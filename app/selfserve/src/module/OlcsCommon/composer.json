@@ -1,0 +1,26 @@
+{
+    "name": "olcs/common",
+    "description": "Contains common code shared by all OLCS-related projects",
+    "type": "library",
+    "license": "proprietary",
+    "require": {
+        "php": ">=5.5.1",
+        "zendframework/zendframework": "2.2.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~3.7"
+    },
+    "autoload": {
+        "psr-0": {
+            "OlcsCommon\\": "src/"
+        },
+        "classmap": [
+            "./Module.php"
+        ]
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-develop": "0.1.x-dev"
+        }
+    }
+}

@@ -1,0 +1,36 @@
+
+<?php 
+
+$this->placeholder('body-class')->set("full-page");
+$this->headScript()->prependFile($this->basePath() . '/js/olc.ajax.js');
+$this->headScript()->prependFile($this->basePath() . '/js/collapsible.init.js');
+$this->headScript()->prependFile($this->basePath() . '/js/collapsible.js');
+$this->headScript()->prependFile($this->basePath() . '/js/listSort.js');
+$this->headScript()->prependFile($this->basePath() . '/js/olc.list.js');
+$this->headScript()->prependFile($this->basePath() . '/js/olc.overlay-form.js');
+?>
+
+<?php echo $this->partial('olcs/common/errorMessages', array('messages' => $messages)); ?>
+
+<?php echo $this->form()->openTag($applicationDetailsForm); ?>
+
+<div id="applicationDetailsDiv" class="row">
+
+<?php
+    echo $this->partial('olcs/application/partials/header-details');
+    echo $this->partial('olcs/application/partials/tabs', 
+        array(
+            $this->active => 'active',
+            'applicationId' => $applicationId,
+            'licenceId' => $licenceId,
+            )
+    );
+    
+    echo $this->forms;
+?>
+    <div class="form-group">
+<?php echo $this->formButton($applicationDetailsForm->get('cancel'), $this->resourceHelper('cancel')); ?>
+<?php echo $this->formButton($applicationDetailsForm->get('submit'), $this->resourceHelper('save')); ?>
+    </div>
+</div>
+<?php echo $this->form()->closeTag(); ?>

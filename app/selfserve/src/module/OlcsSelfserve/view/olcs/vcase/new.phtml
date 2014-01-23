@@ -1,0 +1,46 @@
+<?php $vcaseNewForm->prepare(); ?>
+<?php echo $this->form()->openTag($vcaseNewForm); ?>
+<div class="row">
+    <div class="col-md-12 tFormHeader">
+        <div class="pheading"><?php
+            echo $this->resourceHelper('new-case-header',
+                                array("@operatorName" => $this->escapeHtml($operatorName),
+                                "@licenceNumber" => $this->escapeHtml($licenceNumber)));
+        ?></div>
+    </div>
+</div>
+<?php echo $this->partial('olcs/common/errorMessages', array('messages' => $messages)); ?>
+<div>
+    <div class="form-group">
+        <?php echo $this->formRow($vcaseNewForm->get('operatorId')); ?>
+        <?php echo $this->formRow($vcaseNewForm->get('licenceId')); ?>
+<?php echo $this->formRow($vcaseNewForm->get('operatorName')); ?>
+
+    </div>
+    <div class="form-group required">
+        <label for="categories" class="col-lg-3 control-label"><?php echo $this->resourceHelper('new-case-categories-header'); ?></label>
+        <div class="col-lg-4 itext">
+<?php echo $this->formRow($vcaseNewForm->get('categories')); ?>
+        </div>
+    </div>
+    <div class="form-group required">
+        <label for="description" class="col-lg-3 control-label"><?php echo $this->resourceHelper('case-summary'); ?></label>
+        <div class="col-lg-4 itext">
+<?php echo $this->formRow($vcaseNewForm->get('description')); ?>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="ecms" class="col-lg-3 control-label"><?php echo $this->resourceHelper('ecms-number'); ?></label>
+        <div class="col-lg-4 itext">
+<?php echo $this->formRow($vcaseNewForm->get('ecms')); ?>
+        </div>
+    </div>
+    <div class="padb20">
+        <a class="show-collapsed" href="#"><?php echo $this->resourceHelper('new-case-additional-licence'); ?></a>
+    </div>
+    <div class="form-group">
+<?php echo $this->formButton($vcaseNewForm->get('submit'), $this->resourceHelper('new-case-next')); ?>
+    </div>
+</div
+<?php echo $this->form()->closeTag(); ?>

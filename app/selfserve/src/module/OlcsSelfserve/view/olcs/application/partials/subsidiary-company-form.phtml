@@ -1,0 +1,28 @@
+<div>
+    <div class="pheading">
+        <a href="#" class="acc-buttons collapsible acc-collapsed expanded"><?php
+            echo $this->resourceHelper('subsidiary-companies');
+        ?></a>
+    </div>
+
+    <div class="accordion">
+        <?php
+        echo $this->partial('olcs/common/generic-list/genericListWrapperPlain', array(
+            'id' => 'subsidiary-list',
+            'idListForm' => $form,
+            'isChildForm' => true,
+            'sortable' => true,
+            'data' => array(
+                'overlay-form-url' => '/application/search/subsidiary?type=application-subsidiary&list=%23subsidiary-list',
+            ),
+            'headers' => array(
+                array('sortable' => true, 'title' => 'companyname'),
+                array('sortable' => true, 'title' => 'companynumber'),
+            ),
+            'columnClasses' => array('column-companyname', 'column-companynumber'),
+            'rows' => array(
+            ),
+        ));
+        ?>
+    </div>
+</div>

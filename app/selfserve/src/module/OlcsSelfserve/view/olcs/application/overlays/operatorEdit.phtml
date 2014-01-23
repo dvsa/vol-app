@@ -1,0 +1,24 @@
+<?php $applicationOperatorEditForm->prepare();
+?>
+    <div class="popup-header"><?php
+        echo $this->resourceHelper('operator-edit-popup-header');
+    ?></div>
+<?php
+
+echo $this->form()->openTag($applicationOperatorEditForm); ?>
+<div class='popup-content'>
+    <div class="form-group required">
+        <label for="popupOperatorName" class="col-lg-3 control-label"><?php echo $this->resourceHelper('operator-name'); ?></label>
+        <div class=" col-lg-6 itext" >
+            <?php echo $this->formRow($applicationOperatorEditForm->get('popupOperatorName')); ?>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <?php echo $this->formButton($applicationOperatorEditForm->get('cancel'), $this->resourceHelper('cancel')); ?>
+        <?php echo $this->formButton($applicationOperatorEditForm->get('submit'), $this->resourceHelper('save')); ?>
+    </div>
+
+
+</div>
+<?php echo $this->form()->closeTag(); ?>

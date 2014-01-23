@@ -1,0 +1,19 @@
+<ul class="tabs-list" id="caseDetailsTabs">
+    <li class="<?php echo isset($dashboardActive) ? $dashboardActive : null; ?>" id="caseDashboard"  id="1" data-url="/case/<?php echo $this->escapeHtml($this->licenceId) ?>/<?php echo $this->escapeHtml($this->caseId) ?>/dashboard" data-method="get" data-caseId="<?php echo $this->escapeHtml($this->caseId) ?>">
+        <a href="#" style="padding:0" class="tab-dashboard">
+            <img  class="sprt <?php echo isset($dashboardActive) ? $dashboardActive : null; ?>" src="/img/p.png"/>
+        </a>
+    </li>
+    <li class="<?php echo isset($convictionActive) ? $convictionActive : null; ?>" id="2" data-url="/case/<?php echo $this->escapeHtml($this->licenceId) ?>/<?php echo $this->escapeHtml($this->caseId) ?>/convictions" data-method="get" data-caseId="<?php echo $this->escapeHtml($this->caseId) ?>">
+        <a href="#">
+            <?php echo $this->resourceHelper('convictions'); ?>
+        </a></li>
+    <li id="3"><a href="#">Tab 3</a></li>
+    <li id="4"><a href="#">Tab 4</a></li>
+    <li id="5"><a href="#">Tab 5</a></li>
+    <li id="6"><a href="#">Tab 6</a></li>
+    <li id="7"><a href="#">Tab 7</a></li>
+    <li id="8"><a href="#">Tab 8</a></li>
+    <li id="9"><a href="#">Tab 9</a></li>
+    <li id="10"><a href="#">Tab 10</a></li>
+</ul>

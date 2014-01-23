@@ -1,0 +1,15 @@
+<?php $this->placeholder('body-class')->set("full-page"); //print_r($listData); ?>
+<tbody id="listTable">
+<?php 
+foreach ($listData as $row) :
+    $openTime = new DateTime($row['openTime']);
+    $closedTime = new DateTime($row['closedTime']);
+?>
+    <tr>
+        <td><a href="/case/<?php echo $row['licence']['licenceId'] ?>/<?php echo $this->escapeHtml( $row['caseId']); ?>/dashboard"><?php echo $this->escapeHtml( $row['caseNumber'] ); ?></a></td>
+        <td><?php echo $this->escapeHtml( $row['caseType']); ?></td>
+        <td><?php echo $this->simpleDateFormat($row['openTime']); ?></td>
+        <td><?php echo $row['closedTime'] ? $this->simpleDateFormat($row['closedTime']) : ''; ?></td>
+    </tr>
+<?php endforeach; ?>
+</tbody>

@@ -1,0 +1,35 @@
+<?php $applicationSearchForm->prepare();
+?>
+    <div class="popup-header"><?php
+        echo $this->resourceHelper('operator-search-popup-header');
+    ?></div>
+<?php 
+
+echo $this->form()->openTag($applicationSearchForm); ?>
+<div class='popup-content'>
+<div class="form-container">
+    <div class="form-group required">
+        <label for="popupOperatorName" class="col-lg-3 control-label"><?php echo $this->resourceHelper('operator-name'); ?></label>
+        <div class=" col-lg-6 itext" >
+            <?php echo $this->formRow($applicationSearchForm->get('popupOperatorName')); ?>
+            <?php echo $this->formRow($applicationSearchForm->get('popupOperatorType')); ?>
+        </div>
+        <div class=" col-lg-3" >
+            <?php echo $this->formButton($applicationSearchForm->get('search'), $this->resourceHelper('search')); ?>
+
+        </div>
+    </div>
+
+    <div id="operator-search-results" >
+        <?php echo empty($listView) ? '' : $listView; ?>
+    </div>
+</div>
+
+    <div class="form-group">
+        <?php echo $this->formButton($applicationSearchForm->get('new'), $this->resourceHelper('new')); ?>
+        <?php echo $this->formButton($applicationSearchForm->get('cancel'), $this->resourceHelper('cancel')); ?>
+    </div>
+
+
+</div>
+<?php echo $this->form()->closeTag(); ?>

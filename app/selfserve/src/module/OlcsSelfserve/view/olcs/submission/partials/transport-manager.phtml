@@ -1,0 +1,54 @@
+<div class="submission-section submission-transport-manager">
+    <h2><?php echo $this->resourceHelper('submission-transport-manager-header'); ?></h2>
+    <div class="table-responsive tableContent">
+        <table class="olcs-list-table table table-striped">
+            <thead>
+                <tr>
+                    <th class="text-muted"><span class="noWrap">
+                        <?php echo $this->resourceHelper('last-name'); ?>
+                    </span></th>
+                    <th class="text-muted"><span class="noWrap">
+                        <?php echo $this->resourceHelper('first-name'); ?>
+                    </span></th>
+                    <th class="text-muted"><span class="noWrap">
+                        <?php echo $this->resourceHelper('dob'); ?>
+                    </span></th>
+                    <th class="text-muted"><span class="noWrap">
+                        <?php echo $this->resourceHelper('qualification-type'); ?>
+                    </span></th>
+                    <th class="text-muted licences-or-apps"><span class="noWrap">
+                        <?php echo $this->resourceHelper('other-licences-or-apps'); ?>
+                    </span></th>
+                    <th class="text-muted fluid"><span class="noWrap">
+                        <?php echo $this->resourceHelper('internal-external'); ?>
+                    </span></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($list as $row) : ?>
+                    <tr>
+                        <td><?php echo $this->escapeHtml($row['lastName']); ?></td>
+                        <td><?php echo $this->escapeHtml($row['firstName']); ?></td>
+                        <td><?php echo $this->simpleDateFormat($row['dob'], 'd/m/Y'); ?></td>
+                        <td><?php echo nl2br($this->escapeHtml(implode("\n", $row['qualificationType']))); ?></td>
+                        <td class="licences-or-apps"><?php
+                            if (empty($row['otherLicensesOrApps'])) {
+                                echo '<span class="empty">-</span>';
+                            }
+                            foreach ($row['otherLicensesOrApps'] as $licenceOrApp) {
+                                echo $this->escapeHtml($licenceOrApp['number'] . ' - ' . $licenceOrApp['status']) . '<br />';
+                            }
+                        ?></td>
+                        <td class="fluid"><?php echo $this->escapeHtml($this->resourceHelper($row['internalExternal'])); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+        <div class="readmore">
+            <?php echo $this->resourceHelper('readmore-pager', array(
+                '@currentCount' => '<span class="current-count">' . count($list) . '</span>',
+                '@totalCount' => '<span class="total-count">' . count($list) . '</span>',
+            )); ?>
+        </div>
+    </div>
+</div>

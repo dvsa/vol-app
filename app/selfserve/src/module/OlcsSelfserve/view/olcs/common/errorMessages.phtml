@@ -1,0 +1,18 @@
+<?php if (count($messages)) : ?>
+<div class="error-lookup">
+    <p class="error-lookup-header">
+        <?php echo $this->resourceHelper('lookup-serach-error-header'); ?>
+    </p>
+    <p>
+    <ul>
+        <li>
+            <?php foreach ($messages as $message) : ?>
+            <p class="error-lookup-header-message">
+                <?php echo $this->escapeHtml($message); ?>
+            </p>
+            <?php endforeach; ?>
+        </li>
+    </ul>
+    </p>
+</div>
+<?php endif; ?>

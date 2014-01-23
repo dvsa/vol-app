@@ -1,0 +1,60 @@
+<div class="">
+    <div class="row">
+        <div class="pheading">
+            <a href="#" class="acc-buttons collapsible acc-collapsed expanded">
+                <?php echo $this->resourceHelper('registered-office-details-header'); ?>
+            </a>
+        </div>
+        
+        <div class="accordion">
+            <div class="row form-group required">
+                <label for="postcode" class="col-lg-3 control-label"><?php echo $this->resourceHelper('company-registration-form-label-postcode'); ?></label>
+                <div class="col-lg-4 itext">
+                   <?php echo $this->formRow($registeredOfficeDetailsForm->get('postcode')); ?>
+                </div>
+                <div class="col-lg-2">
+                    <?php echo $this->formButton($registeredOfficeDetailsForm->get('findaddressbutton'), $this->resourceHelper('company-registration-form-button-find-address')); ?>
+                </div>
+                <div class="col-lg-9 pull-right">
+                    <!-- todo address drop down goes here -->
+                </div> 
+            </div>
+            <div class="form-group required">
+                <label for="addressLine1" class="col-lg-3 control-label"><?php echo $this->resourceHelper('company-registration-form-label-address1'); ?></label>
+                <div class="col-lg-4 itext">
+                <?php echo $this->formRow($registeredOfficeDetailsForm->get('addressLine1')); ?>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="addressLine2" class="col-lg-3 control-label"><?php echo $this->resourceHelper('company-registration-form-label-address2'); ?></label>
+                <div class="col-lg-4 itext">
+                <?php echo $this->formRow($registeredOfficeDetailsForm->get('addressLine2')); ?>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="addressLine3" class="col-lg-3 control-label"><?php echo $this->resourceHelper('company-registration-form-label-address3'); ?></label>
+                <div class="col-lg-4 itext">
+                <?php echo $this->formRow($registeredOfficeDetailsForm->get('addressLine3')); ?>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="addressLine4" class="col-lg-3 control-label"><?php echo $this->resourceHelper('company-registration-form-label-address4'); ?></label>
+                <div class="col-lg-4 itext">
+                <?php echo $this->formRow($registeredOfficeDetailsForm->get('addressLine4')); ?>
+                </div>
+            </div>
+            <div class="form-group required">
+                <label for="townCity" class="col-lg-3 control-label"><?php echo $this->resourceHelper('company-registration-form-label-town-city'); ?></label>
+                <div class="col-lg-4 itext">
+                <?php echo $this->formRow($registeredOfficeDetailsForm->get('townCity')); ?>
+                </div>
+            </div>
+            <div class="form-group required">
+                <label for="country" class="col-lg-3 control-label"><?php echo $this->resourceHelper('company-registration-form-label-country'); ?></label>
+                <div class="col-lg-4 itext">
+                <?php echo $this->formRow($registeredOfficeDetailsForm->get('country')); ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

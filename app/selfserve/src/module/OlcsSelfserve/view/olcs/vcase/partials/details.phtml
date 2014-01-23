@@ -1,0 +1,40 @@
+<div class="col-md-12 tFormHeader case-details-header">
+    <a class="btn btn-note" href="#"><?php echo $this->resourceHelper('casenotes'); ?></a>
+
+    <ul class="details-list">
+        <li class="description">
+            <span class="details-list-label"><?php echo $this->resourceHelper('summary'); ?>:</span>
+            <?php echo $this->escapeHtml($params['description']); ?>
+        </li>
+        <li>
+            <span class="details-list-label"><?php echo $this->resourceHelper('case-number'); ?>:</span>
+            <?php echo $this->escapeHtml($params['caseNumber']); ?>
+        </li>
+        <li>
+            <span class="details-list-label"><?php echo $this->resourceHelper('operator-name'); ?>:</span>
+            <?php echo $this->escapeHtml($params['operator']['operatorName']); ?>
+        </li>
+        <li>
+            <span class="details-list-label"><?php echo $this->resourceHelper('licence-number'); ?>:</span>
+            <?php echo $this->escapeHtml($params['licence']['licenceNumber']); ?>
+        </li>
+        <li>
+            <span class="details-list-label"><?php echo $this->resourceHelper('categories'); ?>:</span>
+            <?php echo $this->escapeHtml(implode(', ', $params['categories'])); ?>
+        </li>
+        <li>
+            <span class="details-list-label"><?php echo $this->resourceHelper('ecms-number'); ?>:</span>
+            <?php echo $this->escapeHtml($params['ecms']); ?>
+        </li>
+    </ul>
+
+    <a class="case-edit" href="#"><?php echo $this->resourceHelper('edit'); ?></a>
+
+    <?php 
+        echo $this->partial(
+                        'olcs/vcase/partials/tabs', 
+                        array_merge($caseTabs, 
+                                                array('caseId' => $caseId,
+                                                            'licenceId' => $licenceId))); 
+    ?>
+</div>

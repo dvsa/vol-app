@@ -1,0 +1,44 @@
+<?php 
+$this->placeholder('body-class')->set("full-page");
+$this->headScript()->prependFile($this->basePath() . '/js/olc.ajax.js');
+$this->headScript()->prependFile($this->basePath() . '/js/recDec.js');
+?>
+<?php $form->prepare(); ?>
+<?php echo $this->form()->openTag($form); ?>
+<?php echo $this->formRow($form->get('licenceId')); ?>
+<?php echo $this->formRow($form->get('submissionId')); ?>
+<?php echo $this->formRow($form->get('senderUserId')); ?>
+<?php echo $this->formRow($form->get('caseId')); ?>
+<div id="recommendDecisionDiv" class="submission-section submission-recommendation-form">
+    <h2><?php echo $this->resourceHelper('add-recommendation-decision'); ?></h2>
+    <div class="formContent">
+        <div class="row form-group" id="sdec">
+            <div class="required"><?php echo $this->formRow($form->get('submitActionTypes')); ?></div>
+            <div id="divEmptyActions" class="isLive"><?php echo $this->formRow($form->get('emptyActions')); ?></div>
+            <div id="divRecommendActions" class="required hide"><?php echo $this->formRow($form->get('recommendActions')); ?></div>
+            <div id="divDecisionActions" class="required hide"><?php echo $this->formRow($form->get('decisionActions')); ?></div>
+        </div>
+        <div class="row hide required form-group" id="otherDiv">
+            <label for="other"><?php echo $this->resourceHelper('other-please-specify'); ?></label>
+            <?php echo $this->formRow($form->get('other')); ?>
+        </div>
+        <div class="submission-recommendation-editor">
+            <label for="subRecomDecNote"><?php echo $this->resourceHelper('add-reason'); ?></label>
+            <textarea class="tmce" data-mce-size="300" id='subRecomDecNote' name="subRecomDecNote"></textarea>
+        </div>
+    </div>
+</div>
+<div class="submission-section submission-recommendation-form submission-send-form">
+    <h2><?php echo $this->resourceHelper('send-to'); ?></h2>
+    <div class="formContent">
+        <div class="row form-group submission-recommendation-send">
+            <div class="required"><?php echo $this->formRow($form->get('recipientUserId')); ?></div>
+            <div class="submission-recommendation-urgent">
+                <?php echo $this->formRow($form->get('urgent')); ?>
+                <label for="urgent"><?php echo $this->resourceHelper('mark-urgent'); ?></label>
+            </div>
+            <?php echo $this->formRow($form->get('submit')); ?>
+        </div>
+    </div>
+</div>
+<?php echo $this->form()->closeTag(); ?>

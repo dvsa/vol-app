@@ -1,0 +1,53 @@
+<?php
+$wrapperAttributes = array(
+    'class' => array('table-responsive', 'tableContent'),
+    'id' => empty($id) ? '' : $id,
+);
+$tableAttributes = array(
+    'class' => array('olcs-list-table', 'table', 'table-striped'),
+    'data-base-url' => empty($baseUrl) ? '' : $baseUrl,
+    'data-url' => empty($ajaxUrl) ? '' : $ajaxUrl,
+    'data' => empty($data) ? array() : $data,
+);
+
+$beforeTable = empty($beforeTable) ? '' : $beforeTable;
+
+if (!empty($idListForm)) {
+    $wrapperAttributes['class'][] = 'id-list-wrapper';
+    $tableAttributes['class'][] = 'id-list-table';
+    $beforeTable .= $this->partial('olcs/application/partials/id-list-form', array(
+        'form' => $idListForm,
+        'isChildForm' => !empty($isChildForm),
+    ));
+}
+if (!empty($sortable)) {
+    $tableAttributes['class'][] = 'olcs-sortable';
+}
+if (!empty($class)) {
+    $tableAttributes['class'] = array_merge($tableAttributes['class'], is_array($class) ? $class : array($class));
+}
+?>
+<div <?php echo $this->formatAttributes($wrapperAttributes); ?>>
+    <?php echo $beforeTable; ?>
+    <table <?php echo $this->formatAttributes($tableAttributes); ?>>
+        <?php
+        if (isset($listHeaderView)) {
+            echo $listHeaderView;
+        } else if (isset($headers)) {
+            echo $this->partial('olcs/common/generic-list/genericListHeader', array(
+                'columnClasses' => empty($columnClasses) ? null : $columnClasses,
+                'headers' => $headers,
+            ));
+        }
+
+        if (isset($listView)) {
+            echo $listView;
+        } else if (isset($rows)) {
+            echo $this->partial('olcs/common/generic-list/genericListTemplate', array(
+                'columnClasses' => empty($columnClasses) ? null : $columnClasses,
+                'rows' => $rows,
+            ));
+        }
+        ?>
+    </table>
+</div>

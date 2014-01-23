@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<project name="olcs" basedir="." default="test">
+    <property name="pdo.driver" value="mysql"/>
+    <property name="db.host"    value="localhost"/>
+    <property name="db.name"    value="olcs"/>
+
+    <property name="pdo.int.driver" value="mysql"/>
+    <property name="db.int.host"    value="54.246.232.184"/>
+    <property name="db.int.name"    value="olcs"/>
+
+    <target name="build-database" depends = "create-local-database,seed-local-database"/>
+    <!-- creating the database -->
+    <target name="create-local-database">
+      <pdosqlexec autocommit="true" url="${pdo.driver}:host=${db.host};dbname=${db.name}" encoding="utf8"
+         userId="olcs" password="valtecholcs" onerror="abort">
+           <fileset dir="src/module/Olcs/test/data">
+              <include name="create.sql" />
+           </fileset>
+           <formatter type="plain" outfile="output.txt" />
+       </pdosqlexec>         
+    </target>
+    <!-- Seeding the database -->
+    <target name="seed-local-database">
+      <pdo url="${pdo.driver}:host=${db.host};dbname=${db.name}" encoding="utf8"
+         userId="olcs" password="valtecholcs" onerror="abort">
+         <filelist dir="src/module/Olcs/test/data/seed/" files ="insert-operator.sql,insert-licence.sql,insert-t_case.sql"/>
+       </pdo>         
+    </target>
+    <!-- Seeding the int database database -->
+    <target name="seed-int-database">
+      <pdo url="${pdo.int.driver}:host=${db.int.host};dbname=${db.int.name}" encoding="utf8"
+         userId="olcs" password="valtecholcs" onerror="abort">
+           <fileset dir="src/module/Olcs/test/data/seed">
+              <include name="*.sql" />
+           </fileset>
+       </pdo>         
+    </target>
+    <target name="test">
+       <phpunit bootstrap="./Bootstrap.php" haltonfailure="true" haltonerror="true" printsummary="true">
+         <batchtest>
+           <fileset dir="module/Olcs/test/unit">
+              <include name="**/*Test.php"/>
+           </fileset>
+         </batchtest>
+       </phpunit>
+    </target>
+</project>

@@ -1,0 +1,31 @@
+<ul class="tabs-list" id="applicationDetailsTabs">
+    <li class="<?php echo isset($dashboardActive) ? $dashboardActive : null; ?>" id="caseDashboard"  id="1" data-url="/case/<?php echo $this->escapeHtml($this->licenceId) ?>/<?php echo $this->escapeHtml($this->caseId) ?>/dashboard" data-method="get" data-caseId="<?php echo $this->escapeHtml($this->caseId) ?>">
+        <a href="#" style="padding:0" class="tab-dashboard">
+            <img  class="sprt <?php echo isset($dashboardActive) ? $dashboardActive : null; ?>" src="/img/p.png"/>
+        </a>
+    </li>
+    <li id="entity_details_tab" class="<?php echo isset($entityTypeActive) ? $entityTypeActive : null; ?>" id="3">
+            <a href="#"><?php echo $this->resourceHelper('entity-details'); ?></a>
+    </li>
+    <li id="licence_details_tab" class="<?php echo isset($licenceDetailsAcitve) ? $licenceDetailsAcitve : null; ?>" id="4">
+        <?php 
+        if (isset($applicationId)) {
+        ?>
+        <a class=""  href="/application/<?php echo $applicationId;?>/licence-details"><?php echo $this->resourceHelper('licence-details'); ?></a>        
+        <?php 
+        } else {
+            echo $this->resourceHelper('licence-details');
+        }
+        ?>
+    </li>
+    <li class="<?php echo isset($ocsActive) ? $ocsActive : null; ?>" id="5"><a href="#"><?php echo $this->resourceHelper('ocs'); ?></a></li>
+    <li class="<?php echo isset($vehiclesActive) ? $vehiclesActive : null; ?>" id="6"><a href="#"><?php echo $this->resourceHelper('vehicles'); ?></a></li>
+    <li class="<?php echo isset($mainTActive) ? $mainTActive : null; ?>" id="7"><a href="#"><?php echo $this->resourceHelper('maint'); ?></a></li>
+    <li class="<?php echo isset($financeActive) ? $financeActive : null; ?>"id="8"><a href="#"><?php echo $this->resourceHelper('finance'); ?></a></li>
+    <li class="<?php echo isset($feesActive) ? $feesActive : null; ?>" id="9"><a href="#"><?php echo $this->resourceHelper('fees'); ?></a></li>
+    <li class="<?php echo isset($oppositionActive) ? $oppositionActive : null; ?>" id="10"><a href="#"><?php echo $this->resourceHelper('opposition'); ?></a></li>
+    <li class="<?php echo isset($publicationsActive) ? $publicationsActive : null; ?>" id="11"><a href="#"><?php echo $this->resourceHelper('publications'); ?></a></li>
+    <li class="<?php echo isset($conditionsActive) ? $conditionsActive : null; ?>" id="12"><a href="#"><?php echo $this->resourceHelper('conditions'); ?></a></li>
+    <li class="<?php echo isset($appDecisionsActive) ? $appDecisionsActive : null; ?>" id="13"><a href="#"><?php echo $this->resourceHelper('app-decisions'); ?></a></li>
+    <li class="<?php echo isset($docsActive) ? $docsActive : null; ?>" id="14"><a href="#"><?php echo $this->resourceHelper('docs'); ?></a></li>
+</ul>

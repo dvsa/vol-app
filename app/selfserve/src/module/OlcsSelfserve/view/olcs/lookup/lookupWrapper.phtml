@@ -1,0 +1,10 @@
+<?php //$this->placeholder('no-breadcrumb')->set(true) ?>
+<?php $searchForm->prepare(); ?>
+ <?php echo $this->form()->openTag($searchForm); ?>
+
+<div class="pheading"><h1><?php echo $this->resourceHelper('lookup-header'); ?></h1></div>
+<?php echo $this->partial('olcs/common/errorMessages', array('messages' => $messages)); ?>
+<div id="basicSearch" class=""><?php echo $this->basicLookupView ?></div>
+<div class="padb20"><a href="#" class="show-collapsed"><?php echo $this->resourceHelper('lookup-advance-search-header'); ?></a></div>
+<div id="advancedSearch"><?php echo $this->advancedLookupView ?></div>
+<?php echo $this->form()->closeTag(); ?>

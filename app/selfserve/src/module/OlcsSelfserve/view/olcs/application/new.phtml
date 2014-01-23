@@ -1,0 +1,53 @@
+<?php $applicationNewForm->prepare(); ?>
+<?php echo $this->form()->openTag($applicationNewForm); ?>
+<?php
+    echo $this->formRow($applicationNewForm->get('source'));
+?>
+<div class="row">
+    <div class="col-md-12 tFormHeader">
+        <div class="pheading"><h1><?php
+            echo $this->resourceHelper('new-application-header');
+        ?></h1></div>
+    </div>
+</div>
+<?php echo $this->partial('olcs/common/errorMessages', array('messages' => $messages)); ?>
+<div>
+    <div class="form-group required">
+        <label for="operatorTypes" class="col-lg-3 control-label"><?php echo $this->resourceHelper('new-application-operator-types-header'); ?></label>
+        <div class="operatorTypeBlock radio-block col-lg-4 itext">
+<?php echo $this->formRow($applicationNewForm->get('operatorTypes')); ?>
+        </div>
+    </div>
+    <div class="form-group required" id="licenceTypesContainer">
+        <label for="licenceTypes" class="col-lg-3 control-label"><?php echo $this->resourceHelper('new-application-licence-type'); ?></label>
+        <div class="radio-block col-lg-4 itext" id="licenceContainerGoods">
+            <?php
+                echo $this->formRow($applicationNewForm->get('licenceTypes'));
+            ?>
+        </div>
+    </div>
+
+    <div class="form-group required">
+        <label for="entityTypes" class="col-lg-3 control-label"><?php echo $this->resourceHelper('new-application-entity-type'); ?></label>
+        <div class="col-lg-4 itext">
+<?php echo $this->formRow($applicationNewForm->get('entityTypes')); ?>
+        </div>
+    </div>
+    <div class="form-group required">
+        <label for="trafficAreaType" class="col-lg-3 control-label"><?php echo $this->resourceHelper('new-application-traffic-area-type'); ?></label>
+        <div class="col-lg-4 itext">
+<?php echo $this->formRow($applicationNewForm->get('trafficAreaType')); ?>
+        </div>
+    </div>
+    <div class="form-group required">
+        <span class="col-lg-3 control-label"><?php echo $this->resourceHelper('new-application-date-received'); ?></span>
+        <div class="col-lg-9">
+            <?php echo $this->olcsFormDateSelect($applicationNewForm->get('dateApplicationReceived')); ?>
+        </div>
+    </div>
+    <div class="form-group">
+<?php echo $this->formButton($applicationNewForm->get('cancel'), $this->resourceHelper('cancel')); ?>
+<?php echo $this->formButton($applicationNewForm->get('submit'), $this->resourceHelper('create')); ?>
+    </div>
+</div>
+<?php echo $this->form()->closeTag(); ?>

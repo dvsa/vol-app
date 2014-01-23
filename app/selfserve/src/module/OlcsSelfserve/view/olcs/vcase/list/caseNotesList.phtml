@@ -1,0 +1,13 @@
+<table>
+<?php $this->placeholder('body-class')->set("full-page") ?>
+<tbody id="listTable">
+    
+<?php foreach ($listData as $row) : ?>
+    <tr>
+        <td><?php echo $this->escapeHtml( $row['comment'] ); ?></td>
+        <td><?php echo $this->escapeHtml($row['priority']); ?></td>
+        <td><?php echo $this->simpleDateFormat($row['createdAt'], 'd.m.Y'); ?></td>
+    </tr>
+<?php endforeach; ?>
+</tbody>
+</table>

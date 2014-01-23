@@ -1,0 +1,69 @@
+<?php echo $this->doctype(); ?>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <?php echo $this->headTitle('OLCS')->setSeparator(' - ')->setAutoEscape(false) ?>
+
+        <?php echo $this->headMeta()
+            ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+            ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+        ?>
+
+        <!-- Le styles -->
+        <link rel="shortcut icon" sizes="16x16" type="image/png" href="<?php echo $this->escapeHtml($this->basePath() . '/img/favicon.png'); ?>" />
+        <link rel="icon" sizes="128x128" type="image/png" href="<?php echo $this->escapeHtml($this->basePath() . '/img/favicon-large.png'); ?>" />
+        <?php echo $this->headLink(array('rel' => 'apple-touch-icon', 'type' => 'image/png', 'href' => $this->basePath() . '/img/favicon-large.png'))
+                        ->prependStylesheet($this->basePath() . '/css/style.css')
+                        ->prependStylesheet($this->basePath() . '/css/magnific-popup.css')
+                        ->prependStylesheet($this->basePath() . '/css/bootstrap-theme.min.css')
+                        ->prependStylesheet($this->basePath() . '/css/bootstrap.min.css') ?>
+
+        <!-- Scripts -->
+        <?php echo $this->headScript()
+             ->prependFile($this->basePath() . '/js/js.js')
+            ->prependFile($this->basePath() . '/js/multiselect.js')
+            ->prependFile($this->basePath() . '/js/bootstrap.min.js')
+            ->prependFile($this->basePath() . '/js/jquery.magnific-popup.min.js')
+            ->prependFile($this->basePath() . '/js/jquery.min.js')
+            ->prependFile($this->basePath() . '/js/tinymce/tinymce.min.js')
+            ->prependFile($this->basePath() . '/js/respond.min.js', 'text/javascript', array('conditional' => 'lt IE 9',))
+            ->prependFile($this->basePath() . '/js/html5shiv.js',   'text/javascript', array('conditional' => 'lt IE 9',))
+        ; ?>
+    </head>
+    <body class="<?php echo $this->placeholder('body-class'); ?>">
+		
+        <nav class="navbar navbar-inverse" role="navigation">
+            <div class="container">
+                <a href="/">
+                    <h2><strong>O</strong>perator <strong>L</strong>icensing &amp; <strong>C</strong>ompliance <strong>S</strong>ystem</h2>
+                </a>
+            </div>
+        </nav>
+        <div class="container mainc">
+            <?php if (!$this->placeholder('no-breadcrumb')->getValue()) { ?>
+                <div class="row">
+                    <div class="bcrumb">
+                        <?php
+                            echo $this->navigation('navigation') // <-- Update this!!
+                                                ->breadcrumbs()
+                                                ->setMinDepth(0)
+                                                ->setPartial(array('layout/breadcrumb.phtml', 'Olcs'));
+                        ?>
+                    </div>
+                </div>
+            <?php } ?>
+
+            <?php echo $this->content; ?>
+            
+            <div class="row">
+                <!--<hr>-->
+                <footer>
+                    <p> <?php echo $this->resourceHelper('layout-footer-app-name');?> <?php echo $this->resourceHelper('layout-footer'); ?></p>
+                </footer>
+            <div>
+        </div> <!-- /container -->
+        <?php echo $this->inlineScript() ?>
+    </body>
+</html>

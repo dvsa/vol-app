@@ -1,0 +1,21 @@
+<?php
+//$this->placeholder('no-breadcrumb')->set(true);
+
+$this->placeholder('body-class')->set("full-page");
+$this->headScript()->prependFile($this->basePath() . '/js/olc.error.js');
+$this->headScript()->prependFile($this->basePath() . '/js/olc.submission.js');
+?>
+<div class="submission-view">
+    <?php
+    foreach ($text as $section => $content) {
+        if ($section == 'recommendations') {
+            echo $content;
+        } else {
+            ?><div id="submission-<?php echo $section; ?>" class="submission-edit-section">
+                <?php echo $content ?>
+            </div><?php
+        }
+    }
+    ?>
+</div>
+<?php echo $recommendDecision; ?>

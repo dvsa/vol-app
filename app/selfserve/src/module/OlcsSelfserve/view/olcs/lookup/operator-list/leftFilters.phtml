@@ -1,0 +1,38 @@
+<?php $this->headScript()->prependFile($this->basePath() . '/js/listFilters.js'); ?>
+<div id="leftFilters"  data-url="<?php echo $this->baseQueryString; ?>" data-base-url="<?php echo $this->baseUrl; ?>" data-filters-open="<?php echo $this->filterOpen; ?>">
+    <div class="filterHead"><a href="#" class="clearAllListFilters">Clear all</a></div>
+    <?php 
+            $filterPos = 0; 
+            foreach($this->filters['filters']['operatorList'] as $name => $filterSet) :
+                    $showClear = false;
+    ?>
+    <div class="filterSection">
+        <div><?php echo $name; ?>  <a href="#!" class="listFilterItem"><img src="/img/p.png" class="sprt
+                                                                <?php
+                                                                    $open = substr($this->filterOpen, $filterPos,1);
+                                                                    echo $open ?  'sprExpand' : 'sprCollapse'; ?>
+                                                                cur pull-right"></a></div>
+        <ul id="<?php echo strtolower(str_replace(' ', '-', $name)); ?>" style="display:<?php echo $open ?  'none' : 'block'; ?>">
+            <?php foreach($filterSet as $filterName => $filter) : ?>
+                <li><label>
+                        <input type="checkbox" id="<?php echo $filter; ?>" 
+                            <?php if (in_array($filter, $this->filterQueryParams)) : 
+                                            $showClear = true; 
+                            ?>
+                               checked 
+                            <?php endif; ?>
+                            />
+                        <span><?php echo $filterName; ?></span>
+                    </label>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+        <?php if  ($showClear) : ?>
+            <div class="filterHead clearListFilters" style="margin-top:5px"><a href="#">Clear</a></div>
+        <?php endif; ?>
+    </div>
+    <?php
+    $filterPos++;
+    endforeach; 
+    ?>
+</div>

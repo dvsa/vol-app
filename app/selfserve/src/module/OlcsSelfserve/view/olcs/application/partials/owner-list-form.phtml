@@ -1,0 +1,43 @@
+<?php
+switch ($applicationEntityType) {
+    case 'Registered Company':
+        $header = 'application-form-owners-header-directors';
+        $overlayType = 'application-director';
+        break;
+    case 'Partnership':
+        $header = 'application-form-owners-header-partners';
+        $overlayType = 'application-partner';
+        break;
+    default:
+        $header = 'application-form-owners-header-persons';
+        $overlayType = 'application-other';
+}
+?>
+<div>
+    <div class="pheading">
+        <a href="#" class="acc-buttons collapsible acc-collapsed expanded"><?php
+            echo $this->resourceHelper($header);
+        ?></a>
+    </div>
+
+    <div class="accordion">
+        <?php
+        echo $this->partial('olcs/common/generic-list/genericListWrapperPlain', array(
+            'id' => 'owner-list',
+            'idListForm' => $form,
+            'isChildForm' => true,
+            'sortable' => true,
+            'data' => array(
+                'overlay-form-url' => '/application/search/person?type=' . $overlayType . '&list=%23owner-list',
+            ),
+            'headers' => array(
+                array('sortable' => true, 'title' => 'name'),
+                array('sortable' => true, 'title' => 'dob'),
+                array('sortable' => true, 'title' => 'disqualified'),
+            ),
+            'columnClasses' => array('column-name', 'column-dob', 'column-disqualified columntype-bool'),
+            'rows' => array(),
+        ));
+        ?>
+    </div>
+</div>

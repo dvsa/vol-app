@@ -1,0 +1,45 @@
+<?php
+$tableAttributes = array_merge(array(
+    'class' => array('clear-both', 'olcs-list-table', 'table', 'table-striped'),
+    'data-base-url' => empty($baseUrl) ? '' : $baseUrl,
+    'data-url' => empty($ajaxUrl) ? '' : $ajaxUrl,
+), $tableAttributes);
+if (isset($listHeader) || isset($partials['header'])) { ?>
+<div class="row">  
+    <div class="col-md-12 tListHeader tBorder2t">
+        <div class="pheading pull-left"><h1><?php
+            if (isset($headerParams)) {
+                foreach ($headerParams as $key => $value) {
+                    $headerParams[$key] = $this->escapeHtml($value);
+                }
+            }
+            echo $this->resourceHelper($listHeader, isset($headerParams) ? $headerParams : null); 
+        ?></h1></div>
+        <div id="headerListPartials" style="margin-bottom:20px">
+            <?php if (isset($partials['header']) && is_array($partials['header']))
+                    {
+                        foreach($partials['header'] as $h_partial)
+                        {
+                            echo $this->partial($h_partial['view'],  isset($h_partial['params']) ? $h_partial['params'] : array());                
+                        }
+                    }
+            ?>
+        </div>
+    </div>
+</div>
+<?php } ?>
+<div  class="row">
+        <div class="col-md-12 nopad">
+            <?php echo $this->pagingView ?>
+            <div class="table-responsive tableContent">
+                <table <?php echo $this->formatAttributes($tableAttributes); ?>>
+                    <?php echo $this->listHeaderView ?>
+                    <?php echo $this->listView ?>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-12 nopad">
+            <?php echo $this->pagingView ?>
+        </div>
+        <div class="clearfix"></div>
+</div>

@@ -1,0 +1,70 @@
+<?php $form->prepare();?>
+
+<?php if (!empty($embedded)) { ?>
+    <div class="row">
+        <div class="pheading">
+            <a href="#" class="acc-buttons collapsible acc-collapsed expanded"><?php echo $this->resourceHelper($header); ?></a>
+        </div>
+
+        <div class="accordion form-section embedded-overlay-form">
+<?php } else { ?>
+    <div class="popup-header"><?php echo $this->resourceHelper($header); ?></div>
+    <div class="popup-content form-section">
+    <?php echo $this->form()->openTag($form); ?>
+<?php } ?>
+
+        <?php if (!empty($embedded)) { ?>
+            <div class="hidden show-after-mapping">
+                <div class="form-group">
+                    <?php echo $this->formRow($form->get('personId')); ?>
+                    <div class="col-lg-3 control-label"><?php echo $this->resourceHelper('lookup-name'); ?></div>
+                    <div class="col-lg-9 itext">
+                        <div class="help-block"><span class="column-name"></span> <a href="#" class="resetFieldMapping">X</a></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-lg-3 control-label"><?php echo $this->resourceHelper('dob'); ?></div>
+                    <div class="col-lg-9 itext"><div class="help-block column-dob"></div></div>
+                </div>
+            </div>
+        <?php } ?>
+
+        <div class="form-container hide-after-mapping">
+            <div class="form-group">
+                <label for="<?php echo $form->get('personSurname')->getLabel();?>" class="col-lg-3 control-label"><?php echo $this->resourceHelper('surname'); ?></label>
+                <div class="col-lg-9 itext">
+                    <?php echo $this->formRow($form->get('personSurname')); ?>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="<?php echo $form->get('personFirstName')->getLabel();?>" class="col-lg-3 control-label"><?php echo $this->resourceHelper('first-name'); ?></label>
+                <div class="col-lg-9 itext">
+                    <?php echo $this->formRow($form->get('personFirstName')); ?>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <span class="col-lg-3 control-label"><?php echo $this->resourceHelper('lookup-dob'); ?></span>
+                <div class="col-lg-9">
+                    <?php echo $this->olcsFormDateSelect($form->get('personDob')); ?>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-offset-3 col-lg-9">
+                    <?php echo $this->formButton($form->get('submit'), $this->resourceHelper('search')); ?>
+                </div>
+            </div>
+
+            <?php echo empty($listView) ? '' : $listView; ?>
+        </div>
+
+    <?php if (!empty($embedded)) { ?>
+        </div>
+    <?php } else { ?>
+        <?php echo $this->form()->closeTag(); ?>
+        <?php echo $this->formButton($form->get('cancel'), $this->resourceHelper('cancel')); ?>
+        <?php echo empty($listView) ? '' : $this->formButton($form->get('new'), $this->resourceHelper('new')); ?>
+        <?php echo $this->formButton($form->get('saveButton'), $this->resourceHelper('save')); ?>
+        <?php echo $this->formButton($form->get('saveAndAddAnotherButton'), $this->resourceHelper('save-and-add-another')); ?>
+    <?php } ?>
+</div>

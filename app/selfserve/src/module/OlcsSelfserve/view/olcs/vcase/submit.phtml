@@ -1,0 +1,9 @@
+<?php $submitForm->prepare(); ?>
+<?php echo $this->form()->openTag($submitForm); ?>
+<div class="form-group">
+    <label for="caseSummary" class="col-lg-3 control-label"><?php echo $this->resourceHelper('case-summary'); ?></label>
+    <div class="col-lg-4 itext">
+      <?php echo $this->formRow($submitForm->get('caseSummary')); ?>
+    </div>
+</div>
+<?php echo $this->form()->closeTag(); ?>

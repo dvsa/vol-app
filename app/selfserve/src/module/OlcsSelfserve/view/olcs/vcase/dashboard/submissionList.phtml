@@ -1,0 +1,24 @@
+<?php $this->placeholder('body-class')->set("full-page"); ?>
+<tbody id="listTable">
+<?php foreach ($listData as $row) : ?>
+    <tr>
+        <td>
+            <a href="/case/submission?id=<?php echo $this->escapeHtml( $row['submissionId']); ?>&caseId=
+<?php echo $this->escapeHtml( $row['case']['caseId']); ?>&licenceId=
+<?php echo $this->escapeHtml( $row['licence']['licenceId']); ?>">
+<?php echo $this->escapeHtml( $row['submissionNumber'] ); ?></a><br>
+<?php echo $this->escapeHtml(ucfirst(($row['status'] == 'created') ? 'open' : $row['status'])); ?>
+        </td>
+        <td><?php echo $row['createdAt'] ? $this->simpleDateFormat($row['createdAt']) : ''; ?></td>
+        <td><?php echo $row['closedAt'] ? $this->simpleDateFormat($row['closedAt']) : ''; ?></td>
+        <td><?php echo $this->escapeHtml($row['with']); ?></td>
+        <td class="blue38-bold"><?php echo $this->escapeHtml($row['urgent'] ? strtoupper('Urgent') : null); ?></td>
+        <td style="text-align: right">
+            <?php if ($row['status']=='open') : ?>
+            <button type="button" name="stop-redirect" class="btn-flex active" id="stop-redirect">Stop / Redirect</button>
+            <button type="button" name="void" class="btn-flex active" id="void">Void</button>
+            <?php endif; ?>
+        </td>
+    </tr>
+<?php endforeach; ?>
+</tbody>

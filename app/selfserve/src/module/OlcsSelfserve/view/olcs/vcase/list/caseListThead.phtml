@@ -1,0 +1,15 @@
+<?php  
+    $this->headScript()->prependFile($this->basePath() . '/js/listSort.js');
+    $sort = array();
+        if (isset($this->tableHeaderParams['sortColumn'])) {
+            $sort[$this->tableHeaderParams['sortColumn']]['dir'] = $this->tableHeaderParams['sortDir'] == 'dn' ? 'arrDn' : 'arrUp';
+        }
+?>
+<thead>
+    <tr>
+        <th class="text-muted columnSortable" id="caseId"><span class="noWrap"><img  src="/img/p.png" class="sprt <?php echo array_key_exists('caseId', $sort) ? $sort['caseId']['dir'] : 'arrUp'; ?>" /><?php echo $this->resourceHelper('case-number'); ?></span></th>
+        <th class="text-muted columnSortable" id="caseType"><span class="noWrap"><img  src="/img/p.png" class="sprt <?php echo array_key_exists('caseType', $sort) ? $sort['caseType']['dir'] : 'arrUp'; ?>" /><?php echo $this->resourceHelper('licence-type'); ?></th>
+        <th class="text-muted columnSortable" id="openTime"><span class="noWrap"><img  src="/img/p.png" class="sprt <?php echo array_key_exists('openTime', $sort) ? $sort['openTime']['dir'] : 'arrUp'; ?>" /><?php echo $this->resourceHelper('created'); ?></th>
+        <th class="text-muted columnSortable" id="closeTime"><span class="noWrap"><img  src="/img/p.png" class="sprt <?php echo array_key_exists('closeTime', $sort) ? $sort['closeTime']['dir'] : 'arrUp'; ?>" /><?php echo $this->resourceHelper('closed'); ?></th>
+    </tr>
+</thead>
