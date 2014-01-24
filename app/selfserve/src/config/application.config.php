@@ -5,7 +5,7 @@ return array(
         'OlcsCommon',
         'DoctrineModule',
         'DoctrineORMModule',
-        'OlcsApp'
+        'OlcsSelfserve'
     ),
 
     // These are various options for the listeners attached to the ModuleManager
