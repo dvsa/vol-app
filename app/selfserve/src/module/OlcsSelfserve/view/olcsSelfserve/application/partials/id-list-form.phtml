@@ -1,9 +1,0 @@
-<?php
-if (empty($isChildForm)) {
-    $form->prepare();
-    echo $this->form()->openTag($form);
-    echo $this->formCollection($form->get('listIds'));
-    echo $this->form()->closeTag($form);
-} else {
-    echo '<div class="id-list-form">' . $this->formCollection($form->get('listIds')) . '</div>';
-}
