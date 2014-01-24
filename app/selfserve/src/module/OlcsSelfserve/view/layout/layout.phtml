@@ -15,16 +15,11 @@
         <link rel="shortcut icon" sizes="16x16" type="image/png" href="<?php echo $this->escapeHtml($this->basePath() . '/img/favicon.png'); ?>" />
         <link rel="icon" sizes="128x128" type="image/png" href="<?php echo $this->escapeHtml($this->basePath() . '/img/favicon-large.png'); ?>" />
         <?php echo $this->headLink(array('rel' => 'apple-touch-icon', 'type' => 'image/png', 'href' => $this->basePath() . '/img/favicon-large.png'))
-                        ->prependStylesheet($this->basePath() . '/css/style.css')
-                        ->prependStylesheet($this->basePath() . '/css/magnific-popup.css')
-                        ->prependStylesheet($this->basePath() . '/css/bootstrap-theme.min.css')
-                        ->prependStylesheet($this->basePath() . '/css/bootstrap.min.css') ?>
+                        ->prependStylesheet($this->basePath() . '/css/style.css')?>
 
         <!-- Scripts -->
         <?php echo $this->headScript()
-             ->prependFile($this->basePath() . '/js/js.js')
             ->prependFile($this->basePath() . '/js/multiselect.js')
-            ->prependFile($this->basePath() . '/js/bootstrap.min.js')
             ->prependFile($this->basePath() . '/js/jquery.magnific-popup.min.js')
             ->prependFile($this->basePath() . '/js/jquery.min.js')
             ->prependFile($this->basePath() . '/js/tinymce/tinymce.min.js')
@@ -33,37 +28,60 @@
         ; ?>
     </head>
     <body class="<?php echo $this->placeholder('body-class'); ?>">
-		
-        <nav class="navbar navbar-inverse" role="navigation">
+        <div class="header">
             <div class="container">
                 <a href="/">
-                    <h2><strong>O</strong>perator <strong>L</strong>icensing &amp; <strong>C</strong>ompliance <strong>S</strong>ystem <strong>S</strong>elf <strong>S</strong>ervice</h2>
+                    <h2>GOV.UK</h2>
                 </a>
             </div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#"><?php echo $this->resourceHelper('progress-bar-applicant-details');?></a></li>
+                <li><a href="#"><?php echo $this->resourceHelper('progress-bar-type-of-licence');?></a></li>
+                <li><a href="#"><?php echo $this->resourceHelper('progress-bar-your-business');?></a></li>
+                <li><a href="#"><?php echo $this->resourceHelper('progress-bar-operating-centres');?></a></li>
+                <li><a href="#"><?php echo $this->resourceHelper('progress-bar-trnsport-managers');?></a></li>
+                <li><a href="#"><?php echo $this->resourceHelper('progress-bar-vehicles-safety');?></a></li>
+                <li><a href="#"><?php echo $this->resourceHelper('progress-bar-previous-history');?></a></li>
+                <li><a href="#"><?php echo $this->resourceHelper('progress-bar-declaration');?></a></li>
+                <li><a href="#"><?php echo $this->resourceHelper('progress-bar-payment');?></a></li>
+                <li><a href="#"><?php echo $this->resourceHelper('progress-bar-summary');?></a></li>
+
+            </ul>
         </nav>
         <div class="container mainc">
-            <?php if (!$this->placeholder('no-breadcrumb')->getValue()) { ?>
-                <div class="row">
-                    <div class="bcrumb">
-                        <?php
-                            echo $this->navigation('navigation') // <-- Update this!!
-                                                ->breadcrumbs()
-                                                ->setMinDepth(0)
-                                                ->setPartial(array('layout/breadcrumb.phtml', 'Olcs'));
-                        ?>
-                    </div>
-                </div>
-            <?php } ?>
 
+            
             <?php echo $this->content; ?>
             
-            <div class="row">
-                <!--<hr>-->
-                <footer>
-                    <p> <?php echo $this->resourceHelper('layout-footer-app-name');?> <?php echo $this->resourceHelper('layout-footer'); ?></p>
-                </footer>
-            <div>
+             <div class="clearfix"></div>
         </div> <!-- /container -->
+        <footer>
+            <div class="container">
+        
+                <div id="footer-text">
+                    <ul>
+                        <li><a href="#"><?php 
+                        // These translations are keys in src/module/OlcsSelfserve/config/translations.ini SL
+                        echo $this->resourceHelper('layout-footer-support');?></a></li>
+                        <li><a href="#"><?php echo $this->resourceHelper('layout-footer-cookies');?></a></li>
+                        <li><a href="#"><?php echo $this->resourceHelper('layout-footer-feedback');?></a></li>
+                        <li><a href="#"><?php echo $this->resourceHelper('layout-footer-cymraeg');?></a></li>
+                        <li><?php echo $this->resourceHelper('layout-footer-built-by-the');?></li>
+                        <li><a href="#"><?php echo $this->resourceHelper('layout-footer-government-digital-service');?></a></li>
+
+                        <p><?php echo $this->resourceHelper('layout-footer-open-government-licence-statement');?></p>
+                        <p><?php echo $this->resourceHelper('layout-footer-disclaimer-statement');?></p>  
+                    </ul>
+                    
+                </div>
+                <div id="footer-logo">
+                    <img src="/img/favicon-large.png" />
+                </div>
+            </div>
+            
+        </footer>
         <?php echo $this->inlineScript() ?>
     </body>
 </html>
