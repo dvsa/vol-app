@@ -20,18 +20,8 @@ class IndexController extends AbstractActionController {
        $view = new ViewModel(array(
             'message' => 'OCLS dashboard',
         ));
-        $view->setTemplate('lookup/staticViews/index');
+        $view->setTemplate('index/index');
         return $view;        
-    }
-    
-    public function welcomeAction()    {
-        
-       $view = new ViewModel(array(
-            'message' => 'OCLS dashboard',
-        ));
-        $view->setTemplate('olcs/lookup/staticViews/index');
-        return $view;
-        
     }
     
 }
