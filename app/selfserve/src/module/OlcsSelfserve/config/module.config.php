@@ -49,7 +49,7 @@ return array(
             'navigation' => 'Zend\Navigation\Service\DefaultNavigationFactory',
             'Zend\Log' => function ($sm) {
                 $log = new Zend\Log\Logger();
-                $writer = new Zend\Log\Writer\Stream('/var/log/olcs/olcs-selfserveLogfile.log');
+                $writer = new Zend\Log\Writer\Stream('/var/log/olcs/olcs-selfserve.log');
                 $log->addWriter($writer);
 
                 return $log;
