@@ -33,7 +33,7 @@ class Module
             'Zend\Loader\StandardAutoloader' => array(
                 'namespaces' => array(
                     //__NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
-                    'Olcs' => __DIR__ . '/src/Olcs',
+                    'OlcsSelfserve' => __DIR__ . '/src/OlcsSelfserve',
                 ),
             ),
         );
@@ -43,10 +43,10 @@ class Module
     {
         return array(
             'invokables' => array(
-                'olcsFormDateSelect' => '\Olcs\View\Helper\FormDateSelect',
-                'formatAttributes' => '\Olcs\View\Helper\FormatAttributes',
-                'simpleDateFormat' => '\Olcs\View\Helper\SimpleDateFormat',
-                'tooltipHelper' => '\Olcs\View\Helper\TooltipHelper',
+                'olcsFormDateSelect' => '\OlcsSelfserve\View\Helper\FormDateSelect',
+                'formatAttributes' => '\OlcsSelfserve\View\Helper\FormatAttributes',
+                'simpleDateFormat' => '\OlcsSelfserve\View\Helper\SimpleDateFormat',
+                'tooltipHelper' => '\OlcsSelfserve\View\Helper\TooltipHelper',
             ),
             'factories' => array(
               'resourceHelper'=> function($sm) {
@@ -58,7 +58,7 @@ class Module
                         $data = $reader->fromFile($config['resource_strings']);
                         $resources = $data['section'];
                     }
-                    $helper  = new \Olcs\View\Helper\ResourceHelper($resources);
+                    $helper  = new \OlcsSelfserve\View\Helper\ResourceHelper($resources);
                     return $helper;
               }
             )

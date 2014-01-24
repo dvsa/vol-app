@@ -11,7 +11,7 @@
  * @author adminmwc
  */
 
-namespace Olcs\View\Helper;
+namespace OlcsSelfserve\View\Helper;
 use Zend\View\Helper\AbstractHelper;
 use Zend\View\Model\ViewModel;
 

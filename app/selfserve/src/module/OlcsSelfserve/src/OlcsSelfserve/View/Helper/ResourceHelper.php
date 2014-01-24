@@ -1,6 +1,6 @@
 <?php
 
-namespace Olcs\View\Helper;
+namespace OlcsSelfserve\View\Helper;
 use Zend\View\Helper\AbstractHelper;
 
 /*

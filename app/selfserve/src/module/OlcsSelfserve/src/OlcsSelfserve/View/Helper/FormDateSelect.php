@@ -1,8 +1,8 @@
 <?php
-namespace Olcs\View\Helper;
+namespace OlcsSelfserve\View\Helper;
 
 use DateTime;
-use Olcs\Form\Element\DateSelect as DateSelectElement;
+use OlcsSelfserve\Form\Element\DateSelect as DateSelectElement;
 use Zend\Form\ElementInterface;
 use Zend\Form\Exception;
 use Zend\Form\View\Helper\FormText as FormText;

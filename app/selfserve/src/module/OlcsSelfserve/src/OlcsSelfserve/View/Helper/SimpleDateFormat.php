@@ -4,12 +4,12 @@
  *
  * Helps formatting dates in views.
  * 
- * @package     olcs
+ * @package     OlcsSelfserve
  * @subpackage  view
  * @author      Pelle Wessman <pelle.wessman@valtech.se>
  */
 
-namespace Olcs\View\Helper;
+namespace OlcsSelfserve\View\Helper;
 
 use DateTime;
 use Zend\View\Helper\AbstractHelper;

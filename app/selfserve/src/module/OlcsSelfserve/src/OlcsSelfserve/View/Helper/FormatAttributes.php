@@ -4,12 +4,12 @@
  *
  * Usable when there's many attributes on an element that are conditional on some PHP-value
  * 
- * @package     olcs
+ * @package     OlcsSelfserve
  * @subpackage  view
  * @author      Pelle Wessman <pelle.wessman@valtech.se>
  */
 
-namespace Olcs\View\Helper;
+namespace OlcsSelfserve\View\Helper;
 
 use Zend\View\Helper\AbstractHtmlElement;
 

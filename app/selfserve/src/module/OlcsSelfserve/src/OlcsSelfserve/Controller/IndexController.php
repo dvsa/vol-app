@@ -7,7 +7,7 @@
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
-namespace Olcs\Controller;
+namespace OlcsSelfserve\Controller;
 
 use OlcsCommon\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -17,8 +17,11 @@ class IndexController extends AbstractActionController {
     
     public function indexAction()    {
         
-        return new ViewModel();
-        
+       $view = new ViewModel(array(
+            'message' => 'OCLS dashboard',
+        ));
+        $view->setTemplate('lookup/staticViews/index');
+        return $view;        
     }
     
     public function welcomeAction()    {

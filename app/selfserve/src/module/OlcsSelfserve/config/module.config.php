@@ -12,7 +12,7 @@ return array(
                 'options' => array(
                     'route' => '/',
                     'defaults' => array(
-                        'controller' => 'Olcs\Controller\Index',
+                        'controller' => 'OlcsSelfserve\Controller\Index',
                         'action' => 'index',
                     )
                 )
@@ -21,7 +21,7 @@ return array(
     ),
     'controllers' => array(
         'invokables' => array(
-            'Olcs\Controller\Index' => 'Olcs\Controller\IndexController'
+            'OlcsSelfserve\Controller\Index' => 'OlcsSelfserve\Controller\IndexController'
         )
     ),
     //-------- End of routes -----------------
@@ -49,7 +49,7 @@ return array(
             'navigation' => 'Zend\Navigation\Service\DefaultNavigationFactory',
             'Zend\Log' => function ($sm) {
                 $log = new Zend\Log\Logger();
-                $writer = new Zend\Log\Writer\Stream('/var/log/olcs/olcsLogfile.log');
+                $writer = new Zend\Log\Writer\Stream('/var/log/olcs/olcs-selfserveLogfile.log');
                 $log->addWriter($writer);
 
                 return $log;
@@ -75,7 +75,7 @@ return array(
         'template_map' => array(
             'layout/layout' => __DIR__ . '/../view/layout/layout.phtml',
             'layout/popup' => __DIR__ . '/../view/layout/popup.phtml',
-            'olcs/index/index' => __DIR__ . '/../view/olcs/index/index.phtml',
+            'olcs/index/index' => __DIR__ . '/../view/index/index.phtml',
             'error/404' => __DIR__ . '/../view/error/404.phtml',
             'error/index' => __DIR__ . '/../view/error/index.phtml',
         ),
@@ -110,8 +110,8 @@ return array(
     ),
     'controller_plugins' => array(
         'invokables' => array(
-            'DataListPlugin' => 'Olcs\Controller\Plugin\DataListPlugin',
-            'transactional' => 'Olcs\Controller\Plugin\DoctrineTransaction',
+            'DataListPlugin' => 'OlcsSelfserve\Controller\Plugin\DataListPlugin',
+            'transactional' => 'OlcsSelfserve\Controller\Plugin\DoctrineTransaction',
         )
     ),
     'resource_strings' => __DIR__ . '/translations.ini',
