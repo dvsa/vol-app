@@ -48,6 +48,15 @@ body.full-page .container {
 }
 /* End Header */
 
+/* text styles */
+.instruction-text p {
+    margin-bottom:3 0px;
+    font-size:90%;
+    font-weight:lighter;
+    font-style:italic;
+    color:#aaaaaa;
+}
+
 /* Navigation progress bar */
 nav {
     height: 75px;
@@ -136,3 +145,115 @@ footer #footer-logo {
 
 }
 /* END Footer */
+
+
+/* Button CSS */
+.btn {
+    border-radius: 0;
+    box-shadow: none;
+    border: 0;
+    width: auto;
+    min-width: 150px;
+    text-align: center;
+    text-shadow: none;
+    font-size: 16px;
+    padding: 8px 15px 7px;
+    position: relative;
+    text-decoration: none;
+}
+
+.btn,
+.btn:hover,
+.btn:focus,
+.btn:active,
+.btn.active {
+    background: #38aed3;
+    color: #fff;
+}
+.btn.disabled, .btn[disabled], fieldset[disabled] .btn {
+    background-color: #ccc;
+    opacity: 1;
+}
+.btn-next:after,
+.btn-search:after,
+.btn-note:after,
+.btn-save:after,
+.btn-new:after,
+.btn.loading:after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 50%;
+    background: url("/img/OLCS-icons.png") no-repeat;
+}
+.btn.loading:after {
+    background: url("/img/loading-button.gif") no-repeat 0 0;
+}
+.btn-next { padding-right: 35px }
+.btn-next:after {
+    width: 8px;
+    height: 9px;
+    right: 14px;
+    margin-top: -4px;
+    background-position: 0 -220px;
+}
+.btn-search,
+.btn-note,
+.btn-save,
+.btn-new,
+.btn.loading {
+    padding-left: 35px;
+}
+.btn-search:after,
+.btn-new:after {
+    width: 14px;
+    height: 14px;
+    left: 14px;
+    margin-top: -7px;
+}
+.btn-search:after { background-position: 0 -180px }
+.btn-new:after {
+    margin-top: -4px;
+    background-position: 0 -160px;
+}
+.btn-note:after,
+.btn-save:after {
+    width: 26px;
+    height: 26px;
+    left: 10px;
+    margin-top: -13px;
+}
+.btn-note:after { background-position: -40px -30px }
+.btn-save:after { background-position: -40px -60px }
+.btn.loading:after {
+    width: 16px;
+    height: 16px;
+    left: 19px;
+    margin-top: -8px;
+}
+.btn-small {
+    padding: 7px 0 6px;
+    min-width: 0;
+}
+.btn-small {
+    width: 36px;
+    text-indent: -5000em;
+}
+.btn-small:after {
+    left: 5px;
+}
+.btn-small.loading:after {
+    left: 10px;
+}
+
+.btn-next,
+.btn-exit {
+    float: right;
+    margin-left: 10px;
+}
+
+.btn-back {
+    float: left;
+}
+
+/* END Button CSS */

@@ -84,7 +84,7 @@ class LicenceTypeForm extends Form
             'name' => 'back',
             'type' => 'Submit',
             'attributes' => array(
-                'class' => 'btn btn-cancel',
+                'class' => 'btn btn-back',
                 'id' => 'backbutton',
                 'value' => 'Back'
             )
@@ -94,7 +94,7 @@ class LicenceTypeForm extends Form
             'name' => 'exit',
             'type' => 'Submit',
             'attributes' => array(
-                'class' => 'btn btn-cancel',
+                'class' => 'btn btn-exit',
                 'id' => 'exitbutton',
                 'value' => 'Exit'
             )
