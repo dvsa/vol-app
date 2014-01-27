@@ -16,12 +16,39 @@ return array(
                         'action' => 'index',
                     )
                 )
+            ),
+            'business-type' => array(
+                'type' => 'literal',
+                'options' => array(
+                    'route' => '/business-type',
+                    'defaults' => array(
+                        'controller' => 'OlcsSelfserve\Controller\BusinessType',
+                        'action' => 'details',
+                    )
+                ),
+                'may_terminate' => true,
+                'child_routes' => array(
+                    'details' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/business-type/[:applicationId]',
+                            'constraints' => array(
+                                'applicationId' => '[0-9]+'
+                            ),
+                            'defaults' => array(
+                                'controller' => 'OlcsSelfserve\Controller\BusinessType',
+                                'action' => 'details'
+                            )
+                        )
+                    )
+                )
             )
         )
     ),
     'controllers' => array(
         'invokables' => array(
-            'OlcsSelfserve\Controller\Index' => 'OlcsSelfserve\Controller\IndexController'
+            'OlcsSelfserve\Controller\Index' => 'OlcsSelfserve\Controller\IndexController',
+            'OlcsSelfserve\Controller\BusinessType' => 'OlcsSelfserve\Controller\Selfserve\BusinessTypeController'
         )
     ),
     //-------- End of routes -----------------
