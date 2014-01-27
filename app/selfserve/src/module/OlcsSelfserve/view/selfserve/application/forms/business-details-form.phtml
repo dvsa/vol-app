@@ -11,16 +11,28 @@
             <?php echo $this->resourceHelper('your-business-company-details-header'); ?>
         </div>
         
+        <?php echo $this->formRow($this->businessDetailsForm->get('business[companyNumber]')); ?>
+        <div class="instruction-text">
+            <p><?php echo $this->resourceHelper('your-business-form-instruction-company-number-text'); ?></p>
+        </div>
+
+        <?php echo $this->formRow($this->businessDetailsForm->get('business[companyName]')); ?>
+        <div class="instruction-text">
+            <p><?php echo $this->resourceHelper('your-business-form-instruction-company-name-text'); ?></p>
+        </div>
         
         <div>
             <?php echo $this->resourceHelper('your-business-trading-names-header'); ?>
         </div>
-        
-        
+                
+        <?php echo $this->formRow($this->businessDetailsForm->get('business[tradingNames]')); ?>
+
         <div>
             <?php echo $this->resourceHelper('your-business-types-of-business-header'); ?>
         </div>
         
+        <?php //echo $this->formRow($this->businessDetailsForm->get('business[typesOfBusiness]')); ?>
+
 
         
         

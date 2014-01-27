@@ -63,6 +63,21 @@ nav a {
 }
 /* END Navigation progress bar */
 
+/* FORM styles */
+label, input, select {
+    display:block;
+    margin:20px;
+}
+/* End form styles */
+
+/* text styles */
+.instruction-text p {
+    font-size:90%;
+    font-weight:lighter;
+    font-style:italic;
+    color:#aaaaaa;
+}
+
 /* Footer */
 
 footer, footer a {
