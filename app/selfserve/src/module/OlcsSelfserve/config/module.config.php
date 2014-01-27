@@ -20,7 +20,7 @@ return array(
             'business-type' => array(
                 'type' => 'literal',
                 'options' => array(
-                    'route' => '/business-type',
+                    'route' => '/selfserve/business-type',
                     'defaults' => array(
                         'controller' => 'OlcsSelfserve\Controller\BusinessType',
                         'action' => 'details',
@@ -31,7 +31,7 @@ return array(
                     'details' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/business-type/[:applicationId]',
+                            'route' => '/selfserve/business-type/[:applicationId]',
                             'constraints' => array(
                                 'applicationId' => '[0-9]+'
                             ),

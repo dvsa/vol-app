@@ -19,8 +19,6 @@ class BusinessDetailsForm extends OlcsForm
     public function __construct()  {
 
         parent::__construct('BusinessDetailsForm');
-
-        $this->countryArray = include (__DIR__ . '/../../../../config/countries.config.php');
         
         $this->add(array(
             'type' => 'Zend\Form\Element\Select',
@@ -32,6 +30,10 @@ class BusinessDetailsForm extends OlcsForm
                 )
         ));
         
+        $entityTypesElem = $this->get('business[entityTypes]');
+        $entityTypeGroup = $this->getSelectResourceStrings(self::$entityTypesArray);
+        $entityTypesElem->setValueOptions($this->setSelect($entityTypeGroup, 'Select type'));
+
     }
         
     public function isValid() {
