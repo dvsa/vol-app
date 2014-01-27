@@ -48,7 +48,19 @@ body.full-page .container {
 }
 /* End Header */
 
-/* text styles */
+/* Form styles */
+
+.form-group { font-size: 19px; }
+.form-group label { font-weight: normal; }
+.form-group.required .control-label:after {
+    content: "*";
+    color: #3daed7;
+}
+
+/* End Form styles */
+
+/* Text styles */
+
 .instruction-text p {
     margin-bottom:3 0px;
     font-size:90%;
@@ -56,6 +68,8 @@ body.full-page .container {
     font-style:italic;
     color:#aaaaaa;
 }
+
+/* End text styles */
 
 /* Navigation progress bar */
 nav {
@@ -112,6 +126,18 @@ nav li a {
 }
 /* END Navigation progress bar */
 
+/* Radio blocks */
+
+.radio-block LABEL {
+    display: block;
+}
+
+.radio-block {
+    margin-bottom: 10px;
+}
+
+/* END Radio blocks */
+
 /* Footer */
 
 footer, footer a {
@@ -146,6 +172,14 @@ footer #footer-logo {
 }
 /* END Footer */
 
+/* text styles */
+.instruction-text {
+    margin-bottom:3 0px;
+    font-size:90%;
+    font-weight:lighter;
+    font-style:italic;
+    color:#aaaaaa;
+}
 
 /* Button CSS */
 .btn {
