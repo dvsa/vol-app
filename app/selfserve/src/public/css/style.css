@@ -50,16 +50,56 @@ body.full-page .container {
 
 /* Navigation progress bar */
 nav {
-    height:100px;
+    height: 75px;
+    width: 900px;
+}
+nav ul {
+    height: 100%;
+    background-image: url('/img/dashed_line.png');
+    background-repeat: repeat-x; 
+    background-position:  left;
+    
 }
 nav li {
-    display:inline;
-    margin:5px;
+    display:inline-block;
+    height: 100%;
+    width: 80px;
+    
+    background-image: url('/img/green_circle.png');
+    background-repeat: no-repeat;
+    background-position: center;
 }
-nav a {
+nav li a {
+    display: inline-block;
     text-decoration:none;
     color:#666666;
-    font-size:14px;
+    
+    font-size:13px; 
+    text-align: center;
+  
+    height: 100%;
+    width: 100%;
+}
+
+nav span {
+    display: inline-block;
+    width: 80px;
+    height: 35px;
+    position: relative;
+    top: 60px;
+}
+
+
+nav li.progress-breadcrumb-on {
+    background-image: url('/img/black_circle.png');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+nav li a {
+    background-image: url('/img/white_arrow.png');
+    background-repeat: no-repeat;
+    background-position: center;
 }
 /* END Navigation progress bar */
 
