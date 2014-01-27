@@ -140,12 +140,16 @@ nav li a {
 
 /* Footer */
 
+footer {
+    clear:both;
+}
+
 footer, footer a {
     color:#666666;
     background-color: #dddddd;
 }
 footer .container {
-        padding:20px;
+    padding:20px;
 }
 footer #footer-text {
     
@@ -179,6 +183,11 @@ footer #footer-logo {
     font-weight:lighter;
     font-style:italic;
     color:#aaaaaa;
+}
+
+
+.default-hidden {
+    display: none;
 }
 
 /* Button CSS */
