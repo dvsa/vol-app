@@ -1,0 +1,23 @@
+<?php 
+$this->placeholder('body-class')->set("full-page");
+
+?>
+<?php $businessDetailsForm->prepare(); ?>
+
+<?php //echo $this->partial('OlcsSelfserve/common/errorMessages', array('messages' => $messages)); ?>
+<?php echo $this->form()->openTag($businessDetailsForm); ?>
+
+<div id="businessDetailsDiv" class="row">
+
+<?php
+    echo $this->partial('application/forms/business-details-form', array(
+        
+    ));
+    
+?>
+    <div class="form-group">
+        <button id="cancelbutton" name="cancel" class="btn btn-cancel" type="button"><?php echo $this->resourceHelper('cancel'); ?></button>
+        <button id="submitbutton" name="submit" class="btn btn-success btn-save pull-right"><?php echo $this->resourceHelper('save'); ?></button>
+    </div>
+</div>
+<?php echo $this->form()->closeTag(); ?>

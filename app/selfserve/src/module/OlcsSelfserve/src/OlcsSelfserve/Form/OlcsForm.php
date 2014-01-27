@@ -7,7 +7,7 @@
  * @author     Pelle Wessman <pelle.wessman@valtech.se>
  */
 
-namespace Olcs\Form;
+namespace OlcsSelfserve\Form;
 
 use Zend\Form\Form;
 use Zend\ServiceManager\ServiceLocatorInterface;
