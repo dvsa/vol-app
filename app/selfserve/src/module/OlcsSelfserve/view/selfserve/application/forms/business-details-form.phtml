@@ -5,20 +5,24 @@
             <?php echo $this->resourceHelper('your-business-type-of-business-header'); ?>
         </h1>
         
-        <?php echo $this->formRow($this->businessDetailsForm->get('business[entityTypes]')); ?>
         
-        <h2>
-            <?php echo $this->resourceHelper('your-business-company-details-header'); ?>
-        </h2>
+        <label for="<?php echo $businessDetailsForm->get('business[entityTypes]')->getAttribute('id');?>"><?php echo $this->resourceHelper('your-business-form-label-type-of-business'); ?></label>
+        <?php echo $this->formRow($businessDetailsForm->get('business[entityTypes]')); ?>
+     
         
-        <?php echo $this->formRow($this->businessDetailsForm->get('business[companyNumber]')); ?>
-        <?php echo $this->formRow($this->businessDetailsForm->get('organisationSearchBtn')); ?>
+        <h2><?php echo $this->resourceHelper('your-business-company-details-header'); ?></h2>
+        
+        <label for="<?php echo $businessDetailsForm->get('business[companyNumber]')->getAttribute('id');?>"><?php echo $this->resourceHelper('your-business-form-label-registered-company-number'); ?></label>
+        <?php echo $this->formRow($businessDetailsForm->get('business[companyNumber]')); ?>
+        <?php echo $this->formButton($businessDetailsForm->get('organisationSearchBtn'), $this->resourceHelper('common-button-find')); ?>
 
         <div class="instruction-text">
             <p><?php echo $this->resourceHelper('your-business-form-instruction-company-number-text'); ?></p>
         </div>
 
-        <?php echo $this->formRow($this->businessDetailsForm->get('business[companyName]')); ?>
+        
+        <label for="<?php echo $businessDetailsForm->get('business[companyName]')->getAttribute('id');?>"><?php echo $this->resourceHelper('your-business-form-label-registered-company-name'); ?></label>
+        <?php echo $this->formRow($businessDetailsForm->get('business[companyName]')); ?>
         <div class="instruction-text">
             <p><?php echo $this->resourceHelper('your-business-form-instruction-company-name-text'); ?></p>
         </div>
@@ -30,6 +34,7 @@
         <div class="" id="tradingNameContainer">
 
             <div class="">
+                <label for=""><?php echo $this->resourceHelper('your-business-form-label-trading-name'); ?></label>
                 <?php echo $this->formRow($businessDetailsForm->get('business[tradingNameId]')); ?>
                 <span class="trading-names-collection"><?php
                     echo $this->formCollection($businessDetailsForm->get('business[tradingNames]'));
@@ -37,7 +42,7 @@
                 <div id="tradingNameText" class=""></div>
             </div>
             <div class="">
-                <?php echo $this->formButton($businessDetailsForm->get('tradingAddAnother')); ?>
+                <?php echo $this->formButton($businessDetailsForm->get('tradingAddAnother'), $this->resourceHelper('common-button-add-another')); ?>
             </div>
         </div>
         <div class="instruction-text">
@@ -47,7 +52,8 @@
         <h2>
             <?php echo $this->resourceHelper('your-business-types-of-business-header'); ?>
         </h2>
-        
+
+        <label for=""><?php echo $this->resourceHelper('your-business-form-label-types-of-business'); ?></label>
         <?php echo $this->formRow($this->businessDetailsForm->get('business[businessTypes]')); ?>
 
 

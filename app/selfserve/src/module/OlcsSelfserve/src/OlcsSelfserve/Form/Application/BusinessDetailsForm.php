@@ -21,16 +21,14 @@ class BusinessDetailsForm extends OlcsForm
         parent::__construct('BusinessDetailsForm');
         
         $this->add(array(
+            'id' => 'business[entityTypes]',
             'type' => 'Zend\Form\Element\Select',
             'name' => 'business[entityTypes]',
             'required' => true,
             'attributes' =>  array(
-                'class' => '',
+                'class' => 'form-control multiselect',
                 'id' => 'business[entityTypes]'
-                ),
-            'options' => array(
-                'label' => $this->getResourceString('your-business-form-label-type-of-business'),
-            ),
+                )
         ));
         
         $entityTypesElem = $this->get('business[entityTypes]');
@@ -42,12 +40,9 @@ class BusinessDetailsForm extends OlcsForm
             'name' => 'business[companyNumber]',
             'required' => true,
             'attributes' =>  array(
-                'class' => '',
+                'class' => 'form-control',
                 'id' => 'business[companyNumber]'
-                ),
-            'options' => array(
-                'label' => $this->getResourceString('your-business-form-label-registered-company-number'),
-            ),
+                )
         ));
         
         $this->add(array(
@@ -55,12 +50,9 @@ class BusinessDetailsForm extends OlcsForm
             'name' => 'business[companyName]',
             'required' => true,
             'attributes' =>  array(
-                'class' => '',
+                'class' => 'form-control',
                 'id' => 'business[companyName]'
-                ),
-            'options' => array(
-                'label' => $this->getResourceString('your-business-form-label-registered-company-name'),
-            ),
+                )
         ));
                 
         
@@ -69,25 +61,19 @@ class BusinessDetailsForm extends OlcsForm
             'name' => 'organisationSearchBtn',
             'type' => 'button',
             'attributes' => array(
-                'class' => 'inline-btn',
+                'class' => 'form-control btn btn-search ',
                 'id' => 'organisationSearchBtn',
                 'value' => 'Search'
-            ),            
-            'options' => array(
-                'label' => $this->getResourceString('common-button-find'),
-            ),
+            )
         ));        
         
         $this->add(array(
             'name' => 'business[tradingNameId]',
             'type' => 'Text',
             'attributes' => array(
-                'class' => '',
+                'class' => 'form-control',
                 'id' => 'business[tradingNameId]',
-            ),  
-            'options' => array(
-                'label' => $this->getResourceString('your-business-form-label-trading-name'),
-            ),
+            )
         ));
 
         $this->add(array(
@@ -106,13 +92,10 @@ class BusinessDetailsForm extends OlcsForm
             'name' => 'tradingAddAnother',
             'type' => 'button',
             'attributes' => array(
-                'class' => '',
+                'class' => 'btn btn-add disabled',
                 'id' => 'tradingAddAnother',
                 'value' => 'Search'
-            ),            
-            'options' => array(
-                'label' => $this->getResourceString('common-button-add-another'),
-            ),
+            )
         ));
         
         $this->add(array(
@@ -120,21 +103,14 @@ class BusinessDetailsForm extends OlcsForm
             'name' => 'business[businessTypes]',
             'required' => true,
             'attributes' =>  array(
-                'class' => '',
+                'class' => 'form-control multiselect',
                 'id' => 'business[businessTypes]'
-                ),
-            'options' => array(
-                'label' => $this->getResourceString('your-business-form-label-types-of-business'),
-            ),
+                )
         ));
 
         $entityTypesElem = $this->get('business[businessTypes]');
         $entityTypeGroup = $this->getSelectResourceStrings(self::$businessTypesArray);
         $entityTypesElem->setValueOptions($this->setSelect($entityTypeGroup, $this->getResourceString('common-please-select')));
-
-        
-        
-        
         
     }
         
