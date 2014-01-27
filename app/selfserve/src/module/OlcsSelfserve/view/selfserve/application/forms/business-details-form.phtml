@@ -1,17 +1,19 @@
 <?php 
 ?>
     <div>
-        <div>
+        <h1>
             <?php echo $this->resourceHelper('your-business-type-of-business-header'); ?>
-        </div>
+        </h1>
         
         <?php echo $this->formRow($this->businessDetailsForm->get('business[entityTypes]')); ?>
         
-        <div>
+        <h2>
             <?php echo $this->resourceHelper('your-business-company-details-header'); ?>
-        </div>
+        </h2>
         
         <?php echo $this->formRow($this->businessDetailsForm->get('business[companyNumber]')); ?>
+        <?php echo $this->formRow($this->businessDetailsForm->get('organisationSearchBtn')); ?>
+
         <div class="instruction-text">
             <p><?php echo $this->resourceHelper('your-business-form-instruction-company-number-text'); ?></p>
         </div>
@@ -21,17 +23,32 @@
             <p><?php echo $this->resourceHelper('your-business-form-instruction-company-name-text'); ?></p>
         </div>
         
-        <div>
+        <h2>
             <?php echo $this->resourceHelper('your-business-trading-names-header'); ?>
-        </div>
+        </h2>
                 
-        <?php echo $this->formRow($this->businessDetailsForm->get('business[tradingNames]')); ?>
+        <div class="" id="tradingNameContainer">
 
-        <div>
-            <?php echo $this->resourceHelper('your-business-types-of-business-header'); ?>
+            <div class="">
+                <?php echo $this->formRow($businessDetailsForm->get('business[tradingNameId]')); ?>
+                <span class="trading-names-collection"><?php
+                    echo $this->formCollection($businessDetailsForm->get('business[tradingNames]'));
+                ?></span>
+                <div id="tradingNameText" class=""></div>
+            </div>
+            <div class="">
+                <?php echo $this->formButton($businessDetailsForm->get('tradingAddAnother')); ?>
+            </div>
         </div>
+        <div class="instruction-text">
+            <p><?php echo $this->resourceHelper('your-business-form-instruction-trading-name-text'); ?></p>
+        </div>
+
+        <h2>
+            <?php echo $this->resourceHelper('your-business-types-of-business-header'); ?>
+        </h2>
         
-        <?php //echo $this->formRow($this->businessDetailsForm->get('business[typesOfBusiness]')); ?>
+        <?php echo $this->formRow($this->businessDetailsForm->get('business[businessTypes]')); ?>
 
 
         

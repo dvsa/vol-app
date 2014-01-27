@@ -64,14 +64,17 @@ nav a {
 /* END Navigation progress bar */
 
 /* FORM styles */
-label, input, select {
+label, input, select, .instruction-text, button {
     display:block;
-    margin:20px;
+    margin:5px 20px 0px 20px;
 }
+
+
 /* End form styles */
 
 /* text styles */
 .instruction-text p {
+    margin-bottom:30px;
     font-size:90%;
     font-weight:lighter;
     font-style:italic;
