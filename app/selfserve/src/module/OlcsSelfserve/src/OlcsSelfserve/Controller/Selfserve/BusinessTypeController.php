@@ -34,38 +34,67 @@ class BusinessTypeController extends AbstractActionController
      * Preloads application/licence and organisation 
      * 
      * @return null
-     *
+     */
     public function init()
     {
-        $this->logger = $this->getServiceLocator()->get('Zend\Log');
+        //$this->logger = $this->getServiceLocator()->get('Zend\Log');
         
         // get application
-        $this->applicationId = $this->getEvent()->getRouteMatch()->getParam('appId');
-     
+        $this->applicationId = $this->getEvent()->getRouteMatch()->getParam('applicationId');
+
         if (isset($this->applicationId) && is_numeric($this->applicationId))
         {
-            
-            $appService = $this->service('Olcs\Application');
-            $this->application = $appService->get($this->applicationId);
-            $this->logger->err('Application '.$this->applicationId.' could not be retrived');
+            try 
+            {
+                $appService = $this->service('Olcs\Application');
+                $this->application = $appService->get($this->applicationId);
+                //$this->logger->err('Application '.$this->applicationId.' could not be retrived');
+            }
+            catch (Exception $e)
+            {
+                return $e;
+            }
+
             
             // if application has a licence, get the licence
             if (isset($this->application['applicationLicence']['licenceId']))
             {
-                $this->licenceId = $this->application['applicationLicence']['licenceId'];
-                $this->licence = $this->service('Olcs\Licence')->get($this->licenceId);
-                
-                $this->logger->err('Licence '.$this->licenceId.' could not be retrived');
+                try 
+                {
+                    $this->licenceId = $this->application['applicationLicence']['licenceId'];
+                    $this->licence = $this->service('Olcs\Licence')->get($this->licenceId);
+                }
+                catch (Exception $e)
+                {
+                    //$this->logger->err('Licence '.$this->licenceId.' could not be retrived');
+                    return $e;
+                }
                 
                 // if licence has an operator get the organisation
                 if (isset($this->licence['operator']['operatorId']))
                 {
-                    $this->organisation = $this->service('Olcs\Organisation')->get($this->licence['operator']['operatorId']);            
+                    try 
+                    {
+                        $this->organisation = $this->service('Olcs\Organisation')->get($this->licence['operator']['operatorId']);            
+                    }
+                    catch (Exception $e)
+                    {
+                        //$this->logger->err('Organisation '.$this->licence['operator']['operatorId'].' could not be retrived');
+                        return $e;
+                    }
                 }
             }
         }
-
-    }*/
+  
+        /*
+        echo '<h4>Appplication</h4>';
+        var_dump($this->application);
+        echo '<h4>Licence</h4>';
+        var_dump($this->licence);
+        echo '<h4>Organisation</h4>';
+        var_dump($this->organisation);
+*/
+    }
     
    /**
     * Method to dispatch the business type form based on the type of business
@@ -74,9 +103,26 @@ class BusinessTypeController extends AbstractActionController
     */
    public function detailsAction() 
     {
-
+        $this->init();
         $businessDetailsForm = new Form\Application\BusinessDetailsForm();
 
+        if ($this->getRequest()->isPost())
+        {
+            // FORM POSTED
+            if ($businessDetailsForm->isValid())
+            {
+                $this->update();
+            }
+        }
+        else 
+        {           
+            $formData = $this->mapFormData();
+
+            // prefill form
+            $businessDetailsForm->setData($formData);
+            var_dump($formData);
+        }
+        
         $view = new ViewModel(array('businessDetailsForm' => $businessDetailsForm,
                                     'messages' => $this->messages
                                 ));
@@ -86,5 +132,38 @@ class BusinessTypeController extends AbstractActionController
         
     }
     
-   
+    /**
+     * Method to map form data fields from any data retrieved from the database.
+     * Enabling an easy $form->setData($formData) to be used.
+     * 
+     * @return array
+     */
+    private function mapFormData() {
+        $formData = array();
+        
+        if (isset($this->licence))
+        {
+            $formData['entityType'] = $this->licence['operator']['entityType'];
+            $formData['companyNumId'] = $this->licence['operator']['registeredCompanyNumber'];
+            $formData['operatorId'] = $this->licence['operator']['operatorId'];
+            $formData['operatorNameTextHidden'] = $this->licence['operator']['operatorName'];
+            $formData['operatorName'] = $this->licence['operator']['operatorName'];
+            $formData['tradingDropdown'] = $this->licence['tradeType'];
+            $formData['tradingNames'] = $this->licence['tradingNames'];
+        }
+        
+        return $formData;
+    }
+    
+    /**
+     * Update the database and redirect
+     * @todo
+     */
+    public function process()
+    {
+        
+        return true;
+        
+    }
+    
 }

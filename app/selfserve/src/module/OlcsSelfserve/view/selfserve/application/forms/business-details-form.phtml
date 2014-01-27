@@ -6,23 +6,23 @@
         </h1>
         
         
-        <label for="<?php echo $businessDetailsForm->get('business[entityTypes]')->getAttribute('id');?>"><?php echo $this->resourceHelper('your-business-form-label-type-of-business'); ?></label>
-        <?php echo $this->formRow($businessDetailsForm->get('business[entityTypes]')); ?>
+        <label for="<?php echo $businessDetailsForm->get('entityType')->getAttribute('id');?>"><?php echo $this->resourceHelper('your-business-form-label-type-of-business'); ?></label>
+        <?php echo $this->formRow($businessDetailsForm->get('entityType')); ?>
      
         
         <h2><?php echo $this->resourceHelper('your-business-company-details-header'); ?></h2>
         
-        <label for="<?php echo $businessDetailsForm->get('business[companyNumber]')->getAttribute('id');?>"><?php echo $this->resourceHelper('your-business-form-label-registered-company-number'); ?></label>
-        <?php echo $this->formRow($businessDetailsForm->get('business[companyNumber]')); ?>
+        <label for="<?php echo $businessDetailsForm->get('companyNumId')->getAttribute('id');?>"><?php echo $this->resourceHelper('your-business-form-label-registered-company-number'); ?></label>
+        <?php echo $this->formRow($businessDetailsForm->get('companyNumId')); ?>
         <?php echo $this->formButton($businessDetailsForm->get('organisationSearchBtn'), $this->resourceHelper('common-button-find')); ?>
 
         <div class="instruction-text">
             <p><?php echo $this->resourceHelper('your-business-form-instruction-company-number-text'); ?></p>
         </div>
 
-        
-        <label for="<?php echo $businessDetailsForm->get('business[companyName]')->getAttribute('id');?>"><?php echo $this->resourceHelper('your-business-form-label-registered-company-name'); ?></label>
-        <?php echo $this->formRow($businessDetailsForm->get('business[companyName]')); ?>
+        <?php echo $this->formRow($businessDetailsForm->get('operatorId')); ?>
+        <label for="<?php echo $businessDetailsForm->get('operatorName')->getAttribute('id');?>"><?php echo $this->resourceHelper('your-business-form-label-registered-company-name'); ?></label>
+        <?php echo $this->formRow($businessDetailsForm->get('operatorName')); ?>
         <div class="instruction-text">
             <p><?php echo $this->resourceHelper('your-business-form-instruction-company-name-text'); ?></p>
         </div>

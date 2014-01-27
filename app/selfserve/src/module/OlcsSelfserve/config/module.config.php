@@ -31,7 +31,7 @@ return array(
                     'details' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/selfserve/business-type/[:applicationId]',
+                            'route' => '/[:applicationId]',
                             'constraints' => array(
                                 'applicationId' => '[0-9]+'
                             ),
@@ -78,7 +78,6 @@ return array(
                 $log = new Zend\Log\Logger();
                 $writer = new Zend\Log\Writer\Stream('/var/log/olcs/olcs-selfserve.log');
                 $log->addWriter($writer);
-
                 return $log;
             },
         )

@@ -21,37 +21,47 @@ class BusinessDetailsForm extends OlcsForm
         parent::__construct('BusinessDetailsForm');
         
         $this->add(array(
-            'id' => 'business[entityTypes]',
+            'id' => 'entityType',
             'type' => 'Zend\Form\Element\Select',
-            'name' => 'business[entityTypes]',
+            'name' => 'entityType',
             'required' => true,
             'attributes' =>  array(
                 'class' => 'form-control multiselect',
-                'id' => 'business[entityTypes]'
+                'id' => 'entityType'
                 )
         ));
         
-        $entityTypesElem = $this->get('business[entityTypes]');
+        $entityTypesElem = $this->get('entityType');
         $entityTypeGroup = $this->getSelectResourceStrings(self::$entityTypesArray);
         $entityTypesElem->setValueOptions($this->setSelect($entityTypeGroup, 'Select type'));
 
         $this->add(array(
             'type' => 'Zend\Form\Element\Text',
-            'name' => 'business[companyNumber]',
+            'name' => 'companyNumId',
             'required' => true,
             'attributes' =>  array(
                 'class' => 'form-control',
-                'id' => 'business[companyNumber]'
+                'id' => 'companyNumId'
                 )
         ));
-        
+      
         $this->add(array(
-            'type' => 'Zend\Form\Element\Text',
-            'name' => 'business[companyName]',
+            'type' => 'Zend\Form\Element\Hidden',
+            'name' => 'operatorId',
             'required' => true,
             'attributes' =>  array(
                 'class' => 'form-control',
-                'id' => 'business[companyName]'
+                'id' => 'operatorId'
+                )
+        ));
+                
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Text',
+            'name' => 'operatorName',
+            'required' => true,
+            'attributes' =>  array(
+                'class' => 'form-control',
+                'id' => 'operatorName'
                 )
         ));
                 
