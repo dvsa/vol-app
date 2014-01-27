@@ -7,13 +7,13 @@
  * @author     Pelle Wessman <pelle.wessman@valtech.se>
  */
 
-namespace Olcs\Form;
+namespace OlcsSelfserve\Form;
 
 use Zend\Form\Form;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
-class OlcsForm extends Form implements ServiceLocatorAwareInterface
+class OlcsSelfserveForm extends Form implements ServiceLocatorAwareInterface
 {
     
     protected $servicelocator;
