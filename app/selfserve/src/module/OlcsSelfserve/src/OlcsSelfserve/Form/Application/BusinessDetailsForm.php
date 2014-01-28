@@ -124,8 +124,13 @@ class BusinessDetailsForm extends OlcsForm
         
     }
         
-
+    /**
+     * BusinessDetailsForm validation
+     * 
+     * @return boolean
+     */
     public function isValid() {
+        
         return true;
     }
 }
