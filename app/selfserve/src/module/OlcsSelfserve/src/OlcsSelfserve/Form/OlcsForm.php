@@ -76,7 +76,7 @@ class OlcsForm extends Form implements ServiceLocatorAwareInterface
      *  Static list of entity types. Used to populate the entity types drop down.
      *  @var array Entity types
      */
-    protected static $entityTypesArray = array( 'Registered Company' => 'Registered Company',
+    protected static $entityTypesArray = array( 'Registered company' => 'Registered Company',
                                                 'Sole Trader' => 'Sole trader',
                                                 'Partnership' => 'Partnership',
                                                 'Public Authority' => 'Public Authority',

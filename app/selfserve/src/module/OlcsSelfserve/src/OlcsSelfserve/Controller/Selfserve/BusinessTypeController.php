@@ -111,7 +111,7 @@ class BusinessTypeController extends AbstractActionController
             // FORM POSTED
             if ($businessDetailsForm->isValid())
             {
-                $this->update();
+                $this->process();
             }
         }
         else 
@@ -120,7 +120,6 @@ class BusinessTypeController extends AbstractActionController
 
             // prefill form
             $businessDetailsForm->setData($formData);
-            var_dump($formData);
         }
         
         $view = new ViewModel(array('businessDetailsForm' => $businessDetailsForm,
