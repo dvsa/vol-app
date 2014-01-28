@@ -13,12 +13,19 @@ selfserve.setSections = function ($context) {
     }
 
     // Country logic
-    if ( $('input:radio[name=operatorLocation]:checked').val() == "uk" ) {
+    if ( $('input:radio[name=operatorLocation]:checked').val() == "ie" ) {
+        // Operator type can only be goods
+    }
+
+    // Licence type values
+    if ( $('input:radio[name=operatorType]:checked').val() == "psv" ) {
+        // PSV
+    } else {
+        // Goods
     }
 };
 
 $(document).ready(function(){
-
     $('BODY').on("click","input:radio[name=operatorLocation]", function(e){
         selfserve.setSections();
     });
