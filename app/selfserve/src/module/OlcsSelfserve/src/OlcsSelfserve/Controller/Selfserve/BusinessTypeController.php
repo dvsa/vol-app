@@ -112,7 +112,8 @@ class BusinessTypeController extends AbstractActionController
             if ($businessDetailsForm->isValid())
             {
                 $this->process();
-            }
+            } 
+            // invalid form, todo error messages set in isValid
         }
         else 
         {           
