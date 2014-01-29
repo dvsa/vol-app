@@ -1,5 +1,9 @@
 <?php $this->headScript()->prependFile($this->basePath() . '/js/selfserve/application/licenceType.js'); ?>
-
+<?php
+    echo $this->partial('selfserve/application/partials/navigation', array(
+        'selectedPage' => 'type-of-licence',
+    ));
+?>
 
 <?php $licenceTypeForm->prepare(); ?>
 <?php echo $this->form()->openTag($licenceTypeForm); ?>
