@@ -17,8 +17,8 @@ selfserve.setSections = function ($context) {
         // Operator type can only be goods
         $(":radio[value='psv']").parent().show();
     } else {
-        $(":radio[value='psv']").parent().hide();
         $(":radio[value='goods']").prop('checked',true);
+        $('#operatorTypeSection').hide();
     }
 
     // Licence type visibility
