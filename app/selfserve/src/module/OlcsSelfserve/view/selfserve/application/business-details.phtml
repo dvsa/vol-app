@@ -1,6 +1,10 @@
 <?php 
 $this->placeholder('body-class')->set("full-page");
-
+?>
+<?php
+    echo $this->partial('selfserve/application/partials/navigation', array(
+        'selectedPage' => 'your-business',
+    ));
 ?>
 <?php $businessDetailsForm->prepare(); ?>
 

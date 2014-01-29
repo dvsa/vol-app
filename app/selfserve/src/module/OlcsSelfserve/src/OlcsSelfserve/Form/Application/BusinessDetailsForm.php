@@ -11,9 +11,9 @@
 
 namespace OlcsSelfserve\Form\Application;
 
-use OlcsSelfserve\Form\OlcsForm;
+use OlcsSelfserve\Form\OlcsSelfserveForm;
 
-class BusinessDetailsForm extends OlcsForm
+class BusinessDetailsForm extends OlcsSelfserveForm
 {
     
     public function __construct()  {

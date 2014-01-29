@@ -1,0 +1,32 @@
+<?php
+    // An array of label=>URL
+    $navArray=array(
+        "applicant-details"=>"/selfserve/licence-type",
+        "type-of-licence"=>"/selfserve/licence-type",
+        "your-business"=>"/selfserve/business-type",
+        "operating-centres"=>"",
+        "transport-managers"=>"",
+        "vehicles-safety"=>"",
+        "previous-history"=>"",
+        "declaration"=>"",
+        "payment"=>"",
+        "summary"=>""
+    )
+?>
+<nav>
+    <ul>
+        <?php
+            foreach($navArray as $label=>$url) {
+                echo '<li';
+                if ( $selectedPage == $label ) {
+                    echo ' class="progress-breadcrumb-on"';
+                }
+                echo '>
+                        <a href="'.$url.'" title="'.$this->resourceHelper("progress-bar-".$label).'">
+                            <span>'.$this->resourceHelper("progress-bar-".$label).'</span>
+                        </a>
+                      </li>';
+            }
+        ?>
+    </ul>
+</nav>
