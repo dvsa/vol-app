@@ -1,5 +1,5 @@
 <?php
-namespace Olcs\test;
+namespace OlcsSelfserve\test;
 
 use Zend\Loader\AutoloaderFactory;
 use Zend\Mvc\Service\ServiceManagerConfig;
