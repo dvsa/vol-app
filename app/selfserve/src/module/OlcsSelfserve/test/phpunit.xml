@@ -2,8 +2,8 @@
 
 <phpunit bootstrap="Bootstrap.php" colors="true">
     <testsuites>
-        <testsuite name="Olcs">
-            <directory>./unit/Olcs</directory>
+        <testsuite name="OlcsSelfserve">
+            <directory>./unit/OlcsSelfserve</directory>
         </testsuite>
     </testsuites>
 </phpunit>

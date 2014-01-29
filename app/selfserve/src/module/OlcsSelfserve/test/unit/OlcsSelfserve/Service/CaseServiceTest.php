@@ -1,6 +1,6 @@
 <?php
 
-namespace unit\Olcs\Service;
+namespace unit\OlcsSelfserve\Service;
 use \OlcsCommon\Controller\AbstractHttpControllerTestCase;
 use \Mockery as m;
 

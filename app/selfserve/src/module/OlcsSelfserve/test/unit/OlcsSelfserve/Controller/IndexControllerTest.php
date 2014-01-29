@@ -1,6 +1,6 @@
 <?php
 
-namespace unit\Olcs\Controller;
+namespace unit\OlcsSelfserve\Controller;
 
 use \OlcsCommon\Controller\AbstractHttpControllerTestCase;
 

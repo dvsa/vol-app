@@ -2,7 +2,7 @@
 
 namespace unit\OlcsSelfserve\Controller;
 
-use \OlcsCommon\Controller\AbstractHttpControllerTestCase;
+use OlcsCommon\Controller\AbstractHttpControllerTestCase;
 
 class BusinessTypeControllerTest extends AbstractHttpControllerTestCase
 {
