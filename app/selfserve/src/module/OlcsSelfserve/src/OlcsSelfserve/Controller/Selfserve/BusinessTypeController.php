@@ -86,14 +86,6 @@ class BusinessTypeController extends AbstractActionController
             }
         }
   
-        /*
-        echo '<h4>Appplication</h4>';
-        var_dump($this->application);
-        echo '<h4>Licence</h4>';
-        var_dump($this->licence);
-        echo '<h4>Organisation</h4>';
-        var_dump($this->organisation);
-*/
     }
     
    /**
