@@ -28,9 +28,9 @@ class LicenceTypeForm extends Form
 
         $this->add(array(
             'type' => 'Zend\Form\Element\Radio',
-            'name' => 'licenceTypes',
+            'name' => 'licenceType',
             'attributes' =>  array(
-                'id' => 'licenceTypes'
+                'id' => 'licenceType'
             ),
             'options' => array(
                         'value_options' => array(
@@ -74,7 +74,7 @@ class LicenceTypeForm extends Form
             'name' => 'savenext',
             'type' => 'Submit',
             'attributes' => array(
-                'class' => 'btn btn-next',
+                'class' => 'btn btn-next disabled',
                 'id' => 'savenextbutton',
                 'value' => 'Save & Next'
             )

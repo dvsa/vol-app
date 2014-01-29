@@ -13,20 +13,43 @@ selfserve.setSections = function ($context) {
     }
 
     // Country logic
-    if ( $('input:radio[name=operatorLocation]:checked').val() == "ie" ) {
+    if ( $('input:radio[name=operatorLocation]:checked').val() == "uk" ) {
         // Operator type can only be goods
+        $(":radio[value='psv']").parent().show();
+    } else {
+        $(":radio[value='psv']").parent().hide();
+        $(":radio[value='goods']").prop('checked',true);
+    }
+
+    // Licence type visibility
+    if ( $('input:radio[name=operatorType]:checked').val() ) {
+        $('#licenceTypeSection').show();
+    } else {
+        $('#licenceTypeSection').hide();
     }
 
     // Licence type values
     if ( $('input:radio[name=operatorType]:checked').val() == "psv" ) {
-        // PSV
+        $(":radio[value='special restricted']").parent().show();
     } else {
-        // Goods
+        $(":radio[value='special restricted']").parent().hide();
     }
+
+    // Check the save/next button
+    if (( $('input:radio[name=operatorType]:checked').val() )
+            && ( $('input:radio[name=operatorLocation]:checked').val() )
+            && ( $('input:radio[name=licenceType]:checked').val() ))  {
+        $('#savenextbutton').removeClass('disabled');
+    } else {
+        $('#savenextbutton').addClass('disabled');
+
+    }
+
 };
 
 $(document).ready(function(){
-    $('BODY').on("click","input:radio[name=operatorLocation]", function(e){
+    $('BODY').on("click","input:radio", function(e){
         selfserve.setSections();
     });
+
 });
