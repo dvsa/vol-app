@@ -1,5 +1,5 @@
 <?php
-namespace integration\Olcs\Service;
+namespace integration\OlcsSelfserve\Service;
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.

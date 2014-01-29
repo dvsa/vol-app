@@ -72,8 +72,35 @@ class OlcsSelfserveForm extends Form implements ServiceLocatorAwareInterface
         6 => 'In-office revocation'
     );
     
+    /**
+     *  Static list of entity types. Used to populate the entity types drop down.
+     *  @var array Entity types
+     */
+    protected static $entityTypesArray = array( 'Registered company' => 'Registered Company',
+                                                'Sole Trader' => 'Sole trader',
+                                                'Partnership' => 'Partnership',
+                                                'Public Authority' => 'Public Authority',
+                                                'Other' => 'Other');
+     
+    /**
+     *  Static list of business types. Used to populate the business types drop down.
+     *  @var array Business types
+     */
+    protected static $businessTypesArray = array(   'Pre Selected SIC code' => 'Pre selected SIC code');
+             
+    /**
+     * Static list of countries retrieved in the constructor from an included 
+     * countries.config.php file
+     * 
+     * @see src/module/OlcsSelfserve/config/countries.config.php
+     * @var array countriesArray
+     */
+    protected $countryArray;
+
     public function __construct($name = null, $options = array())
     {
+        $this->countryArray = include (__DIR__ . '/../../../config/countries.config.php');
+
         parent::__construct($name, $options);
     }
     
@@ -107,7 +134,7 @@ class OlcsSelfserveForm extends Form implements ServiceLocatorAwareInterface
     protected function getSelectResourceStrings($options)
     {
         $resources = $this->getResourceStrings();
-        $resourceHelper = new \Olcs\View\Helper\ResourceHelper($resources);
+        $resourceHelper = new \OlcsSelfserve\View\Helper\ResourceHelper($resources);
         foreach($options as $key => $value) {
             $value = str_replace(' ', '-',   strtolower($value));
             $retOptions[$key] = $resourceHelper($value);
@@ -118,7 +145,7 @@ class OlcsSelfserveForm extends Form implements ServiceLocatorAwareInterface
     protected function getResourceStrings() {
 
         $reader = new \Zend\Config\Reader\Ini();
-        $data   = $reader->fromFile(__DIR__ . '/../../../config/application.ini');
+        $data   = $reader->fromFile(__DIR__ . '/../../../config/translations.ini');
         return $data['section'];
 
     }

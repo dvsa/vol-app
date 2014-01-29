@@ -17,14 +17,40 @@ return array(
                     )
                 )
             ),
+            'business-type' => array(
+                'type' => 'literal',
+                'options' => array(
+                    'route' => '/selfserve/business-type',
+                    'defaults' => array(
+                        'controller' => 'OlcsSelfserve\Controller\BusinessType',
+                        'action' => 'details',
+                    )
+                ),
+                'may_terminate' => true,
+                'child_routes' => array(
+                    'details' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/[:applicationId]',
+                            'constraints' => array(
+                                'applicationId' => '[0-9]+'
+                            ),
+                            'defaults' => array(
+                                'controller' => 'OlcsSelfserve\Controller\BusinessType',
+                                'action' => 'details'
+                            )
+                        )
+                    )
+                )
+            ),
             'licence-type' => array(
                 'type' => 'literal',
                 'options' => array(
                     'route' => '/selfserve/licence-type',
                     'defaults' => array(
                         'controller' => 'OlcsSelfserve\Controller\LicenceType',
-                        'action' => 'index',
-                    )
+                        'action' => 'index',            
+                                )
                 ),
                 'may_terminate' => true,
                 'child_routes' => array(
@@ -36,18 +62,23 @@ return array(
                                 'applicationId' => '[0-9]+'
                             ),
                             'defaults' => array(
-                               'controller' => 'OlcsSelfserve\Controller\LicenceType',
+                                'controller' => 'OlcsSelfserve\Controller\LicenceType',
                                 'action' => 'index'
                             )
                         )
                     )
                 )
-            )
-        )
-    ),
+           )
+       )
+  ),
+            
+            
+
+            
     'controllers' => array(
         'invokables' => array(
             'OlcsSelfserve\Controller\Index' => 'OlcsSelfserve\Controller\IndexController',
+            'OlcsSelfserve\Controller\BusinessType' => 'OlcsSelfserve\Controller\Selfserve\BusinessTypeController',
             'OlcsSelfserve\Controller\LicenceType' => 'OlcsSelfserve\Controller\LicenceTypeController',
         )
     ),
@@ -76,9 +107,8 @@ return array(
             'navigation' => 'Zend\Navigation\Service\DefaultNavigationFactory',
             'Zend\Log' => function ($sm) {
                 $log = new Zend\Log\Logger();
-                $writer = new Zend\Log\Writer\Stream('/var/log/olcs/olcs-selfserveLogfile.log');
+                $writer = new Zend\Log\Writer\Stream('/var/log/olcs/olcs-selfserve.log');
                 $log->addWriter($writer);
-
                 return $log;
             },
         )

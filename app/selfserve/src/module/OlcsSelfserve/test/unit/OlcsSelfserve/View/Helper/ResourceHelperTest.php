@@ -1,8 +1,8 @@
 <?php
-namespace Olcs\unit\View\Helper;
+namespace OlcsSelfserve\unit\View\Helper;
 
 use PHPUnit_Framework_TestCase;
-use Olcs\View\Helper\ResourceHelper;
+use OlcsSelfserve\View\Helper\ResourceHelper;
 
 /*
  * To change this template, choose Tools | Templates

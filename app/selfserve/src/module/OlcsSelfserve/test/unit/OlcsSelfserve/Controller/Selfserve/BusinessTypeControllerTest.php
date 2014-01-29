@@ -1,10 +1,10 @@
 <?php
 
-namespace unit\Olcs\Controller;
+namespace unit\OlcsSelfserve\Controller;
 
-use \OlcsCommon\Controller\AbstractHttpControllerTestCase;
+use OlcsCommon\Controller\AbstractHttpControllerTestCase;
 
-class IndexControllerTest extends AbstractHttpControllerTestCase
+class BusinessTypeControllerTest extends AbstractHttpControllerTestCase
 {
     public function setUp($noConfig = false)
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Olcs;
+namespace OlcsSelfserve;
 
 use Zend\Loader\AutoloaderFactory;
 use Zend\Mvc\Service\ServiceManagerConfig;
@@ -39,7 +39,7 @@ class Bootstrap
                 'module_paths' => $zf2ModulePaths,
             ),
             'modules' => array(
-                'Olcs',
+                'OlcsSelfserve',
                 'OlcsCommon',
                 'VosaCommonEntities',
             )

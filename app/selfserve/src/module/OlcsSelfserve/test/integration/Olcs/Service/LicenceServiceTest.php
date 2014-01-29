@@ -1,5 +1,5 @@
 <?php
-namespace integration\Olcs\Service;
+namespace integration\OlcsSelfserve\Service;
 use \Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
 
