@@ -1,0 +1,81 @@
+<?php $this->headScript()->prependFile($this->basePath() . '/js/selfserve/application/licenceType.js'); ?>
+<?php
+    echo $this->partial('selfserve/application/partials/navigation', array(
+        'selectedPage' => 'type-of-licence',
+    ));
+?>
+
+<?php $licenceTypeForm->prepare(); ?>
+<?php echo $this->form()->openTag($licenceTypeForm); ?>
+<div class="row">
+    <div class="col-md-12 tFormHeader">
+        <div class="pheading"><h1><?php
+            echo $this->resourceHelper('type-of-licence');
+        ?></h1></div>
+    </div>
+</div>
+<?php echo $this->partial('common/errorMessages', array('messages' => $messages)); ?>
+
+<div class="row">
+    <?php
+       echo $this->resourceHelper('mandatory-fields');
+    ?>
+</div>
+
+<div class="row">
+    <div class="col-md-12 tFormHeader">
+        <div class="pheading"><h2><?php
+            echo $this->resourceHelper('operator-type');
+        ?></h2></div>
+    </div>
+</div>
+
+<div>
+    <div class="form-group required">
+        <label for="operatorLocation" class="col-lg-3 control-label"><?php echo $this->resourceHelper('which-operator-location'); ?></label>
+    </div>
+    <div class="form-group required">
+        <div class="licenceTypeBlock radio-block col-lg-4 itext">
+            <?php echo $this->formRow($licenceTypeForm->get('operatorLocation')); ?>
+        </div>
+    </div>
+</div>
+
+<div id="operatorTypeSection" class="default-hidden">
+    <div class="form-group required">
+        <label for="operatorType" class="col-lg-3 control-label"><?php echo $this->resourceHelper('which-operator-type'); ?></label>
+        <div class="licenceTypeBlock radio-block col-lg-4 itext">
+            <?php echo $this->formRow($licenceTypeForm->get('operatorType')); ?>
+        </div>
+    </div>
+</div>
+
+<div id="licenceTypeSection" class="default-hidden">
+    <div class="row">
+        <div class="col-md-12 tFormHeader">
+            <div class="pheading"><h2><?php
+                echo $this->resourceHelper('type-of-licence');
+            ?></h2></div>
+        </div>
+    </div>
+
+    <div>
+        <div class="form-group required">
+            <label for="licenceType" class="col-lg-3 control-label"><?php echo $this->resourceHelper('which-licence-type'); ?></label>
+            <div class="licenceTypeBlock radio-block col-lg-4 itext">
+                <?php echo $this->formRow($licenceTypeForm->get('licenceType')); ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <div class="form-group">
+<?php echo $this->formButton($licenceTypeForm->get('back'), $this->resourceHelper('back')); ?>
+<?php echo $this->formButton($licenceTypeForm->get('exit'), $this->resourceHelper('exit')); ?>
+<?php echo $this->formButton($licenceTypeForm->get('savenext'), $this->resourceHelper('savenext')); ?>
+    </div>
+
+    <div class='clear-both'></div>
+</div>
+<?php echo $this->form()->closeTag(); ?>

@@ -16,12 +16,39 @@ return array(
                         'action' => 'index',
                     )
                 )
+            ),
+            'licence-type' => array(
+                'type' => 'literal',
+                'options' => array(
+                    'route' => '/selfserve/licence-type',
+                    'defaults' => array(
+                        'controller' => 'OlcsSelfserve\Controller\LicenceType',
+                        'action' => 'index',
+                    )
+                ),
+                'may_terminate' => true,
+                'child_routes' => array(
+                    'details' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/selfserve/licence-type/[:applicationId]',
+                            'constraints' => array(
+                                'applicationId' => '[0-9]+'
+                            ),
+                            'defaults' => array(
+                               'controller' => 'OlcsSelfserve\Controller\LicenceType',
+                                'action' => 'index'
+                            )
+                        )
+                    )
+                )
             )
         )
     ),
     'controllers' => array(
         'invokables' => array(
-            'OlcsSelfserve\Controller\Index' => 'OlcsSelfserve\Controller\IndexController'
+            'OlcsSelfserve\Controller\Index' => 'OlcsSelfserve\Controller\IndexController',
+            'OlcsSelfserve\Controller\LicenceType' => 'OlcsSelfserve\Controller\LicenceTypeController',
         )
     ),
     //-------- End of routes -----------------
