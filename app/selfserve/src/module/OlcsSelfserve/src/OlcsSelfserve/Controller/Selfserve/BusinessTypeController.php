@@ -122,7 +122,7 @@ class BusinessTypeController extends AbstractActionController
 
                                 ));
 
-        $view->setTemplate('selfserve/application/business-details');
+        $view->setTemplate('selfserve/application/businessDetails');
         return $view;        
         
     }

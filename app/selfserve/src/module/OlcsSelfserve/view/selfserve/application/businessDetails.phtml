@@ -1,4 +1,5 @@
 <?php 
+$this->headScript()->prependFile($this->basePath() . '/js/selfserve/application/businessDetails.js');
 $this->placeholder('body-class')->set("full-page");
 ?>
 <?php
@@ -32,4 +33,3 @@ $this->placeholder('body-class')->set("full-page");
     <div class='clear-both'></div>
 </div>
 <?php echo $this->form()->closeTag(); ?>    
-
