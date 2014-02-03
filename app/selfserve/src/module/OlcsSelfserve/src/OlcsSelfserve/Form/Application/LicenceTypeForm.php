@@ -52,7 +52,7 @@ class LicenceTypeForm extends OlcsSelfserveForm
             ),
             'options' => array(
                         'value_options' => array(
-                            'uk' => "Mainland UK",
+                            'uk' => "Great Britain",
                             'northern ireland' => "Northern Ireland"
                         )
             )
