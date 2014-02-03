@@ -35,16 +35,55 @@ selfserve.setSections = function ($context) {
         $(":radio[value='special restricted']").parent().hide();
     }
 
-    // Check the save/next button
-    if (( $('input:radio[name=operatorType]:checked').val() )
+    // licence type and operator type values to determine visibility of 
+    // main business type input fields = Goods 
+    if (( $('input:radio[name=operatorType]:checked').val() == "goods" )
             && ( $('input:radio[name=operatorLocation]:checked').val() )
-            && ( $('input:radio[name=licenceType]:checked').val() ))  {
-        $('#savenextbutton').removeClass('disabled');
+            && ( $('input:radio[name=licenceType]:checked').val() )
+            )
+    {
+        if (
+                ( $('input:radio[name=licenceType]:checked').val() == 'special restricted' ) ||
+                ( $('input:radio[name=licenceType]:checked').val() == 'standard national' ) ||
+                ( $('input:radio[name=licenceType]:checked').val() == 'standard international' )
+           )
+        {
+            $('#licenceBusinessTradeSection').show();
+            $('#licenceMainBusinessSection').hide();
+        }
+        else
+        {
+            $('#licenceMainBusinessSection').show();
+            $('#licenceBusinessTradeSection').hide();
+        }
     } else {
-        $('#savenextbutton').addClass('disabled');
+        $('#licenceBusinessTradeSection').hide();
+        $('#licenceMainBusinessSection').hide();
 
     }
 
+     // licence type and operator type values to determine visibility of 
+    // main business type input fields = PSV 
+    if (( $('input:radio[name=operatorType]:checked').val() == "psv" )
+            && ( $('input:radio[name=operatorLocation]:checked').val() )
+            && ( $('input:radio[name=licenceType]:checked').val() )
+            )
+    {
+        if (
+                ( $('input:radio[name=licenceType]:checked').val() == 'standard national' ) ||
+                ( $('input:radio[name=licenceType]:checked').val() == 'standard international' )
+           )
+        {
+            $('#licenceBusinessTradeSection').show();
+            $('#licenceMainBusinessSection').hide();
+        }
+        else
+        {
+            $('#licenceMainBusinessSection').show();
+            $('#licenceBusinessTradeSection').hide();
+        }
+    }
+    
 };
 
 $(document).ready(function(){
