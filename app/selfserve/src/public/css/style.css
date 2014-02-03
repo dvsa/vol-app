@@ -164,6 +164,7 @@ label, input, select, .instruction-text, button {
 
 footer {
     clear:both;
+    margin-top:70px;
 }
 
 footer, footer a {

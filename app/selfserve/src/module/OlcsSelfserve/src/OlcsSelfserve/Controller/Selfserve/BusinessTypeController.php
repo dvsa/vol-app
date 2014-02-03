@@ -27,7 +27,8 @@ class BusinessTypeController extends AbstractActionController
 
     protected $applicationId;
     protected $application;
-    
+    protected $licence;
+
     /**
      * Method to initialise the controller by looking for passed params and 
      * preloading data required, if these params are set.
@@ -85,7 +86,6 @@ class BusinessTypeController extends AbstractActionController
                 }
             }
         }
-  
     }
     
    /**
@@ -114,9 +114,10 @@ class BusinessTypeController extends AbstractActionController
             // prefill form
             $businessDetailsForm->setData($formData);
         }
-        
+       
         $view = new ViewModel(array('businessDetailsForm' => $businessDetailsForm,
-                                    'messages' => $this->messages
+                                    'messages' => $this->messages,
+                                    'licence' => $this->licence
                                 ));
 
         $view->setTemplate('selfserve/application/business-details');

@@ -13,14 +13,6 @@ use OlcsSelfserve\Form\OlcsSelfserveForm;
 
 class LicenceTypeForm extends OlcsSelfserveForm
 {
-    public $tradingBusinessArray = array('Skip hire / waste transfer / refuse' => 'Skip hire waste transfer refuse',
-                                        'Gen haulier / distribution' => 'Gen haulier distribution',
-                                        'Farmers / Livestock carriers' => 'Farmers Livestock carriers',
-                                        'Removals / Construction / Plant hire' => 'Removals Construction Plant hire',
-                                        'Utilities' => 'Utilities',
-                                        'Dangerous goods / hazchem carriers' => 'Dangerous goods hazchem carriers',
-                                        'Refrigerated transport' => 'Refrigerated transport',
-                                        'Other' => 'Other');
 
     public function __construct($name = null)  
     {
@@ -80,31 +72,6 @@ class LicenceTypeForm extends OlcsSelfserveForm
             )
         ));
 
-        
-        $this->add(array(
-            'id' => 'licence[trade_type]',
-            'type' => 'Zend\Form\Element\Select',
-            'name' => 'licence[trade_type]',
-            'required' => true,
-            'attributes' =>  array(
-                'class' => 'form-control multiselect',
-                'id' => 'entityType'
-                )
-        ));
-        
-        $entityTypesElem = $this->get('licence[trade_type]');
-        $entityTypeGroup = $this->getSelectResourceStrings($this->tradingBusinessArray);
-        $entityTypesElem->setValueOptions($this->setSelect($this->tradingBusinessArray, 'Select type'));
-
-        $this->add(array(
-            'type' => 'Zend\Form\Element\Text',
-            'name' => 'licence[tradingother]',
-            'required' => true,
-            'attributes' =>  array(
-                'class' => 'form-control',
-                'id' => 'licence[tradingother]'
-                )
-        ));
         
         $this->add(array(
             'name' => 'savenext',

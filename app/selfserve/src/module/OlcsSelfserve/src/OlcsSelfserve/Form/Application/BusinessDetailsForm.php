@@ -15,6 +15,7 @@ use OlcsSelfserve\Form\OlcsSelfserveForm;
 
 class BusinessDetailsForm extends OlcsSelfserveForm
 {
+    public $tradingBusinessArray = array('SIC codes' => 'SIC codes TO FIX');
     
     public function __construct()  {
 
@@ -110,18 +111,57 @@ class BusinessDetailsForm extends OlcsSelfserveForm
         
         $this->add(array(
             'type' => 'Zend\Form\Element\Select',
-            'name' => 'business[businessTypes]',
+            'name' => 'licence[trade_type]',
             'required' => true,
             'attributes' =>  array(
                 'class' => 'form-control multiselect',
-                'id' => 'business[businessTypes]'
+                'id' => 'licence[trade_type]'
                 )
         ));
-
-        $entityTypesElem = $this->get('business[businessTypes]');
-        $entityTypeGroup = $this->getSelectResourceStrings(self::$businessTypesArray);
-        $entityTypesElem->setValueOptions($this->setSelect($entityTypeGroup, $this->getResourceString('common-please-select')));
         
+        $entityTypesElem = $this->get('licence[trade_type]');
+        $entityTypeGroup = $this->getSelectResourceStrings($this->tradingBusinessArray);
+        $entityTypesElem->setValueOptions($this->setSelect($this->tradingBusinessArray, 'Select type'));
+
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Text',
+            'name' => 'licence[tradingother]',
+            'required' => true,
+            'attributes' =>  array(
+                'class' => 'form-control',
+                'id' => 'licence[tradingother]'
+                )
+        ));
+        
+                $this->add(array(
+            'name' => 'savenext',
+            'type' => 'Submit',
+            'attributes' => array(
+                'class' => 'btn btn-next disabled',
+                'id' => 'savenextbutton',
+                'value' => 'Save & Next'
+            )
+        ));
+
+        $this->add(array(
+            'name' => 'back',
+            'type' => 'Submit',
+            'attributes' => array(
+                'class' => 'btn btn-back',
+                'id' => 'backbutton',
+                'value' => 'Back'
+            )
+        ));
+
+        $this->add(array(
+            'name' => 'exit',
+            'type' => 'Submit',
+            'attributes' => array(
+                'class' => 'btn btn-exit',
+                'id' => 'exitbutton',
+                'value' => 'Exit'
+            )
+        ));
     }
         
     /**
