@@ -70,7 +70,7 @@ class BusinessTypeController extends AbstractActionController
                     //$this->logger->err('Licence '.$this->licenceId.' could not be retrived');
                     return $e;
                 }
-                
+
                 // if licence has an operator get the organisation
                 if (isset($this->licence['operator']['operatorId']))
                 {
@@ -117,7 +117,9 @@ class BusinessTypeController extends AbstractActionController
        
         $view = new ViewModel(array('businessDetailsForm' => $businessDetailsForm,
                                     'messages' => $this->messages,
-                                    'licence' => $this->licence
+                                    'licence' => $this->licence,
+                                    'application' => $this->application
+
                                 ));
 
         $view->setTemplate('selfserve/application/business-details');

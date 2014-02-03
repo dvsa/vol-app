@@ -54,18 +54,18 @@
         </h2>
 
         <?php 
-            if (isset($licence) && ($licence['goodsOrPsv'] == 'Goods'))
+            if (isset($application['applicationLicence']) && ($application['applicationLicence']['goodsOrPsv'] == 'Goods'))
             {
                 // Goods
-                if (isset($licence) && ($licence['licenceType'] == 'Special restricted' ||
-                                        $licence['licenceType'] == 'Standard National' ||
-                                        $licence['licenceType'] == 'Standard International'
+                if (isset($application['applicationLicence']) && ($application['applicationLicence']['licenceType'] == 'Special restricted' ||
+                                        $application['applicationLicence']['licenceType'] == 'Standard National' ||
+                                        $application['applicationLicence']['licenceType'] == 'Standard International'
                                        )
                    ) 
                 {
                     // show trade type drop down
                 ?>
-                    <label for="licence[trade_type]" class="col-lg-3 control-label"><?php echo $this->resourceHelper('trading-business'); ?></label>
+                    <label for="licence[trade_type]" class="col-lg-3 control-label"><?php echo $this->resourceHelper('your-business-form-label-types-of-business'); ?></label>
                     <?php echo $this->formRow($businessDetailsForm->get('licence[trade_type]'));
                 }
                 else
@@ -78,12 +78,12 @@
                 }
                 
             } 
-            elseif (isset($licence) && ($licence['goodsOrPsv'] == 'PSV'))             
+            elseif (isset($application['applicationLicence']) && ($application['applicationLicence']['goodsOrPsv'] == 'PSV'))             
             {
                 // PSV
-                if (isset($licence) && ($licence['licenceType'] == 'Special restricted' ||
-                                        $licence['licenceType'] == 'Standard National' ||
-                                        $licence['licenceType'] == 'Standard International'
+                if (isset($application['applicationLicence']) && ($application['applicationLicence']['licenceType'] == 'Special restricted' ||
+                                        $application['applicationLicence']['licenceType'] == 'Standard National' ||
+                                        $application['applicationLicence']['licenceType'] == 'Standard International'
                                        )
                    ) 
                 {

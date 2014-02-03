@@ -16,7 +16,8 @@ $this->placeholder('body-class')->set("full-page");
 <?php
     echo $this->partial('selfserve/application/forms/business-details-form', array(
         'businessDetailsForm' => $businessDetailsForm,
-        'licence' => $licence
+        'licence' => $licence,
+        'application' => $application
     ));
     
 ?>
