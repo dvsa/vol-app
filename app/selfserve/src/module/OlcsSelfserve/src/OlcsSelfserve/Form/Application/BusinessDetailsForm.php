@@ -102,7 +102,7 @@ class BusinessDetailsForm extends OlcsSelfserveForm
             'name' => 'tradingAddAnother',
             'type' => 'button',
             'attributes' => array(
-                'class' => 'btn btn-add disabled',
+                'class' => 'btn btn-add',
                 'id' => 'tradingAddAnother',
                 'value' => 'Search'
             )
