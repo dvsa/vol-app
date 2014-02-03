@@ -22,7 +22,8 @@ class LicenceTypeForm extends OlcsSelfserveForm
                                         'Refrigerated transport' => 'Refrigerated transport',
                                         'Other' => 'Other');
 
-    public function __construct($name = null)  {
+    public function __construct($name = null)  
+    {
         // we want to ignore the name passed
         parent::__construct('LicenceTypeForm');
         $this->setAttribute('class', 'application-new-form form-horizontal');
