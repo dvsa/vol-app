@@ -4,34 +4,47 @@
 
 var selfserve = {}; // Initialize the selfserve object
 
-selfserve.setSections = function ($context) {
+selfserve.setSections = function ($context) 
+{
     // Section visibility
-    if ( $('input:radio[name=operatorLocation]:checked').val() != "" ) {
+    if ( $('input:radio[name=operatorLocation]:checked').val() != "" ) 
+    {
         $('#operatorTypeSection').show();
-    } else {
+    }
+    else
+    {
         $('#operatorTypeSection').hide();
     }
 
     // Country logic
-    if ( $('input:radio[name=operatorLocation]:checked').val() == "uk" ) {
+    if ( $('input:radio[name=operatorLocation]:checked').val() == "uk" ) 
+    {
         // Operator type can only be goods
         $(":radio[value='psv']").parent().show();
-    } else {
+    } 
+    else
+    {
         $(":radio[value='goods']").prop('checked',true);
         $('#operatorTypeSection').hide();
     }
 
     // Licence type visibility
-    if ( $('input:radio[name=operatorType]:checked').val() ) {
+    if ( $('input:radio[name=operatorType]:checked').val() ) 
+    {
         $('#licenceTypeSection').show();
-    } else {
+    }
+    else
+    {
         $('#licenceTypeSection').hide();
     }
 
     // Licence type values
-    if ( $('input:radio[name=operatorType]:checked').val() == "psv" ) {
+    if ( $('input:radio[name=operatorType]:checked').val() == "psv" ) 
+    {
         $(":radio[value='special restricted']").parent().show();
-    } else {
+    } 
+    else 
+    {
         $(":radio[value='special restricted']").parent().hide();
     }
 
@@ -56,13 +69,15 @@ selfserve.setSections = function ($context) {
             $('#licenceMainBusinessSection').show();
             $('#licenceBusinessTradeSection').hide();
         }
-    } else {
+    } 
+    else 
+    {
         $('#licenceBusinessTradeSection').hide();
         $('#licenceMainBusinessSection').hide();
 
     }
 
-     // licence type and operator type values to determine visibility of 
+    // licence type and operator type values to determine visibility of 
     // main business type input fields = PSV 
     if (( $('input:radio[name=operatorType]:checked').val() == "psv" )
             && ( $('input:radio[name=operatorLocation]:checked').val() )
@@ -85,11 +100,28 @@ selfserve.setSections = function ($context) {
         }
     }
     
+    // Check the save/next button
+    if (( $('input:radio[name=operatorType]:checked').val() )
+            && ( $('input:radio[name=operatorLocation]:checked').val() )
+            && ( $('input:radio[name=licenceType]:checked').val() ))  
+    {
+        $('#savenextbutton').removeClass('disabled');
+    }
+    else 
+    {
+        $('#savenextbutton').addClass('disabled');
+
+    }
 };
 
-$(document).ready(function(){
-    $('BODY').on("click","input:radio", function(e){
-        selfserve.setSections();
-    });
+$(document).ready(function()
+{
+    $('BODY').on
+    (
+        "click","input:radio", function(e)
+        {
+            selfserve.setSections();
+        }
+    );
 
 });
