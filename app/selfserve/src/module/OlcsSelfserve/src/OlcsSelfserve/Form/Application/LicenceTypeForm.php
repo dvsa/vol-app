@@ -9,11 +9,13 @@
 
 namespace OlcsSelfserve\Form\Application;
 
-use Zend\Form\Form;
+use OlcsSelfserve\Form\OlcsSelfserveForm;
 
-class LicenceTypeForm extends Form
+class LicenceTypeForm extends OlcsSelfserveForm
 {
-    public function __construct($name = null)  {
+
+    public function __construct($name = null)  
+    {
         // we want to ignore the name passed
         parent::__construct('LicenceTypeForm');
         $this->setAttribute('class', 'application-new-form form-horizontal');
@@ -70,6 +72,7 @@ class LicenceTypeForm extends Form
             )
         ));
 
+        
         $this->add(array(
             'name' => 'savenext',
             'type' => 'Submit',

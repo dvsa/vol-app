@@ -59,7 +59,64 @@
             <?php echo $this->resourceHelper('your-business-types-of-business-header'); ?>
         </h2>
 
-        <label for=""><?php echo $this->resourceHelper('your-business-form-label-types-of-business'); ?></label>
-        <?php echo $this->formRow($this->businessDetailsForm->get('business[businessTypes]')); ?>
+        <?php 
+            if (isset($licence) && ($licence['goodsOrPsv'] == 'Goods'))
+            {
+                // Goods
+                if (isset($licence['licenceType']) && ($licence['licenceType'] == 'Special restricted' ||
+                                        $licence['licenceType'] == 'Standard National' ||
+                                        $licence['licenceType'] == 'Standard International'
+                                       )
+                   ) 
+                {
+                    // show trade type drop down
+                ?>
+                    <label for="licence[trade_type]" class="col-lg-3 control-label"><?php echo $this->resourceHelper('your-business-form-label-types-of-business'); ?></label>
+                    <?php echo $this->formRow($businessDetailsForm->get('licence[trade_type]'));
+                }
+                else
+                {
+                    // restricted -  show main occupation
+                ?>
+                    <label for="licence[tradingother]"><?php echo $this->resourceHelper('main-occupation'); ?></label>
+                    <?php 
+                    echo $this->formRow($businessDetailsForm->get('licence[tradingother]'));
+                }
+                
+            } 
+            elseif (isset($licence) && ($licence['goodsOrPsv'] == 'PSV'))             
+            {
+                // PSV
+                if (isset($licence) && ($licence['licenceType'] == 'Special restricted' ||
+                                        $licence['licenceType'] == 'Standard National' ||
+                                        $licence['licenceType'] == 'Standard International'
+                                       )
+                   ) 
+                {
+                    // show trade type drop down
+                ?>
+                    <label for="licence[trade_type]" class="col-lg-3 control-label"><?php echo $this->resourceHelper('trading-business'); ?></label>
+                    <?php echo $this->formRow($businessDetailsForm->get('licence[trade_type]'));
+                }
+                else
+                {
+                    // restricted -  show main occupation
+                ?>
+                <label for="licence[tradingother]"><?php echo $this->resourceHelper('main-occupation'); ?></label>
+                <?php 
+                echo $this->formRow($businessDetailsForm->get('licence[tradingother]'));
+ 
+                }
+            }
+            else
+            {
+            ?>    
+            
+                <label for="licence[trade_type]"><?php echo $this->resourceHelper('your-business-form-label-types-of-business'); ?></label>
+                <?php 
+                echo $this->formRow($businessDetailsForm->get('licence[trade_type]'));
+            }
+        ?>
+
     </div>
 </div>
