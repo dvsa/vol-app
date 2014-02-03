@@ -33,8 +33,50 @@ function bindAddAnother() {
     });
 }
 
+var selfserve = {}; // Initialize the selfserve object
+
+selfserve.setSections = function ($context) 
+{
+    switch($('#entityType').val())
+    {
+        case 'Registered company':
+            
+            break;
+        case 'Sole trader':
+            
+            break;
+        case 'Partnership':
+            
+            break;
+        case 'Public authority':
+            
+            break;
+        case 'Other':
+            
+            break;
+    }
+    
+    
+    if ( $('input:radio[name=operatorLocation]:checked').val() != "" ) 
+    {
+        $('#operatorTypeSection').show();
+    }
+    else
+    {
+        $('#operatorTypeSection').hide();
+    }
+
+}
 $(document).ready(function () {
     defaultView();
     typeSelect();
     bindAddAnother();
+    
+    $('BODY').on
+    (
+        "click","#entityType", function(e)
+        {
+            selfserve.setSections();
+        }
+    );
 }); 
