@@ -15,7 +15,7 @@ use OlcsSelfserve\Form\OlcsSelfserveForm;
 
 class BusinessDetailsForm extends OlcsSelfserveForm
 {
-    public $tradingBusinessArray = array('SIC codes' => 'SIC codes TO FIX');
+    public $tradingBusinessArray = array('TO FIX' => 'Pre selected SIC code TO FIX');
     
     public function __construct()  {
 
