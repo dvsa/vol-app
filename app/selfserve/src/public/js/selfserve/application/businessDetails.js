@@ -2,37 +2,43 @@
 function defaultView()
 {
     $('#business-company-details').hide();
-    $('#business-training').hide();
+    $('#business-trading').hide();
     $('#business-types').hide();
 }
 
 function showRegisteredCompany()
 {
-        $('#business-training').show();
-        $('#business-types').show();
+    $('#business-company-details').show();
+    $('#business-trading').show();
+    $('#business-types').show();
     
 }
 
 function showSoleTrader()
 {
-    $('#business-training').hide();
+    $('#business-trading').hide();
     $('#business-types').hide();
 }
 
 function showPartnership()
 {
-    $('#business-training').hide();
+    $('#business-trading').hide();
     $('#business-types').hide();
 }
 
 function showPublicAuthority()
 {
-    $('#business-training').hide();
+    $('#business-trading').hide();
     $('#business-types').hide();
 }
 
 function showOther()
 {
+    $('#business-trading').hide();
+    $('#business-types').hide();
+    $('label[for="operatorName"]').text('Operator name:');
+    $('#business-company-details').show();
+    $('#companyNumberField').hide();
     
 }
 
