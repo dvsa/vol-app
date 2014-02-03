@@ -16,7 +16,7 @@ gTNCID = 0;
 function bindAddAnother() {
     $('#tradingAddAnother').click(function () {
         gTNCID++;
-        var x = $('<a href="#" id="TNCL' + gTNCID + '">X</a>');
+        var x = $('<button class="btn btn-add" id="TNCL' + gTNCID + '">Remove</button>');
         var input = $('<input type="text" id="TNC' + gTNCID + '" />');
         var currentID = gTNCID;
         
@@ -26,7 +26,8 @@ function bindAddAnother() {
             e.preventDefault();
         });
         
-        $('#trading-names-collection').before(input).after(x);
+        $('#trading-names-collection').before(input);
+        $('#TNC' + gTNCID).after(x);
         
         $('#TNC' + gTNCID + ' .instruction-text').after(x);
     });
