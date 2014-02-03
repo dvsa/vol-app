@@ -70,6 +70,7 @@ selfserve.setSections = function ($context) {
             )
     {
         if (
+                ( $('input:radio[name=licenceType]:checked').val() == 'special restricted' ) ||
                 ( $('input:radio[name=licenceType]:checked').val() == 'standard national' ) ||
                 ( $('input:radio[name=licenceType]:checked').val() == 'standard international' )
            )
