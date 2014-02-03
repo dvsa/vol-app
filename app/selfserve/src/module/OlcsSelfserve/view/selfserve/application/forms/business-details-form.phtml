@@ -54,12 +54,12 @@
         </h2>
 
         <?php 
-            if (isset($application['applicationLicence']) && ($application['applicationLicence']['goodsOrPsv'] == 'Goods'))
+            if (isset($licence) && ($licence['goodsOrPsv'] == 'Goods'))
             {
                 // Goods
-                if (isset($application['applicationLicence']) && ($application['applicationLicence']['licenceType'] == 'Special restricted' ||
-                                        $application['applicationLicence']['licenceType'] == 'Standard National' ||
-                                        $application['applicationLicence']['licenceType'] == 'Standard International'
+                if (isset($licence['licenceType']) && ($licence['licenceType'] == 'Special restricted' ||
+                                        $licence['licenceType'] == 'Standard National' ||
+                                        $licence['licenceType'] == 'Standard International'
                                        )
                    ) 
                 {
@@ -78,12 +78,12 @@
                 }
                 
             } 
-            elseif (isset($application['applicationLicence']) && ($application['applicationLicence']['goodsOrPsv'] == 'PSV'))             
+            elseif (isset($licence) && ($licence['goodsOrPsv'] == 'PSV'))             
             {
                 // PSV
-                if (isset($application['applicationLicence']) && ($application['applicationLicence']['licenceType'] == 'Special restricted' ||
-                                        $application['applicationLicence']['licenceType'] == 'Standard National' ||
-                                        $application['applicationLicence']['licenceType'] == 'Standard International'
+                if (isset($licence) && ($licence['licenceType'] == 'Special restricted' ||
+                                        $licence['licenceType'] == 'Standard National' ||
+                                        $licence['licenceType'] == 'Standard International'
                                        )
                    ) 
                 {
