@@ -154,6 +154,10 @@ label, input, select, .instruction-text, button {
     margin-bottom: 10px;
 }
 
+.radio-block input {
+    display: inline;
+}
+
 /* END Radio blocks */
 
 /* Footer */
