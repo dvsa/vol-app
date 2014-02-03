@@ -16,10 +16,17 @@ gTNCID = 0;
 function bindAddAnother() {
     $('#tradingAddAnother').click(function () {
         gTNCID++;
-        var x = $('<a href="#">X</a>');
+        var x = $('<a href="#" id="TNCL' + gTNCID + '">X</a>');
+        var input = $('<input type="text" id="TNC' + gTNCID + '" />');
+        var currentID = gTNCID;
         
-        x.click(function (e) { $('#TNC' + gTNCID).remove(); gTNCID--; e.preventDefault();});
-        $('#tradingNameContainers').append($('#tradingNameContainer').clone().attr('id', 'TNC' + gTNCID));
+        x.click(function (e) { 
+            $('#TNCL' + currentID).remove();  
+            $('#TNC' + currentID).remove();  
+            e.preventDefault();
+        });
+        
+        $('#trading-names-collection').before(input).after(x);
         
         $('#TNC' + gTNCID + ' .instruction-text').after(x);
     });

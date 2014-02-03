@@ -39,7 +39,7 @@
                 <div class="">
                     <label for=""><?php echo $this->resourceHelper('your-business-form-label-trading-name'); ?></label>
                     <?php echo $this->formRow($businessDetailsForm->get('business[tradingNameId]')); ?>
-                    <span class="trading-names-collection"><?php
+                    <span class="trading-names-collection" id="trading-names-collection"><?php
                         echo $this->formCollection($businessDetailsForm->get('business[tradingNames]'));
                         ?></span>
                     <div id="tradingNameText" class=""></div>
