@@ -133,7 +133,9 @@ class BusinessDetailsForm extends OlcsSelfserveForm
                 )
         ));
         
-                $this->add(array(
+        
+        
+        $this->add(array(
             'name' => 'savenext',
             'type' => 'Submit',
             'attributes' => array(

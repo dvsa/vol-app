@@ -79,6 +79,7 @@ class OlcsSelfserveForm extends Form implements ServiceLocatorAwareInterface
     protected static $entityTypesArray = array( 'Registered company' => 'Registered Company',
                                                 'Sole Trader' => 'Sole trader',
                                                 'Partnership' => 'Partnership',
+                                                'LLP' => 'LLP',
                                                 'Public Authority' => 'Public Authority',
                                                 'Other' => 'Other');
      

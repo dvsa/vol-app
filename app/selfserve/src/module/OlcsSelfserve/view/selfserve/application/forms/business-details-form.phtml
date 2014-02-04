@@ -12,24 +12,28 @@
 
     <div id="business-company-details">
         <h2><?php echo $this->resourceHelper('your-business-company-details-header'); ?></h2>
+        
+        <div id="companyNumberField" class="form-field">
+            <label for="<?php echo $businessDetailsForm->get('companyNumId')->getAttribute('id'); ?>"><?php echo $this->resourceHelper('your-business-form-label-registered-company-number'); ?></label>
+            <?php echo $this->formRow($businessDetailsForm->get('companyNumId')); ?>
+            <?php echo $this->formButton($businessDetailsForm->get('organisationSearchBtn'), $this->resourceHelper('common-button-find')); ?>
 
-        <label for="<?php echo $businessDetailsForm->get('companyNumId')->getAttribute('id'); ?>"><?php echo $this->resourceHelper('your-business-form-label-registered-company-number'); ?></label>
-        <?php echo $this->formRow($businessDetailsForm->get('companyNumId')); ?>
-        <?php echo $this->formButton($businessDetailsForm->get('organisationSearchBtn'), $this->resourceHelper('common-button-find')); ?>
-
-        <div class="instruction-text">
-            <p><?php echo $this->resourceHelper('your-business-form-instruction-company-number-text'); ?></p>
+            <div class="instruction-text">
+                <p><?php echo $this->resourceHelper('your-business-form-instruction-company-number-text'); ?></p>
+            </div>
         </div>
-
-        <?php echo $this->formRow($businessDetailsForm->get('operatorId')); ?>
-        <label for="<?php echo $businessDetailsForm->get('operatorName')->getAttribute('id'); ?>"><?php echo $this->resourceHelper('your-business-form-label-registered-company-name'); ?></label>
-        <?php echo $this->formRow($businessDetailsForm->get('operatorName')); ?>
-        <div class="instruction-text">
-            <p><?php echo $this->resourceHelper('your-business-form-instruction-company-name-text'); ?></p>
+        <div id="operatorNameField" class="form-field">
+        
+            <?php echo $this->formRow($businessDetailsForm->get('operatorId')); ?>
+            <label for="<?php echo $businessDetailsForm->get('operatorName')->getAttribute('id'); ?>"><?php echo $this->resourceHelper('your-business-form-label-registered-company-name'); ?></label>
+            <?php echo $this->formRow($businessDetailsForm->get('operatorName')); ?>
+            <div class="instruction-text">
+                <p><?php echo $this->resourceHelper('your-business-form-instruction-company-name-text'); ?></p>
+            </div>
         </div>
     </div>
 
-    <div id="business-training">
+    <div id="business-trading">
         <h2>
             <?php echo $this->resourceHelper('your-business-trading-names-header'); ?>
         </h2>
