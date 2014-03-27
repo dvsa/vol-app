@@ -14,6 +14,8 @@ return array(
             'apis' => array(
                 'User' => 'user',
                 'Person' => 'person',
+                'PersonSearch' => 'person-search',
+                'OperatorSearch' => 'operator-search',
             )
         )
     )
