@@ -1,0 +1,126 @@
+<?php echo $this->render('partials/page-header.phtml', array('pageTitle' => 'Form elements', 'pageSubTitle'=> 'Includes form wrapper elements, labelling, inputs and actions')); ?>
+
+<div class="one-quarter">
+    <?php echo $this->render('partials/vertical-navigation.phtml', array('navItems' => array('Postal address', 'Personal information', 'About you'))); ?>
+</div><!-- end .one-quarter -->
+
+<div class="two-thirds">
+	<form>
+		<div class="validation-summary">
+	        <h3>There was a problem submitting the form</h3>
+	        <p>Please try the following:</p>
+	        <ol class="validation-summary__list">
+	        	<li class="validation-summary__item"><a href="#error1">Enter a town or city</a></li>
+	        	<li class="validation-summary__item"><a href="#error2">Enter a date of birth</a></li>
+	         	<li class="validation-summary__item"><a href="#error3">Enter a biography</a></li>
+	        </ol><!-- end .validation-summary__list -->
+        </div><!-- end .validation-summary -->
+
+		<fieldset id="postal-address">
+			<legend>Postal address</legend>
+			<div class="field">
+				<label for="address-line-one">Address line 1</label>
+    			<input id="address-line-one" name="address" type="text" class="long">
+			</div>
+			<div class="field">
+				<label for="address-line-two">Address line 2</label>
+    			<input id="address-line-two" name="address" type="text" class="long">
+			</div>
+			<div class="validation-wrapper">
+				<span class="validation-wrapper__message" id="error2">Please complete your biography</span>
+				<div class="field">
+					<label for="town-city">Town/city</label>
+	    			<input id="town-city" name="town-city" type="text" class="long">
+				</div>
+			</div>
+			<div class="field">
+				<label for="postcode">Postcode</label>
+    			<input id="postcode" type="text" name="postcode" class="short">
+			</div>
+			<fieldset>
+				<legend>Postcode</legend>
+				<div class="field inline">
+					<label for="postcode-search" class="visually-hidden">Postcode</label>
+        			<input id="postcode-search" name="postcode" type="text" class="short">
+				</div>
+				<div class="field inline">
+					<input class="button--primary" type="submit" value="Search">
+				</div>
+			</fieldset>
+		</fieldset><!-- end #postal-address -->
+
+		<fieldset id="personal-information">
+			<legend>Personal information</legend>
+			<div class="field">
+				<label for="title">Title</label>
+				<select id="title" name="title">
+					<option value="Please select">Mr.</option>
+				</select>
+			</div>
+			<div class="field">
+				<label for="first-name">First name</label>
+    			<input id="first-name" name="name" type="text" class="long">
+			</div>
+			<div class="field">
+				<label for="last-name">Last name</label>
+    			<input id="last-name" name="name" type="text" class="long" />
+			</div>
+			<div class="validation-wrapper">
+				<span class="validation-wrapper__message" id="error3">Please complete your biography</span>
+				<div class="field">
+					<label>Date of birth</label>
+					<select id="day" name="date-of-birth">
+						<option value="Day">Day</option>
+					</select>
+					<select id="month" name="date-of-birth">
+						<option value="Month">Month</option>
+					</select>
+					<select id="year" name="date-of-birth">
+						<option value="Year">Year</option>
+					</select>
+				</div>
+			</div>
+			<fieldset>
+				<legend class="legend">Gender</legend>
+				<div class="field--inline">
+					<label><input type="radio" name="gender" checked>Male</label>
+				</div>
+				<div class="field--inline">
+					<label><input type="radio" name="gender">Female</label>
+				</div>
+			</fieldset>
+		</fieldset><!-- end #personal-information -->
+
+		<fieldset id="about-you">
+			<legend>About you</legend>
+			<fieldset>
+				<legend>I am interested in</legend>
+				<div class="field--list">
+					<label for="jobs"><input type="checkbox" id="jobs">Job offers</label>
+				</div>
+				<div class="field--list">
+					<label for="networking"><input type="checkbox" id="networking">Networking</label>
+				</div>
+				<div class="field--list">
+					<label for="business"><input type="checkbox" id="business">Business opportunities</label>
+				</div>
+			</fieldset>
+			<div class="validation-wrapper">
+				<span class="validation-wrapper__message" id="error3">Please complete your biography</span>
+				<div class="field">
+					<label for="biography">Biography</label>
+					<textarea id="biography" class="extra-long" placeholder="Enter text here"></textarea>
+					<p class="hint">Write a few short words about yourself</p>
+				</div>
+			</div><!-- end .validation-wrapsper -->
+		</fieldset><!-- end #about-you -->
+
+		<div class="actions">
+			<input class="button--secondary" type="submit" value="Previous">
+			<input class="button--primary" type="submit" value="Next">
+			<input class="button--warning" type="submit" value="Delete">
+		</div><!-- end .actions -->
+
+	</form>
+
+</div><!-- end .two-thirds -->

@@ -1,0 +1,50 @@
+<?php echo $this->render('partials/page-header.phtml', array('pageTitle' => 'Navigation elements', 'pageSubTitle'=> 'Includes a standard set of vertical and horizontal navigation mechanisms')); ?>
+
+				<div class="full-width">
+					<h3>Tabbed navigation</h3>
+					<ul class="tabs" role="navigation" >
+						<li class="tabs__item"><a href="">Item one</a></li>
+						<li class="tabs__item current">Item two</li>
+						<li class="tabs__item"><a href="">Item three</a></li>
+						<li class="tabs__item"><a href="">Item four</a></li>
+						<li class="tabs__item disabled"><a href="">Item five</a></li>
+						<li class="tabs__item"><a href="">Item six</a></li>
+						<li class="tabs__item disabled"><a href="">Item seven</a></li>
+					</ul><!-- end .tabs -->
+					<div class="tabs__content">
+						<p>This is the content, switchable by the tabs</p>
+					</div>
+				</div><!-- end .full-width -->
+
+				<div class="full-width">
+					<h3>Accordion</h3>
+                    <ul class="accordion">
+                    	<li class="accordion__item">
+                    		<h4><a href="">This is a section title</a></h4>
+                    		<p>This is a helpful description about the sections</p>
+                    		<a class="accordion__item__action" href="">Edit</a>
+                    	</li>
+                    	<li class="accordion__item">
+                    		<h4><a href="">This is another section title</a></h4>
+                    		<p>This is a helpful description about the sections</p>
+                    		<a class="accordion__item__action" href="">Edit</a>
+                    	</li>                    	
+                    	<li class="accordion__item">
+                    		<h4><a href="">This is another section title</a></h4>
+                    		<p>This is a helpful description about the sections</p>
+                    		<a class="accordion__item__action" href="">Edit</a>
+                    	</li>
+                    </ul><!-- end .accordion -->
+				</div><!-- end .full-width -->
+
+				<div class="one-third">
+					<h3>Vertical navigation</h3>
+	                <?php echo $this->render('partials/vertical-navigation.phtml', array('navItems' => array('Postal address', 'Personal information', 'About you'))); ?>
+                </div><!-- end .one-third -->
+
+				<div class="full-width">
+					<h3>Pagination</h3>
+                    <?php echo $this->render('partials/pagination.phtml'); ?>
+				</div><!-- end .full-width -->
+
+				

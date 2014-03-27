@@ -1,0 +1,70 @@
+<?php echo $this->render('partials/page-header.phtml', array('pageTitle' => 'Tables', 'pageSubTitle'=> 'Standard styling for a range of complex tables and surrounding elements')); ?>
+
+		<div class="full-width">
+			<h2>Table header</h2>
+			<!-- Tables should be wrapped in a <div clas=".table__wrapper">... 
+				 element to allow them to overflow correctly  -->
+			<div class="table__wrapper">
+				<table>
+					<thead>
+						<tr>
+							<th>Licence no.</th>
+							<th>Trading name</th>
+							<th>Postcode</th>
+							<th>First name</th>
+							<th>Last name</th>
+							<th>D.O.B</th>
+							<th>Conv.</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><a href="">76163222712</a></td>
+							<td>Jim Jefferey's Haulage LTD</td>
+							<td>LS7 4QP</td>
+							<td>James</td>
+							<td>Jefferey</td>
+							<td>07/02/1963</td>
+							<td>14</td>
+							<td class="delete"><a href="">Delete</a></td>
+						</tr>
+						<tr>
+							<td><a href="">36233242279</a></td>
+							<td>Amber Taxis</td>
+							<td>LS3 2PS</td>
+							<td>Mohammed</td>
+							<td>Ali</td>
+							<td>23/11/1943</td>
+							<td>5</td>
+							<td class="delete"><a href="">Delete</a></td>
+						</tr>
+						<tr>
+							<td><a href="">86173252712</a></td>
+							<td>Jim Jefferey's Haulage LTD</td>
+							<td>LS7 4QP</td>
+							<td>James</td>
+							<td>Jefferey</td>
+							<td>07/02/1963</td>
+							<td>14</td>
+							<td class="delete"><a href="">Delete</a></td>
+						</tr>
+						<tr>
+							<td><a href="">8272632422</a></td>
+							<td>Amber Taxis</td>
+							<td>LS3 2PS</td>
+							<td>Mohammed</td>
+							<td>Ali</td>
+							<td>23/11/1943</td>
+							<td>5</td>
+							<td class="delete"><a href="">Delete</a></td>
+						</tr>
+					</tbody>
+				</table>
+			</div><!-- end .table__wrapper -->
+			<div class="actions">
+				<input class="button--primary" type="submit" value="Add table row">
+			</div><!-- end .actions -->
+			<?php echo $this->render('partials/pagination.phtml'); ?>
+		</div><!-- end .full-width -->
+

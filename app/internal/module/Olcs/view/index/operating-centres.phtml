@@ -1,0 +1,130 @@
+<?php echo $this->render('partials/page-header.phtml', array('pageTitle' => 'Operating centres')); ?>
+
+
+<!-- Modal overlay -->
+<div class="overlay"></div>
+<div class="modal__wrapper">
+	<div class="modal">
+		<a href="" class="modal__close">Close</a>
+	</div>
+</div><!-- end .modal__wrapper -->
+
+
+<!-- Vertical navigation -->
+<div class="one-quarter">
+    <?php echo $this->render('partials/vertical-navigation.phtml', array('navItems' => array('Operating centres', 'Authorised vehicles', 'Financial evidence'))); ?>
+</div><!-- end .one-quarter -->
+
+
+<div class="three-quarters">
+
+	<!-- Operating centers -->
+	<div class="table__header">
+		<h3 id="operating-centres">Operating centres</h3>
+	</div><!-- end .table__header -->
+	<div class="table__wrapper">
+		<table>
+			<thead>
+				<tr>
+					<th>Address</th>
+					<th>Vehicles</th>
+					<th>Trailers</th>
+					<th>Permission</th>
+					<th>Advertised</th>
+					<th>Proof</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><a href="">24 Dulwich Road, Southwell</a></td>
+					<td>3</td>
+					<td>5</td>
+					<td>Yes</td>
+					<td>Yes</td>
+					<td>No</td>
+					<td class="delete"><a href="">Delete</a></td>
+				</tr>
+				<tr>
+					<td><a href="">177 Beeston Industrial Park</a></td>
+					<td>26</td>
+					<td>2</td>
+					<td>Yes</td>
+					<td>Yes</td>
+					<td>Yes</td>
+					<td class="delete"><a href="">Delete</a></td>
+				</tr>
+			</tbody>
+		</table>
+	</div><!-- end .table-wrapper -->
+	<div class="actions">
+		<a href="operating-centres_add" class="button--primary js-modal">Add operating centre</a>
+	</div>
+
+
+	<!-- Authorised vehicles -->
+	<form>
+		<fieldset>
+			<legend id="authorised-vehicles">Authorised vehicles</legend>
+	        <p class="hint">Enter the total amount of vehicles &amp; trailers that you want authorised on the licence your are applying for</p>
+			<div class="field">
+	            <label for="no-of-vehicles">Total no. of vehicles</label>
+	            <input class="short" id="no-of-vehicles" name="no-of-vehicles" placeholder="" type="text" value="">
+	        </div>
+	        <div class="field">
+	            <label for="no-of-trailers">Total no. of trailers</label>
+	            <input class="short" id="no-of-trailers" name="no-of-trailers" placeholder="" type="text" value="">
+	        </div>
+		</fieldset>
+		<div class="actions">
+			<input class="button--primary" type="submit" value="Calculate">
+		</div><!-- end .actions -->
+	</form>
+
+
+	<!-- Financial evidence -->
+	<h3 id="financial-evidence">Financial evidence</h3>
+	<p class="hint">Please upload copies of your accounts or bank statements to prove you have sufficient funds</p>
+	<div class="table__wrapper">
+		<table>
+			<thead>
+				<tr>
+					<th>File name</th>
+					<th>Evidence type</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Amber_taxis_accounts_2012-2013.xls</td>
+					<td>Accounts</td>
+					<td class="delete"><a href="">Delete</a></td>
+				</tr>
+			</tbody>
+		</table>
+	</div><!-- end .table_wrapper -->
+	<div class="actions">
+		<input class="button--primary" type="submit" value="Upload evidence">
+	</div><!-- end .actions -->
+
+
+	<!-- Totals -->
+	<h3 id="totals">Totals</h3>
+	<div class="table__wrapper">
+		<table class="totals">
+			<tfoot>
+				<tr>
+					<th>Total finance available</th>
+					<td style="width: 12%;">£22,083</td>
+				</tr>
+				<tr>
+					<th>Required finance</th>
+					<td style="width: 12%;"><strong>£10,000</strong></td>
+				</tr>
+			</tfoot>
+		</table>
+	</div><!-- end .table-wrapper -->
+
+
+
+</div><!-- end .three-quarters -->
