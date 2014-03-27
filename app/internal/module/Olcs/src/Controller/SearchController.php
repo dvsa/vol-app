@@ -16,13 +16,11 @@ class SearchController extends AbstractActionController
 
     public function indexAction()
     {
-        $form = $this->generateFormFromGet(
+        $form = $this->generateFormWithData(
             'search',
             function() {
                 $this->redirect()->toRoute('styleguide', array('action' => 'typography'));
-            },
-            'Person',
-            1
+            }
         );
 
         $view = new ViewModel(['form' => $form]);
