@@ -1,0 +1,1102 @@
+/**
+ *
+ *  OPERATOR LICENCE & COMPLIANCE SYSTEM
+ *  @version: 1.0
+ *  @author: Valtech Ltd
+ *	
+ *  1. Base styles & resets
+ *  2. Typography
+ *  3. Layout
+ *  4. Headers
+ *  5. Global footer
+ *  6. Forms
+ *  7. Navigation
+ *  8. Tables
+ *  9. Actions
+ * 10. Modals & alerts
+ *
+ **/
+
+
+/* ==========================================================================
+   1. Base styles & resets
+   ========================================================================== */
+
+@import 
+'../govuk_toolkit/stylesheets/_device-pixels',
+'../govuk_toolkit/stylesheets/_measurements', 
+'../govuk_toolkit/stylesheets/_css3',
+'../govuk_toolkit/stylesheets/_colours',
+'../govuk_toolkit/stylesheets/_typography',
+'../govuk_toolkit/stylesheets/design-patterns/_buttons';
+
+@import '_fonts';
+
+html {
+	background: $grey-3;
+	font-size: 100%; 
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+	-webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+body {
+	margin: 0;
+	background: #FFF;
+	font-size: 100%;
+	font-family: $NTA-Light;
+	font-weight: 400;
+	color: $black;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	line-height: 1.31579;
+	text-transform: none;
+	vertical-align: baseline;
+}
+
+menu, ol, ul {
+	padding: 0;
+	margin: 0;
+}
+
+ul {
+	list-style: circle;
+	list-style-position:inside;
+}
+
+img {
+    border: 0;
+    -ms-interpolation-mode: bicubic;
+}
+
+/* 1.1 Links
+   ========================================================================== */
+
+a { 
+	color: $link-colour; 
+}
+
+a:focus { outline: thin dotted; }
+
+a:active,
+a:hover { 
+	color: $link-active-colour;
+	outline: 0; 
+	text-decoration: none;
+}
+
+.disabled,
+.disabled a {
+	text-decoration: none;
+	color: $grey-1;
+}
+
+
+/* ==========================================================================
+   2. Typography
+   ========================================================================== */
+
+@mixin font-size($font-size, $print-font-size, $font-size-640) {
+	@if $is-print == false {
+		font-size: $font-size;
+	} @else {
+		font-size: $print-font-size;
+	}
+	@media (max-width: 640px) {
+		font-size: $font-size-640;
+  	}
+}
+
+%h2 { 
+	@include font-size(36px,18pt,24px); 
+
+}
+
+%h3 { @include font-size(24px,16pt,20px); }
+
+%h4 { 
+	@include font-size(19px,14pt,16px); 
+	margin: 0;
+}
+
+%paragraph--large {
+	@include font-size(19px,14pt,16px);
+	font-weight: 400;
+}
+
+%paragraph--small { 
+	@include font-size(16px,12pt,14px);
+}
+
+h1, h2, h3, h4, h5, p {
+	clear: both;
+	margin: 0 0 $gutter-one-quarter 0;
+	font-weight: 700;
+}
+
+h1 { 
+	@include font-size(48px,18pt,32px);
+	margin: 0;
+}
+
+h2 { @extend %h2; }
+
+h3 { @extend %h3; }
+
+h4 { 
+	@extend %h4; 
+	margin-bottom: 0;
+}
+
+p { 
+	@extend %paragraph--small;
+	font-weight: 400;
+}
+
+b, strong { font-weight: 700; }
+
+small { font-size: 80%; }
+
+html,
+button,
+input,
+select,
+textarea {
+    font-family: sans-serif;
+}
+
+.hint {
+	display: block;
+	color: $grey-1;
+	margin: 0 0 .75em 0;
+}
+
+/* 2.1 Article styles
+   ========================================================================== */
+
+.article {
+	h2 { margin-bottom: .25em;}
+	h3,h4 { margin-bottom: .5em; }
+	ul { 
+		@extend %paragraph--large; 
+		margin-bottom: 1em;
+	}
+	li {
+		margin-bottom: 0.25em;
+	}
+	p { 
+		@extend %paragraph--large;
+		margin-bottom: .75em; 
+	}
+}
+
+/* ==========================================================================
+   3. Layout
+   ========================================================================== */
+
+%centered-wrapper {
+	max-width: 980px;
+	margin: 0 auto;
+	overflow: hidden;
+}
+
+.one-third {
+	@extend %container;
+	width: 28.3333333333%;
+	width : 28.1%\9; /* lt IE9  */
+	p {
+		@extend %paragraph--small;
+	}
+}
+
+.one-quarter { 
+	@extend %container;
+	width: 20%;
+}
+
+.one-half {
+	@extend %container;
+	width: 45%;
+}
+
+.two-thirds {
+	@extend %container;
+	width: 61.6666666667%;
+}
+
+.three-quarters { 
+	@extend %container;
+	width: 70%; 
+}
+
+.full-width {
+	@extend %container;
+	width: 95%;
+}
+
+%container {
+	float:left;
+	margin: 0 2.5% 1.5em 2.5%;
+	@media (max-width: 640px){
+		width: 92%;
+		margin: 0 4% 1.5em 4%;
+	}
+}
+
+.page-wrapper {
+	@extend %centered-wrapper;
+	width: 100%;
+	position:relative;
+	clear:both;
+	overflow: hidden;
+}
+
+#main {
+	width: 100%;
+	&:focus {
+		outline: 0;
+	}
+}
+
+hr {
+	width: 100%;
+	height: 0.25em;
+	display: block;
+	border: 0;
+}
+
+/* Helpers */
+
+.visually-hidden {
+	position: absolute;
+	left: -9999em;
+}
+
+.right-aligned {
+	float: right;
+}
+
+.inline {
+	display: inline;
+}
+
+/* ==========================================================================
+   4. Headers
+   ========================================================================== */
+
+/* 4.1 Global header
+   ========================================================================== */
+
+.global-header {
+	background: $black;
+	color: $white;
+	&__wrapper {
+		@extend %centered-wrapper;
+		padding: .5em 0;
+		overflow: auto;
+	}
+	&__logo {
+		clear: none;
+		float: left;
+		margin-left: 2.5%;
+		padding: 6px 0 1px 0;
+		overflow: visible;
+		color: white;
+		font-family: $NTA-Light;
+		font-weight: bold;
+		font-size: 30px;
+		line-height: 1;
+		text-decoration: none;	
+		img {
+			margin-top: -2px;
+			width: 35px;
+			height: 31px;
+			padding-right: 6px;
+			float: left;
+		}
+		&:hover {
+			text-decoration: none;
+			border-bottom: 1px solid #FFF;
+			margin-bottom: -1px;
+			color: #FFF;
+		}
+	}
+	&__title {
+		@extend %h4;
+		clear: none;
+		margin-right: 2.5%;
+		overflow: hidden;
+		text-align: right;
+		margin-top: .25em;
+		display: block;
+		@media (max-width: 640px){
+			display: none;
+		}
+	}
+	&__phase-tag {
+		background: $alpha-colour;
+		width: auto;
+		margin-left: $gutter-half;
+		letter-spacing: .2em;
+		font-weight: 700;
+		font-size: .75em;
+		text-transform: uppercase;
+		padding: .5em;
+		position: relative;
+	}
+}
+
+/* 4.2 Page header
+   ========================================================================== */
+
+.page-header {
+	@extend .full-width;
+	margin-bottom: 1.5em;
+	border-bottom: 1px solid $grey-2;
+	padding-bottom: .5em;
+}
+
+.page-header__subtitle {
+	color: $grey-1;
+	font-weight: 400;
+}
+
+
+/* ==========================================================================
+   5. Global footer
+   ========================================================================== */
+
+.global-footer {
+	border-top: 1px solid $grey-2;
+	background: $grey-3;
+	color: #454a4c;
+	clear: both;
+	a {
+		color: #454a4c;
+	}
+	&__wrapper {
+		@extend %centered-wrapper;
+		padding: 2em 0 0 0;
+	}
+	&__links {
+		@extend .two-thirds;
+		padding-top: 7em;
+		list-style: none;
+	}
+	&__link {
+		float: left;
+		margin-right: $gutter-half;
+	}
+	&__copyright {
+		@extend .one-third;
+		height: 150px;	
+		float: right;
+		display: block;
+		background: url('../images/footer-crest.png') no-repeat 50% 0 ;
+		@include device-pixel-ratio($ratio: 2) {
+			background: url('../images/footer-crest-2x.png') no-repeat 50% 0;
+			background-size: 125px 102px;
+		}
+		a {
+			text-align: center;
+			display: block;
+			padding-top: 7em;
+		}
+	}
+	@media (max-width: 640px){
+		&__links {
+			text-align: center;	
+			padding: 0 0 1.5em 0;
+		}
+	}
+}
+
+/* ==========================================================================
+   6. Forms
+   ========================================================================== */
+
+/* 6.1 Resets
+   ========================================================================== */
+
+$warning-background: #fef7f7;
+
+button,
+select {
+    text-transform: none;
+}
+
+button,
+input,
+select,
+textarea {
+    font-size: 100%;
+    margin: 0;
+    vertical-align: baseline;
+    *vertical-align: middle;
+}
+
+button,
+html input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+    -webkit-appearance: button;
+    cursor: pointer;
+    *overflow: visible;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+    box-sizing: border-box;
+    padding: 0;
+    *height: 13px;
+    *width: 13px;
+}
+
+input[type="search"] {
+    -webkit-appearance: textfield;
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box; 
+    box-sizing: content-box;
+}
+
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration {
+    -webkit-appearance: none;
+}
+
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+
+/* 6.2 Wrapper elements
+   ========================================================================== */
+
+form {
+	margin: 0;
+	width: 100%;
+}
+
+fieldset {
+	margin: 0 0 2em 0;
+	padding: 0;
+	border: 0;
+	clear: both;
+	fieldset {
+		margin-bottom: 1em;
+		padding-bottom: 0
+	}
+}
+
+.field { 
+	margin: 0 0 1rem 0;
+	margin-bottom: 20px;
+	@media (max-width: 640px) {
+		margin-bottom: .5em;
+	}
+	&.inline {
+		margin-right: .25em;
+		display: inline;
+		label {
+			@extend %paragraph--small;
+			display: inline;
+			margin-right: .25em;
+			padding-bottom: 1em;
+		}	
+	}
+}
+
+/* 6.2 Labelling
+   ========================================================================== */
+
+legend {
+	@extend %h3;
+	*margin-left: -7px;
+	margin-bottom: .25em;
+	padding: 0;
+	color: black;
+	font-weight: 700;
+}
+
+label {
+	@extend %paragraph--large;
+	display: block;
+	margin: 0 .5em .25em 0;
+}
+
+fieldset fieldset legend {
+	@extend %paragraph--large;
+}
+
+fieldset fieldset label {
+	@extend %paragraph--small;
+}
+
+/* 6.3 Inputs
+   ========================================================================== */
+
+input,
+textarea {
+	padding: .5em 1.5%;
+	background-color: #f9f9f9;
+	border: 1px solid #A2A2A2;
+	max-width: 500px;
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+	display: inline;
+	margin-right: 0.25em;
+	border: none;
+}
+
+textarea {
+	min-height: 10em;
+	padding-top: .5em;
+	overflow: auto;
+    vertical-align: top;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: 3px solid #ffbf47; 
+}
+
+.extra-long { width: 97%; }
+
+.long { width: $two-thirds; }
+
+.medium { width: $half; }
+
+.short { 
+	width: $one-quarter; 
+	width: 140px;
+	@media (max-width: 640px){
+		width: $half;
+	}
+}
+
+@media (max-width: 640px){
+	.extra-long,
+	.long,
+	.medium {
+		width: 97%;
+	}
+}
+
+
+/* 6.6 Validation
+   ========================================================================== */
+
+%validation-box {
+	padding: 1em 1em 0 1em;
+	margin: 0 0 1em -1em;
+	overflow: hidden;
+	background: $warning-background;
+	@media (max-width: 640px){
+		margin-left: -1em;
+		margin-right: -1em;
+	}
+}
+
+.validation-summary {
+	@extend %validation-box;
+	border: 3px solid $mellow-red;
+	&__list {
+		margin: 0 0 1em 1.5em;
+	}
+	&__item {
+		color: $mellow-red;
+		margin: 0 0 0.25em 0;
+		a {
+			color: $mellow-red;
+		}
+	}
+}
+
+.validation-wrapper {
+	@extend %validation-box;
+	border-left: 3px solid $mellow-red;
+	ul {
+		list-style: none;
+	}
+	li {
+		@extend %paragraph--small;
+		display: block;
+		margin-bottom: .5em;
+		color: $mellow-red;
+	}
+}
+
+/* 6.7 Form items
+   ========================================================================== */
+
+
+/* ==========================================================================
+   7. Navigation
+   ========================================================================== */
+
+%navigation {
+	list-style: none;
+	width: 100%;
+	overflow: auto;
+}
+
+%navigation__item {
+	float: left;
+	margin-bottom: 0;
+	@media(max-width: 640px) {
+		width: 100%;
+	}
+}
+
+%navigation__link {
+	display: block;
+	position: relative;
+	padding: .5em 1em;
+	@media(max-width: 640px) {
+		border-bottom: 1px solid $grey-2;
+		padding: .5em 0;
+	}	
+	&:hover {
+		background: $grey-4;
+		color: $link-colour; 
+	}
+}
+
+/* 7.1 Global breadcrumbs
+   ========================================================================== */
+
+.global-breadcrumbs {
+	@extend .full-width;
+	@extend %paragraph--small;
+	margin-bottom: 0.5em;
+	border-top: 10px solid $alpha-colour;
+	padding: .75em 0;
+	overflow: auto;
+	list-style: none;
+	&__item {
+		float: left;
+		padding-right: 1em;
+		margin-right: .5em;
+		color: $black;
+		background: url('../images/breadcrumb-arrow.png') no-repeat 100% 70%;
+		@include device-pixel-ratio($ratio: 2) {
+			background: url('../images/breadcrumb-arrow-2x.png') no-repeat 100% 40%;
+			background-size: 6px 11px;
+		}
+	}
+	a {
+		color: $black;
+	}
+	.current {
+		background: none;
+	}
+}
+
+/* 7.2 Tabs
+   ========================================================================== */
+
+.tabs {
+	@extend %navigation;
+	&__item {
+		@extend %navigation__item;
+	}
+	&__content {
+		border-top: 1px solid $grey-2;
+		padding: 1em 0;
+		margin-top: -1px;
+	}
+	a {
+		@extend %navigation__link;
+	}
+	.current {
+		@extend %navigation__link;	
+		border: 1px solid $grey-2;
+		border-bottom-color: $white;
+		@media(max-width: 640px) {
+			border: none;
+			border-bottom: 1px solid $grey-2;
+		}	
+		&:hover {
+			background: none;
+			color: $black;
+		}
+	}
+}
+
+/* 7.3 Vertical navigation
+   ========================================================================== */
+
+.vertical-navigation {
+	@extend %navigation;
+	&__title {
+		margin-bottom: 0;
+	}
+	a {
+		@extend %navigation__link;
+		padding: .5em 0;
+		border-bottom: 1px solid $grey-2;	
+
+	}
+}
+
+/* 7.4 Pagination
+   ========================================================================== */
+
+.pagination {	
+	&__item {
+		@extend %paragraph--small;
+		display: inline;
+		margin: 0 5px;
+	}
+}
+
+@media(max-width: 640px) {
+	a[rel="previous"],
+	a[rel="next"] {
+		display: none;
+	}
+}
+
+/* 7.5 Results settings
+   ========================================================================== */
+
+.results-settings {
+	float: left;
+	p {
+		@extend %paragraph--small;
+		margin-right: 1em;
+		display: inline;
+	}
+	a {
+		margin-left: 0.5em;
+	}
+}
+
+/* 7.6 Accordion
+   ========================================================================== */
+
+$summary-border: #cdd7dc;
+$summary-background: #e6eff5;
+
+.accordion {
+	@extend %navigation;
+	margin-bottom: 1.5em;
+	p {
+		@extend %paragraph--small;
+		margin-bottom: 0;
+	}
+	&__item {
+		position: relative;
+		overflow: auto;
+		padding: .75em 1em;
+		margin-bottom: 0;
+		border-bottom: 1px solid $summary-border;
+		background: $summary-background;
+	}
+	&__item__action {
+		@extend %paragraph--small;
+		position: absolute;
+		right: 1em;
+		top: .75em;	
+	}
+}
+
+
+/* ==========================================================================
+   8. Tables
+   ========================================================================== */
+
+.table__wrapper {
+	display: block;
+	width: 100%;
+	overflow: auto;
+}
+
+table { 
+	width: 100%;
+	border-collapse: collapse; 
+	margin-bottom: 1em;
+	input[type="checkbox"],
+	input[type="radio"] {
+		margin-right: 0;
+	}
+}
+
+tr:nth-child(even) { 
+	background: $grey-4; 
+}
+
+td, th { 
+	@extend %paragraph--small;
+	padding: .5em; 
+	border: 1px dotted $grey-2; 
+	text-align: left; 
+	vertical-align: top;
+}
+
+th { 
+	font-weight: 600;
+	background: $grey-3; 
+	border: 1px solid $grey-2; 
+}
+
+td {
+	overflow: hidden;
+}
+
+tfoot {
+	th, td {
+		background: $summary-background;
+		border: none;
+		border: 1px solid $summary-border;
+	}
+	th {
+		text-align: right;
+	}
+}
+
+.delete	{
+	width: 5%;
+	a {
+		color: $mellow-red;
+		&:hover {
+			color: $red;
+		}
+	}
+}
+
+
+
+/* ==========================================================================
+   9. Actions
+   ========================================================================== */
+
+.actions {
+	margin: 0 0 2.5em 0;
+	float: left;
+}
+
+@mixin button-colour ($colour: $button-colour) {
+	background: $colour;
+	@include box-shadow(0 2px 0 darken($colour, 15%));
+    @include ie-lte(8) {
+	    border-bottom: 2px solid darken($colour, 15%);
+	}
+	&:visited{
+	    background-color: $colour;
+	}
+	&:hover,
+	&:focus {
+		text-decoration: none;
+		background-color: darken($colour, 5%);
+	}
+	&:active {
+    	top: 2px;
+    	@include box-shadow(0 0 0 $colour);
+  	}
+	&.disabled,
+	&[disabled="disabled"],
+	&[disabled] {
+		@include opacity(.5);
+		&:hover{
+			cursor: default;
+			background-color: $colour;
+		}
+		&:active {
+			top: 0;
+			@include box-shadow(0 2px 0 darken($colour, 15%));
+			@include ie-lte(8) {
+				border-bottom: 2px solid darken($colour, 15%);
+			}
+		}
+	}
+	@if lightness($colour) < 50% {
+		color: $white;
+		&:link,
+		&:hover,
+		&:focus,
+		&:visited{
+			color: $white;
+		}
+	} @else {
+		color: $text-colour;
+		&:link,
+		&:hover,
+		&:focus,
+		&:visited{
+			color: $text-colour;
+		}
+	}
+}
+
+%button {
+	@include inline-block;
+	@include border-radius(3px);
+	border: none;
+	margin: 0 .25em 0 0;
+	padding: .3em .5em .1em .5em;
+	padding : .3em .5em .4em .5em\9;
+	font-family: $NTA-Light;
+	text-decoration: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	vertical-align: top;
+	-webkit-appearance: none;
+	cursor: pointer;
+	&[rel="external"]:after {
+		display: none;
+		content: none;
+		margin-left: 0;
+		margin-right: 0;
+	}
+	@include ie-lte(8) {
+		&[type="submit"],
+		&[type="reset"],
+		&[type="button"] {
+			filter:chroma(color=#000000);
+		}
+		&[type=submit].button {
+			filter: none;
+		}
+	}
+}
+
+.button {
+	&--primary {
+		@extend %paragraph--large;
+		@include button-colour();
+		@extend %button;
+		&--large {
+			@extend h3;
+			@include button-colour();
+			@extend %button;
+			font-weight: normal;
+		}
+	}
+	&--secondary {
+		@extend %paragraph--large;
+		@include button-colour($grey-3);
+		@extend %button;
+	}
+	&--warning {
+		@extend %paragraph--large;
+		@include button-colour($red);
+		@extend %button;
+	}
+}
+
+
+/* ===================================§=======================================
+   10. Modals & alerts
+   ========================================================================== */
+
+%fixed {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+
+}
+
+.overlay {
+	@extend %fixed;
+	@include opacity(.8);
+	background: $black;
+	z-index: 1;
+}
+
+%overlay-box {
+	display: block;
+	border: 3px solid $grey-2;
+	background: $white;
+	padding: 1em;
+	overflow: hidden;
+	position: relative;
+	z-index: 2;
+	@media (max-width:640px) {
+		padding: .5em 1em 4.25em 1em;
+	}
+}
+
+/* 10.1 Modals
+   ========================================================================== */
+.modal__wrapper {
+	@extend %fixed;
+	overflow: auto;
+	z-index: 1;
+}
+.modal {
+	@extend %overlay-box;
+	position: absolute;
+	left: 50%;
+	margin: 5% 0 5% -320px;
+	padding: 0 0 0 0;
+	width: 640px;
+	@media(max-width: 640px) {
+		margin: 46px 0 5% 0;
+		width: 100%;
+		left: 0;
+	}
+	&__close {
+		@extend %paragraph--small;
+		position: absolute;
+		right: 1.25em;
+		top: .7em;
+	}
+	/* Ajaxed content overides*/
+	.page-header {
+		background: $grey-3;
+		margin: 0; 
+		padding: 0.6em 1em 0.4em;
+		margin-bottom: 1em;
+	}
+	h1 {
+		@extend %h4;
+	}
+	.subtitle {
+		@extend %paragraph--small;
+	}
+	form {
+		overflow: auto;
+		margin-bottom: 0;
+		padding-left: 1px;
+		padding-right: 2.5%;
+		width: 97.5%;
+	}
+	.actions {
+		margin-bottom: .25em;
+	}
+}
+
+/* 10.2 Alerts
+   ========================================================================== */
+
+.alert, .alert--warning  {
+	@extend %overlay-box;
+	margin: 20% auto;
+	width: 40%;
+	max-width: 360px;
+	min-width: 260px;
+	padding: 1em 1em .5em 1em;
+	&__wrapper {
+		@extend %fixed;
+	}
+	.actions {
+		text-align: center;
+	}
+	p {
+		@extend %paragraph--small;
+		margin-bottom: 1em;	
+	}
+}
+
+.alert--warning {
+	background: $warning-background;
+	border: 3px solid $mellow-red;
+}

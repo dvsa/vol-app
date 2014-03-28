@@ -1,0 +1,10 @@
+<div id="licence-type">
+    <h1><?php echo $this->translate('Licence type');?></h1>
+
+    <?php 
+
+    echo $this->partial('self-serve/forms/licence-type', array(
+        'licenceTypeForm' => $licenceTypeForm,
+    ));
+    ?>
+</div>
