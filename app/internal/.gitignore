@@ -12,3 +12,4 @@ test/coverage-report
 config/autoload/local.php
 .sublime-project
 .sass-cache/
+public/static
