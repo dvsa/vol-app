@@ -11,7 +11,7 @@ namespace Olcs\Controller;
 use Common\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
-class SearchController extends AbstractActionController
+class SearchController extends FormActionController
 {
 
     public function indexAction()

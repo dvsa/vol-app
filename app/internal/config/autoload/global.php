@@ -16,6 +16,7 @@ return array(
                 'Person' => 'person',
                 'PersonSearch' => 'person-search',
                 'OperatorSearch' => 'operator-search',
+                'VosaCase' => 'vosa-case',
             )
         )
     )

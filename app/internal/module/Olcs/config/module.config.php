@@ -106,6 +106,19 @@ return array(
                         'action' => 'delete'
                     )
                 )
+            ),
+            'add-case' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/case[/:action][/:licence]',
+                    'constraints' => array(
+                        'licence' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'CaseController',
+                        'action' => 'index'
+                    )
+                )
             )
         )
     ),
@@ -123,7 +136,8 @@ return array(
         'invokables' => array(
             'DefaultController' => 'Olcs\Olcs\Placeholder\Controller\DefaultController',
             'IndexController' => 'Olcs\Controller\IndexController',
-            'SearchController' => 'Olcs\Controller\SearchController'
+            'SearchController' => 'Olcs\Controller\SearchController',
+            'CaseController' => 'Olcs\Controller\CaseController'
         )
     ),
     'view_manager' => array(
