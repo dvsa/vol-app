@@ -22,76 +22,6 @@ class IndexController extends FormActionController
     
     public function IndexAction() {
        
-        $licenceTypeForm = new LicenceTypeForm();
-        $step = $this->getEvent()->getRouteMatch()->getParam('step');
-
-        $licenceTypeForm = $this->configureForm('licenceType', $licenceTypeForm, $step);
-        
-        $routeParams = $this->getEvent()->getRouteMatch()->getParams();
-        $request  = $this->getRequest();
-                     
-        if ($request->isPost()) {
-
-            $licenceTypeForm->setData($request->getPost());
-            if ($licenceTypeForm->isValid()) {
-
-                $this->persistFormData($licenceTypeForm, $step);
-                
-                $next_step = $this->getNextStepRoute('licenceType', $licenceTypeForm, $step);
-                //var_dump($next_step);exit;
-                if ($next_step == 'Complete')
-                {
-                    return $this->forward()->dispatch('SelfServe\LicenceType\Index', array('action' => 'complete'));
-                                    
-                } else {
-                    $this->redirect()->toUrl($next_step);
-                }
-            } else {
-                $this->addErrorMessage('An error occurred.', \Zend\Log\Logger::ERR);
-                $this->messages = $licenceTypeForm->getMessages();
-            }
-        } 
-             
-        $persistedFormData = $this->getPersistedFormData($licenceTypeForm);
-        
-        if (!empty($persistedFormData))
-        {
-            $licenceTypeForm->setData($persistedFormData);
-        }
-        
-        //$headers = $this->getResponse()->getHeaders();
-        //$headers->addHeaderLine('Cache-Control: no-cache');             
-        $view = new ViewModel(array('licenceTypeForm' => $licenceTypeForm,
-                                    'messages' => $this->messages));
-
-        $view->setTemplate('self-serve/index/index');
-        return $view;
-    }
-
-    public function completeAction()
-    {
-
-        $request  = $this->getRequest();
-       
-        $licenceTypeForm = new LicenceTypeForm();
-        $step = $this->getEvent()->getRouteMatch()->getParam('step');
-        
-        $session = new \Zend\Session\Container('LicenceTypeForm');
-
-        $persistedFormData[] = $session->Location; 
-        $persistedFormData[] = $session->OperatorType;
-        $persistedFormData[] = $session->LicenceType;
-       
-        $view = new ViewModel(array('persistedFormData' => $persistedFormData,
-                                    'messages' => $this->messages));
-
-        $view->setTemplate('self-serve/index/complete');
-        return $view;        
-    }
-    
-    public function newIndexAction()
-    {
-        
         // create form
         $form = $this->generateSectionForm();
         
@@ -110,5 +40,19 @@ class IndexController extends FormActionController
         $view->setTemplate('self-serve/index/index');
         return $view;
     }
+
+    /**
+     * End of the journey redirect to business type
+     */
+    public function completeAction()
+    {
+
+        // persist data if possible
+        $request  = $this->getRequest();
+       
+        $this->redirect()->toRoute('selfserve/business-type', ['step' => 'choose-company']);
+
+    }
+
 
 }
