@@ -25,7 +25,7 @@ return array(
             'search' => array(
                 'type' => 'segment',
                 'options' => array(
-                    'route' => '/search',
+                    'route' => '/search[/:action]',
                     'defaults' => array(
                         'controller' => 'SearchController',
                         'action' => 'index'
