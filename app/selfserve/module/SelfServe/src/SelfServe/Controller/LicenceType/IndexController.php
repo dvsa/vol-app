@@ -11,11 +11,11 @@
 
 namespace SelfServe\Controller\LicenceType;
 
-use Common\Controller\FormActionController;
+use Common\Controller\FormJourneyActionController;
 use Zend\View\Model\ViewModel;
 use SelfServe\Form\LicenceType\LicenceTypeForm;
 
-class IndexController extends FormActionController
+class IndexController extends FormJourneyActionController
 {
     protected $messages;
     protected $section = 'licence_type';
