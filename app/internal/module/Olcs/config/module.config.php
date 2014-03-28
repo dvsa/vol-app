@@ -110,13 +110,26 @@ return array(
             'add-case' => array(
                 'type' => 'segment',
                 'options' => array(
-                    'route' => '/case[/:action][/:licence]',
+                    'route' => '/case/add[/:licence]',
                     'constraints' => array(
                         'licence' => '[0-9]+'
                     ),
                     'defaults' => array(
                         'controller' => 'CaseController',
-                        'action' => 'index'
+                        'action' => 'add'
+                    )
+                )
+            ),
+            'edit-case' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/case/edit[/:case]',
+                    'constraints' => array(
+                        'case' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'CaseController',
+                        'action' => 'edit'
                     )
                 )
             )

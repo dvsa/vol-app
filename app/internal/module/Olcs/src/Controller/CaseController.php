@@ -55,16 +55,67 @@ class CaseController extends FormActionController
     }
 
     /**
+     * Edit a new case
+     *
+     * @return ViewModel
+     */
+    public function editAction()
+    {
+        $case = $this->params()->fromRoute('case');
+
+        $result = $this->makeRestCall('VosaCase', 'GET', array('id' => $case));
+
+        $result['categories'] = $this->unFormatCategories($result['categories']);
+
+        $result['fields'] = $result;
+
+        $form = $this->generateFormWithData(
+            'case',
+            'processEditCase',
+            $result
+        );
+
+        $view = new ViewModel(['form' => $form]);
+        $view->setTemplate('form');
+        return $view;
+    }
+
+    /**
      * Process adding the case
      *
      * @param type $data
      */
     protected function processAddCase($data)
     {
+        // @todo Find out where these fields come from
+        $data['caseNumber'] = 12345678;
+        $data['openTime'] = '2014-01-01 12:00:00';
+        $data['owner'] = 7;
+
         $data['categories'] = $this->formatCategories($data['categories']);
         $data = array_merge($data, $data['fields']);
 
-        $this->processAdd($data, 'VosaCase');
+        $result = $this->processAdd($data, 'VosaCase');
+
+        if (isset($result['id'])) {
+            // @todo Decide where to send the user afterwards
+            $this->redirect()->toUrl('/case/add/' . $data['licence'] . '?created=' . $result['id']);
+        }
+    }
+
+    /**
+     * Process updating the case
+     *
+     * @param type $data
+     */
+    protected function processEditCase($data)
+    {
+        /*$data['categories'] = $this->formatCategories($data['categories']);
+        $data = array_merge($data, $data['fields']);
+
+        $result = $this->processEdit($data, 'VosaCase');
+
+        var_dump($result);*/
     }
 
     private function formatCategories($categories = array())
@@ -77,6 +128,18 @@ class CaseController extends FormActionController
 
                 $return[] = str_replace('case_category.', '', $category);
             }
+        }
+
+        return $return;
+    }
+
+    private function unFormatCategories($categories = array())
+    {
+        $return = array();
+
+        foreach ($categories as $category) {
+
+            $return['compliance'] = 'case_category.' . $category;
         }
 
         return $return;
