@@ -1,12 +1,12 @@
 <?php
 
 return [
-    'location-type' => array(
+    'business-type' => array(
         'type' => 'segment',
         'options' => array(
-            'route' => '/licence-type/:step',
+            'route' => '/business-type/:step',
             'defaults' => array(
-                'controller' => 'Selfserve\LicenceType\Index',
+                'controller' => 'Selfserve\BusinessType\Index',
                 'action' => 'index'
             )
         ),
