@@ -21,6 +21,8 @@ class CaseController extends FormActionController
 {
     /**
      * List of cases if we have a licence
+     *
+     * @todo Handle 404
      */
     public function indexAction()
     {
@@ -33,13 +35,92 @@ class CaseController extends FormActionController
 
         $results = $this->makeRestCall('VosaCase', 'GET', array('licence' => $licence));
 
-        $view = new ViewModel(['results' => $results]);
-        $view->setTemplate('results');
+        $settings = array(
+            'columns' => array(
+                'id' => array(
+                    'Title' => 'ID',
+                    'Format' => '<a href="/case/' . $licence . '/edit/:VALUE">:VALUE</a>'
+                ),
+                'caseNumber' => array(
+                    'Title' => 'Case Number'
+                ),
+                'status' => array(
+                    'Title' => 'Status'
+                ),
+                'description' => array(
+                    'Title' => 'Description'
+                ),
+                'ecms' => array(
+                    'Title' => 'ECMS'
+                )
+            )
+        );
+
+        $view = new ViewModel(['licence' => $licence, 'count' => $results['Count'], 'table' => $this->buildTable($results['Results'], $settings)]);
+        $view->setTemplate('case-list');
         return $view;
+    }
+
+    private function buildTable($data, $settings = array())
+    {
+        if (empty($data)) {
+            return '<p>No results</p>';
+        }
+
+        $firstRow = $data[0];
+
+        $headers = array();
+
+        foreach ($settings['columns'] as $key => $details) {
+            $headers[$key] = $details['Title'];
+        }
+
+        $rows = array();
+
+        foreach ($data as $row) {
+
+            $columns = array();
+
+            foreach ($row as $column => $value) {
+
+                if (isset($headers[$column])) {
+
+                    if (is_string($value) || is_numeric($value)) {
+                        $val = $value;
+                    } else {
+                        $val = '';
+                    }
+
+                    if (isset($settings['columns'][$column]['Format'])) {
+
+                        $columns[] = str_replace(':VALUE', $value, $settings['columns'][$column]['Format']);
+                    } else {
+                        $columns[] = $val;
+                    }
+                }
+            }
+
+            $rows[] = '<td>' . implode('</td><td>', $columns) . '</td>';
+        }
+
+        $table = '
+<table>
+    <thead>
+        <tr>
+            <th>' . implode('</th><th>', $headers) . '</th>
+        </tr>
+    </thead>
+    <tbody><tr>' . implode('</tr><tr>', $rows) . '</tr>
+    </tbody>
+</table>';
+
+        return $table;
     }
 
     /**
      * Add a new case to a licence
+     *
+     * @todo Handle 404 and Bad Request
      *
      * @return ViewModel
      */
@@ -47,9 +128,14 @@ class CaseController extends FormActionController
     {
         $licence = $this->params()->fromRoute('licence');
 
-        // If we don't have a licence id
         if (empty($licence)) {
-            $this->redirect()->toUrl('/');
+            die('Bad request');
+        }
+
+        $results = $this->makeRestCall('Licence', 'GET', array('id' => $licence));
+
+        if (empty($results)) {
+            return $this->notFoundAction();
         }
 
         $form = $this->generateFormWithData(
@@ -68,13 +154,20 @@ class CaseController extends FormActionController
     /**
      * Edit a new case
      *
+     * @todo Handle 404
+     *
      * @return ViewModel
      */
     public function editAction()
     {
+        $licence = $this->params()->fromRoute('licence');
         $case = $this->params()->fromRoute('case');
 
-        $result = $this->makeRestCall('VosaCase', 'GET', array('id' => $case));
+        $result = $this->makeRestCall('VosaCase', 'GET', array('id' => $case, 'licence' => $licence));
+
+        if (empty($result)) {
+            return $this->notFoundAction();
+        }
 
         $categories = $result['categories'];
         unset($result['categories']);
@@ -115,7 +208,7 @@ class CaseController extends FormActionController
         $result = $this->processAdd($data, 'VosaCase');
 
         if (isset($result['id'])) {
-            $this->redirect()->toUrl('/case/edit/' . $result['id']);
+            $this->redirect()->toUrl('/case/' . $data['licence']);
         }
     }
 
@@ -133,7 +226,7 @@ class CaseController extends FormActionController
 
         $result = $this->processEdit($data, 'VosaCase');
 
-        $this->redirect()->toUrl('/case/edit/' . $data['id']);
+        $this->redirect()->toUrl('/case/' . $data['licence']);
     }
 
     /**
