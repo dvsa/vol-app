@@ -16,6 +16,10 @@ class SearchController extends FormActionController
 
     public function indexAction()
     {
+        // Below is for setting route params for the breadcrumb
+        $this->setBreadcrumb(array('search' => array()));
+        $navigation = $this->getServiceLocator()->get('navigation');
+        
         $form = $this->generateFormWithData(
             'search',
             'processSearch'
@@ -43,7 +47,7 @@ class SearchController extends FormActionController
             'transportManagerId'
         );
 
-        $searchType = 'operator';
+        $searchType = 'operators';
 
         foreach ($data as $key => $value) {
 
@@ -75,7 +79,7 @@ class SearchController extends FormActionController
         $results = $this->makeRestCall('OperatorSearch', 'GET', $data);
 
         $view = new ViewModel(['results' => $results]);
-        $view->setTemplate('results');
+        $view->setTemplate('results-operator');
         return $view;
     }
 
