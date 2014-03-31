@@ -38,7 +38,7 @@
     "autoload" : {
         "psr-4": {
             "OlcsEntities\\": "vendor/olcs/olcs-entities/OlcsEntities/src/OlcsEntities",
-            "Common\\": "vendor/olcs/OlcsCommon/Common/src"
+            "Common\\": "vendor/olcs/OlcsCommon/Common/src/Common"
         }
     }
 }
