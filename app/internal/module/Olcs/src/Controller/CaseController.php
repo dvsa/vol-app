@@ -20,11 +20,22 @@ use Zend\View\Model\ViewModel;
 class CaseController extends FormActionController
 {
     /**
-     * @todo Decide where to send people if they don't have an action
+     * List of cases if we have a licence
      */
     public function indexAction()
     {
-        $this->redirect()->toUrl('/');
+        $licence = $this->params()->fromRoute('licence');
+
+        if (empty($licence)) {
+
+            return $this->notFoundAction();
+        }
+
+        $results = $this->makeRestCall('VosaCase', 'GET', array('licence' => $licence));
+
+        $view = new ViewModel(['results' => $results]);
+        $view->setTemplate('results');
+        return $view;
     }
 
     /**
@@ -65,9 +76,12 @@ class CaseController extends FormActionController
 
         $result = $this->makeRestCall('VosaCase', 'GET', array('id' => $case));
 
-        $result['categories'] = $this->unFormatCategories($result['categories']);
+        $categories = $result['categories'];
+        unset($result['categories']);
 
         $result['fields'] = $result;
+
+        $result['categories'] = $this->unFormatCategories($categories);
 
         $form = $this->generateFormWithData(
             'case',
@@ -83,13 +97,16 @@ class CaseController extends FormActionController
     /**
      * Process adding the case
      *
+     * @todo Additional fields are required for persisting - Find out where these fields come from
+     * @todo Decide where to send the user afterwards
+     *
      * @param type $data
      */
     protected function processAddCase($data)
     {
-        // @todo Find out where these fields come from
+        // Additional fields (Mocked for now)
         $data['caseNumber'] = 12345678;
-        $data['openTime'] = '2014-01-01 12:00:00';
+        $data['openTime'] = date('Y-m-d H:i:s');
         $data['owner'] = 7;
 
         $data['categories'] = $this->formatCategories($data['categories']);
@@ -98,26 +115,33 @@ class CaseController extends FormActionController
         $result = $this->processAdd($data, 'VosaCase');
 
         if (isset($result['id'])) {
-            // @todo Decide where to send the user afterwards
-            $this->redirect()->toUrl('/case/add/' . $data['licence'] . '?created=' . $result['id']);
+            $this->redirect()->toUrl('/case/edit/' . $result['id']);
         }
     }
 
     /**
      * Process updating the case
      *
+     * @todo Decide what to do on success
+     *
      * @param type $data
      */
     protected function processEditCase($data)
     {
-        /*$data['categories'] = $this->formatCategories($data['categories']);
+        $data['categories'] = $this->formatCategories($data['categories']);
         $data = array_merge($data, $data['fields']);
 
         $result = $this->processEdit($data, 'VosaCase');
 
-        var_dump($result);*/
+        $this->redirect()->toUrl('/case/edit/' . $data['id']);
     }
 
+    /**
+     * Format categories into a single dimension array
+     *
+     * @param array $categories
+     * @return array
+     */
     private function formatCategories($categories = array())
     {
         $return = array();
@@ -133,16 +157,42 @@ class CaseController extends FormActionController
         return $return;
     }
 
+    /**
+     * Format the categories from the REST response into the form's format
+     *
+     * @todo Look at re-factoring this
+     *
+     * @param array $categories
+     * @return array
+     */
     private function unFormatCategories($categories = array())
     {
-        $return = array();
+        $config = $this->getServiceLocator()->get('Config');
 
-        foreach ($categories as $category) {
+        $formattedCategories = array();
 
-            $return['compliance'] = 'case_category.' . $category;
+        $translations = array();
+
+        foreach ($config['static-list-data'] as $key => $array) {
+
+            if (preg_match('/case_categories_([a-z]+)/', $key, $matches)) {
+
+                foreach (array_keys($array) as $id) {
+
+                    $translations[str_replace('case_category.', '', $id)] = $matches[1];
+                }
+            }
         }
 
-        return $return;
-    }
+        foreach ($categories as $categoryId) {
 
+            if (!isset($formattedCategories[$translations[$categoryId]])) {
+                $formattedCategories[$translations[$categoryId]] = array();
+            }
+
+            $formattedCategories[$translations[$categoryId]][] = 'case_category.' . $categoryId;
+        }
+
+        return $formattedCategories;
+    }
 }
