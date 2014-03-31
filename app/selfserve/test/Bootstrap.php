@@ -1,6 +1,6 @@
 <?php
 
-namespace OlcsTest;
+namespace SelfServe\test;
 
 use Zend\Mvc\Service\ServiceManagerConfig;
 use Zend\ServiceManager\ServiceManager;
