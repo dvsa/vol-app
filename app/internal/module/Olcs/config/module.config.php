@@ -22,10 +22,20 @@ return array(
                     )
                 )
             ),
+             'operators' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/search/operators',
+                    'defaults' => array(
+                        'controller' => 'SearchController',
+                        'action' => 'operator'
+                    )
+                )
+            ),
             'search' => array(
                 'type' => 'segment',
                 'options' => array(
-                    'route' => '/search[/:action]',
+                    'route' => '/search',
                     'defaults' => array(
                         'controller' => 'SearchController',
                         'action' => 'index'
