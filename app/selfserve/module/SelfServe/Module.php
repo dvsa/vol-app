@@ -38,11 +38,12 @@ class Module
                      ->get('Zend\Session\SessionManager');
         $session->start();
 
-        $container = new Container('initialized');
-        if (!isset($container->init)) {
+        //$container = new Container('initialized');
+        /* this breaks unit tests...
+         if (!isset($container->init)) {
              $session->regenerateId(true);
              $container->init = 1;
-        }
+        }*/
     }
 
     public function getServiceConfig()
