@@ -1,0 +1,37 @@
+<?php echo $this->render('partials/page-header.phtml', array('pageTitle' => 'Tables', 'pageSubTitle'=> 'Standard styling for a range of complex tables and surrounding elements')); ?>
+
+<div class="full-width">
+<h2>Table header</h2>
+<pre>
+<?php //print_r($results)?>
+</pre>
+    <div class="table__wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th class="id"><?php echo $this->translate('id'); ?></th>
+                    <th class="operator_org_name"><?php echo $this->translate('operator_org_name'); ?></th>
+                    <th class="operator_org_reg"><?php echo $this->translate('operator_org_reg'); ?></th>
+                    <th class="operator_org_type"><?php echo $this->translate('operator_org_type'); ?></th>
+                    <th class="licence_id" style="text-align: center;"><?php echo $this->translate('licence_id'); ?></th>
+                    <th class="case_count" style="text-align: center;"><?php echo $this->translate('case_count'); ?></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                foreach ($results['Results'] as $result):
+                ?>
+                <tr>
+                    <td class="id"><?php echo $result['id']; ?></td>
+                    <td class="operator_org_name"><?php echo $result['name']; ?></td>
+                    <td class="operator_org_reg"><?php echo $result['registered_company_number']; ?></td>
+                    <td class="operator_org_type"><?php echo $result['organisation_type']; ?></td>
+                    <td class="licence_id" style="text-align: center;"><?php echo $result['licenceId']; ?></td>
+                    <td class="case_count" style="text-align: center;"><?php echo $result['caseCount']; ?></td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+
+</div>

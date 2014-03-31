@@ -8,7 +8,7 @@
 
 namespace Olcs\Controller;
 
-use Common\Controller\AbstractActionController;
+use Common\Controller\FormActionController;
 use Zend\View\Model\ViewModel;
 
 class SearchController extends FormActionController
@@ -75,7 +75,7 @@ class SearchController extends FormActionController
         $results = $this->makeRestCall('OperatorSearch', 'GET', $data);
 
         $view = new ViewModel(['results' => $results]);
-        $view->setTemplate('results');
+        $view->setTemplate('results-operator');
         return $view;
     }
 
