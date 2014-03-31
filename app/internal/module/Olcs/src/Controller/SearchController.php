@@ -9,6 +9,7 @@
 namespace Olcs\Controller;
 
 use Common\Controller\AbstractActionController;
+use Common\Controller\FormActionController;
 use Zend\View\Model\ViewModel;
 
 class SearchController extends FormActionController
