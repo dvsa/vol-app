@@ -1,24 +1,23 @@
 <?php
 
 /**
- * AuthorisationFinance Controller
+ * Business Type Controller
  *
  *
  * @package		selfserve
- * @subpackage          operating-centre
+ * @subpackage          business
  * @author		S Lizzio <shaun.lizzio@valtech.co.uk>
  */
 
-namespace SelfServe\Controller\LicenceType;
+namespace SelfServe\Controller\Business;
 
 use Common\Controller\FormJourneyActionController;
 use Zend\View\Model\ViewModel;
-use SelfServe\Form\LicenceType\LicenceTypeForm;
 
 class IndexController extends FormJourneyActionController
 {
     protected $messages;
-    protected $section = 'licence_type';
+    protected $section = 'business';
     
     public function IndexAction() {
        
@@ -36,8 +35,8 @@ class IndexController extends FormJourneyActionController
         }
         
         // render the view
-        $view = new ViewModel(['licenceTypeForm' => $form]);
-        $view->setTemplate('self-serve/index/index');
+        $view = new ViewModel(['form' => $form]);
+        $view->setTemplate('self-serve/business/index');
         return $view;
     }
 

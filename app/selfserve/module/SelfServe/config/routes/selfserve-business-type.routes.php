@@ -1,12 +1,12 @@
 <?php
 
 return [
-    'business-type' => array(
+    'business' => array(
         'type' => 'segment',
         'options' => array(
-            'route' => '/business-type/:step',
+            'route' => '/business[/][:step]',
             'defaults' => array(
-                'controller' => 'Selfserve\BusinessType\Index',
+                'controller' => 'Selfserve\Business\Index',
                 'action' => 'index'
             )
         ),
