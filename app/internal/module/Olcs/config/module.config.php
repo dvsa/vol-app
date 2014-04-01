@@ -117,29 +117,17 @@ return array(
                     )
                 )
             ),
-            'add-case' => array(
+            'case' => array(
                 'type' => 'segment',
                 'options' => array(
-                    'route' => '/case/add[/:licence]',
+                    'route' => '/case[/:licence][/:action][/:case]',
                     'constraints' => array(
-                        'licence' => '[0-9]+'
-                    ),
-                    'defaults' => array(
-                        'controller' => 'CaseController',
-                        'action' => 'add'
-                    )
-                )
-            ),
-            'edit-case' => array(
-                'type' => 'segment',
-                'options' => array(
-                    'route' => '/case/edit[/:case]',
-                    'constraints' => array(
+                        'licence' => '[0-9]+',
                         'case' => '[0-9]+'
                     ),
                     'defaults' => array(
                         'controller' => 'CaseController',
-                        'action' => 'edit'
+                        'action' => 'index'
                     )
                 )
             )
