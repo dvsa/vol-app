@@ -1,37 +1,67 @@
-<?php echo $this->render('partials/page-header.phtml', array('pageTitle' => 'Tables', 'pageSubTitle'=> 'Standard styling for a range of complex tables and surrounding elements')); ?>
+<?php echo $this->render('partials/page-header.phtml', array('pageTitle' => 'Search results', 'pageSubTitle'=> 'Your search results')); ?>
 
 <div class="full-width">
-<h2>Table header</h2>
+<h2>Results List</h2>
+<p>Instructional text goes here</p>
+<div class="table__wrapper">
+    <table>
+        <thead>
+            <tr>
+                <th><?php echo $this->translate('Lic no/status'); ?></th>
+                <th><?php echo $this->translate('App ID/status'); ?></th>
+                <th><?php echo $this->translate('Op/trading name'); ?></th>
+                <th><?php echo $this->translate('Company/Lic type'); ?></th>
+                <th><?php echo $this->translate('Last act CN/Date'); ?></th>
+                <th><?php echo $this->translate('Correspondence address'); ?></th>
+                <th class="tbl_num_cases" style="text-align: center;"><?php echo $this->translate('Cases'); ?></th>
+                <th class="tbl_mlh" style="text-align: center;"><?php echo $this->translate('MLH'); ?></th>
+                <th class="tbl_info" style="text-align: center;"><?php echo $this->translate('Info'); ?></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            foreach ($results['Results'] as $result):
+            ?>
+            <tr>
+                <td><a href="#"><?php echo $result['licenceNumber']; ?></a><br/><?php echo $result['status']; ?></td>
+                <td><?php echo $result['licenceId']; ?><br/><?php echo $result['status']; ?></td>
+                <td><?php echo $result['trading_as'] == '' ? $result['name'] : $result['trading_as']; ?></td>
+                <td><?php echo $result['licenceType']; ?></td>
+                <td><?php echo date('d/m/Y', strtotime($result['last_updated_on'])); ?></td>
+                <td>&nbsp;</td>
+                <td class="tbl_num_cases" style="text-align: center;"><?php echo $result['has_cases'] == 0 ? '[+add]' : $result['has_cases']; ?></td>
+                <td class="tbl_mlh" style="text-align: center;">[hyper]</td>
+                <td class="tbl_info" style="text-align: center;">[info_icon]</td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+<div class="table__footer">
+    <div class="results-settings">
+        <p>Showing:</p>
+        <ul class="results-settings__list">
+            <li class="results-settings__item current">25</li>
+            <li class="results-settings__item"><a href="">50</a></li>
+            <li class="results-settings__item"><a href="">100</a></li>
+        </ul><!-- end .results-settings__list -->
+        <p>of 204 results</p>
+    </div><!-- end .results-settings -->
+
+    <ul role="navigation" class="pagination right-aligned">
+        <li class="pagination__item"><a rel="previous" href="">Previous</a></li>
+        <li class="pagination__item"><a href="">1</a></li>
+        <li class="pagination__item"><a href="">2</a></li>
+        <li class="pagination__item current">3</li>
+        <li class="pagination__item"><a href="">4</a></li>
+        <li class="pagination__item"><a href="">5</a></li>
+        <li class="pagination__item">...</li>
+        <li class="pagination__item"><a href="">14</a></li>
+        <li class="pagination__item"><a rel="next" href="">Next</a></li>
+    </ul><!-- end .pagination.right-aligned -->
+</div>
+
+
 <pre>
 <?php //print_r($results)?>
 </pre>
-    <div class="table__wrapper">
-        <table>
-            <thead>
-                <tr>
-                    <th class="id"><?php echo $this->translate('id'); ?></th>
-                    <th class="operator_org_name"><?php echo $this->translate('operator_org_name'); ?></th>
-                    <th class="operator_org_reg"><?php echo $this->translate('operator_org_reg'); ?></th>
-                    <th class="operator_org_type"><?php echo $this->translate('operator_org_type'); ?></th>
-                    <th class="licence_id" style="text-align: center;"><?php echo $this->translate('licence_id'); ?></th>
-                    <th class="case_count" style="text-align: center;"><?php echo $this->translate('case_count'); ?></th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                foreach ($results['Results'] as $result):
-                ?>
-                <tr>
-                    <td class="id"><?php echo $result['id']; ?></td>
-                    <td class="operator_org_name"><?php echo $result['name']; ?></td>
-                    <td class="operator_org_reg"><?php echo $result['registered_company_number']; ?></td>
-                    <td class="operator_org_type"><?php echo $result['organisation_type']; ?></td>
-                    <td class="licence_id" style="text-align: center;"><?php echo $result['licenceId']; ?></td>
-                    <td class="case_count" style="text-align: center;"><?php echo $result['caseCount']; ?></td>
-                </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    </div>
-
-</div>
