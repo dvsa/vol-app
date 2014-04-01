@@ -50,7 +50,7 @@ class IndexController extends FormJourneyActionController
         // persist data if possible
         $request  = $this->getRequest();
        
-        $this->redirect()->toRoute('selfserve/business', ['step' => 'type']);
+        $this->redirect()->toRoute('selfserve/business', ['step' => 'business_type']);
 
     }
 
