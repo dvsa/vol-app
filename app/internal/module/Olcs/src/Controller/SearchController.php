@@ -19,7 +19,7 @@ class SearchController extends FormActionController
         // Below is for setting route params for the breadcrumb
         $this->setBreadcrumb(array('search' => array()));
         $navigation = $this->getServiceLocator()->get('navigation');
-        
+
         $form = $this->generateFormWithData(
             'search',
             'processSearch'
@@ -27,6 +27,15 @@ class SearchController extends FormActionController
 
         $view = new ViewModel(['form' => $form]);
         $view->setTemplate('form');
+        return $view;
+    }
+
+    public function resultsAction()
+    {
+        $table = $this->getServiceLocator()->get('Table')->buildTable('sample');
+
+        $view = new ViewModel(['table' => $table]);
+        $view->setTemplate('table');
         return $view;
     }
 

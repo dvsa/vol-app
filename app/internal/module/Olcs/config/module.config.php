@@ -3,6 +3,16 @@
 return array(
     'router' => array(
         'routes' => array(
+            'search-results-test' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/search/results',
+                    'defaults' => array(
+                        'controller' => 'SearchController',
+                        'action' => 'results'
+                    )
+                )
+            ),
             'olcsHome' => array(
                 'type' => 'Literal',
                 'options' => array(
