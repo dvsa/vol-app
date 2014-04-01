@@ -6,11 +6,11 @@
         "type": "package",
         "package": {
             "name": "olcs/olcs-entities",
-            "version": "0.1.4",
+            "version": "dev-develop",
             "source": {
                 "url": "gitolite@git.clb.npm:olcs-entities.git",
                 "type": "git",
-                "reference": "origin/master"
+                "reference": "origin/develop"
                 }
             }
         },
@@ -18,7 +18,7 @@
         "type": "package",
         "package": {
             "name": "olcs/OlcsCommon",
-            "version": "0.1.0",
+            "version": "dev-develop",
             "source": {
                 "url": "gitolite@git.clb.npm:olcs-common.git",
                 "type": "git",
