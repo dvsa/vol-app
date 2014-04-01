@@ -19,7 +19,7 @@ class IndexController extends FormJourneyActionController
     protected $messages;
     protected $section = 'business';
     
-    public function IndexAction() {
+    public function indexAction() {
        
         // create form
         $form = $this->generateSectionForm();
