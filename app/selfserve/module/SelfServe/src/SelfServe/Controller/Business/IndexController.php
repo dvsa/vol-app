@@ -49,7 +49,8 @@ class IndexController extends FormJourneyActionController
                 break;
             default:
                 // do nothing since we already have the form?
-                $form->setValidationGroup(InputFilterInterface::VALIDATE_ALL);
+                //$form->setValidationGroup(InputFilterInterface::VALIDATE_ALL);
+                $form = $this->formPost($form, 'processForm');
                 break;
         }
         
@@ -71,14 +72,17 @@ class IndexController extends FormJourneyActionController
      */
     public function completeAction()
     {
-
         // persist data if possible
-        $request  = $this->getRequest();
-       
+        
         $this->redirect()->toRoute('selfserve/business', ['step' => 'type']);
-
+        
     }
 
+    public function companyLookupAction()
+    {
+        
+    }
+    
     /**
      * Method called once a valid company look up form has been submitted.
      * Needs to call CH Controller and implement PRG and redirect back to 
@@ -105,6 +109,10 @@ class IndexController extends FormJourneyActionController
     
     protected function processAll()
     {
-        $form->setValidationGroup(FormInterface::VALIDATE_ALL);
+        // Main processing form
+        
+        // persist data if possible
+        
+        $this->redirect()->toRoute('selfserve/finance', ['step' => 'index']);
     }
 }
