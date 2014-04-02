@@ -32,7 +32,14 @@ class SearchController extends FormActionController
 
     public function resultsAction()
     {
-        $table = $this->getServiceLocator()->get('Table')->buildTable('sample');
+        $data = array(
+            'sort' => filter_input(INPUT_GET, 'sort'),
+            'sortOrder' => filter_input(INPUT_GET, 'order')
+        );
+
+        $results = $this->makeRestCall('OperatorSearch', 'GET', $data);
+
+        $table = $this->getServiceLocator()->get('Table')->buildTable('sample', $results);
 
         $view = new ViewModel(['table' => $table]);
         $view->setTemplate('table');
