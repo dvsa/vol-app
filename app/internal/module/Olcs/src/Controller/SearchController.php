@@ -26,7 +26,7 @@ class SearchController extends FormActionController
         );
 
         $view = new ViewModel(['form' => $form]);
-        $view->setTemplate('form');
+        $view->setTemplate('search/index');
         return $view;
     }
 

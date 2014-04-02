@@ -147,7 +147,7 @@ class CaseController extends FormActionController
         );
 
         $view = new ViewModel(['form' => $form]);
-        $view->setTemplate('form');
+        $view->setTemplate('case/add');
         return $view;
     }
 
@@ -183,7 +183,7 @@ class CaseController extends FormActionController
         );
 
         $view = new ViewModel(['form' => $form]);
-        $view->setTemplate('form');
+        $view->setTemplate('case/edit');
         return $view;
     }
 
