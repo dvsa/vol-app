@@ -1,16 +1,17 @@
 <?php
-echo $this->render(
-    'partials/page-header.phtml',
-    array(
-        'pageTitle' => 'Tables',
-        'pageSubTitle'=> 'Standard styling for a range of complex tables and surrounding elements'
-    )
-);
+    echo $this->render(
+        '/partials/page-header.phtml',
+        array(
+            'pageTitle' => 'Cases',
+            'pageSubTitle'=> 'A list of cases'
+        )
+    );
 ?>
+
 <div class="full-width">
     <a href="/case/<?php echo $licence; ?>/add" class="action--primary right-aligned">Add Case</a>
     <h2>Cases (<?php echo $count; ?> found)</h2>
     <div class="table__wrapper">
         <?php echo $table; ?>
     </div>
-</div>
+</div><!-- end .full-width -->
