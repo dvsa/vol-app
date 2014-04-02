@@ -19,14 +19,14 @@ class SearchController extends FormActionController
         // Below is for setting route params for the breadcrumb
         $this->setBreadcrumb(array('search' => array()));
         $navigation = $this->getServiceLocator()->get('navigation');
-        
+
         $form = $this->generateFormWithData(
             'search',
             'processSearch'
         );
 
         $view = new ViewModel(['form' => $form]);
-        $view->setTemplate('form');
+        $view->setTemplate('search/index');
         return $view;
     }
 
