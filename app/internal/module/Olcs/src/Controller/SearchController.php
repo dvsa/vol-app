@@ -30,22 +30,6 @@ class SearchController extends FormActionController
         return $view;
     }
 
-    public function resultsAction()
-    {
-        $data = array(
-            'sort' => filter_input(INPUT_GET, 'sort'),
-            'sortOrder' => filter_input(INPUT_GET, 'order')
-        );
-
-        $results = $this->makeRestCall('OperatorSearch', 'GET', $data);
-
-        $table = $this->getServiceLocator()->get('Table')->buildTable('sample', $results);
-
-        $view = new ViewModel(['table' => $table]);
-        $view->setTemplate('table');
-        return $view;
-    }
-
     /**
      * Process the search
      *
@@ -94,7 +78,9 @@ class SearchController extends FormActionController
 
         $results = $this->makeRestCall('OperatorSearch', 'GET', $data);
 
-        $view = new ViewModel(['results' => $results]);
+        $table = $this->getServiceLocator()->get('Table')->buildTable('operator', $results);
+
+        $view = new ViewModel(['table' => $table]);
         $view->setTemplate('results-operator');
         return $view;
     }
