@@ -78,8 +78,10 @@ class SearchController extends FormActionController
 
         $results = $this->makeRestCall('OperatorSearch', 'GET', $data);
 
-        $view = new ViewModel(['results' => $results]);
-        $view->setTemplate('search/results-operator');
+        $table = $this->getServiceLocator()->get('Table')->buildTable('operator', $results);
+
+        $view = new ViewModel(['table' => $table]);
+        $view->setTemplate('results-operator');
         return $view;
     }
 

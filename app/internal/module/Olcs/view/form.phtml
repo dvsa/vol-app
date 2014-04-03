@@ -1,6 +1,14 @@
-<div class="page-header">
-    <h1>OLCS FORM index page</h1>
-    <div><?php
+<?php
+    echo $this->render(
+        '/partials/page-header.phtml',
+        array(
+            'pageTitle' => 'Add case'
+        )
+    );
+?>
+
+<div class="two-thirds">
+<?php
         $form->prepare();
 //echo $this->form()->openTag($form);
         echo $this->form($form);
@@ -15,5 +23,5 @@
             print '</pre>';
         }
     }
-    ?>
-</div>
+?>
+</div><!-- end .three-quarters -->
