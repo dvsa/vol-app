@@ -1,0 +1,8 @@
+        <li class="summary__item">
+            <b><?php echo $this->translate($item['label']); ?></b>
+            <?php if (isset($item['url']) && $item['url'] != ''): ?>
+            <a href="<?php echo $item['url']; ?>"><?php echo $item['value']; ?></a>
+            <?php else: ?>
+            <?php echo $item['value']; ?>
+            <?php endif; ?>
+        </li>

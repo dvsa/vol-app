@@ -1,0 +1,6 @@
+    <!-- Horizontal navigation -->
+    <ul class="horizontal-navigation" role="navigation">
+        <?php foreach($items as $item): ?>
+           <?php echo $this->render('partials/horizontal-navigation/horizontal-navigation__item', ['item' => $item, 'current' => $current]); ?>
+        <?php endforeach; ?>
+    </ul><!-- end .horizontal-navigation -->
