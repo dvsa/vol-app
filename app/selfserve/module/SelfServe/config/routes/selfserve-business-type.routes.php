@@ -18,6 +18,7 @@ return [
             'defaults' => array(
                 'controller' => 'Selfserve\BusinessType\Index',
                 'action' => 'complete'
+
             )
         ),
     ),
