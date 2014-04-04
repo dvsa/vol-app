@@ -58,7 +58,9 @@ class SearchController extends FormActionController
             }
         }
 
-        $this->redirect()->toUrl('/search/' . $searchType . '?' . http_build_query($data));
+        $url = $this->getPluginManager()->get('url')->fromRoute('operators/operators-params', $data);
+
+        $this->redirect()->toUrl($url);
     }
 
     public function personAction()
@@ -74,11 +76,13 @@ class SearchController extends FormActionController
 
     public function operatorAction()
     {
-        $data = $this->params()->fromQuery();
+        $data = $this->params()->fromRoute();
 
         $results = $this->makeRestCall('OperatorSearch', 'GET', $data);
 
-        $table = $this->getServiceLocator()->get('Table')->buildTable('operator', $results);
+        $data['url'] = $this->getPluginManager()->get('url');
+
+        $table = $this->getServiceLocator()->get('Table')->buildTable('operator', $results, $data);
 
         $view = new ViewModel(['table' => $table]);
         $view->setTemplate('results-operator');

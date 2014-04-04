@@ -23,12 +23,26 @@ return array(
                 )
             ),
              'operators' => array(
-                'type' => 'segment',
+                'type' => 'Literal',
                 'options' => array(
                     'route' => '/search/operators',
                     'defaults' => array(
                         'controller' => 'SearchController',
                         'action' => 'operator'
+                    )
+                ),
+                'may_terminate' => false,
+                'child_routes' => array(
+                    'operators-params' => array(
+                        'type' => 'wildcard',
+                        'options' => array(
+                            'key_value_delimiter' => '/',
+                            'param_delimiter' => '/',
+                            'defaults' => array(
+                                'page' => 1,
+                                'limit' => 10
+                            )
+                        )
                     )
                 )
             ),
