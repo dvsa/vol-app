@@ -97,5 +97,12 @@ return array(
         'template_path_stack' => array(
             'olcs/view' => dirname(__DIR__) . '/view',
         )
-    )
+    ),
+    //-------- Start navigation -----------------
+    'navigation' => array(
+        'default' => array(
+            include __DIR__ . '/navigation.config.php'
+        )
+    ),
+    //-------- End navigation -----------------
 );
