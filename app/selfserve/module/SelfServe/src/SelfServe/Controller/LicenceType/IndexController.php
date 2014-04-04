@@ -13,20 +13,27 @@ namespace SelfServe\Controller\LicenceType;
 
 use Common\Controller\FormJourneyActionController;
 use Zend\View\Model\ViewModel;
-use SelfServe\Form\LicenceType\LicenceTypeForm;
 
 class IndexController extends FormJourneyActionController
 {
     protected $messages;
-    protected $section = 'licence_type';
     
-    public function IndexAction() {
-       
+    public function __construct()
+    {
+        $this->setCurrentSection('licence-type');
+    }
+    
+    public function generateStepFormAction() {
+    
+        $step = $this->params()->fromRoute('step');
+
+        $this->setCurrentStep($step);
+        
         // create form
         $form = $this->generateSectionForm();
         
         // Do the post
-        $form = $this->formPost($form, 'processForm');
+        $form = $this->formPost($form, $this->getStepProcessMethod($this->getCurrentStep()));
 
         // prefill form data if persisted
         $formData = $this->getPersistedFormData($form);
@@ -40,7 +47,40 @@ class IndexController extends FormJourneyActionController
         $view->setTemplate('self-serve/index/index');
         return $view;
     }
+    
+    public function getOperatorLocationFormData()
+    {
+    }
 
+    public function processOperatorLocation($valid_data, $form, $journeyData, $params)
+    {
+          $this->persistFormData($form);
+
+        $next_step = $this->evaluateNextStep($form);
+
+        $this->redirect()->toUrl($next_step);
+        
+    }
+    
+    public function processOperatorType($valid_data, $form, $journeyData, $params)
+    {
+        $this->persistFormData($form);
+
+        $next_step = $this->evaluateNextStep($form);
+
+        $this->redirect()->toUrl($next_step);
+    }
+    
+    public function processLicenceType($valid_data, $form, $journeyData, $params)
+    {
+        $this->persistFormData($form);
+
+        $next_step = $this->evaluateNextStep($form);
+            
+        return $this->forward()->dispatch('SelfServe\LicenceType\Index', array('action' => 'complete'));
+ 
+    }
+    
     /**
      * End of the journey redirect to business type
      */

@@ -7,7 +7,7 @@ return [
             'route' => '/licence-type/:step',
             'defaults' => array(
                 'controller' => 'Selfserve\LicenceType\Index',
-                'action' => 'index'
+                'action' => 'generateStepForm'
             )
         ),
     ),
