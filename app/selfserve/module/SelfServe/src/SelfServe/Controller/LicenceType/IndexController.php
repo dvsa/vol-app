@@ -60,38 +60,51 @@ class IndexController extends FormJourneyActionController
         $data['version'] = 1;
         $data['licenceNumber'] = '';
         $data['licenceType'] = '';
-        
+        $data['status'] = 'lic_status.new';
+
         // create licence
         //$licence = $this->processAdd($data, 'Licence');
-          //      var_dump($licence);exit;
+        //var_dump($licence);exit;
 
         // create application
         //$application = $this->processAdd($data, 'Application');
         
-        
-        
         $next_step = $this->evaluateNextStep($form);
-
-        $this->redirect()->toUrl($next_step);
+        $this->redirect()->toRoute('selfserve/licence-type', array('step' => $next_step));
         
     }
     
     public function processOperatorType($valid_data, $form, $journeyData, $params)
     {
-        $this->persistFormData($form);
-
+        // data persist goes here
+        
         $next_step = $this->evaluateNextStep($form);
-
-        $this->redirect()->toUrl($next_step);
+        $this->redirect()->toRoute('selfserve/licence-type', array('step' => $next_step));
     }
     
     public function processLicenceType($valid_data, $form, $journeyData, $params)
     {
-        $this->persistFormData($form);
+        // data persist goes here
 
-        $next_step = $this->evaluateNextStep($form);
-            
-        return $this->forward()->dispatch('SelfServe\LicenceType\Index', array('action' => 'complete'));
+        $this->redirect()->toRoute('selfserve/licence-type-complete');
+
+ 
+    }
+    
+    public function processLicenceTypePsv($valid_data, $form, $journeyData, $params)
+    {
+        // data persist goes here
+
+        $this->redirect()->toRoute('selfserve/licence-type-complete');
+
+ 
+    }
+    
+    public function processLicenceTypeNi($valid_data, $form, $journeyData, $params)
+    {
+        // data persist goes here
+
+        $this->redirect()->toRoute('selfserve/licence-type-complete');
  
     }
     
@@ -103,7 +116,6 @@ class IndexController extends FormJourneyActionController
 
         // persist data if possible
         $request  = $this->getRequest();
-       
         $this->redirect()->toRoute('selfserve/business-type', ['step' => 'choose-company']);
 
     }

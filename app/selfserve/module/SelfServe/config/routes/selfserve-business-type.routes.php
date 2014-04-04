@@ -7,7 +7,7 @@ return [
             'route' => '/business-type/:step',
             'defaults' => array(
                 'controller' => 'Selfserve\BusinessType\Index',
-                'action' => 'index'
+                'action' => 'generateStepForm'
             )
         ),
     ),
