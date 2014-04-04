@@ -1,0 +1,5 @@
+            <?php if ($current == $item['key']): ?>
+            <li class="horizontal-navigation__item current"><?php echo $this->translate($item['label'])?></li>
+            <?php else: ?>
+            <li class="horizontal-navigation__item"><a href="<?php echo $item['url']; ?>"><?php echo $this->translate($item['label'])?></a></li>
+            <?php endif; ?>

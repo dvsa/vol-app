@@ -55,6 +55,19 @@ return array(
                         'action' => 'index'
                     )
                 )
+            ),
+            'case_manage' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/case/:case/:action',
+                    'constraints' => array(
+                        'case' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'CaseController',
+                        'action' => 'summary'
+                    )
+                )
             )
         )
     ),

@@ -1,0 +1,6 @@
+
+        <ul class="case-summary__list">
+            <?php foreach ($items as $item): ?>
+                <?php echo $this->render('partials/summary/summary__item', ['item' => $item]); ?>
+            <?php endforeach; ?>
+        </ul><!-- end .case-summary__list -->
