@@ -19,12 +19,12 @@ use \Zend\InputFilter\InputFilterInterface;
 class IndexController extends FormJourneyActionController
 {
     protected $messages;
-    protected $section = 'business';
     
     public function __construct()
     {
         $this->setCurrentSection('business-type');
     }
+
     /**
      * Main method of processing the form. Generates a form and if a submit 
      * button is pressed, sets the validation group based on that button AND 
@@ -34,6 +34,10 @@ class IndexController extends FormJourneyActionController
      */
     public function generateStepFormAction() {
        
+        $step = $this->params()->fromRoute('step');
+
+        $this->setCurrentStep($step);
+        
         // create form
         $form = $this->generateSectionForm();
         
