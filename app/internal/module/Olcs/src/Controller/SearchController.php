@@ -1,9 +1,13 @@
 <?php
 
 /**
+ * Search controller
+ *
+ * Search for operators and licences
+ *
  * @package    olcs
- * @subpackage
  * @author     Mike Cooper
+ * @author     Rob Caiger <rob@clocal.co.uk>
  */
 
 namespace Olcs\Controller;
@@ -11,9 +15,23 @@ namespace Olcs\Controller;
 use Common\Controller\FormActionController;
 use Zend\View\Model\ViewModel;
 
+/**
+ * Search controller
+ *
+ * Search for operators and licences
+ *
+ * @package    olcs
+ * @author     Mike Cooper
+ * @author     Rob Caiger <rob@clocal.co.uk>
+ */
 class SearchController extends FormActionController
 {
 
+    /**
+     * Search form action
+     *
+     * @return ViewModel
+     */
     public function indexAction()
     {
         // Below is for setting route params for the breadcrumb
@@ -21,8 +39,7 @@ class SearchController extends FormActionController
         $navigation = $this->getServiceLocator()->get('navigation');
 
         $form = $this->generateFormWithData(
-            'search',
-            'processSearch'
+            'search', 'processSearch'
         );
 
         $view = new ViewModel(['form' => $form]);
@@ -39,7 +56,6 @@ class SearchController extends FormActionController
     {
         $data = array_merge($data['search'], $data['advanced']);
 
-        // Person Search Rules
         $personSearch = array(
             'firstName',
             'lastName',
@@ -63,8 +79,16 @@ class SearchController extends FormActionController
         $this->redirect()->toUrl($url);
     }
 
+    /**
+     * Person search results
+     *
+     * @todo Implement person search results
+     *
+     * @return ViewModel
+     */
     public function personAction()
     {
+        die('Person search is out of scope');
         $data = $this->params()->fromQuery();
 
         $results = $this->makeRestCall('PersonSearch', 'GET', $data);
@@ -74,6 +98,11 @@ class SearchController extends FormActionController
         return $view;
     }
 
+    /**
+     * Operator search results
+     *
+     * @return ViewModel
+     */
     public function operatorAction()
     {
         $data = $this->params()->fromRoute();
@@ -87,12 +116,6 @@ class SearchController extends FormActionController
         $view = new ViewModel(['table' => $table]);
         $view->setTemplate('results-operator');
         return $view;
-    }
-
-    protected function redirectUser()
-    {
-        print 'Doing something like a redirect';
-        $this->redirect()->toRoute('olcsHome');
     }
 
 }

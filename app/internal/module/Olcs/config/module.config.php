@@ -73,7 +73,7 @@ return array(
             'case_manage' => array(
                 'type' => 'segment',
                 'options' => array(
-                    'route' => '/case/:case/:action',
+                    'route' => '/case/:case/action/:action',
                     'constraints' => array(
                         'case' => '[0-9]+'
                     ),
