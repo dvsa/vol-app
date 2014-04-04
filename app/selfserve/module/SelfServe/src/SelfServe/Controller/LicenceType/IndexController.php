@@ -48,12 +48,15 @@ class IndexController extends FormJourneyActionController
         return $view;
     }
     
-    public function getOperatorLocationFormData()
-    {
 
-    }
-
-    
+    /**
+     * Method to process the operator location. 
+     * 
+     * @param array $valid_data
+     * @param \Zend\Form $form
+     * @param array $journeyData
+     * @param array $params
+     */
     public function processOperatorLocation($valid_data, $form, $journeyData, $params)
     {
 
@@ -74,6 +77,14 @@ class IndexController extends FormJourneyActionController
         
     }
     
+    /**
+     * Method to process the operator type. 
+     * 
+     * @param array $valid_data
+     * @param \Zend\Form $form
+     * @param array $journeyData
+     * @param array $params
+     */
     public function processOperatorType($valid_data, $form, $journeyData, $params)
     {
         // data persist goes here
@@ -82,6 +93,14 @@ class IndexController extends FormJourneyActionController
         $this->redirect()->toRoute('selfserve/licence-type', array('step' => $next_step));
     }
     
+    /**
+     * Method to process the licence type. 
+     * 
+     * @param array $valid_data
+     * @param \Zend\Form $form
+     * @param array $journeyData
+     * @param array $params
+     */
     public function processLicenceType($valid_data, $form, $journeyData, $params)
     {
         // data persist goes here
@@ -91,6 +110,14 @@ class IndexController extends FormJourneyActionController
  
     }
     
+    /**
+     * Method to process the licence type for PSV type operators 
+     * 
+     * @param array $valid_data
+     * @param \Zend\Form $form
+     * @param array $journeyData
+     * @param array $params
+     */
     public function processLicenceTypePsv($valid_data, $form, $journeyData, $params)
     {
         // data persist goes here
@@ -100,6 +127,15 @@ class IndexController extends FormJourneyActionController
  
     }
     
+    /**
+     * Method to process the licence type for NI.
+     * Should insist that goods_or_psv = goods? 
+     * 
+     * @param array $valid_data
+     * @param \Zend\Form $form
+     * @param array $journeyData
+     * @param array $params
+     */
     public function processLicenceTypeNi($valid_data, $form, $journeyData, $params)
     {
         // data persist goes here
