@@ -50,12 +50,26 @@ class IndexController extends FormJourneyActionController
     
     public function getOperatorLocationFormData()
     {
+
     }
 
+    
     public function processOperatorLocation($valid_data, $form, $journeyData, $params)
     {
-          $this->persistFormData($form);
 
+        $data['version'] = 1;
+        $data['licenceNumber'] = '';
+        $data['licenceType'] = '';
+        
+        // create licence
+        //$licence = $this->processAdd($data, 'Licence');
+          //      var_dump($licence);exit;
+
+        // create application
+        //$application = $this->processAdd($data, 'Application');
+        
+        
+        
         $next_step = $this->evaluateNextStep($form);
 
         $this->redirect()->toUrl($next_step);
