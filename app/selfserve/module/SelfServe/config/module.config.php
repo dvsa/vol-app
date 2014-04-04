@@ -32,7 +32,7 @@ return array(
     'controllers' => array(
         'invokables' => array(
             'SelfServe\LicenceType\Index' => 'SelfServe\Controller\LicenceType\IndexController',
-            'SelfServe\Business\Index' => 'SelfServe\Controller\Business\IndexController',
+            'SelfServe\BusinessType\Index' => 'SelfServe\Controller\BusinessType\IndexController',
             'SelfServe\Finance\Index' => 'SelfServe\Controller\Finance\IndexController'
         ),
     ),

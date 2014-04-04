@@ -9,7 +9,7 @@
  * @author		S Lizzio <shaun.lizzio@valtech.co.uk>
  */
 
-namespace SelfServe\Controller\Business;
+namespace SelfServe\Controller\BusinessType;
 
 use Common\Controller\FormJourneyActionController;
 use Zend\View\Model\ViewModel;
@@ -21,6 +21,10 @@ class IndexController extends FormJourneyActionController
     protected $messages;
     protected $section = 'business';
     
+    public function __construct()
+    {
+        $this->setCurrentSection('business-type');
+    }
     /**
      * Main method of processing the form. Generates a form and if a submit 
      * button is pressed, sets the validation group based on that button AND 
@@ -28,7 +32,7 @@ class IndexController extends FormJourneyActionController
      *  
      * @return \Zend\View\Model\ViewModel
      */
-    public function indexAction() {
+    public function generateStepFormAction() {
        
         // create form
         $form = $this->generateSectionForm();
@@ -74,7 +78,7 @@ class IndexController extends FormJourneyActionController
     {
         // persist data if possible
         
-        $this->redirect()->toRoute('selfserve/business', ['step' => 'type']);
+        $this->redirect()->toRoute('selfserve/finance', ['step' => 'type']);
         
     }
 
