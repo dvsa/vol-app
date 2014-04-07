@@ -31,6 +31,7 @@ return array(
     ),
     'controllers' => array(
         'invokables' => array(
+            'SelfServe\Dashboard\Index' => 'SelfServe\Controller\Dashboard\IndexController',
             'SelfServe\LicenceType\Index' => 'SelfServe\Controller\LicenceType\IndexController',
             'SelfServe\BusinessType\Index' => 'SelfServe\Controller\BusinessType\IndexController',
             'SelfServe\Finance\Index' => 'SelfServe\Controller\Finance\IndexController'
