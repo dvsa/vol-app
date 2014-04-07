@@ -61,9 +61,9 @@ class IndexController extends FormJourneyActionController
     {
 
         $data['version'] = 1;
-        $data['licenceNumber'] = '';
-        $data['licenceType'] = '';
-        $data['status'] = 'lic_status.new';
+        $data['licenceNumber'] = 'AB12341234';
+        $data['licenceType'] = 'goods';
+        $data['licenceStatus'] = 'lic_status.new';
 
         // create licence
         //$licence = $this->processAdd($data, 'Licence');

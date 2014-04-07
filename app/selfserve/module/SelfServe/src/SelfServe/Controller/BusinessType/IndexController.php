@@ -48,11 +48,11 @@ class IndexController extends FormJourneyActionController
         switch($submit_posted)
         {
             case 'lookup_company':
-                //$form->setValidationGroup([$step => ['company_number']]);
+                $form->setValidationGroup([$step => ['company_number']]);
                 $form = $this->formPost($form, 'processLookupCompany');
                 break;
             case 'add_trading_name':
-                //$form->setValidationGroup([$step => ['trading_names']]);
+                $form->setValidationGroup([$step => ['trading_names']]);
                 $form = $this->formPost($form, 'processAddTradingName');
                 break;
             default:
