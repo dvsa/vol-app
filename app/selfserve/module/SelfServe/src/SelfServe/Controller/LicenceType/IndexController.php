@@ -50,7 +50,7 @@ class IndexController extends FormJourneyActionController
     
     public function getOperatorLocationFormData()
     {
-
+		
     }
 
     
