@@ -48,50 +48,99 @@ class IndexController extends FormJourneyActionController
         return $view;
     }
     
-    public function getOperatorLocationFormData()
-    {
 		
-    }
-
-    
+    /**
+     * Method to process the operator location. 
+     * 
+     * @param array $valid_data
+     * @param \Zend\Form $form
+     * @param array $journeyData
+     * @param array $params
+     */
     public function processOperatorLocation($valid_data, $form, $journeyData, $params)
     {
 
         $data['version'] = 1;
         $data['licenceNumber'] = '';
         $data['licenceType'] = '';
-        
+        $data['status'] = 'lic_status.new';
+
         // create licence
         //$licence = $this->processAdd($data, 'Licence');
-          //      var_dump($licence);exit;
+        //var_dump($licence);exit;
 
         // create application
         //$application = $this->processAdd($data, 'Application');
         
-        
-        
         $next_step = $this->evaluateNextStep($form);
-
-        $this->redirect()->toUrl($next_step);
+        $this->redirect()->toRoute('selfserve/licence-type', array('step' => $next_step));
         
     }
     
+    /**
+     * Method to process the operator type. 
+     * 
+     * @param array $valid_data
+     * @param \Zend\Form $form
+     * @param array $journeyData
+     * @param array $params
+     */
     public function processOperatorType($valid_data, $form, $journeyData, $params)
     {
-        $this->persistFormData($form);
-
+        // data persist goes here
+        
         $next_step = $this->evaluateNextStep($form);
-
-        $this->redirect()->toUrl($next_step);
+        $this->redirect()->toRoute('selfserve/licence-type', array('step' => $next_step));
     }
     
+    /**
+     * Method to process the licence type. 
+     * 
+     * @param array $valid_data
+     * @param \Zend\Form $form
+     * @param array $journeyData
+     * @param array $params
+     */
     public function processLicenceType($valid_data, $form, $journeyData, $params)
     {
-        $this->persistFormData($form);
+        // data persist goes here
 
-        $next_step = $this->evaluateNextStep($form);
-            
-        return $this->forward()->dispatch('SelfServe\LicenceType\Index', array('action' => 'complete'));
+        $this->redirect()->toRoute('selfserve/licence-type-complete');
+
+ 
+    }
+    
+    /**
+     * Method to process the licence type for PSV type operators 
+     * 
+     * @param array $valid_data
+     * @param \Zend\Form $form
+     * @param array $journeyData
+     * @param array $params
+     */
+    public function processLicenceTypePsv($valid_data, $form, $journeyData, $params)
+    {
+        // data persist goes here
+
+        $this->redirect()->toRoute('selfserve/licence-type-complete');
+
+ 
+    }
+    
+    /**
+     * Method to process the licence type for NI.
+     * Should insist that goods_or_psv = goods? 
+     * 
+     * @param array $valid_data
+     * @param \Zend\Form $form
+     * @param array $journeyData
+     * @param array $params
+     */
+    public function processLicenceTypeNi($valid_data, $form, $journeyData, $params)
+    {
+        // data persist goes here
+
+        $this->redirect()->toRoute('selfserve/licence-type-complete');
  
     }
     
@@ -103,9 +152,7 @@ class IndexController extends FormJourneyActionController
 
         // persist data if possible
         $request  = $this->getRequest();
-       
-        $this->redirect()->toRoute('selfserve/business-type', ['step' => 'choose-company']);
-
+        $this->redirect()->toRoute('selfserve/business-type', ['step' => 'business-type']);
     }
 
 

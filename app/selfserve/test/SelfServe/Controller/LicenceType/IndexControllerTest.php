@@ -1,6 +1,6 @@
 <?php
 
-namespace SelfServe\test;
+namespace SelfServe\test\LicenceType;
 
 use Zend\Test\PHPUnit\Controller\AbstractControllerTestCase;
 use Zend\Http\Request;
@@ -29,22 +29,27 @@ class IndexControllerTest extends AbstractControllerTestCase
     }
     
    
+    /**
+     * Test access to operator location step
+     */
     public function testOperatorLocationStepAccess()
     { 
-        $this->dispatch('/selfserve/licence-type/operator_location');
+        $this->dispatch('/selfserve/licence-type/operator-location');
         
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('selfserve');
         $this->assertControllerName('selfserve\licencetype\index');
         $this->assertControllerClass('IndexController');
         $this->assertMatchedRouteName('selfserve/licence-type');
-        
         
     }
-    
+        
+    /**
+     * Test access to operator type step
+     */
     public function testOperatorTypeStepAccess()
     { 
-        $this->dispatch('/selfserve/licence-type/operator_type');
+        $this->dispatch('/selfserve/licence-type/operator-type');
         
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('selfserve');
@@ -53,9 +58,12 @@ class IndexControllerTest extends AbstractControllerTestCase
         $this->assertMatchedRouteName('selfserve/licence-type');
     }   
         
+    /**
+     * Test access to licence type step
+     */
     public function testLicenceTypeStepAccess()
     { 
-        $this->dispatch('/selfserve/licence-type/licence_type');
+        $this->dispatch('/selfserve/licence-type/licence-type');
         
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('selfserve');
@@ -64,9 +72,13 @@ class IndexControllerTest extends AbstractControllerTestCase
         $this->assertMatchedRouteName('selfserve/licence-type');
     }   
     
+    
+    /**
+     * Test access to licence type PSV step
+     */
     public function testLicenceTypePSVStepAccess()
     { 
-        $this->dispatch('/selfserve/licence-type/licence_type_psv');
+        $this->dispatch('/selfserve/licence-type/licence-type-psv');
         
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('selfserve');
@@ -75,6 +87,10 @@ class IndexControllerTest extends AbstractControllerTestCase
         $this->assertMatchedRouteName('selfserve/licence-type');
     }   
     
+        
+    /**
+     * Test access to complete step action
+     */
     public function testCompleteActionAccess()
     { 
         $this->dispatch('/selfserve/licence-type/complete');

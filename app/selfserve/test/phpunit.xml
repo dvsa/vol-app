@@ -1,20 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<phpunit bootstrap="Bootstrap.php" colors="true">
+<phpunit bootstrap="Bootstrap.php" colors="true" stopOnFailure="false" syntaxCheck="true" strict="true">
     <testsuites>
-        <testsuite name="FE Application">
+        <testsuite name="OLCS Selfserve Application">
             <directory>./</directory>
         </testsuite>
     </testsuites>
     <filter>
         <whitelist>
-            <directory suffix=".php">../module</directory>
-            <exclude>
-                <file>../module/AlphaGov/Module.php</file>
-                <file>../module/Common/Module.php</file>
-                <file>../module/Olcs/Module.php</file>
-                <directory>../module/*/config</directory>
-            </exclude>
+            <directory suffix=".php">../module/SelfServe/src</directory>
         </whitelist>
     </filter>
     <logging>

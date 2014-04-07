@@ -1,39 +1,36 @@
 {
-    "name": "OLCS Self Serve",
+    "name": "olcs/olcs-selfserve",
     "description": "OLCS Self Service Web Site",
-    "repositories": [
-        {
+    "repositories": [{
         "type": "package",
         "package": {
             "name": "olcs/olcs-entities",
-            "version": "0.1.4",
+            "version": "dev-develop",
             "source": {
                 "url": "gitolite@git.clb.npm:olcs-entities.git",
                 "type": "git",
-                "reference": "origin/master"
-                }
+                "reference": "origin/develop"
             }
-        },
-        {
+        }
+     },{
         "type": "package",
         "package": {
             "name": "olcs/OlcsCommon",
-            "version": "0.1.0",
+            "version": "dev-develop",
             "source": {
                 "url": "gitolite@git.clb.npm:olcs-common.git",
                 "type": "git",
                 "reference": "origin/develop"
-                }
             }
         }
-    ],
+    }],
     "require": {
         "php": ">=5.4",
         "phpunit/phpunit": "4.0.*",
         "zendframework/zendframework": "2.2.*",
         "doctrine/doctrine-orm-module": "0.*",
-        "olcs/olcs-entities": "0.1.*",
-        "olcs/OlcsCommon": "0.1.*"
+        "olcs/olcs-entities": "dev-develop",
+        "olcs/OlcsCommon": "dev-develop"
     },
     "autoload" : {
         "psr-4": {
