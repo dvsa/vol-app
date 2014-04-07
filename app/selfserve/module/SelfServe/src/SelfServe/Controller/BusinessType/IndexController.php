@@ -79,12 +79,12 @@ class IndexController extends FormJourneyActionController
         
     }
     
-    public function processBusinessType($valid_data, $form, $journeyData, $params)
+    public function processBusinessType($valid_data, $form, $params)
     {
         // data persist goes here
         
         $next_step = $this->evaluateNextStep($form);
-        $this->redirect()->toRoute('selfserve/business-type', array('step' => $next_step));
+        $this->redirect()->toRoute('selfserve/business-type', array('licenceId' => $params['licenceId'], 'step' => $next_step));
         
     }
     

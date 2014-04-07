@@ -4,7 +4,7 @@ return [
     'business-type' => array(
         'type' => 'segment',
         'options' => array(
-            'route' => '/business-type[/][:step]',
+            'route' => '/:licenceId/business-type[/][:step]',
             'defaults' => array(
                 'controller' => 'Selfserve\BusinessType\Index',
                 'action' => 'generateStepForm'
@@ -14,7 +14,7 @@ return [
     'business-complete' => array(
         'type' => 'segment',
         'options' => array(
-            'route' => '/business-type/complete',
+            'route' => '/:licenceId/business-type/complete',
             'defaults' => array(
                 'controller' => 'Selfserve\BusinessType\Index',
                 'action' => 'complete'
