@@ -87,6 +87,15 @@ class IndexController extends FormJourneyActionController
         
     }
     
+    /**
+     * Method called as a callback once business type form has been validated.
+     * Should redirect to the correct business type form page as the next step
+     * 
+     * @param array $valid_data
+     * @param \Zend\Form $form
+     * @param array $journeyData
+     * @param array $params
+     */
     public function processBusinessType($valid_data, $form, $journeyData, $params)
     {
         // data persist goes here
@@ -100,6 +109,11 @@ class IndexController extends FormJourneyActionController
      * Method called once a valid company look up form has been submitted.
      * Needs to call CH Controller and implement PRG and redirect back to 
      * indexAction.
+     * 
+     * @param array $valid_data
+     * @param \Zend\Form $form
+     * @param array $journeyData
+     * @param array $params
      */
     protected function processLookupCompany($valid_data, $form, $journeyData, $params)
     {
@@ -110,7 +124,13 @@ class IndexController extends FormJourneyActionController
     
     /**
      * Method called once a valid company look up form has been submitted.
+     * Needs to call CH Controller and implement PRG and redirect back to 
+     * indexAction.
      * 
+     * @param array $valid_data
+     * @param \Zend\Form $form
+     * @param array $journeyData
+     * @param array $params
      */
     protected function processAddTradingName($valid_data, $form, $journeyData, $params)
     {
@@ -120,6 +140,15 @@ class IndexController extends FormJourneyActionController
         
     }
     
+    /**
+     * Method called for all business type forms submitted and found to be valid.
+     * Uses PRG to redirect to the next step. 
+     * 
+     * @param array $valid_data
+     * @param \Zend\Form $form
+     * @param array $journeyData
+     * @param array $params
+     */
     protected function processAll($valid_data, $form, $journeyData, $params)
     {
         // Main processing form

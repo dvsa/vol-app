@@ -18,11 +18,20 @@ class IndexController extends FormJourneyActionController
 {
     protected $messages;
     
+    /**
+     * Construct the LicenceType Controller class
+     * Sets the current section only.
+     */
     public function __construct()
     {
         $this->setCurrentSection('licence-type');
     }
     
+    /**
+     * Generates the next step form depending on which step the user is on.
+     * 
+     * @return \Zend\View\Model\ViewModel
+     */
     public function generateStepFormAction() {
     
         $step = $this->params()->fromRoute('step');
