@@ -16,17 +16,17 @@ use Zend\View\Model\ViewModel;
 
 class IndexController extends FormJourneyActionController{
     
-	const LICENCE_PARAM_NAME = 'id';
-	
-	protected $messages;
-    
+    const LICENCE_PARAM_NAME = 'id';
+
+    protected $messages;
+
     public function __construct()
     {
         $this->setCurrentSection('licence-type');
     }
     
     public function generateStepFormAction() {
-    
+        $licenceId = $this->params()->fromRoute('licenceId');
         $step = $this->params()->fromRoute('step');
 
         $this->setCurrentStep($step);
@@ -35,7 +35,7 @@ class IndexController extends FormJourneyActionController{
         $form = $this->generateSectionForm();
         
         // Do the post
-        $form = $this->formPost($form, $this->getStepProcessMethod($this->getCurrentStep()));
+        $form = $this->formPost($form, $this->getStepProcessMethod($this->getCurrentStep()), ['licenceId' => $licenceId]);
 
         // prefill form data if persisted
         $formData = $this->getPersistedFormData($form);
@@ -59,10 +59,8 @@ class IndexController extends FormJourneyActionController{
      * @param array $journeyData
      * @param array $params
      */
-    public function processOperatorLocation($valid_data, $form, $journeyData, $params)
+    public function processOperatorLocation($valid_data, $form, $params)
     {
-        $licenceId = $this->params()->fromRoute('licenceId');
-
         $data['version'] = 1;
         $data['licenceNumber'] = '';
         $data['licenceType'] = '';
@@ -77,7 +75,7 @@ class IndexController extends FormJourneyActionController{
         
         $next_step = $this->evaluateNextStep($form);
         $this->redirect()->toRoute('selfserve/licence-type', 
-                                    array('licenceId' => $licenceId, 'step' => $next_step));
+                                    array('licenceId' => $params['licenceId'], 'step' => $next_step));
         
     }
     
@@ -101,14 +99,14 @@ class IndexController extends FormJourneyActionController{
      * @param array $journeyData
      * @param array $params
      */
-    public function processOperatorType($valid_data, $form, $journeyData, $params)
+    public function processOperatorType($valid_data, $form, $params)
     {
-        $licenceId = $this->params()->fromRoute('licenceId');
-
         // data persist goes here
         
         $next_step = $this->evaluateNextStep($form);
-        $this->redirect()->toRoute('selfserve/licence-type', array('licenceId' => $licenceId, 'step' => $next_step));
+        $this->redirect()->toRoute('selfserve/licence-type', 
+                                array('licenceId' => $params['licenceId'], 
+                                      'step' => $next_step));
     }
     
     
@@ -139,12 +137,13 @@ class IndexController extends FormJourneyActionController{
      * @param array $journeyData
      * @param array $params
      */
-    public function processLicenceType($valid_data, $form, $journeyData, $params)
+    public function processLicenceType($valid_data, $form, $params)
     {
-        $licenceId = $this->params()->fromRoute('licenceId');
         // data persist goes here
 
-        $this->redirect()->toRoute('selfserve/licence-type-complete', array('licenceId' => $licenceId));
+        $this->redirect()->toRoute('selfserve/licence-type-complete', 
+                                array('licenceId' => $params['licenceId'], 
+                                      'step' => $next_step));
     }
     
     /**
@@ -173,12 +172,13 @@ class IndexController extends FormJourneyActionController{
      * @param array $journeyData
      * @param array $params
      */
-    public function processLicenceTypePsv($valid_data, $form, $journeyData, $params)
+    public function processLicenceTypePsv($valid_data, $form, $params)
     {
-        $licenceId = $this->params()->fromRoute('licenceId');
         // data persist goes here
 
-        $this->redirect()->toRoute('selfserve/licence-type-complete', array('licenceId' => $licenceId));
+        $this->redirect()->toRoute('selfserve/licence-type-complete', 
+                                array('licenceId' => $params['licenceId'], 
+                                      'step' => $next_step));
 
  
     }
@@ -192,12 +192,14 @@ class IndexController extends FormJourneyActionController{
      * @param array $journeyData
      * @param array $params
      */
-    public function processLicenceTypeNi($valid_data, $form, $journeyData, $params)
+    public function processLicenceTypeNi($valid_data, $form, $params)
     {
         $licenceId = $this->params()->fromRoute('licenceId');
         // data persist goes here
 
-        $this->redirect()->toRoute('selfserve/licence-type-complete', array('licenceId' => $licenceId));
+        $this->redirect()->toRoute('selfserve/licence-type-complete',  
+                                array('licenceId' => $params['licenceId'], 
+                                      'step' => $next_step));
  
     }
     
@@ -210,7 +212,9 @@ class IndexController extends FormJourneyActionController{
 
         // persist data if possible
         $request  = $this->getRequest();
-        $this->redirect()->toRoute('selfserve/business-type', ['licenceId' => $licenceId, 'step' => 'business-type']);
+        $this->redirect()->toRoute('selfserve/business-type', 
+                                array('licenceId' => $licenceId, 'step' => 
+                                 'business-type'));
     }
     
     /**
