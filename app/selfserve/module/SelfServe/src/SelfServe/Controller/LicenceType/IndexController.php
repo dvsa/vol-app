@@ -14,9 +14,11 @@ namespace SelfServe\Controller\LicenceType;
 use Common\Controller\FormJourneyActionController;
 use Zend\View\Model\ViewModel;
 
-class IndexController extends FormJourneyActionController
-{
-    protected $messages;
+class IndexController extends FormJourneyActionController{
+    
+	const LICENCE_PARAM_NAME = 'id';
+	
+	protected $messages;
     
     public function __construct()
     {
@@ -77,9 +79,14 @@ class IndexController extends FormJourneyActionController
         
     }
     
+    /**
+     * Returns persisted data (if exists) to popuplate form
+     *
+     * @return array
+     */
     public function getOperatorLocationFormData()
     {
-    	return null;
+    	return array();
     }
     
     
@@ -100,13 +107,21 @@ class IndexController extends FormJourneyActionController
         $this->redirect()->toRoute('selfserve/licence-type', array('step' => $next_step));
     }
     
+    
+    /**
+     * Returns persisted data (if exists) to popuplate form
+     * 
+     * @return array
+     */
     public function getOperatorTypeFormData()
     {
-        $apiData = $this->makeRestCall('Licence', 'GET', array('id' => 7));
-        
+    	$entity = $this->_getLicenceEntity();
+    	if (empty($entity))
+    	    return array();
+    	
         return array(
             'operator-type' => array(
-    	        'operator-type' => $apiData['goodsOrPsv'], 
+    	        'operator-type' => $entity['goodsOrPsv'], 
             ),
     	);
     }
@@ -127,15 +142,21 @@ class IndexController extends FormJourneyActionController
         $this->redirect()->toRoute('selfserve/licence-type-complete');
     }
     
+    /**
+     * Returns persisted data (if exists) to popuplate form
+     *
+     * @return array
+     */
     public function getLicenceTypeFormData()
     {
-    	$apiData = $this->makeRestCall('Licence', 'GET', array('id' => 7));
-        //\Zend\Debug\Debug::dump($apiData);exit;
+    	$entity = $this->_getLicenceEntity();
+    	if (empty($entity))
+    	    return array();
     	
     	return array(
-    			'licence-type' => array(
-    					'licence_type' => $apiData['licenceType'],
-    			),
+    	    'licence-type' => array(
+    		    'licence_type' => $entity['licenceType'],
+    	    ),
     	);
     }
     
@@ -182,6 +203,25 @@ class IndexController extends FormJourneyActionController
         // persist data if possible
         $request  = $this->getRequest();
         $this->redirect()->toRoute('selfserve/business-type', ['step' => 'business-type']);
+    }
+    
+    /**
+     * Get licence entity based on route id value
+     * 
+     * @return array|false
+     */
+    private function _getLicenceEntity()
+    {
+    	$licenceId = (int) $this->params()->fromRoute(self::LICENCE_PARAM_NAME);
+    	if ($licenceId == 0)
+    		return array();
+    	 
+    	$result = $this->makeRestCall('Licence', 'GET', array('id' => $licenceId));
+    	if (empty($result)) {
+    		//not found action?
+    		return false;
+    	}
+    	return $result;
     }
 
 
