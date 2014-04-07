@@ -31,7 +31,7 @@ class IndexControllerTest extends AbstractControllerTestCase
    
     public function testOperatorLocationStepAccess()
     { 
-        $this->dispatch('/selfserve/licence-type/operator_location');
+        $this->dispatch('/selfserve/licence-type/operator-location');
         
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('selfserve');
@@ -44,7 +44,7 @@ class IndexControllerTest extends AbstractControllerTestCase
     
     public function testOperatorTypeStepAccess()
     { 
-        $this->dispatch('/selfserve/licence-type/operator_type');
+        $this->dispatch('/selfserve/licence-type/operator-type');
         
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('selfserve');
@@ -55,7 +55,7 @@ class IndexControllerTest extends AbstractControllerTestCase
         
     public function testLicenceTypeStepAccess()
     { 
-        $this->dispatch('/selfserve/licence-type/licence_type');
+        $this->dispatch('/selfserve/licence-type/licence-type');
         
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('selfserve');
@@ -66,7 +66,7 @@ class IndexControllerTest extends AbstractControllerTestCase
     
     public function testLicenceTypePSVStepAccess()
     { 
-        $this->dispatch('/selfserve/licence-type/licence_type_psv');
+        $this->dispatch('/selfserve/licence-type/licence-type-psv');
         
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('selfserve');
