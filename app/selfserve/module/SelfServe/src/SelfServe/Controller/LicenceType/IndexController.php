@@ -77,6 +77,13 @@ class IndexController extends FormJourneyActionController
         
     }
     
+    public function getOperatorLocationFormData()
+    {
+    	return null;
+    }
+    
+    
+    
     /**
      * Method to process the operator type. 
      * 
@@ -93,6 +100,18 @@ class IndexController extends FormJourneyActionController
         $this->redirect()->toRoute('selfserve/licence-type', array('step' => $next_step));
     }
     
+    public function getOperatorTypeFormData()
+    {
+        $apiData = $this->makeRestCall('Licence', 'GET', array('id' => 7));
+        
+        return array(
+            'operator-type' => array(
+    	        'operator-type' => $apiData['goodsOrPsv'], 
+            ),
+    	);
+    }
+    
+    
     /**
      * Method to process the licence type. 
      * 
@@ -106,8 +125,18 @@ class IndexController extends FormJourneyActionController
         // data persist goes here
 
         $this->redirect()->toRoute('selfserve/licence-type-complete');
-
- 
+    }
+    
+    public function getLicenceTypeFormData()
+    {
+    	$apiData = $this->makeRestCall('Licence', 'GET', array('id' => 7));
+        //\Zend\Debug\Debug::dump($apiData);exit;
+    	
+    	return array(
+    			'licence-type' => array(
+    					'licence_type' => $apiData['licenceType'],
+    			),
+    	);
     }
     
     /**
