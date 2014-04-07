@@ -1,6 +1,6 @@
 <?php
 
-namespace SelfServe\test;
+namespace SelfServe\test\LicenceType;
 
 use Zend\Test\PHPUnit\Controller\AbstractControllerTestCase;
 use Zend\Http\Request;
