@@ -58,7 +58,15 @@ class IndexController extends FormJourneyActionController
             default:
                 // do nothing since we already have the form?
                 //$form->setValidationGroup(InputFilterInterface::VALIDATE_ALL);
-                $form = $this->formPost($form, $this->getStepProcessMethod($this->getCurrentStep()));
+                if ($step == 'business-type')
+                {
+                    $form = $this->formPost($form, 'processBusinessType');
+                }
+                else
+                {
+                    $form = $this->formPost($form, 'processAll');    
+                }
+                    
                 break;
         }
 
@@ -120,4 +128,5 @@ class IndexController extends FormJourneyActionController
         
         $this->redirect()->toRoute('selfserve/finance', ['step' => 'index']);
     }
+    
 }
