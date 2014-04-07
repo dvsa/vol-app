@@ -48,27 +48,20 @@ class IndexController extends FormJourneyActionController
         switch($submit_posted)
         {
             case 'lookup_company':
-                $form->setValidationGroup(['registered-company' => ['company_number']]);
+                //$form->setValidationGroup([$step => ['company_number']]);
                 $form = $this->formPost($form, 'processLookupCompany');
                 break;
             case 'add_trading_name':
-                $form->setValidationGroup(['registered-company' => ['trading_names']]);
+                //$form->setValidationGroup([$step => ['trading_names']]);
                 $form = $this->formPost($form, 'processAddTradingName');
                 break;
             default:
                 // do nothing since we already have the form?
                 //$form->setValidationGroup(InputFilterInterface::VALIDATE_ALL);
-                $form = $this->formPost($form, 'processForm');
+                $form = $this->formPost($form, $this->getStepProcessMethod($this->getCurrentStep()));
                 break;
         }
-        
-        // prefill form data if persisted
-        $formData = $this->getPersistedFormData($form);
-        if (isset($formData))
-        {
-            $form->setData($formData);
-        }
-        
+
         // render the view
         $view = new ViewModel(['form' => $form]);
         $view->setTemplate('self-serve/business/index');
@@ -85,9 +78,13 @@ class IndexController extends FormJourneyActionController
         $this->redirect()->toRoute('selfserve/finance', ['step' => 'type']);
         
     }
-
-    public function companyLookupAction()
+    
+    public function processBusinessType($valid_data, $form, $journeyData, $params)
     {
+        // data persist goes here
+        
+        $next_step = $this->evaluateNextStep($form);
+        $this->redirect()->toRoute('selfserve/business-type', array('step' => $next_step));
         
     }
     
@@ -96,7 +93,7 @@ class IndexController extends FormJourneyActionController
      * Needs to call CH Controller and implement PRG and redirect back to 
      * indexAction.
      */
-    protected function processLookupCompany()
+    protected function processLookupCompany($valid_data, $form, $journeyData, $params)
     {
         echo 'FORM VALID looking up company';
         // 
@@ -107,7 +104,7 @@ class IndexController extends FormJourneyActionController
      * Method called once a valid company look up form has been submitted.
      * 
      */
-    protected function processAddTradingName()
+    protected function processAddTradingName($valid_data, $form, $journeyData, $params)
     {
         echo 'FORM VALID adding trading name';
 
@@ -115,7 +112,7 @@ class IndexController extends FormJourneyActionController
         
     }
     
-    protected function processAll()
+    protected function processAll($valid_data, $form, $journeyData, $params)
     {
         // Main processing form
         
