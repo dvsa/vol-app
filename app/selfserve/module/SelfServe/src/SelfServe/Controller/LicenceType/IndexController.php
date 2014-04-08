@@ -16,8 +16,6 @@ use Zend\View\Model\ViewModel;
 
 class IndexController extends FormJourneyActionController{
     
-    const LICENCE_PARAM_NAME = 'id';
-
     protected $messages;
 
     public function __construct()
@@ -61,17 +59,7 @@ class IndexController extends FormJourneyActionController{
      */
     public function processOperatorLocation($valid_data, $form, $params)
     {
-        $data['version'] = 1;
-        $data['licenceNumber'] = '';
-        $data['licenceType'] = '';
-        $data['status'] = 'lic_status.new';
-
-        // create licence
-        //$licence = $this->processAdd($data, 'Licence');
-        //var_dump($licence);exit;
-
-        // create application
-        //$application = $this->processAdd($data, 'Application');
+        
         
         $next_step = $this->evaluateNextStep($form);
         $this->redirect()->toRoute('selfserve/licence-type', 
@@ -101,11 +89,17 @@ class IndexController extends FormJourneyActionController{
      */
     public function processOperatorType($valid_data, $form, $params)
     {
-        // data persist goes here
+    	$licenceId = $params['licenceId'];
+        $data = array(
+        	'goodsOrPsv' => $valid_data['operator-type']['operator-type'],
+        	'id' => $licenceId,
+        );
+        
+        $this->makeRestCall('Licence', 'PATCH', $data);
         
         $next_step = $this->evaluateNextStep($form);
-        $this->redirect()->toRoute('selfserve/licence-type', 
-                                array('licenceId' => $params['licenceId'], 
+        $this->redirect()->toRoute('selfserve/licence-type',    
+                                array('licenceId' => $licenceId, 
                                       'step' => $next_step));
     }
     
@@ -224,7 +218,7 @@ class IndexController extends FormJourneyActionController{
      */
     private function _getLicenceEntity()
     {
-    	$licenceId = (int) $this->params()->fromRoute(self::LICENCE_PARAM_NAME);
+    	$licenceId = (int) $this->params()->fromRoute('licenceId');
     	if ($licenceId == 0)
     		return array();
     	 
