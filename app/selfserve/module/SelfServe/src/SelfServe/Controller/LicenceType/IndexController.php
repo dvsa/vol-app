@@ -188,7 +188,6 @@ class IndexController extends FormJourneyActionController{
      */
     public function processLicenceTypeNi($valid_data, $form, $params)
     {
-        $licenceId = $this->params()->fromRoute('licenceId');
         // data persist goes here
 
         $this->redirect()->toRoute('selfserve/licence-type-complete',  
