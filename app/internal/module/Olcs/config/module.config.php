@@ -68,7 +68,17 @@ return array(
                         'action' => 'summary'
                     )
                 )
-            )
+            ),
+            'fieldset' => array(
+                'type' => 'literal',
+                'options' => array(
+                    'route' => '/fieldset',
+                    'defaults' => array(
+                        'controller' => 'IndexController',
+                        'action' => 'fieldset'
+                    )
+                )
+            ),
         )
     ),
     'controllers' => array(
