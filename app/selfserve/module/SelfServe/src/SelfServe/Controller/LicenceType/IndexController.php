@@ -19,13 +19,20 @@ class IndexController extends FormJourneyActionController{
     
     use SelfServeTrait\FormJourneyTrait;
     
-    protected $messages;
-
+    /**
+     * Construct the LicenceType Controller class
+     * Sets the current section only.
+     */
     public function __construct()
     {
         $this->setCurrentSection('licence-type');
     }
     
+    /**
+     * Generates the next step form depending on which step the user is on.
+     * 
+     * @return \Zend\View\Model\ViewModel
+     */
     public function generateStepFormAction() {
         $licenceId = $this->params()->fromRoute('licenceId');
         $step = $this->params()->fromRoute('step');
@@ -69,6 +76,7 @@ class IndexController extends FormJourneyActionController{
         );
         
         $this->processEdit($data, 'Licence');
+
         
         $next_step = $this->evaluateNextStep($form);
         $this->redirect()->toRoute('selfserve/licence-type', 
