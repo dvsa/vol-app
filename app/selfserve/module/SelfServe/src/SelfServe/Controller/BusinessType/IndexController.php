@@ -102,13 +102,8 @@ class IndexController extends FormJourneyActionController
     
     public function getBusinessTypeFormData()
     {
-        return array();
         $organisation = $this->_getOrganisationEntity();
-        if (empty($organisation))
-            return array();
         
-        //var_dump($organisation);exit;
-         
         return array(
                 'business-type' => array(
                         'business-type' => $organisation['organisationType'],
@@ -209,37 +204,8 @@ class IndexController extends FormJourneyActionController
     
     private function _getOrganisationEntity()
     {
-        $entity = $this->_getLicenceEntity();
-        if (empty($entity))
-            return array();
-        
-        if (is_null($entity['organisation'])){
-           
-            $data = array(
-            	'name' => '',
-            );
-            
-            /**
-             * @todo update licence with organisationId
-             */
-            // create organisation
-            $result = $this->makeRestCall('Organisation', 'POST', $data);
-            $orgId = $result['id'];
-            
-            $result = $this->makeRestCall('Licence', 'PATCH', array(
-                'id' => $entity['id'],
-                'organisation' => $orgId, 
-            ));
-        }
-        else{
-            $orgId = $entity['organisation'];
-        }
-        
-        $result = $this->makeRestCall('Organisation', 'GET', array('id' => $orgId));
-        if (empty($result)) {
-            //not found action?
-            return false;
-        }
+        $licenceId = (int) $this->params()->fromRoute('licenceId');
+        $result = $this->makeRestCall('LicenceOrganisation', 'GET', array('id' => $licenceId)); 
         return $result;
     }
 
