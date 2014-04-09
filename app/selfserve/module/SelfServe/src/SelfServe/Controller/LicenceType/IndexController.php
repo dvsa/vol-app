@@ -234,7 +234,13 @@ class IndexController extends FormJourneyActionController{
      */
     public function processLicenceTypeNi($valid_data, $form, $params)
     {
-        // data persist goes here
+        $licenceId = $params['licenceId'];
+        $data = array(
+        	'licenceType' => $valid_data['licence-type-ni']['licence_type'],
+        	'id' => $licenceId,
+            'version' => $valid_data['version'],
+        );
+        $this->processEdit($data, 'Licence');
 
         $next_step = $this->evaluateNextStep($form);
         $this->redirect()->toRoute('selfserve/licence-type-complete',  
@@ -250,15 +256,14 @@ class IndexController extends FormJourneyActionController{
      */
     public function getLicenceTypeNiFormData()
     {
-        return array();
         $entity = $this->_getLicenceEntity();
         
-        return array(
-                'version' => $entity['version'],
-                'licence-type-psv' => array(
-                        'licence-type-psv' => $entity['licenceType'],
-                ),
-        );
+    	return array(
+    	    'version' => $entity['version'],
+    	    'licence-type-ni' => array(
+    		    'licence_type' => $entity['licenceType'],
+    	    ),
+    	);
     }
     
     

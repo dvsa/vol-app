@@ -37,16 +37,26 @@ class IndexController extends FormActionController
     public function createApplicationAction()
     {
 
-        $data['version'] = 1;
-        $data['licenceNumber'] = '';
-        $data['licenceType'] = '';
-        $data['licenceStatus'] = 'lic_status.new';
-
-        // create licence
-        $result = $this->makeRestCall('Licence', 'POST', $data);
-        $licenceId = $result['id'];
+        //This block should be in db transaction
+        
+            /* $data = array(
+                'name'      => '',
+                'version'   => 1,
+            );
+            $orgResult = $this->makeRestCall('Organisation', 'POST', $data); */
+            
+            $data['version'] = 1;
+            $data['licenceNumber'] = '';
+            $data['licenceType'] = '';
+            //$data['organisation'] = $orgResult['id'];
+            $data['licenceStatus'] = 'lic_status.new';
+    
+            // create licence
+            $result = $this->makeRestCall('Licence', 'POST', $data);
+            $licenceId = $result['id'];
                 
-        $this->redirect()->toRoute('selfserve/licence-type', array('licenceId' => $licenceId, 'step' => 'operator-location'));
+            $this->redirect()->toRoute('selfserve/licence-type', array('licenceId' => $licenceId, 'step' => 'operator-location'));
+      
         
     }
 
