@@ -23,12 +23,26 @@ return array(
                 )
             ),
              'operators' => array(
-                'type' => 'segment',
+                'type' => 'Literal',
                 'options' => array(
                     'route' => '/search/operators',
                     'defaults' => array(
                         'controller' => 'SearchController',
                         'action' => 'operator'
+                    )
+                ),
+                'may_terminate' => false,
+                'child_routes' => array(
+                    'operators-params' => array(
+                        'type' => 'wildcard',
+                        'options' => array(
+                            'key_value_delimiter' => '/',
+                            'param_delimiter' => '/',
+                            'defaults' => array(
+                                'page' => 1,
+                                'limit' => 10
+                            )
+                        )
                     )
                 )
             ),
@@ -42,20 +56,69 @@ return array(
                     )
                 )
             ),
-            'case' => array(
+            'licence_case_list' => array(
                 'type' => 'segment',
                 'options' => array(
-                    'route' => '/case[/:licence][/:action][/:case]',
+                    'route' => '/licence/:licence/cases',
                     'constraints' => array(
-                        'licence' => '[0-9]+',
-                        'case' => '[0-9]+'
+                        'licence' => '[0-9]+'
                     ),
                     'defaults' => array(
                         'controller' => 'CaseController',
                         'action' => 'index'
                     )
+                ),
+                'may_terminate' => true,
+                'child_routes' => array(
+                    'pagination' => array(
+                        'type' => 'wildcard',
+                        'options' => array(
+                            'key_value_delimiter' => '/',
+                            'param_delimiter' => '/',
+                            'defaults' => array(
+                                'page' => 1,
+                                'limit' => 10
+                            )
+                        )
+                    )
                 )
-            )
+            ),
+            'licence_case_action' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/licence/:licence/case[/:action][/:case]',
+                    'constraints' => array(
+                        'licence' => '[0-9]+',
+                        'case' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'CaseController'
+                    )
+                )
+            ),
+            'case_manage' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/case/:case/action/:action',
+                    'constraints' => array(
+                        'case' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'CaseController',
+                        'action' => 'summary'
+                    )
+                )
+            ),
+            'fieldset' => array(
+                'type' => 'literal',
+                'options' => array(
+                    'route' => '/fieldset',
+                    'defaults' => array(
+                        'controller' => 'IndexController',
+                        'action' => 'fieldset'
+                    )
+                )
+            ),
         )
     ),
     'controllers' => array(
@@ -70,5 +133,13 @@ return array(
         'template_path_stack' => array(
             'olcs/view' => dirname(__DIR__) . '/view',
         )
-    )
+    ),
+    'local_forms_path' => __DIR__ .'/../src/Form/Forms/',
+    //-------- Start navigation -----------------
+    'navigation' => array(
+        'default' => array(
+            include __DIR__ . '/navigation.config.php'
+        )
+    ),
+    //-------- End navigation -----------------
 );

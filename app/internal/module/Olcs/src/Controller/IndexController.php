@@ -399,4 +399,20 @@ class IndexController extends AbstractActionController
         return $view;
     }
     
+    public function fieldsetAction() 
+    {
+print_r($this->getServiceLocator()->get('config')['service_api_mapping']);
+        $callback = function() {
+            $this->redirect()->toUrl('/' . $this->params()->fromRoute('action'));
+        };
+        $formGenerator = $this->getFormGenerator();
+        $formConfig = $formGenerator->getFormConfig('licence_type');
+        $formConfig = $formGenerator->addFieldset($formConfig['licence_type'], 'operator_type');
+        $formGenerator->setFormConfig(array('licence_type' => $formConfig));
+        $form = $formGenerator->createForm('licence_type');
+        $view = new ViewModel(['form' => $form]);
+        $view->setTemplate('search/index');
+        return $view;
+    }
+    
 }

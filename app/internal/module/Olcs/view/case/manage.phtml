@@ -1,0 +1,13 @@
+<?php echo $this->render('partials/page-header.phtml', array('pageTitle' => 'Case details')); ?>
+
+<div class="full-width">
+
+    <?php echo $this->render('partials/summary/case-summary', ['items' => $summary, 'title' => 'Case summary information']); ?>
+
+    <?php echo $this->render('partials/horizontal-navigation/horizontal-navigation__list', ['items' => $tabs, 'current' => $tab]); ?>
+
+</div><!-- end .full-width -->
+
+
+
+<?php echo $this->render('case/page/' .$tab, ['case' => $details]); ?>
