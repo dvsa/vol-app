@@ -56,17 +56,43 @@ return array(
                     )
                 )
             ),
-            'case' => array(
+            'licence_case_list' => array(
                 'type' => 'segment',
                 'options' => array(
-                    'route' => '/case[/:licence][/:action][/:case]',
+                    'route' => '/licence/:licence/cases',
+                    'constraints' => array(
+                        'licence' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'CaseController',
+                        'action' => 'index'
+                    )
+                ),
+                'may_terminate' => true,
+                'child_routes' => array(
+                    'pagination' => array(
+                        'type' => 'wildcard',
+                        'options' => array(
+                            'key_value_delimiter' => '/',
+                            'param_delimiter' => '/',
+                            'defaults' => array(
+                                'page' => 1,
+                                'limit' => 10
+                            )
+                        )
+                    )
+                )
+            ),
+            'licence_case_action' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/licence/:licence/case[/:action][/:case]',
                     'constraints' => array(
                         'licence' => '[0-9]+',
                         'case' => '[0-9]+'
                     ),
                     'defaults' => array(
-                        'controller' => 'CaseController',
-                        'action' => 'index'
+                        'controller' => 'CaseController'
                     )
                 )
             ),
