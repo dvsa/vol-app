@@ -59,17 +59,26 @@ class IndexController extends FormJourneyActionController
         switch($submit_posted)
         {
             case 'lookup_company':
-                //$form->setValidationGroup([$step => ['company_number']]);
+                $form->setValidationGroup([$step => ['company_number']]);
                 $form = $this->formPost($form, 'processLookupCompany',['licenceId' => $licenceId]);
                 break;
             case 'add_trading_name':
-                //$form->setValidationGroup([$step => ['trading_names']]);
+                $form->setValidationGroup([$step => ['trading_names']]);
                 $form = $this->formPost($form, 'processAddTradingName',['licenceId' => $licenceId]);
                 break;
             default:
                 // do nothing since we already have the form?
                 //$form->setValidationGroup(InputFilterInterface::VALIDATE_ALL);
-                $form = $this->formPost($form, $this->getStepProcessMethod($this->getCurrentStep()), ['licenceId' => $licenceId]);
+
+                if ($step == 'business-type')
+                {
+                    $form = $this->formPost($form, 'processBusinessType', ['licenceId' => $licenceId]);
+                }
+                else
+                {
+                    $form = $this->formPost($form, 'processAll', ['licenceId' => $licenceId]);    
+                }
+                    
                 break;
         }
         
@@ -107,7 +116,16 @@ class IndexController extends FormJourneyActionController
         );
     }
     
-    public function processBusinessType($valid_data, $form, $params)
+    /**
+     * Method called as a callback once business type form has been validated.
+     * Should redirect to the correct business type form page as the next step
+     * 
+     * @param array $valid_data
+     * @param \Zend\Form $form
+     * @param array $journeyData
+     * @param array $params
+     */
+    public function processBusinessType($valid_data, $form, $journeyData, $params)
     {
         // data persist goes here
         
@@ -140,6 +158,11 @@ class IndexController extends FormJourneyActionController
      * Method called once a valid company look up form has been submitted.
      * Needs to call CH Controller and implement PRG and redirect back to 
      * indexAction.
+     * 
+     * @param array $valid_data
+     * @param \Zend\Form $form
+     * @param array $journeyData
+     * @param array $params
      */
     protected function processLookupCompany($valid_data, $form, $journeyData, $params)
     {
@@ -150,7 +173,13 @@ class IndexController extends FormJourneyActionController
     
     /**
      * Method called once a valid company look up form has been submitted.
+     * Needs to call CH Controller and implement PRG and redirect back to 
+     * indexAction.
      * 
+     * @param array $valid_data
+     * @param \Zend\Form $form
+     * @param array $journeyData
+     * @param array $params
      */
     protected function processAddTradingName($valid_data, $form, $journeyData, $params)
     {
@@ -160,6 +189,15 @@ class IndexController extends FormJourneyActionController
         
     }
     
+    /**
+     * Method called for all business type forms submitted and found to be valid.
+     * Uses PRG to redirect to the next step. 
+     * 
+     * @param array $valid_data
+     * @param \Zend\Form $form
+     * @param array $journeyData
+     * @param array $params
+     */
     protected function processAll($valid_data, $form, $journeyData, $params)
     {
         // Main processing form
@@ -204,4 +242,5 @@ class IndexController extends FormJourneyActionController
         }
         return $result;
     }
+
 }
