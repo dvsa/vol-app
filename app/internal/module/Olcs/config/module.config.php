@@ -73,13 +73,14 @@ return array(
             'case_manage' => array(
                 'type' => 'segment',
                 'options' => array(
-                    'route' => '/case/:case/action/:action',
+                    'route' => '/case/:case/action/manage/:tab',
                     'constraints' => array(
                         'case' => '[0-9]+'
                     ),
                     'defaults' => array(
                         'controller' => 'CaseController',
-                        'action' => 'summary'
+                        'action' => 'manage',
+                        'tab' => 'summary'
                     )
                 )
             ),

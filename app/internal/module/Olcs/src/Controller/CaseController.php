@@ -19,14 +19,19 @@ use Zend\View\Model\ViewModel;
 class CaseController extends FormActionController
 {
 
-    public function notFoundAction()
+    /**
+     * Here we are making use of the notFoundAction to intercept the
+     * (non-PHPdoc)
+     * @see Zend\Mvc\Controller.AbstractActionController::notFoundAction()
+     */
+    public function manageAction()
     {
-        $view = new ViewModel();
+        $view = $this->getView();
 
-        $caseId = $this->params()->fromRoute('case');
-        $action = $this->params()->fromRoute('action');
+        $caseId = $this->fromRoute('case');
+        $action = $this->fromRoute('tab');
 
-        $pm = $this->getPluginManager();
+        //$pm = $this->getPluginManager();
 
         $tabs = $this->getTabInformationArray();
 
@@ -45,6 +50,16 @@ class CaseController extends FormActionController
 
         $view->setTemplate('case/manage');
         return $view;
+    }
+
+    public function getView()
+    {
+        return new ViewModel();
+    }
+
+    public function fromRoute($param, $default = null)
+    {
+        return $this->params()->fromRoute($param, $default);
     }
 
     public function getCase($caseId)
@@ -77,17 +92,17 @@ class CaseController extends FormActionController
             'overview' => [
                 'key' => 'overview',
                 'label' => 'Overview',
-                'url' => $pm->get('url')->fromRoute(null, ['action' => 'overview'], [], true),
+                'url' => $pm->get('url')->fromRoute(null, ['tab' => 'overview'], [], true),
             ],
             'convictions' => [
                 'key' => 'convictions',
                 'label' => 'Convictions',
-                'url' => $pm->get('url')->fromRoute(null, ['action' => 'convictions'], [], true),
+                'url' => $pm->get('url')->fromRoute(null, ['tab' => 'convictions'], [], true),
             ],
             'prohibitions' => [
                 'key' => 'prohibitions',
                 'label' => 'Prohibitions',
-                'url' => $pm->get('url')->fromRoute(null, ['action' => 'prohibitions'], [], true),
+                'url' => $pm->get('url')->fromRoute(null, ['tab' => 'prohibitions'], [], true),
             ],
         ];
 
