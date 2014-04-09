@@ -104,10 +104,8 @@ class IndexController extends FormJourneyActionController
     {
         return array();
         $organisation = $this->_getOrganisationEntity();
-        if (empty($organisation))
-            return array();
         
-        //var_dump($organisation);exit;
+        var_dump($organisation);exit;
          
         return array(
                 'business-type' => array(
@@ -209,7 +207,6 @@ class IndexController extends FormJourneyActionController
     
     private function _getOrganisationEntity()
     {
-        
         
         $result = $this->makeRestCall('Organisation', 'GET', array('id' => $orgId));
         if (empty($result)) {
