@@ -125,10 +125,10 @@ class IndexController extends FormJourneyActionController
      * @param array $journeyData
      * @param array $params
      */
-    public function processBusinessType($valid_data, $form, $journeyData, $params)
+    public function processBusinessType($valid_data, $form, $params)
     {
         // data persist goes here
-        
+
         $next_step = $this->evaluateNextStep($form);
         $this->redirect()->toRoute('selfserve/business-type', array('licenceId' => $params['licenceId'], 'step' => $next_step));
         
@@ -164,7 +164,7 @@ class IndexController extends FormJourneyActionController
      * @param array $journeyData
      * @param array $params
      */
-    protected function processLookupCompany($valid_data, $form, $journeyData, $params)
+    protected function processLookupCompany($valid_data, $form, $params)
     {
         echo 'FORM VALID looking up company';
         // 
@@ -181,7 +181,7 @@ class IndexController extends FormJourneyActionController
      * @param array $journeyData
      * @param array $params
      */
-    protected function processAddTradingName($valid_data, $form, $journeyData, $params)
+    protected function processAddTradingName($valid_data, $form, $params)
     {
         echo 'FORM VALID adding trading name';
 
@@ -198,7 +198,7 @@ class IndexController extends FormJourneyActionController
      * @param array $journeyData
      * @param array $params
      */
-    protected function processAll($valid_data, $form, $journeyData, $params)
+    protected function processAll($valid_data, $form, $params)
     {
         // Main processing form
         
