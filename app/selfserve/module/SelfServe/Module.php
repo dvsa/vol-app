@@ -28,7 +28,7 @@ class Module
         $serviceManager      = $e->getApplication()->getServiceManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
-        $this->bootstrapSession($e);
+        //$this->bootstrapSession($e);
     }
 
     public function bootstrapSession($e)

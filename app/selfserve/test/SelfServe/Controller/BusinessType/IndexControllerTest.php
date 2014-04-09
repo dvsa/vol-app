@@ -33,7 +33,7 @@ class IndexControllerTest extends AbstractControllerTestCase
      */
     public function testBusinessTypeStepAccess()
     { 
-        $this->dispatch('/selfserve/business-type/business-type');
+        $this->dispatch('/selfserve/7/business-type/business-type');
         
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('selfserve');
@@ -47,7 +47,7 @@ class IndexControllerTest extends AbstractControllerTestCase
      */
     public function testRegisteredCompanyStepAccess()
     { 
-        $this->dispatch('/selfserve/business-type/registered-company');
+        $this->dispatch('/selfserve/7/business-type/registered-company');
         
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('selfserve');
@@ -61,7 +61,7 @@ class IndexControllerTest extends AbstractControllerTestCase
      */
     public function testSoleTraderStepAccess()
     { 
-        $this->dispatch('/selfserve/business-type/sole-trader');
+        $this->dispatch('/selfserve/7/business-type/sole-trader');
         
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('selfserve');
@@ -75,7 +75,7 @@ class IndexControllerTest extends AbstractControllerTestCase
      */
     public function testPartnershipStepAccess()
     { 
-        $this->dispatch('/selfserve/business-type/partnership');
+        $this->dispatch('/selfserve/7/business-type/partnership');
         
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('selfserve');
@@ -90,7 +90,7 @@ class IndexControllerTest extends AbstractControllerTestCase
      */
     public function testLlpStepAccess()
     { 
-        $this->dispatch('/selfserve/business-type/llp');
+        $this->dispatch('/selfserve/7/business-type/llp');
         
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('selfserve');
@@ -104,7 +104,7 @@ class IndexControllerTest extends AbstractControllerTestCase
      */
     public function testPublicAuthorityStepAccess()
     { 
-        $this->dispatch('/selfserve/business-type/public-authority');
+        $this->dispatch('/selfserve/7/business-type/public-authority');
         
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('selfserve');
@@ -118,7 +118,7 @@ class IndexControllerTest extends AbstractControllerTestCase
      */
     public function testCompleteActionAccess()
     { 
-        $this->dispatch('/selfserve/business-type/complete');
+        $this->dispatch('/selfserve/7/business-type/complete');
         
         $this->assertResponseStatusCode(302);
         $this->assertModuleName('selfserve');
