@@ -36,7 +36,7 @@ class CaseController extends FormActionController
         $tabs = $this->getTabInformationArray();
 
         if (!array_key_exists($action, $tabs)) {
-            return parent::notFoundAction();
+            return $this->notFoundAction();
         }
 
         $case = $this->getCase($caseId);
