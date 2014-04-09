@@ -398,10 +398,9 @@ class IndexController extends AbstractActionController
         $view->setTemplate('index');
         return $view;
     }
-    
-    public function fieldsetAction() 
+
+    public function fieldsetAction()
     {
-//print_r($this->getServiceLocator()->get('config')['service_api_mapping']);
         $callback = function() {
             $this->redirect()->toUrl('/' . $this->params()->fromRoute('action'));
         };
@@ -414,5 +413,5 @@ class IndexController extends AbstractActionController
         $view->setTemplate('search/index');
         return $view;
     }
-    
+
 }
