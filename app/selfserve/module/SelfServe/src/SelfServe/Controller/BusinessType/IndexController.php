@@ -205,7 +205,8 @@ class IndexController extends FormJourneyActionController
     private function _getOrganisationEntity()
     {
         $licenceId = (int) $this->params()->fromRoute('licenceId');
-        $result = $this->makeRestCall('LicenceOrganisation', 'GET', array('id' => $licenceId)); 
+        $result = $this->makeRestCall('LicenceOrganisation', 'GET', array('id' => $licenceId));
+        \Zend\Debug\Debug::dump($result);exit; 
         return $result;
     }
 
