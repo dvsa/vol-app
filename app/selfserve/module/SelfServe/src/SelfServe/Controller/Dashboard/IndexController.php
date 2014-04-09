@@ -38,26 +38,32 @@ class IndexController extends FormActionController
     {
 
         //This block should be in db transaction
-        
-            /* $data = array(
+        try{
+            $data = array(
                 'name'      => '',
                 'version'   => 1,
             );
-            $orgResult = $this->makeRestCall('Organisation', 'POST', $data); */
             
-            $data['version'] = 1;
-            $data['licenceNumber'] = '';
-            $data['licenceType'] = '';
-            //$data['organisation'] = $orgResult['id'];
-            $data['licenceStatus'] = 'lic_status.new';
+            //create organisation
+            $orgResult = $this->makeRestCall('Organisation', 'POST', $data);
+            
+            $data = array(
+                'version'       => 1,
+                'licenceNumber' => '',
+                'licenceType'   => '',
+                'licenceStatus' => 'lic_status.new',
+                'organisation'  => $orgResult['id'],
+            );
     
             // create licence
             $result = $this->makeRestCall('Licence', 'POST', $data);
             $licenceId = $result['id'];
                 
             $this->redirect()->toRoute('selfserve/licence-type', array('licenceId' => $licenceId, 'step' => 'operator-location'));
-      
-        
+        }
+        catch (\Exception $e){
+            die('An error occured and transaction should be rolled back.');   
+        }
     }
 
 }
