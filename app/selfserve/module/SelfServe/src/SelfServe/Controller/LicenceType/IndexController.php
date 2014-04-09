@@ -13,8 +13,11 @@ namespace SelfServe\Controller\LicenceType;
 
 use Common\Controller\FormJourneyActionController;
 use Zend\View\Model\ViewModel;
+use SelfServe\SelfServeTrait;
 
 class IndexController extends FormJourneyActionController{
+    
+    use SelfServeTrait\FormJourneyTrait;
     
     protected $messages;
 
@@ -59,7 +62,13 @@ class IndexController extends FormJourneyActionController{
      */
     public function processOperatorLocation($valid_data, $form, $params)
     {
+        $data = array(
+        	'id' => $params['licenceId'],
+            'niFlag' => $valid_data['operator_location']['operator_location'] == 'ni' ? 1 : 0,
+            'version' => $valid_data['version'],
+        );
         
+        $this->processEdit($data, 'Licence');
         
         $next_step = $this->evaluateNextStep($form);
         $this->redirect()->toRoute('selfserve/licence-type', 
@@ -73,8 +82,17 @@ class IndexController extends FormJourneyActionController{
      * @return array
      */
     public function getOperatorLocationFormData()
-    {
-    	return array();
+    {   
+    	$entity = $this->_getLicenceEntity();
+    	if (is_null($entity['niFlag']))
+    	    return array('version' => $entity['version']);
+    	
+        return array(
+            'version' => $entity['version'],
+            'operator_location' => array(
+    	        'operator_location' => $entity['niFlag'] ? 'ni' : 'uk', 
+            ),
+    	);
     }
     
     
@@ -93,9 +111,9 @@ class IndexController extends FormJourneyActionController{
         $data = array(
         	'goodsOrPsv' => $valid_data['operator-type']['operator-type'],
         	'id' => $licenceId,
+            'version' => $valid_data['version'],
         );
-        
-        $this->makeRestCall('Licence', 'PATCH', $data);
+        $this->processEdit($data, 'Licence');
         
         $next_step = $this->evaluateNextStep($form);
         $this->redirect()->toRoute('selfserve/licence-type',    
@@ -112,10 +130,9 @@ class IndexController extends FormJourneyActionController{
     public function getOperatorTypeFormData()
     {
     	$entity = $this->_getLicenceEntity();
-    	if (empty($entity))
-    	    return array();
     	
         return array(
+            'version' => $entity['version'],
             'operator-type' => array(
     	        'operator-type' => $entity['goodsOrPsv'], 
             ),
@@ -133,8 +150,15 @@ class IndexController extends FormJourneyActionController{
      */
     public function processLicenceType($valid_data, $form, $params)
     {
-        // data persist goes here
-
+        $licenceId = $params['licenceId'];
+        $data = array(
+        	'licenceType' => $valid_data['licence-type']['licence_type'],
+        	'id' => $licenceId,
+            'version' => $valid_data['version'],
+        );
+        $this->processEdit($data, 'Licence');
+        
+        $next_step = $this->evaluateNextStep($form);
         $this->redirect()->toRoute('selfserve/licence-type-complete', 
                                 array('licenceId' => $params['licenceId'], 
                                       'step' => $next_step));
@@ -148,10 +172,9 @@ class IndexController extends FormJourneyActionController{
     public function getLicenceTypeFormData()
     {
     	$entity = $this->_getLicenceEntity();
-    	if (empty($entity))
-    	    return array();
     	
     	return array(
+    	    'version' => $entity['version'],
     	    'licence-type' => array(
     		    'licence_type' => $entity['licenceType'],
     	    ),
@@ -168,13 +191,36 @@ class IndexController extends FormJourneyActionController{
      */
     public function processLicenceTypePsv($valid_data, $form, $params)
     {
-        // data persist goes here
-
+        $licenceId = $params['licenceId'];
+        $data = array(
+        	'licenceType' => $valid_data['licence-type-psv']['licence-type-psv'],
+        	'id' => $licenceId,
+            'version' => $valid_data['version'],
+        );
+        $this->processEdit($data, 'Licence');
+        
+        $next_step = $this->evaluateNextStep($form);
         $this->redirect()->toRoute('selfserve/licence-type-complete', 
                                 array('licenceId' => $params['licenceId'], 
                                       'step' => $next_step));
-
  
+    }
+    
+    /**
+     * Returns persisted data (if exists) to popuplate form
+     *
+     * @return array
+     */
+    public function getLicenceTypePsvFormData()
+    {
+        $entity = $this->_getLicenceEntity();
+    	
+    	return array(
+    	    'version' => $entity['version'],
+    	    'licence-type-psv' => array(
+    		    'licence-type-psv' => $entity['licenceType'],
+    	    ),
+    	);
     }
     
     /**
@@ -190,11 +236,31 @@ class IndexController extends FormJourneyActionController{
     {
         // data persist goes here
 
+        $next_step = $this->evaluateNextStep($form);
         $this->redirect()->toRoute('selfserve/licence-type-complete',  
                                 array('licenceId' => $params['licenceId'], 
                                       'step' => $next_step));
  
     }
+    
+    /**
+     * Returns persisted data (if exists) to popuplate form
+     *
+     * @return array
+     */
+    public function getLicenceTypeNiFormData()
+    {
+        return array();
+        $entity = $this->_getLicenceEntity();
+        
+        return array(
+                'version' => $entity['version'],
+                'licence-type-psv' => array(
+                        'licence-type-psv' => $entity['licenceType'],
+                ),
+        );
+    }
+    
     
     /**
      * End of the journey redirect to business type
@@ -209,25 +275,5 @@ class IndexController extends FormJourneyActionController{
                                 array('licenceId' => $licenceId, 'step' => 
                                  'business-type'));
     }
-    
-    /**
-     * Get licence entity based on route id value
-     * 
-     * @return array|false
-     */
-    private function _getLicenceEntity()
-    {
-    	$licenceId = (int) $this->params()->fromRoute('licenceId');
-    	if ($licenceId == 0)
-    		return array();
-    	 
-    	$result = $this->makeRestCall('Licence', 'GET', array('id' => $licenceId));
-    	if (empty($result)) {
-    		//not found action?
-    		return false;
-    	}
-    	return $result;
-    }
-
-
+   
 }
