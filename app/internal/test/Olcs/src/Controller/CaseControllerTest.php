@@ -82,4 +82,30 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
 
         $this->assertSame($view, $sut->manageAction());
     }
+
+    public function testFromRoute()
+    {
+        $request = 'hello';
+        $return = 'helloRet';
+
+        $params = $this->getMock('stdClass', ['fromRoute']);
+        $params->expects($this->once())
+               ->method('fromRoute')
+               ->with($this->equalTo($request))
+               ->will($this->returnValue($return));
+
+        $sut = $this->getMock('\Olcs\Controller\CaseController', ['params']);
+        $sut->expects($this->once())
+               ->method('params')
+               ->will($this->returnValue($params));
+
+        $this->assertSame($return, $sut->fromRoute($request));
+    }
+
+    public function testGetView()
+    {
+        $sut = new \Olcs\Controller\CaseController();
+
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $sut->getView());
+    }
 }
