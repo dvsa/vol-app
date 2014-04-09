@@ -401,7 +401,7 @@ class IndexController extends AbstractActionController
     
     public function fieldsetAction() 
     {
-print_r($this->getServiceLocator()->get('config')['service_api_mapping']);
+//print_r($this->getServiceLocator()->get('config')['service_api_mapping']);
         $callback = function() {
             $this->redirect()->toUrl('/' . $this->params()->fromRoute('action'));
         };

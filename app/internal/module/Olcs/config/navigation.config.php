@@ -11,7 +11,7 @@ return array(
             'pages' => array(
                 array(
                     'label' => 'Operators',
-                    'route' => 'operators',
+                    'route' => 'operators/operators-params',
                     'action' => 'operator'
                 )
             )
