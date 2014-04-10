@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Description of OlcsIndexControllerTest
+ * Search controller form post tests
  *
  * @author adminmwc
  */
@@ -27,13 +27,26 @@ class OlcsSearchControllerTest  extends AbstractHttpControllerTestCase
                 'getPluginManager',
                 'redirect',
                 'params',
-                'makeRestCall'
+                'makeRestCall',
+                'url'
             )
         );
         $this->serviceLocator = $this->getMock('\stdClass', array('get'));
         $this->pluginManager = $this->getMock('\stdClass', array('get'));
         $this->url = $this->getMock('\stdClass', array('fromRoute'));
         parent::setUp();
+    }
+    
+    private function setServiceLocator($params, $returnVal) 
+    {
+        $this->controller->expects($this->once())
+            ->method('getServiceLocator')
+            ->will($this->returnValue($this->serviceLocator));
+        
+        $this->serviceLocator->expects($this->once())
+            ->method('get')
+            ->with($params)
+            ->will($this->returnValue($returnVal));
     }
     
     public function testIndexAction() 
@@ -47,16 +60,7 @@ class OlcsSearchControllerTest  extends AbstractHttpControllerTestCase
             ->with('search', 'processSearch')
             ->will($this->returnValue('zendForm'));
         
-        $serviceLocator = $this->getMock('\stdClass', array('get'));
-        
-        $this->serviceLocator->expects($this->once())
-            ->method('get')
-            ->with('navigation')
-            ->will($this->returnValue('navigation'));
-
-        $this->controller->expects($this->once())
-            ->method('getServiceLocator')
-            ->will($this->returnValue($this->serviceLocator));
+        $this->setServiceLocator('navigation', 'navigation');
         
         $this->controller->indexAction();
     }
@@ -75,22 +79,16 @@ class OlcsSearchControllerTest  extends AbstractHttpControllerTestCase
             'advanced' => []
         );
         
-        
         $redirect = $this->getMock('\stdClass', array('toUrl'));
         
-        $this->pluginManager->expects($this->once())
-            ->method('get')
-            ->with('url')
-            ->will($this->returnValue($this->url));
+        $this->controller->expects($this->once())
+             ->method('url')
+             ->will($this->returnValue($this->url));
         
         $this->url->expects($this->once())
             ->method('fromRoute')
             ->with('operators/operators-params', array ( 'operatorName' => 'a', 'firstName' => 'ken'))
             ->will($this->returnValue('/search/operators'));
-        
-        $this->controller->expects($this->once())
-             ->method('getPluginManager')
-             ->will($this->returnValue($this->pluginManager));
         
         $this->controller->expects($this->once())
              ->method('redirect')
@@ -116,6 +114,10 @@ class OlcsSearchControllerTest  extends AbstractHttpControllerTestCase
             ->will($this->returnValue($data));
         
         $this->controller->expects($this->once())
+             ->method('url')
+             ->will($this->returnValue('/search/operators'));
+        
+        $this->controller->expects($this->once())
              ->method('params')
              ->will($this->returnValue($this->url));
         
@@ -123,15 +125,6 @@ class OlcsSearchControllerTest  extends AbstractHttpControllerTestCase
             ->method('makeRestCall')
             ->with('OperatorSearch', 'GET', $data)
             ->will($this->returnValue(array()));
-        
-        $this->pluginManager->expects($this->once())
-                ->method('get')
-            ->with('url')
-            ->will($this->returnValue('/search/operators'));
-        
-        $this->controller->expects($this->once())
-             ->method('getPluginManager')
-             ->will($this->returnValue($this->pluginManager));
         
         $tableBuilder = $this->getMock('\stdClass', array('buildTable'));
         
@@ -141,14 +134,7 @@ class OlcsSearchControllerTest  extends AbstractHttpControllerTestCase
             ->with('operator', array(), $data)
             ->will($this->returnValue('table'));
         
-        $this->serviceLocator->expects($this->once())
-            ->method('get')
-            ->with('Table')
-            ->will($this->returnValue($tableBuilder));
-
-        $this->controller->expects($this->once())
-            ->method('getServiceLocator')
-            ->will($this->returnValue($this->serviceLocator));
+        $this->setServiceLocator('Table', $tableBuilder);
         
         $this->controller->operatorAction();
     }
