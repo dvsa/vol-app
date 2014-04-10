@@ -37,7 +37,6 @@ class SearchController extends FormActionController
         // Below is for setting route params for the breadcrumb
         $this->setBreadcrumb(array('search' => array()));
         $navigation = $this->getServiceLocator()->get('navigation');
-
         $form = $this->generateFormWithData('search', 'processSearch');
 
         $view = new ViewModel(['form' => $form]);
@@ -70,7 +69,7 @@ class SearchController extends FormActionController
                 $searchType = 'person';
             }
         }
-        $url = $this->getPluginManager()->get('url')->fromRoute('operators/operators-params', $data);
+        $url = $this->url()->fromRoute('operators/operators-params', $data);
 
         $this->redirect()->toUrl($url);
     }
@@ -104,8 +103,7 @@ class SearchController extends FormActionController
         $data = $this->params()->fromRoute();
         $results = $this->makeRestCall('OperatorSearch', 'GET', $data);
 
-        $data['url'] = $this->getPluginManager()->get('url');
-
+        $data['url'] = $this->url();
         $table = $this->getServiceLocator()->get('Table')->buildTable('operator', $results, $data);
 
         $view = new ViewModel(['table' => $table]);
