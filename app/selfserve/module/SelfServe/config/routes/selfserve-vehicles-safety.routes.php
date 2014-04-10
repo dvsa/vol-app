@@ -21,5 +21,15 @@ return [
             )
         ),
     ),
+    'vehicle-edit' => array(
+        'type' => 'segment',
+        'options' => array(
+            'route' => '/:licenceId/vehicle/:vehicleId/edit',
+            'defaults' => array(
+                'controller' => 'Selfserve\VehiclesSafety\Vehicle',
+                'action' => 'edit'
+            )
+        ),
+    ),
 ];
 

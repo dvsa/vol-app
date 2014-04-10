@@ -63,8 +63,6 @@ class IndexController extends FormJourneyActionController{
     private function generateVehicleTable($licence)
     {
         $results = $this->makeRestCall('LicenceVehicle', 'GET', array('licence_id' => $licence['id']));
-
-        // These settings could come from the current route
         $settings = array(
             'sort' => 'field',
             'order' => 'ASC',
@@ -73,13 +71,8 @@ class IndexController extends FormJourneyActionController{
             'url' => $this->getPluginManager()->get('url') // The helper needs a URL object to build the URL for sorting, pagination, limit etc
         );
   
-// There is a Table service, the build table takes in;
-//  1. The name of the table config to use
-//  2. The data which can be either
-//         a simple array of results
-//         or an array containing 'Count' and 'Results'
-//  3. An array of settings
-$table = $this->getServiceLocator()->get('Table')->buildTable('vehicle', $results, $settings);
+        $table = $this->getServiceLocator()->get('Table')->buildTable('vehicle', $results, $settings);
+        return $table;
     }
     
     /**
