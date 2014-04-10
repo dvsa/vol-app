@@ -17,7 +17,6 @@ use SelfServe\SelfServeTrait;
 
 class IndexController extends FormJourneyActionController{
     
-    use SelfServeTrait\FormJourneyTrait;
     
     /**
      * Construct the Vehicles Safety Controller class
@@ -63,9 +62,8 @@ class IndexController extends FormJourneyActionController{
     
     private function generateVehicleTable($licence)
     {
+        $results = $this->makeRestCall('LicenceVehicle', 'GET', array('licence_id' => $licence['id']));
 
-        $results = $this->makeRestCall('Vehicle', 'GET', array('licence' => $licence));
-  
         // These settings could come from the current route
         $settings = array(
             'sort' => 'field',
@@ -81,7 +79,7 @@ class IndexController extends FormJourneyActionController{
 //         a simple array of results
 //         or an array containing 'Count' and 'Results'
 //  3. An array of settings
-$table = $this->getServiceLocator()->get('Table')->buildTable('case', $results, $settings);
+$table = $this->getServiceLocator()->get('Table')->buildTable('vehicle', $results, $settings);
     }
     
     /**
