@@ -13,11 +13,8 @@ namespace SelfServe\Controller\LicenceType;
 
 use Common\Controller\FormJourneyActionController;
 use Zend\View\Model\ViewModel;
-use SelfServe\SelfServeTrait;
 
 class IndexController extends FormJourneyActionController{
-    
-    use SelfServeTrait\FormJourneyTrait;
     
     /**
      * Construct the LicenceType Controller class
@@ -76,7 +73,6 @@ class IndexController extends FormJourneyActionController{
         );
         
         $this->processEdit($data, 'Licence');
-
         
         $next_step = $this->evaluateNextStep($form);
         $this->redirect()->toRoute('selfserve/licence-type', 
@@ -287,6 +283,17 @@ class IndexController extends FormJourneyActionController{
         $this->redirect()->toRoute('selfserve/business-type', 
                                 array('licenceId' => $licenceId, 'step' => 
                                  'business-type'));
+    }
+    
+    /**
+     * Get licence entity based on route id value
+     *
+     * @return array|object
+     */
+    private function _getLicenceEntity()
+    {
+        $licenceId = (int) $this->params()->fromRoute('licenceId');
+        return $this->makeRestCall('Licence', 'GET', array('id' => $licenceId));
     }
    
 }

@@ -15,12 +15,9 @@ use Common\Controller\FormJourneyActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Form\FormInterface;
 use \Zend\InputFilter\InputFilterInterface;
-use SelfServe\SelfServeTrait;
 
 class IndexController extends FormJourneyActionController
 {
-    
-    use SelfServeTrait\FormJourneyTrait;
     
     protected $messages;
     
@@ -67,18 +64,8 @@ class IndexController extends FormJourneyActionController
                 $form = $this->formPost($form, 'processAddTradingName',['licenceId' => $licenceId]);
                 break;
             default:
-                // do nothing since we already have the form?
-                //$form->setValidationGroup(InputFilterInterface::VALIDATE_ALL);
-
-                if ($step == 'business-type')
-                {
-                    $form = $this->formPost($form, 'processBusinessType', ['licenceId' => $licenceId]);
-                }
-                else
-                {
-                    $form = $this->formPost($form, 'processAll', ['licenceId' => $licenceId]);    
-                }
-                    
+               
+                $form = $this->formPost($form, $this->getStepProcessMethod($this->getCurrentStep()), ['licenceId' => $licenceId]);
                 break;
         }
         
@@ -90,21 +77,28 @@ class IndexController extends FormJourneyActionController
     }
 
     /**
-     * End of the journey redirect to business type
+     * End of the journey redirect to finance type
      */
     public function completeAction()
     {
         // persist data if possible
         
-        $this->redirect()->toRoute('selfserve/finance', ['step' => 'type']);
+        $this->redirect()->toRoute('selfserve/finance', ['step' => 'index']);
         
     }
     
+    
+    /**
+     * Returns persisted data (if exists) to popuplate form
+     *
+     * @return array
+     */
     public function getBusinessTypeFormData()
     {
         $organisation = $this->_getOrganisationEntity();
         
         return array(
+                'version' => $organisation['version'],
                 'business-type' => array(
                         'business-type' => $organisation['organisationType'],
                 ),
@@ -122,29 +116,240 @@ class IndexController extends FormJourneyActionController
      */
     public function processBusinessType($valid_data, $form, $params)
     {
-        // data persist goes here
-
+        $licenceId = $params['licenceId'];
+        $data = array(
+        	'id' => $licenceId,
+            'organisationType' => $valid_data['business-type']['business-type'],
+            'version' => $valid_data['version'],
+        );
+       
+        $result = $this->makeRestCall('LicenceOrganisation', 'PUT', $data);
+        
         $next_step = $this->evaluateNextStep($form);
-        $this->redirect()->toRoute('selfserve/business-type', array('licenceId' => $params['licenceId'], 'step' => $next_step));
+        $this->redirect()->toRoute('selfserve/business-type', array('licenceId' => $licenceId, 'step' => $next_step));
         
     }
     
+    /**
+     * Returns persisted data (if exists) to popuplate form
+     *
+     * @return array
+     */
     public function getRegisteredCompanyFormData()
     {
-        return array();
         $organisation = $this->_getOrganisationEntity();
-        if (empty($organisation))
-            return array();
-    
-        //\Zend\Debug\Debug::dump($organisation);exit;
-         
+        
         return array(
+                'version' => $organisation['version'],
                 'registered-company' => array(
                         'company_number' => $organisation['registeredCompanyNumber'],
                         'company_name' => $organisation['name'],
-                        'trading_names' => $organisation['name'],
+                        'type_of_business' => $organisation['sicCode'],
+                        //'trading_names' => $organisation['name'],
                 ),
         );
+    }
+    
+    /**
+     * Method called as a callback once your business form has been validated.
+     * Should redirect to the finance form page as the next step
+     *
+     * @param array $valid_data
+     * @param \Zend\Form $form
+     * @param array $journeyData
+     * @param array $params
+     */
+    public function processRegisteredCompany($valid_data, $form, $params)
+    {
+        $licenceId = $params['licenceId'];
+        $data = array(
+                'id' => $licenceId,
+                'name' => $valid_data['registered-company']['company_name'],
+                'registeredCompanyNumber' => $valid_data['registered-company']['company_number'],
+                'sicCode' => $valid_data['registered-company']['type_of_business'],
+                'version' => $valid_data['version'],
+        );
+        
+        $result = $this->makeRestCall('LicenceOrganisation', 'PUT', $data);
+    
+        $next_step = $this->evaluateNextStep($form);
+        $this->redirect()->toRoute('selfserve/business-type', array('licenceId' => $licenceId, 'step' => $next_step));
+    
+    }
+    
+    /**
+     * Returns persisted data (if exists) to popuplate form
+     *
+     * @return array
+     */
+    public function getSoleTraderFormData()
+    {
+        $organisation = $this->_getOrganisationEntity();
+        return array(
+                'version' => $organisation['version'],
+                'sole-trader' => array(
+                        0 => $organisation['sicCode'],
+                        //'trading_names' => $organisation['name'],
+                ),
+        );
+    }
+    
+    /**
+     * Method called as a callback once your business form has been validated.
+     * Should redirect to the finance form page as the next step
+     *
+     * @param array $valid_data
+     * @param \Zend\Form $form
+     * @param array $journeyData
+     * @param array $params
+     */
+    public function processSoleTrader($valid_data, $form, $params)
+    {
+        $licenceId = $params['licenceId'];
+        $data = array(
+                'id' => $licenceId,
+                'sicCode' => $valid_data['sole-trader'][0],
+                'version' => $valid_data['version'],
+        );
+         
+        $result = $this->makeRestCall('LicenceOrganisation', 'PUT', $data);
+    
+        $next_step = $this->evaluateNextStep($form);
+        $this->redirect()->toRoute('selfserve/business-type', array('licenceId' => $licenceId, 'step' => $next_step));
+    
+    }
+    
+    /**
+     * Returns persisted data (if exists) to popuplate form
+     *
+     * @return array
+     */
+    public function getPartnershipFormData()
+    {
+        $organisation = $this->_getOrganisationEntity();
+    
+        return array(
+                'version' => $organisation['version'],
+                'partnership' => array(
+                        'company_name' => $organisation['name'],
+                        '0' => $organisation['sicCode'],
+                        //'trading_names' => $organisation['name'],
+                ),
+        );
+    }
+    
+    /**
+     * Method called as a callback once your business form has been validated.
+     * Should redirect to the finance form page as the next step
+     *
+     * @param array $valid_data
+     * @param \Zend\Form $form
+     * @param array $journeyData
+     * @param array $params
+     */
+    public function processPartnership($valid_data, $form, $params)
+    {
+        $licenceId = $params['licenceId'];
+        $data = array(
+                'id' => $licenceId,
+                'name' => $valid_data['partnership']['company_name'],
+                'sicCode' => $valid_data['partnership'][0],
+                'version' => $valid_data['version'],
+        );
+         
+        $result = $this->makeRestCall('LicenceOrganisation', 'PUT', $data);
+    
+        $next_step = $this->evaluateNextStep($form);
+        $this->redirect()->toRoute('selfserve/business-type', array('licenceId' => $licenceId, 'step' => $next_step));
+    
+    }
+    
+    /**
+     * Returns persisted data (if exists) to popuplate form
+     *
+     * @return array
+     */
+    public function getLlpFormData()
+    {
+        $organisation = $this->_getOrganisationEntity();
+    
+        return array(
+                'version' => $organisation['version'],
+                'llp' => array(
+                        'company_number' => $organisation['registeredCompanyNumber'],
+                        //'trading_names' => $organisation['name'],
+                ),
+        );
+    }
+    
+    /**
+     * Method called as a callback once your business form has been validated.
+     * Should redirect to the finance form page as the next step
+     *
+     * @param array $valid_data
+     * @param \Zend\Form $form
+     * @param array $journeyData
+     * @param array $params
+     */
+    public function processLlp($valid_data, $form, $params)
+    {
+        $licenceId = $params['licenceId'];
+        $data = array(
+                'id' => $licenceId,
+                'registeredCompanyNumber' => $valid_data['llp']['company_number'],
+                'version' => $valid_data['version'],
+        );
+         
+        $result = $this->makeRestCall('LicenceOrganisation', 'PUT', $data);
+    
+        $next_step = $this->evaluateNextStep($form);
+        $this->redirect()->toRoute('selfserve/business-type', array('licenceId' => $licenceId, 'step' => $next_step));
+    
+    }
+    
+    /**
+     * Returns persisted data (if exists) to popuplate form
+     *
+     * @return array
+     */
+    public function getPublicAuthorityFormData()
+    {
+        $organisation = $this->_getOrganisationEntity();
+    
+        return array(
+                'version' => $organisation['version'],
+                'public-authority' => array(
+                        'company_name' => $organisation['name'],
+                        '0' => $organisation['sicCode'],
+                        //'trading_names' => $organisation['name'],
+                ),
+        );
+    }
+    
+    /**
+     * Method called as a callback once your business form has been validated.
+     * Should redirect to the finance form page as the next step
+     *
+     * @param array $valid_data
+     * @param \Zend\Form $form
+     * @param array $journeyData
+     * @param array $params
+     */
+    public function processPublicAuthority($valid_data, $form, $params)
+    {
+        $licenceId = $params['licenceId'];
+        $data = array(
+                'id' => $licenceId,
+                'name' => $valid_data['public-authority']['company_name'],
+                'sicCode' => $valid_data['public-authority'][0],
+                'version' => $valid_data['version'],
+        );
+         
+        $result = $this->makeRestCall('LicenceOrganisation', 'PUT', $data);
+    
+        $next_step = $this->evaluateNextStep($form);
+        $this->redirect()->toRoute('selfserve/business-type', array('licenceId' => $licenceId, 'step' => $next_step));
+    
     }
     
     
@@ -184,29 +389,18 @@ class IndexController extends FormJourneyActionController
         
     }
     
-    /**
-     * Method called for all business type forms submitted and found to be valid.
-     * Uses PRG to redirect to the next step. 
-     * 
-     * @param array $valid_data
-     * @param \Zend\Form $form
-     * @param array $journeyData
-     * @param array $params
-     */
-    protected function processAll($valid_data, $form, $params)
-    {
-        // Main processing form
-        
-        // persist data if possible
-        
-        $this->redirect()->toRoute('selfserve/finance', ['step' => 'index']);
-    }
     
+    
+    /**
+     * Get organisation entity based on licenceId (from route param)
+     * 
+     * @return array
+     */
     private function _getOrganisationEntity()
     {
         $licenceId = (int) $this->params()->fromRoute('licenceId');
         $result = $this->makeRestCall('LicenceOrganisation', 'GET', array('id' => $licenceId));
-        \Zend\Debug\Debug::dump($result);exit; 
+        //\Zend\Debug\Debug::dump($result);exit; 
         return $result;
     }
 
