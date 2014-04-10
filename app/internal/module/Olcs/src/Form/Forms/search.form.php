@@ -44,11 +44,12 @@ return [
                         'class' => 'long',
                         'placeholder' => 'Last name'
                     ],
-                    // 'dateOfBirth' => [
-                    //     'type' => 'dateSelect',
-                    //     'label' => 'Date of birth'
-                    // ]
-                    'submit1' => [
+                     'dateOfBirth' => [
+                         'type' => 'dateSelect',
+                         'label' => 'Date of birth'
+                         
+                     ],
+                    'search' => [
                         'type' => 'submit',
                         'label' => 'Search',
                         'class' => 'action--primary large'
@@ -111,7 +112,7 @@ return [
             ]
         ],
         'elements' => [
-            'submit' => [
+            'advanced' => [
                 'type' => 'submit',
                 'label' => 'Search',
                 'class' => 'action--primary large'
