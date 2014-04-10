@@ -66,11 +66,17 @@ class IndexController extends FormJourneyActionController{
      */
     public function processOperatorLocation($valid_data, $form, $params)
     {
+        $operatorLocation = $valid_data['operator_location']['operator_location'];
         $data = array(
         	'id' => $params['licenceId'],
-            'niFlag' => $valid_data['operator_location']['operator_location'] == 'ni' ? 1 : 0,
+            'niFlag' => $operatorLocation == 'ni' ? 1 : 0,
             'version' => $valid_data['version'],
         );
+        
+        //if location is Norther Ireland, the operator type is always goods
+        if ($operatorLocation == 'ni'){
+            $data['goodsOrPsv'] = 'goods';
+        }
         
         $this->processEdit($data, 'Licence');
         
