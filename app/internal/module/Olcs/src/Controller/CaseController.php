@@ -52,6 +52,33 @@ class CaseController extends FormActionController
         return $view;
     }
 
+    public function submissionsAction()
+    {
+        $case = '75';
+
+        $results = $this->makeRestCall('Submission', 'GET', array('vosaCase' => $case));
+
+        foreach ($results['Results'] as $k => $result) {
+            $actions = $this->makeRestCall('SubmissionAction', 'GET', array('submission' => $result['id']));
+            foreach ($actions['Results'] as $action) {
+                $results['Results'][$k]['actions'][] = $action;
+            }
+        }
+
+        echo '<pre>';
+        print_r($results);
+        die();
+
+        $data = [];
+        $data['url'] = $this->getPluginManager()->get('url');
+
+        $table = $this->getServiceLocator()->get('Table')->buildTable('submission', $results, $data);
+
+        $view = new ViewModel(['table' => $table]);
+        $view->setTemplate('submission-list');
+        return $view;
+    }
+
     public function getView()
     {
         return new ViewModel();

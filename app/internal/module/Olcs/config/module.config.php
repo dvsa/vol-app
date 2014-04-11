@@ -110,6 +110,16 @@ return array(
                     )
                 )
             ),
+            'submissions' => array(
+                'type' => 'literal',
+                'options' => array(
+                    'route' => '/submissions',
+                    'defaults' => array(
+                        'controller' => 'CaseController',
+                        'action' => 'submissions'
+                    )
+                )
+            ),
             'fieldset' => array(
                 'type' => 'literal',
                 'options' => array(
