@@ -37,23 +37,6 @@ class IndexController extends FormJourneyActionController{
         $licence = $this->_getLicenceEntity();
         $vehicleTable = $this->generateVehicleTable($licence);
         
-/*        $step = $this->params()->fromRoute('step');
-
-        $this->setCurrentStep($step);
-        
-        // create form
-        $form = $this->generateSectionForm();
-        
-        // Do the post
-        $form = $this->formPost($form, $this->getStepProcessMethod($this->getCurrentStep()), ['licenceId' => $licenceId]);
-
-        // prefill form data if persisted
-        $formData = $this->getPersistedFormData($form);
-        if (isset($formData))
-        {
-            $form->setData($formData);
-        }*/
-        
         // render the view
         $view = new ViewModel(['vehicleTable' => $vehicleTable]);
         $view->setTemplate('self-serve/vehicle-safety/index');
@@ -62,7 +45,8 @@ class IndexController extends FormJourneyActionController{
     
     private function generateVehicleTable($licence)
     {
-        $results = $this->makeRestCall('LicenceVehicle', 'GET', array('licence_id' => $licence['id']));
+        $results = $this->makeRestCall('LicenceVehicle', 'GET', array('licenceId' => $licence['id']));
+
         $settings = array(
             'sort' => 'field',
             'order' => 'ASC',
