@@ -19,13 +19,12 @@ class IndexController extends FormJourneyActionController
     protected $messages;
     protected $section = 'finance';
     
-    public function indexAction() {
-               
+    public function indexAction() 
+    {
         // render the view
         $view = new ViewModel();
         $view->setTemplate('self-serve/finance/index');
         return $view;
-
     }
 
     /**

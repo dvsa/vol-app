@@ -78,13 +78,24 @@ class IndexController extends FormJourneyActionController
 
     /**
      * End of the journey redirect to finance type
+     * 
+     * @todo THIS IS WRONG! On all journey we should relay on application entity 
+     * not on a licence. So this is a temporary hack, that creates application entity 
      */
     public function completeAction()
     {
-        // persist data if possible
+        $licenceId = $this->params('licenceId');
         
-        $this->redirect()->toRoute('selfserve/finance', ['step' => 'index']);
+        //create application entity (hack)
+        $data = array(
+        	'version'   => 1,
+            'licence'   => $licenceId,
+            'status'    => 'app_status.new', 
+        );
+        $result = $this->makeRestCall('Application', 'POST', $data);
+        $applicationId = $result['id'];
         
+        $this->redirect()->toRoute('selfserve/finance', ['step' => 'index', 'applicationId' => $applicationId]);
     }
     
     

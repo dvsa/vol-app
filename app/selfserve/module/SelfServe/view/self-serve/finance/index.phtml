@@ -31,7 +31,7 @@
 		<div class="table__header">
 			<h3>Operating centres</h3>
 			<div class="actions-container">
-				<input class="action--primary" type="submit" value="Add">
+				<a href="<?php echo $this->url('selfserve/finance/operating_centre_action', ['action' => 'add'], true); ?>" class="action--primary">Add</a>
 				<input class="action--secondary" type="submit" value="Edit">
 				<input class="action--warning" type="submit" value="Delete">
 			</div><!-- end .actions-container -->
@@ -71,25 +71,6 @@
 				</tbody>
 			</table>
 		</div><!-- end .table-wrapper -->
-	</form>
-
-	<!-- Authorised vehicles -->
-	<form>
-		<fieldset>
-			<legend id="authorised-vehicles">Authorised vehicles</legend>
-	        <p class="hint">Enter the total amount of vehicles &amp; trailers that you want authorised on the licence your are applying for</p>
-			<div class="field">
-	            <label for="no-of-vehicles">Total no. of vehicles</label>
-	            <input class="short" id="no-of-vehicles" name="no-of-vehicles" placeholder="" type="text" value="">
-	        </div>
-	        <div class="field">
-	            <label for="no-of-trailers">Total no. of trailers</label>
-	            <input class="short" id="no-of-trailers" name="no-of-trailers" placeholder="" type="text" value="">
-	        </div>
-		</fieldset>
-		<div class="actions-container">
-			<input class="action--primary large" type="submit" value="Calculate">
-		</div><!-- end .actions -->
 	</form>
 
 	<!-- Financial evidence -->
