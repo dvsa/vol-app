@@ -12,7 +12,26 @@ return array(
                 array(
                     'label' => 'Operators',
                     'route' => 'operators',
-                    'action' => 'operator'
+                    'action' => 'operator',
+                    /*'pages' => array(
+                        array(
+                            'label' => 'Add Conviction',
+                            'route' => 'conviction',
+                            'action' => 'index'
+                        )
+                    )*/
+                ),
+                array(
+                    'label' => 'Convictions',
+                    'route' => 'conviction',
+                    'action' => 'index'
+                    /*'pages' => array(
+                        array(
+                            'label' => 'Add Conviction',
+                            'route' => 'conviction',
+                            'action' => 'index'
+                        )
+                    )*/
                 )
             )
         )

@@ -24,7 +24,7 @@ use Zend\View\Model\ViewModel;
  * @author     Mike Cooper
  * @author     Rob Caiger <rob@clocal.co.uk>
  */
-class SearchController extends FormActionController
+class ConvictionController extends FormActionController
 {
 
     /**
@@ -35,14 +35,21 @@ class SearchController extends FormActionController
     public function indexAction()
     {
         // Below is for setting route params for the breadcrumb
-        $this->setBreadcrumb(array('search' => array()));
+        //$this->setBreadcrumb(array('conviction' => array('case' => 7)));
 
         $form = $this->generateFormWithData(
-            'search', 'processSearch'
+            'conviction', 'processConviction'
         );
 
-        $view = new ViewModel(['form' => $form]);
-        $view->setTemplate('search/index');
+        $view = new ViewModel([
+            'form' => $form,
+            'params' => [
+                    'pageTitle' => 'add-conviction',
+                    'pageSubTitle' => 'add-conviction-text'
+                ]
+            ]
+        );
+        $view->setTemplate('form');
         return $view;
     }
 
@@ -51,28 +58,8 @@ class SearchController extends FormActionController
      *
      * @param array $data
      */
-    protected function processSearch($data)
+    protected function processConviction($data)
     {
-        $data = array_merge($data['search'], $data['advanced']);
-
-        $personSearch = array(
-            'firstName',
-            'lastName',
-            'dateOfBirth',
-            'transportManagerId'
-        );
-
-        $searchType = 'operators';
-
-        foreach ($data as $key => $value) {
-
-            if (empty($value)) {
-                unset($data[$key]);
-            } elseif (in_array($key, $personSearch)) {
-                $searchType = 'person';
-            }
-        }
-
         $url = $this->getPluginManager()->get('url')->fromRoute('operators/operators-params', $data);
 
         $this->redirect()->toUrl($url);

@@ -31,7 +31,7 @@ return array(
                         'action' => 'operator'
                     )
                 ),
-                'may_terminate' => false,
+                'may_terminate' => true,
                 'child_routes' => array(
                     'operators-params' => array(
                         'type' => 'wildcard',
@@ -110,16 +110,16 @@ return array(
                     )
                 )
             ),
-            'fieldset' => array(
-                'type' => 'literal',
+            'conviction' => array(
+                'type' => 'segment',
                 'options' => array(
-                    'route' => '/fieldset',
+                    'route' => '/case/[:case]/convictions',
                     'defaults' => array(
-                        'controller' => 'IndexController',
-                        'action' => 'fieldset'
+                        'controller' => 'ConvictionController',
+                        'action' => 'index'
                     )
                 )
-            ),
+            )
         )
     ),
     'controllers' => array(
@@ -127,7 +127,8 @@ return array(
             'DefaultController' => 'Olcs\Olcs\Placeholder\Controller\DefaultController',
             'IndexController' => 'Olcs\Controller\IndexController',
             'SearchController' => 'Olcs\Controller\SearchController',
-            'CaseController' => 'Olcs\Controller\CaseController'
+            'CaseController' => 'Olcs\Controller\CaseController',
+            'ConvictionController' => 'Olcs\Controller\ConvictionController'
         )
     ),
     'view_manager' => array(
