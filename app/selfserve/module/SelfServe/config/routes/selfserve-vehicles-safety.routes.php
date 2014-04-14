@@ -4,32 +4,67 @@ return [
     'vehicles-safety' => array(
         'type' => 'segment',
         'options' => array(
-            'route' => '/:licenceId/vehicle-safety/:step',
+            'route' => '/:applicationId/vehicle-safety/:step',
             'defaults' => array(
                 'controller' => 'Selfserve\VehiclesSafety\Index',
-                'action' => 'index'
+                'action' => 'index',
+                'step'  => 'index',
             )
+        ),    
+        'may_terminate' => true,
+        'child_routes' => array(
+            'vehicles-safety-action' => array(
+                'type' => 'segment',
+                'options' => array(
+                        'route' => '/vehicle[/:action][/:vehicleId]',
+                        'constraints' => array(
+                                'vehicleId' => '[0-9]+'
+                        ),
+                        'defaults' => array(
+                                'controller' => 'SelfServe\VehiclesSafety\VehicleController'
+                        ),
+                ),
+            ),
         ),
     ),
-    'vehicles-safety-complete' => array(
+    'vehicle-action' => array(
         'type' => 'segment',
         'options' => array(
-            'route' => '/:licenceId/vehicles-safety/complete',
-            'defaults' => array(
-                'controller' => 'Selfserve\VehiclesSafety\Index',
-                'action' => 'complete'
-            )
-        ),
-    ),
-    'vehicle-edit' => array(
-        'type' => 'segment',
-        'options' => array(
-            'route' => '/:licenceId/vehicle/:vehicleId/edit',
+            'route' => '/:applicationId/vehicle',
             'defaults' => array(
                 'controller' => 'Selfserve\VehiclesSafety\Vehicle',
-                'action' => 'edit'
             )
+        ), 
+        'may_terminate' => false,
+        'child_routes' => array(
+            'vehicle-add' => array(
+                'type' => 'segment',
+                'options' => array(
+                        'route' => '/add',
+                        'constraints' => array(
+                                'vehicleId' => '[0-9]+'
+                        ),
+                        'defaults' => array(
+                                'controller' => 'SelfServe\VehiclesSafety\Vehicle',
+                                'action'    => 'add'
+                        ),
+                ),
+            ),
+            'vehicle-edit' => array(
+                'type' => 'segment',
+                'options' => array(
+                        'route' => '/:vehicleId/edit',
+                        'constraints' => array(
+                                'vehicleId' => '[0-9]+'
+                        ),
+                        'defaults' => array(
+                                'controller' => 'SelfServe\VehiclesSafety\VehicleController',
+                                'action'    => 'edit'
+                        ),
+                ),
+            ),
         ),
     ),
+    
 ];
 
