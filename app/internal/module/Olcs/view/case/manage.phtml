@@ -8,6 +8,6 @@
 
 </div><!-- end .full-width -->
 
+<?php
 
-
-<?php echo $this->render('case/page/' .$tab, ['case' => $details]); ?>
+echo $this->render('case/page/' . $tab, array_merge((array)$this->vars(), ['case' => $details]));
