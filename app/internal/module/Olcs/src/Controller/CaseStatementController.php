@@ -21,11 +21,13 @@ class CaseStatementController extends CaseController
         $tabs = $this->getTabInformationArray();
         $action = 'statements';
         $caseId = $this->fromRoute('case');
+
         $case = $this->getCase($caseId);
+
         $summary = $this->getCaseSummaryArray($case);
         $details = $this->getCaseDetailsArray($case);
 
-        //$results = $this->makeRestCall('', 'GET', array('licence' => $licence));
+        $results = $this->makeRestCall('Statement', 'GET', array('caseId' => $caseId));
 
         $data['url'] = $this->getPluginManager()->get('url');
 
