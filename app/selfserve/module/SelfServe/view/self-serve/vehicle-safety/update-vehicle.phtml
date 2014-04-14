@@ -1,0 +1,17 @@
+<?php
+    echo $this->render(
+        '/partials/page-header.phtml',
+        array(
+        'pageTitle' => 'Add a vehicle',    
+        // 'pageSubTitle'=> 'Tell us about the type of licence you are applying for'
+        )
+    );
+?>
+
+<div class="two-thirds">
+    <?php 
+    echo $this->partial('self-serve/forms/update-vehicle', array(
+        'form' => $form,
+    ));
+    ?>
+</div>

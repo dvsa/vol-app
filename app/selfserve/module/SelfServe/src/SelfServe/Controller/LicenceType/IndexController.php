@@ -296,7 +296,7 @@ class IndexController extends FormJourneyActionController{
      *
      * @return array|object
      */
-    private function _getLicenceEntity()
+    protected function _getLicenceEntity()
     {
         $licenceId = (int) $this->params()->fromRoute('licenceId');
         return $this->makeRestCall('Licence', 'GET', array('id' => $licenceId));
