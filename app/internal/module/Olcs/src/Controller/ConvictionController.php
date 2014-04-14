@@ -1,13 +1,12 @@
 <?php
 
 /**
- * Search controller
+ * Conviction controller
  *
- * Search for operators and licences
+ * Add and edit convictions
  *
  * @package    olcs
  * @author     Mike Cooper
- * @author     Rob Caiger <rob@clocal.co.uk>
  */
 
 namespace Olcs\Controller;
@@ -32,13 +31,28 @@ class ConvictionController extends FormActionController
      *
      * @return ViewModel
      */
-    public function indexAction()
+    public function addEditAction()
     {
         // Below is for setting route params for the breadcrumb
-        //$this->setBreadcrumb(array('conviction' => array('case' => 7)));
-
+        $this->setBreadcrumb(array('operators/operators-params' => array('operatorName' => 'a')));
+        
+        $routeParams = $this->getParams(array('case', 'licence', 'formAction', 'id'));
+        
+        $data = array('case' => $routeParams['case']);
+        $results = $this->makeRestCall('VosaCase', 'GET', array('id' => $routeParams['case']));
+        
+        if (empty($routeParams['case']) || empty($routeParams['licence']) || empty($results)) {
+             return $this->getResponse()->setStatusCode(404);
+        }
+        
+        if (strtolower($routeParams['formAction']) == 'edit' && isset($routeParams['id'])) {
+            $data = $this->makeRestCall('Conviction', 'GET', array('id' => $routeParams['id']));
+            $data['id'] = $routeParams['id'];
+            $data['defendant-details'] = $data;
+            $data['offence'] = $data;
+        }
         $form = $this->generateFormWithData(
-            'conviction', 'processConviction'
+            'conviction', 'addConviction', $data
         );
 
         $view = new ViewModel([
@@ -52,56 +66,22 @@ class ConvictionController extends FormActionController
         $view->setTemplate('form');
         return $view;
     }
-
-    /**
-     * Process the search
-     *
-     * @param array $data
-     */
-    protected function processConviction($data)
-    {
-        $url = $this->getPluginManager()->get('url')->fromRoute('operators/operators-params', $data);
-
-        $this->redirect()->toUrl($url);
+    
+    public function editAction() {
+        
     }
-
-    /**
-     * Person search results
-     *
-     * @todo Implement person search results
-     *
-     * @return ViewModel
-     */
-    public function personAction()
+    
+    protected function addConviction($data) 
     {
-        die('Person search is out of scope');
-        $data = $this->params()->fromQuery();
-
-        $results = $this->makeRestCall('PersonSearch', 'GET', $data);
-
-        $view = new ViewModel(['results' => $results]);
-        $view->setTemplate('results');
-        return $view;
-    }
-
-    /**
-     * Operator search results
-     *
-     * @return ViewModel
-     */
-    public function operatorAction()
-    {
-        $data = $this->params()->fromRoute();
-
-        $results = $this->makeRestCall('OperatorSearch', 'GET', $data);
-
-        $data['url'] = $this->getPluginManager()->get('url');
-
-        $table = $this->getServiceLocator()->get('Table')->buildTable('operator', $results, $data);
-
-        $view = new ViewModel(['table' => $table]);
-        $view->setTemplate('results-operator');
-        return $view;
+        $data = array_merge($data, $data['defendant-details'], $data['offence']);
+        unset($data['defendant-details'], $data['offence'], $data['case'], $data['save-add'], $data['save'], $data['cancel']);
+        $routeParams = $this->getParams(array('case', 'licence', 'formAction', 'id'));
+        if (strtolower($routeParams['formAction']) == 'edit') {
+            $result = $this->processEdit($data, 'Conviction');
+        } else {
+            $result = $this->processAdd($data, 'Conviction');
+        }
+        $this->redirect()->toRoute('search', array());
     }
 
 }

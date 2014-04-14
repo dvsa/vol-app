@@ -14,19 +14,25 @@ return [
                     'label' => 'Defendant details',
                 ],
                 'elements' => [
-                    'defendantType' => [
+                    'defType' => [
                         'type' => 'select',
                         'label' => 'Defendant type:',
                         'value_options' => 'defendant_types'
                     ],
-                    'firstName' => [
+                    'personFirstname' => [
                         'type' => 'personName',
                         'label' => 'First name:',
                          'class' => 'long'
                     ],
-                    'lastName' => [
+                    'personLastname' => [
                         'type' => 'personName',
                         'label' => 'Last name:',
+                        'class' => 'long'
+                    ],
+                    'operatorName' => [
+                        'type' => 'text',
+                        'filters' => '\Common\Form\Elements\InputFilters\textMax70',
+                        'label' => 'Operator name:',
                         'class' => 'long'
                     ],
                     'dateOfBirth' => [
@@ -42,24 +48,25 @@ return [
                     'class' => 'extra-long'
                 ],
                 'elements' => [
-                    'actsi' => [
+                    /*'actsi' => [
                          'type' => 'select',
                          'label' => 'Act/si'
                     ],
                     'conviction-description' => [
                          'type' => 'select',
                          'label' => 'Conviction description:'
-                    ],
-                    'conviction-notes' => [
+                    ],*/
+                    'convictionNotes' => [
                         'type' => 'textarea',
+                        'filters' => '\Common\Form\Elements\InputFilters\textMax4000',
                         'label' => 'Conviction notes:',
                         'class' => 'extra-long'
                     ],
-                    'offencedate' => [
+                    'dateOfOffence' => [
                          'type' => 'dateSelect',
                          'label' => 'Offence date:'
                      ],
-                    'convictiondate' => [
+                    'dateOfConviction' => [
                          'type' => 'dateSelect',
                          'label' => 'Conviction date:'
                      ],
@@ -68,9 +75,10 @@ return [
                         'label' => 'Si',
                         'value_options' => 'yes_no'
                     ],
-                    'courtfpn' => [
+                    'courtFpm' => [
                         'type' => 'text',
-                        'label' => 'Court Fpn:',
+                        'filters' => '\Common\Form\Elements\InputFilters\TextMax70',
+                        'label' => 'Court Fpm:',
                         'class' => 'medium'
                     ],
                     'penalty' => [
@@ -78,22 +86,18 @@ return [
                         'label' => 'Penalty:',
                         'class' => 'medium'
                     ],
-                    'Costs' => [
+                    'costs' => [
                         'type' => 'text',
                         'label' => 'Costs:',
                         'class' => 'medium'
                     ],
-                    'conviction-notes' => [
+                    'takenIntoConsideration' => [
                         'type' => 'textarea',
-                        'label' => 'Conviction notes:',
-                        'class' => 'extra-long'
-                    ],
-                    'tic' => [
-                        'type' => 'textarea',
+                        'filters' => '\Common\Form\Elements\InputFilters\TextMax4000',
                         'label' => 'Tic:',
                         'class' => 'extra-long'
                     ],
-                    'declaredtotctr' => [
+                    'decToTc' => [
                         'type' => 'select',
                         'label' => 'Declared to TC/TR:',
                         'value_options' => 'yes_no'
@@ -102,11 +106,20 @@ return [
             ]
         ],
         'elements' => [
-            'save-add' => [
+            'case' => [
+                'type' => 'hidden'
+            ],
+            'id' => [
+                'type' => 'hidden'
+            ],
+            'version' => [
+                'type' => 'hidden'
+            ],
+            /*'save-add' => [
                 'type' => 'submit',
                 'label' => 'Save & add another',
                 'class' => 'action--primary large'
-            ],
+            ],*/
             'save' => [
                 'type' => 'submit',
                 'label' => 'Save',

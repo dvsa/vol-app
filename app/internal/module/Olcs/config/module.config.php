@@ -113,10 +113,10 @@ return array(
             'conviction' => array(
                 'type' => 'segment',
                 'options' => array(
-                    'route' => '/case/[:case]/convictions',
+                    'route' => '/licence/[:licence]/case/[:case]/conviction[/:formAction][/:id]',
                     'defaults' => array(
                         'controller' => 'ConvictionController',
-                        'action' => 'index'
+                        'action' => 'addEdit'
                     )
                 )
             )

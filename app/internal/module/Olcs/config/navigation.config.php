@@ -7,32 +7,17 @@ return array(
         array(
             'label' => 'Search',
             'route' => 'search',
-            'action' => 'index',
             'pages' => array(
                 array(
                     'label' => 'Operators',
-                    'route' => 'operators',
-                    'action' => 'operator',
-                    /*'pages' => array(
+                    'route' => 'operators/operators-params',
+                    'pages' => array(
                         array(
                             'label' => 'Add Conviction',
                             'route' => 'conviction',
-                            'action' => 'index'
                         )
-                    )*/
+                    )
                 ),
-                array(
-                    'label' => 'Convictions',
-                    'route' => 'conviction',
-                    'action' => 'index'
-                    /*'pages' => array(
-                        array(
-                            'label' => 'Add Conviction',
-                            'route' => 'conviction',
-                            'action' => 'index'
-                        )
-                    )*/
-                )
             )
         )
     )
