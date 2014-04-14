@@ -229,8 +229,6 @@ class CaseController extends FormActionController
 
             $action = strtolower($action);
 
-            $url = '/case/' . $licence . '/' . $action;
-
             if ($action !== 'add') {
 
                 $id = $this->params()->fromPost('id');
@@ -239,14 +237,16 @@ class CaseController extends FormActionController
                     // TODO: Should add flash message here
                     die('Select an id');
                 } else {
-                    $this->redirect()->toUrl($url . '/' . $id);
+                    $this->redirect()->toRoute('licence_case_action', array('action' => $action, 'case' => $id, 'licence' => $licence));
                 }
 
             } else {
 
-                $this->redirect()->toUrl($url);
+                $this->redirect()->toRoute('licence_case_action', array('action' => $action, 'licence' => $licence));
             }
         }
+
+        $pageData = $this->getPageData($licence);
 
         $results = $this->makeRestCall('VosaCase', 'GET', array('licence' => $licence));
 
@@ -254,8 +254,8 @@ class CaseController extends FormActionController
 
         $table = $this->getServiceLocator()->get('Table')->buildTable('case', $results, $data);
 
-        $view = new ViewModel(['licence' => $licence, 'table' => $table]);
-        $view->setTemplate('case-list');
+        $view = new ViewModel(['licence' => $licence, 'table' => $table, 'data' => $pageData]);
+        $view->setTemplate('case/list');
         return $view;
     }
 
@@ -286,7 +286,9 @@ class CaseController extends FormActionController
             )
         );
 
-        $view = new ViewModel(['form' => $form]);
+        $pageData = $this->getPageData($licence);
+
+        $view = new ViewModel(['form' => $form, 'data' => $pageData]);
         $view->setTemplate('case/add');
         return $view;
     }
@@ -320,9 +322,27 @@ class CaseController extends FormActionController
             'case', 'processEditCase', $result
         );
 
-        $view = new ViewModel(['form' => $form]);
+        $pageData = $this->getPageData($licence);
+
+        $view = new ViewModel(['form' => $form, 'data' => $pageData]);
         $view->setTemplate('case/edit');
         return $view;
+    }
+
+    /**
+     * Get page data from licence id
+     *
+     * @param int $licence
+     */
+    private function getPageData($licence)
+    {
+        $licenceData = $this->makeRestCall('Licence', 'GET', array('id' => $licence));
+        $organisationData = $this->makeRestCall('Organisation', 'GET', array('id' => $licenceData['organisation']));
+
+        return array(
+            'organisation' => $organisationData['name'],
+            'licence' => $licenceData['licenceNumber']
+        );
     }
 
     public function deleteAction()
@@ -362,7 +382,7 @@ class CaseController extends FormActionController
         $result = $this->processAdd($data, 'VosaCase');
 
         if (isset($result['id'])) {
-            $this->redirect()->toUrl('/case/' . $data['licence']);
+            $this->redirect()->toRoute('licence_case_list', array('licence' => $data['licence']));
         }
     }
 
@@ -380,7 +400,7 @@ class CaseController extends FormActionController
 
         $result = $this->processEdit($data, 'VosaCase');
 
-        $this->redirect()->toUrl('/case/' . $data['licence']);
+        $this->redirect()->toRoute('licence_case_list', array('licence' => $data['licence']));
     }
 
     /**

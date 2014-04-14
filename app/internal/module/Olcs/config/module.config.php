@@ -3,13 +3,13 @@
 return array(
     'router' => array(
         'routes' => array(
-            'olcsHome' => array(
+            'dashboard' => array(
                 'type' => 'Literal',
                 'options' => array(
                     'route' => '/',
                     'defaults' => array(
                         'controller' => 'IndexController',
-                        'action'     => 'home',
+                        'action'     => 'index',
                     )
                 )
             ),
