@@ -180,6 +180,11 @@ class CaseController extends FormActionController
                 'label' => 'Prohibitions',
                 'url' => $pm->get('url')->fromRoute(null, ['tab' => 'prohibitions'], [], true),
             ],
+            'statements' => [
+                'key' => 'statements',
+                'label' => 'Statements',
+                'url' => $pm->get('url')->fromRoute(null, ['tab' => 'statements'], [], true),
+            ]
         ];
 
         return $tabs;
