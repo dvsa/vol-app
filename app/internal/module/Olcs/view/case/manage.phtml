@@ -10,4 +10,13 @@
 
 
 
-<?php echo $this->render('case/page/' .$tab, ['case' => $details]); ?>
+<?php
+
+$array = array();
+$array['case'] = $details;
+
+if (isset($submissions)) {
+    $array['submissions'] = $submissions;
+}
+
+echo $this->render('case/page/' .$tab, $array); ?>

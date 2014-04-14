@@ -4,8 +4,10 @@
 
 </div><!-- end .full-width -->
 
+<?php if (isset($submissions)): ?>
 <div class="full-width">
 
-    <?php echo $this->render('partials/summary/summary', ['items' => $case, 'title' => 'Case details']); ?>
+    <?php echo $submissions; ?>
 
 </div><!-- end .full-width -->
+<?php endif; ?>
