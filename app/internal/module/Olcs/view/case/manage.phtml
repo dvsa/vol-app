@@ -8,6 +8,13 @@
 
 </div><!-- end .full-width -->
 
+<?php
 
+$array = array();
+$array['case'] = $details;
 
-<?php echo $this->render('case/page/' .$tab, ['case' => $details]); ?>
+if (isset($submissions)) {
+    $array['submissions'] = $submissions;
+}
+
+echo $this->render('case/page/' .$tab, $array); ?>

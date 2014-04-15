@@ -110,6 +110,29 @@ return array(
                     )
                 )
             ),
+            'submissions' => array(
+                'type' => 'literal',
+                'options' => array(
+                    'route' => '/submissions',
+                    'defaults' => array(
+                        'controller' => 'CaseController',
+                        'action' => 'submissions'
+                    )
+                )
+            ),
+            'case_statement' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/case/:case/action/manage/statements',
+                    'constraints' => array(
+                        'case' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'CaseStatementController',
+                        'action' => 'index'
+                    )
+                )
+            ),
             'fieldset' => array(
                 'type' => 'literal',
                 'options' => array(
@@ -127,7 +150,8 @@ return array(
             'DefaultController' => 'Olcs\Olcs\Placeholder\Controller\DefaultController',
             'IndexController' => 'Olcs\Controller\IndexController',
             'SearchController' => 'Olcs\Controller\SearchController',
-            'CaseController' => 'Olcs\Controller\CaseController'
+            'CaseController' => 'Olcs\Controller\CaseController',
+            'CaseStatementController' => 'Olcs\Controller\CaseStatementController'
         )
     ),
     'view_manager' => array(
