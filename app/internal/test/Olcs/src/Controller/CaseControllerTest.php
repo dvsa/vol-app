@@ -13,7 +13,7 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
         parent::setUp();
     }
 
-    public function testNotFoundActionAction()
+    public function manageAction()
     {
         $caseId = '12345';
         $actionTab = 'overview';
@@ -31,6 +31,7 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
                 'getCase',
                 'getCaseSummaryArray',
                 'getCaseDetailsArray',
+                'log'
             ]
         );
 
