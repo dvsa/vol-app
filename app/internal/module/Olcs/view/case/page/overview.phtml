@@ -3,3 +3,11 @@
     <?php echo $this->render('partials/summary/summary', ['items' => $case, 'title' => 'Case details']); ?>
 
 </div><!-- end .full-width -->
+
+<?php if (isset($submissions)): ?>
+<div class="full-width">
+
+    <?php echo $submissions; ?>
+
+</div><!-- end .full-width -->
+<?php endif; ?>
