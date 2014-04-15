@@ -68,7 +68,7 @@ class CaseController extends FormActionController
         return $view;
     }
 
-    public function submissionsAction()
+    /* public function submissionsAction()
     {
         $case = '24';
 
@@ -84,7 +84,7 @@ class CaseController extends FormActionController
         $view = new ViewModel(['table' => $table]);
         $view->setTemplate('submission-list');
         return $view;
-    }
+    } */
 
     public function getSubbmissions($case)
     {
