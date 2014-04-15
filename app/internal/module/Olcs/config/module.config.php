@@ -123,6 +123,32 @@ return array(
                     )
                 )
             ),
+            'case_stay' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/case/:case/action/manage/stays/',
+                    'constraints' => array(
+                        'case' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'CaseStayController',
+                        'action' => 'index'
+                    )
+                )
+            ),
+            'case_stay_action' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/case/:case/action/manage/stays[/:action][/:stay]',
+                    'constraints' => array(
+                        'case' => '[0-9]+',
+                        'stay' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'CaseStayController'
+                    )
+                )
+            ),
             'fieldset' => array(
                 'type' => 'literal',
                 'options' => array(
@@ -141,7 +167,8 @@ return array(
             'IndexController' => 'Olcs\Controller\IndexController',
             'SearchController' => 'Olcs\Controller\SearchController',
             'CaseController' => 'Olcs\Controller\CaseController',
-            'CaseStatementController' => 'Olcs\Controller\CaseStatementController'
+            'CaseStatementController' => 'Olcs\Controller\CaseStatementController',
+            'CaseStayController' => 'Olcs\Controller\CaseStayController'
         )
     ),
     'view_manager' => array(
