@@ -10,4 +10,11 @@
 
 <?php
 
-echo $this->render('case/page/' . $tab, array_merge((array)$this->vars(), ['case' => $details]));
+$array = array();
+$array['case'] = $details;
+
+if (isset($submissions)) {
+    $array['submissions'] = $submissions;
+}
+
+echo $this->render('case/page/' .$tab, $array); ?>
