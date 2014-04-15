@@ -31,8 +31,12 @@ return [
         'type' => 'segment',
         'options' => array(
             'route' => '/:applicationId/vehicle',
+            'constraints' => array(
+                    'applicationId' => '[0-9]+'
+            ),
             'defaults' => array(
                 'controller' => 'Selfserve\VehiclesSafety\Vehicle',
+                'action'    => 'index'
             )
         ), 
         'may_terminate' => false,
@@ -41,9 +45,6 @@ return [
                 'type' => 'segment',
                 'options' => array(
                         'route' => '/add',
-                        'constraints' => array(
-                                'vehicleId' => '[0-9]+'
-                        ),
                         'defaults' => array(
                                 'controller' => 'SelfServe\VehiclesSafety\Vehicle',
                                 'action'    => 'add'
@@ -58,7 +59,7 @@ return [
                                 'vehicleId' => '[0-9]+'
                         ),
                         'defaults' => array(
-                                'controller' => 'SelfServe\VehiclesSafety\VehicleController',
+                                'controller' => 'SelfServe\VehiclesSafety\Vehicle',
                                 'action'    => 'edit'
                         ),
                 ),

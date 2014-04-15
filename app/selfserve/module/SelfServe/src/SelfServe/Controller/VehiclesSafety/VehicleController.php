@@ -67,14 +67,29 @@ class VehicleController extends FormJourneyActionController{
     }
     
     /**
+     * Generates the edit form 
+     * 
+     * @return \Zend\View\Model\ViewModel
+     */
+    public function editAction() {
+        $applicationId = $this->params()->fromRoute('applicationId');
+        $vehicleId = $this->params()->fromRoute('vehicleId');
+
+        $licence = $this->_getLicenceEntity();
+        echo 'edit vehicle';
+        exit;
+
+    }
+    
+    /**
      * Process adding of goods vehicle form
      * 
      * @param array $valid_data
-     * @param \Zend\Form $form
+     * @param \Zend\Form\Form $form
      * @param array $params
      * @return \Zend\Form
      */
-    public function processAddGoodsVehicle($valid_data, \Zend\Form $form, $params)
+    public function processAddGoodsVehicle($valid_data, \Zend\Form\Form $form, $params)
     {
         $applicationId = $this->params()->fromRoute('applicationId');
         $licence = $this->_getLicenceEntity();
@@ -83,16 +98,18 @@ class VehicleController extends FormJourneyActionController{
         if ($save_result)
         {
             // check for submit buttons and redirect accordingly
-            $posted_data = $this->getRequest()->getPost()->toArray();        
-            if (in_array('submit_add_another', $posted_data))
+            $posted_data = $this->getRequest()->getPost()->toArray();  
+
+            if (array_key_exists('submit_add_another', $posted_data))
             {
-                $this->redirect()->toRoute('selfserve/vehicles-safety-action', 
+                $this->redirect()->toRoute('selfserve/vehicle-action/vehicle-add', 
                                     array('action' => 'add', 'applicationId' => $applicationId));            
             }
             else 
             {
                 $this->redirect()->toRoute('selfserve/vehicles-safety', array('applicationId' => $applicationId));        
             }
+
         }
         
         return $form;

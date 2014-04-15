@@ -34,6 +34,21 @@ class IndexController extends FormJourneyActionController{
      */
     public function indexAction() {
         
+        // process any submit button pressed
+        if ($this->getRequest()->isPost())
+        {
+            $action = $this->getRequest()->getPost('action');
+            $vehicleId = $this->getRequest()->getPost('id');
+            $applicationId = $this->params()->fromRoute('applicationId');
+
+            $this->redirect()->toRoute('selfserve/vehicle-action/vehicle-'.strtolower($action), 
+                    array(  'action' => $action, 
+                            'vehicleId' => $vehicleId, 
+                            'applicationId' => $applicationId
+                         )
+            );
+        }
+        
         $licence = $this->_getLicenceEntity();
         $vehicleTable = $this->generateVehicleTable($licence);
         
@@ -45,7 +60,7 @@ class IndexController extends FormJourneyActionController{
     
     private function generateVehicleTable($licence)
     {
-        $results = $this->makeRestCall('LicenceVehicle', 'GET', array('licenceId' => $licence['id']));
+        $results = $this->makeRestCall('LicenceVehicle', 'GET', array('licence' => $licence['id']));
 
         $settings = array(
             'sort' => 'field',
