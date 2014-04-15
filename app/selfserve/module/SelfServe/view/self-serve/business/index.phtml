@@ -1,10 +1,17 @@
-<div id="licence-type">
-    <h1><?php echo $this->translate('Your Business');?></h1>
+<?php
+    echo $this->render(
+        '/partials/page-header.phtml',
+        array(
+        'pageTitle' => 'Your business',    
+        // 'pageSubTitle'=> 'Tell us about the type of licence you are applying for'
+        )
+    );
+?>
 
-    <?php 
-
+<div class="two-thirds">
+<?php 
     echo $this->partial('self-serve/forms/business-type', array(
         'form' => $form,
     ));
-    ?>
-</div>
+?>
+</div><!-- end .two-thirds -->
