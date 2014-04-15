@@ -3,7 +3,7 @@
 <phpunit bootstrap="Bootstrap.php" colors="true" stopOnFailure="false" syntaxCheck="true" strict="true">
     <testsuites>
         <testsuite name="OLCS Selfserve Application">
-            <directory>./</directory>
+            <directory>./SelfServe/Controller/Finance/</directory>
         </testsuite>
     </testsuites>
     <filter>

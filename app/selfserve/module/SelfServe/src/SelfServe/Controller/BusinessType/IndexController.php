@@ -156,7 +156,6 @@ class IndexController extends FormJourneyActionController
                         'company_number' => $organisation['registeredCompanyNumber'],
                         'company_name' => $organisation['name'],
                         'type_of_business' => $organisation['sicCode'],
-                        //'trading_names' => $organisation['name'],
                 ),
         );
     }
