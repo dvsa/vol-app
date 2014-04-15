@@ -31,7 +31,7 @@ class CaseStayController extends CaseController
      */
     public function addAction()
     {
-        $caseId = $this->params()->fromRoute('case');
+        $caseId = $this->fromRoute('case');
         $pageData = $this->getCase($caseId);
 
         if (empty($pageData)) {
@@ -53,8 +53,8 @@ class CaseStayController extends CaseController
     }
     
     public function editAction(){
-        $caseId = $this->params()->fromRoute('case');
-        $stayId = $this->params()->fromRoute('stay');
+        $caseId = $this->fromRoute('case');
+        $stayId = $this->fromRoute('stay');
 
         $result = $this->makeRestCall('Stay', 'GET', array('id' => $stayId));
         $result['fields'] = $result;
@@ -80,19 +80,12 @@ class CaseStayController extends CaseController
      */
     protected function processAddStay($data)
     {
-        //$data['created_on'] = date('Y-m-d');
-        //$data['last_updated_on'] = date('Y-m-d');
         $data['stayType'] = "1";
         $data['lastUpdatedBy'] = 6;
         $data['createdBy'] = 7;
         $data = array_merge($data, $data['fields']);
-        //print_r($data);
-        //die();
         
         $result = $this->processAdd($data, 'Stay');
-        
-        //print_r($result);
-        //die();
         
         if (isset($result['id'])) {
             $this->redirect()->toRoute('case_stay_action', array('action' => 'edit', 'case' => $data['case'], 'stay' => $result['id']));
@@ -109,8 +102,6 @@ class CaseStayController extends CaseController
         $data['stayType'] = "1";
         $data['lastUpdatedBy'] = 8;
         $data = array_merge($data, $data['fields']);
-        //print_r($data);
-        //die();
         
         $result = $this->processEdit($data, 'Stay');
         
