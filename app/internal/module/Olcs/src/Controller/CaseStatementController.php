@@ -60,9 +60,10 @@ class CaseStatementController extends CaseController
      */
     public function addAction()
     {
+        $caseId = $this->fromRoute('case');
+
         $form = $this->generateFormWithData(
-            'statement', 'processAddStatement', array(
-            )
+            'statement', 'processAddStatement', array('case' => $caseId)
         );
 
         $view = $this->getView([

@@ -13,7 +13,7 @@ return [
                     'label' => 'Statement Details'
                 ],
                 'elements' => [
-                    'licence_type' => [
+                    /*'licence_type' => [
                         'type' => 'text',
                         'label' => 'Licence type',
                         'required' => false
@@ -22,58 +22,58 @@ return [
                         'type' => 'text',
                         'label' => 'Licence number',
                         'required' => false
-                    ],
+                    ],*/
                     'statement_type' => [
                         'type' => 'select',
                         'label' => 'Statement type',
-                        'options' => [],
-                        'required' => false
+                        'value_options' => 'statement_types',
+                        'required' => true
                     ],
-                    'traffic_area' => [
+                    /*'traffic_area' => [
                         'type' => 'text',
                         'label' => 'Traffic area',
                         'required' => false
-                    ],
+                    ],*/
                     'vrm' => [
-                        'type' => 'text',
-                        'label' => 'Vehicle registration mark',
-                        'required' => false
+                        'type' => 'vrm'
                     ],
                     'requestors_first_name' => [
                         'type' => 'text',
-                        'label' => 'Requestors first name',
-                        'required' => false
+                        'filters' => '\Common\Form\Elements\InputFilters\TextRequired',
+                        'label' => 'Requestors first name'
                     ],
                     'requestors_family_name' => [
                         'type' => 'text',
-                        'label' => 'Requestors last name',
-                        'required' => false
+                        'filters' => '\Common\Form\Elements\InputFilters\TextRequired',
+                        'label' => 'Requestors last name'
                     ],
                     'requestors_body' => [
                         'type' => 'text',
-                        'label' => 'Requestors body',
-                        'required' => false
+                        'filters' => '\Common\Form\Elements\InputFilters\TextRequired',
+                        'label' => 'Requestors body'
                     ],
                     'date_stopped' => [
                         'type' => 'dateSelect',
                         'label' => 'Date stopped',
-                        'required' => false
+                        'required' => true
                     ],
                     'date_requested' => [
                         'type' => 'dateSelect',
                         'label' => 'Date requested',
-                        'required' => false
+                        'required' => true
                     ],
                     'request_mode' => [
                         'type' => 'select',
                         'label' => 'Request mode',
-                        'options' => [],
-                        'required' => false
+                        'value_options' => 'request_modes',
+                        'required' => true
                     ],
                     'authorised_decision' => [
                         'type' => 'textarea',
+                        'filters' => '\Common\Form\Elements\InputFilters\TextareaRequired',
                         'label' => 'Authorised decision',
-                        'class' => 'extra-long'
+                        'class' => 'extra-long',
+                        'required' => true
                     ]
                 ]
             ],
@@ -98,7 +98,12 @@ return [
             'crsf' => [
                 'type' => 'crsf',
             ],
-            'submit' => [
+            'saveAdd' => [
+                'type' => 'submit',
+                'label' => 'Save & add another',
+                'class' => 'action--primary large'
+            ],
+            'save' => [
                 'type' => 'submit',
                 'label' => 'Save',
                 'class' => 'action--primary large'
