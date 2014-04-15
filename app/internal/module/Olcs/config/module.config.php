@@ -113,9 +113,10 @@ return array(
             'case_statement' => array(
                 'type' => 'segment',
                 'options' => array(
-                    'route' => '/case/:case/action/manage/statements',
+                    'route' => '/case/:case/action/manage/statements[/:action][/:statement]',
                     'constraints' => array(
-                        'case' => '[0-9]+'
+                        'case' => '[0-9]+',
+                        'statement' => '[0-9]+'
                     ),
                     'defaults' => array(
                         'controller' => 'CaseStatementController',

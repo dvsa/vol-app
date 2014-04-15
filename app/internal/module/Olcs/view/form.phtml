@@ -2,26 +2,15 @@
     echo $this->render(
         '/partials/page-header.phtml',
         array(
-            'pageTitle' => 'Add case'
+            'pageTitle' => $this->translate($this->params['pageTitle']),
+            'pageSubTitle'=> $this->translate($this->params['pageSubTitle'])
         )
     );
 ?>
 
 <div class="two-thirds">
-<?php
-        $form->prepare();
-//echo $this->form()->openTag($form);
-        echo $this->form($form);
-//echo $this->form()->closeTag($form);
-        ?></div>
-    <?php
-    if (isset($results) && !empty($results)) {
-        foreach ($results as $result)
-        {
-            print '<pre>';
-            print_r($results);
-            print '</pre>';
-        }
-    }
-?>
-</div><!-- end .three-quarters -->
+	<?php
+	    echo $this->formErrors($form);
+	    echo $this->form($form);
+	?>
+</div><!-- end three-quarters -->

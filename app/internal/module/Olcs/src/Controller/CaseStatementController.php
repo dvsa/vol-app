@@ -15,12 +15,19 @@ namespace Olcs\Controller;
  */
 class CaseStatementController extends CaseController
 {
+    /**
+     * Show statements
+     *
+     * @return object
+     */
     public function indexAction()
     {
-        $view = $this->getView();
+        $caseId = $this->fromRoute('case');
+
+        $this->checkForCrudAction('case_statement', array('case' => $caseId), 'statement');
+
         $tabs = $this->getTabInformationArray();
         $action = 'statements';
-        $caseId = $this->fromRoute('case');
 
         $case = $this->getCase($caseId);
 
@@ -33,7 +40,7 @@ class CaseStatementController extends CaseController
 
         $table = $this->getServiceLocator()->get('Table')->buildTable('statement', $results, $data);
 
-        $view->setVariables([
+        $view = $this->getView([
             'case' => $case,
             'tabs' => $tabs,
             'tab' => $action,
@@ -43,6 +50,31 @@ class CaseStatementController extends CaseController
         ]);
 
         $view->setTemplate('case/manage');
+        return $view;
+    }
+
+    /**
+     * Add statement action
+     *
+     * @return object
+     */
+    public function addAction()
+    {
+        $form = $this->generateFormWithData(
+            'statement', 'processAddStatement', array(
+            )
+        );
+
+        $view = $this->getView([
+            'params' => [
+                'pageTitle' => 'Add statement',
+                'pageSubTitle' => ''
+            ],
+            'form' => $form
+        ]);
+
+        $view->setTemplate('form');
+
         return $view;
     }
 }

@@ -52,9 +52,9 @@ class CaseController extends FormActionController
         return $view;
     }
 
-    public function getView()
+    public function getView($params = array())
     {
-        return new ViewModel();
+        return new ViewModel($params);
     }
 
     public function fromRoute($param, $default = null)
