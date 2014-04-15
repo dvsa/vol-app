@@ -66,24 +66,36 @@ class VehicleController extends FormJourneyActionController{
 
     }
     
-    public function processAddGoodsVehicle($valid_data, $form, $params)
+    /**
+     * Process adding of goods vehicle form
+     * 
+     * @param array $valid_data
+     * @param \Zend\Form $form
+     * @param array $params
+     * @return \Zend\Form
+     */
+    public function processAddGoodsVehicle($valid_data, \Zend\Form $form, $params)
     {
         $applicationId = $this->params()->fromRoute('applicationId');
         $licence = $this->_getLicenceEntity();
+        $save_result = $this->persistVehicle($valid_data);
         
-        $this->persistVehicle($valid_data);
+        if ($save_result)
+        {
+            // check for submit buttons and redirect accordingly
+            $posted_data = $this->getRequest()->getPost()->toArray();        
+            if (in_array('submit_add_another', $posted_data))
+            {
+                $this->redirect()->toRoute('selfserve/vehicles-safety-action', 
+                                    array('action' => 'add', 'applicationId' => $applicationId));            
+            }
+            else 
+            {
+                $this->redirect()->toRoute('selfserve/vehicles-safety', array('applicationId' => $applicationId));        
+            }
+        }
         
-        // check for submit buttons and redirect accordingly
-        $posted_data = $this->getRequest()->getPost()->toArray();        
-        if (in_array('submit_add_another', $posted_data))
-        {
-            $this->redirect()->toRoute('selfserve/vehicles-safety-action', 
-                                array('action' => 'add', 'applicationId' => $applicationId));            
-        }
-        else 
-        {
-            $this->redirect()->toRoute('selfserve/vehicles-safety', array('applicationId' => $applicationId));        
-        }
+        return $form;
     }
   
     /**
@@ -97,6 +109,7 @@ class VehicleController extends FormJourneyActionController{
         try
         {
             $licence = $this->_getLicenceEntity();
+            
             $vehicle_data = array(
                     'version' => 1,
                     'vrm' => $valid_data['vrm'],
@@ -106,20 +119,28 @@ class VehicleController extends FormJourneyActionController{
                     'isRefrigerated' => 0,
                     'isArticulated' => 0,
                     'certificateNumber' => '',
+                    'viAction' => ''
             );
             // store the vehicle
             $vehicle = $result = $this->makeRestCall('Vehicle', 'POST', $vehicle_data);
 
             // store the licence_vehicle
             $licence_vehicle_data = array(
-                'licenceId' => $licencep['id'],
-                'vehicleId' => $vehicle['id'],
+                'licence' => $licence['id'],
+                'dateApplicationReceived' => date('Y-m-d H:i:s'),
+                'vehicle' => $vehicle['id'],
                 'version' => 1
             );
-                                
+
+            $licence_vehicle_result = $lv_result = $this->makeRestCall('LicenceVehicle', 'POST', $licence_vehicle_data);
+
+            
         } catch (Exception $ex) {
-            throw new \RuntimeException('Unable to save vehicle');
+            return false;
         }
+        
+        return true;
+        
     }
     
     /**
