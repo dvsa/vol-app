@@ -8,7 +8,7 @@
             "name": "olcs/olcs-entities",
             "version": "dev-develop",
             "source": {
-                "url": "git@gitlab.clb.npm:/olcs/olcs-entities.git",
+                "url": "git@gitlab.clb.npm:olcs/olcs-entities.git",
                 "type": "git",
                 "reference": "origin/develop"
                 }
@@ -20,7 +20,7 @@
             "name": "olcs/OlcsCommon",
             "version": "dev-develop",
             "source": {
-                "url": "git@gitlab.clb.npm:/olcs/olcs-common.git",
+                "url": "git@gitlab.clb.npm:olcs/olcs-common.git",
                 "type": "git",
                 "reference": "origin/develop"
                 }
