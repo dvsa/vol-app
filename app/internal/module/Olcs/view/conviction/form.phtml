@@ -1,0 +1,19 @@
+<?php
+    foreach($this->headScript as $headScript) {
+        $this->headScript()->prependFile($this->basePath() . $headScript);
+    }
+    echo $this->render(
+        '/partials/page-header.phtml',
+        array(
+            'pageTitle' => $this->translate($this->params['pageTitle']),
+            'pageSubTitle'=> $this->translate($this->params['pageSubTitle'])
+        )
+    );
+?>
+
+<div class="two-thirds">
+    <?php
+        echo $this->formErrors($form);
+        echo $this->form($form);
+    ?>
+</div><!-- end three-quarters -->

@@ -120,7 +120,7 @@ return [
                 'label' => 'Save & add another',
                 'class' => 'action--primary large'
             ],*/
-            'save' => [
+            'conviction' => [
                 'type' => 'submit',
                 'label' => 'Save',
                 'class' => 'action--primary large'

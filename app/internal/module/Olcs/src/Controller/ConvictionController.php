@@ -31,12 +31,16 @@ class ConvictionController extends FormActionController
      *
      * @return ViewModel
      */
-    public function addEditAction()
+    public function addAction()
     {
         // Below is for setting route params for the breadcrumb
         $this->setBreadcrumb(array('operators/operators-params' => array('operatorName' => 'a')));
         
-        $routeParams = $this->getParams(array('case', 'licence', 'formAction', 'id'));
+        $routeParams = $this->getParams(array(
+            'case',
+            'licence',
+            'id'
+            ));
         
         $data = array('case' => $routeParams['case']);
         $results = $this->makeRestCall('VosaCase', 'GET', array('id' => $routeParams['case']));
@@ -45,43 +49,77 @@ class ConvictionController extends FormActionController
              return $this->getResponse()->setStatusCode(404);
         }
         
-        if (strtolower($routeParams['formAction']) == 'edit' && isset($routeParams['id'])) {
-            $data = $this->makeRestCall('Conviction', 'GET', array('id' => $routeParams['id']));
-            $data['id'] = $routeParams['id'];
-            $data['defendant-details'] = $data;
-            $data['offence'] = $data;
-        }
-        $form = $this->generateFormWithData(
-            'conviction', 'addConviction', $data
+        $form = $this->generateForm(
+                    'conviction', 
+                    'processConviction'
         );
-
+        $form->setData($data);
+        $form->setMessages(array('blah' => 'This is a test message'));
         $view = new ViewModel([
             'form' => $form,
+            'headScript' => ['/static/js/conviction.js'],
             'params' => [
                     'pageTitle' => 'add-conviction',
                     'pageSubTitle' => 'add-conviction-text'
                 ]
             ]
         );
-        $view->setTemplate('form');
+        $view->setTemplate('conviction/form');
         return $view;
     }
     
-    public function editAction() {
+    public function editAction() 
+    {
+        $routeParams = $this->getParams(array(
+            'case', 
+            'licence',  
+            'id',
+            'change'
+        ));
         
+        $data = $this->makeRestCall('Conviction', 'GET', array('id' => $routeParams['id']));
+        $data['id'] = $routeParams['id'];
+        $data['defendant-details'] = $data;
+        $data['offence'] = $data;
+        
+        $form = $this->generateFormWithData(
+                    'conviction', 
+                    'processConviction',
+                    $data
+        );
+        
+        $view = new ViewModel([
+            'form' => $form,
+            'headScript' => ['/static/js/conviction.js'],
+            'params' => [
+                    'pageTitle' => 'add-conviction',
+                    'pageSubTitle' => 'add-conviction-text'
+                ]
+            ]
+        );
+        $view->setTemplate('conviction/form');
+        return $view;
     }
     
-    protected function addConviction($data) 
+    protected function processConviction($data, $action) 
     {
         $data = array_merge($data, $data['defendant-details'], $data['offence']);
-        unset($data['defendant-details'], $data['offence'], $data['case'], $data['save-add'], $data['save'], $data['cancel']);
-        $routeParams = $this->getParams(array('case', 'licence', 'formAction', 'id'));
-        if (strtolower($routeParams['formAction']) == 'edit') {
+        //$data['cases'] = array($data['case']);
+        unset($data['defendant-details'], $data['offence'], $data['case'], $data['save'], $data['cancel'], $data['conviction'], $data['conviction-operator']);
+        $routeParams = $this->getParams(array('action', 'licence', 'case'));
+//print_r($data);
+//exit;
+        if (strtolower($routeParams['action']) == 'edit') {
             $result = $this->processEdit($data, 'Conviction');
         } else {
             $result = $this->processAdd($data, 'Conviction');
         }
-        $this->redirect()->toRoute('search', array());
+        
+        return $this->redirect()->toRoute('conviction', array(
+            'licence' => $routeParams['licence'],
+            'case' =>  $routeParams['case'],
+            'action' => 'add'
+        ));
     }
 
 }
