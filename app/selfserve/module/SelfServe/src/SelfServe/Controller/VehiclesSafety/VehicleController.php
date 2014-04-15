@@ -80,22 +80,20 @@ class VehicleController extends FormJourneyActionController{
                 'isArticulated' => 0,
                 'certificateNumber' => '',
         );
-
+        // store the vehicle
         $vehicle = $result = $this->makeRestCall('Vehicle', 'POST', $vehicle_data);
  
         // check for submit buttons and redirect accordingly
-        $submit_posted = $this->determineSubmitButtonPressed($this->getRequest());
-
-        if ($submit_posted !== 'add_another')
+        $posted_data = $this->getRequest()->getPost()->toArray();        
+        if (in_array('submit_add_another', $posted_data))
         {
-            $this->redirect()->toRoute('selfserve/vehicles-safety', array('applicationId' => $applicationId));        
+            $this->redirect()->toRoute('selfserve/vehicles-safety-action', 
+                                array('action' => 'add', 'applicationId' => $applicationId));            
         }
         else 
         {
-            $this->redirect()->toRoute('selfserve/vehicles-safety-action', 
-                                        array('action' => 'add', 'applicationId' => $applicationId));        
+            $this->redirect()->toRoute('selfserve/vehicles-safety', array('applicationId' => $applicationId));        
         }
-    
     }
     
     /**
