@@ -1,6 +1,6 @@
 <?php
 
-namespace SelfServe\test\BusinessType;
+namespace SelfServe\test\VehicleSafety;
 
 
 use PHPUnit_Framework_TestCase;
