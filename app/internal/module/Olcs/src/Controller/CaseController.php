@@ -44,12 +44,15 @@ class CaseController extends FormActionController
 
         // -- submissions
 
-        $submissionsResults = $this->getSubbmissions($caseId);
+        $submissionsResults = $this->getSubmissions($caseId);
         $submissionsData = [];
         $submissionsData['url'] = $this->getPluginManager()->get('url');
 
         $submissionsTable = $this->getServiceLocator()->get('Table')->buildTable(
-            'submission', $submissionsResults, $submissionsData);
+            'submission',
+            $submissionsResults,
+            $submissionsData
+        );
 
         // -- submissions
 
@@ -68,7 +71,7 @@ class CaseController extends FormActionController
         return $view;
     }
 
-    public function getSubbmissions($case)
+    public function getSubmissions($case)
     {
         $results = $this->makeRestCall('Submission', 'GET', array('vosaCase' => $case));
 
@@ -87,8 +90,7 @@ class CaseController extends FormActionController
                 }
 
                 $sas = $this->makeRestCall(
-                    'SubmissionActionStatus', 'GET',
-                    array('id' => $action['submissionActionStatus'])
+                    'SubmissionActionStatus', 'GET', array('id' => $action['submissionActionStatus'])
                 );
                 if (!empty($sas)) {
                     $results['Results'][$k]['actions'][$ak]['submissionActionStatus'] = $sas;
@@ -97,7 +99,13 @@ class CaseController extends FormActionController
                     $results['Results'][$k]['status'] = $sas['name'];
 
                     // Get the submission action status type - this gives us the current submission type
-                    $sast = $this->makeRestCall('SubmissionActionStatusType', 'GET', array('id' => $sas['submissionActionStatusType']));
+                    $sast = $this->makeRestCall(
+                        'SubmissionActionStatusType',
+                        'GET',
+                        array(
+                            'id' => $sas['submissionActionStatusType']
+                        )
+                    );
 
                     $results['Results'][$k]['type'] = $sast['name'];
                 }
@@ -110,9 +118,9 @@ class CaseController extends FormActionController
         return $results;
     }
 
-    public function getView()
+    public function getView(array $params = null)
     {
-        return new ViewModel();
+        return new ViewModel($params);
     }
 
     public function fromRoute($param, $default = null)
@@ -174,8 +182,6 @@ class CaseController extends FormActionController
 
     public function getCaseSummaryArray(array $case)
     {
-        $pm = $this->getPluginManager();
-
         $smmary = [
 
             'case_number' => [
@@ -215,8 +221,6 @@ class CaseController extends FormActionController
 
     public function getCaseDetailsArray(array $case)
     {
-        $pm = $this->getPluginManager();
-
         $opentimeDate = date('d/m/Y', strtotime($case['openTime']));
         $licenceStartDate = date('d/m/Y', strtotime($case['licence']['startDate']));
 
@@ -269,8 +273,6 @@ class CaseController extends FormActionController
 
     /**
      * List of cases if we have a licence
-     *
-     * @todo Handle 404
      */
     public function indexAction()
     {
@@ -292,12 +294,20 @@ class CaseController extends FormActionController
                 $id = $this->params()->fromPost('id');
 
                 if (empty($id)) {
-                    // TODO: Should add flash message here
-                    die('Select an id');
-                } else {
-                    $this->redirect()->toRoute('licence_case_action', array('action' => $action, 'case' => $id, 'licence' => $licence));
-                }
 
+                    $this->crudActionMissingId();
+
+                } else {
+
+                    $this->redirect()->toRoute(
+                        'licence_case_action',
+                        array(
+                            'action' => $action,
+                            'case' => $id,
+                            'licence' => $licence
+                        )
+                    );
+                }
             } else {
 
                 $this->redirect()->toRoute('licence_case_action', array('action' => $action, 'licence' => $licence));
@@ -320,8 +330,6 @@ class CaseController extends FormActionController
     /**
      * Add a new case to a licence
      *
-     * @todo Handle 404 and Bad Request
-     *
      * @return ViewModel
      */
     public function addAction()
@@ -329,7 +337,7 @@ class CaseController extends FormActionController
         $licence = $this->params()->fromRoute('licence');
 
         if (empty($licence)) {
-            die('Bad request');
+            return $this->notFoundAction();
         }
 
         $results = $this->makeRestCall('Licence', 'GET', array('id' => $licence));
@@ -353,8 +361,6 @@ class CaseController extends FormActionController
 
     /**
      * Edit a new case
-     *
-     * @todo Handle 404
      *
      * @return ViewModel
      */
@@ -423,7 +429,6 @@ class CaseController extends FormActionController
      * Process adding the case
      *
      * @todo Additional fields are required for persisting - Find out where these fields come from
-     * @todo Decide where to send the user afterwards
      *
      * @param type $data
      */
@@ -447,8 +452,6 @@ class CaseController extends FormActionController
     /**
      * Process updating the case
      *
-     * @todo Decide what to do on success
-     *
      * @param type $data
      */
     protected function processEditCase($data)
@@ -456,7 +459,7 @@ class CaseController extends FormActionController
         $data['categories'] = $this->formatCategories($data['categories']);
         $data = array_merge($data, $data['fields']);
 
-        $result = $this->processEdit($data, 'VosaCase');
+        $this->processEdit($data, 'VosaCase');
 
         $this->redirect()->toRoute('licence_case_list', array('licence' => $data['licence']));
     }
@@ -521,4 +524,24 @@ class CaseController extends FormActionController
         return $formattedCategories;
     }
 
+    /**
+     * Extend and retrieve the required case variables
+     *
+     * @param int $caseId
+     * @param array $variables
+     * @return array
+     */
+    public function getCaseVariables($caseId, $variables = array())
+    {
+        $case = $this->getCase($caseId);
+
+        $defaults = array(
+            'case' => $case,
+            'tabs' => $this->getTabInformationArray(),
+            'details' => $this->getCaseDetailsArray($case),
+            'summary' => $this->getCaseSummaryArray($case)
+        );
+
+        return array_merge($defaults, $variables);
+    }
 }

@@ -31,7 +31,7 @@ return array(
                         'action' => 'operator'
                     )
                 ),
-                'may_terminate' => false,
+                'may_terminate' => true,
                 'child_routes' => array(
                     'operators-params' => array(
                         'type' => 'wildcard',
