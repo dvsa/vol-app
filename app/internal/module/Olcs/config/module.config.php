@@ -110,16 +110,6 @@ return array(
                     )
                 )
             ),
-            'submissions' => array(
-                'type' => 'literal',
-                'options' => array(
-                    'route' => '/submissions',
-                    'defaults' => array(
-                        'controller' => 'CaseController',
-                        'action' => 'submissions'
-                    )
-                )
-            ),
             'case_statement' => array(
                 'type' => 'segment',
                 'options' => array(
@@ -129,6 +119,19 @@ return array(
                     ),
                     'defaults' => array(
                         'controller' => 'CaseStatementController',
+                        'action' => 'index'
+                    )
+                )
+            ),
+            'case_convictions' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/case/:case/action/manage/convictions',
+                    'constraints' => array(
+                        'case' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'CaseConvictionController',
                         'action' => 'index'
                     )
                 )
@@ -151,7 +154,8 @@ return array(
             'IndexController' => 'Olcs\Controller\IndexController',
             'SearchController' => 'Olcs\Controller\SearchController',
             'CaseController' => 'Olcs\Controller\CaseController',
-            'CaseStatementController' => 'Olcs\Controller\CaseStatementController'
+            'CaseStatementController' => 'Olcs\Controller\CaseStatementController',
+            'CaseConvictionController' => 'Olcs\Controller\CaseConvictionController'
         )
     ),
     'view_manager' => array(
