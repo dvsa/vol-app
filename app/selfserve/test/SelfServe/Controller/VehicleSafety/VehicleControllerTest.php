@@ -49,7 +49,6 @@ class VehicleControllerTest extends AbstractHttpControllerTestCase
             ->method('params')
             ->will($this->returnValue($mockParams));
                 
-                
         $this->controller->expects($this->once())
             ->method('_getLicenceEntity')
             ->will($this->returnValue($mockLicenceArray));
@@ -99,8 +98,5 @@ class VehicleControllerTest extends AbstractHttpControllerTestCase
 
         $this->assertSame($mockView, $this->controller->addAction());
     }
-
-
-    
 
 }
