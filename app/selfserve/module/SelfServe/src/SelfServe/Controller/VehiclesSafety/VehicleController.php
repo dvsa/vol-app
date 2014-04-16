@@ -31,6 +31,7 @@ class VehicleController extends FormJourneyActionController{
      * @return \Zend\View\Model\ViewModel
      */
     public function addAction() {
+
         $applicationId = $this->params()->fromRoute('applicationId');
         $licence = $this->_getLicenceEntity();
         
@@ -59,11 +60,18 @@ class VehicleController extends FormJourneyActionController{
             $form->setData($formData);
         }
         
+        $view = $this->getView();
+
         // render the view
-        $view = new ViewModel(['form' => $form, 'goodsOrPsv' => $goodsOrPsv]);
+        $view->setVariables(['form' => $form, 'goodsOrPsv' => $goodsOrPsv]);
         $view->setTemplate('self-serve/vehicle-safety/add-vehicle');
         return $view;
 
+    }
+    
+    public function getView()
+    {
+        return new ViewModel();
     }
     
     /**
