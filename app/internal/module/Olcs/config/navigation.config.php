@@ -7,12 +7,16 @@ return array(
         array(
             'label' => 'Search',
             'route' => 'search',
-            'action' => 'index',
             'pages' => array(
                 array(
                     'label' => 'Operators',
-                    'route' => 'operators',
-                    'action' => 'operator'
+                    'route' => 'operators/operators-params',
+                    'pages' => array(
+                    array(
+                        'label' => 'Case list',
+                        'route' => 'licence_case_list/pagination',
+                        )
+                    )
                 )
             )
         )
