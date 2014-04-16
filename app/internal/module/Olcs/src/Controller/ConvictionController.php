@@ -33,14 +33,14 @@ class ConvictionController extends FormActionController
      */
     public function addAction()
     {
-        // Below is for setting route params for the breadcrumb
-        //$this->setBreadcrumb(array('operators/operators-params' => array('operatorName' => 'a')));
         
         $routeParams = $this->getParams(array(
             'case',
             'licence',
             'id'
             ));
+         // Below is for setting route params for the breadcrumb
+        $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $routeParams['licence'])));
         
         $data = array('vosaCase' => $routeParams['case']);
         $results = $this->makeRestCall('VosaCase', 'GET', array('id' => $routeParams['case']));
@@ -70,12 +70,13 @@ class ConvictionController extends FormActionController
     
     public function editAction() 
     {
-        //$this->setBreadcrumb(array('operators/operators-params' => array('operatorName' => 'a')));
         $routeParams = $this->getParams(array(
             'case', 
             'licence',  
             'id',
         ));
+        // Below is for setting route params for the breadcrumb
+        $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $routeParams['licence'])));
         
         $data = $this->makeRestCall('Conviction', 'GET', array('id' => $routeParams['id']));
         

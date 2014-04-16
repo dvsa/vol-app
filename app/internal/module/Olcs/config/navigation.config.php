@@ -13,8 +13,30 @@ return array(
                     'route' => 'operators/operators-params',
                     'pages' => array(
                         array(
-                            'label' => 'Add Conviction',
-                            'route' => 'conviction',
+                            'label' => 'Case list',
+                            'route' => 'licence_case_list/pagination',
+                            'pages' => array(
+                                array(
+                                    'label' => 'Add Case',
+                                    'route' => 'licence_case_action',
+                                    'action' => 'add'
+                                ),
+                                array(
+                                    'label' => 'Edit Case',
+                                    'route' => 'licence_case_action',
+                                    'action' => 'edit'
+                                ),
+                                array(
+                                    'label' => 'Add Conviction',
+                                    'route' => 'conviction',
+                                    'action' => 'add'
+                                ),
+                                array(
+                                    'label' => 'Edit Conviction',
+                                    'route' => 'conviction',
+                                    'action' => 'edit'
+                                )
+                            )
                         )
                     )
                 )

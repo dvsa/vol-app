@@ -158,22 +158,22 @@ class CaseController extends FormActionController
             'overview' => [
                 'key' => 'overview',
                 'label' => 'Overview',
-                'url' => $pm->get('url')->fromRoute(null, ['tab' => 'overview'], [], true),
+                'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'overview'], [], true),
             ],
             'convictions' => [
                 'key' => 'convictions',
                 'label' => 'Convictions',
-                'url' => $pm->get('url')->fromRoute(null, ['tab' => 'convictions'], [], true),
+                'url' => $pm->get('url')->fromRoute('case_convictions', ['tab' => 'convictions'], [], true),
             ],
             'prohibitions' => [
                 'key' => 'prohibitions',
                 'label' => 'Prohibitions',
-                'url' => $pm->get('url')->fromRoute(null, ['tab' => 'prohibitions'], [], true),
+                'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'prohibitions'], [], true),
             ],
             'statements' => [
                 'key' => 'statements',
                 'label' => 'Statements',
-                'url' => $pm->get('url')->fromRoute(null, ['tab' => 'statements'], [], true),
+                'url' => $pm->get('url')->fromRoute('case_statement', ['tab' => 'statements'], [], true),
             ]
         ];
 
@@ -335,6 +335,7 @@ class CaseController extends FormActionController
     public function addAction()
     {
         $licence = $this->params()->fromRoute('licence');
+        $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licence)));
 
         if (empty($licence)) {
             return $this->notFoundAction();
@@ -368,7 +369,8 @@ class CaseController extends FormActionController
     {
         $licence = $this->params()->fromRoute('licence');
         $case = $this->params()->fromRoute('case');
-
+        $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licence)));
+        
         $result = $this->makeRestCall('VosaCase', 'GET', array('id' => $case, 'licence' => $licence));
 
         if (empty($result)) {
