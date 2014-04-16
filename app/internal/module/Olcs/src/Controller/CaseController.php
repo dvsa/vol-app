@@ -335,6 +335,7 @@ class CaseController extends FormActionController
     public function addAction()
     {
         $licence = $this->params()->fromRoute('licence');
+        $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licence)));
 
         if (empty($licence)) {
             return $this->notFoundAction();
@@ -368,7 +369,8 @@ class CaseController extends FormActionController
     {
         $licence = $this->params()->fromRoute('licence');
         $case = $this->params()->fromRoute('case');
-
+        $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licence)));
+        
         $result = $this->makeRestCall('VosaCase', 'GET', array('id' => $case, 'licence' => $licence));
 
         if (empty($result)) {
