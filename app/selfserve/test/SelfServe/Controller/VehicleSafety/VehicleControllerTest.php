@@ -15,6 +15,7 @@ class VehicleControllerTest extends AbstractHttpControllerTestCase
         $this->controller = $this->getMock(
             '\SelfServe\Controller\VehiclesSafety\VehicleController',
             [
+                'getView',
                 'setCurrentStep',
                 'generateSectionForm',
                 'formPost',
@@ -50,9 +51,7 @@ class VehicleControllerTest extends AbstractHttpControllerTestCase
             'goodsOrPsv' => 'goods'
         ];
 
-        $formData = [
-            
-        ];
+        $formData = [];
         
         $mockParams = $this->getMock('\stdClass', ['fromRoute']);
         $mockParams->expects($this->once())
@@ -112,7 +111,7 @@ class VehicleControllerTest extends AbstractHttpControllerTestCase
             ->method('getView')
             ->will($this->returnValue($mockView));
 
-        $this->controller->addAction();
+        $this->assertSame($mockView, $this->controller->addAction());
     }
 
 
