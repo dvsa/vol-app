@@ -64,7 +64,7 @@ class OlcsConvictionControllerTest  extends AbstractHttpControllerTestCase
         
         $form->expects($this->once())
             ->method('setData')
-            ->with(array('case' => 54));
+            ->with(array('vosaCase' => 54));
         
         $this->controller->addAction();
     }
@@ -143,10 +143,8 @@ class OlcsConvictionControllerTest  extends AbstractHttpControllerTestCase
         
         $toRoute->expects($this->once())
             ->method('toRoute')
-            ->with('conviction', array(
-                'licence' => 7,
-                'case' =>  54,
-                'action' => 'add')
+            ->with('case_convictions', array(
+                'case' =>  54)
             );
         
         $this->controller->expects($this->once())
@@ -178,10 +176,8 @@ class OlcsConvictionControllerTest  extends AbstractHttpControllerTestCase
         
         $toRoute->expects($this->once())
             ->method('toRoute')
-            ->with('conviction', array(
-                'licence' => 7,
-                'case' =>  54,
-                'action' => 'add')
+            ->with('case_convictions', array(
+                'case' =>  54)
             );
         
         $this->controller->expects($this->once())
