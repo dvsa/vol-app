@@ -17,10 +17,6 @@ use Zend\View\Model\ViewModel;
  */
 class CaseStayController extends CaseController
 {
-    public function indexAction()
-    {
-        
-    }
     
     /**
      * Add a new stay for a case
@@ -52,14 +48,31 @@ class CaseStayController extends CaseController
         return $view;
     }
     
+    /**
+     * Loads the edit page
+     *
+     * @param array $data
+     * 
+     * @todo Once user auth is ready, check user allowed access
+     * @todo Check to make sure the stay ID is really related to the case ID
+     */
     public function editAction(){
-        $caseId = $this->fromRoute('case');
         $stayId = $this->fromRoute('stay');
 
         $result = $this->makeRestCall('Stay', 'GET', array('id' => $stayId));
+        
+        if (empty($result)) {
+            return $this->notFoundAction();
+        }
+        
         $result['fields'] = $result;
         
+        $caseId = $this->fromRoute('case');
         $case = $this->getCase($caseId);
+        
+        if (empty($case)) {
+            return $this->notFoundAction();
+        }
         
         $pageData = array_merge($result,$case);
         $pageData['pageHeading'] = 'Edit';
@@ -77,8 +90,11 @@ class CaseStayController extends CaseController
      * Process adding the stay
      *
      * @param array $data
+     * 
+     * @todo Once user auth is ready, check user allowed access
+     * @todo Implement redirect to main stay page once it is ready
      */
-    protected function processAddStay($data)
+    public function processAddStay($data)
     {
         $data['stayType'] = "1";
         $data['lastUpdatedBy'] = 6;
@@ -88,7 +104,7 @@ class CaseStayController extends CaseController
         $result = $this->processAdd($data, 'Stay');
         
         if (isset($result['id'])) {
-            $this->redirect()->toRoute('case_stay_action', array('action' => 'edit', 'case' => $data['case'], 'stay' => $result['id']));
+            //$this->redirect()->toRoute('case_stay_action', array('action' => 'edit', 'case' => $data['case'], 'stay' => $result['id']));
         }
     }
     
@@ -96,8 +112,11 @@ class CaseStayController extends CaseController
      * Process adding the stay
      *
      * @param array $data
+     * 
+     * @todo Once user auth is ready, check user allowed access
+     * @todo Implement redirect to main stay page once it is ready
      */
-    protected function processEditStay($data)
+    public function processEditStay($data)
     {
         $data['stayType'] = "1";
         $data['lastUpdatedBy'] = 8;
@@ -106,7 +125,7 @@ class CaseStayController extends CaseController
         $result = $this->processEdit($data, 'Stay');
         
         if (isset($result['id'])) {
-            $this->redirect()->toRoute('case_stay_action', array('action' => 'edit', 'case' => $data['case'], 'stay' => $result['id']));
+            //$this->redirect()->toRoute('case_stay_action', array('action' => 'edit', 'case' => $data['case'], 'stay' => $result['id']));
         }
     }
 }
