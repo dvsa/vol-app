@@ -29,20 +29,6 @@ class VehicleControllerTest extends AbstractHttpControllerTestCase
 
     }
     
-    /**
-     * Test access to main index action
-     *
-    public function testAddActionAccess()
-    { 
-        $this->dispatch('/selfserve/1/vehicle/add');
-        
-        $this->assertResponseStatusCode(200);
-        $this->assertModuleName('selfserve');
-        $this->assertControllerName('selfserve\vehiclessafety\vehicle');
-        $this->assertControllerClass('vehiclecontroller');
-        $this->assertMatchedRouteName('selfserve/vehicle-action/vehicle-add');   
-    }*/
-    
     public function testAddAction()
     {
         $applicationId = '1';
