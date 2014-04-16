@@ -22,7 +22,7 @@ class IndexController extends FormJourneyActionController
     public function indexAction() {
 
 
-        $results = $this->makeRestCall('LicenceOperatingCentre', 'GET', array('id' => 7));
+        $results = $this->makeRestCall('ApplicationOperatingCentre', 'GET', array('id' => 1));
 
         $settings = array(
             'sort' => 'address',
