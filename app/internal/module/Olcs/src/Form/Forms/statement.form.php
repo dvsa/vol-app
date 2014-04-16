@@ -13,62 +13,47 @@ return [
                     'label' => 'Statement Details'
                 ],
                 'elements' => [
-                    /*'licence_type' => [
-                        'type' => 'text',
-                        'label' => 'Licence type',
-                        'required' => false
-                    ],
-                    'licence_number' => [
-                        'type' => 'text',
-                        'label' => 'Licence number',
-                        'required' => false
-                    ],*/
-                    'statement_type' => [
+                    'statementType' => [
                         'type' => 'select',
                         'label' => 'Statement type',
                         'value_options' => 'statement_types',
                         'required' => true
                     ],
-                    /*'traffic_area' => [
-                        'type' => 'text',
-                        'label' => 'Traffic area',
-                        'required' => false
-                    ],*/
                     'vrm' => [
                         'type' => 'vrm'
                     ],
-                    'requestors_first_name' => [
+                    'requestorsFirstName' => [
                         'type' => 'text',
                         'filters' => '\Common\Form\Elements\InputFilters\TextRequired',
                         'label' => 'Requestors first name'
                     ],
-                    'requestors_family_name' => [
+                    'requestorsFamilyName' => [
                         'type' => 'text',
                         'filters' => '\Common\Form\Elements\InputFilters\TextRequired',
                         'label' => 'Requestors last name'
                     ],
-                    'requestors_body' => [
+                    'requestorsBody' => [
                         'type' => 'text',
                         'filters' => '\Common\Form\Elements\InputFilters\TextRequired',
                         'label' => 'Requestors body'
                     ],
-                    'date_stopped' => [
+                    'dateStopped' => [
                         'type' => 'dateSelect',
                         'label' => 'Date stopped',
                         'required' => true
                     ],
-                    'date_requested' => [
+                    'dateRequested' => [
                         'type' => 'dateSelect',
                         'label' => 'Date requested',
                         'required' => true
                     ],
-                    'request_mode' => [
+                    'contactType' => [
                         'type' => 'select',
                         'label' => 'Request mode',
-                        'value_options' => 'request_modes',
+                        'value_options' => 'contact_type',
                         'required' => true
                     ],
-                    'authorised_decision' => [
+                    'authorisersDecision' => [
                         'type' => 'textarea',
                         'filters' => '\Common\Form\Elements\InputFilters\TextareaRequired',
                         'label' => 'Authorised decision',
@@ -78,7 +63,7 @@ return [
                 ]
             ],
             [
-                'name' => 'address',
+                'name' => 'requestorsAddress',
                 'options' => [
                     'label' => 'Requestors Address'
                 ],
@@ -98,12 +83,7 @@ return [
             'crsf' => [
                 'type' => 'crsf',
             ],
-            'saveAdd' => [
-                'type' => 'submit',
-                'label' => 'Save & add another',
-                'class' => 'action--primary large'
-            ],
-            'save' => [
+            'submit' => [
                 'type' => 'submit',
                 'label' => 'Save',
                 'class' => 'action--primary large'
@@ -111,4 +91,3 @@ return [
         ]
     ]
 ];
-
