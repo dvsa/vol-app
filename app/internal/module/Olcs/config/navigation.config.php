@@ -17,6 +17,11 @@ return array(
                             'route' => 'licence_case_list/pagination',
                             'pages' => array(
                                 array(
+                                    'label' => 'Case',
+                                    'route' => 'licence_case_action',
+                                    'action' => 'add'
+                                ),
+                                array(
                                     'label' => 'Add Case',
                                     'route' => 'licence_case_action',
                                     'action' => 'add'
