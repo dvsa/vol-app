@@ -54,7 +54,7 @@ class ConvictionController extends FormActionController
                     'processConviction'
         );
         $form->setData($data);
-        $form->setMessages(array('blah' => 'This is a test message'));
+        //$form->setMessages(array('blah' => 'This is a test message'));
         $view = new ViewModel([
             'form' => $form,
             'headScript' => ['/static/js/conviction.js'],
