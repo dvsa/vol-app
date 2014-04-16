@@ -97,7 +97,7 @@ class VehicleController extends FormJourneyActionController{
      * @param array $params
      * @return \Zend\Form
      */
-    protected function processAddGoodsVehicle($valid_data, \Zend\Form\Form $form, $params)
+    public function processAddGoodsVehicle($valid_data, \Zend\Form\Form $form, $params)
     {
         $applicationId = $this->params()->fromRoute('applicationId');
         $licence = $this->_getLicenceEntity();
