@@ -42,7 +42,7 @@ class ConvictionController extends FormActionController
             'id'
             ));
         
-        $data = array('case' => $routeParams['case']);
+        $data = array('vosaCase' => $routeParams['case']);
         $results = $this->makeRestCall('VosaCase', 'GET', array('id' => $routeParams['case']));
         
         if (empty($routeParams['case']) || empty($routeParams['licence']) || empty($results)) {
@@ -109,10 +109,11 @@ class ConvictionController extends FormActionController
     public function processConviction($data) 
     {
         $data = array_merge($data, $data['defendant-details'], $data['offence']);
-        //$data['cases'] = array($data['case']);
-        unset($data['defendant-details'], $data['offence'], $data['case'], $data['save'], $data['cancel'], $data['conviction'], $data['conviction-operator']);
+        unset($data['defendant-details'], $data['offence'], $data['save'], $data['cancel'], $data['conviction'], $data['conviction-operator']);
         $routeParams = $this->getParams(array('action', 'licence', 'case'));
+        
         if (strtolower($routeParams['action']) == 'edit') {
+            unset($data['vosaCase']);
             $result = $this->processEdit($data, 'Conviction');
         } else {
             $result = $this->processAdd($data, 'Conviction');

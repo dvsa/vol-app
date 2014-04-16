@@ -106,7 +106,7 @@ return [
             ]
         ],
         'elements' => [
-            'case' => [
+            'vosaCase' => [
                 'type' => 'hidden'
             ],
             'id' => [
