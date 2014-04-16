@@ -35,7 +35,7 @@ class IndexController extends FormJourneyActionController
      */
     public function generateStepFormAction() {
        
-        $licenceId = $this->params()->fromRoute('licenceId');
+        $applicationId = $this->params()->fromRoute('applicationId');
         $step = $this->params()->fromRoute('step');
         $this->setCurrentStep($step);
         
@@ -57,15 +57,14 @@ class IndexController extends FormJourneyActionController
         {
             case 'lookup_company':
                 $form->setValidationGroup([$step => ['company_number']]);
-                $form = $this->formPost($form, 'processLookupCompany',['licenceId' => $licenceId]);
+                $form = $this->formPost($form, 'processLookupCompany',['applicationId' => $applicationId]);
                 break;
             case 'add_trading_name':
                 $form->setValidationGroup([$step => ['trading_names']]);
-                $form = $this->formPost($form, 'processAddTradingName',['licenceId' => $licenceId]);
+                $form = $this->formPost($form, 'processAddTradingName',['applicationId' => $applicationId]);
                 break;
             default:
-               
-                $form = $this->formPost($form, $this->getStepProcessMethod($this->getCurrentStep()), ['licenceId' => $licenceId]);
+                $form = $this->formPost($form, $this->getStepProcessMethod($this->getCurrentStep()), ['applicationId' => $applicationId]);
                 break;
         }
         
@@ -116,9 +115,11 @@ class IndexController extends FormJourneyActionController
      */
     public function processBusinessType($valid_data, $form, $params)
     {
-        $licenceId = $params['licenceId'];
+        $licence = $this->_getLicenceEntity();
+        $applicationId = $this->params()->fromRoute('applicationId');
+
         $data = array(
-        	'id' => $licenceId,
+            'id' => $licence['id'],
             'organisationType' => $valid_data['business-type']['business-type'],
             'version' => $valid_data['version'],
         );
@@ -126,7 +127,7 @@ class IndexController extends FormJourneyActionController
         $result = $this->makeRestCall('LicenceOrganisation', 'PUT', $data);
         
         $next_step = $this->evaluateNextStep($form);
-        $this->redirect()->toRoute('selfserve/business-type', array('licenceId' => $licenceId, 'step' => $next_step));
+        $this->redirect()->toRoute('selfserve/business-type', array('applicationId' => $applicationId, 'step' => $next_step));
         
     }
     
@@ -161,9 +162,11 @@ class IndexController extends FormJourneyActionController
      */
     public function processRegisteredCompany($valid_data, $form, $params)
     {
-        $licenceId = $params['licenceId'];
+        $licence = $this->_getLicenceEntity();
+        $applicationId = $this->params()->fromRoute('applicationId');
+
         $data = array(
-                'id' => $licenceId,
+                'id' => $licence['id'],
                 'name' => $valid_data['registered-company']['company_name'],
                 'registeredCompanyNumber' => $valid_data['registered-company']['company_number'],
                 'sicCode' => $valid_data['registered-company']['type_of_business'],
@@ -173,7 +176,7 @@ class IndexController extends FormJourneyActionController
         $result = $this->makeRestCall('LicenceOrganisation', 'PUT', $data);
     
         $next_step = $this->evaluateNextStep($form);
-        $this->redirect()->toRoute('selfserve/business-type', array('licenceId' => $licenceId, 'step' => $next_step));
+        $this->redirect()->toRoute('selfserve/business-type', array('applicationId' => $applicationId, 'step' => $next_step));
     
     }
     
@@ -205,17 +208,19 @@ class IndexController extends FormJourneyActionController
      */
     public function processSoleTrader($valid_data, $form, $params)
     {
-        $licenceId = $params['licenceId'];
+        $licence = $this->_getLicenceEntity();
+        $applicationId = $this->params()->fromRoute('applicationId');
+
         $data = array(
-                'id' => $licenceId,
-                'sicCode' => $valid_data['sole-trader'][0],
+                'id' => $licence['id'],
+                'sicCode' => $valid_data['sole-trader']['type_of_business'],
                 'version' => $valid_data['version'],
         );
-         
+
         $result = $this->makeRestCall('LicenceOrganisation', 'PUT', $data);
     
         $next_step = $this->evaluateNextStep($form);
-        $this->redirect()->toRoute('selfserve/business-type', array('licenceId' => $licenceId, 'step' => $next_step));
+        $this->redirect()->toRoute('selfserve/business-type', array('applicationId' => $applicationId, 'step' => $next_step));
     
     }
     
@@ -249,18 +254,20 @@ class IndexController extends FormJourneyActionController
      */
     public function processPartnership($valid_data, $form, $params)
     {
-        $licenceId = $params['licenceId'];
+        $licence = $this->_getLicenceEntity();
+        $applicationId = $this->params()->fromRoute('applicationId');
+
         $data = array(
-                'id' => $licenceId,
+                'id' => $licence['id'],
                 'name' => $valid_data['partnership']['company_name'],
-                'sicCode' => $valid_data['partnership'][0],
+                'sicCode' => $valid_data['partnership']['type_of_business'],
                 'version' => $valid_data['version'],
         );
          
         $result = $this->makeRestCall('LicenceOrganisation', 'PUT', $data);
     
         $next_step = $this->evaluateNextStep($form);
-        $this->redirect()->toRoute('selfserve/business-type', array('licenceId' => $licenceId, 'step' => $next_step));
+        $this->redirect()->toRoute('selfserve/business-type', array('applicationId' => $applicationId, 'step' => $next_step));
     
     }
     
@@ -293,9 +300,11 @@ class IndexController extends FormJourneyActionController
      */
     public function processLlp($valid_data, $form, $params)
     {
-        $licenceId = $params['licenceId'];
+        $licence = $this->_getLicenceEntity();
+        $applicationId = $this->params()->fromRoute('applicationId');
+
         $data = array(
-                'id' => $licenceId,
+                'id' => $licence['id'],
                 'registeredCompanyNumber' => $valid_data['llp']['company_number'],
                 'version' => $valid_data['version'],
         );
@@ -303,7 +312,7 @@ class IndexController extends FormJourneyActionController
         $result = $this->makeRestCall('LicenceOrganisation', 'PUT', $data);
     
         $next_step = $this->evaluateNextStep($form);
-        $this->redirect()->toRoute('selfserve/business-type', array('licenceId' => $licenceId, 'step' => $next_step));
+        $this->redirect()->toRoute('selfserve/business-type', array('applicationId' => $applicationId, 'step' => $next_step));
     
     }
     
@@ -337,18 +346,20 @@ class IndexController extends FormJourneyActionController
      */
     public function processPublicAuthority($valid_data, $form, $params)
     {
-        $licenceId = $params['licenceId'];
+        $licence = $this->_getLicenceEntity();
+        $applicationId = $this->params()->fromRoute('applicationId');
+
         $data = array(
-                'id' => $licenceId,
+                'id' => $licence['id'],
                 'name' => $valid_data['public-authority']['company_name'],
-                'sicCode' => $valid_data['public-authority'][0],
+                'sicCode' => $valid_data['public-authority']['type_of_business'],
                 'version' => $valid_data['version'],
         );
          
         $result = $this->makeRestCall('LicenceOrganisation', 'PUT', $data);
     
         $next_step = $this->evaluateNextStep($form);
-        $this->redirect()->toRoute('selfserve/business-type', array('licenceId' => $licenceId, 'step' => $next_step));
+        $this->redirect()->toRoute('selfserve/business-type', array('applicationId' => $applicationId, 'step' => $next_step));
     
     }
     
@@ -392,15 +403,15 @@ class IndexController extends FormJourneyActionController
     
     
     /**
-     * Get organisation entity based on licenceId (from route param)
+     * Get organisation entity based on licenceId 
      * 
      * @return array
      */
     private function _getOrganisationEntity()
     {
-        $licenceId = (int) $this->params()->fromRoute('licenceId');
-        $result = $this->makeRestCall('LicenceOrganisation', 'GET', array('id' => $licenceId));
-        //\Zend\Debug\Debug::dump($result);exit; 
+        $licence = $this->_getLicenceEntity();
+
+        $result = $this->makeRestCall('LicenceOrganisation', 'GET', array('id' => $licence['id']));
         return $result;
     }
 

@@ -4,7 +4,7 @@ return [
     'licence-type' => array(
         'type' => 'segment',
         'options' => array(
-            'route' => '/:licenceId/licence-type/:step',
+            'route' => '/:applicationId/licence-type/:step',
             'defaults' => array(
                 'controller' => 'Selfserve\LicenceType\Index',
                 'action' => 'generateStepForm'
@@ -14,7 +14,7 @@ return [
     'licence-type-complete' => array(
         'type' => 'segment',
         'options' => array(
-            'route' => '/:licenceId/licence-type/complete',
+            'route' => '/:applicationId/licence-type/complete',
             'defaults' => array(
                 'controller' => 'Selfserve\LicenceType\Index',
                 'action' => 'complete'
