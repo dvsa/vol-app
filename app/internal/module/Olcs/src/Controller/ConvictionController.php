@@ -34,7 +34,7 @@ class ConvictionController extends FormActionController
     public function addAction()
     {
         // Below is for setting route params for the breadcrumb
-        $this->setBreadcrumb(array('operators/operators-params' => array('operatorName' => 'a')));
+        //$this->setBreadcrumb(array('operators/operators-params' => array('operatorName' => 'a')));
         
         $routeParams = $this->getParams(array(
             'case',
@@ -70,14 +70,19 @@ class ConvictionController extends FormActionController
     
     public function editAction() 
     {
+        //$this->setBreadcrumb(array('operators/operators-params' => array('operatorName' => 'a')));
         $routeParams = $this->getParams(array(
             'case', 
             'licence',  
             'id',
-            'change'
         ));
         
         $data = $this->makeRestCall('Conviction', 'GET', array('id' => $routeParams['id']));
+        
+        if (empty($routeParams['case']) || empty($routeParams['licence']) || empty($data)) {
+             return $this->getResponse()->setStatusCode(404);
+        }
+        
         $data['id'] = $routeParams['id'];
         $data['defendant-details'] = $data;
         $data['offence'] = $data;
@@ -101,14 +106,12 @@ class ConvictionController extends FormActionController
         return $view;
     }
     
-    protected function processConviction($data, $action) 
+    public function processConviction($data) 
     {
         $data = array_merge($data, $data['defendant-details'], $data['offence']);
         //$data['cases'] = array($data['case']);
         unset($data['defendant-details'], $data['offence'], $data['case'], $data['save'], $data['cancel'], $data['conviction'], $data['conviction-operator']);
         $routeParams = $this->getParams(array('action', 'licence', 'case'));
-//print_r($data);
-//exit;
         if (strtolower($routeParams['action']) == 'edit') {
             $result = $this->processEdit($data, 'Conviction');
         } else {

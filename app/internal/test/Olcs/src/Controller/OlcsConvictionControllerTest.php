@@ -24,37 +24,26 @@ class OlcsConvictionControllerTest  extends AbstractHttpControllerTestCase
                 'getServiceLocator',
                 'setBreadcrumb',
                 'generateFormWithData',
+                'generateForm',
                 'getPluginManager',
                 'redirect',
                 'params',
                 'getParams',
                 'makeRestCall',
-                'url'
+                'setData',
+                'url',
+                'processEdit',
+                'processAdd'
             )
         );
-        //$this->serviceLocator = $this->getMock('\stdClass', array('get'));
-        //$this->pluginManager = $this->getMock('\stdClass', array('get'));
-        //$this->url = $this->getMock('\stdClass', array('fromRoute'));
         parent::setUp();
     }
     
-    /*private function setServiceLocator($params, $returnVal) 
+    public function testAddAction() 
     {
-        $this->controller->expects($this->once())
-            ->method('getServiceLocator')
-            ->will($this->returnValue($this->serviceLocator));
-        
-        $this->serviceLocator->expects($this->once())
-            ->method('get')
-            ->with($params)
-            ->will($this->returnValue($returnVal));
-    }*/
-    
-    public function testaddAction() 
-    {
-        $this->controller->expects($this->once())
+        /*$this->controller->expects($this->once())
             ->method('setBreadcrumb')
-            ->with(array('operators/operators-params' => array('operatorName' => 'a')));
+            ->with(array('operators/operators-params' => array('operatorName' => 'a')));*/
         
         $this->controller->expects($this->once())
             ->method('getParams')
@@ -63,91 +52,142 @@ class OlcsConvictionControllerTest  extends AbstractHttpControllerTestCase
         
         $this->controller->expects($this->once())
             ->method('makeRestCall')
-            ->with('OperatorSearch', 'GET', $data)
-            ->will($this->returnValue(array()));
+            ->with('VosaCase', 'GET', array('id' => 54))
+            ->will($this->returnValue(array('id' => 54)));
         
-        /*$this->controller->expects($this->once())
-            ->method('generateFormWithData')
-            ->with('search', 'processSearch')
-            ->will($this->returnValue('zendForm'));
+        $form = $this->getMock('\stdClass', array('setData'));
         
-        $this->setServiceLocator('navigation', 'navigation');*/
+        $this->controller->expects($this->once())
+            ->method('generateForm')
+            ->with('conviction', 'processConviction')
+            ->will($this->returnValue($form));
+        
+        $form->expects($this->once())
+            ->method('setData')
+            ->with(array('case' => 54));
         
         $this->controller->addAction();
     }
     
-     /*public function testProcessSearchAction() 
+    public function testAddFailAction() 
     {
-        $data = array(
-            'search' => [
-                'licenceNumber' => '',
-                'operatorName' => 'a',
-                'postcode' => '',
-                'firstName' => 'ken',
-                'lastName' => '',
-                'transportManagerId' => ''
-            ],
-            'advanced' => []
-        );
-        
-        $redirect = $this->getMock('\stdClass', array('toUrl'));
-        
         $this->controller->expects($this->once())
-             ->method('url')
-             ->will($this->returnValue($this->url));
-        
-        $this->url->expects($this->once())
-            ->method('fromRoute')
-            ->with('operators/operators-params', array ( 'operatorName' => 'a', 'firstName' => 'ken'))
-            ->will($this->returnValue('/search/operators'));
-        
-        $this->controller->expects($this->once())
-             ->method('redirect')
-             ->will($this->returnValue($redirect));
-        
-        $redirect->expects($this->once())
-            ->method('toUrl')
-            ->with('/search/operators');
-
-        $this->controller->processSearch($data);
-    }
-    
-    public function testOperatorAction() 
-    {
-        $data = array ('controller' => 'SearchController',
-            'action' => 'operator',
-            'page' => 1,
-            'limit' => 10,
-            'operatorName' => 'a'
-        );
-        $this->url->expects($this->once())
-            ->method('fromRoute')
-            ->will($this->returnValue($data));
-        
-        $this->controller->expects($this->once())
-             ->method('url')
-             ->will($this->returnValue('/search/operators'));
-        
-        $this->controller->expects($this->once())
-             ->method('params')
-             ->will($this->returnValue($this->url));
+            ->method('getParams')
+            ->with(array('case', 'licence', 'id'))
+            ->will($this->returnValue(Array ( 'licence' => 7, 'case' => 54 )));
         
         $this->controller->expects($this->once())
             ->method('makeRestCall')
-            ->with('OperatorSearch', 'GET', $data)
-            ->will($this->returnValue(array()));
+            ->with('VosaCase', 'GET', array('id' => 54))
+            ->will($this->returnValue(''));
         
-        $tableBuilder = $this->getMock('\stdClass', array('buildTable'));
-        
-        $data['url'] = '/search/operators';
-        $tableBuilder->expects($this->once())
-            ->method('buildTable')
-            ->with('operator', array(), $data)
-            ->will($this->returnValue('table'));
-        
-        $this->setServiceLocator('Table', $tableBuilder);
-        
-        $this->controller->operatorAction();
-    }*/
+        $this->controller->addAction();
+    }
     
+    public function testEditAction() 
+    {
+        $this->controller->expects($this->once())
+            ->method('getParams')
+            ->with(array('case', 'licence', 'id'))
+            ->will($this->returnValue(Array ( 'licence' => 7, 'case' => 54, 'id' => 33 )));
+        
+        $this->controller->expects($this->once())
+            ->method('makeRestCall')
+            ->with('Conviction', 'GET', array('id' => 33))
+            ->will($this->returnValue(array('id' => 33)));
+        
+        $form = $this->getMock('\stdClass', array('setData'));
+        
+        $this->controller->expects($this->once())
+            ->method('generateFormWithData')
+            ->with('conviction', 'processConviction')
+            ->will($this->returnValue($form));
+        
+        $this->controller->editAction();
+    }
+    
+    public function testEditFailAction() 
+    {
+        $this->controller->expects($this->once())
+            ->method('getParams')
+            ->with(array('case', 'licence', 'id'))
+            ->will($this->returnValue(Array ( 'licence' => 7, 'case' => 54, 'id' => 33 )));
+        
+        $this->controller->expects($this->once())
+            ->method('makeRestCall')
+            ->with('Conviction', 'GET', array('id' => 33))
+            ->will($this->returnValue(''));
+        
+        $this->controller->editAction();
+    }
+    
+    public function testProcessEditAction() 
+    {
+        $data = array(
+            'id' => 33,
+            'defendant-details' => array(),
+            'offence' => array()
+            );
+        
+        $this->controller->expects($this->once())
+            ->method('getParams')
+            ->with(array('action', 'licence', 'case'))
+            ->will($this->returnValue(Array ( 'licence' => 7, 'case' => 54, 'action' => 'edit' )));
+        
+        $this->controller->expects($this->once())
+            ->method('processEdit')
+            ->with(array('id' => 33), 'Conviction')
+            ->will($this->returnValue(array('id' => 33)));
+        
+        $toRoute = $this->getMock('\stdClass', array('toRoute'));
+        
+        $toRoute->expects($this->once())
+            ->method('toRoute')
+            ->with('conviction', array(
+                'licence' => 7,
+                'case' =>  54,
+                'action' => 'add')
+            );
+        
+        $this->controller->expects($this->once())
+            ->method('redirect')
+            ->will($this->returnValue($toRoute));
+        
+        $this->controller->processConviction($data);
+    }
+    
+    public function testProcessAddAction() 
+    {
+        $data = array(
+            'id' => 33,
+            'defendant-details' => array(),
+            'offence' => array()
+            );
+        
+        $this->controller->expects($this->once())
+            ->method('getParams')
+            ->with(array('action', 'licence', 'case'))
+            ->will($this->returnValue(Array ( 'licence' => 7, 'case' => 54, 'action' => 'add' )));
+        
+        $this->controller->expects($this->once())
+            ->method('processAdd')
+            ->with(array('id' => 33), 'Conviction')
+            ->will($this->returnValue(array('id' => 33)));
+        
+        $toRoute = $this->getMock('\stdClass', array('toRoute'));
+        
+        $toRoute->expects($this->once())
+            ->method('toRoute')
+            ->with('conviction', array(
+                'licence' => 7,
+                'case' =>  54,
+                'action' => 'add')
+            );
+        
+        $this->controller->expects($this->once())
+            ->method('redirect')
+            ->will($this->returnValue($toRoute));
+        
+        $this->controller->processConviction($data);
+    }
 }
