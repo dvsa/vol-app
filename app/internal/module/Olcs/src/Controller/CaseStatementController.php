@@ -15,34 +15,24 @@ namespace Olcs\Controller;
  */
 class CaseStatementController extends CaseController
 {
+
+    /**
+     * Show a table of statements for the given case
+     *
+     * @return object
+     */
     public function indexAction()
     {
-        $view = $this->getView();
-        $tabs = $this->getTabInformationArray();
-        $action = 'statements';
         $caseId = $this->fromRoute('case');
-
-        $case = $this->getCase($caseId);
-
-        $summary = $this->getCaseSummaryArray($case);
-        $details = $this->getCaseDetailsArray($case);
 
         $results = $this->makeRestCall('Statement', 'GET', array('caseId' => $caseId));
 
-        $data['url'] = $this->getPluginManager()->get('url');
+        $variables = array('tab' => 'statements', 'table' => $this->buildTable('statement', $results));
 
-        $table = $this->getServiceLocator()->get('Table')->buildTable('statement', $results, $data);
-
-        $view->setVariables([
-            'case' => $case,
-            'tabs' => $tabs,
-            'tab' => $action,
-            'summary' => $summary,
-            'details' => $details,
-            'table' => $table
-        ]);
+        $view = $this->getView($this->getCaseVariables($caseId, $variables));
 
         $view->setTemplate('case/manage');
+
         return $view;
     }
 }
