@@ -22,7 +22,7 @@ return [
                     'vrm' => [
                         'type' => 'vrm'
                     ],
-                    'requestorsFirstName' => [
+                    'requestorsForename' => [
                         'type' => 'text',
                         'filters' => '\Common\Form\Elements\InputFilters\TextRequired',
                         'label' => 'Requestors first name'

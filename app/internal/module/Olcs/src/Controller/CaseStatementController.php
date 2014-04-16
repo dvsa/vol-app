@@ -72,17 +72,30 @@ class CaseStatementController extends CaseController
      */
     public function editAction()
     {
-        $caseId = $this->fromRoute('case');
-
         $statementId = $this->fromRoute('statement');
+
+        $details = $this->makeRestCall('Statement', 'GET', array('id' => $statementId));
+
+        if (empty($details)) {
+            return $this->notFoundAction();
+        }
+
+        $data = $this->formatDataForEditForm($details);
+
+        $address = array();
+
+        if (isset($details['requestorsAddressId']) && !empty($details['requestorsAddressId'])) {
+            $address = $this->makeRestCall('Address', 'GET', array('id' => $details['requestorsAddressId']));
+        }
+
+        $data['requestorsAddress'] = $address;
+
+        $data['requestorsAddress']['country'] = 'country.' . $data['requestorsAddress']['country'];
 
         $form = $this->generateFormWithData(
             'statement',
             'processEditStatement',
-            array(
-                'case' => $caseId,
-                'id' => $statementId
-            )
+            $data
         );
 
         $view = $this->getView(
@@ -101,6 +114,43 @@ class CaseStatementController extends CaseController
     }
 
     /**
+     * Format the data for the edit form
+     *
+     * @param array $data
+     * @return array
+     */
+    private function formatDataForEditForm($data)
+    {
+        $data['details'] = $data;
+
+        $data['details']['statementType'] = 'statement_type.' . $data['details']['statementType'];
+        $data['details']['contactType'] = 'contact_type.' . $data['details']['contactType'];
+
+        return $data;
+    }
+
+    /**
+     * Delete action
+     */
+    public function deleteAction()
+    {
+        $caseId = $this->fromRoute('case');
+
+        $statementId = $this->fromRoute('statement');
+
+        // Check that the statement belongs to the case before deleting
+        $results = $this->makeRestCall('Statement', 'GET', array('id' => $statementId));
+
+        if (isset($results['case']) && $results['case'] == $caseId) {
+
+            $this->makeRestCall('Statement', 'DELETE', array('id' => $statementId));
+            return $this->redirect()->toRoute('case_statement', array('case' => $caseId));
+        }
+
+        return $this->notFoundAction();
+    }
+
+    /**
      * Process the add post
      *
      * @param array $data
@@ -109,11 +159,9 @@ class CaseStatementController extends CaseController
     {
         $data = $this->processDataBeforePersist($data);
 
-        $results = $this->processAdd($data, 'Statement');
+        $this->processAdd($data, 'Statement');
 
-        print '<pre>';
-        print_r($results);
-        print '</pre>';
+        $this->redirect()->toRoute('case_statement', array('case' => $data['case']));
     }
 
     /**
@@ -125,11 +173,9 @@ class CaseStatementController extends CaseController
     {
         $data = $this->processDataBeforePersist($data);
 
-        $results = $this->processEdit($data, 'Statement');
+        $this->processEdit($data, 'Statement');
 
-        print '<pre>';
-        print_r($results);
-        print '</pre>';
+        $this->redirect()->toRoute('case_statement', array('case' => $data['case']));
     }
 
     /**
