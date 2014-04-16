@@ -96,7 +96,7 @@ class IndexController extends FormJourneyActionController{
     public function getOperatorLocationFormData()
     {   
     	$entity = $this->_getLicenceEntity();
-    	if (is_null($entity['niFlag']))
+    	if (empty($entity['niFlag']))
     	    return array('version' => $entity['version']);
     	
         return array(
