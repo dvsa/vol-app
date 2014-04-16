@@ -3,13 +3,13 @@
 return array(
     'router' => array(
         'routes' => array(
-            'olcsHome' => array(
+            'dashboard' => array(
                 'type' => 'Literal',
                 'options' => array(
                     'route' => '/',
                     'defaults' => array(
                         'controller' => 'IndexController',
-                        'action'     => 'home',
+                        'action'     => 'index',
                     )
                 )
             ),
@@ -110,6 +110,29 @@ return array(
                     )
                 )
             ),
+            'submissions' => array(
+                'type' => 'literal',
+                'options' => array(
+                    'route' => '/submissions',
+                    'defaults' => array(
+                        'controller' => 'CaseController',
+                        'action' => 'submissions'
+                    )
+                )
+            ),
+            'case_statement' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/case/:case/action/manage/statements',
+                    'constraints' => array(
+                        'case' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'CaseStatementController',
+                        'action' => 'index'
+                    )
+                )
+            ),
             'conviction' => array(
                 'type' => 'segment',
                 'options' => array(
@@ -127,7 +150,8 @@ return array(
             'IndexController' => 'Olcs\Controller\IndexController',
             'SearchController' => 'Olcs\Controller\SearchController',
             'CaseController' => 'Olcs\Controller\CaseController',
-            'ConvictionController' => 'Olcs\Controller\ConvictionController'
+            'ConvictionController' => 'Olcs\Controller\ConvictionController',
+            'CaseStatementController' => 'Olcs\Controller\CaseStatementController'
         )
     ),
     'view_manager' => array(

@@ -2,7 +2,7 @@
 
 return array(
     'label' => 'Home',
-    'route' => 'olcsHome',
+    'route' => 'dashboard',
     'pages' => array(
         array(
             'label' => 'Search',
@@ -17,7 +17,7 @@ return array(
                             'route' => 'conviction',
                         )
                     )
-                ),
+                )
             )
         )
     )

@@ -20,9 +20,7 @@ class CaseController extends FormActionController
 {
 
     /**
-     * Here we are making use of the notFoundAction to intercept the
-     * (non-PHPdoc)
-     * @see Zend\Mvc\Controller.AbstractActionController::notFoundAction()
+     * Manage action.
      */
     public function manageAction()
     {
@@ -44,12 +42,72 @@ class CaseController extends FormActionController
         $summary = $this->getCaseSummaryArray($case);
         $details = $this->getCaseDetailsArray($case);
 
+        // -- submissions
+
+        $submissionsResults = $this->getSubbmissions($caseId);
+        $submissionsData = [];
+        $submissionsData['url'] = $this->getPluginManager()->get('url');
+
+        $submissionsTable = $this->getServiceLocator()->get('Table')->buildTable(
+            'submission', $submissionsResults, $submissionsData);
+
+        // -- submissions
+
         $view->setVariables(
-            ['case' => $case, 'tabs' => $tabs, 'tab' => $action, 'summary' => $summary, 'details' => $details]
+            array(
+                'case' => $case,
+                'tabs' => $tabs,
+                'tab' => $action,
+                'summary' => $summary,
+                'details' => $details,
+                'submissions' => $submissionsTable
+            )
         );
 
         $view->setTemplate('case/manage');
         return $view;
+    }
+
+    public function getSubbmissions($case)
+    {
+        $results = $this->makeRestCall('Submission', 'GET', array('vosaCase' => $case));
+
+        foreach ($results['Results'] as $k => $result) {
+            //$actions = $this->makeRestCall('User', 'GET', array('submission' => $result['id']));
+            $actions = $this->makeRestCall('SubmissionAction', 'GET', array('submission' => $result['id']));
+            foreach ($actions['Results'] as $ak => $action) {
+
+                $results['Results'][$k]['actions'][$ak] = $action;
+                $results['Results'][$k]['urgent'] = $action['urgent'];
+
+                $user = $this->makeRestCall('User', 'GET', array('id' => $action['userRecipient']));
+                if (!empty($user)) {
+                    $results['Results'][$k]['actions'][$ak]['userRecipient'] = $user;
+                    $results['Results'][$k]['currentlyWith'] = $user['displayName'];
+                }
+
+                $sas = $this->makeRestCall(
+                    'SubmissionActionStatus', 'GET',
+                    array('id' => $action['submissionActionStatus'])
+                );
+                if (!empty($sas)) {
+                    $results['Results'][$k]['actions'][$ak]['submissionActionStatus'] = $sas;
+
+                    // set the submission status at the top level.
+                    $results['Results'][$k]['status'] = $sas['name'];
+
+                    // Get the submission action status type - this gives us the current submission type
+                    $sast = $this->makeRestCall('SubmissionActionStatusType', 'GET', array('id' => $sas['submissionActionStatusType']));
+
+                    $results['Results'][$k]['type'] = $sast['name'];
+                }
+
+                //We only need the data from the top action - which is the latest.
+                break;
+            }
+        }
+
+        return $results;
     }
 
     public function getView()
@@ -104,6 +162,11 @@ class CaseController extends FormActionController
                 'label' => 'Prohibitions',
                 'url' => $pm->get('url')->fromRoute(null, ['tab' => 'prohibitions'], [], true),
             ],
+            'statements' => [
+                'key' => 'statements',
+                'label' => 'Statements',
+                'url' => $pm->get('url')->fromRoute(null, ['tab' => 'statements'], [], true),
+            ]
         ];
 
         return $tabs;
@@ -154,8 +217,8 @@ class CaseController extends FormActionController
     {
         $pm = $this->getPluginManager();
 
-        $opentimeDate = date('d/m/Y', strtotime($case['openTime']['date']));
-        $licenceStartDate = date('d/m/Y', strtotime($case['licence']['startDate']['date']));
+        $opentimeDate = date('d/m/Y', strtotime($case['openTime']));
+        $licenceStartDate = date('d/m/Y', strtotime($case['licence']['startDate']));
 
         $details = [
 
@@ -224,8 +287,6 @@ class CaseController extends FormActionController
 
             $action = strtolower($action);
 
-            $url = '/case/' . $licence . '/' . $action;
-
             if ($action !== 'add') {
 
                 $id = $this->params()->fromPost('id');
@@ -234,14 +295,16 @@ class CaseController extends FormActionController
                     // TODO: Should add flash message here
                     die('Select an id');
                 } else {
-                    $this->redirect()->toUrl($url . '/' . $id);
+                    $this->redirect()->toRoute('licence_case_action', array('action' => $action, 'case' => $id, 'licence' => $licence));
                 }
 
             } else {
 
-                $this->redirect()->toUrl($url);
+                $this->redirect()->toRoute('licence_case_action', array('action' => $action, 'licence' => $licence));
             }
         }
+
+        $pageData = $this->getPageData($licence);
 
         $results = $this->makeRestCall('VosaCase', 'GET', array('licence' => $licence));
 
@@ -249,8 +312,8 @@ class CaseController extends FormActionController
 
         $table = $this->getServiceLocator()->get('Table')->buildTable('case', $results, $data);
 
-        $view = new ViewModel(['licence' => $licence, 'table' => $table]);
-        $view->setTemplate('case-list');
+        $view = new ViewModel(['licence' => $licence, 'table' => $table, 'data' => $pageData]);
+        $view->setTemplate('case/list');
         return $view;
     }
 
@@ -281,7 +344,9 @@ class CaseController extends FormActionController
             )
         );
 
-        $view = new ViewModel(['form' => $form]);
+        $pageData = $this->getPageData($licence);
+
+        $view = new ViewModel(['form' => $form, 'data' => $pageData]);
         $view->setTemplate('case/add');
         return $view;
     }
@@ -315,9 +380,27 @@ class CaseController extends FormActionController
             'case', 'processEditCase', $result
         );
 
-        $view = new ViewModel(['form' => $form]);
+        $pageData = $this->getPageData($licence);
+
+        $view = new ViewModel(['form' => $form, 'data' => $pageData]);
         $view->setTemplate('case/edit');
         return $view;
+    }
+
+    /**
+     * Get page data from licence id
+     *
+     * @param int $licence
+     */
+    private function getPageData($licence)
+    {
+        $licenceData = $this->makeRestCall('Licence', 'GET', array('id' => $licence));
+        $organisationData = $this->makeRestCall('Organisation', 'GET', array('id' => $licenceData['organisation']));
+
+        return array(
+            'organisation' => $organisationData['name'],
+            'licence' => $licenceData['licenceNumber']
+        );
     }
 
     public function deleteAction()
@@ -357,7 +440,7 @@ class CaseController extends FormActionController
         $result = $this->processAdd($data, 'VosaCase');
 
         if (isset($result['id'])) {
-            $this->redirect()->toUrl('/case/' . $data['licence']);
+            $this->redirect()->toRoute('licence_case_list', array('licence' => $data['licence']));
         }
     }
 
@@ -375,7 +458,7 @@ class CaseController extends FormActionController
 
         $result = $this->processEdit($data, 'VosaCase');
 
-        $this->redirect()->toUrl('/case/' . $data['licence']);
+        $this->redirect()->toRoute('licence_case_list', array('licence' => $data['licence']));
     }
 
     /**

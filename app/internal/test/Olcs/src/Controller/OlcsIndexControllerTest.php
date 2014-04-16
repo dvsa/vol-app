@@ -19,12 +19,12 @@ class OlcsIndexControllerTest  extends AbstractHttpControllerTestCase
         );
         parent::setUp();
     }
-    
-    public function testIndexAction() 
+
+    public function testIndexAction()
     {
-        $this->dispatch('/fieldset');
+        $this->dispatch('/');
         $this->assertResponseStatusCode(200);
         $this->assertControllerClass('IndexController');
-        $this->assertMatchedRouteName('fieldset');
+        $this->assertMatchedRouteName('dashboard');
     }
 }

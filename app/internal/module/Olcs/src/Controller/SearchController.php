@@ -36,10 +36,8 @@ class SearchController extends FormActionController
     {
         // Below is for setting route params for the breadcrumb
         $this->setBreadcrumb(array('search' => array()));
-
-        $form = $this->generateFormWithData(
-            'search', 'processSearch'
-        );
+        $navigation = $this->getServiceLocator()->get('navigation');
+        $form = $this->generateFormWithData('search', 'processSearch');
 
         $view = new ViewModel(['form' => $form]);
         $view->setTemplate('search/index');
@@ -51,10 +49,9 @@ class SearchController extends FormActionController
      *
      * @param array $data
      */
-    protected function processSearch($data)
+    public function processSearch($data)
     {
         $data = array_merge($data['search'], $data['advanced']);
-
         $personSearch = array(
             'firstName',
             'lastName',
@@ -72,20 +69,19 @@ class SearchController extends FormActionController
                 $searchType = 'person';
             }
         }
-
-        $url = $this->getPluginManager()->get('url')->fromRoute('operators/operators-params', $data);
+        $url = $this->url()->fromRoute('operators/operators-params', $data);
 
         $this->redirect()->toUrl($url);
     }
 
     /**
-     * Person search results
+     * Person search results: NOT IMPLEMENTED YET
      *
      * @todo Implement person search results
      *
      * @return ViewModel
      */
-    public function personAction()
+    /*public function personAction()
     {
         die('Person search is out of scope');
         $data = $this->params()->fromQuery();
@@ -95,7 +91,7 @@ class SearchController extends FormActionController
         $view = new ViewModel(['results' => $results]);
         $view->setTemplate('results');
         return $view;
-    }
+    }*/
 
     /**
      * Operator search results
@@ -105,11 +101,9 @@ class SearchController extends FormActionController
     public function operatorAction()
     {
         $data = $this->params()->fromRoute();
-
         $results = $this->makeRestCall('OperatorSearch', 'GET', $data);
 
-        $data['url'] = $this->getPluginManager()->get('url');
-
+        $data['url'] = $this->url();
         $table = $this->getServiceLocator()->get('Table')->buildTable('operator', $results, $data);
 
         $view = new ViewModel(['table' => $table]);
