@@ -16,7 +16,7 @@ namespace Olcs\Controller;
 class CaseStatementController extends CaseController
 {
     /**
-     * Show statements
+     * Show a table of statements for the given case
      *
      * @return object
      */
@@ -26,30 +26,14 @@ class CaseStatementController extends CaseController
 
         $this->checkForCrudAction('case_statement', array('case' => $caseId), 'statement');
 
-        $tabs = $this->getTabInformationArray();
-        $action = 'statements';
-
-        $case = $this->getCase($caseId);
-
-        $summary = $this->getCaseSummaryArray($case);
-        $details = $this->getCaseDetailsArray($case);
-
         $results = $this->makeRestCall('Statement', 'GET', array('caseId' => $caseId));
 
-        $data['url'] = $this->getPluginManager()->get('url');
+        $variables = array('tab' => 'statements', 'table' => $this->buildTable('statement', $results));
 
-        $table = $this->getServiceLocator()->get('Table')->buildTable('statement', $results, $data);
-
-        $view = $this->getView([
-            'case' => $case,
-            'tabs' => $tabs,
-            'tab' => $action,
-            'summary' => $summary,
-            'details' => $details,
-            'table' => $table
-        ]);
+        $view = $this->getView($this->getCaseVariables($caseId, $variables));
 
         $view->setTemplate('case/manage');
+
         return $view;
     }
 
@@ -66,13 +50,15 @@ class CaseStatementController extends CaseController
             'statement', 'processAddStatement', array('case' => $caseId)
         );
 
-        $view = $this->getView([
-            'params' => [
-                'pageTitle' => 'Add statement',
-                'pageSubTitle' => ''
-            ],
-            'form' => $form
-        ]);
+        $view = $this->getView(
+            [
+                'params' => [
+                    'pageTitle' => 'Add statement',
+                    'pageSubTitle' => ''
+                ],
+                'form' => $form
+            ]
+        );
 
         $view->setTemplate('form');
 
