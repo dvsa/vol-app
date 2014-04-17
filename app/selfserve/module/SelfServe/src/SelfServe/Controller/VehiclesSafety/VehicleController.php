@@ -29,7 +29,7 @@ class VehicleController extends FormJourneyActionController{
      * Generates the next step form depending on which step the user is on.
      * 
      * @return \Zend\View\Model\ViewModel
-     */
+     *
     public function addAction() {
 
         $applicationId = $this->params()->fromRoute('applicationId');
@@ -67,7 +67,7 @@ class VehicleController extends FormJourneyActionController{
         $view->setTemplate('self-serve/vehicle-safety/add-vehicle');
         return $view;
 
-    }
+    }*/
     
     public function getView()
     {
@@ -78,7 +78,7 @@ class VehicleController extends FormJourneyActionController{
      * Generates the edit form 
      * 
      * @return \Zend\View\Model\ViewModel
-     */
+     *
     public function editAction() {
         $applicationId = $this->params()->fromRoute('applicationId');
         $vehicleId = $this->params()->fromRoute('vehicleId');
@@ -87,7 +87,7 @@ class VehicleController extends FormJourneyActionController{
         echo 'edit vehicle';
         exit;
 
-    }
+    }*/
     
     /**
      * Process adding of goods vehicle form
@@ -97,7 +97,7 @@ class VehicleController extends FormJourneyActionController{
      * @param array $params
      * @return \Zend\Form
      */
-    public function processAddGoodsVehicle($valid_data, \Zend\Form\Form $form, $params)
+    public function processAddGoodsVehicleForm($valid_data, \Zend\Form\Form $form, $params)
     {
         $applicationId = $this->params()->fromRoute('applicationId');
         $licence = $this->_getLicenceEntity();
@@ -176,4 +176,72 @@ class VehicleController extends FormJourneyActionController{
 
     }
    
+    
+    public function addAction() 
+    {
+        $licence = $this->_getLicenceEntity();
+
+        $form = $this->generateForm(
+                'update-vehicle', 'processAddGoodsVehicleForm'
+        );
+         
+        $goodsOrPsv = $licence['goodsOrPsv'] == 'PSV' ? 'psv' : 'goods';
+        
+        $view = new ViewModel(['form' => $form, 'goodsOrPsv' => $goodsOrPsv]);
+        $view->setTemplate('self-serve/vehicle-safety/add-vehicle');
+        return $view;
+    }
+    
+    /**
+     * Method to edit a vehicle.
+     * 
+     * @return \Zend\View\Model\ViewModel
+     */
+    public function editAction()
+    {
+        $licence = $this->_getLicenceEntity();
+        $goodsOrPsv = $licence['goodsOrPsv'] == 'PSV' ? 'psv' : 'goods';
+
+        $vehicleId  = $this->params()->fromRoute('vehicleId');
+        $applicationId      = $this->params()->fromRoute('applicationId');
+        
+        $data = array(
+        	'id' => $vehicleId,
+        );
+        
+        //get operating centre enetity based on applicationId and operatingCentreId
+        $result = $this->makeRestCall('Vehicle', 'GET', $data);
+        if (empty($result)){
+            return $this->notFoundAction();
+        }
+
+        //hydrate data
+        $data = array(
+            'id' => $result['id'],
+            'version' => $result['version'],
+            'vrm' => $result['vrm'],
+            'plated_weight' => $result['platedWeight'],
+            'body_type' => $result['bodyType']
+        );
+        
+        // generate form with data
+        $form = $this->generateFormWithData(
+                'update-vehicle', 'processEditGoodsVehicleForm', $data
+        );
+        
+        $view = new ViewModel(['form' => $form, 'goodsOrPsv' => $goodsOrPsv]);
+        $view->setTemplate('self-serve/vehicle-safety/add-vehicle');
+        return $view;
+    }
+    
+    /**
+     * Persist data to database. After that, redirect to Operating centres page
+     *
+     * @param array $validData
+     * @return void
+     */
+    public function processEditGoodsVehicleForm($validData)
+    {
+
+    }
 }
