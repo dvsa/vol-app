@@ -33,29 +33,54 @@ class IndexController extends FormJourneyActionController{
      * @return \Zend\View\Model\ViewModel
      */
     public function indexAction() {
-        
+      
+        $licence = $this->_getLicenceEntity();
+        $vehicleTable = $this->generateVehicleTable($licence);
+
         // process any submit button pressed
         if ($this->getRequest()->isPost())
         {
             $action = $this->getRequest()->getPost('action');
-            $vehicleId = $this->getRequest()->getPost('id');
-            $applicationId = $this->params()->fromRoute('applicationId');
 
-            $this->redirect()->toRoute('selfserve/vehicle-action/vehicle-'.strtolower($action), 
-                    array(  'action' => $action, 
-                            'vehicleId' => $vehicleId, 
-                            'applicationId' => $applicationId
-                         )
-            );
+            switch($action)
+            { 
+                case 'Add':
+                    $this->redirectToVehicleAction($action);
+                    break;
+                case 'Edit':
+                    // todo validation
+                    $this->redirectToVehicleAction($action);
+                    break;
+                case 'Delete':
+                    // todo validation
+                    $this->redirectToVehicleAction($action);
+                    break;
+            }
+
         }
-        
-        $licence = $this->_getLicenceEntity();
-        $vehicleTable = $this->generateVehicleTable($licence);
         
         // render the view
         $view = new ViewModel(['vehicleTable' => $vehicleTable]);
         $view->setTemplate('self-serve/vehicle-safety/index');
         return $view;
+    }
+    
+    /**
+     * Method to redirect user depending on action
+     * 
+     * @param string $action
+     */
+    private function redirectToVehicleAction($action)
+    {
+        $applicationId = $this->params()->fromRoute('applicationId');
+        $vehicleId = $this->getRequest()->getPost('id'); 
+        
+        $this->redirect()->toRoute('selfserve/vehicle-safety/vehicle-action/vehicle-'.strtolower($action), 
+            array(  'action' => $action, 
+                    'vehicleId' => $vehicleId, 
+                    'applicationId' => $applicationId
+                 )
+            );
     }
     
     private function generateVehicleTable($licence)
