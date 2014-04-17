@@ -208,7 +208,7 @@ class IndexController extends FormJourneyActionController
         $licenceId = $params['licenceId'];
         $data = array(
                 'id' => $licenceId,
-                'sicCode' => $valid_data['sole-trader'][0],
+                'sicCode' => $valid_data['sole-trader']['type_of_business'],
                 'version' => $valid_data['version'],
         );
          
@@ -253,7 +253,7 @@ class IndexController extends FormJourneyActionController
         $data = array(
                 'id' => $licenceId,
                 'name' => $valid_data['partnership']['company_name'],
-                'sicCode' => $valid_data['partnership'][0],
+                'sicCode' => $valid_data['partnership']['type_of_business'],
                 'version' => $valid_data['version'],
         );
          
@@ -341,7 +341,7 @@ class IndexController extends FormJourneyActionController
         $data = array(
                 'id' => $licenceId,
                 'name' => $valid_data['public-authority']['company_name'],
-                'sicCode' => $valid_data['public-authority'][0],
+                'sicCode' => $valid_data['public-authority']['type_of_business'],
                 'version' => $valid_data['version'],
         );
          
