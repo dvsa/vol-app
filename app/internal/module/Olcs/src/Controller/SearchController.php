@@ -51,7 +51,7 @@ class SearchController extends FormActionController
      */
     public function processSearch($data)
     {
-        $data = array_merge($data['search'], $data['advanced']);
+        $data = array_merge($data['search'], $data['search-advanced']);
         $personSearch = array(
             'firstName',
             'lastName',

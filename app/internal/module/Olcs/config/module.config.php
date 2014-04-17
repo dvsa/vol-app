@@ -128,7 +128,8 @@ return array(
                 'options' => array(
                     'route' => '/case/:case/action/manage/convictions',
                     'constraints' => array(
-                        'case' => '[0-9]+'
+                        'case' => '[0-9]+',
+                        'statement' => '[0-9]+'
                     ),
                     'defaults' => array(
                         'controller' => 'CaseConvictionController',
@@ -136,16 +137,15 @@ return array(
                     )
                 )
             ),
-            'fieldset' => array(
-                'type' => 'literal',
+            'conviction' => array(
+                'type' => 'segment',
                 'options' => array(
-                    'route' => '/fieldset',
+                    'route' => '/licence/[:licence]/case/[:case]/conviction[/:action][/:id]',
                     'defaults' => array(
-                        'controller' => 'IndexController',
-                        'action' => 'fieldset'
+                        'controller' => 'ConvictionController',
                     )
                 )
-            ),
+            )
         )
     ),
     'controllers' => array(
@@ -154,6 +154,8 @@ return array(
             'IndexController' => 'Olcs\Controller\IndexController',
             'SearchController' => 'Olcs\Controller\SearchController',
             'CaseController' => 'Olcs\Controller\CaseController',
+            'ConvictionController' => 'Olcs\Controller\ConvictionController',
+            'CaseStatementController' => 'Olcs\Controller\CaseStatementController',
             'CaseStatementController' => 'Olcs\Controller\CaseStatementController',
             'CaseConvictionController' => 'Olcs\Controller\CaseConvictionController'
         )
