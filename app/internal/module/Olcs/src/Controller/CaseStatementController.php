@@ -123,6 +123,10 @@ class CaseStatementController extends CaseController
     {
         $data['details'] = $data;
 
+        foreach ($data['details'] as $key => $val) {
+            unset($data[$key]);
+        }
+
         $data['details']['statementType'] = 'statement_type.' . $data['details']['statementType'];
         $data['details']['contactType'] = 'contact_type.' . $data['details']['contactType'];
 
