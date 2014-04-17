@@ -24,6 +24,7 @@ class CaseController extends FormActionController
      */
     public function manageAction()
     {
+        $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => 7)));
         $view = $this->getView();
 
         $caseId = $this->fromRoute('case');
@@ -163,7 +164,7 @@ class CaseController extends FormActionController
             'convictions' => [
                 'key' => 'convictions',
                 'label' => 'Convictions',
-                'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'convictions'], [], true),
+                'url' => $pm->get('url')->fromRoute('case_convictions', ['tab' => 'convictions'], [], true),
             ],
             'prohibitions' => [
                 'key' => 'prohibitions',
@@ -173,7 +174,7 @@ class CaseController extends FormActionController
             'statements' => [
                 'key' => 'statements',
                 'label' => 'Statements',
-                'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'statements'], [], true),
+                'url' => $pm->get('url')->fromRoute('case_statement', ['tab' => 'statements'], [], true),
             ]
         ];
 

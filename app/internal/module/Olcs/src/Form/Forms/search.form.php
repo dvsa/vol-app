@@ -55,7 +55,7 @@ return [
                 ]
             ],
             [
-                'name' => 'advanced',
+                'name' => 'search-advanced',
                 'options' => [
                     'label' => 'Advanced Search',
                     'class' => 'extra-long'

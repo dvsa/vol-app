@@ -14,4 +14,8 @@ $array = (array)$this->vars();
 
 $array['case'] = $details;
 
-echo $this->render('case/page/' . $tab, $array);
+if (isset($table)) {
+    $array['table'] = $table;
+}
+
+echo $this->render('case/page/' .$tab, $array); ?>
