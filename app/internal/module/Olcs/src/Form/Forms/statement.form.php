@@ -38,12 +38,12 @@ return [
                         'label' => 'Requestor body'
                     ],
                     'dateStopped' => [
-                        'type' => 'dateSelect',
+                        'type' => 'dateSelectWithEmpty',
                         'label' => 'Date stopped',
                         'required' => true
                     ],
                     'dateRequested' => [
-                        'type' => 'dateSelect',
+                        'type' => 'dateSelectWithEmpty',
                         'label' => 'Date requested',
                         'required' => true
                     ],
