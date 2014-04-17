@@ -33,14 +33,16 @@ class ConvictionController extends FormActionController
      */
     public function addAction()
     {
-        
         $routeParams = $this->getParams(array(
             'case',
             'licence',
             'id'
             ));
          // Below is for setting route params for the breadcrumb
-        $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $routeParams['licence'])));
+        $this->setBreadcrumb(array(
+            'licence_case_list/pagination' => array('licence' => $routeParams['licence']),
+            'case_convictions' => array('case' => $routeParams['case'])
+        ));
         
         $data = array('vosaCase' => $routeParams['case']);
         $results = $this->makeRestCall('VosaCase', 'GET', array('id' => $routeParams['case']));
@@ -76,7 +78,10 @@ class ConvictionController extends FormActionController
             'id',
         ));
         // Below is for setting route params for the breadcrumb
-        $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $routeParams['licence'])));
+        $this->setBreadcrumb(array(
+            'licence_case_list/pagination' => array('licence' => $routeParams['licence']),
+            'case_convictions' => array('case' => $routeParams['case'])
+        ));
         
         $data = $this->makeRestCall('Conviction', 'GET', array('id' => $routeParams['id']));
         
@@ -120,10 +125,8 @@ class ConvictionController extends FormActionController
             $result = $this->processAdd($data, 'Conviction');
         }
         
-        return $this->redirect()->toRoute('conviction', array(
-            'licence' => $routeParams['licence'],
+        return $this->redirect()->toRoute('case_convictions', array(
             'case' =>  $routeParams['case'],
-            'action' => 'add'
         ));
     }
 

@@ -17,6 +17,24 @@ class CaseConvictionController extends CaseController
 {
     public function indexAction()
     {
+        $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => 7)));
+        if ($this->params()->fromPost('action')) {
+            switch (strtolower($this->params()->fromPost('action'))) {
+                case 'add':
+                        return $this->redirect()->toRoute('conviction', array('licence' => 7, 
+                            'case' => $this->fromRoute('case'), 
+                            'action' => 'add'));
+                    break;
+                case 'edit':
+                        return $this->redirect()->toRoute('conviction', array('licence' => 7, 
+                            'case' => $this->fromRoute('case'),
+                            'id' => $this->params()->fromPost('id'),
+                            'action' => 'edit'));
+                    break;
+                default:
+                    break;
+            }
+        }
         $view = $this->getView();
         $tabs = $this->getTabInformationArray();
         $action = 'convictions';

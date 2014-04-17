@@ -24,6 +24,7 @@ class CaseController extends FormActionController
      */
     public function manageAction()
     {
+        $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => 7)));
         $view = $this->getView();
 
         $caseId = $this->fromRoute('case');

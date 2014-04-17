@@ -17,6 +17,26 @@ return array(
                             'route' => 'licence_case_list/pagination',
                             'pages' => array(
                                 array(
+                                    'label' => 'Case Summary',
+                                    'route' => 'case_manage',
+                                ),
+                                array(
+                                    'label' => 'Case Convictions',
+                                    'route' => 'case_convictions',
+                                    'pages' => array(
+                                        array(
+                                        'label' => 'Add Conviction',
+                                        'route' => 'conviction',
+                                        'action' => 'add'
+                                        ),
+                                        array(
+                                            'label' => 'Edit Conviction',
+                                            'route' => 'conviction',
+                                            'action' => 'edit'
+                                        )
+                                    )
+                                ),
+                                array(
                                     'label' => 'Case',
                                     'route' => 'licence_case_action',
                                     'action' => 'add'
@@ -31,16 +51,7 @@ return array(
                                     'route' => 'licence_case_action',
                                     'action' => 'edit'
                                 ),
-                                array(
-                                    'label' => 'Add Conviction',
-                                    'route' => 'conviction',
-                                    'action' => 'add'
-                                ),
-                                array(
-                                    'label' => 'Edit Conviction',
-                                    'route' => 'conviction',
-                                    'action' => 'edit'
-                                )
+                                
                             )
                         )
                     )
