@@ -35,7 +35,7 @@ return [
                     'requestorsBody' => [
                         'type' => 'text',
                         'filters' => '\Common\Form\Elements\InputFilters\TextRequired',
-                        'label' => 'Requestors body'
+                        'label' => 'Requestor body'
                     ],
                     'dateStopped' => [
                         'type' => 'dateSelect',
