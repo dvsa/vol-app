@@ -64,6 +64,19 @@ return [
                         ),
                 ),
             ),
+            'vehicle-delete' => array(
+                    'type' => 'segment',
+                    'options' => array(
+                            'route' => '/:vehicleId/delete',
+                            'constraints' => array(
+                                    'vehicleId' => '[0-9]+'
+                            ),
+                            'defaults' => array(
+                                    'controller' => 'SelfServe\VehiclesSafety\Vehicle',
+                                    'action'    => 'delete'
+                            ),
+                    ),
+            ),
         ),
     ),
     

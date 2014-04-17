@@ -82,11 +82,36 @@ class VehicleController extends FormJourneyActionController{
     public function editAction() {
         $applicationId = $this->params()->fromRoute('applicationId');
         $vehicleId = $this->params()->fromRoute('vehicleId');
+        
 
         $licence = $this->_getLicenceEntity();
         echo 'edit vehicle';
         exit;
 
+    }
+    
+    /**
+     * Performs delete action
+     */
+    public function deleteAction()
+    {
+        $applicationId = $this->params()->fromRoute('applicationId');
+        $vehicleId = $this->params()->fromRoute('vehicleId');
+        $licence = $this->_getLicenceEntity();
+        
+        //delete conditions
+        $cond = array(
+            'vehicle' => $vehicleId, 
+            'licence' => $licence['id'],
+        );
+        $licenceVehicle = $this->makeRestCall('LicenceVehicle', 'GET', $cond);
+        
+        if ($licenceVehicle['Count'] == 0){
+            return $this->notFoundAction();
+        }
+        $licenceVehicle = $licenceVehicle['Results'][0];
+        $result = $this->makeRestCall('LicenceVehicle', 'DELETE', ['id' => $licenceVehicle['id']]);
+        return $this->redirect()->toRoute('selfserve/vehicles-safety', array('applicationId' => $applicationId));
     }
     
     /**

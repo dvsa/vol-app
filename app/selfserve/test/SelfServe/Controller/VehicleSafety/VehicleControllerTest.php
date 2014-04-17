@@ -22,11 +22,55 @@ class VehicleControllerTest extends AbstractHttpControllerTestCase
                 'getStepProcessMethod',
                 'getPersistedFormData',
                 'params',
-                '_getLicenceEntity'
+                '_getLicenceEntity',
+                'makeRestCall',
             ]
         );
         parent::setUp();
 
+    }
+    
+    public function testDeleteAction()
+    {
+        $applicationId = '1';
+        $vehicleId = '1';
+    
+        $mockParams[0] = $this->getMock('\stdClass', ['fromRoute']);
+        $mockParams[0]->expects($this->once())
+            ->method('fromRoute')
+            ->with($this->equalTo('applicationId'))
+            ->will($this->returnValue($applicationId));
+        
+        $mockParams[1] = $this->getMock('\stdClass', ['fromRoute']);
+        $mockParams[1]->expects($this->once())
+            ->method('fromRoute')
+            ->with($this->equalTo('vehicleId'))
+            ->will($this->returnValue($vehicleId));
+        
+        $this->controller->expects($this->exactly(2))
+            ->method('params')
+            ->will($this->onConsecutiveCalls($mockParams[0], $mockParams[1]));
+        
+        $restCallResults = array(
+        	array('Count' => 1, 'Results' => array(array('id' => 1))),
+            array(),
+        );
+        
+        $this->controller->expects($this->exactly(2))
+            ->method('makeRestCall')
+            ->will($this->onConsecutiveCalls($restCallResults[0], $restCallResults[1]));
+        
+        $router = $this->getMock('\Zend\Mvc\Router\SimpleRouteStack', ['assemble']);
+        $router->expects($this->once())
+                ->method('assemble')
+                ->will($this->returnValue('/selfserve/1/vehicle-safety/safety-inspections'))
+        ;
+        $this->controller->getEvent()->setRouter($router);
+        $this->controller->getEvent()->setResponse(new \Zend\Http\PhpEnvironment\Response());
+        
+        $deleteAction = $this->controller->deleteAction();
+        $this->assertInstanceOf('Zend\Http\PhpEnvironment\Response', $deleteAction);
+        $this->assertEquals(302, $deleteAction->getStatusCode());
     }
     
     public function testAddAction()
@@ -98,5 +142,7 @@ class VehicleControllerTest extends AbstractHttpControllerTestCase
 
         $this->assertSame($mockView, $this->controller->addAction());
     }
+    
+   
 
 }
