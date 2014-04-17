@@ -76,7 +76,7 @@ class OlcsSearchControllerTest  extends AbstractHttpControllerTestCase
                 'lastName' => '',
                 'transportManagerId' => ''
             ],
-            'advanced' => []
+            'search-advanced' => []
         );
         
         $redirect = $this->getMock('\stdClass', array('toUrl'));
