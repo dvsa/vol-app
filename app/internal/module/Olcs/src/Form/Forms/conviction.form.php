@@ -78,7 +78,7 @@ return [
                     'courtFpm' => [
                         'type' => 'text',
                         'filters' => '\Common\Form\Elements\InputFilters\TextMax70',
-                        'label' => 'Court Fpm:',
+                        'label' => 'Court Fpn:',
                         'class' => 'medium'
                     ],
                     'penalty' => [
@@ -94,7 +94,7 @@ return [
                     'takenIntoConsideration' => [
                         'type' => 'textarea',
                         'filters' => '\Common\Form\Elements\InputFilters\TextMax4000',
-                        'label' => 'Tic:',
+                        'label' => 'Taken into consideration:',
                         'class' => 'extra-long'
                     ],
                     'decToTc' => [

@@ -78,7 +78,6 @@ class ConvictionController extends FormActionController
             'licence',  
             'id',
         ));
-        $this->checkForCancel($routeParams);
         $this->setBreadcrumb(array(
             'licence_case_list/pagination' => array('licence' => $routeParams['licence']),
             'case_convictions' => array('case' => $routeParams['case'])
