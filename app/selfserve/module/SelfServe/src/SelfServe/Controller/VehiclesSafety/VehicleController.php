@@ -4,7 +4,7 @@
  * Vehicles Controller - responsible for CRUD vehicles
  *
  * @package		selfserve
- * @subpackage          vehicles-safety
+ * @subpackage          vehicle-safety
  * @author		S Lizzio <shaun.lizzio@valtech.co.uk>
  */
 
@@ -115,7 +115,7 @@ class VehicleController extends FormJourneyActionController{
             }
             else 
             {
-                $this->redirect()->toRoute('selfserve/vehicles-safety', array('applicationId' => $applicationId));        
+                $this->redirect()->toRoute('selfserve/vehicle-safety', array('applicationId' => $applicationId));        
             }
 
         }

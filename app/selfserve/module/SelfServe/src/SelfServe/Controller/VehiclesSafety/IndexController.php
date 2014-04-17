@@ -5,7 +5,7 @@
  *
  *
  * @package		selfserve
- * @subpackage          vehicles-safety
+ * @subpackage          vehicle-safety
  * @author		S Lizzio <shaun.lizzio@valtech.co.uk>
  */
 
@@ -24,7 +24,7 @@ class IndexController extends FormJourneyActionController{
      */
     public function __construct()
     {
-        $this->setCurrentSection('vehicles-safety');
+        $this->setCurrentSection('vehicle-safety');
     }
     
     /**
