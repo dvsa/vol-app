@@ -51,30 +51,66 @@ class OperatingCentreTest extends AbstractHttpControllerTestCase
     
     public function testProccessAdd()
     {
-        $validData = array(
-        	'authorised-vehicles' => array(
-        	   'no-of-vehicles' => 1,
-        	   'no-of-trailers' => 1,
-        	   'parking-spaces-confirmation' => 1,
-        	   'permission-confirmation' => 1,
-            ),
-        );
+        $validData = $this->getValidData();
+        $this->controller->expects($this->once())
+            ->method('makeRestCall')
+            ->will($this->returnValue(array('id' => 1)))
+        ;
+        
+        $router = $this->getMock('\Zend\Mvc\Router\SimpleRouteStack', ['assemble']);
+        $router->expects($this->once())
+            ->method('assemble')
+            ->will($this->returnValue('/selfserve/1/finance/index'))
+        ;
+        $this->controller->getEvent()->setRouter($router);
+        $this->controller->getEvent()->setResponse(new \Zend\Http\PhpEnvironment\Response());
+        
+        
         $this->assertEquals($this->controller->processAddForm($validData), null);
     }
     
     public function testProccessEdit()
     {
-        $validData = array(
+        $validData = array_merge($this->getValidData(), array('version' => 1));
+        
+        $router = $this->getMock('\Zend\Mvc\Router\SimpleRouteStack', ['assemble']);
+        $router->expects($this->once())
+            ->method('assemble')
+            ->will($this->returnValue('/selfserve/1/finance/index'))
+        ;
+        $this->controller->getEvent()->setRouter($router);
+        $this->controller->getEvent()->setResponse(new \Zend\Http\PhpEnvironment\Response());
+        
+        $proccessFormReturnValue = $this->controller->processEditForm($validData);
+        
+        $this->assertInstanceOf('Zend\Http\PhpEnvironment\Response', $proccessFormReturnValue);
+        $this->assertEquals(302, $proccessFormReturnValue->getStatusCode());
+    }
+    
+    public function testMapData()
+    {
+        $class = new \ReflectionClass('\SelfServe\Controller\Finance\OperatingCentreController');
+        $method = $class->getMethod('mapData');
+        $method->setAccessible(true);
+        $result = $method->invokeArgs($this->controller, array($this->getValidData()));
+        
+        $this->assertArrayHasKey('numberOfVehicles', $result);
+        $this->assertArrayHasKey('numberOfTrailers', $result);
+        $this->assertArrayHasKey('sufficientParking', $result);
+        $this->assertArrayHasKey('permission', $result);
+        $this->assertArrayHasKey('application', $result);
+    }
+    
+    private function getValidData()
+    {
+        return array(
                 'authorised-vehicles' => array(
                         'no-of-vehicles' => 1,
                         'no-of-trailers' => 1,
                         'parking-spaces-confirmation' => 1,
                         'permission-confirmation' => 1,
-                       
                 ),
-                'version' => 1,
-        );
-        $this->assertInstanceOf($this->controller->processEditForm($validData), '\Zend\Http\PhpEnvironment\Response');
+             );
     }
     
     
