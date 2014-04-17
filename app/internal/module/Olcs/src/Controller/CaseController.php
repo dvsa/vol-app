@@ -386,7 +386,7 @@ class CaseController extends FormActionController
         $result['categories'] = $this->unFormatCategories($categories);
 
         $form = $this->generateFormWithData(
-            'case', 'processEditCase', $result
+            'case', 'processEditCase', $result, true
         );
 
         $pageData = $this->getPageData($licence);
