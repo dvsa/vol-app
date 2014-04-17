@@ -133,29 +133,19 @@ return array(
                     )
                 )
             ),
-            'case_stay' => array(
+
+            'case_stay_action' => array(
                 'type' => 'segment',
                 'options' => array(
-                    'route' => '/case/:case/action/manage/stays/',
+                    'route' => '/case/:case/action/manage/stays[/:action][/:staytype][/:stay]',
                     'constraints' => array(
-                        'case' => '[0-9]+'
+                        'case' => '[0-9]+',
+                        'staytype' => '[0-9]',
+                        'stay' => '[0-9]+'
                     ),
                     'defaults' => array(
                         'controller' => 'CaseStayController',
                         'action' => 'index'
-                    )
-                )
-            ),
-            'case_stay_action' => array(
-                'type' => 'segment',
-                'options' => array(
-                    'route' => '/case/:case/action/manage/stays[/:action][/:stay]',
-                    'constraints' => array(
-                        'case' => '[0-9]+',
-                        'stay' => '[0-9]+'
-                    ),
-                    'defaults' => array(
-                        'controller' => 'CaseStayController'
                     )
                 )
             ),

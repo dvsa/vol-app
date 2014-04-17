@@ -2,8 +2,8 @@
 echo $this->render(
     'partials/page-header.phtml',
     array(
-        'pageTitle' =>  $data['pageHeading'] .' stay',
-        'pageSubTitle' => 'Associated with: ' . $data['licence']['organisation']['name'] .' (case id ' . $data['id'].')'
+        'pageTitle' =>  $data['pageHeading'],
+        'pageSubTitle' => 'Associated with: ' . $data['licence']['organisation']['name']
     )
 );
 ?>
