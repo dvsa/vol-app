@@ -31,7 +31,7 @@ return [
                     ],
                     'operatorName' => [
                         'type' => 'text',
-                        'filters' => '\Common\Form\Elements\InputFilters\textMax70',
+                        'filters' => '\Common\Form\Elements\InputFilters\TextMax70',
                         'label' => 'Operator name:',
                         'class' => 'long'
                     ],
@@ -58,7 +58,7 @@ return [
                     ],*/
                     'convictionNotes' => [
                         'type' => 'textarea',
-                        'filters' => '\Common\Form\Elements\InputFilters\textMax4000',
+                        'filters' => '\Common\Form\Elements\InputFilters\TextMax4000',
                         'label' => 'Conviction notes:',
                         'class' => 'extra-long'
                     ],
@@ -126,6 +126,7 @@ return [
                 'class' => 'action--primary large'
             ],
             'cancel' => [
+                'name' => 'cancel-conviction',
                 'type' => 'submit',
                 'label' => 'Cancel',
                 'class' => 'action--secondary large'
