@@ -128,7 +128,8 @@ return array(
                 'options' => array(
                     'route' => '/case/:case/action/manage/convictions',
                     'constraints' => array(
-                        'case' => '[0-9]+'
+                        'case' => '[0-9]+',
+                        'statement' => '[0-9]+'
                     ),
                     'defaults' => array(
                         'controller' => 'CaseConvictionController',

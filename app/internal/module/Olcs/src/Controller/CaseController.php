@@ -448,7 +448,7 @@ class CaseController extends FormActionController
         $result = $this->processAdd($data, 'VosaCase');
 
         if (isset($result['id'])) {
-            $this->redirect()->toRoute('licence_case_list', array('licence' => $data['licence']));
+            $this->redirect()->toRoute('case_manage', array('case' => $result['id'], 'tab' => 'overview'));
         }
     }
 
