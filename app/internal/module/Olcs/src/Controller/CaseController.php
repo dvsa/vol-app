@@ -174,7 +174,7 @@ class CaseController extends FormActionController
             'statements' => [
                 'key' => 'statements',
                 'label' => 'Statements',
-                'url' => $pm->get('url')->fromRoute('case_statement', ['tab' => 'statements'], [], true),
+                'url' => $pm->get('url')->fromRoute('case_statement', ['action' => null], [], true),
             ]
         ];
 
@@ -371,7 +371,7 @@ class CaseController extends FormActionController
         $licence = $this->params()->fromRoute('licence');
         $case = $this->params()->fromRoute('case');
         $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licence)));
-        
+
         $result = $this->makeRestCall('VosaCase', 'GET', array('id' => $case, 'licence' => $licence));
 
         if (empty($result)) {

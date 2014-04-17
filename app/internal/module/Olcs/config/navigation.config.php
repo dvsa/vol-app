@@ -51,7 +51,23 @@ return array(
                                     'route' => 'licence_case_action',
                                     'action' => 'edit'
                                 ),
-                                
+                                array(
+                                    'label' => 'Case Statements',
+                                    'route' => 'case_statement',
+                                    'action' => 'index',
+                                    'pages' => array(
+                                        array(
+                                            'label' => 'Add Statement',
+                                            'route' => 'case_statement',
+                                            'action' => 'add'
+                                        ),
+                                        array(
+                                            'label' => 'Edit Statement',
+                                            'route' => 'case_statement',
+                                            'action' => 'edit'
+                                        )
+                                    )
+                                )
                             )
                         )
                     )

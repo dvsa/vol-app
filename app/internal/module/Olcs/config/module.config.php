@@ -113,7 +113,7 @@ return array(
             'case_statement' => array(
                 'type' => 'segment',
                 'options' => array(
-                    'route' => '/case/:case/action/manage/statements[/:action][/:statement]',
+                    'route' => '/case/:case/statements[/:action][/:statement]',
                     'constraints' => array(
                         'case' => '[0-9]+'
                     ),

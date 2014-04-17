@@ -26,7 +26,8 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
                 'makeRestCall',
                 'buildTable',
                 'getView',
-                'getCaseVariables'
+                'getCaseVariables',
+                'setBreadcrumb'
             )
         );
 
@@ -39,6 +40,9 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
         );
 
         $viewMock = $this->getMock('\stdClass', array('setTemplate'));
+
+        $controller->expects($this->once())
+            ->method('setBreadcrumb');
 
         $controller->expects($this->once())
             ->method('fromRoute')
@@ -84,8 +88,11 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
 
         $controller = $this->getMock(
             'Olcs\Controller\CaseStatementController',
-            array('fromRoute', 'generateFormWithData', 'getView')
+            array('fromRoute', 'generateFormWithData', 'getView', 'setBreadcrumb')
         );
+
+        $controller->expects($this->once())
+            ->method('setBreadcrumb');
 
         $controller->expects($this->once())
             ->method('fromRoute')
@@ -113,10 +120,17 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
 
         $controller = $this->getMock(
             'Olcs\Controller\CaseStatementController',
-            array('fromRoute', 'makeRestCall', 'notFoundAction')
+            array('fromRoute', 'makeRestCall', 'notFoundAction', 'setBreadcrumb')
         );
 
         $controller->expects($this->once())
+            ->method('setBreadcrumb');
+
+        $controller->expects($this->at(0))
+            ->method('fromRoute')
+            ->will($this->returnValue(3));
+
+        $controller->expects($this->at(1))
             ->method('fromRoute')
             ->will($this->returnValue($statementId));
 
@@ -179,19 +193,26 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
 
         $controller = $this->getMock(
             'Olcs\Controller\CaseStatementController',
-            array('fromRoute', 'makeRestCall', 'generateFormWithData', 'getView')
+            array('fromRoute', 'makeRestCall', 'generateFormWithData', 'getView', 'setBreadcrumb')
         );
 
         $controller->expects($this->once())
+            ->method('setBreadcrumb');
+
+        $controller->expects($this->at(0))
+            ->method('fromRoute')
+            ->will($this->returnValue(3));
+
+        $controller->expects($this->at(2))
             ->method('fromRoute')
             ->will($this->returnValue($statementId));
 
-        $controller->expects($this->at(1))
+        $controller->expects($this->at(3))
             ->method('makeRestCall')
             ->with('Statement')
             ->will($this->returnValue($statementDetails));
 
-        $controller->expects($this->at(2))
+        $controller->expects($this->at(4))
             ->method('makeRestCall')
             ->with('Address')
             ->will($this->returnValue($addressDetails));

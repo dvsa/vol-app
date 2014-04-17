@@ -11,6 +11,8 @@ namespace Olcs\Controller;
 /**
  * Case Statement Controller
  *
+ * @todo For Breadcrumbs we need to pull the real licence id in
+ *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 class CaseStatementController extends CaseController
@@ -22,6 +24,8 @@ class CaseStatementController extends CaseController
      */
     public function indexAction()
     {
+        $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => 1)));
+
         $caseId = $this->fromRoute('case');
 
         $this->checkForCrudAction('case_statement', array('case' => $caseId), 'statement');
@@ -45,6 +49,13 @@ class CaseStatementController extends CaseController
     public function addAction()
     {
         $caseId = $this->fromRoute('case');
+
+        $this->setBreadcrumb(
+            array(
+                'licence_case_list/pagination' => array('licence' => 1),
+                'case_statement' => array('case' => $caseId)
+            )
+        );
 
         $form = $this->generateFormWithData(
             'statement', 'processAddStatement', array('case' => $caseId)
@@ -72,6 +83,15 @@ class CaseStatementController extends CaseController
      */
     public function editAction()
     {
+        $caseId = $this->fromRoute('case');
+
+        $this->setBreadcrumb(
+            array(
+                'licence_case_list/pagination' => array('licence' => 1),
+                'case_statement' => array('case' => $caseId)
+            )
+        );
+
         $statementId = $this->fromRoute('statement');
 
         $details = $this->makeRestCall('Statement', 'GET', array('id' => $statementId));
