@@ -10,11 +10,12 @@
 
 <?php
 
-$array = array();
+$array = (array)$this->vars();
+
 $array['case'] = $details;
 
-if (isset($submissions)) {
-    $array['submissions'] = $submissions;
+if (isset($table)) {
+    $array['table'] = $table;
 }
 
 echo $this->render('case/page/' .$tab, $array); ?>

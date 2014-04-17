@@ -1,6 +1,5 @@
 <?php
 
-
 return [
     'search' => [
         'name' => 'search',
@@ -35,7 +34,7 @@ return [
                     'firstName' => [
                         'type' => 'personName',
                         'label' => 'First name',
-                         'class' => 'long',
+                        'class' => 'long',
                         'placeholder' => 'First name'
                     ],
                     'lastName' => [
@@ -44,11 +43,10 @@ return [
                         'class' => 'long',
                         'placeholder' => 'Last name'
                     ],
-                     'dateOfBirth' => [
-                         'type' => 'dateSelect',
-                         'label' => 'Date of birth'
-                         
-                     ],
+                    'dateOfBirth' => [
+                        'type' => 'dateSelect',
+                        'label' => 'Date of birth'
+                    ],
                     'search' => [
                         'type' => 'submit',
                         'label' => 'Search',
@@ -57,7 +55,7 @@ return [
                 ]
             ],
             [
-                'name' => 'advanced',
+                'name' => 'search-advanced',
                 'options' => [
                     'label' => 'Advanced Search',
                     'class' => 'extra-long'
@@ -120,4 +118,3 @@ return [
         ]
     ]
 ];
-

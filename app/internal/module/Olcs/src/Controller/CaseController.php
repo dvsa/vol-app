@@ -24,6 +24,7 @@ class CaseController extends FormActionController
      */
     public function manageAction()
     {
+        $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => 7)));
         $view = $this->getView();
 
         $caseId = $this->fromRoute('case');
@@ -158,22 +159,22 @@ class CaseController extends FormActionController
             'overview' => [
                 'key' => 'overview',
                 'label' => 'Overview',
-                'url' => $pm->get('url')->fromRoute(null, ['tab' => 'overview'], [], true),
+                'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'overview'], [], true),
             ],
             'convictions' => [
                 'key' => 'convictions',
                 'label' => 'Convictions',
-                'url' => $pm->get('url')->fromRoute(null, ['tab' => 'convictions'], [], true),
+                'url' => $pm->get('url')->fromRoute('case_convictions', ['tab' => 'convictions'], [], true),
             ],
             'prohibitions' => [
                 'key' => 'prohibitions',
                 'label' => 'Prohibitions',
-                'url' => $pm->get('url')->fromRoute(null, ['tab' => 'prohibitions'], [], true),
+                'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'prohibitions'], [], true),
             ],
             'statements' => [
                 'key' => 'statements',
                 'label' => 'Statements',
-                'url' => $pm->get('url')->fromRoute(null, ['tab' => 'statements'], [], true),
+                'url' => $pm->get('url')->fromRoute('case_statement', ['tab' => 'statements'], [], true),
             ]
         ];
 
@@ -447,7 +448,7 @@ class CaseController extends FormActionController
         $result = $this->processAdd($data, 'VosaCase');
 
         if (isset($result['id'])) {
-            $this->redirect()->toRoute('licence_case_list', array('licence' => $data['licence']));
+            $this->redirect()->toRoute('case_manage', array('case' => $result['id'], 'tab' => 'overview'));
         }
     }
 
