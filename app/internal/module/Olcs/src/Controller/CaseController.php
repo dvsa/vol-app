@@ -158,22 +158,22 @@ class CaseController extends FormActionController
             'overview' => [
                 'key' => 'overview',
                 'label' => 'Overview',
-                'url' => $pm->get('url')->fromRoute(null, ['tab' => 'overview'], [], true),
+                'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'overview'], [], true),
             ],
             'convictions' => [
                 'key' => 'convictions',
                 'label' => 'Convictions',
-                'url' => $pm->get('url')->fromRoute(null, ['tab' => 'convictions'], [], true),
+                'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'convictions'], [], true),
             ],
             'prohibitions' => [
                 'key' => 'prohibitions',
                 'label' => 'Prohibitions',
-                'url' => $pm->get('url')->fromRoute(null, ['tab' => 'prohibitions'], [], true),
+                'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'prohibitions'], [], true),
             ],
             'statements' => [
                 'key' => 'statements',
                 'label' => 'Statements',
-                'url' => $pm->get('url')->fromRoute(null, ['tab' => 'statements'], [], true),
+                'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'statements'], [], true),
             ]
         ];
 

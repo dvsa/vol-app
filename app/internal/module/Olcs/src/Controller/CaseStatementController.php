@@ -15,7 +15,6 @@ namespace Olcs\Controller;
  */
 class CaseStatementController extends CaseController
 {
-
     /**
      * Show a table of statements for the given case
      *
@@ -24,6 +23,8 @@ class CaseStatementController extends CaseController
     public function indexAction()
     {
         $caseId = $this->fromRoute('case');
+
+        $this->checkForCrudAction('case_statement', array('case' => $caseId), 'statement');
 
         $results = $this->makeRestCall('Statement', 'GET', array('caseId' => $caseId));
 
@@ -34,5 +35,166 @@ class CaseStatementController extends CaseController
         $view->setTemplate('case/manage');
 
         return $view;
+    }
+
+    /**
+     * Add statement action
+     *
+     * @return object
+     */
+    public function addAction()
+    {
+        $caseId = $this->fromRoute('case');
+
+        $form = $this->generateFormWithData(
+            'statement', 'processAddStatement', array('case' => $caseId)
+        );
+
+        $view = $this->getView(
+            [
+                'params' => [
+                    'pageTitle' => 'Add statement',
+                    'pageSubTitle' => ''
+                ],
+                'form' => $form
+            ]
+        );
+
+        $view->setTemplate('form');
+
+        return $view;
+    }
+
+    /**
+     * Edit statement action
+     *
+     * @return object
+     */
+    public function editAction()
+    {
+        $statementId = $this->fromRoute('statement');
+
+        $details = $this->makeRestCall('Statement', 'GET', array('id' => $statementId));
+
+        if (empty($details)) {
+            return $this->notFoundAction();
+        }
+
+        $data = $this->formatDataForEditForm($details);
+
+        $address = array();
+
+        if (isset($details['requestorsAddressId']) && !empty($details['requestorsAddressId'])) {
+            $address = $this->makeRestCall('Address', 'GET', array('id' => $details['requestorsAddressId']));
+        }
+
+        $data['requestorsAddress'] = $address;
+
+        $data['requestorsAddress']['country'] = 'country.' . $data['requestorsAddress']['country'];
+
+        $form = $this->generateFormWithData(
+            'statement',
+            'processEditStatement',
+            $data
+        );
+
+        $view = $this->getView(
+            [
+                'params' => [
+                    'pageTitle' => 'Edit statement',
+                    'pageSubTitle' => ''
+                ],
+                'form' => $form
+            ]
+        );
+
+        $view->setTemplate('form');
+
+        return $view;
+    }
+
+    /**
+     * Format the data for the edit form
+     *
+     * @param array $data
+     * @return array
+     */
+    private function formatDataForEditForm($data)
+    {
+        $data['details'] = $data;
+
+        $data['details']['statementType'] = 'statement_type.' . $data['details']['statementType'];
+        $data['details']['contactType'] = 'contact_type.' . $data['details']['contactType'];
+
+        return $data;
+    }
+
+    /**
+     * Delete action
+     */
+    public function deleteAction()
+    {
+        $caseId = $this->fromRoute('case');
+
+        $statementId = $this->fromRoute('statement');
+
+        // Check that the statement belongs to the case before deleting
+        $results = $this->makeRestCall('Statement', 'GET', array('id' => $statementId));
+
+        if (isset($results['case']) && $results['case'] == $caseId) {
+
+            $this->makeRestCall('Statement', 'DELETE', array('id' => $statementId));
+            return $this->redirect()->toRoute('case_statement', array('case' => $caseId));
+        }
+
+        return $this->notFoundAction();
+    }
+
+    /**
+     * Process the add post
+     *
+     * @param array $data
+     */
+    public function processAddStatement($data)
+    {
+        $data = $this->processDataBeforePersist($data);
+
+        $this->processAdd($data, 'Statement');
+
+        $this->redirect()->toRoute('case_statement', array('case' => $data['case']));
+    }
+
+    /**
+     * Process the edit post
+     *
+     * @param array $data
+     */
+    public function processEditStatement($data)
+    {
+        $data = $this->processDataBeforePersist($data);
+
+        $this->processEdit($data, 'Statement');
+
+        $this->redirect()->toRoute('case_statement', array('case' => $data['case']));
+    }
+
+    /**
+     * Pre-persist data processing
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function processDataBeforePersist($data)
+    {
+        $data = array_merge($data, $data['details']);
+
+        unset($data['details']);
+
+        $data = $this->processAddressData($data, 'requestorsAddress');
+
+        $data['statementType'] = str_replace('statement_type.', '', $data['statementType']);
+        $data['contactType'] = str_replace('contact_type.', '', $data['contactType']);
+
+        return $data;
     }
 }
