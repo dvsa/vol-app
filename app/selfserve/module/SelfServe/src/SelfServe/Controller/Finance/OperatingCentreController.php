@@ -19,6 +19,11 @@ class OperatingCentreController extends FormActionController
     protected $messages;
     protected $section = 'finance';
     
+    /**
+     * Action that is responsible for adding operating centre
+     * 
+     * @return \Zend\View\Model\ViewModel
+     */
     public function addAction() 
     {
         $form = $this->generateForm(
@@ -30,6 +35,11 @@ class OperatingCentreController extends FormActionController
         return $view;
     }
     
+    /**
+     * Action that is responsible for editing operating centre
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
     public function editAction()
     {
         $operatingCentreId  = $this->params()->fromRoute('operatingCentreId');
@@ -92,7 +102,7 @@ class OperatingCentreController extends FormActionController
      * Persist data to database. After that, redirect to Operating centres page
      *
      * @param array $validData
-     * @return void
+     * @return \Zend\Http\PhpEnvironment\Response
      */
     public function processEditForm($validData)
     {
@@ -105,7 +115,7 @@ class OperatingCentreController extends FormActionController
     
         //persiste to database by calling rest api
         $result = $this->makeRestCall('ApplicationOperatingCentre', 'PUT', $data);
-        $this->redirect()->toRoute('selfserve/finance', array(), true);
+        return $this->redirect()->toRoute('selfserve/finance', array(), true);
     }
     
     /**
