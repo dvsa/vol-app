@@ -155,6 +155,9 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
         $form = '<form></form>';
 
         $expectedData = array(
+            'statementType' => '5',
+            'contactType' => '9',
+            'requestorsAddressId' => 12,
             'details' => array(
                 'statementType' => 'statement_type.5',
                 'contactType' => 'contact_type.9',
