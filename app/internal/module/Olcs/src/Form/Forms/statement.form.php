@@ -24,18 +24,18 @@ return [
                     ],
                     'requestorsForename' => [
                         'type' => 'text',
-                        'filters' => '\Common\Form\Elements\InputFilters\TextRequired',
+                        'filters' => '\Common\Form\Elements\InputFilters\TextMax75Required',
                         'label' => 'Requestors first name'
                     ],
                     'requestorsFamilyName' => [
                         'type' => 'text',
-                        'filters' => '\Common\Form\Elements\InputFilters\TextRequired',
+                        'filters' => '\Common\Form\Elements\InputFilters\TextMax75Required',
                         'label' => 'Requestors last name'
                     ],
                     'requestorsBody' => [
                         'type' => 'text',
-                        'filters' => '\Common\Form\Elements\InputFilters\TextRequired',
-                        'label' => 'Requestors body'
+                        'filters' => '\Common\Form\Elements\InputFilters\TextMax40Required',
+                        'label' => 'Requestor body'
                     ],
                     'dateStopped' => [
                         'type' => 'dateSelect',
@@ -55,7 +55,7 @@ return [
                     ],
                     'authorisersDecision' => [
                         'type' => 'textarea',
-                        'filters' => '\Common\Form\Elements\InputFilters\TextareaRequired',
+                        'filters' => '\Common\Form\Elements\InputFilters\TextMax4000Required',
                         'label' => 'Authorised decision',
                         'class' => 'extra-long',
                         'required' => true
