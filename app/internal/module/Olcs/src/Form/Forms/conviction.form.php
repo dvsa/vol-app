@@ -56,12 +56,6 @@ return [
                          'type' => 'select',
                          'label' => 'Conviction description:'
                     ],*/
-                    'convictionNotes' => [
-                        'type' => 'textarea',
-                        'filters' => '\Common\Form\Elements\InputFilters\TextMax4000',
-                        'label' => 'Conviction notes:',
-                        'class' => 'extra-long'
-                    ],
                     'dateOfOffence' => [
                          'type' => 'dateSelect',
                          'label' => 'Offence date:'
@@ -72,7 +66,7 @@ return [
                      ],
                     'si' => [
                         'type' => 'select',
-                        'label' => 'Si',
+                        'label' => 'SI',
                         'value_options' => 'yes_no'
                     ],
                     'courtFpm' => [
@@ -90,6 +84,12 @@ return [
                         'type' => 'text',
                         'label' => 'Costs:',
                         'class' => 'medium'
+                    ],
+                    'convictionNotes' => [
+                        'type' => 'textarea',
+                        'filters' => '\Common\Form\Elements\InputFilters\TextMax4000',
+                        'label' => 'Conviction notes:',
+                        'class' => 'extra-long'
                     ],
                     'takenIntoConsideration' => [
                         'type' => 'textarea',

@@ -21,12 +21,12 @@ class CaseConvictionController extends CaseController
         if ($this->params()->fromPost('action')) {
             switch (strtolower($this->params()->fromPost('action'))) {
                 case 'add':
-                        return $this->redirect()->toRoute('conviction', array('licence' => 7, 
-                            'case' => $this->fromRoute('case'), 
+                        return $this->redirect()->toRoute('conviction', array('licence' => 7,
+                            'case' => $this->fromRoute('case'),
                             'action' => 'add'));
                     break;
                 case 'edit':
-                        return $this->redirect()->toRoute('conviction', array('licence' => 7, 
+                        return $this->redirect()->toRoute('conviction', array('licence' => 7,
                             'case' => $this->fromRoute('case'),
                             'id' => $this->params()->fromPost('id'),
                             'action' => 'edit'));
@@ -35,6 +35,7 @@ class CaseConvictionController extends CaseController
                     break;
             }
         }
+
         $view = $this->getView();
         $tabs = $this->getTabInformationArray();
         $action = 'convictions';
@@ -42,13 +43,12 @@ class CaseConvictionController extends CaseController
 
         $case = $this->getCase($caseId);
 
+        $form = $this->generateCommentForm($case);
+
         $summary = $this->getCaseSummaryArray($case);
         $details = $this->getCaseDetailsArray($case);
 
         $results = $this->makeRestCall('Conviction', 'GET', array('vosaCase' => $caseId));
-        /* Echo '<pre>';
-        print_r($results);
-        die(); */
 
         $data = [];
         $data['url'] = $this->getPluginManager()->get('url');
@@ -61,10 +61,47 @@ class CaseConvictionController extends CaseController
             'tab' => $action,
             'summary' => $summary,
             'details' => $details,
-            'table' => $table
+            'table' => $table,
+            'commentForm' => $form,
         ]);
 
         $view->setTemplate('case/manage');
         return $view;
+    }
+
+    /**
+     * Creates and returns the comment form.
+     *
+     * @param array $case
+     * @return \Zend\Form
+     */
+    public function generateCommentForm($case)
+    {
+        $form = $this->generateForm(
+            'conviction-comment',
+            'saveCommentForm'
+        );
+        $form->setData($case);
+
+        return $form;
+    }
+
+    /**
+     * Saves the comment form.
+     *
+     * @param array $data
+     */
+    public function saveCommentForm($data)
+    {
+        /* print_r($data); */
+
+        $data = array_intersect_key($data, array_flip(['id', 'convictionData', 'version']));
+
+        /* print_r($data);
+        die(); */
+
+        $this->processEdit($data, 'VosaCase');
+
+        return $this->redirect()->toRoute('case_convictions', array('case' => $data['id']));
     }
 }
