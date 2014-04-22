@@ -36,13 +36,6 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
      */
     public function testIndexAction($caseId, $searchResults)
     {
-        $response = $this->dispatch('/case/24/action/manage/stays', 'GET', array('action' => 'index', 'case' => $caseId));
-        $this->assertResponseStatusCode(200);
-        $this->assertControllerName('casestaycontroller');
-        $this->assertControllerClass('CaseStayController');
-        $this->assertMatchedRouteName('case_stay_action');
-        $this->assertActionName('index');
-
         $restEnd = 'Stay';
         $restComm = 'GET';
         $restParam = array('case' => $caseId);
@@ -87,12 +80,6 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
      */
     public function testAddAction($caseId, $stayTypeId, $existingRecord)
     {
-        $this->dispatch('/case/24/action/manage/stays/add/1', 'GET', array('action' => 'add', 'case' => $caseId, 'stayType' => $stayTypeId));
-
-        $this->assertControllerName('casestaycontroller');
-        $this->assertControllerClass('CaseStayController');
-        $this->assertMatchedRouteName('case_stay_action');
-        $this->assertActionName('add');
         $case = ['key' => 'case'];
         $viewTemplate = 'case/add-stay';
 
@@ -164,13 +151,6 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
      */
     public function testEditAction($caseId, $stayTypeId, $stayId)
     {
-        //$response = $this->dispatch('/case/24/action/manage/stays/edit/1/1', 'GET', array('action' => 'edit', 'case' => $caseId, 'stayType' => $stayTypeId, 'stay' => $stayId));
-        //$this->assertResponseStatusCode(200);
-        //$this->assertControllerName('casestaycontroller');
-        //$this->assertControllerClass('CaseStayController');
-        //$this->assertMatchedRouteName('case_stay_action');
-        //$this->assertActionName('edit');
-
         $restEnd = 'Stay';
         $restComm = 'GET';
         $restParam = array('id' => $stayId);
@@ -258,7 +238,6 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue($existingRecord));
 
         if ($existingRecord) {
-            //$this->assertResponseStatusCode(302);
             $redirectInfo = $this->getRedirectSuccess($data['case']);
             $redirect = $this->getRedirectMock($redirectInfo);
 
@@ -266,7 +245,6 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
                 ->method('redirect')
                 ->will($this->returnValue($redirect));
         } else {
-            //$this->assertResponseStatusCode(200);
             $sut->expects($this->at(1))
                 ->method('processAdd')
                 ->will($this->returnValue($result));
@@ -345,7 +323,7 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
                 ->with($this->equalTo('Stay'), $this->equalTo('GET'), $this->equalTo(array('case' => $caseId)))
                 ->will($this->returnValue($results));
         }
-        
+
         $sut->checkExistingStay($caseId, $stayTypeId);
     }
 
