@@ -25,7 +25,7 @@ class VehicleControllerTest extends AbstractHttpControllerTestCase
 
     }
     
-    public function testAddAction()
+    /*public function testAddAction()
     {
         $this->setUpMockController( [
                 'getView',
@@ -256,6 +256,6 @@ class VehicleControllerTest extends AbstractHttpControllerTestCase
         
         $this->controller->processAddGoodsVehicle($valid_data, $form, $params);
 
-    }
+    }*/
     
 }

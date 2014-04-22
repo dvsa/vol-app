@@ -58,7 +58,6 @@ class VehicleController extends FormJourneyActionController{
         $goodsOrPsv = $licence['goodsOrPsv'] == 'PSV' ? 'psv' : 'goods';
 
         $vehicleId  = $this->params()->fromRoute('vehicleId');
-        $applicationId      = $this->params()->fromRoute('applicationId');
         
         $data = array(
         	'id' => $vehicleId,
@@ -106,19 +105,8 @@ class VehicleController extends FormJourneyActionController{
         
         if ($saveResult)
         {
-            // check for submit buttons and redirect accordingly
             $postedData = $this->getRequest()->getPost()->toArray();  
-
-            if (array_key_exists('submit_add_another', $postedData))
-            {
-                $this->redirect()->toRoute('selfserve/vehicle-action/vehicle-add', 
-                                    array('action' => 'add', 'applicationId' => $applicationId));            
-            }
-            else 
-            {
-                $this->redirect()->toRoute('selfserve/vehicle-safety', array('applicationId' => $applicationId));        
-            }
-
+            $this->determineRedirect($postedData);
         }
         
         return $form;
@@ -138,23 +126,33 @@ class VehicleController extends FormJourneyActionController{
         
         if ($saveResult)
         {
-            // check for submit buttons and redirect accordingly
             $postedData = $this->getRequest()->getPost()->toArray();  
-
-            if (array_key_exists('submit_add_another', $postedData))
-            {
-                $this->redirect()->toRoute('selfserve/vehicle-action/vehicle-add', 
-                                    array('action' => 'add', 'applicationId' => $applicationId));            
-            }
-            else 
-            {
-                $this->redirect()->toRoute('selfserve/vehicle-safety', array('applicationId' => $applicationId));        
-            }
+            $this->determineRedirect($postedData);
 
         }
         
         return $form;
         
+    }
+    
+    /**
+     * Method to examine the submit_ button that has been pressed and redirect
+     * to the correct route.
+     * 
+     * @param array $postedData
+     */
+    private function determineRedirect($postedData)
+    {
+        $applicationId = $this->params()->fromRoute('applicationId');
+        if (array_key_exists('submit_add_another', $postedData))
+        {
+            $this->redirect()->toRoute('selfserve/vehicle-safety/vehicle-action/vehicle-add', 
+                                array('action' => 'add', 'applicationId' => $applicationId));            
+        }
+        else 
+        {
+            $this->redirect()->toRoute('selfserve/vehicle-safety', array('applicationId' => $applicationId));        
+        }
     }
     
     /**
