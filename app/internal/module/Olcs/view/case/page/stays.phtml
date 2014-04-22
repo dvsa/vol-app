@@ -1,8 +1,27 @@
 <div class="full-width">
-    <?php echo'placeholder page for stays'
-    . '<div class="actions-container">'
-        . '<a href="../manage/stays/add" id="add" class="action--primary" name="action" value="Add">Add</a>'
-    . '</div>';
+    <?php
+    //THIS IS A PLACEHOLDER AND NOT INTENDED FOR JUDGEMENT / PRODUCTION :)
+    echo'<h3>Placeholder page for stays - not final design</h3><br /><br />';
+
+    //print_r($records);
+
+    foreach($stayTypes as $id => $type){
+        if(isset($records[$id])){
+            $button = '<a class="action--primary" href="../manage/stays/edit/'.$id.'/'.$records[$id]['id'].'">edit</a><br />';
+            $content = ''
+                . 'Date of decision: dd/mm/yy<br />'
+                . 'Request date: dd/mm/yy<br />'
+                . 'Outcome: '.($records[$id]['outcome']  == 'stay_status_granted' ? 'Granted' : 'Refused').'<br />'
+                . 'Notes: '.$records[$id]['notes'].'<br /><br />';
+        }
+        else{
+            $button = '<a class="action--primary" href="../manage/stays/add/'.$id.'">add</a><br />';
+            $content = 'No stay of this type has been added';
+        }
+
+        echo'<h3>'.$type.' '.$button.'</h3>';
+        echo $content;
+    }
 
     ?>
 </div>

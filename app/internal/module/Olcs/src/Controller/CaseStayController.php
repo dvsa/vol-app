@@ -14,17 +14,34 @@ use Zend\View\Model\ViewModel;
 class CaseStayController extends CaseController
 {
 
-    //temporary hardcoding of stay types until data available
     public $stayTypes = array(1 => 'Upper Tribunal', 2 => 'Traffic Commissioner / Transport Regulator');
 
-    public function getPageHeading($action,$stayTypeId)
+    private function getPageHeading($action, $stayTypeId)
     {
-        return $action . ' ' . $this->getStayTypes($stayTypeId);
+        $heading = $this->getStayType($stayTypeId);
+
+        if ($heading) {
+            return $action . ' ' . $heading;
+        }
+
+        return false;
+    }
+    /**
+     * temporary hardcoding of stay types until proper data available
+     */
+    public function getStayType($stayTypeId)
+    {
+        if (isset($this->stayTypes[$stayTypeId])) {
+            return $this->stayTypes[$stayTypeId];
+        }
+
+        return false;
     }
 
-    public function getStayTypes($stayTypeId)
+    //temporary hardcoding of stay types until proper data available
+    public function getStayTypes()
     {
-        return $this->stayTypes[$stayTypeId];
+        return $this->stayTypes;
     }
 
     /**
@@ -34,18 +51,27 @@ class CaseStayController extends CaseController
      */
     public function indexAction()
     {
+        $stayTypes = $this->getStayTypes();
+
         $caseId = $this->fromRoute('case');
 
-        $results = $this->makeRestCall('Stay', 'GET', array('vosa_case' => $caseId));
+        $result = $this->makeRestCall('Stay', 'GET', array('case' => $caseId));
+        $records = array();
 
-        $variables = array('tab' => 'stays', 'stays' => $results);
+        //need a better way to do this...
+        if (isset($result['Results'])) {
+            foreach ($result['Results'] as $stay) {
+                if (isset($stayTypes[$stay['stayType']])) {
+                    $records[$stay['stayType']] = $stay;
+                }
+            }
+        }
 
-        $casevariables = $this->getCaseVariables($caseId, $variables);
-
-        $view = $this->getView($casevariables);
+        $variables = array('tab' => 'stays', 'table' => 'test', 'records' => $records, 'stayTypes' => $stayTypes);
+        $caseVariables = $this->getCaseVariables($caseId, $variables);
+        $view = $this->getView($caseVariables);
 
         $view->setTemplate('case/manage');
-
         return $view;
     }
 
@@ -53,17 +79,24 @@ class CaseStayController extends CaseController
      * Add a new stay for a case
      *
      * @todo Handle 404 and Bad Request
-     *
+     * @todo add message along with redirect if there's pre existing data
      * @return ViewModel
      */
     public function addAction()
     {
         $caseId = $this->fromRoute('case');
-        $stayTypeId = $this->fromRoute('staytype');
+
         $pageData = $this->getCase($caseId);
 
         if (empty($pageData)) {
             return $this->notFoundAction();
+        }
+
+        $stayTypeId = $this->fromRoute('stayType');
+
+        //if data already exists don't display the add form
+        if ($this->checkExistingStay($caseId, $stayTypeId)) {
+            return $this->redirect()->toRoute('case_stay_action', array('action' => 'index', 'case' => $caseId));
         }
 
         $form = $this->generateFormWithData(
@@ -74,9 +107,11 @@ class CaseStayController extends CaseController
         );
 
         //add in that this is an an action (reflected in the title)
-        $stayTypeName = $this->getStayTypes($stayTypeId);
-        $pageData['pageHeading'] = 'Add ' . $stayTypeName;
         $pageData['pageHeading'] = $this->getPageHeading('Add', $stayTypeId);
+
+        if ($pageData['pageHeading'] === false) {
+            return $this->notFoundAction();
+        }
 
         $view = new ViewModel(['form' => $form, 'data' => $pageData]);
         $view->setTemplate('case/add-stay');
@@ -114,13 +149,18 @@ class CaseStayController extends CaseController
 
         $pageData = array_merge($result, $case);
 
-        $stayTypeId = $this->fromRoute('staytype');
-        $stayTypeName = $this->getStayTypes($stayTypeId);
-        $pageData['pageHeading'] = 'Edit ' . $stayTypeName;
+        $stayTypeId = $this->fromRoute('stayType');
 
         $form = $this->generateFormWithData(
             'case-stay', 'processEditStay', $result, true
         );
+
+        //add in that this is an an action (reflected in the title)
+        $pageData['pageHeading'] = $this->getPageHeading('Edit', $stayTypeId);
+
+        if ($pageData['pageHeading'] === false) {
+            return $this->notFoundAction();
+        }
 
         $view = new ViewModel(['form' => $form, 'data' => $pageData]);
         $view->setTemplate('case/add-stay');
@@ -135,11 +175,15 @@ class CaseStayController extends CaseController
      * @todo Once user auth is ready, check user allowed access
      * @todo Once user auth is ready, add the user info to the data (fields are lastUpdatedBy and createdBy)
      * @todo Stay type (traffic commissioner / tribunal) needs implementing once data structure agreed
-     * @todo Need to allow only one record for each stay type (can't do this yet as stay type structure not agreed)
      * @todo Need to deal with failures
      */
     public function processAddStay($data)
     {
+        //if data already exists don't add more
+        if ($this->checkExistingStay($data['case'], $data['stayType'])) {
+            return $this->redirect()->toRoute('case_stay_action', array('action' => 'index', 'case' => $data['case']));
+        }
+
         $data['lastUpdatedBy'] = 6;
         $data['createdBy'] = 7;
         $data = array_merge($data, $data['fields']);
@@ -149,7 +193,7 @@ class CaseStayController extends CaseController
         if (isset($result['id'])) {
             return $this->redirect()->toRoute('case_stay_action', array('action' => 'index', 'case' => $data['case']));
         } else {
-            return $this->redirect()->toRoute('case_stay_action', array('action' => 'add', 'case' => $data['case'], 'staytype' => $data['stayType']));
+            return $this->redirect()->toRoute('case_stay_action', array('action' => 'add', 'case' => $data['case'], 'stayType' => $data['stayType']));
         }
     }
 
@@ -160,8 +204,7 @@ class CaseStayController extends CaseController
      *
      * @todo Once user auth is ready, check user allowed access
      * @todo Once user auth is ready, add the user info to the data (field is lastUpdatedBy)
-     * @todo Stay type (traffic commissioner / tribunal) needs implementing once data structure agreed
-     * @todo Need to allow only one record for each stay type (can't do this yet as stay type structure not agreed)
+     * @todo Need to allow only one record for each stay type (would only happen if data posted maliciously)
      */
     public function processEditStay($data)
     {
@@ -173,7 +216,38 @@ class CaseStayController extends CaseController
         if (empty($result)) {
             return $this->redirect()->toRoute('case_stay_action', array('action' => 'index', 'case' => $data['case']));
         } else {
-            return $this->redirect()->toRoute('case_stay_action', array('action' => 'edit', 'case' => $data['case'], 'staytype' => $data['stayType'], 'stay' => $data['stay']));
+            return $this->redirect()->toRoute('case_stay_action', array('action' => 'edit', 'case' => $data['case'], 'stayType' => $data['stayType'], 'stay' => $data['stay']));
         }
+    }
+
+    /**
+     *
+     * @param int $caseId
+     * @param int $stayTypeId
+     *
+     * @todo need to remove foreach stuff and make this just one rest call (as in commented out code)
+     *
+     * @return boolean
+     */
+    public function checkExistingStay($caseId, $stayTypeId)
+    {
+        $result = $this->makeRestCall('Stay', 'GET', array('case' => $caseId));
+
+        if (isset($result['Results'])) {
+            foreach ($result['Results'] as $stay) {
+                if ($stay['stayType'] == $stayTypeId) {
+                    return true;
+                }
+            }
+        }
+
+        /*
+          $result = $this->makeRestCall('Stay', 'GET', array('stayType' => $stayTypeId, 'case' => $caseId));
+
+          if(empty($result['results'])){
+          return true;
+          }
+         */
+        return false;
     }
 }

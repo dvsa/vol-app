@@ -17,4 +17,9 @@ if (isset($submissions)) {
     $array['submissions'] = $submissions;
 }
 
+if(isset($stayTypes)){
+    $array['stayTypes'] = $stayTypes;
+    $array['records'] = $records;
+}
+
 echo $this->render('case/page/' .$tab, $array); ?>
