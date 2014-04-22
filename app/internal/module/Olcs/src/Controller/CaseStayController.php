@@ -16,6 +16,13 @@ class CaseStayController extends CaseController
 
     public $stayTypes = array(1 => 'Upper Tribunal', 2 => 'Traffic Commissioner / Transport Regulator');
 
+    /**
+     * Page heading
+     *
+     * @param string $action
+     * @param int $stayTypeId
+     * @return string|boolean
+     */
     private function getPageHeading($action, $stayTypeId)
     {
         $heading = $this->getStayType($stayTypeId);
@@ -26,10 +33,13 @@ class CaseStayController extends CaseController
 
         return false;
     }
+
     /**
      * temporary hardcoding of stay types until proper data available
+     *
+     * @return array|boolean
      */
-    public function getStayType($stayTypeId)
+    private function getStayType($stayTypeId)
     {
         if (isset($this->stayTypes[$stayTypeId])) {
             return $this->stayTypes[$stayTypeId];
@@ -38,8 +48,12 @@ class CaseStayController extends CaseController
         return false;
     }
 
-    //temporary hardcoding of stay types until proper data available
-    public function getStayTypes()
+    /**
+     * temporary hardcoding of stay types until proper data available
+     *
+     * @return array
+     */
+    private function getStayTypes()
     {
         return $this->stayTypes;
     }
@@ -54,6 +68,10 @@ class CaseStayController extends CaseController
         $stayTypes = $this->getStayTypes();
 
         $caseId = $this->fromRoute('case');
+
+        if (!is_numeric($caseId)) {
+            return $this->notFoundAction();
+        }
 
         $result = $this->makeRestCall('Stay', 'GET', array('case' => $caseId));
         $records = array();
@@ -95,7 +113,9 @@ class CaseStayController extends CaseController
         $stayTypeId = $this->fromRoute('stayType');
 
         //if data already exists don't display the add form
-        if ($this->checkExistingStay($caseId, $stayTypeId)) {
+        $existingRecord = $this->checkExistingStay($caseId, $stayTypeId);
+
+        if ($existingRecord) {
             return $this->redirect()->toRoute('case_stay_action', array('action' => 'index', 'case' => $caseId));
         }
 
@@ -174,13 +194,12 @@ class CaseStayController extends CaseController
      *
      * @todo Once user auth is ready, check user allowed access
      * @todo Once user auth is ready, add the user info to the data (fields are lastUpdatedBy and createdBy)
-     * @todo Stay type (traffic commissioner / tribunal) needs implementing once data structure agreed
-     * @todo Need to deal with failures
      */
     public function processAddStay($data)
     {
         //if data already exists don't add more
-        if ($this->checkExistingStay($data['case'], $data['stayType'])) {
+        $existingRecord = $this->checkExistingStay($data['case'], $data['stayType']);
+        if ($existingRecord) {
             return $this->redirect()->toRoute('case_stay_action', array('action' => 'index', 'case' => $data['case']));
         }
 
@@ -204,7 +223,6 @@ class CaseStayController extends CaseController
      *
      * @todo Once user auth is ready, check user allowed access
      * @todo Once user auth is ready, add the user info to the data (field is lastUpdatedBy)
-     * @todo Need to allow only one record for each stay type (would only happen if data posted maliciously)
      */
     public function processEditStay($data)
     {
@@ -221,6 +239,7 @@ class CaseStayController extends CaseController
     }
 
     /**
+     * Checks whether a stay already exists for the given case and staytype (only one should be allowed)
      *
      * @param int $caseId
      * @param int $stayTypeId
@@ -231,6 +250,10 @@ class CaseStayController extends CaseController
      */
     public function checkExistingStay($caseId, $stayTypeId)
     {
+        if (!is_numeric($caseId) || !is_numeric($stayTypeId)) {
+            return false;
+        }
+
         $result = $this->makeRestCall('Stay', 'GET', array('case' => $caseId));
 
         if (isset($result['Results'])) {
