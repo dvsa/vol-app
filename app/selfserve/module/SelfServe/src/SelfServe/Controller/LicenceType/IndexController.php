@@ -291,7 +291,6 @@ class IndexController extends FormJourneyActionController{
         $applicationId = $this->params()->fromRoute('applicationId');
 
         // persist data if possible
-        $request  = $this->getRequest();
         $this->redirect()->toRoute('selfserve/business-type', 
                                 array('applicationId' => $applicationId, 'step' => 
                                  'business-type'));
