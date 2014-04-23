@@ -123,6 +123,19 @@ return array(
                     )
                 )
             ),
+            'case_appeal' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/licence/:licence/case/:case/appeals[/:action][/:appeal]',
+                    'constraints' => array(
+                        'case' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'CaseAppealController',
+                        'action' => 'index'
+                    )
+                )
+            ),
             'case_convictions' => array(
                 'type' => 'segment',
                 'options' => array(
@@ -157,6 +170,7 @@ return array(
             'ConvictionController' => 'Olcs\Controller\ConvictionController',
             'CaseStatementController' => 'Olcs\Controller\CaseStatementController',
             'CaseStatementController' => 'Olcs\Controller\CaseStatementController',
+            'CaseAppealController' => 'Olcs\Controller\CaseAppealController',
             'CaseConvictionController' => 'Olcs\Controller\CaseConvictionController'
         )
     ),
