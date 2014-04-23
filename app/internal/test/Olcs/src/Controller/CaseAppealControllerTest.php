@@ -160,7 +160,7 @@ class CaseAppealControllerTest extends \PHPUnit_Framework_TestCase
 
         $controller = $this->getMock(
             'Olcs\Controller\CaseAppealController',
-            array('makeRestCall', 'redirect')
+            array('makeRestCall', 'redirect', 'fromRoute')
         );
 
         $controller->expects($this->once())
@@ -170,6 +170,10 @@ class CaseAppealControllerTest extends \PHPUnit_Framework_TestCase
         $controller->expects($this->once())
             ->method('redirect')
             ->will($this->returnValue($mockRedirect));
+        
+         $controller->expects($this->once())
+            ->method('fromRoute')
+            ->will($this->returnValue(7));
 
         $controller->processAddAppeal($data);
     }
@@ -201,7 +205,7 @@ class CaseAppealControllerTest extends \PHPUnit_Framework_TestCase
 
         $controller = $this->getMock(
             'Olcs\Controller\CaseAppealController',
-            array('makeRestCall', 'redirect')
+            array('makeRestCall', 'redirect', 'fromRoute')
         );
 
         $controller->expects($this->once())
@@ -211,6 +215,10 @@ class CaseAppealControllerTest extends \PHPUnit_Framework_TestCase
         $controller->expects($this->once())
             ->method('redirect')
             ->will($this->returnValue($mockRedirect));
+        
+        $controller->expects($this->once())
+            ->method('fromRoute')
+            ->will($this->returnValue(7));
 
         $controller->processEditAppeal($data);
     }
