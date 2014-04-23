@@ -1,6 +1,6 @@
 <?php
 
-namespace OlcsTest\Controller;
+namespace OlcsTest\Controller\VehicleSafety;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 

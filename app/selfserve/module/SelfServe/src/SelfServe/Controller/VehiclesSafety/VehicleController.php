@@ -191,6 +191,7 @@ class VehicleController extends FormJourneyActionController{
      */
     private function persistVehicle($validData)
     {
+
         try
         {
             if (isset($validData['id']) && is_numeric($validData['id']))
@@ -251,7 +252,8 @@ class VehicleController extends FormJourneyActionController{
     private function mapVehicleData($validData)
     {
         $vehicleData = array(
-            'version' => 1,
+            'id' => $validData['id'],
+            'version' => $validData['version'],
             'vrm' => $validData['vrm'],
             'platedWeight' => (int) $validData['plated_weight'],
             'bodyType' => $validData['body_type'],
