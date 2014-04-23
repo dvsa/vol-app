@@ -22,14 +22,14 @@ class IndexController extends FormJourneyActionController
     public function indexAction() {
 
 
-        $results = $this->makeRestCall('ApplicationOperatingCentre', 'GET', array('id' => 1));
+        $results = $this->makeRestCall('ApplicationOperatingCentre', 'GET', array('applicationId' => 1));
 
         $settings = array(
             'sort' => 'address',
             'order' => 'ASC',
             'limit' => 10,
             'page' => 1,
-            'url' => $this->getPluginManager()->get('url') // The helper needs a URL object to build the URL for sorting, pagination, limit etc
+            'url' => $this->getPluginManager()->get('url')
         );
         $table = $this->getServiceLocator()->get('Table')->buildTable('operatingcentre', $results, $settings);
 
