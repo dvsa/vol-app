@@ -99,7 +99,7 @@ return array(
             'case_manage' => array(
                 'type' => 'segment',
                 'options' => array(
-                    'route' => '/case/:case/action/manage/:tab',
+                    'route' => '/licence/[:licence]/case/:case/action/manage/:tab',
                     'constraints' => array(
                         'case' => '[0-9]+'
                     ),
@@ -113,7 +113,7 @@ return array(
             'case_statement' => array(
                 'type' => 'segment',
                 'options' => array(
-                    'route' => '/case/:case/statements[/:action][/:statement]',
+                    'route' => '/licence/[:licence]/case/:case/statements[/:action][/:statement]',
                     'constraints' => array(
                         'case' => '[0-9]+'
                     ),
@@ -139,7 +139,7 @@ return array(
             'case_convictions' => array(
                 'type' => 'segment',
                 'options' => array(
-                    'route' => '/case/:case/action/manage/convictions',
+                    'route' => '/licence/[:licence]/case/:case/action/manage/convictions',
                     'constraints' => array(
                         'case' => '[0-9]+',
                         'statement' => '[0-9]+'
