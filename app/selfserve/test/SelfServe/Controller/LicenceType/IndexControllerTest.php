@@ -1,6 +1,6 @@
 <?php
 
-namespace OlcsTest\Controller;
+namespace OlcsTest\Controller\LicenceType;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
@@ -37,12 +37,12 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
             'getPersistedFormData'
         ]);
         $mockParams = $this->getMock('\stdClass', array('fromRoute'));
-        $licenceId = 7;
+        $applicationId = 7;
         
         $mockParams->expects($this->at(0))
             ->method('fromRoute')
-            ->with($this->equalTo('licenceId'))
-            ->will($this->returnValue($licenceId));
+            ->with($this->equalTo('applicationId'))
+            ->will($this->returnValue($applicationId));
         
         $mockParams->expects($this->at(1))
             ->method('fromRoute')
@@ -64,7 +64,7 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
         
         $this->controller->expects($this->once())
                 ->method('formPost')
-                ->with($mockForm, 'processOperatorLocation', ['licenceId' => $licenceId])
+                ->with($mockForm, 'processOperatorLocation', ['applicationId' => $applicationId])
                 ->will($this->returnValue($mockForm));
         
         $formData = []; // no prefill
@@ -84,15 +84,17 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
         $this->setUpMockController( [
             'processEdit',
             'redirect',
-            'evaluateNextStep'
+            'evaluateNextStep',
+            '_getLicenceEntity'
         ]);
-        $params['licenceId'] = 7;
+        $params['applicationId'] = 7;
+        $entity_data = ['id' => $params['applicationId']];
         
         $valid_data['operator_location']['operator_location'] = 'ni';
         $valid_data['version'] = 1;
         $operatorLocation = $valid_data['operator_location']['operator_location'];
         $process_data = array(
-            'id' => $params['licenceId'],
+            'id' => $params['applicationId'],
             'niFlag' =>  $operatorLocation == 'ni' ? 1 : 0,
             'version' => $valid_data['version'],
         );
@@ -106,6 +108,11 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
         
         $mockForm = new \Zend\Form\Form();
 
+                
+        $this->controller->expects($this->any())
+                ->method('_getLicenceEntity')
+                ->will($this->returnValue($entity_data)); 
+        
         $this->controller->expects($this->once())
                 ->method('processEdit')
                 ->with($this->equalTo($process_data), $this->equalTo('Licence'));
@@ -118,7 +125,7 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
         $mockRedirect->expects($this->once())
                 ->method('toRoute')
                 ->with($this->equalTo('selfserve/licence-type'), 
-                       $this->equalTo(['licenceId' => $params['licenceId'], 'step' => $next_step]));
+                       $this->equalTo(['applicationId' => $params['applicationId'], 'step' => $next_step]));
            
         $this->controller->expects($this->once())
                 ->method('redirect')
@@ -132,7 +139,7 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
      */
     public function testGetNIOperatorLocationFormData()
     {
-        $licenceId  = 7;
+        $applicationId  = 7;
         
         
         // Test NI
@@ -142,28 +149,17 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
         $this->setUpMockController( [
             'makeRestCall',
             'redirect',
-            'params'
+            'params',
+            '_getLicenceEntity'
         ]);
 
-        $mockParams = $this->getMock('\stdClass', array('fromRoute'));
+         
+        $entity_data['id'] = 7;
         
-        $mockParams->expects($this->once())
-            ->method('fromRoute')
-            ->with($this->equalTo('licenceId'))
-            ->will($this->returnValue($licenceId));
-                
-        $this->controller->expects($this->once())
-                ->method('params')
-                ->will($this->returnValue($mockParams));   
-
-        $this->controller->expects($this->once())
-                ->method('makeRestCall')
-                ->with($this->equalTo('Licence'), 
-                        $this->equalTo('GET'),
-                        $this->equalTo(['id' => $licenceId]))
-                ->will($this->returnValue($entity_data));   
+        $this->controller->expects($this->any())
+                ->method('_getLicenceEntity')
+                ->will($this->returnValue($entity_data)); 
         
-                
         $result = $this->controller->getOperatorLocationFormData();
         
         $expected = ['version' => $entity_data['version'], 
@@ -208,16 +204,18 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
         $this->setUpMockController( [
             'processEdit',
             'redirect',
-            'evaluateNextStep'
+            'evaluateNextStep',
+            '_getLicenceEntity'
         ]);
-        $params['licenceId'] = 7;
+        $params['applicationId'] = 1;
+        $entity_data = ['id' => $params['applicationId']];
         
         $valid_data['operator-type']['operator-type'] = 'psv';
         $valid_data['version'] = 1;
         $operatorType = $valid_data['operator-type']['operator-type'];
 
         $process_data = array(
-            'id' => $params['licenceId'],
+            'id' => $params['applicationId'],
             'goodsOrPsv' =>  $operatorType,
             'version' => $valid_data['version'],
         );
@@ -226,7 +224,11 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
         $next_step = 'licence_type_psv';
         
         $mockForm = new \Zend\Form\Form();
-
+                
+        $this->controller->expects($this->any())
+                ->method('_getLicenceEntity')
+                ->will($this->returnValue($entity_data)); 
+        
         $this->controller->expects($this->once())
                 ->method('processEdit')
                 ->with($this->equalTo($process_data), $this->equalTo('Licence'));
@@ -239,7 +241,7 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
         $mockRedirect->expects($this->once())
                 ->method('toRoute')
                 ->with($this->equalTo('selfserve/licence-type'), 
-                       $this->equalTo(['licenceId' => $params['licenceId'], 'step' => $next_step]));
+                       $this->equalTo(['applicationId' => $params['applicationId'], 'step' => $next_step]));
            
         $this->controller->expects($this->once())
                 ->method('redirect')
@@ -286,16 +288,17 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
         $this->setUpMockController( [
             'processEdit',
             'redirect',
-            'evaluateNextStep'
+            'evaluateNextStep',
+            '_getLicenceEntity'
         ]);
-        $params['licenceId'] = 7;
+        $params['applicationId'] = 7;
         
         $valid_data['licence-type']['licence_type'] = 'standard-national';
         $valid_data['version'] = 1;
         $licenceType = $valid_data['licence-type']['licence_type'];
 
         $process_data = array(
-            'id' => $params['licenceId'],
+            'id' => $params['applicationId'],
             'licenceType' =>  $licenceType,
             'version' => $valid_data['version'],
         );
@@ -305,6 +308,12 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
         
         $mockForm = new \Zend\Form\Form();
 
+        $entity_data = ['id' => $params['applicationId']];
+        
+        $this->controller->expects($this->any())
+                ->method('_getLicenceEntity')
+                ->will($this->returnValue($entity_data)); 
+        
         $this->controller->expects($this->once())
                 ->method('processEdit')
                 ->with($this->equalTo($process_data), $this->equalTo('Licence'));
@@ -317,7 +326,7 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
         $mockRedirect->expects($this->once())
                 ->method('toRoute')
                 ->with($this->equalTo('selfserve/licence-type-complete'), 
-                       $this->equalTo(['licenceId' => $params['licenceId'], 'step' => $next_step]));
+                       $this->equalTo(['applicationId' => $params['applicationId'], 'step' => $next_step]));
            
         $this->controller->expects($this->once())
                 ->method('redirect')
@@ -364,16 +373,17 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
         $this->setUpMockController( [
             'processEdit',
             'redirect',
-            'evaluateNextStep'
+            'evaluateNextStep',
+            '_getLicenceEntity'
         ]);
-        $params['licenceId'] = 7;
+        $params['applicationId'] = 7;
         
         $valid_data['licence-type-psv']['licence-type-psv'] = 'standard-national';
         $valid_data['version'] = 1;
         $licenceType = $valid_data['licence-type-psv']['licence-type-psv'];
 
         $process_data = array(
-            'id' => $params['licenceId'],
+            'id' => $params['applicationId'],
             'licenceType' =>  $licenceType,
             'version' => $valid_data['version'],
         );
@@ -382,7 +392,13 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
         $next_step = 'licence_type_psv';
         
         $mockForm = new \Zend\Form\Form();
-
+        
+        $entity_data = ['id' => $params['applicationId']];
+        
+        $this->controller->expects($this->any())
+                ->method('_getLicenceEntity')
+                ->will($this->returnValue($entity_data)); 
+        
         $this->controller->expects($this->once())
                 ->method('processEdit')
                 ->with($this->equalTo($process_data), $this->equalTo('Licence'));
@@ -395,7 +411,7 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
         $mockRedirect->expects($this->once())
                 ->method('toRoute')
                 ->with($this->equalTo('selfserve/licence-type-complete'), 
-                       $this->equalTo(['licenceId' => $params['licenceId'], 'step' => $next_step]));
+                       $this->equalTo(['application' => $params['applicationId'], 'step' => $next_step]));
            
         $this->controller->expects($this->once())
                 ->method('redirect')
@@ -442,16 +458,17 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
         $this->setUpMockController( [
             'processEdit',
             'redirect',
-            'evaluateNextStep'
+            'evaluateNextStep',
+            '_getLicenceEntity'
         ]);
-        $params['licenceId'] = 7;
+        $params['applicationId'] = 7;
         
         $valid_data['licence-type-ni']['licence_type'] = 'standard-national';
         $valid_data['version'] = 1;
         $licenceType = $valid_data['licence-type-ni']['licence_type'];
 
         $process_data = array(
-            'id' => $params['licenceId'],
+            'id' => $params['applicationId'],
             'licenceType' =>  $licenceType,
             'version' => $valid_data['version'],
         );
@@ -460,7 +477,13 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
         $next_step = 'licence_type_psv';
         
         $mockForm = new \Zend\Form\Form();
-
+        
+        $entity_data = ['id' => $params['applicationId']];
+        
+        $this->controller->expects($this->any())
+                ->method('_getLicenceEntity')
+                ->will($this->returnValue($entity_data)); 
+        
         $this->controller->expects($this->once())
                 ->method('processEdit')
                 ->with($this->equalTo($process_data), $this->equalTo('Licence'));
@@ -473,7 +496,7 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
         $mockRedirect->expects($this->once())
                 ->method('toRoute')
                 ->with($this->equalTo('selfserve/licence-type-complete'), 
-                       $this->equalTo(['licenceId' => $params['licenceId'], 'step' => $next_step]));
+                       $this->equalTo(['applicationId' => $params['applicationId'], 'step' => $next_step]));
            
         $this->controller->expects($this->once())
                 ->method('redirect')
@@ -523,12 +546,12 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
         $mockRedirect = $this->getMock('\stdClass', array('toRoute'));
 
         $mockParams = $this->getMock('\stdClass', array('fromRoute'));
-        $licenceId = 7;
+        $applicationId = 7;
         $next_step = 'business-type';
         $mockParams->expects($this->once())
             ->method('fromRoute')
-            ->with($this->equalTo('licenceId'))
-            ->will($this->returnValue($licenceId));
+            ->with($this->equalTo('applicationId'))
+            ->will($this->returnValue($applicationId));
                 
         $this->controller->expects($this->once())
                 ->method('params')
@@ -537,7 +560,7 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
         $mockRedirect->expects($this->once())
                 ->method('toRoute')
                 ->with($this->equalTo('selfserve/business-type'), 
-                       $this->equalTo(['licenceId' => $licenceId, 'step' => $next_step]));
+                       $this->equalTo(['applicationId' => $applicationId, 'step' => $next_step]));
            
         $this->controller->expects($this->once())
                 ->method('redirect')

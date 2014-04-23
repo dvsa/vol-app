@@ -31,7 +31,7 @@ class IndexController extends FormJourneyActionController{
      * @return \Zend\View\Model\ViewModel
      */
     public function generateStepFormAction() {
-        $licenceId = $this->params()->fromRoute('licenceId');
+        $applicationId = $this->params()->fromRoute('applicationId');
         $step = $this->params()->fromRoute('step');
 
         $this->setCurrentStep($step);
@@ -40,7 +40,7 @@ class IndexController extends FormJourneyActionController{
         $form = $this->generateSectionForm();
         
         // Do the post
-        $form = $this->formPost($form, $this->getStepProcessMethod($this->getCurrentStep()), ['licenceId' => $licenceId]);
+        $form = $this->formPost($form, $this->getStepProcessMethod($this->getCurrentStep()), ['applicationId' => $applicationId]);
 
         // prefill form data if persisted
         $formData = $this->getPersistedFormData($form);
@@ -67,8 +67,10 @@ class IndexController extends FormJourneyActionController{
     public function processOperatorLocation($valid_data, $form, $params)
     {
         $operatorLocation = $valid_data['operator_location']['operator_location'];
+    	$licence = $this->_getLicenceEntity();
+
         $data = array(
-        	'id' => $params['licenceId'],
+        	'id' => $licence['id'],
             'niFlag' => $operatorLocation == 'ni' ? 1 : 0,
             'version' => $valid_data['version'],
         );
@@ -82,7 +84,7 @@ class IndexController extends FormJourneyActionController{
         
         $next_step = $this->evaluateNextStep($form);
         $this->redirect()->toRoute('selfserve/licence-type', 
-                                    array('licenceId' => $params['licenceId'], 'step' => $next_step));
+                                    array('applicationId' => $params['applicationId'], 'step' => $next_step));
         
     }
     
@@ -117,17 +119,18 @@ class IndexController extends FormJourneyActionController{
      */
     public function processOperatorType($valid_data, $form, $params)
     {
-    	$licenceId = $params['licenceId'];
+        $licence = $this->_getLicenceEntity();
+
         $data = array(
+        	'id' => $licence['id'],
         	'goodsOrPsv' => $valid_data['operator-type']['operator-type'],
-        	'id' => $licenceId,
-            'version' => $valid_data['version'],
+                'version' => $valid_data['version'],
         );
         $this->processEdit($data, 'Licence');
         
         $next_step = $this->evaluateNextStep($form);
         $this->redirect()->toRoute('selfserve/licence-type',    
-                                array('licenceId' => $licenceId, 
+                                array('applicationId' => $params['applicationId'], 
                                       'step' => $next_step));
     }
     
@@ -160,17 +163,18 @@ class IndexController extends FormJourneyActionController{
      */
     public function processLicenceType($valid_data, $form, $params)
     {
-        $licenceId = $params['licenceId'];
+        $licence = $this->_getLicenceEntity();
+
         $data = array(
+        	'id' => $licence['id'],
         	'licenceType' => $valid_data['licence-type']['licence_type'],
-        	'id' => $licenceId,
-            'version' => $valid_data['version'],
+                'version' => $valid_data['version'],
         );
         $this->processEdit($data, 'Licence');
         
         $next_step = $this->evaluateNextStep($form);
         $this->redirect()->toRoute('selfserve/licence-type-complete', 
-                                array('licenceId' => $params['licenceId'], 
+                                array('applicationId' => $params['applicationId'], 
                                       'step' => $next_step));
     }
     
@@ -201,17 +205,18 @@ class IndexController extends FormJourneyActionController{
      */
     public function processLicenceTypePsv($valid_data, $form, $params)
     {
-        $licenceId = $params['licenceId'];
+        $licence = $this->_getLicenceEntity();
+
         $data = array(
+        	'id' => $licence['id'],
         	'licenceType' => $valid_data['licence-type-psv']['licence-type-psv'],
-        	'id' => $licenceId,
-            'version' => $valid_data['version'],
+                'version' => $valid_data['version'],
         );
         $this->processEdit($data, 'Licence');
         
         $next_step = $this->evaluateNextStep($form);
         $this->redirect()->toRoute('selfserve/licence-type-complete', 
-                                array('licenceId' => $params['licenceId'], 
+                                array('application' => $params['applicationId'], 
                                       'step' => $next_step));
  
     }
@@ -228,7 +233,7 @@ class IndexController extends FormJourneyActionController{
     	return array(
     	    'version' => $entity['version'],
     	    'licence-type-psv' => array(
-    		    'licence-type-psv' => $entity['licenceType'],
+                'licence-type-psv' => $entity['licenceType'],
     	    ),
     	);
     }
@@ -244,17 +249,18 @@ class IndexController extends FormJourneyActionController{
      */
     public function processLicenceTypeNi($valid_data, $form, $params)
     {
-        $licenceId = $params['licenceId'];
+        $licence = $this->_getLicenceEntity();
+
         $data = array(
+        	'id' => $licence['id'],        
         	'licenceType' => $valid_data['licence-type-ni']['licence_type'],
-        	'id' => $licenceId,
-            'version' => $valid_data['version'],
+                'version' => $valid_data['version'],
         );
         $this->processEdit($data, 'Licence');
 
         $next_step = $this->evaluateNextStep($form);
         $this->redirect()->toRoute('selfserve/licence-type-complete',  
-                                array('licenceId' => $params['licenceId'], 
+                                array('applicationId' => $params['applicationId'], 
                                       'step' => $next_step));
  
     }
@@ -271,7 +277,7 @@ class IndexController extends FormJourneyActionController{
     	return array(
     	    'version' => $entity['version'],
     	    'licence-type-ni' => array(
-    		    'licence_type' => $entity['licenceType'],
+            'licence_type' => $entity['licenceType'],
     	    ),
     	);
     }
@@ -282,23 +288,12 @@ class IndexController extends FormJourneyActionController{
      */
     public function completeAction()
     {
-        $licenceId = $this->params()->fromRoute('licenceId');
+        $applicationId = $this->params()->fromRoute('applicationId');
 
         // persist data if possible
         $this->redirect()->toRoute('selfserve/business-type', 
-                                array('licenceId' => $licenceId, 'step' => 
+                                array('applicationId' => $applicationId, 'step' => 
                                  'business-type'));
-    }
-    
-    /**
-     * Get licence entity based on route id value
-     *
-     * @return array|object
-     */
-    protected function _getLicenceEntity()
-    {
-        $licenceId = (int) $this->params()->fromRoute('licenceId');
-        return $this->makeRestCall('Licence', 'GET', array('id' => $licenceId));
     }
    
 }

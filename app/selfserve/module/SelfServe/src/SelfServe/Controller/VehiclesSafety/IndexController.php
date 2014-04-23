@@ -5,7 +5,7 @@
  *
  *
  * @package		selfserve
- * @subpackage          vehicles-safety
+ * @subpackage          vehicle-safety
  * @author		S Lizzio <shaun.lizzio@valtech.co.uk>
  */
 
@@ -24,7 +24,7 @@ class IndexController extends FormJourneyActionController{
      */
     public function __construct()
     {
-        $this->setCurrentSection('vehicles-safety');
+        $this->setCurrentSection('vehicle-safety');
     }
     
     /**
@@ -33,9 +33,32 @@ class IndexController extends FormJourneyActionController{
      * @return \Zend\View\Model\ViewModel
      */
     public function indexAction() {
-        
+      
         $licence = $this->_getLicenceEntity();
         $vehicleTable = $this->generateVehicleTable($licence);
+
+        $action = $this->getRequest()->getPost('action');
+
+        // process any submit button pressed
+        if (isset($action))
+        {
+
+            switch($action)
+            { 
+                case 'Add':
+                    $this->redirectToVehicleAction($action);
+                    break;
+                case 'Edit':
+                    // todo validation
+                    $this->redirectToVehicleAction($action);
+                    break;
+                case 'Delete':
+                    // todo validation
+                    $this->redirectToVehicleAction($action);
+                    break;
+            }
+
+        }
         
         // render the view
         $view = new ViewModel(['vehicleTable' => $vehicleTable]);
@@ -43,9 +66,27 @@ class IndexController extends FormJourneyActionController{
         return $view;
     }
     
-    private function generateVehicleTable($licence)
+    /**
+     * Method to redirect user depending on action
+     * 
+     * @param string $action
+     */
+    private function redirectToVehicleAction($action)
     {
-        $results = $this->makeRestCall('LicenceVehicle', 'GET', array('licenceId' => $licence['id']));
+        $applicationId = $this->params()->fromRoute('applicationId');
+        $vehicleId = $this->getRequest()->getPost('id'); 
+        
+        return $this->redirect()->toRoute('selfserve/vehicle-safety/vehicle-action/vehicle-'.strtolower($action), 
+            array(  'action' => $action, 
+                    'vehicleId' => $vehicleId, 
+                    'applicationId' => $applicationId
+                 )
+            );
+    }
+    
+    protected function generateVehicleTable($licence)
+    {
+        $results = $this->makeRestCall('LicenceVehicle', 'GET', array('licence' => $licence['id']));
 
         $settings = array(
             'sort' => 'field',
@@ -64,13 +105,7 @@ class IndexController extends FormJourneyActionController{
      */
     public function completeAction()
     {
-        $licenceId = $this->params()->fromRoute('licenceId');
 
-        // persist data if possible
-        $request  = $this->getRequest();
-        $this->redirect()->toRoute('selfserve/business-type', 
-                                array('licenceId' => $licenceId, 'step' => 
-                                 'business-type'));
     }
    
 }
