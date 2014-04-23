@@ -55,6 +55,7 @@ class VehicleController extends FormJourneyActionController{
     public function editAction()
     {
         $licence = $this->_getLicenceEntity();
+
         $goodsOrPsv = $licence['goodsOrPsv'] == 'PSV' ? 'psv' : 'goods';
 
         $vehicleId  = $this->params()->fromRoute('vehicleId');
@@ -65,6 +66,7 @@ class VehicleController extends FormJourneyActionController{
         
         //get operating centre enetity based on applicationId and operatingCentreId
         $result = $this->makeRestCall('Vehicle', 'GET', $data);
+
         if (empty($result)){
             return $this->notFoundAction();
         }
@@ -77,12 +79,13 @@ class VehicleController extends FormJourneyActionController{
             'plated_weight' => $result['platedWeight'],
             'body_type' => $result['bodyType']
         );
+
         
         // generate form with data
         $form = $this->generateFormWithData(
                 'update-vehicle', 'processEditGoodsVehicleForm', $data
         );
-        
+
         $view = $this->getViewModel(['form' => $form, 'goodsOrPsv' => $goodsOrPsv]);
         $view->setTemplate('self-serve/vehicle-safety/add-vehicle');
         
@@ -131,7 +134,7 @@ class VehicleController extends FormJourneyActionController{
 
         }
         
-        return $form;
+        return $saveResult;
         
     }
     
@@ -196,6 +199,20 @@ class VehicleController extends FormJourneyActionController{
         $licence = $this->_getLicenceEntity();
 
         $this->createLicenceVehicle($licence, $vehicle);
+        
+        return $vehicle;
+    }
+    
+    /**
+     * Method to update a vehicle Entity
+     * 
+     * @param array $validData ['id' => ?]
+     * @return array containing id
+     */
+    private function updateVehicle($validData)
+    {
+        $vehicleData = $this->mapVehicleData($validData);
+        $vehicle = $result = $this->makeRestCall('Vehicle', 'PUT', $vehicleData);
         
         return $vehicle;
     }
