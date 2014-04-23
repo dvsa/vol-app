@@ -110,20 +110,10 @@ return array(
                     )
                 )
             ),
-            'submissions' => array(
-                'type' => 'literal',
-                'options' => array(
-                    'route' => '/submissions',
-                    'defaults' => array(
-                        'controller' => 'CaseController',
-                        'action' => 'submissions'
-                    )
-                )
-            ),
             'case_statement' => array(
                 'type' => 'segment',
                 'options' => array(
-                    'route' => '/case/:case/action/manage/statements',
+                    'route' => '/case/:case/statements[/:action][/:statement]',
                     'constraints' => array(
                         'case' => '[0-9]+'
                     ),
@@ -133,7 +123,20 @@ return array(
                     )
                 )
             ),
-
+            'case_convictions' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/case/:case/action/manage/convictions',
+                    'constraints' => array(
+                        'case' => '[0-9]+',
+                        'statement' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'CaseConvictionController',
+                        'action' => 'index'
+                    )
+                )
+            ),
             'case_stay_action' => array(
                 'type' => 'segment',
                 'options' => array(
@@ -149,16 +152,15 @@ return array(
                     )
                 )
             ),
-            'fieldset' => array(
-                'type' => 'literal',
+            'conviction' => array(
+                'type' => 'segment',
                 'options' => array(
-                    'route' => '/fieldset',
+                    'route' => '/licence/[:licence]/case/[:case]/conviction[/:action][/:id]',
                     'defaults' => array(
-                        'controller' => 'IndexController',
-                        'action' => 'fieldset'
+                        'controller' => 'ConvictionController',
                     )
                 )
-            ),
+            )
         )
     ),
     'controllers' => array(
@@ -167,6 +169,8 @@ return array(
             'IndexController' => 'Olcs\Controller\IndexController',
             'SearchController' => 'Olcs\Controller\SearchController',
             'CaseController' => 'Olcs\Controller\CaseController',
+            'ConvictionController' => 'Olcs\Controller\ConvictionController',
+            'CaseConvictionController' => 'Olcs\Controller\CaseConvictionController',
             'CaseStatementController' => 'Olcs\Controller\CaseStatementController',
             'CaseStayController' => 'Olcs\Controller\CaseStayController'
         )
