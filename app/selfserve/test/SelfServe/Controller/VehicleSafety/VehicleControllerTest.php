@@ -30,8 +30,10 @@ class VehicleControllerTest extends AbstractHttpControllerTestCase
                 'getStepProcessMethod',
                 'getPersistedFormData',
                 'params',
+                'notFoundAction',
                 '_getLicenceEntity',
                 'makeRestCall',
+
             ]
         );
         parent::setUp();
@@ -79,6 +81,43 @@ class VehicleControllerTest extends AbstractHttpControllerTestCase
         $deleteAction = $this->controller->deleteAction();
         $this->assertInstanceOf('Zend\Http\PhpEnvironment\Response', $deleteAction);
         $this->assertEquals(302, $deleteAction->getStatusCode());
+    }
+
+    public function testDeleteWithNoVehicleAction()
+    {
+        $applicationId = '1';
+        $vehicleId = '1';
+
+        $mockParams[0] = $this->getMock('\stdClass', ['fromRoute']);
+        $mockParams[0]->expects($this->once())
+            ->method('fromRoute')
+            ->with($this->equalTo('applicationId'))
+            ->will($this->returnValue($applicationId));
+
+        $mockParams[1] = $this->getMock('\stdClass', ['fromRoute']);
+        $mockParams[1]->expects($this->once())
+            ->method('fromRoute')
+            ->with($this->equalTo('vehicleId'))
+            ->will($this->returnValue($vehicleId));
+
+        $this->controller->expects($this->exactly(2))
+            ->method('params')
+            ->will($this->onConsecutiveCalls($mockParams[0], $mockParams[1]));
+
+        $restCallResult = array('Count' => 0, 'Results' => array());
+
+        $this->controller->expects($this->exactly(1))
+            ->method('makeRestCall')
+            ->will($this->returnValue($restCallResult));
+
+
+        $this->controller->expects($this->once())
+            ->method('notFoundAction')
+            ->will($this->returnValue(new \Zend\Http\PhpEnvironment\Response));
+
+        $deleteAction = $this->controller->deleteAction();
+        $this->assertInstanceOf('Zend\Http\PhpEnvironment\Response', $deleteAction);
+        $this->assertEquals(200, $deleteAction->getStatusCode());
     }
     
     public function testAddAction()

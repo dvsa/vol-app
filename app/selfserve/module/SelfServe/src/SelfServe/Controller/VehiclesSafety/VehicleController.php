@@ -12,7 +12,6 @@ namespace SelfServe\Controller\VehiclesSafety;
 
 use Common\Controller\FormJourneyActionController;
 use Zend\View\Model\ViewModel;
-use SelfServe\SelfServeTrait;
 
 class VehicleController extends FormJourneyActionController{
     
@@ -94,6 +93,8 @@ class VehicleController extends FormJourneyActionController{
     
     /**
      * Performs delete action
+     *
+     * @return \Zend\Http\PhpEnvironment\Response
      */
     public function deleteAction()
     {
@@ -113,7 +114,7 @@ class VehicleController extends FormJourneyActionController{
         }
         $licenceVehicle = $licenceVehicle['Results'][0];
         $result = $this->makeRestCall('LicenceVehicle', 'DELETE', ['id' => $licenceVehicle['id']]);
-        return $this->redirect()->toRoute('selfserve/vehicles-safety', array('applicationId' => $applicationId));
+        return $this->redirect()->toRoute('selfserve/vehicle-safety', array('applicationId' => $applicationId));
     }
     
     /**
