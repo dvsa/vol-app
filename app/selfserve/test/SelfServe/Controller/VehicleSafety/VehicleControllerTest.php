@@ -193,7 +193,9 @@ class VehicleControllerTest extends AbstractHttpControllerTestCase
             'goodsOrPsv' => 'goods'
         ];
 
-        $valid_data = ['vrm' => 'test', 
+        $valid_data = ['id' => '',
+                        'version' => 1,
+                       'vrm' => 'test', 
                        'plated_weight' => 1000,
                        'body_type' => 'asdf']; 
         $form = new \Zend\Form\Form();
@@ -262,7 +264,9 @@ class VehicleControllerTest extends AbstractHttpControllerTestCase
             'goodsOrPsv' => 'goods'
         ];
 
-        $valid_data = ['vrm' => 'test', 
+        $valid_data = ['id' => '',
+                       'version' => 1,
+                       'vrm' => 'test', 
                        'plated_weight' => 1000,
                        'body_type' => 'asdf']; 
         $form = new \Zend\Form\Form();
@@ -333,6 +337,7 @@ class VehicleControllerTest extends AbstractHttpControllerTestCase
         ];
 
         $valid_data = ['id' => 1,
+                       'version' => 3,
                        'vrm' => 'test', 
                        'plated_weight' => 1000,
                        'body_type' => 'asdf']; 
