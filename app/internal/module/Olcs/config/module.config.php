@@ -161,6 +161,11 @@ return array(
             )
         )
     ),
+    'tables' => array(
+        'config' => array(
+            __DIR__ . '/../src/Table/Tables/'
+        )
+    ),
     'controllers' => array(
         'invokables' => array(
             'DefaultController' => 'Olcs\Olcs\Placeholder\Controller\DefaultController',
