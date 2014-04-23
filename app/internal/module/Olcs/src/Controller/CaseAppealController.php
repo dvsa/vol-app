@@ -109,7 +109,8 @@ class CaseAppealController extends CaseController
 
         $this->processAdd($data, 'Appeal');
 
-        $this->redirect()->toRoute('case_appeal', array('case' => $data['case']));
+        $licence = $this->fromRoute('licence');
+        $this->redirect()->toRoute('case_appeal', array('licence' => $licence, 'case' => $data['case']));
     }
 
     /**
@@ -123,7 +124,8 @@ class CaseAppealController extends CaseController
 
         $this->processEdit($data, 'Appeal');
 
-        $this->redirect()->toRoute('case_appeal', array('case' => $data['case']));
+        $licence = $this->fromRoute('licence');
+        $this->redirect()->toRoute('case_appeal', array('licence' => $licence, 'case' => $data['case']));
     }
 
     /**

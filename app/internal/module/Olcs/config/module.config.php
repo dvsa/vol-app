@@ -126,7 +126,7 @@ return array(
             'case_appeal' => array(
                 'type' => 'segment',
                 'options' => array(
-                    'route' => '/case/:case/appeals[/:action][/:appeal]',
+                    'route' => '/licence/:licence/case/:case/appeals[/:action][/:appeal]',
                     'constraints' => array(
                         'case' => '[0-9]+'
                     ),
