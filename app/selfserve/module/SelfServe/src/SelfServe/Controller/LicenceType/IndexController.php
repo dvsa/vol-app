@@ -94,7 +94,7 @@ class IndexController extends FormJourneyActionController{
     public function getOperatorLocationFormData()
     {   
     	$entity = $this->_getLicenceEntity();
-    	if (is_null($entity['niFlag']))
+    	if (empty($entity['niFlag']))
     	    return array('version' => $entity['version']);
     	
         return array(
@@ -285,7 +285,6 @@ class IndexController extends FormJourneyActionController{
         $licenceId = $this->params()->fromRoute('licenceId');
 
         // persist data if possible
-        $request  = $this->getRequest();
         $this->redirect()->toRoute('selfserve/business-type', 
                                 array('licenceId' => $licenceId, 'step' => 
                                  'business-type'));
@@ -296,7 +295,7 @@ class IndexController extends FormJourneyActionController{
      *
      * @return array|object
      */
-    private function _getLicenceEntity()
+    protected function _getLicenceEntity()
     {
         $licenceId = (int) $this->params()->fromRoute('licenceId');
         return $this->makeRestCall('Licence', 'GET', array('id' => $licenceId));
