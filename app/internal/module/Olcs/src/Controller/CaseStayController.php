@@ -14,32 +14,14 @@ use Zend\View\Model\ViewModel;
 class CaseStayController extends CaseController
 {
 
-    public $stayTypes = array(1 => 'Upper Tribunal', 2 => 'Traffic Commissioner / Transport Regulator');
-
-    /**
-     * Page heading
-     *
-     * @param string $action
-     * @param int $stayTypeId
-     * @return string|boolean
-     */
-    private function getPageHeading($action, $stayTypeId)
-    {
-        $heading = $this->getStayType($stayTypeId);
-
-        if ($heading) {
-            return $action . ' ' . $heading;
-        }
-
-        return false;
-    }
+    private $stayTypes = array(1 => 'Upper Tribunal', 2 => 'Traffic Commissioner / Transport Regulator');
 
     /**
      * temporary hardcoding of stay types until proper data available
      *
      * @return array|boolean
      */
-    private function getStayType($stayTypeId)
+    private function getStayTypeName($stayTypeId)
     {
         if (isset($this->stayTypes[$stayTypeId])) {
             return $this->stayTypes[$stayTypeId];
@@ -65,13 +47,13 @@ class CaseStayController extends CaseController
      */
     public function indexAction()
     {
-        $stayTypes = $this->getStayTypes();
-
         $caseId = $this->fromRoute('case');
 
-        if (!is_numeric($caseId)) {
+        if ((int)$caseId == 0) {
             return $this->notFoundAction();
         }
+
+        $stayTypes = $this->getStayTypes();
 
         $result = $this->makeRestCall('Stay', 'GET', array('case' => $caseId));
         $records = array();
@@ -111,6 +93,11 @@ class CaseStayController extends CaseController
         }
 
         $stayTypeId = $this->fromRoute('stayType');
+        $stayTypeName = $this->getStayTypeName($stayTypeId);
+
+        if (!$stayTypeName) {
+            return $this->notFoundAction();
+        }
 
         //if data already exists don't display the add form
         $existingRecord = $this->checkExistingStay($caseId, $stayTypeId);
@@ -127,11 +114,7 @@ class CaseStayController extends CaseController
         );
 
         //add in that this is an an action (reflected in the title)
-        $pageData['pageHeading'] = $this->getPageHeading('Add', $stayTypeId);
-
-        if ($pageData['pageHeading'] === false) {
-            return $this->notFoundAction();
-        }
+        $pageData['pageHeading'] = 'Add ' . $stayTypeName;
 
         $view = new ViewModel(['form' => $form, 'data' => $pageData]);
         $view->setTemplate('case/add-stay');
@@ -170,17 +153,18 @@ class CaseStayController extends CaseController
         $pageData = array_merge($result, $case);
 
         $stayTypeId = $this->fromRoute('stayType');
+        $stayTypeName = $this->getStayTypeName($stayTypeId);
+
+        if (!$stayTypeName) {
+            return $this->notFoundAction();
+        }
 
         $form = $this->generateFormWithData(
             'case-stay', 'processEditStay', $result, true
         );
 
         //add in that this is an an action (reflected in the title)
-        $pageData['pageHeading'] = $this->getPageHeading('Edit', $stayTypeId);
-
-        if ($pageData['pageHeading'] === false) {
-            return $this->notFoundAction();
-        }
+        $pageData['pageHeading'] = 'Edit ' . $stayTypeName;
 
         $view = new ViewModel(['form' => $form, 'data' => $pageData]);
         $view->setTemplate('case/add-stay');
@@ -199,6 +183,7 @@ class CaseStayController extends CaseController
     {
         //if data already exists don't add more
         $existingRecord = $this->checkExistingStay($data['case'], $data['stayType']);
+
         if ($existingRecord) {
             return $this->redirect()->toRoute('case_stay_action', array('action' => 'index', 'case' => $data['case']));
         }
@@ -248,12 +233,8 @@ class CaseStayController extends CaseController
      *
      * @return boolean
      */
-    public function checkExistingStay($caseId, $stayTypeId)
+    private function checkExistingStay($caseId, $stayTypeId)
     {
-        if (!is_numeric($caseId) || !is_numeric($stayTypeId)) {
-            return false;
-        }
-
         $result = $this->makeRestCall('Stay', 'GET', array('case' => $caseId));
 
         if (isset($result['Results'])) {

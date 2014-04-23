@@ -4,7 +4,6 @@
  * Case Stay Test Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- * @todo better unit tests
  */
 
 namespace OlcsTest\Controller;
@@ -20,6 +19,27 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
     {
         $this->setApplicationConfig(
             include __DIR__ . '/../../../../config/application.config.php'
+        );
+
+        $this->controller = $this->getMock(
+            '\Olcs\Controller\CaseStayController', [
+            'makeRestCall',
+            'fromRoute',
+            'getCase',
+            'generateFormWithData',
+            'getCaseVariables',
+            'notFoundAction',
+            'redirect',
+            'processAdd',
+            'processEdit'
+            ]
+        );
+
+        $this->view = $this->getMock(
+            'Zend\View\Model\ViewModel', [
+            'setVariables',
+            'setTemplate'
+            ]
         );
 
         parent::setUp();
@@ -40,33 +60,40 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
         $restComm = 'GET';
         $restParam = array('case' => $caseId);
 
-        $sut = $this->getMock(
-            '\Olcs\Controller\CaseStayController', ['fromRoute', 'makeRestCall', 'getCaseVariables', 'notFoundAction']
-        );
-
-        $view = $this->getMock(
-            'Zend\View\Model\ViewModel', ['setVariables', 'setTemplate']
-        );
-
-        $sut->expects($this->once())
+        $this->controller->expects($this->once())
             ->method('fromRoute')
             ->with($this->equalTo('case'))
             ->will($this->returnValue($caseId));
 
-        if (!is_numeric($caseId)) {
-            $sut->expects($this->once())
-                ->method('notFoundAction');
-        } else {
-            $sut->expects($this->once())
-                ->method('makeRestCall')
-                ->with($this->equalTo($restEnd), $this->equalTo($restComm), $this->equalTo($restParam))
-                ->will($this->returnValue($searchResults));
+        $this->controller->expects($this->once())
+            ->method('makeRestCall')
+            ->with($this->equalTo($restEnd), $this->equalTo($restComm), $this->equalTo($restParam))
+            ->will($this->returnValue($searchResults));
 
-            $sut->expects($this->once())
-                ->method('getCaseVariables');
-        }
+        $this->controller->expects($this->once())
+            ->method('getCaseVariables');
 
-        $sut->indexAction();
+        $this->controller->indexAction();
+    }
+
+    /**
+     * Tests indexAction if a none numeric case id is posted
+     *
+     * @dataProvider badIdProvider
+     *
+     * @param int $caseId
+     */
+    public function testIndexActionNotFound($caseId)
+    {
+        $this->controller->expects($this->once())
+            ->method('fromRoute')
+            ->with($this->equalTo('case'))
+            ->will($this->returnValue($caseId));
+
+        $this->controller->expects($this->once())
+            ->method('notFoundAction');
+
+        $this->controller->indexAction();
     }
 
     /**
@@ -76,68 +103,195 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
      *
      * @param int $caseId
      * @param int $stayTypeId
-     * @param bool $existingRecord
      */
-    public function testAddAction($caseId, $stayTypeId, $existingRecord)
+    public function testAddAction($caseId, $stayTypeId)
     {
-        $case = ['key' => 'case'];
         $viewTemplate = 'case/add-stay';
 
-        $view = $this->getMock(
-            'Zend\View\Model\ViewModel', ['setVariables', 'setTemplate']
-        );
-
-        $sut = $this->getMock('\Olcs\Controller\CaseStayController', ['fromRoute', 'getCase', 'generateFormWithData', 'setTemplate', 'notFoundAction', 'redirect', 'checkExistingStay']);
-
-        $sut->expects($this->at(0))
+        $this->controller->expects($this->at(0))
             ->method('fromRoute')
             ->with($this->equalTo('case'))
             ->will($this->returnValue($caseId));
 
-        $sut->expects($this->at(1))
+        $this->controller->expects($this->at(1))
             ->method('getCase')
             ->with($this->equalTo($caseId))
-            ->will($this->returnValue($this->caseProvider($caseId)));
+            ->will($this->returnValue(array('data' => 'data')));
 
-        if (empty($this->caseProvider($caseId))) {
-            $sut->expects($this->at(2))
-                ->method('notFoundAction');
-        } else {
-            $sut->expects($this->at(2))
-                ->method('fromRoute')
-                ->with($this->equalTo('stayType'))
-                ->will($this->returnValue($stayTypeId));
+        $this->controller->expects($this->at(2))
+            ->method('fromRoute')
+            ->with($this->equalTo('stayType'))
+            ->will($this->returnValue($stayTypeId));
 
-            $sut->expects($this->at(3))
-                ->method('checkExistingStay')
-                ->with($this->equalTo($caseId), $this->equalTo($stayTypeId))
-                ->will($this->returnValue($existingRecord));
+        $this->controller->expects($this->once())
+            ->method('makeRestCall')
+            ->with('Stay', 'GET', $this->equalTo(array('case' => $caseId)))
+            ->will($this->returnValue($this->getStayRestResult(false)));
 
-            if ($existingRecord) {
-                //$this->assertResponseStatusCode(302);
-                $redirectInfo = $this->getRedirectSuccess($caseId);
-                $redirect = $this->getRedirectMock($redirectInfo);
+        $this->controller->expects($this->once())
+            ->method('generateFormWithData');
 
-                $sut->expects($this->once())
-                    ->method('redirect')
-                    ->will($this->returnValue($redirect));
-            } else {
-                //$this->assertResponseStatusCode(200);
-                $sut->expects($this->once())
-                    ->method('generateFormWithData');
+        $this->controller->expects($this->never())
+            ->method('notFoundAction');
 
-                if ($this->getPageHeadingSuccess($stayTypeId)) {
-                    $sut->expects($this->never())
-                        ->method('notFoundAction');
-                } else {
-                    //$view->expects($this->at(0))
-                    //->method('setTemplate')
-                    //->with($this->equalTo($viewTemplate));
-                }
-            }
-        }
+        $this->controller->addAction();
+    }
 
-        $sut->addAction();
+    /**
+     * Tests the add action fails when a record already exists
+     *
+     * @dataProvider addActionProvider
+     *
+     * @param int $caseId
+     * @param int $stayTypeId
+     *
+     */
+    public function testAddActionFailExists($caseId, $stayTypeId)
+    {
+        $redirectInfo = $this->getRedirectSuccess($caseId);
+        $redirect = $this->getRedirectMock($redirectInfo);
+
+        $this->controller->expects($this->at(0))
+            ->method('fromRoute')
+            ->with($this->equalTo('case'))
+            ->will($this->returnValue($caseId));
+
+        $this->controller->expects($this->once())
+            ->method('getCase')
+            ->with($this->equalTo($caseId))
+            ->will($this->returnValue(array('data' => 'data')));
+
+        $this->controller->expects($this->at(2))
+            ->method('fromRoute')
+            ->with($this->equalTo('stayType'))
+            ->will($this->returnValue($stayTypeId));
+
+        $this->controller->expects($this->once())
+            ->method('makeRestCall')
+            ->with('Stay', 'GET', $this->equalTo(array('case' => $caseId)))
+            ->will($this->returnValue($this->getStayRestResult(true)));
+
+        $this->controller->expects($this->once())
+            ->method('redirect')
+            ->will($this->returnValue($redirect));
+
+        $this->controller->addAction();
+    }
+
+    /**
+     * Tests the add action fails when no case data is found
+     */
+    public function testAddActionNotFoundCase()
+    {
+        $this->controller->expects($this->at(0))
+            ->method('fromRoute')
+            ->with($this->equalTo('case'));
+
+        $this->controller->expects($this->at(1))
+            ->method('getCase')
+            ->will($this->returnValue(''));
+
+        $this->controller->expects($this->at(2))
+            ->method('notFoundAction');
+
+        $this->controller->addAction();
+    }
+
+    /**
+     * Tests the add action fails when no stay type data is found
+     *
+     * @dataProvider badIdProvider
+     */
+    public function testAddActionNotFoundStayType($stayTypeId)
+    {
+        $this->controller->expects($this->at(0))
+            ->method('fromRoute')
+            ->with($this->equalTo('case'));
+
+        $this->controller->expects($this->at(1))
+            ->method('getCase')
+            ->will($this->returnValue(array('data' => 'data')));
+
+        $this->controller->expects($this->at(2))
+            ->method('fromRoute')
+            ->with($this->equalTo('stayType'))
+            ->will($this->returnValue($stayTypeId));
+
+        $this->controller->expects($this->once())
+            ->method('notFoundAction');
+
+        $this->controller->addAction();
+    }
+
+    public function testEditActionFailStay()
+    {
+        $this->controller->expects($this->at(0))
+            ->method('fromRoute')
+            ->with($this->equalTo('stay'));
+
+        $this->controller->expects($this->at(1))
+            ->method('makeRestCall')
+            ->will($this->returnValue(''));
+
+        $this->controller->expects($this->at(2))
+            ->method('notFoundAction');
+
+        $this->controller->editAction();
+    }
+
+    public function testEditActionFailCase()
+    {
+        $this->controller->expects($this->at(0))
+            ->method('fromRoute')
+            ->with($this->equalTo('stay'));
+
+        $this->controller->expects($this->at(1))
+            ->method('makeRestCall')
+            ->will($this->returnValue(array('data' => 'data')));
+
+        $this->controller->expects($this->at(2))
+            ->method('fromRoute')
+            ->with($this->equalTo('case'));
+
+        $this->controller->expects($this->once())
+            ->method('getCase')
+            ->will($this->returnValue(''));
+
+        $this->controller->editAction();
+    }
+
+    /**
+     * Tests the edit action fails when no stay type data is found
+     *
+     * @dataProvider badIdProvider
+     */
+    public function testEditActionFailStayType($stayTypeId)
+    {
+        $this->controller->expects($this->at(0))
+            ->method('fromRoute')
+            ->with($this->equalTo('stay'));
+
+        $this->controller->expects($this->once())
+            ->method('makeRestCall')
+            ->will($this->returnValue(array('data' => 'data')));
+
+        $this->controller->expects($this->at(2))
+            ->method('fromRoute')
+            ->with($this->equalTo('case'));
+
+        $this->controller->expects($this->once())
+            ->method('getCase')
+            ->will($this->returnValue(array('data' => 'data')));
+
+        $this->controller->expects($this->at(4))
+            ->method('fromRoute')
+            ->with($this->equalTo('stayType'))
+            ->will($this->returnValue($stayTypeId));
+
+        $this->controller->expects($this->once())
+            ->method('notFoundAction');
+
+        $this->controller->editAction();
     }
 
     /**
@@ -156,62 +310,35 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
         $restParam = array('id' => $stayId);
         $viewTemplate = 'case/add-stay';
 
-        $sut = $this->getMock(
-            '\Olcs\Controller\CaseStayController', ['fromRoute', 'makeRestCall', 'getCase', 'generateFormWithData', 'notFoundAction', 'setTemplate']
-        );
-
-        $view = $this->getMock(
-            'Zend\View\Model\ViewModel', ['setVariables', 'setTemplate']
-        );
-
-        $sut->expects($this->at(0))
+        $this->controller->expects($this->at(0))
             ->method('fromRoute')
             ->with($this->equalTo('stay'))
             ->will($this->returnValue($stayId));
 
-        $sut->expects($this->at(1))
+        $this->controller->expects($this->at(1))
             ->method('makeRestCall')
             ->with($this->equalTo($restEnd), $this->equalTo($restComm), $this->equalTo($restParam))
-            ->will($this->returnValue($this->stayProvider($stayId)));
+            ->will($this->returnValue(array('data' => 'data')));
 
-        if (empty($this->stayProvider($stayId))) {
-            $sut->expects($this->at(2))
-                ->method('notFoundAction');
-        } else {
-            $sut->expects($this->at(2))
-                ->method('fromRoute')
-                ->with($this->equalTo('case'))
-                ->will($this->returnValue($caseId));
+        $this->controller->expects($this->at(2))
+            ->method('fromRoute')
+            ->with($this->equalTo('case'))
+            ->will($this->returnValue($caseId));
 
-            $sut->expects($this->at(3))
-                ->method('getCase')
-                ->with($this->equalTo($caseId))
-                ->will($this->returnValue($this->caseProvider($caseId)));
+        $this->controller->expects($this->at(3))
+            ->method('getCase')
+            ->with($this->equalTo($caseId))
+            ->will($this->returnValue(array('data' => 'data')));
 
-            if (empty($this->caseProvider($caseId))) {
-                $sut->expects($this->once())
-                    ->method('notFoundAction');
-            } else {
-                $sut->expects($this->at(4))
-                    ->method('fromRoute')
-                    ->with($this->equalTo('stayType'))
-                    ->will($this->returnValue($stayTypeId));
+        $this->controller->expects($this->at(4))
+            ->method('fromRoute')
+            ->with($this->equalTo('stayType'))
+            ->will($this->returnValue($stayTypeId));
 
-                $sut->expects($this->once())
-                    ->method('generateFormWithData');
+        $this->controller->expects($this->once())
+            ->method('generateFormWithData');
 
-                if ($this->getPageHeadingSuccess($stayTypeId)) {
-                    $sut->expects($this->never())
-                        ->method('notFoundAction');
-                } else {
-                    //$view->expects($this->at(0))
-                    //->method('setTemplate')
-                    //->with($this->equalTo($viewTemplate));
-                }
-            }
-        }
-
-        $sut->editAction();
+        $this->controller->editAction();
     }
 
     /**
@@ -219,49 +346,82 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
      *
      * @dataProvider processAddStayProvider
      *
-     * @param array $result
      * @param array $data
-     * @param bool $existingRecord
      *
      */
-    public function testProcessAddStay($result, $data, $existingRecord)
+    public function testProcessAddStayFailExists($data)
     {
-        $data['fields'] = array();
+        $redirectInfo = $this->getRedirectExistsFail($data['case']);
+        $redirect = $this->getRedirectMock($redirectInfo);
 
-        $sut = $this->getMock(
-            '\Olcs\Controller\CaseStayController', ['redirect', 'processAdd', 'checkExistingStay']
-        );
+        $this->controller->expects($this->once())
+            ->method('makeRestCall')
+            ->with('Stay', 'GET', $this->equalTo(array('case' => $data['case'])))
+            ->will($this->returnValue($this->getStayRestResult(true)));
 
-        $sut->expects($this->once())
-            ->method('checkExistingStay')
-            ->with($this->equalTo($data['case']), $this->equalTo($data['stayType']))
-            ->will($this->returnValue($existingRecord));
+        $this->controller->expects($this->once())
+            ->method('redirect')
+            ->will($this->returnValue($redirect));
 
-        if ($existingRecord) {
-            $redirectInfo = $this->getRedirectSuccess($data['case']);
-            $redirect = $this->getRedirectMock($redirectInfo);
+        $this->controller->processAddStay($data);
+    }
 
-            $sut->expects($this->once())
-                ->method('redirect')
-                ->will($this->returnValue($redirect));
-        } else {
-            $sut->expects($this->at(1))
-                ->method('processAdd')
-                ->will($this->returnValue($result));
+    /**
+     * Tests processAddStay
+     *
+     * @dataProvider processAddStayProvider
+     *
+     * @param array $data
+     *
+     */
+    public function testProcessAddStay($data)
+    {
+        $this->controller->expects($this->once())
+            ->method('makeRestCall')
+            ->with('Stay', 'GET', $this->equalTo(array('case' => $data['case'])))
+            ->will($this->returnValue($this->getStayRestResult(false)));
 
-            if ($this->getInsertSuccess($result)) {
-                $redirectInfo = $this->getRedirectSuccess($data['case']);
-            } else {
-                $redirectInfo = $this->getRedirectAddFail($data['case'], $data['stayType']);
-            }
+        $this->controller->expects($this->at(1))
+            ->method('processAdd')
+            ->will($this->returnValue(array('id' => 1)));
 
-            $redirect = $this->getRedirectMock($redirectInfo);
+        $redirectInfo = $this->getRedirectSuccess($data['case']);
+        $redirect = $this->getRedirectMock($redirectInfo);
 
-            $sut->expects($this->once())
-                ->method('redirect')
-                ->will($this->returnValue($redirect));
-        }
-        $sut->processAddStay($data);
+        $this->controller->expects($this->once())
+            ->method('redirect')
+            ->will($this->returnValue($redirect));
+
+        $this->controller->processAddStay($data);
+    }
+
+    /**
+     * Tests processAddStay
+     *
+     * @dataProvider processAddStayProvider
+     *
+     * @param array $data
+     *
+     */
+    public function testProcessAddStayFail($data)
+    {
+        $this->controller->expects($this->once())
+            ->method('makeRestCall')
+            ->with('Stay', 'GET', $this->equalTo(array('case' => $data['case'])))
+            ->will($this->returnValue($this->getStayRestResult(false)));
+
+        $this->controller->expects($this->at(1))
+            ->method('processAdd')
+            ->will($this->returnValue(array()));
+
+        $redirectInfo = $this->getRedirectAddFail($data['case'], $data['stayType']);
+        $redirect = $this->getRedirectMock($redirectInfo);
+
+        $this->controller->expects($this->once())
+            ->method('redirect')
+            ->will($this->returnValue($redirect));
+
+        $this->controller->processAddStay($data);
     }
 
     /**
@@ -273,90 +433,45 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
      * @param array $data
      *
      */
-    public function testProcessEditStay($result, $data)
+    public function testProcessEditStay($data)
     {
-        $data['fields'] = array();
-
-        $sut = $this->getMock(
-            '\Olcs\Controller\CaseStayController', ['redirect', 'processEdit']
-        );
-
-        $sut->expects($this->at(0))
+        $this->controller->expects($this->at(0))
             ->method('processEdit')
-            ->will($this->returnValue($result));
+            ->will($this->returnValue(''));
 
-        if ($this->getEditSuccess($result)) {
-            $redirectInfo = $this->getRedirectSuccess($data['case']);
-        } else {
-            $redirectInfo = $this->getRedirectEditFail($data['case'], $data['stay'], $data['stayType']);
-        }
-
+        $redirectInfo = $this->getRedirectSuccess($data['case']);
         $redirect = $this->getRedirectMock($redirectInfo);
 
-        $sut->expects($this->once())
+        $this->controller->expects($this->once())
             ->method('redirect')
             ->will($this->returnValue($redirect));
 
-        return $sut->processEditStay($data);
+        $this->controller->processEditStay($data);
     }
 
     /**
-     * Tests checkExistingStay
+     * Tests for failure of processEditStay
      *
-     * @dataProvider checkExistingStayProvider
+     * @dataProvider processEditStayProvider
      *
-     * @param int $caseId
-     * @param int $stayTypeId
-     * @param array $results
+     * @param array $result
+     * @param array $data
+     *
      */
-    public function testCheckExistingStay($caseId, $stayTypeId, $results)
+    public function testProcessEditStayFail($data)
     {
-        $sut = $this->getMock(
-            '\Olcs\Controller\CaseStayController', ['notFoundAction', 'makeRestCall']
-        );
+        $this->controller->expects($this->at(0))
+            ->method('processEdit')
+            ->will($this->returnValue(array('data' => 'data')));
 
-        if (!is_numeric($caseId) || !is_numeric($stayTypeId)) {
+        $redirectInfo = $this->getRedirectEditFail($data['case'], $data['stay'], $data['stayType']);
+        $redirect = $this->getRedirectMock($redirectInfo);
 
-        } else {
-            $sut->expects($this->once())
-                ->method('makeRestCall')
-                ->with($this->equalTo('Stay'), $this->equalTo('GET'), $this->equalTo(array('case' => $caseId)))
-                ->will($this->returnValue($results));
-        }
+        $this->controller->expects($this->once())
+            ->method('redirect')
+            ->will($this->returnValue($redirect));
 
-        $sut->checkExistingStay($caseId, $stayTypeId);
-    }
-
-    /**
-     * Returns a fake case object or null if input data is not int
-     *
-     * @param int $caseId
-     * @return array|null
-     */
-    public function caseProvider($caseId)
-    {
-        if ((int) $caseId) {
-            $case = ['key' => 'case'];
-            return $case;
-        }
-
-        return null;
-    }
-
-    /**
-     * Returns a fake stay object or null if input data is not int
-     *
-     * @param int $caseId
-     * @return array|null
-     */
-    public function stayProvider($stayId)
-    {
-        if ((int) $stayId) {
-            $stay = ['key' => 'stay'];
-            return $stay;
-        }
-
-        return null;
+        $this->controller->processEditStay($data);
     }
 
     /**
@@ -369,22 +484,6 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
         return array(
             array(24, 1, 1),
             array(24, 1, 2),
-            array(24, 0, 10),
-            array(24, 'a', 10),
-            array(24, true, 10),
-            array(24, 10, 10),
-            array(0, 1, 0),
-            array(0, 2, 0),
-            array(24, 1, 0),
-            array(24, 2, 0),
-            array(0, 1, 10),
-            array(0, 2, 10),
-            array('', 1, ''),
-            array('', 2, ''),
-            array('a', 1, 'b'),
-            array('a', 2, 'b'),
-            array(false, 1, true),
-            array(false, 2, true),
         );
     }
 
@@ -396,58 +495,8 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
     public function addActionProvider()
     {
         return array(
-            array(24, 1, true),
-            array(24, 2, true),
-            array(24, 1, false),
-            array(24, 2, false),
-            array(24, 'a', false),
-            array(24, true, false),
-            array(24, 0, false),
-            array(24, 10, false),
-            array(0, 1, false),
-            array(0, 2, false),
-            array('', 1, false),
-            array('', 2, false),
-            array(false, 1, false),
-            array(false, 2, false),
-            array(true, 1, false),
-            array(true, 2, false),
-            array('a', 1, false),
-            array('a', 2, false),
-        );
-    }
-
-    /**
-     * Data provider for stay type ids
-     *
-     * @return array
-     */
-    public function stayTypeIdProvider()
-    {
-        return array(
-            array(1),
-            array(2),
-            array(0),
-            array(false),
-            array(true),
-            array('a')
-        );
-    }
-
-    /**
-     * Data provider for case ids
-     *
-     * @return array
-     */
-    public function caseIdProvider()
-    {
-        return array(
-            array(24),
-            array(0),
-            array(''),
-            array(false),
-            array(true),
-            array('a')
+            array(24, 1),
+            array(24, 2),
         );
     }
 
@@ -459,48 +508,38 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
     public function indexActionProvider()
     {
         return array(
-            array(24, $this->getRestResult(false)),
-            array(24, $this->getRestResult()),
-            array(0, $this->getRestResult()),
-            array('', $this->getRestResult()),
-            array(false, $this->getRestResult()),
-            array(true, $this->getRestResult()),
-            array('a', $this->getRestResult())
+            array(24, $this->getStayRestResult(false)),
+            array(24, $this->getStayRestResult()),
         );
     }
 
     /**
-     * Data provider for checkExistingStay
-     */
-    public function checkExistingStayProvider()
-    {
-        return array(
-            array(24, 1, $this->getRestResult(false)),
-            array(24, 2, $this->getRestResult(false)),
-            array(24, 1, $this->getRestResult()),
-            array(24, 2, $this->getRestResult()),
-            array(24, 0, $this->getRestResult()),
-            array(0, 1, $this->getRestResult()),
-            array('', '', $this->getRestResult()),
-            array(false, 'true', $this->getRestResult()),
-            array(true, 'false', $this->getRestResult()),
-            array('a', 'b', $this->getRestResult())
-        );
-    }
-
-    /**
-     * simulates a rest result array
+     * Returns a list of Ids which should fail validation
      *
-     * @param bool $empty
      * @return array
      */
-    public function getRestResult($empty = true)
+    public function badIdProvider()
     {
-        if ($empty) {
-            return array('Results' => array());
+        return array(
+            array(0),
+            array(''),
+            array('aaa')
+        );
+    }
+
+    /**
+     * simulates a stay rest result array
+     *
+     * @param bool $results
+     * @return array
+     */
+    public function getStayRestResult($results = true)
+    {
+        if ($results) {
+            return array('Results' => array(1 => array('stayType' => 1)));
         }
 
-        return array('Results' => array(1 => array('stayType' => 1)));
+        return array('Results' => array());
     }
 
     /**
@@ -511,14 +550,8 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
     public function processAddStayProvider()
     {
         return array(
-            array(array('id' => 1), array('case' => 1, 'stayType' => 1), true),
-            array(array('id' => 1), array('case' => 1, 'stayType' => 2), true),
-            array(array(), array('case' => 1, 'stayType' => 2), false),
-            array(array(), array('case' => 1, 'stayType' => 2), false),
-            array(array('id' => 1), array('case' => 1, 'stayType' => 1), false),
-            array(array('id' => 1), array('case' => 1, 'stayType' => 2), false),
-            array(array(), array('case' => 1, 'stayType' => 2), false),
-            array(array(), array('case' => 1, 'stayType' => 2), false)
+            array(array('case' => 1, 'stayType' => 1, 'fields' => array())),
+            array(array('case' => 1, 'stayType' => 2, 'fields' => array()))
         );
     }
 
@@ -530,40 +563,82 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
     public function processEditStayProvider()
     {
         return array(
-            array(array('failed' => true), array('case' => 1, 'stay' => 1, 'stayType' => 1)),
-            array(array('failed' => true), array('case' => 1, 'stay' => 1, 'stayType' => 2)),
-            array(array(), array('case' => 1, 'stay' => 1, 'stayType' => 1)),
-            array(array(), array('case' => 1, 'stay' => 1, 'stayType' => 2))
+            array(array('case' => 1, 'stay' => 1, 'stayType' => 1, 'fields' => array())),
+            array(array('case' => 1, 'stay' => 1, 'stayType' => 2, 'fields' => array())),
         );
     }
 
-    public function getRedirectSuccess($caseId)
+    /**
+     * Parameters for a successful redirect
+     *
+     * @param int $caseId
+     * @return array
+     */
+    private function getRedirectSuccess($caseId)
     {
         $redirectInfo['string'] = $this->getRedirectAction();
         $redirectInfo['options'] = array('action' => 'index', 'case' => $caseId);
         return $redirectInfo;
     }
 
-    public function getRedirectAddFail($caseId, $stayTypeId)
+    /**
+     * Parameters for redirect if adding a record failed
+     *
+     * @param int $caseId
+     * @param int $stayTypeId
+     * @return array
+     */
+    private function getRedirectAddFail($caseId, $stayTypeId)
     {
         $redirectInfo['string'] = $this->getRedirectAction();
         $redirectInfo['options'] = array('action' => 'add', 'case' => $caseId, 'stayType' => $stayTypeId);
         return $redirectInfo;
     }
 
-    public function getRedirectEditFail($caseId, $stayId, $stayTypeId)
+    /**
+     * Paramaeters for a redirect after a failure where a record already existed
+     *
+     * @param int $caseId
+     * @return array
+     */
+    private function getRedirectExistsFail($caseId)
+    {
+        return $this->getRedirectSuccess($caseId);
+    }
+
+    /**
+     * Paramaeters for a redirect after an edit has failed
+     *
+     * @param int $caseId
+     * @param int $stayId
+     * @param int $stayTypeId
+     *
+     * @return array
+     */
+    private function getRedirectEditFail($caseId, $stayId, $stayTypeId)
     {
         $redirectInfo['string'] = $this->getRedirectAction();
         $redirectInfo['options'] = array('action' => 'edit', 'case' => $caseId, 'stayType' => $stayTypeId, 'stay' => $stayId);
         return $redirectInfo;
     }
 
-    public function getRedirectAction()
+    /**
+     * Returns the routing action for the stays page
+     *
+     * @return string
+     */
+    private function getRedirectAction()
     {
         return 'case_stay_action';
     }
 
-    public function getRedirectMock($redirectInfo)
+    /**
+     * Creates a mock class (used for the redirect method)
+     *
+     * @param type $redirectInfo
+     * @return type
+     */
+    private function getRedirectMock($redirectInfo)
     {
         $redirect = $this->getMock('stdClass', ['toRoute']);
         $redirect->expects($this->once())
@@ -571,34 +646,5 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
             ->with($this->equalTo($redirectInfo['string']), $this->equalTo($redirectInfo['options']));
 
         return $redirect;
-    }
-
-    public function getInsertSuccess($result)
-    {
-        if (isset($result['id'])) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public function getEditSuccess($result)
-    {
-        if (empty($result)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * simulates whether page heading was generated successfully
-     *
-     * @todo we don't currently have an agreed data source
-     */
-    public function getPageHeadingSuccess($stayTypeId)
-    {
-        $validId = array(1, 2);
-        return in_array($stayTypeId, $validId);
     }
 }
