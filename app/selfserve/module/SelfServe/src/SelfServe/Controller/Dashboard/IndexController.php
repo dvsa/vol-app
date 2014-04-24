@@ -73,6 +73,7 @@ class IndexController extends FormActionController
             $this->redirect()->toRoute('selfserve/licence-type', array('applicationId' => $applicationId, 'step' => 'operator-location'));
         }
         catch (\Exception $e){
+            throw $e;
             
             //An error occured and transaction should be rolled back. Message: $'); 
             throw $e;

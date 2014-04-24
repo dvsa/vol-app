@@ -40,14 +40,10 @@ return array(
             'SelfServe\LicenceType\Index' => 'SelfServe\Controller\LicenceType\IndexController',
             'SelfServe\BusinessType\Index' => 'SelfServe\Controller\BusinessType\IndexController',
             'SelfServe\Finance\Index' => 'SelfServe\Controller\Finance\IndexController',
+            'SelfServe\Finance\OperatingCentreController' => 'SelfServe\Controller\Finance\OperatingCentreController',
             'SelfServe\VehiclesSafety\Index' => 'SelfServe\Controller\VehiclesSafety\IndexController',
             'SelfServe\VehiclesSafety\Vehicle' => 'SelfServe\Controller\VehiclesSafety\VehicleController'
         ),
-    ),
-    'tables' => array(
-        'config' => array(
-            __DIR__ . '/../src/SelfServe/Table/Tables/'
-        )
     ),
     'service_manager' => array(
         'factories' => array(
