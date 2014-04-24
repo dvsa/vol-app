@@ -371,7 +371,29 @@ class CaseController extends FormActionController
         $case = $this->params()->fromRoute('case');
         $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licence)));
 
-        $result = $this->makeRestCall('VosaCase', 'GET', array('id' => $case, 'licence' => $licence));
+        $bundle = json_encode(
+            array(
+                'children' => array(
+                    'categories' => array(
+                        'properties' => array(
+                            'id'
+                        )
+                    ),
+                    'licence' => array(
+                        'properties' => array(
+                            'id'
+                        )
+                    )
+
+                )
+            )
+        );
+
+        $result = $this->makeRestCall(
+            'VosaCase',
+            'GET',
+            array('id' => $case, 'licence' => $licence, 'bundle' => $bundle)
+        );
 
         if (empty($result)) {
             return $this->notFoundAction();
@@ -383,6 +405,8 @@ class CaseController extends FormActionController
         $result['fields'] = $result;
 
         $result['categories'] = $this->unFormatCategories($categories);
+
+        $result['licence'] = $result['licence']['id'];
 
         $form = $this->generateFormWithData(
             'case', 'processEditCase', $result, true
@@ -514,13 +538,13 @@ class CaseController extends FormActionController
             }
         }
 
-        foreach ($categories as $categoryId) {
+        foreach ($categories as $category) {
 
-            if (!isset($formattedCategories[$translations[$categoryId]])) {
-                $formattedCategories[$translations[$categoryId]] = array();
+            if (!isset($formattedCategories[$translations[$category['id']]])) {
+                $formattedCategories[$translations[$category['id']]] = array();
             }
 
-            $formattedCategories[$translations[$categoryId]][] = 'case_category.' . $categoryId;
+            $formattedCategories[$translations[$category['id']]][] = 'case_category.' . $category['id'];
         }
 
         return $formattedCategories;
