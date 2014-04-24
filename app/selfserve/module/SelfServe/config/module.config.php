@@ -8,9 +8,14 @@
  */
 $routes = [];
 
-foreach (array_map(function ($file) {
-    return include $file;
-}, glob(__DIR__ . '/routes/*.routes.php')) as $rs) {
+$routeArray = array_map(
+    function ($file) {
+        return include $file;
+    },
+    glob(__DIR__ . '/routes/*.routes.php')
+);
+
+foreach ($routeArray as $rs) {
     $routes += $rs;
 }
 
@@ -36,6 +41,8 @@ return array(
             'SelfServe\BusinessType\Index' => 'SelfServe\Controller\BusinessType\IndexController',
             'SelfServe\Finance\Index' => 'SelfServe\Controller\Finance\IndexController',
             'SelfServe\Finance\OperatingCentreController' => 'SelfServe\Controller\Finance\OperatingCentreController',
+            'SelfServe\VehiclesSafety\Index' => 'SelfServe\Controller\VehiclesSafety\IndexController',
+            'SelfServe\VehiclesSafety\Vehicle' => 'SelfServe\Controller\VehiclesSafety\VehicleController'
         ),
     ),
     'service_manager' => array(

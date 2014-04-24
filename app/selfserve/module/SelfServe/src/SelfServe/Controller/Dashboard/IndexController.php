@@ -56,14 +56,27 @@ class IndexController extends FormActionController
             );
     
             // create licence
-            $result = $this->makeRestCall('Licence', 'POST', $data);
-            $licenceId = $result['id'];
-                
-            $this->redirect()->toRoute('selfserve/licence-type', array('licenceId' => $licenceId, 'step' => 'operator-location'));
+            $licenceResult = $this->makeRestCall('Licence', 'POST', $data);
+            $licenceId = $licenceResult['id'];
+     
+            $data = array(
+                'version'       => 1,
+                'licence' => $licenceId,
+                'createdOn'   => date('Y-m-d h:i:s'),
+                'status' => 'app_status.new'
+            );
+            
+            // create application
+            $applicationResult = $this->makeRestCall('Application', 'POST', $data);
+            $applicationId = $applicationResult['id'];
+            
+            $this->redirect()->toRoute('selfserve/licence-type', array('applicationId' => $applicationId, 'step' => 'operator-location'));
         }
         catch (\Exception $e){
             throw $e;
-            die('An error occured and transaction should be rolled back.');   
+            
+            //An error occured and transaction should be rolled back. Message: $'); 
+            throw $e;
         }
     }
 
