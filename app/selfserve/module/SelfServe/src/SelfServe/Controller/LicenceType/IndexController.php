@@ -206,7 +206,6 @@ class IndexController extends FormJourneyActionController{
     public function processLicenceTypePsv($valid_data, $form, $params)
     {
         $licence = $this->_getLicenceEntity();
-
         $data = array(
         	'id' => $licence['id'],
         	'licenceType' => $valid_data['licence-type-psv']['licence-type-psv'],
@@ -216,7 +215,7 @@ class IndexController extends FormJourneyActionController{
         
         $next_step = $this->evaluateNextStep($form);
         $this->redirect()->toRoute('selfserve/licence-type-complete', 
-                                array('application' => $params['applicationId'], 
+                                array('applicationId' => $params['applicationId'],
                                       'step' => $next_step));
  
     }

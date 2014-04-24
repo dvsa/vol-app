@@ -46,7 +46,7 @@ return array(
     ),
     'tables' => array(
         'config' => array(
-            __DIR__ . '/../src/Table/Tables/'
+            __DIR__ . '/../src/SelfServe/Table/Tables/'
         )
     ),
     'service_manager' => array(
