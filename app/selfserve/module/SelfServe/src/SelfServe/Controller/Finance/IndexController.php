@@ -18,11 +18,24 @@ class IndexController extends FormJourneyActionController
 {
     protected $messages;
     protected $section = 'finance';
-    
-    public function indexAction() 
+
+    public function indexAction()
     {
+        $results = $this->makeRestCall('ApplicationOperatingCentre', 'GET', array('applicationId' => 1));
+
+        $settings = array(
+            'sort' => 'address',
+            'order' => 'ASC',
+            'limit' => 10,
+            'page' => 1,
+            'url' => $this->getPluginManager()->get('url')
+        );
+        $table = $this->getServiceLocator()->get('Table')->buildTable('operatingcentre', $results, $settings);
+
         // render the view
-        $view = new ViewModel();
+        $view = new ViewModel(Array(
+                        'operatingCentres' => $table
+                    ));
         $view->setTemplate('self-serve/finance/index');
         return $view;
     }
@@ -35,7 +48,7 @@ class IndexController extends FormJourneyActionController
 
         // persist data if possible
         $request  = $this->getRequest();
-       
+
         $this->redirect()->toRoute('selfserve/business', ['step' => 'business_type']);
 
     }

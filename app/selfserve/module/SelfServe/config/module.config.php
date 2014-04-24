@@ -46,6 +46,11 @@ return array(
             'SelfServe\PreviousHistory\Index' => 'SelfServe\Controller\PreviousHistory\IndexController',
         ),
     ),
+    'tables' => array(
+        'config' => array(
+            __DIR__ . '/../src/SelfServe/Table/Tables/'
+        )
+    ),
     'service_manager' => array(
         'factories' => array(
         ),
