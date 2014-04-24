@@ -64,9 +64,10 @@ class VehicleControllerTest extends AbstractHttpControllerTestCase
         $restCallResults = array(
         	array('Count' => 1, 'Results' => array(array('id' => 1))),
             array(),
+            array(),
         );
         
-        $this->controller->expects($this->exactly(2))
+        $this->controller->expects($this->exactly(3))
             ->method('makeRestCall')
             ->will($this->onConsecutiveCalls($restCallResults[0], $restCallResults[1]));
         

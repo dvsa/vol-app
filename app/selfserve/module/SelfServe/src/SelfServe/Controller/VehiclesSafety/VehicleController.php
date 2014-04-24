@@ -114,6 +114,9 @@ class VehicleController extends FormJourneyActionController{
         }
         $licenceVehicle = $licenceVehicle['Results'][0];
         $result = $this->makeRestCall('LicenceVehicle', 'DELETE', ['id' => $licenceVehicle['id']]);
+
+        $this->makeRestCall('Vehicle', 'DELETE', ['id' => $vehicleId]);
+
         return $this->redirect()->toRoute('selfserve/vehicle-safety', array('applicationId' => $applicationId));
     }
     
