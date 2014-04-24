@@ -20,6 +20,8 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
         $this->setApplicationConfig(
             include __DIR__.'/../../../../config/application.config.php'
         );
+    
+        $this->serviceLocator = $this->getMock('\stdClass', array('get'));
 
         parent::setUp();
 
@@ -287,4 +289,105 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
         $this->controller->indexAction();
     }
     
+   public function testGenerateVehicleTable()
+    {
+        $this->setUpMockController( [
+                'makeRestCall',
+                'getPluginManager',
+                'getServiceLocator',
+            ]);
+        $licenceId = 7;
+        $mockUrl = $this->getMock('\StdClass');
+        $mockLicence = ['id' => $licenceId];
+        
+        $settings = array(
+            'sort' => 'field',
+            'order' => 'ASC',
+            'limit' => 10,
+            'page' => 1,
+            'url' => $mockUrl
+        );
+        $mockResults = [0 => ['vrm' => 'VRM1']];
+        
+        $this->controller->expects($this->once())
+                ->method('makeRestCall')
+                ->with($this->equalTo('LicenceVehicle'),
+                        $this->equalTo('GET'),
+                        $this->equalTo(['licence' => $mockLicence['id']])
+                        )
+                ->will($this->returnValue($mockResults));
+        
+        $mockPluginManager = $this->getMock('\stdClass', array('get'));
+        
+        $mockPluginManager->expects($this->once())
+            ->method('get')
+            //->with($this->equalTo('url'))
+            ->will($this->returnValue($mockUrl));
+
+        $this->controller->expects($this->once())
+                ->method('getPluginManager')
+                ->will($this->returnValue($mockPluginManager));
+        
+        
+        $mockTableService = $this->getMock('\stdClass', array('buildTable'));
+        $mockTable = '<html>table</html>';
+        
+        
+        $this->setServiceLocator('Table', $mockTableService);
+                
+        $mockTableService->expects($this->once())
+            ->method('buildTable')
+            ->with($this->equalTo('vehicle'),
+                    $this->equalTo($mockResults),
+                    $this->equalTo($settings))
+            ->will($this->returnValue($mockTable));
+        
+        $this->setServiceLocator('Table', $mockTableService);
+
+        $this->controller->generateVehicleTable($mockLicence);
+    }
+    
+    public function testCompleteAction() 
+    {
+        $this->setUpMockController( [
+            'params',
+            'redirect'
+        ]);
+        $mockRedirect = $this->getMock('\stdClass', array('toRoute'));
+
+        $mockParams = $this->getMock('\stdClass', array('fromRoute'));
+        $applicationId = 7;
+        $next_step = 'index';
+        $mockParams->expects($this->once())
+            ->method('fromRoute')
+            ->with($this->equalTo('applicationId'))
+            ->will($this->returnValue($applicationId));
+                
+        $this->controller->expects($this->once())
+                ->method('params')
+                ->will($this->returnValue($mockParams));   
+        
+        $mockRedirect->expects($this->once())
+                ->method('toRoute')
+                ->with($this->equalTo('selfserve/transport'), 
+                       $this->equalTo(['applicationId' => $applicationId, 'step' => $next_step]));
+           
+        $this->controller->expects($this->once())
+                ->method('redirect')
+                ->will($this->returnValue($mockRedirect));
+        
+        $this->controller->completeAction();
+    }
+    
+    private function setServiceLocator($params, $returnVal) 
+    {
+        $this->controller->expects($this->once())
+            ->method('getServiceLocator')
+            ->will($this->returnValue($this->serviceLocator));
+        
+        $this->serviceLocator->expects($this->once())
+            ->method('get')
+            ->with($params)
+            ->will($this->returnValue($returnVal));
+    }
 }
