@@ -411,7 +411,7 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
         $mockRedirect->expects($this->once())
                 ->method('toRoute')
                 ->with($this->equalTo('selfserve/licence-type-complete'), 
-                       $this->equalTo(['application' => $params['applicationId'], 'step' => $next_step]));
+                       $this->equalTo(['applicationId' => $params['applicationId'], 'step' => $next_step]));
            
         $this->controller->expects($this->once())
                 ->method('redirect')
