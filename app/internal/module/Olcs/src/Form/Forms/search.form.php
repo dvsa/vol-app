@@ -15,33 +15,28 @@ return [
                 'elements' => [
                     'licenceNumber' => [
                         'type' => 'text',
-                        'label' => 'Lic #',
+                        'label' => 'License number',
                         'class' => 'medium',
-                        'placeholder' => 'Licence number'
                     ],
                     'operatorName' => [
                         'type' => 'text',
-                        'label' => 'Operator / trading name',
+                        'label' => 'Operator/trading name',
                         'class' => 'medium',
-                        'placeholder' => 'Trading name'
                     ],
                     'postcode' => [
                         'type' => 'text',
                         'label' => 'Postcode',
                         'class' => 'short',
-                        'placeholder' => 'Postcode'
                     ],
                     'firstName' => [
                         'type' => 'personName',
                         'label' => 'First name',
                         'class' => 'long',
-                        'placeholder' => 'First name'
                     ],
                     'lastName' => [
                         'type' => 'personName',
                         'label' => 'Last name',
                         'class' => 'long',
-                        'placeholder' => 'Last name'
                     ],
                     'dateOfBirth' => [
                         'type' => 'dateSelect',
@@ -57,7 +52,7 @@ return [
             [
                 'name' => 'search-advanced',
                 'options' => [
-                    'label' => 'Advanced Search',
+                    'label' => 'Advanced search',
                     'class' => 'extra-long'
                 ],
                 'elements' => [
@@ -73,12 +68,12 @@ return [
                     ],
                     'caseNumber' => [
                         'type' => 'text',
-                        'label' => 'Case Number',
+                        'label' => 'Case number',
                         'class' => 'medium'
                     ],
                     'transportManagerId' => [
                         'type' => 'text',
-                        'label' => 'Transport Manager ID',
+                        'label' => 'Transport manager ID',
                         'class' => 'medium'
                     ],
                     'operatorId' => [
@@ -88,22 +83,22 @@ return [
                     ],
                     'vehicleRegMark' => [
                         'type' => 'text',
-                        'label' => 'Vehicle Registration Mark',
+                        'label' => 'Vehicle registration mark',
                         'class' => 'medium'
                     ],
                     'diskSerialNumber' => [
                         'type' => 'text',
-                        'label' => 'Disk Serial Number',
+                        'label' => 'Disk serial number',
                         'class' => 'medium'
                     ],
                     'fabsRef' => [
                         'type' => 'text',
-                        'label' => 'Fabs Ref',
+                        'label' => 'Fabs ref',
                         'class' => 'medium'
                     ],
                     'companyNo' => [
                         'type' => 'text',
-                        'label' => 'Company No',
+                        'label' => 'Company number',
                         'class' => 'medium'
                     ]
                 ]
