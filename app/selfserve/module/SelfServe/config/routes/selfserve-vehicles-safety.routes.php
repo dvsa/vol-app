@@ -1,35 +1,68 @@
 <?php
 
 return [
-    'vehicles-safety' => array(
+    'vehicle-safety' => array(
         'type' => 'segment',
         'options' => array(
-            'route' => '/:licenceId/vehicle-safety/:step',
+            'route' => '/:applicationId/vehicle-safety[/]',
+            'constraints' => array(
+                    'applicationId' => '[0-9]+',
+            ),
             'defaults' => array(
                 'controller' => 'Selfserve\VehiclesSafety\Index',
-                'action' => 'index'
+                'action' => 'index',
+                'step'  => 'index',
+            )
+        ),    
+        'may_terminate' => true,
+        'child_routes' => array(      
+            'vehicle-action' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => 'vehicle'
+                ), 
+                'may_terminate' => false,
+                'child_routes' => array(
+                    'vehicle-add' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                                'route' => '/add',
+                                'defaults' => array(
+                                        'controller' => 'SelfServe\VehiclesSafety\Vehicle',
+                                        'action'    => 'add'
+                                ),
+                        ),
+                    ),
+                    'vehicle-edit' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                                'route' => '/:vehicleId/edit',
+                                'constraints' => array(
+                                        'vehicleId' => '[0-9]+'
+                                ),
+                                'defaults' => array(
+                                        'controller' => 'SelfServe\VehiclesSafety\Vehicle',
+                                        'action'    => 'edit'
+                                ),
+                        ),
+                    ),
+                    'vehicle-delete' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/:vehicleId/delete',
+                            'constraints' => array(
+                                'vehicleId' => '[0-9]+'
+                            ),
+                            'defaults' => array(
+                                'controller' => 'SelfServe\VehiclesSafety\Vehicle',
+                                'action'    => 'delete'
+                            ),
+                        ),
+                    ),
+                ),
             )
         ),
-    ),
-    'vehicles-safety-complete' => array(
-        'type' => 'segment',
-        'options' => array(
-            'route' => '/:licenceId/vehicles-safety/complete',
-            'defaults' => array(
-                'controller' => 'Selfserve\VehiclesSafety\Index',
-                'action' => 'complete'
-            )
-        ),
-    ),
-    'vehicle-edit' => array(
-        'type' => 'segment',
-        'options' => array(
-            'route' => '/:licenceId/vehicle/:vehicleId/edit',
-            'defaults' => array(
-                'controller' => 'Selfserve\VehiclesSafety\Vehicle',
-                'action' => 'edit'
-            )
-        ),
-    ),
+    )
+    
 ];
 
