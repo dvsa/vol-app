@@ -83,17 +83,7 @@ class IndexController extends FormJourneyActionController
      */
     public function completeAction()
     {
-        $licenceId = $this->params('licenceId');
-        
-        //create application entity (hack)
-        $data = array(
-        	'version'   => 1,
-            'licence'   => $licenceId,
-            'status'    => 'app_status.new', 
-        );
-        $result = $this->makeRestCall('Application', 'POST', $data);
-        $applicationId = $result['id'];
-        
+        $applicationId = $this->params('applicationId');
         $this->redirect()->toRoute('selfserve/finance', ['step' => 'index', 'applicationId' => $applicationId]);
     }
     
