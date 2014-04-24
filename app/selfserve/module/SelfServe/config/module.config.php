@@ -45,6 +45,11 @@ return array(
             'SelfServe\VehiclesSafety\Vehicle' => 'SelfServe\Controller\VehiclesSafety\VehicleController'
         ),
     ),
+    'tables' => array(
+        'config' => array(
+            __DIR__ . '/../src/SelfServe/Table/Tables/'
+        )
+    ),
     'service_manager' => array(
         'factories' => array(
         ),
