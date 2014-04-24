@@ -99,7 +99,7 @@ return array(
             'case_manage' => array(
                 'type' => 'segment',
                 'options' => array(
-                    'route' => '/case/:case/action/manage/:tab',
+                    'route' => '/licence/[:licence]/case/:case/action/manage/:tab',
                     'constraints' => array(
                         'case' => '[0-9]+'
                     ),
@@ -113,7 +113,7 @@ return array(
             'case_statement' => array(
                 'type' => 'segment',
                 'options' => array(
-                    'route' => '/case/:case/statements[/:action][/:statement]',
+                    'route' => '/licence/[:licence]/case/:case/statements[/:action][/:statement]',
                     'constraints' => array(
                         'case' => '[0-9]+'
                     ),
@@ -123,10 +123,23 @@ return array(
                     )
                 )
             ),
+            'case_appeal' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/licence/:licence/case/:case/appeals[/:action][/:appeal]',
+                    'constraints' => array(
+                        'case' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'CaseAppealController',
+                        'action' => 'index'
+                    )
+                )
+            ),
             'case_convictions' => array(
                 'type' => 'segment',
                 'options' => array(
-                    'route' => '/case/:case/action/manage/convictions',
+                    'route' => '/licence/[:licence]/case/:case/action/manage/convictions',
                     'constraints' => array(
                         'case' => '[0-9]+',
                         'statement' => '[0-9]+'
@@ -163,6 +176,11 @@ return array(
             )
         )
     ),
+    'tables' => array(
+        'config' => array(
+            __DIR__ . '/../src/Table/Tables/'
+        )
+    ),
     'controllers' => array(
         'invokables' => array(
             'DefaultController' => 'Olcs\Olcs\Placeholder\Controller\DefaultController',
@@ -172,6 +190,8 @@ return array(
             'ConvictionController' => 'Olcs\Controller\ConvictionController',
             'CaseConvictionController' => 'Olcs\Controller\CaseConvictionController',
             'CaseStatementController' => 'Olcs\Controller\CaseStatementController',
+            'CaseStatementController' => 'Olcs\Controller\CaseStatementController',
+            'CaseAppealController' => 'Olcs\Controller\CaseAppealController',
             'CaseStayController' => 'Olcs\Controller\CaseStayController'
         )
     ),
