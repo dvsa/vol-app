@@ -216,8 +216,7 @@ class CaseStayController extends CaseController
         unset($data['licence']);
 
         $data = array_merge($data, $data['fields']);
-        //print_r($data);
-        //die();
+
         $result = $this->processEdit($data, 'Stay');
 
         if (empty($result)) {
