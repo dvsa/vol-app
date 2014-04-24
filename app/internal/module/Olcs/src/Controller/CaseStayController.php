@@ -49,7 +49,7 @@ class CaseStayController extends CaseController
     {
         $caseId = $this->fromRoute('case');
 
-        if ((int)$caseId == 0) {
+        if ((int) $caseId == 0) {
             return $this->notFoundAction();
         }
 
@@ -84,6 +84,7 @@ class CaseStayController extends CaseController
      */
     public function addAction()
     {
+        $licence = $this->fromRoute('licence');
         $caseId = $this->fromRoute('case');
 
         $pageData = $this->getCase($caseId);
@@ -103,13 +104,14 @@ class CaseStayController extends CaseController
         $existingRecord = $this->checkExistingStay($caseId, $stayTypeId);
 
         if ($existingRecord) {
-            return $this->redirect()->toRoute('case_stay_action', array('action' => 'index', 'case' => $caseId));
+            return $this->redirect()->toRoute('case_stay_action', array('action' => 'index', 'licence' => $licence, 'case' => $caseId));
         }
 
         $form = $this->generateFormWithData(
             'case-stay', 'processAddStay', array(
             'case' => $caseId,
-            'stayType' => $stayTypeId
+            'stayType' => $stayTypeId,
+            'licence' => $licence
             )
         );
 
@@ -150,6 +152,7 @@ class CaseStayController extends CaseController
             return $this->notFoundAction();
         }
 
+        $result['licence'] = $this->fromRoute('licence');
         $pageData = array_merge($result, $case);
 
         $stayTypeId = $this->fromRoute('stayType');
@@ -185,20 +188,18 @@ class CaseStayController extends CaseController
         $existingRecord = $this->checkExistingStay($data['case'], $data['stayType']);
 
         if ($existingRecord) {
-            return $this->redirect()->toRoute('case_stay_action', array('action' => 'index', 'case' => $data['case']));
+            return $this->redirect()->toRoute('case_stay_action', array('action' => 'index', 'licence' => $data['licence'], 'case' => $data['case']));
         }
 
-        $data['lastUpdatedBy'] = 6;
-        $data['createdBy'] = 7;
         $data = array_merge($data, $data['fields']);
 
         $result = $this->processAdd($data, 'Stay');
 
         if (isset($result['id'])) {
-            return $this->redirect()->toRoute('case_stay_action', array('action' => 'index', 'case' => $data['case']));
+            return $this->redirect()->toRoute('case_stay_action', array('action' => 'index', 'licence' => $data['licence'], 'case' => $data['case']));
         }
 
-        return $this->redirect()->toRoute('case_stay_action', array('action' => 'add', 'case' => $data['case'], 'stayType' => $data['stayType']));
+        return $this->redirect()->toRoute('case_stay_action', array('action' => 'add', 'licence' => $data['licence'], 'case' => $data['case'], 'stayType' => $data['stayType']));
     }
 
     /**
@@ -211,16 +212,19 @@ class CaseStayController extends CaseController
      */
     public function processEditStay($data)
     {
-        $data['lastUpdatedBy'] = 8;
-        $data = array_merge($data, $data['fields']);
+        $licence = $data['licence'];
+        unset($data['licence']);
 
+        $data = array_merge($data, $data['fields']);
+        //print_r($data);
+        //die();
         $result = $this->processEdit($data, 'Stay');
 
         if (empty($result)) {
-            return $this->redirect()->toRoute('case_stay_action', array('action' => 'index', 'case' => $data['case']));
+            return $this->redirect()->toRoute('case_stay_action', array('action' => 'index', 'licence' => $licence, 'case' => $data['case']));
         }
 
-        return $this->redirect()->toRoute('case_stay_action', array('action' => 'edit', 'case' => $data['case'], 'stayType' => $data['stayType'], 'stay' => $data['stay']));
+        return $this->redirect()->toRoute('case_stay_action', array('action' => 'edit', 'licence' => $licence, 'case' => $data['case'], 'stayType' => $data['stayType'], 'stay' => $data['stay']));
     }
 
     /**

@@ -9,7 +9,7 @@ return array(
                     'route' => '/',
                     'defaults' => array(
                         'controller' => 'IndexController',
-                        'action'     => 'index',
+                        'action' => 'index',
                     )
                 )
             ),
@@ -22,7 +22,7 @@ return array(
                     )
                 )
             ),
-             'operators' => array(
+            'operators' => array(
                 'type' => 'Literal',
                 'options' => array(
                     'route' => '/search/operators',
@@ -153,7 +153,7 @@ return array(
             'case_stay_action' => array(
                 'type' => 'segment',
                 'options' => array(
-                    'route' => '/case/:case/action/manage/stays[/:action][/:stayType][/:stay]',
+                    'route' => '/licence/[:licence]/case/:case/action/manage/stays[/:action][/:stayType][/:stay]',
                     'constraints' => array(
                         'case' => '[0-9]+',
                         'staytype' => '[0-9]',
@@ -200,7 +200,7 @@ return array(
             'olcs/view' => dirname(__DIR__) . '/view',
         )
     ),
-    'local_forms_path' => __DIR__ .'/../src/Form/Forms/',
+    'local_forms_path' => __DIR__ . '/../src/Form/Forms/',
     //-------- Start navigation -----------------
     'navigation' => array(
         'default' => array(
