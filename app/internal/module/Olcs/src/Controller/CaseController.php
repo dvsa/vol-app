@@ -50,9 +50,7 @@ class CaseController extends FormActionController
         $submissionsData['url'] = $this->getPluginManager()->get('url');
 
         $submissionsTable = $this->getServiceLocator()->get('Table')->buildTable(
-            'submission',
-            $submissionsResults,
-            $submissionsData
+            'submission', $submissionsResults, $submissionsData
         );
 
         // -- submissions
@@ -101,10 +99,8 @@ class CaseController extends FormActionController
 
                     // Get the submission action status type - this gives us the current submission type
                     $sast = $this->makeRestCall(
-                        'SubmissionActionStatusType',
-                        'GET',
-                        array(
-                            'id' => $sas['submissionActionStatusType']
+                        'SubmissionActionStatusType', 'GET', array(
+                        'id' => $sas['submissionActionStatusType']
                         )
                     );
 
@@ -179,7 +175,7 @@ class CaseController extends FormActionController
             'stays' => [
                 'key' => 'stays',
                 'label' => 'Stays',
-                'url' => $pm->get('url')->fromRoute('case_stay_manage', ['tab' => 'stays'], [], true),
+                'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'stays'], [], true),
             ]
         ];
 
@@ -302,15 +298,13 @@ class CaseController extends FormActionController
                 if (empty($id)) {
 
                     $this->crudActionMissingId();
-
                 } else {
 
                     $this->redirect()->toRoute(
-                        'licence_case_action',
-                        array(
-                            'action' => $action,
-                            'case' => $id,
-                            'licence' => $licence
+                        'licence_case_action', array(
+                        'action' => $action,
+                        'case' => $id,
+                        'licence' => $licence
                         )
                     );
                 }

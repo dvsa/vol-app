@@ -196,9 +196,9 @@ class CaseStayController extends CaseController
 
         if (isset($result['id'])) {
             return $this->redirect()->toRoute('case_stay_action', array('action' => 'index', 'case' => $data['case']));
-        } else {
-            return $this->redirect()->toRoute('case_stay_action', array('action' => 'add', 'case' => $data['case'], 'stayType' => $data['stayType']));
         }
+
+        return $this->redirect()->toRoute('case_stay_action', array('action' => 'add', 'case' => $data['case'], 'stayType' => $data['stayType']));
     }
 
     /**
@@ -218,9 +218,9 @@ class CaseStayController extends CaseController
 
         if (empty($result)) {
             return $this->redirect()->toRoute('case_stay_action', array('action' => 'index', 'case' => $data['case']));
-        } else {
-            return $this->redirect()->toRoute('case_stay_action', array('action' => 'edit', 'case' => $data['case'], 'stayType' => $data['stayType'], 'stay' => $data['stay']));
         }
+
+        return $this->redirect()->toRoute('case_stay_action', array('action' => 'edit', 'case' => $data['case'], 'stayType' => $data['stayType'], 'stay' => $data['stay']));
     }
 
     /**
