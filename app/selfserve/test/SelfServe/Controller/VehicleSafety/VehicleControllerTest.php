@@ -486,4 +486,36 @@ class VehicleControllerTest extends AbstractHttpControllerTestCase
         $this->controller->processEditGoodsVehicleForm($valid_data, $form, $params);
 
     }
+ 
+    public function testCompleteAction() 
+    {
+        $this->setUpMockController( [
+            'params',
+            'redirect'
+        ]);
+        $mockRedirect = $this->getMock('\stdClass', array('toRoute'));
+
+        $mockParams = $this->getMock('\stdClass', array('fromRoute'));
+        $applicationId = 7;
+        $next_step = 'index';
+        $mockParams->expects($this->once())
+            ->method('fromRoute')
+            ->with($this->equalTo('applicationId'))
+            ->will($this->returnValue($applicationId));
+                
+        $this->controller->expects($this->once())
+                ->method('params')
+                ->will($this->returnValue($mockParams));   
+        
+        $mockRedirect->expects($this->once())
+                ->method('toRoute')
+                ->with($this->equalTo('selfserve/vehicle-safety'), 
+                       $this->equalTo(['applicationId' => $applicationId, 'step' => $next_step]));
+           
+        $this->controller->expects($this->once())
+                ->method('redirect')
+                ->will($this->returnValue($mockRedirect));
+        
+        $this->controller->completeAction();
+    }
 }

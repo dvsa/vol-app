@@ -84,7 +84,13 @@ class IndexController extends FormJourneyActionController{
             );
     }
     
-    protected function generateVehicleTable($licence)
+    /**
+     * Method to return the vehicle table for a licence.
+     * 
+     * @param array $licence
+     * @return string HTML table
+     */
+    public function generateVehicleTable($licence)
     {
         $results = $this->makeRestCall('LicenceVehicle', 'GET', array('licence' => $licence['id']));
 
@@ -101,11 +107,16 @@ class IndexController extends FormJourneyActionController{
     }
     
     /**
-     * End of the journey redirect to business type
+     * End of the journey redirect to the next step TBC
      */
     public function completeAction()
     {
+        $applicationId = $this->params()->fromRoute('applicationId');
 
+        // persist data if possible
+        $this->redirect()->toRoute('selfserve/transport', 
+                                array('applicationId' => $applicationId, 'step' => 
+                                 'index'));           
     }
    
 }

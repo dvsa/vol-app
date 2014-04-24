@@ -303,8 +303,14 @@ class VehicleController extends FormJourneyActionController{
      */
     public function completeAction()
     {
+        $applicationId = $this->params()->fromRoute('applicationId');
 
+        // persist data if possible
+        $this->redirect()->toRoute('selfserve/vehicle-safety', 
+                                array('applicationId' => $applicationId, 'step' => 
+                                 'index'));           
     }
+    
 
     /**
      * Method to return a new view model - to make testing easier?
