@@ -7,7 +7,7 @@
  * @todo implement DBUNIT
  */
 
-namespace SelfServe\test\LicenceType;
+namespace SelfServe\test\Finance;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use Zend\Http\Request;
@@ -49,7 +49,7 @@ class OperatingCentreTest extends AbstractHttpControllerTestCase
         $this->controller->setServiceLocator(Bootstrap::getServiceManager());
     }
     
-    public function testProccessAdd()
+    public function testProcessAdd()
     {
         $validData = $this->getValidData();
         $this->controller->expects($this->once())
@@ -104,18 +104,22 @@ class OperatingCentreTest extends AbstractHttpControllerTestCase
     private function getValidData()
     {
         return array(
-                'authorised-vehicles' => array(
-                        'no-of-vehicles' => 1,
-                        'no-of-trailers' => 1,
-                        'parking-spaces-confirmation' => 1,
-                        'permission-confirmation' => 1,
-                ),
-             );
+            'authorised-vehicles' => array(
+                'no-of-vehicles' => 1,
+                'no-of-trailers' => 1,
+                'parking-spaces-confirmation' => 1,
+                'permission-confirmation' => 1,
+                'ad-placed' => 1,
+            ),
+            'address' => array(
+                'addressLine1' => '1 Some Street',
+                'addressLine2' => '',
+                'addressLine3' => '',
+                'city' => 'Leeds',
+                'postcode' => 'LS96NF',
+                'country' => 'country.GB',
+            ),
+
+         );
     }
-    
-    
-    
-    
-    
-    
 }

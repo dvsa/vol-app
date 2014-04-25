@@ -7,7 +7,7 @@
  * @todo implement DBUNIT
  */
 
-namespace SelfServe\test\LicenceType;
+namespace SelfServe\test\Finance;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use Zend\Http\Request;
@@ -76,7 +76,7 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
     public function testForm()
     {
         $form = $this->getOlcsForm('operating-centre');
-        
+
         //valid data
         $mockData = array(
         	'authorised-vehicles' => array(
@@ -84,7 +84,16 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
         	    'no-of-trailers' => 23,
                 'parking-spaces-confirmation' => '1',
                 'permission-confirmation' => '1',
+                'ad-placed' => '1',
             ),
+            'address' => array(
+                'addressLine1' => '1 Some Street',
+                'addressLine2' => '',
+                'addressLine3' => '',
+                'city' => 'Leeds',
+                'postcode' => 'LS96NF',
+                'country' => 'country.GB',
+            )
         );
         $form->setData($mockData);
         $valid = $form->isValid();
@@ -141,14 +150,13 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
         $response = $this->controller->getResponse();
         $form = $result->getVariables()['form'];
         $authorisedVehicles = $form->get('authorised-vehicles');
-    
+
         $this->assertEquals($authorisedVehicles->get('no-of-vehicles')->getValue(), 34);
         $this->assertEquals($authorisedVehicles->get('no-of-trailers')->getValue(), 23);
         $this->assertEquals($authorisedVehicles->get('parking-spaces-confirmation')->getValue(), 1);
         $this->assertEquals($authorisedVehicles->get('permission-confirmation')->getValue(), 1);
     }
-    
-    
+
     protected function getOlcsForm($name)
     {
         $class = new \ReflectionClass('\Common\Controller\FormActionController');
@@ -158,10 +166,7 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
 
         $form->remove('crsf');
         $form->remove('version');
-        
+
         return $form;
     }
-    
-    
-    
 }
