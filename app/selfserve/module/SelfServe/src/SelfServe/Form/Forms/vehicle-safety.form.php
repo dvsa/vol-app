@@ -13,35 +13,35 @@ return array(
                 'name' => 'data',
                 'options' => array(0),
                 'elements' => array(
-                    'vehicleInspectionInterval' => array(
+                    'safety_ins_vehicles' => array(
                         'type' => 'select',
                         'label' => $translationPrefix . 'vehicleInspectionInterval',
                         'value_options' => 'inspection_interval_vehicle',
                         'required' => true
                     ),
-                    'trailerInspectionInterval' => array(
+                    'safety_ins_trailers' => array(
                         'type' => 'select',
                         'label' => $translationPrefix . 'trailerInspectionInterval',
                         'value_options' => 'inspection_interval_trailer',
                         'required' => true
                     ),
-                    'moreFrequentInspections' => array(
+                    'safety_ins_varies' => array(
                         'type' => 'yesNoRadio',
                         'label' => $translationPrefix . 'moreFrequentInspections',
                         'required' => true
                     ),
-                    'tachographAnalyser' => array(
+                    'tachograph_ins' => array(
                         'type' => 'radio',
                         'label' => $translationPrefix . 'tachographAnalyser',
                         'value_options' => 'tachograph_analyser',
                         'required' => true
                     ),
-                    'tachographAnalyserContractor' => array(
+                    'tachograph_ins_name' => array(
                         'type' => 'text',
                         'filters' => '\Common\Form\Elements\InputFilters\VehicleSafetyTachographAnalyserContractor',
                         'label' => $translationPrefix . 'tachographAnalyserContractor'
                     ),
-                    'safetyConfirmation' => array(
+                    'safety_confirmation' => array(
                         // @todo See if we can make this a checkbox
                         'type' => 'multicheckbox',
                         'label' => 'Confirm',
