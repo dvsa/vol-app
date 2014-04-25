@@ -19,7 +19,7 @@ class CaseComplaintController extends CaseController
     /**
      * Main index action responsible for generating the main landing page for
      * complaints.
-     * 
+     *
      * @return \Zend\View\Model\ViewModel
      */
     public function indexAction()
@@ -55,7 +55,34 @@ class CaseComplaintController extends CaseController
         $summary = $this->getCaseSummaryArray($case);
         $details = $this->getCaseDetailsArray($case);
 
-        $results = $this->makeRestCall('Complaint', 'GET', array('vosaCase' => $caseId));
+        $bundle = array(
+                'properties' => array(
+                    'id'
+                ),
+                'children' => array(
+                'groups' => array(
+                    'complaints' => array(
+                         'properties' => array(
+                             'complaint_date'
+                         ),
+                         'children' => array(
+                             'complainant' => array(
+                                'children' => array(
+                                    'person' => array(
+                                        'properties' => array(
+                                            'forename',
+                                            'familyName'
+                                        )
+                                    )
+                                )
+                             )
+                         )
+                     ),
+                )
+            )
+        );
+        $results = $this->makeRestCall('VosaCase', 'GET', array('id' => $caseId, 'bundle' => json_encode($bundle)));
+
 
         $data = [];
         $data['url'] = $this->getPluginManager()->get('url');
