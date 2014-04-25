@@ -3,9 +3,7 @@
 /**
  * Vehicles Controller - responsible for CRUD vehicles
  *
- * @package		selfserve
- * @subpackage          vehicle-safety
- * @author		S Lizzio <shaun.lizzio@valtech.co.uk>
+ * @author S Lizzio <shaun.lizzio@valtech.co.uk>
  */
 
 namespace SelfServe\Controller\VehiclesSafety;
@@ -13,8 +11,14 @@ namespace SelfServe\Controller\VehiclesSafety;
 use Common\Controller\FormJourneyActionController;
 use Zend\View\Model\ViewModel;
 
-class VehicleController extends FormJourneyActionController{
-    
+/**
+ * Vehicles Controller - responsible for CRUD vehicles
+ *
+ * @author S Lizzio <shaun.lizzio@valtech.co.uk>
+ */
+class VehicleController extends FormJourneyActionController
+{
+
     /**
      * Construct the Vehicles Safety Controller class
      * Sets the current section only.
@@ -23,50 +27,49 @@ class VehicleController extends FormJourneyActionController{
     {
         $this->setCurrentSection('update-vehicle');
     }
-    
-        
+
     /**
      * Method to add vehicle
-     * 
+     *
      * @return \Zend\View\Model\ViewModel
      */
-    public function addAction() 
+    public function addAction()
     {
-        $licence = $this->_getLicenceEntity();
+        $licence = $this->getLicenceEntity();
 
         $form = $this->generateForm(
-                'update-vehicle', 'processAddGoodsVehicleForm'
+            'update-vehicle', 'processAddGoodsVehicleForm'
         );
-         
+
         $goodsOrPsv = $licence['goodsOrPsv'] == 'PSV' ? 'psv' : 'goods';
-        
+
         $view = $this->getViewModel(['form' => $form, 'goodsOrPsv' => $goodsOrPsv]);
         $view->setTemplate('self-serve/vehicle-safety/add-vehicle');
-        
+
         return $view;
     }
-    
+
     /**
      * Method to edit a vehicle.
-     * 
+     *
      * @return \Zend\View\Model\ViewModel
      */
     public function editAction()
     {
-        $licence = $this->_getLicenceEntity();
+        $licence = $this->getLicenceEntity();
 
         $goodsOrPsv = $licence['goodsOrPsv'] == 'PSV' ? 'psv' : 'goods';
 
-        $vehicleId  = $this->params()->fromRoute('vehicleId');
-        
+        $vehicleId = $this->params()->fromRoute('vehicleId');
+
         $data = array(
-        	'id' => $vehicleId,
+            'id' => $vehicleId,
         );
-        
+
         //get operating centre enetity based on applicationId and operatingCentreId
         $result = $this->makeRestCall('Vehicle', 'GET', $data);
 
-        if (empty($result)){
+        if (empty($result)) {
             return $this->notFoundAction();
         }
 
@@ -79,18 +82,17 @@ class VehicleController extends FormJourneyActionController{
             'body_type' => $result['bodyType']
         );
 
-        
         // generate form with data
         $form = $this->generateFormWithData(
-                'update-vehicle', 'processEditGoodsVehicleForm', $data
+            'update-vehicle', 'processEditGoodsVehicleForm', $data
         );
 
         $view = $this->getViewModel(['form' => $form, 'goodsOrPsv' => $goodsOrPsv]);
         $view->setTemplate('self-serve/vehicle-safety/add-vehicle');
-        
+
         return $view;
     }
-    
+
     /**
      * Performs delete action
      *
@@ -100,16 +102,16 @@ class VehicleController extends FormJourneyActionController{
     {
         $applicationId = $this->params()->fromRoute('applicationId');
         $vehicleId = $this->params()->fromRoute('vehicleId');
-        $licence = $this->_getLicenceEntity();
-        
+        $licence = $this->getLicenceEntity();
+
         //delete conditions
         $cond = array(
-            'vehicle' => $vehicleId, 
+            'vehicle' => $vehicleId,
             'licence' => $licence['id'],
         );
         $licenceVehicle = $this->makeRestCall('LicenceVehicle', 'GET', $cond);
-        
-        if ($licenceVehicle['Count'] == 0){
+
+        if ($licenceVehicle['Count'] == 0) {
             return $this->notFoundAction();
         }
         $licenceVehicle = $licenceVehicle['Results'][0];
@@ -119,10 +121,10 @@ class VehicleController extends FormJourneyActionController{
 
         return $this->redirect()->toRoute('selfserve/vehicle-safety', array('applicationId' => $applicationId));
     }
-    
+
     /**
      * Process adding of goods vehicle form
-     * 
+     *
      * @param array $valid_data
      * @param \Zend\Form\Form $form
      * @param array $params
@@ -131,18 +133,17 @@ class VehicleController extends FormJourneyActionController{
     public function processAddGoodsVehicleForm($validData, \Zend\Form\Form $form, $params)
     {
         $applicationId = $this->params()->fromRoute('applicationId');
-        $licence = $this->_getLicenceEntity();
+        $licence = $this->getLicenceEntity();
         $saveResult = $this->persistVehicle($validData);
-        
-        if ($saveResult)
-        {
-            $postedData = $this->getRequest()->getPost()->toArray();  
+
+        if ($saveResult) {
+            $postedData = $this->getRequest()->getPost()->toArray();
             $this->determineRedirect($postedData);
         }
-        
+
         return $form;
     }
-  
+
     /**
      * Persist data to database. After that, redirect to landing page
      *
@@ -152,71 +153,64 @@ class VehicleController extends FormJourneyActionController{
     public function processEditGoodsVehicleForm($validData)
     {
         $applicationId = $this->params()->fromRoute('applicationId');
-        $licence = $this->_getLicenceEntity();
+        $licence = $this->getLicenceEntity();
         $saveResult = $this->persistVehicle($validData);
-        
-        if ($saveResult)
-        {
-            $postedData = $this->getRequest()->getPost()->toArray();  
-            $this->determineRedirect($postedData);
 
+        if ($saveResult) {
+            $postedData = $this->getRequest()->getPost()->toArray();
+            $this->determineRedirect($postedData);
         }
-        
+
         return $saveResult;
-        
     }
-    
+
     /**
      * Method to examine the submit_ button that has been pressed and redirect
      * to the correct route.
-     * 
+     *
      * @param array $postedData
      */
     private function determineRedirect($postedData)
     {
         $applicationId = $this->params()->fromRoute('applicationId');
-        if (array_key_exists('submit_add_another', $postedData))
-        {
-            $this->redirect()->toRoute('selfserve/vehicle-safety/vehicle-action/vehicle-add', 
-                                array('action' => 'add', 'applicationId' => $applicationId));            
-        }
-        else 
-        {
-            $this->redirect()->toRoute('selfserve/vehicle-safety', array('applicationId' => $applicationId));        
+        if (array_key_exists('submit_add_another', $postedData)) {
+            $this->redirect()->toRoute(
+                'selfserve/vehicle-safety/vehicle-action/vehicle-add',
+                array(
+                    'action' => 'add',
+                    'applicationId' => $applicationId
+                )
+            );
+        } else {
+            $this->redirect()->toRoute('selfserve/vehicle-safety', array('applicationId' => $applicationId));
         }
     }
-    
+
     /**
      * Method to persist the vehicle and licence vehicle entity data
-     * 
+     *
      * @param array $valid_data
      * @throws \RuntimeException
      */
     private function persistVehicle($validData)
     {
 
-        try
-        {
-            if (isset($validData['id']) && is_numeric($validData['id']))
-            {
+        try {
+            if (isset($validData['id']) && is_numeric($validData['id'])) {
                 $this->updateVehicle($validData);
-            }
-            else 
-            {
+            } else {
                 $this->createVehicle($validData);
             }
-        } 
-        catch (Exception $ex)
-        {
+        } catch (Exception $ex) {
             return false;
         }
-        
+
         return true;
     }
-    
+
     /**
      * Method to create the vehicle Entity onlt
-     * 
+     *
      * @param array $validData ['id' => ?]
      * @return array containing id
      */
@@ -225,16 +219,16 @@ class VehicleController extends FormJourneyActionController{
         $vehicleData = $this->mapVehicleData($validData);
         $vehicle = $result = $this->makeRestCall('Vehicle', 'POST', $vehicleData);
 
-        $licence = $this->_getLicenceEntity();
+        $licence = $this->getLicenceEntity();
 
         $this->createLicenceVehicle($licence, $vehicle);
-        
+
         return $vehicle;
     }
-    
+
     /**
      * Method to update a vehicle Entity
-     * 
+     *
      * @param array $validData ['id' => ?]
      * @return array containing id
      */
@@ -242,13 +236,13 @@ class VehicleController extends FormJourneyActionController{
     {
         $vehicleData = $this->mapVehicleData($validData);
         $vehicle = $result = $this->makeRestCall('Vehicle', 'PUT', $vehicleData);
-        
+
         return $vehicle;
     }
-    
-    /** 
+
+    /**
      * Method to map form data to vehicle data
-     * 
+     *
      * @param array $validData form data
      * @return array entity data
      */
@@ -268,10 +262,10 @@ class VehicleController extends FormJourneyActionController{
         );
         return $vehicleData;
     }
-    
-    /** 
+
+    /**
      * Method to map form data to licencevehicle data
-     * 
+     *
      * @param array $validData form data
      * @return array entity data
      */
@@ -285,10 +279,10 @@ class VehicleController extends FormJourneyActionController{
         );
         return $licenceVehicleData;
     }
-    
+
     /**
      * Method to create the licence vehicle in the database
-     * 
+     *
      * @param array $licence licence data
      * @param array $vehicle vehicle data
      */
@@ -297,7 +291,7 @@ class VehicleController extends FormJourneyActionController{
         $licenceVehicleData = $this->mapLicenceVehicleData($licence, $vehicle);
         $licenceVehicleResult = $lv_result = $this->makeRestCall('LicenceVehicle', 'POST', $licenceVehicleData);
     }
-    
+
     /**
      * End of the journey redirect to vehicle finance landing page
      */
@@ -306,15 +300,18 @@ class VehicleController extends FormJourneyActionController{
         $applicationId = $this->params()->fromRoute('applicationId');
 
         // persist data if possible
-        $this->redirect()->toRoute('selfserve/vehicle-safety', 
-                                array('applicationId' => $applicationId, 'step' => 
-                                 'index'));           
+        $this->redirect()->toRoute(
+            'selfserve/vehicle-safety',
+            array(
+                'applicationId' => $applicationId,
+                'step' => 'index'
+            )
+        );
     }
-    
 
     /**
      * Method to return a new view model - to make testing easier?
-     * 
+     *
      * @return \Zend\View\Model\ViewModel
      */
     private function getViewModel($params)

@@ -3,21 +3,22 @@
 /**
  * Vehicles & Safety  Controller
  *
- *
- * @package		selfserve
- * @subpackage          vehicle-safety
- * @author		S Lizzio <shaun.lizzio@valtech.co.uk>
+ * @author S Lizzio <shaun.lizzio@valtech.co.uk>
  */
 
 namespace SelfServe\Controller\VehiclesSafety;
 
 use Common\Controller\FormJourneyActionController;
 use Zend\View\Model\ViewModel;
-use SelfServe\SelfServeTrait;
 
-class IndexController extends FormJourneyActionController{
-    
-    
+/**
+ * Vehicles & Safety  Controller
+ *
+ * @author S Lizzio <shaun.lizzio@valtech.co.uk>
+ */
+class IndexController extends FormJourneyActionController
+{
+
     /**
      * Construct the Vehicles Safety Controller class
      * Sets the current section only.
@@ -26,25 +27,24 @@ class IndexController extends FormJourneyActionController{
     {
         $this->setCurrentSection('vehicle-safety');
     }
-    
+
     /**
      * Generates the next step form depending on which step the user is on.
-     * 
+     *
      * @return \Zend\View\Model\ViewModel
      */
-    public function indexAction() {
-      
-        $licence = $this->_getLicenceEntity();
+    public function indexAction()
+    {
+
+        $licence = $this->getLicenceEntity();
         $vehicleTable = $this->generateVehicleTable($licence);
 
         $action = $this->getRequest()->getPost('action');
 
         // process any submit button pressed
-        if (isset($action))
-        {
+        if (isset($action)) {
 
-            switch($action)
-            { 
+            switch ($action) {
                 case 'Add':
                     $this->redirectToVehicleAction($action);
                     break;
@@ -57,36 +57,37 @@ class IndexController extends FormJourneyActionController{
                     $this->redirectToVehicleAction($action);
                     break;
             }
-
         }
-        
+
         // render the view
         $view = new ViewModel(['vehicleTable' => $vehicleTable]);
         $view->setTemplate('self-serve/vehicle-safety/index');
         return $view;
     }
-    
+
     /**
      * Method to redirect user depending on action
-     * 
+     *
      * @param string $action
      */
     private function redirectToVehicleAction($action)
     {
         $applicationId = $this->params()->fromRoute('applicationId');
-        $vehicleId = $this->getRequest()->getPost('id'); 
-        
-        return $this->redirect()->toRoute('selfserve/vehicle-safety/vehicle-action/vehicle-'.strtolower($action), 
-            array(  'action' => $action, 
-                    'vehicleId' => $vehicleId, 
-                    'applicationId' => $applicationId
-                 )
-            );
+        $vehicleId = $this->getRequest()->getPost('id');
+
+        return $this->redirect()->toRoute(
+            'selfserve/vehicle-safety/vehicle-action/vehicle-' . strtolower($action),
+            array(
+                'action' => $action,
+                'vehicleId' => $vehicleId,
+                'applicationId' => $applicationId
+            )
+        );
     }
-    
+
     /**
      * Method to return the vehicle table for a licence.
-     * 
+     *
      * @param array $licence
      * @return string HTML table
      */
@@ -99,13 +100,13 @@ class IndexController extends FormJourneyActionController{
             'order' => 'ASC',
             'limit' => 10,
             'page' => 1,
-            'url' => $this->getPluginManager()->get('url') // The helper needs a URL object to build the URL for sorting, pagination, limit etc
+            'url' => $this->getPluginManager()->get('url')
         );
-  
+
         $table = $this->getServiceLocator()->get('Table')->buildTable('vehicle', $results, $settings);
         return $table;
     }
-    
+
     /**
      * End of the journey redirect to the next step TBC
      */
@@ -114,9 +115,12 @@ class IndexController extends FormJourneyActionController{
         $applicationId = $this->params()->fromRoute('applicationId');
 
         // persist data if possible
-        $this->redirect()->toRoute('selfserve/transport', 
-                                array('applicationId' => $applicationId, 'step' => 
-                                 'index'));           
+        $this->redirect()->toRoute(
+            'selfserve/transport',
+            array(
+                'applicationId' => $applicationId,
+                'step' => 'index'
+            )
+        );
     }
-   
 }
