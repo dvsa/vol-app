@@ -18,13 +18,12 @@ return [
         'child_routes' => array(
             'safety-action' => array(
                 'type' => 'segment',
-                'route' => '/safety',
-                'defaults' => array(
-                    'controller' => 'SelfServe\VehiclesSafety\Safety',
-                    'action' => 'index'
-                ),
                 'options' => array(
-                    'route' => 'safety'
+                    'route' => 'safety',
+                    'defaults' => array(
+                        'controller' => 'SelfServe\VehiclesSafety\Safety',
+                        'action' => 'index'
+                    )
                 )
             ),
             'vehicle-action' => array(

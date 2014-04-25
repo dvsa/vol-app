@@ -28,11 +28,11 @@ return array(
             'selfserve' => array(
                 'type' => 'literal',
                 'options' => array(
-                    'route' => '/selfserve',
+                    'route' => '/selfserve'
                 ),
                 'child_routes' => $routes
-            ),
-        ),
+            )
+        )
     ),
     'controllers' => array(
         'invokables' => array(
@@ -42,17 +42,19 @@ return array(
             'SelfServe\Finance\Index' => 'SelfServe\Controller\Finance\IndexController',
             'SelfServe\Finance\OperatingCentreController' => 'SelfServe\Controller\Finance\OperatingCentreController',
             'SelfServe\VehiclesSafety\Index' => 'SelfServe\Controller\VehiclesSafety\IndexController',
-            'SelfServe\VehiclesSafety\Vehicle' => 'SelfServe\Controller\VehiclesSafety\VehicleController'
-        ),
+            'SelfServe\VehiclesSafety\Vehicle' => 'SelfServe\Controller\VehiclesSafety\VehicleController',
+            'SelfServe\VehiclesSafety\Safety' => 'SelfServe\Controller\VehiclesSafety\SafetyController'
+        )
     ),
     'tables' => array(
         'config' => array(
             __DIR__ . '/../src/SelfServe/Table/Tables/'
         )
     ),
+    'local_forms_path' => __DIR__ . '/../src/SelfServe/Form/Forms/',
     'service_manager' => array(
         'factories' => array(
-        ),
+        )
     ),
     'controller_plugins' => array(
         'invokables' => array(
@@ -63,10 +65,10 @@ return array(
     ),
     'view_manager' => array(
         'template_path_stack' => array(
-            __DIR__ . '/../view',
+            __DIR__ . '/../view'
         ),
         'strategies' => array(
-            'ViewJsonStrategy',
-        ),
-    ),
+            'ViewJsonStrategy'
+        )
+    )
 );

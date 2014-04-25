@@ -308,14 +308,4 @@ class VehicleController extends FormJourneyActionController
             )
         );
     }
-
-    /**
-     * Method to return a new view model - to make testing easier?
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
-    private function getViewModel($params)
-    {
-        return new ViewModel($params);
-    }
 }
