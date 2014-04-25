@@ -19,10 +19,10 @@ use SelfServe\test\Bootstrap;
 
 class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
 {
-    
+
     const APPLICATION_ID = 1;
     const OP_CENTRE_ID  = 1;
-    
+
     protected $controller;
     protected $request;
     protected $response;
@@ -34,25 +34,25 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
         $this->setApplicationConfig(
             include __DIR__.'/../../../../config/application.config.php'
         );
-        
+
         $this->controller = new \SelfServe\Controller\Finance\OperatingCentreController();
-        
+
         $this->request    = new Request();
         $this->response   = new Response();
         $this->routeMatch = new RouteMatch(array('controller' => 'SelfServe\Finance\OperatingCentreController'));
         $this->event      = new MvcEvent();
         $this->event->setRouteMatch($this->routeMatch);
         $this->controller->setEvent($this->event);
-        
+
         $this->controller->setServiceLocator(Bootstrap::getServiceManager());
     }
-    
-    
-    
+
+
+
     public function testAddActionCanBeAccessed()
     {
         $this->dispatch('/selfserve/' . self::APPLICATION_ID . '/finance/index/operating-centre/add');
-        
+
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('selfserve');
         $this->assertControllerName('selfserve\finance\operatingcentrecontroller');
@@ -60,11 +60,11 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
         $this->assertMatchedRouteName('selfserve/finance/operating_centre_action');
         $this->assertActionName('add');
     }
-    
+
     public function testEditActionCanBeAccessed()
     {
         $this->dispatch('/selfserve/' . self::APPLICATION_ID . '/finance/index/operating-centre/edit/' . self::OP_CENTRE_ID);
-    
+
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('selfserve');
         $this->assertControllerName('selfserve\finance\operatingcentrecontroller');
@@ -72,7 +72,7 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
         $this->assertMatchedRouteName('selfserve/finance/operating_centre_action');
         $this->assertActionName('edit');
     }
-    
+
     public function testForm()
     {
         $form = $this->getOlcsForm('operating-centre');
@@ -98,7 +98,7 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
         $form->setData($mockData);
         $valid = $form->isValid();
         $this->assertEquals(true, $valid);
-        
+
         $form = $this->getOlcsForm('operating-centre');
         //invalid data
         $mockData = array(
@@ -112,7 +112,7 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
         $form->setData($mockData);
         $valid = $form->isValid();
         $this->assertEquals(false, $valid);
-        
+
         $form = $this->getOlcsForm('operating-centre');
         //invalid data
         $mockData = array(
@@ -126,7 +126,7 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
         $form->setData($mockData);
         $valid = $form->isValid();
         $this->assertEquals(false, $valid);
-        
+
         $form = $this->getOlcsForm('operating-centre');
         //invalid data
         $mockData = array(
@@ -141,7 +141,7 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
         $valid = $form->isValid();
         $this->assertEquals(false, $valid);
     }
-    
+
     public function testPopulatedDataInEditAction()
     {
         $this->routeMatch->setParam('action', 'edit');
