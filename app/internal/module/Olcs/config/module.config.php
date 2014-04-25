@@ -173,6 +173,28 @@ return array(
                         'controller' => 'ConvictionController',
                     )
                 )
+            ),
+            'case_complaints' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/licence/[:licence]/case/:case/complaints[/:action][/:complaint]',
+                    'constraints' => array(
+                        'case' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'CaseComplaintController',
+                        'action' => 'index'
+                    )
+                )
+            ),
+            'complaints' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/licence/[:licence]/case/[:case]/complaint[/:action][/:id]',
+                    'defaults' => array(
+                        'controller' => 'ComplaintController',
+                    )
+                )
             )
         )
     ),
@@ -192,7 +214,8 @@ return array(
             'CaseStatementController' => 'Olcs\Controller\CaseStatementController',
             'CaseStatementController' => 'Olcs\Controller\CaseStatementController',
             'CaseAppealController' => 'Olcs\Controller\CaseAppealController',
-            'CaseStayController' => 'Olcs\Controller\CaseStayController'
+            'CaseStayController' => 'Olcs\Controller\CaseStayController',
+            'CaseComplaintController' => 'Olcs\Controller\CaseComplaintController'
         )
     ),
     'view_manager' => array(
