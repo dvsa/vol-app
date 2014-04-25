@@ -165,7 +165,7 @@ class CaseStatementController extends CaseController
         if (isset($results['case']) && $results['case'] == $caseId) {
 
             $this->makeRestCall('Statement', 'DELETE', array('id' => $statementId));
-            return $this->redirect()->toRoute('case_statement', array('case' => $caseId));
+            return $this->redirect()->toRoute('case_statement', [], [], true);
         }
 
         return $this->notFoundAction();
@@ -182,7 +182,7 @@ class CaseStatementController extends CaseController
 
         $this->processAdd($data, 'Statement');
 
-        $this->redirect()->toRoute('case_statement', array('case' => $data['case']));
+        $this->redirect()->toRoute('case_statement', [], [], true);
     }
 
     /**
@@ -196,7 +196,7 @@ class CaseStatementController extends CaseController
 
         $this->processEdit($data, 'Statement');
 
-        $this->redirect()->toRoute('case_statement', array('case' => $data['case']));
+        $this->redirect()->toRoute('case_statement', [], [], true);
     }
 
     /**
