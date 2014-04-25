@@ -4,13 +4,15 @@
  * Case Stay Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- * @todo update hardcoded stay types once data is available
  */
 
 namespace Olcs\Controller;
 
 use Zend\View\Model\ViewModel;
 
+/**
+ * Class to manage Stays
+ */
 class CaseStayController extends CaseController
 {
 
@@ -41,38 +43,69 @@ class CaseStayController extends CaseController
     }
 
     /**
-     * Show a table of stays for the given case
+     * Show a table of stays and appeals for the given case
      *
      * @return object
      */
     public function indexAction()
     {
+        $stayRecords = array();
+        $addHref = array();
+
         $caseId = $this->fromRoute('case');
 
         if ((int) $caseId == 0) {
             return $this->notFoundAction();
         }
 
+        $licenceId = $this->fromRoute('licence');
+
+        $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licenceId)));
+
         $stayTypes = $this->getStayTypes();
 
-        $result = $this->makeRestCall('Stay', 'GET', array('case' => $caseId));
-        $records = array();
+        $this->pm = $this->getPluginManager();
+
+        foreach ($stayTypes as $id => $type) {
+            $addHref[$id] = $this->getAddStayHref($licenceId, $caseId, $id);
+        }
+
+        $addHref['appeal'] = $this->getAddAppealHref($licenceId, $caseId);
+
+        $stayResult = $this->makeRestCall('Stay', 'GET', array('case' => $caseId));
 
         //need a better way to do this...
-        if (isset($result['Results'])) {
-            foreach ($result['Results'] as $stay) {
-                if (isset($stayTypes[$stay['stayType']])) {
-                    $records[$stay['stayType']] = $stay;
-                }
+        foreach ($stayResult['Results'] as $stay) {
+            if (isset($stayTypes[$stay['stayType']])) {
+                $stayRecords[$stay['stayType']] = $stay;
+                $stayRecords[$stay['stayType']]['editHref'] = $this->pm->get('url')->fromRoute('case_stay_action', ['action' => 'edit', 'licence' => $licenceId, 'stay' => $stay['id'], 'stayType' => $stay['stayType'], 'case' => $caseId], [], true);
+                $stayRecords[$stay['stayType']]['deleteHref'] = '';
             }
         }
 
-        $variables = array('tab' => 'stays', 'table' => 'test', 'records' => $records, 'stayTypes' => $stayTypes);
+        $appealResult = $this->makeRestCall('Appeal', 'GET', array('case' => $caseId));
+
+        if (!empty($appealResult['Results'][0])) {
+            $appealResult['Results'][0]['editHref'] = '';
+            $appealResult['Results'][0]['deleteHref'] = '';
+        }
+
+        $variables = array('tab' => 'stays', 'addHref' => $addHref, 'appealRecords' => $appealResult['Results'], 'stayRecords' => $stayRecords, 'stayTypes' => $stayTypes);
         $caseVariables = $this->getCaseVariables($caseId, $variables);
         $view = $this->getView($caseVariables);
 
         $view->setTemplate('case/manage');
         return $view;
+    }
+
+    private function getAddStayHref($licenceId, $caseId, $stayTypeId)
+    {
+        return $this->pm->get('url')->fromRoute('case_stay_action', ['action' => 'add', 'licence' => $licenceId, 'stayType' => $stayTypeId, 'case' => $caseId], [], true);
+    }
+
+    private function getAddAppealHref($licenceId, $caseId)
+    {
+        return $this->pm->get('url')->fromRoute('case_appeal', ['action' => 'add', 'licence' => $licenceId, 'case' => $caseId], [], true);
     }
 
     /**
@@ -104,14 +137,16 @@ class CaseStayController extends CaseController
         $existingRecord = $this->checkExistingStay($caseId, $stayTypeId);
 
         if ($existingRecord) {
-            return $this->redirect()->toRoute('case_stay_action', array('action' => 'index', 'licence' => $licence, 'case' => $caseId));
+            return $this->redirectIndex($licence, $caseId);
         }
 
         $form = $this->generateFormWithData(
-            'case-stay', 'processAddStay', array(
-            'case' => $caseId,
-            'stayType' => $stayTypeId,
-            'licence' => $licence
+            'case-stay',
+            'processAddStay',
+            array(
+                'case' => $caseId,
+                'stayType' => $stayTypeId,
+                'licence' => $licence
             )
         );
 
@@ -163,7 +198,10 @@ class CaseStayController extends CaseController
         }
 
         $form = $this->generateFormWithData(
-            'case-stay', 'processEditStay', $result, true
+            'case-stay',
+            'processEditStay',
+            $result,
+            true
         );
 
         //add in that this is an an action (reflected in the title)
@@ -188,7 +226,7 @@ class CaseStayController extends CaseController
         $existingRecord = $this->checkExistingStay($data['case'], $data['stayType']);
 
         if ($existingRecord) {
-            return $this->redirect()->toRoute('case_stay_action', array('action' => 'index', 'licence' => $data['licence'], 'case' => $data['case']));
+            return $this->redirectIndex($data['licence'], $data['case']);
         }
 
         $data = array_merge($data, $data['fields']);
@@ -196,19 +234,27 @@ class CaseStayController extends CaseController
         $result = $this->processAdd($data, 'Stay');
 
         if (isset($result['id'])) {
-            return $this->redirect()->toRoute('case_stay_action', array('action' => 'index', 'licence' => $data['licence'], 'case' => $data['case']));
+            return $this->redirectIndex($data['licence'], $data['case']);
         }
 
-        return $this->redirect()->toRoute('case_stay_action', array('action' => 'add', 'licence' => $data['licence'], 'case' => $data['case'], 'stayType' => $data['stayType']));
+        return $this->redirect()->toRoute(
+            'case_stay_action',
+            array(
+                'action' => 'add',
+                'licence' => $data['licence'],
+                'case' => $data['case'],
+                'stayType' => $data['stayType']
+            )
+        );
     }
 
     /**
-     * Process adding the stay
+     * Process editing a stay
      *
      * @param array $data
      *
      * @todo Once user auth is ready, check user allowed access
-     * @todo Once user auth is ready, add the user info to the data (field is lastUpdatedBy)
+     * @todo Once user auth is ready, add the user info to the data (fields are lastUpdatedBy and createdBy)
      */
     public function processEditStay($data)
     {
@@ -220,10 +266,53 @@ class CaseStayController extends CaseController
         $result = $this->processEdit($data, 'Stay');
 
         if (empty($result)) {
-            return $this->redirect()->toRoute('case_stay_action', array('action' => 'index', 'licence' => $licence, 'case' => $data['case']));
+            return $this->redirectIndex($licence, $data['case']);
         }
 
-        return $this->redirect()->toRoute('case_stay_action', array('action' => 'edit', 'licence' => $licence, 'case' => $data['case'], 'stayType' => $data['stayType'], 'stay' => $data['stay']));
+        return $this->redirectEditFail($licence, $data['case'], $data['stayType'], $data['stay']);
+    }
+
+    /**
+     * Redirect to the index page
+     *
+     * @param int $licence
+     * @param int $case
+     *
+     * @return Response
+     */
+    private function redirectIndex($licence, $case)
+    {
+        return $this->redirect()->toRoute(
+            'case_stay_action',
+            array(
+                'action' => 'index',
+                'licence' => $licence,
+                'case' => $case
+            )
+        );
+    }
+
+    /**
+     * Redirect to the edit page on failure
+     *
+     * @param int $licence
+     * @param int $case
+     * @param int $stayType
+     * @param int $stay
+     *
+     * @return Response
+     */
+    private function redirectEditFail($licence, $case, $stayType, $stay)
+    {
+        return $this->redirect()->toRoute(
+                'case_stay_action', array(
+                'action' => 'edit',
+                'licence' => $licence,
+                'case' => $case,
+                'stayType' => $stayType,
+                'stay' => $stay
+                )
+        );
     }
 
     /**

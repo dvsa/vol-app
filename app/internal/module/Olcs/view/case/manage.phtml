@@ -20,7 +20,9 @@ if (isset($table)) {
 
 if(isset($stayTypes)){
     $array['stayTypes'] = $stayTypes;
-    $array['records'] = $records;
+    $array['stayRecords'] = $stayRecords;
+    $array['appealRecords'] = $appealRecords;
+    $array['addHref'] = $addHref;
 }
 
 echo $this->render('case/page/' .$tab, $array); ?>
