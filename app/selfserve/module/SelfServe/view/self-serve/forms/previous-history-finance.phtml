@@ -1,0 +1,17 @@
+<?php
+    $form->prepare();
+    echo $this->form()->openTag($form);
+?>
+<fieldset>
+    <?php $mainLegend =  $form->get('finance')->getOption('label'); ?>
+    <?php if (!empty($mainLegend)): ?>
+        <legend><?php echo $mainLegend ?></legend>
+    <?php endif; ?>
+    <label>Has any person named in this application (including partners, directors or transport managers) ever been:<br /><br /></label>
+    <?php foreach ($form->get('finance')->getElements() as $element): ?>
+        <?php echo $this->formRow($element); ?>
+    <?php endforeach; ?>
+    <?php echo $this->formRow($form->get('submit')); ?>
+    <?php echo $this->formHidden($form->get('version')); ?>
+</fieldset>
+<?php echo $this->form()->closeTag(); ?>

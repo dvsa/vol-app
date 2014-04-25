@@ -23,7 +23,8 @@ class IndexController extends FormJourneyActionController
      *
      * @return \Zend\View\Model\ViewModel
      */
-    public function generateStepFormAction() {
+    public function generateStepFormAction()
+    {
         $applicationId = $this->params()->fromRoute('applicationId');
         $step = $this->params()->fromRoute('step');
 
@@ -42,10 +43,53 @@ class IndexController extends FormJourneyActionController
             $form->setData($formData);
         }
 
+        //for finance step we need to render form in a special way to meet UI expectations
+        if ($step == 'financfe'){
+            $formPartialPath = 'self-serve/forms/previous-history-finance';
+        } else{
+            $formPartialPath = 'self-serve/forms/previous-history';
+        }
+
         // render the view
-        $view = new ViewModel(['licenceTypeForm' => $form]);
-        $view->setTemplate('self-serve/licence/index');
+        $view = new ViewModel(['form' => $form, 'formPartialPath' => $formPartialPath]);
+        $view->setTemplate('self-serve/previous-history/index');
         return $view;
+    }
+
+
+    public function processFinance($validData, $form, $params)
+    {
+
+
+        var_dump($validData, $params);exit;
+    }
+
+    public function getFinanceFormData()
+    {
+        $applicationId = $this->params()->fromRoute('applicationId');
+        $entity = $this->makeRestCall('Application', 'GET', ['id' => $applicationId]);
+
+        if (empty($entity))
+            return array();
+
+        return array(
+            'version' => $entity['version'],
+            'finance' => $entity,
+        );
+    }
+
+
+    /**
+     * End of the journey redirect to business type
+     */
+    public function completeAction()
+    {
+        $applicationId = $this->params()->fromRoute('applicationId');
+
+        // persist data if possible
+        $this->redirect()->toRoute('selfserve/finance',
+            array('applicationId' => $applicationId, 'step' =>
+                'index'));
     }
 
 
