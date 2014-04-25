@@ -44,7 +44,7 @@ class IndexController extends FormJourneyActionController
         }
 
         //for finance step we need to render form in a special way to meet UI expectations
-        if ($step == 'financfe'){
+        if ($step == 'financee'){
             $formPartialPath = 'self-serve/forms/previous-history-finance';
         } else{
             $formPartialPath = 'self-serve/forms/previous-history';
@@ -59,9 +59,12 @@ class IndexController extends FormJourneyActionController
 
     public function processFinance($validData, $form, $params)
     {
+        $data = $validData['finance'];
+        unset($validData['finance']);
+        $data = array_merge($data, $validData);
+        unset();
 
-
-        var_dump($validData, $params);exit;
+        var_dump($data);exit;
     }
 
     public function getFinanceFormData()
@@ -70,7 +73,7 @@ class IndexController extends FormJourneyActionController
         $entity = $this->makeRestCall('Application', 'GET', ['id' => $applicationId]);
 
         if (empty($entity))
-            return array();
+            throw new \OlcsEntities\Exceptions\EntityNotFoundException('Entity not found');
 
         return array(
             'version' => $entity['version'],
@@ -86,7 +89,6 @@ class IndexController extends FormJourneyActionController
     {
         $applicationId = $this->params()->fromRoute('applicationId');
 
-        // persist data if possible
         $this->redirect()->toRoute('selfserve/finance',
             array('applicationId' => $applicationId, 'step' =>
                 'index'));
