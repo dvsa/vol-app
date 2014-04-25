@@ -33,10 +33,10 @@ class ConvictionController extends FormActionController
     public function addAction()
     {
         $routeParams = $this->getParams(array('case', 'licence', 'id'));
-        
+
         if (isset($_POST['cancel-conviction']))
             return $this->redirect()->toRoute('case_convictions', array('case' => $routeParams['case']));
-        
+
         // Below is for setting route params for the breadcrumb
         $this->setBreadcrumb(
             array(
@@ -82,7 +82,7 @@ class ConvictionController extends FormActionController
         );
         if (isset($_POST['cancel-conviction']))
             return $this->redirect()->toRoute('case_convictions', array('case' => $routeParams['case']));
-        
+
         $this->setBreadcrumb(
             array(
                 'licence_case_list/pagination' => array('licence' => $routeParams['licence']),
@@ -144,7 +144,7 @@ class ConvictionController extends FormActionController
         return $this->redirect()->toRoute(
             'case_convictions',
             array(
-                'case' => $routeParams['case'],
+                'case' => $routeParams['case'], 'licence' => $routeParams['licence']
             )
         );
     }
