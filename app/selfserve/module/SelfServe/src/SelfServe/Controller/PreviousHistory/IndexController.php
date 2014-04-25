@@ -10,6 +10,11 @@ namespace SelfServe\Controller\PreviousHistory;
 use Common\Controller\FormJourneyActionController;
 use Zend\View\Model\ViewModel;
 
+/**
+ * @package		selfserve
+ * @subpackage  PreviousHistory
+ * @author		Jakub Igla <jakub.igla@valtech.co.uk>
+ */
 class IndexController extends FormJourneyActionController
 {
 
@@ -33,9 +38,6 @@ class IndexController extends FormJourneyActionController
         // create form
         $form = $this->generateSectionForm();
 
-        // Do the post
-        $form = $this->formPost($form, $this->getStepProcessMethod($this->getCurrentStep()), ['applicationId' => $applicationId]);
-
         // prefill form data if persisted
         $formData = $this->getPersistedFormData($form);
         if (isset($formData))
@@ -43,8 +45,11 @@ class IndexController extends FormJourneyActionController
             $form->setData($formData);
         }
 
+        // Do the post
+        $form = $this->formPost($form, $this->getStepProcessMethod($this->getCurrentStep()), ['applicationId' => $applicationId]);
+
         //for finance step we need to render form in a special way to meet UI expectations
-        if ($step == 'financee'){
+        if ($step == 'finance'){
             $formPartialPath = 'self-serve/forms/previous-history-finance';
         } else{
             $formPartialPath = 'self-serve/forms/previous-history';
@@ -57,23 +62,47 @@ class IndexController extends FormJourneyActionController
     }
 
 
+    /**
+     * Persists valid data to database and redirects to next step
+     *
+     * @param array $validData
+     * @param \Zend\Form\Form $form
+     * @param $params
+     * @return void
+     */
     public function processFinance($validData, $form, $params)
     {
+
+        //prepare data
         $data = $validData['finance'];
         unset($validData['finance']);
-        $data = array_merge($data, $validData);
-        unset();
+        $data = array_merge($data, $validData, array('id' => $params['applicationId']));
 
-        var_dump($data);exit;
+        //persist to database
+        $this->processEdit($data, 'Application');
+        $next_step = $this->evaluateNextStep($form);
+
+        //reditect to next step
+        $this->redirect()->toRoute('selfserve/previous-history',
+            array('applicationId' => $params['applicationId'],
+                'step' => $next_step));
+
     }
 
+    /**
+     * Get data from database and returns in ready to populate form format
+     *
+     * @return array
+     * @throws \OlcsEntities\Exceptions\EntityNotFoundException
+     */
     public function getFinanceFormData()
     {
         $applicationId = $this->params()->fromRoute('applicationId');
         $entity = $this->makeRestCall('Application', 'GET', ['id' => $applicationId]);
 
-        if (empty($entity))
-            throw new \OlcsEntities\Exceptions\EntityNotFoundException('Entity not found');
+        if (empty($entity)){
+            throw new \OlcsEntities\Exceptions\EntityNotFoundException('Application entity not found');
+        }
 
         return array(
             'version' => $entity['version'],
@@ -83,7 +112,7 @@ class IndexController extends FormJourneyActionController
 
 
     /**
-     * End of the journey redirect to business type
+     * End of the journey redirect to finance dashboard
      */
     public function completeAction()
     {
