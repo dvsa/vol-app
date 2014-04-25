@@ -59,18 +59,6 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
         $this->assertActionName('add');
     }
 
-    public function testEditActionCanBeAccessed()
-    {
-        $this->dispatch('/selfserve/' . self::APPLICATION_ID . '/finance/index/operating-centre/edit/' . self::OP_CENTRE_ID);
-
-        $this->assertResponseStatusCode(200);
-        $this->assertModuleName('selfserve');
-        $this->assertControllerName('selfserve\finance\operatingcentrecontroller');
-        $this->assertControllerClass('OperatingCentreController');
-        $this->assertMatchedRouteName('selfserve/finance/operating_centre_action');
-        $this->assertActionName('edit');
-    }
-
     public function testForm()
     {
         $form = $this->getOlcsForm('operating-centre');
@@ -129,21 +117,6 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
         $form->setData($mockData);
         $valid = $form->isValid();
         $this->assertEquals(false, $valid);
-    }
-
-    public function testPopulatedDataInEditAction()
-    {
-        $this->routeMatch->setParam('action', 'edit');
-        $this->routeMatch->setParam('operatingCentreId', self::OP_CENTRE_ID);
-        $result = $this->controller->dispatch($this->request, $this->response);
-        $response = $this->controller->getResponse();
-        $form = $result->getVariables()['form'];
-        $authorisedVehicles = $form->get('authorised-vehicles');
-
-        $this->assertEquals($authorisedVehicles->get('no-of-vehicles')->getValue(), 34);
-        $this->assertEquals($authorisedVehicles->get('no-of-trailers')->getValue(), 23);
-        $this->assertEquals($authorisedVehicles->get('parking-spaces-confirmation')->getValue(), 1);
-        $this->assertEquals($authorisedVehicles->get('permission-confirmation')->getValue(), 1);
     }
 
     protected function getOlcsForm($name)
