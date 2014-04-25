@@ -1,0 +1,19 @@
+<?php
+    echo $this->render(
+        '/partials/page-header.phtml',
+        array(
+            'pageTitle' => $this->translate($this->params['pageTitle']),
+            'pageSubTitle'=> $this->translate($this->params['pageSubTitle'])
+        )
+    );
+?>
+<div  class="two-thirds">
+<?php //echo print_r($this->params['data']); ?>
+<?php 
+    foreach($this->params['data'] as $key => $section) { 
+        echo $this->partial('submission/partials/section.phtml', array(
+        'heading' => $key,
+        'data' => $section)); 
+    } 
+?>
+</div>

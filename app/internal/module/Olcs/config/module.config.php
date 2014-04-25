@@ -158,6 +158,15 @@ return array(
                         'controller' => 'ConvictionController',
                     )
                 )
+            ),
+            'submission' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/licence/[:licence]/case/[:case]/submission[/:action][/:id]',
+                    'defaults' => array(
+                        'controller' => 'SubmissionController',
+                    )
+                )
             )
         )
     ),
@@ -176,7 +185,8 @@ return array(
             'CaseStatementController' => 'Olcs\Controller\CaseStatementController',
             'CaseStatementController' => 'Olcs\Controller\CaseStatementController',
             'CaseAppealController' => 'Olcs\Controller\CaseAppealController',
-            'CaseConvictionController' => 'Olcs\Controller\CaseConvictionController'
+            'CaseConvictionController' => 'Olcs\Controller\CaseConvictionController',
+            'SubmissionController' => 'Olcs\Controller\SubmissionController'
         )
     ),
     'view_manager' => array(
