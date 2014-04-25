@@ -60,29 +60,29 @@ class CaseComplaintController extends CaseController
                     'id'
                 ),
                 'children' => array(
-                'groups' => array(
-                    'complaints' => array(
-                         'properties' => array(
-                             'complaint_date'
-                         ),
-                         'children' => array(
-                             'complainant' => array(
-                                'children' => array(
-                                    'person' => array(
-                                        'properties' => array(
-                                            'forename',
-                                            'familyName'
-                                        )
-                                    )
-                                )
-                             )
-                         )
-                     ),
+                'complaints' => array(
+                    'complaint' => array(
+                        'properties' => array(
+                            'complaint_date'
+                        ),
+                        'children' => array(
+                            'complainant' => array(
+                               'children' => array(
+                                   'person' => array(
+                                       'properties' => array(
+                                           'forename',
+                                           'familyName'
+                                       )
+                                   )
+                               )
+                            )
+                        )
+                    )
                 )
             )
         );
         $results = $this->makeRestCall('VosaCase', 'GET', array('id' => $caseId, 'bundle' => json_encode($bundle)));
-
+var_dump($results);exit;
 
         $data = [];
         $data['url'] = $this->getPluginManager()->get('url');
