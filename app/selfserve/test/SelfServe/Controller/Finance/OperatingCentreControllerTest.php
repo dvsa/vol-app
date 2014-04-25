@@ -79,12 +79,12 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
 
         //valid data
         $mockData = array(
+            'ad-placed' => '1',
         	'authorised-vehicles' => array(
         	    'no-of-vehicles' => 69,
         	    'no-of-trailers' => 23,
                 'parking-spaces-confirmation' => '1',
                 'permission-confirmation' => '1',
-                'ad-placed' => '1',
             ),
             'address' => array(
                 'addressLine1' => '1 Some Street',

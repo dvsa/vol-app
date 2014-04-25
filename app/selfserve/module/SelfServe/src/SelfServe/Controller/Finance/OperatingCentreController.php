@@ -141,7 +141,7 @@ class OperatingCentreController extends FormActionController
             'numberOfTrailers' => $validData['authorised-vehicles']['no-of-trailers'],
             'sufficientParking' => $validData['authorised-vehicles']['parking-spaces-confirmation'],
             'permission' => $validData['authorised-vehicles']['permission-confirmation'],
-            'adPlaced' => $validData['authorised-vehicles']['ad-placed'],
+            'adPlaced' => $validData['ad-placed'],
             'address' => $address,
             'application' => $applicationId,
         );

@@ -104,12 +104,12 @@ class OperatingCentreTest extends AbstractHttpControllerTestCase
     private function getValidData()
     {
         return array(
+            'ad-placed' => 1,
             'authorised-vehicles' => array(
                 'no-of-vehicles' => 1,
                 'no-of-trailers' => 1,
                 'parking-spaces-confirmation' => 1,
                 'permission-confirmation' => 1,
-                'ad-placed' => 1,
             ),
             'address' => array(
                 'addressLine1' => '1 Some Street',
