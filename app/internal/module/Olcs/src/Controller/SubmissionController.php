@@ -35,7 +35,6 @@ class SubmissionController extends FormActionController
         );
         //$result = $this->processAdd($data, 'Submission');
         $submission = json_decode($submission, true);
-        $submission = $this->createSubmissionViewData($submission, $routeParams);
         $view = new ViewModel(
             array(
                 'headScript' => array('/static/js/conviction.js'),
@@ -50,35 +49,36 @@ class SubmissionController extends FormActionController
         return $view;
     }
     
-    public function createSubmissionViewData($submission, $routeParams)
-    {
-        $licenceData = $this->makeRestCall('Licence', 'GET', array('id' => $routeParams['licence']));
-//print_r($licenceData);
-        $exclude = array('transport-managers' => array('attr' => 'licenceType', 'val' => 'Standard National'));
-        foreach($submission as $key => $section) {
-            if (isset($exclude[$key]) && $exclude[$key]['val'] != $licenceData[$exclude[$key]['attr']]) {
-                print 'excluded';
-                //unset($submission[$key]);
-            }
-        }
-        return $submission;
-    }
-    
+    /**
+     * Return json encoded submission
+     * @param type $routeParams
+     * @return type
+     */
     public function createSubmission($routeParams)
     {
+        $licenceData = $this->makeRestCall('Licence', 'GET', array('id' => $routeParams['licence']));
         $caseData = $this->makeRestCall('VosaCase', 'GET', array('id' => $routeParams['case']));
         $submission = array();
-        $submission['case-details'] = $caseData;
+        $submission['case-summary-info'] = $caseData;
         $submission['persons'] = array();
-        $submission['transport-managers'] = array();
-        $submission['outstanding-application'] = array();
+        if (in_array(strtolower($licenceData['licenceType']), array('standard national', 'standard international'))) {
+            $submission['transport-managers'] = array();
+        }
+        $submission['outstanding-applications'] = array();
         $submission['environmental'] = array();
+        $submission['objections'] = array();
+        $submission['representations'] = array();
         $submission['previous-history'] = array();
         $submission['operating-centre'] = array();
-        $submission['conditions-undertakings'] = array();
+        $submission['conditions'] = array();
+        $submission['undertakings'] = array();
+        $submission['annual-test-history'] = array();
         $submission['prohibition-history'] = array();
         $submission['conviction-history'] = array();
-        $submission['bus-services-registered'] = array();
+        if (strtolower($licenceData['goodsOrPsv']) == 'psv') {
+            $submission['bus-services-registered'] = array();
+            $submission['bus-compliance-issues'] = array();
+        }
         $submission['current-submission'] = array();
         //$submission['recommendation-decision'] = array();
         $jsonSubmission = json_encode($submission);
@@ -89,5 +89,4 @@ class SubmissionController extends FormActionController
     {
         
     }
-
 }

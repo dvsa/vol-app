@@ -24,13 +24,19 @@ class CaseController extends FormActionController
      */
     public function manageAction()
     {
-        $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => 7)));
-        $view = $this->getView();
-
         $caseId = $this->fromRoute('case');
+        $licence = $this->fromRoute('licence');
         $action = $this->fromRoute('tab');
-
-        //$pm = $this->getPluginManager();
+        
+        $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licence)));
+        
+        if ($this->params()->fromPost('action')) {
+            return $this->redirect()->toRoute($this->params()->fromPost('action'), array('licence' => $licence,
+                        'case' => $caseId,
+                        'action' => strtolower($this->params()->fromPost('action'))));
+        }
+        
+        $view = $this->getView();
 
         $tabs = $this->getTabInformationArray();
 
@@ -71,6 +77,11 @@ class CaseController extends FormActionController
         $view->setTemplate('case/manage');
         return $view;
     }
+    
+    private function checkForSubmissions()
+    {
+        
+    }
 
     public function getSubmissions($case)
     {
@@ -91,7 +102,9 @@ class CaseController extends FormActionController
                 }
 
                 $sas = $this->makeRestCall(
-                    'SubmissionActionStatus', 'GET', array('id' => $action['submissionActionStatus'])
+                    'SubmissionActionStatus',
+                    'GET',
+                    array('id' => $action['submissionActionStatus'])
                 );
                 if (!empty($sas)) {
                     $results['Results'][$k]['actions'][$ak]['submissionActionStatus'] = $sas;
@@ -349,9 +362,9 @@ class CaseController extends FormActionController
         }
 
         $form = $this->generateFormWithData(
-            'case', 'processAddCase', array(
-            'licence' => $licence
-            )
+            'case',
+            'processAddCase',
+            array('licence' => $licence)
         );
 
         $pageData = $this->getPageData($licence);
@@ -385,9 +398,7 @@ class CaseController extends FormActionController
 
         $result['categories'] = $this->unFormatCategories($categories);
 
-        $form = $this->generateFormWithData(
-            'case', 'processEditCase', $result, true
-        );
+        $form = $this->generateFormWithData('case', 'processEditCase', $result, true);
 
         $pageData = $this->getPageData($licence);
 
