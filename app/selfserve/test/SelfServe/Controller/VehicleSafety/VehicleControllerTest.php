@@ -158,8 +158,7 @@ class VehicleControllerTest extends AbstractHttpControllerTestCase
                 'params',
                 'makeRestCall',
                 'notFoundAction',
-                'generateFormWithData',
-                'getViewModel'
+                'generateFormWithData'
             ]
         );
 

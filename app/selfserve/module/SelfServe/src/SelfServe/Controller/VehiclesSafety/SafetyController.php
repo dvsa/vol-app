@@ -48,10 +48,14 @@ class SafetyController extends FormJourneyActionController
 
         $data = $this->makeRestCall('Application', 'GET', array('id' => $applicationId), $bundle);
 
+        if (empty($data)) {
+            return $this->notFoundAction();
+        }
+
         $form = $this->generateFormWithData(
             'vehicle-safety',
             'processVehicleSafety',
-            array('data' => $this->formatDataForForm($data)),
+            array('data' => $this->formatDataForForm($data, $applicationId)),
             true
         );
 
@@ -65,9 +69,10 @@ class SafetyController extends FormJourneyActionController
      * Format data for the form
      *
      * @param array $data
+     * @param int $applicationId
      * @return array
      */
-    protected function formatDataForForm($data)
+    protected function formatDataForForm($data, $applicationId)
     {
         $data['id'] = $applicationId;
 
@@ -97,16 +102,30 @@ class SafetyController extends FormJourneyActionController
      *
      * @param array $data
      */
-    protected function processVehicleSafety($data)
+    public function processVehicleSafety($data)
     {
         $applicationId = $this->params()->fromRoute('applicationId');
 
-        $applicationData = array(
-            'id' => $applicationId,
-            'version' => $data['data']['version'],
-            'safetyConfirmation' => $data['data']['safetyConfirmation'][0]
-        );
+        $applicationData = $this->formatApplicationData($data, $applicationId);
 
+        $licenceData = $this->formatLicenceData($data);
+
+        $this->makeRestCall('Application', 'PUT', $applicationData);
+
+        $this->makeRestCall('Licence', 'PUT', $licenceData);
+
+        // @todo Redirect to previous history when this page is created
+        return $this->redirect()->toRoute(null, array('applicationId' => $applicationId));
+    }
+
+    /**
+     * Format licence data for persisting
+     *
+     * @param array $data
+     * @return array
+     */
+    private function formatLicenceData($data)
+    {
         $licenceData = array();
 
         foreach ($data['data'] as $key => $value) {
@@ -131,16 +150,32 @@ class SafetyController extends FormJourneyActionController
 
         $licenceData['tachographIns'] = str_replace('tachograph_analyser.', '', $licenceData['tachographIns']);
 
-        $this->makeRestCall('Application', 'PUT', $applicationData);
-
-        $this->makeRestCall('Licence', 'PUT', $licenceData);
-
-        // @todo Redirect to previous history when this page is created
-        return $this->redirect()->toRoute(null, array('applicationId' => $applicationId));
+        return $licenceData;
     }
 
-    protected function completeAction()
+    /**
+     * Format the application data for persisting
+     *
+     * @param array $data
+     * @param int $applicationId
+     * @return array
+     */
+    private function formatApplicationData($data, $applicationId)
     {
+        return array(
+            'id' => $applicationId,
+            'version' => $data['data']['version'],
+            'safetyConfirmation' => $data['data']['safetyConfirmation'][0]
+        );
+    }
 
+    /**
+     * Complete Action
+     *
+     * @return ViewModel
+     */
+    public function completeAction()
+    {
+        return $this->getViewModel();
     }
 }
