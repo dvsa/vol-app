@@ -10,9 +10,9 @@ return [
                 'action' => 'index'
             )
         ),
-        'may_terminate' => true,
+        'may_terminate' => false,
         'child_routes' => array(
-            'operating_centre_action' => array(
+            'operating_centre' => array(
                 'type' => 'segment',
                 'options' => array(
                     'route' => 'operating-centre[/:action][/:operatingCentreId]',

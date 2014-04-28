@@ -46,6 +46,7 @@ return array(
             'SelfServe\Finance\FinancialEvidenceController' => 'SelfServe\Controller\Finance\FinancialEvidenceController'
         ),
     ),
+    'local_forms_path' => __DIR__ . '/../src/SelfServe/Form/Forms/',
     'tables' => array(
         'config' => array(
             __DIR__ . '/../src/SelfServe/Table/Tables/'

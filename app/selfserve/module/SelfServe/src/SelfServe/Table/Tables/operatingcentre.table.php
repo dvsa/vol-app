@@ -22,17 +22,17 @@ return array(
             'format' => '{{[elements/radio]}}'
         ),
         array(
-            'title' => 'Operating Centre Address',
-            'formatter' => function($data) {
-                $parts = array();
-                foreach (array('address_line1', 'address_line2', 'address_line3', 'postcode') as $item) {
-                    if (!empty($data[$item])) {
-                        $parts[] = $data[$item];
-                    }
+            'title' => 'Operating centre address',
+            'formatter' => function ($data) {
+            $parts = array();
+            foreach (array('address_line1', 'address_line2', 'address_line3', 'postcode') as $item) {
+                if (!empty($data[$item])) {
+                    $parts[] = $data[$item];
                 }
+            }
 
-                return "<a href='#'>".implode(', ', $parts)."</a>";
-            },
+            return "<a href='#'>" . implode(', ', $parts) . "</a>";
+        },
             'name' => 'address'
         ),
         array(
@@ -46,16 +46,16 @@ return array(
         array(
             'title' => 'Permission',
             'name' => 'permission',
-            'formatter' => function($data) {
-                            return ($data['permission']==1?'Y':'N');
-            }
+            'formatter' => function ($data) {
+            return ($data['permission'] == 1 ? 'Y' : 'N');
+        }
         ),
         array(
             'title' => 'Advertising',
             'name' => 'advertising',
             'formatter' => function($data) {
-                            return ($data['ad_placed']==1?'Y':'N');
-            }
+            return ($data['ad_placed'] == 1 ? 'Y' : 'N');
+        }
         )
     ),
     // Footer configuration

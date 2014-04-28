@@ -1,29 +1,113 @@
 <?php
 
 /**
- * AuthorisedVehicles Controller
+ * OperatingCentre Controller
  *
- *
- * @package		selfserve
- * @subpackage  operating-centre
- * @author		Jakub Igla <jakub.igla@valtech.co.uk>
+ * @author Jakub Igla <jakub.igla@valtech.co.uk>
+ * @author Rob Caiger <rob@clocal.co.uk>
  */
 
 namespace SelfServe\Controller\Finance;
 
-use Common\Controller\FormActionController;
 use Zend\View\Model\ViewModel;
 
 /**
- * AuthorisedVehicles Controller
+ * OperatingCentre Controller
  *
  * @author Jakub Igla <jakub.igla@valtech.co.uk>
+ * @author Rob Caiger <rob@clocal.co.uk>
  */
-class OperatingCentreController extends FormActionController
+class OperatingCentreController extends AbstractFinanceController
 {
+    /**
+     * Index action
+     *
+     * @return object
+     */
+    public function indexAction()
+    {
+        $action = $this->checkForCrudAction();
 
-    protected $messages;
-    protected $section = 'finance';
+        if ($action !== false) {
+            return $action;
+        }
+
+        $applicationId = $this->params()->fromRoute('applicationId');
+
+        $results = $this->makeRestCall('ApplicationOperatingCentre', 'GET', array('applicationId' => $applicationId));
+
+        $table = $this->getOperatingCentreTable($results);
+
+        $bundle = array(
+            'properties' => array(
+                'version',
+                'tot_auth_vehicles',
+                'tot_auth_trailers'
+            )
+        );
+
+        $data = $this->makeRestCall('Application', 'GET', array('id' => $applicationId), $bundle);
+
+        if (empty($data)) {
+            return $this->notFoundAction();
+        }
+
+        $data['data'] = $data;
+
+        $data['data']['noOfOperatingCentres'] = count($results);
+        $data['data']['minVehicleAuth'] = 0;
+        $data['data']['maxVehicleAuth'] = 0;
+        $data['data']['minTrailerAuth'] = 0;
+        $data['data']['maxTrailerAuth'] = 0;
+
+        foreach ($results as $row) {
+
+            $data['data']['minVehicleAuth'] = max(array($data['data']['minVehicleAuth'], $row['no_of_vehicles_required']));
+            $data['data']['minTrailerAuth'] = max(array($data['data']['minTrailerAuth'], $row['no_of_trailers_required']));
+            $data['data']['maxVehicleAuth'] += (int)$row['no_of_vehicles_required'];
+            $data['data']['maxTrailerAuth'] += (int)$row['no_of_trailers_required'];
+        }
+
+        $form = $this->generateFormWithData('operating-centre-authorisation', 'processAuthorisation', $data);
+
+        $view = new ViewModel(array('operatingCentres' => $table, 'form' => $form));
+
+        $view->setTemplate('self-serve/finance/operating-centre/index');
+
+        return $this->renderLayout($view, 'operatingCentre');
+    }
+
+    /**
+     * Process persisting of Authorisation
+     *
+     * @param array $data
+     */
+    public function processAuthorisation($data)
+    {
+        print '<pre>';
+        print_r($data);
+        print '</pre>';
+        exit;
+    }
+
+    /**
+     * Get the operating centre table
+     *
+     * @param array $results
+     * @return object
+     */
+    private function getOperatingCentreTable($results)
+    {
+        $settings = array(
+            'sort' => 'address',
+            'order' => 'ASC',
+            'limit' => 10,
+            'page' => 1,
+            'url' => $this->getPluginManager()->get('url')
+        );
+
+        return $this->getServiceLocator()->get('Table')->buildTable('operatingcentre', $results, $settings);
+    }
 
     /**
      * Action that is responsible for adding operating centre
@@ -37,8 +121,8 @@ class OperatingCentreController extends FormActionController
         );
 
         $view = new ViewModel(['form' => $form]);
-        $view->setTemplate('self-serve/finance/operating-center/add');
-        return $view;
+        $view->setTemplate('self-serve/finance/operating-centre/add');
+        return $this->renderLayout($view, 'operatingCentre');
     }
 
     /**
@@ -79,8 +163,8 @@ class OperatingCentreController extends FormActionController
         );
 
         $view = new ViewModel(['form' => $form]);
-        $view->setTemplate('self-serve/finance/operating-center/edit');
-        return $view;
+        $view->setTemplate('self-serve/finance/operating-centre/edit');
+        return $this->renderLayout($view, 'operatingCentre');
     }
 
     /**
@@ -138,5 +222,10 @@ class OperatingCentreController extends FormActionController
             'permission' => $validData['authorised-vehicles']['permission-confirmation'],
             'application' => $applicationId,
         );
+    }
+
+    public function completeAction()
+    {
+
     }
 }
