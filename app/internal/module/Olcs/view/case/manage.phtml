@@ -18,4 +18,9 @@ if (isset($table)) {
     $array['table'] = $table;
 }
 
-echo $this->render('case/page/' .$tab, $array);
+if(isset($stayTypes)){
+    $array['stayTypes'] = $stayTypes;
+    $array['records'] = $records;
+}
+
+echo $this->render('case/page/' .$tab, $array); ?>

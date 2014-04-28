@@ -33,7 +33,8 @@ return array(
             'formatter' => function ($row) {
                 return '<a href="' . $this->generateUrl(
                     array('case' => $row['id'], 'tab' => 'overview'),
-                    'case_manage'
+                    'case_manage',
+                    true
                 ) . '">' . $row['id'] . '</a>';
             }
         ),

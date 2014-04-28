@@ -82,7 +82,18 @@ class ConvictionController extends FormActionController
             )
         );
 
-        $data = $this->makeRestCall('Conviction', 'GET', array('id' => $routeParams['id']));
+        $bundle = array(
+            'children' => array(
+                'vosaCase' => array(
+                    'properties' => 'ALL'
+                )
+            )
+        );
+
+        $data = $this->makeRestCall('Conviction', 'GET', array('id' => $routeParams['id']), $bundle);
+        if (isset($data['vosaCase'])) {
+            $data['vosaCase'] = $data['vosaCase']['id'];
+        }
 
         if (empty($routeParams['case']) || empty($routeParams['licence']) || empty($data)) {
             return $this->getResponse()->setStatusCode(404);
