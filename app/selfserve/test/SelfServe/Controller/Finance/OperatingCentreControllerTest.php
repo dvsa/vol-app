@@ -14,9 +14,13 @@ use Zend\Http\Request;
 use Zend\Http\Response;
 use Zend\Mvc\MvcEvent;
 use Zend\Mvc\Router\RouteMatch;
-use PHPUnit_Framework_TestCase;
 use SelfServe\test\Bootstrap;
 
+/**
+ * Test case for operating centre pages
+ *
+ * @author Jakub.Igla
+ */
 class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
 {
 
