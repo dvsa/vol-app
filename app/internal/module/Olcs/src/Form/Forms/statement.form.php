@@ -71,6 +71,9 @@ return [
             ]
         ],
         'elements' => [
+            'case' => [
+                'type' => 'hidden'
+            ],
             'id' => [
                 'type' => 'hidden'
             ],
