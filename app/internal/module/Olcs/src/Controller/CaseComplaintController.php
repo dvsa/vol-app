@@ -25,25 +25,6 @@ class CaseComplaintController extends CaseController
     public function indexAction()
     {
         $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => 7)));
-        if ($this->params()->fromPost('action')) {
-            switch (strtolower($this->params()->fromPost('action'))) {
-                case 'add':
-                    return $this->redirect()->toRoute(
-                        'complaint', array('licence' => 7,
-                        'case' => $this->fromRoute('case'),
-                        'action' => 'add')
-                    );
-                case 'edit':
-                    return $this->redirect()->toRoute(
-                        'complaint', array('licence' => 7,
-                        'case' => $this->fromRoute('case'),
-                        'id' => $this->params()->fromPost('id'),
-                        'action' => 'edit')
-                    );
-                default:
-                    break;
-            }
-        }
 
         $view = $this->getView();
         $tabs = $this->getTabInformationArray();
@@ -93,7 +74,7 @@ class CaseComplaintController extends CaseController
         $data = [];
         $data['url'] = $this->getPluginManager()->get('url');
 
-        $table = $this->getServiceLocator()->get('Table')->buildTable('complaints', $results['complaints'], $data);
+        $table = $this->buildTable('complaints', $results['complaints'], $data);
 
         $view->setVariables(
             [
