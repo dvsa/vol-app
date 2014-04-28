@@ -21,7 +21,9 @@ class IndexController extends FormJourneyActionController
 
     public function indexAction()
     {
-        $results = $this->makeRestCall('ApplicationOperatingCentre', 'GET', array('applicationId' => 1));
+        $applicationId = $this->params()->fromRoute('applicationId');
+
+        $results = $this->makeRestCall('ApplicationOperatingCentre', 'GET', array('application' => $applicationId));
 
         $settings = array(
             'sort' => 'address',
