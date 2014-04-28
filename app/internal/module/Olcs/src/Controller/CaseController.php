@@ -111,22 +111,12 @@ class CaseController extends FormActionController
                     $results['Results'][$k]['currentlyWith'] = $action['userRecipient']['displayName'];
                 }
 
-                /* $sas = $this->makeRestCall(
-                    'SubmissionActionStatus', 'GET', array('id' => $action['submissionActionStatus'])
-                ); */
                 if (isset($action['submissionActionStatus']['name'])) {
-                    //$results['Results'][$k]['actions'][$ak]['submissionActionStatus'] = $sas;
 
                     // set the submission status at the top level.
                     $results['Results'][$k]['status'] = $action['submissionActionStatus']['name'];
 
                     // Get the submission action status type - this gives us the current submission type
-                    /* $sast = $this->makeRestCall(
-                        'SubmissionActionStatusType', 'GET', array(
-                        'id' => $sas['submissionActionStatusType']
-                        )
-                    ); */
-
                     $results['Results'][$k]['type'] =
                         $action['submissionActionStatus']['submissionActionStatusType']['name'];
                 }
@@ -135,11 +125,6 @@ class CaseController extends FormActionController
                 break;
             }
         }
-
-        /* echo '<pre>';
-        print_r($results);
-        die(); */
-
 
         return $results;
     }
@@ -455,10 +440,6 @@ class CaseController extends FormActionController
             $bundle
         );
 
-        /* echo '<pre>';
-        print_r($result);
-        die(); */
-
         if (empty($result)) {
             return $this->notFoundAction();
         }
@@ -490,11 +471,18 @@ class CaseController extends FormActionController
      */
     private function getPageData($licence)
     {
-        $licenceData = $this->makeRestCall('Licence', 'GET', array('id' => $licence));
-        $organisationData = $this->makeRestCall('Organisation', 'GET', array('id' => $licenceData['organisation']));
+        $bundle = [
+            'children' => [
+                'organisation' => [
+                    'properties' => 'ALL'
+                ]
+            ]
+        ];
+
+        $licenceData = $this->makeRestCall('Licence', 'GET', array('id' => $licence), $bundle);
 
         return array(
-            'organisation' => $organisationData['name'],
+            'organisation' => $licenceData['organisation']['name'],
             'licence' => $licenceData['licenceNumber']
         );
     }
