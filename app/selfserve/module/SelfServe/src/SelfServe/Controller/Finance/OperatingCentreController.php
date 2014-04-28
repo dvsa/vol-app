@@ -89,9 +89,16 @@ class OperatingCentreController extends FormActionController
         $data = array(
         	'version' => 1,
         );
+
         $data = array_merge($this->mapData($validData), $data);
 
-        //persiste to database by calling rest api
+        // first of all create the basic operating centre; this doesn't
+        // store much data except version and address...
+        $result = $this->makeRestCall('OperatingCentre', 'POST', $data);
+
+        // ... and then create the application OC entity which persists the
+        // rest of the data
+        $data['operatingCentre'] = $result['id'];
         $result = $this->makeRestCall('ApplicationOperatingCentre', 'POST', $data);
         if (isset($result['id'])) {
             $this->redirect()->toRoute('selfserve/finance', array(), true);
@@ -113,8 +120,7 @@ class OperatingCentreController extends FormActionController
         );
         $data = array_merge($this->mapData($validData), $data);
 
-        //persiste to database by calling rest api
-        $result = $this->makeRestCall('ApplicationOperatingCentre', 'PUT', $data);
+        $this->makeRestCall('ApplicationOperatingCentre', 'PUT', $data);
         return $this->redirect()->toRoute('selfserve/finance', array(), true);
     }
 
@@ -125,15 +131,7 @@ class OperatingCentreController extends FormActionController
      */
     private function mapData($validData)
     {
-        $addressData = $validData["address"];
-
-        $address = new \OlcsEntities\Entity\Address;
-        $address->setAddressLine1($addressData['addressLine1']);
-        $address->setAddressLine2($addressData['addressLine2']);
-        $address->setAddressLine3($addressData['addressLine3']);
-        $address->setCity($addressData['city']);
-        $address->setCountry($addressData['country']);
-        $address->setPostcode($addressData['postcode']);
+        $validData = $this->processAddressData($validData);
 
         $applicationId = $this->params()->fromRoute('applicationId');
         return array(
@@ -142,8 +140,8 @@ class OperatingCentreController extends FormActionController
             'sufficientParking' => $validData['authorised-vehicles']['parking-spaces-confirmation'],
             'permission' => $validData['authorised-vehicles']['permission-confirmation'],
             'adPlaced' => $validData['ad-placed'],
-            'address' => $address,
             'application' => $applicationId,
+            'addresses' => $validData['addresses'],
         );
     }
 }

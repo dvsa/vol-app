@@ -52,7 +52,7 @@ class OperatingCentreTest extends AbstractHttpControllerTestCase
     public function testProcessAdd()
     {
         $validData = $this->getValidData();
-        $this->controller->expects($this->once())
+        $this->controller->expects($this->exactly(2))
             ->method('makeRestCall')
             ->will($this->returnValue(array('id' => 1)))
         ;
