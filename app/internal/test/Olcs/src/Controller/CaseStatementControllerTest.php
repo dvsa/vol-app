@@ -393,7 +393,7 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
 
         $controller = $this->getMock(
             'Olcs\Controller\CaseStatementController',
-            array('makeRestCall', 'redirect')
+            array('makeRestCall', 'fromRoute', 'redirect')
         );
 
         $controller->expects($this->once())
@@ -448,7 +448,7 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
 
         $controller = $this->getMock(
             'Olcs\Controller\CaseStatementController',
-            array('makeRestCall', 'redirect')
+            array('makeRestCall', 'fromRoute', 'redirect')
         );
 
         $controller->expects($this->once())
