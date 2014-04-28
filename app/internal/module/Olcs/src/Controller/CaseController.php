@@ -221,12 +221,15 @@ class CaseController extends FormActionController
 
     public function getCaseSummaryArray(array $case)
     {
+        /* echo '<pre>';
+        die(print_r($case, 1)); */
+
         $categoryNames = array();
 
         if (isset($case['categories']) && !empty($case['categories'])) {
 
             foreach ($case['categories'] as $category) {
-                $categoryNames[] = $case['categories']['name'];
+                $categoryNames[] = $category['name'];
             }
         }
 
