@@ -120,7 +120,8 @@ class OperatingCentreController extends FormActionController
         );
         $data = array_merge($this->mapData($validData), $data);
 
-        $this->makeRestCall('ApplicationOperatingCentre', 'PUT', $data);
+        //persiste to database by calling rest api
+        $result = $this->makeRestCall('ApplicationOperatingCentre', 'PUT', $data);
         return $this->redirect()->toRoute('selfserve/finance', array(), true);
     }
 
