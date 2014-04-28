@@ -13,3 +13,4 @@ config/autoload/local.php
 .sublime-project
 .sass-cache/
 public/static
+*.sw?
