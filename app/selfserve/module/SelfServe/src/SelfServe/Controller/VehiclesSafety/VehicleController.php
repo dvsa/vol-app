@@ -259,7 +259,7 @@ class VehicleController extends FormJourneyActionController{
             'version' => $validData['version'],
             'vrm' => $validData['vrm'],
             'platedWeight' => (int) $validData['plated_weight'],
-            'bodyType' => $validData['body_type'],
+            'bodyType' => 'vhl_body_type.flat', //$validData['body_type'], //NOT PART OF THE STORY (2057)
             'isTipper' => 0,
             'isRefrigerated' => 0,
             'isArticulated' => 0,

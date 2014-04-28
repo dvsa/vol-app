@@ -60,19 +60,7 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
         $this->assertMatchedRouteName('selfserve/finance/operating_centre_action');
         $this->assertActionName('add');
     }
-    
-    public function testEditActionCanBeAccessed()
-    {
-        $this->dispatch('/selfserve/' . self::APPLICATION_ID . '/finance/index/operating-centre/edit/' . self::OP_CENTRE_ID);
-    
-        $this->assertResponseStatusCode(200);
-        $this->assertModuleName('selfserve');
-        $this->assertControllerName('selfserve\finance\operatingcentrecontroller');
-        $this->assertControllerClass('OperatingCentreController');
-        $this->assertMatchedRouteName('selfserve/finance/operating_centre_action');
-        $this->assertActionName('edit');
-    }
-    
+
     public function testForm()
     {
         $form = $this->getOlcsForm('operating-centre');

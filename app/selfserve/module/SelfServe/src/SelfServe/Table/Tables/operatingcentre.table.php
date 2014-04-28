@@ -13,8 +13,7 @@ return array(
             )
         )
     ),
-    'attributes' => array(
-    ),
+    'attributes' => array(),
     'columns' => array(
         array(
             'title' => '',
@@ -30,18 +29,17 @@ return array(
                         $parts[] = $data[$item];
                     }
                 }
-
                 return "<a href='#'>" . implode(', ', $parts) . "</a>";
             },
             'name' => 'address'
         ),
         array(
             'title' => 'Vehicles',
-            'format' => '{{no_of_vehicles_required}}'
+            'format' => '{{numberOfVehicles}}'
         ),
         array(
             'title' => 'Trailers',
-            'format' => '{{no_of_trailers_required}}'
+            'format' => '{{numberOfTrailers}}'
         ),
         array(
             'title' => 'Permission',
@@ -67,11 +65,11 @@ return array(
         ),
         array(
             'formatter' => 'Sum',
-            'name' => 'no_of_vehicles_required'
+            'name' => 'numberOfVehicles'
         ),
         array(
             'formatter' => 'Sum',
-            'name' => 'no_of_trailers_required'
+            'name' => 'numberOfTrailers'
         ),
         array(
             'colspan' => 2
