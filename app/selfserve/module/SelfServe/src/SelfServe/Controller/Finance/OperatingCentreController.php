@@ -19,6 +19,7 @@ use Zend\View\Model\ViewModel;
  */
 class OperatingCentreController extends AbstractFinanceController
 {
+
     /**
      * Index action
      *
@@ -34,15 +35,15 @@ class OperatingCentreController extends AbstractFinanceController
 
         $applicationId = $this->params()->fromRoute('applicationId');
 
-        $results = $this->makeRestCall('ApplicationOperatingCentre', 'GET', array('applicationId' => $applicationId));
+        $results = $this->getOperatingCentresForApplication($applicationId);
 
         $table = $this->getOperatingCentreTable($results);
 
         $bundle = array(
             'properties' => array(
                 'version',
-                'tot_auth_vehicles',
-                'tot_auth_trailers'
+                'totAuthVehicles',
+                'totAuthTrailers'
             )
         );
 
@@ -52,21 +53,7 @@ class OperatingCentreController extends AbstractFinanceController
             return $this->notFoundAction();
         }
 
-        $data['data'] = $data;
-
-        $data['data']['noOfOperatingCentres'] = count($results);
-        $data['data']['minVehicleAuth'] = 0;
-        $data['data']['maxVehicleAuth'] = 0;
-        $data['data']['minTrailerAuth'] = 0;
-        $data['data']['maxTrailerAuth'] = 0;
-
-        foreach ($results as $row) {
-
-            $data['data']['minVehicleAuth'] = max(array($data['data']['minVehicleAuth'], $row['no_of_vehicles_required']));
-            $data['data']['minTrailerAuth'] = max(array($data['data']['minTrailerAuth'], $row['no_of_trailers_required']));
-            $data['data']['maxVehicleAuth'] += (int)$row['no_of_vehicles_required'];
-            $data['data']['maxTrailerAuth'] += (int)$row['no_of_trailers_required'];
-        }
+        $data = $this->formatDataForForm($data, $applicationId, $results);
 
         $form = $this->generateFormWithData('operating-centre-authorisation', 'processAuthorisation', $data);
 
@@ -78,16 +65,133 @@ class OperatingCentreController extends AbstractFinanceController
     }
 
     /**
+     * Get operating centres for application
+     *
+     * @param int $applicationId
+     * @return array
+     */
+    private function getOperatingCentresForApplication($applicationId)
+    {
+        $bundle = array(
+            'properties' => array(
+                'id',
+                'numberOfTrailers',
+                'numberOfVehicles',
+                'permission',
+                'adPlaced'
+            ),
+            'children' => array(
+                'operatingCentre' => array(
+                    'properties' => array('id'),
+                    'children' => array(
+                        'address' => array(
+                            'properties' => array(
+                                'addressLine1',
+                                'addressLine2',
+                                'addressLine3',
+                                'addressLine4',
+                                'postcode',
+                                'county',
+                                'city',
+                                'country'
+                            )
+                        )
+                    )
+                )
+            )
+        );
+
+        $data = $this->makeRestCall(
+            'ApplicationOperatingCentre',
+            'GET',
+            array('application' => $applicationId),
+            $bundle
+        );
+
+        $newData = array();
+
+        foreach ($data as $row) {
+
+            $newRow = $row;
+
+            if (isset($row['operatingCentre']['address'])) {
+
+                $newRow = array_merge($newRow, $row['operatingCentre']['address']);
+            }
+
+            unset($newRow['operatingCentre']);
+
+            $newData[] = $newRow;
+        }
+
+        return $newData;
+    }
+
+    /**
      * Process persisting of Authorisation
      *
      * @param array $data
      */
     public function processAuthorisation($data)
     {
-        print '<pre>';
-        print_r($data);
-        print '</pre>';
-        exit;
+        $data = $this->formatDataFromForm($data);
+
+        $this->makeRestCall('Application', 'PUT', $data);
+
+        return $this->redirect()->toRoute('selfserve/finance/financial_evidence', array('applicationId' => $data['id']));
+    }
+
+    /**
+     * Format the data from the form
+     *
+     * @param array $data
+     * @return array
+     */
+    private function formatDataFromForm($data)
+    {
+        $data = $data['data'];
+
+        unset($data['noOfOperatingCentres']);
+        unset($data['minVehicleAuth']);
+        unset($data['maxVehicleAuth']);
+        unset($data['minTrailerAuth']);
+        unset($data['maxTrailerAuth']);
+
+        return $data;
+    }
+
+    /**
+     * Format the data for the form
+     *
+     * @param array $data
+     * @param int $applicationId
+     * @return array
+     */
+    private function formatDataForForm($data, $applicationId, $results)
+    {
+        $data['data'] = $data;
+        $data['data']['id'] = $applicationId;
+
+        // These fields are used for validation
+        $data['data']['noOfOperatingCentres'] = count($results);
+        $data['data']['minVehicleAuth'] = 0;
+        $data['data']['maxVehicleAuth'] = 0;
+        $data['data']['minTrailerAuth'] = 0;
+        $data['data']['maxTrailerAuth'] = 0;
+
+        foreach ($results as $row) {
+
+            $data['data']['minVehicleAuth'] = max(
+                array($data['data']['minVehicleAuth'], $row['no_of_vehicles_required'])
+            );
+            $data['data']['minTrailerAuth'] = max(
+                array($data['data']['minTrailerAuth'], $row['no_of_trailers_required'])
+            );
+            $data['data']['maxVehicleAuth'] += (int) $row['no_of_vehicles_required'];
+            $data['data']['maxTrailerAuth'] += (int) $row['no_of_trailers_required'];
+        }
+
+        return $data;
     }
 
     /**
@@ -132,7 +236,7 @@ class OperatingCentreController extends AbstractFinanceController
      */
     public function editAction()
     {
-        $operatingCentreId = $this->params()->fromRoute('operatingCentreId');
+        $operatingCentreId = $this->params()->fromRoute('id');
         $applicationId = $this->params()->fromRoute('applicationId');
 
         $data = array(
@@ -153,8 +257,8 @@ class OperatingCentreController extends AbstractFinanceController
                 'no-of-vehicles' => $result['numberOfVehicles'],
                 'no-of-trailers' => $result['numberOfTrailers'],
                 'parking-spaces-confirmation' => $result['sufficientParking'],
-                'permission-confirmation' => $result['permission'],
-            ),
+                'permission-confirmation' => $result['permission']
+            )
         );
 
         //generate form with data
@@ -165,6 +269,33 @@ class OperatingCentreController extends AbstractFinanceController
         $view = new ViewModel(['form' => $form]);
         $view->setTemplate('self-serve/finance/operating-centre/edit');
         return $this->renderLayout($view, 'operatingCentre');
+    }
+
+    /**
+     * Delete an operating centre
+     */
+    public function deleteAction()
+    {
+        $operatingCentreId = $this->params()->fromRoute('id');
+        $applicationId = $this->params()->fromRoute('applicationId');
+
+        $data = array(
+            'id' => $operatingCentreId,
+            'application' => $applicationId,
+        );
+
+        $result = $this->makeRestCall('ApplicationOperatingCentre', 'GET', $data);
+
+        if (empty($result)) {
+
+            return $this->notFoundAction();
+        }
+
+        $this->makeRestCall('OperatingCentre', 'DELETE', array('id' => $operatingCentreId));
+
+        return $this->redirect()->toRoute(
+                'selfserve/finance/operating_centre', array('applicationId' => $applicationId)
+        );
     }
 
     /**
@@ -195,7 +326,7 @@ class OperatingCentreController extends AbstractFinanceController
      */
     public function processEditForm($validData)
     {
-        $operatingCentreId = $this->params()->fromRoute('operatingCentreId');
+        $operatingCentreId = $this->params()->fromRoute('id');
         $data = array(
             'id' => $operatingCentreId,
             'version' => $validData['version'],

@@ -15,9 +15,9 @@ return [
             'operating_centre' => array(
                 'type' => 'segment',
                 'options' => array(
-                    'route' => 'operating-centre[/:action][/:operatingCentreId]',
+                    'route' => 'operating-centre[/:action][/:id]',
                     'constraints' => array(
-                        'operatingCentreId' => '[0-9]+'
+                        'id' => '[0-9]+'
                     ),
                     'defaults' => array(
                         'controller' => 'SelfServe\Finance\OperatingCentreController',
