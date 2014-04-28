@@ -88,6 +88,7 @@ class OperatingCentreController extends FormActionController
     {
         $data = array(
         	'version' => 1,
+            'adPlaced' => 'Y',
         ); 
         $data = array_merge($this->mapData($validData), $data);
         
