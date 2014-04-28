@@ -19,7 +19,7 @@ use SelfServe\test\Bootstrap;
 /**
  * Test case for operating centre pages
  *
- * @author Jakub.Igla
+ * @author Jakub Igla <jakub.igla@valtech.co.uk>
  */
 class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
 {
