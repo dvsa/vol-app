@@ -14,27 +14,33 @@ namespace SelfServe\Controller\Finance;
 use Common\Controller\FormActionController;
 use Zend\View\Model\ViewModel;
 
+/**
+ * AuthorisedVehicles Controller
+ *
+ * @author Jakub Igla <jakub.igla@valtech.co.uk>
+ */
 class OperatingCentreController extends FormActionController
 {
+
     protected $messages;
     protected $section = 'finance';
-    
+
     /**
      * Action that is responsible for adding operating centre
-     * 
+     *
      * @return \Zend\View\Model\ViewModel
      */
-    public function addAction() 
+    public function addAction()
     {
         $form = $this->generateForm(
-                'operating-centre', 'processAddForm'
+            'operating-centre', 'processAddForm'
         );
-        
+
         $view = new ViewModel(['form' => $form]);
         $view->setTemplate('self-serve/finance/operating-center/add');
         return $view;
     }
-    
+
     /**
      * Action that is responsible for editing operating centre
      *
@@ -42,62 +48,61 @@ class OperatingCentreController extends FormActionController
      */
     public function editAction()
     {
-        $operatingCentreId  = $this->params()->fromRoute('operatingCentreId');
-        $applicationId      = $this->params()->fromRoute('applicationId');
-        
+        $operatingCentreId = $this->params()->fromRoute('operatingCentreId');
+        $applicationId = $this->params()->fromRoute('applicationId');
+
         $data = array(
-        	'id' => $operatingCentreId,
+            'id' => $operatingCentreId,
             'application' => $applicationId,
         );
-        
+
         //get operating centre enetity based on applicationId and operatingCentreId
         $result = $this->makeRestCall('ApplicationOperatingCentre', 'GET', $data);
-        if (empty($result)){
+        if (empty($result)) {
             return $this->notFoundAction();
         }
-        
+
         //hydrate data
         $data = array(
-        	'version' => $result['version'],
+            'version' => $result['version'],
             'authorised-vehicles' => array(
-        	    'no-of-vehicles' => $result['numberOfVehicles'],
+                'no-of-vehicles' => $result['numberOfVehicles'],
                 'no-of-trailers' => $result['numberOfTrailers'],
                 'parking-spaces-confirmation' => $result['sufficientParking'],
                 'permission-confirmation' => $result['permission'],
             ),
         );
-        
+
         //generate form with data
         $form = $this->generateFormWithData(
-                'operating-centre', 'processEditForm', $data
+            'operating-centre', 'processEditForm', $data
         );
-        
+
         $view = new ViewModel(['form' => $form]);
         $view->setTemplate('self-serve/finance/operating-center/edit');
         return $view;
     }
-    
-    
+
     /**
      * Persist data to database. After that, redirect to Operating centres page
-     * 
+     *
      * @param array $validData
      * @return void
      */
     public function processAddForm($validData)
     {
         $data = array(
-        	'version' => 1,
-        ); 
+            'version' => 1,
+        );
         $data = array_merge($this->mapData($validData), $data);
-        
+
         //persiste to database by calling rest api
         $result = $this->makeRestCall('ApplicationOperatingCentre', 'POST', $data);
         if (isset($result['id'])) {
             $this->redirect()->toRoute('selfserve/finance', array(), true);
         }
     }
-    
+
     /**
      * Persist data to database. After that, redirect to Operating centres page
      *
@@ -106,18 +111,18 @@ class OperatingCentreController extends FormActionController
      */
     public function processEditForm($validData)
     {
-        $operatingCentreId  = $this->params()->fromRoute('operatingCentreId');
+        $operatingCentreId = $this->params()->fromRoute('operatingCentreId');
         $data = array(
             'id' => $operatingCentreId,
             'version' => $validData['version'],
         );
         $data = array_merge($this->mapData($validData), $data);
-    
+
         //persiste to database by calling rest api
         $result = $this->makeRestCall('ApplicationOperatingCentre', 'PUT', $data);
         return $this->redirect()->toRoute('selfserve/finance', array(), true);
     }
-    
+
     /**
      * Map common data
      * @param array $validData

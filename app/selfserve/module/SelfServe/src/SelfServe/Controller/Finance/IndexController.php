@@ -14,8 +14,14 @@ namespace SelfServe\Controller\Finance;
 use Common\Controller\FormJourneyActionController;
 use Zend\View\Model\ViewModel;
 
+/**
+ * AuthorisationFinance Controller
+ *
+ * @author S Lizzio <shaun.lizzio@valtech.co.uk>
+ */
 class IndexController extends FormJourneyActionController
 {
+
     protected $messages;
     protected $section = 'finance';
 
@@ -33,9 +39,7 @@ class IndexController extends FormJourneyActionController
         $table = $this->getServiceLocator()->get('Table')->buildTable('operatingcentre', $results, $settings);
 
         // render the view
-        $view = new ViewModel(Array(
-                        'operatingCentres' => $table
-                    ));
+        $view = new ViewModel(array('operatingCentres' => $table));
         $view->setTemplate('self-serve/finance/index');
         return $view;
     }
@@ -45,13 +49,6 @@ class IndexController extends FormJourneyActionController
      */
     public function completeAction()
     {
-
-        // persist data if possible
-        $request  = $this->getRequest();
-
         $this->redirect()->toRoute('selfserve/business', ['step' => 'business_type']);
-
     }
-
-
 }
