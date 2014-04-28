@@ -153,7 +153,7 @@ return array(
             'conviction' => array(
                 'type' => 'segment',
                 'options' => array(
-                    'route' => '/licence/[:licence]/case/[:case]/conviction[/:action][/:id]',
+                    'route' => '/licence/[:licence]/case/[:case]/conviction[/:action][/][:id]',
                     'defaults' => array(
                         'controller' => 'ConvictionController',
                     )
@@ -162,7 +162,7 @@ return array(
             'submission' => array(
                 'type' => 'segment',
                 'options' => array(
-                    'route' => '/licence/[:licence]/case/[:case]/submission[/:action][/:id]',
+                    'route' => '/licence/[:licence]/case/[:case]/submission[/:action][/][:id]',
                     'defaults' => array(
                         'controller' => 'SubmissionController',
                     )
