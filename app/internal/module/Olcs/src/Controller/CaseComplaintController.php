@@ -56,38 +56,44 @@ class CaseComplaintController extends CaseController
         $details = $this->getCaseDetailsArray($case);
 
         $bundle = array(
-                'properties' => array(
-                    'id'
-                ),
-                'children' => array(
+            'properties' => array(
+                'id'
+            ),
+            'children' => array(
                 'complaints' => array(
-                    'complaint' => array(
-                        'properties' => array(
-                            'complaint_date'
-                        ),
-                        'children' => array(
-                            'complainant' => array(
-                               'children' => array(
-                                   'person' => array(
-                                       'properties' => array(
-                                           'forename',
-                                           'familyName'
-                                       )
+                    'properties' => array(
+                        'id',
+                        'complaintDate',
+                        'description',
+                        'complainant'
+                    ),
+                    'children' => array(
+                        'complainant' => array(
+                            'properties' => array(
+                                'id',
+                                'person'
+                            ),
+                           'children' => array(
+                               'person' => array(
+                                   'properties' => array(
+                                       'firstName',
+                                       'middleName',
+                                       'surname',
                                    )
                                )
-                            )
+                           )
                         )
                     )
                 )
             )
         );
+
         $results = $this->makeRestCall('VosaCase', 'GET', array('id' => $caseId, 'bundle' => json_encode($bundle)));
-var_dump($results);exit;
 
         $data = [];
         $data['url'] = $this->getPluginManager()->get('url');
 
-        $table = $this->getServiceLocator()->get('Table')->buildTable('complaints', $results, $data);
+        $table = $this->getServiceLocator()->get('Table')->buildTable('complaints', $results['complaints'], $data);
 
         $view->setVariables(
             [

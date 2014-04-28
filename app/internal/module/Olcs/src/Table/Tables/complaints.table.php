@@ -23,15 +23,20 @@ return array(
             'title' => 'Date',
             'formatter' => function ($data, $column) {
                 $column['formatter'] = 'Date';
-        return '<a href="' . $this->generateUrl(
-                        array('action' => 'edit', 'complaint' => $data['id'])
-                ) . '">' . $this->callFormatter($column, $data) . '</a>';
-    },
-            'name' => 'date'
+                return '<a href="' . $this->generateUrl(
+                                array('action' => 'edit', 'complaint' => $data['id'])
+                        ) . '">' . $this->callFormatter($column, $data) . '</a>';
+            },
+            'name' => 'complaintDate'
         ),
         array(
             'title' => 'Complainant name',
-            'format' => '{{complainantsForename}} {{complainantsFamilyName}}'
+            'formatter' => function ($data, $column) {
+                return $data['complainant']['person']['firstName'] . ' ' .
+                    $data['complainant']['person']['middleName'] . ' ' .
+                    $data['complainant']['person']['surname'];
+            },
+            //'format' => '{{complainantsForename}} {{complainantsFamilyName}}'
         ),
         array(
             'title' => 'Description',
