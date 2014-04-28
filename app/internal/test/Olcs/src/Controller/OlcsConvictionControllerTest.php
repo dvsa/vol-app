@@ -15,8 +15,7 @@ class OlcsConvictionControllerTest  extends AbstractHttpControllerTestCase
     public function setUp()
     {
         $this->setApplicationConfig(
-            include __DIR__.'/../../../../'
-                . 'config/application.config.php'
+            include __DIR__.'/../../../../' . 'config/application.config.php'
         );
         $this->controller = $this->getMock(
             '\Olcs\Controller\ConvictionController',
@@ -39,7 +38,7 @@ class OlcsConvictionControllerTest  extends AbstractHttpControllerTestCase
         parent::setUp();
     }
     
-    public function testAddAction() 
+    public function testAddAction()
     {
         /*$this->controller->expects($this->once())
             ->method('setBreadcrumb')
@@ -48,7 +47,7 @@ class OlcsConvictionControllerTest  extends AbstractHttpControllerTestCase
         $this->controller->expects($this->once())
             ->method('getParams')
             ->with(array('case', 'licence', 'id'))
-            ->will($this->returnValue(Array ( 'licence' => 7, 'case' => 54 )));
+            ->will($this->returnValue(array ( 'licence' => 7, 'case' => 54 )));
         
         $this->controller->expects($this->once())
             ->method('makeRestCall')
@@ -69,12 +68,12 @@ class OlcsConvictionControllerTest  extends AbstractHttpControllerTestCase
         $this->controller->addAction();
     }
     
-    public function testAddFailAction() 
+    public function testAddFailAction()
     {
         $this->controller->expects($this->once())
             ->method('getParams')
             ->with(array('case', 'licence', 'id'))
-            ->will($this->returnValue(Array ( 'licence' => 7, 'case' => 54 )));
+            ->will($this->returnValue(array ( 'licence' => 7, 'case' => 54 )));
         
         $this->controller->expects($this->once())
             ->method('makeRestCall')
@@ -84,12 +83,12 @@ class OlcsConvictionControllerTest  extends AbstractHttpControllerTestCase
         $this->controller->addAction();
     }
     
-    public function testEditAction() 
+    public function testEditAction()
     {
         $this->controller->expects($this->once())
             ->method('getParams')
             ->with(array('case', 'licence', 'id'))
-            ->will($this->returnValue(Array ( 'licence' => 7, 'case' => 54, 'id' => 33 )));
+            ->will($this->returnValue(array ( 'licence' => 7, 'case' => 54, 'id' => 33 )));
         
         $this->controller->expects($this->once())
             ->method('makeRestCall')
@@ -106,12 +105,12 @@ class OlcsConvictionControllerTest  extends AbstractHttpControllerTestCase
         $this->controller->editAction();
     }
     
-    public function testEditFailAction() 
+    public function testEditFailAction()
     {
         $this->controller->expects($this->once())
             ->method('getParams')
             ->with(array('case', 'licence', 'id'))
-            ->will($this->returnValue(Array ( 'licence' => 7, 'case' => 54, 'id' => 33 )));
+            ->will($this->returnValue(array ( 'licence' => 7, 'case' => 54, 'id' => 33 )));
         
         $this->controller->expects($this->once())
             ->method('makeRestCall')
@@ -121,7 +120,7 @@ class OlcsConvictionControllerTest  extends AbstractHttpControllerTestCase
         $this->controller->editAction();
     }
     
-    public function testProcessEditAction() 
+    public function testProcessEditAction()
     {
         $data = array(
             'id' => 33,
@@ -132,7 +131,7 @@ class OlcsConvictionControllerTest  extends AbstractHttpControllerTestCase
         $this->controller->expects($this->once())
             ->method('getParams')
             ->with(array('action', 'licence', 'case'))
-            ->will($this->returnValue(Array ( 'licence' => 7, 'case' => 54, 'action' => 'edit' )));
+            ->will($this->returnValue(array ( 'licence' => 7, 'case' => 54, 'action' => 'edit' )));
         
         $this->controller->expects($this->once())
             ->method('processEdit')
@@ -144,8 +143,7 @@ class OlcsConvictionControllerTest  extends AbstractHttpControllerTestCase
         $toRoute->expects($this->once())
             ->method('toRoute')
             ->with('case_convictions', array(
-                'case' =>  54)
-            );
+                'case' =>  54, 'licence' => 7));
         
         $this->controller->expects($this->once())
             ->method('redirect')
@@ -154,7 +152,7 @@ class OlcsConvictionControllerTest  extends AbstractHttpControllerTestCase
         $this->controller->processConviction($data);
     }
     
-    public function testProcessAddAction() 
+    public function testProcessAddAction()
     {
         $data = array(
             'id' => 33,
@@ -165,7 +163,7 @@ class OlcsConvictionControllerTest  extends AbstractHttpControllerTestCase
         $this->controller->expects($this->once())
             ->method('getParams')
             ->with(array('action', 'licence', 'case'))
-            ->will($this->returnValue(Array ( 'licence' => 7, 'case' => 54, 'action' => 'add' )));
+            ->will($this->returnValue(array ( 'licence' => 7, 'case' => 54, 'action' => 'add' )));
         
         $this->controller->expects($this->once())
             ->method('processAdd')
@@ -177,8 +175,7 @@ class OlcsConvictionControllerTest  extends AbstractHttpControllerTestCase
         $toRoute->expects($this->once())
             ->method('toRoute')
             ->with('case_convictions', array(
-                'case' =>  54)
-            );
+                'case' =>  54, 'licence' => 7));
         
         $this->controller->expects($this->once())
             ->method('redirect')

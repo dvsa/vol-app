@@ -33,11 +33,12 @@ class SubmissionController extends FormActionController
             'text' => $submission,
             'vosaCase' => $routeParams['case'],
         );
-        //$result = $this->processAdd($data, 'Submission');
+        
+        $result = $this->processAdd($data, 'Submission');
+        
         $submission = json_decode($submission, true);
-        $view = new ViewModel(
+        $view = $this->getView(
             array(
-                'headScript' => array('/static/js/conviction.js'),
                 'params' => array(
                     'pageTitle' => 'case-submission',
                     'pageSubTitle' => 'case-submission-text',
@@ -57,7 +58,8 @@ class SubmissionController extends FormActionController
     public function createSubmission($routeParams)
     {
         $licenceData = $this->makeRestCall('Licence', 'GET', array('id' => $routeParams['licence']));
-        $caseData = $this->makeRestCall('VosaCase', 'GET', array('id' => $routeParams['case']));
+        $caseData = array();
+        //$caseData = $this->makeRestCall('VosaCase', 'GET', array('id' => $routeParams['case']));
         $submission = array();
         $submission['case-summary-info'] = $caseData;
         $submission['persons'] = array();
@@ -83,10 +85,5 @@ class SubmissionController extends FormActionController
         //$submission['recommendation-decision'] = array();
         $jsonSubmission = json_encode($submission);
         return $jsonSubmission;
-    }
-
-    public function editAction()
-    {
-        
     }
 }
