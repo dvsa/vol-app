@@ -4,9 +4,9 @@
  * AuthorisedVehicles Controller
  *
  *
- * @package		selfserve
+ * @package     selfserve
  * @subpackage  operating-centre
- * @author		Jakub Igla <jakub.igla@valtech.co.uk>
+ * @author      Jakub Igla <jakub.igla@valtech.co.uk>
  */
 
 namespace SelfServe\Controller\Finance;
@@ -27,7 +27,7 @@ class OperatingCentreController extends FormActionController
     public function addAction()
     {
         $form = $this->generateForm(
-                'operating-centre', 'processAddForm'
+            'operating-centre', 'processAddForm'
         );
 
         $view = new ViewModel(['form' => $form]);
@@ -46,21 +46,21 @@ class OperatingCentreController extends FormActionController
         $applicationId      = $this->params()->fromRoute('applicationId');
 
         $data = array(
-        	'id' => $operatingCentreId,
+            'id' => $operatingCentreId,
             'application' => $applicationId,
         );
 
         //get operating centre enetity based on applicationId and operatingCentreId
         $result = $this->makeRestCall('ApplicationOperatingCentre', 'GET', $data);
-        if (empty($result)){
+        if (empty($result)) {
             return $this->notFoundAction();
         }
 
         //hydrate data
         $data = array(
-        	'version' => $result['version'],
+            'version' => $result['version'],
             'authorised-vehicles' => array(
-        	    'no-of-vehicles' => $result['numberOfVehicles'],
+                'no-of-vehicles' => $result['numberOfVehicles'],
                 'no-of-trailers' => $result['numberOfTrailers'],
                 'parking-spaces-confirmation' => $result['sufficientParking'],
                 'permission-confirmation' => $result['permission'],
@@ -69,7 +69,7 @@ class OperatingCentreController extends FormActionController
 
         //generate form with data
         $form = $this->generateFormWithData(
-                'operating-centre', 'processEditForm', $data
+            'operating-centre', 'processEditForm', $data
         );
 
         $view = new ViewModel(['form' => $form]);
@@ -82,12 +82,13 @@ class OperatingCentreController extends FormActionController
      * Persist data to database. After that, redirect to Operating centres page
      *
      * @param array $validData
+     *
      * @return void
      */
     public function processAddForm($validData)
     {
         $data = array(
-        	'version' => 1,
+            'version' => 1,
         );
 
         $data = array_merge($this->mapData($validData), $data);
@@ -109,6 +110,7 @@ class OperatingCentreController extends FormActionController
      * Persist data to database. After that, redirect to Operating centres page
      *
      * @param array $validData
+     *
      * @return \Zend\Http\PhpEnvironment\Response
      */
     public function processEditForm($validData)
@@ -121,13 +123,14 @@ class OperatingCentreController extends FormActionController
         $data = array_merge($this->mapData($validData), $data);
 
         //persiste to database by calling rest api
-        $result = $this->makeRestCall('ApplicationOperatingCentre', 'PUT', $data);
+        $this->makeRestCall('ApplicationOperatingCentre', 'PUT', $data);
         return $this->redirect()->toRoute('selfserve/finance', array(), true);
     }
 
     /**
      * Map common data
      * @param array $validData
+     *
      * @return array
      */
     private function mapData($validData)
