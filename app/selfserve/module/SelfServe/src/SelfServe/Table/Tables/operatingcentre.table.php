@@ -13,8 +13,7 @@ return array(
             )
         )
     ),
-    'attributes' => array(
-    ),
+    'attributes' => array(),
     'columns' => array(
         array(
             'title' => '',
@@ -22,40 +21,32 @@ return array(
             'format' => '{{[elements/radio]}}'
         ),
         array(
-            'title' => 'Operating Centre Address',
-            'formatter' => function($data) {
-                    $parts = array();
-                    foreach (array('address_line1', 'address_line2', 'address_line3', 'postcode') as $item) {
-                        if (!empty($data[$item])) {
-                            $parts[] = $data[$item];
-                        }
-                    }
+            'title' => 'Operating centre address',
+            'formatter' => function ($data, $column) {
 
-                    return "<a href='#'>".implode(', ', $parts)."</a>";
-                },
+                $column['formatter'] = 'Address';
+
+                return "<a href='#'>" . $this->callFormatter($column, $data) . "</a>";
+            },
             'name' => 'address'
         ),
         array(
             'title' => 'Vehicles',
-            'format' => '{{numberOfVehicles}}'
+            'name' => 'numberOfVehicles'
         ),
         array(
             'title' => 'Trailers',
-            'format' => '{{numberOfTrailers}}'
+            'name' => 'numberOfTrailers'
         ),
         array(
             'title' => 'Permission',
             'name' => 'permission',
-            'formatter' => function($data) {
-                    return ($data['permission']==1?'Y':'N');
-                }
+            'formatter' => 'YesNo'
         ),
         array(
-            'title' => 'Advertising',
-            'name' => 'advertising',
-            'formatter' => function($data) {
-                    return ($data['adPlaced']==1?'Y':'N');
-                }
+            'title' => 'Advertised',
+            'name' => 'adPlaced',
+            'formatter' => 'YesNo'
         )
     ),
     // Footer configuration

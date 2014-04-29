@@ -4,27 +4,37 @@ return [
     'finance' => array(
         'type' => 'segment',
         'options' => array(
-            'route' => '/:applicationId/finance[/][:step]',
+            'route' => '/:applicationId/finance[/]',
             'defaults' => array(
                 'controller' => 'Selfserve\Finance\Index',
-                'action' => 'index',
-                'step'  => 'index',
-            ),
+                'action' => 'index'
+            )
         ),
-        'may_terminate' => true,
+        'may_terminate' => false,
         'child_routes' => array(
-                'operating_centre_action' => array(
-                        'type' => 'segment',
-                        'options' => array(
-                                'route' => '/operating-centre[/:action][/:operatingCentreId]',
-                                'constraints' => array(
-                                        'operatingCentreId' => '[0-9]+'
-                                ),
-                                'defaults' => array(
-                                        'controller' => 'SelfServe\Finance\OperatingCentreController'
-                                ),
-                        ),
-                ),
-        ),
-    ),
+            'operating_centre' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => 'operating-centre[/:action][/:id]',
+                    'constraints' => array(
+                        'id' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'SelfServe\Finance\OperatingCentreController',
+                        'action' => 'index'
+                    )
+                )
+            ),
+            'financial_evidence' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => 'financial-evidence',
+                    'defaults' => array(
+                        'controller' => 'SelfServe\Finance\FinancialEvidenceController',
+                        'action' => 'index'
+                    )
+                )
+            )
+        )
+    )
 ];
