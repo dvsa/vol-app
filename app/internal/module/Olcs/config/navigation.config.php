@@ -69,7 +69,7 @@ return array(
                                     )
                                 ),
                                 array(
-                                    'label' => 'Case Stays',
+                                    'label' => 'Stays & Appeals',
                                     'route' => 'case_stay_action',
                                     'action' => 'index',
                                     'pages' => array(
