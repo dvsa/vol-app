@@ -241,7 +241,9 @@ class OperatingCentreController extends AbstractFinanceController
      */
     public function editAction()
     {
+
         $operatingCentreId = $this->params()->fromRoute('id');
+
         $applicationId = $this->params()->fromRoute('applicationId');
 
         $data = array(
@@ -334,13 +336,14 @@ class OperatingCentreController extends AbstractFinanceController
     public function processEditForm($validData)
     {
         $operatingCentreId = $this->params()->fromRoute('id');
+
         $data = array(
             'id' => $operatingCentreId,
             'version' => $validData['version'],
         );
         $data = array_merge($this->mapData($validData), $data);
 
-        //persiste to database by calling rest api
+        //persist to database by calling rest api
         $result = $this->makeRestCall('ApplicationOperatingCentre', 'PUT', $data);
         return $this->redirect()->toRoute('selfserve/finance', array(), true);
     }
