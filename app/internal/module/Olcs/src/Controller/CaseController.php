@@ -31,6 +31,7 @@ class CaseController extends FormActionController
         $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licence)));
         
         if ($this->params()->fromPost('action')) {
+            //return $this->forward()->dispatch('SubmissionController', array('action' => 'add', 'licence' => $licence, 'case' => $caseId));
             return $this->redirect()->toRoute($this->params()->fromPost('table'), array('licence' => $licence,
                         'case' => $caseId,
                         'id' => $this->params()->fromPost('id') ? $this->params()->fromPost('id') : '',

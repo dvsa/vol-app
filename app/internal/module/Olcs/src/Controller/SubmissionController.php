@@ -38,20 +38,64 @@ class SubmissionController extends FormActionController
             'vosaCase' => $routeParams['case'],
         );
         
-        $result = $this->processAdd($data, 'Submission');
+        //if ($this->getRequest()->isPost()) {
+            $result = $this->processAdd($data, 'Submission');
+        //}
         
         $submission = json_decode($submission, true);
+        $routeParams['id'] = $result['id'];
+        $routeParams['action'] = 'post';
+        $formAction = $this->url()->fromRoute('submission', $routeParams);
         $view = $this->getView(
             array(
                 'params' => array(
+                    'formAction' => $formAction,
                     'pageTitle' => 'case-submission',
                     'pageSubTitle' => 'case-submission-text',
                     'data' => $submission
                 )
             )
         );
+        
         $view->setTemplate('submission/page');
         return $view;
+    }
+    
+    /**
+     * 
+     * @return type
+     */
+    public function postAction()
+    {
+        $routeParams = $this->getParams(array('case', 'licence', 'id'));
+        $params = array(
+            'case' => $routeParams['case'],
+            'licence' => $routeParams['case'],
+            'id' => $routeParams['id']);
+        if ($this->params()->fromPost('decision')) {
+            $params['action'] = 'decision';
+        } elseif ($this->params()->fromPost('recommend')) {
+            $params['action'] = 'recomendation';
+        }
+        //return $this->forward()->dispatch('SubmissionController', array('action' => 'recomendation'));
+        return $this->redirect()->toRoute(
+            'submission',
+            $params
+        );
+    }
+    
+    /**
+     * 
+     * @return type
+     */
+    public function recomendationAction()
+    {
+        return $this->formView('recommend');
+    }
+    
+    public function decisionAction()
+    {
+        return $this->formView('decision');
     }
     
     /**
@@ -70,7 +114,8 @@ class SubmissionController extends FormActionController
         if (in_array(strtolower($licenceData['licenceType']), array('standard national', 'standard international'))) {
             $submission['transport-managers'] = array();
         }
-        $submission['outstanding-applications'] = array();
+        $submission['outstanding-applications']['data'] = array();
+        $submission['outstanding-applications']['notes'] = array();
         $submission['environmental'] = array();
         $submission['objections'] = array();
         $submission['representations'] = array();
@@ -89,5 +134,52 @@ class SubmissionController extends FormActionController
         //$submission['recommendation-decision'] = array();
         $jsonSubmission = json_encode($submission);
         return $jsonSubmission;
+    }
+    
+    public function formView($type)
+    {
+        $form = $this->getFormWithUsers($type);
+        $form = $this->formPost($form);
+        $view = $this->getView(
+            array(
+                'form' => $form,
+                'params' => array(
+                    'pageTitle' => "submission-$type",
+                    'pageSubTitle' => "submission-$type-text",
+                )
+            )
+        );
+        $view->setTemplate('form');
+        return $view;
+    }
+    
+    /**
+     * 
+     * @return type
+     */
+    private function getUserList()
+    {
+        $users = $this->makeRestCall('User', 'GET', array());
+        $userList = [];
+        foreach ($users['Results'] as $user) {
+            $userList[$user['id']] = $user['displayName'];
+        }
+        return $userList;
+    }
+    
+    /**
+     * 
+     * @param type $userList
+     * @param type $formType
+     * @return type
+     */
+    private function getFormWithUsers($formType)
+    {
+        $userList = $this->getUserList();
+        $generator = $this->getFormGenerator();
+        $formConfig = $generator->getFormConfig($formType);
+        $formConfig[$formType]['fieldsets']['main']['elements']['sendto']['value_options'] = $userList;
+        $form = $generator->setFormConfig($formConfig)->createForm($formType);
+        return $form;
     }
 }
