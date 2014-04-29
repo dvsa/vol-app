@@ -30,7 +30,7 @@ class ComplaintController extends FormActionController
      */
     public function addAction()
     {
-        $routeParams = $this->getParams(array('complaint', 'licence', 'id'));
+        $routeParams = $this->getParams(array('complaint', 'case', 'licence', 'id'));
 
         if (null !== $this->params()->fromPost('cancel-complaint')) {
             return $this->redirect()->toRoute('case_complaints', array('complaint' => $routeParams['complaint']));
@@ -61,7 +61,7 @@ class ComplaintController extends FormActionController
             'headScript' => array('/static/js/complaint.js'),
             'params' => array(
                 'pageTitle' => 'add-complaint',
-                'pageSubTitle' => 'add-complaint-text'
+                'pageSubTitle' => 'subtitle-complaint-text'
             )
             )
         );

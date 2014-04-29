@@ -24,31 +24,16 @@ class CaseComplaintController extends CaseController
      */
     public function indexAction()
     {
-        $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => 7)));
-        if ($this->params()->fromPost('action')) {
-            switch (strtolower($this->params()->fromPost('action'))) {
-                case 'add':
-                    return $this->redirect()->toRoute(
-                        'case_complaints',
-                        array(
-                            'licence' => $this->fromRoute('licence'),
-                            'case' => $this->fromRoute('case'),
-                            'action' => 'add')
-                    );
-                    break;
-                case 'edit':
-                    return $this->redirect()->toRoute(
-                        'case_complaints',
-                        array(
-                            'licence' => $this->fromRoute('licence'),
-                            'case' => $this->fromRoute('case'),
-                            'action' => 'edit')
-                    );
-                    break;
-                default:
-                    break;
-            }
-        }
+        $caseId = $this->fromRoute('case');
+        $licenceId = $this->fromRoute('licence');
+        $complaintId = $this->fromRoute('complaint');
+
+        $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licenceId)));
+
+        // checks for CRUD and redirects as required
+        $this->checkForCrudAction('complaint', array('case' => $caseId, 'licence' => $licenceId), 'id');
+
+        // no crud, generate the main complaints table
         $view = $this->getView();
         $tabs = $this->getTabInformationArray();
         $action = 'complaints';
