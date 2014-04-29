@@ -67,6 +67,23 @@ return array(
                                             'action' => 'edit'
                                         )
                                     )
+                                ),
+                                array(
+                                    'label' => 'Case Complaints',
+                                    'route' => 'case_complaints',
+                                    'action' => 'index',
+                                    'pages' => array(
+                                        array(
+                                            'label' => 'Add Complaint',
+                                            'route' => 'case_complaint',
+                                            'action' => 'add'
+                                        ),
+                                        array(
+                                            'label' => 'Edit Complaint',
+                                            'route' => 'case_complaint',
+                                            'action' => 'edit'
+                                        )
+                                    )
                                 )
                             )
                         )

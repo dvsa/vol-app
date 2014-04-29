@@ -177,14 +177,26 @@ return array(
             'case_complaints' => array(
                 'type' => 'segment',
                 'options' => array(
-                    'route' => '/licence/[:licence]/case/:case/complaints[/:action][/:complaint]',
+                    'route' => '/licence/[:licence]/case/:case/action/manage/complaints',
                     'constraints' => array(
                         'case' => '[0-9]+',
-                        'complaint' => '[0-9]+'
                     ),
                     'defaults' => array(
                         'controller' => 'CaseComplaintController',
                         'action' => 'index'
+                    )
+                )
+            ),
+            'complaint' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/licence/[:licence]/case/:case/complaints[/:action][/:id]',
+                    'constraints' => array(
+                        'case' => '[0-9]+',
+                        'id' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'ComplaintController',
                     )
                 )
             ),
@@ -207,7 +219,8 @@ return array(
             'CaseStatementController' => 'Olcs\Controller\CaseStatementController',
             'CaseAppealController' => 'Olcs\Controller\CaseAppealController',
             'CaseStayController' => 'Olcs\Controller\CaseStayController',
-            'CaseComplaintController' => 'Olcs\Controller\CaseComplaintController'
+            'CaseComplaintController' => 'Olcs\Controller\CaseComplaintController',
+            'ComplaintController' => 'Olcs\Controller\ComplaintController'
         )
     ),
     'view_manager' => array(
