@@ -46,7 +46,7 @@ class SubmissionController extends FormActionController
         $routeParams['id'] = $result['id'];
         $routeParams['action'] = 'post';
         $formAction = $this->url()->fromRoute('submission', $routeParams);
-        $view = $this->getView(
+        $view = $this->getViewModel(
             array(
                 'params' => array(
                     'formAction' => $formAction,
@@ -84,7 +84,7 @@ class SubmissionController extends FormActionController
     }
     
     /**
-     * 
+     * Recommendation form
      * @return type
      */
     public function recomendationAction()
@@ -92,6 +92,10 @@ class SubmissionController extends FormActionController
         return $this->formView('recommend');
     }
     
+    /**
+     * Decision form
+     * @return type
+     */
     public function decisionAction()
     {
         return $this->formView('decision');
@@ -135,6 +139,11 @@ class SubmissionController extends FormActionController
         return $jsonSubmission;
     }
     
+    /**
+     * Gets the view for the form based on type
+     * @param type $type
+     * @return type
+     */
     public function formView($type)
     {
         $form = $this->getFormWithUsers(
@@ -144,7 +153,7 @@ class SubmissionController extends FormActionController
                 'userSender' => 2)
         );
         $form = $this->formPost($form, 'processRecDecForm');
-        $view = $this->getView(
+        $view = $this->getViewModel(
             array(
                 'form' => $form,
                 'params' => array(
@@ -157,6 +166,11 @@ class SubmissionController extends FormActionController
         return $view;
     }
     
+    /**
+     * Adds a SubmissionAction entry
+     * @param type $data
+     * @return type
+     */
     public function processRecDecForm($data)
     {
         $data = array_merge($data, $data['main']);
@@ -172,7 +186,7 @@ class SubmissionController extends FormActionController
     }
     
     /**
-     * 
+     * Gets user list for recipients
      * @return type
      */
     private function getUserList()
@@ -186,7 +200,7 @@ class SubmissionController extends FormActionController
     }
     
     /**
-     * 
+     * Gets a form for the form type and populates the Send to list with users
      * @param type $userList
      * @param type $formType
      * @return type

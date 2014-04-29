@@ -31,7 +31,7 @@ return [
                         'class' => 'extra-long'
                     ],
                     'urgent' => [
-                        'type' => 'checkbox',
+                        'type' => 'checkbox-yn',
                         'label' => 'Urgent',
                     ]
                 ]

@@ -118,7 +118,8 @@ class CaseController extends FormActionController
                 }
 
                 $actions = $submissionActions['submission_'.$action['submissionActionType']];
-                $results['Results'][$k]['status'] = $actions[$action['submissionActionStatus']];
+                $results['Results'][$k]['status'] = isset($actions[$action['submissionActionStatus']])
+                    ? $actions[$action['submissionActionStatus']] : '';
                 $results['Results'][$k]['type'] = ucfirst($action['submissionActionType']);
 
                 //We only need the data from the top action - which is the latest.
