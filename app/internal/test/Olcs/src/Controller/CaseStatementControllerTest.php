@@ -182,7 +182,8 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
                 'postcode' => 'AB1 0AB',
                 'country' => 'country.GB',
                 'city' => 'Leeds'
-            )
+            ),
+            'case' => '3'
         );
 
         $viewMock = $this->getMock('\stdClass', array('setTemplate'));
@@ -310,7 +311,7 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
         $caseId = 7;
         $statementId = 9;
         $results = array(
-            'case' => 7
+            'case' => array('id' => 7)
         );
 
         $mockRedirect = $this->getMock('\stdClass', array('toRoute'));
@@ -392,7 +393,7 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
 
         $controller = $this->getMock(
             'Olcs\Controller\CaseStatementController',
-            array('makeRestCall', 'redirect')
+            array('makeRestCall', 'fromRoute', 'redirect')
         );
 
         $controller->expects($this->once())
@@ -447,7 +448,7 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
 
         $controller = $this->getMock(
             'Olcs\Controller\CaseStatementController',
-            array('makeRestCall', 'redirect')
+            array('makeRestCall', 'fromRoute', 'redirect')
         );
 
         $controller->expects($this->once())

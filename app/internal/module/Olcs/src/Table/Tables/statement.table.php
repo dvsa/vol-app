@@ -24,7 +24,9 @@ return array(
             'formatter' => function ($data, $column) {
                 $column['formatter'] = 'Date';
                 return '<a href="' . $this->generateUrl(
-                    array('action' => 'edit', 'statement' => $data['id'])
+                    array('action' => 'edit', 'statement' => $data['id']),
+                    'case_statement',
+                    true
                 ) . '">' . $this->callFormatter($column, $data) . '</a>';
             },
             'name' => 'dateRequested'
