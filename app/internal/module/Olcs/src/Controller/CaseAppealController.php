@@ -23,6 +23,14 @@ class CaseAppealController extends CaseController
     public function addAction()
     {
         $caseId = $this->fromRoute('case');
+        $licenceId = $this->fromRoute('licence');
+
+        $this->setBreadcrumb(
+            array(
+                'licence_case_list/pagination' => array('licence' => $licenceId),
+                'case_stay_action' => array('licence' => $licenceId, 'case' => $caseId)
+            )
+        );
 
         $form = $this->generateFormWithData(
             'appeal',
@@ -53,6 +61,16 @@ class CaseAppealController extends CaseController
     public function editAction()
     {
         $appealId = $this->fromRoute('appeal');
+        $licenceId = $this->fromRoute('licence');
+        $caseId = $this->fromRoute('case');
+
+        $this->setBreadcrumb(
+            array(
+                'licence_case_list/pagination' => array('licence' => $licenceId),
+                'case_stay_action' => array('licence' => $licenceId, 'case' => $caseId)
+            )
+        );
+
 
         $details = $this->makeRestCall('Appeal', 'GET', array('id' => $appealId));
 

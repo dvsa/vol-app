@@ -49,8 +49,8 @@ class CaseStayController extends CaseController
      */
     public function indexAction()
     {
-        $stayRecords = array();
         $addHref = array();
+
 
         $caseId = $this->fromRoute('case');
 
@@ -59,53 +59,54 @@ class CaseStayController extends CaseController
         }
 
         $licenceId = $this->fromRoute('licence');
-
         $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licenceId)));
+
+        $config = $this->getServiceLocator()->get('Config');
+
+        $staticStay = $config['static-list-data']['case_stay_outcome'];
+        $staticAppealOutcomes = $config['static-list-data']['appeal_outcomes'];
+        $staticAppealReasons = $config['static-list-data']['appeal_reasons'];
 
         $stayTypes = $this->getStayTypes();
 
-        $this->pm = $this->getPluginManager();
-
-        foreach ($stayTypes as $id => $type) {
-            $addHref[$id] = $this->getAddStayHref($licenceId, $caseId, $id);
+        foreach (array_keys($stayTypes) as $id) {
+            $addHref[$id] = $this->getUrl(
+                'case_stay_action',
+                [
+                    'action' => 'add',
+                    'licence' => $licenceId,
+                    'case' => $caseId,
+                    'stayType' => $id
+                ]
+            );
         }
 
-        $addHref['appeal'] = $this->getAddAppealHref($licenceId, $caseId);
+        $addHref['appeal'] = $this->getUrl(
+            'case_appeal',
+            array(
+                'action' => 'add',
+                'licence' => $licenceId,
+                'case' => $caseId,
+            )
+        );
 
-        $stayResult = $this->makeRestCall('Stay', 'GET', array('case' => $caseId));
+        $stayRecords = $this->getStayData($licenceId, $caseId, $staticStay);
+        $appealResult = $this->getAppealData($licenceId, $caseId, $staticAppealOutcomes, $staticAppealReasons);
 
-        //need a better way to do this...
-        foreach ($stayResult['Results'] as $stay) {
-            if (isset($stayTypes[$stay['stayType']])) {
-                $stayRecords[$stay['stayType']] = $stay;
-                $stayRecords[$stay['stayType']]['editHref'] = $this->pm->get('url')->fromRoute('case_stay_action', ['action' => 'edit', 'licence' => $licenceId, 'stay' => $stay['id'], 'stayType' => $stay['stayType'], 'case' => $caseId], [], true);
-                $stayRecords[$stay['stayType']]['deleteHref'] = '';
-            }
-        }
 
-        $appealResult = $this->makeRestCall('Appeal', 'GET', array('case' => $caseId));
+        $variables = array(
+            'tab' => 'stays',
+            'addHref' => $addHref,
+            'appealRecord' => $appealResult,
+            'stayRecords' => $stayRecords,
+            'stayTypes' => $stayTypes
+        );
 
-        if (!empty($appealResult['Results'][0])) {
-            $appealResult['Results'][0]['editHref'] = '';
-            $appealResult['Results'][0]['deleteHref'] = '';
-        }
-
-        $variables = array('tab' => 'stays', 'addHref' => $addHref, 'appealRecords' => $appealResult['Results'], 'stayRecords' => $stayRecords, 'stayTypes' => $stayTypes);
         $caseVariables = $this->getCaseVariables($caseId, $variables);
         $view = $this->getView($caseVariables);
 
         $view->setTemplate('case/manage');
         return $view;
-    }
-
-    private function getAddStayHref($licenceId, $caseId, $stayTypeId)
-    {
-        return $this->pm->get('url')->fromRoute('case_stay_action', ['action' => 'add', 'licence' => $licenceId, 'stayType' => $stayTypeId, 'case' => $caseId], [], true);
-    }
-
-    private function getAddAppealHref($licenceId, $caseId)
-    {
-        return $this->pm->get('url')->fromRoute('case_appeal', ['action' => 'add', 'licence' => $licenceId, 'case' => $caseId], [], true);
     }
 
     /**
@@ -117,7 +118,7 @@ class CaseStayController extends CaseController
      */
     public function addAction()
     {
-        $licence = $this->fromRoute('licence');
+        $licenceId = $this->fromRoute('licence');
         $caseId = $this->fromRoute('case');
 
         $pageData = $this->getCase($caseId);
@@ -137,8 +138,15 @@ class CaseStayController extends CaseController
         $existingRecord = $this->checkExistingStay($caseId, $stayTypeId);
 
         if ($existingRecord) {
-            return $this->redirectIndex($licence, $caseId);
+            return $this->redirectIndex($licenceId, $caseId);
         }
+
+        $this->setBreadcrumb(
+            array(
+                'licence_case_list/pagination' => array('licence' => $licenceId),
+                'case_stay_action' => array('licence' => $licenceId, 'case' => $caseId)
+            )
+        );
 
         $form = $this->generateFormWithData(
             'case-stay',
@@ -146,7 +154,7 @@ class CaseStayController extends CaseController
             array(
                 'case' => $caseId,
                 'stayType' => $stayTypeId,
-                'licence' => $licence
+                'licence' => $licenceId
             )
         );
 
@@ -164,8 +172,6 @@ class CaseStayController extends CaseController
      * @param array $data
      *
      * @todo Handle 404 and Bad Request
-     * @todo Once user auth is ready, check user allowed access
-     * @todo Once user auth is ready, add the user info to the data (fields are lastUpdatedBy and createdBy)
      * @todo Check to make sure the stay ID is really related to the case ID
      */
     public function editAction()
@@ -188,6 +194,7 @@ class CaseStayController extends CaseController
         }
 
         $result['licence'] = $this->fromRoute('licence');
+
         $pageData = array_merge($result, $case);
 
         $stayTypeId = $this->fromRoute('stayType');
@@ -196,6 +203,13 @@ class CaseStayController extends CaseController
         if (!$stayTypeName) {
             return $this->notFoundAction();
         }
+
+        $this->setBreadcrumb(
+            array(
+                'licence_case_list/pagination' => array('licence' => $result['licence']),
+                'case_stay_action' => array('licence' => $result['licence'], 'case' => $caseId)
+            )
+        );
 
         $form = $this->generateFormWithData(
             'case-stay',
@@ -216,9 +230,6 @@ class CaseStayController extends CaseController
      * Process adding the stay
      *
      * @param array $data
-     *
-     * @todo Once user auth is ready, check user allowed access
-     * @todo Once user auth is ready, add the user info to the data (fields are lastUpdatedBy and createdBy)
      */
     public function processAddStay($data)
     {
@@ -273,6 +284,115 @@ class CaseStayController extends CaseController
     }
 
     /**
+     * Gets stay data for use on the index page
+     *
+     * @param int $licenceId
+     * @param int $caseId
+     * @param array static Static list data
+     * @return array
+     */
+    private function getStayData($licenceId, $caseId, $static)
+    {
+        $stayRecords = array();
+
+        $stayResult = $this->makeRestCall('Stay', 'GET', array('case' => $caseId));
+
+        //need a better way to do this...
+        foreach ($stayResult['Results'] as $stay) {
+            if (isset($this->stayTypes[$stay['stayType']])) {
+                $stay = $this->formatDates(
+                    $stay,
+                    array(
+                        'requestDate'
+                    )
+                );
+
+                $stayRecords[$stay['stayType']] = $stay;
+                $stayRecords[$stay['stayType']]['outcome'] = $static[$stay['outcome']];
+                $stayRecords[$stay['stayType']]['editHref'] = $this->getUrl(
+                    'case_stay_action',
+                    [
+                        'action' => 'edit',
+                        'licence' => $licenceId,
+                        'stay' => $stay['id'],
+                        'stayType' => $stay['stayType'],
+                        'case' => $caseId
+                    ]
+                );
+
+                $stayRecords[$stay['stayType']]['deleteHref'] = '';
+            }
+        }
+
+        return $stayRecords;
+    }
+
+    /**
+     * Retrieves appeal data
+     *
+     * @param int $licenceId
+     * @param int $caseId
+     * @param array $outcomes Static data for appeal outcomes
+     * @param array $reasons Static data for appeal reasons
+     * @return array
+     */
+    private function getAppealData($licenceId, $caseId, $outcomes, $reasons)
+    {
+        $appealResult = $this->makeRestCall('Appeal', 'GET', array('case' => $caseId));
+        $appeal = array();
+
+        if (!empty($appealResult['Results'][0])) {
+            $appeal = $this->formatDates(
+                $appealResult['Results'][0],
+                array(
+                    'deadlineDate',
+                    'appealDate',
+                    'hearingDate',
+                    'decisionDate',
+                    'papersDue',
+                    'papersSent'
+                )
+            );
+
+            $appeal['editHref'] = $this->getUrl(
+                'case_appeal',
+                array(
+                    'action' => 'edit',
+                    'licence' => $licenceId,
+                    'case' => $caseId,
+                    'appeal' => $appeal['id']
+                )
+            );
+
+            $appeal['deleteHref'] = '';
+            $appeal['outcome'] = $outcomes['appeal_outcome.'.$appeal['outcome']];
+            $appeal['reason'] = $reasons['appeal_reason.'.$appeal['reason']];
+        }
+
+        return $appeal;
+    }
+
+    /**
+     * Gets the url corresponding to the route and parameters
+     *
+     * @param string $route
+     * @param array $params
+     * @return type
+     */
+    private function getUrl($route, $params)
+    {
+        return $this->url()
+                        ->fromRoute(
+                            $route,
+                            $params,
+                            [
+
+                            ],
+                            true
+                        );
+    }
+
+    /**
      * Redirect to the index page
      *
      * @param int $licence
@@ -305,13 +425,14 @@ class CaseStayController extends CaseController
     private function redirectEditFail($licence, $case, $stayType, $stay)
     {
         return $this->redirect()->toRoute(
-                'case_stay_action', array(
+            'case_stay_action',
+            array(
                 'action' => 'edit',
                 'licence' => $licence,
                 'case' => $case,
                 'stayType' => $stayType,
                 'stay' => $stay
-                )
+            )
         );
     }
 
@@ -345,5 +466,24 @@ class CaseStayController extends CaseController
           }
          */
         return false;
+    }
+
+    /**
+     * Formats the specified fields in the supplied array with the correct date format
+     * Expect to replace this with a view helper later
+     *
+     * @param array $data
+     * @param array $fields
+     * @return array
+     */
+    private function formatDates($data, $fields)
+    {
+        foreach ($fields as $field) {
+            if (isset($data[$field])) {
+                $data[$field] = date('d/m/Y', strtotime($data[$field]));
+            }
+        }
+
+        return $data;
     }
 }

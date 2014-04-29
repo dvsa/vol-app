@@ -32,7 +32,10 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
                 'notFoundAction',
                 'redirect',
                 'processAdd',
-                'processEdit'
+                'processEdit',
+                'url',
+                'getServiceLocator',
+                'setBreadcrumb'
             ]
         );
 
@@ -43,6 +46,8 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
                 'setTemplate'
             ]
         );
+
+        $this->pm = $this->getMock('\stdClass', array('get'));
 
         parent::setUp();
     }
@@ -56,22 +61,28 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
      * @param array $searchResults
      *
      */
-    public function testIndexAction($caseId, $searchResults)
+    public function testIndexAction($licenceId, $caseId)
     {
-        $restComm = 'GET';
-        $restParam = array('case' => $caseId);
+        $mockService = $this->getServiceLocatorMock();
+        $mockUrl = $this->getUrlMock();
 
         $this->getFromRoute(0, 'case', $caseId);
+        $this->getFromRoute(1, 'licence', $licenceId);
 
-        $this->controller->expects($this->at(1))
-            ->method('makeRestCall')
-            ->with($this->equalTo('Stay'), $this->equalTo($restComm), $this->equalTo($restParam))
-            ->will($this->returnValue($searchResults));
+        $this->controller->expects($this->once())
+            ->method('setBreadcrumb');
 
-        $this->controller->expects($this->at(2))
+        $this->controller->expects($this->once())
+            ->method('getServiceLocator')
+            ->will($this->returnValue($mockService));
+
+        $this->controller->expects($this->any())
+            ->method('url')
+            ->will($this->returnValue($mockUrl));
+
+        $this->controller->expects($this->exactly(2))
             ->method('makeRestCall')
-            ->with($this->equalTo('Appeal'), $this->equalTo($restComm), $this->equalTo($restParam))
-            ->will($this->returnValue($searchResults));
+            ->will($this->onConsecutiveCalls($this->getStayRestResult(1), $this->getAppealRestResult()));
 
         $this->controller->expects($this->once())
             ->method('getCaseVariables');
@@ -122,6 +133,9 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue($this->getEmptyStayRestResult()));
 
         $this->controller->expects($this->once())
+            ->method('setBreadcrumb');
+
+        $this->controller->expects($this->once())
             ->method('generateFormWithData');
 
         $this->controller->expects($this->never())
@@ -157,7 +171,7 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
         $this->controller->expects($this->at(4))
             ->method('makeRestCall')
             ->with('Stay', 'GET', $this->equalTo(array('case' => $caseId)))
-            ->will($this->returnValue($this->getStayRestResult(true, $stayTypeId)));
+            ->will($this->returnValue($this->getStayRestResult($stayTypeId)));
 
         $this->controller->expects($this->at(5))
             ->method('redirect')
@@ -306,6 +320,9 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
         $this->controller->expects($this->once())
             ->method('generateFormWithData');
 
+        $this->controller->expects($this->once())
+            ->method('setBreadcrumb');
+
         $this->controller->editAction();
     }
 
@@ -325,7 +342,7 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
         $this->controller->expects($this->once())
             ->method('makeRestCall')
             ->with('Stay', 'GET', $this->equalTo(array('case' => $data['case'])))
-            ->will($this->returnValue($this->getStayRestResult(true, $data['stayType'])));
+            ->will($this->returnValue($this->getStayRestResult($data['stayType'])));
 
         $this->controller->expects($this->once())
             ->method('redirect')
@@ -442,6 +459,42 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
+     *
+     * @dataProvider getStayDataWithResultsProvider
+     *
+     * @param int $licenceId
+     * @param int $caseId
+     * @param array $static
+     */
+    public function atestGetStayDataWithResults($licenceId, $caseId, $static)
+    {
+        $this->controller->expects($this->at(0))
+            ->method('makeRestCall')
+            ->with('Stay', 'GET', $this->equalTo(array('case' => $caseId)))
+            ->will($this->returnValue($this->getStayRestResult(1)));
+
+        $this->controller->expects($this->atLeastOnce())
+            ->method('formatDates');
+
+        $this->controller->expects($this->atLeastOnce())
+            ->method('getUrl');
+
+        $this->controller->getStayData($licenceId, $caseId, $static);
+    }
+
+    /**
+     * Data provider for testGetStayWithResults
+     *
+     * @return array
+     */
+    public function getStayDataWithResultsProvider()
+    {
+        return array(
+            array(7, 24, $this->getStaticStayData())
+        );
+    }
+
+    /**
      * Data provider for testEditAction
      *
      * @return array
@@ -477,8 +530,8 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
     public function indexActionProvider()
     {
         return array(
-            array(24, $this->getEmptyStayRestResult()),
-            array(24, $this->getStayRestResult(true, 1)),
+            array(7, 24),
+            array(7, 24),
         );
     }
 
@@ -496,6 +549,25 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
         );
     }
 
+    public function getAppealRestResult()
+    {
+        return array(
+            'Results' => array(
+                0 => array(
+                    'id' => 1,
+                    'outcome' => 1,
+                    'reason' => 1,
+                    'deadlineDate' => '',
+                    'appealDate' => '',
+                    'hearingDate' => '',
+                    'decisionDate' => '',
+                    'papersDue' => '',
+                    'papersSent' => ''
+                )
+            )
+        );
+    }
+
     /**
      * simulates a stay rest result array with results
      *
@@ -504,7 +576,17 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
      */
     public function getStayRestResult($stayTypeId)
     {
-        return array('Results' => array(0 => array('stayType' => $stayTypeId)));
+        return array('Results' => array(0 => array('id' => 1,'stayType' => $stayTypeId, 'outcome' => 'stay_status_granted', 'requestDate' => strtotime(time()))));
+    }
+
+    public function getStaticStayData()
+    {
+        return array(
+            1 => 'outcome 1',
+            2 => 'outcome 2',
+            3 => 'outcome 3',
+            4 => 'outcome 4',
+        );
     }
 
     /**
@@ -617,7 +699,7 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
     /**
      * Creates a mock class (used for the redirect method)
      *
-     * @param type $redirectInfo
+     * @param array $redirectInfo
      * @return type
      */
     private function getRedirectMock($redirectInfo)
@@ -628,6 +710,16 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
             ->with($this->equalTo($redirectInfo['string']), $this->equalTo($redirectInfo['options']));
 
         return $redirect;
+    }
+
+    /**
+     * Creates a mock url function
+     *
+     * @return type
+     */
+    private function getUrlMock()
+    {
+        return $this->getMock('\stdClass', array('fromRoute'));
     }
 
     /**
@@ -649,5 +741,49 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
                 ->method('fromRoute')
                 ->with($this->equalTo($with));
         }
+    }
+
+    /**
+     * Creates a mock service locator
+     *
+     * @return type
+     */
+    private function getServiceLocatorMock()
+    {
+        $service = $this->getMock('\stdClass', array('get'));
+        $service->expects($this->once())
+            ->method('get')
+            ->will($this->returnValue($this->getConfOutcomes()));
+
+        return $service;
+    }
+
+    /**
+     * Data for outcomes
+     *
+     * @return array
+     */
+    private function getConfOutcomes()
+    {
+        return array(
+            'static-list-data' => array(
+                'case_stay_outcome' => [
+                    'stay_status_granted' => 'Granted',
+                    'stay_status_refused' => 'Refused'
+                ],
+                'appeal_reasons' => [
+                    'appeal_reason.1' => 'Application',
+                    'appeal_reason.2' => 'Disciplinary PI',
+                    'appeal_reason.3' => 'Disciplinary Non PI',
+                    'appeal_reason.4' => 'Impounding'
+                ],
+                'appeal_outcomes' => [
+                    'appeal_outcome.1' => 'Successful',
+                    'appeal_outcome.2' => 'Partially Successful',
+                    'appeal_outcome.3' => 'Dismissed',
+                    'appeal_outcome.4' => 'Refer back to TC'
+                ]
+            )
+        );
     }
 }

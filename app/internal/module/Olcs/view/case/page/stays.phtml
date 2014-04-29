@@ -10,9 +10,8 @@
         }
     }
 
-    if(!empty($appealRecords)){
-        print_r($appealRecords);
-        echo  $this->render('partials/case/appeal.phtml', array('record' => $appealRecords[0]));
+    if(!empty($appealRecord)){
+        echo  $this->render('partials/case/appeal.phtml', array('record' => $appealRecord));
     } else {
         echo  $this->render('partials/case/stay-empty.phtml', array('heading' => 'Appeal', 'addHref' => $addHref['appeal']));
     }

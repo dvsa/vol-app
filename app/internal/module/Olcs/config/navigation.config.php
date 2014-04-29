@@ -68,7 +68,7 @@ return array(
                                         )
                                     )
                                 ),
-                                /*array(
+                                array(
                                     'label' => 'Case Stays',
                                     'route' => 'case_stay_action',
                                     'action' => 'index',
@@ -95,7 +95,7 @@ return array(
                                             'action' => 'edit'
                                         )
                                     )
-                                ),*/
+                                )
 
                             )
                         )
