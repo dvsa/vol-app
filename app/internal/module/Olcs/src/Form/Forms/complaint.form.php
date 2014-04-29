@@ -14,15 +14,21 @@ return [
                     'label' => 'Complainant details',
                 ],
                 'elements' => [
+                    'id' => [
+                        'type' => 'hidden'
+                    ],
+                    'version' => [
+                        'type' => 'hidden'
+                    ],
                     'firstName' => [
                         'type' => 'personName',
                         'label' => 'Complainant first name:',
-                         'class' => 'long'
+                         'class' => 'medium'
                     ],
                     'surname' => [
                         'type' => 'personName',
                         'label' => 'Complainant last name:',
-                        'class' => 'long'
+                        'class' => 'medium'
                     ],
                ],
            ],
@@ -32,6 +38,12 @@ return [
                     'label' => 'Complaint details',
                 ],
                 'elements' => [
+                    'id' => [
+                        'type' => 'hidden'
+                    ],
+                    'version' => [
+                        'type' => 'hidden'
+                    ],
                     'complaintDate' => [
                          'type' => 'dateSelect',
                          'label' => 'Complaint date:'
@@ -65,6 +77,12 @@ return [
                     'class' => 'extra-long'
                 ],
                 'elements' => [
+                    'id' => [
+                        'type' => 'hidden'
+                    ],
+                    'version' => [
+                        'type' => 'hidden'
+                    ],
                     'name' => [
                         'type' => 'text',
                         'label' => 'Operator:',
@@ -79,15 +97,21 @@ return [
                     'class' => 'extra-long'
                 ],
                 'elements' => [
+                    'id' => [
+                        'type' => 'hidden'
+                    ],
+                    'version' => [
+                        'type' => 'hidden'
+                    ],
                     'firstName' => [
                         'type' => 'personName',
                         'label' => 'Driver first name:',
-                         'class' => 'long'
+                         'class' => 'medium'
                     ],
                     'surname' => [
                         'type' => 'personName',
                         'label' => 'Driver last name:',
-                        'class' => 'long'
+                        'class' => 'medium'
                     ]
                 ]
             ]
