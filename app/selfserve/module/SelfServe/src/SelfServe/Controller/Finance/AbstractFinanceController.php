@@ -23,7 +23,7 @@ abstract class AbstractFinanceController extends FormJourneyActionController
      * @param object $view
      * @param string $current
      */
-    protected function renderLayout($view, $current = '')
+    public function renderLayout($view, $current = '')
     {
         $applicationId = $this->params()->fromRoute('applicationId');
 

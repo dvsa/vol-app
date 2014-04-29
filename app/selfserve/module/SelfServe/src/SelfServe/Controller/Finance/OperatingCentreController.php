@@ -54,9 +54,9 @@ class OperatingCentreController extends AbstractFinanceController
 
         $data = $this->formatDataForForm($data, $applicationId, $results);
 
-        $form = $this->generateFormWithData('operating-centre-authorisation', 'processAuthorisation', $data);
+        $form = $this->generateFormWithData('operating-centre-authorisation', 'processAuthorisation', $data, true);
 
-        $view = new ViewModel(array('operatingCentres' => $table, 'form' => $form));
+        $view = $this->getViewModel(array('operatingCentres' => $table, 'form' => $form));
 
         $view->setTemplate('self-serve/finance/operating-centre/index');
 
@@ -74,7 +74,7 @@ class OperatingCentreController extends AbstractFinanceController
             'operating-centre', 'processAddForm'
         );
 
-        $view = new ViewModel(['form' => $form]);
+        $view = $this->getViewModel(['form' => $form]);
         $view->setTemplate('self-serve/finance/operating-centre/add');
         return $this->renderLayout($view, 'operatingCentre');
     }
@@ -86,23 +86,15 @@ class OperatingCentreController extends AbstractFinanceController
      */
     public function editAction()
     {
-
         $operatingCentreId = $this->params()->fromRoute('id');
 
-        $applicationId = $this->params()->fromRoute('applicationId');
-
-        $data = array(
-            'id' => $operatingCentreId,
-            'application' => $applicationId,
-        );
-
         //get operating centre enetity based on applicationId and operatingCentreId
-        $result = $this->makeRestCall('ApplicationOperatingCentre', 'GET', $data);
+        $result = $this->makeRestCall('ApplicationOperatingCentre', 'GET', array('id' => $operatingCentreId));
+
         if (empty($result)) {
             return $this->notFoundAction();
         }
 
-        //hydrate data
         $data = array(
             'version' => $result['version'],
             'authorised-vehicles' => array(
@@ -113,12 +105,9 @@ class OperatingCentreController extends AbstractFinanceController
             )
         );
 
-        //generate form with data
-        $form = $this->generateFormWithData(
-            'operating-centre', 'processEditForm', $data
-        );
+        $form = $this->generateFormWithData('operating-centre', 'processEditForm', $data, true);
 
-        $view = new ViewModel(['form' => $form]);
+        $view = $this->getViewModel(['form' => $form]);
         $view->setTemplate('self-serve/finance/operating-centre/edit');
         return $this->renderLayout($view, 'operatingCentre');
     }
@@ -133,11 +122,7 @@ class OperatingCentreController extends AbstractFinanceController
 
         $data = array('id' => $appOperatingCentreId);
 
-        $bundle = array(
-            'properties' => array(
-                'id'
-            )
-        );
+        $bundle = array('properties' => array('id'));
 
         $result = $this->makeRestCall('ApplicationOperatingCentre', 'GET', $data, $bundle);
 
