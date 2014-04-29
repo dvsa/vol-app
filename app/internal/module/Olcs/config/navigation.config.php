@@ -75,12 +75,12 @@ return array(
                                     'pages' => array(
                                         array(
                                             'label' => 'Add Complaint',
-                                            'route' => 'case_complaint',
+                                            'route' => 'complaint',
                                             'action' => 'add'
                                         ),
                                         array(
                                             'label' => 'Edit Complaint',
-                                            'route' => 'case_complaint',
+                                            'route' => 'complaint',
                                             'action' => 'edit'
                                         )
                                     )

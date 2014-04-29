@@ -81,11 +81,11 @@ class ComplaintController extends FormActionController
         if (null !== $this->params()->fromPost('cancel-complaint')) {
             return $this->redirect()->toRoute('case_complaints', array('complaint' => $routeParams['complaint']));
         }
-
         $this->setBreadcrumb(
             array(
                 'licence_case_list/pagination' => array('licence' => $routeParams['licence']),
-                'case_complaints' => array('case' => $routeParams['case'])
+                'case_complaints' => array('licence' => $routeParams['licence'], 'case' => $routeParams['case'])
+                
             )
         );
 
