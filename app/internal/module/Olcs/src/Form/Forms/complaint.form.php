@@ -14,30 +14,62 @@ return [
                     'label' => 'Complainant details',
                 ],
                 'elements' => [
-                    'personFirstname' => [
+                    'firstName' => [
                         'type' => 'personName',
                         'label' => 'Complainant first name:',
                          'class' => 'long'
                     ],
-                    'personLastname' => [
+                    'surname' => [
                         'type' => 'personName',
                         'label' => 'Complainant last name:',
                         'class' => 'long'
                     ],
+               ],
+           ],
+           [
+                'name' => 'complaint-details',
+                'options' => [
+                    'label' => 'Complaint details',
+                ],
+                'elements' => [
                     'complaintDate' => [
                          'type' => 'dateSelect',
                          'label' => 'Complaint date:'
                      ],
-                    'complaintType' => [
+                    'typeOfComplaint' => [
                         'type' => 'select',
                         'label' => 'Complaint type:',
                         'value_options' => 'complaint_types'
                     ],
-                    'complaintStatus' => [
+                    'status' => [
                         'type' => 'select',
                         'label' => 'Complaint status:',
                         'value_options' => 'complaint_status_types'
                     ],
+                    'description' => [
+                        'type' => 'textarea',
+                        'filters' => '\Common\Form\Elements\InputFilters\TextMax4000',
+                        'label' => 'Description:',
+                        'class' => 'extra-long'
+                    ],
+                    'vrm' => [
+                        'type' => 'vehicleVrm',
+                        'label' => 'Vehicle registration mark:',
+                        'class' => 'medium'
+                    ],
+                ]
+            ],
+            [
+                'name' => 'organisation-details',
+                'options' => [
+                    'class' => 'extra-long'
+                ],
+                'elements' => [
+                    'name' => [
+                        'type' => 'text',
+                        'label' => 'Operator:',
+                        'class' => 'medium'
+                    ]
                 ]
             ],
             [
@@ -47,32 +79,16 @@ return [
                     'class' => 'extra-long'
                 ],
                 'elements' => [
-                    'driverFirstname' => [
+                    'firstName' => [
                         'type' => 'personName',
                         'label' => 'Driver first name:',
                          'class' => 'long'
                     ],
-                    'driverLastname' => [
+                    'surname' => [
                         'type' => 'personName',
                         'label' => 'Driver last name:',
                         'class' => 'long'
-                    ],
-                    'vrm' => [
-                        'type' => 'vehicleVrm',
-                        'label' => 'Vehicle registration mark:',
-                        'class' => 'medium'
-                    ],
-                    'operatorName' => [
-                        'type' => 'text',
-                        'label' => 'Operator:',
-                        'class' => 'medium'
-                    ],
-                    'description' => [
-                        'type' => 'textarea',
-                        'filters' => '\Common\Form\Elements\InputFilters\TextMax4000',
-                        'label' => 'Description:',
-                        'class' => 'extra-long'
-                    ],
+                    ]
                 ]
             ]
         ],

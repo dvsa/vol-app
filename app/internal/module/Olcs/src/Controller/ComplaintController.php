@@ -90,25 +90,63 @@ class ComplaintController extends FormActionController
         );
 
         $bundle = array(
+           'complaint' => array(
+               'properties' => array('ALL'),
+           ),
             'children' => array(
-                'vosaCase' => array(
-                    'properties' => 'ALL'
+                'driver' => array(
+                    'properties' => array('id', 'version'),
+                    'children' => array(
+                        'contactDetails' => array(
+                            'properties' => array('id', 'version'),
+                            'children' => array(
+                                'person' => array(
+                                    'properties' => array(
+                                        'id',
+                                        'version',
+                                        'firstName',
+                                        'middleName',
+                                        'surname',
+                                    )
+                                )
+                            )
+                        )
+                    )
+                ),
+                'complainant' => array(
+                   'properties' => array('person'),
+                   'children' => array(
+                       'person' => array(
+                           'properties' => array(
+                               'id',
+                               'version',
+                               'firstName',
+                               'middleName',
+                               'surname',
+                           )
+                       )
+                   )
+                ),
+                'organisation' => array(
+                   'properties' => array('id', 'version', 'name'),
                 )
             )
         );
 
-        $data = $this->makeRestCall('Complaint', 'GET', array('id' => $routeParams['id']), $bundle);
-        if (isset($data['vosaCase'])) {
-            $data['vosaCase'] = $data['vosaCase']['id'];
+        $data = $this->makeRestCall('Complaint', 'GET', array('id' => $routeParams['id'], 'bundle' => json_encode($bundle)));
+
+        if (isset($data['id'])) {
+            $data['vosaCase'] = $data['id'];
         }
 
         if (empty($routeParams['case']) || empty($routeParams['licence']) || empty($data)) {
             return $this->getResponse()->setStatusCode(404);
         }
 
-        $data['id'] = $routeParams['id'];
-        $data['complainant-details'] = $data;
-        $data['driver-details'] = $data;
+        $data['organisation-details'] = $data['organisation'];
+        $data['complaint-details'] = $data;
+        $data['complainant-details'] = $data['complainant']['person'];
+        $data['driver-details'] = $data['driver']['contactDetails']['person'];
 
         $form = $this->generateFormWithData(
             'complaint', 'processComplaint', $data, true
@@ -121,8 +159,8 @@ class ComplaintController extends FormActionController
                     '/static/js/complaint.js'
                 ),
                 'params' => array(
-                    'pageTitle' => 'add-complaint',
-                    'pageSubTitle' => 'add-complaint-text'
+                    'pageTitle' => 'edit-complaint',
+                    'pageSubTitle' => 'subtitle-complaint-text'
                 )
             )
         );
