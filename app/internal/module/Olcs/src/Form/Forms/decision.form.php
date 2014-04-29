@@ -1,5 +1,4 @@
 <?php
-
 return [
     'decision' => [
         'name' => 'decision',
@@ -10,35 +9,45 @@ return [
             [
                 'name' => 'main',
                 'options' => [
-                    'label' => 'Add recommendation'
+                    'label' => 'Add decision'
                 ],
                 'elements' => [
-                    'type' => [
+                    'submissionActionStatus' => [
                         'label' => 'Decision type',
                         'type' => 'select',
-                        'value_options' => 'submission_decisions',
+                        'value_options' => 'submission_decision',
                         'required' => true
                     ],
-                    'sendto' => [
+                    'userRecipient' => [
                         'label' => 'Send to',
                         'type' => 'select',
-                        'value_options' => 'appeal_reasons',
+                        'value_options' => 'user-list',
                         'required' => true
                     ],
-                    'reason' => [
+                    'comment' => [
                         'type' => 'text',
                         'filters' => '\Common\Form\Elements\InputFilters\TextMax4000Required',
                         'label' => 'Reason',
                         'class' => 'extra-long'
+                    ],
+                    'urgent' => [
+                        'type' => 'checkbox',
+                        'label' => 'Urgent',
                     ]
                 ]
             ]
         ],
         'elements' => [
-            'case' => [
-                'type' => 'hidden'
+            'submissionActionType' => [
+                'type' => 'hidden',
+                'attributes' => array(
+                     'value' => 'decision'
+                )
             ],
-            'id' => [
+            'userSender' => [
+                'type' => 'hidden',
+            ],
+            'submission' => [
                 'type' => 'hidden'
             ],
             'version' => [

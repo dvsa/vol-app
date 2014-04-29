@@ -19,7 +19,7 @@ class SubmissionController extends FormActionController
      */
     public function addAction()
     {
-        $routeParams = $this->getParams(array('case', 'licence', 'id'));
+        $routeParams = $this->getParams(array('case', 'licence', 'id', 'action'));
         $this->setBreadcrumb(
             array(
                 'licence_case_list/pagination' => array('licence' => $routeParams['licence']),
@@ -38,9 +38,9 @@ class SubmissionController extends FormActionController
             'vosaCase' => $routeParams['case'],
         );
         
-        //if ($this->getRequest()->isPost()) {
+        if ($this->getRequest()->isPost()) {
             $result = $this->processAdd($data, 'Submission');
-        //}
+        }
         
         $submission = json_decode($submission, true);
         $routeParams['id'] = $result['id'];
@@ -77,7 +77,6 @@ class SubmissionController extends FormActionController
         } elseif ($this->params()->fromPost('recommend')) {
             $params['action'] = 'recomendation';
         }
-        //return $this->forward()->dispatch('SubmissionController', array('action' => 'recomendation'));
         return $this->redirect()->toRoute(
             'submission',
             $params
@@ -138,8 +137,13 @@ class SubmissionController extends FormActionController
     
     public function formView($type)
     {
-        $form = $this->getFormWithUsers($type);
-        $form = $this->formPost($form);
+        $form = $this->getFormWithUsers(
+            $type,
+            array(
+                'submission' => $this->params()->fromRoute('id'),
+                'userSender' => 2)
+        );
+        $form = $this->formPost($form, 'processRecDecForm');
         $view = $this->getView(
             array(
                 'form' => $form,
@@ -151,6 +155,20 @@ class SubmissionController extends FormActionController
         );
         $view->setTemplate('form');
         return $view;
+    }
+    
+    public function processRecDecForm($data)
+    {
+        $data = array_merge($data, $data['main']);
+        $result = $this->processAdd($data, 'SubmissionAction');
+        $routeParams = $this->getParams(array('case', 'licence', 'id'));
+        return $this->redirect()->toRoute(
+            'case_manage',
+            array(
+                'case' => $routeParams['case'],
+                'licence' => $routeParams['licence'],
+                'tab' => 'overview')
+        );
     }
     
     /**
@@ -173,13 +191,14 @@ class SubmissionController extends FormActionController
      * @param type $formType
      * @return type
      */
-    private function getFormWithUsers($formType)
+    private function getFormWithUsers($formType, $data = array())
     {
         $userList = $this->getUserList();
         $generator = $this->getFormGenerator();
         $formConfig = $generator->getFormConfig($formType);
-        $formConfig[$formType]['fieldsets']['main']['elements']['sendto']['value_options'] = $userList;
+        $formConfig[$formType]['fieldsets']['main']['elements']['userRecipient']['value_options'] = $userList;
         $form = $generator->setFormConfig($formConfig)->createForm($formType);
+        $form->setData($data);
         return $form;
     }
 }
