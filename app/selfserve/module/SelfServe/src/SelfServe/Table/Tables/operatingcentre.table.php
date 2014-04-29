@@ -22,14 +22,11 @@ return array(
         ),
         array(
             'title' => 'Operating centre address',
-            'formatter' => function ($data) {
-                $parts = array();
-                foreach (array('address_line1', 'address_line2', 'address_line3', 'postcode') as $item) {
-                    if (!empty($data[$item])) {
-                        $parts[] = $data[$item];
-                    }
-                }
-                return "<a href='#'>" . implode(', ', $parts) . "</a>";
+            'formatter' => function ($data, $column) {
+
+                $column['formatter'] = 'Address';
+
+                return "<a href='#'>" . $this->callFormatter($column, $data) . "</a>";
             },
             'name' => 'address'
         ),
@@ -44,16 +41,12 @@ return array(
         array(
             'title' => 'Permission',
             'name' => 'permission',
-            'formatter' => function ($data) {
-                return ($data['permission'] == 1 ? 'Y' : 'N');
-            }
+            'formatter' => 'YesNo'
         ),
         array(
-            'title' => 'Advertising',
-            'name' => 'advertising',
-            'formatter' => function ($data) {
-                return ($data['ad_placed'] == 1 ? 'Y' : 'N');
-            }
+            'title' => 'Advertised',
+            'name' => 'adPlaced',
+            'formatter' => 'YesNo'
         )
     ),
     // Footer configuration

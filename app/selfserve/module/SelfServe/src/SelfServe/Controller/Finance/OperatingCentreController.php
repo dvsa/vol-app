@@ -110,12 +110,7 @@ class OperatingCentreController extends AbstractFinanceController
 
         $newData = array();
 
-        print '<pre>';
-        print_r($data);
-        print '</pre>';
-        exit;
-
-        foreach ($data as $row) {
+        foreach ($data['Results'] as $row) {
 
             $newRow = $row;
 
@@ -283,22 +278,24 @@ class OperatingCentreController extends AbstractFinanceController
      */
     public function deleteAction()
     {
-        $operatingCentreId = $this->params()->fromRoute('id');
+        $appOperatingCentreId = $this->params()->fromRoute('id');
         $applicationId = $this->params()->fromRoute('applicationId');
 
-        $data = array(
-            'id' => $operatingCentreId,
-            'application' => $applicationId,
+        $data = array('id' => $appOperatingCentreId);
+
+        $bundle = array(
+            'properties' => array(
+                'id'
+            )
         );
 
-        $result = $this->makeRestCall('ApplicationOperatingCentre', 'GET', $data);
+        $result = $this->makeRestCall('ApplicationOperatingCentre', 'GET', $data, $bundle);
 
         if (empty($result)) {
-
             return $this->notFoundAction();
         }
 
-        $this->makeRestCall('OperatingCentre', 'DELETE', array('id' => $operatingCentreId));
+        $this->makeRestCall('ApplicationOperatingCentre', 'DELETE', array('id' => $result['id']));
 
         return $this->redirect()->toRoute(
             'selfserve/finance/operating_centre',
@@ -316,14 +313,16 @@ class OperatingCentreController extends AbstractFinanceController
     {
         $data = array(
             'version' => 1,
+            'adPlaced' => 1
         );
 
         $data = array_merge($this->mapData($validData), $data);
 
-        //persiste to database by calling rest api
+        //persist to database by calling rest api
         $result = $this->makeRestCall('ApplicationOperatingCentre', 'POST', $data);
+
         if (isset($result['id'])) {
-            $this->redirect()->toRoute('selfserve/finance', array(), true);
+            return $this->redirect()->toRoute('selfserve/finance/operating_centre', array('applicationId' => $data['application']));
         }
     }
 
@@ -344,8 +343,8 @@ class OperatingCentreController extends AbstractFinanceController
         $data = array_merge($this->mapData($validData), $data);
 
         //persist to database by calling rest api
-        $result = $this->makeRestCall('ApplicationOperatingCentre', 'PUT', $data);
-        return $this->redirect()->toRoute('selfserve/finance', array(), true);
+        $this->makeRestCall('ApplicationOperatingCentre', 'PUT', $data);
+        return $this->redirect()->toRoute('selfserve/finance/operating_centre', array('applicationId' => $data['application']));
     }
 
     /**
