@@ -44,7 +44,13 @@ class ComplaintController extends FormActionController
         );
 
         $data = array('vosaCase' => $routeParams['case']);
+
+        // todo hardcoded organisation id for now
         $results = $this->makeRestCall('VosaCase', 'GET', array('id' => $routeParams['case']));
+
+        // todo hardcoded organisation id for now
+        $data['organisation-details']['id'] = 7;
+        $data['organisation-details']['version'] = 1;
 
         if (empty($routeParams['case']) || empty($routeParams['licence']) || empty($results)) {
             return $this->getResponse()->setStatusCode(404);
@@ -85,7 +91,6 @@ class ComplaintController extends FormActionController
             array(
                 'licence_case_list/pagination' => array('licence' => $routeParams['licence']),
                 'case_complaints' => array('licence' => $routeParams['licence'], 'case' => $routeParams['case'])
-                
             )
         );
 
@@ -134,7 +139,6 @@ class ComplaintController extends FormActionController
         );
 
         $data = $this->makeRestCall('Complaint', 'GET', array('id' => $routeParams['id'], 'bundle' => json_encode($bundle)));
-
         if (isset($data['id'])) {
             $data['vosaCase'] = $data['id'];
         }
@@ -167,34 +171,29 @@ class ComplaintController extends FormActionController
         $view->setTemplate('complaint/form');
         return $view;
     }
-/*
-    public function processConviction($data)
+
+    public function processComplaint($data)
     {
-        $data = array_merge($data, $data['defendant-details'], $data['offence']);
-        unset(
-            $data['defendant-details'],
-            $data['cancel-conviction'],
-            $data['offence'],
-            $data['save'],
-            $data['cancel'],
-            $data['conviction'],
-            $data['conviction-operator']
-        );
         $routeParams = $this->getParams(array('action', 'licence', 'case'));
 
         if (strtolower($routeParams['action']) == 'edit') {
-            unset($data['vosaCase']);
-            $result = $this->processEdit($data, 'Conviction');
+//var_dump($data['complaint-details']);exit;
+            $result = $this->processEdit($data['complaint-details'], 'Complaint');
+            $result = $this->processEdit($data['complainant-details'], 'Person');
+            $result = $this->processEdit($data['driver-details'], 'Person');
+
         } else {
-            $result = $this->processAdd($data, 'Conviction');
+            $result = $this->processAdd($data['complaint-details'], 'Complaint');
+            $result = $this->processAdd($data['complainant-details'], 'Person');
+            $result = $this->processAdd($data['driver-details'], 'Person');
+
         }
 
         return $this->redirect()->toRoute(
-            'case_convictions',
+            'case_complaints',
             array(
                 'case' => $routeParams['case'], 'licence' => $routeParams['licence']
             )
         );
     }
- */
 }
