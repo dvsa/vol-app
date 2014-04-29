@@ -26,8 +26,10 @@ class OperatingCentreController extends FormActionController
      */
     public function addAction() 
     {
+        $applicationId      = $this->params()->fromRoute('applicationId');
+
         $form = $this->generateForm(
-                'operating-centre', 'processAddForm'
+            $this->getFormConfigName($applicationId), 'processAddForm'
         );
         
         $view = new ViewModel(['form' => $form]);
@@ -69,12 +71,24 @@ class OperatingCentreController extends FormActionController
         
         //generate form with data
         $form = $this->generateFormWithData(
-                'operating-centre', 'processEditForm', $data
+                $this->getFormConfigName($applicationId), 'processEditForm', $data
         );
         
         $view = new ViewModel(['form' => $form]);
         $view->setTemplate('self-serve/finance/operating-center/edit');
         return $view;
+    }
+
+    /**
+     * Returns form config name based on licence type
+     *
+     * @param $applicationId
+     * @return string
+     */
+    public function getFormConfigName($applicationId)
+    {
+        $licence = $this->makeRestCall('Application', 'GET', ['id' => $applicationId], ['properties' => [], 'children' => ['licence']])['licence'];
+        return $licence['goodsOrPsv'] == 'psv' ? 'operating-centre-psv' : 'operating-centre';
     }
     
     
@@ -127,12 +141,18 @@ class OperatingCentreController extends FormActionController
     private function mapData($validData)
     {
         $applicationId = $this->params()->fromRoute('applicationId');
-        return array(
+        $data = array(
             'numberOfVehicles' => $validData['authorised-vehicles']['no-of-vehicles'],
-            'numberOfTrailers' => $validData['authorised-vehicles']['no-of-trailers'],
             'sufficientParking' => $validData['authorised-vehicles']['parking-spaces-confirmation'],
             'permission' => $validData['authorised-vehicles']['permission-confirmation'],
             'application' => $applicationId,
         );
+
+        //licence type condition
+        if (isset($validData['authorised-vehicles']['no-of-trailers'])){
+            $data = array_merge($data, array('numberOfTrailers' => $validData['authorised-vehicles']['no-of-trailers']));
+        }
+
+        return $data;
     }
 }

@@ -39,7 +39,7 @@ return array(
             'title' => 'Vehicles',
             'format' => '{{numberOfVehicles}}'
         ),
-        array(
+        'trailersCol' => array(
             'title' => 'Trailers',
             'format' => '{{numberOfTrailers}}'
         ),

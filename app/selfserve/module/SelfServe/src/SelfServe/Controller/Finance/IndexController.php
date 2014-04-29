@@ -22,6 +22,7 @@ class IndexController extends FormJourneyActionController
     public function indexAction()
     {
         $applicationId = $this->params()->fromRoute('applicationId');
+        $licence = $this->_getLicenceEntity();
 
         $results = $this->makeRestCall('ApplicationOperatingCentre', 'GET', array('application' => $applicationId));
 
@@ -32,7 +33,10 @@ class IndexController extends FormJourneyActionController
             'page' => 1,
             'url' => $this->getPluginManager()->get('url')
         );
-        $table = $this->getServiceLocator()->get('Table')->buildTable('operatingcentre', $results, $settings);
+
+        $tableConfigName = $licence['goodsOrPsv'] == 'psv' ? 'operatingcentrepsv' : 'operatingcentre';
+
+        $table = $this->getServiceLocator()->get('Table')->buildTable($tableConfigName, $results, $settings);
 
         // render the view
         $view = new ViewModel(Array(
