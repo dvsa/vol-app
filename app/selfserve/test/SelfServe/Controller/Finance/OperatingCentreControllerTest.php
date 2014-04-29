@@ -7,7 +7,7 @@
  * @todo implement DBUNIT
  */
 
-namespace SelfServe\test\LicenceType;
+namespace SelfServe\test\Finance;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use Zend\Http\Request;
@@ -19,10 +19,10 @@ use SelfServe\test\Bootstrap;
 
 class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
 {
-    
+
     const APPLICATION_ID = 1;
     const OP_CENTRE_ID  = 1;
-    
+
     protected $controller;
     protected $request;
     protected $response;
@@ -34,25 +34,25 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
         $this->setApplicationConfig(
             include __DIR__.'/../../../../config/application.config.php'
         );
-        
+
         $this->controller = new \SelfServe\Controller\Finance\OperatingCentreController();
-        
+
         $this->request    = new Request();
         $this->response   = new Response();
         $this->routeMatch = new RouteMatch(array('controller' => 'SelfServe\Finance\OperatingCentreController'));
         $this->event      = new MvcEvent();
         $this->event->setRouteMatch($this->routeMatch);
         $this->controller->setEvent($this->event);
-        
+
         $this->controller->setServiceLocator(Bootstrap::getServiceManager());
     }
-    
-    
-    
+
+
+
     public function testAddActionCanBeAccessed()
     {
         $this->dispatch('/selfserve/' . self::APPLICATION_ID . '/finance/index/operating-centre/add');
-        
+
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('selfserve');
         $this->assertControllerName('selfserve\finance\operatingcentrecontroller');
@@ -64,20 +64,29 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
     public function testForm()
     {
         $form = $this->getOlcsForm('operating-centre');
-        
+
         //valid data
         $mockData = array(
+            'ad-placed' => '1',
         	'authorised-vehicles' => array(
         	    'no-of-vehicles' => 69,
         	    'no-of-trailers' => 23,
                 'parking-spaces-confirmation' => '1',
                 'permission-confirmation' => '1',
             ),
+            'address' => array(
+                'addressLine1' => '1 Some Street',
+                'addressLine2' => '',
+                'addressLine3' => '',
+                'city' => 'Leeds',
+                'postcode' => 'LS96NF',
+                'country' => 'country.GB',
+            )
         );
         $form->setData($mockData);
         $valid = $form->isValid();
         $this->assertEquals(true, $valid);
-        
+
         $form = $this->getOlcsForm('operating-centre');
         //invalid data
         $mockData = array(
@@ -91,7 +100,7 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
         $form->setData($mockData);
         $valid = $form->isValid();
         $this->assertEquals(false, $valid);
-        
+
         $form = $this->getOlcsForm('operating-centre');
         //invalid data
         $mockData = array(
@@ -105,7 +114,7 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
         $form->setData($mockData);
         $valid = $form->isValid();
         $this->assertEquals(false, $valid);
-        
+
         $form = $this->getOlcsForm('operating-centre');
         //invalid data
         $mockData = array(
@@ -120,7 +129,7 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
         $valid = $form->isValid();
         $this->assertEquals(false, $valid);
     }
-    
+
     public function testPopulatedDataInEditAction()
     {
         $this->routeMatch->setParam('action', 'edit');
@@ -129,14 +138,13 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
         $response = $this->controller->getResponse();
         $form = $result->getVariables()['form'];
         $authorisedVehicles = $form->get('authorised-vehicles');
-    
+
         $this->assertEquals($authorisedVehicles->get('no-of-vehicles')->getValue(), 34);
         $this->assertEquals($authorisedVehicles->get('no-of-trailers')->getValue(), 23);
         $this->assertEquals($authorisedVehicles->get('parking-spaces-confirmation')->getValue(), 1);
         $this->assertEquals($authorisedVehicles->get('permission-confirmation')->getValue(), 1);
     }
-    
-    
+
     protected function getOlcsForm($name)
     {
         $class = new \ReflectionClass('\Common\Controller\FormActionController');
@@ -146,10 +154,7 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
 
         $form->remove('crsf');
         $form->remove('version');
-        
+
         return $form;
     }
-    
-    
-    
 }
