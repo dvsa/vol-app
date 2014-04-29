@@ -6,6 +6,7 @@ return array(
     ),
     'settings' => array(
         'crud' => array(
+            'formName' => 'conviction',
             'actions' => array(
                 'add' => array('class' => 'primary'),
                 'Dealt with' => array('requireRows' => true),
@@ -34,7 +35,7 @@ return array(
 
                 $column['formatter'] = 'Date';
                 return '<a href="' . $this->generateUrl(
-                    array('case' => $data['id'], 'action' => 'edit'),
+                    array('action' => 'edit', 'id' => $data['id']),
                     'conviction',
                     true
                 ) . '">' . $this->callFormatter($column, $data) . '</a>';

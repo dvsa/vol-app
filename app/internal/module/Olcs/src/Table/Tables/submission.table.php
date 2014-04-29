@@ -6,6 +6,7 @@ return array(
     ),
     'settings' => array(
         'crud' => array(
+            'formName' => 'submission',
             'actions' => array(
                 'add' => array('class' => 'primary'),
                 'edit' => array('requireRows' => true),
@@ -32,7 +33,8 @@ return array(
             'formatter' => function ($row) {
                 return '<a href="' . $this->generateUrl(
                     array('case' => $row['id'], 'tab' => 'overview'),
-                    'case_manage'
+                    'case_manage',
+                    true
                 ) . '">' . $row['id'] . '</a>';
             }
         ),
