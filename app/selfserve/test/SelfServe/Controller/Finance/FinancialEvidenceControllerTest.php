@@ -4,7 +4,7 @@
  * Test FinancialEvidenceController
  */
 
-namespace OlcsTest\Controller;
+namespace SelfServe\test\Controller\Finance;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use SelfServe\Controller\Finance\FinancialEvidenceController;

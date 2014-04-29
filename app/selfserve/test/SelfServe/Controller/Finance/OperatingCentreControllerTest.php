@@ -4,7 +4,7 @@
  * Test OperatingCentreController
  */
 
-namespace OlcsTest\Controller;
+namespace SelfServe\test\Controller\Finance;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use SelfServe\Controller\Finance\OperatingCentreController;
@@ -14,6 +14,7 @@ use SelfServe\Controller\Finance\OperatingCentreController;
  */
 class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
 {
+
     /**
      * Build a mock controller
      *

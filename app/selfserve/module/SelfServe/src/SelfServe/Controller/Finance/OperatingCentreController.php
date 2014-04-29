@@ -299,6 +299,7 @@ class OperatingCentreController extends AbstractFinanceController
      * Persist data to database. After that, redirect to Operating centres page
      *
      * @param array $validData
+     *
      * @return void
      */
     public function processAddForm($validData)
@@ -306,11 +307,18 @@ class OperatingCentreController extends AbstractFinanceController
         $data = array(
             'version' => 1,
             'adPlaced' => 1
+
         );
 
         $data = array_merge($this->mapData($validData), $data);
 
-        //persist to database by calling rest api
+        // first of all create the basic operating centre; this doesn't
+        // store much data except version and address...
+        $result = $this->makeRestCall('OperatingCentre', 'POST', $data);
+
+        // ... and then create the application OC entity which persists the
+        // rest of the data
+        $data['operatingCentre'] = $result['id'];
         $result = $this->makeRestCall('ApplicationOperatingCentre', 'POST', $data);
 
         if (isset($result['id'])) {
@@ -322,6 +330,7 @@ class OperatingCentreController extends AbstractFinanceController
      * Persist data to database. After that, redirect to Operating centres page
      *
      * @param array $validData
+     *
      * @return \Zend\Http\PhpEnvironment\Response
      */
     public function processEditForm($validData)
@@ -342,17 +351,22 @@ class OperatingCentreController extends AbstractFinanceController
     /**
      * Map common data
      * @param array $validData
+     *
      * @return array
      */
     private function mapData($validData)
     {
+        $validData = $this->processAddressData($validData);
+
         $applicationId = $this->params()->fromRoute('applicationId');
         return array(
             'numberOfVehicles' => $validData['authorised-vehicles']['no-of-vehicles'],
             'numberOfTrailers' => $validData['authorised-vehicles']['no-of-trailers'],
             'sufficientParking' => $validData['authorised-vehicles']['parking-spaces-confirmation'],
             'permission' => $validData['authorised-vehicles']['permission-confirmation'],
+            'adPlaced' => true,
             'application' => $applicationId,
+            'addresses' => $validData['addresses'],
         );
     }
 }
