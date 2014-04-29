@@ -179,7 +179,8 @@ return array(
                 'options' => array(
                     'route' => '/licence/[:licence]/case/:case/complaints[/:action][/:complaint]',
                     'constraints' => array(
-                        'case' => '[0-9]+'
+                        'case' => '[0-9]+',
+                        'complaint' => '[0-9]+'
                     ),
                     'defaults' => array(
                         'controller' => 'CaseComplaintController',
@@ -187,15 +188,6 @@ return array(
                     )
                 )
             ),
-            'complaints' => array(
-                'type' => 'segment',
-                'options' => array(
-                    'route' => '/licence/[:licence]/case/[:case]/complaint[/:action][/:id]',
-                    'defaults' => array(
-                        'controller' => 'ComplaintController',
-                    )
-                )
-            )
         )
     ),
     'tables' => array(
