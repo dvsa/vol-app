@@ -1,138 +1,164 @@
 <?php
 
 /**
- * Test case for operating centre pages
- *
- * @author Jakub.Igla
- * @todo implement DBUNIT
+ * Test OperatingCentreController
  */
 
-namespace SelfServe\test\LicenceType;
+namespace OlcsTest\Controller;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
-use Zend\Http\Request;
-use Zend\Http\Response;
-use Zend\Mvc\MvcEvent;
-use Zend\Mvc\Router\RouteMatch;
-use SelfServe\test\Bootstrap;
+use SelfServe\Controller\Finance\OperatingCentreController;
 
 /**
- * Test case for operating centre pages
- *
- * @author Jakub Igla <jakub.igla@valtech.co.uk>
+ * Test OperatingCentreController
  */
 class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
 {
+    /**
+     * Build a mock controller
+     *
+     * @param array $methods
+     */
+    protected function getMockController($methods = array())
+    {
+        $this->controller = $this->getMock(
+            'SelfServe\Controller\Finance\OperatingCentreController', $methods
+        );
+    }
 
-    const APPLICATION_ID = 1;
-    const OP_CENTRE_ID = 1;
-
-    protected $controller;
-    protected $request;
-    protected $response;
-    protected $routeMatch;
-    protected $event;
-
+    /**
+     * Set up the unit tests
+     */
     protected function setUp()
     {
         $this->setApplicationConfig(
             include __DIR__ . '/../../../../config/application.config.php'
         );
 
-        $this->controller = new \SelfServe\Controller\Finance\OperatingCentreController();
-
-        $this->request = new Request();
-        $this->response = new Response();
-        $this->routeMatch = new RouteMatch(array('controller' => 'SelfServe\Finance\OperatingCentreController'));
-        $this->event = new MvcEvent();
-        $this->event->setRouteMatch($this->routeMatch);
-        $this->controller->setEvent($this->event);
-
-        $this->controller->setServiceLocator(Bootstrap::getServiceManager());
+        parent::setUp();
     }
 
-    public function testAddActionCanBeAccessed()
+    /**
+     * Test indexAction With Crud Action
+     */
+    public function testIndexActionWithCrudAction()
     {
-        $this->dispatch('/selfserve/' . self::APPLICATION_ID . '/finance/index/operating-centre/add');
+        $this->getMockController(array('checkForCrudAction'));
 
-        $this->assertResponseStatusCode(200);
-        $this->assertModuleName('selfserve');
-        $this->assertControllerName('selfserve\finance\operatingcentrecontroller');
-        $this->assertControllerClass('OperatingCentreController');
-        $this->assertMatchedRouteName('selfserve/finance/operating_centre_action');
-        $this->assertActionName('add');
+        $this->controller->expects($this->once())
+            ->method('checkForCrudAction')
+            ->will($this->returnValue('add'));
+
+        $this->assertEquals('add', $this->controller->indexAction());
     }
 
-    public function testForm()
+    /**
+     * Test indexAction With Missing Application
+     */
+    public function testIndexActionWithMissingApplication()
     {
-        $form = $this->getOlcsForm('operating-centre');
+        $applicationData = array();
 
-        //valid data
-        $mockData = array(
-            'authorised-vehicles' => array(
-                'no-of-vehicles' => 69,
-                'no-of-trailers' => 23,
-                'parking-spaces-confirmation' => '1',
-                'permission-confirmation' => '1',
-            ),
-        );
-        $form->setData($mockData);
-        $valid = $form->isValid();
-        $this->assertEquals(true, $valid);
+        $applicationId = 7;
 
-        $form = $this->getOlcsForm('operating-centre');
-        //invalid data
-        $mockData = array(
-            'authorised-vehicles' => array(
-                'no-of-vehicles' => 0,
-                'no-of-trailers' => 0,
-                'parking-spaces-confirmation' => '1',
-                'permission-confirmation' => '1',
-            ),
-        );
-        $form->setData($mockData);
-        $valid = $form->isValid();
-        $this->assertEquals(false, $valid);
+        $this->getMockController(array('checkForCrudAction', 'params', 'makeRestCall', 'notFoundAction'));
 
-        $form = $this->getOlcsForm('operating-centre');
-        //invalid data
-        $mockData = array(
-            'authorised-vehicles' => array(
-                'no-of-vehicles' => 23,
-                'no-of-trailers' => 13,
-                'parking-spaces-confirmation' => '0',
-                'permission-confirmation' => '1',
-            ),
-        );
-        $form->setData($mockData);
-        $valid = $form->isValid();
-        $this->assertEquals(false, $valid);
+        $mockParams = $this->getMock('\stdClass', array('fromRoute'));
 
-        $form = $this->getOlcsForm('operating-centre');
-        //invalid data
-        $mockData = array(
-            'authorised-vehicles' => array(
-                'no-of-vehicles' => 23,
-                'no-of-trailers' => 13,
-                'parking-spaces-confirmation' => '1',
-                'permission-confirmation' => '0',
-            ),
-        );
-        $form->setData($mockData);
-        $valid = $form->isValid();
-        $this->assertEquals(false, $valid);
+        $mockParams->expects($this->once())
+            ->method('fromRoute')
+            ->with('applicationId')
+            ->will($this->returnValue($applicationId));
+
+        $this->controller->expects($this->once())
+            ->method('params')
+            ->will($this->returnValue($mockParams));
+
+        $this->controller->expects($this->once())
+            ->method('checkForCrudAction')
+            ->will($this->returnValue(false));
+
+        $this->controller->expects($this->once())
+            ->method('makeRestCall')
+            ->will($this->returnValue($applicationData));
+
+        $this->controller->expects($this->once())
+            ->method('notFoundAction')
+            ->will($this->returnValue(404));
+
+        $this->assertEquals(404, $this->controller->indexAction());
     }
 
-    protected function getOlcsForm($name)
+    /**
+     * Test indexAction with 0 results
+     */
+    public function testIndexActionWithoutResults()
     {
-        $class = new \ReflectionClass('\Common\Controller\FormActionController');
-        $method = $class->getMethod('getForm');
-        $method->setAccessible(true);
-        $form = $method->invokeArgs($this->controller, array($name));
+        /**$applicationId = 7;
 
-        $form->remove('crsf');
-        $form->remove('version');
+        $applicationData = array();
 
-        return $form;
+        $aocData = array(
+            'Count' => 0,
+            'Results' => array()
+        );
+
+        $this->getMockController(array('checkForCrudAction', 'params', 'makeRestCall'));
+
+        $mockParams = $this->getMock('\stdClass', array('fromRoute'));
+
+        $mockParams->expects($this->once())
+            ->method('fromRoute')
+            ->with('applicationId')
+            ->will($this->returnValue($applicationId));
+
+        $this->controller->expects($this->once())
+            ->method('params')
+            ->will($this->returnValue($mockParams));
+
+        $this->controller->expects($this->once())
+            ->method('checkForCrudAction')
+            ->will($this->returnValue(false));
+
+        $this->controller->expects($this->once())
+            ->method('makeRestCall')
+            ->will($this->returnValue($applicationData));
+
+        $this->controller->expects($this->once())
+            ->method('makeRestCall')
+            ->with('ApplicationOperatingCentre', 'GET')
+            ->will($this->returnValue($aocData));
+
+        $mockServiceLocator = $this->getMock('\stdClass', array('get'));
+
+        $mockTable = $this->getMock('\stdClass', array('buildTable'));
+
+        $mockTable->expects($this->once())
+            ->method('buildTable')
+            ->with('operatingcentre', array())
+            ->will($this->returnValue('<table></table>'));
+
+        $mockServiceLocator->expects($this->once())
+            ->method('get')
+            ->with('Table')
+            ->will($this->returnValue($mockTable));
+
+        $this->expects($this->once())
+            ->method('getServiceLocator')
+            ->will($this->returnValue($mockServiceLocator));
+
+        $this->controller->indexAction();*/
+    }
+
+    /**
+     * Test completeAction
+     */
+    public function testCompleteAction()
+    {
+        $controller = new OperatingCentreController();
+
+        $response = $controller->completeAction();
+
+        $this->assertEquals(null, $response);
     }
 }

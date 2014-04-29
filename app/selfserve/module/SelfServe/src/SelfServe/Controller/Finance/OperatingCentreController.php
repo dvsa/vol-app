@@ -19,7 +19,6 @@ use Zend\View\Model\ViewModel;
  */
 class OperatingCentreController extends AbstractFinanceController
 {
-
     /**
      * Index action
      *
@@ -35,10 +34,6 @@ class OperatingCentreController extends AbstractFinanceController
 
         $applicationId = $this->params()->fromRoute('applicationId');
 
-        $results = $this->getOperatingCentresForApplication($applicationId);
-
-        $table = $this->getOperatingCentreTable($results);
-
         $bundle = array(
             'properties' => array(
                 'version',
@@ -53,6 +48,10 @@ class OperatingCentreController extends AbstractFinanceController
             return $this->notFoundAction();
         }
 
+        $results = $this->getOperatingCentresForApplication($applicationId);
+
+        $table = $this->getOperatingCentreTable($results);
+
         $data = $this->formatDataForForm($data, $applicationId, $results);
 
         $form = $this->generateFormWithData('operating-centre-authorisation', 'processAuthorisation', $data);
@@ -62,155 +61,6 @@ class OperatingCentreController extends AbstractFinanceController
         $view->setTemplate('self-serve/finance/operating-centre/index');
 
         return $this->renderLayout($view, 'operatingCentre');
-    }
-
-    /**
-     * Get operating centres for application
-     *
-     * @param int $applicationId
-     * @return array
-     */
-    private function getOperatingCentresForApplication($applicationId)
-    {
-        $bundle = array(
-            'properties' => array(
-                'id',
-                'numberOfTrailers',
-                'numberOfVehicles',
-                'permission',
-                'adPlaced'
-            ),
-            'children' => array(
-                'operatingCentre' => array(
-                    'properties' => array('id'),
-                    'children' => array(
-                        'address' => array(
-                            'properties' => array(
-                                'addressLine1',
-                                'addressLine2',
-                                'addressLine3',
-                                'addressLine4',
-                                'postcode',
-                                'county',
-                                'city',
-                                'country'
-                            )
-                        )
-                    )
-                )
-            )
-        );
-
-        $data = $this->makeRestCall(
-            'ApplicationOperatingCentre',
-            'GET',
-            array('application' => $applicationId),
-            $bundle
-        );
-
-        $newData = array();
-
-        foreach ($data['Results'] as $row) {
-
-            $newRow = $row;
-
-            if (isset($row['operatingCentre']['address'])) {
-
-                $newRow = array_merge($newRow, $row['operatingCentre']['address']);
-            }
-
-            unset($newRow['operatingCentre']);
-
-            $newData[] = $newRow;
-        }
-
-        return $newData;
-    }
-
-    /**
-     * Process persisting of Authorisation
-     *
-     * @param array $data
-     */
-    public function processAuthorisation($data)
-    {
-        $data = $this->formatDataFromForm($data);
-
-        $this->makeRestCall('Application', 'PUT', $data);
-
-        return $this->redirect()->toRoute('selfserve/finance/financial_evidence', array('applicationId' => $data['id']));
-    }
-
-    /**
-     * Format the data from the form
-     *
-     * @param array $data
-     * @return array
-     */
-    private function formatDataFromForm($data)
-    {
-        $data = $data['data'];
-
-        unset($data['noOfOperatingCentres']);
-        unset($data['minVehicleAuth']);
-        unset($data['maxVehicleAuth']);
-        unset($data['minTrailerAuth']);
-        unset($data['maxTrailerAuth']);
-
-        return $data;
-    }
-
-    /**
-     * Format the data for the form
-     *
-     * @param array $data
-     * @param int $applicationId
-     * @return array
-     */
-    private function formatDataForForm($data, $applicationId, $results)
-    {
-        $data['data'] = $data;
-        $data['data']['id'] = $applicationId;
-
-        // These fields are used for validation
-        $data['data']['noOfOperatingCentres'] = count($results);
-        $data['data']['minVehicleAuth'] = 0;
-        $data['data']['maxVehicleAuth'] = 0;
-        $data['data']['minTrailerAuth'] = 0;
-        $data['data']['maxTrailerAuth'] = 0;
-
-        foreach ($results as $row) {
-
-            $data['data']['minVehicleAuth'] = max(
-                array($data['data']['minVehicleAuth'], $row['numberOfVehicles'])
-            );
-            $data['data']['minTrailerAuth'] = max(
-                array($data['data']['minTrailerAuth'], $row['numberOfTrailers'])
-            );
-            $data['data']['maxVehicleAuth'] += (int) $row['numberOfVehicles'];
-            $data['data']['maxTrailerAuth'] += (int) $row['numberOfTrailers'];
-        }
-
-        return $data;
-    }
-
-    /**
-     * Get the operating centre table
-     *
-     * @param array $results
-     * @return object
-     */
-    private function getOperatingCentreTable($results)
-    {
-        $settings = array(
-            'sort' => 'address',
-            'order' => 'ASC',
-            'limit' => 10,
-            'page' => 1,
-            'url' => $this->getPluginManager()->get('url')
-        );
-
-        return $this->getServiceLocator()->get('Table')->buildTable('operatingcentre', $results, $settings);
     }
 
     /**
@@ -304,6 +154,163 @@ class OperatingCentreController extends AbstractFinanceController
     }
 
     /**
+     * @todo implement this
+     */
+    public function completeAction()
+    {
+
+    }
+
+    /**
+     * Get operating centres for application
+     *
+     * @param int $applicationId
+     * @return array
+     */
+    private function getOperatingCentresForApplication($applicationId)
+    {
+        $bundle = array(
+            'properties' => array(
+                'id',
+                'numberOfTrailers',
+                'numberOfVehicles',
+                'permission',
+                'adPlaced'
+            ),
+            'children' => array(
+                'operatingCentre' => array(
+                    'properties' => array('id'),
+                    'children' => array(
+                        'address' => array(
+                            'properties' => array(
+                                'addressLine1',
+                                'addressLine2',
+                                'addressLine3',
+                                'addressLine4',
+                                'postcode',
+                                'county',
+                                'city',
+                                'country'
+                            )
+                        )
+                    )
+                )
+            )
+        );
+
+        $data = $this->makeRestCall(
+            'ApplicationOperatingCentre',
+            'GET',
+            array('application' => $applicationId),
+            $bundle
+        );
+
+        $newData = array();
+
+        foreach ($data['Results'] as $row) {
+
+            $newRow = $row;
+
+            if (isset($row['operatingCentre']['address'])) {
+
+                $newRow = array_merge($newRow, $row['operatingCentre']['address']);
+            }
+
+            unset($newRow['operatingCentre']);
+
+            $newData[] = $newRow;
+        }
+
+        return $newData;
+    }
+
+    /**
+     * Get the operating centre table
+     *
+     * @param array $results
+     * @return object
+     */
+    private function getOperatingCentreTable($results)
+    {
+        $settings = array(
+            'sort' => 'address',
+            'order' => 'ASC',
+            'limit' => 10,
+            'page' => 1,
+            'url' => $this->getPluginManager()->get('url')
+        );
+
+        return $this->getServiceLocator()->get('Table')->buildTable('operatingcentre', $results, $settings);
+    }
+
+    /**
+     * Process persisting of Authorisation
+     *
+     * @param array $data
+     */
+    public function processAuthorisation($data)
+    {
+        $data = $this->formatDataFromForm($data);
+
+        $this->makeRestCall('Application', 'PUT', $data);
+
+        return $this->redirect()->toRoute('selfserve/finance/financial_evidence', array('applicationId' => $data['id']));
+    }
+
+    /**
+     * Format the data from the form
+     *
+     * @param array $data
+     * @return array
+     */
+    private function formatDataFromForm($data)
+    {
+        $data = $data['data'];
+
+        unset($data['noOfOperatingCentres']);
+        unset($data['minVehicleAuth']);
+        unset($data['maxVehicleAuth']);
+        unset($data['minTrailerAuth']);
+        unset($data['maxTrailerAuth']);
+
+        return $data;
+    }
+
+    /**
+     * Format the data for the form
+     *
+     * @param array $data
+     * @param int $applicationId
+     * @return array
+     */
+    private function formatDataForForm($data, $applicationId, $results)
+    {
+        $data['data'] = $data;
+        $data['data']['id'] = $applicationId;
+
+        // These fields are used for validation
+        $data['data']['noOfOperatingCentres'] = count($results);
+        $data['data']['minVehicleAuth'] = 0;
+        $data['data']['maxVehicleAuth'] = 0;
+        $data['data']['minTrailerAuth'] = 0;
+        $data['data']['maxTrailerAuth'] = 0;
+
+        foreach ($results as $row) {
+
+            $data['data']['minVehicleAuth'] = max(
+                array($data['data']['minVehicleAuth'], $row['numberOfVehicles'])
+            );
+            $data['data']['minTrailerAuth'] = max(
+                array($data['data']['minTrailerAuth'], $row['numberOfTrailers'])
+            );
+            $data['data']['maxVehicleAuth'] += (int) $row['numberOfVehicles'];
+            $data['data']['maxTrailerAuth'] += (int) $row['numberOfTrailers'];
+        }
+
+        return $data;
+    }
+
+    /**
      * Persist data to database. After that, redirect to Operating centres page
      *
      * @param array $validData
@@ -362,10 +369,5 @@ class OperatingCentreController extends AbstractFinanceController
             'permission' => $validData['authorised-vehicles']['permission-confirmation'],
             'application' => $applicationId,
         );
-    }
-
-    public function completeAction()
-    {
-
     }
 }
