@@ -115,7 +115,7 @@ class SafetyController extends FormJourneyActionController
         $this->makeRestCall('Licence', 'PUT', $licenceData);
 
         // @todo Redirect to previous history when this page is created
-        return $this->redirect()->toRoute(null, array('applicationId' => $applicationId));
+        return $this->redirect()->toRoute('selfserve/previous-history', array('step' => 'finance', 'applicationId' => $applicationId));
     }
 
     /**
