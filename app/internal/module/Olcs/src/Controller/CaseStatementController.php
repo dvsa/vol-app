@@ -191,7 +191,12 @@ class CaseStatementController extends CaseController
 
         $this->processAdd($data, 'Statement');
 
-        $this->redirect()->toRoute('case_statement', ['statement'=>''], [], true);
+        $this->redirect()->toRoute(
+            'case_statement',
+            ['case'=>$this->fromRoute('case'), 'licence'=>$this->fromRoute('licence')],
+            [],
+            false
+        );
     }
 
     /**
@@ -205,7 +210,12 @@ class CaseStatementController extends CaseController
 
         $this->processEdit($data, 'Statement');
 
-        $this->redirect()->toRoute('case_statement', ['statement'=>''], [], true);
+        $this->redirect()->toRoute(
+            'case_statement',
+            ['case'=>$this->fromRoute('case'), 'licence'=>$this->fromRoute('licence')],
+            [],
+            false
+        );
     }
 
     /**
