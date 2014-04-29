@@ -489,6 +489,14 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
         $applicationId = 7;
 
         $data = array(
+            'address' => array(
+                'addressLine1' => '',
+                'addressLine2' => '',
+                'addressLine3' => '',
+                'city' => '',
+                'country' => '',
+                'postcode' => ''
+            ),
             'authorised-vehicles' => array(
                 'no-of-vehicles' => 3,
                 'no-of-trailers' => 4,
@@ -510,7 +518,12 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
             ->method('params')
             ->will($this->returnValue($mockParams));
 
-        $this->controller->expects($this->once())
+        $this->controller->expects($this->at(1))
+            ->method('makeRestCall')
+            ->with('OperatingCentre', 'POST')
+            ->will($this->returnValue(array('id' => 1)));
+
+        $this->controller->expects($this->at(2))
             ->method('makeRestCall')
             ->with('ApplicationOperatingCentre', 'POST')
             ->will($this->returnValue(array()));
@@ -526,6 +539,14 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
         $applicationId = 7;
 
         $data = array(
+            'address' => array(
+                'addressLine1' => '',
+                'addressLine2' => '',
+                'addressLine3' => '',
+                'city' => '',
+                'country' => '',
+                'postcode' => ''
+            ),
             'authorised-vehicles' => array(
                 'no-of-vehicles' => 3,
                 'no-of-trailers' => 4,
@@ -547,7 +568,12 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
             ->method('params')
             ->will($this->returnValue($mockParams));
 
-        $this->controller->expects($this->once())
+        $this->controller->expects($this->at(1))
+            ->method('makeRestCall')
+            ->with('OperatingCentre', 'POST')
+            ->will($this->returnValue(array('id' => 1)));
+
+        $this->controller->expects($this->at(2))
             ->method('makeRestCall')
             ->with('ApplicationOperatingCentre', 'POST')
             ->will($this->returnValue(array('id' => 1)));
@@ -575,6 +601,14 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
 
         $data = array(
             'version' => 1,
+            'address' => array(
+                'addressLine1' => '',
+                'addressLine2' => '',
+                'addressLine3' => '',
+                'city' => '',
+                'country' => '',
+                'postcode' => ''
+            ),
             'authorised-vehicles' => array(
                 'no-of-vehicles' => 3,
                 'no-of-trailers' => 4,

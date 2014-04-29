@@ -307,7 +307,6 @@ class OperatingCentreController extends AbstractFinanceController
         $data = array(
             'version' => 1,
             'adPlaced' => 1
-
         );
 
         $data = array_merge($this->mapData($validData), $data);
