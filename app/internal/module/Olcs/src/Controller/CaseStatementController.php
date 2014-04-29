@@ -94,7 +94,13 @@ class CaseStatementController extends CaseController
 
         $statementId = $this->fromRoute('statement');
 
-        $details = $this->makeRestCall('Statement', 'GET', array('id' => $statementId));
+        $bundle = array(
+            'children' => array(
+                'requestorsAddress'
+            )
+        );
+
+        $details = $this->makeRestCall('Statement', 'GET', array('id' => $statementId), $bundle);
 
         if (empty($details)) {
             return $this->notFoundAction();
@@ -102,14 +108,6 @@ class CaseStatementController extends CaseController
 
         $data = $this->formatDataForEditForm($details);
         $data['case'] = $caseId;
-
-        $address = array();
-
-        if (isset($details['requestorsAddressId']) && !empty($details['requestorsAddressId'])) {
-            $address = $this->makeRestCall('Address', 'GET', array('id' => $details['requestorsAddressId']));
-        }
-
-        $data['requestorsAddress'] = $address;
 
         $data['requestorsAddress']['country'] = 'country.' . $data['requestorsAddress']['country'];
 
@@ -191,7 +189,12 @@ class CaseStatementController extends CaseController
 
         $this->processAdd($data, 'Statement');
 
-        $this->redirect()->toRoute('case_statement', ['statement'=>''], [], true);
+        $this->redirect()->toRoute(
+            'case_statement',
+            ['case'=>$this->fromRoute('case'), 'licence'=>$this->fromRoute('licence')],
+            [],
+            false
+        );
     }
 
     /**
@@ -205,7 +208,12 @@ class CaseStatementController extends CaseController
 
         $this->processEdit($data, 'Statement');
 
-        $this->redirect()->toRoute('case_statement', ['statement'=>''], [], true);
+        $this->redirect()->toRoute(
+            'case_statement',
+            ['case'=>$this->fromRoute('case'), 'licence'=>$this->fromRoute('licence')],
+            [],
+            false
+        );
     }
 
     /**
