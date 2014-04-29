@@ -71,7 +71,7 @@ class CaseAppealControllerTest extends \PHPUnit_Framework_TestCase
             array('fromRoute', 'makeRestCall', 'notFoundAction', 'setBreadcrumb')
         );
 
-        $controller->expects($this->exactly(3))
+        $controller->expects($this->exactly(2))
             ->method('fromRoute');
 
         $controller->expects($this->once())
@@ -92,10 +92,14 @@ class CaseAppealControllerTest extends \PHPUnit_Framework_TestCase
     public function testEditAction()
     {
         $appealId = 3;
+        $caseId = 24;
 
         $appealDetails = array(
             'reason' => '5',
-            'outcome' => '9'
+            'outcome' => '9',
+            'case' => array(
+                'id' => $caseId
+            )
         );
 
         $form = '<form></form>';
@@ -105,8 +109,10 @@ class CaseAppealControllerTest extends \PHPUnit_Framework_TestCase
             'outcome' => '9',
             'details' => array(
                 'reason' => 'appeal_reason.5',
-                'outcome' => 'appeal_outcome.9'
-            )
+                'outcome' => 'appeal_outcome.9',
+                'case' => $caseId
+            ),
+            'case' => $caseId
         );
 
         $viewMock = $this->getMock('\stdClass', array('setTemplate'));
@@ -128,13 +134,8 @@ class CaseAppealControllerTest extends \PHPUnit_Framework_TestCase
             ->method('fromRoute')
             ->with('licence');
 
-        $controller->expects($this->at(2))
-            ->method('fromRoute')
-            ->with('case');
-
         $controller->expects($this->once())
             ->method('makeRestCall')
-            ->with('Appeal')
             ->will($this->returnValue($appealDetails));
 
         $controller->expects($this->once())

@@ -178,16 +178,31 @@ class CaseStayController extends CaseController
     {
         $stayId = $this->fromRoute('stay');
 
-        $result = $this->makeRestCall('Stay', 'GET', array('id' => $stayId));
+        $bundle = array(
+            'children' => array(
+                'case' => array(
+                    'properties' => array(
+                        'id'
+                    )
+                ),
+                'licence' => array(
+                    'properties' => array(
+                        'id'
+                    )
+                )
+            )
+        );
+
+        $result = $this->makeRestCall('Stay', 'GET', array('id' => $stayId, 'bundle' => json_encode($bundle)));
 
         if (empty($result)) {
             return $this->notFoundAction();
         }
 
+        $result['case'] = $result['case']['id'];
         $result['fields'] = $result;
 
-        $caseId = $this->fromRoute('case');
-        $case = $this->getCase($caseId);
+        $case = $this->getCase($result['case']);
 
         if (empty($case)) {
             return $this->notFoundAction();
@@ -207,7 +222,7 @@ class CaseStayController extends CaseController
         $this->setBreadcrumb(
             array(
                 'licence_case_list/pagination' => array('licence' => $result['licence']),
-                'case_stay_action' => array('licence' => $result['licence'], 'case' => $caseId)
+                'case_stay_action' => array('licence' => $result['licence'], 'case' => $result['case'])
             )
         );
 

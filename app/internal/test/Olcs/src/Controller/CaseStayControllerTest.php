@@ -246,9 +246,7 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->at(1))
             ->method('makeRestCall')
-            ->will($this->returnValue(array('data' => 'data')));
-
-        $this->getFromRoute(2, 'case', false);
+            ->will($this->returnValue(array('case' => array('id' => 24))));
 
         $this->controller->expects($this->once())
             ->method('getCase')
@@ -268,16 +266,14 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->once())
             ->method('makeRestCall')
-            ->will($this->returnValue(array('data' => 'data')));
-
-        $this->getFromRoute(2, 'case', false);
+            ->will($this->returnValue(array('case' => array('id' => 24))));
 
         $this->controller->expects($this->once())
             ->method('getCase')
             ->will($this->returnValue(array('data' => 'data')));
 
-        $this->getFromRoute(4, 'licence', false);
-        $this->getFromRoute(5, 'stayType', $stayTypeId);
+        $this->getFromRoute(3, 'licence', false);
+        $this->getFromRoute(4, 'stayType', $stayTypeId);
 
         $this->controller->expects($this->once())
             ->method('notFoundAction');
@@ -296,26 +292,19 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
      */
     public function testEditAction($caseId, $stayTypeId, $stayId, $licenceId)
     {
-        $restEnd = 'Stay';
-        $restComm = 'GET';
-        $restParam = array('id' => $stayId);
-
         $this->getFromRoute(0, 'stay', $stayId);
 
         $this->controller->expects($this->at(1))
             ->method('makeRestCall')
-            ->with($this->equalTo($restEnd), $this->equalTo($restComm), $this->equalTo($restParam))
-            ->will($this->returnValue(array('data' => 'data')));
+            ->will($this->returnValue((array('case' => array('id' => $caseId)))));
 
-        $this->getFromRoute(2, 'case', $caseId);
-
-        $this->controller->expects($this->at(3))
+        $this->controller->expects($this->at(2))
             ->method('getCase')
             ->with($this->equalTo($caseId))
             ->will($this->returnValue(array('data' => 'data')));
 
-        $this->getFromRoute(4, 'licence', $licenceId);
-        $this->getFromRoute(5, 'stayType', $stayTypeId);
+        $this->getFromRoute(3, 'licence', $licenceId);
+        $this->getFromRoute(4, 'stayType', $stayTypeId);
 
         $this->controller->expects($this->once())
             ->method('generateFormWithData');

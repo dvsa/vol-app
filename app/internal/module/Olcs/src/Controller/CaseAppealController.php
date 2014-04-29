@@ -62,23 +62,31 @@ class CaseAppealController extends CaseController
     {
         $appealId = $this->fromRoute('appeal');
         $licenceId = $this->fromRoute('licence');
-        $caseId = $this->fromRoute('case');
 
-        $this->setBreadcrumb(
-            array(
-                'licence_case_list/pagination' => array('licence' => $licenceId),
-                'case_stay_action' => array('licence' => $licenceId, 'case' => $caseId)
+        $bundle = array(
+            'children' => array(
+                'case' => array(
+                    'properties' => array(
+                        'id'
+                    )
+                )
             )
         );
 
-
-        $details = $this->makeRestCall('Appeal', 'GET', array('id' => $appealId));
+        $details = $this->makeRestCall('Appeal', 'GET', array('id' => $appealId, 'bundle' => json_encode($bundle)));
 
         if (empty($details)) {
             return $this->notFoundAction();
         }
 
         $data = $this->formatDataForEditForm($details);
+
+        $this->setBreadcrumb(
+            array(
+                'licence_case_list/pagination' => array('licence' => $licenceId),
+                'case_stay_action' => array('licence' => $licenceId, 'case' => $data['case'])
+            )
+        );
 
         $form = $this->generateFormWithData(
             'appeal',
@@ -110,6 +118,7 @@ class CaseAppealController extends CaseController
      */
     private function formatDataForEditForm($data)
     {
+        $data['case'] = $data['case']['id'];
         $data['details'] = $data;
 
         $data['details']['reason'] = 'appeal_reason.' . $data['details']['reason'];
