@@ -35,11 +35,11 @@ return array(
         ),
         array(
             'title' => 'Vehicles',
-            'format' => '{{numberOfVehicles}}'
+            'name' => 'numberOfVehicles'
         ),
         array(
             'title' => 'Trailers',
-            'format' => '{{numberOfTrailers}}'
+            'name' => 'numberOfTrailers'
         ),
         array(
             'title' => 'Permission',

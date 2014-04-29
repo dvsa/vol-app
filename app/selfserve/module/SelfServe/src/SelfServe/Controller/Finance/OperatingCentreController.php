@@ -110,6 +110,11 @@ class OperatingCentreController extends AbstractFinanceController
 
         $newData = array();
 
+        print '<pre>';
+        print_r($data);
+        print '</pre>';
+        exit;
+
         foreach ($data as $row) {
 
             $newRow = $row;
@@ -182,13 +187,13 @@ class OperatingCentreController extends AbstractFinanceController
         foreach ($results as $row) {
 
             $data['data']['minVehicleAuth'] = max(
-                array($data['data']['minVehicleAuth'], $row['no_of_vehicles_required'])
+                array($data['data']['minVehicleAuth'], $row['numberOfVehicles'])
             );
             $data['data']['minTrailerAuth'] = max(
-                array($data['data']['minTrailerAuth'], $row['no_of_trailers_required'])
+                array($data['data']['minTrailerAuth'], $row['numberOfTrailers'])
             );
-            $data['data']['maxVehicleAuth'] += (int) $row['no_of_vehicles_required'];
-            $data['data']['maxTrailerAuth'] += (int) $row['no_of_trailers_required'];
+            $data['data']['maxVehicleAuth'] += (int) $row['numberOfVehicles'];
+            $data['data']['maxTrailerAuth'] += (int) $row['numberOfTrailers'];
         }
 
         return $data;
@@ -294,7 +299,8 @@ class OperatingCentreController extends AbstractFinanceController
         $this->makeRestCall('OperatingCentre', 'DELETE', array('id' => $operatingCentreId));
 
         return $this->redirect()->toRoute(
-                'selfserve/finance/operating_centre', array('applicationId' => $applicationId)
+            'selfserve/finance/operating_centre',
+            array('applicationId' => $applicationId)
         );
     }
 
