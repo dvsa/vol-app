@@ -199,20 +199,55 @@ class CaseController extends FormActionController
                 'label' => 'Prohibitions',
                 'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'prohibitions'], [], true),
             ],
+            'penalties' => [
+                'key' => 'penalties',
+                'label' => 'Penalties',
+                'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'penalties'], [], true),
+            ],
+            'erru' => [
+                'key' => 'erru',
+                'label' => 'ERRU Penalties',
+                'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'erru'], [], true),
+            ],
             'statements' => [
                 'key' => 'statements',
                 'label' => 'Statements',
                 'url' => $pm->get('url')->fromRoute('case_statement', ['action' => null], [], true),
             ],
+            'complaints' => [
+                'key' => 'complaints',
+                'label' => 'Complaints',
+                'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'complaints'], [], true),
+            ],
+            'si' => [
+                'key' => 'si',
+                'label' => 'Serious infringement',
+                'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'si'], [], true),
+            ],
             'stays' => [
                 'key' => 'stays',
-                'label' => 'Stays',
+                'label' => 'Stays ',
                 'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'stays'], [], true),
             ],
             'complaints' => [
                 'key' => 'complaints',
                 'label' => 'Complaints',
                 'url' => $pm->get('url')->fromRoute('case_complaints', ['tab' => 'complaints'], [], true),
+            ],
+            'reports' => [
+                'key' => 'reports',
+                'label' => 'Reports',
+                'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'reports'], [], true),
+            ],
+            'documents' => [
+                'key' => 'documents',
+                'label' => 'Documents',
+                'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'documents'], [], true),
+            ],
+            'notes' => [
+                'key' => 'notes',
+                'label' => 'Notes',
+                'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'notes'], [], true),
             ]
         ];
 
