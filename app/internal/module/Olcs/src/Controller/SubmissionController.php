@@ -61,7 +61,7 @@ class SubmissionController extends FormActionController
         return $view;
     }
     
-    public function editAction() 
+    public function editAction()
     {
         print 'edit action';
         return false;

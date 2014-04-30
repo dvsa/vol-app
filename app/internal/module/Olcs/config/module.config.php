@@ -153,8 +153,9 @@ return array(
             'case_stay_action' => array(
                 'type' => 'segment',
                 'options' => array(
-                    'route' => '/licence/[:licence]/case/:case/action/manage/stays[/:action][/:stayType][/:stay]',
+                    'route' => '/licence/[:licence]/case/[:case]/action/manage/stays[/:action][/:stayType][/:stay]',
                     'constraints' => array(
+                        'licence' => '[0-9]+',
                         'case' => '[0-9]+',
                         'staytype' => '[0-9]',
                         'stay' => '[0-9]+'
@@ -171,6 +172,28 @@ return array(
                     'route' => '/licence/[:licence]/case/[:case]/conviction[/:action][/][:id]',
                     'defaults' => array(
                         'controller' => 'ConvictionController',
+                    )
+                )
+            ),
+            'case_complaints' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/licence/[:licence]/case/:case/complaints[/:action][/:complaint]',
+                    'constraints' => array(
+                        'case' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'CaseComplaintController',
+                        'action' => 'index'
+                    )
+                )
+            ),
+            'complaints' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/licence/[:licence]/case/[:case]/complaint[/:action][/:id]',
+                    'defaults' => array(
+                        'controller' => 'ComplaintController',
                     )
                 )
             ),
@@ -201,6 +224,7 @@ return array(
             'CaseStatementController' => 'Olcs\Controller\CaseStatementController',
             'CaseStatementController' => 'Olcs\Controller\CaseStatementController',
             'CaseAppealController' => 'Olcs\Controller\CaseAppealController',
+            'CaseComplaintController' => 'Olcs\Controller\CaseComplaintController',
             'CaseConvictionController' => 'Olcs\Controller\CaseConvictionController',
             'SubmissionController' => 'Olcs\Controller\SubmissionController',
             'CaseStayController' => 'Olcs\Controller\CaseStayController'

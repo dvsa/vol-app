@@ -1,23 +1,20 @@
 <div class="full-width">
     <?php
-    //THIS IS A PLACEHOLDER AND NOT INTENDED FOR JUDGEMENT / PRODUCTION :)
-    echo'<h3>Placeholder page for stays - not final design</h3><br /><br />';
+    echo $this->render('partials/page-header.phtml', array('pageTitle' => 'Stays & Appeals'));
 
     foreach ($stayTypes as $id => $type) {
-        if (isset($records[$id])) {
-            $button = '<a class="action--primary" href="../manage/stays/edit/' . $id . '/' . $records[$id]['id'] . '">edit</a><br />';
-            $content = ''
-                . 'Date of decision: dd/mm/yy<br />'
-                . 'Request date: dd/mm/yy<br />'
-                . 'Outcome: ' . ($records[$id]['outcome'] == 'stay_status_granted' ? 'Granted' : 'Refused') . '<br />'
-                . 'Notes: ' . $records[$id]['notes'] . '<br /><br />';
+        if (isset($stayRecords[$id])) {
+            echo $this->render('partials/case/stay.phtml', array('stay' => $stayRecords[$id], 'stayType' => $type));
         } else {
-            $button = '<a class="action--primary" href="../manage/stays/add/' . $id . '">add</a><br />';
-            $content = 'No stay of this type has been added<br /><br />';
+            echo  $this->render('partials/case/stay-empty.phtml', array('heading' => $type . ' Stay', 'route' => 'case_stay_action', 'stayTypeId' => $id));
         }
-
-        echo'<h3>' . $type . ' ' . $button . '</h3>';
-        echo $content;
     }
+
+    if(!empty($appealRecord)){
+        echo  $this->render('partials/case/appeal.phtml', array('record' => $appealRecord));
+    } else {
+        echo  $this->render('partials/case/stay-empty.phtml', array('heading' => 'Appeal', 'route' => 'case_appeal'));
+    }
+
     ?>
 </div>

@@ -21,7 +21,8 @@ class CaseAppealControllerTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddAction()
     {
-        $caseId = 7;
+        $licenceId = 7;
+        $caseId = 24;
         $form = '<form></form>';
 
         $viewMock = $this->getMock('\stdClass', array('setTemplate'));
@@ -32,13 +33,21 @@ class CaseAppealControllerTest extends \PHPUnit_Framework_TestCase
 
         $controller = $this->getMock(
             'Olcs\Controller\CaseAppealController',
-            array('fromRoute', 'generateFormWithData', 'getView')
+            array('fromRoute', 'generateFormWithData', 'getView', 'setBreadcrumb')
         );
 
-        $controller->expects($this->once())
+        $controller->expects($this->at(0))
             ->method('fromRoute')
             ->with('case')
             ->will($this->returnValue($caseId));
+
+        $controller->expects($this->at(1))
+            ->method('fromRoute')
+            ->with('licence')
+            ->will($this->returnValue($licenceId));
+
+        $controller->expects($this->once())
+            ->method('setBreadcrumb');
 
         $controller->expects($this->once())
             ->method('generateFormWithData')
@@ -59,12 +68,11 @@ class CaseAppealControllerTest extends \PHPUnit_Framework_TestCase
     {
         $controller = $this->getMock(
             'Olcs\Controller\CaseAppealController',
-            array('fromRoute', 'makeRestCall', 'notFoundAction')
+            array('fromRoute', 'makeRestCall', 'notFoundAction', 'setBreadcrumb')
         );
 
-        $controller->expects($this->once())
-            ->method('fromRoute')
-            ->will($this->returnValue(3));
+        $controller->expects($this->exactly(2))
+            ->method('fromRoute');
 
         $controller->expects($this->once())
             ->method('makeRestCall')
@@ -83,11 +91,15 @@ class CaseAppealControllerTest extends \PHPUnit_Framework_TestCase
      */
     public function testEditAction()
     {
-        $appealId = 7;
+        $appealId = 3;
+        $caseId = 24;
 
         $appealDetails = array(
             'reason' => '5',
-            'outcome' => '9'
+            'outcome' => '9',
+            'case' => array(
+                'id' => $caseId
+            )
         );
 
         $form = '<form></form>';
@@ -97,8 +109,10 @@ class CaseAppealControllerTest extends \PHPUnit_Framework_TestCase
             'outcome' => '9',
             'details' => array(
                 'reason' => 'appeal_reason.5',
-                'outcome' => 'appeal_outcome.9'
-            )
+                'outcome' => 'appeal_outcome.9',
+                'case' => $caseId
+            ),
+            'case' => $caseId
         );
 
         $viewMock = $this->getMock('\stdClass', array('setTemplate'));
@@ -109,16 +123,19 @@ class CaseAppealControllerTest extends \PHPUnit_Framework_TestCase
 
         $controller = $this->getMock(
             'Olcs\Controller\CaseAppealController',
-            array('fromRoute', 'makeRestCall', 'generateFormWithData', 'getView')
+            array('fromRoute', 'makeRestCall', 'generateFormWithData', 'getView', 'setBreadcrumb')
         );
 
-        $controller->expects($this->once())
+        $controller->expects($this->at(0))
             ->method('fromRoute')
-            ->will($this->returnValue(3));
+            ->will($this->returnValue($appealId));
+
+        $controller->expects($this->at(1))
+            ->method('fromRoute')
+            ->with('licence');
 
         $controller->expects($this->once())
             ->method('makeRestCall')
-            ->with('Appeal')
             ->will($this->returnValue($appealDetails));
 
         $controller->expects($this->once())
@@ -170,7 +187,7 @@ class CaseAppealControllerTest extends \PHPUnit_Framework_TestCase
         $controller->expects($this->once())
             ->method('redirect')
             ->will($this->returnValue($mockRedirect));
-        
+
          $controller->expects($this->once())
             ->method('fromRoute')
             ->will($this->returnValue(7));
@@ -215,7 +232,7 @@ class CaseAppealControllerTest extends \PHPUnit_Framework_TestCase
         $controller->expects($this->once())
             ->method('redirect')
             ->will($this->returnValue($mockRedirect));
-        
+
         $controller->expects($this->once())
             ->method('fromRoute')
             ->will($this->returnValue(7));

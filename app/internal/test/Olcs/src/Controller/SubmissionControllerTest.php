@@ -31,7 +31,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
                 'setData',
                 'processEdit',
                 'processAdd',
-                'getView',
+                'getViewModel',
                 'createSubmission'
             )
         );
@@ -56,7 +56,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
             ->method('setBreadcrumb')
             ->with(array(
                 'licence_case_list/pagination' => array('licence' => 7),
-                'case_manage' => array('case' => 54, 'licence' => 7)
+                'case_manage' => array('case' => 54, 'licence' => 7, 'tab' => 'overview')
             ));
         
         $this->controller->expects($this->once())
@@ -78,7 +78,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         );
         
         $this->controller->expects($this->once())
-            ->method('getView')
+            ->method('getViewModel')
             ->will($this->returnValue($view));
         
         $view->expects($this->once())
