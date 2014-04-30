@@ -103,18 +103,19 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
                 'getServiceLocator',
                 'generateFormWithData',
                 'getViewModel',
-                'renderLayout'
+                'renderLayout',
+                'notFoundAction',
             )
         );
 
         $mockParams = $this->getMock('\stdClass', array('fromRoute'));
 
-        $mockParams->expects($this->once())
+        $mockParams->expects($this->any())
             ->method('fromRoute')
             ->with('applicationId')
             ->will($this->returnValue($applicationId));
 
-        $this->controller->expects($this->once())
+        $this->controller->expects($this->any())
             ->method('params')
             ->will($this->returnValue($mockParams));
 
@@ -122,49 +123,22 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
             ->method('checkForCrudAction')
             ->will($this->returnValue(false));
 
-        $this->controller->expects($this->any())
+        $this->controller->expects($this->at(0))
+            ->method('makeRestCall')
+            ->will($this->returnValue(array('licence' => array())));
+
+        $this->controller->expects($this->at(1))
             ->method('makeRestCall')
             ->will($this->returnCallback(array($this, 'mockRestCall')));
 
-        $mockServiceLocator = $this->getMock('\stdClass', array('get'));
 
-        $mockTable = $this->getMock('\stdClass', array('buildTable'));
-
-        $mockTable->expects($this->once())
-            ->method('buildTable')
-            ->with('operatingcentre', array())
-            ->will($this->returnValue('<table></table>'));
-
-        $mockServiceLocator->expects($this->once())
-            ->method('get')
-            ->with('Table')
-            ->will($this->returnValue($mockTable));
-
-        $this->controller->expects($this->once())
-            ->method('getServiceLocator')
-            ->will($this->returnValue($mockServiceLocator));
-
-        $this->controller->expects($this->once())
-            ->method('generateFormWithData')
-            ->will($this->returnValue('<form></form>'));
-
-        $mockViewModel = $this->getMock('\stdClass', array('setTemplate'));
-
-        $this->controller->expects($this->once())
-            ->method('getViewModel')
-            ->with(array('operatingCentres' => '<table></table>', 'form' => '<form></form>'))
-            ->will($this->returnValue($mockViewModel));
-
-        $this->controller->expects($this->once())
-            ->method('renderLayout')
-            ->with($mockViewModel)
-            ->will($this->returnValue('LAYOUT'));
-
-        $this->assertEquals('LAYOUT', $this->controller->indexAction());
+        $this->controller->indexAction();
     }
 
     /**
      * Test indexAction with 0 results
+     *
+     * @group current
      */
     public function testIndexAction()
     {
@@ -184,12 +158,12 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
 
         $mockParams = $this->getMock('\stdClass', array('fromRoute'));
 
-        $mockParams->expects($this->once())
+        $mockParams->expects($this->any())
             ->method('fromRoute')
             ->with('applicationId')
             ->will($this->returnValue($applicationId));
 
-        $this->controller->expects($this->once())
+        $this->controller->expects($this->any())
             ->method('params')
             ->will($this->returnValue($mockParams));
 
@@ -200,6 +174,7 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
         $this->controller->expects($this->any())
             ->method('makeRestCall')
             ->will($this->returnCallback(array($this, 'mockRestCall')));
+
 
         $mockServiceLocator = $this->getMock('\stdClass', array('get'));
 
@@ -227,7 +202,7 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->once())
             ->method('getViewModel')
-            ->with(array('operatingCentres' => '<table></table>', 'form' => '<form></form>'))
+            ->with(array('operatingCentres' => '<table></table>', 'form' => '<form></form>', 'isPsv' => false))
             ->will($this->returnValue($mockViewModel));
 
         $this->controller->expects($this->once())
@@ -243,9 +218,23 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
      */
     public function testAddAction()
     {
-        $this->getMockController(array('generateForm', 'getViewModel', 'renderLayout'));
-
+        $this->getMockController(array('generateForm', 'getViewModel', 'renderLayout', 'params', 'makeRestCall'));
+        $applicationId = 3;
         $mockViewModel = $this->getMock('\stdClass', array('setTemplate'));
+
+        $mockParams = $this->getMock('\stdClass', array('fromRoute'));
+        $mockParams->expects($this->any())
+            ->method('fromRoute')
+            ->with('applicationId')
+            ->will($this->returnValue($applicationId));
+
+        $this->controller->expects($this->any())
+            ->method('params')
+            ->will($this->returnValue($mockParams));
+
+        $this->controller->expects($this->any())
+            ->method('makeRestCall')
+            ->will($this->returnCallback(array($this, 'mockRestCall')));
 
         $this->controller->expects($this->once())
             ->method('generateForm')
@@ -706,7 +695,8 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
             3 => array(
                 'version' => 1,
                 'totAuthVehicles' => 5,
-                'totAuthTrailers' => 10
+                'totAuthTrailers' => 10,
+                'licence' => array('goodsOrPsv' => 'goods'),
             )
         );
 

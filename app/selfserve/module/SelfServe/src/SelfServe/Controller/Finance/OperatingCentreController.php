@@ -19,6 +19,9 @@ use Zend\View\Model\ViewModel;
  */
 class OperatingCentreController extends AbstractFinanceController
 {
+
+    private $isPsv = null;
+
     /**
      * Index action
      *
@@ -50,13 +53,13 @@ class OperatingCentreController extends AbstractFinanceController
 
         $results = $this->getOperatingCentresForApplication($applicationId);
 
-        $table = $this->getOperatingCentreTable($results);
+        $table = $this->getOperatingCentreTable($results, $applicationId);
 
         $data = $this->formatDataForForm($data, $applicationId, $results);
 
-        $form = $this->generateFormWithData('operating-centre-authorisation', 'processAuthorisation', $data, true);
+        $form = $this->generateFormWithData('operating-centre-authorisation' . ($this->isPsvLicence($applicationId) ? '-psv' : ''), 'processAuthorisation', $data, true);
 
-        $view = $this->getViewModel(array('operatingCentres' => $table, 'form' => $form));
+        $view = $this->getViewModel(array('operatingCentres' => $table, 'form' => $form, 'isPsv' => $this->isPsvLicence($applicationId)));
 
         $view->setTemplate('self-serve/finance/operating-centre/index');
 
@@ -73,7 +76,7 @@ class OperatingCentreController extends AbstractFinanceController
         $applicationId      = $this->params()->fromRoute('applicationId');
 
         $form = $this->generateForm(
-            $this->getFormConfigName($applicationId), 'processAddForm'
+            'operating-centre' . ($this->isPsvLicence($applicationId) ? '-psv' : ''), 'processAddForm'
         );
 
         $view = $this->getViewModel(['form' => $form]);
@@ -185,10 +188,6 @@ class OperatingCentreController extends AbstractFinanceController
             )
         );
         
-        //generate form with data
-        $form = $this->generateFormWithData(
-                $this->getFormConfigName($applicationId), 'processEditForm', $data
-
         $data = $this->makeRestCall(
             'ApplicationOperatingCentre',
             'GET',
@@ -216,25 +215,12 @@ class OperatingCentreController extends AbstractFinanceController
     }
 
     /**
-     * Returns form config name based on licence type
-     *
-     * @param $applicationId
-     * @return string
-     */
-    public function getFormConfigName($applicationId)
-    {
-        $licence = $this->makeRestCall('Application', 'GET', ['id' => $applicationId], ['properties' => [], 'children' => ['licence']])['licence'];
-        return $licence['goodsOrPsv'] == 'psv' ? 'operating-centre-psv' : 'operating-centre';
-    }
-    
-    
-    /**
      * Get the operating centre table
      *
      * @param array $results
      * @return object
      */
-    private function getOperatingCentreTable($results)
+    private function getOperatingCentreTable($results, $applicationId)
     {
         $settings = array(
             'sort' => 'address',
@@ -244,7 +230,7 @@ class OperatingCentreController extends AbstractFinanceController
             'url' => $this->getPluginManager()->get('url')
         );
 
-        return $this->getServiceLocator()->get('Table')->buildTable('operatingcentre', $results, $settings);
+        return $this->getServiceLocator()->get('Table')->buildTable('operatingcentre' . ($this->isPsvLicence($applicationId) ? 'psv' : ''), $results, $settings);
     }
 
     /**
@@ -393,4 +379,20 @@ class OperatingCentreController extends AbstractFinanceController
 
         return $data;
     }
+
+    /**
+     * Check if licence type is psv
+     *
+     * @param int $applicationId
+     * @return boolean
+     */
+    private function isPsvLicence($applicationId)
+    {
+        if (is_null($this->isPsv)){
+            $licence = $this->getLicenceEntity($applicationId);
+            $this->isPsv = $licence['goodsOrPsv'] == 'psv';
+        }
+        return $this->isPsv;
+    }
+
 }
