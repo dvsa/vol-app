@@ -46,7 +46,9 @@ class SubmissionController extends FormActionController
         }
         
         $submission = json_decode($submission, true);
-        return $this->getSubmissionView($submission);
+        $submissionView = array();
+        $submissionView['data'] = $submission;
+        return $this->getSubmissionView($submissionView);
     }
     
     /**
@@ -62,7 +64,14 @@ class SubmissionController extends FormActionController
                         'id' => $this->params()->fromPost('id'),
                         'action' => 'edit'));
         }
-         $bundle = array(
+        
+        $submission = $this->getEditSubmissionData();
+        return $this->getSubmissionView($submission);
+    }
+    
+    public function getEditSubmissionData()
+    {
+        $bundle = array(
             'children' => array(
                 'submissionActions' => array(
                     'properties' => 'ALL',
@@ -86,8 +95,7 @@ class SubmissionController extends FormActionController
             $action['submissionActionStatus'] = $actions[$action['submissionActionStatus']];
         }
         $submission['submissionActions'] = $submissionData['submissionActions'];
-        
-        return $this->getSubmissionView($submission);
+        return $submission;
     }
     
     /**
@@ -141,6 +149,9 @@ class SubmissionController extends FormActionController
      */
     public function recommendationAction()
     {
+        if (isset($_POST['cancel-submission'])) {
+            return $this->backToCaseButton();
+        }
         $this->setBreadcrumb($this->getRecDecBreadcrumb());
         return $this->formView('recommend');
     }
@@ -151,6 +162,9 @@ class SubmissionController extends FormActionController
      */
     public function decisionAction()
     {
+        if (isset($_POST['cancel-submission'])) {
+            return $this->backToCaseButton();
+        }
         $this->setBreadcrumb($this->getRecDecBreadcrumb());
         return $this->formView('decision');
     }
@@ -248,6 +262,18 @@ class SubmissionController extends FormActionController
                 'case' => $this->routeParams['case'],
                 'licence' => $this->routeParams['licence'],
                 'tab' => 'overview')
+        );
+    }
+    
+    public function backToCaseButton()
+    {
+        return $this->redirect()->toRoute(
+            'submission',
+            array(
+                'case' => $this->routeParams['case'],
+                'licence' => $this->routeParams['licence'],
+                'id' => $this->routeParams['id'],
+                'action' => 'edit')
         );
     }
     

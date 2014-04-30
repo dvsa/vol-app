@@ -57,6 +57,12 @@ return [
                 'type' => 'submit',
                 'label' => 'Save',
                 'class' => 'action--primary large'
+            ],
+            'cancel' => [
+                'name' => 'cancel-submission',
+                'type' => 'submit',
+                'label' => 'Cancel',
+                'class' => 'action--secondary large'
             ]
         ]
     ]

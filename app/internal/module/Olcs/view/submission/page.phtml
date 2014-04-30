@@ -17,6 +17,7 @@
     } 
 ?>
 </div>
+<?php if (isset($this->params['submission']['submissionActions'])) : ?>
 <div  class="two-thirds">
     <?php 
         echo $this->partial('submission/partials/decRecDisplay.phtml', array(
@@ -24,6 +25,7 @@
         'data' => $this->params['submission']['submissionActions'])); 
 ?>
 </div>
+<?php endif; ?>
 <div  class="two-thirds">
     <form method="POST" action="<?php echo $this->params['formAction']; ?>">
         <div class="actions-container">

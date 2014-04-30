@@ -32,10 +32,12 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
                 'processEdit',
                 'processAdd',
                 'getViewModel',
-                'createSubmission'
+                'createSubmission',
+                'getSubmissionView',
+                'getRequest'
             )
         );
-        
+        $this->controller->routeParams = array();
         $this->licenceData = array(
             'id' => 7,
             'licenceType' => 'Standard National',
@@ -45,50 +47,175 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         parent::setUp();
     }
     
-    public function testAddAction()
+    public function testAddPostAction()
     {
-        $this->controller->expects($this->once())
-            ->method('getParams')
-            ->with(array('case', 'licence', 'id'))
-            ->will($this->returnValue(array ( 'licence' => 7, 'case' => 54)));
+        $this->controller->routeParams = array('case' => 54, 'licence' => 7, 'action' => 'add');
         
         $this->controller->expects($this->once())
             ->method('setBreadcrumb')
-            ->with(array(
-                'licence_case_list/pagination' => array('licence' => 7),
-                'case_manage' => array('case' => 54, 'licence' => 7, 'tab' => 'overview')
-            ));
+            ->with();
         
         $this->controller->expects($this->once())
             ->method('createSubmission')
-            ->with(array('case' => 54, 'licence' => 7))
+            ->with($this->controller->routeParams)
             ->will($this->returnValue('{"submission":{}}'));
+        
+        $getRequest = $this->getMock('\stdClass', array('isPost'));
+        
+        $getRequest->expects($this->once())
+            ->method('isPost')
+            ->will($this->returnValue(true));
+        
+        $this->controller->expects($this->once())
+            ->method('getRequest')
+            ->will($this->returnValue($getRequest));
+        
+        $data = array(
+            'createdBy' => 1,
+            'text' => '{"submission":{}}',
+            'vosaCase' => 54);
         
         $this->controller->expects($this->once())
             ->method('processAdd')
-            ->with(array(
-                'createdBy' => 1,
-                'text' => '{"submission":{}}',
-                'vosaCase' => 54))
+            ->with($data, 'Submission')
             ->will($this->returnValue(8));
         
-        $view = $this->getMock(
-            'Zend\View\Model\ViewModel',
-            ['setTemplate']
-        );
+        $redirect = $this->getMock('\stdClass', array('toRoute'));
+        
+        $redirect->expects($this->once())
+            ->method('toRoute')
+            ->with('submission', array('licence' => 7, 'case' => 54, 'id' => null, 'action' => 'add'));
         
         $this->controller->expects($this->once())
-            ->method('getViewModel')
-            ->will($this->returnValue($view));
-        
-        $view->expects($this->once())
-            ->method('setTemplate')
-            ->with($this->equalTo('submission/page'));
+             ->method('redirect')
+             ->will($this->returnValue($redirect));
         
         $this->controller->addAction();
     }
     
-    public function testCreateSubmission()
+    public function testAddGetAction()
+    {
+        $this->controller->routeParams = array('case' => 54, 'licence' => 7, 'action' => 'add');
+        
+        $this->controller->expects($this->once())
+            ->method('setBreadcrumb')
+            ->with();
+        
+        $this->controller->expects($this->once())
+            ->method('createSubmission')
+            ->with($this->controller->routeParams)
+            ->will($this->returnValue('{"submission":{}}'));
+        
+        $getRequest = $this->getMock('\stdClass', array('isPost'));
+        
+        $getRequest->expects($this->once())
+            ->method('isPost')
+            ->will($this->returnValue(false));
+        
+        $this->controller->expects($this->once())
+            ->method('getRequest')
+            ->will($this->returnValue($getRequest));
+        
+        $this->controller->expects($this->once())
+            ->method('getSubmissionView')
+            ->with(array('data' => array('submission' => array())))
+            ->will($this->returnValue('view}'));
+        
+        $this->controller->addAction();
+    }
+    
+    public function testEditAction()
+    {
+        $this->controller = $this->getMock(
+            '\Olcs\Controller\SubmissionController',
+            array(
+                'getEditSubmissionData',
+                'getSubmissionView',
+                'setBreadcrumb',
+                'getRequest'
+            )
+        );
+        $this->controller->routeParams = array('case' => 54, 'licence' => 7, 'action' => 'add');
+        
+        $this->controller->expects($this->once())
+            ->method('setBreadcrumb')
+            ->with();
+        
+        $getRequest = $this->getMock('\stdClass', array('isPost'));
+        
+        $getRequest->expects($this->once())
+            ->method('isPost')
+            ->will($this->returnValue(false));
+        
+        $this->controller->expects($this->once())
+            ->method('getRequest')
+            ->will($this->returnValue($getRequest));
+        
+        $this->controller->expects($this->once())
+            ->method('getEditSubmissionData')
+            ->will($this->returnValue('{"submission":{}}'));
+        
+        $this->controller->expects($this->once())
+            ->method('getSubmissionView')
+            ->with('{"submission":{}}');
+        
+        $this->controller->editAction();
+    }
+    
+    public function testEditRedirectAction()
+    {
+        $this->controller = $this->getMock(
+            '\Olcs\Controller\SubmissionController',
+            array(
+                'getEditSubmissionData',
+                'getSubmissionView',
+                'setBreadcrumb',
+                'getRequest',
+                'redirect',
+                'params'
+            )
+        );
+        $this->controller->routeParams = array('case' => 54, 'licence' => 7, 'action' => 'add');
+        
+        $this->controller->expects($this->once())
+            ->method('setBreadcrumb')
+            ->with();
+        
+        $getRequest = $this->getMock('\stdClass', array('isPost'));
+        
+        $getRequest->expects($this->once())
+            ->method('isPost')
+            ->will($this->returnValue(true));
+        
+        $this->controller->expects($this->once())
+            ->method('getRequest')
+            ->will($this->returnValue($getRequest));
+        
+        $redirect = $this->getMock('\stdClass', array('toRoute'));
+        
+        $redirect->expects($this->once())
+            ->method('toRoute')
+            ->with('submission', array('licence' => 7, 'case' => 54, 'id' => null, 'action' => 'edit'));
+        
+        $this->controller->expects($this->once())
+             ->method('redirect')
+             ->will($this->returnValue($redirect));
+        
+         $params = $this->getMock('\stdClass', array('fromPost'));
+         
+         $params->expects($this->once())
+            ->method('fromPost')
+            ->with('id')
+            ->will($this->returnValue(null));
+         
+         $this->controller->expects($this->once())
+             ->method('params')
+             ->will($this->returnValue($params));
+        
+        $this->controller->editAction();
+    }
+    
+    /*public function testCreateSubmission()
     {
         $this->controller = $this->getMock(
             '\Olcs\Controller\SubmissionController',
@@ -102,5 +229,5 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue($this->licenceData));
         
         $this->controller->createSubmission(array('licence' => 7, 'case' => 54));
-    }
+    }*/
 }
