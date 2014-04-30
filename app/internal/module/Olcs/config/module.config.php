@@ -153,8 +153,9 @@ return array(
             'case_stay_action' => array(
                 'type' => 'segment',
                 'options' => array(
-                    'route' => '/licence/[:licence]/case/:case/action/manage/stays[/:action][/:stayType][/:stay]',
+                    'route' => '/licence/[:licence]/case/[:case]/action/manage/stays[/:action][/:stayType][/:stay]',
                     'constraints' => array(
+                        'licence' => '[0-9]+',
                         'case' => '[0-9]+',
                         'staytype' => '[0-9]',
                         'stay' => '[0-9]+'

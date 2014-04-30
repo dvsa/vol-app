@@ -86,7 +86,6 @@ class CaseController extends FormActionController
 
     public function getSubmissions($case)
     {
-
         $bundle = array(
             'children' => array(
                 'submissionActions' => array(
@@ -113,9 +112,8 @@ class CaseController extends FormActionController
 
         $results = $this->makeRestCall('Submission', 'GET', array('vosaCase' => $case), $bundle);
         foreach ($results['Results'] as $k => $result) {
-            //$actions = $this->makeRestCall('User', 'GET', array('submission' => $result['id']));
-            $actions = $this->makeRestCall('SubmissionAction', 'GET', array('submission' => $result['id']));
-            foreach ($result['submissionActions'] as $ak => $action) {
+            $this->makeRestCall('SubmissionAction', 'GET', array('submission' => $result['id']));
+            foreach ($result['submissionActions'] as $action) {
 
                 //$results['Results'][$k]['actions'][$ak] = $action;
                 $results['Results'][$k]['urgent'] = $action['urgent'];
@@ -240,7 +238,7 @@ class CaseController extends FormActionController
             ],
             'stays' => [
                 'key' => 'stays',
-                'label' => 'Stays ',
+                'label' => 'Stays & Appeals',
                 'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'stays'], [], true),
             ],
             'reports' => [

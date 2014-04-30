@@ -22,25 +22,30 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
         );
 
         $this->controller = $this->getMock(
-            '\Olcs\Controller\CaseStayController', [
-            'makeRestCall',
-            'fromRoute',
-            'getCase',
-            'generateFormWithData',
-            'getCaseVariables',
-            'notFoundAction',
-            'redirect',
-            'processAdd',
-            'processEdit'
+            '\Olcs\Controller\CaseStayController',
+            [
+                'makeRestCall',
+                'fromRoute',
+                'getCase',
+                'generateFormWithData',
+                'getCaseVariables',
+                'notFoundAction',
+                'redirect',
+                'processAdd',
+                'processEdit',
+                'setBreadcrumb'
             ]
         );
 
         $this->view = $this->getMock(
-            'Zend\View\Model\ViewModel', [
-            'setVariables',
-            'setTemplate'
+            'Zend\View\Model\ViewModel',
+            [
+                'setVariables',
+                'setTemplate'
             ]
         );
+
+        $this->pm = $this->getMock('\stdClass', array('get'));
 
         parent::setUp();
     }
@@ -54,21 +59,17 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
      * @param array $searchResults
      *
      */
-    public function testIndexAction($caseId, $searchResults)
+    public function testIndexAction($licenceId, $caseId)
     {
-        $restEnd = 'Stay';
-        $restComm = 'GET';
-        $restParam = array('case' => $caseId);
+        $this->getFromRoute(0, 'case', $caseId);
+        $this->getFromRoute(1, 'licence', $licenceId);
 
         $this->controller->expects($this->once())
-            ->method('fromRoute')
-            ->with($this->equalTo('case'))
-            ->will($this->returnValue($caseId));
+            ->method('setBreadcrumb');
 
-        $this->controller->expects($this->once())
+        $this->controller->expects($this->exactly(2))
             ->method('makeRestCall')
-            ->with($this->equalTo($restEnd), $this->equalTo($restComm), $this->equalTo($restParam))
-            ->will($this->returnValue($searchResults));
+            ->will($this->onConsecutiveCalls($this->getStayRestResult(1), $this->getAppealRestResult()));
 
         $this->controller->expects($this->once())
             ->method('getCaseVariables');
@@ -85,10 +86,7 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
      */
     public function testIndexActionNotFound($caseId)
     {
-        $this->controller->expects($this->once())
-            ->method('fromRoute')
-            ->with($this->equalTo('case'))
-            ->will($this->returnValue($caseId));
+        $this->getFromRoute(0, 'case', $caseId);
 
         $this->controller->expects($this->once())
             ->method('notFoundAction');
@@ -106,8 +104,6 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
      */
     public function testAddAction($caseId, $stayTypeId, $licenceId)
     {
-        $viewTemplate = 'case/add-stay';
-
         $this->getFromRoute(0, 'licence', $licenceId);
         $this->getFromRoute(1, 'case', $caseId);
 
@@ -121,7 +117,10 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
         $this->controller->expects($this->once())
             ->method('makeRestCall')
             ->with('Stay', 'GET', $this->equalTo(array('case' => $caseId)))
-            ->will($this->returnValue($this->getStayRestResult(false, $stayTypeId)));
+            ->will($this->returnValue($this->getEmptyStayRestResult()));
+
+        $this->controller->expects($this->once())
+            ->method('setBreadcrumb');
 
         $this->controller->expects($this->once())
             ->method('generateFormWithData');
@@ -159,7 +158,7 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
         $this->controller->expects($this->at(4))
             ->method('makeRestCall')
             ->with('Stay', 'GET', $this->equalTo(array('case' => $caseId)))
-            ->will($this->returnValue($this->getStayRestResult(true, $stayTypeId)));
+            ->will($this->returnValue($this->getStayRestResult($stayTypeId)));
 
         $this->controller->expects($this->at(5))
             ->method('redirect')
@@ -208,6 +207,9 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
         $this->controller->addAction();
     }
 
+    /**
+     * Tests the edit action fails if the stay id is missing
+     */
     public function testEditActionFailStay()
     {
         $this->getFromRoute(0, 'stay', false);
@@ -222,15 +224,16 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
         $this->controller->editAction();
     }
 
+    /**
+     * Tests the edit action fails if the case id is missing
+     */
     public function testEditActionFailCase()
     {
         $this->getFromRoute(0, 'stay', false);
 
         $this->controller->expects($this->at(1))
             ->method('makeRestCall')
-            ->will($this->returnValue(array('data' => 'data')));
-
-        $this->getFromRoute(2, 'case', false);
+            ->will($this->returnValue(array('case' => array('id' => 24))));
 
         $this->controller->expects($this->once())
             ->method('getCase')
@@ -250,16 +253,14 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->once())
             ->method('makeRestCall')
-            ->will($this->returnValue(array('data' => 'data')));
-
-        $this->getFromRoute(2, 'case', false);
+            ->will($this->returnValue(array('case' => array('id' => 24))));
 
         $this->controller->expects($this->once())
             ->method('getCase')
             ->will($this->returnValue(array('data' => 'data')));
 
-        $this->getFromRoute(4, 'licence', false);
-        $this->getFromRoute(5, 'stayType', $stayTypeId);
+        $this->getFromRoute(3, 'licence', false);
+        $this->getFromRoute(4, 'stayType', $stayTypeId);
 
         $this->controller->expects($this->once())
             ->method('notFoundAction');
@@ -278,30 +279,25 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
      */
     public function testEditAction($caseId, $stayTypeId, $stayId, $licenceId)
     {
-        $restEnd = 'Stay';
-        $restComm = 'GET';
-        $restParam = array('id' => $stayId);
-        $viewTemplate = 'case/add-stay';
-
         $this->getFromRoute(0, 'stay', $stayId);
 
         $this->controller->expects($this->at(1))
             ->method('makeRestCall')
-            ->with($this->equalTo($restEnd), $this->equalTo($restComm), $this->equalTo($restParam))
-            ->will($this->returnValue(array('data' => 'data')));
+            ->will($this->returnValue((array('case' => array('id' => $caseId)))));
 
-        $this->getFromRoute(2, 'case', $caseId);
-
-        $this->controller->expects($this->at(3))
+        $this->controller->expects($this->at(2))
             ->method('getCase')
             ->with($this->equalTo($caseId))
             ->will($this->returnValue(array('data' => 'data')));
 
-        $this->getFromRoute(4, 'licence', $licenceId);
-        $this->getFromRoute(5, 'stayType', $stayTypeId);
+        $this->getFromRoute(3, 'licence', $licenceId);
+        $this->getFromRoute(4, 'stayType', $stayTypeId);
 
         $this->controller->expects($this->once())
             ->method('generateFormWithData');
+
+        $this->controller->expects($this->once())
+            ->method('setBreadcrumb');
 
         $this->controller->editAction();
     }
@@ -322,7 +318,7 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
         $this->controller->expects($this->once())
             ->method('makeRestCall')
             ->with('Stay', 'GET', $this->equalTo(array('case' => $data['case'])))
-            ->will($this->returnValue($this->getStayRestResult(true, $data['stayType'])));
+            ->will($this->returnValue($this->getStayRestResult($data['stayType'])));
 
         $this->controller->expects($this->once())
             ->method('redirect')
@@ -344,7 +340,7 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
         $this->controller->expects($this->once())
             ->method('makeRestCall')
             ->with('Stay', 'GET', $this->equalTo(array('case' => $data['case'])))
-            ->will($this->returnValue($this->getStayRestResult(false, $data['stayType'])));
+            ->will($this->returnValue($this->getEmptyStayRestResult()));
 
         $this->controller->expects($this->at(1))
             ->method('processAdd')
@@ -373,7 +369,7 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
         $this->controller->expects($this->once())
             ->method('makeRestCall')
             ->with('Stay', 'GET', $this->equalTo(array('case' => $data['case'])))
-            ->will($this->returnValue($this->getStayRestResult(false, $data['stayType'])));
+            ->will($this->returnValue($this->getEmptyStayRestResult()));
 
         $this->controller->expects($this->at(1))
             ->method('processAdd')
@@ -394,7 +390,6 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
      *
      * @dataProvider processEditStayProvider
      *
-     * @param array $result
      * @param array $data
      *
      */
@@ -475,8 +470,8 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
     public function indexActionProvider()
     {
         return array(
-            array(24, $this->getStayRestResult(false, 1)),
-            array(24, $this->getStayRestResult(true, 1)),
+            array(7, 24),
+            array(7, 24),
         );
     }
 
@@ -494,18 +489,43 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
         );
     }
 
+    public function getAppealRestResult()
+    {
+        return array(
+            'Results' => array(
+                0 => array(
+                    'id' => 1,
+                    'outcome' => 1,
+                    'reason' => 1,
+                    'deadlineDate' => '',
+                    'appealDate' => '',
+                    'hearingDate' => '',
+                    'decisionDate' => '',
+                    'papersDue' => '',
+                    'papersSent' => ''
+                )
+            )
+        );
+    }
+
     /**
-     * simulates a stay rest result array
+     * simulates a stay rest result array with results
      *
-     * @param bool $results
+     * @param int $stayTypeId
      * @return array
      */
-    public function getStayRestResult($results = true, $stayTypeId)
+    public function getStayRestResult($stayTypeId)
     {
-        if ($results) {
-            return array('Results' => array(0 => array('stayType' => $stayTypeId)));
-        }
+        return array('Results' => array(0 => array('id' => 1,'stayType' => $stayTypeId, 'outcome' => 'stay_status_granted', 'requestDate' => strtotime(time()))));
+    }
 
+    /**
+     * simulates a stay rest result array with no results
+     *
+     * @return array
+     */
+    public function getEmptyStayRestResult()
+    {
         return array('Results' => array());
     }
 
@@ -541,6 +561,7 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
      * Parameters for a successful redirect
      *
      * @param int $caseId
+     * @param int $licenceId
      * @return array
      */
     private function getRedirectSuccess($caseId, $licenceId)
@@ -555,6 +576,7 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
      *
      * @param int $caseId
      * @param int $stayTypeId
+     * @param int $licenceId
      * @return array
      */
     private function getRedirectAddFail($caseId, $stayTypeId, $licenceId)
@@ -565,9 +587,11 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
-     * Paramaeters for a redirect after a failure where a record already existed
+     * Parameters for a redirect after a failure where a record already existed
+     * This is an alias for getRedirectSuccess as they do the same thing
      *
      * @param int $caseId
+     * @param int $licenceId
      * @return array
      */
     private function getRedirectExistsFail($caseId, $licenceId)
@@ -581,6 +605,7 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
      * @param int $caseId
      * @param int $stayId
      * @param int $stayTypeId
+     * @param int $licenceId
      *
      * @return array
      */
@@ -604,7 +629,7 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
     /**
      * Creates a mock class (used for the redirect method)
      *
-     * @param type $redirectInfo
+     * @param array $redirectInfo
      * @return type
      */
     private function getRedirectMock($redirectInfo)
