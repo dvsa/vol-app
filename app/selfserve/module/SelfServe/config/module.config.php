@@ -70,4 +70,9 @@ return array(
             'ViewJsonStrategy',
         ),
     ),
+    'view_helpers' => array(
+        'invokables' => array(
+            'journey' => 'SelfServe\View\Helper\Journey'
+        ),
+    )
 );

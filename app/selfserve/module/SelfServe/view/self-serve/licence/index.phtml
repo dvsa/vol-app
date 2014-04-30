@@ -1,15 +1,27 @@
 <?php
+/*    echo $this->render(
+        'self-serve/navigation/header.phtml',
+        array(
+            'statusArray' => $statusArray,
+            'applicationId' => $applicationId
+        )
+    );
+ */
+    echo $this->journey("moo");
+?>
+
+<?php
     echo $this->render(
         '/partials/page-header.phtml',
         array(
-        'pageTitle' => 'Type of licence',    
+        'pageTitle' => 'Type of licence',
         // 'pageSubTitle'=> 'Tell us about the type of licence you are applying for'
         )
     );
 ?>
 
 <div class="two-thirds">
-    <?php 
+    <?php
     echo $this->partial('self-serve/forms/licence-type', array(
         'licenceTypeForm' => $licenceTypeForm,
     ));

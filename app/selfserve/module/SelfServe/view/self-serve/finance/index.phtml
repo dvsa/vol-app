@@ -1,3 +1,12 @@
+<?php
+    echo $this->render(
+        'navigation/header.phtml',
+        array(
+        'statusArray' => $statusArray
+        )
+    );
+?>
+
 <div id="finance-authorisation">
     <h1><?php echo $this->translate('Operating centres');?></h1>
 

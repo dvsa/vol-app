@@ -15,7 +15,7 @@ use Common\Controller\FormJourneyActionController;
 use Zend\View\Model\ViewModel;
 
 class IndexController extends FormJourneyActionController{
-    
+
     /**
      * Construct the LicenceType Controller class
      * Sets the current section only.
@@ -24,10 +24,10 @@ class IndexController extends FormJourneyActionController{
     {
         $this->setCurrentSection('licence-type');
     }
-    
+
     /**
      * Generates the next step form depending on which step the user is on.
-     * 
+     *
      * @return \Zend\View\Model\ViewModel
      */
     public function generateStepFormAction() {
@@ -35,10 +35,10 @@ class IndexController extends FormJourneyActionController{
         $step = $this->params()->fromRoute('step');
 
         $this->setCurrentStep($step);
-        
+
         // create form
         $form = $this->generateSectionForm();
-        
+
         // Do the post
         $form = $this->formPost($form, $this->getStepProcessMethod($this->getCurrentStep()), ['applicationId' => $applicationId]);
 
@@ -48,17 +48,17 @@ class IndexController extends FormJourneyActionController{
         {
             $form->setData($formData);
         }
-        
+
         // render the view
         $view = new ViewModel(['licenceTypeForm' => $form]);
         $view->setTemplate('self-serve/licence/index');
         return $view;
     }
-    
-		
+
+
     /**
-     * Method to process the operator location. 
-     * 
+     * Method to process the operator location.
+     *
      * @param array $valid_data
      * @param \Zend\Form $form
      * @param array $journeyData
@@ -74,44 +74,44 @@ class IndexController extends FormJourneyActionController{
             'niFlag' => $operatorLocation == 'ni' ? 1 : 0,
             'version' => $valid_data['version'],
         );
-        
+
         //if location is Norther Ireland, the operator type is always goods
         if ($operatorLocation == 'ni'){
             $data['goodsOrPsv'] = 'goods';
         }
-        
+
         $this->processEdit($data, 'Licence');
-        
+
         $next_step = $this->evaluateNextStep($form);
-        $this->redirect()->toRoute('selfserve/licence-type', 
+        $this->redirect()->toRoute('selfserve/licence-type',
                                     array('applicationId' => $params['applicationId'], 'step' => $next_step));
-        
+
     }
-    
+
     /**
      * Returns persisted data (if exists) to popuplate form
      *
      * @return array
      */
     public function getOperatorLocationFormData()
-    {   
+    {
     	$entity = $this->_getLicenceEntity();
     	if (empty($entity['niFlag']))
     	    return array('version' => $entity['version']);
-    	
+
         return array(
             'version' => $entity['version'],
             'operator_location' => array(
-    	        'operator_location' => $entity['niFlag'] ? 'ni' : 'uk', 
+    	        'operator_location' => $entity['niFlag'] ? 'ni' : 'uk',
             ),
     	);
     }
-    
-    
-    
+
+
+
     /**
-     * Method to process the operator type. 
-     * 
+     * Method to process the operator type.
+     *
      * @param array $valid_data
      * @param \Zend\Form $form
      * @param array $journeyData
@@ -127,35 +127,35 @@ class IndexController extends FormJourneyActionController{
                 'version' => $valid_data['version'],
         );
         $this->processEdit($data, 'Licence');
-        
+
         $next_step = $this->evaluateNextStep($form);
-        $this->redirect()->toRoute('selfserve/licence-type',    
-                                array('applicationId' => $params['applicationId'], 
+        $this->redirect()->toRoute('selfserve/licence-type',
+                                array('applicationId' => $params['applicationId'],
                                       'step' => $next_step));
     }
-    
-    
+
+
     /**
      * Returns persisted data (if exists) to popuplate form
-     * 
+     *
      * @return array
      */
     public function getOperatorTypeFormData()
     {
     	$entity = $this->_getLicenceEntity();
-    	
+
         return array(
             'version' => $entity['version'],
             'operator-type' => array(
-    	        'operator-type' => $entity['goodsOrPsv'], 
+    	        'operator-type' => $entity['goodsOrPsv'],
             ),
     	);
     }
-    
-    
+
+
     /**
-     * Method to process the licence type. 
-     * 
+     * Method to process the licence type.
+     *
      * @param array $valid_data
      * @param \Zend\Form $form
      * @param array $journeyData
@@ -171,13 +171,13 @@ class IndexController extends FormJourneyActionController{
                 'version' => $valid_data['version'],
         );
         $this->processEdit($data, 'Licence');
-        
+
         $next_step = $this->evaluateNextStep($form);
-        $this->redirect()->toRoute('selfserve/licence-type-complete', 
-                                array('applicationId' => $params['applicationId'], 
+        $this->redirect()->toRoute('selfserve/licence-type-complete',
+                                array('applicationId' => $params['applicationId'],
                                       'step' => $next_step));
     }
-    
+
     /**
      * Returns persisted data (if exists) to popuplate form
      *
@@ -186,7 +186,7 @@ class IndexController extends FormJourneyActionController{
     public function getLicenceTypeFormData()
     {
     	$entity = $this->_getLicenceEntity();
-    	
+
     	return array(
     	    'version' => $entity['version'],
     	    'licence-type' => array(
@@ -194,10 +194,10 @@ class IndexController extends FormJourneyActionController{
     	    ),
     	);
     }
-    
+
     /**
-     * Method to process the licence type for PSV type operators 
-     * 
+     * Method to process the licence type for PSV type operators
+     *
      * @param array $valid_data
      * @param \Zend\Form $form
      * @param array $journeyData
@@ -212,14 +212,14 @@ class IndexController extends FormJourneyActionController{
                 'version' => $valid_data['version'],
         );
         $this->processEdit($data, 'Licence');
-        
+
         $next_step = $this->evaluateNextStep($form);
-        $this->redirect()->toRoute('selfserve/licence-type-complete', 
+        $this->redirect()->toRoute('selfserve/licence-type-complete',
                                 array('applicationId' => $params['applicationId'],
                                       'step' => $next_step));
- 
+
     }
-    
+
     /**
      * Returns persisted data (if exists) to popuplate form
      *
@@ -228,7 +228,7 @@ class IndexController extends FormJourneyActionController{
     public function getLicenceTypePsvFormData()
     {
         $entity = $this->_getLicenceEntity();
-    	
+
     	return array(
     	    'version' => $entity['version'],
     	    'licence-type-psv' => array(
@@ -236,11 +236,11 @@ class IndexController extends FormJourneyActionController{
     	    ),
     	);
     }
-    
+
     /**
      * Method to process the licence type for NI.
-     * Should insist that goods_or_psv = goods? 
-     * 
+     * Should insist that goods_or_psv = goods?
+     *
      * @param array $valid_data
      * @param \Zend\Form $form
      * @param array $journeyData
@@ -251,19 +251,19 @@ class IndexController extends FormJourneyActionController{
         $licence = $this->_getLicenceEntity();
 
         $data = array(
-        	'id' => $licence['id'],        
+        	'id' => $licence['id'],
         	'licenceType' => $valid_data['licence-type-ni']['licence_type'],
                 'version' => $valid_data['version'],
         );
         $this->processEdit($data, 'Licence');
 
         $next_step = $this->evaluateNextStep($form);
-        $this->redirect()->toRoute('selfserve/licence-type-complete',  
-                                array('applicationId' => $params['applicationId'], 
+        $this->redirect()->toRoute('selfserve/licence-type-complete',
+                                array('applicationId' => $params['applicationId'],
                                       'step' => $next_step));
- 
+
     }
-    
+
     /**
      * Returns persisted data (if exists) to popuplate form
      *
@@ -272,7 +272,7 @@ class IndexController extends FormJourneyActionController{
     public function getLicenceTypeNiFormData()
     {
         $entity = $this->_getLicenceEntity();
-        
+
     	return array(
     	    'version' => $entity['version'],
     	    'licence-type-ni' => array(
@@ -280,8 +280,8 @@ class IndexController extends FormJourneyActionController{
     	    ),
     	);
     }
-    
-    
+
+
     /**
      * End of the journey redirect to business type
      */
@@ -290,9 +290,9 @@ class IndexController extends FormJourneyActionController{
         $applicationId = $this->params()->fromRoute('applicationId');
 
         // persist data if possible
-        $this->redirect()->toRoute('selfserve/business-type', 
-                                array('applicationId' => $applicationId, 'step' => 
+        $this->redirect()->toRoute('selfserve/business-type',
+                                array('applicationId' => $applicationId, 'step' =>
                                  'business-type'));
     }
-   
+
 }
