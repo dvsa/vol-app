@@ -1,0 +1,33 @@
+<div class="table__header">
+    <h3><?php echo $this->translate('submission-actions'); ?></h3>
+</div>
+<?php 
+    foreach($data as $key => $action) :
+?>
+<div>
+    <div>
+        <?php echo ucfirst($action['submissionActionType']).' - '.$action['submissionActionStatus']; ?>
+    </div>
+    <p>
+        <?php echo ucfirst($action['comment']); ?>
+    </p>
+    <table>
+        <thead>
+            <th>From:</th>
+            <th>To:</th>
+            <th>Created:</th>
+            <th>Urgent:</th>
+        </thead>
+        <tbody>
+            <tr>
+                <td><?php echo ucfirst($action['userSender']['displayName']); ?></td>
+                <td><?php echo ucfirst($action['userRecipient']['displayName']); ?></td>
+                <td><?php echo ucfirst($action['createdOn']); ?></td>
+                <td><?php echo ucfirst($action['urgent']); ?></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<?php    
+endforeach; 
+?>

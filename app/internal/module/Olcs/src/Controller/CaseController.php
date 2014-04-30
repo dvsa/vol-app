@@ -29,14 +29,12 @@ class CaseController extends FormActionController
         $action = $this->fromRoute('tab');
         
         $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licence)));
-        
+        $params = $this->params()->fromPost();
+        $params = array_merge($params, array('case' => $caseId, 'licence' => $licence));
         if ($this->params()->fromPost('action')) {
             return $this->forward()->dispatch(
                 'SubmissionController',
-                array(
-                    'action' => $this->params()->fromPost('action'),
-                    'licence' => $licence,
-                    'case' => $caseId)
+                $params
             );
             /*return $this->redirect()->toRoute($this->params()->fromPost('table'), array('licence' => $licence,
                         'case' => $caseId,
@@ -86,11 +84,6 @@ class CaseController extends FormActionController
         $view->setTemplate('case/manage');
         return $view;
     }
-    
-    private function checkForSubmissions()
-    {
-        
-    }
 
     public function getSubmissions($case)
     {
@@ -109,27 +102,21 @@ class CaseController extends FormActionController
                 )
             )
         );
-        
         $submissionActions = $this->getServiceLocator()->get('config')['static-list-data'];
         $results = $this->makeRestCall('Submission', 'GET', array('vosaCase' => $case), $bundle);
         foreach ($results['Results'] as $k => $result) {
-            //$actions = $this->makeRestCall('User', 'GET', array('submission' => $result['id']));
             $actions = $this->makeRestCall('SubmissionAction', 'GET', array('submission' => $result['id']));
             foreach ($result['submissionActions'] as $ak => $action) {
-                //$results['Results'][$k]['actions'][$ak] = $action;
                 $results['Results'][$k]['urgent'] = $action['urgent'];
-
                 if (isset($action['userRecipient']['displayName'])) {
-
                     $results['Results'][$k]['currentlyWith'] = $action['userRecipient']['displayName'];
                 }
-
                 $actions = isset($submissionActions['submission_'.$action['submissionActionType']])
                     ? $submissionActions['submission_'.$action['submissionActionType']] : '';
                 $results['Results'][$k]['status'] = isset($actions[$action['submissionActionStatus']])
                     ? $actions[$action['submissionActionStatus']] : '';
                 $results['Results'][$k]['type'] = ucfirst($action['submissionActionType']);
-
+                
                 //We only need the data from the top action - which is the latest.
                 break;
             }
@@ -572,9 +559,15 @@ class CaseController extends FormActionController
         $data = array_merge($data, $data['fields']);
 
         $result = $this->processAdd($data, 'VosaCase');
-
+        $licence = $this->params()->fromRoute('licence');
         if (isset($result['id'])) {
-            $this->redirect()->toRoute('case_manage', array('case' => $result['id'], 'tab' => 'overview'));
+            $this->redirect()->toRoute(
+                'case_manage',
+                array(
+                    'licence' => $licence,
+                    'case' => $result['id'],
+                    'tab' => 'overview')
+            );
         }
     }
 

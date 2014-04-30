@@ -12,6 +12,14 @@ use Zend\View\Model\ViewModel;
 
 class SubmissionController extends FormActionController
 {
+    
+    public $routeParams = array();
+    
+    public function onDispatch(\Zend\Mvc\MvcEvent $e)
+    {
+        $this->routeParams = $this->getParams(array('case', 'licence', 'id', 'action'));
+        parent::onDispatch($e);
+    }
 
     /**
      * Add submission action
@@ -19,40 +27,85 @@ class SubmissionController extends FormActionController
      */
     public function addAction()
     {
-        $routeParams = $this->getParams(array('case', 'licence', 'id', 'action'));
-        $this->setBreadcrumb(
-            array(
-                'licence_case_list/pagination' => array('licence' => $routeParams['licence']),
-                'case_manage' => array(
-                    'case' => $routeParams['case'],
-                    'licence' => $routeParams['licence'],
-                    'tab' => 'overview'
-                )
-            )
-        );
+        $this->setBreadcrumb();
         
-        $submission = $this->createSubmission($routeParams);
+        $submission = $this->createSubmission($this->routeParams);
         $data = array(
             'createdBy' => 1,
             'text' => $submission,
-            'vosaCase' => $routeParams['case'],
+            'vosaCase' => $this->routeParams['case'],
         );
         
         if ($this->getRequest()->isPost()) {
             $result = $this->processAdd($data, 'Submission');
+            //$result = array('id' => 999);
+            return $this->redirect()->toRoute('submission', array('licence' => $this->routeParams['licence'],
+                        'case' => $this->routeParams['case'],
+                        'id' => $result['id'],
+                        'action' => strtolower($this->routeParams['action'])));
         }
         
         $submission = json_decode($submission, true);
-        $routeParams['id'] = $result['id'];
-        $routeParams['action'] = 'post';
-        $formAction = $this->url()->fromRoute('submission', $routeParams);
+        return $this->getSubmissionView($submission);
+    }
+    
+    /**
+     * Edit a conviction
+     * @return type
+     */
+    public function editAction()
+    {
+        $this->setBreadcrumb();
+        if ($this->getRequest()->isPost()) {
+            return $this->redirect()->toRoute('submission', array('licence' => $this->routeParams['licence'],
+                        'case' => $this->routeParams['case'],
+                        'id' => $this->params()->fromPost('id'),
+                        'action' => 'edit'));
+        }
+         $bundle = array(
+            'children' => array(
+                'submissionActions' => array(
+                    'properties' => 'ALL',
+                    'children' => array(
+                        'userSender' => array(
+                            'properties' => 'ALL'
+                        ),
+                        'userRecipient' => array(
+                            'properties' => 'ALL'
+                        ),
+                    )
+                )
+            )
+        );
+        $submissionData = $this->makeRestCall('Submission', 'GET', array('id' => $this->routeParams['id']), $bundle);
+        $submissionActions = $this->getServiceLocator()->get('config')['static-list-data'];
+        $submission['data'] = json_decode($submissionData['text']);
+        foreach ($submissionData['submissionActions'] as &$action) {
+            $actions = isset($submissionActions['submission_'.$action['submissionActionType']])
+                    ? $submissionActions['submission_'.$action['submissionActionType']] : '';
+            $action['submissionActionStatus'] = $actions[$action['submissionActionStatus']];
+        }
+        $submission['submissionActions'] = $submissionData['submissionActions'];
+        
+        return $this->getSubmissionView($submission);
+    }
+    
+    /**
+     * Returns a submission view for add and edit
+     * @param type $submission
+     * @return type
+     */
+    public function getSubmissionView($submission)
+    {
+        $this->routeParams['action'] = 'post';
+        $formAction = $this->url()->fromRoute('submission', $this->routeParams);
         $view = $this->getViewModel(
             array(
                 'params' => array(
                     'formAction' => $formAction,
                     'pageTitle' => 'case-submission',
                     'pageSubTitle' => 'case-submission-text',
-                    'data' => $submission
+                    'submission' => $submission
                 )
             )
         );
@@ -61,27 +114,20 @@ class SubmissionController extends FormActionController
         return $view;
     }
     
-    public function editAction()
-    {
-        print 'edit action';
-        return false;
-    }
-    
     /**
-     * 
+     * Redirects to either recommendation or decision from submission
      * @return type
      */
     public function postAction()
     {
-        $routeParams = $this->getParams(array('case', 'licence', 'id'));
         $params = array(
-            'case' => $routeParams['case'],
-            'licence' => $routeParams['case'],
-            'id' => $routeParams['id']);
+            'case' => $this->routeParams['case'],
+            'licence' => $this->routeParams['licence'],
+            'id' => $this->routeParams['id']);
         if ($this->params()->fromPost('decision')) {
             $params['action'] = 'decision';
         } elseif ($this->params()->fromPost('recommend')) {
-            $params['action'] = 'recomendation';
+            $params['action'] = 'recommendation';
         }
         return $this->redirect()->toRoute(
             'submission',
@@ -90,59 +136,74 @@ class SubmissionController extends FormActionController
     }
     
     /**
-     * Recommendation form
+     * returns recommendation form
      * @return type
      */
-    public function recomendationAction()
+    public function recommendationAction()
     {
+        $this->setBreadcrumb($this->getRecDecBreadcrumb());
         return $this->formView('recommend');
     }
     
     /**
-     * Decision form
+     * returns decision form
      * @return type
      */
     public function decisionAction()
     {
+        $this->setBreadcrumb($this->getRecDecBreadcrumb());
         return $this->formView('decision');
     }
     
+    private function getRecDecBreadcrumb()
+    {
+        return array(
+                'submission' => array(
+                    'case' => $this->routeParams['case'],
+                    'licence' => $this->routeParams['licence'],
+                    'action' => $this->routeParams['action'],
+                    'id' => $this->routeParams['id']
+                ),
+            );
+    }
+    
     /**
-     * Return json encoded submission
+     * Return json encoded submission based on submission_config
      * @param type $routeParams
      * @return type
      */
     public function createSubmission($routeParams)
     {
         $licenceData = $this->makeRestCall('Licence', 'GET', array('id' => $routeParams['licence']));
-        $caseData = array();
-        //$caseData = $this->makeRestCall('VosaCase', 'GET', array('id' => $routeParams['case']));
+        $submissionConfig = $this->getServiceLocator()->get('config')['submission_config'];
         $submission = array();
-        $submission['case-summary-info'] = $caseData;
-        $submission['persons'] = array();
-        if (in_array(strtolower($licenceData['licenceType']), array('standard national', 'standard international'))) {
-            $submission['transport-managers'] = array();
+        foreach ($submissionConfig['sections'] as $section => $config) {
+            if ($this->submissionExclude($section, $config, $licenceData)) {
+                $submission[$section]['data'] = array();
+                $submission[$section]['notes'] = null;
+            }
         }
-        $submission['outstanding-applications']['data'] = array();
-        $submission['outstanding-applications']['notes'] = array();
-        $submission['environmental'] = array();
-        $submission['objections'] = array();
-        $submission['representations'] = array();
-        $submission['previous-history'] = array();
-        $submission['operating-centre'] = array();
-        $submission['conditions'] = array();
-        $submission['undertakings'] = array();
-        $submission['annual-test-history'] = array();
-        $submission['prohibition-history'] = array();
-        $submission['conviction-history'] = array();
-        if (strtolower($licenceData['goodsOrPsv']) == 'psv') {
-            $submission['bus-services-registered'] = array();
-            $submission['bus-compliance-issues'] = array();
-        }
-        $submission['current-submission'] = array();
-        //$submission['recommendation-decision'] = array();
         $jsonSubmission = json_encode($submission);
         return $jsonSubmission;
+    }
+    
+    /**
+     * builds a submission and excludes sections based on rules in
+     * the submission config
+     * @param type $section
+     * @param type $config
+     * @param type $licenceData
+     * @return boolean
+     */
+    public function submissionExclude($section, $config, $licenceData)
+    {
+        if (!isset($config['exclude'])) {
+            return true;
+        }
+        if (in_array(strtolower($licenceData[$config['exclude']['column']]), $config['exclude']['values'])) {
+            return true;
+        }
+        return false;
     }
     
     /**
@@ -156,7 +217,7 @@ class SubmissionController extends FormActionController
             $type,
             array(
                 'submission' => $this->params()->fromRoute('id'),
-                'userSender' => 2)
+                'userSender' => 1)
         );
         $form = $this->formPost($form, 'processRecDecForm');
         $view = $this->getViewModel(
@@ -181,12 +242,11 @@ class SubmissionController extends FormActionController
     {
         $data = array_merge($data, $data['main']);
         $result = $this->processAdd($data, 'SubmissionAction');
-        $routeParams = $this->getParams(array('case', 'licence', 'id'));
         return $this->redirect()->toRoute(
             'case_manage',
             array(
-                'case' => $routeParams['case'],
-                'licence' => $routeParams['licence'],
+                'case' => $this->routeParams['case'],
+                'licence' => $this->routeParams['licence'],
                 'tab' => 'overview')
         );
     }
@@ -220,5 +280,22 @@ class SubmissionController extends FormActionController
         $form = $generator->setFormConfig($formConfig)->createForm($formType);
         $form->setData($data);
         return $form;
+    }
+    
+    /**
+     * Overrides abstract class to set breadcrumb for all submission routes
+     * @param type $navRoutes
+     */
+    public function setBreadcrumb($navRoutes = array())
+    {
+        $thisNavRoutes = array(
+                'licence_case_list/pagination' => array('licence' => $this->routeParams['licence']),
+                'case_manage' => array(
+                    'case' => $this->routeParams['case'],
+                    'licence' => $this->routeParams['licence'],
+                    'tab' => 'overview'
+                ));
+        $allNavRoutes = array_merge($thisNavRoutes, $navRoutes);
+        parent::setBreadcrumb($allNavRoutes);
     }
 }

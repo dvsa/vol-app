@@ -243,4 +243,5 @@ return array(
         )
     ),
     //-------- End navigation -----------------
+    'submission_config' => include __DIR__ . '/submission/submission.config.php',
 );

@@ -10,11 +10,18 @@
 <div  class="two-thirds">
 <?php //echo print_r($this->params['data']); ?>
 <?php 
-    foreach($this->params['data'] as $key => $section) { 
+    foreach($this->params['submission']['data'] as $key => $section) { 
         echo $this->partial('submission/partials/section.phtml', array(
         'heading' => $key,
         'data' => $section)); 
     } 
+?>
+</div>
+<div  class="two-thirds">
+    <?php 
+        echo $this->partial('submission/partials/decRecDisplay.phtml', array(
+        'heading' => $key,
+        'data' => $this->params['submission']['submissionActions'])); 
 ?>
 </div>
 <div  class="two-thirds">
