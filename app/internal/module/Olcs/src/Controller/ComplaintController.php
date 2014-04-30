@@ -59,6 +59,8 @@ class ComplaintController extends FormActionController
         $form = $this->generateForm(
             'complaint', 'processComplaint'
         );
+        var_dump($_POST);exit;
+
         $form->setData($data);
         //$form->setMessages(array('blah' => 'This is a test message'));
         $view = new ViewModel(
@@ -177,15 +179,41 @@ class ComplaintController extends FormActionController
         $routeParams = $this->getParams(array('action', 'licence', 'case'));
 
         if (strtolower($routeParams['action']) == 'edit') {
-//var_dump($data['complaint-details']);exit;
             $result = $this->processEdit($data['complaint-details'], 'Complaint');
             $result = $this->processEdit($data['complainant-details'], 'Person');
             $result = $this->processEdit($data['driver-details'], 'Person');
-
         } else {
-            $result = $this->processAdd($data['complaint-details'], 'Complaint');
-            $result = $this->processAdd($data['complainant-details'], 'Person');
-            $result = $this->processAdd($data['driver-details'], 'Person');
+            $data['complaint-details']['value'] = '';
+            // set up data
+            //$data = $this->getNewComplaintData();
+            // add contact details
+            $result = $this->processAdd($data['driver-details'], 'ContactDetails');
+            var_dump($result);exit;
+
+            // add driver to person table
+            $result = $this->processAdd($data['driver-details'], 'Driver');
+            var_dump($result);exit;
+            // add complainant to person table
+
+            // add contact details for both persons
+
+            // add contact details to driver table
+
+            // add complaint
+
+            // add link to complaint_case table
+
+            $newComplainantData = [
+                'version' => 1,
+                'organisation_id' => 7,
+                'contact_details_type' => 'Complainant',
+                'is_deleted' => 0,
+                'person' => $data['complainant-details'],
+                ];
+            $result = $this->processAdd($newComplainantData, 'ContactDetails');
+            //$result = $this->processAdd($data['complaint-details'], 'Complaint');
+            //$result = $this->processAdd($data['complainant-details'], 'Person');
+            //$result = $this->processAdd($data['driver-details'], 'Person');
 
         }
 
@@ -195,5 +223,12 @@ class ComplaintController extends FormActionController
                 'case' => $routeParams['case'], 'licence' => $routeParams['licence']
             )
         );
+    }
+    /**
+     * Method to map the data in the correct format
+     */
+    public function getNewComplaintData()
+    {
+
     }
 }
