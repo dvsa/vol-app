@@ -14,14 +14,6 @@ namespace Olcs\Controller;
 use Common\Controller\FormActionController;
 use Zend\View\Model\ViewModel;
 
-/**
- * Search controller
- *
- * Search for operators and licences
- *
- * @author Mike Cooper <michael.cooper@valtech.co.uk>
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 class ConvictionController extends FormActionController
 {
 
@@ -33,15 +25,16 @@ class ConvictionController extends FormActionController
     public function addAction()
     {
         $routeParams = $this->getParams(array('case', 'licence', 'id'));
-
-        if (isset($_POST['cancel-conviction']))
+        
+        if (isset($_POST['cancel-conviction'])) {
             return $this->redirect()->toRoute('case_convictions', array('case' => $routeParams['case']));
-
+        }
+        
         // Below is for setting route params for the breadcrumb
         $this->setBreadcrumb(
             array(
                 'licence_case_list/pagination' => array('licence' => $routeParams['licence']),
-                'case_convictions' => array('case' => $routeParams['case'])
+                'case_convictions' => array('case' => $routeParams['case'], 'licence' => $routeParams['licence'])
             )
         );
 
@@ -52,9 +45,7 @@ class ConvictionController extends FormActionController
             return $this->getResponse()->setStatusCode(404);
         }
 
-        $form = $this->generateForm(
-            'conviction', 'processConviction'
-        );
+        $form = $this->generateForm('conviction', 'processConviction');
         $form->setData($data);
         //$form->setMessages(array('blah' => 'This is a test message'));
         $view = new ViewModel(
@@ -80,9 +71,10 @@ class ConvictionController extends FormActionController
                 'id',
             )
         );
-        if (isset($_POST['cancel-conviction']))
+        if (isset($_POST['cancel-conviction'])) {
             return $this->redirect()->toRoute('case_convictions', array('case' => $routeParams['case']));
-
+        }
+        
         $this->setBreadcrumb(
             array(
                 'licence_case_list/pagination' => array('licence' => $routeParams['licence']),
@@ -112,7 +104,10 @@ class ConvictionController extends FormActionController
         $data['offence'] = $data;
 
         $form = $this->generateFormWithData(
-            'conviction', 'processConviction', $data, true
+            'conviction',
+            'processConviction',
+            $data,
+            true
         );
 
         $view = new ViewModel(
@@ -155,7 +150,8 @@ class ConvictionController extends FormActionController
         return $this->redirect()->toRoute(
             'case_convictions',
             array(
-                'case' => $routeParams['case'], 'licence' => $routeParams['licence']
+                'case' => $routeParams['case'],
+                'licence' => $routeParams['licence']
             )
         );
     }
