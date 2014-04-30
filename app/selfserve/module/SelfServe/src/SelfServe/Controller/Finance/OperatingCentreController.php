@@ -60,7 +60,7 @@ class OperatingCentreController extends AbstractFinanceController
 
         $view->setTemplate('self-serve/finance/operating-centre/index');
 
-        return $this->renderLayout($view, 'operatingCentre');
+        return $this->renderLayoutWithSubSections($view, 'operatingCentre');
     }
 
     /**
@@ -76,7 +76,7 @@ class OperatingCentreController extends AbstractFinanceController
 
         $view = $this->getViewModel(['form' => $form]);
         $view->setTemplate('self-serve/finance/operating-centre/add');
-        return $this->renderLayout($view, 'operatingCentre');
+        return $this->renderLayoutWithSubSections($view, 'operatingCentre');
     }
 
     /**
@@ -109,7 +109,7 @@ class OperatingCentreController extends AbstractFinanceController
 
         $view = $this->getViewModel(['form' => $form]);
         $view->setTemplate('self-serve/finance/operating-centre/edit');
-        return $this->renderLayout($view, 'operatingCentre');
+        return $this->renderLayoutWithSubSections($view, 'operatingCentre');
     }
 
     /**

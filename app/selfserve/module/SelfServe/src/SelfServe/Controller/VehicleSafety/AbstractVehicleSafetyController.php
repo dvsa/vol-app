@@ -1,21 +1,21 @@
 <?php
 
 /**
- * Abstract Finance Controller
+ * Abstract Vehicle Safety Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
-namespace SelfServe\Controller\Finance;
+namespace SelfServe\Controller\VehicleSafety;
 
 use SelfServe\Controller\AbstractApplicationController;
 
 /**
- * Abstract Finance Controller
+ * Abstract Vehicle Safety Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-abstract class AbstractFinanceController extends AbstractApplicationController
+abstract class AbstractVehicleSafetyController extends AbstractApplicationController
 {
     /**
      * Render the layout
@@ -29,16 +29,17 @@ abstract class AbstractFinanceController extends AbstractApplicationController
 
         $this->setSubSections(
             array(
-                'operatingCentre' => array(
-                    'label' => 'selfserve-app-subSection-operating-centre-oc',
-                    'route' => 'selfserve/finance/operating_centre',
+                'vehicles' => array(
+                    'label' => 'selfserve-app-subSection-vehicle-safety-vehicle',
+                    // @todo Change this to the vehicle page once complete
+                    'route' => 'selfserve/vehicle-safety/vehicle-action/vehicle-add',
                     'routeParams' => array(
                         'applicationId' => $applicationId
                     )
                 ),
-                'financialEvidence' => array(
-                    'label' => 'selfserve-app-subSection-operating-centre-fe',
-                    'route' => 'selfserve/finance/financial_evidence',
+                'safety' => array(
+                    'label' => 'selfserve-app-subSection-vehicle-safety-safety',
+                    'route' => 'selfserve/vehicle-safety/safety-action',
                     'routeParams' => array(
                         'applicationId' => $applicationId
                     )

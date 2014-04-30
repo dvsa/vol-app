@@ -27,7 +27,7 @@ class FinancialEvidenceController extends AbstractFinanceController
         $view = $this->getViewModel();
         $view->setTemplate('self-serve/finance/financial-evidence/index');
 
-        return $this->renderLayout($view, 'financialEvidence');
+        return $this->renderLayoutWithSubSections($view, 'financialEvidence');
     }
 
     public function completeAction()

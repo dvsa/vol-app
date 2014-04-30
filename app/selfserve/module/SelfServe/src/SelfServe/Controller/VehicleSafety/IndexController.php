@@ -6,7 +6,7 @@
  * @author S Lizzio <shaun.lizzio@valtech.co.uk>
  */
 
-namespace SelfServe\Controller\VehiclesSafety;
+namespace SelfServe\Controller\VehicleSafety;
 
 use Common\Controller\FormJourneyActionController;
 use Zend\View\Model\ViewModel;

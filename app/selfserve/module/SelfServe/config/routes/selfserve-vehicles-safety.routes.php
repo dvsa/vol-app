@@ -9,7 +9,7 @@ return [
                 'applicationId' => '[0-9]+'
             ),
             'defaults' => array(
-                'controller' => 'Selfserve\VehiclesSafety\Index',
+                'controller' => 'Selfserve\VehicleSafety\Index',
                 'action' => 'index',
                 'step' => 'index'
             )
@@ -21,8 +21,23 @@ return [
                 'options' => array(
                     'route' => 'safety',
                     'defaults' => array(
-                        'controller' => 'SelfServe\VehiclesSafety\Safety',
+                        'controller' => 'SelfServe\VehicleSafety\Safety',
                         'action' => 'index'
+                    )
+                ),
+                'may_terminate' => true,
+                'child_routes' => array(
+                    'workshop' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/workshop/:action[/:id]',
+                            'constraints' => array(
+                                'id' => '[0-9]+'
+                            ),
+                            'defaults' => array(
+                                'controller' => 'SelfServe\VehicleSafety\Workshop'
+                            )
+                        )
                     )
                 )
             ),
@@ -38,7 +53,7 @@ return [
                         'options' => array(
                             'route' => '/add',
                             'defaults' => array(
-                                'controller' => 'SelfServe\VehiclesSafety\Vehicle',
+                                'controller' => 'SelfServe\VehicleSafety\Vehicle',
                                 'action' => 'add'
                             )
                         )
@@ -51,7 +66,7 @@ return [
                                 'vehicleId' => '[0-9]+'
                             ),
                             'defaults' => array(
-                                'controller' => 'SelfServe\VehiclesSafety\Vehicle',
+                                'controller' => 'SelfServe\VehicleSafety\Vehicle',
                                 'action' => 'edit'
                             )
                         )
@@ -64,7 +79,7 @@ return [
                                 'vehicleId' => '[0-9]+'
                             ),
                             'defaults' => array(
-                                'controller' => 'SelfServe\VehiclesSafety\Vehicle',
+                                'controller' => 'SelfServe\VehicleSafety\Vehicle',
                                 'action' => 'delete'
                             )
                         )

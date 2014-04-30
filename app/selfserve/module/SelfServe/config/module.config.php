@@ -41,11 +41,12 @@ return array(
             'SelfServe\BusinessType\Index' => 'SelfServe\Controller\BusinessType\IndexController',
             'SelfServe\Finance\Index' => 'SelfServe\Controller\Finance\IndexController',
             'SelfServe\Finance\OperatingCentreController' => 'SelfServe\Controller\Finance\OperatingCentreController',
-            'SelfServe\VehiclesSafety\Index' => 'SelfServe\Controller\VehiclesSafety\IndexController',
-            'SelfServe\VehiclesSafety\Vehicle' => 'SelfServe\Controller\VehiclesSafety\VehicleController',
+            'SelfServe\VehicleSafety\Index' => 'SelfServe\Controller\VehicleSafety\IndexController',
+            'SelfServe\VehicleSafety\Vehicle' => 'SelfServe\Controller\VehicleSafety\VehicleController',
+            'SelfServe\VehicleSafety\Safety' => 'SelfServe\Controller\VehicleSafety\SafetyController',
+            'SelfServe\VehicleSafety\Workshop' => 'SelfServe\Controller\VehicleSafety\WorkshopController',
             'SelfServe\Finance\FinancialEvidenceController' => 'SelfServe\Controller\Finance\FinancialEvidenceController',
             'SelfServe\PreviousHistory\Index' => 'SelfServe\Controller\PreviousHistory\IndexController',
-            'SelfServe\VehiclesSafety\Safety' => 'SelfServe\Controller\VehiclesSafety\SafetyController'
         )
     ),
     'local_forms_path' => __DIR__ . '/../src/SelfServe/Form/Forms/',
