@@ -31,7 +31,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
                 'setData',
                 'processEdit',
                 'processAdd',
-                'getView',
+                'getViewModel',
                 'createSubmission'
             )
         );
@@ -78,7 +78,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         );
         
         $this->controller->expects($this->once())
-            ->method('getView')
+            ->method('getViewModel')
             ->will($this->returnValue($view));
         
         $view->expects($this->once())
