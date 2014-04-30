@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Case Stay Controller
+ * Case Penalty Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
@@ -11,36 +11,10 @@ namespace Olcs\Controller;
 use Zend\View\Model\ViewModel;
 
 /**
- * Class to manage Stays
+ * Class to manage Penalties
  */
-class CaseStayController extends CaseController
+class CasePenaltyController extends CaseController
 {
-
-    private $stayTypes = array(1 => 'Upper Tribunal', 2 => 'Traffic Commissioner / Transport Regulator');
-
-    /**
-     * temporary hardcoding of stay types until proper data available
-     *
-     * @return array|boolean
-     */
-    private function getStayTypeName($stayTypeId)
-    {
-        if (isset($this->stayTypes[$stayTypeId])) {
-            return $this->stayTypes[$stayTypeId];
-        }
-
-        return false;
-    }
-
-    /**
-     * temporary hardcoding of stay types until proper data available
-     *
-     * @return array
-     */
-    private function getStayTypes()
-    {
-        return $this->stayTypes;
-    }
 
     /**
      * Show a table of stays and appeals for the given case
@@ -58,16 +32,9 @@ class CaseStayController extends CaseController
         $licenceId = $this->fromRoute('licence');
         $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licenceId)));
 
-        $stayTypes = $this->getStayTypes();
-
-        $stayRecords = $this->getStayData($caseId);
-        $appealResult = $this->getAppealData($caseId);
-
         $variables = array(
-            'tab' => 'stays',
-            'appealRecord' => $appealResult,
-            'stayRecords' => $stayRecords,
-            'stayTypes' => $stayTypes
+            'tab' => 'penalties',
+            'penaltyRecord' => $penaltyResult
         );
 
         $caseVariables = $this->getCaseVariables($caseId, $variables);
@@ -102,7 +69,7 @@ class CaseStayController extends CaseController
         }
 
         //if data already exists don't display the add form
-        $existingRecord = $this->checkExistingStay($caseId, $stayTypeId);
+        $existingRecord = $this->checkExistingPenalty($caseId);
 
         if ($existingRecord) {
             return $this->redirectIndex($licenceId, $caseId);
@@ -111,7 +78,7 @@ class CaseStayController extends CaseController
         $this->setBreadcrumb(
             array(
                 'licence_case_list/pagination' => array('licence' => $licenceId),
-                'case_stay_action' => array('licence' => $licenceId, 'case' => $caseId)
+                'case_penalty' => array('licence' => $licenceId, 'case' => $caseId)
             )
         );
 
@@ -203,117 +170,16 @@ class CaseStayController extends CaseController
     }
 
     /**
-     * Process adding the stay
-     *
-     * @param array $data
-     */
-    public function processAddStay($data)
-    {
-        //if data already exists don't add more
-        $existingRecord = $this->checkExistingStay($data['case'], $data['stayType']);
-
-        if ($existingRecord) {
-            return $this->redirectIndex($data['licence'], $data['case']);
-        }
-
-        $data = array_merge($data, $data['fields']);
-
-        $result = $this->processAdd($data, 'Stay');
-
-        if (isset($result['id'])) {
-            return $this->redirectIndex($data['licence'], $data['case']);
-        }
-
-        return $this->redirect()->toRoute(
-            'case_stay_action',
-            array(
-                'action' => 'add',
-                'licence' => $data['licence'],
-                'case' => $data['case'],
-                'stayType' => $data['stayType']
-            )
-        );
-    }
-
-    /**
-     * Process editing a stay
-     *
-     * @param array $data
-     *
-     * @todo Once user auth is ready, check user allowed access
-     * @todo Once user auth is ready, add the user info to the data (fields are lastUpdatedBy and createdBy)
-     */
-    public function processEditStay($data)
-    {
-        $licence = $data['licence'];
-        unset($data['licence']);
-
-        $data = array_merge($data, $data['fields']);
-
-        $result = $this->processEdit($data, 'Stay');
-
-        if (empty($result)) {
-            return $this->redirectIndex($licence, $data['case']);
-        }
-
-        return $this->redirectEditFail($licence, $data['case'], $data['stayType'], $data['stay']);
-    }
-
-    /**
-     * Gets stay data for use on the index page
+     * Retrieves penalty data
      *
      * @param int $caseId
      * @return array
      */
-    private function getStayData($caseId)
+    private function getPenaltyData($caseId)
     {
-        $stayRecords = array();
+        $penaltyResult = $this->makeRestCall('Penalty', 'GET', array('case' => $caseId));
 
-        $stayResult = $this->makeRestCall('Stay', 'GET', array('case' => $caseId));
-
-        //need a better way to do this...
-        foreach ($stayResult['Results'] as $stay) {
-            if (isset($this->stayTypes[$stay['stayType']])) {
-                $stay = $this->formatDates(
-                    $stay,
-                    array(
-                        'requestDate'
-                    )
-                );
-
-                $stayRecords[$stay['stayType']] = $stay;
-            }
-        }
-
-        return $stayRecords;
-    }
-
-    /**
-     * Retrieves appeal data
-     *
-     * @param int $caseId
-     * @return array
-     */
-    private function getAppealData($caseId)
-    {
-        $appealResult = $this->makeRestCall('Appeal', 'GET', array('case' => $caseId));
-        $appeal = array();
-
-        if (!empty($appealResult['Results'][0])) {
-            $appeal = $this->formatDates(
-                $appealResult['Results'][0],
-                array(
-                    'deadlineDate',
-                    'appealDate',
-                    'hearingDate',
-                    'decisionDate',
-                    'papersDue',
-                    'papersSent'
-                )
-            );
-        }
-
-        return $appeal;
+        return $penaltyResult;
     }
 
     /**
@@ -327,7 +193,7 @@ class CaseStayController extends CaseController
     private function redirectIndex($licence, $case)
     {
         return $this->redirect()->toRoute(
-            'case_stay_action',
+            'case_penalty',
             array(
                 'action' => 'index',
                 'licence' => $licence,
@@ -341,27 +207,23 @@ class CaseStayController extends CaseController
      *
      * @param int $licence
      * @param int $case
-     * @param int $stayType
-     * @param int $stay
      *
      * @return Response
      */
-    private function redirectEditFail($licence, $case, $stayType, $stay)
+    private function redirectEditFail($licence, $case)
     {
         return $this->redirect()->toRoute(
-            'case_stay_action',
+            'case_penalty',
             array(
                 'action' => 'edit',
                 'licence' => $licence,
                 'case' => $case,
-                'stayType' => $stayType,
-                'stay' => $stay
             )
         );
     }
 
     /**
-     * Checks whether a stay already exists for the given case and staytype (only one should be allowed)
+     * Checks whether a penalty already exists for the given case
      *
      * @param int $caseId
      * @param int $stayTypeId
@@ -370,44 +232,10 @@ class CaseStayController extends CaseController
      *
      * @return boolean
      */
-    private function checkExistingStay($caseId, $stayTypeId)
+    private function checkExistingStay($caseId)
     {
-        $result = $this->makeRestCall('Stay', 'GET', array('case' => $caseId));
+        $result = $this->makeRestCall('Penalty', 'GET', array('case' => $caseId));
 
-        if (isset($result['Results'])) {
-            foreach ($result['Results'] as $stay) {
-                if ($stay['stayType'] == $stayTypeId) {
-                    return true;
-                }
-            }
-        }
-
-        /*
-          $result = $this->makeRestCall('Stay', 'GET', array('stayType' => $stayTypeId, 'case' => $caseId));
-
-          if(empty($result['results'])){
-          return true;
-          }
-         */
-        return false;
-    }
-
-    /**
-     * Formats the specified fields in the supplied array with the correct date format
-     * Expect to replace this with a view helper later
-     *
-     * @param array $data
-     * @param array $fields
-     * @return array
-     */
-    private function formatDates($data, $fields)
-    {
-        foreach ($fields as $field) {
-            if (isset($data[$field])) {
-                $data[$field] = date('d/m/Y', strtotime($data[$field]));
-            }
-        }
-
-        return $data;
+        return $result['Count'];
     }
 }
