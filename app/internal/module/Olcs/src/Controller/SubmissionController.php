@@ -41,7 +41,7 @@ class SubmissionController extends FormActionController
         $result = $this->processAdd($data, 'Submission');
         
         $submission = json_decode($submission, true);
-        $view = $this->getView(
+        $view = $this->getViewModel(
             array(
                 'params' => array(
                     'pageTitle' => 'case-submission',
