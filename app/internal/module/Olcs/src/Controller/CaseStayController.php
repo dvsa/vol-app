@@ -126,7 +126,7 @@ class CaseStayController extends CaseController
         );
 
         //add in that this is an an action (reflected in the title)
-        $pageData['pageHeading'] = 'Add ' . $stayTypeName;
+        $pageData['pageHeading'] = 'Add ' . $stayTypeName . ' Stay';
 
         $view = new ViewModel(['form' => $form, 'data' => $pageData]);
         $view->setTemplate('case/add-stay');
@@ -195,7 +195,7 @@ class CaseStayController extends CaseController
         );
 
         //add in that this is an an action (reflected in the title)
-        $pageData['pageHeading'] = 'Edit ' . $stayTypeName;
+        $pageData['pageHeading'] = 'Edit ' . $stayTypeName . ' Stay';
 
         $view = new ViewModel(['form' => $form, 'data' => $pageData]);
         $view->setTemplate('case/add-stay');
