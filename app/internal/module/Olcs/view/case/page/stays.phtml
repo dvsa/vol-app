@@ -4,16 +4,16 @@
 
     foreach ($stayTypes as $id => $type) {
         if (isset($stayRecords[$id])) {
-            echo $this->render('partials/case/stay.phtml', array('stay' => $stayRecords[$id], 'stayType' => $type, 'licence' => $licenceId, 'case' => $caseId));
+            echo $this->render('partials/case/stay.phtml', array('stay' => $stayRecords[$id], 'stayType' => $type));
         } else {
-            echo  $this->render('partials/case/stay-empty.phtml', array('heading' => $type, 'stayTypeId' => $id, 'licence' => $licenceId, 'case' => $caseId));
+            echo  $this->render('partials/case/stay-empty.phtml', array('heading' => $type, 'route' => 'case_stay_action', 'stayTypeId' => $id));
         }
     }
 
     if(!empty($appealRecord)){
-        echo  $this->render('partials/case/appeal.phtml', array('record' => $appealRecord, 'route' => 'case_stay_action', 'licence' => $licenceId, 'case' => $caseId));
+        echo  $this->render('partials/case/appeal.phtml', array('record' => $appealRecord));
     } else {
-        echo  $this->render('partials/case/stay-empty.phtml', array('heading' => 'Appeal', 'route' => 'case_appeal', 'licence' => $licenceId, 'case' => $caseId));
+        echo  $this->render('partials/case/stay-empty.phtml', array('heading' => 'Appeal', 'route' => 'case_appeal'));
     }
 
     ?>

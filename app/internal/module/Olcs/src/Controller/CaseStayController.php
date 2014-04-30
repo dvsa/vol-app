@@ -63,14 +63,11 @@ class CaseStayController extends CaseController
         $stayRecords = $this->getStayData($caseId);
         $appealResult = $this->getAppealData($caseId);
 
-
         $variables = array(
             'tab' => 'stays',
             'appealRecord' => $appealResult,
             'stayRecords' => $stayRecords,
-            'stayTypes' => $stayTypes,
-            'licenceId' => $licenceId,
-            'caseId' => $caseId
+            'stayTypes' => $stayTypes
         );
 
         $caseVariables = $this->getCaseVariables($caseId, $variables);
@@ -83,7 +80,6 @@ class CaseStayController extends CaseController
     /**
      * Add a new stay for a case
      *
-     * @todo Handle 404 and Bad Request
      * @todo add message along with redirect if there's pre existing data
      * @return ViewModel
      */
@@ -142,7 +138,6 @@ class CaseStayController extends CaseController
      *
      * @param array $data
      *
-     * @todo Handle 404 and Bad Request
      * @todo Check to make sure the stay ID is really related to the case ID
      */
     public function editAction()
