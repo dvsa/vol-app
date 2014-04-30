@@ -178,7 +178,7 @@ return array(
             'case_complaints' => array(
                 'type' => 'segment',
                 'options' => array(
-                    'route' => '/licence/[:licence]/case/:case/complaints[/:action][/:complaint]',
+                    'route' => '/licence/[:licence]/case/:case/complaints',
                     'constraints' => array(
                         'case' => '[0-9]+'
                     ),
