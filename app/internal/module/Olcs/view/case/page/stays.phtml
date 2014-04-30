@@ -6,7 +6,7 @@
         if (isset($stayRecords[$id])) {
             echo $this->render('partials/case/stay.phtml', array('stay' => $stayRecords[$id], 'stayType' => $type));
         } else {
-            echo  $this->render('partials/case/stay-empty.phtml', array('heading' => $type, 'route' => 'case_stay_action', 'stayTypeId' => $id));
+            echo  $this->render('partials/case/stay-empty.phtml', array('heading' => $type . ' Stay', 'route' => 'case_stay_action', 'stayTypeId' => $id));
         }
     }
 
