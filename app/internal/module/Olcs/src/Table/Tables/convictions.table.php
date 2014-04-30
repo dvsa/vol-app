@@ -6,6 +6,7 @@ return array(
     ),
     'settings' => array(
         'crud' => array(
+            'formName' => 'conviction',
             'actions' => array(
                 'add' => array('class' => 'primary'),
                 'Dealt with' => array('requireRows' => true),

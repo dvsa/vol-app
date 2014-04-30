@@ -19,6 +19,13 @@ return array(
                                 array(
                                     'label' => 'Case Summary',
                                     'route' => 'case_manage',
+                                    'pages' => array(
+                                        array(
+                                        'label' => 'Case Submission',
+                                        'route' => 'submission',
+                                        'action' => 'add'
+                                        )
+                                    )
                                 ),
                                 array(
                                     'label' => 'Case Convictions',
