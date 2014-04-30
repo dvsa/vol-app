@@ -59,7 +59,6 @@ class ComplaintController extends FormActionController
         $form = $this->generateForm(
             'complaint', 'processComplaint'
         );
-        var_dump($_POST);exit;
 
         $form->setData($data);
         //$form->setMessages(array('blah' => 'This is a test message'));
@@ -96,49 +95,7 @@ class ComplaintController extends FormActionController
             )
         );
 
-        $bundle = array(
-           'complaint' => array(
-               'properties' => array('ALL'),
-           ),
-            'children' => array(
-                'driver' => array(
-                    'properties' => array('id', 'version'),
-                    'children' => array(
-                        'contactDetails' => array(
-                            'properties' => array('id', 'version'),
-                            'children' => array(
-                                'person' => array(
-                                    'properties' => array(
-                                        'id',
-                                        'version',
-                                        'firstName',
-                                        'middleName',
-                                        'surname',
-                                    )
-                                )
-                            )
-                        )
-                    )
-                ),
-                'complainant' => array(
-                   'properties' => array('person'),
-                   'children' => array(
-                       'person' => array(
-                           'properties' => array(
-                               'id',
-                               'version',
-                               'firstName',
-                               'middleName',
-                               'surname',
-                           )
-                       )
-                   )
-                ),
-                'organisation' => array(
-                   'properties' => array('id', 'version', 'name'),
-                )
-            )
-        );
+        $bundle = $this->getComplaintBundle();
 
         $data = $this->makeRestCall('Complaint', 'GET', array('id' => $routeParams['id'], 'bundle' => json_encode($bundle)));
         if (isset($data['id'])) {
@@ -183,37 +140,25 @@ class ComplaintController extends FormActionController
             $result = $this->processEdit($data['complainant-details'], 'Person');
             $result = $this->processEdit($data['driver-details'], 'Person');
         } else {
-            $data['complaint-details']['value'] = '';
-            // set up data
-            //$data = $this->getNewComplaintData();
-            // add contact details
-            $result = $this->processAdd($data['driver-details'], 'ContactDetails');
-            var_dump($result);exit;
+            // configure complaint data
 
-            // add driver to person table
-            $result = $this->processAdd($data['driver-details'], 'Driver');
-            var_dump($result);exit;
-            // add complainant to person table
+            $newData = $data['complaint-details'];
+            $newData['vosaCases'][] = $data['vosaCase'];
+            $newData['value'] = '';
+            $newData['vehicle_id'] = 1;
+            $newData['organisation'] = $data['organisation-details'];
 
-            // add contact details for both persons
+            $newData['driver']['contactDetails']['contactDetailsType'] = 'Driver';
+            $newData['driver']['contactDetails']['is_deleted'] = 0;
+            $newData['driver']['contactDetails']['version'] = 1;
+            $newData['driver']['contactDetails']['person'] = $data['driver-details'];
 
-            // add contact details to driver table
+            $newData['complainant']['contactDetailsType'] = 'Complainant';
+            $newData['complainant']['is_deleted'] = 0;
+            $newData['complainant']['version'] = 1;
+            $newData['complainant']['person'] = $data['complainant-details'];
 
-            // add complaint
-
-            // add link to complaint_case table
-
-            $newComplainantData = [
-                'version' => 1,
-                'organisation_id' => 7,
-                'contact_details_type' => 'Complainant',
-                'is_deleted' => 0,
-                'person' => $data['complainant-details'],
-                ];
-            $result = $this->processAdd($newComplainantData, 'ContactDetails');
-            //$result = $this->processAdd($data['complaint-details'], 'Complaint');
-            //$result = $this->processAdd($data['complainant-details'], 'Person');
-            //$result = $this->processAdd($data['driver-details'], 'Person');
+            $result = $this->processAdd($newData, 'Complaint');
 
         }
 
@@ -230,5 +175,58 @@ class ComplaintController extends FormActionController
     public function getNewComplaintData()
     {
 
+    }
+
+    /**
+     * Method to return the bundle required for getting complaints and related
+     * entities from the database.
+     *
+     * @return array
+     */
+    private function getComplaintBundle()
+    {
+        return array(
+           'complaint' => array(
+               'properties' => array('ALL'),
+           ),
+            'children' => array(
+                'driver' => array(
+                    'properties' => array('id', 'version'),
+                    'children' => array(
+                        'contactDetails' => array(
+                            'properties' => array('id', 'version'),
+                            'children' => array(
+                                'person' => array(
+                                    'properties' => array(
+                                        'id',
+                                        'version',
+                                        'firstName',
+                                        'middleName',
+                                        'surname',
+                                    )
+                                )
+                            )
+                        )
+                    )
+                ),
+                'complainant' => array(
+                   'properties' => array('person'),
+                   'children' => array(
+                       'person' => array(
+                           'properties' => array(
+                               'id',
+                               'version',
+                               'firstName',
+                               'middleName',
+                               'surname',
+                           )
+                       )
+                   )
+                ),
+                'organisation' => array(
+                   'properties' => array('id', 'version', 'name'),
+                )
+            )
+        );
     }
 }
