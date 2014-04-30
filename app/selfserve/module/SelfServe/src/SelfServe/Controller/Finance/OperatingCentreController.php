@@ -57,7 +57,7 @@ class OperatingCentreController extends AbstractFinanceController
 
         $data = $this->formatDataForForm($data, $applicationId, $results);
 
-        $form = $this->generateFormWithData('operating-centre-authorisation' . ($this->isPsvLicence($applicationId) ? '-psv' : ''), 'processAuthorisation', $data, true);
+        $form = $this->generateFormWithData($this->processConfigName('operating-centre-authorisation', $applicationId), 'processAuthorisation', $data, true);
 
         $view = $this->getViewModel(array('operatingCentres' => $table, 'form' => $form, 'isPsv' => $this->isPsvLicence($applicationId)));
 
@@ -76,7 +76,7 @@ class OperatingCentreController extends AbstractFinanceController
         $applicationId      = $this->params()->fromRoute('applicationId');
 
         $form = $this->generateForm(
-            'operating-centre' . ($this->isPsvLicence($applicationId) ? '-psv' : ''), 'processAddForm'
+            $this->processConfigName('operating-centre', $applicationId), 'processAddForm'
         );
 
         $view = $this->getViewModel(['form' => $form]);
@@ -92,6 +92,7 @@ class OperatingCentreController extends AbstractFinanceController
     public function editAction()
     {
         $operatingCentreId = $this->params()->fromRoute('id');
+        $applicationId = $this->params()->fromRoute('applicationId');
 
         //get operating centre enetity based on applicationId and operatingCentreId
         $result = $this->makeRestCall('ApplicationOperatingCentre', 'GET', array('id' => $operatingCentreId));
@@ -110,7 +111,7 @@ class OperatingCentreController extends AbstractFinanceController
             )
         );
 
-        $form = $this->generateFormWithData('operating-centre', 'processEditForm', $data, true);
+        $form = $this->generateFormWithData($this->processConfigName('operating-centre', $applicationId), 'processEditForm', $data, true);
 
         $view = $this->getViewModel(['form' => $form]);
         $view->setTemplate('self-serve/finance/operating-centre/edit');
@@ -230,7 +231,7 @@ class OperatingCentreController extends AbstractFinanceController
             'url' => $this->getPluginManager()->get('url')
         );
 
-        return $this->getServiceLocator()->get('Table')->buildTable('operatingcentre' . ($this->isPsvLicence($applicationId) ? 'psv' : ''), $results, $settings);
+        return $this->getServiceLocator()->get('Table')->buildTable($this->processConfigName('operatingcentre', $applicationId), $results, $settings);
     }
 
     /**
@@ -373,7 +374,7 @@ class OperatingCentreController extends AbstractFinanceController
         );
 
         //licence type condition
-        if (isset($validData['authorised-vehicles']['no-of-trailers'])){
+        if (isset($validData['authorised-vehicles']['no-of-trailers'])) {
             $data = array_merge($data, array('numberOfTrailers' => $validData['authorised-vehicles']['no-of-trailers']));
         }
 
@@ -388,11 +389,26 @@ class OperatingCentreController extends AbstractFinanceController
      */
     private function isPsvLicence($applicationId)
     {
-        if (is_null($this->isPsv)){
+        if (is_null($this->isPsv)) {
             $licence = $this->getLicenceEntity($applicationId);
             $this->isPsv = $licence['goodsOrPsv'] == 'psv';
         }
         return $this->isPsv;
+    }
+
+    /**
+     * Adds -psv suffix if the licence type is psv
+     *
+     * @param $applicationId
+     * @param $name
+     * @return string
+     */
+    private function processConfigName($name, $applicationId)
+    {
+        if ($this->isPsvLicence($applicationId)) {
+            $name .= '-psv';
+        }
+        return $name;
     }
 
 }

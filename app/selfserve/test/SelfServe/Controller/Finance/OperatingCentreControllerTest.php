@@ -258,17 +258,23 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
     public function testEditActionWithMissingId()
     {
         $ocId = 1;
+        $applicationId = 3;
 
         $this->getMockController(array('makeRestCall', 'params', 'notFoundAction'));
 
         $mockParams = $this->getMock('\stdClass', array('fromRoute'));
 
-        $mockParams->expects($this->once())
+        $mockParams->expects($this->at(0))
             ->method('fromRoute')
             ->with('id')
             ->will($this->returnValue($ocId));
 
-        $this->controller->expects($this->once())
+        $mockParams->expects($this->at(1))
+            ->method('fromRoute')
+            ->with('applicationId')
+            ->will($this->returnValue($applicationId));
+
+        $this->controller->expects($this->any())
             ->method('params')
             ->will($this->returnValue($mockParams));
 
@@ -289,29 +295,36 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
     public function testEditAction()
     {
         $ocId = 2;
+        $applicationId = 3;
 
         $data = array(
             'version' => 1,
             'numberOfVehicles' => 10,
             'numberOfTrailers' => 10,
             'sufficientParking' => 1,
-            'permission' => 1
+            'permission' => 1,
+            'licence' => array('goodsOrPsv' => 'psv'),
         );
 
         $this->getMockController(array('makeRestCall', 'params', 'generateFormWithData', 'getViewModel', 'renderLayout'));
 
         $mockParams = $this->getMock('\stdClass', array('fromRoute'));
 
-        $mockParams->expects($this->once())
+        $mockParams->expects($this->at(0))
             ->method('fromRoute')
             ->with('id')
             ->will($this->returnValue($ocId));
 
-        $this->controller->expects($this->once())
+        $mockParams->expects($this->at(1))
+            ->method('fromRoute')
+            ->with('applicationId')
+            ->will($this->returnValue($applicationId));
+
+        $this->controller->expects($this->any())
             ->method('params')
             ->will($this->returnValue($mockParams));
 
-        $this->controller->expects($this->once())
+        $this->controller->expects($this->any())
             ->method('makeRestCall')
             ->will($this->returnValue($data));
 
