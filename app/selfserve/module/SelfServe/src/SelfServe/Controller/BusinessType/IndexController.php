@@ -78,15 +78,13 @@ class IndexController extends FormJourneyActionController
     }
 
     /**
-     * End of the journey redirect to finance type
+     * End of the journey redirect to finance section
      *
-     * @todo THIS IS WRONG! On all journey we should relay on application entity
-     * not on a licence. So this is a temporary hack, that creates application entity
      */
     public function completeAction()
     {
         $applicationId = $this->params('applicationId');
-        $this->redirect()->toRoute('selfserve/finance', ['step' => 'index', 'applicationId' => $applicationId]);
+        $this->redirect()->toRoute('selfserve/finance/operating_centre', ['applicationId' => $applicationId]);
     }
 
     /**
@@ -457,15 +455,23 @@ class IndexController extends FormJourneyActionController
     }
 
     /**
-     * Get organisation entity based on licenceId
+     * Get organisation entity based on applicationId
      *
      * @return array
      */
     private function getOrganisationEntity()
     {
-        $licence = $this->getLicenceEntity();
+        $applicationId = (int) $this->params()->fromRoute('applicationId');
 
-        $result = $this->makeRestCall('LicenceOrganisation', 'GET', array('id' => $licence['id']));
-        return $result;
+        $bundle = array(
+            'children' => array(
+                'licence' => array(
+                    'children' => array('organisation')
+                ),
+            ),
+        );
+
+        $application = $this->makeRestCall('Application', 'GET', array('id' => $applicationId), $bundle);
+        return $application['licence']['organisation'];
     }
 }
