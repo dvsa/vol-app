@@ -37,7 +37,6 @@ class CaseComplaintController extends CaseController
         $view = $this->getView();
         $tabs = $this->getTabInformationArray();
         $action = 'complaints';
-        $caseId = $this->fromRoute('case');
 
         $case = $this->getCase($caseId);
 
