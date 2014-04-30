@@ -27,16 +27,16 @@ class CaseController extends FormActionController
         $caseId = $this->fromRoute('case');
         $licence = $this->fromRoute('licence');
         $action = $this->fromRoute('tab');
-        
+
         $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licence)));
-        
+
         if ($this->params()->fromPost('action')) {
             return $this->redirect()->toRoute($this->params()->fromPost('table'), array('licence' => $licence,
                         'case' => $caseId,
                         'id' => $this->params()->fromPost('id') ? $this->params()->fromPost('id') : '',
                         'action' => strtolower($this->params()->fromPost('action'))));
         }
-        
+
         $view = $this->getView();
 
         $tabs = $this->getTabInformationArray();
@@ -78,10 +78,10 @@ class CaseController extends FormActionController
         $view->setTemplate('case/manage');
         return $view;
     }
-    
+
     private function checkForSubmissions()
     {
-        
+
     }
 
     public function getSubmissions($case)
@@ -229,7 +229,7 @@ class CaseController extends FormActionController
             'complaints' => [
                 'key' => 'complaints',
                 'label' => 'Complaints',
-                'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'complaints'], [], true),
+                'url' => $pm->get('url')->fromRoute('case_complaints', ['tab' => 'complaints'], [], true),
             ],
             'si' => [
                 'key' => 'si',
