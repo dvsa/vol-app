@@ -44,7 +44,41 @@ class CaseComplaintController extends CaseController
         $summary = $this->getCaseSummaryArray($case);
         $details = $this->getCaseDetailsArray($case);
 
-        $bundle = array(
+        $bundle = $this->getComplaintBundle();
+
+        $results = $this->makeRestCall(
+            'VosaCase', 'GET', array(
+            'id' => $caseId, 'bundle' => json_encode($bundle))
+        );
+
+        $data = [];
+        $data['url'] = $this->getPluginManager()->get('url');
+
+        $table = $this->buildTable('complaints', $results['complaints'], $data);
+
+        $view->setVariables(
+            [
+            'case' => $case,
+            'tabs' => $tabs,
+            'tab' => $action,
+            'summary' => $summary,
+            'details' => $details,
+            'table' => $table,
+            ]
+        );
+
+        $view->setTemplate('case/manage');
+        return $view;
+    }
+
+    /**
+     * Method to return the bundle required for complaints
+     *
+     * @return array
+     */
+    private function getComplaintBundle()
+    {
+        return array(
             'properties' => array(
                 'id'
             ),
@@ -76,26 +110,5 @@ class CaseComplaintController extends CaseController
                 )
             )
         );
-
-        $results = $this->makeRestCall('VosaCase', 'GET', array('id' => $caseId, 'bundle' => json_encode($bundle)));
-
-        $data = [];
-        $data['url'] = $this->getPluginManager()->get('url');
-
-        $table = $this->buildTable('complaints', $results['complaints'], $data);
-
-        $view->setVariables(
-            [
-            'case' => $case,
-            'tabs' => $tabs,
-            'tab' => $action,
-            'summary' => $summary,
-            'details' => $details,
-            'table' => $table,
-            ]
-        );
-
-        $view->setTemplate('case/manage');
-        return $view;
     }
 }

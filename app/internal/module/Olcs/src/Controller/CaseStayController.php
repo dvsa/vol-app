@@ -4,13 +4,15 @@
  * Case Stay Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- * @todo update hardcoded stay types once data is available
  */
 
 namespace Olcs\Controller;
 
 use Zend\View\Model\ViewModel;
 
+/**
+ * Class to manage Stays
+ */
 class CaseStayController extends CaseController
 {
 
@@ -41,7 +43,7 @@ class CaseStayController extends CaseController
     }
 
     /**
-     * Show a table of stays for the given case
+     * Show a table of stays and appeals for the given case
      *
      * @return object
      */
@@ -53,21 +55,21 @@ class CaseStayController extends CaseController
             return $this->notFoundAction();
         }
 
+        $licenceId = $this->fromRoute('licence');
+        $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licenceId)));
+
         $stayTypes = $this->getStayTypes();
 
-        $result = $this->makeRestCall('Stay', 'GET', array('case' => $caseId));
-        $records = array();
+        $stayRecords = $this->getStayData($caseId);
+        $appealResult = $this->getAppealData($caseId);
 
-        //need a better way to do this...
-        if (isset($result['Results'])) {
-            foreach ($result['Results'] as $stay) {
-                if (isset($stayTypes[$stay['stayType']])) {
-                    $records[$stay['stayType']] = $stay;
-                }
-            }
-        }
+        $variables = array(
+            'tab' => 'stays',
+            'appealRecord' => $appealResult,
+            'stayRecords' => $stayRecords,
+            'stayTypes' => $stayTypes
+        );
 
-        $variables = array('tab' => 'stays', 'table' => 'test', 'records' => $records, 'stayTypes' => $stayTypes);
         $caseVariables = $this->getCaseVariables($caseId, $variables);
         $view = $this->getView($caseVariables);
 
@@ -78,13 +80,12 @@ class CaseStayController extends CaseController
     /**
      * Add a new stay for a case
      *
-     * @todo Handle 404 and Bad Request
      * @todo add message along with redirect if there's pre existing data
      * @return ViewModel
      */
     public function addAction()
     {
-        $licence = $this->fromRoute('licence');
+        $licenceId = $this->fromRoute('licence');
         $caseId = $this->fromRoute('case');
 
         $pageData = $this->getCase($caseId);
@@ -104,19 +105,28 @@ class CaseStayController extends CaseController
         $existingRecord = $this->checkExistingStay($caseId, $stayTypeId);
 
         if ($existingRecord) {
-            return $this->redirect()->toRoute('case_stay_action', array('action' => 'index', 'licence' => $licence, 'case' => $caseId));
+            return $this->redirectIndex($licenceId, $caseId);
         }
 
+        $this->setBreadcrumb(
+            array(
+                'licence_case_list/pagination' => array('licence' => $licenceId),
+                'case_stay_action' => array('licence' => $licenceId, 'case' => $caseId)
+            )
+        );
+
         $form = $this->generateFormWithData(
-            'case-stay', 'processAddStay', array(
-            'case' => $caseId,
-            'stayType' => $stayTypeId,
-            'licence' => $licence
+            'case-stay',
+            'processAddStay',
+            array(
+                'case' => $caseId,
+                'stayType' => $stayTypeId,
+                'licence' => $licenceId
             )
         );
 
         //add in that this is an an action (reflected in the title)
-        $pageData['pageHeading'] = 'Add ' . $stayTypeName;
+        $pageData['pageHeading'] = 'Add ' . $stayTypeName . ' Stay';
 
         $view = new ViewModel(['form' => $form, 'data' => $pageData]);
         $view->setTemplate('case/add-stay');
@@ -128,31 +138,39 @@ class CaseStayController extends CaseController
      *
      * @param array $data
      *
-     * @todo Handle 404 and Bad Request
-     * @todo Once user auth is ready, check user allowed access
-     * @todo Once user auth is ready, add the user info to the data (fields are lastUpdatedBy and createdBy)
      * @todo Check to make sure the stay ID is really related to the case ID
      */
     public function editAction()
     {
         $stayId = $this->fromRoute('stay');
 
-        $result = $this->makeRestCall('Stay', 'GET', array('id' => $stayId));
+        $bundle = array(
+            'children' => array(
+                'case' => array(
+                    'properties' => array(
+                        'id'
+                    )
+                )
+            )
+        );
+
+        $result = $this->makeRestCall('Stay', 'GET', array('id' => $stayId, 'bundle' => json_encode($bundle)));
 
         if (empty($result)) {
             return $this->notFoundAction();
         }
 
+        $result['case'] = $result['case']['id'];
         $result['fields'] = $result;
 
-        $caseId = $this->fromRoute('case');
-        $case = $this->getCase($caseId);
+        $case = $this->getCase($result['case']);
 
         if (empty($case)) {
             return $this->notFoundAction();
         }
 
         $result['licence'] = $this->fromRoute('licence');
+
         $pageData = array_merge($result, $case);
 
         $stayTypeId = $this->fromRoute('stayType');
@@ -162,12 +180,22 @@ class CaseStayController extends CaseController
             return $this->notFoundAction();
         }
 
+        $this->setBreadcrumb(
+            array(
+                'licence_case_list/pagination' => array('licence' => $result['licence']),
+                'case_stay_action' => array('licence' => $result['licence'], 'case' => $result['case'])
+            )
+        );
+
         $form = $this->generateFormWithData(
-            'case-stay', 'processEditStay', $result, true
+            'case-stay',
+            'processEditStay',
+            $result,
+            true
         );
 
         //add in that this is an an action (reflected in the title)
-        $pageData['pageHeading'] = 'Edit ' . $stayTypeName;
+        $pageData['pageHeading'] = 'Edit ' . $stayTypeName . ' Stay';
 
         $view = new ViewModel(['form' => $form, 'data' => $pageData]);
         $view->setTemplate('case/add-stay');
@@ -178,9 +206,6 @@ class CaseStayController extends CaseController
      * Process adding the stay
      *
      * @param array $data
-     *
-     * @todo Once user auth is ready, check user allowed access
-     * @todo Once user auth is ready, add the user info to the data (fields are lastUpdatedBy and createdBy)
      */
     public function processAddStay($data)
     {
@@ -188,7 +213,7 @@ class CaseStayController extends CaseController
         $existingRecord = $this->checkExistingStay($data['case'], $data['stayType']);
 
         if ($existingRecord) {
-            return $this->redirect()->toRoute('case_stay_action', array('action' => 'index', 'licence' => $data['licence'], 'case' => $data['case']));
+            return $this->redirectIndex($data['licence'], $data['case']);
         }
 
         $data = array_merge($data, $data['fields']);
@@ -196,19 +221,27 @@ class CaseStayController extends CaseController
         $result = $this->processAdd($data, 'Stay');
 
         if (isset($result['id'])) {
-            return $this->redirect()->toRoute('case_stay_action', array('action' => 'index', 'licence' => $data['licence'], 'case' => $data['case']));
+            return $this->redirectIndex($data['licence'], $data['case']);
         }
 
-        return $this->redirect()->toRoute('case_stay_action', array('action' => 'add', 'licence' => $data['licence'], 'case' => $data['case'], 'stayType' => $data['stayType']));
+        return $this->redirect()->toRoute(
+            'case_stay_action',
+            array(
+                'action' => 'add',
+                'licence' => $data['licence'],
+                'case' => $data['case'],
+                'stayType' => $data['stayType']
+            )
+        );
     }
 
     /**
-     * Process adding the stay
+     * Process editing a stay
      *
      * @param array $data
      *
      * @todo Once user auth is ready, check user allowed access
-     * @todo Once user auth is ready, add the user info to the data (field is lastUpdatedBy)
+     * @todo Once user auth is ready, add the user info to the data (fields are lastUpdatedBy and createdBy)
      */
     public function processEditStay($data)
     {
@@ -220,10 +253,111 @@ class CaseStayController extends CaseController
         $result = $this->processEdit($data, 'Stay');
 
         if (empty($result)) {
-            return $this->redirect()->toRoute('case_stay_action', array('action' => 'index', 'licence' => $licence, 'case' => $data['case']));
+            return $this->redirectIndex($licence, $data['case']);
         }
 
-        return $this->redirect()->toRoute('case_stay_action', array('action' => 'edit', 'licence' => $licence, 'case' => $data['case'], 'stayType' => $data['stayType'], 'stay' => $data['stay']));
+        return $this->redirectEditFail($licence, $data['case'], $data['stayType'], $data['stay']);
+    }
+
+    /**
+     * Gets stay data for use on the index page
+     *
+     * @param int $caseId
+     * @return array
+     */
+    private function getStayData($caseId)
+    {
+        $stayRecords = array();
+
+        $stayResult = $this->makeRestCall('Stay', 'GET', array('case' => $caseId));
+
+        //need a better way to do this...
+        foreach ($stayResult['Results'] as $stay) {
+            if (isset($this->stayTypes[$stay['stayType']])) {
+                $stay = $this->formatDates(
+                    $stay,
+                    array(
+                        'requestDate'
+                    )
+                );
+
+                $stayRecords[$stay['stayType']] = $stay;
+            }
+        }
+
+        return $stayRecords;
+    }
+
+    /**
+     * Retrieves appeal data
+     *
+     * @param int $caseId
+     * @return array
+     */
+    private function getAppealData($caseId)
+    {
+        $appealResult = $this->makeRestCall('Appeal', 'GET', array('case' => $caseId));
+        $appeal = array();
+
+        if (!empty($appealResult['Results'][0])) {
+            $appeal = $this->formatDates(
+                $appealResult['Results'][0],
+                array(
+                    'deadlineDate',
+                    'appealDate',
+                    'hearingDate',
+                    'decisionDate',
+                    'papersDue',
+                    'papersSent'
+                )
+            );
+        }
+
+        return $appeal;
+    }
+
+    /**
+     * Redirect to the index page
+     *
+     * @param int $licence
+     * @param int $case
+     *
+     * @return Response
+     */
+    private function redirectIndex($licence, $case)
+    {
+        return $this->redirect()->toRoute(
+            'case_stay_action',
+            array(
+                'action' => 'index',
+                'licence' => $licence,
+                'case' => $case
+            )
+        );
+    }
+
+    /**
+     * Redirect to the edit page on failure
+     *
+     * @param int $licence
+     * @param int $case
+     * @param int $stayType
+     * @param int $stay
+     *
+     * @return Response
+     */
+    private function redirectEditFail($licence, $case, $stayType, $stay)
+    {
+        return $this->redirect()->toRoute(
+            'case_stay_action',
+            array(
+                'action' => 'edit',
+                'licence' => $licence,
+                'case' => $case,
+                'stayType' => $stayType,
+                'stay' => $stay
+            )
+        );
     }
 
     /**
@@ -256,5 +390,24 @@ class CaseStayController extends CaseController
           }
          */
         return false;
+    }
+
+    /**
+     * Formats the specified fields in the supplied array with the correct date format
+     * Expect to replace this with a view helper later
+     *
+     * @param array $data
+     * @param array $fields
+     * @return array
+     */
+    private function formatDates($data, $fields)
+    {
+        foreach ($fields as $field) {
+            if (isset($data[$field])) {
+                $data[$field] = date('d/m/Y', strtotime($data[$field]));
+            }
+        }
+
+        return $data;
     }
 }

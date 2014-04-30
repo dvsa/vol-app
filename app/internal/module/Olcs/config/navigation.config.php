@@ -19,6 +19,13 @@ return array(
                                 array(
                                     'label' => 'Case Summary',
                                     'route' => 'case_manage',
+                                    'pages' => array(
+                                        array(
+                                        'label' => 'Case Submission',
+                                        'route' => 'submission',
+                                        'action' => 'add'
+                                        )
+                                    )
                                 ),
                                 array(
                                     'label' => 'Case Convictions',
@@ -69,6 +76,34 @@ return array(
                                     )
                                 ),
                                 array(
+                                    'label' => 'Stays & Appeals',
+                                    'route' => 'case_stay_action',
+                                    'action' => 'index',
+                                    'pages' => array(
+                                        array(
+                                            'label' => 'Add Stay',
+                                            'route' => 'case_stay_action',
+                                            'action' => 'add'
+                                        ),
+                                        array(
+                                            'label' => 'Edit Stay',
+                                            'route' => 'case_stay_action',
+                                            'action' => 'edit'
+                                        )
+                                        ,
+                                        array(
+                                            'label' => 'Add Appeal',
+                                            'route' => 'case_appeal',
+                                            'action' => 'add'
+                                        ),
+                                        array(
+                                            'label' => 'Edit Appeal',
+                                            'route' => 'case_appeal',
+                                            'action' => 'edit'
+                                        )
+                                    )
+                                ),
+                                array(
                                     'label' => 'Case Complaints',
                                     'route' => 'case_complaints',
                                     'action' => 'index',
@@ -81,7 +116,6 @@ return array(
                                         array(
                                             'label' => 'Edit Complaint',
                                             'route' => 'complaint',
-                                            'action' => 'edit'
                                         )
                                     )
                                 )
