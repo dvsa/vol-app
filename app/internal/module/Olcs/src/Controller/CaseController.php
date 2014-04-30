@@ -31,7 +31,13 @@ class CaseController extends FormActionController
         $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licence)));
         
         if ($this->params()->fromPost('action')) {
-            return $this->forward()->dispatch('SubmissionController', array('action' => 'add', 'licence' => $licence, 'case' => $caseId));
+            return $this->forward()->dispatch(
+                'SubmissionController',
+                array(
+                    'action' => $this->params()->fromPost('action'),
+                    'licence' => $licence,
+                    'case' => $caseId)
+            );
             /*return $this->redirect()->toRoute($this->params()->fromPost('table'), array('licence' => $licence,
                         'case' => $caseId,
                         'id' => $this->params()->fromPost('id') ? $this->params()->fromPost('id') : '',
@@ -62,6 +68,7 @@ class CaseController extends FormActionController
             $submissionsResults,
             $submissionsData
         );
+//print_r($submissionsData);
 
         // -- submissions
 
@@ -117,7 +124,8 @@ class CaseController extends FormActionController
                     $results['Results'][$k]['currentlyWith'] = $action['userRecipient']['displayName'];
                 }
 
-                $actions = $submissionActions['submission_'.$action['submissionActionType']];
+                $actions = isset($submissionActions['submission_'.$action['submissionActionType']])
+                    ? $submissionActions['submission_'.$action['submissionActionType']] : '';
                 $results['Results'][$k]['status'] = isset($actions[$action['submissionActionStatus']])
                     ? $actions[$action['submissionActionStatus']] : '';
                 $results['Results'][$k]['type'] = ucfirst($action['submissionActionType']);
