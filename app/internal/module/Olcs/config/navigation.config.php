@@ -67,7 +67,36 @@ return array(
                                             'action' => 'edit'
                                         )
                                     )
+                                ),
+                                array(
+                                    'label' => 'Stays & Appeals',
+                                    'route' => 'case_stay_action',
+                                    'action' => 'index',
+                                    'pages' => array(
+                                        array(
+                                            'label' => 'Add Stay',
+                                            'route' => 'case_stay_action',
+                                            'action' => 'add'
+                                        ),
+                                        array(
+                                            'label' => 'Edit Stay',
+                                            'route' => 'case_stay_action',
+                                            'action' => 'edit'
+                                        )
+                                        ,
+                                        array(
+                                            'label' => 'Add Appeal',
+                                            'route' => 'case_appeal',
+                                            'action' => 'add'
+                                        ),
+                                        array(
+                                            'label' => 'Edit Appeal',
+                                            'route' => 'case_appeal',
+                                            'action' => 'edit'
+                                        )
+                                    )
                                 )
+
                             )
                         )
                     )
