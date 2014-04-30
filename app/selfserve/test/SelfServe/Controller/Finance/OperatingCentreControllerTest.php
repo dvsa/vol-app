@@ -1,72 +1,72 @@
 <?php
 
 /**
- * Test case for operating centre pages
- * 
- * @author Jakub.Igla
- * @todo implement DBUNIT
+ * Test OperatingCentreController
  */
 
-namespace SelfServe\test\LicenceType;
+namespace SelfServe\test\Controller\Finance;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
-use Zend\Http\Request;
-use Zend\Http\Response;
-use Zend\Mvc\MvcEvent;
-use Zend\Mvc\Router\RouteMatch;
-use PHPUnit_Framework_TestCase;
-use SelfServe\test\Bootstrap;
+use SelfServe\Controller\Finance\OperatingCentreController;
 
+/**
+ * Test OperatingCentreController
+ */
 class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
 {
-    
-    const APPLICATION_ID = 1;
-    const OP_CENTRE_ID  = 1;
-    
-    protected $controller;
-    protected $request;
-    protected $response;
-    protected $routeMatch;
-    protected $event;
 
-    protected function setUpMockController($methods)
+    /**
+     * Build a mock controller
+     *
+     * @param array $methods
+     */
+    protected function getMockController($methods = array())
     {
         $this->controller = $this->getMock(
-            '\SelfServe\Controller\Finance\OperatingCentreController',
-            $methods
+            'SelfServe\Controller\Finance\OperatingCentreController', $methods
         );
-
-        $router = $this->getMock('\Zend\Mvc\Router\SimpleRouteStack', ['assemble']);
-        $router->expects($this->any())
-            ->method('assemble')
-            ->will($this->returnValue('/selfserve/1/finance/index'))
-        ;
-        $this->controller->getEvent()->setRouter($router);
-        $this->controller->getEvent()->setResponse(new \Zend\Http\PhpEnvironment\Response());
     }
 
+    /**
+     * Set up the unit tests
+     */
     protected function setUp()
     {
         $this->setApplicationConfig(
-            include __DIR__.'/../../../../config/application.config.php'
+            include __DIR__ . '/../../../../config/application.config.php'
         );
 
         parent::setUp();
     }
 
-    public function testAddAction()
+    /**
+     * Test indexAction With Crud Action
+     */
+    public function testIndexActionWithCrudAction()
     {
-        $this->setUpMockController( [
-            'params',
-            'generateForm',
-            'getFormConfigName',
-        ]);
-        $mockParams = $this->getMock('\stdClass', array('fromRoute'));
+        $this->getMockController(array('checkForCrudAction'));
+
+        $this->controller->expects($this->once())
+            ->method('checkForCrudAction')
+            ->will($this->returnValue('add'));
+
+        $this->assertEquals('add', $this->controller->indexAction());
+    }
+
+    /**
+     * Test indexAction With Missing Application
+     */
+    public function testIndexActionWithMissingApplication()
+    {
         $applicationId = 1;
+
+        $this->getMockController(array('checkForCrudAction', 'params', 'makeRestCall', 'notFoundAction'));
+
+        $mockParams = $this->getMock('\stdClass', array('fromRoute'));
 
         $mockParams->expects($this->once())
             ->method('fromRoute')
-            ->with($this->equalTo('applicationId'))
+            ->with('applicationId')
             ->will($this->returnValue($applicationId));
 
         $this->controller->expects($this->once())
@@ -74,231 +74,658 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue($mockParams));
 
         $this->controller->expects($this->once())
-            ->method('getFormConfigName')
-            ->with($this->equalTo($applicationId))
-            ->will($this->returnValue('operating-centre'));
+            ->method('checkForCrudAction')
+            ->will($this->returnValue(false));
 
-        $mockForm = new \Zend\Form\Form();
+        $this->controller->expects($this->any())
+            ->method('makeRestCall')
+            ->will($this->returnCallback(array($this, 'mockRestCall')));
+
         $this->controller->expects($this->once())
-            ->method('generateForm')
-            ->will($this->returnValue($mockForm));
+            ->method('notFoundAction')
+            ->will($this->returnValue(404));
 
-        $this->controller->addAction();
+        $this->assertEquals(404, $this->controller->indexAction());
     }
 
-    public function testEditActionWithEntityFound()
+    /**
+     * Test indexAction with 0 results
+     */
+    public function testIndexActionWithoutResults()
     {
-        $this->setUpMockController( [
-            'params',
-            'makeRestCall',
-            'getFormConfigName',
-            'generateFormWithData',
+        $applicationId = 2;
 
-        ]);
+        $this->getMockController(
+            array(
+                'checkForCrudAction',
+                'params',
+                'makeRestCall',
+                'getServiceLocator',
+                'generateFormWithData',
+                'getViewModel',
+                'renderLayout'
+            )
+        );
+
         $mockParams = $this->getMock('\stdClass', array('fromRoute'));
 
-        $applicationId = 1;
-        $operatingCentreId = 1;
-
-        $mockParams->expects($this->at(0))
+        $mockParams->expects($this->once())
             ->method('fromRoute')
-            ->with($this->equalTo('operatingCentreId'))
-            ->will($this->returnValue($operatingCentreId));
-
-        $mockParams->expects($this->at(1))
-            ->method('fromRoute')
-            ->with($this->equalTo('applicationId'))
+            ->with('applicationId')
             ->will($this->returnValue($applicationId));
 
-        $this->controller->expects($this->at(0))
-            ->method('params')
-            ->will($this->returnValue($mockParams));
-
-        $this->controller->expects($this->at(1))
+        $this->controller->expects($this->once())
             ->method('params')
             ->will($this->returnValue($mockParams));
 
         $this->controller->expects($this->once())
-            ->method('makeRestCall')
-            ->with($this->equalTo('ApplicationOperatingCentre'), $this->equalTo('GET'), $this->equalTo(['id' => $operatingCentreId, 'application' => $applicationId]))
-            ->will($this->returnValue($this->mockOperatingCentre()));
+            ->method('checkForCrudAction')
+            ->will($this->returnValue(false));
 
-        $mockForm = new \Zend\Form\Form();
+        $this->controller->expects($this->any())
+            ->method('makeRestCall')
+            ->will($this->returnCallback(array($this, 'mockRestCall')));
+
+        $mockServiceLocator = $this->getMock('\stdClass', array('get'));
+
+        $mockTable = $this->getMock('\stdClass', array('buildTable'));
+
+        $mockTable->expects($this->once())
+            ->method('buildTable')
+            ->with('operatingcentre', array())
+            ->will($this->returnValue('<table></table>'));
+
+        $mockServiceLocator->expects($this->once())
+            ->method('get')
+            ->with('Table')
+            ->will($this->returnValue($mockTable));
+
+        $this->controller->expects($this->once())
+            ->method('getServiceLocator')
+            ->will($this->returnValue($mockServiceLocator));
+
         $this->controller->expects($this->once())
             ->method('generateFormWithData')
-            ->will($this->returnValue($mockForm));
+            ->will($this->returnValue('<form></form>'));
 
-        $this->controller->editAction();
+        $mockViewModel = $this->getMock('\stdClass', array('setTemplate'));
+
+        $this->controller->expects($this->once())
+            ->method('getViewModel')
+            ->with(array('operatingCentres' => '<table></table>', 'form' => '<form></form>'))
+            ->will($this->returnValue($mockViewModel));
+
+        $this->controller->expects($this->once())
+            ->method('renderLayout')
+            ->with($mockViewModel)
+            ->will($this->returnValue('LAYOUT'));
+
+        $this->assertEquals('LAYOUT', $this->controller->indexAction());
     }
 
-    public function testEditActionWithNoEntityFound()
+    /**
+     * Test indexAction with 0 results
+     */
+    public function testIndexAction()
     {
-        $this->setUpMockController( [
-            'params',
-            'makeRestCall',
-            'getFormConfigName',
-            'generateFormWithData',
-            'notFoundAction',
+        $applicationId = 3;
 
-        ]);
+        $this->getMockController(
+            array(
+                'checkForCrudAction',
+                'params',
+                'makeRestCall',
+                'getServiceLocator',
+                'generateFormWithData',
+                'getViewModel',
+                'renderLayout'
+            )
+        );
+
         $mockParams = $this->getMock('\stdClass', array('fromRoute'));
 
-        $applicationId = 1;
-        $operatingCentreId = 1;
+        $mockParams->expects($this->once())
+            ->method('fromRoute')
+            ->with('applicationId')
+            ->will($this->returnValue($applicationId));
+
+        $this->controller->expects($this->once())
+            ->method('params')
+            ->will($this->returnValue($mockParams));
+
+        $this->controller->expects($this->once())
+            ->method('checkForCrudAction')
+            ->will($this->returnValue(false));
+
+        $this->controller->expects($this->any())
+            ->method('makeRestCall')
+            ->will($this->returnCallback(array($this, 'mockRestCall')));
+
+        $mockServiceLocator = $this->getMock('\stdClass', array('get'));
+
+        $mockTable = $this->getMock('\stdClass', array('buildTable'));
+
+        $mockTable->expects($this->once())
+            ->method('buildTable')
+            ->with('operatingcentre')
+            ->will($this->returnValue('<table></table>'));
+
+        $mockServiceLocator->expects($this->once())
+            ->method('get')
+            ->with('Table')
+            ->will($this->returnValue($mockTable));
+
+        $this->controller->expects($this->once())
+            ->method('getServiceLocator')
+            ->will($this->returnValue($mockServiceLocator));
+
+        $this->controller->expects($this->once())
+            ->method('generateFormWithData')
+            ->will($this->returnValue('<form></form>'));
+
+        $mockViewModel = $this->getMock('\stdClass', array('setTemplate'));
+
+        $this->controller->expects($this->once())
+            ->method('getViewModel')
+            ->with(array('operatingCentres' => '<table></table>', 'form' => '<form></form>'))
+            ->will($this->returnValue($mockViewModel));
+
+        $this->controller->expects($this->once())
+            ->method('renderLayout')
+            ->with($mockViewModel)
+            ->will($this->returnValue('LAYOUT'));
+
+        $this->assertEquals('LAYOUT', $this->controller->indexAction());
+    }
+
+    /**
+     * Test addAction
+     */
+    public function testAddAction()
+    {
+        $this->getMockController(array('generateForm', 'getViewModel', 'renderLayout'));
+
+        $mockViewModel = $this->getMock('\stdClass', array('setTemplate'));
+
+        $this->controller->expects($this->once())
+            ->method('generateForm')
+            ->will($this->returnValue('<form></form>'));
+
+        $this->controller->expects($this->once())
+            ->method('getViewModel')
+            ->will($this->returnValue($mockViewModel));
+
+        $this->controller->expects($this->once())
+            ->method('renderLayout')
+            ->with($mockViewModel)
+            ->will($this->returnValue('LAYOUT'));
+
+        $this->assertEquals('LAYOUT', $this->controller->addAction());
+    }
+
+    /**
+     * Test editAction With Missing Id
+     */
+    public function testEditActionWithMissingId()
+    {
+        $ocId = 1;
+
+        $this->getMockController(array('makeRestCall', 'params', 'notFoundAction'));
+
+        $mockParams = $this->getMock('\stdClass', array('fromRoute'));
+
+        $mockParams->expects($this->once())
+            ->method('fromRoute')
+            ->with('id')
+            ->will($this->returnValue($ocId));
+
+        $this->controller->expects($this->once())
+            ->method('params')
+            ->will($this->returnValue($mockParams));
+
+        $this->controller->expects($this->once())
+            ->method('makeRestCall')
+            ->will($this->returnValue(array()));
+
+        $this->controller->expects($this->once())
+            ->method('notFoundAction')
+            ->will($this->returnValue(404));
+
+        $this->assertEquals(404, $this->controller->editAction());
+    }
+
+    /**
+     * Test editAction
+     */
+    public function testEditAction()
+    {
+        $ocId = 2;
+
+        $data = array(
+            'version' => 1,
+            'numberOfVehicles' => 10,
+            'numberOfTrailers' => 10,
+            'sufficientParking' => 1,
+            'permission' => 1
+        );
+
+        $this->getMockController(array('makeRestCall', 'params', 'generateFormWithData', 'getViewModel', 'renderLayout'));
+
+        $mockParams = $this->getMock('\stdClass', array('fromRoute'));
+
+        $mockParams->expects($this->once())
+            ->method('fromRoute')
+            ->with('id')
+            ->will($this->returnValue($ocId));
+
+        $this->controller->expects($this->once())
+            ->method('params')
+            ->will($this->returnValue($mockParams));
+
+        $this->controller->expects($this->once())
+            ->method('makeRestCall')
+            ->will($this->returnValue($data));
+
+        $this->controller->expects($this->once())
+            ->method('generateFormWithData')
+            ->will($this->returnValue('<form></form>'));
+
+        $mockViewModel = $this->getMock('\stdClass', array('setTemplate'));
+
+        $this->controller->expects($this->once())
+            ->method('getViewModel')
+            ->will($this->returnValue($mockViewModel));
+
+        $this->controller->expects($this->once())
+            ->method('renderLayout')
+            ->with($mockViewModel)
+            ->will($this->returnValue('LAYOUT'));
+
+        $this->assertEquals('LAYOUT', $this->controller->editAction());
+    }
+
+    /**
+     * Test deleteAction Without Id
+     */
+    public function testDeleteActionWithoutId()
+    {
+        $ocId = 1;
+        $appId = 2;
+        $result = array(
+
+        );
+
+        $this->getMockController(array('params', 'makeRestCall', 'notFoundAction'));
+
+        $mockParams = $this->getMock('\stdClass', array('fromRoute'));
 
         $mockParams->expects($this->at(0))
             ->method('fromRoute')
-            ->with($this->equalTo('operatingCentreId'))
-            ->will($this->returnValue($operatingCentreId));
+            ->with('id')
+            ->will($this->returnValue($ocId));
 
         $mockParams->expects($this->at(1))
             ->method('fromRoute')
-            ->with($this->equalTo('applicationId'))
+            ->with('applicationId')
+            ->will($this->returnValue($appId));
+
+        $this->controller->expects($this->any())
+            ->method('params')
+            ->will($this->returnValue($mockParams));
+
+        $this->controller->expects($this->at(2))
+            ->method('makeRestCall')
+            ->will($this->returnValue($result));
+
+        $this->controller->expects($this->once())
+            ->method('notFoundAction')
+            ->will($this->returnValue(404));
+
+        $this->assertEquals(404, $this->controller->deleteAction());
+    }
+
+    /**
+     * Test deleteAction
+     */
+    public function testDeleteAction()
+    {
+        $ocId = 1;
+        $appId = 2;
+        $result = array(
+            'id' => 1
+        );
+
+        $this->getMockController(array('params', 'makeRestCall', 'redirect'));
+
+        $mockParams = $this->getMock('\stdClass', array('fromRoute'));
+
+        $mockParams->expects($this->at(0))
+            ->method('fromRoute')
+            ->with('id')
+            ->will($this->returnValue($ocId));
+
+        $mockParams->expects($this->at(1))
+            ->method('fromRoute')
+            ->with('applicationId')
+            ->will($this->returnValue($appId));
+
+        $this->controller->expects($this->any())
+            ->method('params')
+            ->will($this->returnValue($mockParams));
+
+        $this->controller->expects($this->at(2))
+            ->method('makeRestCall')
+            ->will($this->returnValue($result));
+
+        $this->controller->expects($this->at(3))
+            ->method('makeRestCall')
+            ->with('ApplicationOperatingCentre', 'DELETE', array('id' => 1));
+
+        $mockRedirect = $this->getMock('\stdClass', array('toRoute'));
+
+        $mockRedirect->expects($this->once())
+            ->method('toRoute')
+            ->will($this->returnValue('REDIRECT'));
+
+        $this->controller->expects($this->once())
+            ->method('redirect')
+            ->will($this->returnValue($mockRedirect));
+
+        $this->assertEquals('REDIRECT', $this->controller->deleteAction());
+    }
+
+    /**
+     * Test completeAction
+     */
+    public function testCompleteAction()
+    {
+        $controller = new OperatingCentreController();
+
+        $response = $controller->completeAction();
+
+        $this->assertEquals(null, $response);
+    }
+
+    /**
+     * Test processAuthorisation
+     */
+    public function testProcessAuthorisation()
+    {
+        $data = array(
+            'data' => array(
+                'id' => '',
+                'noOfOperatingCentres' => '',
+                'minVehicleAuth' => '',
+                'maxVehicleAuth' => '',
+                'minTrailerAuth' => '',
+                'maxTrailerAuth' => ''
+            )
+        );
+
+        $this->getMockController(array('makeRestCall', 'redirect'));
+
+        $this->controller->expects($this->once())
+            ->method('makeRestCall')
+            ->with('Application', 'PUT');
+
+        $mockRedirect = $this->getMock('\stdClass', array('toRoute'));
+
+        $mockRedirect->expects($this->once())
+            ->method('toRoute')
+            ->will($this->returnValue('REDIRECT'));
+
+        $this->controller->expects($this->once())
+            ->method('redirect')
+            ->will($this->returnValue($mockRedirect));
+
+        $this->assertEquals('REDIRECT', $this->controller->processAuthorisation($data));
+    }
+
+    /**
+     * Test processAddForm With Failure
+     */
+    public function testProcessAddFormWithFailure()
+    {
+        $applicationId = 7;
+
+        $data = array(
+            'address' => array(
+                'addressLine1' => '',
+                'addressLine2' => '',
+                'addressLine3' => '',
+                'city' => '',
+                'country' => '',
+                'postcode' => ''
+            ),
+            'authorised-vehicles' => array(
+                'no-of-vehicles' => 3,
+                'no-of-trailers' => 4,
+                'parking-spaces-confirmation' => 1,
+                'permission-confirmation' => 1
+            )
+        );
+
+        $this->getMockController(array('makeRestCall', 'params'));
+
+        $mockParams = $this->getMock('\stdClass', array('fromRoute'));
+
+        $mockParams->expects($this->once())
+            ->method('fromRoute')
+            ->with('applicationId')
             ->will($this->returnValue($applicationId));
 
-        $this->controller->expects($this->at(0))
+        $this->controller->expects($this->once())
             ->method('params')
             ->will($this->returnValue($mockParams));
 
         $this->controller->expects($this->at(1))
-            ->method('params')
-            ->will($this->returnValue($mockParams));
-
-        $this->controller->expects($this->once())
             ->method('makeRestCall')
-            ->with($this->equalTo('ApplicationOperatingCentre'), $this->equalTo('GET'), $this->equalTo(['id' => $operatingCentreId, 'application' => $applicationId]))
-            ->will($this->returnValue(null));
+            ->with('OperatingCentre', 'POST')
+            ->will($this->returnValue(array('id' => 1)));
 
-        $this->controller->editAction();
+        $this->controller->expects($this->at(2))
+            ->method('makeRestCall')
+            ->with('ApplicationOperatingCentre', 'POST')
+            ->will($this->returnValue(array()));
+
+        $this->assertEquals(null, $this->controller->processAddForm($data));
     }
 
-    public function testGetFormConfigName()
-    {
-        $this->setUpMockController( [
-            'makeRestCall',
-        ]);
-
-        $applicationId = 1;
-
-        $this->controller->expects($this->once())
-            ->method('makeRestCall')
-            ->with($this->equalTo('Application'),
-                   $this->equalTo('GET'),
-                   $this->equalTo(['id' => $applicationId]),
-                   $this->equalTo(['properties' => [], 'children' => ['licence']]))
-            ->will($this->returnValue(['licence' => ['goodsOrPsv' => 'goods']]));
-
-        $this->controller->getFormConfigName($applicationId);
-    }
-
+    /**
+     * Test processAddForm
+     */
     public function testProcessAddForm()
     {
-        $this->setUpMockController( [
-            'makeRestCall',
-            'params',
-        ]);
+        $applicationId = 7;
+
+        $data = array(
+            'address' => array(
+                'addressLine1' => '',
+                'addressLine2' => '',
+                'addressLine3' => '',
+                'city' => '',
+                'country' => '',
+                'postcode' => ''
+            ),
+            'authorised-vehicles' => array(
+                'no-of-vehicles' => 3,
+                'no-of-trailers' => 4,
+                'parking-spaces-confirmation' => 1,
+                'permission-confirmation' => 1
+            )
+        );
+
+        $this->getMockController(array('makeRestCall', 'params', 'redirect'));
 
         $mockParams = $this->getMock('\stdClass', array('fromRoute'));
-        $applicationId = 1;
 
         $mockParams->expects($this->once())
             ->method('fromRoute')
-            ->with($this->equalTo('applicationId'))
+            ->with('applicationId')
             ->will($this->returnValue($applicationId));
 
         $this->controller->expects($this->once())
-            ->method('params')
-            ->will($this->returnValue($mockParams));
-
-        $this->controller->expects($this->once())
-            ->method('makeRestCall')
-            ->will($this->returnValue(['id' => 1]));
-
-        $this->controller->processAddForm(['authorised-vehicles' => [
-            'no-of-vehicles' => 1,
-            'parking-spaces-confirmation' => 1,
-            'permission-confirmation' => 1,
-        ]]);
-    }
-
-    public function testProcessAddFormForPSV()
-    {
-        $this->setUpMockController( [
-            'makeRestCall',
-            'params',
-        ]);
-
-        $mockParams = $this->getMock('\stdClass', array('fromRoute'));
-        $applicationId = 1;
-
-        $mockParams->expects($this->once())
-            ->method('fromRoute')
-            ->with($this->equalTo('applicationId'))
-            ->will($this->returnValue($applicationId));
-
-        $this->controller->expects($this->once())
-            ->method('params')
-            ->will($this->returnValue($mockParams));
-
-        $this->controller->expects($this->once())
-            ->method('makeRestCall')
-            ->will($this->returnValue(['id' => 1]));
-
-        $this->controller->processAddForm(['authorised-vehicles' => [
-            'no-of-vehicles' => 1,
-            'parking-spaces-confirmation' => 1,
-            'permission-confirmation' => 1,
-            'no-of-trailers' => 1,
-        ]]);
-    }
-
-    public function testProcessEditForm()
-    {
-        $this->setUpMockController( [
-            'makeRestCall',
-            'params',
-        ]);
-
-        $mockParams = $this->getMock('\stdClass', array('fromRoute'));
-        $applicationId = 1;
-        $operatingCentreId = 1;
-
-        $mockParams->expects($this->at(0))
-            ->method('fromRoute')
-            ->with($this->equalTo('operatingCentreId'))
-            ->will($this->returnValue($operatingCentreId));
-
-        $mockParams->expects($this->at(1))
-            ->method('fromRoute')
-            ->with($this->equalTo('applicationId'))
-            ->will($this->returnValue($applicationId));
-
-        $this->controller->expects($this->at(0))
             ->method('params')
             ->will($this->returnValue($mockParams));
 
         $this->controller->expects($this->at(1))
+            ->method('makeRestCall')
+            ->with('OperatingCentre', 'POST')
+            ->will($this->returnValue(array('id' => 1)));
+
+        $this->controller->expects($this->at(2))
+            ->method('makeRestCall')
+            ->with('ApplicationOperatingCentre', 'POST')
+            ->will($this->returnValue(array('id' => 1)));
+
+        $mockRedirect = $this->getMock('\stdClass', array('toRoute'));
+
+        $mockRedirect->expects($this->once())
+            ->method('toRoute')
+            ->will($this->returnValue('REDIRECT'));
+
+        $this->controller->expects($this->once())
+            ->method('redirect')
+            ->will($this->returnValue($mockRedirect));
+
+        $this->assertEquals('REDIRECT', $this->controller->processAddForm($data));
+    }
+
+    /**
+     * Test processEditForm
+     */
+    public function testProcessEditForm()
+    {
+        $ocId = 4;
+        $applicationId = 7;
+
+        $data = array(
+            'version' => 1,
+            'address' => array(
+                'addressLine1' => '',
+                'addressLine2' => '',
+                'addressLine3' => '',
+                'city' => '',
+                'country' => '',
+                'postcode' => ''
+            ),
+            'authorised-vehicles' => array(
+                'no-of-vehicles' => 3,
+                'no-of-trailers' => 4,
+                'parking-spaces-confirmation' => 1,
+                'permission-confirmation' => 1
+            )
+        );
+
+        $this->getMockController(array('makeRestCall', 'params', 'redirect'));
+
+        $mockParams = $this->getMock('\stdClass', array('fromRoute'));
+
+        $mockParams->expects($this->at(0))
+            ->method('fromRoute')
+            ->with('id')
+            ->will($this->returnValue($ocId));
+
+        $mockParams->expects($this->at(1))
+            ->method('fromRoute')
+            ->with('applicationId')
+            ->will($this->returnValue($applicationId));
+
+        $this->controller->expects($this->any())
             ->method('params')
             ->will($this->returnValue($mockParams));
 
-        $this->controller->processEditForm(['version' => 1, 'authorised-vehicles' => [
-            'no-of-vehicles' => 1,
-            'parking-spaces-confirmation' => 1,
-            'permission-confirmation' => 1,
-        ]]);
+        $this->controller->expects($this->once())
+            ->method('makeRestCall')
+            ->with('ApplicationOperatingCentre', 'PUT');
+
+        $mockRedirect = $this->getMock('\stdClass', array('toRoute'));
+
+        $mockRedirect->expects($this->once())
+            ->method('toRoute')
+            ->will($this->returnValue('REDIRECT'));
+
+        $this->controller->expects($this->once())
+            ->method('redirect')
+            ->will($this->returnValue($mockRedirect));
+
+        $this->assertEquals('REDIRECT', $this->controller->processEditForm($data));
     }
 
-
-    private function mockOperatingCentre()
+    /**
+     * Mock the rest call
+     *
+     * @param string $service
+     * @param string $method
+     * @param array $data
+     */
+    public function mockRestCall($service, $method, $data)
     {
-        return array(
-            'version' => 1,
-            'numberOfVehicles' => 23,
-            'numberOfTrailers' => 12,
-            'sufficientParking' => 1,
-            'permission' => 1,
-        );
-    }
+        $response = array();
 
-    
+        $aocs = array(
+            1 => array(),
+            2 => array(
+                'Count' => 0,
+                'Results' => array()
+            ),
+            3 => array(
+                'Count' => 1,
+                'Results' => array(
+                    array(
+                        'id' => 3,
+                        'numberOfTrailers' => 5,
+                        'numberOfVehicles' => 5,
+                        'permission' => 1,
+                        'adPlaced' => 1,
+                        'operatingCentre' => array(
+                            'id' => 2,
+                            'address' => array(
+                                'addressLine1' => '',
+                                'addressLine2' => '',
+                                'addressLine3' => '',
+                                'addressLine4' => '',
+                                'postcode' => '',
+                                'county' => '',
+                                'city' => '',
+                                'country' => ''
+                            )
+                        )
+                    )
+                )
+            )
+        );
+
+        $applications = array(
+            1 => array(),
+            2 => array(
+                'version' => 1,
+                'totAuthVehicles' => 5,
+                'totAuthTrailers' => 10
+            ),
+            3 => array(
+                'version' => 1,
+                'totAuthVehicles' => 5,
+                'totAuthTrailers' => 10
+            )
+        );
+
+        switch ($service) {
+            case 'Application':
+
+                $this->assertTrue(array_key_exists('id', $data));
+
+                $response = $applications[$data['id']];
+
+                break;
+            case 'ApplicationOperatingCentre':
+
+                $this->assertTrue(array_key_exists('application', $data));
+
+                $response = $aocs[$data['application']];
+                break;
+        }
+
+        return $response;
+    }
 }

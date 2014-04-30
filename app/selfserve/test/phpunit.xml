@@ -9,6 +9,10 @@
     <filter>
         <whitelist>
             <directory suffix=".php">../module/SelfServe/src</directory>
+            <exclude>
+                <directory>../module/SelfServe/src/SelfServe/Table/</directory>
+                <directory>../module/SelfServe/src/SelfServe/Form/</directory>
+            </exclude>
         </whitelist>
     </filter>
     <logging>
