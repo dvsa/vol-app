@@ -156,14 +156,12 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
         $statementDetails = array(
             'statementType' => '5',
             'contactType' => '9',
-            'requestorsAddressId' => 12
-        );
-
-        $addressDetails = array(
-            'addressLine1' => '123 Street',
-            'postcode' => 'AB1 0AB',
-            'country' => 'GB',
-            'city' => 'Leeds'
+            'requestorsAddress' => array(
+                'addressLine1' => '123 Street',
+                'postcode' => 'AB1 0AB',
+                'country' => 'GB',
+                'city' => 'Leeds'
+            )
         );
 
         $form = '<form></form>';
@@ -171,11 +169,15 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
         $expectedData = array(
             'statementType' => '5',
             'contactType' => '9',
-            'requestorsAddressId' => 12,
             'details' => array(
                 'statementType' => 'statement_type.5',
                 'contactType' => 'contact_type.9',
-                'requestorsAddressId' => 12
+                'requestorsAddress' => array(
+                    'addressLine1' => '123 Street',
+                    'postcode' => 'AB1 0AB',
+                    'country' => 'GB',
+                    'city' => 'Leeds'
+                ),
             ),
             'requestorsAddress' => array(
                 'addressLine1' => '123 Street',
@@ -183,7 +185,7 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
                 'country' => 'country.GB',
                 'city' => 'Leeds'
             ),
-            'case' => '3'
+            'case' => 3
         );
 
         $viewMock = $this->getMock('\stdClass', array('setTemplate'));
@@ -212,11 +214,6 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
             ->method('makeRestCall')
             ->with('Statement')
             ->will($this->returnValue($statementDetails));
-
-        $controller->expects($this->at(4))
-            ->method('makeRestCall')
-            ->with('Address')
-            ->will($this->returnValue($addressDetails));
 
         $controller->expects($this->once())
             ->method('generateFormWithData')
