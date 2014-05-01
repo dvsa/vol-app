@@ -46,7 +46,9 @@ return array(
             'SelfServe\Finance\FinancialEvidenceController' => 'SelfServe\Controller\Finance\FinancialEvidenceController',
             'SelfServe\PreviousHistory\Index' => 'SelfServe\Controller\PreviousHistory\IndexController',
             'SelfServe\VehiclesSafety\Safety' => 'SelfServe\Controller\VehiclesSafety\SafetyController',
-            'SelfServe\TransportManagers\Index' => 'SelfServe\Controller\TransportManagers\IndexController'
+            'SelfServe\Declarations\Index' => 'SelfServe\Controller\Declarations\IndexController',
+            'SelfServe\PaymentDetails\Index' => 'SelfServe\Controller\PaymentDetails\IndexController',
+            'SelfServe\Declarations\Index' => 'SelfServe\Controller\Declarations\IndexController'
         )
     ),
     'local_forms_path' => __DIR__ . '/../src/SelfServe/Form/Forms/',
