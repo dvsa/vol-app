@@ -46,7 +46,7 @@ return array(
             'SelfServe\Finance\FinancialEvidenceController' => 'SelfServe\Controller\Finance\FinancialEvidenceController',
             'SelfServe\PreviousHistory\Index' => 'SelfServe\Controller\PreviousHistory\IndexController',
             'SelfServe\VehiclesSafety\Safety' => 'SelfServe\Controller\VehiclesSafety\SafetyController',
-            'SelfServe\Declarations\Index' => 'SelfServe\Controller\Declarations\IndexController',
+            'SelfServe\TransportManagers\Index' => 'SelfServe\Controller\TransportManagers\IndexController',
             'SelfServe\PaymentDetails\Index' => 'SelfServe\Controller\PaymentDetails\IndexController',
             'SelfServe\Summary\Index' => 'SelfServe\Controller\Summary\IndexController',
             'SelfServe\Declarations\Index' => 'SelfServe\Controller\Declarations\IndexController'
