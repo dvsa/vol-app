@@ -30,10 +30,15 @@ class ComplaintController extends FormActionController
      */
     public function addAction()
     {
-        $routeParams = $this->getParams(array('complaint', 'case', 'licence', 'id'));
+        $routeParams = $this->getParams(array('case', 'licence', 'id'));
 
         if (null !== $this->params()->fromPost('cancel-complaint')) {
-            return $this->redirect()->toRoute('case_complaints', array('complaint' => $routeParams['complaint']));
+            return $this->redirect()->toRoute(
+                'case_complaints', array(
+                    'licence' => $routeParams['licence'],
+                    'case' => $routeParams['case']
+                )
+            );
         }
         // Below is for setting route params for the breadcrumb
         $this->setBreadcrumb(
@@ -86,7 +91,12 @@ class ComplaintController extends FormActionController
             )
         );
         if (null !== $this->params()->fromPost('cancel-complaint')) {
-            return $this->redirect()->toRoute('case_complaints', array('complaint' => $routeParams['complaint']));
+            return $this->redirect()->toRoute(
+                'case_complaints', array(
+                    'licence' => $routeParams['licence'],
+                    'case' => $routeParams['case']
+                )
+            );
         }
         $this->setBreadcrumb(
             array(
@@ -168,13 +178,6 @@ class ComplaintController extends FormActionController
                 'case' => $routeParams['case'], 'licence' => $routeParams['licence']
             )
         );
-    }
-    /**
-     * Method to map the data in the correct format
-     */
-    public function getNewComplaintData()
-    {
-
     }
 
     /**
