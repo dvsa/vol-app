@@ -7,6 +7,7 @@ return [
         'attributes' => [
             'method' => 'post',
         ],
+        'type' => 'Common\Form\Form',
         'fieldsets' => [
             [
                 'name' => 'defendant-details',
@@ -57,7 +58,7 @@ return [
                          'label' => 'Conviction description:'
                     ],*/
                     'dateOfOffence' => [
-                         'type' => 'dateSelect',
+                         'type' => 'dateSelectWithEmpty',
                          'label' => 'Offence date:'
                      ],
                     'dateOfConviction' => [

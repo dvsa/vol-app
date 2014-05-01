@@ -31,11 +31,14 @@ class CaseComplaintControllerTest extends AbstractHttpControllerTestCase
                 'getCaseDetailsArray',
                 'makeRestCall',
                 'buildTable',
-                'getPluginManager'
+                'getPluginManager',
+                'checkForCrudAction'
             )
         );
 
         $caseId = 24;
+        $licenceId = 7;
+        $complaintId = 1;
 
         $restResults = array();
 
@@ -91,9 +94,17 @@ class CaseComplaintControllerTest extends AbstractHttpControllerTestCase
         $viewMock = $this->getMock('\stdClass', array('setVariables', 'setTemplate'));
         $viewMock->expects($this->once())
                 ->method('setVariables');
-        
+
         $controller->expects($this->once())
             ->method('setBreadcrumb');
+
+        $controller->expects($this->once())
+            ->method('checkForCrudAction')
+            ->with(
+                $this->equalTo('complaint'),
+                $this->equalTo(array('case' => $caseId, 'licence' => $licenceId)),
+                $this->equalTo('id')
+            );
 
         $controller->expects($this->once())
             ->method('getView')
@@ -103,10 +114,20 @@ class CaseComplaintControllerTest extends AbstractHttpControllerTestCase
             ->method('getTabInformationArray')
             ->will($this->returnValue($variables));
 
-        $controller->expects($this->once())
+        $controller->expects($this->at(0))
             ->method('fromRoute')
             ->with('case')
             ->will($this->returnValue($caseId));
+
+        $controller->expects($this->at(1))
+            ->method('fromRoute')
+            ->with('licence')
+            ->will($this->returnValue($licenceId));
+
+        $controller->expects($this->at(2))
+            ->method('fromRoute')
+            ->with('complaint')
+            ->will($this->returnValue($complaintId));
 
         $controller->expects($this->once())
             ->method('getCase')

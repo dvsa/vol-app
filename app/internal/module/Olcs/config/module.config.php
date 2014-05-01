@@ -166,6 +166,20 @@ return array(
                     )
                 )
             ),
+            'case_prohibition' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/licence/[:licence]/case/[:case]/action/manage/prohibitions',
+                    'constraints' => array(
+                        'licence' => '[0-9]+',
+                        'case' => '[0-9]+',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'CaseProhibitionController',
+                        'action' => 'index'
+                    )
+                )
+            ),
             'conviction' => array(
                 'type' => 'segment',
                 'options' => array(
@@ -175,12 +189,26 @@ return array(
                     )
                 )
             ),
+            'case_penalty' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/licence/[:licence]/case/[:case]/action/manage/penalties',
+                    'constraints' => array(
+                        'licence' => '[0-9]+',
+                        'case' => '[0-9]+',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'CasePenaltyController',
+                        'action' => 'index'
+                    )
+                )
+            ),
             'case_complaints' => array(
                 'type' => 'segment',
                 'options' => array(
-                    'route' => '/licence/[:licence]/case/:case/complaints[/:action][/:complaint]',
+                    'route' => '/licence/[:licence]/case/:case/complaints',
                     'constraints' => array(
-                        'case' => '[0-9]+'
+                        'case' => '[0-9]+',
                     ),
                     'defaults' => array(
                         'controller' => 'CaseComplaintController',
@@ -188,10 +216,14 @@ return array(
                     )
                 )
             ),
-            'complaints' => array(
+            'complaint' => array(
                 'type' => 'segment',
                 'options' => array(
-                    'route' => '/licence/[:licence]/case/[:case]/complaint[/:action][/:id]',
+                    'route' => '/licence/:licence/case/:case/complaints/:action[/:id]',
+                    'constraints' => array(
+                        'case' => '[0-9]+',
+                        'id' => '[0-9]+'
+                    ),
                     'defaults' => array(
                         'controller' => 'ComplaintController',
                     )
@@ -225,9 +257,12 @@ return array(
             'CaseStatementController' => 'Olcs\Controller\CaseStatementController',
             'CaseAppealController' => 'Olcs\Controller\CaseAppealController',
             'CaseComplaintController' => 'Olcs\Controller\CaseComplaintController',
+            'ComplaintController' => 'Olcs\Controller\ComplaintController',
             'CaseConvictionController' => 'Olcs\Controller\CaseConvictionController',
             'SubmissionController' => 'Olcs\Controller\SubmissionController',
-            'CaseStayController' => 'Olcs\Controller\CaseStayController'
+            'CaseStayController' => 'Olcs\Controller\CaseStayController',
+            'CasePenaltyController' => 'Olcs\Controller\CasePenaltyController',
+            'CaseProhibitionController' => 'Olcs\Controller\CaseProhibitionController'
         )
     ),
     'view_manager' => array(
@@ -243,4 +278,5 @@ return array(
         )
     ),
     //-------- End navigation -----------------
+    'submission_config' => include __DIR__ . '/submission/submission.config.php',
 );

@@ -16,6 +16,29 @@ use Zend\View\Model\ViewModel;
 
 class ConvictionController extends FormActionController
 {
+    public function dealtAction()
+    {
+        $params = $this->getParams(['id', 'case', 'licence']);
+
+        if (!isset($params['id']) || !is_numeric($params['id'])) {
+            return $this->notFoundAction();
+        }
+
+        $case = $this->makeRestCall('Conviction', 'GET', array('id' => $params['id']));
+
+        $data = array_intersect_key($case, array_flip(['id', 'version']));
+        $data['dealtWith'] = 'Y';
+
+        $this->processEdit($data, 'Conviction');
+
+        return $this->redirect()->toRoute(
+            'case_convictions',
+            [
+                'case' => $params['case'],
+                'licence' => $params['licence']
+            ]
+        );
+    }
 
     /**
      * Search form action
@@ -25,11 +48,11 @@ class ConvictionController extends FormActionController
     public function addAction()
     {
         $routeParams = $this->getParams(array('case', 'licence', 'id'));
-        
+
         if (isset($_POST['cancel-conviction'])) {
             return $this->redirect()->toRoute('case_convictions', array('case' => $routeParams['case']));
         }
-        
+
         // Below is for setting route params for the breadcrumb
         $this->setBreadcrumb(
             array(
@@ -74,7 +97,7 @@ class ConvictionController extends FormActionController
         if (isset($_POST['cancel-conviction'])) {
             return $this->redirect()->toRoute('case_convictions', array('case' => $routeParams['case']));
         }
-        
+
         $this->setBreadcrumb(
             array(
                 'licence_case_list/pagination' => array('licence' => $routeParams['licence']),
@@ -140,7 +163,7 @@ class ConvictionController extends FormActionController
         );
         $routeParams = $this->getParams(array('action', 'licence', 'case'));
 
-        if (strtolower($routeParams['action']) == 'edit') {
+        if (strtolower($routeParams['action']) == 'edit' || strtolower($routeParams['action']) == 'dealt') {
             unset($data['vosaCase']);
             $result = $this->processEdit($data, 'Conviction');
         } else {
