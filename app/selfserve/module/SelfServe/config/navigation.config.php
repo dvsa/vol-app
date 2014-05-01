@@ -9,50 +9,50 @@
             'licence-type' => array(
                 'dbkey' => 'Tol',
                 'route' => 'licence-type',
-                'label' => 'Type of licence',
+                'label' => 'type-of-licence',
                 'step'  => 'operator-location'
             ),
             'business-type' => array(
                 'dbkey' => 'Yb',
                 'route' => 'business-type',
                 'step'  => 'business-type',
-                'label' => 'Your business'
+                'label' => 'your-business'
             ),
             'operating-centre' => array(
                 'dbkey' => 'Ocs',
                 'route' => 'finance/operating_centre',
-                'label' => 'Operating centres'
+                'label' => 'operating-centres'
             ),
             'transport-managers' => array(
                 'dbkey' => 'Tms',
                 'route' => 'transport-managers',
-                'label' => 'Transport managers'
+                'label' => 'transport-managers'
             ),
             'vehicle-safety' => array(
                 'dbkey' => 'Veh',
                 'route' => 'vehicle-safety',
-                'label' => 'Vehicle & safety'
+                'label' => 'vehicle-and-safety'
             ),
             'previous-history' => array(
                 'dbkey' => 'Ph',
                 'route' => 'previous-history',
                 'step'  => 'finance',
-                'label' => 'Previous history'
+                'label' => 'previous-history'
             ),
             'declarations' => array(
                 'dbkey' => 'Ud',
                 'route' => 'declarations',
-                'label' => 'Declarations'
+                'label' => 'declarations'
             ),
             'payment-details' => array(
                 'dbkey' => 'Pay',
                 'route' => 'payment-details',
-                'label' => 'Payment details'
+                'label' => 'payment-details'
             ),
             'summary' => array(
                 'dbkey' => 'Sub',
                 'route' => 'summary',
-                'label' => 'Summary'
+                'label' => 'summary'
             ),
         )
     );
