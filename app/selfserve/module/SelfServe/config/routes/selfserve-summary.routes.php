@@ -4,10 +4,10 @@ return [
     'summary' => array(
         'type' => 'segment',
         'options' => array(
-            'route' => '/:applicationId/summary/:step',
+            'route' => '/:applicationId/summary/',
             'defaults' => array(
                 'controller' => 'Selfserve\Summary\Index',
-                'action' => 'generateStepForm'
+                'action' => 'index'
             )
         ),
     ),

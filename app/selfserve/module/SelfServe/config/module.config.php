@@ -48,6 +48,7 @@ return array(
             'SelfServe\VehiclesSafety\Safety' => 'SelfServe\Controller\VehiclesSafety\SafetyController',
             'SelfServe\Declarations\Index' => 'SelfServe\Controller\Declarations\IndexController',
             'SelfServe\PaymentDetails\Index' => 'SelfServe\Controller\PaymentDetails\IndexController',
+            'SelfServe\Summary\Index' => 'SelfServe\Controller\Summary\IndexController',
             'SelfServe\Declarations\Index' => 'SelfServe\Controller\Declarations\IndexController'
         )
     ),
