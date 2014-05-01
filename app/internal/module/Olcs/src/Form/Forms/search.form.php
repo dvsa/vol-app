@@ -88,12 +88,12 @@ return [
                     ],
                     'diskSerialNumber' => [
                         'type' => 'text',
-                        'label' => 'Disk serial number',
+                        'label' => 'Disc serial number',
                         'class' => 'medium'
                     ],
                     'fabsRef' => [
                         'type' => 'text',
-                        'label' => 'Fabs ref',
+                        'label' => 'Fabs reference',
                         'class' => 'medium'
                     ],
                     'companyNo' => [
