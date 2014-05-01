@@ -15,6 +15,11 @@ namespace Olcs\Controller;
  */
 class CasePenaltyController extends CaseController
 {
+    /* *
+     * Index action loads form data
+     *
+     * @return \Zend\Form
+     */
     public function indexAction()
     {
         $caseId = $this->fromRoute('case');
@@ -91,10 +96,8 @@ class CasePenaltyController extends CaseController
     {
         unset($data['cancel']);
 
-        $data['fields'] = $data;
-
         if ($data['submit'] === '') {
-            if (!empty($data['fields']['id'])) {
+            if (!empty($data['id'])) {
                 $this->processEdit($data, 'Penalty');
             } else {
                 $this->processAdd($data, 'Penalty');

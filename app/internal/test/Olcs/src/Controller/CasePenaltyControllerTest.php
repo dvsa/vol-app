@@ -320,10 +320,6 @@ class CasePenaltyControllerTest extends AbstractHttpControllerTestCase
 
     /**
      * Creates a mock class (used for the redirect method)
-     *
-     * @param int $caseId
-     * @param int $licenceId
-     *
      */
     private function getSaveRedirect()
     {
