@@ -8,12 +8,26 @@
     );
 ?>
 <div  class="two-thirds">
-<?php //echo print_r($this->params['data']); ?>
 <?php 
-    foreach($this->params['data'] as $key => $section) { 
+    foreach($this->params['submission']['data'] as $key => $section) { 
         echo $this->partial('submission/partials/section.phtml', array(
         'heading' => $key,
         'data' => $section)); 
     } 
 ?>
+</div>
+<?php if (isset($this->params['submission']['submissionActions'])) : ?>
+    <?php 
+        echo $this->partial('submission/partials/decRecDisplay.phtml', array(
+        'heading' => $key,
+        'data' => $this->params['submission']['submissionActions'])); 
+?>
+<?php endif; ?>
+<div  class="two-thirds">
+    <form method="POST" action="<?php echo $this->params['formAction']; ?>">
+        <div class="actions-container">
+            <input id="recommend" class="action--primary" name="recommend" type="submit" value="Add recommendation">
+            <input id="decision" class="action--primary" name="decision" type="submit" value="Add decision">
+        </div>
+    </form>
 </div>

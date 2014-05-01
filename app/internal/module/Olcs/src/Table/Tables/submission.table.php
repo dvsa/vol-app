@@ -32,8 +32,8 @@ return array(
             'title' => 'Submission #',
             'formatter' => function ($row) {
                 return '<a href="' . $this->generateUrl(
-                    array('case' => $row['id'], 'tab' => 'overview'),
-                    'case_manage',
+                    array('id' => $row['id'], 'action' => 'edit'),
+                    'submission',
                     true
                 ) . '">' . $row['id'] . '</a>';
             }
