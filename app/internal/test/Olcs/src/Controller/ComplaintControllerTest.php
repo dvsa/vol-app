@@ -10,6 +10,11 @@ namespace OlcsTest\Controller;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
+/**
+ * Complaint controller form post tests
+ *
+ * @author Shaun Lizzio  <shaun.lizzio@valtech.co.uk>
+ */
 class ComplaintControllerTest extends AbstractHttpControllerTestCase
 {
 
@@ -361,61 +366,61 @@ class ComplaintControllerTest extends AbstractHttpControllerTestCase
     private function getAddData()
     {
         return array (
-  0 =>
-  array (
-    0 => 'id => 1',
-  ),
-  'vosaCases' =>
-  array (
-    0 =>
-    array (
-      0 => 'vc',
-    ),
-  ),
-  'value' => '',
-  'vehicle_id' => 1,
-  'organisation' =>
-  array (
-    0 => 'od',
-  ),
-  'driver' =>
-  array (
-    'contactDetails' =>
-    array (
-      'contactDetailsType' => 'Driver',
-      'is_deleted' => 0,
-      'version' => 1,
-      'person' =>
-      array (
-        'contactDetails' =>
+        0 =>
+            array (
+              0 => 'id => 1',
+            ),
+        'vosaCases' =>
         array (
-          'contactDetailsType' => 'Driver',
+          0 =>
+          array (
+            0 => 'vc',
+          ),
+        ),
+        'value' => '',
+        'vehicle_id' => 1,
+        'organisation' =>
+        array (
+          0 => 'od',
+        ),
+        'driver' =>
+        array (
+          'contactDetails' =>
+          array (
+            'contactDetailsType' => 'Driver',
+            'is_deleted' => 0,
+            'version' => 1,
+            'person' =>
+            array (
+              'contactDetails' =>
+              array (
+                'contactDetailsType' => 'Driver',
+                'is_deleted' => 0,
+                'version' => 1,
+                'person' =>
+                array (
+                  0 => 'dd',
+                ),
+              ),
+            ),
+          ),
+        ),
+        'complainant' =>
+        array (
+          'contactDetailsType' => 'Complainant',
           'is_deleted' => 0,
           'version' => 1,
           'person' =>
           array (
-            0 => 'dd',
+            'contactDetailsType' => 'Complainant',
+            'is_deleted' => 0,
+            'version' => 1,
+            'person' =>
+            array (
+              0 => 'cnd',
+            ),
           ),
         ),
-      ),
-    ),
-  ),
-  'complainant' =>
-  array (
-    'contactDetailsType' => 'Complainant',
-    'is_deleted' => 0,
-    'version' => 1,
-    'person' =>
-    array (
-      'contactDetailsType' => 'Complainant',
-      'is_deleted' => 0,
-      'version' => 1,
-      'person' =>
-      array (
-        0 => 'cnd',
-      ),
-    ),
-  ),
-);
+        );
     }
 }
