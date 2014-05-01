@@ -7,7 +7,7 @@ return [
             'route' => '/:applicationId/transport-managers/:step',
             'defaults' => array(
                 'controller' => 'Selfserve\TransportManagers\Index',
-                'action' => 'generateStepForm'
+                'action' => 'index'
             )
         ),
     ),
