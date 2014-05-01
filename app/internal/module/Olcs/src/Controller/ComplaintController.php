@@ -146,6 +146,9 @@ class ComplaintController extends FormActionController
         $routeParams = $this->getParams(array('action', 'licence', 'case'));
 
         if (strtolower($routeParams['action']) == 'edit') {
+            // not sure how the version info is to be handled for entities
+            // that are not directly updated (e.g. ContactDetails)
+            // todo this *may* be possible in a single rest call
             $result = $this->processEdit($data['complaint-details'], 'Complaint');
             $result = $this->processEdit($data['complainant-details'], 'Person');
             $result = $this->processEdit($data['driver-details'], 'Person');
