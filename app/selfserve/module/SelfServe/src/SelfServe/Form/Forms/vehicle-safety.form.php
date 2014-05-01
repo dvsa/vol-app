@@ -73,13 +73,24 @@ return array(
                         'type' => 'hidden'
                     )
                 )
-            )
-        ),
-        'elements' => array(
-            'submit' => array(
-                'type' => 'submit',
-                'label' => 'Continue',
-                'class' => 'action--primary large'
+            ),
+            array(
+                'name' => 'form-actions',
+                'class' => 'action-buttons',
+                'options' => array(0),
+                'elements' => array(
+                    'submit' => array(
+                        'type' => 'submit',
+                        'filters' => '\Common\Form\Elements\InputFilters\ActionButton',
+                        'label' => 'Continue',
+                        'class' => 'action--primary large'
+                    ),
+                    'home' => array(
+                        'type' => 'submit',
+                        'label' => 'Back to home',
+                        'filters' => '\Common\Form\Elements\InputFilters\ActionLink'
+                    )
+                )
             )
         )
     )

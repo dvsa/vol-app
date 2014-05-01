@@ -22,11 +22,11 @@ return array(
         array(
             'title' => '',
             'width' => 'checkbox',
-            'format' => '{{[elements/radio]}}'
+            'type' => 'Selector'
         ),
         array(
             'title' => 'Provider\'s name',
-            'name' => 'organisation'
+            'name' => 'fao'
         ),
         array(
             'title' => 'External?',

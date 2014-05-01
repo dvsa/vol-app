@@ -22,6 +22,12 @@ return array(
                     'version' => array(
                         'type' => 'hidden'
                     ),
+                    'contactDetails.id' => array(
+                        'type' => 'hidden'
+                    ),
+                    'contactDetails.version' => array(
+                        'type' => 'hidden'
+                    ),
                     'isExternal' => array(
                         'type' => 'radio',
                         'label' => 'Who will carry out the safety inspections?',
@@ -30,7 +36,7 @@ return array(
                             'Y' => 'An external contractor'
                         )
                     ),
-                    'organisation' => array(
+                    'fao' => array(
                         'type' => 'text',
                         'label' => 'Contractor\'s name or person\'s full name if performed internally',
                         'filters' => '\Common\Form\Elements\InputFilters\TextRequired'
@@ -52,7 +58,13 @@ return array(
                     'submit' => array(
                         'type' => 'submit',
                         'filters' => '\Common\Form\Elements\InputFilters\ActionButton',
-                        'label' => 'Continue',
+                        'label' => 'Save',
+                        'class' => 'action--primary large'
+                    ),
+                    'addAnother' => array(
+                        'type' => 'submit',
+                        'filters' => '\Common\Form\Elements\InputFilters\ActionButton',
+                        'label' => 'Save & add another',
                         'class' => 'action--primary large'
                     ),
                     'cancel' => array(

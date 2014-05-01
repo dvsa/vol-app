@@ -59,6 +59,8 @@ class OperatingCentreController extends AbstractFinanceController
 
         $form = $this->generateFormWithData($this->processConfigName('operating-centre-authorisation', $applicationId), 'processAuthorisation', $data, true);
 
+        $form->get('form-actions')->get('home')->setValue($this->url()->fromRoute('selfserve/dashboard-home'));
+
         $view = $this->getViewModel(array('operatingCentres' => $table, 'form' => $form, 'isPsv' => $this->isPsvLicence($applicationId)));
 
         $view->setTemplate('self-serve/finance/operating-centre/index');
@@ -188,7 +190,7 @@ class OperatingCentreController extends AbstractFinanceController
                 )
             )
         );
-        
+
         $data = $this->makeRestCall(
             'ApplicationOperatingCentre',
             'GET',

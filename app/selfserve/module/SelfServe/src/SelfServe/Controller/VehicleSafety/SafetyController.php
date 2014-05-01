@@ -50,7 +50,7 @@ class SafetyController extends AbstractVehicleSafetyController
                     'children' => array(
                         'contactDetails' => array(
                             'properties' => array(
-                                'organisation'
+                                'fao'
                             ),
                             'children' => array(
                                 'address' => array(
@@ -93,6 +93,8 @@ class SafetyController extends AbstractVehicleSafetyController
             ),
             true
         );
+
+        $form->get('form-actions')->get('home')->setValue($this->url()->fromRoute('selfserve/dashboard-home'));
 
         $view = $this->getViewModel(['form' => $form]);
         $view->setTemplate('self-serve/forms/generic');
@@ -193,6 +195,21 @@ class SafetyController extends AbstractVehicleSafetyController
             return $this->redirect()->toRoute(
                 'selfserve/vehicle-safety/safety-action/workshop',
                 array('action' => 'add', 'applicationId' => $data['application']['id'])
+            );
+        } else {
+
+            if (!isset($data['table']['id']) || empty($data['table']['id'])) {
+
+                return $this->crudActionMissingId();
+            }
+
+            return $this->redirect()->toRoute(
+                'selfserve/vehicle-safety/safety-action/workshop',
+                array(
+                    'action' => strtolower($data['table']['action']),
+                    'applicationId' => $data['application']['id'],
+                    'id' => $data['table']['id']
+                )
             );
         }
     }

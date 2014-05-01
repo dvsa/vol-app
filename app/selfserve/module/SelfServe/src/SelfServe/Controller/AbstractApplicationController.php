@@ -30,18 +30,18 @@ abstract class AbstractApplicationController extends FormJourneyActionController
     protected $subSections = array();
 
     /**
-     * Has the cancel button been pressed
+     * Check if a button was pressed
      *
-     * @return boolean
+     * @param string $button
      */
-    protected function isCancelPressed()
+    protected function isButtonPressed($button)
     {
         $request = $this->getRequest();
 
         if ($request->isPost()) {
             $data = (array)$request->getPost();
 
-            if (isset($data['form-actions']['cancel'])) {
+            if (isset($data['form-actions'][$button])) {
 
                 return true;
             }
@@ -113,5 +113,16 @@ abstract class AbstractApplicationController extends FormJourneyActionController
         }
 
         return $this->applicationId;
+    }
+
+    /**
+     * Return a variable from route
+     *
+     * @param string $name
+     * @return mixed
+     */
+    protected function fromRoute($name)
+    {
+        return $this->params()->fromRoute($name);
     }
 }
