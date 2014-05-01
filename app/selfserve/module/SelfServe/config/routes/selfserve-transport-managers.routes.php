@@ -4,7 +4,7 @@ return [
     'transport-managers' => array(
         'type' => 'segment',
         'options' => array(
-            'route' => '/:applicationId/transport-managers/:step',
+            'route' => '/:applicationId/transport-managers/',
             'defaults' => array(
                 'controller' => 'Selfserve\TransportManagers\Index',
                 'action' => 'index'
