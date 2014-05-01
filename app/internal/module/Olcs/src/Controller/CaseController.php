@@ -214,7 +214,7 @@ class CaseController extends FormActionController
             'complaints' => [
                 'key' => 'complaints',
                 'label' => 'Complaints',
-                'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'complaints'], [], true),
+                'url' => $pm->get('url')->fromRoute('case_complaints', ['tab' => 'complaints'], [], true),
             ],
             'si' => [
                 'key' => 'si',

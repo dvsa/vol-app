@@ -133,6 +133,22 @@ return array(
                                     )
                                 ),
                                 array(
+                                    'label' => 'Case Complaints',
+                                    'route' => 'case_complaints',
+                                    'action' => 'index',
+                                    'pages' => array(
+                                        array(
+                                            'label' => 'Add Complaint',
+                                            'route' => 'complaint',
+                                            'action' => 'add'
+                                        ),
+                                        array(
+                                            'label' => 'Edit Complaint',
+                                            'route' => 'complaint',
+                                        )
+                                    ),
+                                ),
+                                array(
                                     'label' => 'Case Penalties',
                                     'route' => 'case_penalty',
                                     'action' => 'index',
