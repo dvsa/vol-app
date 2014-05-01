@@ -22,7 +22,7 @@
             <tr>
                 <td><?php echo ucfirst($action['userSender']['displayName']); ?></td>
                 <td><?php echo ucfirst($action['userRecipient']['displayName']); ?></td>
-                <td><?php echo ucfirst($action['createdOn']); ?></td>
+                <td><?php echo date('d/m/Y', strtotime($action['createdOn'])); ?></td>
                 <td><?php echo ucfirst($action['urgent']); ?></td>
             </tr>
         </tbody>

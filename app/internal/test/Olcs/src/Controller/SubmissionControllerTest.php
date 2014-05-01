@@ -34,7 +34,8 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
                 'getViewModel',
                 'createSubmission',
                 'getSubmissionView',
-                'getRequest'
+                'getRequest',
+                'url'
             )
         );
         $this->controller->routeParams = array();
@@ -47,6 +48,9 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         parent::setUp();
     }
     
+    /**
+     * 
+     */
     public function testAddPostAction()
     {
         $this->controller->routeParams = array('case' => 54, 'licence' => 7, 'action' => 'add');
@@ -93,6 +97,9 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $this->controller->addAction();
     }
     
+    /**
+     * 
+     */
     public function testAddGetAction()
     {
         $this->controller->routeParams = array('case' => 54, 'licence' => 7, 'action' => 'add');
@@ -124,7 +131,10 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $this->controller->addAction();
     }
     
-    public function testEditAction()
+    /**
+     * 
+     */
+    public function testEditPostAction()
     {
         $this->controller = $this->getMock(
             '\Olcs\Controller\SubmissionController',
@@ -162,6 +172,9 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $this->controller->editAction();
     }
     
+    /**
+     * 
+     */
     public function testEditRedirectAction()
     {
         $this->controller = $this->getMock(
@@ -213,6 +226,242 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
              ->will($this->returnValue($params));
         
         $this->controller->editAction();
+    }
+    
+    /**
+     * Test getEditSubmissionData
+     */
+    public function testgetEditSubmissionData()
+    {
+        $this->controller = $this->getMock(
+            '\Olcs\Controller\SubmissionController',
+            array(
+                'makeRestCall',
+                'getServiceLocator',
+            )
+        );
+        $this->controller->routeParams = array('case' => 54, 'licence' => 7, 'action' => 'add', 'id' => 8);
+        $bundle = array(
+            'children' => array(
+                'submissionActions' => array(
+                    'properties' => 'ALL',
+                    'children' => array(
+                        'userSender' => array(
+                            'properties' => 'ALL'
+                        ),
+                        'userRecipient' => array(
+                            'properties' => 'ALL'
+                        ),
+                    )
+                )
+            )
+        );
+        
+        $this->controller->expects($this->once())
+            ->method('makeRestCall')
+            ->with('Submission', 'GET', array('id' => $this->controller->routeParams['id']), $bundle)
+            ->will(
+                $this->returnValue(array(
+                'text' => '{"submission":{}}',
+                'submissionActions' => array(
+                    array(
+                        'submissionActionType' => 'decision',
+                        'submissionActionStatus' => 'submission_decision.disagree'
+                    )
+                )))
+            );
+        
+        $serviceLocator = $this->getMock('\stdClass', array('get'));
+        
+        $serviceLocator->expects($this->once())
+            ->method('get')
+            ->with('config')
+            ->will(
+                $this->returnValue(array(
+                'static-list-data' => array('submission_decision' => 
+                    array(
+                        'submission_decision.disagree' => 'Disagree'
+                    ))
+                ))
+            );
+        
+        $this->controller->expects($this->once())
+            ->method('getServiceLocator')
+            ->will($this->returnValue($serviceLocator));
+        
+        $this->controller->getEditSubmissionData();
+    }
+    
+    public function testgetSubmissionView()
+    {
+        $this->controller = $this->getMock(
+            '\Olcs\Controller\SubmissionController',
+            array(
+                'getViewModel',
+                'url',
+            )
+        );
+        
+        $this->controller->routeParams = array('case' => 54, 'licence' => 7, 'action' => 'post', 'id' => 8);
+        
+        $url = $this->getMock('\stdClass', array('fromRoute'));
+        
+        $url->expects($this->once())
+            ->method('fromRoute')
+            ->with('submission', $this->controller->routeParams)
+            ->will($this->returnValue('/licence/7/case/28/submission/edit/166'));
+        
+        $this->controller->expects($this->once())
+            ->method('url')
+            ->will($this->returnValue($url));
+        
+        $viewModel = $this->getMock('\stdClass', array('setTemplate'));
+        
+       $viewModel->expects($this->once())
+            ->method('setTemplate')
+            ->with('submission/page');
+        
+        $this->controller->expects($this->once())
+            ->method('getViewModel')
+            ->with(
+                array(
+                    'params' => array(
+                        'formAction' => '/licence/7/case/28/submission/edit/166',
+                        'pageTitle' => 'case-submission',
+                        'pageSubTitle' => 'case-submission-text',
+                        'submission' => array()
+                    )
+                )
+            )
+            ->will($this->returnValue($viewModel));
+         
+        $this->controller->getSubmissionView(array());
+    }
+    
+    public function testPostDecisionAction()
+    {
+        $this->controller = $this->getMock(
+            '\Olcs\Controller\SubmissionController',
+            array(
+                'getViewModel',
+                'params',
+                'redirect',
+                'backToCaseButton'
+            )
+        );
+        $this->controller->routeParams = array('case' => 54, 'licence' => 7, 'action' => 'decision', 'id' => 8);
+        
+        $params = $this->getMock('\stdClass', array('fromPost'));
+         
+         $params->expects($this->at(0))
+            ->method('fromPost')
+            ->with('decision')
+            ->will($this->returnValue(true));
+         
+         $this->controller->expects($this->atLeastOnce())
+             ->method('params')
+             ->will($this->returnValue($params));
+         
+         $redirect = $this->getMock('\stdClass', array('toRoute'));
+        
+        $redirect->expects($this->once())
+            ->method('toRoute')
+            ->with('submission', $this->controller->routeParams);
+        
+        $this->controller->expects($this->once())
+             ->method('redirect')
+             ->will($this->returnValue($redirect));
+         
+         $this->controller->postAction();
+    }
+    
+    public function testPostRecommendAction()
+    {
+        $this->controller->routeParams = array('case' => 54, 'licence' => 7, 'action' => 'recommendation', 'id' => 8);
+        $params = $this->getMock('\stdClass', array('fromPost'));
+         
+         $params->expects($this->at(0))
+            ->method('fromPost')
+            ->with('decision')
+            ->will($this->returnValue(false));
+         
+         $params->expects($this->at(1))
+            ->method('fromPost')
+            ->with('recommend')
+            ->will($this->returnValue(true));
+         
+         $this->controller->expects($this->atLeastOnce())
+             ->method('params')
+             ->will($this->returnValue($params));
+         
+         $redirect = $this->getMock('\stdClass', array('toRoute'));
+        
+        $redirect->expects($this->once())
+            ->method('toRoute')
+            ->with('submission', $this->controller->routeParams);
+        
+        $this->controller->expects($this->once())
+             ->method('redirect')
+             ->will($this->returnValue($redirect));
+         
+         $this->controller->postAction();
+    }
+    
+    public function testRecommendationAction()
+    {
+        $this->controller = $this->getMock(
+            '\Olcs\Controller\SubmissionController',
+            array(
+                'backToCaseButton',
+                'formView',
+                'setBreadcrumb',
+                
+            )
+        );
+        $this->controller->routeParams = array('case' => 54, 'licence' => 7, 'action' => 'recommendation', 'id' => 8);
+        /*$this->controller->expects($this->once())
+             ->method('backToCaseButton');*/
+        
+        $this->controller->expects($this->once())
+            ->method('setBreadcrumb')
+            ->with();
+        
+        $this->controller->expects($this->once())
+            ->method('formView')
+            ->with('recommend');
+        
+        $this->controller->recommendationAction();
+    }
+    
+    public function testDecisionAction()
+    {
+        $this->controller = $this->getMock(
+            '\Olcs\Controller\SubmissionController',
+            array(
+                'backToCaseButton',
+                'formView',
+                'setBreadcrumb',
+                
+            )
+        );
+        $this->controller->routeParams = array('case' => 54, 'licence' => 7, 'action' => 'recommendation', 'id' => 8);
+        /*$this->controller->expects($this->once())
+             ->method('backToCaseButton');*/
+        
+        $this->controller->expects($this->once())
+            ->method('setBreadcrumb')
+            ->with();
+        
+        $this->controller->expects($this->once())
+            ->method('formView')
+            ->with('decision');
+        
+        $this->controller->decisionAction();
+    }
+    
+    public function testCreateSubmission()
+    {
+        
     }
     
     /*public function testCreateSubmission()

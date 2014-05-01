@@ -87,7 +87,9 @@ class SubmissionController extends FormActionController
             )
         );
         $submissionData = $this->makeRestCall('Submission', 'GET', array('id' => $this->routeParams['id']), $bundle);
-        $submissionActions = $this->getServiceLocator()->get('config')['static-list-data'];
+        $submissionActions = $this->getServiceLocator()->get('config');
+        $submissionActions = $submissionActions['static-list-data'];
+        
         $submission['data'] = json_decode($submissionData['text']);
         foreach ($submissionData['submissionActions'] as &$action) {
             $actions = isset($submissionActions['submission_'.$action['submissionActionType']])
