@@ -2,7 +2,8 @@
 
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
-    
+ini_set('intl.default_locale', 'en_GB');
+
 /**
  * This makes our life easier when dealing with paths. Everything is relative
  * to the application root now.
