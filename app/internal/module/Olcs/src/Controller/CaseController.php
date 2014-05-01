@@ -214,7 +214,7 @@ class CaseController extends FormActionController
             'penalties' => [
                 'key' => 'penalties',
                 'label' => 'Penalties',
-                'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'penalties'], [], true),
+                'url' => $pm->get('url')->fromRoute('case_penalty', ['tab' => 'penalties', 'action' => null], [], true),
             ],
             'erru' => [
                 'key' => 'erru',
