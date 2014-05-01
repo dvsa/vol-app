@@ -122,8 +122,13 @@ return array(
                                 array(
                                     'label' => 'Case Penalties',
                                     'route' => 'case_penalty',
+                                    'action' => 'index',
+                                ),
+                                array(
+                                    'label' => 'Case Prohibitions',
+                                    'route' => 'case_prohibition',
                                     'action' => 'index'
-                                )
+                                ),
                             )
                         )
                     )
