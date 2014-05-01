@@ -19,12 +19,26 @@ class CasePenaltyController extends CaseController
     {
         $caseId = $this->fromRoute('case');
         $licence = $this->fromRoute('licence');
-        
-        $penalties = array();
-        $results = $this->makeRestCall('Penalty', 'GET', array('vosaCase' => $caseId));
 
-        if ($results['Count']) {
-            $penalties = $results['Results'][0];
+        $penalties = array();
+
+        $bundle = array(
+            'children' => array(
+                'case' => array(
+                    'properties' => array(
+                        'id'
+                    )
+                )
+            )
+        );
+
+        $result = $this->makeRestCall('Penalty', 'GET', array('case' => $caseId, 'bundle' => json_encode($bundle)));
+
+        if ($result['Count']) {
+            $penalties = $result['Results'][0];
+            $penalties['case'] = $penalties['case']['id'];
+        } else {
+            $penalties['case'] = $caseId;
         }
 
         $form = $this->generatePenaltyForm($penalties);
@@ -57,7 +71,7 @@ class CasePenaltyController extends CaseController
      * @param array $case
      * @return \Zend\Form
      */
-    public function generatePenaltyForm($penalty)
+    private function generatePenaltyForm($penalty)
     {
         $form = $this->generateForm(
             'penalty-comment',
@@ -75,15 +89,18 @@ class CasePenaltyController extends CaseController
      */
     public function savePenaltyForm($data)
     {
-        $data['case'] = 24;
+        unset($data['cancel']);
+
         $data['fields'] = $data;
 
-        if (!empty($data['fields']['id'])) {
-            $this->processEdit($data, 'Penalty');
-        } else {
-            $this->processAdd($data, 'Penalty');
+        if ($data['submit'] === '') {
+            if (!empty($data['fields']['id'])) {
+                $this->processEdit($data, 'Penalty');
+            } else {
+                $this->processAdd($data, 'Penalty');
+            }
         }
 
-        return $this->redirect()->toRoute('case_penalty', array('licence' => 7, 'case' => 24));
+        return $this->redirect()->toRoute('case_penalty', array(), array(), true);
     }
 }

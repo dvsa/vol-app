@@ -8,11 +8,14 @@ return [
         ],
         'elements' => [
             'notes' => [
-                        'type'  => 'textarea',
-                        'label' => 'Enter penalties',
-                        'class' => 'extra-long'
-                    ],
+                'type' => 'textarea',
+                'label' => 'Enter penalties',
+                'class' => 'extra-long'
+            ],
             'id' => [
+                'type' => 'hidden'
+            ],
+            'case' => [
                 'type' => 'hidden'
             ],
             'version' => [
@@ -25,6 +28,11 @@ return [
                 'type' => 'submit',
                 'label' => 'Save',
                 'class' => 'action--primary large'
+            ],
+            'cancel' => [
+                'type' => 'submit',
+                'label' => 'Cancel',
+                'class' => 'action--secondary large'
             ]
         ]
     ]

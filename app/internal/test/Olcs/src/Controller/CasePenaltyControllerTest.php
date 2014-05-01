@@ -30,12 +30,13 @@ class CasePenaltyControllerTest extends AbstractHttpControllerTestCase
                 'getCaseDetailsArray',
                 'getCaseSummaryArray',
                 'makeRestCall',
-                'generatePenaltyForm',
+                'generateForm',
                 'fromRoute',
                 'setBreadcrumb',
                 'processEdit',
                 'processAdd',
-                'redirect'
+                'redirect',
+                'getView'
             )
         );
 
@@ -85,11 +86,26 @@ class CasePenaltyControllerTest extends AbstractHttpControllerTestCase
             ->method('makeRestCall')->
             will($this->returnValue($results));
 
+        $form = $this->getMock('stdClass', ['setData']);
+        $form->expects($this->once())
+             ->method('setData');
+
         $this->controller->expects($this->once())
-            ->method('generatePenaltyForm');
+            ->method('generateForm')
+            ->will($this->returnValue($form));
 
+        $this->controller->expects($this->once())
+            ->method('getView')
+            ->will($this->returnValue($this->view));
 
-        $this->controller->indexAction();
+        $this->view->expects($this->once())
+            ->method('setVariables');
+
+        $this->view->expects($this->once())
+            ->method('setTemplate')
+            ->with('case/manage');
+
+        $this->assertEquals($this->view, $this->controller->indexAction());
     }
 
     /**
@@ -103,7 +119,11 @@ class CasePenaltyControllerTest extends AbstractHttpControllerTestCase
             array(24,7, array(
                     'Count' => 1,
                     'Results' => array(
-                        0 => array()
+                        0 => array(
+                            'case' => array(
+                                'id' => 24
+                            )
+                        )
                     )
                 )
             ),
@@ -114,13 +134,13 @@ class CasePenaltyControllerTest extends AbstractHttpControllerTestCase
     /**
      * Tests savePenaltyForm add is called
      *
-     * @dataProvider savePenaltyFormAddProvider
+     * @dataProvider savePenaltyFormAddSubmitProvider
      *
      * @param array $data
      */
-    public function testSavePenaltyFormAdd($data)
+    public function testSavePenaltyFormAddSubmit($data)
     {
-        $redirect = $this->getSaveRedirect($data['case'], $data['licence']);
+        $redirect = $this->getSaveRedirect();
 
         $this->controller->expects($this->once())
             ->method('processAdd');
@@ -133,17 +153,59 @@ class CasePenaltyControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
-     * Tests savePenaltyForm edit is called
+     * Tests savePenaltyForm add is called
      *
-     * @dataProvider savePenaltyFormEditProvider
+     * @dataProvider savePenaltyFormAddCancelProvider
      *
      * @param array $data
      */
-    public function testSavePenaltyFormEdit($data)
+    public function testSavePenaltyFormAddCancel($data)
     {
-        $redirect = $this->getSaveRedirect($data['case'], $data['licence']);
+        $redirect = $this->getSaveRedirect();
+
+        $this->controller->expects($this->never())
+            ->method('processAdd');
 
         $this->controller->expects($this->once())
+            ->method('redirect')
+            ->will($this->returnValue($redirect));
+
+        $this->controller->savePenaltyForm($data);
+    }
+
+    /**
+     * Tests savePenaltyForm edit is called when submit pressed
+     *
+     * @dataProvider savePenaltyFormEditSubmitProvider
+     *
+     * @param array $data
+     */
+    public function testSavePenaltyFormEditSubmit($data)
+    {
+        $redirect = $this->getSaveRedirect();
+
+        $this->controller->expects($this->once())
+            ->method('processEdit');
+
+         $this->controller->expects($this->once())
+            ->method('redirect')
+            ->will($this->returnValue($redirect));
+
+         $this->controller->savePenaltyForm($data);
+    }
+
+    /**
+     * Tests savePenaltyForm edit is not called when cancel pressed
+     *
+     * @dataProvider savePenaltyFormEditCancelProvider
+     *
+     * @param array $data
+     */
+    public function testSavePenaltyFormEditCancel($data)
+    {
+        $redirect = $this->getSaveRedirect();
+
+        $this->controller->expects($this->never())
             ->method('processEdit');
 
          $this->controller->expects($this->once())
@@ -159,14 +221,15 @@ class CasePenaltyControllerTest extends AbstractHttpControllerTestCase
      *
      * @return array
      */
-    public function savePenaltyFormAddProvider()
+    public function savePenaltyFormAddSubmitProvider()
     {
         return array(
             array(
                 array(
                     'case' => 24,
-                    'licence' => 7,
-                    'notes' => 'test'
+                    'notes' => 'test',
+                    'submit' => '',
+                    'cancel' => null
                 )
             )
         );
@@ -178,17 +241,59 @@ class CasePenaltyControllerTest extends AbstractHttpControllerTestCase
      *
      * @return array
      */
-    public function savePenaltyFormEditProvider()
+    public function savePenaltyFormAddCancelProvider()
     {
         return array(
             array(
-                array(
+            array(
+                    'case' => 24,
+                    'notes' => 'test',
+                    'submit' => null,
+                    'cancel' => ''
+            )
+                )
+        );
+    }
+
+    /**
+     *
+     * data provider for testSavePenaltySubmitForm
+     *
+     * @return array
+     */
+    public function savePenaltyFormEditSubmitProvider()
+    {
+        return array(
+            array(
+            array(
                     'id' => 1,
                     'case' => 24,
-                    'licence' => 7,
-                    'notes' => 'test'
-                )
+                    'notes' => 'test',
+                    'submit' => '',
+                    'cancel' => null
             )
+                )
+        );
+    }
+
+    /**
+     *
+     * data provider for testSavePenaltyCancelForm
+     *
+     * @return array
+     */
+    public function savePenaltyFormEditCancelProvider()
+    {
+        return array(
+            array(
+            array(
+                    'id' => 1,
+                    'case' => 24,
+                    'notes' => 'test',
+                    'submit' => null,
+                    'cancel' => ''
+            )
+                )
         );
     }
 
@@ -220,12 +325,12 @@ class CasePenaltyControllerTest extends AbstractHttpControllerTestCase
      * @param int $licenceId
      *
      */
-    private function getSaveRedirect($caseId, $licenceId)
+    private function getSaveRedirect()
     {
         $redirect = $this->getMock('stdClass', ['toRoute']);
         $redirect->expects($this->once())
             ->method('toRoute')
-            ->with($this->equalTo('case_penalty'), $this->equalTo(array('licence' => $licenceId, 'case' => $caseId)));
+            ->with($this->equalTo('case_penalty'), $this->equalTo(array()), $this->equalTo(array()), $this->equalTo(true));
 
         return $redirect;
     }
