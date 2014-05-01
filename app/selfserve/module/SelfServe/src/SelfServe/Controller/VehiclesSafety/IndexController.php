@@ -35,6 +35,7 @@ class IndexController extends FormJourneyActionController
      */
     public function indexAction()
     {
+        $applicationId = $this->params()->fromRoute('applicationId');
 
         $licence = $this->getLicenceEntity();
         $vehicleTable = $this->generateVehicleTable($licence);
@@ -59,8 +60,13 @@ class IndexController extends FormJourneyActionController
             }
         }
 
+        // collect completion status
+        $completionStatus = $this->makeRestCall('ApplicationCompletion', 'GET', array('application_id' => $applicationId));
+
         // render the view
-        $view = new ViewModel(['vehicleTable' => $vehicleTable]);
+        $view = new ViewModel(['vehicleTable' => $vehicleTable,
+                                'completionStatus' => $completionStatus['Results'][0],
+                                'applicationId' => $applicationId]);
         $view->setTemplate('self-serve/vehicle-safety/index');
         return $view;
     }

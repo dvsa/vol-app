@@ -24,10 +24,17 @@ class FinancialEvidenceController extends AbstractFinanceController
      */
     public function indexAction()
     {
+        $applicationId = $this->params()->fromRoute('applicationId');
+
         $view = $this->getViewModel();
         $view->setTemplate('self-serve/finance/financial-evidence/index');
 
-        return $this->renderLayout($view, 'financialEvidence');
+        // collect completion status
+        $completionStatus = $this->makeRestCall('ApplicationCompletion', 'GET', array('application_id' => $applicationId));
+
+        return $this->renderLayout($view, 'financialEvidence',
+                                    array('completionStatus' => $completionStatus['Results'][0],
+                                            'applicationId' => $applicationId));
     }
 
     public function completeAction()

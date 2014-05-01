@@ -59,11 +59,20 @@ class OperatingCentreController extends AbstractFinanceController
 
         $form = $this->generateFormWithData($this->processConfigName('operating-centre-authorisation', $applicationId), 'processAuthorisation', $data, true);
 
-        $view = $this->getViewModel(array('operatingCentres' => $table, 'form' => $form, 'isPsv' => $this->isPsvLicence($applicationId)));
+        // collect completion status
+        $completionStatus = $this->makeRestCall('ApplicationCompletion', 'GET', array('application_id' => $applicationId));
+
+        $view = $this->getViewModel(array(
+                        'operatingCentres' => $table,
+                        'form' => $form,
+                        'isPsv' => $this->isPsvLicence($applicationId)
+                        ));
 
         $view->setTemplate('self-serve/finance/operating-centre/index');
 
-        return $this->renderLayout($view, 'operatingCentre');
+        return $this->renderLayout($view, 'operatingCentre',
+                                array('completionStatus' => $completionStatus['Results'][0],
+                                        'applicationId' => $applicationId));
     }
 
     /**
@@ -81,7 +90,9 @@ class OperatingCentreController extends AbstractFinanceController
 
         $view = $this->getViewModel(['form' => $form]);
         $view->setTemplate('self-serve/finance/operating-centre/add');
-        return $this->renderLayout($view, 'operatingCentre');
+        return $this->renderLayout($view, 'operatingCentre',
+                                        array('completionStatus' => $completionStatus['Results'][0],
+                                                'applicationId' => $applicationId));
     }
 
     /**
@@ -115,7 +126,9 @@ class OperatingCentreController extends AbstractFinanceController
 
         $view = $this->getViewModel(['form' => $form]);
         $view->setTemplate('self-serve/finance/operating-centre/edit');
-        return $this->renderLayout($view, 'operatingCentre');
+        return $this->renderLayout($view, 'operatingCentre',
+                                        array('completionStatus' => $completionStatus['Results'][0],
+                                                'applicationId' => $applicationId));
     }
 
     /**
@@ -188,7 +201,7 @@ class OperatingCentreController extends AbstractFinanceController
                 )
             )
         );
-        
+
         $data = $this->makeRestCall(
             'ApplicationOperatingCentre',
             'GET',

@@ -40,6 +40,9 @@ class IndexController extends FormJourneyActionController
 
         $this->setCurrentStep($step);
 
+        // collect completion status
+        $completionStatus = $this->makeRestCall('ApplicationCompletion', 'GET', array('application_id' => $applicationId));
+
         // create form
         $form = $this->generateSectionForm();
 
@@ -57,7 +60,9 @@ class IndexController extends FormJourneyActionController
         }
 
         // render the view
-        $view = new ViewModel(['licenceTypeForm' => $form]);
+        $view = new ViewModel(['licenceTypeForm' => $form,
+                                'completionStatus' => $completionStatus['Results'][0],
+                                'applicationId' => $applicationId]);
         $view->setTemplate('self-serve/licence/index');
         return $view;
     }

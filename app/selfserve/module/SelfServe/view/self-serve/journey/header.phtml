@@ -1,30 +1,12 @@
-<?php
-    $applicationProcess=array(
-        "Tol" => Array("title" => "Type of licence", "link" => "licence-type" ),
-        "Yb" => Array("title" => "Your business", "link" => "business"),
-        "Ocs" => Array("title" => "Operating centres", "link" => "finance/operating-centres"),
-        "Tms" => Array("title" => "Transport managers", "link" => "transport-managers"),
-        "Veh" => Array("title" => "Vehicle &amp; safety", "link" => "vehicle-safety" ),
-        "Ph" => Array("title" => "Previous history", "link" => "previous-history" ),
-        "Ud" => Array("title" => "Declarations", "link" => "declarations" ),
-        "Pay" => Array("title" => "Payment details", "link" => "payment-details"),
-        "Sub" => Array("title" => "Summary", "link" => "summary" )
-    );
-?>
-
-<h3>Application navigation</h3>
+<!-- start progress -->
 <ul class="application" role="navigation" >
     <?php
-        foreach($applicationProcess as $applicationKey=>$applicationStage) {
+        foreach($applicationProcess as $applicationItem) {
             echo $this->render(
-                'self-serve/navigation/item.phtml',
-                array(
-                    'status' => $statusArray['Results'][0]['section'.$applicationKey.'Status'],
-                    'title' => $applicationStage['title'],
-                    'link' => '/selfserve/'.$applicationId.'/'.$applicationStage['link']
-                )
+                        'self-serve/journey/item.phtml',
+                        $applicationItem
             );
         }
     ?>
-</ul><!-- end .progress -->
-
+</ul>
+<!-- end .progress -->

@@ -1,16 +1,6 @@
 <?php
-/*    echo $this->render(
-        'self-serve/navigation/header.phtml',
-        array(
-            'statusArray' => $statusArray,
-            'applicationId' => $applicationId
-        )
-    );
- */
-    echo $this->journey("moo");
-?>
+    echo $this->journey("licence-type",$completionStatus,$applicationId);
 
-<?php
     echo $this->render(
         '/partials/page-header.phtml',
         array(
