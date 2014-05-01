@@ -102,8 +102,12 @@ return array(
                                             'action' => 'edit'
                                         )
                                     )
-                                )
-
+                                ),
+                                array(
+                                    'label' => 'Case Prohibitions',
+                                    'route' => 'case_prohibition',
+                                    'action' => 'index'
+                                ),
                             )
                         )
                     )
