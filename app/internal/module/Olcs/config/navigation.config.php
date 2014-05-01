@@ -102,6 +102,11 @@ return array(
                                             'action' => 'edit'
                                         )
                                     )
+                                ),
+                                array(
+                                    'label' => 'Case Penalties',
+                                    'route' => 'case_penalty',
+                                    'action' => 'index',
                                 )
 
                             )
