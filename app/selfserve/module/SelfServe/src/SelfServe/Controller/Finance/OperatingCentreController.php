@@ -19,6 +19,9 @@ use Zend\View\Model\ViewModel;
  */
 class OperatingCentreController extends AbstractFinanceController
 {
+
+    private $isPsv = null;
+
     /**
      * Index action
      *
@@ -50,13 +53,13 @@ class OperatingCentreController extends AbstractFinanceController
 
         $results = $this->getOperatingCentresForApplication($applicationId);
 
-        $table = $this->getOperatingCentreTable($results);
+        $table = $this->getOperatingCentreTable($results, $applicationId);
 
         $data = $this->formatDataForForm($data, $applicationId, $results);
 
-        $form = $this->generateFormWithData('operating-centre-authorisation', 'processAuthorisation', $data, true);
+        $form = $this->generateFormWithData($this->processConfigName('operating-centre-authorisation', $applicationId), 'processAuthorisation', $data, true);
 
-        $view = $this->getViewModel(array('operatingCentres' => $table, 'form' => $form));
+        $view = $this->getViewModel(array('operatingCentres' => $table, 'form' => $form, 'isPsv' => $this->isPsvLicence($applicationId)));
 
         $view->setTemplate('self-serve/finance/operating-centre/index');
 
@@ -70,8 +73,10 @@ class OperatingCentreController extends AbstractFinanceController
      */
     public function addAction()
     {
+        $applicationId      = $this->params()->fromRoute('applicationId');
+
         $form = $this->generateForm(
-            'operating-centre', 'processAddForm'
+            $this->processConfigName('operating-centre', $applicationId), 'processAddForm'
         );
 
         $view = $this->getViewModel(['form' => $form]);
@@ -87,6 +92,7 @@ class OperatingCentreController extends AbstractFinanceController
     public function editAction()
     {
         $operatingCentreId = $this->params()->fromRoute('id');
+        $applicationId = $this->params()->fromRoute('applicationId');
 
         //get operating centre enetity based on applicationId and operatingCentreId
         $result = $this->makeRestCall('ApplicationOperatingCentre', 'GET', array('id' => $operatingCentreId));
@@ -105,7 +111,7 @@ class OperatingCentreController extends AbstractFinanceController
             )
         );
 
-        $form = $this->generateFormWithData('operating-centre', 'processEditForm', $data, true);
+        $form = $this->generateFormWithData($this->processConfigName('operating-centre', $applicationId), 'processEditForm', $data, true);
 
         $view = $this->getViewModel(['form' => $form]);
         $view->setTemplate('self-serve/finance/operating-centre/edit');
@@ -182,7 +188,7 @@ class OperatingCentreController extends AbstractFinanceController
                 )
             )
         );
-
+        
         $data = $this->makeRestCall(
             'ApplicationOperatingCentre',
             'GET',
@@ -215,7 +221,7 @@ class OperatingCentreController extends AbstractFinanceController
      * @param array $results
      * @return object
      */
-    private function getOperatingCentreTable($results)
+    private function getOperatingCentreTable($results, $applicationId)
     {
         $settings = array(
             'sort' => 'address',
@@ -225,7 +231,7 @@ class OperatingCentreController extends AbstractFinanceController
             'url' => $this->getPluginManager()->get('url')
         );
 
-        return $this->getServiceLocator()->get('Table')->buildTable('operatingcentre', $results, $settings);
+        return $this->getServiceLocator()->get('Table')->buildTable($this->processConfigName('operatingcentre', $applicationId), $results, $settings);
     }
 
     /**
@@ -358,14 +364,51 @@ class OperatingCentreController extends AbstractFinanceController
         $validData = $this->processAddressData($validData);
 
         $applicationId = $this->params()->fromRoute('applicationId');
-        return array(
+        $data = array(
             'numberOfVehicles' => $validData['authorised-vehicles']['no-of-vehicles'],
-            'numberOfTrailers' => $validData['authorised-vehicles']['no-of-trailers'],
             'sufficientParking' => $validData['authorised-vehicles']['parking-spaces-confirmation'],
             'permission' => $validData['authorised-vehicles']['permission-confirmation'],
             'adPlaced' => true,
             'application' => $applicationId,
             'addresses' => $validData['addresses'],
         );
+
+        //licence type condition
+        if (isset($validData['authorised-vehicles']['no-of-trailers'])) {
+            $data = array_merge($data, array('numberOfTrailers' => $validData['authorised-vehicles']['no-of-trailers']));
+        }
+
+        return $data;
     }
+
+    /**
+     * Check if licence type is psv
+     *
+     * @param int $applicationId
+     * @return boolean
+     */
+    private function isPsvLicence($applicationId)
+    {
+        if (is_null($this->isPsv)) {
+            $licence = $this->getLicenceEntity($applicationId);
+            $this->isPsv = $licence['goodsOrPsv'] == 'psv';
+        }
+        return $this->isPsv;
+    }
+
+    /**
+     * Adds -psv suffix if the licence type is psv
+     *
+     * @param $applicationId
+     * @param $name
+     * @return string
+     */
+    private function processConfigName($name, $applicationId)
+    {
+        if ($this->isPsvLicence($applicationId)) {
+            $name .= '-psv';
+        }
+        return $name;
+    }
+
 }

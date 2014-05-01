@@ -34,7 +34,7 @@ return array(
             'title' => 'Vehicles',
             'name' => 'numberOfVehicles'
         ),
-        array(
+        'trailersCol' => array(
             'title' => 'Trailers',
             'name' => 'numberOfTrailers'
         ),
