@@ -117,7 +117,12 @@ return array(
                                             'label' => 'Edit Complaint',
                                             'route' => 'complaint',
                                         )
-                                    )
+                                    ),
+                                ),
+                                array(
+                                    'label' => 'Case Penalties',
+                                    'route' => 'case_penalty',
+                                    'action' => 'index'
                                 )
                             )
                         )
