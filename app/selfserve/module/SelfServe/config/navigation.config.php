@@ -1,16 +1,4 @@
 <?php
-/*    $applicationProcess=array(
-        "Tol" => Array("title" => "Type of licence", "link" => "licence-type" ),
-        "Yb" => Array("title" => "Your business", "link" => "business"),
-        "Ocs" => Array("title" => "Operating centres", "link" => "finance/operating-centres"),
-        "Tms" => Array("title" => "Transport managers", "link" => "transport-managers"),
-        "Veh" => Array("title" => "Vehicle &amp; safety", "link" => "vehicle-safety" ),
-        "Ph" => Array("title" => "Previous history", "link" => "previous-history" ),
-        "Ud" => Array("title" => "Declarations", "link" => "declarations" ),
-        "Pay" => Array("title" => "Payment details", "link" => "payment-details"),
-        "Sub" => Array("title" => "Summary", "link" => "summary" )
-    );*/
-
     return array(
         'journeyCompletionStatus' => array(
                 0 => '',
