@@ -38,11 +38,25 @@ return array(
             }
         ),
         array(
-            'title' => 'Status',
-            'name' => 'status'
+            'title' => 'Case type',
+            'name' => 'caseType',
+        ),
+        array(
+            'title' => 'Created',
+            'formatter' => 'Date',
+            'name' => 'createdOn',
+        ),
+        array(
+            'title' => 'Closed',
+            'formatter' => 'Date',
+            'name' => 'closedTime',
         ),
         array(
             'title' => 'Description',
+            'formatter' => function ($row) {
+                $append = strlen($row['description']) > 250 ? '...' : '';
+                return substr($row['description'], 0, 250) . $append;
+            },
             'name' => 'description'
         ),
         array(
