@@ -15,6 +15,12 @@ namespace Olcs\Controller;
  */
 class CaseProhibitionController extends CaseController
 {
+
+    /**
+     * Index action loads the form data
+     *
+     * @return \Zend\Form
+     */
     public function indexAction()
     {
         $caseId = $this->fromRoute('case');
