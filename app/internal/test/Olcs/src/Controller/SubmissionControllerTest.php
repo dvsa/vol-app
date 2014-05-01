@@ -48,9 +48,6 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         parent::setUp();
     }
     
-    /**
-     * 
-     */
     public function testAddPostAction()
     {
         $this->controller->routeParams = array('case' => 54, 'licence' => 7, 'action' => 'add');
@@ -97,9 +94,6 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $this->controller->addAction();
     }
     
-    /**
-     * 
-     */
     public function testAddGetAction()
     {
         $this->controller->routeParams = array('case' => 54, 'licence' => 7, 'action' => 'add');
@@ -131,9 +125,6 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $this->controller->addAction();
     }
     
-    /**
-     * 
-     */
     public function testEditPostAction()
     {
         $this->controller = $this->getMock(
@@ -172,9 +163,6 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $this->controller->editAction();
     }
     
-    /**
-     * 
-     */
     public function testEditRedirectAction()
     {
         $this->controller = $this->getMock(
@@ -228,9 +216,6 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $this->controller->editAction();
     }
     
-    /**
-     * Test getEditSubmissionData
-     */
     public function testgetEditSubmissionData()
     {
         $this->controller = $this->getMock(
@@ -461,22 +446,233 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
     
     public function testCreateSubmission()
     {
-        
-    }
-    
-    /*public function testCreateSubmission()
-    {
         $this->controller = $this->getMock(
             '\Olcs\Controller\SubmissionController',
             array(
                 'makeRestCall',
+                'getServiceLocator'
             )
         );
+        $this->licenceData['licenceType'] = 'blah';
         $this->controller->expects($this->once())
             ->method('makeRestCall')
             ->with('Licence', 'GET', array('id' => 7))
             ->will($this->returnValue($this->licenceData));
         
+        $serviceLocator = $this->getMock('\stdClass', array('get'));
+        
+        $serviceLocator->expects($this->once())
+            ->method('get')
+            ->with('config')
+            ->will(
+                $this->returnValue(
+                    array(
+                        'submission_config' => array(
+                            'sections' => array(
+                                'case-summary-info' => null,
+                                'transport-managers' => array(
+                                    'exclude' => array(
+                                        'column' => 'licenceType',
+                                        'values' => array(
+                                            'standard national',
+                                            'standard international'
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            );
+        
+        $this->controller->expects($this->once())
+            ->method('getServiceLocator')
+            ->will($this->returnValue($serviceLocator));
+        
         $this->controller->createSubmission(array('licence' => 7, 'case' => 54));
-    }*/
+    }
+    
+    public function testFormView()
+    {
+        $this->controller = $this->getMock(
+            '\Olcs\Controller\SubmissionController',
+            array(
+                'makeRestCall',
+                'getServiceLocator',
+                'getFormWithUsers',
+                'formPost',
+                'getViewModel'
+            )
+        );
+        $this->controller->routeParams = array('case' => 54, 'licence' => 7, 'action' => 'decision', 'id' => 8);
+        $this->controller->expects($this->once())
+            ->method('getFormWithUsers')
+            ->with('decision', array('submission' => 8, 'userSender' => 1))
+            ->will($this->returnValue('form'));
+        
+        $this->controller->expects($this->once())
+            ->method('formPost')
+            ->with('form', 'processRecDecForm')
+            ->will($this->returnValue('form'));
+        
+        $viewModel = $this->getMock('\stdClass', array('setTemplate'));
+        
+       $viewModel->expects($this->once())
+            ->method('setTemplate')
+            ->with('form');
+        
+        $this->controller->expects($this->once())
+            ->method('getViewModel')
+            ->with(
+                array(
+                'form' => 'form',
+                'params' => array(
+                    'pageTitle' => "submission-decision",
+                    'pageSubTitle' => "submission-decision-text",
+                )
+            )
+            )
+            ->will($this->returnValue($viewModel));
+        
+        $this->controller->formView('decision');
+    }
+    
+    public function testProcessRecDecForm()
+    {
+        $this->controller = $this->getMock(
+            '\Olcs\Controller\SubmissionController',
+            array(
+                'processAdd',
+                'redirect'
+            )
+        );
+        $this->controller->routeParams = array('case' => 54, 'licence' => 7, 'action' => 'decision', 'id' => 8);
+         $this->controller->expects($this->once())
+            ->method('processAdd')
+            ->with(array('main' => array()))
+            ->will($this->returnValue(array('id' => 8)));
+         
+         $redirect = $this->getMock('\stdClass', array('toRoute'));
+        
+        $redirect->expects($this->once())
+            ->method('toRoute')
+            ->with('case_manage', array('licence' => 7, 'case' => 54, 'tab' => 'overview'));
+        
+        $this->controller->expects($this->once())
+             ->method('redirect')
+             ->will($this->returnValue($redirect));
+         
+        $this->controller->processRecDecForm(array('main' => array()));
+    }
+    
+    public function testBackToCaseButton()
+    {
+        $this->controller->routeParams = array('case' => 54, 'licence' => 7, 'action' => 'decision', 'id' => 8);
+        $redirect = $this->getMock('\stdClass', array('toRoute'));
+        
+        $redirect->expects($this->once())
+            ->method('toRoute')
+            ->with('submission', array('licence' => 7, 'case' => 54, 'id' => 8, 'action' => 'edit'));
+        
+        $this->controller->expects($this->once())
+             ->method('redirect')
+             ->will($this->returnValue($redirect));
+         
+        $this->controller->backToCaseButton(array('main' => array()));
+    }
+    
+    public function testGetUserList()
+    {
+        $this->controller = $this->getMock(
+            '\Olcs\Controller\SubmissionController',
+            array(
+                'makeRestCall'
+            )
+        );
+        $this->controller->routeParams = array('case' => 54, 'licence' => 7, 'action' => 'decision', 'id' => 8);
+        $users = array(
+            'Results' => array(
+                array(
+                    'id' => 1,
+                    'displayName' => 'Fred Smith'
+                )
+            )
+        );
+        
+        $this->controller->expects($this->once())
+            ->method('makeRestCall')
+            ->with('User', 'GET', array())
+            ->will($this->returnValue($users));
+        
+        $this->controller->getUserList();
+    }
+    
+    public function testGetFormWithUsers()
+    {
+        $this->controller = $this->getMock(
+            '\Olcs\Controller\SubmissionController',
+            array(
+                'getUserList',
+                'getFormGenerator',
+            )
+        );
+        
+        $this->controller->expects($this->once())
+            ->method('getUserList')
+            ->will($this->returnValue('user-list'));
+        
+        $formGenerator = $this->getMock('\stdClass', array('getFormConfig', 'setFormConfig'));
+        
+        $formConfig = [
+            'decision' => [
+                'name' => 'decision',
+                'attributes' => [
+                    'method' => 'post',
+                ],
+                'fieldsets' => ['main' =>
+                    [
+                        'name' => 'main',
+                        'options' => [
+                            'label' => 'Add decision'
+                        ],
+                        'elements' => [
+                            'userRecipient' => [
+                                'label' => 'Send to',
+                                'type' => 'select',
+                                'value_options' => 'user-list',
+                                'required' => true
+                            ],
+                        ]
+                    ]
+                ],
+            ]
+        ];
+        
+        $formGenerator->expects($this->once())
+            ->method('getFormConfig')
+            ->will($this->returnValue($formConfig));
+        
+        $this->controller->expects($this->once())
+            ->method('getFormGenerator')
+            ->will($this->returnValue($formGenerator));
+        
+        $createForm = $this->getMock('\stdClass', array('createForm'));
+        $form = $this->getMock('\stdClass', array('setData'));
+        
+        $createForm->expects($this->once())
+            ->method('createForm')
+            ->with('decision')
+            ->will($this->returnValue($form));
+        
+        $formGenerator->expects($this->once())
+            ->method('setFormConfig')
+            ->with($formConfig)
+            ->will($this->returnValue($createForm));
+        
+        $form->expects($this->once())
+            ->method('setData')
+            ->with(array());
+        
+        $this->controller->getFormWithUsers('decision', array());
+    }
 }

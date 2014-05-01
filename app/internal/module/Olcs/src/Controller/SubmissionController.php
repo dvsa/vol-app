@@ -232,7 +232,7 @@ class SubmissionController extends FormActionController
         $form = $this->getFormWithUsers(
             $type,
             array(
-                'submission' => $this->params()->fromRoute('id'),
+                'submission' => $this->routeParams['id'],
                 'userSender' => 1)
         );
         $form = $this->formPost($form, 'processRecDecForm');
@@ -283,7 +283,7 @@ class SubmissionController extends FormActionController
      * Gets user list for recipients
      * @return type
      */
-    private function getUserList()
+    public function getUserList()
     {
         $users = $this->makeRestCall('User', 'GET', array());
         $userList = [];
@@ -299,7 +299,7 @@ class SubmissionController extends FormActionController
      * @param type $formType
      * @return type
      */
-    private function getFormWithUsers($formType, $data = array())
+    public function getFormWithUsers($formType, $data = array())
     {
         $userList = $this->getUserList();
         $generator = $this->getFormGenerator();

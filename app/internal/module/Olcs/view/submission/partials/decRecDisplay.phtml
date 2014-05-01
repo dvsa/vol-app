@@ -1,33 +1,21 @@
-<div class="table__header">
-    <h3><?php echo $this->translate('submission-actions'); ?></h3>
+<div class="three-quarters">
+    <h2><?php echo $this->translate('submission-actions'); ?></h2>	
+    <ul class="submission-actions">
+            <?php 
+            foreach($data as $key => $action) :
+            ?>
+            <li class="submission-actions__item">
+                <h3><?php echo ucfirst($action['submissionActionType']); ?>: <?php echo $action['submissionActionStatus']; ?></h3>
+                <p><?php echo $action['comment']; ?></p>
+                <ul class="summary__list">
+                    <li class="summary__item"><b>From</b><a href=""><?php echo ucfirst($action['userSender']['displayName']); ?></a></li>
+                    <li class="summary__item"><b>To</b><a href=""><?php echo ucfirst($action['userRecipient']['displayName']); ?></a></li>
+                    <li class="summary__item"><b>Created</b><?php echo date('d/m/Y', strtotime($action['createdOn'])); ?></li>
+                    <li class="summary__item"><b>Urgent</b><?php echo ucfirst($action['urgent']); ?></li>
+                </ul>
+            </li>
+            <?php    
+            endforeach; 
+            ?>
+        </ul>
 </div>
-<?php 
-    foreach($data as $key => $action) :
-?>
-<div>
-    <div>
-        <?php echo ucfirst($action['submissionActionType']).' - '.$action['submissionActionStatus']; ?>
-    </div>
-    <p>
-        <?php echo ucfirst($action['comment']); ?>
-    </p>
-    <table>
-        <thead>
-            <th>From:</th>
-            <th>To:</th>
-            <th>Created:</th>
-            <th>Urgent:</th>
-        </thead>
-        <tbody>
-            <tr>
-                <td><?php echo ucfirst($action['userSender']['displayName']); ?></td>
-                <td><?php echo ucfirst($action['userRecipient']['displayName']); ?></td>
-                <td><?php echo date('d/m/Y', strtotime($action['createdOn'])); ?></td>
-                <td><?php echo ucfirst($action['urgent']); ?></td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-<?php    
-endforeach; 
-?>
