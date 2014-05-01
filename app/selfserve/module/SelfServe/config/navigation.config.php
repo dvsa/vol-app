@@ -9,7 +9,8 @@
             'licence-type' => array(
                 'dbkey' => 'Tol',
                 'route' => 'licence-type',
-                'label' => 'Type of licence'
+                'label' => 'Type of licence',
+                'step'  => 'operator-location'
             ),
             'business-type' => array(
                 'dbkey' => 'Yb',
@@ -34,6 +35,7 @@
             'previous-history' => array(
                 'dbkey' => 'Ph',
                 'route' => 'previous-history',
+                'step'  => 'finance',
                 'label' => 'Previous history'
             ),
             'declarations' => array(

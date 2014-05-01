@@ -33,7 +33,7 @@ class Journey
                 'title' => $applicationStage['label'],
                 'link' => $this->view->url("selfserve/".$applicationStage['route'],
                                         array('applicationId'=>$applicationId,
-                                                'step'=>1)),
+                                                'step'=>(isset($applicationStage['step'])?$applicationStage['step']:""))),
                 'status' => $config['journeyCompletionStatus'][$thisCompletionStatus]
             );
 
