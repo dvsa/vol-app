@@ -27,10 +27,11 @@ class CaseController extends FormActionController
         $caseId = $this->fromRoute('case');
         $licence = $this->fromRoute('licence');
         $action = $this->fromRoute('tab');
-        
+
         $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licence)));
         $params = $this->params()->fromPost();
         $params = array_merge($params, array('case' => $caseId, 'licence' => $licence));
+
         if ($this->params()->fromPost('action')) {
             return $this->forward()->dispatch(
                 'SubmissionController',
@@ -41,7 +42,7 @@ class CaseController extends FormActionController
                         'id' => $this->params()->fromPost('id') ? $this->params()->fromPost('id') : '',
                         'action' => strtolower($this->params()->fromPost('action'))));*/
         }
-        
+
         $view = $this->getView();
 
         $tabs = $this->getTabInformationArray();
@@ -193,12 +194,12 @@ class CaseController extends FormActionController
             'prohibitions' => [
                 'key' => 'prohibitions',
                 'label' => 'Prohibitions',
-                'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'prohibitions'], [], true),
+                'url' => $pm->get('url')->fromRoute('case_prohibition', ['tab' => 'prohibitions'], [], true),
             ],
             'penalties' => [
                 'key' => 'penalties',
                 'label' => 'Penalties',
-                'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'penalties'], [], true),
+                'url' => $pm->get('url')->fromRoute('case_penalty', ['tab' => 'penalties', 'action' => null], [], true),
             ],
             'erru' => [
                 'key' => 'erru',

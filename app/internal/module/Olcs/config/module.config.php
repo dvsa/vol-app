@@ -166,12 +166,40 @@ return array(
                     )
                 )
             ),
+            'case_prohibition' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/licence/[:licence]/case/[:case]/action/manage/prohibitions',
+                    'constraints' => array(
+                        'licence' => '[0-9]+',
+                        'case' => '[0-9]+',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'CaseProhibitionController',
+                        'action' => 'index'
+                    )
+                )
+            ),
             'conviction' => array(
                 'type' => 'segment',
                 'options' => array(
                     'route' => '/licence/[:licence]/case/[:case]/conviction[/:action][/][:id]',
                     'defaults' => array(
                         'controller' => 'ConvictionController',
+                    )
+                )
+            ),
+            'case_penalty' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/licence/[:licence]/case/[:case]/action/manage/penalties',
+                    'constraints' => array(
+                        'licence' => '[0-9]+',
+                        'case' => '[0-9]+',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'CasePenaltyController',
+                        'action' => 'index'
                     )
                 )
             ),
@@ -227,7 +255,9 @@ return array(
             'CaseComplaintController' => 'Olcs\Controller\CaseComplaintController',
             'CaseConvictionController' => 'Olcs\Controller\CaseConvictionController',
             'SubmissionController' => 'Olcs\Controller\SubmissionController',
-            'CaseStayController' => 'Olcs\Controller\CaseStayController'
+            'CaseStayController' => 'Olcs\Controller\CaseStayController',
+            'CasePenaltyController' => 'Olcs\Controller\CasePenaltyController',
+            'CaseProhibitionController' => 'Olcs\Controller\CaseProhibitionController'
         )
     ),
     'view_manager' => array(

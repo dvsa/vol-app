@@ -9,7 +9,7 @@ return array(
             'formName' => 'conviction',
             'actions' => array(
                 'add' => array('class' => 'primary'),
-                'Dealt with' => array('requireRows' => true),
+                'dealt' => array('requireRows' => true, 'value' => 'Dealt With'),
                 'edit' => array('requireRows' => true),
                 'delete' => array('class' => 'warning', 'requireRows' => true)
             )
@@ -33,12 +33,14 @@ return array(
             'title' => 'Date of conviction',
             'formatter' => function ($data, $column) {
 
+                $url = $this->generateUrl(['action' => 'edit', 'id' => $data['id']], 'conviction', true);
+
+                if ($data['dateOfConviction'] == null) {
+                    return '<a href="' . $url . '">N/A</a>';
+                }
+
                 $column['formatter'] = 'Date';
-                return '<a href="' . $this->generateUrl(
-                    array('action' => 'edit', 'id' => $data['id']),
-                    'conviction',
-                    true
-                ) . '">' . $this->callFormatter($column, $data) . '</a>';
+                return '<a href="' . $url . '">' . $this->callFormatter($column, $data) . '</a>';
             },
             'name' => 'dateOfConviction'
         ),
