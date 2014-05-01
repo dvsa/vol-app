@@ -11,6 +11,12 @@ return array(
                 'edit' => array('requireRows' => true),
                 'delete' => array('class' => 'warning', 'requireRows' => true)
             )
+        ),
+        'paginate' => array(
+            'limit' => array(
+                'default' => 10,
+                'options' => array(10, 25, 50)
+            )
         )
     ),
     'columns' => array(
@@ -24,8 +30,10 @@ return array(
             'formatter' => function ($data, $column) {
                 $column['formatter'] = 'Date';
                 return '<a href="' . $this->generateUrl(
-                                array('action' => 'edit', 'complaint' => $data['id'])
-                        ) . '">' . $this->callFormatter($column, $data) . '</a>';
+                    array('action' => 'edit', 'id' => $data['id']),
+                    'complaint',
+                    true
+                ) . '">' . $this->callFormatter($column, $data) . '</a>';
             },
             'name' => 'complaintDate'
         ),
