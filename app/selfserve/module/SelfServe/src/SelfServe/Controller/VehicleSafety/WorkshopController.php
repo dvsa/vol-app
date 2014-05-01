@@ -23,7 +23,12 @@ class WorkshopController extends AbstractVehicleSafetyController
      */
     public function addAction()
     {
-        $applicationId = $this->params()->fromRoute('applicationId');
+        $applicationId = $this->getApplicationId();
+
+        if ($this->isCancelPressed()) {
+
+            return $this->redirect()->toRoute('selfserve/vehicle-safety/safety-action', array('applicationId' => $applicationId));
+        }
 
         $data = array(
 

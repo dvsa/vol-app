@@ -23,7 +23,7 @@ class SafetyController extends AbstractVehicleSafetyController
      */
     public function indexAction()
     {
-        $applicationId = $this->params()->fromRoute('applicationId');
+        $applicationId = $this->getApplicationId();
 
         $bundle = array(
             'properties' => array(

@@ -4,7 +4,7 @@ return array(
     'variables' => array(
         'title' => 'Safety inspection providers',
         'empty_message' => 'Please tell us about who will carry out the safety inspections on the vehicles and trailers
-            you intend to operate under your licence. <a href="#">Add your first safety inspector</a>',
+            you intend to operate under your licence.',
         'within_form' => true
     ),
     'settings' => array(

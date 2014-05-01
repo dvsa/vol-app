@@ -30,6 +30,27 @@ abstract class AbstractApplicationController extends FormJourneyActionController
     protected $subSections = array();
 
     /**
+     * Has the cancel button been pressed
+     *
+     * @return boolean
+     */
+    protected function isCancelPressed()
+    {
+        $request = $this->getRequest();
+
+        if ($request->isPost()) {
+            $data = (array)$request->getPost();
+
+            if (isset($data['form-actions']['cancel'])) {
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Render the layout with sub sections
 
      * @param object $view
