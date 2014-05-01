@@ -4,10 +4,10 @@ return [
     'declarations' => array(
         'type' => 'segment',
         'options' => array(
-            'route' => '/:applicationId/declarations/:step',
+            'route' => '/:applicationId/declarations/',
             'defaults' => array(
                 'controller' => 'Selfserve\Declarations\Index',
-                'action' => 'generateStepForm'
+                'action' => 'index'
             )
         ),
     ),
