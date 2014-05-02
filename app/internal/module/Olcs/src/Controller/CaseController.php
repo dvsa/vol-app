@@ -29,15 +29,15 @@ class CaseController extends FormActionController
         $action = $this->fromRoute('tab');
 
         $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licence)));
-        $params = $this->params()->fromPost();
-        $params = array_merge($params, array('case' => $caseId, 'licence' => $licence));
+        //$params = $this->params()->fromPost();
+        //$params = array_merge($params, array('case' => $caseId, 'licence' => $licence));
 
-        if ($this->params()->fromPost('action')) {
-            return $this->forward()->dispatch(
-                'SubmissionController',
-                $params
-            );
-        }
+        //if ($this->params()->fromPost('action')) {
+           // return $this->forward()->dispatch(
+           //     'SubmissionController',
+           //     $params
+           // );
+        //}
 
         $view = $this->getView();
 
@@ -126,9 +126,28 @@ class CaseController extends FormActionController
         return new ViewModel($params);
     }
 
+    /**
+     * Gets a variable from the route
+     *
+     * @param string $param
+     * @param mixed $default
+     * @return type
+     */
     public function fromRoute($param, $default = null)
     {
         return $this->params()->fromRoute($param, $default);
+    }
+
+    /**
+     * Gets a variable from postdata
+     *
+     * @param string $param
+     * @param mixed $default
+     * @return type
+     */
+    public function fromPost($param, $default = null)
+    {
+        return $this->params()->fromPost($param, $default);
     }
 
     /**
@@ -248,9 +267,6 @@ class CaseController extends FormActionController
 
     public function getCaseSummaryArray(array $case)
     {
-        /* echo '<pre>';
-        die(print_r($case, 1)); */
-
         $categoryNames = array();
 
         if (isset($case['categories']) && !empty($case['categories'])) {
@@ -354,14 +370,14 @@ class CaseController extends FormActionController
      */
     public function indexAction()
     {
-        $licence = $this->params()->fromRoute('licence');
+        $licence = $this->fromRoute('licence');
 
         if (empty($licence)) {
 
             return $this->notFoundAction();
         }
 
-        $action = $this->params()->fromPost('action');
+        $action = $this->fromPost('action');
 
         if (!empty($action)) {
 
@@ -369,25 +385,22 @@ class CaseController extends FormActionController
 
             if ($action !== 'add') {
 
-                $id = $this->params()->fromPost('id');
+                $id = $this->fromPost('id');
 
                 if (empty($id)) {
-
-                    $this->crudActionMissingId();
-                } else {
-
-                    $this->redirect()->toRoute(
-                        'licence_case_action',
-                        array(
-                            'action' => $action,
-                            'case' => $id,
-                            'licence' => $licence
-                        )
-                    );
+                    return $this->crudActionMissingId();
                 }
-            } else {
 
-                $this->redirect()->toRoute('licence_case_action', array('action' => $action, 'licence' => $licence));
+                return $this->redirect()->toRoute(
+                    'licence_case_action',
+                    array(
+                        'action' => $action,
+                        'case' => $id,
+                        'licence' => $licence
+                    )
+                );
+            } else {
+                return $this->redirect()->toRoute('licence_case_action', array('action' => $action, 'licence' => $licence));
             }
         }
 
@@ -411,7 +424,7 @@ class CaseController extends FormActionController
      */
     public function addAction()
     {
-        $licence = $this->params()->fromRoute('licence');
+        $licence = $this->fromRoute('licence');
         $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licence)));
 
         if (empty($licence)) {
@@ -444,8 +457,8 @@ class CaseController extends FormActionController
      */
     public function editAction()
     {
-        $licence = $this->params()->fromRoute('licence');
-        $case = $this->params()->fromRoute('case');
+        $licence = $this->fromRoute('licence');
+        $case = $this->fromRoute('case');
         $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licence)));
 
         $bundle = array(
@@ -523,8 +536,8 @@ class CaseController extends FormActionController
 
     public function deleteAction()
     {
-        $licence = $this->params()->fromRoute('licence');
-        $case = $this->params()->fromRoute('case');
+        $licence = $this->fromRoute('licence');
+        $case = $this->fromRoute('case');
 
         $result = $this->makeRestCall('VosaCase', 'GET', array('id' => $case, 'licence' => $licence));
 
