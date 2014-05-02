@@ -97,6 +97,7 @@ class SubmissionController extends FormActionController
             $action['submissionActionStatus'] = $actions[$action['submissionActionStatus']];
         }
         $submission['submissionActions'] = $submissionData['submissionActions'];
+        krsort($submission['submissionActions']);
         return $submission;
     }
     
