@@ -22,15 +22,15 @@ return [
                     ],
                     'firstName' => [
                         'type' => 'personName',
-                        'label' => 'Complainant first name:',
-                         'class' => 'medium',
-                        'filters' => '\Common\Form\Elements\InputFilters\TextMax70'
+                        'label' => 'Complainant first name',
+                        'class' => 'medium',
+                        'filters' => '\Common\Form\Elements\InputFilters\TextMax70Mandatory'
                     ],
                     'surname' => [
                         'type' => 'personName',
-                        'label' => 'Complainant last name:',
+                        'label' => 'Complainant last name',
                         'class' => 'medium',
-                        'filters' => '\Common\Form\Elements\InputFilters\TextMax70'
+                        'filters' => '\Common\Form\Elements\InputFilters\TextMax70Mandatory'
                     ],
                ],
            ],
@@ -48,36 +48,39 @@ return [
                     ],
                     'complaintDate' => [
                          'type' => 'dateSelect',
-                         'label' => 'Complaint date:'
+                         'label' => 'Complaint date',
+                         'required' => true
                      ],
                     'typeOfComplaint' => [
                         'type' => 'select',
-                        'label' => 'Complaint type:',
+                        'label' => 'Complaint type',
                         'value_options' => 'complaint_types',
                         'required' => true
                     ],
                     'status' => [
                         'type' => 'select',
-                        'label' => 'Complaint status:',
+                        'label' => 'Complaint status',
                         'value_options' => 'complaint_status_types',
                         'required' => true
                     ],
                     'description' => [
                         'type' => 'textarea',
                         'filters' => '\Common\Form\Elements\InputFilters\TextMax4000',
-                        'label' => 'Description:',
+                        'label' => 'Description',
                         'class' => 'extra-long'
                     ],
                     'vrm' => [
                         'type' => 'vehicleVrm',
-                        'label' => 'Vehicle registration mark:',
-                        'class' => 'medium'
+                        'label' => 'Vehicle registration mark',
+                        'class' => 'medium',
+                        'filters' => '\Common\Form\Elements\InputFilters\VrmOptional',
                     ],
                 ]
             ],
             [
                 'name' => 'organisation-details',
                 'options' => [
+                    'label' => 'Operator details',
                     'class' => 'extra-long'
                 ],
                 'elements' => [
@@ -89,15 +92,15 @@ return [
                     ],
                     'name' => [
                         'type' => 'companyName',
-                        'label' => 'Operator:',
-                        'class' => 'medium',
+                        'label' => 'Operator name',
+                        'class' => 'medium'
                     ]
                 ]
             ],
             [
                 'name' => 'driver-details',
                 'options' => [
-                    'label' => 'Driver details:',
+                    'label' => 'Driver details',
                     'class' => 'extra-long'
                 ],
                 'elements' => [
@@ -109,13 +112,13 @@ return [
                     ],
                     'firstName' => [
                         'type' => 'personName',
-                        'label' => 'Driver first name:',
+                        'label' => 'Driver first name',
                         'class' => 'medium',
                         'filters' => '\Common\Form\Elements\InputFilters\TextMax70'
                     ],
                     'surname' => [
                         'type' => 'personName',
-                        'label' => 'Driver last name:',
+                        'label' => 'Driver last name',
                         'class' => 'medium',
                         'filters' => '\Common\Form\Elements\InputFilters\TextMax70'
                     ]

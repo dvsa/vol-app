@@ -35,10 +35,58 @@ class OlcsConvictionControllerTest extends AbstractHttpControllerTestCase
                 'setData',
                 'url',
                 'processEdit',
-                'processAdd'
+                'processAdd',
+                'notFoundAction'
             )
         );
         parent::setUp();
+        $_POST = array();
+    }
+    
+    public function testDealtAction()
+    {
+        $this->controller->expects($this->once())
+            ->method('getParams')
+            ->with(array('id', 'case', 'licence'))
+            ->will($this->returnValue(array('id' => 8, 'case' => 54, 'licence' => 7)));
+        
+        $this->controller->expects($this->once())
+            ->method('makeRestCall')
+            ->with('Conviction', 'GET', array('id' => 8))
+            ->will($this->returnValue(array('id' => 8, 'version' => 1, 'dealtWith' => 'N')));
+        
+        $this->controller->expects($this->once())
+            ->method('processEdit')
+            ->with(array('id' => 8, 'version' => 1, 'dealtWith' => 'Y'), 'Conviction')
+            ->will($this->returnValue(array('id' => 33)));
+        
+        $toRoute = $this->getMock('\stdClass', array('toRoute'));
+
+        $toRoute->expects($this->once())
+            ->method('toRoute')
+            ->with('case_convictions', array(
+                'case' =>  54, 'licence' => 7));
+
+        $this->controller->expects($this->once())
+            ->method('redirect')
+            ->will($this->returnValue($toRoute));
+        
+        $this->controller->dealtAction();
+        
+    }
+    
+    public function testDealtFailedAction()
+    {
+        $this->controller->expects($this->once())
+            ->method('getParams')
+            ->with(array('id', 'case', 'licence'))
+            ->will($this->returnValue(array('case' => 54, 'licence' => 7)));
+        
+        $this->controller->expects($this->once())
+            ->method('notFoundAction')
+            ->will($this->returnValue(null));
+        
+        $this->controller->dealtAction();
     }
 
     public function testAddAction()
@@ -71,6 +119,29 @@ class OlcsConvictionControllerTest extends AbstractHttpControllerTestCase
         $this->controller->addAction();
     }
 
+    public function testAddCancelAction()
+    {
+        $_POST['cancel-conviction'] = '';
+        
+        $this->controller->expects($this->once())
+            ->method('getParams')
+            ->with(array('case', 'licence', 'id'))
+            ->will($this->returnValue(array ( 'licence' => 7, 'case' => 54 )));
+        
+        $toRoute = $this->getMock('\stdClass', array('toRoute'));
+
+        $toRoute->expects($this->once())
+            ->method('toRoute')
+            ->with('case_convictions', array(
+                'case' =>  54, 'licence' => 7));
+
+        $this->controller->expects($this->once())
+            ->method('redirect')
+            ->will($this->returnValue($toRoute));
+        
+        $this->controller->addAction();
+    }
+    
     public function testAddFailAction()
     {
         $this->controller->expects($this->once())
@@ -96,7 +167,11 @@ class OlcsConvictionControllerTest extends AbstractHttpControllerTestCase
         $this->controller->expects($this->once())
             ->method('makeRestCall')
             ->with('Conviction', 'GET', array('id' => 33))
-            ->will($this->returnValue(array('id' => 33)));
+            ->will($this->returnValue(array(
+                'vosaCase' => array(
+                    'id' => 33
+                    )
+                )));
 
         $form = $this->getMock('\stdClass', array('setData'));
 
@@ -105,6 +180,29 @@ class OlcsConvictionControllerTest extends AbstractHttpControllerTestCase
             ->with('conviction', 'processConviction')
             ->will($this->returnValue($form));
 
+        $this->controller->editAction();
+    }
+    
+    public function testEditCancelAction()
+    {
+        $_POST['cancel-conviction'] = '';
+        
+        $this->controller->expects($this->once())
+            ->method('getParams')
+            ->with(array('case', 'licence', 'id'))
+            ->will($this->returnValue(array ( 'licence' => 7, 'case' => 54 )));
+        
+        $toRoute = $this->getMock('\stdClass', array('toRoute'));
+
+        $toRoute->expects($this->once())
+            ->method('toRoute')
+            ->with('case_convictions', array(
+                'case' =>  54, 'licence' => 7));
+
+        $this->controller->expects($this->once())
+            ->method('redirect')
+            ->will($this->returnValue($toRoute));
+        
         $this->controller->editAction();
     }
 

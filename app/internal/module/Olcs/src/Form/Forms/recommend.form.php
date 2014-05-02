@@ -9,7 +9,7 @@ return [
             [
                 'name' => 'main',
                 'options' => [
-                    'label' => 'Add decision'
+                    'label' => 'Add recommendation'
                 ],
                 'elements' => [
                     'submissionActionStatus' => [
