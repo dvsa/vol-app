@@ -15,6 +15,7 @@ return array(
         'outstanding-applications' => null,
         'objections' => null,
         'representations' => null,
+        'complaints' => null,
         'environmental' => null,
         'previous-history' => null,
         'operating-centre' => null,
