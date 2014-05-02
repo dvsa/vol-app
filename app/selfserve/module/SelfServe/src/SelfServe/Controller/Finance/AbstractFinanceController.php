@@ -52,7 +52,7 @@ abstract class AbstractFinanceController extends FormJourneyActionController
         $layout = $this->getViewModel(
             array(
                 'subSections' => $subSections,
-                'completionStatus' => $completionStatus['Results'][0],
+                'completionStatus' => (($completionStatus['Count']>0)?$completionStatus['Results'][0]:Array()),
                 'applicationId' => $applicationId
             )
         );

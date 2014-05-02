@@ -65,7 +65,7 @@ class IndexController extends FormJourneyActionController
 
         // render the view
         $view = new ViewModel(['vehicleTable' => $vehicleTable,
-                                'completionStatus' => $completionStatus['Results'][0],
+                                'completionStatus' => (($completionStatus['Count']>0)?$completionStatus['Results'][0]:Array()),
                                 'applicationId' => $applicationId]);
         $view->setTemplate('self-serve/vehicle-safety/index');
         return $view;

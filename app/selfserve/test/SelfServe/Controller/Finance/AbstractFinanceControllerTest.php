@@ -53,7 +53,7 @@ class AbstractFinanceControllerTest extends AbstractHttpControllerTestCase
 
         $view = $this->getMock('\stdClass');
 
-        $this->getMockController(array('params', 'getViewModel'));
+        $this->getMockController(array('params', 'getViewModel', 'makeRestCall'));
 
         $mockParams = $this->getMock('\stdClass', array('fromRoute'));
 
@@ -65,6 +65,11 @@ class AbstractFinanceControllerTest extends AbstractHttpControllerTestCase
         $this->controller->expects($this->once())
             ->method('params')
             ->will($this->returnValue($mockParams));
+        
+        $mockJourney=Array('Count'=>0,'Results'=>[]);
+        $this->controller->expects($this->any())
+            ->method('makeRestCall')
+            ->will($this->returnValue($mockJourney));
 
         $mockViewModel = $this->getMock('\stdClass', array('setTemplate', 'addChild'));
 

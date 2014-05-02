@@ -31,7 +31,7 @@ class Journey
 
             $journeyItem=Array(
                 'title' => $applicationStage['label'],
-                'link' => $this->view->url("selfserve/".$applicationStage['route'],
+                'link' => $this->renderer->url("selfserve/".$applicationStage['route'],
                                         array('applicationId'=>$applicationId,
                                                 'step'=>(isset($applicationStage['step'])?$applicationStage['step']:""))),
                 'status' => $config['journeyCompletionStatus'][$thisCompletionStatus]

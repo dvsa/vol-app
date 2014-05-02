@@ -61,7 +61,7 @@ class IndexController extends FormJourneyActionController
         // render the view
         $view = new ViewModel(['form' => $form,
                                 'formPartialPath' => $formPartialPath,
-                                'completionStatus' => $completionStatus['Results'][0],
+                                'completionStatus' => (($completionStatus['Count']>0)?$completionStatus['Results'][0]:Array()),
                                 'applicationId' => $applicationId]);
         $view->setTemplate('self-serve/previous-history/index');
         return $view;

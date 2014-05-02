@@ -43,7 +43,20 @@ class FinancialEvidenceControllerTest extends AbstractHttpControllerTestCase
      */
     public function testIndexAction()
     {
-        $this->getMockController(array('getViewModel', 'renderLayout'));
+        $this->getMockController(array('getViewModel', 'renderLayout', 'params', 'makeRestCall'));
+
+        $applicationId=1;
+
+        $mockParams = $this->getMock('\stdClass', array('fromRoute'));
+
+        $mockParams->expects($this->once())
+            ->method('fromRoute')
+            ->with('applicationId')
+            ->will($this->returnValue($applicationId));
+
+        $this->controller->expects($this->once())
+            ->method('params')
+            ->will($this->returnValue($mockParams));
 
         $mockViewModel = $this->getMock('\stdClass', array('setTemplate'));
 
@@ -55,6 +68,11 @@ class FinancialEvidenceControllerTest extends AbstractHttpControllerTestCase
             ->method('renderLayout')
             ->with($mockViewModel)
             ->will($this->returnValue('LAYOUT'));
+
+        $mockJourney=Array('Count'=>0,'Results'=>[]);
+        $this->controller->expects($this->any())
+            ->method('makeRestCall')
+            ->will($this->returnValue($mockJourney));
 
         $this->assertEquals('LAYOUT', $this->controller->indexAction());
 

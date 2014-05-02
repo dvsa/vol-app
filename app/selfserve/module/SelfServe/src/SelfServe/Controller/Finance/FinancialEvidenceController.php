@@ -33,7 +33,7 @@ class FinancialEvidenceController extends AbstractFinanceController
         $completionStatus = $this->makeRestCall('ApplicationCompletion', 'GET', array('application_id' => $applicationId));
 
         return $this->renderLayout($view, 'financialEvidence',
-                                    array('completionStatus' => $completionStatus['Results'][0],
+                                    array('completionStatus' => (($completionStatus['Count']>0)?$completionStatus['Results'][0]:Array()),
                                             'applicationId' => $applicationId));
     }
 
