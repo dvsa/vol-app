@@ -117,7 +117,7 @@ class CaseController extends FormActionController
                 $results['Results'][$k]['status'] = isset($actions[$action['submissionActionStatus']])
                     ? $actions[$action['submissionActionStatus']] : '';
                 $results['Results'][$k]['type'] = ucfirst($action['submissionActionType']);
-                
+
                 //We only need the data from the top action - which is the latest.
                 break;
             }
@@ -397,11 +397,19 @@ class CaseController extends FormActionController
         }
 
         $pageData = $this->getPageData($licence);
-
-        $results = $this->makeRestCall('VosaCase', 'GET', array('licence' => $licence));
-        // todo $data doesnt work fpr pagination SL
         $data = $this->params()->fromRoute();
+
+        //$pagination['url'] = $this->url();
+        $pagination['licence'] = $data['licence'];
+        $pagination['page'] = isset($data['page']) ? $data['page'] : 1;
+        $pagination['sort'] = isset($data['sort']) ? $data['sort'] : 'caseNumber';
+        $pagination['order'] = isset($data['order']) ? $data['order'] : 'desc';
+        $pagination['limit'] = isset($data['limit']) ? $data['limit'] : 10;
+
+        $results = $this->makeRestCall('VosaCase', 'GET', $pagination);
+
         $data['url'] = $this->url();
+
         $table = $this->getServiceLocator()->get('Table')->buildTable('case', $results, $data);
 
         $view = new ViewModel(['licence' => $licence, 'table' => $table, 'data' => $pageData]);

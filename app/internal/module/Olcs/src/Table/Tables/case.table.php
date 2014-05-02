@@ -35,21 +35,25 @@ return array(
                     'case_manage',
                     true
                 ) . '">' . $row['caseNumber'] . '</a>';
-            }
+            },
+            'sort' => 'caseNumber'
         ),
         array(
             'title' => 'Case type',
             'name' => 'caseType',
+            'sort' => 'caseType'
         ),
         array(
             'title' => 'Created',
             'formatter' => 'Date',
             'name' => 'createdOn',
+            'sort' => 'createdOn'
         ),
         array(
             'title' => 'Closed',
             'formatter' => 'Date',
             'name' => 'closedTime',
+            'sort' => 'closedTime'
         ),
         array(
             'title' => 'Description',
