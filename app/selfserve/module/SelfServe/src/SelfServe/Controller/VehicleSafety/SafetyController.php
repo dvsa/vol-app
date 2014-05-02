@@ -161,9 +161,12 @@ class SafetyController extends AbstractVehicleSafetyController
             $newData['licence']['licence.' . $key] = $val;
         }
 
-        $newData['licence']['licence.safetyInsVehicles'] = 'inspection_interval_vehicle.' . $newData['licence']['licence.safetyInsVehicles'];
-        $newData['licence']['licence.safetyInsTrailers'] = 'inspection_interval_trailer.' . $newData['licence']['licence.safetyInsTrailers'];
-        $newData['licence']['licence.tachographIns'] = 'tachograph_analyser.' . $newData['licence']['licence.tachographIns'];
+        $newData['licence']['licence.safetyInsVehicles'] = 'inspection_interval_vehicle.'
+            . $newData['licence']['licence.safetyInsVehicles'];
+        $newData['licence']['licence.safetyInsTrailers'] = 'inspection_interval_trailer.'
+            . $newData['licence']['licence.safetyInsTrailers'];
+        $newData['licence']['licence.tachographIns'] = 'tachograph_analyser.'
+            . $newData['licence']['licence.tachographIns'];
 
         return $newData;
     }
@@ -176,9 +179,14 @@ class SafetyController extends AbstractVehicleSafetyController
      */
     public function processVehicleSafetySuccess($data)
     {
+        $applicationId = $this->getApplicationId();
+
         $this->persistVehicleSafetyData($data);
 
-        return $this->redirect()->toRoute('selfserve/previous-history', array('step' => 'finance', 'applicationId' => $applicationId));
+        return $this->redirect()->toRoute(
+            'selfserve/previous-history',
+            array('step' => 'finance', 'applicationId' => $applicationId)
+        );
     }
 
     /**

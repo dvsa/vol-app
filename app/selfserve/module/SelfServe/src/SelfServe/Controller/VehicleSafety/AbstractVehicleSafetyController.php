@@ -23,23 +23,23 @@ abstract class AbstractVehicleSafetyController extends AbstractApplicationContro
      * @param object $view
      * @param string $current
      */
-    protected function renderLayoutWithSubSections($view, $current = '')
+    protected function renderLayoutWithSubSections($view, $current = '', $journey = 'vehicle-safety')
     {
         $applicationId = $this->params()->fromRoute('applicationId');
 
         $this->setSubSections(
             array(
-                'vehicles' => array(
+                'vehicle' => array(
                     'label' => 'selfserve-app-subSection-vehicle-safety-vehicle',
                     // @todo Change this to the vehicle page once complete
-                    'route' => 'selfserve/vehicle-safety/vehicle-action/vehicle-add',
+                    'route' => 'selfserve/vehicle-safety/vehicle',
                     'routeParams' => array(
                         'applicationId' => $applicationId
                     )
                 ),
                 'safety' => array(
                     'label' => 'selfserve-app-subSection-vehicle-safety-safety',
-                    'route' => 'selfserve/vehicle-safety/safety-action',
+                    'route' => 'selfserve/vehicle-safety/safety',
                     'routeParams' => array(
                         'applicationId' => $applicationId
                     )
@@ -47,6 +47,6 @@ abstract class AbstractVehicleSafetyController extends AbstractApplicationContro
             )
         );
 
-        return parent::renderLayoutWithSubSections($view, $current);
+        return parent::renderLayoutWithSubSections($view, $current, $journey);
     }
 }

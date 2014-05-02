@@ -55,8 +55,6 @@ class WorkshopController extends AbstractVehicleSafetyController
             return $this->backToSafety();
         }
 
-        $applicationId = $this->getApplicationId();
-
         $id = $this->fromRoute('id');
 
         $bundle = array(

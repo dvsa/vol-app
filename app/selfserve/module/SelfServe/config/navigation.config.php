@@ -30,7 +30,7 @@
             ),
             'vehicle-safety' => array(
                 'dbkey' => 'Veh',
-                'route' => 'vehicle-safety',
+                'route' => 'vehicle-safety/vehicle',
                 'label' => 'vehicle-and-safety'
             ),
             'previous-history' => array(

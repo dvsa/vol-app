@@ -41,7 +41,6 @@ return array(
             'SelfServe\BusinessType\Index' => 'SelfServe\Controller\BusinessType\IndexController',
             'SelfServe\Finance\Index' => 'SelfServe\Controller\Finance\IndexController',
             'SelfServe\Finance\OperatingCentreController' => 'SelfServe\Controller\Finance\OperatingCentreController',
-            'SelfServe\VehicleSafety\Index' => 'SelfServe\Controller\VehicleSafety\IndexController',
             'SelfServe\VehicleSafety\Vehicle' => 'SelfServe\Controller\VehicleSafety\VehicleController',
             'SelfServe\VehicleSafety\Safety' => 'SelfServe\Controller\VehicleSafety\SafetyController',
             'SelfServe\VehicleSafety\Workshop' => 'SelfServe\Controller\VehicleSafety\WorkshopController',

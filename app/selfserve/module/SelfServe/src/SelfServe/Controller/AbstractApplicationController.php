@@ -55,8 +55,9 @@ abstract class AbstractApplicationController extends FormJourneyActionController
 
      * @param object $view
      * @param string $current
+     * @param string $journey
      */
-    protected function renderLayoutWithSubSections($view, $current = '')
+    protected function renderLayoutWithSubSections($view, $current = '', $journey = '')
     {
         $subSections = $this->getSubSections();
 
@@ -79,6 +80,7 @@ abstract class AbstractApplicationController extends FormJourneyActionController
 
         $layout = $this->getViewModel(
             array(
+                'journey' => $journey,
                 'subSections' => $subSections,
                 'completionStatus' => ($completionStatus['Count'] > 0 ? $completionStatus['Results'][0] : array()),
                 'applicationId' => $applicationId
