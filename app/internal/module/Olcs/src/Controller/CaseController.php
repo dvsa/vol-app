@@ -414,9 +414,9 @@ class CaseController extends FormActionController
         $pageData = $this->getPageData($licence);
 
         $results = $this->makeRestCall('VosaCase', 'GET', array('licence' => $licence));
-
-        $data['url'] = $this->getPluginManager()->get('url');
-
+        // todo $data doesnt work fpr pagination SL
+        $data = $this->params()->fromRoute();
+        $data['url'] = $this->url();
         $table = $this->getServiceLocator()->get('Table')->buildTable('case', $results, $data);
 
         $view = new ViewModel(['licence' => $licence, 'table' => $table, 'data' => $pageData]);
