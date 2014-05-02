@@ -60,11 +60,20 @@ class OperatingCentreController extends AbstractFinanceController
 
         $form = $this->generateFormWithData($this->processConfigName('operating-centre-authorisation', $applicationId), 'processAuthorisation', $data, true);
 
-        $view = $this->getViewModel(array('operatingCentres' => $table, 'form' => $form, 'isPsv' => $this->isPsvLicence($applicationId)));
+        // collect completion status
+        $completionStatus = $this->makeRestCall('ApplicationCompletion', 'GET', array('application_id' => $applicationId));
+
+        $view = $this->getViewModel(array(
+                        'operatingCentres' => $table,
+                        'form' => $form,
+                        'isPsv' => $this->isPsvLicence($applicationId)
+                        ));
 
         $view->setTemplate('self-serve/finance/operating-centre/index');
 
-        return $this->renderLayout($view, 'operatingCentre');
+        return $this->renderLayout($view, 'operatingCentre',
+                                array('completionStatus' => (($completionStatus['Count']>0)?$completionStatus['Results'][0]:Array()),
+                                        'applicationId' => $applicationId));
     }
 
     /**
@@ -80,9 +89,14 @@ class OperatingCentreController extends AbstractFinanceController
             $this->processConfigName('operating-centre', $applicationId), 'processAddForm'
         );
 
+        // collect completion status
+        $completionStatus = $this->makeRestCall('ApplicationCompletion', 'GET', array('application_id' => $applicationId));
+
         $view = $this->getViewModel(['form' => $form]);
         $view->setTemplate('self-serve/finance/operating-centre/add');
-        return $this->renderLayout($view, 'operatingCentre');
+        return $this->renderLayout($view, 'operatingCentre',
+                                        array('completionStatus' => (($completionStatus['Count']>0)?$completionStatus['Results'][0]:Array()),
+                                                'applicationId' => $applicationId));
     }
 
     /**
@@ -95,7 +109,7 @@ class OperatingCentreController extends AbstractFinanceController
         $operatingCentreId = $this->params()->fromRoute('id');
         $applicationId = $this->params()->fromRoute('applicationId');
 
-        //get operating centre enetity based on applicationId and operatingCentreId
+        //get operating centre entity based on applicationId and operatingCentreId
         $result = $this->makeRestCall('ApplicationOperatingCentre', 'GET', array('id' => $operatingCentreId));
 
         if (empty($result)) {
@@ -107,6 +121,9 @@ class OperatingCentreController extends AbstractFinanceController
             return $this->notFoundAction();
         }
         $resultsOperatingCentre = current($resultsOperatingCentre['Results']);
+
+        // collect completion status
+        $completionStatus = $this->makeRestCall('ApplicationCompletion', 'GET', array('application_id' => $applicationId));
 
         $data = array(
             'version' => $result['version'],
@@ -134,7 +151,9 @@ class OperatingCentreController extends AbstractFinanceController
 
         $view = $this->getViewModel(['form' => $form]);
         $view->setTemplate('self-serve/finance/operating-centre/edit');
-        return $this->renderLayout($view, 'operatingCentre');
+        return $this->renderLayout($view, 'operatingCentre',
+                                        array('completionStatus' => (($completionStatus['Count']>0)?$completionStatus['Results'][0]:Array()),
+                                                'applicationId' => $applicationId));
     }
 
     /**
@@ -209,7 +228,7 @@ class OperatingCentreController extends AbstractFinanceController
                 )
             )
         );
-        
+
         $data = $this->makeRestCall(
             'ApplicationOperatingCentre',
             'GET',

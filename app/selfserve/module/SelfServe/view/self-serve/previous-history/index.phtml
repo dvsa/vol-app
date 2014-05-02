@@ -1,4 +1,6 @@
 <?php
+    echo $this->journey("previous-history",$completionStatus,$applicationId);
+
     echo $this->render(
         '/partials/page-header.phtml',
         array(
@@ -22,7 +24,7 @@
 
 </div><!-- end .one-quarter -->
 <div class="three-quarters">
-    <?php 
+    <?php
     echo $this->partial($formPartialPath, array(
         'form' => $form,
     ));
