@@ -37,10 +37,6 @@ class CaseController extends FormActionController
                 'SubmissionController',
                 $params
             );
-            /*return $this->redirect()->toRoute($this->params()->fromPost('table'), array('licence' => $licence,
-                        'case' => $caseId,
-                        'id' => $this->params()->fromPost('id') ? $this->params()->fromPost('id') : '',
-                        'action' => strtolower($this->params()->fromPost('action'))));*/
         }
 
         $view = $this->getView();
@@ -67,7 +63,6 @@ class CaseController extends FormActionController
             $submissionsResults,
             $submissionsData
         );
-//print_r($submissionsData);
 
         // -- submissions
 
@@ -117,7 +112,7 @@ class CaseController extends FormActionController
                 $results['Results'][$k]['status'] = isset($actions[$action['submissionActionStatus']])
                     ? $actions[$action['submissionActionStatus']] : '';
                 $results['Results'][$k]['type'] = ucfirst($action['submissionActionType']);
-                
+
                 //We only need the data from the top action - which is the latest.
                 break;
             }

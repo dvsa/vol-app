@@ -17,7 +17,15 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
         $this->controller = $this->getMock(
             '\Olcs\Controller\CaseController',
             [
+                'getView',
+                'fromRoute',
+                'getTabInformationArray',
+                'getCase',
+                'getCaseSummaryArray',
+                'getCaseDetailsArray',
+                'log',
                 'makeRestCall',
+                'getPluginManager'
             ]
         );
 
@@ -36,75 +44,93 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
 
     public function testManageAction()
     {
-        $caseId = '12345';
+        $caseId = '24';
+        $licence = '7';
         $actionTab = 'overview';
         $tabInfo = ['overview' => [], 'convictions' => []];
         $case = ['key' => 'case'];
         $summary = ['key' => 'summary'];
         $details = ['key' => 'details'];
 
-        $sut = $this->getMock(
-            '\Olcs\Controller\CaseController',
-            [
-                'getView',
-                'fromRoute',
-                'getTabInformationArray',
-                'getCase',
-                'getCaseSummaryArray',
-                'getCaseDetailsArray',
-                'log'
-            ]
-        );
+        $this->getFromRoute(0, 'case', $caseId);
+        $this->getFromRoute(1, 'licence', $licence);
+        $this->getFromRoute(2, 'tab', $actionTab);
 
-        $view = $this->getMock(
-            'Zend\View\Model\ViewModel',
-            ['setVariables', 'setTemplate']
-        );
-
-        $sut->expects($this->once())
+        $this->controller->expects($this->once())
             ->method('getView')
-            ->will($this->returnValue($view));
+            ->will($this->returnValue($this->view));
 
-        $sut->expects($this->at(1))
+        $this->controller->expects($this->at(1))
             ->method('fromRoute')
             ->with($this->equalTo('case'))
             ->will($this->returnValue($caseId));
 
-        $sut->expects($this->at(2))
+        $this->controller->expects($this->at(2))
             ->method('fromRoute')
             ->with($this->equalTo('tab'))
             ->will($this->returnValue($actionTab));
 
-        $sut->expects($this->once())
+        $this->controller->expects($this->once())
             ->method('getTabInformationArray')
             ->will($this->returnValue($tabInfo));
 
-        $sut->expects($this->once())
+        $this->controller->expects($this->once())
             ->method('getCase')
             ->with($this->equalTo($caseId))
             ->will($this->returnValue($case));
 
-        $sut->expects($this->once())
+        $this->controller->expects($this->once())
             ->method('getCaseSummaryArray')
             ->with($this->equalTo($case))
             ->will($this->returnValue($summary));
 
-        $sut->expects($this->once())
+        $this->controller->expects($this->once())
             ->method('getCaseDetailsArray')
             ->with($this->equalTo($case))
             ->will($this->returnValue($details));
 
-        $view->expects($this->once())
+        $this->view->expects($this->once())
             ->method('setVariables')
             ->with($this->equalTo(['case' => $case, 'tabs' => $tabInfo, 'tab' => $actionTab, 'summary' => $summary, 'details' => $details]));
 
-        $view->expects($this->once())
+        $this->view->expects($this->once())
             ->method('setTemplate')
             ->with($this->equalTo('case/manage'));
 
-        $this->assertSame($view, $sut->manageAction());
+        $this->assertSame($this->view, $this->controller->manageAction());
     }
 
+    /**
+     * Tests the index action
+     */
+    public function testIndexAction()
+    {
+
+    }
+
+    /**
+     * Tests getTabInformationArray
+     */
+    public function testGetTabInformationArray()
+    {
+        $pluginMock = $this->getMock(
+            'stdClass',
+            [
+                'get'
+            ]
+        );
+
+        $pm->expects->($this->any())
+            ->method('get')
+            ->with('url')
+            ->will($this->returnValue($))
+
+        $this->controller->expects($this->once())
+            ->method('getPluginManager')
+            ->will($this->returnValue($pluginMock));
+
+        $this->controller->getTabInformationArray();
+    }
 
     /**
      * Tests the get case function
@@ -144,5 +170,26 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
         $sut = new \Olcs\Controller\CaseController();
 
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $sut->getView());
+    }
+
+    /**
+     * Generate a fromRoute function call
+     *
+     * @param int $at
+     * @param mixed $with
+     * @param mixed $will
+     */
+    private function getFromRoute($at, $with, $will = false)
+    {
+        if ($will) {
+            $this->controller->expects($this->at($at))
+                ->method('fromRoute')
+                ->with($this->equalTo($with))
+                ->will($this->returnValue($will));
+        } else {
+            $this->controller->expects($this->at($at))
+                ->method('fromRoute')
+                ->with($this->equalTo($with));
+        }
     }
 }
