@@ -23,14 +23,14 @@ return [
                     'firstName' => [
                         'type' => 'personName',
                         'label' => 'Complainant first name',
-                         'class' => 'medium',
-                        'filters' => '\Common\Form\Elements\InputFilters\TextMax70'
+                        'class' => 'medium',
+                        'filters' => '\Common\Form\Elements\InputFilters\TextMax70Mandatory'
                     ],
                     'surname' => [
                         'type' => 'personName',
                         'label' => 'Complainant last name',
                         'class' => 'medium',
-                        'filters' => '\Common\Form\Elements\InputFilters\TextMax70'
+                        'filters' => '\Common\Form\Elements\InputFilters\TextMax70Mandatory'
                     ],
                ],
            ],
@@ -93,6 +93,7 @@ return [
                         'type' => 'companyName',
                         'label' => 'Operator name',
                         'class' => 'medium',
+                        'filters' => '\Common\Form\Elements\InputFilters\NameRequired',
                     ]
                 ]
             ],
