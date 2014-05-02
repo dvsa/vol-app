@@ -175,7 +175,6 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
             ->method('makeRestCall')
             ->will($this->returnCallback(array($this, 'mockRestCall')));
 
-
         $mockServiceLocator = $this->getMock('\stdClass', array('get'));
 
         $mockTable = $this->getMock('\stdClass', array('buildTable'));
@@ -231,10 +230,6 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
         $this->controller->expects($this->any())
             ->method('params')
             ->will($this->returnValue($mockParams));
-
-        $this->controller->expects($this->any())
-            ->method('makeRestCall')
-            ->will($this->returnCallback(array($this, 'mockRestCall')));
 
         $this->controller->expects($this->once())
             ->method('generateForm')
@@ -324,13 +319,13 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
             ->method('params')
             ->will($this->returnValue($mockParams));
 
-        $this->controller->expects($this->any())
-            ->method('makeRestCall')
-            ->will($this->returnValue($data));
-
         $this->controller->expects($this->once())
             ->method('generateFormWithData')
             ->will($this->returnValue('<form></form>'));
+
+        $this->controller->expects($this->any())
+            ->method('makeRestCall')
+            ->will($this->returnCallback(array($this, 'mockRestCall')));
 
         $mockViewModel = $this->getMock('\stdClass', array('setTemplate'));
 
@@ -692,10 +687,36 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
                                 'city' => '',
                                 'country' => ''
                             )
-                        )
+                        ),
+                        'version' => 1
                     )
                 )
             )
+        );
+
+        $aocsById = array(
+            2=> array(
+                        'id' => 2,
+                        'numberOfTrailers' => 5,
+                        'numberOfVehicles' => 5,
+                        'permission' => 1,
+                        'adPlaced' => 1,
+                        'operatingCentre' => array(
+                            'id' => 2,
+                            'address' => array(
+                                'addressLine1' => '',
+                                'addressLine2' => '',
+                                'addressLine3' => '',
+                                'addressLine4' => '',
+                                'postcode' => '',
+                                'county' => '',
+                                'city' => '',
+                                'country' => ''
+                            )
+                        ),
+                        'version' => 1,
+                        'sufficientParking' => 1
+                    )
         );
 
         $applications = array(
@@ -717,15 +738,21 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
             case 'Application':
 
                 $this->assertTrue(array_key_exists('id', $data));
-
                 $response = $applications[$data['id']];
 
                 break;
+
             case 'ApplicationOperatingCentre':
+                $this->assertTrue(array_key_exists('application', $data) or array_key_exists('id', $data));
+                if ( array_key_exists('application', $data) ) {
+                    $response = $aocs[$data['application']];
+                } else {
+                    $response = $aocsById[$data['id']];
+                }
+                break;
 
-                $this->assertTrue(array_key_exists('application', $data));
-
-                $response = $aocs[$data['application']];
+            case 'ApplicationCompletion':
+                $response = Array('Count'=>0,'Results'=>[]);
                 break;
         }
 

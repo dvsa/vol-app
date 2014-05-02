@@ -46,9 +46,14 @@ abstract class AbstractFinanceController extends FormJourneyActionController
             )
         );
 
+        // collect completion status
+        $completionStatus = $this->makeRestCall('ApplicationCompletion', 'GET', array('application_id' => $applicationId));
+
         $layout = $this->getViewModel(
             array(
-                'subSections' => $subSections
+                'subSections' => $subSections,
+                'completionStatus' => (($completionStatus['Count']>0)?$completionStatus['Results'][0]:Array()),
+                'applicationId' => $applicationId
             )
         );
 

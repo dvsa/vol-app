@@ -12,9 +12,9 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
         $this->controller = $this->getMock(
             '\SelfServe\Controller\PreviousHistory\IndexController',
             $methods
-        );    
+        );
     }
-    
+
     protected function setUp()
     {
         $this->setApplicationConfig(
@@ -35,45 +35,51 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
             'params',
             'generateSectionForm',
             'formPost',
-            'getPersistedFormData'
+            'getPersistedFormData',
+            'makeRestCall'
         ]);
         $mockParams = $this->getMock('\stdClass', array('fromRoute'));
         $applicationId = 1;
-        
+
         $mockParams->expects($this->at(0))
             ->method('fromRoute')
             ->with($this->equalTo('applicationId'))
             ->will($this->returnValue($applicationId));
-        
+
         $mockParams->expects($this->at(1))
             ->method('fromRoute')
             ->with($this->equalTo('step'))
             ->will($this->returnValue('finance'));
         $mockForm = new \Zend\Form\Form();
-        
+
         $this->controller->expects($this->at(0))
                 ->method('params')
                 ->will($this->returnValue($mockParams));
-           
+
         $this->controller->expects($this->at(1))
                 ->method('params')
-                ->will($this->returnValue($mockParams));     
-        
+                ->will($this->returnValue($mockParams));
+
         $this->controller->expects($this->once())
                 ->method('generateSectionForm')
                 ->will($this->returnValue($mockForm));
-        
+
         $this->controller->expects($this->once())
                 ->method('formPost')
                 ->with($mockForm, 'processFinance', ['applicationId' => $applicationId])
                 ->will($this->returnValue($mockForm));
-        
+
         $formData = []; // no prefill
         $this->controller->expects($this->once())
                 ->method('getPersistedFormData')
                 ->with($mockForm)
                 ->will($this->returnValue($formData));
-        
+
+        $mockJourney=Array('Count'=>0,'Results'=>[]);
+        $this->controller->expects($this->any())
+            ->method('makeRestCall')
+            ->will($this->returnValue($mockJourney));
+
         $this->controller->generateStepFormAction();
     }
 
@@ -87,7 +93,8 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
             'params',
             'generateSectionForm',
             'formPost',
-            'getPersistedFormData'
+            'getPersistedFormData',
+            'makeRestCall'
         ]);
         $mockParams = $this->getMock('\stdClass', array('fromRoute'));
         $applicationId = 1;
@@ -125,6 +132,11 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
             ->method('getPersistedFormData')
             ->with($mockForm)
             ->will($this->returnValue($formData));
+
+        $mockJourney=Array('Count'=>0,'Results'=>[]);
+        $this->controller->expects($this->any())
+            ->method('makeRestCall')
+            ->will($this->returnValue($mockJourney));
 
         $this->controller->generateStepFormAction();
     }
@@ -260,5 +272,5 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
     }
 
 
-    
+
 }

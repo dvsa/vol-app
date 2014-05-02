@@ -1,0 +1,10 @@
+<?php
+    echo $this->journey("summary",$completionStatus,$applicationId);
+
+    echo $this->render(
+        '/partials/page-header.phtml',
+        array(
+            'pageTitle' => 'Summary'
+        )
+    );
+?>

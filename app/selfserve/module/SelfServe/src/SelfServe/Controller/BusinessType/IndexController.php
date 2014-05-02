@@ -71,8 +71,13 @@ class IndexController extends FormJourneyActionController
                 break;
         }
 
+        // collect completion status
+        $completionStatus = $this->makeRestCall('ApplicationCompletion', 'GET', array('application_id' => $applicationId));
+
         // render the view
-        $view = new ViewModel(['form' => $form]);
+        $view = new ViewModel(['form' => $form,
+                                'completionStatus' => $completionStatus['Results'][0],
+                                'applicationId' => $applicationId]);
         $view->setTemplate('self-serve/business/index');
         return $view;
     }
