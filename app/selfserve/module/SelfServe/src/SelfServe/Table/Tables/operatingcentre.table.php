@@ -23,13 +23,21 @@ return array(
         array(
             'title' => 'Operating centre address',
             'formatter' => function ($data, $column) {
-                
+
                 $sl = $this->getServiceLocator();
                 $applicationId = $sl->get('Application')->getMvcEvent()->getRouteMatch()->getParam('applicationId');
-                
+
                 $column['formatter'] = 'Address';
 
-                return "<a href='" . $this->generateUrl(array('action' => 'edit', 'id' => $data['id'], 'applicationId' => $applicationId), 'selfserve/finance/operating_centre', false) . "'>" . $this->callFormatter($column, $data) . "</a>";
+                return "<a href='" . $this->generateUrl(
+                    array(
+                        'action' => 'edit',
+                        'id' => $data['id'],
+                        'applicationId' => $applicationId
+                    ),
+                    'selfserve/finance/operating_centre',
+                    false
+                ) . "'>" . $this->callFormatter($column, $data) . "</a>";
             },
             'name' => 'address'
         ),

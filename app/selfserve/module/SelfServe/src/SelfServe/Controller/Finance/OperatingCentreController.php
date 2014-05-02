@@ -55,25 +55,41 @@ class OperatingCentreController extends AbstractFinanceController
         $flatResults = $this->convertOperatingCentresDataToFlatFormat($results);
 
         $table = $this->getOperatingCentreTable($flatResults, $applicationId);
-        
+
         $data = $this->formatDataForForm($data, $applicationId, $flatResults);
 
-        $form = $this->generateFormWithData($this->processConfigName('operating-centre-authorisation', $applicationId), 'processAuthorisation', $data, true);
+        $form = $this->generateFormWithData(
+            $this->processConfigName('operating-centre-authorisation', $applicationId),
+            'processAuthorisation',
+            $data,
+            true
+        );
 
         // collect completion status
-        $completionStatus = $this->makeRestCall('ApplicationCompletion', 'GET', array('application_id' => $applicationId));
+        $completionStatus = $this->makeRestCall(
+            'ApplicationCompletion',
+            'GET',
+            array('application_id' => $applicationId)
+        );
 
-        $view = $this->getViewModel(array(
-                        'operatingCentres' => $table,
-                        'form' => $form,
-                        'isPsv' => $this->isPsvLicence($applicationId)
-                        ));
+        $view = $this->getViewModel(
+            array(
+                'operatingCentres' => $table,
+                'form' => $form,
+                'isPsv' => $this->isPsvLicence($applicationId)
+            )
+        );
 
         $view->setTemplate('self-serve/finance/operating-centre/index');
 
-        return $this->renderLayout($view, 'operatingCentre',
-                                array('completionStatus' => (($completionStatus['Count']>0)?$completionStatus['Results'][0]:Array()),
-                                        'applicationId' => $applicationId));
+        return $this->renderLayout(
+            $view,
+            'operatingCentre',
+            array(
+                'completionStatus' => (($completionStatus['Count'] > 0) ? $completionStatus['Results'][0] : array()),
+                'applicationId' => $applicationId
+            )
+        );
     }
 
     /**
@@ -83,20 +99,29 @@ class OperatingCentreController extends AbstractFinanceController
      */
     public function addAction()
     {
-        $applicationId      = $this->params()->fromRoute('applicationId');
+        $applicationId = $this->params()->fromRoute('applicationId');
 
         $form = $this->generateForm(
             $this->processConfigName('operating-centre', $applicationId), 'processAddForm'
         );
 
         // collect completion status
-        $completionStatus = $this->makeRestCall('ApplicationCompletion', 'GET', array('application_id' => $applicationId));
+        $completionStatus = $this->makeRestCall(
+            'ApplicationCompletion',
+            'GET',
+            array('application_id' => $applicationId)
+        );
 
         $view = $this->getViewModel(['form' => $form]);
         $view->setTemplate('self-serve/finance/operating-centre/add');
-        return $this->renderLayout($view, 'operatingCentre',
-                                        array('completionStatus' => (($completionStatus['Count']>0)?$completionStatus['Results'][0]:Array()),
-                                                'applicationId' => $applicationId));
+        return $this->renderLayout(
+            $view,
+            'operatingCentre',
+            array(
+                'completionStatus' => (($completionStatus['Count'] > 0) ? $completionStatus['Results'][0] : array()),
+                'applicationId' => $applicationId
+            )
+        );
     }
 
     /**
@@ -115,7 +140,7 @@ class OperatingCentreController extends AbstractFinanceController
         if (empty($result)) {
             return $this->notFoundAction();
         }
-        
+
         $resultsOperatingCentre = $this->getOperatingCentresForApplication($applicationId);
         if (empty($resultsOperatingCentre) || !count($resultsOperatingCentre['Results'])) {
             return $this->notFoundAction();
@@ -123,7 +148,11 @@ class OperatingCentreController extends AbstractFinanceController
         $resultsOperatingCentre = current($resultsOperatingCentre['Results']);
 
         // collect completion status
-        $completionStatus = $this->makeRestCall('ApplicationCompletion', 'GET', array('application_id' => $applicationId));
+        $completionStatus = $this->makeRestCall(
+            'ApplicationCompletion',
+            'GET',
+            array('application_id' => $applicationId)
+        );
 
         $data = array(
             'version' => $result['version'],
@@ -134,26 +163,36 @@ class OperatingCentreController extends AbstractFinanceController
                 'permission-confirmation' => $result['permission']
             ),
             'address' => array(
-                'id'           => $resultsOperatingCentre['operatingCentre']['address']['id'],
-                'version'      => $resultsOperatingCentre['operatingCentre']['address']['version'],
+                'id' => $resultsOperatingCentre['operatingCentre']['address']['id'],
+                'version' => $resultsOperatingCentre['operatingCentre']['address']['version'],
                 'addressLine1' => $resultsOperatingCentre['operatingCentre']['address']['addressLine1'],
                 'addressLine2' => $resultsOperatingCentre['operatingCentre']['address']['addressLine2'],
                 'addressLine3' => $resultsOperatingCentre['operatingCentre']['address']['addressLine3'],
                 'addressLine4' => $resultsOperatingCentre['operatingCentre']['address']['addressLine4'],
-                'postcode'     => $resultsOperatingCentre['operatingCentre']['address']['postcode'],
-                'county'       => $resultsOperatingCentre['operatingCentre']['address']['county'],
-                'city'         => $resultsOperatingCentre['operatingCentre']['address']['city'],
-                'country'      => 'country.' . $resultsOperatingCentre['operatingCentre']['address']['country']
-           )
+                'postcode' => $resultsOperatingCentre['operatingCentre']['address']['postcode'],
+                'county' => $resultsOperatingCentre['operatingCentre']['address']['county'],
+                'city' => $resultsOperatingCentre['operatingCentre']['address']['city'],
+                'country' => 'country.' . $resultsOperatingCentre['operatingCentre']['address']['country']
+            )
         );
 
-        $form = $this->generateFormWithData($this->processConfigName('operating-centre', $applicationId), 'processEditForm', $data, true);
+        $form = $this->generateFormWithData(
+            $this->processConfigName('operating-centre', $applicationId),
+            'processEditForm',
+            $data,
+            true
+        );
 
         $view = $this->getViewModel(['form' => $form]);
         $view->setTemplate('self-serve/finance/operating-centre/edit');
-        return $this->renderLayout($view, 'operatingCentre',
-                                        array('completionStatus' => (($completionStatus['Count']>0)?$completionStatus['Results'][0]:Array()),
-                                                'applicationId' => $applicationId));
+        return $this->renderLayout(
+            $view,
+            'operatingCentre',
+            array(
+                'completionStatus' => (($completionStatus['Count'] > 0) ? $completionStatus['Results'][0] : array()),
+                'applicationId' => $applicationId
+            )
+        );
     }
 
     /**
@@ -183,7 +222,7 @@ class OperatingCentreController extends AbstractFinanceController
     }
 
     /**
-     * @todo implement this
+     * Complete action
      */
     public function completeAction()
     {
@@ -230,10 +269,7 @@ class OperatingCentreController extends AbstractFinanceController
         );
 
         $data = $this->makeRestCall(
-            'ApplicationOperatingCentre',
-            'GET',
-            array('application' => $applicationId),
-            $bundle
+            'ApplicationOperatingCentre', 'GET', array('application' => $applicationId), $bundle
         );
 
         return $data;
@@ -254,10 +290,10 @@ class OperatingCentreController extends AbstractFinanceController
             $newRow = $row;
 
             if (isset($row['operatingCentre']['address'])) {
-                
+
                 unset($row['operatingCentre']['address']['id']);
                 unset($row['operatingCentre']['address']['version']);
-                
+
                 $newRow = array_merge($newRow, $row['operatingCentre']['address']);
             }
 
@@ -267,7 +303,7 @@ class OperatingCentreController extends AbstractFinanceController
         }
         return $newData;
     }
-    
+
     /**
      * Get the operating centre table
      *
@@ -284,7 +320,8 @@ class OperatingCentreController extends AbstractFinanceController
             'url' => $this->getPluginManager()->get('url')
         );
 
-        return $this->getServiceLocator()->get('Table')->buildTable($this->processConfigName('operatingcentre', $applicationId), $results, $settings);
+        return $this->getServiceLocator()->get('Table')
+            ->buildTable($this->processConfigName('operatingcentre', $applicationId), $results, $settings);
     }
 
     /**
@@ -298,7 +335,10 @@ class OperatingCentreController extends AbstractFinanceController
 
         $this->makeRestCall('Application', 'PUT', $data);
 
-        return $this->redirect()->toRoute('selfserve/finance/financial_evidence', array('applicationId' => $data['id']));
+        return $this->redirect()->toRoute(
+            'selfserve/finance/financial_evidence',
+            array('applicationId' => $data['id'])
+        );
     }
 
     /**
@@ -369,7 +409,7 @@ class OperatingCentreController extends AbstractFinanceController
         );
 
         $data = array_merge($this->mapData($validData), $data);
-        
+
         // first of all create the basic operating centre; this doesn't
         // store much data except version and address...
         $result = $this->makeRestCall('OperatingCentre', 'POST', $data);
@@ -380,7 +420,10 @@ class OperatingCentreController extends AbstractFinanceController
         $result = $this->makeRestCall('ApplicationOperatingCentre', 'POST', $data);
 
         if (isset($result['id'])) {
-            return $this->redirect()->toRoute('selfserve/finance/operating_centre', array('applicationId' => $data['application']));
+            return $this->redirect()->toRoute(
+                'selfserve/finance/operating_centre',
+                array('applicationId' => $data['application'])
+            );
         }
     }
 
@@ -399,16 +442,21 @@ class OperatingCentreController extends AbstractFinanceController
             'id' => $operatingCentreId,
             'version' => $validData['version'],
         );
-        
-        $validData['address']['country'] = str_replace('country.','',$validData['address']['country']);
+
+        $validData['address']['country'] = str_replace('country.', '', $validData['address']['country']);
         //saving address
         $this->makeRestCall('Address', 'PUT', $validData['address']);
-      
+
         $data = array_merge($this->mapData($validData), $data);
 
         //persist to database by calling rest api
         $this->makeRestCall('ApplicationOperatingCentre', 'PUT', $data);
-        return $this->redirect()->toRoute('selfserve/finance/operating_centre', array('applicationId' => $data['application']));
+        return $this->redirect()->toRoute(
+            'selfserve/finance/operating_centre',
+            array(
+                'applicationId' => $data['application']
+            )
+        );
     }
 
     /**
@@ -433,7 +481,12 @@ class OperatingCentreController extends AbstractFinanceController
 
         //licence type condition
         if (isset($validData['authorised-vehicles']['no-of-trailers'])) {
-            $data = array_merge($data, array('numberOfTrailers' => $validData['authorised-vehicles']['no-of-trailers']));
+            $data = array_merge(
+                $data,
+                array(
+                    'numberOfTrailers' => $validData['authorised-vehicles']['no-of-trailers']
+                )
+            );
         }
 
         return $data;
@@ -468,5 +521,4 @@ class OperatingCentreController extends AbstractFinanceController
         }
         return $name;
     }
-
 }
