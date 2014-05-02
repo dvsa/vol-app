@@ -35,6 +35,9 @@ class IndexController extends FormJourneyActionController
 
         $this->setCurrentStep($step);
 
+        // collect completion status
+        $completionStatus = $this->makeRestCall('ApplicationCompletion', 'GET', array('application_id' => $applicationId));
+
         // create form
         $form = $this->generateSectionForm();
 
@@ -56,7 +59,10 @@ class IndexController extends FormJourneyActionController
         }
 
         // render the view
-        $view = new ViewModel(['form' => $form, 'formPartialPath' => $formPartialPath]);
+        $view = new ViewModel(['form' => $form,
+                                'formPartialPath' => $formPartialPath,
+                                'completionStatus' => (($completionStatus['Count']>0)?$completionStatus['Results'][0]:Array()),
+                                'applicationId' => $applicationId]);
         $view->setTemplate('self-serve/previous-history/index');
         return $view;
     }
@@ -124,4 +130,4 @@ class IndexController extends FormJourneyActionController
     }
 
 
-} 
+}
