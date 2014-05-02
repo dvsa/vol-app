@@ -1,9 +1,16 @@
 <?php
-
+/**
+ *  Test coverage for Journey Helper
+ *  @author Jess Rowbottom <jess.rowbottom@valtech.co.uk>
+ */
 namespace OlcsTest\View\JourneyHelper;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
+/**
+ *  Test coverage for Journey Helper
+ *  @author Jess Rowbottom <jess.rowbottom@valtech.co.uk>
+ */
 class JourneyHelperTest extends AbstractHttpControllerTestCase
 {
 
