@@ -23,7 +23,36 @@ return array(
                                         array(
                                         'label' => 'Case Submission',
                                         'route' => 'submission',
-                                        'action' => 'add'
+                                        'action' => 'add',
+                                            'pages' => array(
+                                                array(
+                                                    'label' => 'Decision',
+                                                    'route' => 'submission',
+                                                    'action' => 'decision'
+                                                ),
+                                                array(
+                                                    'label' => 'Recommendation',
+                                                    'route' => 'submission',
+                                                    'action' => 'recommendation'
+                                                )
+                                            )
+                                        ),
+                                        array(
+                                        'label' => 'Edit Submission',
+                                        'route' => 'submission',
+                                        'action' => 'edit',
+                                            'pages' => array(
+                                                array(
+                                                    'label' => 'Decision',
+                                                    'route' => 'submission',
+                                                    'action' => 'decision'
+                                                ),
+                                                array(
+                                                    'label' => 'Recommendation',
+                                                    'route' => 'submission',
+                                                    'action' => 'recommendation'
+                                                )
+                                            )
                                         )
                                     )
                                 ),
@@ -102,6 +131,22 @@ return array(
                                             'action' => 'edit'
                                         )
                                     )
+                                ),
+                                array(
+                                    'label' => 'Case Complaints',
+                                    'route' => 'case_complaints',
+                                    'action' => 'index',
+                                    'pages' => array(
+                                        array(
+                                            'label' => 'Add Complaint',
+                                            'route' => 'complaint',
+                                            'action' => 'add'
+                                        ),
+                                        array(
+                                            'label' => 'Edit Complaint',
+                                            'route' => 'complaint',
+                                        )
+                                    ),
                                 ),
                                 array(
                                     'label' => 'Case Penalties',
