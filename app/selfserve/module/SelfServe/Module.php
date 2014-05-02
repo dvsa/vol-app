@@ -6,9 +6,16 @@ use Zend\Mvc\ModuleRouteListener;
 
 class Module
 {
-    public function getConfig()
-    {
-        return include __DIR__ . '/config/module.config.php';
+    public function getConfig() {
+        $config = array();
+        $configFiles = array(
+            include __DIR__ . '/config/module.config.php',
+            include __DIR__ . '/config/navigation.config.php',
+        );
+        foreach ($configFiles as $file) {
+            $config = \Zend\Stdlib\ArrayUtils::merge($config, $file);
+        }
+        return $config;
     }
 
     public function getAutoloaderConfig()
@@ -21,7 +28,7 @@ class Module
             ),
         );
     }
-    
+
     public function onBootstrap($e)
     {
         $eventManager        = $e->getApplication()->getEventManager();
@@ -93,5 +100,5 @@ class Module
             ),
         );
     }
-    
+
 }

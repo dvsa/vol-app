@@ -1,0 +1,11 @@
+<?php
+    echo $this->journey("payment-details",$completionStatus,$applicationId);
+
+    echo $this->render(
+        '/partials/page-header.phtml',
+        array(
+        'pageTitle' => 'Payment details',
+        // 'pageSubTitle'=> 'Tell us about the type of licence you are applying for'
+        )
+    );
+?>

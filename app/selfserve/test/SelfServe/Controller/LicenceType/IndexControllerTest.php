@@ -40,7 +40,8 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
                 'params',
                 'generateSectionForm',
                 'formPost',
-                'getPersistedFormData'
+                'getPersistedFormData',
+                'makeRestCall'
             ]
         );
 
@@ -80,6 +81,12 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
             ->method('getPersistedFormData')
             ->with($mockForm)
             ->will($this->returnValue($formData));
+
+        $mockJourney=Array('Count'=>0,'Results'=>[]);
+        $this->controller->expects($this->any())
+            ->method('makeRestCall')
+            ->with('ApplicationCompletion', 'GET', ['application_id' => $applicationId])
+            ->will($this->returnValue($mockJourney));
 
         $this->controller->generateStepFormAction();
     }

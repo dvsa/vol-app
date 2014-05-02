@@ -1,0 +1,14 @@
+<!-- start progress -->
+<div class="full-width">
+    <ul class="application" role="navigation" >
+        <?php
+            foreach($applicationProcess as $applicationItem) {
+                echo $this->render(
+                            'self-serve/journey/item.phtml',
+                            $applicationItem
+                );
+            }
+        ?>
+    </ul>
+</div>
+<!-- end .progress -->

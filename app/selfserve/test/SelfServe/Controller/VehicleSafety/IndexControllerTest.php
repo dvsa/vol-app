@@ -90,25 +90,21 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
             ->with($this->equalTo($mockLicenceArray))
             ->will($this->returnValue($mockTable));
 
-        $this->controller->expects($this->at(2))
+        $this->controller->expects($this->any())
             ->method('getRequest')
             ->will($this->returnValue($mockRequest));
 
         $mockParams = $this->getMock('\stdClass', array('fromRoute'));
 
         $applicationId = 1;
-        $mockParams->expects($this->once())
+        $mockParams->expects($this->exactly(2))
             ->method('fromRoute')
             ->with($this->equalTo('applicationId'))
             ->will($this->returnValue($applicationId));
 
-        $this->controller->expects($this->once())
+        $this->controller->expects($this->exactly(2))
             ->method('params')
             ->will($this->returnValue($mockParams));
-
-        $this->controller->expects($this->at(4))
-            ->method('getRequest')
-            ->will($this->returnValue($mockRequest));
 
         $mockRedirect = $this->getMock('\stdClass', array('params', 'toRoute'));
 
@@ -129,6 +125,11 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
         $this->controller->expects($this->once())
             ->method('redirect')
             ->will($this->returnValue($mockRedirect));
+
+        $mockJourney=Array('Count'=>0,'Results'=>[]);
+        $this->controller->expects($this->any())
+            ->method('makeRestCall')
+            ->will($this->returnValue($mockJourney));
 
         $this->controller->indexAction();
     }
@@ -152,11 +153,12 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
                 'generateVehicleTable',
                 'getRequest',
                 'params',
-                'redirect'
+                'redirect',
+                'getPost'
             ]
         );
 
-        $mockRequest = $this->getMock('\StdClass', ['getPost']);
+        $mockRequest = $this->getMock('\stdClass', ['getPost']);
 
         $mockRequest->expects($this->at(0))
             ->method('getPost')
@@ -177,23 +179,23 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
             ->with($this->equalTo($mockLicenceArray))
             ->will($this->returnValue($mockTable));
 
-        $this->controller->expects($this->at(2))
+        $this->controller->expects($this->at(3))
             ->method('getRequest')
             ->will($this->returnValue($mockRequest));
 
         $mockParams = $this->getMock('\stdClass', array('fromRoute'));
 
         $applicationId = 1;
-        $mockParams->expects($this->once())
+        $mockParams->expects($this->exactly(2))
             ->method('fromRoute')
             ->with($this->equalTo('applicationId'))
             ->will($this->returnValue($applicationId));
 
-        $this->controller->expects($this->once())
+        $this->controller->expects($this->exactly(2))
             ->method('params')
             ->will($this->returnValue($mockParams));
 
-        $this->controller->expects($this->at(4))
+        $this->controller->expects($this->any())
             ->method('getRequest')
             ->will($this->returnValue($mockRequest));
 
@@ -264,25 +266,21 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
             ->with($this->equalTo($mockLicenceArray))
             ->will($this->returnValue($mockTable));
 
-        $this->controller->expects($this->at(2))
+        $this->controller->expects($this->any())
             ->method('getRequest')
             ->will($this->returnValue($mockRequest));
 
         $mockParams = $this->getMock('\stdClass', array('fromRoute'));
 
         $applicationId = 1;
-        $mockParams->expects($this->once())
+        $mockParams->expects($this->exactly(2))
             ->method('fromRoute')
             ->with($this->equalTo('applicationId'))
             ->will($this->returnValue($applicationId));
 
-        $this->controller->expects($this->once())
+        $this->controller->expects($this->exactly(2))
             ->method('params')
             ->will($this->returnValue($mockParams));
-
-        $this->controller->expects($this->at(4))
-            ->method('getRequest')
-            ->will($this->returnValue($mockRequest));
 
         $mockRedirect = $this->getMock('\stdClass', array('params', 'toRoute'));
 

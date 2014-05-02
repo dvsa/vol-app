@@ -1,0 +1,9 @@
+    <li class="application__item <?php echo $status; ?>">
+        <?php if ( $status != "current" ) { ?>
+            <a href="<?php echo $link; ?>">
+        <?php } ?>
+        <span><?php echo $this->translate($title); ?></span>
+        <?php if ( $status != "current" ) { ?>
+            </a>
+        <?php } ?>
+    </li>
