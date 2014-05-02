@@ -3,17 +3,38 @@ namespace OlcsTest\Controller;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
-class IndexControllerTest extends AbstractHttpControllerTestCase
+/**
+ * Tests the Case Controller
+ */
+class CaseControllerTest extends AbstractHttpControllerTestCase
 {
     public function setUp()
     {
         $this->setApplicationConfig(
             include __DIR__.'/../../../../config/application.config.php'
         );
+
+        $this->controller = $this->getMock(
+            '\Olcs\Controller\CaseController',
+            [
+                'makeRestCall',
+            ]
+        );
+
+        $this->view = $this->getMock(
+            'Zend\View\Model\ViewModel',
+            [
+                'setVariables',
+                'setTemplate'
+            ]
+        );
+
+        $this->pm = $this->getMock('\stdClass', array('get'));
+
         parent::setUp();
     }
 
-    public function manageAction()
+    public function testManageAction()
     {
         $caseId = '12345';
         $actionTab = 'overview';
@@ -82,6 +103,21 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
             ->with($this->equalTo('case/manage'));
 
         $this->assertSame($view, $sut->manageAction());
+    }
+
+
+    /**
+     * Tests the get case function
+     *
+     *
+     */
+    public function testGetCase()
+    {
+        $this->controller->expects($this->once())
+            ->method('makeRestCall')
+            ->will($this->returnValue(array('data' => 'data')));
+
+        $this->controller->getCase(24);
     }
 
     public function testFromRoute()

@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Search controller
+ * Conviction controller
  *
- * Search for operators and licences
+ * Manages convictions
  *
  * @author Mike Cooper <michael.cooper@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
@@ -14,6 +14,11 @@ namespace Olcs\Controller;
 use Common\Controller\FormActionController;
 use Zend\View\Model\ViewModel;
 
+/**
+ * Conviction controller
+ *
+ * Manages convictions
+ */
 class ConvictionController extends FormActionController
 {
     public function dealtAction()
@@ -152,15 +157,18 @@ class ConvictionController extends FormActionController
     public function processConviction($data)
     {
         $data = array_merge($data, $data['defendant-details'], $data['offence']);
+
+        //two unsets here keeps line length under 120
+        //keeps phpunit happy as it isn't detecting the code has
+        //been run when the parameters on on more than one line!
         unset(
-            $data['defendant-details'],
-            $data['cancel-conviction'],
-            $data['offence'],
-            $data['save'],
-            $data['cancel'],
-            $data['conviction'],
-            $data['conviction-operator']
+            $data['defendant-details'], $data['cancel-conviction'], $data['offence'], $data['save']
         );
+
+        unset(
+            $data['cancel'], $data['conviction'], $data['conviction-operator']
+        );
+
         $routeParams = $this->getParams(array('action', 'licence', 'case'));
 
         if (strtolower($routeParams['action']) == 'edit' || strtolower($routeParams['action']) == 'dealt') {

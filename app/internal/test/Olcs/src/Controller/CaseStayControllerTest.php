@@ -10,6 +10,9 @@ namespace OlcsTest\Controller;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
+/**
+ * Tests the case stay controller
+ */
 class CaseStayControllerTest extends AbstractHttpControllerTestCase
 {
 
@@ -55,8 +58,8 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
      *
      * @dataProvider indexActionProvider
      *
+     * @param int $licenceId
      * @param int $caseId
-     * @param array $searchResults
      *
      */
     public function testIndexAction($licenceId, $caseId)
