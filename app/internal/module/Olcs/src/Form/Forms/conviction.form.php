@@ -59,7 +59,8 @@ return [
                     ],*/
                     'dateOfOffence' => [
                          'type' => 'dateSelectWithEmpty',
-                         'label' => 'Offence date:'
+                         'label' => 'Offence date:',
+                         'filters' => '\Common\Form\Elements\InputFilters\OffenceDateBeforeConvictionDate',
                      ],
                     'dateOfConviction' => [
                          'type' => 'dateSelect',

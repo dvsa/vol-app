@@ -72,7 +72,8 @@ return [
                     'vrm' => [
                         'type' => 'vehicleVrm',
                         'label' => 'Vehicle registration mark',
-                        'class' => 'medium'
+                        'class' => 'medium',
+                        'filters' => '\Common\Form\Elements\InputFilters\VrmOptional',
                     ],
                 ]
             ],
@@ -92,8 +93,7 @@ return [
                     'name' => [
                         'type' => 'companyName',
                         'label' => 'Operator name',
-                        'class' => 'medium',
-                        'filters' => '\Common\Form\Elements\InputFilters\NameRequired',
+                        'class' => 'medium'
                     ]
                 ]
             ],
