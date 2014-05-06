@@ -201,7 +201,7 @@ class SafetyController extends AbstractVehicleSafetyController
         if ($data['table']['action'] == 'Add') {
 
             return $this->redirect()->toRoute(
-                'selfserve/vehicle-safety/safety-action/workshop',
+                'selfserve/vehicle-safety/safety/workshop',
                 array('action' => 'add', 'applicationId' => $data['application']['id'])
             );
         } else {
@@ -212,7 +212,7 @@ class SafetyController extends AbstractVehicleSafetyController
             }
 
             return $this->redirect()->toRoute(
-                'selfserve/vehicle-safety/safety-action/workshop',
+                'selfserve/vehicle-safety/safety/workshop',
                 array(
                     'action' => strtolower($data['table']['action']),
                     'applicationId' => $data['application']['id'],

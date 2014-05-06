@@ -41,9 +41,7 @@ return array(
         ),
         array(
             'title' => 'Gross plated weight (kg)',
-            'formatter' => function ($row) {
-                return $row['platedWeight'].' Kg';
-            }
+            'format' => '{{platedWeight}} Kg'
         )
     )
 );

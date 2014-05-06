@@ -38,6 +38,8 @@ class WorkshopController extends AbstractVehicleSafetyController
 
         $form = $this->generateFormWithData('vehicle-safety-workshop', 'processAddWorkshop', $data);
 
+        $form->get('data')->setLabel('Add safety inspection provider');
+
         $view = $this->getViewModel(['form' => $form]);
         $view->setTemplate('self-serve/forms/generic');
 
@@ -93,6 +95,8 @@ class WorkshopController extends AbstractVehicleSafetyController
         $data = $this->formatDataForForm($result);
 
         $form = $this->generateFormWithData('vehicle-safety-workshop', 'processEditWorkshop', $data, true);
+
+        $form->get('data')->setLabel('Update safety inspection provider');
 
         $form->get('form-actions')->remove('addAnother');
 
@@ -215,7 +219,7 @@ class WorkshopController extends AbstractVehicleSafetyController
         $applicationId = $this->getApplicationId();
 
         return $this->redirect()->toRoute(
-            'selfserve/vehicle-safety/safety-action',
+            'selfserve/vehicle-safety/safety',
             array('applicationId' => $applicationId)
         );
     }

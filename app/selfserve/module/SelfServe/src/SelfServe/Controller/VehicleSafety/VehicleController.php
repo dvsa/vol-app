@@ -108,25 +108,28 @@ class VehicleController extends AbstractVehicleSafetyController
      */
     public function deleteAction()
     {
-        $id = $this->params()->fromRoute('id');
-        die();
-        $vehicleId = $this->params()->fromRoute('vehicleId');
+        $vehicleId = $this->params()->fromRoute('id');
+
         $licence = $this->getLicenceEntity();
 
-        //delete conditions
         $cond = array(
             'vehicle' => $vehicleId,
             'licence' => $licence['id'],
         );
-        $licenceVehicle = $this->makeRestCall('LicenceVehicle', 'GET', $cond);
 
-        if ($licenceVehicle['Count'] == 0) {
+        $bundle = array(
+            'properties' => array(
+                'id'
+            )
+        );
+
+        $licenceVehicle = $this->makeRestCall('LicenceVehicle', 'GET', $cond, $bundle);
+
+        if (empty($licenceVehicle) || (isset($licenceVehicle['Count']) && $licenceVehicle['Count'] == 0)) {
             return $this->notFoundAction();
         }
-        $licenceVehicle = $licenceVehicle['Results'][0];
-        $this->makeRestCall('LicenceVehicle', 'DELETE', ['id' => $licenceVehicle['id']]);
 
-        $this->makeRestCall('Vehicle', 'DELETE', ['id' => $vehicleId]);
+        $this->makeRestCall('LicenceVehicle', 'DELETE', array('id' => $licenceVehicle['Results'][0]['id']));
 
         return $this->redirectToVehicles();
     }
@@ -292,7 +295,27 @@ class VehicleController extends AbstractVehicleSafetyController
      */
     public function generateVehicleTable($licence)
     {
-        $results = $this->makeRestCall('LicenceVehicle', 'GET', array('licence' => $licence['id']));
+        $bundle = array(
+            'properties' => null,
+            'children' => array(
+                'licenceVehicles' => array(
+                    'properties' => null,
+                    'children' => array(
+                        'vehicle' => array(
+                            'properties' => array(
+                                'id',
+                                'vrm',
+                                'platedWeight'
+                            )
+                        )
+                    )
+                )
+            )
+        );
+
+        $results = $this->makeRestCall('Licence', 'GET', array('id' => $licence['id']), $bundle);
+
+        $results = $this->formatDataForTable($results);
 
         $settings = array(
             'sort' => 'field',
@@ -304,5 +327,28 @@ class VehicleController extends AbstractVehicleSafetyController
 
         $table = $this->getServiceLocator()->get('Table')->buildTable('vehicle', $results, $settings);
         return $table;
+    }
+
+    /**
+     * Format data for table
+     *
+     * @param array $data
+     * @return array
+     */
+    private function formatDataForTable($data)
+    {
+        $results = array();
+
+        if (isset($data['licenceVehicles']) && !empty($data['licenceVehicles'])) {
+
+            foreach ($data['licenceVehicles'] as $licenceVehicle) {
+
+                if (isset($licenceVehicle['vehicle']) && !empty($licenceVehicle['vehicle'])) {
+                    $results[] = $licenceVehicle['vehicle'];
+                }
+            }
+        }
+
+        return $results;
     }
 }
