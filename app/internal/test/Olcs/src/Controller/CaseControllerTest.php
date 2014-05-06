@@ -28,9 +28,14 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
                 'getCase',
                 'getSubmissions',
                 'getServiceLocator',
+                'generateFormWithData',
                 'crudActionMissingId',
                 'redirect',
-                'notFoundAction'
+                'notFoundAction',
+                'params',
+                'forward',
+                'processAdd',
+                'processEdit'
             ]
         );
 
@@ -47,14 +52,71 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
         parent::setUp();
     }
 
+    public function testManageActionNoTab()
+    {
+        $caseId = '24';
+        $licence = '7';
+        $actionTab = 'overview';
+        $tabInfo = ['convictions' => []];
+        $params = array();
+
+        $this->getFrom('Route', 0, 'case', $caseId);
+        $this->getFrom('Route', 1, 'licence', $licence);
+        $this->getFrom('Route', 2, 'tab', $actionTab);
+
+        $this->controller->expects($this->once())
+            ->method('setBreadcrumb');
+
+        $this->controller->expects($this->once())
+            ->method('params')
+            ->will($this->returnValue($this->getParams($params)));
+
+        $this->controller->expects($this->once())
+            ->method('getTabInformationArray')
+            ->will($this->returnValue($tabInfo));
+
+        $this->controller->expects($this->once())
+            ->method('notFoundAction');
+
+        $this->controller->manageAction();
+    }
+
+    public function testManageActionWithAction()
+    {
+        $caseId = '24';
+        $licence = '7';
+        $actionTab = 'overview';
+        $tabInfo = ['convictions' => []];
+        $params = array(
+            'table' => 'submission',
+            'action' => 'Add'
+        );
+
+        $this->getFrom('Route', 0, 'case', $caseId);
+        $this->getFrom('Route', 1, 'licence', $licence);
+        $this->getFrom('Route', 2, 'tab', $actionTab);
+
+        $this->controller->expects($this->once())
+            ->method('setBreadcrumb');
+
+        $this->controller->expects($this->once())
+            ->method('params')
+            ->will($this->returnValue($this->getParams($params)));
+
+        $this->controller->expects($this->once())
+            ->method('forward')
+            ->will($this->returnValue($this->getForwardDispatch()));
+
+        $this->controller->manageAction();
+    }
+
     public function testManageAction()
     {
         $caseId = '24';
         $licence = '7';
         $actionTab = 'overview';
         $tabInfo = ['overview' => [], 'convictions' => []];
-        $summary = ['key' => 'summary'];
-        $details = ['key' => 'details'];
+        $params = array();
         $caseObject = $this->getSampleCaseArray($caseId, $licence);
 
         $this->getFrom('Route', 0, 'case', $caseId);
@@ -65,28 +127,22 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
             ->method('setBreadcrumb');
 
         $this->controller->expects($this->once())
-            ->method('getView')
-            ->will($this->returnValue($this->view));
+            ->method('params')
+            ->will($this->returnValue($this->getParams($params)));
 
         $this->controller->expects($this->once())
             ->method('getTabInformationArray')
             ->will($this->returnValue($tabInfo));
 
         $this->controller->expects($this->once())
+            ->method('getView')
+            ->will($this->returnValue($this->view));
+
+        $this->controller->expects($this->once())
             ->method('getCase')
             ->with($this->equalTo($caseId))
             ->will($this->returnValue($caseObject));
-/*
-        $this->controller->expects($this->once())
-            ->method('getCaseSummaryArray')
-            ->with($this->equalTo($caseObject))
-            ->will($this->returnValue($summary));
 
-        $this->controller->expects($this->once())
-            ->method('getCaseDetailsArray')
-            ->with($this->equalTo($caseObject))
-            ->will($this->returnValue($details));
-*/
         $this->controller->expects($this->once())
             ->method('getSubmissions')
             ->with($this->equalTo($caseId))
@@ -125,16 +181,6 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
             ->method('notFoundAction');
 
         $this->controller->indexAction();
-    }
-
-    public function getPageDataRestArray($licenceId)
-    {
-        return array(
-            'organisation' => array(
-                'name' => 'Orgnaisation name',
-            ),
-            'licenceNumber' => $licenceId
-        );
     }
 
     /**
@@ -237,6 +283,166 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
     {
         $this->getFrom('Route', 0, 'licence', $licenceId);
         $this->getFrom('Post', 1, 'action', $action);
+    }
+
+    public function testDeleteAction ()
+    {
+        $licenceId = 7;
+        $caseId = 24;
+
+        $this->getFrom('Route', 0, 'licence', $licenceId);
+        $this->getFrom('Route', 1, 'case', $caseId);
+
+        $this->controller->expects($this->exactly(2))
+            ->method('makeRestCall')
+            ->will($this->returnValue(array('data' => 'data')));
+
+        $redirectInfo = $this->getSuccessRedirect($licenceId);
+        $redirect = $this->getRedirectMock($redirectInfo);
+
+        $this->controller->expects($this->once())
+            ->method('redirect')
+            ->will($this->returnValue($redirect));
+
+        $this->controller->deleteAction();
+    }
+
+    public function testDeleteActionNotFound ()
+    {
+        $licenceId = 7;
+        $caseId = 24;
+
+        $this->getFrom('Route', 0, 'licence', $licenceId);
+        $this->getFrom('Route', 1, 'case', $caseId);
+
+        $this->controller->expects($this->once())
+            ->method('makeRestCall')
+            ->will($this->returnValue(array()));
+
+        $this->controller->expects($this->once())
+            ->method('notFoundAction');
+
+        $this->controller->deleteAction();
+    }
+
+    public function testEditAction()
+    {
+        $licenceId = 7;
+        $caseId = 24;
+        $caseObject = $this->getSampleCaseArray($caseId, $licenceId);
+
+        $this->getFrom('Route', 0, 'licence', $licenceId);
+        $this->getFrom('Route', 1, 'case', $caseId);
+
+        $this->controller->expects($this->exactly(2))
+            ->method('makeRestCall')
+            ->will(
+                $this->onConsecutiveCalls(
+                    $this->returnValue(
+                        $caseObject
+                    ),
+                    $this->returnValue(
+                        $this->getPageDataRestArray($licenceId)
+                    )
+                )
+            );
+
+        $this->controller->expects($this->once())
+            ->method('getServiceLocator')
+            ->will($this->returnValue($this->getServiceLocatorStaticData()));
+
+        $this->controller->editAction();
+
+    }
+
+    /**
+     * Tests the edit action when no result is found
+     */
+    public function testEditActionNotFound()
+    {
+        $licenceId = 7;
+        $caseId = 24;
+
+        $this->getFrom('Route', 0, 'licence', $licenceId);
+        $this->getFrom('Route', 1, 'case', $caseId);
+
+        $this->controller->expects($this->once())
+            ->method('makeRestCall')
+            ->will($this->returnValue(array()));
+
+        $this->controller->expects($this->once())
+            ->method('notFoundAction');
+
+        $this->controller->editAction();
+
+    }
+
+    /**
+     * @dataProvider addEditCaseProvider
+     *
+     * @param array $data
+     */
+    public function testProcessAddCase ($data)
+    {
+        $redirectInfo = $this->getCaseAddRedirect(24, $data['licence']);
+        $redirect = $this->getRedirectMock($redirectInfo);
+
+        $this->getFrom('Route', 0, 'licence', $data['licence']);
+
+        $this->controller->expects($this->once())
+            ->method('processAdd')->
+            will($this->returnValue(array('id' => 24)));
+
+        $this->controller->expects($this->once())
+            ->method('redirect')
+            ->will($this->returnValue($redirect));
+
+        $this->controller->processAddCase($data);
+    }
+
+    /**
+     * @dataProvider addEditCaseProvider
+     *
+     * @param array $data
+     */
+    public function testProcessEditCase ($data)
+    {
+        $redirectInfo = $this->getSuccessRedirect($data['licence']);
+        $redirect = $this->getRedirectMock($redirectInfo);
+
+        $this->controller->expects($this->once())
+            ->method('processEdit');
+
+        $this->controller->expects($this->once())
+            ->method('redirect')
+            ->will($this->returnValue($redirect));
+
+        $this->controller->processEditCase($data);
+    }
+
+    public function addEditCaseProvider()
+    {
+        return array(
+            array(
+                array('fields' => array(),'licence' => 7, 'categories' => $this->getSampleCategoriesArray())
+            )
+        );
+    }
+
+
+    public function testGetCaseVariables()
+    {
+        $caseId = 24;
+        $licenceId = 7;
+        $variables = array();
+        $caseObject = $this->getSampleCaseArray($caseId, $licenceId);
+
+        $this->controller->expects($this->once())
+            ->method('getCase')
+            ->with($caseId)
+            ->will($this->returnValue($caseObject));
+
+        $this->controller->getCaseVariables($caseId, $variables);
     }
 
     /**
@@ -360,7 +566,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
         return $redirect;
     }
 
-    public function getAddNoIdRedirect($action, $licenceId)
+    private function getAddNoIdRedirect($action, $licenceId)
     {
         return array(
             'string' => 'licence_case_action',
@@ -371,13 +577,35 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
         );
     }
 
-    public function getAddWithIdRedirect($action, $id, $licenceId)
+    private function getAddWithIdRedirect($action, $id, $licenceId)
     {
         return array(
             'string' => 'licence_case_action',
             'options' => array(
                 'action' => $action,
                 'case' => $id,
+                'licence' => $licenceId,
+            )
+        );
+    }
+
+    private function getCaseAddRedirect($caseId, $licenceId)
+    {
+        return array(
+            'string' => 'case_manage',
+            'options' => array(
+                'licence' => $licenceId,
+                'case' => $caseId,
+                'tab' => 'overview',
+            )
+        );
+    }
+
+    private function getSuccessRedirect($licenceId)
+    {
+        return array(
+            'string' => 'licence_case_list',
+            'options' => array(
                 'licence' => $licenceId,
             )
         );
@@ -425,6 +653,48 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
     /**
      * Gets a mock plugin manager url call
      */
+    public function getServiceLocatorStaticData ()
+    {
+        $serviceMock = $this->getMock('\stdClass', array('get'));
+
+        $serviceMock->expects($this->once())
+            ->method('get')
+            ->with($this->equalTo('Config'))
+            ->will($this->returnValue(array('static-list-data' => $this->getSampleCategoriesArray())));
+
+        return $serviceMock;
+    }
+
+    /**
+     * Gets a mock call to get parameters
+     */
+    public function getParams ($returnValue)
+    {
+        $paramsMock = $this->getMock('\stdClass', array('fromPost'));
+
+        $paramsMock->expects($this->once())
+            ->method('fromPost')
+            ->will($this->returnValue($returnValue));
+
+        return $paramsMock;
+    }
+
+    /**
+     * Gets a call to forwward->dispatch()
+     */
+    public function getForwardDispatch ()
+    {
+        $paramsMock = $this->getMock('\stdClass', array('dispatch'));
+
+        $paramsMock->expects($this->once())
+            ->method('dispatch');
+
+        return $paramsMock;
+    }
+
+    /**
+     * Gets a mock plugin manager url call
+     */
     public function getServiceLocatorGetTable ()
     {
         $serviceMock = $this->getMock(
@@ -454,6 +724,72 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
+     * Returns a sample array as would be expected from the getPageData function
+     *
+     * @param  int $licenceId
+     * @return array
+     */
+    private function getPageDataRestArray($licenceId)
+    {
+        return array(
+            'organisation' => array(
+                'name' => 'Orgnaisation name',
+            ),
+            'licenceNumber' => $licenceId
+        );
+    }
+
+    /**
+     * Returns a sample categories array
+     *
+     * @return array
+     */
+    private function getSampleCategoriesArray()
+    {
+        return array(
+            'case_categories_compliance' => array(
+                'case_category.1' => 'Offences (inc. driver hours)',
+                'case_category.2' => 'Prohibitions',
+                'case_category.3' => 'Convictions',
+                'case_category.4' => 'Penalties',
+                'case_category.5' => 'ERRU MSI',
+                'case_category.6' => 'Bus compliance',
+                'case_category.7' => 'Section 9',
+                'case_category.8' => 'Section 43',
+                'case_category.9' => 'Impounding'
+            ),
+            'case_categories_bus' => array(
+            ),
+            'case_categories_tm' => array(
+                'case_category.10' => 'Duplicate TM',
+                'case_category.11' => 'Repute / professional comptenece of TM',
+                'case_category.12' => 'TM Hours'
+            ),
+            'case_categories_app' => array(
+                'case_category.13' => 'Interim with / without submission',
+                'case_category.14' => 'Representation',
+                'case_category.15' => 'Objection',
+                'case_category.16' => 'Non-chargeable variation',
+                'case_category.17' => 'Regulation 31',
+                'case_category.18' => 'Schedule 4',
+                'case_category.19' => 'Chargeable variation',
+                'case_category.20' => 'New application'
+            ),
+            'case_categories_referral' => array(
+                'case_category.21' => 'Surrender',
+                'case_category.22' => 'Non application related maintenance issue',
+                'case_category.23' => 'Review complaint',
+                'case_category.24' => 'Late fee',
+                'case_category.25' => 'Financial standing issue (continuation)',
+                'case_category.26' => 'Repute fitness of director',
+                'case_category.27' => 'Period of grace',
+                'case_category.28' => 'Proposal to revoke'
+            ),
+        );
+
+    }
+
+    /**
      * Provides a sample case object
      */
     public function getSampleCaseArray($caseId, $licenceId)
@@ -478,7 +814,8 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
         'categories' => array
             (
                 array(
-                    'name' => 'Category Name'
+                    'id' => 1,
+                    'name' => 'Category name'
                 )
             ),
 

@@ -29,23 +29,23 @@ class CaseController extends FormActionController
         $action = $this->fromRoute('tab');
 
         $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licence)));
-        //$params = $this->params()->fromPost();
-        //$params = array_merge($params, array('case' => $caseId, 'licence' => $licence));
+        $params = $this->params()->fromPost();
+        $params = array_merge($params, array('case' => $caseId, 'licence' => $licence));
 
-        //if ($this->params()->fromPost('action')) {
-           // return $this->forward()->dispatch(
-           //     'SubmissionController',
-           //     $params
-           // );
-        //}
-
-        $view = $this->getView();
+        if (isset($params['action'])) {
+            return $this->forward()->dispatch(
+                'SubmissionController',
+                $params
+            );
+        }
 
         $tabs = $this->getTabInformationArray();
 
         if (!array_key_exists($action, $tabs)) {
             return $this->notFoundAction();
         }
+
+        $view = $this->getView();
 
         $case = $this->getCase($caseId);
 
@@ -81,7 +81,7 @@ class CaseController extends FormActionController
         return $view;
     }
 
-    public function getSubmissions($case)
+    public function getSubmissions($caseId)
     {
         $bundle = array(
             'children' => array(
@@ -98,8 +98,13 @@ class CaseController extends FormActionController
                 )
             )
         );
-        $submissionActions = $this->getServiceLocator()->get('config')['static-list-data'];
-        $results = $this->makeRestCall('Submission', 'GET', array('vosaCase' => $case), $bundle);
+
+        $config = $config = $this->getServiceLocator()->get('Config');
+        $submissionActions = $config['static-list-data'];
+        $results = $this->makeRestCall('Submission', 'GET', array('vosaCase' => $caseId), $bundle);
+
+        print_r($results);
+
         foreach ($results['Results'] as $k => $result) {
             $actions = $this->makeRestCall('SubmissionAction', 'GET', array('submission' => $result['id']));
             foreach ($result['submissionActions'] as $ak => $action) {
@@ -547,7 +552,7 @@ class CaseController extends FormActionController
 
         $this->makeRestCall('VosaCase', 'DELETE', array('id' => $case));
 
-        $this->redirect()->toUrl('/case/' . $licence);
+        $this->redirect()->toRoute('licence_case_list', array('licence' => $licence));
     }
 
     /**
@@ -557,18 +562,20 @@ class CaseController extends FormActionController
      *
      * @param type $data
      */
-    protected function processAddCase($data)
+    public function processAddCase($data)
     {
         // Additional fields (Mocked for now)
         $data['caseNumber'] = 12345678;
         $data['openTime'] = date('Y-m-d H:i:s');
         $data['owner'] = 7;
 
+        $licence = $this->fromRoute('licence');
+
         $data['categories'] = $this->formatCategories($data['categories']);
         $data = array_merge($data, $data['fields']);
 
         $result = $this->processAdd($data, 'VosaCase');
-        $licence = $this->params()->fromRoute('licence');
+
         if (isset($result['id'])) {
             $this->redirect()->toRoute(
                 'case_manage',
@@ -585,7 +592,7 @@ class CaseController extends FormActionController
      *
      * @param type $data
      */
-    protected function processEditCase($data)
+    public function processEditCase($data)
     {
         $data['categories'] = $this->formatCategories($data['categories']);
         $data = array_merge($data, $data['fields']);
@@ -644,7 +651,6 @@ class CaseController extends FormActionController
         }
 
         foreach ($categories as $category) {
-
             if (!isset($formattedCategories[$translations[$category['id']]])) {
                 $formattedCategories[$translations[$category['id']]] = array();
             }
