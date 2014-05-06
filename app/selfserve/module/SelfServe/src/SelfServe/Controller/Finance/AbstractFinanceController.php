@@ -23,9 +23,9 @@ abstract class AbstractFinanceController extends AbstractApplicationController
      * @param object $view
      * @param string $current
      */
-    protected function renderLayoutWithSubSections($view, $current = '', $journey = 'operating-centre')
+    public function renderLayoutWithSubSections($view, $current = '', $journey = 'operating-centre')
     {
-        $applicationId = $this->params()->fromRoute('applicationId');
+        $applicationId = $this->getApplicationId();
 
         $this->setSubSections(
             array(

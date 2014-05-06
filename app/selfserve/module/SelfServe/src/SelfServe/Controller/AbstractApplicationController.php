@@ -34,7 +34,7 @@ abstract class AbstractApplicationController extends FormJourneyActionController
      *
      * @param string $button
      */
-    protected function isButtonPressed($button)
+    public function isButtonPressed($button)
     {
         $request = $this->getRequest();
 
@@ -57,7 +57,7 @@ abstract class AbstractApplicationController extends FormJourneyActionController
      * @param string $current
      * @param string $journey
      */
-    protected function renderLayoutWithSubSections($view, $current = '', $journey = '')
+    public function renderLayoutWithSubSections($view, $current = '', $journey = '')
     {
         $subSections = $this->getSubSections();
 
@@ -119,7 +119,7 @@ abstract class AbstractApplicationController extends FormJourneyActionController
      *
      * @return int
      */
-    protected function getApplicationId()
+    public function getApplicationId()
     {
         if (empty($this->applicationId)) {
             $this->applicationId = $this->params()->fromRoute('applicationId');
@@ -137,5 +137,17 @@ abstract class AbstractApplicationController extends FormJourneyActionController
     protected function fromRoute($name)
     {
         return $this->params()->fromRoute($name);
+    }
+
+    /**
+     * Redirect to vehicles sections
+     *
+     * @return objecy
+     */
+    public function redirectToVehicles()
+    {
+        $applicationId = $this->getApplicationId();
+
+        return $this->redirect()->toRoute('selfserve/vehicle-safety/vehicle', array('applicationId' => $applicationId));
     }
 }

@@ -23,7 +23,7 @@ abstract class AbstractVehicleSafetyController extends AbstractApplicationContro
      * @param object $view
      * @param string $current
      */
-    protected function renderLayoutWithSubSections($view, $current = '', $journey = 'vehicle-safety')
+    public function renderLayoutWithSubSections($view, $current = '', $journey = 'vehicle-safety')
     {
         $applicationId = $this->params()->fromRoute('applicationId');
 
@@ -31,7 +31,6 @@ abstract class AbstractVehicleSafetyController extends AbstractApplicationContro
             array(
                 'vehicle' => array(
                     'label' => 'selfserve-app-subSection-vehicle-safety-vehicle',
-                    // @todo Change this to the vehicle page once complete
                     'route' => 'selfserve/vehicle-safety/vehicle',
                     'routeParams' => array(
                         'applicationId' => $applicationId

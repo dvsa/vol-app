@@ -94,7 +94,7 @@ class SafetyController extends AbstractVehicleSafetyController
             true
         );
 
-        $form->get('form-actions')->get('home')->setValue($this->url()->fromRoute('selfserve/dashboard-home'));
+        $form->get('form-actions')->get('home')->setValue($this->getUrlFromRoute('selfserve/dashboard-home'));
 
         $view = $this->getViewModel(['form' => $form]);
         $view->setTemplate('self-serve/forms/generic');
@@ -289,15 +289,5 @@ class SafetyController extends AbstractVehicleSafetyController
             'version' => $data['application']['version'],
             'safetyConfirmation' => $data['application']['safetyConfirmation'][0]
         );
-    }
-
-    /**
-     * Complete Action
-     *
-     * @return ViewModel
-     */
-    public function completeAction()
-    {
-        return $this->getViewModel();
     }
 }

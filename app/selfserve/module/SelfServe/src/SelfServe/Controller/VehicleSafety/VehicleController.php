@@ -135,18 +135,6 @@ class VehicleController extends AbstractVehicleSafetyController
     }
 
     /**
-     * Redirect to vehicles sections
-     *
-     * @return objecy
-     */
-    private function redirectToVehicles()
-    {
-        $applicationId = $this->getApplicationId();
-
-        return $this->redirect()->toRoute('selfserve/vehicle-safety/vehicle', array('applicationId' => $applicationId));
-    }
-
-    /**
      * Process goods vehicle form
      *
      * @param array $validData
