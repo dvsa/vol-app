@@ -30,8 +30,13 @@ return array(
                 $column['formatter'] = 'Address';
 
                 return "<a href='" . $this->generateUrl(
-                    array('action' => 'edit', 'id' => $data['id'], 'applicationId' => $applicationId),
-                    'selfserve/finance/operating_centre', false
+                    array(
+                        'action' => 'edit',
+                        'id' => $data['id'],
+                        'applicationId' => $applicationId
+                    ),
+                    'selfserve/finance/operating_centre',
+                    false
                 ) . "'>" . $this->callFormatter($column, $data) . "</a>";
             },
             'name' => 'address'
