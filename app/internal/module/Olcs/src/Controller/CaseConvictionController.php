@@ -17,22 +17,22 @@ class CaseConvictionController extends CaseController
 {
     public function indexAction()
     {
-        $licence = $this->fromRoute('licence');
-        $caseId = $this->fromRoute('case');
+        $postParams = $this->params()->fromPost();
+        $routeParams = $this->params()->fromRoute();
         
-        $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licence)));
+        $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $routeParams['licence'])));
         
-        if ($this->params()->fromPost('action')) {
-            return $this->redirect()->toRoute($this->params()->fromPost('table'), array('licence' => $licence,
-                        'case' => $caseId,
-                        'id' => $this->params()->fromPost('id') ? $this->params()->fromPost('id') : '',
-                        'action' => strtolower($this->params()->fromPost('action'))));
+        if (isset($postParams['action'])) {
+            return $this->redirect()->toRoute($postParams['table'], array('licence' => $routeParams['licence'],
+                        'case' => $routeParams['case'],
+                        'id' => isset($postParams['id']) ? $postParams['id'] : '',
+                        'action' => strtolower($postParams['action'])));
         }
 
         $view = $this->getView();
         $tabs = $this->getTabInformationArray();
         $action = 'convictions';
-        $caseId = $this->fromRoute('case');
+        $caseId = $routeParams['case'];
 
         $case = $this->getCase($caseId);
 
@@ -86,13 +86,7 @@ class CaseConvictionController extends CaseController
      */
     public function saveCommentForm($data)
     {
-        /* print_r($data); */
-
         $data = array_intersect_key($data, array_flip(['id', 'convictionData', 'version']));
-
-        /* print_r($data);
-        die(); */
-
         $this->processEdit($data, 'VosaCase');
 
         return $this->redirect()->toRoute('case_convictions', array('case' => $data['id']));
