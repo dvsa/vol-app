@@ -20,71 +20,182 @@ class CaseConvictionControllerTest  extends AbstractHttpControllerTestCase
         $this->controller = $this->getMock(
             '\Olcs\Controller\CaseConvictionController',
             array(
-                'getServiceLocator',
                 'setBreadcrumb',
                 'generateFormWithData',
                 'generateForm',
                 'redirect',
                 'makeRestCall',
                 'processEdit',
-                'processAdd',
                 'params',
-                'fromRoute'
+                'getView',
+                'getTabInformationArray',
+                'getCase',
+                'generateCommentForm',
+                'getCaseSummaryArray',
+                'getCaseDetailsArray',
+                'url',
+                'getServiceLocator'
             )
         );
         parent::setUp();
         $_POST = array();
     }
     
-    public function testIndexAction()
+    public function testIndexRedirectAction()
     {
-        $this->controller->expects($this->at(0))
-            ->method('fromRoute')
-            ->with('licence')
-            ->will($this->returnValue(7));
         
-        $this->controller->expects($this->at(1))
+        $params = $this->getMock('\stdClass', array('fromPost', 'fromRoute'));
+        
+        $params->expects($this->once())
             ->method('fromRoute')
-            ->with('case')
-            ->will($this->returnValue(54));
+            ->will($this->returnValue(array('licence' => 7, 'case' => 54)));
+        
+        $params->expects($this->once())
+            ->method('fromPost')
+            ->will($this->returnValue(array('action' => 'add', 'table' => 'case_convictions', 'id' => 8)));
+
+        $this->controller->expects($this->exactly(2))
+            ->method('params')
+            ->will($this->returnValue($params));
         
         $this->controller->expects($this->once())
             ->method('setBreadcrumb')
             ->with(array('licence_case_list/pagination' => array('licence' => 7)));
         
-        $params = $this->getMock('\stdClass', array('fromPost'));
-        
-         $params->expects($this->once())
-            ->method('fromPost')
-            ->with('action')
-            ->will($this->returnValue(false));
-        
+        $toRoute = $this->getMock('\stdClass', array('toRoute'));
+
+        $toRoute->expects($this->once())
+            ->method('toRoute')
+            ->with('case_convictions', array('licence' => 7, 'case' =>  54, 'id' => 8, 'action' => 'add'));
+
         $this->controller->expects($this->once())
+            ->method('redirect')
+            ->will($this->returnValue($toRoute));
+        
+        $viewModel = $this->getMock('\stdClass', array('toRoute'));
+        
+        $this->controller->indexAction();
+        
+    }
+    
+    public function testIndexAction()
+    {
+        
+        $params = $this->getMock('\stdClass', array('fromPost', 'fromRoute'));
+        
+        $params->expects($this->once())
+            ->method('fromRoute')
+            ->will($this->returnValue(array('licence' => 7, 'case' => 54)));
+        
+        $params->expects($this->once())
+            ->method('fromPost')
+            ->will($this->returnValue(array()));
+
+        $this->controller->expects($this->exactly(2))
             ->method('params')
             ->will($this->returnValue($params));
         
-        /*$this->controller->expects($this->once())
-            ->method('makeRestCall')
-            ->with('Conviction', 'GET', array('id' => 8))
-            ->will($this->returnValue(array('id' => 8, 'version' => 1, 'dealtWith' => 'N')));
+        $this->controller->expects($this->once())
+            ->method('setBreadcrumb')
+            ->with(array('licence_case_list/pagination' => array('licence' => 7)));
+        
+        $viewModel = $this->getMock('\stdClass', array('setVariables', 'setTemplate'));
         
         $this->controller->expects($this->once())
+            ->method('getView')
+            ->will($this->returnValue($viewModel));
+        
+        $this->controller->expects($this->once())
+            ->method('getTabInformationArray')
+            ->will($this->returnValue(array()));
+        
+        $this->controller->expects($this->once())
+            ->method('getCase')
+            ->will($this->returnValue(array()));
+        
+        $this->controller->expects($this->once())
+            ->method('generateCommentForm')
+            ->will($this->returnValue(array()));
+        
+        $this->controller->expects($this->once())
+            ->method('getCaseSummaryArray')
+            ->will($this->returnValue(array()));
+        
+        $this->controller->expects($this->once())
+            ->method('getCaseDetailsArray')
+            ->will($this->returnValue(array()));
+        
+        $this->controller->expects($this->once())
+            ->method('makeRestCall')
+                ->with('Conviction', 'GET', array('vosaCase' => 54))
+            ->will($this->returnValue(array()));
+        
+        $this->controller->expects($this->once())
+            ->method('url')
+            ->will($this->returnValue(array()));
+        
+        $serviceLocator = $this->getMock('\stdClass', array('get'));
+        $tableBuilder = $this->getMock('\stdClass', array('buildTable'));
+        
+        $serviceLocator->expects($this->once())
+            ->method('get')
+            ->with('Table')
+            ->will($this->returnValue($tableBuilder));
+        
+        $this->controller->expects($this->once())
+            ->method('getServiceLocator')
+            ->will($this->returnValue($serviceLocator));
+        
+        $this->controller->indexAction();
+    }
+    
+    public function testGenerateCommentForm()
+    {
+        $this->controller = $this->getMock(
+            '\Olcs\Controller\CaseConvictionController',
+            array(
+                'generateForm',
+            )
+        );
+                
+        $form = $this->getMock('\stdClass', array('setData'));
+        $this->controller->expects($this->once())
+            ->method('generateForm')
+            ->with('conviction-comment', 'saveCommentForm')
+            ->will($this->returnValue($form));
+        
+        $form->expects($this->once())
+            ->method('setData')
+            ->will($this->returnValue(54));
+        
+        $this->controller->generateCommentForm(54);
+    }
+    
+    public function testSaveCommentForm()
+    {
+        $this->controller = $this->getMock(
+            '\Olcs\Controller\CaseConvictionController',
+            array(
+                'processEdit',
+                'redirect'
+            )
+        );
+        
+        $data = array('id' => 8, 'convictionData' => array(), 'version' => 1);
+        $this->controller->expects($this->once())
             ->method('processEdit')
-            ->with(array('id' => 8, 'version' => 1, 'dealtWith' => 'Y'), 'Conviction')
-            ->will($this->returnValue(array('id' => 33)));
+            ->with($data, 'VosaCase');
         
         $toRoute = $this->getMock('\stdClass', array('toRoute'));
 
         $toRoute->expects($this->once())
             ->method('toRoute')
-            ->with('case_convictions', array(
-                'case' =>  54, 'licence' => 7));
+            ->with('case_convictions', array('case' =>  8));
 
         $this->controller->expects($this->once())
             ->method('redirect')
-            ->will($this->returnValue($toRoute));*/
+            ->will($this->returnValue($toRoute));
         
-        $this->controller->indexAction();
-        
+        $this->controller->saveCommentForm($data);
     }
 }

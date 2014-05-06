@@ -44,9 +44,10 @@ class CaseConvictionController extends CaseController
         $results = $this->makeRestCall('Conviction', 'GET', array('vosaCase' => $caseId));
 
         $data = [];
-        $data['url'] = $this->getPluginManager()->get('url');
+        $data['url'] = $this->url();
 
-        $table = $this->getServiceLocator()->get('Table')->buildTable('convictions', $results, $data);
+        $tableBuilder = $this->getServiceLocator()->get('Table');
+        $table = $tableBuilder->buildTable('convictions', $results, $data);
 
         $view->setVariables([
             'case' => $case,
