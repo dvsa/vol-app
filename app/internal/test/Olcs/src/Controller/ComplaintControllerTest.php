@@ -325,6 +325,8 @@ class ComplaintControllerTest extends AbstractHttpControllerTestCase
 
         $returnData = ['id' => 1];
 
+        unset($functionData['complaint-details']['version']);
+        unset($functionData['organisation-details']['version']);
         $addData = $functionData['complaint-details'];
         $addData['vosaCases'][] = $functionData['vosaCase'];
         $addData['value'] = '';
@@ -333,13 +335,13 @@ class ComplaintControllerTest extends AbstractHttpControllerTestCase
 
         $addData['driver']['contactDetails']['contactDetailsType'] = 'Driver';
         $addData['driver']['contactDetails']['is_deleted'] = 0;
-        $addData['driver']['contactDetails']['version'] = 1;
         $addData['driver']['contactDetails']['person'] = $functionData['driver-details'];
+        unset($addData['driver']['contactDetails']['person']['version']);
 
         $addData['complainant']['contactDetailsType'] = 'Complainant';
         $addData['complainant']['is_deleted'] = 0;
-        $addData['complainant']['version'] = 1;
         $addData['complainant']['person'] = $functionData['complainant-details'];
+            unset($addData['complainant']['person']['version']);
 
         $toRoute = $this->getMock('\stdClass', array('toRoute'));
 
