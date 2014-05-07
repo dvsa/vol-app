@@ -32,7 +32,14 @@ class VehicleControllerTest extends PHPUnit_Framework_TestCase
         );
 
         $this->setUpMockController(
-            array('checkForCrudAction', 'getApplicationId', 'makeRestCall', 'generateVehicleTable', 'getViewModel', 'renderLayoutWithSubSections')
+            array(
+                'checkForCrudAction',
+                'getApplicationId',
+                'makeRestCall',
+                'generateVehicleTable',
+                'getViewModel',
+                'renderLayoutWithSubSections'
+            )
         );
 
         $this->controller->expects($this->any())

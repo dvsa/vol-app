@@ -119,7 +119,6 @@ class OperatingCentreControllerTest extends PHPUnit_Framework_TestCase
             ->method('makeRestCall')
             ->will($this->returnCallback(array($this, 'mockRestCall')));
 
-
         $this->controller->indexAction();
     }
 
@@ -233,7 +232,9 @@ class OperatingCentreControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testAddAction()
     {
-        $this->getMockController(array('generateForm', 'getViewModel', 'renderLayoutWithSubSections', 'params', 'makeRestCall'));
+        $this->getMockController(
+            array('generateForm', 'getViewModel', 'renderLayoutWithSubSections', 'params', 'makeRestCall')
+        );
         $applicationId = 3;
         $mockViewModel = $this->getMock('\stdClass', array('setTemplate'));
 

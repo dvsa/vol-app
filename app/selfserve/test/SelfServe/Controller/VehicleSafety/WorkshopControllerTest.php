@@ -55,7 +55,13 @@ class WorkshopControllerTest extends PHPUnit_Framework_TestCase
         $applicationId = 3;
 
         $this->getMockController(
-            array('isButtonPressed', 'getApplicationId', 'generateFormWithData', 'getViewModel', 'renderLayoutWithSubSections')
+            array(
+                'isButtonPressed',
+                'getApplicationId',
+                'generateFormWithData',
+                'getViewModel',
+                'renderLayoutWithSubSections'
+            )
         );
 
         $this->controller->expects($this->once())
@@ -143,7 +149,15 @@ class WorkshopControllerTest extends PHPUnit_Framework_TestCase
         );
 
         $this->getMockController(
-            array('isButtonPressed', 'makeRestCall', 'getFromRoute', 'getApplicationId', 'generateFormWithData', 'getViewModel', 'renderLayoutWithSubSections')
+            array(
+                'isButtonPressed',
+                'makeRestCall',
+                'getFromRoute',
+                'getApplicationId',
+                'generateFormWithData',
+                'getViewModel',
+                'renderLayoutWithSubSections'
+            )
         );
 
         $this->controller->expects($this->once())
