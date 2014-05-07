@@ -103,8 +103,6 @@ class CaseController extends FormActionController
         $submissionActions = $config['static-list-data'];
         $results = $this->makeRestCall('Submission', 'GET', array('vosaCase' => $caseId), $bundle);
 
-        print_r($results);
-
         foreach ($results['Results'] as $k => $result) {
             $actions = $this->makeRestCall('SubmissionAction', 'GET', array('submission' => $result['id']));
             foreach ($result['submissionActions'] as $ak => $action) {
@@ -417,8 +415,9 @@ class CaseController extends FormActionController
 
         $table = $this->getServiceLocator()->get('Table')->buildTable('case', $results, $data);
 
-        $view = new ViewModel(['licence' => $licence, 'table' => $table, 'data' => $pageData]);
+        $view = $this->getView(array('licence' => $licence, 'table' => $table, 'data' => $pageData));
         $view->setTemplate('case/list');
+
         return $view;
     }
 
@@ -450,7 +449,7 @@ class CaseController extends FormActionController
 
         $pageData = $this->getPageData($licence);
 
-        $view = new ViewModel(['form' => $form, 'data' => $pageData]);
+        $view = $this->getView(['form' => $form, 'data' => $pageData]);
         $view->setTemplate('case/add');
         return $view;
     }
@@ -511,7 +510,7 @@ class CaseController extends FormActionController
 
         $pageData = $this->getPageData($licence);
 
-        $view = new ViewModel(['form' => $form, 'data' => $pageData]);
+        $view = $this->getView(['form' => $form, 'data' => $pageData]);
         $view->setTemplate('case/edit');
         return $view;
     }

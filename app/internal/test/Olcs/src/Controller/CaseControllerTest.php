@@ -26,7 +26,6 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
                 'getPluginManager',
                 'setBreadcrumb',
                 'getCase',
-                'getSubmissions',
                 'getServiceLocator',
                 'generateFormWithData',
                 'crudActionMissingId',
@@ -52,6 +51,9 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
         parent::setUp();
     }
 
+    /**
+     * Tests that manageAction returns not found if the tab isn't present
+     */
     public function testManageActionNoTab()
     {
         $caseId = '24';
@@ -81,12 +83,15 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
         $this->controller->manageAction();
     }
 
+
+    /**
+     * Tests that manageAction recognises the add action
+     */
     public function testManageActionWithAction()
     {
         $caseId = '24';
         $licence = '7';
         $actionTab = 'overview';
-        $tabInfo = ['convictions' => []];
         $params = array(
             'table' => 'submission',
             'action' => 'Add'
@@ -110,6 +115,9 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
         $this->controller->manageAction();
     }
 
+    /**
+     * Tests manageAction
+     */
     public function testManageAction()
     {
         $caseId = '24';
@@ -135,30 +143,46 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue($tabInfo));
 
         $this->controller->expects($this->once())
-            ->method('getView')
-            ->will($this->returnValue($this->view));
-
-        $this->controller->expects($this->once())
             ->method('getCase')
             ->with($this->equalTo($caseId))
             ->will($this->returnValue($caseObject));
 
-        $this->controller->expects($this->once())
-            ->method('getSubmissions')
-            ->with($this->equalTo($caseId))
-            ->will($this->returnValue(array('data' => 'data')));
+        $this->controller->expects($this->exactly(2))
+            ->method('getServiceLocator')
+            ->will(
+                $this->onConsecutiveCalls(
+                    $this->returnValue(
+                        $this->getServiceLocatorStaticData()
+                    ),
+                    $this->returnValue(
+                        $this->getServiceLocatorGetTable()
+                    )
+                )
+            );
+
+        $this->controller->expects($this->exactly(2))
+            ->method('makeRestCall')
+            ->will(
+                $this->onConsecutiveCalls(
+                    $this->returnValue(
+                        $this->getSampleSubmissions()
+                    ),
+                    $this->returnValue(
+                        array()
+                    )
+                )
+            );
 
         $this->controller->expects($this->once())
             ->method('getPluginManager')
             ->will($this->returnValue($this->getPluginManagerUrl()));
 
         $this->controller->expects($this->once())
-            ->method('getServiceLocator')
-            ->will($this->returnValue($this->getServiceLocatorGetTable()));
+            ->method('getView')
+            ->will($this->returnValue($this->view));
 
         $this->view->expects($this->once())
             ->method('setVariables');
-            //->with($this->equalTo(['case' => $caseObject, 'tabs' => $tabInfo, 'tab' => $actionTab, 'summary' => $summary, 'details' => $details]));
 
         $this->view->expects($this->once())
             ->method('setTemplate')
@@ -169,7 +193,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
 
 
     /**
-     * Tests the index action
+     * Tests the index action returns not found if no licence present
      */
     public function testIndexActionNoLicence()
     {
@@ -212,6 +236,16 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
         $this->controller->expects($this->once())
             ->method('getServiceLocator')
             ->will($this->returnValue($this->getServiceLocatorGetTable()));
+
+        $this->controller->expects($this->once())
+            ->method('getView')
+            ->will($this->returnValue($this->view));
+
+        $this->view->expects($this->once())
+            ->method('setTemplate')
+            ->with($this->equalTo('case/list'));
+
+        $this->assertSame($this->view, $this->controller->indexAction());
 
         $this->controller->indexAction();
     }
@@ -265,7 +299,6 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
     {
         $licenceId = 7;
         $action = 'add';
-        $id = '';
 
         $this->beginIndexAction($licenceId, $action);
 
@@ -279,12 +312,21 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
         $this->controller->indexAction();
     }
 
+    /**
+     * The first calls are the same accross all indexAction tests
+     *
+     * @param type $licenceId
+     * @param type $action
+     */
     private function beginIndexAction($licenceId, $action)
     {
         $this->getFrom('Route', 0, 'licence', $licenceId);
         $this->getFrom('Post', 1, 'action', $action);
     }
 
+    /**
+     * Tests the delete action
+     */
     public function testDeleteAction ()
     {
         $licenceId = 7;
@@ -307,6 +349,9 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
         $this->controller->deleteAction();
     }
 
+    /**
+     * Tests deleteAction if the record is not found
+     */
     public function testDeleteActionNotFound ()
     {
         $licenceId = 7;
@@ -325,6 +370,77 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
         $this->controller->deleteAction();
     }
 
+    /**
+     * Tests the add action
+     */
+    public function testAddAction()
+    {
+        $licenceId = 7;
+        $this->getFrom('Route', 0, 'licence', $licenceId);
+
+        $this->controller->expects($this->exactly(2))
+            ->method('makeRestCall')
+            ->will(
+                $this->onConsecutiveCalls(
+                    $this->returnValue(
+                        array('data' => 'data')
+                    ),
+                    $this->returnValue(
+                        $this->getPageDataRestArray($licenceId)
+                    )
+                )
+            );
+
+        $this->controller->expects($this->once())
+            ->method('generateFormWithData');
+
+        $this->controller->expects($this->once())
+            ->method('getView')
+            ->will($this->returnValue($this->view));
+
+        $this->view->expects($this->once())
+            ->method('setTemplate')
+            ->with($this->equalTo('case/add'));
+
+        $this->assertSame($this->view, $this->controller->addAction());
+
+    }
+
+    /**
+     * Tests the addAction if the licence ID is not found
+     */
+    public function testAddActionNotFoundLicence()
+    {
+        $licenceId = null;
+        $this->getFrom('Route', 0, 'licence', $licenceId);
+
+        $this->controller->expects($this->once())
+            ->method('notFoundAction');
+
+        $this->controller->addAction();
+    }
+
+    /**
+     * Tests addAction if no licence information comes back from the rest call
+     */
+    public function testAddActionNoResults()
+    {
+        $licenceId = 7;
+        $this->getFrom('Route', 0, 'licence', $licenceId);
+
+        $this->controller->expects($this->once())
+            ->method('makeRestCall')
+            ->will($this->returnValue(array()));
+
+        $this->controller->expects($this->once())
+            ->method('notFoundAction');
+
+        $this->controller->addAction();
+    }
+
+    /**
+     * Tests editAction
+     */
     public function testEditAction()
     {
         $licenceId = 7;
@@ -348,11 +464,21 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
             );
 
         $this->controller->expects($this->once())
+            ->method('generateFormWithData');
+
+        $this->controller->expects($this->once())
             ->method('getServiceLocator')
             ->will($this->returnValue($this->getServiceLocatorStaticData()));
 
-        $this->controller->editAction();
+        $this->controller->expects($this->once())
+            ->method('getView')
+            ->will($this->returnValue($this->view));
 
+        $this->view->expects($this->once())
+            ->method('setTemplate')
+            ->with($this->equalTo('case/edit'));
+
+        $this->assertSame($this->view, $this->controller->editAction());
     }
 
     /**
@@ -374,10 +500,11 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
             ->method('notFoundAction');
 
         $this->controller->editAction();
-
     }
 
     /**
+     * Tests processAddCase, shares data provider with processEditCase
+     *
      * @dataProvider addEditCaseProvider
      *
      * @param array $data
@@ -420,6 +547,11 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
         $this->controller->processEditCase($data);
     }
 
+    /**
+     * Data provider for processAddCase and processEditCase
+     *
+     * @return array
+     */
     public function addEditCaseProvider()
     {
         return array(
@@ -429,7 +561,9 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
         );
     }
 
-
+    /**
+     * Tests the getCaseVariables method
+     */
     public function testGetCaseVariables()
     {
         $caseId = 24;
@@ -488,8 +622,6 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
 
     /**
      * Tests the get case function
-     *
-     *
      */
     public function testGetCase()
     {
@@ -543,6 +675,9 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
         );
     }
 
+    /**
+     * Tests getView
+     */
     public function testGetView()
     {
         $sut = new \Olcs\Controller\CaseController();
@@ -566,6 +701,13 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
         return $redirect;
     }
 
+    /**
+     * Information required for a redirect follwing a case being added
+     *
+     * @param int $caseId
+     * @param int $licenceId
+     * @return array
+     */
     private function getAddNoIdRedirect($action, $licenceId)
     {
         return array(
@@ -577,18 +719,33 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
         );
     }
 
-    private function getAddWithIdRedirect($action, $id, $licenceId)
+    /**
+     * Information required for a redirect follwing a case being added
+     *
+     * @param string $action
+     * @param int $caseId
+     * @param int $licenceId
+     * @return array
+     */
+    private function getAddWithIdRedirect($action, $caseId, $licenceId)
     {
         return array(
             'string' => 'licence_case_action',
             'options' => array(
                 'action' => $action,
-                'case' => $id,
+                'case' => $caseId,
                 'licence' => $licenceId,
             )
         );
     }
 
+    /**
+     * Information required for a redirect follwing a case being added
+     *
+     * @param int $caseId
+     * @param int $licenceId
+     * @return array
+     */
     private function getCaseAddRedirect($caseId, $licenceId)
     {
         return array(
@@ -601,6 +758,12 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
         );
     }
 
+    /**
+     * Information required for a redirect follwing success
+     *
+     * @param int $licenceId
+     * @return array
+     */
     private function getSuccessRedirect($licenceId)
     {
         return array(
@@ -638,7 +801,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
     /**
      * Gets a mock plugin manager url call
      */
-    public function getPluginManagerUrl ()
+    private function getPluginManagerUrl ()
     {
         $pm = $this->getMock('\stdClass', array('get'));
 
@@ -651,9 +814,9 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
-     * Gets a mock plugin manager url call
+     * Gets a mock version of static-list-data
      */
-    public function getServiceLocatorStaticData ()
+    private function getServiceLocatorStaticData ()
     {
         $serviceMock = $this->getMock('\stdClass', array('get'));
 
@@ -668,7 +831,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
     /**
      * Gets a mock call to get parameters
      */
-    public function getParams ($returnValue)
+    private function getParams ($returnValue)
     {
         $paramsMock = $this->getMock('\stdClass', array('fromPost'));
 
@@ -682,7 +845,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
     /**
      * Gets a call to forwward->dispatch()
      */
-    public function getForwardDispatch ()
+    private function getForwardDispatch ()
     {
         $paramsMock = $this->getMock('\stdClass', array('dispatch'));
 
@@ -695,7 +858,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
     /**
      * Gets a mock plugin manager url call
      */
-    public function getServiceLocatorGetTable ()
+    private function getServiceLocatorGetTable ()
     {
         $serviceMock = $this->getMock(
             'stdClass',
@@ -791,8 +954,13 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
 
     /**
      * Provides a sample case object
+     *
+     * @param int $caseId
+     * @param int $licenceId
+     *
+     * @return array
      */
-    public function getSampleCaseArray($caseId, $licenceId)
+    private function getSampleCaseArray($caseId, $licenceId)
     {
         return array
         (
@@ -933,6 +1101,102 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
         'prohibitions' => array
             (
             )
+
+        );
+    }
+
+    /**
+     * Returns a sample submission result array
+     *
+     * @return array
+     */
+    private function getSampleSubmissions()
+    {
+        return array(
+
+            'Count' => 1,
+            'Results' => array
+                (
+                    0 => array
+                        (
+                            'createdOn' => '2014-05-07T09:31:02+0100',
+                            'lastUpdatedOn' => '2014-05-07T09:31:02+0100',
+                            'version' => 1,
+                            'id' => 1,
+                            'text' => '',
+                            'dateClosed' => '',
+                            'createdBy' => array
+                                (
+
+                                ),
+
+                            'lastUpdatedBy' => '',
+                            'vosaCase' => Array
+                                (
+
+                                ),
+
+                            'submissionActions' => Array
+                                (
+                                    0 => Array
+                                        (
+                                            'createdOn' => '2014-05-07T09:31:45+0100',
+                                            'lastUpdatedOn' => '2014-05-07T09:31:45+0100',
+                                            'version' => 1,
+                                            'id' => 1,
+                                            'comment' => 'test ddd',
+                                            'urgent' => 'Y',
+                                            'submissionActionStatus' => 'submission_recommendation.undertakings-conditions',
+                                            'submissionActionType' => 'recommendation',
+                                            'createdBy' => '',
+                                            'lastUpdatedBy' => '',
+                                            'userSender' => array
+                                                (
+                                                    'createdOn' => '2013-11-27T00:00:00+0000',
+                                                    'lastUpdatedOn' => '2013-11-27T00:00:00+0000',
+                                                    'version' => 1,
+                                                    'id' => 1,
+                                                    'username' => 'Logged in user',
+                                                    'password' => '',
+                                                    'displayName' => 'Logged in User',
+                                                    'isDeleted' => 0,
+                                                    'createdBy' => '',
+                                                    'lastUpdatedBy' => '',
+                                                    'roles' => array
+                                                        (
+                                                        )
+
+                                                ),
+
+                                            'userRecipient' => array
+                                                (
+                                                    'createdOn' => '2013-11-27T00:00:00+0000',
+                                                    'lastUpdatedOn' => '2013-11-27T00:00:00+0000',
+                                                    'version' => 1,
+                                                    'id' => 1,
+                                                    'username' => 'Logged in user',
+                                                    'password' => '',
+                                                    'displayName' => 'Logged in User',
+                                                    'isDeleted' => 0,
+                                                    'createdBy' => '',
+                                                    'lastUpdatedBy' => '',
+                                                    'roles' => array
+                                                        (
+                                                        )
+
+                                                ),
+
+                                            'submission' => array
+                                                (
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
 
         );
     }
