@@ -35,6 +35,8 @@ class IndexController extends FormJourneyActionController
 
     public function completeAction()
     {
-
+        $view = new ViewModel();
+        $view->setTemplate('self-serve/summary/complete');
+        return $view;
     }
 }
