@@ -23,12 +23,16 @@ class IndexController extends FormJourneyActionController
         $applicationId = $this->params()->fromRoute('applicationId');
 
         // collect completion status
-        $completionStatus = $this->makeRestCall('ApplicationCompletion', 'GET',
-                                                array('application_id' => $applicationId));
+        $completionStatus = $this->makeRestCall(
+            'ApplicationCompletion',
+            'GET',
+            array('application_id' => $applicationId)
+        );
 
         // render the view
-        $view = new ViewModel(array('completionStatus' => $completionStatus['Results'][0],
-                                            'applicationId' => $applicationId));
+        $view = new ViewModel(
+            array('completionStatus' => $completionStatus['Results'][0],
+                    'applicationId' => $applicationId));
         $view->setTemplate('self-serve/payment-details/index');
 
         return $view;
