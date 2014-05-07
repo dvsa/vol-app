@@ -57,7 +57,7 @@ class WorkshopController extends AbstractVehicleSafetyController
             return $this->backToSafety();
         }
 
-        $id = $this->fromRoute('id');
+        $id = $this->getFromRoute('id');
 
         $bundle = array(
             'properties' => array(
@@ -111,7 +111,7 @@ class WorkshopController extends AbstractVehicleSafetyController
      */
     public function deleteAction()
     {
-        $id = $this->fromRoute('id');
+        $id = $this->getFromRoute('id');
 
         $this->makeRestCall('Workshop', 'DELETE', array('id' => $id));
 
@@ -148,7 +148,7 @@ class WorkshopController extends AbstractVehicleSafetyController
 
             if ($this->isButtonPressed('addAnother')) {
 
-                return $this->redirect()->toRoute(null, array(), array(), true);
+                return $this->redirectToRoute(null, array(), array(), true);
             }
 
             return $this->backToSafety();
@@ -207,25 +207,5 @@ class WorkshopController extends AbstractVehicleSafetyController
         $data['address']['country'] = 'country.' . $data['address']['country'];
 
         return $data;
-    }
-
-    /**
-     * Redirect to safety
-     *
-     * @return object
-     */
-    protected function backToSafety()
-    {
-        $applicationId = $this->getApplicationId();
-
-        return $this->redirect()->toRoute(
-            'selfserve/vehicle-safety/safety',
-            array('applicationId' => $applicationId)
-        );
-    }
-
-    public function completeAction()
-    {
-
     }
 }

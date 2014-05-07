@@ -99,7 +99,7 @@ abstract class AbstractApplicationController extends FormJourneyActionController
      *
      * @return array
      */
-    protected function getSubSections()
+    public function getSubSections()
     {
         return $this->subSections;
     }
@@ -126,28 +126,5 @@ abstract class AbstractApplicationController extends FormJourneyActionController
         }
 
         return $this->applicationId;
-    }
-
-    /**
-     * Return a variable from route
-     *
-     * @param string $name
-     * @return mixed
-     */
-    protected function fromRoute($name)
-    {
-        return $this->params()->fromRoute($name);
-    }
-
-    /**
-     * Redirect to vehicles sections
-     *
-     * @return objecy
-     */
-    public function redirectToVehicles()
-    {
-        $applicationId = $this->getApplicationId();
-
-        return $this->redirect()->toRoute('selfserve/vehicle-safety/vehicle', array('applicationId' => $applicationId));
     }
 }

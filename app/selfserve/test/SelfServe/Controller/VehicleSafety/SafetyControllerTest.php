@@ -81,7 +81,14 @@ class SafetyControllerTest extends PHPUnit_Framework_TestCase
                 'version' => 3
             ),
             'workshops' => array(
-
+                array(
+                    'contactDetails' => array(
+                        'id' => 1
+                    ),
+                    'address' => array(
+                        'addressLine1' => 'foo'
+                    )
+                )
             )
         );
 
@@ -147,5 +154,156 @@ class SafetyControllerTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue($viewMock));
 
         $this->assertEquals($viewMock, $this->controller->indexAction());
+    }
+
+    /**
+     * test processVehicleSafetySuccess
+     */
+    public function testProcessVehicleSafetySuccess()
+    {
+        $applicationId = 2;
+
+        $data = array(
+            'foo' => 'bar'
+        );
+
+        $this->getMockController(array('getApplicationId', 'redirectToRoute', 'persistVehicleSafetyData'));
+
+        $this->controller->expects($this->once())
+            ->method('getApplicationId')
+            ->will($this->returnValue($applicationId));
+
+        $this->controller->expects($this->once())
+            ->method('persistVehicleSafetyData')
+            ->with($data);
+
+        $this->controller->expects($this->once())
+            ->method('redirectToRoute')
+            ->will($this->returnValue('REDIRECT'));
+
+        $this->assertEquals('REDIRECT', $this->controller->processVehicleSafetySuccess($data));
+    }
+
+    /**
+     * Test processVehicleSafetyCrudAction with Add Action
+     */
+    public function testProcessVehicleSafetyCrudActionWithAddAction()
+    {
+        $data = array(
+            'application' => array(
+                'id' => 2
+            ),
+            'foo' => 'bar',
+            'table' => array(
+                'action' => 'Add'
+            )
+        );
+
+        $this->getMockController(array('persistVehicleSafetyData', 'redirectToRoute'));
+
+        $this->controller->expects($this->once())
+            ->method('persistVehicleSafetyData')
+            ->with($data);
+
+        $this->controller->expects($this->once())
+            ->method('redirectToRoute')
+            ->will($this->returnValue('REDIRECT'));
+
+        $this->assertEquals('REDIRECT', $this->controller->processVehicleSafetyCrudAction($data));
+    }
+
+    /**
+     * Test processVehicleSafetyCrudAction with Edit Action Without Id
+     */
+    public function testProcessVehicleSafetyCrudActionWithEditActionWithoutId()
+    {
+        $data = array(
+            'application' => array(
+                'id' => 2
+            ),
+            'foo' => 'bar',
+            'table' => array(
+                'action' => 'Edit'
+            )
+        );
+
+        $this->getMockController(array('persistVehicleSafetyData', 'crudActionMissingId'));
+
+        $this->controller->expects($this->once())
+            ->method('persistVehicleSafetyData')
+            ->with($data);
+
+        $this->controller->expects($this->once())
+            ->method('crudActionMissingId')
+            ->will($this->returnValue('MISSING'));
+
+        $this->assertEquals('MISSING', $this->controller->processVehicleSafetyCrudAction($data));
+    }
+
+    /**
+     * Test processVehicleSafetyCrudAction with Edit Action
+     */
+    public function testProcessVehicleSafetyCrudActionWithEditAction()
+    {
+        $data = array(
+            'application' => array(
+                'id' => 2
+            ),
+            'foo' => 'bar',
+            'table' => array(
+                'id' => 7,
+                'action' => 'Edit'
+            )
+        );
+
+        $this->getMockController(array('persistVehicleSafetyData', 'redirectToRoute'));
+
+        $this->controller->expects($this->once())
+            ->method('persistVehicleSafetyData')
+            ->with($data);
+
+        $this->controller->expects($this->once())
+            ->method('redirectToRoute')
+            ->will($this->returnValue('REDIRECT'));
+
+        $this->assertEquals('REDIRECT', $this->controller->processVehicleSafetyCrudAction($data));
+    }
+
+    /**
+     * Test persistVehicleSafetyData
+     */
+    public function testPersistVehicleSafetyData()
+    {
+        $applicationId = 2;
+
+        $data = array(
+            'application' => array(
+                'version' => 2,
+                'safetyConfirmation' => array(
+                    '1'
+                )
+            ),
+            'licence' => array(
+                'licence.safetyInsVehicles' => 'inspection_interval_vehicle.1',
+                'licence.safetyInsTrailers' => 'inspection_interval_trailer.2',
+                'licence.tachographIns' => 'tachograph_analyser.3'
+            )
+        );
+
+        $this->getMockController(array('getApplicationId', 'makeRestCall'));
+
+        $this->controller->expects($this->once())
+            ->method('getApplicationId')
+            ->will($this->returnValue($applicationId));
+
+        $this->controller->expects($this->at(1))
+            ->method('makeRestCall')
+            ->with('Application', 'PUT');
+
+        $this->controller->expects($this->at(2))
+            ->method('makeRestCall')
+            ->with('Licence', 'PUT');
+
+        $this->controller->persistVehicleSafetyData($data);
     }
 }

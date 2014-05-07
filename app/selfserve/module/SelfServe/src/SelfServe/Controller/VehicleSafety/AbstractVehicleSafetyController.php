@@ -25,7 +25,7 @@ abstract class AbstractVehicleSafetyController extends AbstractApplicationContro
      */
     public function renderLayoutWithSubSections($view, $current = '', $journey = 'vehicle-safety')
     {
-        $applicationId = $this->params()->fromRoute('applicationId');
+        $applicationId = $this->getApplicationId();
 
         $this->setSubSections(
             array(
@@ -47,5 +47,32 @@ abstract class AbstractVehicleSafetyController extends AbstractApplicationContro
         );
 
         return parent::renderLayoutWithSubSections($view, $current, $journey);
+    }
+
+    /**
+     * Redirect to safety
+     *
+     * @return object
+     */
+    public function backToSafety()
+    {
+        $applicationId = $this->getApplicationId();
+
+        return $this->redirectToRoute(
+            'selfserve/vehicle-safety/safety',
+            array('applicationId' => $applicationId)
+        );
+    }
+
+    /**
+     * Redirect to vehicles sections
+     *
+     * @return objecy
+     */
+    public function redirectToVehicles()
+    {
+        $applicationId = $this->getApplicationId();
+
+        return $this->redirectToRoute('selfserve/vehicle-safety/vehicle', array('applicationId' => $applicationId));
     }
 }

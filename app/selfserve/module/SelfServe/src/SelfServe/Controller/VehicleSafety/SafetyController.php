@@ -183,7 +183,7 @@ class SafetyController extends AbstractVehicleSafetyController
 
         $this->persistVehicleSafetyData($data);
 
-        return $this->redirect()->toRoute(
+        return $this->redirectToRoute(
             'selfserve/previous-history',
             array('step' => 'finance', 'applicationId' => $applicationId)
         );
@@ -198,9 +198,11 @@ class SafetyController extends AbstractVehicleSafetyController
     {
         $this->persistVehicleSafetyData($data);
 
-        if ($data['table']['action'] == 'Add') {
+        $data['table']['action'] = strtolower($data['table']['action']);
 
-            return $this->redirect()->toRoute(
+        if ($data['table']['action'] == 'add') {
+
+            return $this->redirectToRoute(
                 'selfserve/vehicle-safety/safety/workshop',
                 array('action' => 'add', 'applicationId' => $data['application']['id'])
             );
@@ -211,10 +213,10 @@ class SafetyController extends AbstractVehicleSafetyController
                 return $this->crudActionMissingId();
             }
 
-            return $this->redirect()->toRoute(
+            return $this->redirectToRoute(
                 'selfserve/vehicle-safety/safety/workshop',
                 array(
-                    'action' => strtolower($data['table']['action']),
+                    'action' => $data['table']['action'],
                     'applicationId' => $data['application']['id'],
                     'id' => $data['table']['id']
                 )
@@ -229,7 +231,7 @@ class SafetyController extends AbstractVehicleSafetyController
      */
     public function persistVehicleSafetyData($data)
     {
-        $applicationId = $this->params()->fromRoute('applicationId');
+        $applicationId = $this->getApplicationId();
 
         $applicationData = $this->formatApplicationData($data, $applicationId);
 

@@ -108,7 +108,7 @@ class VehicleController extends AbstractVehicleSafetyController
      */
     public function deleteAction()
     {
-        $vehicleId = $this->params()->fromRoute('id');
+        $vehicleId = $this->getFromRoute('id');
 
         $licence = $this->getLicenceEntity();
 
@@ -162,7 +162,7 @@ class VehicleController extends AbstractVehicleSafetyController
         $applicationId = $this->getApplicationId();
 
         if ($this->isButtonPressed('addAnother')) {
-            $this->redirect()->toRoute(
+            return $this->redirectToRoute(
                 'selfserve/vehicle-safety/vehicle',
                 array(
                     'applicationId' => $applicationId,
@@ -309,12 +309,10 @@ class VehicleController extends AbstractVehicleSafetyController
             'sort' => 'field',
             'order' => 'ASC',
             'limit' => 10,
-            'page' => 1,
-            'url' => $this->getPluginManager()->get('url')
+            'page' => 1
         );
 
-        $table = $this->getServiceLocator()->get('Table')->buildTable('vehicle', $results, $settings);
-        return $table;
+        return $this->buildTable('vehicle', $results, $settings);
     }
 
     /**
