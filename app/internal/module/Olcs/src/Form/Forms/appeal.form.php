@@ -6,6 +6,7 @@ return [
         'attributes' => [
             'method' => 'post',
         ],
+        'type' => 'Common\Form\Form',
         'fieldsets' => [
             [
                 'name' => 'details',
@@ -19,7 +20,7 @@ return [
                         'required' => false
                     ],
                     'appealDate' => [
-                        'type' => 'dateSelectWithEmpty',
+                        'type' => 'dateSelect',
                         'label' => 'Date of appeal',
                         'required' => true
                     ],
