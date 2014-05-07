@@ -32,7 +32,8 @@ class IndexController extends FormJourneyActionController
         // render the view
         $view = new ViewModel(
             array('completionStatus' => $completionStatus['Results'][0],
-                    'applicationId' => $applicationId));
+                    'applicationId' => $applicationId)
+        );
         $view->setTemplate('self-serve/payment-details/index');
 
         return $view;
