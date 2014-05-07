@@ -27,7 +27,7 @@ class SubmissionController extends FormActionController
      */
     public function addAction()
     {
-        $this->setBreadcrumb();
+        $this->setSubmissionBreadcrumb();
         
         $submission = $this->createSubmission($this->routeParams);
         $data = array(
@@ -57,7 +57,7 @@ class SubmissionController extends FormActionController
      */
     public function editAction()
     {
-        $this->setBreadcrumb();
+        $this->setSubmissionBreadcrumb();
         if ($this->getRequest()->isPost()) {
             return $this->redirect()->toRoute('submission', array('licence' => $this->routeParams['licence'],
                         'case' => $this->routeParams['case'],
@@ -155,7 +155,7 @@ class SubmissionController extends FormActionController
         if (isset($_POST['cancel-submission'])) {
             return $this->backToCaseButton();
         }
-        $this->setBreadcrumb($this->getRecDecBreadcrumb());
+        $this->setSubmissionBreadcrumb($this->getRecDecBreadcrumb());
         return $this->formView('recommend');
     }
     
@@ -168,7 +168,7 @@ class SubmissionController extends FormActionController
         if (isset($_POST['cancel-submission'])) {
             return $this->backToCaseButton();
         }
-        $this->setBreadcrumb($this->getRecDecBreadcrumb());
+        $this->setSubmissionBreadcrumb($this->getRecDecBreadcrumb());
         return $this->formView('decision');
     }
     
@@ -315,7 +315,7 @@ class SubmissionController extends FormActionController
      * Overrides abstract class to set breadcrumb for all submission routes
      * @param type $navRoutes
      */
-    public function setBreadcrumb($navRoutes = array())
+    public function setSubmissionBreadcrumb($navRoutes = array())
     {
         $thisNavRoutes = array(
                 'licence_case_list/pagination' => array('licence' => $this->routeParams['licence']),
@@ -325,6 +325,6 @@ class SubmissionController extends FormActionController
                     'tab' => 'overview'
                 ));
         $allNavRoutes = array_merge($thisNavRoutes, $navRoutes);
-        parent::setBreadcrumb($allNavRoutes);
+        $this->setBreadcrumb($allNavRoutes);
     }
 }
