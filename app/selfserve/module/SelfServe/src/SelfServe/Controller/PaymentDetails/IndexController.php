@@ -18,9 +18,6 @@ use Zend\View\Model\ViewModel;
  */
 class IndexController extends FormJourneyActionController
 {
-    /**
-     * @todo When OLCS-2392 is merged, ensure the HTML elements are rendered correctly
-     */
     public function indexAction()
     {
         if ($this->getRequest()->isPost()) {
@@ -32,7 +29,11 @@ class IndexController extends FormJourneyActionController
         $applicationId = $this->params()->fromRoute('applicationId');
 
         // collect completion status
-        $completionStatus = $this->makeRestCall('ApplicationCompletion', 'GET', array('application_id' => $applicationId));
+        $completionStatus = $this->makeRestCall(
+            'ApplicationCompletion',
+            'GET',
+            array('application_id' => $applicationId)
+        );
 
         // render the view
         $view = $this->getViewModel(
