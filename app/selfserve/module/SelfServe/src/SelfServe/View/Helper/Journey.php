@@ -23,8 +23,9 @@ class Journey
 
         $journeyConfig=Array();
         foreach($config['journey'] as $applicationKey=>$applicationStage) {
-
-            $thisCompletionStatus=$completionStatus['section'.$applicationStage['dbkey'].'Status'];
+            
+            $thisCompletionStatus = array_key_exists('section'.$applicationStage['dbkey'].'Status', $completionStatus) !== false ?
+                                    $completionStatus['section'.$applicationStage['dbkey'].'Status'] : '';
             if ( $thisCompletionStatus == "" ) {
                 $thisCompletionStatus=0;
             }

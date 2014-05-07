@@ -140,7 +140,6 @@ class OperatingCentreController extends AbstractFinanceController
         if (empty($result)) {
             return $this->notFoundAction();
         }
-
         $resultsOperatingCentre = $this->getOperatingCentresForApplication($applicationId);
         if (empty($resultsOperatingCentre) || !count($resultsOperatingCentre['Results'])) {
             return $this->notFoundAction();
