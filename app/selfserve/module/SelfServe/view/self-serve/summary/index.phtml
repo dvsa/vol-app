@@ -4,32 +4,7 @@
     echo $this->render(
         '/partials/page-header.phtml',
         array(
-            'pageTitle' => 'Thank you',
-            'pageSubTitle' => 'Your application has been submitted successfully!'
+            'pageTitle' => 'Summary',
         )
     );
 ?>
-<div class="three-quarters">
-    <h3>Summary</h3>
-    <dl>
-        <dt>Application ID</dt>
-        <dd>7987</dd>
-        <dt>Licence number</dt>
-        <dd>OB767877</dd>
-        <dt>Licence type</dt>
-        <dd>Restricted</dd>
-        <dt>Type of operator</dt>
-        <dd>Public Service Vehicle</dd>
-        <dt>Date Submitted</dt>
-        <dd>01/09/2014</dd>
-    </dl>
-    <br /><br />
-    <div class="highlight-box">
-        <h3>What happens next?</h3>
-        <p>Your application will be processed by the <a href="#">Driver & Vehicle Standards Agency</a> which can take up to 3 weeks. Should there be any issues with your application or further information required their team will contact you directly. You can track the progress of your application on your dashboard.</p>
-    </div>
-    <div class="actions-container">
-        <a href="<?php echo $this->url('selfserve/dashboard-home'); ?>" class="action--primary large">Take me to my dashboard</a>
-        <a href="#" class="action--secondary large">View my application summary</a>
-    </div>
-</div>
