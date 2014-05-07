@@ -1,10 +1,18 @@
 <?php
+/**
+ * Case Test Controller
+ *
+ * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ */
+
 namespace OlcsTest\Controller;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
 /**
- * Tests the Case Controller
+ * Case Test Controller
+ *
+ * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
 class CaseControllerTest extends AbstractHttpControllerTestCase
 {
