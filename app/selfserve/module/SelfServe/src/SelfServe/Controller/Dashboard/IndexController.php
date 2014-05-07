@@ -20,10 +20,31 @@ use Zend\View\Model\ViewModel;
 class IndexController extends FormActionController
 {
     
-    public function indexAction() {
-    
+    public function indexAction()
+    {
+        //hardcoded organisationId
+        $organisationId = $this->getOrganisationId();
+
+        $applications = $this->makeRestCall('OrganisationApplication',
+            'GET',
+            ['operatorId' => $organisationId],
+            ['children' => ['licence']]
+        );
+
+        $settings = array(
+            'sort' => 'createdOn',
+            'order' => 'DESC',
+            'limit' => 10,
+            'page' => 1,
+            'url' => $this->getPluginManager()->get('url')
+        );
+
+        $applicationsTable = $this->getServiceLocator()->get('Table')->buildTable('dashboard-applications', $applications, $settings);
+
+        //\Zend\Debug\Debug::dump($applications);exit;
+
         // render the view
-        $view = new ViewModel();
+        $view = new ViewModel(['applicationsTable' => $applicationsTable]);
         $view->setTemplate('self-serve/dashboard/index');
         return $view;
     }
@@ -37,47 +58,41 @@ class IndexController extends FormActionController
     public function createApplicationAction()
     {
 
-        //This block should be in db transaction
-        try{
-            $data = array(
-                'name'      => '',
-                'version'   => 1,
-            );
-            
-            //create organisation
-            $orgResult = $this->makeRestCall('Organisation', 'POST', $data);
-            
-            $data = array(
-                'version'       => 1,
-                'licenceNumber' => '',
-                'licenceType'   => '',
-                'licenceStatus' => 'lic_status.new',
-                'organisation'  => $orgResult['id'],
-            );
-    
-            // create licence
-            $licenceResult = $this->makeRestCall('Licence', 'POST', $data);
-            $licenceId = $licenceResult['id'];
-     
-            $data = array(
-                'version'       => 1,
-                'licence' => $licenceId,
-                'createdOn'   => date('Y-m-d h:i:s'),
-                'status' => 'app_status.new'
-            );
-            
-            // create application
-            $applicationResult = $this->makeRestCall('Application', 'POST', $data);
-            $applicationId = $applicationResult['id'];
-            
-            $this->redirect()->toRoute('selfserve/licence-type', array('applicationId' => $applicationId, 'step' => 'operator-location'));
-        }
-        catch (\Exception $e){
-            throw $e;
-            
-            //An error occured and transaction should be rolled back. Message: $'); 
-            throw $e;
-        }
+        $data = array(
+            'version'       => 1,
+            'licenceNumber' => '',
+            'licenceType'   => '',
+            'licenceStatus' => 'lic_status.new',
+            'organisation'  => $this->getOrganisationId(),
+        );
+
+        // create licence
+        $licenceResult = $this->makeRestCall('Licence', 'POST', $data);
+        $licenceId = $licenceResult['id'];
+
+        $data = array(
+            'version'       => 1,
+            'licence' => $licenceId,
+            'createdOn'   => date('Y-m-d h:i:s'),
+            'status' => 'app_status.new'
+        );
+
+        // create application
+        $applicationResult = $this->makeRestCall('Application', 'POST', $data);
+        $applicationId = $applicationResult['id'];
+
+        $this->redirect()->toRoute('selfserve/licence-type', array('applicationId' => $applicationId, 'step' => 'operator-location'));
+
+    }
+
+    /**
+     * Get organisation Id (currently hardcoded)
+     *
+     * @return int
+     */
+    private function getOrganisationId()
+    {
+        return 104;
     }
 
 }
