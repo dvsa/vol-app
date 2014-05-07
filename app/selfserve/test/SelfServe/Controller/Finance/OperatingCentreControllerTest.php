@@ -802,17 +802,4 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
 
         return $response;
     }
-    /**
-     * Test processConfigName
-     */
-    public function testProcessConfigName()
-    {
-        $this->getMockController(array('isPsvLicence'));
-
-        $this->controller->expects($this->once())
-            ->method('isPsvConfigLicence')
-            ->will($this->returnValue(true));
-
-        $this->assertEquals('a-psv', $this->controller->processConfigName('a', 1));
-    }
 }
