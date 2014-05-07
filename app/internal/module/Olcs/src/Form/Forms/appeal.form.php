@@ -20,9 +20,9 @@ return [
                         'required' => false
                     ],
                     'appealDate' => [
-                        'type' => 'dateSelect',
+                        'type' => 'dateSelectWithEmpty',
                         'label' => 'Date of appeal',
-                        'required' => true
+                        'filters' => '\Common\Form\Elements\InputFilters\DateRequired'
                     ],
                     'appealNumber' => [
                         'label' => 'Appeal number',
