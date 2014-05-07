@@ -44,16 +44,11 @@
                 'route' => 'declarations',
                 'label' => 'declarations'
             ),
-            'payment-details' => array(
+            'payment-submission' => array(
                 'dbkey' => 'Pay',
-                'route' => 'payment-details',
-                'label' => 'payment-details'
-            ),
-            'summary' => array(
-                'dbkey' => 'Sub',
-                'route' => 'summary',
-                'label' => 'summary'
-            ),
+                'route' => 'payment-submission',
+                'label' => 'payment-submission'
+            )
         )
     );
 ?>
