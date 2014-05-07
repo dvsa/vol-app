@@ -18,19 +18,41 @@ use Zend\View\Model\ViewModel;
  */
 class IndexController extends FormJourneyActionController
 {
+    /**
+     * @todo When OLCS-2392 is merged, ensure the HTML elements are rendered correctly
+     */
     public function indexAction()
     {
+        if ($this->getRequest()->isPost()) {
+            return $this->processPayment();
+        }
+
+        $form = $this->generateForm('payment', 'processPayment');
+
         $applicationId = $this->params()->fromRoute('applicationId');
 
         // collect completion status
         $completionStatus = $this->makeRestCall('ApplicationCompletion', 'GET', array('application_id' => $applicationId));
 
         // render the view
-        $view = new ViewModel(array('completionStatus' => $completionStatus['Results'][0],
-                                            'applicationId' => $applicationId));
-        $view->setTemplate('self-serve/payment-details/index');
+        $view = $this->getViewModel(
+            array(
+                'form' => $form,
+                'completionStatus' => $completionStatus['Results'][0],
+                'applicationId' => $applicationId
+            )
+        );
+
+        $view->setTemplate('self-serve/forms/generic');
 
         return $view;
+    }
+
+    public function processPayment($data)
+    {
+        $applicationId = $this->params()->fromRoute('applicationId');
+
+        return $this->redirect()->toRoute('selfserve/summary-complete', array('applicationId' => $applicationId));
     }
 
     public function completeAction()
