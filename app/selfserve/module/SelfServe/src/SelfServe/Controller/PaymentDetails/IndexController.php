@@ -20,23 +20,26 @@ class IndexController extends AbstractApplicationController
 {
     public function indexAction()
     {
-        $applicationId = $this->params()->fromRoute('applicationId');
+        if ($this->getRequest()->isPost()) {
+            return $this->processPayment();
+        }
 
-        // collect completion status
-        $completionStatus = $this->makeRestCall(
-            'ApplicationCompletion',
-            'GET',
-            array('application_id' => $applicationId)
-        );
+        $form = $this->generateForm('payment', 'processPayment');
 
-        // render the view
-        $view = new ViewModel(
-            array('completionStatus' => $completionStatus['Results'][0],
-                    'applicationId' => $applicationId)
-        );
-        $view->setTemplate('self-serve/payment-details/index');
+        $applicationId = $this->getApplicationId();
 
-        return $view;
+        $view = $this->getViewModel(array('form' => $form));
+
+        $view->setTemplate('self-serve/layout/form');
+
+        return $this->renderLayoutWithSubSections($view);
+    }
+
+    public function processPayment()
+    {
+        $applicationId = $this->getApplicationId();
+
+        return $this->redirectToRoute('selfserve/payment-submission-complete', array('applicationId' => $applicationId));
     }
 
     public function completeAction()
