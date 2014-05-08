@@ -10,7 +10,10 @@ namespace OlcsTest\Controller;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
-class OlcsConvictionControllerTest  extends AbstractHttpControllerTestCase
+/**
+ * Tests the conviction controller
+ */
+class OlcsConvictionControllerTest extends AbstractHttpControllerTestCase
 {
     public function setUp()
     {
@@ -85,7 +88,7 @@ class OlcsConvictionControllerTest  extends AbstractHttpControllerTestCase
         
         $this->controller->dealtAction();
     }
-    
+
     public function testAddAction()
     {
         /*$this->controller->expects($this->once())
@@ -145,7 +148,7 @@ class OlcsConvictionControllerTest  extends AbstractHttpControllerTestCase
             ->method('getParams')
             ->with(array('case', 'licence', 'id'))
             ->will($this->returnValue(array ( 'licence' => 7, 'case' => 54 )));
-        
+
         $this->controller->expects($this->once())
             ->method('makeRestCall')
             ->with('VosaCase', 'GET', array('id' => 54))
@@ -153,7 +156,7 @@ class OlcsConvictionControllerTest  extends AbstractHttpControllerTestCase
 
         $this->controller->addAction();
     }
-    
+
     public function testEditAction()
     {
         $this->controller->expects($this->once())
@@ -217,7 +220,7 @@ class OlcsConvictionControllerTest  extends AbstractHttpControllerTestCase
 
         $this->controller->editAction();
     }
-    
+
     public function testProcessEditAction()
     {
         $data = array(
@@ -240,8 +243,13 @@ class OlcsConvictionControllerTest  extends AbstractHttpControllerTestCase
 
         $toRoute->expects($this->once())
             ->method('toRoute')
-            ->with('case_convictions', array(
-                'case' =>  54, 'licence' => 7));
+            ->with(
+                'case_convictions',
+                array(
+                    'case' =>  54,
+                    'licence' => 7
+                )
+            );
 
         $this->controller->expects($this->once())
             ->method('redirect')
@@ -272,8 +280,13 @@ class OlcsConvictionControllerTest  extends AbstractHttpControllerTestCase
 
         $toRoute->expects($this->once())
             ->method('toRoute')
-            ->with('case_convictions', array(
-                'case' =>  54, 'licence' => 7));
+            ->with(
+                'case_convictions',
+                array(
+                    'case' =>  54,
+                    'licence' => 7
+                )
+            );
 
         $this->controller->expects($this->once())
             ->method('redirect')

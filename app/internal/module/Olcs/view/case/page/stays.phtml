@@ -1,7 +1,5 @@
 <div class="full-width">
     <?php
-    echo $this->render('partials/page-header.phtml', array('pageTitle' => 'Stays & Appeals'));
-
     foreach ($stayTypes as $id => $type) {
         if (isset($stayRecords[$id])) {
             echo $this->render('partials/case/stay.phtml', array('stay' => $stayRecords[$id], 'stayType' => $type));

@@ -35,7 +35,8 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
                 'createSubmission',
                 'getSubmissionView',
                 'getRequest',
-                'url'
+                'url',
+                'setSubmissionBreadcrumb'
             )
         );
         $this->controller->routeParams = array();
@@ -53,7 +54,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $this->controller->routeParams = array('case' => 54, 'licence' => 7, 'action' => 'add');
         
         $this->controller->expects($this->once())
-            ->method('setBreadcrumb')
+            ->method('setSubmissionBreadcrumb')
             ->with();
         
         $this->controller->expects($this->once())
@@ -99,7 +100,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $this->controller->routeParams = array('case' => 54, 'licence' => 7, 'action' => 'add');
         
         $this->controller->expects($this->once())
-            ->method('setBreadcrumb')
+            ->method('setSubmissionBreadcrumb')
             ->with();
         
         $this->controller->expects($this->once())
@@ -132,14 +133,14 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
             array(
                 'getEditSubmissionData',
                 'getSubmissionView',
-                'setBreadcrumb',
-                'getRequest'
+                'getRequest',
+                'setSubmissionBreadcrumb'
             )
         );
         $this->controller->routeParams = array('case' => 54, 'licence' => 7, 'action' => 'add');
         
         $this->controller->expects($this->once())
-            ->method('setBreadcrumb')
+            ->method('setSubmissionBreadcrumb')
             ->with();
         
         $getRequest = $this->getMock('\stdClass', array('isPost'));
@@ -170,16 +171,16 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
             array(
                 'getEditSubmissionData',
                 'getSubmissionView',
-                'setBreadcrumb',
                 'getRequest',
                 'redirect',
-                'params'
+                'params',
+                'setSubmissionBreadcrumb'
             )
         );
         $this->controller->routeParams = array('case' => 54, 'licence' => 7, 'action' => 'add');
         
         $this->controller->expects($this->once())
-            ->method('setBreadcrumb')
+            ->method('setSubmissionBreadcrumb')
             ->with();
         
         $getRequest = $this->getMock('\stdClass', array('isPost'));
@@ -263,7 +264,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
             ->with('config')
             ->will(
                 $this->returnValue(array(
-                'static-list-data' => array('submission_decision' => 
+                'static-list-data' => array('submission_decision' =>
                     array(
                         'submission_decision.disagree' => 'Disagree'
                     ))
@@ -399,7 +400,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
             array(
                 'backToCaseButton',
                 'formView',
-                'setBreadcrumb',
+                'setSubmissionBreadcrumb',
                 
             )
         );
@@ -408,7 +409,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
              ->method('backToCaseButton');*/
         
         $this->controller->expects($this->once())
-            ->method('setBreadcrumb')
+            ->method('setSubmissionBreadcrumb')
             ->with();
         
         $this->controller->expects($this->once())
@@ -425,7 +426,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
             array(
                 'backToCaseButton',
                 'formView',
-                'setBreadcrumb',
+                'setSubmissionBreadcrumb',
                 
             )
         );
@@ -434,7 +435,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
              ->method('backToCaseButton');*/
         
         $this->controller->expects($this->once())
-            ->method('setBreadcrumb')
+            ->method('setSubmissionBreadcrumb')
             ->with();
         
         $this->controller->expects($this->once())
@@ -674,5 +675,29 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
             ->with(array());
         
         $this->controller->getFormWithUsers('decision', array());
+    }
+    
+    public function testSetSubmissionBreadcrumb()
+    {
+        $this->controller = $this->getMock(
+            '\Olcs\Controller\SubmissionController',
+            array(
+                'makeRestCall',
+                'setBreadcrumb'
+            )
+        );
+        $this->controller->routeParams = array('case' => 54, 'licence' => 7, 'action' => 'decision', 'id' => 8);
+        $thisNavRoutes = array(
+                'licence_case_list/pagination' => array('licence' => 7),
+                'case_manage' => array(
+                    'case' => 54,
+                    'licence' => 7,
+                    'tab' => 'overview'
+                )
+        );
+        $this->controller->expects($this->once())
+            ->method('setBreadcrumb')
+            ->with($thisNavRoutes);
+        $this->controller->setSubmissionBreadcrumb(array());
     }
 }

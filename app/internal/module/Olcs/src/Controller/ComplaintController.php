@@ -154,6 +154,8 @@ class ComplaintController extends FormActionController
             $result = $this->processEdit($data['driver-details'], 'Person');
         } else {
             // configure complaint data
+            unset($data['complaint-details']['version']);
+            unset($data['organisation-details']['version']);
 
             $newData = $data['complaint-details'];
             $newData['vosaCases'][] = $data['vosaCase'];
@@ -163,13 +165,13 @@ class ComplaintController extends FormActionController
 
             $newData['driver']['contactDetails']['contactDetailsType'] = 'Driver';
             $newData['driver']['contactDetails']['is_deleted'] = 0;
-            $newData['driver']['contactDetails']['version'] = 1;
             $newData['driver']['contactDetails']['person'] = $data['driver-details'];
+            unset($newData['driver']['contactDetails']['person']['version']);
 
             $newData['complainant']['contactDetailsType'] = 'Complainant';
             $newData['complainant']['is_deleted'] = 0;
-            $newData['complainant']['version'] = 1;
             $newData['complainant']['person'] = $data['complainant-details'];
+            unset($newData['complainant']['person']['version']);
 
             $result = $this->processAdd($newData, 'Complaint');
 

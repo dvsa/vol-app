@@ -37,8 +37,9 @@ return [
                         'class' => 'long'
                     ],
                     'dateOfBirth' => [
-                         'type' => 'dateSelect',
-                         'label' => 'Date of birth:'
+                         'type' => 'dateSelectWithEmpty',
+                         'label' => 'Date of birth:',
+                         'filters' => '\Common\Form\Elements\InputFilters\DateNotRequiredNotInFuture'
                      ],
                 ]
             ],
@@ -60,11 +61,12 @@ return [
                     'dateOfOffence' => [
                          'type' => 'dateSelectWithEmpty',
                          'label' => 'Offence date:',
-                         'filters' => '\Common\Form\Elements\InputFilters\OffenceDateBeforeConvictionDate',
+                         'filters' => '\Common\Form\Elements\InputFilters\OffenceDateBeforeConvictionDate'
                      ],
                     'dateOfConviction' => [
-                         'type' => 'dateSelect',
-                         'label' => 'Conviction date:'
+                         'type' => 'dateSelectWithEmpty',
+                         'label' => 'Conviction date:',
+                         'filters' => '\Common\Form\Elements\InputFilters\DateNotInFuture'
                      ],
                     'si' => [
                         'type' => 'select',
