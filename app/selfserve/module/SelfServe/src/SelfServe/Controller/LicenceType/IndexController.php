@@ -9,7 +9,7 @@
 
 namespace SelfServe\Controller\LicenceType;
 
-use Common\Controller\FormJourneyActionController;
+use SelfServe\Controller\AbstractApplicationController;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -18,7 +18,7 @@ use Zend\View\Model\ViewModel;
  * @author S Lizzio <shaun.lizzio@valtech.co.uk>
  * @author Jakub Igla <jakub.igla@valtech.co.uk>
  */
-class IndexController extends FormJourneyActionController
+class IndexController extends AbstractApplicationController
 {
 
     /**

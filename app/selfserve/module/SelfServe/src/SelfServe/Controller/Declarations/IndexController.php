@@ -8,7 +8,7 @@
 
 namespace SelfServe\Controller\Declarations;
 
-use Common\Controller\FormJourneyActionController;
+use SelfServe\Controller\AbstractApplicationController;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -16,7 +16,7 @@ use Zend\View\Model\ViewModel;
  *
  * @author Jess Rowbottom <jess.rowbottom@valtech.co.uk>
  */
-class IndexController extends FormJourneyActionController
+class IndexController extends AbstractApplicationController
 {
     public function indexAction()
     {

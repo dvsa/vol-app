@@ -8,7 +8,7 @@
 
 namespace SelfServe\Controller\BusinessType;
 
-use Common\Controller\FormJourneyActionController;
+use SelfServe\Controller\AbstractApplicationController;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -16,7 +16,7 @@ use Zend\View\Model\ViewModel;
  *
  * @author S Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class IndexController extends FormJourneyActionController
+class IndexController extends AbstractApplicationController
 {
 
     protected $messages;
