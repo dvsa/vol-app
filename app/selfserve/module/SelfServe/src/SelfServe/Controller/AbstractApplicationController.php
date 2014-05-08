@@ -52,7 +52,7 @@ abstract class AbstractApplicationController extends FormJourneyActionController
 
     /**
      * Render the layout with sub sections
-
+     *
      * @param object $view
      * @param string $current
      * @param string $journey
@@ -87,7 +87,7 @@ abstract class AbstractApplicationController extends FormJourneyActionController
             )
         );
 
-        $layout->setTemplate('self-serve/layout/withSubSections');
+        $layout->setTemplate('self-serve/layout/layout');
 
         $layout->addChild($view, 'main');
 

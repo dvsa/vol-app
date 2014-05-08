@@ -41,7 +41,7 @@ class WorkshopController extends AbstractVehicleSafetyController
         $form->get('data')->setLabel('Add safety inspection provider');
 
         $view = $this->getViewModel(['form' => $form]);
-        $view->setTemplate('self-serve/forms/generic');
+        $view->setTemplate('self-serve/layout/form');
 
         return $this->renderLayoutWithSubSections($view, 'safety');
     }
@@ -101,7 +101,7 @@ class WorkshopController extends AbstractVehicleSafetyController
         $form->get('form-actions')->remove('addAnother');
 
         $view = $this->getViewModel(['form' => $form]);
-        $view->setTemplate('self-serve/forms/generic');
+        $view->setTemplate('self-serve/layout/form');
 
         return $this->renderLayoutWithSubSections($view, 'safety');
     }
