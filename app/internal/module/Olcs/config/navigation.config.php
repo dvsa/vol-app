@@ -158,6 +158,23 @@ return array(
                                     'route' => 'case_prohibition',
                                     'action' => 'index'
                                 ),
+                                array(
+                                    'label' => 'Impounding',
+                                    'route' => 'case_impounding',
+                                    'action' => 'index',
+                                    'pages' => array(
+                                        array(
+                                            'label' => 'Add Impounding',
+                                            'route' => 'case_impounding',
+                                            'action' => 'add'
+                                        ),
+                                        array(
+                                            'label' => 'Edit Impounding',
+                                            'route' => 'case_impounding',
+                                            'action' => 'edit'
+                                        )
+                                    )
+                                ),
                             )
                         )
                     )

@@ -237,7 +237,22 @@ return array(
                         'controller' => 'SubmissionController',
                     )
                 )
-            )
+            ),
+            'case_impounding' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/licence/[:licence]/case/[:case]/action/manage/impounding[/:action][/:id]',
+                    'constraints' => array(
+                        'licence' => '[0-9]+',
+                        'case' => '[0-9]+',
+                        'id' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'CaseImpoundingController',
+                        'action' => 'index'
+                    )
+                )
+            ),
         )
     ),
     'tables' => array(
@@ -262,7 +277,8 @@ return array(
             'SubmissionController' => 'Olcs\Controller\SubmissionController',
             'CaseStayController' => 'Olcs\Controller\CaseStayController',
             'CasePenaltyController' => 'Olcs\Controller\CasePenaltyController',
-            'CaseProhibitionController' => 'Olcs\Controller\CaseProhibitionController'
+            'CaseProhibitionController' => 'Olcs\Controller\CaseProhibitionController',
+            'CaseImpoundingController' => 'Olcs\Controller\CaseImpoundingController'
         )
     ),
     'view_manager' => array(
