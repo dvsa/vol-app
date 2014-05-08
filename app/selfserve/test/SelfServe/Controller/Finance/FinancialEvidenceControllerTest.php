@@ -6,13 +6,12 @@
 
 namespace SelfServe\test\Controller\Finance;
 
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
-use SelfServe\Controller\Finance\FinancialEvidenceController;
+use PHPUnit_Framework_TestCase;
 
 /**
  * Test FinancialEvidenceController
  */
-class FinancialEvidenceControllerTest extends AbstractHttpControllerTestCase
+class FinancialEvidenceControllerTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Build a mock controller
@@ -27,66 +26,26 @@ class FinancialEvidenceControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
-     * Set up the unit tests
-     */
-    protected function setUp()
-    {
-        $this->setApplicationConfig(
-            include __DIR__ . '/../../../../config/application.config.php'
-        );
-
-        parent::setUp();
-    }
-
-    /**
      * Test indexAction
      */
     public function testIndexAction()
     {
-        $this->getMockController(array('getViewModel', 'renderLayout', 'params', 'makeRestCall'));
+        $this->getMockController(array('getViewModel', 'renderLayoutWithSubSections'));
 
-        $applicationId=1;
+        $mockView = $this->getMock('\stdClass', array('setTemplate'));
 
-        $mockParams = $this->getMock('\stdClass', array('fromRoute'));
-
-        $mockParams->expects($this->once())
-            ->method('fromRoute')
-            ->with('applicationId')
-            ->will($this->returnValue($applicationId));
-
-        $this->controller->expects($this->once())
-            ->method('params')
-            ->will($this->returnValue($mockParams));
-
-        $mockViewModel = $this->getMock('\stdClass', array('setTemplate'));
+        $mockView->expects($this->once())
+            ->method('setTemplate');
 
         $this->controller->expects($this->once())
             ->method('getViewModel')
-            ->will($this->returnValue($mockViewModel));
+            ->will($this->returnValue($mockView));
 
         $this->controller->expects($this->once())
-            ->method('renderLayout')
-            ->with($mockViewModel)
-            ->will($this->returnValue('LAYOUT'));
+            ->method('renderLayoutWithSubSections')
+            ->with($mockView)
+            ->will($this->returnValue('VIEW'));
 
-        $mockJourney=Array('Count'=>0,'Results'=>[]);
-        $this->controller->expects($this->any())
-            ->method('makeRestCall')
-            ->will($this->returnValue($mockJourney));
-
-        $this->assertEquals('LAYOUT', $this->controller->indexAction());
-
-    }
-
-    /**
-     * Test completeAction
-     */
-    public function testCompleteAction()
-    {
-        $controller = new FinancialEvidenceController();
-
-        $response = $controller->completeAction();
-
-        $this->assertEquals(null, $response);
+        $this->assertEquals('VIEW', $this->controller->indexAction());
     }
 }

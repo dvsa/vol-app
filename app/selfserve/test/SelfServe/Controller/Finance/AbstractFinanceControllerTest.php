@@ -6,13 +6,12 @@
 
 namespace OlcsTest\Controller;
 
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
-use SelfServe\Controller\Finance\AbstractFinanceController;
+use PHPUnit_Framework_TestCase;
 
 /**
  * Test AbstractFinanceController
  */
-class AbstractFinanceControllerTest extends AbstractHttpControllerTestCase
+class AbstractFinanceControllerTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Build a mock controller
@@ -33,55 +32,42 @@ class AbstractFinanceControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
-     * Set up the unit tests
-     */
-    protected function setUp()
-    {
-        $this->setApplicationConfig(
-            include __DIR__ . '/../../../../config/application.config.php'
-        );
-
-        parent::setUp();
-    }
-
-    /**
      * Test renderLayout
      */
-    public function testRenderLayout()
+    public function testRenderLayoutWithSubSections()
     {
         $applicationId = 5;
+        $current = '';
+        $completionStatus = array(
+            'Count' => 0,
+            'Results' => array()
+        );
 
         $view = $this->getMock('\stdClass');
 
-        $this->getMockController(array('params', 'getViewModel', 'makeRestCall'));
+        $mockLayout = $this->getMock('\stdClass', array('setTemplate', 'addChild'));
 
-        $mockParams = $this->getMock('\stdClass', array('fromRoute'));
+        $mockLayout->expects($this->once())
+            ->method('setTemplate');
 
-        $mockParams->expects($this->once())
-            ->method('fromRoute')
-            ->with('applicationId')
+        $mockLayout->expects($this->once())
+            ->method('addChild')
+            ->with($view);
+
+        $this->getMockController(array('getApplicationId', 'getViewModel', 'makeRestCall'));
+
+        $this->controller->expects($this->any())
+            ->method('getApplicationId')
             ->will($this->returnValue($applicationId));
 
         $this->controller->expects($this->once())
-            ->method('params')
-            ->will($this->returnValue($mockParams));
-        
-        $mockJourney=Array('Count'=>0,'Results'=>[]);
-        $this->controller->expects($this->any())
-            ->method('makeRestCall')
-            ->will($this->returnValue($mockJourney));
-
-        $mockViewModel = $this->getMock('\stdClass', array('setTemplate', 'addChild'));
-
-        $mockViewModel->expects($this->once())
-            ->method('addChild')
-            ->with($view, 'main');
+            ->method('getViewModel')
+            ->will($this->returnValue($mockLayout));
 
         $this->controller->expects($this->once())
-            ->method('getViewModel')
-            ->will($this->returnValue($mockViewModel));
+            ->method('makeRestCall')
+            ->will($this->returnValue($completionStatus));
 
-        $this->assertEquals($mockViewModel, $this->controller->renderLayout($view));
-
+        $this->assertEquals($mockLayout, $this->controller->renderLayoutWithSubSections($view, $current));
     }
 }

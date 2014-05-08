@@ -8,14 +8,14 @@
 
 namespace SelfServe\Controller\Finance;
 
-use Common\Controller\FormJourneyActionController;
+use SelfServe\Controller\AbstractApplicationController;
 
 /**
  * Abstract Finance Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-abstract class AbstractFinanceController extends FormJourneyActionController
+abstract class AbstractFinanceController extends AbstractApplicationController
 {
     /**
      * Render the layout
@@ -23,44 +23,29 @@ abstract class AbstractFinanceController extends FormJourneyActionController
      * @param object $view
      * @param string $current
      */
-    public function renderLayout($view, $current = '')
+    public function renderLayoutWithSubSections($view, $current = '', $journey = 'operating-centre')
     {
-        $applicationId = $this->params()->fromRoute('applicationId');
+        $applicationId = $this->getApplicationId();
 
-        $subSections = array(
+        $this->setSubSections(
             array(
-                'label' => 'selfserve-app-subSection-operating-centre-oc',
-                'route' => 'selfserve/finance/operating_centre',
-                'active' => ($current == 'operatingCentre'),
-                'routeParams' => array(
-                    'applicationId' => $applicationId
-                )
-            ),
-            array(
-                'label' => 'selfserve-app-subSection-operating-centre-fe',
-                'route' => 'selfserve/finance/financial_evidence',
-                'active' => ($current == 'financialEvidence'),
-                'routeParams' => array(
-                    'applicationId' => $applicationId
+                'operatingCentre' => array(
+                    'label' => 'selfserve-app-subSection-operating-centre-oc',
+                    'route' => 'selfserve/finance/operating_centre',
+                    'routeParams' => array(
+                        'applicationId' => $applicationId
+                    )
+                ),
+                'financialEvidence' => array(
+                    'label' => 'selfserve-app-subSection-operating-centre-fe',
+                    'route' => 'selfserve/finance/financial_evidence',
+                    'routeParams' => array(
+                        'applicationId' => $applicationId
+                    )
                 )
             )
         );
 
-        // collect completion status
-        $completionStatus = $this->makeRestCall('ApplicationCompletion', 'GET', array('application_id' => $applicationId));
-
-        $layout = $this->getViewModel(
-            array(
-                'subSections' => $subSections,
-                'completionStatus' => (($completionStatus['Count']>0)?$completionStatus['Results'][0]:Array()),
-                'applicationId' => $applicationId
-            )
-        );
-
-        $layout->setTemplate('self-serve/finance/layout');
-
-        $layout->addChild($view, 'main');
-
-        return $layout;
+        return parent::renderLayoutWithSubSections($view, $current, $journey);
     }
 }

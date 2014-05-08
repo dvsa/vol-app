@@ -8,7 +8,7 @@
 
 namespace SelfServe\Controller\PaymentDetails;
 
-use Common\Controller\FormJourneyActionController;
+use SelfServe\Controller\AbstractApplicationController;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -16,7 +16,7 @@ use Zend\View\Model\ViewModel;
  *
  * @author Jess Rowbottom <jess.rowbottom@valtech.co.uk>
  */
-class IndexController extends FormJourneyActionController
+class IndexController extends AbstractApplicationController
 {
     public function indexAction()
     {
@@ -26,38 +26,26 @@ class IndexController extends FormJourneyActionController
 
         $form = $this->generateForm('payment', 'processPayment');
 
-        $applicationId = $this->params()->fromRoute('applicationId');
+        $applicationId = $this->getApplicationId();
 
-        // collect completion status
-        $completionStatus = $this->makeRestCall(
-            'ApplicationCompletion',
-            'GET',
-            array('application_id' => $applicationId)
-        );
+        $view = $this->getViewModel(array('form' => $form));
 
-        // render the view
-        $view = $this->getViewModel(
-            array(
-                'form' => $form,
-                'completionStatus' => $completionStatus['Results'][0],
-                'applicationId' => $applicationId
-            )
-        );
+        $view->setTemplate('self-serve/layout/form');
 
-        $view->setTemplate('self-serve/forms/generic');
-
-        return $view;
+        return $this->renderLayoutWithSubSections($view);
     }
 
-    public function processPayment($data)
+    public function processPayment()
     {
-        $applicationId = $this->params()->fromRoute('applicationId');
+        $applicationId = $this->getApplicationId();
 
-        return $this->redirect()->toRoute('selfserve/summary-complete', array('applicationId' => $applicationId));
+        return $this->redirectToRoute('selfserve/payment-submission', array('applicationId' => $applicationId));
     }
 
     public function completeAction()
     {
-
+        $view = new ViewModel();
+        $view->setTemplate('self-serve/payment-details/complete');
+        return $view;
     }
 }

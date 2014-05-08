@@ -6,166 +6,136 @@
 
 namespace OlcsTest\Controller;
 
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
+use PHPUnit_Framework_TestCase;
 
 /**
  * Test vehicleControllerTest
  */
-class VehicleControllerTest extends AbstractHttpControllerTestCase
+class VehicleControllerTest extends PHPUnit_Framework_TestCase
 {
 
     protected function setUpMockController($methods)
     {
         $this->controller = $this->getMock(
-            '\SelfServe\Controller\VehiclesSafety\VehicleController', $methods
+            '\SelfServe\Controller\VehicleSafety\VehicleController', $methods
         );
     }
 
-    protected function setUp()
+    public function testIndexAction()
     {
-        $this->setApplicationConfig(
-            include __DIR__ . '/../../../../config/application.config.php'
-        );
-        $this->controller = $this->getMock(
-            '\SelfServe\Controller\VehiclesSafety\VehicleController', [
-            'getView',
-            'setCurrentStep',
-            'generateSectionForm',
-            'formPost',
-            'getStepProcessMethod',
-            'getPersistedFormData',
-            'params',
-            'notFoundAction',
-            'getLicenceEntity',
-            'makeRestCall',
-            ]
-        );
-        parent::setUp();
-    }
+        $applicationId = 2;
 
-    public function testDeleteAction()
-    {
-        $applicationId = '1';
-        $vehicleId = '1';
+        $application = array(
+            'licence' => array(
+                'id' => 3
+            )
+        );
 
-        $mockParams[0] = $this->getMock('\stdClass', ['fromRoute']);
-        $mockParams[0]->expects($this->once())
-            ->method('fromRoute')
-            ->with($this->equalTo('applicationId'))
+        $this->setUpMockController(
+            array(
+                'checkForCrudAction',
+                'getApplicationId',
+                'makeRestCall',
+                'generateVehicleTable',
+                'getViewModel',
+                'renderLayoutWithSubSections'
+            )
+        );
+
+        $this->controller->expects($this->any())
+            ->method('getApplicationId')
             ->will($this->returnValue($applicationId));
-
-        $mockParams[1] = $this->getMock('\stdClass', ['fromRoute']);
-        $mockParams[1]->expects($this->once())
-            ->method('fromRoute')
-            ->with($this->equalTo('vehicleId'))
-            ->will($this->returnValue($vehicleId));
-
-        $this->controller->expects($this->exactly(2))
-            ->method('params')
-            ->will($this->onConsecutiveCalls($mockParams[0], $mockParams[1]));
-
-        $restCallResults = array(
-            array('Count' => 1, 'Results' => array(array('id' => 1))),
-            array(),
-            array(),
-        );
-
-        $this->controller->expects($this->exactly(3))
-            ->method('makeRestCall')
-            ->will($this->onConsecutiveCalls($restCallResults[0], $restCallResults[1]));
-
-        $router = $this->getMock('\Zend\Mvc\Router\SimpleRouteStack', ['assemble']);
-        $router->expects($this->once())
-            ->method('assemble')
-            ->will($this->returnValue('/selfserve/1/vehicle-safety/safety-inspections'));
-
-        $this->controller->getEvent()->setRouter($router);
-        $this->controller->getEvent()->setResponse(new \Zend\Http\PhpEnvironment\Response());
-
-        $deleteAction = $this->controller->deleteAction();
-        $this->assertInstanceOf('Zend\Http\PhpEnvironment\Response', $deleteAction);
-        $this->assertEquals(302, $deleteAction->getStatusCode());
-    }
-
-    public function testDeleteWithNoVehicleAction()
-    {
-        $applicationId = '1';
-        $vehicleId = '1';
-
-        $mockParams[0] = $this->getMock('\stdClass', ['fromRoute']);
-        $mockParams[0]->expects($this->once())
-            ->method('fromRoute')
-            ->with($this->equalTo('applicationId'))
-            ->will($this->returnValue($applicationId));
-
-        $mockParams[1] = $this->getMock('\stdClass', ['fromRoute']);
-        $mockParams[1]->expects($this->once())
-            ->method('fromRoute')
-            ->with($this->equalTo('vehicleId'))
-            ->will($this->returnValue($vehicleId));
-
-        $this->controller->expects($this->exactly(2))
-            ->method('params')
-            ->will($this->onConsecutiveCalls($mockParams[0], $mockParams[1]));
-
-        $restCallResult = array('Count' => 0, 'Results' => array());
-
-        $this->controller->expects($this->exactly(1))
-            ->method('makeRestCall')
-            ->will($this->returnValue($restCallResult));
 
         $this->controller->expects($this->once())
-            ->method('notFoundAction')
-            ->will($this->returnValue(new \Zend\Http\PhpEnvironment\Response));
+            ->method('makeRestCall')
+            ->with('Application', 'GET', array('id' => $applicationId))
+            ->will($this->returnValue($application));
 
-        $deleteAction = $this->controller->deleteAction();
-        $this->assertInstanceOf('Zend\Http\PhpEnvironment\Response', $deleteAction);
-        $this->assertEquals(200, $deleteAction->getStatusCode());
+        $this->controller->expects($this->once())
+            ->method('generateVehicleTable')
+            ->with($application['licence'])
+            ->will($this->returnValue('<table></table>'));
+
+        $mockView = $this->getMock('\stdClass', array('setTemplate'));
+
+        $mockView->expects($this->once())
+            ->method('setTemplate');
+
+        $this->controller->expects($this->once())
+            ->method('getViewModel')
+            ->will($this->returnValue($mockView));
+
+        $this->controller->expects($this->once())
+            ->method('renderLayoutWithSubSections')
+            ->with($mockView)
+            ->will($this->returnValue('RENDER'));
+
+        $this->assertEquals('RENDER', $this->controller->indexAction());
+
+    }
+
+    public function testAddActionWithCancel()
+    {
+        $this->setUpMockController(array('isButtonPressed', 'redirectToVehicles'));
+
+        $this->controller->expects($this->once())
+            ->method('isButtonPressed')
+            ->with('cancel')
+            ->will($this->returnValue(true));
+
+        $this->controller->expects($this->once())
+            ->method('redirectToVehicles')
+            ->will($this->returnValue('REDIRECT'));
+
+        $this->assertEquals('REDIRECT', $this->controller->addAction());
     }
 
     public function testAddAction()
     {
         $this->setUpMockController(
-            [
+            array(
                 'generateForm',
-                'getLicenceEntity'
-            ]
+                'renderLayoutWithSubSections'
+            )
         );
 
-        $mockLicenceArray = [
-            'id' => 7,
-            'makeRestCall',
-            'goodsOrPsv' => 'goods'
-        ];
+        $mockDataFieldset = $this->getMock('\stdClass', array('setLabel'));
 
-        $this->controller->expects($this->once())
-            ->method('getLicenceEntity')
-            ->will($this->returnValue($mockLicenceArray));
+        $mockDataFieldset->expects($this->once())
+            ->method('setLabel')
+            ->with('Add vehicle');
+
+        $mockForm = $this->getMock('\stdClass', array('get'));
+
+        $mockForm->expects($this->once())
+            ->method('get')
+            ->with('data')
+            ->will($this->returnValue($mockDataFieldset));
 
         $this->controller->expects($this->once())
             ->method('generateForm')
-            ->with($this->equalTo('update-vehicle'), $this->equalTo('processAddGoodsVehicleForm'));
+            ->with($this->equalTo('vehicle'), $this->equalTo('processGoodsVehicleForm'))
+            ->will($this->returnValue($mockForm));
 
-        $this->controller->addAction();
+        $this->controller->expects($this->once())
+            ->method('renderLayoutWithSubSections')
+            ->will($this->returnValue('LAYOUT'));
+
+        $this->assertEquals('LAYOUT', $this->controller->addAction());
     }
 
     public function testEditActionWithValidVehicle()
     {
         $this->setUpMockController(
             [
-                'generateForm',
-                'getLicenceEntity',
                 'params',
                 'makeRestCall',
                 'notFoundAction',
-                'generateFormWithData'
+                'generateFormWithData',
+                'renderLayoutWithSubSections'
             ]
         );
 
-        $mockLicenceArray = [
-            'id' => 7,
-            'goodsOrPsv' => 'goods'
-        ];
         $vehicleId = 1;
         $restData = array(
             'id' => $vehicleId,
@@ -178,24 +148,45 @@ class VehicleControllerTest extends AbstractHttpControllerTestCase
             'bodyType' => 'vehicleBodyType'
         );
 
-        $vehicleForm = new \Zend\Form\Form();
+        $mockDataFieldset = $this->getMock('\stdClass', array('setLabel'));
+
+        $mockDataFieldset->expects($this->once())
+            ->method('setLabel')
+            ->with('Edit vehicle');
+
+        $mockFormActions = $this->getMock('\stdClass', array('remove'));
+
+        $mockFormActions->expects($this->once())
+            ->method('remove')
+            ->with('addAnother');
+
+        $mockForm = $this->getMock('\stdClass', array('get'));
+
+        $mockForm->expects($this->at(0))
+            ->method('get')
+            ->with('data')
+            ->will($this->returnValue($mockDataFieldset));
+
+        $mockForm->expects($this->at(1))
+            ->method('get')
+            ->with('form-actions')
+            ->will($this->returnValue($mockFormActions));
 
         $vehicleData = array(
-            'id' => $vehicleResult['id'],
-            'version' => $vehicleResult['version'],
-            'vrm' => $vehicleResult['vrm'],
-            'plated_weight' => $vehicleResult['platedWeight'],
-            'body_type' => $vehicleResult['bodyType']
+            'data' => array(
+                'id' => $vehicleResult['id'],
+                'version' => $vehicleResult['version'],
+                'vrm' => $vehicleResult['vrm'],
+                'plated_weight' => $vehicleResult['platedWeight'],
+                'body_type' => $vehicleResult['bodyType']
+            )
         );
+
         $mockParams = $this->getMock('\StdClass', ['fromRoute']);
         $mockParams->expects($this->once())
             ->method('fromRoute')
             ->with($this->equalTo('vehicleId'))
             ->will($this->returnValue($vehicleId));
-
-        $this->controller->expects($this->once())
-            ->method('getLicenceEntity')
-            ->will($this->returnValue($mockLicenceArray));
 
         $this->controller->expects($this->once())
             ->method('params')
@@ -209,13 +200,17 @@ class VehicleControllerTest extends AbstractHttpControllerTestCase
         $this->controller->expects($this->once())
             ->method('generateFormWithData')
             ->with(
-                $this->equalTo('update-vehicle'),
-                $this->equalTo('processEditGoodsVehicleForm'),
+                $this->equalTo('vehicle'),
+                $this->equalTo('processGoodsVehicleForm'),
                 $this->equalTo($vehicleData)
             )
-            ->will($this->returnValue($vehicleForm));
+            ->will($this->returnValue($mockForm));
 
-        $this->controller->editAction();
+        $this->controller->expects($this->once())
+            ->method('renderLayoutWithSubSections')
+            ->will($this->returnValue('LAYOUT'));
+
+        $this->assertEquals('LAYOUT', $this->controller->editAction());
     }
 
     public function testEditActionWithInvalidVehicle()
@@ -223,7 +218,6 @@ class VehicleControllerTest extends AbstractHttpControllerTestCase
         $this->setUpMockController(
             [
                 'generateForm',
-                'getLicenceEntity',
                 'params',
                 'makeRestCall',
                 'notFoundAction',
@@ -232,10 +226,6 @@ class VehicleControllerTest extends AbstractHttpControllerTestCase
             ]
         );
 
-        $mockLicenceArray = [
-            'id' => 7,
-            'goodsOrPsv' => 'goods'
-        ];
         $vehicleId = 1;
         $restData = array(
             'id' => $vehicleId,
@@ -247,10 +237,6 @@ class VehicleControllerTest extends AbstractHttpControllerTestCase
             ->method('fromRoute')
             ->with($this->equalTo('vehicleId'))
             ->will($this->returnValue($vehicleId));
-
-        $this->controller->expects($this->once())
-            ->method('getLicenceEntity')
-            ->will($this->returnValue($mockLicenceArray));
 
         $this->controller->expects($this->once())
             ->method('params')
@@ -267,258 +253,308 @@ class VehicleControllerTest extends AbstractHttpControllerTestCase
         $this->controller->editAction();
     }
 
-    public function testProcessAddGoodsVehicle()
+    /**
+     * Test deleteAction with missing licence vehicle
+     */
+    public function testDeleteActionWithMissingLicenceVehicle()
     {
-        $this->setUpMockController(
-            [
-                'persistVehicle',
-                'makeRestCall',
-                'getRequest',
-                'redirect',
-                'params'
-            ]
+        $applicationId = 2;
+
+        $application = array(
+            'licence' => array(
+                'id' => 3
+            )
         );
 
-        $applicationId = 1;
+        $vehicleId = 2;
 
-        $mockLicenceArray = [
-            'goodsOrPsv' => 'goods'
-        ];
+        $licenceVehicle = array(
 
-        $valid_data = ['id' => '',
-            'version' => 1,
-            'vrm' => 'test',
-            'plated_weight' => 1000,
-            'body_type' => 'asdf'];
-        $form = new \Zend\Form\Form();
-        $params = array();
-        $posted_data = ['submit_save' => ''];
+        );
 
-        $mockParams = $this->getMock('\stdClass', ['fromRoute']);
-        $mockParams->expects($this->any())
-            ->method('fromRoute')
-            ->with($this->equalTo('applicationId'))
+        $this->setUpMockController(array('getFromRoute', 'getApplicationId', 'makeRestCall', 'notFoundAction'));
+
+        $this->controller->expects($this->once())
+            ->method('getFromRoute')
+            ->with('id')
+            ->will($this->returnValue($vehicleId));
+
+        $this->controller->expects($this->any())
+            ->method('getApplicationId')
             ->will($this->returnValue($applicationId));
 
-        $mockPost = $this->getMock('\stdClass', ['toArray']);
-        $mockPost->expects($this->once())
-            ->method('toArray')
-            ->will($this->returnValue($posted_data));
+        $this->controller->expects($this->at(2))
+            ->method('makeRestCall')
+            ->with('Application', 'GET', array('id' => $applicationId))
+            ->will($this->returnValue($application));
 
-        $mockRequest = $this->getMock('\stdClass', ['getPost']);
-        $mockRequest->expects($this->once())
-            ->method('getPost')
-            ->will($this->returnValue($mockPost));
+        $this->controller->expects($this->at(3))
+            ->method('makeRestCall')
+            ->with('LicenceVehicle', 'GET')
+            ->will($this->returnValue($licenceVehicle));
 
-        $mockRedirect = $this->getMock('\stdClass', ['toRoute']);
-        $mockRedirect->expects($this->once())
-            ->method('toRoute')
-            ->with('selfserve/vehicle-safety', array('applicationId' => $applicationId));
+        $this->controller->expects($this->once())
+            ->method('notFoundAction')
+            ->will($this->returnValue(404));
+
+        $this->assertEquals(404, $this->controller->deleteAction());
+    }
+
+    /**
+     * Test deleteAction
+     */
+    public function testDeleteAction()
+    {
+        $applicationId = 2;
+
+        $application = array(
+            'licence' => array(
+                'id' => 3
+            )
+        );
+
+        $vehicleId = 2;
+
+        $licenceVehicle = array(
+            'Count' => 1,
+            'Results' => array(
+                array(
+                    'id' => 3
+                )
+            )
+        );
+
+        $this->setUpMockController(array('getFromRoute', 'getApplicationId', 'makeRestCall', 'redirectToVehicles'));
+
+        $this->controller->expects($this->once())
+            ->method('getFromRoute')
+            ->with('id')
+            ->will($this->returnValue($vehicleId));
 
         $this->controller->expects($this->any())
-            ->method('params')
-            ->will($this->returnValue($mockParams));
+            ->method('getApplicationId')
+            ->will($this->returnValue($applicationId));
+
+        $this->controller->expects($this->at(2))
+            ->method('makeRestCall')
+            ->with('Application', 'GET', array('id' => $applicationId))
+            ->will($this->returnValue($application));
+
+        $this->controller->expects($this->at(3))
+            ->method('makeRestCall')
+            ->with('LicenceVehicle', 'GET')
+            ->will($this->returnValue($licenceVehicle));
+
+        $this->controller->expects($this->at(4))
+            ->method('makeRestCall')
+            ->with('LicenceVehicle', 'DELETE');
+
+        $this->controller->expects($this->once())
+            ->method('redirectToVehicles')
+            ->will($this->returnValue('REDIRECT'));
+
+        $this->assertEquals('REDIRECT', $this->controller->deleteAction());
+    }
+
+    /**
+     * Test processGoodsVehicleForm without ID With Add Another
+     */
+    public function testProcessGoodsVehicleFormWithoutIdWithAddAnother()
+    {
+        $validData = array(
+            'data' => array(
+                'id' => '',
+                'version' => 1,
+                'vrm' => 'AB23CF',
+                'plated_weight' => 300
+            )
+        );
+
+        $application = array(
+            'licence' => array(
+                'id' => 3
+            )
+        );
+
+        $vehicle = array(
+            'id' => 3
+        );
+
+        $applicationId = 4;
+
+        $mockForm = $this->getMock('\Zend\Form\Form', array());
+
+        $this->setUpMockController(array('makeRestCall', 'getApplicationId', 'isButtonPressed', 'redirectToRoute'));
+
+        $this->controller->expects($this->at(0))
+            ->method('makeRestCall')
+            ->with('Vehicle', 'POST')
+            ->will($this->returnValue($vehicle));
 
         $this->controller->expects($this->any())
-            ->method('getLicenceEntity')
-            ->will($this->returnValue($mockLicenceArray));
+            ->method('getApplicationId')
+            ->will($this->returnValue($applicationId));
 
-        $this->controller->expects($this->any())
-            ->method('persistVehicle')
-            ->with($this->equalTo($valid_data))
+        $this->controller->expects($this->at(2))
+            ->method('makeRestCall')
+            ->with('Application', 'GET')
+            ->will($this->returnValue($application));
+
+        $this->controller->expects($this->at(3))
+            ->method('makeRestCall')
+            ->with('LicenceVehicle', 'POST');
+
+        $this->controller->expects($this->once())
+            ->method('isButtonPressed')
+            ->with('addAnother')
             ->will($this->returnValue(true));
 
         $this->controller->expects($this->once())
-            ->method('getRequest')
-            ->will($this->returnValue($mockRequest));
+            ->method('redirectToRoute');
 
-        $this->controller->expects($this->once())
-            ->method('redirect')
-            ->will($this->returnValue($mockRedirect));
-
-        $this->controller->processAddGoodsVehicleForm($valid_data, $form, $params);
+        $this->assertEquals($mockForm, $this->controller->processGoodsVehicleForm($validData, $mockForm));
     }
 
-    public function testProcessAddGoodsVehicleAndAddanother()
+    /**
+     * Test processGoodsVehicleForm without ID
+     */
+    public function testProcessGoodsVehicleFormWithoutId()
     {
-        $this->setUpMockController(
-            [
-                'persistVehicle',
-                'makeRestCall',
-                'getRequest',
-                'redirect',
-                'params'
-            ]
+        $validData = array(
+            'data' => array(
+                'id' => '',
+                'version' => 1,
+                'vrm' => 'AB23CF',
+                'plated_weight' => 300
+            )
         );
 
-        $applicationId = 1;
+        $application = array(
+            'licence' => array(
+                'id' => 3
+            )
+        );
 
-        $mockLicenceArray = [
-            'goodsOrPsv' => 'goods'
-        ];
+        $vehicle = array(
+            'id' => 3
+        );
 
-        $valid_data = ['id' => '',
-            'version' => 1,
-            'vrm' => 'test',
-            'plated_weight' => 1000,
-            'body_type' => 'asdf'];
-        $form = new \Zend\Form\Form();
-        $params = array();
-        $posted_data = ['submit_add_another' => ''];
+        $applicationId = 4;
 
-        $mockParams = $this->getMock('\stdClass', ['fromRoute']);
-        $mockParams->expects($this->any())
-            ->method('fromRoute')
-            ->with($this->equalTo('applicationId'))
+        $mockForm = $this->getMock('\Zend\Form\Form', array());
+
+        $this->setUpMockController(array('makeRestCall', 'getApplicationId', 'isButtonPressed', 'redirectToVehicles'));
+
+        $this->controller->expects($this->at(0))
+            ->method('makeRestCall')
+            ->with('Vehicle', 'POST')
+            ->will($this->returnValue($vehicle));
+
+        $this->controller->expects($this->any())
+            ->method('getApplicationId')
             ->will($this->returnValue($applicationId));
 
-        $mockPost = $this->getMock('\stdClass', ['toArray']);
-        $mockPost->expects($this->once())
-            ->method('toArray')
-            ->will($this->returnValue($posted_data));
+        $this->controller->expects($this->at(2))
+            ->method('makeRestCall')
+            ->with('Application', 'GET')
+            ->will($this->returnValue($application));
 
-        $mockRequest = $this->getMock('\stdClass', ['getPost']);
-        $mockRequest->expects($this->once())
-            ->method('getPost')
-            ->will($this->returnValue($mockPost));
-
-        $mockRedirect = $this->getMock('\stdClass', ['toRoute']);
-        $mockRedirect->expects($this->once())
-            ->method('toRoute')
-            ->with(
-                'selfserve/vehicle-safety/vehicle-action/vehicle-add',
-                array('action' => 'add', 'applicationId' => $applicationId)
-            );
-
-        $this->controller->expects($this->any())
-            ->method('params')
-            ->will($this->returnValue($mockParams));
-
-        $this->controller->expects($this->any())
-            ->method('getLicenceEntity')
-            ->will($this->returnValue($mockLicenceArray));
-
-        $this->controller->expects($this->any())
-            ->method('persistVehicle')
-            ->with($this->equalTo($valid_data))
-            ->will($this->returnValue(true));
+        $this->controller->expects($this->at(3))
+            ->method('makeRestCall')
+            ->with('LicenceVehicle', 'POST');
 
         $this->controller->expects($this->once())
-            ->method('getRequest')
-            ->will($this->returnValue($mockRequest));
+            ->method('isButtonPressed')
+            ->with('addAnother')
+            ->will($this->returnValue(false));
 
         $this->controller->expects($this->once())
-            ->method('redirect')
-            ->will($this->returnValue($mockRedirect));
+            ->method('redirectToVehicles');
 
-        $this->controller->processAddGoodsVehicleForm($valid_data, $form, $params);
+        $this->assertEquals($mockForm, $this->controller->processGoodsVehicleForm($validData, $mockForm));
     }
 
-    public function testProcessEditGoodsVehicle()
+    /**
+     * Test processGoodsVehicleForm
+     */
+    public function testProcessGoodsVehicleForm()
     {
-        $this->setUpMockController(
-            [
-                'persistVehicle',
-                'makeRestCall',
-                'getRequest',
-                'redirect',
-                'params'
-            ]
+        $validData = array(
+            'data' => array(
+                'id' => '1',
+                'version' => 1,
+                'vrm' => 'AB23CF',
+                'plated_weight' => 300
+            )
         );
 
-        $applicationId = 1;
-
-        $mockLicenceArray = [
-            'goodsOrPsv' => 'goods'
-        ];
-
-        $valid_data = ['id' => 1,
-            'version' => 3,
-            'vrm' => 'test',
-            'plated_weight' => 1000,
-            'body_type' => 'asdf'];
-        $form = new \Zend\Form\Form();
-        $params = array();
-        $posted_data = ['submit_save' => ''];
-
-        $mockParams = $this->getMock('\stdClass', ['fromRoute']);
-        $mockParams->expects($this->any())
-            ->method('fromRoute')
-            ->with($this->equalTo('applicationId'))
-            ->will($this->returnValue($applicationId));
-
-        $mockPost = $this->getMock('\stdClass', ['toArray']);
-        $mockPost->expects($this->once())
-            ->method('toArray')
-            ->will($this->returnValue($posted_data));
-
-        $mockRequest = $this->getMock('\stdClass', ['getPost']);
-        $mockRequest->expects($this->once())
-            ->method('getPost')
-            ->will($this->returnValue($mockPost));
-
-        $mockRedirect = $this->getMock('\stdClass', ['toRoute']);
-        $mockRedirect->expects($this->once())
-            ->method('toRoute')
-            ->with('selfserve/vehicle-safety', array('applicationId' => $applicationId));
-
-        $this->controller->expects($this->any())
-            ->method('params')
-            ->will($this->returnValue($mockParams));
-
-        $this->controller->expects($this->any())
-            ->method('getLicenceEntity')
-            ->will($this->returnValue($mockLicenceArray));
-
-        $this->controller->expects($this->any())
-            ->method('persistVehicle')
-            ->with($this->equalTo($valid_data))
-            ->will($this->returnValue(true));
-
-        $this->controller->expects($this->once())
-            ->method('getRequest')
-            ->will($this->returnValue($mockRequest));
-
-        $this->controller->expects($this->once())
-            ->method('redirect')
-            ->will($this->returnValue($mockRedirect));
-
-        $this->controller->processEditGoodsVehicleForm($valid_data, $form, $params);
-    }
-
-    public function testCompleteAction()
-    {
-        $this->setUpMockController(
-            [
-                'params',
-                'redirect'
-            ]
+        $application = array(
+            'licence' => array(
+                'id' => 3
+            )
         );
-        $mockRedirect = $this->getMock('\stdClass', array('toRoute'));
 
-        $mockParams = $this->getMock('\stdClass', array('fromRoute'));
-        $applicationId = 7;
-        $next_step = 'index';
-        $mockParams->expects($this->once())
-            ->method('fromRoute')
-            ->with($this->equalTo('applicationId'))
+        $vehicle = array(
+            'id' => 3
+        );
+
+        $applicationId = 4;
+
+        $mockForm = $this->getMock('\Zend\Form\Form', array());
+
+        $this->setUpMockController(array('makeRestCall', 'getApplicationId', 'isButtonPressed', 'redirectToVehicles'));
+
+        $this->controller->expects($this->at(0))
+            ->method('makeRestCall')
+            ->with('Vehicle', 'PUT')
+            ->will($this->returnValue($vehicle));
+
+        $this->controller->expects($this->any())
+            ->method('getApplicationId')
             ->will($this->returnValue($applicationId));
 
         $this->controller->expects($this->once())
-            ->method('params')
-            ->will($this->returnValue($mockParams));
-
-        $mockRedirect->expects($this->once())
-            ->method('toRoute')
-            ->with(
-                $this->equalTo('selfserve/vehicle-safety'),
-                $this->equalTo(['applicationId' => $applicationId, 'step' => $next_step])
-            );
+            ->method('isButtonPressed')
+            ->with('addAnother')
+            ->will($this->returnValue(false));
 
         $this->controller->expects($this->once())
-            ->method('redirect')
-            ->will($this->returnValue($mockRedirect));
+            ->method('redirectToVehicles');
 
-        $this->controller->completeAction();
+        $this->assertEquals($mockForm, $this->controller->processGoodsVehicleForm($validData, $mockForm));
+    }
+
+    /**
+     * Test generateVehicleTable
+     */
+    public function testGenerateVehicleTable()
+    {
+        $licence = array(
+            'id' => 1
+        );
+
+        $results = array(
+            'licenceVehicles' => array(
+                array(
+                    'vehicle' => array(
+                        'id' => 1
+                    )
+                )
+            )
+        );
+
+        $this->setUpMockController(array('makeRestCall', 'buildTable'));
+
+        $this->controller->expects($this->once())
+            ->method('makeRestCall')
+            ->with('Licence', 'GET', array('id' => $licence['id']))
+            ->will($this->returnValue($results));
+
+        $this->controller->expects($this->once())
+            ->method('buildTable')
+            ->with('vehicle')
+            ->will($this->returnValue('<table></table>'));
+
+        $this->assertEquals('<table></table>', $this->controller->generateVehicleTable($licence));
     }
 }

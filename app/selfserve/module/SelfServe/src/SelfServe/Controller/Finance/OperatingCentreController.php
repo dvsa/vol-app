@@ -9,8 +9,6 @@
 
 namespace SelfServe\Controller\Finance;
 
-use Zend\View\Model\ViewModel;
-
 /**
  * OperatingCentre Controller
  *
@@ -57,22 +55,29 @@ class OperatingCentreController extends AbstractFinanceController
 
         $data = $this->formatDataForForm($data, $applicationId, $results);
 
-        $form = $this->generateFormWithData($this->processConfigName('operating-centre-authorisation', $applicationId), 'processAuthorisation', $data, true);
+        $form = $this->generateFormWithData(
+            $this->processConfigName(
+                'operating-centre-authorisation',
+                $applicationId
+            ),
+            'processAuthorisation',
+            $data,
+            true
+        );
 
-        // collect completion status
-        $completionStatus = $this->makeRestCall('ApplicationCompletion', 'GET', array('application_id' => $applicationId));
+        $form->get('form-actions')->get('home')->setValue($this->getUrlFromRoute('selfserve/dashboard-home'));
 
-        $view = $this->getViewModel(array(
-                        'operatingCentres' => $table,
-                        'form' => $form,
-                        'isPsv' => $this->isPsvLicence($applicationId)
-                        ));
+        $view = $this->getViewModel(
+            array(
+                'operatingCentres' => $table,
+                'form' => $form,
+                'isPsv' => $this->isPsvLicence($applicationId)
+            )
+        );
 
         $view->setTemplate('self-serve/finance/operating-centre/index');
 
-        return $this->renderLayout($view, 'operatingCentre',
-                                array('completionStatus' => (($completionStatus['Count']>0)?$completionStatus['Results'][0]:Array()),
-                                        'applicationId' => $applicationId));
+        return $this->renderLayoutWithSubSections($view, 'operatingCentre');
     }
 
     /**
@@ -82,20 +87,16 @@ class OperatingCentreController extends AbstractFinanceController
      */
     public function addAction()
     {
-        $applicationId      = $this->params()->fromRoute('applicationId');
+        $applicationId = $this->params()->fromRoute('applicationId');
 
         $form = $this->generateForm(
             $this->processConfigName('operating-centre', $applicationId), 'processAddForm'
         );
 
-        // collect completion status
-        $completionStatus = $this->makeRestCall('ApplicationCompletion', 'GET', array('application_id' => $applicationId));
-
         $view = $this->getViewModel(['form' => $form]);
         $view->setTemplate('self-serve/finance/operating-centre/add');
-        return $this->renderLayout($view, 'operatingCentre',
-                                        array('completionStatus' => (($completionStatus['Count']>0)?$completionStatus['Results'][0]:Array()),
-                                                'applicationId' => $applicationId));
+
+        return $this->renderLayoutWithSubSections($view, 'operatingCentre');
     }
 
     /**
@@ -115,9 +116,6 @@ class OperatingCentreController extends AbstractFinanceController
             return $this->notFoundAction();
         }
 
-        // collect completion status
-        $completionStatus = $this->makeRestCall('ApplicationCompletion', 'GET', array('application_id' => $applicationId));
-
         $data = array(
             'version' => $result['version'],
             'authorised-vehicles' => array(
@@ -128,13 +126,20 @@ class OperatingCentreController extends AbstractFinanceController
             )
         );
 
-        $form = $this->generateFormWithData($this->processConfigName('operating-centre', $applicationId), 'processEditForm', $data, true);
+        $form = $this->generateFormWithData(
+            $this->processConfigName(
+                'operating-centre',
+                $applicationId
+            ),
+            'processEditForm',
+            $data,
+            true
+        );
 
         $view = $this->getViewModel(['form' => $form]);
         $view->setTemplate('self-serve/finance/operating-centre/edit');
-        return $this->renderLayout($view, 'operatingCentre',
-                                        array('completionStatus' => (($completionStatus['Count']>0)?$completionStatus['Results'][0]:Array()),
-                                                'applicationId' => $applicationId));
+
+        return $this->renderLayoutWithSubSections($view, 'operatingCentre');
     }
 
     /**
@@ -164,7 +169,7 @@ class OperatingCentreController extends AbstractFinanceController
     }
 
     /**
-     * @todo implement this
+     * Complete action
      */
     public function completeAction()
     {
@@ -209,10 +214,7 @@ class OperatingCentreController extends AbstractFinanceController
         );
 
         $data = $this->makeRestCall(
-            'ApplicationOperatingCentre',
-            'GET',
-            array('application' => $applicationId),
-            $bundle
+            'ApplicationOperatingCentre', 'GET', array('application' => $applicationId), $bundle
         );
 
         $newData = array();
@@ -250,7 +252,11 @@ class OperatingCentreController extends AbstractFinanceController
             'url' => $this->getPluginManager()->get('url')
         );
 
-        return $this->getServiceLocator()->get('Table')->buildTable($this->processConfigName('operatingcentre', $applicationId), $results, $settings);
+        return $this->getServiceLocator()->get('Table')->buildTable(
+            $this->processConfigName('operatingcentre', $applicationId),
+            $results,
+            $settings
+        );
     }
 
     /**
@@ -264,7 +270,10 @@ class OperatingCentreController extends AbstractFinanceController
 
         $this->makeRestCall('Application', 'PUT', $data);
 
-        return $this->redirect()->toRoute('selfserve/finance/financial_evidence', array('applicationId' => $data['id']));
+        return $this->redirect()->toRoute(
+            'selfserve/finance/financial_evidence',
+            array('applicationId' => $data['id'])
+        );
     }
 
     /**
@@ -346,7 +355,10 @@ class OperatingCentreController extends AbstractFinanceController
         $result = $this->makeRestCall('ApplicationOperatingCentre', 'POST', $data);
 
         if (isset($result['id'])) {
-            return $this->redirect()->toRoute('selfserve/finance/operating_centre', array('applicationId' => $data['application']));
+            return $this->redirect()->toRoute(
+                'selfserve/finance/operating_centre',
+                array('applicationId' => $data['application'])
+            );
         }
     }
 
@@ -369,7 +381,10 @@ class OperatingCentreController extends AbstractFinanceController
 
         //persist to database by calling rest api
         $this->makeRestCall('ApplicationOperatingCentre', 'PUT', $data);
-        return $this->redirect()->toRoute('selfserve/finance/operating_centre', array('applicationId' => $data['application']));
+        return $this->redirect()->toRoute(
+            'selfserve/finance/operating_centre',
+            array('applicationId' => $data['application'])
+        );
     }
 
     /**
@@ -394,7 +409,10 @@ class OperatingCentreController extends AbstractFinanceController
 
         //licence type condition
         if (isset($validData['authorised-vehicles']['no-of-trailers'])) {
-            $data = array_merge($data, array('numberOfTrailers' => $validData['authorised-vehicles']['no-of-trailers']));
+            $data = array_merge(
+                $data,
+                array('numberOfTrailers' => $validData['authorised-vehicles']['no-of-trailers'])
+            );
         }
 
         return $data;
@@ -429,5 +447,4 @@ class OperatingCentreController extends AbstractFinanceController
         }
         return $name;
     }
-
 }
