@@ -43,23 +43,8 @@ class CaseConditionUndertakingController extends CaseController
         $summary = $this->getCaseSummaryArray($case);
         $details = $this->getCaseDetailsArray($case);
 
-        $bundle = $this->getConditionUndertakingBundle();
-
-        $conditionResults = $this->makeRestCall(
-            'VosaCase', 'GET', array(
-            'case' => $caseId, 'conditionType' => 'condition', 'bundle' => json_encode($bundle))
-        );
-var_dump($conditionResults);exit;
-        $undertakingResults = $this->makeRestCall(
-            'ConditionUndertaking', 'GET', array(
-            'case' => $caseId, 'conditionType' => 'undertaking', 'bundle' => json_encode($bundle))
-        );
-
-        $data = [];
-        $data['url'] = $this->getPluginManager()->get('url');
-
-        $conditionsTable = $this->buildTable('conditions', $conditionResults, $data);
-        $undertakingsTable = $this->buildTable('undertakings', $undertakingResults, $data);
+        $conditionsTable = $this->generateConditionTable($caseId);
+        $undertakingsTable = $this->generateUndertakingTable($caseId);
 
         $view->setVariables(
             [
@@ -78,43 +63,84 @@ var_dump($conditionResults);exit;
     }
 
     /**
-     * Method to return the bundle required for complaints
+     * Method to generate the undertakings table
+     *
+     * @param id $caseId
+     * @return string
+     */
+    public function generateUndertakingTable($caseId)
+    {
+        $bundle = $this->getConditionUndertakingBundle('undertaking');
+
+        $undertakingResults = $this->makeRestCall(
+            'VosaCase', 'GET', array(
+            'id' => $caseId, 'bundle' => json_encode($bundle))
+        );
+
+        // add caseId to results
+        for ($i=0; $i<count($undertakingResults['conditionUndertakings']); $i++) {
+            $undertakingResults['conditionUndertakings'][$i]['caseId'] = $caseId;
+        }
+
+        $data = [];
+        $data['url'] = $this->getPluginManager()->get('url');
+
+        $undertakingsTable = $this->buildTable('undertakings', $undertakingResults['conditionUndertakings'], $data);
+
+        return $undertakingsTable;
+    }
+
+    /**
+     * Method to generate the conditions table
+     *
+     * @param id $caseId
+     * @return string
+     */
+    public function generateConditionTable($caseId)
+    {
+        $bundle = $this->getConditionUndertakingBundle('condition');
+
+        $conditionResults = $this->makeRestCall(
+            'VosaCase', 'GET', array(
+            'id' => $caseId, 'bundle' => json_encode($bundle))
+        );
+
+        // add caseId to results
+        for ($i=0; $i<count($conditionResults['conditionUndertakings']); $i++) {
+            $conditionResults['conditionUndertakings'][$i]['caseId'] = $caseId;
+        }
+
+        $data = [];
+        $data['url'] = $this->getPluginManager()->get('url');
+
+        $conditionsTable = $this->buildTable('conditions', $conditionResults['conditionUndertakings'], $data);
+
+        return $conditionsTable;
+    }
+    /**
+     * Method to return the bundle required for conditionundertakings
+     * by conditionType
      *
      * @return array
      */
-    private function getConditionUndertakingBundle()
+    private function getConditionUndertakingBundle($conditionType)
     {
 
         return array(
             'properties' => array(
-                'id',
+                'id'
             ),
             'children' => array(
                 'conditionUndertakings' => array(
+                    'criteria' => array(
+                        'conditionType' => $conditionType,
+                    ),
                     'properties' => array(
                         'id',
                         'addedVia',
                         'isDraft',
                         'attachedTo',
-                        'case',
                         'isFulfilled'
-                    )
-                )
-            )
-        );
-        return array(
-            'properties' => array(
-                'id',
-                'addedVia',
-                'isDraft',
-                'attachedTo',
-                'case',
-                'isFulfilled'
-            ),
-            'children' => array(
-                'case' => array(
-                    'properties' => array(
-                        'id'
                     )
                 )
             )

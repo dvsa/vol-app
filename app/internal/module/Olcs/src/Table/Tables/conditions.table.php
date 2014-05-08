@@ -15,12 +15,19 @@ return array(
     ),
     'columns' => array(
         array(
-            'title' => 'No.',
+            'title' => '',
             'width' => 'checkbox',
             'format' => '{{[elements/radio]}}'
         ),
         array(
+            'title' => 'No.',
+            'name' => 'id'
+        ),
+        array(
             'title' => 'Added via',
+            'formatter' => function ($data, $column) {
+                return 'Case ' . $data['caseId'];
+            },
             'name' => 'caseId'
         ),
         array(

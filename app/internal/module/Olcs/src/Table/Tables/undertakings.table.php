@@ -15,9 +15,13 @@ return array(
     ),
     'columns' => array(
         array(
-            'title' => 'No.',
+            'title' => '',
             'width' => 'checkbox',
             'format' => '{{[elements/radio]}}'
+        ),
+        array(
+            'title' => 'No.',
+            'name' => 'id'
         ),
         array(
             'title' => 'Added via',
