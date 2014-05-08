@@ -47,9 +47,9 @@ return [
                         'type' => 'hidden'
                     ],
                     'complaintDate' => [
-                         'type' => 'dateSelect',
+                         'type' => 'dateSelectWithEmpty',
                          'label' => 'Complaint date',
-                         'required' => true
+                         'filters' => '\Common\Form\Elements\InputFilters\DateNotInFuture'
                      ],
                     'typeOfComplaint' => [
                         'type' => 'select',
