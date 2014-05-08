@@ -95,6 +95,11 @@ class CaseImpoundingController extends CaseController
                                 'tcName'
                             ),
                         ),
+                        'outcome' => array(
+                            'properties' => array(
+                                'tcName'
+                            ),
+                        ),
                     )
                 )
             )
