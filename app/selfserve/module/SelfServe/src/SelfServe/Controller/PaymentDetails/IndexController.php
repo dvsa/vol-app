@@ -39,7 +39,7 @@ class IndexController extends AbstractApplicationController
     {
         $applicationId = $this->getApplicationId();
 
-        return $this->redirectToRoute('selfserve/payment-submission', array('applicationId' => $applicationId));
+        return $this->redirectToRoute('selfserve/payment-submission-complete', array('applicationId' => $applicationId));
     }
 
     public function completeAction()
