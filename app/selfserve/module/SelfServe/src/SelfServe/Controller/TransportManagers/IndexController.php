@@ -8,7 +8,7 @@
 
 namespace SelfServe\Controller\TransportManagers;
 
-use Common\Controller\FormJourneyActionController;
+use SelfServe\Controller\AbstractApplicationController;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -16,7 +16,7 @@ use Zend\View\Model\ViewModel;
  *
  * @author Jess Rowbottom <jess.rowbottom@valtech.co.uk>
  */
-class IndexController extends FormJourneyActionController
+class IndexController extends AbstractApplicationController
 {
     public function indexAction()
     {
@@ -24,7 +24,7 @@ class IndexController extends FormJourneyActionController
 
         // collect completion status
         $completionStatus = $this->makeRestCall('ApplicationCompletion', 'GET', array('application_id' => $applicationId));
-        
+
         // render the view
         $view = new ViewModel(array('completionStatus' => $completionStatus['Results'][0],
                                             'applicationId' => $applicationId));

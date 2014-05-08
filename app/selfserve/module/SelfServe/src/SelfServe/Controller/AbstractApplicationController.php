@@ -127,4 +127,25 @@ abstract class AbstractApplicationController extends FormJourneyActionController
 
         return $this->applicationId;
     }
+
+    /**
+     * Get licence entity based on route id value
+     *
+     * @return array|object
+     */
+    protected function getLicenceEntity($applicationId = false)
+    {
+        if ( ! $applicationId ) {
+            $applicationId = (int) $this->getApplicationId('applicationId');
+        }
+
+        $bundle = array(
+            'children' => array(
+                'licence'
+            )
+        );
+
+        $application = $this->makeRestCall('Application', 'GET', array('id' => $applicationId), $bundle);
+        return $application['licence'];
+    }
 }
