@@ -1,5 +1,11 @@
 <div class="table__header">
-    <h3><?php echo $this->translate($heading); ?></h3>
+    <?php if ($heading != 'case-summary-info') : ?>
+        <h3><?php echo $this->translate($heading); ?></h3>
+    <?php endif; ?>
 </div>
-<div>Section content here...</div>
+<div>
+<?php
+echo $data;
+?>
+</div>
 <div><textarea class="extra-long">Comments here</textarea></div>

@@ -1,0 +1,51 @@
+<?php
+//print_r($this->sectionData);
+?>
+<div class="case-summary">
+    <div class="case-summary__header">
+        <h5><?php echo $this->translate('case-summary'); ?></h5>
+    </div>        
+    <ul class="case-summary__list">
+        <li class="summary__item">
+            <b><?php echo $this->translate('licence-number-full') ?></b><?php echo $this->sectionData['licenceNumber']; ?>
+        </li>
+        <li class="summary__item">
+            <b><?php echo $this->translate('operator-name') ?></b><?php echo $this->sectionData['name']; ?>
+        </li>
+        <li class="summary__item">
+            <b><?php echo $this->translate('MLH') ?></b><?php echo $this->sectionData['isMlh']; ?>
+        </li>
+        <li class="summary__item">
+            <b><?php echo $this->translate('business-type') ?></b><?php echo $this->translate('sic_code.'.$this->sectionData['sicCode']); ?>
+        </li>
+        <li class="summary__item">
+            <b><?php echo $this->translate('licence-type') ?></b><?php echo $this->sectionData['licenceType']; ?>
+        </li>
+        <li class="summary__item">
+            <b><?php echo $this->translate('v-auth-t-auth') ?></b>
+                <?php
+                if ($this->sectionData['authorisedVehicles']) {
+                    echo $this->sectionData['authorisedVehicles'].' vehicles';
+                }
+                if ($this->sectionData['authorisedTrailers']) {
+                    echo ', '.$this->sectionData['authorisedTrailers'].' trailers';
+                }
+                ?>
+        </li>
+        <li class="summary__item">
+            <b><?php echo $this->translate('start-date') ?></b><?php echo date('d/m/Y', strtotime($this->sectionData['startDate']));  ?>
+        </li>
+        <li class="summary__item">
+            <b><?php echo $this->translate('vehicles-in-posession') ?></b>TBD
+        </li>
+        <li class="summary__item">
+            <b><?php echo $this->translate('entity-type') ?></b><?php echo $this->sectionData['organisationType']; ?>
+        </li>
+        <li class="summary__item">
+            <b><?php echo $this->translate('ecms') ?></b><?php echo $this->sectionData['ecms']; ?>
+        </li>
+        <li class="summary__item">
+            <b><?php echo $this->translate('case-summary') ?></b><?php echo $this->sectionData['description']; ?>
+        </li>
+    </ul>
+</div>

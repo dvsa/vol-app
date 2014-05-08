@@ -1,7 +1,31 @@
 <?php
 return array(
     'sections' => array(
-        'case-summary-info' => null,
+        'case-summary-info' => array(
+            'view' => 'submission/partials/case-summary',
+            'dataPath' => 'VosaCase',
+            'bundle' => array(
+                'children' => array(
+                    'categories' => array(
+                        'properties' => array(
+                            'id',
+                            'name'
+                        )
+                    ),
+                    'licence' => array(
+                        'properties' => 'ALL',
+                        'children' => array(
+                            'trafficArea' => array(
+                                'properties' => 'ALL'
+                            ),
+                            'organisation' => array(
+                                'properties' => 'ALL'
+                            )
+                        )
+                    )
+                )
+            )
+        ),
         'persons' => null,
         'transport-managers' => array(
             'exclude' => array(

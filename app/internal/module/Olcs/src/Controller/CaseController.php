@@ -104,7 +104,6 @@ class CaseController extends FormActionController
         $results = $this->makeRestCall('Submission', 'GET', array('vosaCase' => $caseId), $bundle);
 
         foreach ($results['Results'] as $k => $result) {
-            $actions = $this->makeRestCall('SubmissionAction', 'GET', array('submission' => $result['id']));
             foreach ($result['submissionActions'] as $ak => $action) {
                 $results['Results'][$k]['urgent'] = $action['urgent'];
                 if (isset($action['userRecipient']['displayName'])) {

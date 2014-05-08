@@ -9,15 +9,20 @@ namespace Olcs\Controller;
 
 use Common\Controller\FormActionController;
 use Zend\View\Model\ViewModel;
+use Olcs\Util;
+use Zend\Filter\Word\DashToCamelCase;
 
 class SubmissionController extends FormActionController
 {
-    
+    use Util\SubmissionSectionDataTrait,
+    Util\SubmissionSectionViewTrait;
+            
     public $routeParams = array();
     
     public function onDispatch(\Zend\Mvc\MvcEvent $e)
     {
         $this->routeParams = $this->getParams(array('case', 'licence', 'id', 'action'));
+        $this->submissionConfig = $this->getServiceLocator()->get('config')['submission_config'];
         parent::onDispatch($e);
     }
 
@@ -31,7 +36,7 @@ class SubmissionController extends FormActionController
         
         $submission = $this->createSubmission($this->routeParams);
         $data = array(
-            'createdBy' => 1,
+            'createdBy' => $this->getLoggedInUser(),
             'text' => $submission,
             'vosaCase' => $this->routeParams['case'],
         );
@@ -42,7 +47,7 @@ class SubmissionController extends FormActionController
             return $this->redirect()->toRoute('submission', array('licence' => $this->routeParams['licence'],
                         'case' => $this->routeParams['case'],
                         'id' => $result['id'],
-                        'action' => strtolower($this->routeParams['action'])));
+                        'action' => 'edit'));
         }
         
         $submission = json_decode($submission, true);
@@ -90,7 +95,7 @@ class SubmissionController extends FormActionController
         $submissionActions = $this->getServiceLocator()->get('config');
         $submissionActions = $submissionActions['static-list-data'];
         
-        $submission['data'] = json_decode($submissionData['text']);
+        $submission['data'] = json_decode($submissionData['text'], true);
         foreach ($submissionData['submissionActions'] as &$action) {
             $actions = isset($submissionActions['submission_'.$action['submissionActionType']])
                     ? $submissionActions['submission_'.$action['submissionActionType']] : '';
@@ -102,12 +107,14 @@ class SubmissionController extends FormActionController
     }
     
     /**
-     * Returns a submission view for add and edit
+     * Returns a submission view containing all sections for add and edit
      * @param type $submission
      * @return type
      */
     public function getSubmissionView($submission)
     {
+        $submissionViews = $this->getSubmissionSectionViews($submission['data']);
+        $submission['views'] = $submissionViews;
         $this->routeParams['action'] = 'post';
         $formAction = $this->url()->fromRoute('submission', $this->routeParams);
         $view = $this->getViewModel(
@@ -116,13 +123,34 @@ class SubmissionController extends FormActionController
                     'formAction' => $formAction,
                     'pageTitle' => 'case-submission',
                     'pageSubTitle' => 'case-submission-text',
-                    'submission' => $submission
+                    'submission' => $submission,
+                    'submissionConfig' => $this->submissionConfig['sections']
                 )
             )
         );
         
         $view->setTemplate('submission/page');
         return $view;
+    }
+    
+    /**
+     * Gets a rendered version of each section to pass to the main view
+     * @param array $sections
+     * @return type
+     */
+    public function getSubmissionSectionViews(array $sections)
+    {
+        $viewRender = $this->getServiceLocator()->get('ViewRenderer');
+        foreach ($sections as $sectionName => $section) {
+            $view = $this->getViewModel(array('sectionData' => $section['data']));
+            if (isset($this->submissionConfig['sections'][$sectionName]['view'])) {
+                $view->setTemplate($this->submissionConfig['sections'][$sectionName]['view']);
+            } else {
+                $view->setTemplate('submission/partials/blank');
+            }
+            $renderedViews[$sectionName] = $viewRender->render($view);
+        }
+        return $renderedViews;
     }
     
     /**
@@ -192,16 +220,40 @@ class SubmissionController extends FormActionController
     public function createSubmission($routeParams)
     {
         $licenceData = $this->makeRestCall('Licence', 'GET', array('id' => $routeParams['licence']));
-        $submissionConfig = $this->getServiceLocator()->get('config')['submission_config'];
         $submission = array();
-        foreach ($submissionConfig['sections'] as $section => $config) {
-            if ($this->submissionExclude($section, $config, $licenceData)) {
-                $submission[$section]['data'] = array();
-                $submission[$section]['notes'] = null;
+        foreach ($this->submissionConfig['sections'] as $sectionName => $config) {
+            if ($this->submissionExclude($sectionName, $config, $licenceData)) {
+                $submission[$sectionName] = $this->createSection($sectionName, $config);
             }
         }
         $jsonSubmission = json_encode($submission);
         return $jsonSubmission;
+    }
+    
+    /**
+     * Create a sction from the submission config
+     * @param type $config
+     * @return type
+     */
+    public function createSection($sectionName, $config = array())
+    {
+        $routeParams = $this->getParams(array('case'));
+        $section['data'] = array();
+        $section['notes'] = array();
+        $bundle = isset($config['bundle']) ? $config['bundle'] : array();
+        if (isset($config['dataPath'])) {
+            $sectionData = $this->makeRestCall($config['dataPath'], 'GET', array('id' => $routeParams['case']), $bundle);
+            $filter = new DashToCamelCase();
+            $method = $filter->filter($sectionName);
+            $section['data'] = $this->getFilteredSectionData($method, $sectionData);
+        }
+        return $section;
+    }
+    
+    public function getFilteredSectionData($method, $sectionData)
+    {
+        $data = call_user_func(array($this, $method), $sectionData);
+        return $data;
     }
     
     /**
@@ -234,7 +286,7 @@ class SubmissionController extends FormActionController
             $type,
             array(
                 'submission' => $this->routeParams['id'],
-                'userSender' => 1)
+                'userSender' => $this->getLoggedInUser())
         );
         $form = $this->formPost($form, 'processRecDecForm');
         $view = $this->getViewModel(
