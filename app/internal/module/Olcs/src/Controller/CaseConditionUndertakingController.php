@@ -63,6 +63,34 @@ class CaseConditionUndertakingController extends CaseController
     }
 
     /**
+     * Method to generate the conditions table
+     *
+     * @param id $caseId
+     * @return string
+     */
+    public function generateConditionTable($caseId)
+    {
+        $bundle = $this->getConditionUndertakingBundle('condition');
+
+        $conditionResults = $this->makeRestCall(
+            'VosaCase', 'GET', array(
+            'id' => $caseId, 'bundle' => json_encode($bundle))
+        );
+
+        // add caseId to results
+        for ($i=0; $i<count($conditionResults['conditionUndertakings']); $i++) {
+            $conditionResults['conditionUndertakings'][$i]['caseId'] = $caseId;
+        }
+
+        $data = [];
+        $data['url'] = $this->getPluginManager()->get('url');
+
+        $conditionsTable = $this->buildTable('conditions', $conditionResults['conditionUndertakings'], $data);
+
+        return $conditionsTable;
+    }
+
+    /**
      * Method to generate the undertakings table
      *
      * @param id $caseId
@@ -91,33 +119,6 @@ class CaseConditionUndertakingController extends CaseController
     }
 
     /**
-     * Method to generate the conditions table
-     *
-     * @param id $caseId
-     * @return string
-     */
-    public function generateConditionTable($caseId)
-    {
-        $bundle = $this->getConditionUndertakingBundle('condition');
-
-        $conditionResults = $this->makeRestCall(
-            'VosaCase', 'GET', array(
-            'id' => $caseId, 'bundle' => json_encode($bundle))
-        );
-
-        // add caseId to results
-        for ($i=0; $i<count($conditionResults['conditionUndertakings']); $i++) {
-            $conditionResults['conditionUndertakings'][$i]['caseId'] = $caseId;
-        }
-
-        $data = [];
-        $data['url'] = $this->getPluginManager()->get('url');
-
-        $conditionsTable = $this->buildTable('conditions', $conditionResults['conditionUndertakings'], $data);
-
-        return $conditionsTable;
-    }
-    /**
      * Method to return the bundle required for conditionundertakings
      * by conditionType
      *
@@ -140,8 +141,29 @@ class CaseConditionUndertakingController extends CaseController
                         'addedVia',
                         'isDraft',
                         'attachedTo',
-                        'isFulfilled'
+                        'isFulfilled',
+                        'operatingCentre'
+                    ),
+                    'children' => array(
+                        'operatingCentre' => array(
+                            'properties' => array(
+                                'address',
+                            ),
+                            'children' => array(
+                                'address' => array(
+                                    'properties' => array(
+                                        'paon_desc',
+                                        'saon_desc',
+                                        'street',
+                                        'locality',
+                                        'postcode',
+                                        'country'
+                                    )
+                                )
+                            )
+                        )
                     )
+
                 )
             )
         );

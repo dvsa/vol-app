@@ -52,7 +52,12 @@ return array(
         array(
             'title' => 'OC Address',
             'formatter' => function ($data, $column) {
-                return 'ToDo'; // todo S4 clarification
+                return $data['paon_desc'] . ', ' .
+                       $data['street'] . ', ' .
+                       $data['locality'] . ', ' .
+                       $data['postcode'] . ', ' .
+                       $data['country'];
+
             }
         ),
     )
