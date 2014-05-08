@@ -1,8 +1,8 @@
 <?php
 /**
- * @package		selfserve
- * @subpackage  PreviousHistory
- * @author		Jakub Igla <jakub.igla@valtech.co.uk>
+ * @package    Selfserve
+ * @subpackage PreviousHistory
+ * @author     Jakub Igla <jakub.igla@valtech.co.uk>
  */
 
 namespace SelfServe\Controller\PreviousHistory;
@@ -11,7 +11,8 @@ use Common\Controller\FormJourneyActionController;
 use Zend\View\Model\ViewModel;
 
 /**
- * @package		selfserve
+ *
+ * @package    Selfserve
  * @subpackage  PreviousHistory
  * @author		Jakub Igla <jakub.igla@valtech.co.uk>
  */
@@ -43,8 +44,7 @@ class IndexController extends FormJourneyActionController
 
         // prefill form data if persisted
         $formData = $this->getPersistedFormData($form);
-        if (isset($formData))
-        {
+        if (isset($formData)) {
             $form->setData($formData);
         }
 
@@ -52,17 +52,19 @@ class IndexController extends FormJourneyActionController
         $form = $this->formPost($form, $this->getStepProcessMethod($this->getCurrentStep()), ['applicationId' => $applicationId]);
 
         //for finance step we need to render form in a special way to meet UI expectations
-        if ($step == 'finance'){
+        if ($step == 'finance') {
             $formPartialPath = 'self-serve/forms/previous-history-finance';
-        } else{
+        } else {
             $formPartialPath = 'self-serve/forms/previous-history';
         }
 
         // render the view
-        $view = new ViewModel(['form' => $form,
-                                'formPartialPath' => $formPartialPath,
-                                'completionStatus' => (($completionStatus['Count']>0)?$completionStatus['Results'][0]:Array()),
-                                'applicationId' => $applicationId]);
+        $view = new ViewModel(
+            ['form' => $form,
+            'formPartialPath' => $formPartialPath,
+            'completionStatus' => (($completionStatus['Count']>0)?$completionStatus['Results'][0]:Array()),
+            'applicationId' => $applicationId]
+        );
         $view->setTemplate('self-serve/previous-history/index');
         return $view;
     }

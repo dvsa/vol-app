@@ -6,28 +6,51 @@
  * This page essentially sets up all the required database entries and redirects
  * the user to the route
  *
- *
- * @package		selfserve
- * @subpackage          index
- * @author		S Lizzio <shaun.lizzio@valtech.co.uk>
+ * @package    Selfserve
+ * @subpackage Dashboard
+ * @author     S Lizzio <shaun.lizzio@valtech.co.uk>
+ * @author     Jakub Igla <jakub.igla@valtech.co.uk>
  */
 
 namespace SelfServe\Controller\Dashboard;
 
 use Common\Controller\FormActionController;
 use Zend\View\Model\ViewModel;
+use Zend\Session\Container;
 
+/**
+ * Class IndexController
+ *
+ * @package SelfServe
+ * @author  Jakub Igla <jakub.igla@valtech.co.uk>
+ */
 class IndexController extends FormActionController
 {
-    
+
+    /**
+     * User
+     *
+     * @var array
+     */
+    private $user;
+
+    /**
+     * Index action
+     *
+     * @return array|ViewModel
+     */
     public function indexAction()
     {
-        //hardcoded organisationId
-        $organisationId = $this->getOrganisationId();
 
-        $applications = $this->makeRestCall('OrganisationApplication',
+        $user = $this->getUser();
+        if ($user instanceof \Zend\Http\Response) {
+            return $user;
+        }
+
+        $applications = $this->makeRestCall(
+            'OrganisationApplication',
             'GET',
-            ['operatorId' => $organisationId],
+            ['organisation' => $this->getOrganisationId()],
             ['children' => ['licence']]
         );
 
@@ -48,51 +71,94 @@ class IndexController extends FormActionController
         $view->setTemplate('self-serve/dashboard/index');
         return $view;
     }
-    
-		
+
     /**
      * Method to add the required database entries and redirect to beginning 
      * of the application journey. 
-     * 
+     *
+     * @return \Zend\Http\Response
      */
     public function createApplicationAction()
     {
 
-        $data = array(
+        $user = $this->getUser();
+        if ($user instanceof \Zend\Http\Response) {
+            return $user;
+        }
+
+        $data = [
             'version'       => 1,
             'licenceNumber' => '',
             'licenceType'   => '',
             'licenceStatus' => 'lic_status.new',
             'organisation'  => $this->getOrganisationId(),
-        );
+        ];
 
         // create licence
         $licenceResult = $this->makeRestCall('Licence', 'POST', $data);
         $licenceId = $licenceResult['id'];
 
-        $data = array(
+        $data = [
             'version'       => 1,
             'licence' => $licenceId,
             'createdOn'   => date('Y-m-d h:i:s'),
             'status' => 'app_status.new'
-        );
+        ];
 
         // create application
         $applicationResult = $this->makeRestCall('Application', 'POST', $data);
         $applicationId = $applicationResult['id'];
 
-        $this->redirect()->toRoute('selfserve/licence-type', array('applicationId' => $applicationId, 'step' => 'operator-location'));
-
+        return $this->redirect()->toRoute(
+            'selfserve/licence-type',
+            [
+                'applicationId' => $applicationId,
+                'step' => 'operator-location',
+            ]
+        );
     }
 
     /**
-     * Get organisation Id (currently hardcoded)
+     * Get organisation Id based on current user
      *
+     * @throws \Exception
      * @return int
      */
     private function getOrganisationId()
     {
-        return 104;
+        $restBundle = ['children' => ['organisation']];
+        $user = $this->makeRestCall('User', 'GET', ['id' => $this->user['id']], $restBundle);
+        if ($user === false) {
+            throw new \Exception('User not found');
+        }
+        return $user['organisation']['id'];
+    }
+
+    /**
+     * Currently there is no authentication mechanism, so userId is retrieved from route param
+     *
+     * @return array|\Zend\Http\Response
+     */
+    private function getUser()
+    {
+        if (empty($this->user)) {
+            $userId = $this->params()->fromRoute('userId');
+            $session = new Container();
+
+            if (empty($userId)) {
+
+                if (empty($session->user)) {
+                    // redirect to temp user
+                    return $this->redirect()->toRoute('selfserve/dashboard-home', ['userId' => 1]);
+                }
+
+                $this->user = $session->user;
+
+            } else {
+                $session->user = $this->user = array('id' => $userId);
+            }
+        }
+        return $this->user;
     }
 
 }
