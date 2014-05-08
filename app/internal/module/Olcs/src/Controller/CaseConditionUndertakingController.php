@@ -122,6 +122,7 @@ class CaseConditionUndertakingController extends CaseController
      * Method to return the bundle required for conditionundertakings
      * by conditionType
      *
+     * @todo remove address lines when address entity finalised
      * @return array
      */
     private function getConditionUndertakingBundle($conditionType)
@@ -152,6 +153,10 @@ class CaseConditionUndertakingController extends CaseController
                             'children' => array(
                                 'address' => array(
                                     'properties' => array(
+                                        'addressLine1',
+                                        'addressLine2',
+                                        'addressLine3',
+                                        'addressLine4',
                                         'paon_desc',
                                         'saon_desc',
                                         'street',
