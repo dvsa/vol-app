@@ -1,20 +1,20 @@
 <?php
 
 return [
-    'payment-details' => array(
+    'payment-submission' => array(
         'type' => 'segment',
         'options' => array(
-            'route' => '/:applicationId/payment-details/',
+            'route' => '/:applicationId/payment-submission/',
             'defaults' => array(
                 'controller' => 'Selfserve\PaymentDetails\Index',
                 'action' => 'index'
             )
         ),
     ),
-    'payment-details-complete' => array(
+    'payment-submission-complete' => array(
         'type' => 'segment',
         'options' => array(
-            'route' => '/:applicationId/payment-details/complete',
+            'route' => '/:applicationId/payment-submission/complete',
             'defaults' => array(
                 'controller' => 'Selfserve\PaymentDetails\Index',
                 'action' => 'complete'
@@ -22,4 +22,3 @@ return [
         ),
     ),
 ];
-
