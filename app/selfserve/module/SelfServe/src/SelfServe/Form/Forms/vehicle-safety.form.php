@@ -10,7 +10,7 @@ return array(
         ),
         'fieldsets' =>  array(
             array(
-                'name' => 'data',
+                'name' => 'licence',
                 'options' => array(0),
                 'elements' => array(
                     'licence.safetyInsVehicles' => array(
@@ -41,6 +41,23 @@ return array(
                         'filters' => '\Common\Form\Elements\InputFilters\VehicleSafetyTachographAnalyserContractor',
                         'label' => $translationPrefix . 'tachographAnalyserContractor'
                     ),
+                    'licence.version' => array(
+                        'type' => 'hidden'
+                    ),
+                    'licence.id' => array(
+                        'type' => 'hidden'
+                    )
+                )
+            ),
+            array(
+                'name' => 'table',
+                'options' => array(0),
+                'type' => 'table'
+            ),
+            array(
+                'name' => 'application',
+                'options' => array(0),
+                'elements' => array(
                     'safetyConfirmation' => array(
                         // @todo See if we can make this a checkbox
                         'type' => 'multicheckbox',
@@ -54,21 +71,26 @@ return array(
                     ),
                     'version' => array(
                         'type' => 'hidden'
-                    ),
-                    'licence.version' => array(
-                        'type' => 'hidden'
-                    ),
-                    'licence.id' => array(
-                        'type' => 'hidden'
                     )
                 )
-            )
-        ),
-        'elements' => array(
-            'submit' => array(
-                'type' => 'submit',
-                'label' => 'Continue',
-                'class' => 'action--primary large'
+            ),
+            array(
+                'name' => 'form-actions',
+                'class' => 'action-buttons',
+                'options' => array(0),
+                'elements' => array(
+                    'submit' => array(
+                        'type' => 'submit',
+                        'filters' => '\Common\Form\Elements\InputFilters\ActionButton',
+                        'label' => 'Continue',
+                        'class' => 'action--primary large'
+                    ),
+                    'home' => array(
+                        'type' => 'submit',
+                        'label' => 'Back to home',
+                        'filters' => '\Common\Form\Elements\InputFilters\ActionLink'
+                    )
+                )
             )
         )
     )

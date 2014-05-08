@@ -6,13 +6,13 @@
 
 namespace SelfServe\test\Controller\Finance;
 
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
+use PHPUnit_Framework_TestCase;
 use SelfServe\Controller\Finance\OperatingCentreController;
 
 /**
  * Test OperatingCentreController
  */
-class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
+class OperatingCentreControllerTest extends PHPUnit_Framework_TestCase
 {
 
     /**
@@ -25,18 +25,6 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
         $this->controller = $this->getMock(
             'SelfServe\Controller\Finance\OperatingCentreController', $methods
         );
-    }
-
-    /**
-     * Set up the unit tests
-     */
-    protected function setUp()
-    {
-        $this->setApplicationConfig(
-            include __DIR__ . '/../../../../config/application.config.php'
-        );
-
-        parent::setUp();
     }
 
     /**
@@ -131,7 +119,6 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
             ->method('makeRestCall')
             ->will($this->returnCallback(array($this, 'mockRestCall')));
 
-
         $this->controller->indexAction();
     }
 
@@ -152,9 +139,33 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
                 'getServiceLocator',
                 'generateFormWithData',
                 'getViewModel',
-                'renderLayout'
+                'renderLayout',
+                'getUrlFromRoute',
+                'renderLayoutWithSubSections'
             )
         );
+
+        $url = '/foo';
+
+        $mockHomeLink = $this->getMock('\stdClass', array('setValue'));
+
+        $mockHomeLink->expects($this->once())
+            ->method('setValue')
+            ->with($url);
+
+        $mockFormActions = $this->getMock('\stdClass', array('get'));
+
+        $mockFormActions->expects($this->once())
+            ->method('get')
+            ->with('home')
+            ->will($this->returnValue($mockHomeLink));
+
+        $mockForm = $this->getMock('\stdClass', array('get'));
+
+        $mockForm->expects($this->once())
+            ->method('get')
+            ->with('form-actions')
+            ->will($this->returnValue($mockFormActions));
 
         $mockParams = $this->getMock('\stdClass', array('fromRoute'));
 
@@ -195,17 +206,21 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->once())
             ->method('generateFormWithData')
-            ->will($this->returnValue('<form></form>'));
+            ->will($this->returnValue($mockForm));
 
         $mockViewModel = $this->getMock('\stdClass', array('setTemplate'));
 
         $this->controller->expects($this->once())
             ->method('getViewModel')
-            ->with(array('operatingCentres' => '<table></table>', 'form' => '<form></form>', 'isPsv' => false))
+            ->with(array('operatingCentres' => '<table></table>', 'form' => $mockForm, 'isPsv' => false))
             ->will($this->returnValue($mockViewModel));
 
         $this->controller->expects($this->once())
-            ->method('renderLayout')
+            ->method('getUrlFromRoute')
+            ->will($this->returnValue($url));
+
+        $this->controller->expects($this->once())
+            ->method('renderLayoutWithSubSections')
             ->with($mockViewModel)
             ->will($this->returnValue('LAYOUT'));
 
@@ -217,7 +232,9 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
      */
     public function testAddAction()
     {
-        $this->getMockController(array('generateForm', 'getViewModel', 'renderLayout', 'params', 'makeRestCall'));
+        $this->getMockController(
+            array('generateForm', 'getViewModel', 'renderLayoutWithSubSections', 'params', 'makeRestCall')
+        );
         $applicationId = 3;
         $mockViewModel = $this->getMock('\stdClass', array('setTemplate'));
 
@@ -240,7 +257,7 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue($mockViewModel));
 
         $this->controller->expects($this->once())
-            ->method('renderLayout')
+            ->method('renderLayoutWithSubSections')
             ->with($mockViewModel)
             ->will($this->returnValue('LAYOUT'));
 
@@ -301,7 +318,9 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
             'licence' => array('goodsOrPsv' => 'psv'),
         );
 
-        $this->getMockController(array('makeRestCall', 'params', 'generateFormWithData', 'getViewModel', 'renderLayout'));
+        $this->getMockController(
+            array('makeRestCall', 'params', 'generateFormWithData', 'getViewModel', 'renderLayoutWithSubSections')
+        );
 
         $mockParams = $this->getMock('\stdClass', array('fromRoute'));
 
@@ -334,7 +353,7 @@ class OperatingCentreControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue($mockViewModel));
 
         $this->controller->expects($this->once())
-            ->method('renderLayout')
+            ->method('renderLayoutWithSubSections')
             ->with($mockViewModel)
             ->will($this->returnValue('LAYOUT'));
 

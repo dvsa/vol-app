@@ -2,18 +2,19 @@
 
 /**
  * Test SafetyController
+ *
+ * @author Rob Caiger <rob@clocal.co.uk>
  */
-
 namespace OlcsTest\Controller;
 
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
-use Zend\View\Model\ViewModel;
-use SelfServe\Controller\VehiclesSafety\SafetyController;
+use PHPUnit_Framework_TestCase;
 
 /**
  * Test SafetyController
+ *
+ * @author Rob Caiger <rob@clocal.co.uk>
  */
-class SafetyControllerTest extends AbstractHttpControllerTestCase
+class SafetyControllerTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Build a mock controller
@@ -23,32 +24,8 @@ class SafetyControllerTest extends AbstractHttpControllerTestCase
     protected function getMockController($methods = array())
     {
         $this->controller = $this->getMock(
-            'SelfServe\Controller\VehiclesSafety\SafetyController', $methods
+            'SelfServe\Controller\VehicleSafety\SafetyController', $methods
         );
-    }
-
-    /**
-     * Set up the unit tests
-     */
-    protected function setUp()
-    {
-        $this->setApplicationConfig(
-            include __DIR__ . '/../../../../config/application.config.php'
-        );
-
-        parent::setUp();
-    }
-
-    /**
-     * Test completeAction
-     */
-    public function testCompleteAction()
-    {
-        $controller = new SafetyController();
-
-        $response = $controller->completeAction();
-
-        $this->assertTrue($response instanceof ViewModel);
     }
 
     /**
@@ -102,21 +79,59 @@ class SafetyControllerTest extends AbstractHttpControllerTestCase
                 'tachographIns' => 1,
                 'tachographInsName' => 'Foo',
                 'version' => 3
+            ),
+            'workshops' => array(
+                array(
+                    'contactDetails' => array(
+                        'id' => 1
+                    ),
+                    'address' => array(
+                        'addressLine1' => 'foo'
+                    )
+                )
             )
         );
 
-        $this->getMockController(array('params', 'makeRestCall', 'generateFormWithData', 'getViewModel'));
+        $this->getMockController(
+            array(
+                'getApplicationId',
+                'makeRestCall',
+                'generateTableFormWithData',
+                'getViewModel',
+                'getUrlFromRoute',
+                'renderLayoutWithSubSections'
+            )
+        );
 
-        $paramsMock = $this->getMock('\stdClass', array('fromRoute'));
+        $url = '/foo';
 
-        $paramsMock->expects($this->once())
-            ->method('fromRoute')
-            ->with('applicationId')
+        $mockHomeLink = $this->getMock('\stdClass', array('setValue'));
+
+        $mockHomeLink->expects($this->once())
+            ->method('setValue')
+            ->with($url);
+
+        $this->controller->expects($this->once())
+            ->method('getApplicationId')
             ->will($this->returnValue($applicationId));
 
         $this->controller->expects($this->once())
-            ->method('params')
-            ->will($this->returnValue($paramsMock));
+            ->method('getUrlFromRoute')
+            ->will($this->returnValue($url));
+
+        $mockFormActions = $this->getMock('\stdClass', array('get'));
+
+        $mockFormActions->expects($this->once())
+            ->method('get')
+            ->with('home')
+            ->will($this->returnValue($mockHomeLink));
+
+        $mockForm = $this->getMock('\stdClass', array('get'));
+
+        $mockForm->expects($this->once())
+            ->method('get')
+            ->with('form-actions')
+            ->will($this->returnValue($mockFormActions));
 
         $this->controller->expects($this->once())
             ->method('makeRestCall')
@@ -124,8 +139,9 @@ class SafetyControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue($data));
 
         $this->controller->expects($this->once())
-            ->method('generateFormWithData')
-            ->with('vehicle-safety');
+            ->method('generateTableFormWithData')
+            ->with('vehicle-safety')
+            ->will($this->returnValue($mockForm));
 
         $viewMock = $this->getMock('\stdClass', array('setTemplate'));
 
@@ -133,86 +149,161 @@ class SafetyControllerTest extends AbstractHttpControllerTestCase
             ->method('getViewModel')
             ->will($this->returnValue($viewMock));
 
+        $this->controller->expects($this->once())
+            ->method('renderLayoutWithSubSections')
+            ->will($this->returnValue($viewMock));
+
         $this->assertEquals($viewMock, $this->controller->indexAction());
     }
 
     /**
-     * Test processVehicleSafety
+     * test processVehicleSafetySuccess
      */
-    public function testProcessVehicleSafety()
+    public function testProcessVehicleSafetySuccess()
     {
-        $applicationId = 3;
+        $applicationId = 2;
 
         $data = array(
-            'data' => array(
-                'version' => 4,
-                'safetyConfirmation' => array(1),
-                'licence.safetyInsVehicles' => 'inspection_interval_vehicle.2',
-                'licence.safetyInsTrailers' => 'inspection_interval_trailer.3',
-                'licence.safetyInsVaries' => 1,
-                'licence.tachographIns' => 'tachograph_analyser.1',
-                'licence.tachographInsName' => 'Foo',
-                'licence.version' => 3
-            )
+            'foo' => 'bar'
         );
 
-        $this->expectedApplicationData = array(
-            'id' => $applicationId,
-            'version' => 4,
-            'safetyConfirmation' => 1
-        );
+        $this->getMockController(array('getApplicationId', 'redirectToRoute', 'persistVehicleSafetyData'));
 
-        $this->expectedLicenceData = array(
-            'safetyInsVehicles' => '2',
-            'safetyInsTrailers' => '3',
-            'safetyInsVaries' => 1,
-            'tachographIns' => '1',
-            'tachographInsName' => 'Foo',
-            'version' => 3
-        );
-
-        $this->getMockController(array('params', 'makeRestCall', 'redirect'));
-
-        $paramsMock = $this->getMock('\stdClass', array('fromRoute'));
-
-        $paramsMock->expects($this->once())
-            ->method('fromRoute')
-            ->with('applicationId')
+        $this->controller->expects($this->once())
+            ->method('getApplicationId')
             ->will($this->returnValue($applicationId));
 
         $this->controller->expects($this->once())
-            ->method('params')
-            ->will($this->returnValue($paramsMock));
-
-        $this->controller->expects($this->any())
-            ->method('makeRestCall')
-            ->will(
-                $this->returnCallback(
-                    function ($service, $method, $data) {
-                        $this->assertEquals('PUT', $method);
-
-                        if ($service == 'Application') {
-
-                            $this->assertEquals($this->expectedApplicationData, $data);
-
-                        } elseif ($service == 'Licence') {
-
-                            $this->assertEquals($this->expectedLicenceData, $data);
-                        }
-                    }
-                )
-            );
-
-        $redirectMock = $this->getMock('\stdClass', array('toRoute'));
-
-        $redirectMock->expects($this->once())
-            ->method('toRoute')
-            ->will($this->returnValue('redirect'));
+            ->method('persistVehicleSafetyData')
+            ->with($data);
 
         $this->controller->expects($this->once())
-            ->method('redirect')
-            ->will($this->returnValue($redirectMock));
+            ->method('redirectToRoute')
+            ->will($this->returnValue('REDIRECT'));
 
-        $this->assertEquals('redirect', $this->controller->processVehicleSafety($data));
+        $this->assertEquals('REDIRECT', $this->controller->processVehicleSafetySuccess($data));
+    }
+
+    /**
+     * Test processVehicleSafetyCrudAction with Add Action
+     */
+    public function testProcessVehicleSafetyCrudActionWithAddAction()
+    {
+        $data = array(
+            'application' => array(
+                'id' => 2
+            ),
+            'foo' => 'bar',
+            'table' => array(
+                'action' => 'Add'
+            )
+        );
+
+        $this->getMockController(array('persistVehicleSafetyData', 'redirectToRoute'));
+
+        $this->controller->expects($this->once())
+            ->method('persistVehicleSafetyData')
+            ->with($data);
+
+        $this->controller->expects($this->once())
+            ->method('redirectToRoute')
+            ->will($this->returnValue('REDIRECT'));
+
+        $this->assertEquals('REDIRECT', $this->controller->processVehicleSafetyCrudAction($data));
+    }
+
+    /**
+     * Test processVehicleSafetyCrudAction with Edit Action Without Id
+     */
+    public function testProcessVehicleSafetyCrudActionWithEditActionWithoutId()
+    {
+        $data = array(
+            'application' => array(
+                'id' => 2
+            ),
+            'foo' => 'bar',
+            'table' => array(
+                'action' => 'Edit'
+            )
+        );
+
+        $this->getMockController(array('persistVehicleSafetyData', 'crudActionMissingId'));
+
+        $this->controller->expects($this->once())
+            ->method('persistVehicleSafetyData')
+            ->with($data);
+
+        $this->controller->expects($this->once())
+            ->method('crudActionMissingId')
+            ->will($this->returnValue('MISSING'));
+
+        $this->assertEquals('MISSING', $this->controller->processVehicleSafetyCrudAction($data));
+    }
+
+    /**
+     * Test processVehicleSafetyCrudAction with Edit Action
+     */
+    public function testProcessVehicleSafetyCrudActionWithEditAction()
+    {
+        $data = array(
+            'application' => array(
+                'id' => 2
+            ),
+            'foo' => 'bar',
+            'table' => array(
+                'id' => 7,
+                'action' => 'Edit'
+            )
+        );
+
+        $this->getMockController(array('persistVehicleSafetyData', 'redirectToRoute'));
+
+        $this->controller->expects($this->once())
+            ->method('persistVehicleSafetyData')
+            ->with($data);
+
+        $this->controller->expects($this->once())
+            ->method('redirectToRoute')
+            ->will($this->returnValue('REDIRECT'));
+
+        $this->assertEquals('REDIRECT', $this->controller->processVehicleSafetyCrudAction($data));
+    }
+
+    /**
+     * Test persistVehicleSafetyData
+     */
+    public function testPersistVehicleSafetyData()
+    {
+        $applicationId = 2;
+
+        $data = array(
+            'application' => array(
+                'version' => 2,
+                'safetyConfirmation' => array(
+                    '1'
+                )
+            ),
+            'licence' => array(
+                'licence.safetyInsVehicles' => 'inspection_interval_vehicle.1',
+                'licence.safetyInsTrailers' => 'inspection_interval_trailer.2',
+                'licence.tachographIns' => 'tachograph_analyser.3'
+            )
+        );
+
+        $this->getMockController(array('getApplicationId', 'makeRestCall'));
+
+        $this->controller->expects($this->once())
+            ->method('getApplicationId')
+            ->will($this->returnValue($applicationId));
+
+        $this->controller->expects($this->at(1))
+            ->method('makeRestCall')
+            ->with('Application', 'PUT');
+
+        $this->controller->expects($this->at(2))
+            ->method('makeRestCall')
+            ->with('Licence', 'PUT');
+
+        $this->controller->persistVehicleSafetyData($data);
     }
 }
