@@ -87,6 +87,11 @@ class OperatingCentreController extends AbstractFinanceController
      */
     public function addAction()
     {
+        if ($this->isButtonPressed('cancel')) {
+
+            return $this->backToOperatingCentre();
+        }
+
         $applicationId = $this->params()->fromRoute('applicationId');
 
         $form = $this->generateForm(
@@ -106,6 +111,11 @@ class OperatingCentreController extends AbstractFinanceController
      */
     public function editAction()
     {
+        if ($this->isButtonPressed('cancel')) {
+
+            return $this->backToOperatingCentre();
+        }
+
         $operatingCentreId = $this->params()->fromRoute('id');
         $applicationId = $this->params()->fromRoute('applicationId');
 
@@ -135,6 +145,8 @@ class OperatingCentreController extends AbstractFinanceController
             $data,
             true
         );
+
+        $form->get('form-actions')->remove('addAnother');
 
         $view = $this->getViewModel(['form' => $form]);
         $view->setTemplate('self-serve/finance/operating-centre/edit');
@@ -166,14 +178,6 @@ class OperatingCentreController extends AbstractFinanceController
             'selfserve/finance/operating_centre',
             array('applicationId' => $applicationId)
         );
-    }
-
-    /**
-     * Complete action
-     */
-    public function completeAction()
-    {
-
     }
 
     /**
@@ -355,10 +359,12 @@ class OperatingCentreController extends AbstractFinanceController
         $result = $this->makeRestCall('ApplicationOperatingCentre', 'POST', $data);
 
         if (isset($result['id'])) {
-            return $this->redirect()->toRoute(
-                'selfserve/finance/operating_centre',
-                array('applicationId' => $data['application'])
-            );
+            if ($this->isButtonPressed('addAnother')) {
+
+                return $this->redirectToRoute(null, array(), array(), true);
+            }
+
+            return $this->backToOperatingCentre();
         }
     }
 
@@ -446,5 +452,18 @@ class OperatingCentreController extends AbstractFinanceController
             $name .= '-psv';
         }
         return $name;
+    }
+
+    /**
+     * Redirect to operating centre
+     */
+    protected function backToOperatingCentre()
+    {
+        $applicationId = $this->getApplicationId();
+
+        return $this->redirect()->toRoute(
+            'selfserve/finance/operating_centre',
+            array('applicationId' => $applicationId)
+        );
     }
 }
