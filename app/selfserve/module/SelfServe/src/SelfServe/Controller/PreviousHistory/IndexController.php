@@ -1,8 +1,8 @@
 <?php
 /**
- * @package		selfserve
- * @subpackage  PreviousHistory
- * @author		Jakub Igla <jakub.igla@valtech.co.uk>
+ * @package    Selfserve
+ * @subpackage PreviousHistory
+ * @author     Jakub Igla <jakub.igla@valtech.co.uk>
  */
 
 namespace SelfServe\Controller\PreviousHistory;
@@ -11,7 +11,8 @@ use SelfServe\Controller\AbstractApplicationController;
 use Zend\View\Model\ViewModel;
 
 /**
- * @package		selfserve
+ *
+ * @package    Selfserve
  * @subpackage  PreviousHistory
  * @author		Jakub Igla <jakub.igla@valtech.co.uk>
  */
@@ -36,33 +37,42 @@ class IndexController extends AbstractApplicationController
         $this->setCurrentStep($step);
 
         // collect completion status
-        $completionStatus = $this->makeRestCall('ApplicationCompletion', 'GET', array('application_id' => $applicationId));
+        $completionStatus = $this->makeRestCall(
+            'ApplicationCompletion',
+            'GET',
+            array('application_id' => $applicationId)
+        );
 
         // create form
         $form = $this->generateSectionForm();
 
         // prefill form data if persisted
         $formData = $this->getPersistedFormData($form);
-        if (isset($formData))
-        {
+        if (isset($formData)) {
             $form->setData($formData);
         }
 
         // Do the post
-        $form = $this->formPost($form, $this->getStepProcessMethod($this->getCurrentStep()), ['applicationId' => $applicationId]);
+        $form = $this->formPost(
+            $form,
+            $this->getStepProcessMethod($this->getCurrentStep()),
+            ['applicationId' => $applicationId]
+        );
 
         //for finance step we need to render form in a special way to meet UI expectations
-        if ($step == 'finance'){
+        if ($step == 'finance') {
             $formPartialPath = 'self-serve/forms/previous-history-finance';
-        } else{
+        } else {
             $formPartialPath = 'self-serve/forms/previous-history';
         }
 
         // render the view
-        $view = new ViewModel(['form' => $form,
-                                'formPartialPath' => $formPartialPath,
-                                'completionStatus' => (($completionStatus['Count']>0)?$completionStatus['Results'][0]:Array()),
-                                'applicationId' => $applicationId]);
+        $view = new ViewModel(
+            ['form' => $form,
+            'formPartialPath' => $formPartialPath,
+            'completionStatus' => (($completionStatus['Count']>0) ? $completionStatus['Results'][0] : array()),
+            'applicationId' => $applicationId]
+        );
         $view->setTemplate('self-serve/previous-history/index');
         return $view;
     }
@@ -89,10 +99,10 @@ class IndexController extends AbstractApplicationController
         $next_step = $this->evaluateNextStep($form);
 
         //reditect to next step
-        $this->redirect()->toRoute('selfserve/previous-history',
-            array('applicationId' => $params['applicationId'],
-                'step' => $next_step));
-
+        $this->redirect()->toRoute(
+            'selfserve/previous-history',
+            array('applicationId' => $params['applicationId'], 'step' => $next_step)
+        );
     }
 
     /**
@@ -106,7 +116,7 @@ class IndexController extends AbstractApplicationController
         $applicationId = $this->params()->fromRoute('applicationId');
         $entity = $this->makeRestCall('Application', 'GET', ['id' => $applicationId]);
 
-        if (empty($entity)){
+        if (empty($entity)) {
             throw new \OlcsEntities\Exceptions\EntityNotFoundException('Application entity not found');
         }
 
@@ -124,9 +134,10 @@ class IndexController extends AbstractApplicationController
     {
         $applicationId = $this->params()->fromRoute('applicationId');
 
-        $this->redirect()->toRoute('selfserve/finance',
-            array('applicationId' => $applicationId, 'step' =>
-                'index'));
+        $this->redirect()->toRoute(
+            'selfserve/finance',
+            array('applicationId' => $applicationId, 'step' => 'index')
+        );
     }
 
 

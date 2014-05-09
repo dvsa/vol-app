@@ -18,6 +18,11 @@ use Zend\View\Model\ViewModel;
  */
 class IndexController extends AbstractApplicationController
 {
+    public function __construct()
+    {
+        $this->setCurrentSection('payment-submission');
+    }
+
     public function indexAction()
     {
         if ($this->getRequest()->isPost()) {

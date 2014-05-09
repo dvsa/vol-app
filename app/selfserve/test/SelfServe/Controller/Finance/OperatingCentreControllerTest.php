@@ -303,6 +303,10 @@ class OperatingCentreControllerTest extends PHPUnit_Framework_TestCase
             ->with($mockViewModel)
             ->will($this->returnValue('LAYOUT'));
 
+        $this->controller->expects($this->any())
+            ->method('makeRestCall')
+            ->will($this->returnValue(array('licence' => array('goodsOrPsv' => 'psv'), 'Count' => 0, 'Results' => array(array()))));
+
         $this->assertEquals('LAYOUT', $this->controller->addAction());
     }
 

@@ -2,12 +2,19 @@
     echo $this->render(
         '/partials/page-header.phtml',
         array(
-        'pageTitle' => 'Dashboard',    
-        // 'pageSubTitle'=> ''
+            'pageTitle' => 'Dashboard',
+            'pageSubTitle'=> 'These are all your current licences and licence applications you have.',
         )
     );
 ?>
 
 <div class="three-quarters">
-    <a href="/selfserve/dashboard/application/create">Apply for a new licence</a>
+    <?php echo $applicationsTable; ?>
+    <br />
+    <div class="actions-container">
+        <a href="<?php echo $this->url('selfserve/new-licence'); ?>" class="action--primary large">Start new application</a>
+    </div>
+</div>
+<div class="one-quarter">
+    <h3>Notifications</h3>
 </div>
