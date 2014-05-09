@@ -63,7 +63,9 @@ class IndexController extends AbstractApplicationController
             'url' => $this->getPluginManager()->get('url')
         );
 
-        $applicationsTable = $this->getServiceLocator()->get('Table')->buildTable('dashboard-applications', $applications, $settings);
+        $applicationsTable = $this->getServiceLocator()
+            ->get('Table')
+            ->buildTable('dashboard-applications', $applications, $settings);
 
         // render the view
         $view = new ViewModel(['applicationsTable' => $applicationsTable]);
@@ -76,7 +78,11 @@ class IndexController extends AbstractApplicationController
         $applicationId = $this->getApplicationId();
         $journeySections = $this->getServiceLocator()->get('config')['journey'];
 
-        $applicationCompletionResult = $this->makeRestCall('ApplicationCompletion', 'GET', ['application' => $applicationId]);
+        $applicationCompletionResult = $this->makeRestCall(
+            'ApplicationCompletion',
+            'GET',
+            ['application' => $applicationId]
+        );
 
         if ($applicationCompletionResult['Count'] == 0) {
             throw new ResourceNotFoundException('No entity found');
@@ -192,5 +198,4 @@ class IndexController extends AbstractApplicationController
         }
         return $this->user;
     }
-
 }

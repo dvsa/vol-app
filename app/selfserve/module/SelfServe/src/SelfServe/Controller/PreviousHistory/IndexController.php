@@ -37,7 +37,11 @@ class IndexController extends AbstractApplicationController
         $this->setCurrentStep($step);
 
         // collect completion status
-        $completionStatus = $this->makeRestCall('ApplicationCompletion', 'GET', array('application_id' => $applicationId));
+        $completionStatus = $this->makeRestCall(
+            'ApplicationCompletion',
+            'GET',
+            array('application_id' => $applicationId)
+        );
 
         // create form
         $form = $this->generateSectionForm();
@@ -49,7 +53,11 @@ class IndexController extends AbstractApplicationController
         }
 
         // Do the post
-        $form = $this->formPost($form, $this->getStepProcessMethod($this->getCurrentStep()), ['applicationId' => $applicationId]);
+        $form = $this->formPost(
+            $form,
+            $this->getStepProcessMethod($this->getCurrentStep()),
+            ['applicationId' => $applicationId]
+        );
 
         //for finance step we need to render form in a special way to meet UI expectations
         if ($step == 'finance') {
@@ -62,7 +70,7 @@ class IndexController extends AbstractApplicationController
         $view = new ViewModel(
             ['form' => $form,
             'formPartialPath' => $formPartialPath,
-            'completionStatus' => (($completionStatus['Count']>0)?$completionStatus['Results'][0]:Array()),
+            'completionStatus' => (($completionStatus['Count']>0) ? $completionStatus['Results'][0] : array()),
             'applicationId' => $applicationId]
         );
         $view->setTemplate('self-serve/previous-history/index');
@@ -91,10 +99,10 @@ class IndexController extends AbstractApplicationController
         $next_step = $this->evaluateNextStep($form);
 
         //reditect to next step
-        $this->redirect()->toRoute('selfserve/previous-history',
-            array('applicationId' => $params['applicationId'],
-                'step' => $next_step));
-
+        $this->redirect()->toRoute(
+            'selfserve/previous-history',
+            array('applicationId' => $params['applicationId'], 'step' => $next_step)
+        );
     }
 
     /**
@@ -108,7 +116,7 @@ class IndexController extends AbstractApplicationController
         $applicationId = $this->params()->fromRoute('applicationId');
         $entity = $this->makeRestCall('Application', 'GET', ['id' => $applicationId]);
 
-        if (empty($entity)){
+        if (empty($entity)) {
             throw new \OlcsEntities\Exceptions\EntityNotFoundException('Application entity not found');
         }
 
@@ -126,9 +134,10 @@ class IndexController extends AbstractApplicationController
     {
         $applicationId = $this->params()->fromRoute('applicationId');
 
-        $this->redirect()->toRoute('selfserve/finance',
-            array('applicationId' => $applicationId, 'step' =>
-                'index'));
+        $this->redirect()->toRoute(
+            'selfserve/finance',
+            array('applicationId' => $applicationId, 'step' => 'index')
+        );
     }
 
 

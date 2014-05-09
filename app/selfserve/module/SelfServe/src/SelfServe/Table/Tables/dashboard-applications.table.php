@@ -32,12 +32,12 @@ return array(
             },
         ),
         array(
-            'title' => 'Date Created',
+            'title' => 'Date created',
             'name' => 'createdOn',
             'formatter' => 'Date',
         ),
         array(
-            'title' => 'Date Submitted',
+            'title' => 'Date submitted',
             'name' => 'receivedDate',
             'formatter' => 'Date',
         ),
