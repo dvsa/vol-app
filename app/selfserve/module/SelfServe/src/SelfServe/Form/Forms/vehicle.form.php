@@ -14,7 +14,7 @@ return array(
                     'type' => 'hidden',
                 ),
                 'vrm' => array(
-                    'label' => 'Vehicle Registration Number (VRM)',
+                    'label' => 'Vehicle Registration Mark (VRM)',
                     'type' => 'vehicleVrm',
                 ),
                 'plated_weight' => array(
