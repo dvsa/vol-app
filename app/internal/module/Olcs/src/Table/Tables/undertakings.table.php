@@ -25,6 +25,9 @@ return array(
         ),
         array(
             'title' => 'Added via',
+            'formatter' => function ($data, $column) {
+                return 'Case ' . $data['caseId'];
+            },
             'name' => 'caseId'
         ),
         array(
