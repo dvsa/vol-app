@@ -263,10 +263,10 @@ class CaseController extends FormActionController
                 'label' => 'Notes',
                 'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'notes'], [], true),
             ],
-            'conditions_undertakings' => [
-                'key' => 'conditions_undertakings',
+            'conditions-undertakings' => [
+                'key' => 'conditions-undertakings',
                 'label' => 'Conditions &amp; Undertakings',
-                'url' => $pm->get('url')->fromRoute('case_conditions_undertakings', ['tab' => 'conditions_undertakings'], [], true),
+                'url' => $pm->get('url')->fromRoute('case_conditions_undertakings', ['tab' => 'conditions-undertakings'], [], true),
             ],
         ];
 
