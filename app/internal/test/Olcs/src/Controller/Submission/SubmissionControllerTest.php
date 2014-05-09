@@ -6,7 +6,7 @@
  * @author adminmwc
  */
 
-namespace OlcsTest\Controller;
+namespace OlcsTest\Controller\Submission;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
@@ -15,10 +15,10 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
     public function setUp()
     {
         $this->setApplicationConfig(
-            include __DIR__.'/../../../../'  . 'config/application.config.php'
+            include __DIR__.'/../../../../../'  . 'config/application.config.php'
         );
         $this->controller = $this->getMock(
-            '\Olcs\Controller\SubmissionController',
+            '\Olcs\Controller\Submission\SubmissionController',
             array(
                 'getServiceLocator',
                 'setBreadcrumb',
@@ -36,7 +36,8 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
                 'getSubmissionView',
                 'getRequest',
                 'url',
-                'setSubmissionBreadcrumb'
+                'setSubmissionBreadcrumb',
+                'getLoggedInUser'
             )
         );
         $this->controller->routeParams = array();
@@ -78,6 +79,10 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
             'vosaCase' => 54);
         
         $this->controller->expects($this->once())
+            ->method('getLoggedInUser')
+            ->will($this->returnValue(1));
+        
+        $this->controller->expects($this->once())
             ->method('processAdd')
             ->with($data, 'Submission')
             ->will($this->returnValue(8));
@@ -86,7 +91,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         
         $redirect->expects($this->once())
             ->method('toRoute')
-            ->with('submission', array('licence' => 7, 'case' => 54, 'id' => null, 'action' => 'add'));
+            ->with('submission', array('licence' => 7, 'case' => 54, 'id' => null, 'action' => 'edit'));
         
         $this->controller->expects($this->once())
              ->method('redirect')
@@ -129,7 +134,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
     public function testEditPostAction()
     {
         $this->controller = $this->getMock(
-            '\Olcs\Controller\SubmissionController',
+            '\Olcs\Controller\Submission\SubmissionController',
             array(
                 'getEditSubmissionData',
                 'getSubmissionView',
@@ -167,7 +172,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
     public function testEditRedirectAction()
     {
         $this->controller = $this->getMock(
-            '\Olcs\Controller\SubmissionController',
+            '\Olcs\Controller\Submission\SubmissionController',
             array(
                 'getEditSubmissionData',
                 'getSubmissionView',
@@ -220,7 +225,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
     public function testgetEditSubmissionData()
     {
         $this->controller = $this->getMock(
-            '\Olcs\Controller\SubmissionController',
+            '\Olcs\Controller\Submission\SubmissionController',
             array(
                 'makeRestCall',
                 'getServiceLocator',
@@ -281,14 +286,20 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
     public function testgetSubmissionView()
     {
         $this->controller = $this->getMock(
-            '\Olcs\Controller\SubmissionController',
+            '\Olcs\Controller\Submission\SubmissionController',
             array(
                 'getViewModel',
                 'url',
+                'getSubmissionSectionViews'
             )
         );
         
         $this->controller->routeParams = array('case' => 54, 'licence' => 7, 'action' => 'post', 'id' => 8);
+        $this->controller->submissionConfig = array('sections' => array());
+        $this->controller->expects($this->once())
+            ->method('getSubmissionSectionViews')
+            ->with(array())
+            ->will($this->returnValue(array()));
         
         $url = $this->getMock('\stdClass', array('fromRoute'));
         
@@ -315,19 +326,20 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
                         'formAction' => '/licence/7/case/28/submission/edit/166',
                         'pageTitle' => 'case-submission',
                         'pageSubTitle' => 'case-submission-text',
-                        'submission' => array()
+                        'submission' => array('data' => array(), 'views' => array()),
+                        'submissionConfig' => array()
                     )
                 )
             )
             ->will($this->returnValue($viewModel));
          
-        $this->controller->getSubmissionView(array());
+        $this->controller->getSubmissionView(array('data' => array()));
     }
     
     public function testPostDecisionAction()
     {
         $this->controller = $this->getMock(
-            '\Olcs\Controller\SubmissionController',
+            '\Olcs\Controller\Submission\SubmissionController',
             array(
                 'getViewModel',
                 'params',
@@ -396,7 +408,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
     public function testRecommendationAction()
     {
         $this->controller = $this->getMock(
-            '\Olcs\Controller\SubmissionController',
+            '\Olcs\Controller\Submission\SubmissionController',
             array(
                 'backToCaseButton',
                 'formView',
@@ -405,8 +417,6 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
             )
         );
         $this->controller->routeParams = array('case' => 54, 'licence' => 7, 'action' => 'recommendation', 'id' => 8);
-        /*$this->controller->expects($this->once())
-             ->method('backToCaseButton');*/
         
         $this->controller->expects($this->once())
             ->method('setSubmissionBreadcrumb')
@@ -422,7 +432,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
     public function testDecisionAction()
     {
         $this->controller = $this->getMock(
-            '\Olcs\Controller\SubmissionController',
+            '\Olcs\Controller\Submission\SubmissionController',
             array(
                 'backToCaseButton',
                 'formView',
@@ -431,8 +441,6 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
             )
         );
         $this->controller->routeParams = array('case' => 54, 'licence' => 7, 'action' => 'recommendation', 'id' => 8);
-        /*$this->controller->expects($this->once())
-             ->method('backToCaseButton');*/
         
         $this->controller->expects($this->once())
             ->method('setSubmissionBreadcrumb')
@@ -445,67 +453,25 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $this->controller->decisionAction();
     }
     
-    public function testCreateSubmission()
-    {
-        $this->controller = $this->getMock(
-            '\Olcs\Controller\SubmissionController',
-            array(
-                'makeRestCall',
-                'getServiceLocator'
-            )
-        );
-        $this->licenceData['licenceType'] = 'blah';
-        $this->controller->expects($this->once())
-            ->method('makeRestCall')
-            ->with('Licence', 'GET', array('id' => 7))
-            ->will($this->returnValue($this->licenceData));
-        
-        $serviceLocator = $this->getMock('\stdClass', array('get'));
-        
-        $serviceLocator->expects($this->once())
-            ->method('get')
-            ->with('config')
-            ->will(
-                $this->returnValue(
-                    array(
-                        'submission_config' => array(
-                            'sections' => array(
-                                'case-summary-info' => null,
-                                'transport-managers' => array(
-                                    'exclude' => array(
-                                        'column' => 'licenceType',
-                                        'values' => array(
-                                            'standard national',
-                                            'standard international'
-                                        )
-                                    )
-                                )
-                            )
-                        )
-                    )
-                )
-            );
-        
-        $this->controller->expects($this->once())
-            ->method('getServiceLocator')
-            ->will($this->returnValue($serviceLocator));
-        
-        $this->controller->createSubmission(array('licence' => 7, 'case' => 54));
-    }
-    
     public function testFormView()
     {
         $this->controller = $this->getMock(
-            '\Olcs\Controller\SubmissionController',
+            '\Olcs\Controller\Submission\SubmissionController',
             array(
                 'makeRestCall',
                 'getServiceLocator',
                 'getFormWithUsers',
                 'formPost',
-                'getViewModel'
+                'getViewModel',
+                'getLoggedInUser'
             )
         );
         $this->controller->routeParams = array('case' => 54, 'licence' => 7, 'action' => 'decision', 'id' => 8);
+        
+        $this->controller->expects($this->once())
+            ->method('getLoggedInUser')
+            ->will($this->returnValue(1));
+        
         $this->controller->expects($this->once())
             ->method('getFormWithUsers')
             ->with('decision', array('submission' => 8, 'userSender' => 1))
@@ -518,7 +484,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         
         $viewModel = $this->getMock('\stdClass', array('setTemplate'));
         
-       $viewModel->expects($this->once())
+        $viewModel->expects($this->once())
             ->method('setTemplate')
             ->with('form');
         
@@ -541,7 +507,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
     public function testProcessRecDecForm()
     {
         $this->controller = $this->getMock(
-            '\Olcs\Controller\SubmissionController',
+            '\Olcs\Controller\Submission\SubmissionController',
             array(
                 'processAdd',
                 'redirect'
@@ -585,7 +551,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
     public function testGetUserList()
     {
         $this->controller = $this->getMock(
-            '\Olcs\Controller\SubmissionController',
+            '\Olcs\Controller\Submission\SubmissionController',
             array(
                 'makeRestCall'
             )
@@ -611,7 +577,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
     public function testGetFormWithUsers()
     {
         $this->controller = $this->getMock(
-            '\Olcs\Controller\SubmissionController',
+            '\Olcs\Controller\Submission\SubmissionController',
             array(
                 'getUserList',
                 'getFormGenerator',
@@ -680,7 +646,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
     public function testSetSubmissionBreadcrumb()
     {
         $this->controller = $this->getMock(
-            '\Olcs\Controller\SubmissionController',
+            '\Olcs\Controller\Submission\SubmissionController',
             array(
                 'makeRestCall',
                 'setBreadcrumb'

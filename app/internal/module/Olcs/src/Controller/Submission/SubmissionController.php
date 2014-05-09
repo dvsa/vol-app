@@ -5,17 +5,15 @@
  * @author Mike Cooper <michael.cooper@valtech.co.uk>
  */
 
-namespace Olcs\Controller;
+namespace Olcs\Controller\Submission;
 
 use Common\Controller\FormActionController;
 use Zend\View\Model\ViewModel;
-use Olcs\Util;
 use Zend\Filter\Word\DashToCamelCase;
 
 class SubmissionController extends FormActionController
 {
-    use Util\SubmissionSectionDataTrait,
-    Util\SubmissionSectionViewTrait;
+    use SubmissionSectionTrait;
             
     public $routeParams = array();
     
@@ -210,69 +208,6 @@ class SubmissionController extends FormActionController
                     'id' => $this->routeParams['id']
                 ),
             );
-    }
-    
-    /**
-     * Return json encoded submission based on submission_config
-     * @param type $routeParams
-     * @return type
-     */
-    public function createSubmission($routeParams)
-    {
-        $licenceData = $this->makeRestCall('Licence', 'GET', array('id' => $routeParams['licence']));
-        $submission = array();
-        foreach ($this->submissionConfig['sections'] as $sectionName => $config) {
-            if ($this->submissionExclude($sectionName, $config, $licenceData)) {
-                $submission[$sectionName] = $this->createSection($sectionName, $config);
-            }
-        }
-        $jsonSubmission = json_encode($submission);
-        return $jsonSubmission;
-    }
-    
-    /**
-     * Create a sction from the submission config
-     * @param type $config
-     * @return type
-     */
-    public function createSection($sectionName, $config = array())
-    {
-        $routeParams = $this->getParams(array('case'));
-        $section['data'] = array();
-        $section['notes'] = array();
-        $bundle = isset($config['bundle']) ? $config['bundle'] : array();
-        if (isset($config['dataPath'])) {
-            $sectionData = $this->makeRestCall($config['dataPath'], 'GET', array('id' => $routeParams['case']), $bundle);
-            $filter = new DashToCamelCase();
-            $method = $filter->filter($sectionName);
-            $section['data'] = $this->getFilteredSectionData($method, $sectionData);
-        }
-        return $section;
-    }
-    
-    public function getFilteredSectionData($method, $sectionData)
-    {
-        $data = call_user_func(array($this, $method), $sectionData);
-        return $data;
-    }
-    
-    /**
-     * builds a submission and excludes sections based on rules in
-     * the submission config
-     * @param type $section
-     * @param type $config
-     * @param type $licenceData
-     * @return boolean
-     */
-    public function submissionExclude($section, $config, $licenceData)
-    {
-        if (!isset($config['exclude'])) {
-            return true;
-        }
-        if (in_array(strtolower($licenceData[$config['exclude']['column']]), $config['exclude']['values'])) {
-            return true;
-        }
-        return false;
     }
     
     /**
