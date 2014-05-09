@@ -228,6 +228,48 @@ class OperatingCentreControllerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test add action with cancel
+     */
+    public function testAddActionWithCancel()
+    {
+        $this->getMockController(array('isButtonPressed', 'backToOperatingCentre'));
+
+        $this->controller->expects($this->once())
+            ->method('isButtonPressed')
+            ->with('cancel')
+            ->will($this->returnValue(true));
+
+        $this->controller->expects($this->once())
+            ->method('backToOperatingCentre')
+            ->will($this->returnValue('REDIRECT'));
+
+        $response = $this->controller->addAction();
+
+        $this->assertEquals('REDIRECT', $response);
+    }
+
+    /**
+     * Test edit action with cancel
+     */
+    public function testEditActionWithCancel()
+    {
+        $this->getMockController(array('isButtonPressed', 'backToOperatingCentre'));
+
+        $this->controller->expects($this->once())
+            ->method('isButtonPressed')
+            ->with('cancel')
+            ->will($this->returnValue(true));
+
+        $this->controller->expects($this->once())
+            ->method('backToOperatingCentre')
+            ->will($this->returnValue('REDIRECT'));
+
+        $response = $this->controller->editAction();
+
+        $this->assertEquals('REDIRECT', $response);
+    }
+
+    /**
      * Test addAction
      */
     public function testAddAction()
@@ -318,6 +360,18 @@ class OperatingCentreControllerTest extends PHPUnit_Framework_TestCase
             'licence' => array('goodsOrPsv' => 'psv'),
         );
 
+        $mockFormActions = $this->getMock('\stdClass', array('remove'));
+
+        $mockFormActions->expects($this->once())
+            ->method('remove')
+            ->with('addAnother');
+
+        $mockForm = $this->getMock('\stdClass', array('get'));
+
+        $mockForm->expects($this->once())
+            ->method('get')
+            ->will($this->returnValue($mockFormActions));
+
         $this->getMockController(
             array('makeRestCall', 'params', 'generateFormWithData', 'getViewModel', 'renderLayoutWithSubSections')
         );
@@ -340,7 +394,7 @@ class OperatingCentreControllerTest extends PHPUnit_Framework_TestCase
 
         $this->controller->expects($this->once())
             ->method('generateFormWithData')
-            ->will($this->returnValue('<form></form>'));
+            ->will($this->returnValue($mockForm));
 
         $this->controller->expects($this->any())
             ->method('makeRestCall')
@@ -380,11 +434,6 @@ class OperatingCentreControllerTest extends PHPUnit_Framework_TestCase
             ->with('id')
             ->will($this->returnValue($ocId));
 
-        $mockParams->expects($this->at(1))
-            ->method('fromRoute')
-            ->with('applicationId')
-            ->will($this->returnValue($appId));
-
         $this->controller->expects($this->any())
             ->method('params')
             ->will($this->returnValue($mockParams));
@@ -406,7 +455,6 @@ class OperatingCentreControllerTest extends PHPUnit_Framework_TestCase
     public function testDeleteAction()
     {
         $ocId = 1;
-        $appId = 2;
         $result = array(
             'id' => 1
         );
@@ -420,20 +468,15 @@ class OperatingCentreControllerTest extends PHPUnit_Framework_TestCase
             ->with('id')
             ->will($this->returnValue($ocId));
 
-        $mockParams->expects($this->at(1))
-            ->method('fromRoute')
-            ->with('applicationId')
-            ->will($this->returnValue($appId));
-
         $this->controller->expects($this->any())
             ->method('params')
             ->will($this->returnValue($mockParams));
 
-        $this->controller->expects($this->at(2))
+        $this->controller->expects($this->at(1))
             ->method('makeRestCall')
             ->will($this->returnValue($result));
 
-        $this->controller->expects($this->at(3))
+        $this->controller->expects($this->at(2))
             ->method('makeRestCall')
             ->with('ApplicationOperatingCentre', 'DELETE', array('id' => 1));
 
@@ -448,18 +491,6 @@ class OperatingCentreControllerTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue($mockRedirect));
 
         $this->assertEquals('REDIRECT', $this->controller->deleteAction());
-    }
-
-    /**
-     * Test completeAction
-     */
-    public function testCompleteAction()
-    {
-        $controller = new OperatingCentreController();
-
-        $response = $controller->completeAction();
-
-        $this->assertEquals(null, $response);
     }
 
     /**
@@ -575,12 +606,12 @@ class OperatingCentreControllerTest extends PHPUnit_Framework_TestCase
 
         $mockParams = $this->getMock('\stdClass', array('fromRoute'));
 
-        $mockParams->expects($this->once())
+        $mockParams->expects($this->any())
             ->method('fromRoute')
             ->with('applicationId')
             ->will($this->returnValue($applicationId));
 
-        $this->controller->expects($this->once())
+        $this->controller->expects($this->any())
             ->method('params')
             ->will($this->returnValue($mockParams));
 
@@ -603,6 +634,66 @@ class OperatingCentreControllerTest extends PHPUnit_Framework_TestCase
         $this->controller->expects($this->once())
             ->method('redirect')
             ->will($this->returnValue($mockRedirect));
+
+        $this->assertEquals('REDIRECT', $this->controller->processAddForm($data));
+    }
+
+    /**
+     * Test processAddForm with add another
+     */
+    public function testProcessAddFormWithAddAnother()
+    {
+        $applicationId = 7;
+
+        $data = array(
+            'address' => array(
+                'addressLine1' => '',
+                'addressLine2' => '',
+                'addressLine3' => '',
+                'city' => '',
+                'country' => '',
+                'postcode' => ''
+            ),
+            'authorised-vehicles' => array(
+                'no-of-vehicles' => 3,
+                'no-of-trailers' => 4,
+                'parking-spaces-confirmation' => 1,
+                'permission-confirmation' => 1
+            )
+        );
+
+        $this->getMockController(array('makeRestCall', 'params', 'redirect', 'isButtonPressed', 'redirectToRoute'));
+
+        $this->controller->expects($this->once())
+            ->method('isButtonPressed')
+            ->with('addAnother')
+            ->will($this->returnValue(true));
+
+        $this->controller->expects($this->once())
+            ->method('redirectToRoute')
+            ->with(null)
+            ->will($this->returnValue('REDIRECT'));
+
+        $mockParams = $this->getMock('\stdClass', array('fromRoute'));
+
+        $mockParams->expects($this->any())
+            ->method('fromRoute')
+            ->with('applicationId')
+            ->will($this->returnValue($applicationId));
+
+        $this->controller->expects($this->any())
+            ->method('params')
+            ->will($this->returnValue($mockParams));
+
+        $this->controller->expects($this->at(1))
+            ->method('makeRestCall')
+            ->with('OperatingCentre', 'POST')
+            ->will($this->returnValue(array('id' => 1)));
+
+        $this->controller->expects($this->at(2))
+            ->method('makeRestCall')
+            ->with('ApplicationOperatingCentre', 'POST')
+            ->will($this->returnValue(array('id' => 1)));
 
         $this->assertEquals('REDIRECT', $this->controller->processAddForm($data));
     }
