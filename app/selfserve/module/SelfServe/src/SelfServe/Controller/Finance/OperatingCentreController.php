@@ -160,7 +160,6 @@ class OperatingCentreController extends AbstractFinanceController
     public function deleteAction()
     {
         $appOperatingCentreId = $this->params()->fromRoute('id');
-        $applicationId = $this->params()->fromRoute('applicationId');
 
         $data = array('id' => $appOperatingCentreId);
 
@@ -174,10 +173,7 @@ class OperatingCentreController extends AbstractFinanceController
 
         $this->makeRestCall('ApplicationOperatingCentre', 'DELETE', array('id' => $result['id']));
 
-        return $this->redirect()->toRoute(
-            'selfserve/finance/operating_centre',
-            array('applicationId' => $applicationId)
-        );
+        return $this->backToOperatingCentre();
     }
 
     /**
@@ -385,12 +381,9 @@ class OperatingCentreController extends AbstractFinanceController
         );
         $data = array_merge($this->mapData($validData), $data);
 
-        //persist to database by calling rest api
         $this->makeRestCall('ApplicationOperatingCentre', 'PUT', $data);
-        return $this->redirect()->toRoute(
-            'selfserve/finance/operating_centre',
-            array('applicationId' => $data['application'])
-        );
+
+        return $this->backToOperatingCentre();
     }
 
     /**

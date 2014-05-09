@@ -434,11 +434,6 @@ class OperatingCentreControllerTest extends PHPUnit_Framework_TestCase
             ->with('id')
             ->will($this->returnValue($ocId));
 
-        $mockParams->expects($this->at(1))
-            ->method('fromRoute')
-            ->with('applicationId')
-            ->will($this->returnValue($appId));
-
         $this->controller->expects($this->any())
             ->method('params')
             ->will($this->returnValue($mockParams));
@@ -460,7 +455,6 @@ class OperatingCentreControllerTest extends PHPUnit_Framework_TestCase
     public function testDeleteAction()
     {
         $ocId = 1;
-        $appId = 2;
         $result = array(
             'id' => 1
         );
@@ -474,20 +468,15 @@ class OperatingCentreControllerTest extends PHPUnit_Framework_TestCase
             ->with('id')
             ->will($this->returnValue($ocId));
 
-        $mockParams->expects($this->at(1))
-            ->method('fromRoute')
-            ->with('applicationId')
-            ->will($this->returnValue($appId));
-
         $this->controller->expects($this->any())
             ->method('params')
             ->will($this->returnValue($mockParams));
 
-        $this->controller->expects($this->at(2))
+        $this->controller->expects($this->at(1))
             ->method('makeRestCall')
             ->will($this->returnValue($result));
 
-        $this->controller->expects($this->at(3))
+        $this->controller->expects($this->at(2))
             ->method('makeRestCall')
             ->with('ApplicationOperatingCentre', 'DELETE', array('id' => 1));
 
