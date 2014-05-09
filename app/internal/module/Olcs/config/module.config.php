@@ -237,6 +237,16 @@ return array(
                         'controller' => 'SubmissionController',
                     )
                 )
+            ),
+            'note' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/licence/:licence[/case/:case][/:type/:id][/:section]/note[/]',
+                    'defaults' => array(
+                        'controller' => 'NoteFormController',
+                        'action' => 'Index',
+                    )
+                )
             )
         )
     ),
@@ -262,7 +272,8 @@ return array(
             'SubmissionController' => 'Olcs\Controller\Submission\SubmissionController',
             'CaseStayController' => 'Olcs\Controller\CaseStayController',
             'CasePenaltyController' => 'Olcs\Controller\CasePenaltyController',
-            'CaseProhibitionController' => 'Olcs\Controller\CaseProhibitionController'
+            'CaseProhibitionController' => 'Olcs\Controller\CaseProhibitionController',
+            'NoteFormController' => 'Olcs\Controller\NoteFormController'
         )
     ),
     'view_manager' => array(

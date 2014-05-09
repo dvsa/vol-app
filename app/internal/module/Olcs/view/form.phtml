@@ -1,9 +1,17 @@
 <?php
+    $headerSubTitle = null;
+    if (is_array($this->params['pageSubTitle'])) {
+        foreach ($this->params['pageSubTitle'] as $subTitle) {
+            $headerSubTitle .= $this->translate($subTitle);
+        }
+    } else {
+        $headerSubTitle = $this->translate($subTitle);
+    }
     echo $this->render(
         '/partials/page-header.phtml',
         array(
             'pageTitle' => $this->translate($this->params['pageTitle']),
-            'pageSubTitle'=> $this->translate($this->params['pageSubTitle'])
+            'pageSubTitle'=> $headerSubTitle
         )
     );
 ?>
