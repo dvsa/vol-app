@@ -31,7 +31,7 @@ return array(
                 $column['formatter'] = 'Date';
                 return '<a href="' . $this->generateUrl(
                     array('action' => 'edit', 'id' => $data['id']),
-                    'complaint',
+                    'case_impounding',
                     true
                 ) . '">' . $this->callFormatter($column, $data) . '</a>';
             },
@@ -39,7 +39,7 @@ return array(
         ),
         array(
             'title' => 'Presiding TC/DTC',
-            'format' => '{{presidingTc}}'
+            'format' => '{{tcName}}'
         ),
         array(
             'title' => 'Outcome',
@@ -51,7 +51,7 @@ return array(
                 $column['formatter'] = 'Date';
                 return $this->callFormatter($column, $data);
             },
-            'name' => 'closeDate'
+            'name' => 'outcomeSentDate'
 
         ),
     )
