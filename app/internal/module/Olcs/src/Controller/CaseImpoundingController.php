@@ -38,13 +38,12 @@ class CaseImpoundingController extends CaseController
 
         $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licenceId)));
 
-        $bundle = $this->getBundle();
+        $bundle = $this->getIndexBundle();
 
         $results = $this->makeRestCall(
             'VosaCase', 'GET', array(
             'id' => $caseId, 'bundle' => json_encode($bundle))
         );
-        print_r($results);
 
         $impoundings = $this->formatForTable($results['impoundings']);
 
@@ -67,8 +66,8 @@ class CaseImpoundingController extends CaseController
      */
     public function addAction()
     {
-        $caseId = $this->fromRoute('case');
         $licenceId = $this->fromRoute('licence');
+        $caseId = $this->fromRoute('case');
 
         $this->setBreadcrumb(
             array(
@@ -80,7 +79,9 @@ class CaseImpoundingController extends CaseController
         $form = $this->generateFormWithData(
             'impounding',
             'processAddImpounding',
-            array(),
+            array(
+                'case' => $caseId
+            ),
             true
         );
 
@@ -99,6 +100,11 @@ class CaseImpoundingController extends CaseController
         return $view;
     }
 
+    /**
+     * Processes the add impounding form
+     *
+     * @param array $data
+     */
     public function processAddImpounding ($data)
     {
         $formattedData = $this->formatForSave($data);
@@ -113,14 +119,39 @@ class CaseImpoundingController extends CaseController
     }
 
     /**
+     * Processes the edit impounding form
+     *
+     * @param array $data
+     */
+    public function processEditImpounding ($data) {
+        $formattedData = $this->formatForSave($data);
+
+        $result = $this->processEdit($formattedData, 'Impounding');
+
+        if (empty($result)) {
+            return $this->redirect()->toRoute(
+            'case_impounding',
+            array(
+                'action' => null,
+                'id' => null
+            ),
+            array(),
+            true
+            );
+        }
+
+        return $this->redirectToAction('edit');
+    }
+
+    /**
      * Loads the edit impounding page
      *
      * @return ViewModel
      */
     public function editAction()
     {
-        $caseId = $this->fromRoute('case');
         $licenceId = $this->fromRoute('licence');
+        $caseId = $this->fromRoute('case');
         $impoundingId = $this->fromRoute('id');
 
         $bundle = $this->getFormBundle();
@@ -131,7 +162,7 @@ class CaseImpoundingController extends CaseController
             return $this->notFoundAction();
         }
 
-        $data['details'] = $this->formatDataForForm($details);
+        $data = $this->formatDataForForm($details);
 
         $this->setBreadcrumb(
             array(
@@ -175,6 +206,7 @@ class CaseImpoundingController extends CaseController
 
         $formatted['hearingLocation'] = $data['hearing']['hearingLocation'];
         $formatted['hearingDate'] = $this->joinHearingDateAndTime($data['hearing']['hearingDate'], $data['hearing']['hearingTime']);
+        $formatted['presidingTc'] = str_replace('presiding_tc.', '', $formatted['presidingTc']);
         $formatted['id'] = $data['id'];
         $formatted['case'] = $data['case'];
         $formatted['version'] = $data['version'];
@@ -193,7 +225,13 @@ class CaseImpoundingController extends CaseController
     {
         if (!empty($results)) {
             foreach ($results as $key => $result) {
-                $results[$key]['tcName'] = $result['presidingTc']['tcName'];
+                if (isset($result['presidingTc']['tcName'])) {
+                    $results[$key]['tcName'] = $result['presidingTc']['tcName'];
+                }
+
+                if (isset($result['outcome']['handle'])) {
+                    $results[$key]['outcome'] = $result['outcome']['handle'];
+                }
             }
         }
 
@@ -203,15 +241,45 @@ class CaseImpoundingController extends CaseController
     /**
      * Formats data for use in the form
      */
-    private function formatDataForForm($results){
-        //$results['outcome'] = $results['outcome']['itemValue'];
-        $results['presidingTc'] = $results['presidingTc']['tcName'];
+    private function formatDataForForm($results)
+    {
+        $formatted = array();
 
+        //hearing date fieldset
         if (!empty($results['hearingDate'])) {
-            $results['hearingTime'] = date('H:i', strtotime($results['hearingDate']));
+            $formatted['hearing']['hearingTime'] = date('H:i', strtotime($results['hearingDate']));
+            $formatted['hearing']['hearingDate'] = $results['hearingDate'];
         }
 
-        return $results;
+        if (!empty($results['hearingLocation'])) {
+            $formatted['hearing']['hearingLocation'] = $results['hearingLocation']['handle'];
+        }
+
+        //application details fieldset
+        $formatted['application_details'] = array(
+            'impoundingType' => $results['impoundingType']['handle'],
+            'applicationReceiptDate' => $results['applicationReceiptDate']
+        );
+
+        //outcome fieldset
+        $formatted['outcome'] = array(
+            'outcomeSentDate' => $results['outcomeSentDate'],
+            'notes' => $results['notes']
+        );
+
+        if (isset($results['presidingTc']['id'])) {
+           $formatted['outcome']['presidingTc'] = 'presiding_tc.' . $results['presidingTc']['id'];
+        }
+
+        if (isset($results['outcome']['handle'])) {
+            $formatted['outcome']['outcome'] = $results['outcome']['handle'];
+        }
+
+        $formatted['id'] = $results['id'];
+        $formatted['case'] = $results['case']['id'];
+        $formatted['version'] = $results['version'];
+
+        return $formatted;
     }
 
     /**
@@ -248,7 +316,7 @@ class CaseImpoundingController extends CaseController
      *
      * @return array
      */
-    private function getBundle()
+    private function getIndexBundle()
     {
         return array(
             'properties' => array(
@@ -262,6 +330,11 @@ class CaseImpoundingController extends CaseController
                         'outcomeSentDate'
                     ),
                     'children' => array(
+                        'impoundingType' => array(
+                            'properties' => array(
+                                'handle'
+                            )
+                        ),
                         'presidingTc' => array(
                             'properties' => array(
                                 'tcName'
@@ -269,7 +342,7 @@ class CaseImpoundingController extends CaseController
                         ),
                         'outcome' => array(
                             'properties' => array(
-                                'tcName'
+                                'handle'
                             ),
                         ),
                     )
@@ -285,19 +358,36 @@ class CaseImpoundingController extends CaseController
                 'id',
                 'applicationReceiptDate',
                 'outcomeSentDate',
-                'hearingDate'
+                'hearingDate',
+                'notes',
+                'version'
             ),
             'children' => array(
+                'impoundingType' => array(
+                    'properties' => array(
+                        'handle'
+                    )
+                ),
                 'presidingTc' => array(
                     'properties' => array(
-                        'tcName'
+                        'id'
+                    ),
+                ),
+                'case' => array(
+                    'properties' => array(
+                        'id'
+                    )
+                ),
+                'hearingLocation' => array(
+                    'properties' => array(
+                        'handle'
                     ),
                 ),
                 'outcome' => array(
                     'properties' => array(
-                        'itemValue'
+                        'handle'
                     ),
-                ),
+                )
             )
         );
     }

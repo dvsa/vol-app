@@ -31,7 +31,9 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
                 'buildTable',
                 'setBreadcrumb',
                 'fromRoute',
-                'notFoundAction'
+                'notFoundAction',
+                'generateFormWithData',
+                'redirectToAction'
             ]
         );
 
@@ -43,6 +45,37 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
         );
 
         parent::setUp();
+    }
+
+    /**
+     * Tests the index action redirects to an action if present
+     *
+     * @dataProvider indexRedirectProvider
+     *
+     * @param string $action
+     */
+    public function testIndexActionRedirect($action)
+    {
+        $this->getFrom('Route', 0, 'licence', 7);
+        $this->getFrom('Route', 1, 'case', 24);
+        $this->getFrom('Post', 2, 'action', $action);
+
+        $this->controller->expects($this->once())
+            ->method('redirectToAction');
+
+        $this->controller->indexAction();
+    }
+
+    /**
+     * Data provider for testIndexActionRedirect
+     *
+     * @return array
+     */
+    public function indexRedirectProvider(){
+        return array(
+            array('add'),
+            array('edit')
+        );
     }
 
     /**
@@ -71,6 +104,7 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
 
         $this->getFrom('Route', 0, 'licence', $licenceId);
         $this->getFrom('Route', 1, 'case', $caseId);
+        $this->getFrom('Post', 2, 'action', null);
 
         $this->controller->expects($this->once())
             ->method('setBreadcrumb');
@@ -106,26 +140,19 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
     /**
      * Tests the add action
      */
-    /*public function testAddAction()
+    public function testAddAction()
     {
         $licenceId = 7;
-        $this->getFrom('Route', 0, 'licence', $licenceId);
+        $caseId = 24;
 
-        $this->controller->expects($this->exactly(2))
-            ->method('makeRestCall')
-            ->will(
-                $this->onConsecutiveCalls(
-                    $this->returnValue(
-                        array('data' => 'data')
-                    ),
-                    $this->returnValue(
-                        $this->getPageDataRestArray($licenceId)
-                    )
-                )
-            );
+        $this->getFrom('Route', 0, 'licence', $licenceId);
+        $this->getFrom('Route', 1, 'case', $caseId);
 
         $this->controller->expects($this->once())
             ->method('generateFormWithData');
+
+        $this->controller->expects($this->once())
+            ->method('setBreadcrumb');
 
         $this->controller->expects($this->once())
             ->method('getView')
@@ -133,11 +160,40 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
 
         $this->view->expects($this->once())
             ->method('setTemplate')
-            ->with($this->equalTo('case/add'));
+            ->with($this->equalTo('form'));
 
         $this->assertSame($this->view, $this->controller->addAction());
+    }
 
-    }*/
+    /**
+     * Tests the edit action
+     */
+    public function testEditAction()
+    {
+        $licenceId = 7;
+        $caseId = 24;
+        $id = 1;
+
+        $this->getFrom('Route', 0, 'licence', $licenceId);
+        $this->getFrom('Route', 1, 'case', $caseId);
+        $this->getFrom('Route', 2, 'id', $id);
+
+        $this->controller->expects($this->once())
+            ->method('generateFormWithData');
+
+        $this->controller->expects($this->once())
+            ->method('setBreadcrumb');
+
+        $this->controller->expects($this->once())
+            ->method('getView')
+            ->will($this->returnValue($this->view));
+
+        $this->view->expects($this->once())
+            ->method('setTemplate')
+            ->with($this->equalTo('form'));
+
+        $this->assertSame($this->view, $this->controller->editAction());
+    }
 
     /**
      * Tests the addAction if the licence ID is not found

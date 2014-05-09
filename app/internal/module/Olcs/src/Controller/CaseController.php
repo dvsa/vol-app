@@ -266,7 +266,7 @@ class CaseController extends FormActionController
             'impounding' => [
                 'key' => 'impounding',
                 'label' => 'Impounding',
-                'url' => $pm->get('url')->fromRoute('case_impounding', ['tab' => 'impounding'], [], true),
+                'url' => $pm->get('url')->fromRoute('case_impounding', ['tab' => 'impounding', 'action' => null], [], true),
             ]
         ];
 
