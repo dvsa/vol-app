@@ -17,6 +17,7 @@ namespace SelfServe\Controller\Dashboard;
 use SelfServe\Controller\AbstractApplicationController;
 use Zend\View\Model\ViewModel;
 use Zend\Session\Container;
+use Common\Exception\ResourceNotFoundException;
 
 /**
  * Class IndexController
@@ -64,8 +65,6 @@ class IndexController extends AbstractApplicationController
 
         $applicationsTable = $this->getServiceLocator()->get('Table')->buildTable('dashboard-applications', $applications, $settings);
 
-        //\Zend\Debug\Debug::dump($applications);exit;
-
         // render the view
         $view = new ViewModel(['applicationsTable' => $applicationsTable]);
         $view->setTemplate('self-serve/dashboard/index');
@@ -80,7 +79,7 @@ class IndexController extends AbstractApplicationController
         $applicationCompletionResult = $this->makeRestCall('ApplicationCompletion', 'GET', ['application' => $applicationId]);
 
         if ($applicationCompletionResult['Count'] == 0) {
-            throw new \Common\Exception\ResourceNotFoundException('No entity found');
+            throw new ResourceNotFoundException('No entity found');
         }
         $applicationCompletion = $applicationCompletionResult['Results'][0];
 
@@ -158,8 +157,9 @@ class IndexController extends AbstractApplicationController
     {
         $restBundle = ['children' => ['organisation']];
         $user = $this->makeRestCall('User', 'GET', ['id' => $this->user['id']], $restBundle);
+
         if ($user === false) {
-            throw new \Exception('User not found');
+            throw new ResourceNotFoundException('User not found');
         }
         return $user['organisation']['id'];
     }
@@ -172,12 +172,14 @@ class IndexController extends AbstractApplicationController
     private function getUser()
     {
         if (empty($this->user)) {
+
             $userId = $this->params()->fromRoute('userId');
             $session = new Container();
 
             if (empty($userId)) {
 
                 if (empty($session->user)) {
+
                     // redirect to temp user
                     return $this->redirect()->toRoute('selfserve/dashboard-home', ['userId' => 1]);
                 }
