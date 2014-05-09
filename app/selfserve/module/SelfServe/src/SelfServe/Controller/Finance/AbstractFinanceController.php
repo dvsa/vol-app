@@ -17,6 +17,12 @@ use SelfServe\Controller\AbstractApplicationController;
  */
 abstract class AbstractFinanceController extends AbstractApplicationController
 {
+
+    public function __construct()
+    {
+        $this->setCurrentSection('operating-centre');
+    }
+
     /**
      * Render the layout
 

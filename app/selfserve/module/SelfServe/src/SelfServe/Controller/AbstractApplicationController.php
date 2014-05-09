@@ -9,6 +9,7 @@
 namespace SelfServe\Controller;
 
 use Common\Controller\FormJourneyActionController;
+use Zend\EventManager\EventManagerInterface;
 
 /**
  * Abstract Application Controller
@@ -28,6 +29,39 @@ abstract class AbstractApplicationController extends FormJourneyActionController
      * @var array
      */
     protected $subSections = array();
+
+
+    public function setEventManager(EventManagerInterface $events)
+    {
+        parent::setEventManager($events);
+
+        $controller = $this;
+        $events->attach('dispatch', function ($e) use ($controller) {
+
+            if (empty($controller->getApplicationId()) || empty ($controller->getCurrentSection())) {
+                return;
+            }
+
+            $applicationCompletion = $controller->makeRestCall(
+                'Application',
+                'GET',
+                ['id' => $controller->getApplicationId()],
+                ['children' => ['completion']]
+            )['completion'];
+
+            //update last visited section
+            $data = [
+                'version' => $applicationCompletion['version'],
+                'lastSection' => $controller->getCurrentSection(),
+                'id' => $applicationCompletion['id'],
+            ];
+            $this->makeRestCall('ApplicationCompletion', 'PUT', $data);
+
+        }, 100); // execute before executing action logic
+    }
+
+
+
 
     /**
      * Check if a button was pressed

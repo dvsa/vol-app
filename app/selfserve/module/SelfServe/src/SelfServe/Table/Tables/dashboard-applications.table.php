@@ -15,19 +15,19 @@ return array(
 
         array(
             'title' => 'Lic/App number',
-            'formatter' => function ($row, $col, $translator) {
+            'formatter' => function ($row, $col, $sm) {
                 if (!empty($row['licence']['licenceNumber'])) {
                     return $row['licence']['licenceNumber'];
                 }
-                return $translator->translate('Not issued yet');
+                return $sm->get('translator')->translate('Not issued yet');
             },
         ),
         array(
             'title' => 'App ID',
             'formatter' => function ($row) {
                 return '<a href="' . $this->url->fromRoute(
-                    'selfserve/licence-type',
-                    ['applicationId' => $row['id'], 'step' => 'operator-location']
+                    'selfserve/determine-section',
+                    ['applicationId' => $row['id']]
                 ) . '">'.$row['id'].'</a>';
             },
         ),

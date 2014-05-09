@@ -14,7 +14,7 @@
 
 namespace SelfServe\Controller\Dashboard;
 
-use Common\Controller\FormActionController;
+use SelfServe\Controller\AbstractApplicationController;
 use Zend\View\Model\ViewModel;
 use Zend\Session\Container;
 
@@ -24,7 +24,7 @@ use Zend\Session\Container;
  * @package SelfServe
  * @author  Jakub Igla <jakub.igla@valtech.co.uk>
  */
-class IndexController extends FormActionController
+class IndexController extends AbstractApplicationController
 {
 
     /**
@@ -72,6 +72,29 @@ class IndexController extends FormActionController
         return $view;
     }
 
+    public function determineSectionAction()
+    {
+        $applicationId = $this->getApplicationId();
+        $journeySections = $this->getServiceLocator()->get('config')['journey'];
+
+        $applicationCompletionResult = $this->makeRestCall('ApplicationCompletion', 'GET', ['application' => $applicationId]);
+
+        if ($applicationCompletionResult['Count'] == 0) {
+            throw new \Common\Exception\ResourceNotFoundException('No entity found');
+        }
+        $applicationCompletion = $applicationCompletionResult['Results'][0];
+
+        $section = empty($applicationCompletion['lastSection'])
+            ? current($journeySections)
+            : $journeySections[$applicationCompletion['lastSection']];
+
+        return $this->redirect()->toRoute(
+            'selfserve/' . $section['route'],
+            ['step' => $section['step'], 'applicationId' => $applicationId]
+        );
+    }
+
+
     /**
      * Method to add the required database entries and redirect to beginning 
      * of the application journey. 
@@ -108,6 +131,13 @@ class IndexController extends FormActionController
         // create application
         $applicationResult = $this->makeRestCall('Application', 'POST', $data);
         $applicationId = $applicationResult['id'];
+
+        $data = [
+            'version' => 1,
+            'application' => $applicationId,
+        ];
+
+        $this->makeRestCall('ApplicationCompletion', 'POST', $data);
 
         return $this->redirect()->toRoute(
             'selfserve/licence-type',

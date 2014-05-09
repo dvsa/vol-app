@@ -11,6 +11,16 @@ return [
             )
         ),
     ),
+    'determine-section' => array(
+        'type' => 'segment',
+        'options' => array(
+            'route' => '/:applicationId/continue-journey',
+            'defaults' => array(
+                'controller' => 'Selfserve\Dashboard\Index',
+                'action' => 'determineSection'
+            )
+        ),
+    ),
     'new-licence' => array(
         'type' => 'literal',
         'options' => array(

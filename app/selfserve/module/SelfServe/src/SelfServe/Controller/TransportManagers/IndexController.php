@@ -18,6 +18,11 @@ use Zend\View\Model\ViewModel;
  */
 class IndexController extends AbstractApplicationController
 {
+    public function __construct()
+    {
+        $this->setCurrentSection('transport-managers');
+    }
+
     public function indexAction()
     {
         $applicationId = $this->params()->fromRoute('applicationId');
