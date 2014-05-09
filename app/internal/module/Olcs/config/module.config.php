@@ -238,7 +238,33 @@ return array(
                         'controller' => 'SubmissionController',
                     )
                 )
-            )
+            ),
+            'case_conditions_undertakings' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/licence/[:licence]/case/:case/conditions-undertakings',
+                    'constraints' => array(
+                        'case' => '[0-9]+',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'CaseConditionUndertakingController',
+                        'action' => 'index'
+                    )
+                )
+            ),
+            'conditions_undertakings' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/licence/:licence/case/:case/conditions-undertakings/:action[/:id]',
+                    'constraints' => array(
+                        'case' => '[0-9]+',
+                        'id' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'CaseConditionUndertakingController',
+                    )
+                )
+            ),
         )
     ),
     'tables' => array(
@@ -263,7 +289,8 @@ return array(
             'SubmissionController' => 'Olcs\Controller\SubmissionController',
             'CaseStayController' => 'Olcs\Controller\CaseStayController',
             'CasePenaltyController' => 'Olcs\Controller\CasePenaltyController',
-            'CaseProhibitionController' => 'Olcs\Controller\CaseProhibitionController'
+            'CaseProhibitionController' => 'Olcs\Controller\CaseProhibitionController',
+            'CaseConditionUndertakingController' => 'Olcs\Controller\CaseConditionUndertakingController'
         )
     ),
     'view_manager' => array(
