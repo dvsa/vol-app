@@ -457,7 +457,7 @@ class OperatingCentreController extends AbstractFinanceController
     /**
      * Redirect to operating centre
      */
-    protected function backToOperatingCentre()
+    public function backToOperatingCentre()
     {
         $applicationId = $this->getApplicationId();
 
