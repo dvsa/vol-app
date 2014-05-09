@@ -128,7 +128,7 @@ class VehicleControllerTest extends PHPUnit_Framework_TestCase
     {
         $this->setUpMockController(
             [
-                'params',
+                'getFromRoute',
                 'makeRestCall',
                 'notFoundAction',
                 'generateFormWithData',
@@ -182,15 +182,10 @@ class VehicleControllerTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        $mockParams = $this->getMock('\StdClass', ['fromRoute']);
-        $mockParams->expects($this->once())
-            ->method('fromRoute')
-            ->with($this->equalTo('vehicleId'))
-            ->will($this->returnValue($vehicleId));
-
         $this->controller->expects($this->once())
-            ->method('params')
-            ->will($this->returnValue($mockParams));
+            ->method('getFromRoute')
+            ->with($this->equalTo('id'))
+            ->will($this->returnValue($vehicleId));
 
         $this->controller->expects($this->once())
             ->method('makeRestCall')
@@ -218,7 +213,7 @@ class VehicleControllerTest extends PHPUnit_Framework_TestCase
         $this->setUpMockController(
             [
                 'generateForm',
-                'params',
+                'getFromRoute',
                 'makeRestCall',
                 'notFoundAction',
                 'generateFormWithData',
@@ -232,15 +227,10 @@ class VehicleControllerTest extends PHPUnit_Framework_TestCase
         );
         $vehicleResult = null;
 
-        $mockParams = $this->getMock('\StdClass', ['fromRoute']);
-        $mockParams->expects($this->once())
-            ->method('fromRoute')
-            ->with($this->equalTo('vehicleId'))
-            ->will($this->returnValue($vehicleId));
-
         $this->controller->expects($this->once())
-            ->method('params')
-            ->will($this->returnValue($mockParams));
+            ->method('getFromRoute')
+            ->with($this->equalTo('id'))
+            ->will($this->returnValue($vehicleId));
 
         $this->controller->expects($this->once())
             ->method('makeRestCall')
