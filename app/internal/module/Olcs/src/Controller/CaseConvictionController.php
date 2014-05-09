@@ -19,9 +19,9 @@ class CaseConvictionController extends CaseController
     {
         $postParams = $this->params()->fromPost();
         $routeParams = $this->params()->fromRoute();
-        
+
         $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $routeParams['licence'])));
-        
+
         if (isset($postParams['action'])) {
             return $this->redirect()->toRoute($postParams['table'], array('licence' => $routeParams['licence'],
                         'case' => $routeParams['case'],
@@ -90,6 +90,6 @@ class CaseConvictionController extends CaseController
         $data = array_intersect_key($data, array_flip(['id', 'convictionData', 'version']));
         $this->processEdit($data, 'VosaCase');
 
-        return $this->redirect()->toRoute('case_convictions', array('case' => $data['id']));
+        return $this->redirect()->toRoute('case_convictions', [], [], true);
     }
 }

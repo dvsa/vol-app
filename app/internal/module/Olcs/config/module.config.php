@@ -1,6 +1,7 @@
 <?php
 
 return array(
+    'application-name' => 'internal',
     'router' => array(
         'routes' => array(
             'dashboard' => array(
@@ -246,6 +247,32 @@ return array(
                         'controller' => 'NoteFormController',
                     )
                 )
+            ),
+            'case_conditions_undertakings' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/licence/[:licence]/case/:case/conditions-undertakings',
+                    'constraints' => array(
+                        'case' => '[0-9]+',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'CaseConditionUndertakingController',
+                        'action' => 'index'
+                    )
+                )
+            ),
+            'conditions_undertakings' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/licence/:licence/case/:case/conditions-undertakings/:action[/:id]',
+                    'constraints' => array(
+                        'case' => '[0-9]+',
+                        'id' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'CaseConditionUndertakingController',
+                    )
+                )
             )
         )
     ),
@@ -272,7 +299,8 @@ return array(
             'CaseStayController' => 'Olcs\Controller\CaseStayController',
             'CasePenaltyController' => 'Olcs\Controller\CasePenaltyController',
             'CaseProhibitionController' => 'Olcs\Controller\CaseProhibitionController',
-            'NoteFormController' => 'Olcs\Controller\NoteFormController'
+            'NoteFormController' => 'Olcs\Controller\NoteFormController',
+            'CaseConditionUndertakingController' => 'Olcs\Controller\CaseConditionUndertakingController'
         )
     ),
     'view_manager' => array(
