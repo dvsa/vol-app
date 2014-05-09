@@ -47,7 +47,8 @@ return [
                             'of vehicles and trailers stated',
                         'options' => [
                             'must_be_checked' => true,
-                            'not_checked_message' => 'You must confirm that you have permission to use the premisses to park the number of vehicles & trailers stated',
+                            'not_checked_message' => 'You must confirm that you have permission to use the premises to
+                                park the number of vehicles & trailers stated',
                         ],
                     ],
                 ]
