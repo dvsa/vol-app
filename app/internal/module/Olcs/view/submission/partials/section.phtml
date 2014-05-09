@@ -5,7 +5,15 @@
 </div>
 <div>
 <?php
+$routeParams['action'] = 'addnote';
 echo $data;
 ?>
 </div>
-<div><textarea class="extra-long">Comments here</textarea></div>
+<div>
+    <form method="POST" action=<?php echo $this->url('submission', $routeParams); ?>>
+        <input type="hidden" name="section" value="<?php echo $heading;  ?>" />
+        <div class="actions-container">
+            <input id="recommend" class="action--primary" name="recommend" type="submit" value="Add Note">
+        </div>
+    </form>
+</div>

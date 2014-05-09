@@ -17,20 +17,28 @@ use Common\Controller\FormActionController;
  */
 class NoteFormController extends FormActionController
 {
-    public function indexAction()
+    public function addAction()
     {
         $postParams = $this->params()->fromPost();
         $routeParams = $this->params()->fromRoute();
         
-        $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $routeParams['licence'])));
-        
-        if (isset($postParams['action'])) {
-            return $this->redirect()->toRoute($postParams['table'], array('licence' => $routeParams['licence'],
+        $this->setBreadcrumb(
+            array(
+                'licence_case_list/pagination' => array('licence' => $routeParams['licence']),
+                'case_manage' => array(
                         'case' => $routeParams['case'],
-                        'id' => isset($postParams['id']) ? $postParams['id'] : '',
-                        'action' => strtolower($postParams['action'])));
-        }
-
+                        'licence' => $routeParams['licence'],
+                        'tab' => 'overview'
+                ),
+                'submission' => array(
+                        'case' => $routeParams['case'],
+                        'licence' => $routeParams['licence'],
+                        'id' => $routeParams['typeId'],
+                        'action' => 'edit'
+                )
+            )
+        );
+        
         $form = $this->generateNoteForm(array());
 
         $view = $this->getViewModel(
@@ -38,15 +46,13 @@ class NoteFormController extends FormActionController
             'form' => $form,
             'params' => array(
                 'pageTitle' => "add-{$routeParams['type']}-note",
-                'pageSubTitle' => array("add-{$routeParams['type']}-note-text", "case-summary-info")
-            )
+                'pageSubTitle' => array("add-{$routeParams['type']}-note-text", $routeParams['section'])
+                )
             )
         );
 
         $view->setTemplate('form');
         return $view;
-        print 'note controller';
-        return false;
     }
 
     /**
@@ -73,9 +79,27 @@ class NoteFormController extends FormActionController
      */
     public function saveNoteForm($data)
     {
-        $data = array_intersect_key($data, array_flip(['id', 'convictionData', 'version']));
-        $this->processEdit($data, 'VosaCase');
+        $routeParams = $this->params()->fromRoute();
+        $postParams = $this->params()->fromPost();
+//print_r($postParams);
+        $submission = $this->makeRestCall($routeParams['type'], 'GET', array('id' => $routeParams['typeId']));
+        $submissionData = json_decode($submission['text'], true);
+        $newNote = array();
+        $newNote['note'] = $postParams['main']['note'];
+        $newNote['userId'] = $this->getLoggedInUser();
+        $newNote['date'] = date("c");
+        $submissionData[$routeParams['section']]['notes'][] = $newNote;
+        $data = array();
+        $data['id'] = $submission['id'];
+        $data['version'] = $submission['version'];
+        $data['text'] = json_encode($submissionData);
+        
+//print_r($data);
+        $this->processEdit($data, $routeParams['type']);
 
-        return $this->redirect()->toRoute('case_convictions', array('case' => $data['id']));
+        $routeParams = $this->params()->fromRoute();
+        $routeParams['action'] = 'edit';
+        $routeParams['id'] = $routeParams['typeId'];
+        return $this->redirect()->toRoute('submission', $routeParams);
     }
 }

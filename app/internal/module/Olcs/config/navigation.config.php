@@ -34,6 +34,11 @@ return array(
                                                     'label' => 'Recommendation',
                                                     'route' => 'submission',
                                                     'action' => 'recommendation'
+                                                ),
+                                                array(
+                                                    'label' => 'Add note',
+                                                    'route' => 'note',
+                                                    'action' => 'add'
                                                 )
                                             )
                                         ),
@@ -51,6 +56,11 @@ return array(
                                                     'label' => 'Recommendation',
                                                     'route' => 'submission',
                                                     'action' => 'recommendation'
+                                                ),
+                                                array(
+                                                    'label' => 'Add note',
+                                                    'route' => 'note',
+                                                    'action' => 'add'
                                                 )
                                             )
                                         )

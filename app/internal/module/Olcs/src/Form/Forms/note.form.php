@@ -14,7 +14,7 @@ return [
                 'elements' => [
                     'note' => [
                         'type' => 'text',
-                        'filters' => '\Common\Form\Elements\InputFilters\TextMax4000Required',
+                        'filters' => '\Common\Form\Elements\InputFilters\TextMax4000',
                         'label' => 'Note',
                         'class' => 'extra-long'
                     ],

@@ -241,10 +241,9 @@ return array(
             'note' => array(
                 'type' => 'segment',
                 'options' => array(
-                    'route' => '/licence/:licence[/case/:case][/:type/:id][/:section]/note[/]',
+                    'route' => '/licence/:licence[/case/:case][/:type/:typeId][/:section]/note[/:action][/:id]',
                     'defaults' => array(
                         'controller' => 'NoteFormController',
-                        'action' => 'Index',
                     )
                 )
             )

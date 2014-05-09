@@ -72,6 +72,23 @@ class SubmissionController extends FormActionController
         return $this->getSubmissionView($submission);
     }
     
+    /**
+     * Edit a conviction
+     * @return type
+     */
+    public function addnoteAction()
+    {
+        $postParams = $this->params()->fromPost();
+        if ($this->getRequest()->isPost()) {
+            $this->routeParams['type'] = 'submission';
+            $this->routeParams['typeId'] = $this->routeParams['id'];
+            $this->routeParams['section'] = $postParams['section'];
+            $this->routeParams['action'] = 'add';
+            unset($this->routeParams['id']);
+            return $this->redirect()->toRoute('note', $this->routeParams);
+        }
+    }
+    
     public function getEditSubmissionData()
     {
         $bundle = array(
@@ -119,6 +136,7 @@ class SubmissionController extends FormActionController
             array(
                 'params' => array(
                     'formAction' => $formAction,
+                    'routeParams' => $this->routeParams,
                     'pageTitle' => 'case-submission',
                     'pageSubTitle' => 'case-submission-text',
                     'submission' => $submission,
