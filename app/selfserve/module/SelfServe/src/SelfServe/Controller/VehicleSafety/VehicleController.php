@@ -63,20 +63,18 @@ class VehicleController extends AbstractVehicleSafetyController
      */
     public function editAction()
     {
-        $vehicleId = $this->params()->fromRoute('vehicleId');
+        $vehicleId = $this->getFromRoute('id');
 
         $data = array(
             'id' => $vehicleId,
         );
 
-        //get operating centre enetity based on applicationId and operatingCentreId
         $result = $this->makeRestCall('Vehicle', 'GET', $data);
 
         if (empty($result)) {
             return $this->notFoundAction();
         }
 
-        //hydrate data
         $data = array(
             'data' => array(
                 'id' => $result['id'],
