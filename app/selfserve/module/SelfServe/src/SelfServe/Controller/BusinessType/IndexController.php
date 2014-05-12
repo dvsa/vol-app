@@ -434,15 +434,12 @@ class IndexController extends AbstractApplicationController
 
     /**
      * Method called once a valid company look up form has been submitted.
-     * Needs to call CH Controller and implement PRG and redirect back to
-     * indexAction.
      *
      * @param array $valid_data
      * @param \Zend\Form $form
      * @param array $journeyData
-     * @param array $params
      */
-    protected function processLookupCompany($valid_data, $form, $params)
+    protected function processLookupCompany($valid_data, $form)
     {
         $result = $this->makeRestCall(
             'CompaniesHouse', 'GET', array(
