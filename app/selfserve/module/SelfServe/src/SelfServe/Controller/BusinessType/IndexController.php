@@ -10,11 +10,12 @@ namespace SelfServe\Controller\BusinessType;
 
 use SelfServe\Controller\AbstractApplicationController;
 use Zend\View\Model\ViewModel;
-
+use Zend\Http\Response;
 /**
  * Business Type Controller
  *
  * @author S Lizzio <shaun.lizzio@valtech.co.uk>
+ * @author Jakub Igla <jakub.igla@valtech.co.uk>
  */
 class IndexController extends AbstractApplicationController
 {
@@ -40,11 +41,18 @@ class IndexController extends AbstractApplicationController
         $step = $this->params()->fromRoute('step');
         $this->setCurrentStep($step);
 
+        $businessStatus = $this->checkBusinessType();
+
+        if ($businessStatus instanceof Response) {
+            return $businessStatus;
+        }
+
         // create form
         $form = $this->generateSectionForm();
 
         // prefill form data if persisted
         $formData = $this->getPersistedFormData($form);
+
         if (isset($formData)) {
             $form->setData($formData);
         }
@@ -72,14 +80,71 @@ class IndexController extends AbstractApplicationController
         }
 
         // collect completion status
-        $completionStatus = $this->makeRestCall('ApplicationCompletion', 'GET', array('application_id' => $applicationId));
+        $completionStatus = $this->makeRestCall(
+            'ApplicationCompletion',
+            'GET',
+            array('application_id' => $applicationId)
+        );
 
         // render the view
         $view = new ViewModel(['form' => $form,
                                 'completionStatus' => $completionStatus['Results'][0],
                                 'applicationId' => $applicationId]);
         $view->setTemplate('self-serve/business/index');
-        return $view;
+
+        $organisation = $this->getOrganisationEntity();
+
+        return $this->renderLayoutWithSubSections(
+            $view,
+            $this->getCurrentStep(),
+            'business-type',
+            $businessStatus ? null : 'all'
+        );
+    }
+
+    public function checkBusinessType()
+    {
+        $organisation = $this->getOrganisationEntity();
+        $applicationId = $this->getApplicationId();
+
+        //redirect to business type if was not yet set
+        if ($this->getCurrentStep() != 'business-type' && empty($organisation['organisationType'])) {
+            return $this->redirect()->toRoute('selfserve/business-type', ['applicationId' => $applicationId]);
+        }
+
+        return !empty($organisation['organisationType']);
+    }
+
+    public function detailsAction()
+    {
+        $businessStatus = $this->checkBusinessType();
+        if ($businessStatus instanceof Response) {
+            return $businessStatus;
+        }
+
+        $applicationId = $this->getApplicationId();
+        $organisation = $this->getOrganisationEntity();
+
+        $mainStep = 'business-type';
+        $this->setCurrentStep($mainStep);
+        $form = $this->generateSectionForm();
+
+        $valueStepPairs = $form->get($mainStep)->getOptions()['next_step']['values'];
+
+        foreach ($valueStepPairs as $val => $step) {
+
+            //redirect to correct step
+            if ($val == $organisation['organisationType']) {
+                return $this->forward()->dispatch('Selfserve\BusinessType\Index', [
+                    'action' => 'generateStepForm',
+                    'applicationId' => $applicationId,
+                    'step' => $step,
+                ]);
+            }
+        }
+
+        //no value has been found. redirect to business type choice
+        return $this->redirect()->toRoute('selfserve/business-type', ['applicationId' => $applicationId]);
     }
 
     /**
@@ -478,5 +543,54 @@ class IndexController extends AbstractApplicationController
 
         $application = $this->makeRestCall('Application', 'GET', array('id' => $applicationId), $bundle);
         return $application['licence']['organisation'];
+    }
+
+    /**
+     * Render the layout
+     *
+     * @param object $view
+     * @param string $current
+     * @param string $journey
+     * @return ViewModel
+     */
+    public function renderLayoutWithSubSections($view, $current = '', $journey = 'business-type', $disabled = null)
+    {
+        $applicationId = $this->getApplicationId();
+
+        $this->setSubSections(
+            array(
+                'business-details' => array(
+                    'label' => 'selfserve-app-subSection-business-details',
+                    'route' => 'selfserve/business-details',
+                    'routeParams' => array(
+                        'applicationId' => $applicationId,
+                    )
+                ),
+                'addresses' => array(
+                    'label' => 'selfserve-app-subSection-business-addresses',
+                    'route' => 'selfserve/business-type',
+                    'routeParams' => array(
+                        'applicationId' => $applicationId,
+                        'step' => 'addresses',
+                    )
+                ),
+                'people' => array(
+                    'label' => 'selfserve-app-subSection-business-people',
+                    'route' => 'selfserve/business-type',
+                    'routeParams' => array(
+                        'applicationId' => $applicationId,
+                        'step' => 'people',
+                    )
+                ),
+            )
+        );
+
+        $subSections = $this->getSubSections();
+        if ($current != 'business-type' && !array_key_exists($current, $subSections)) {
+            reset($subSections);
+            $current = key($subSections);
+        }
+
+        return parent::renderLayoutWithSubSections($view, $current, $journey, $disabled);
     }
 }

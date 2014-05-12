@@ -10,6 +10,7 @@ namespace SelfServe\Controller;
 
 use Common\Controller\FormJourneyActionController;
 use Zend\EventManager\EventManagerInterface;
+use Zend\View\Model\ViewModel;
 
 /**
  * Abstract Application Controller
@@ -91,8 +92,10 @@ abstract class AbstractApplicationController extends FormJourneyActionController
      * @param object $view
      * @param string $current
      * @param string $journey
+     * @param mixed $disabled
+     * @return ViewModel
      */
-    public function renderLayoutWithSubSections($view, $current = '', $journey = '')
+    public function renderLayoutWithSubSections($view, $current = '', $journey = '', $disabled = null)
     {
         $subSections = $this->getSubSections();
 
@@ -101,6 +104,11 @@ abstract class AbstractApplicationController extends FormJourneyActionController
             $details['active'] = false;
             if ($key == $current) {
                 $details['active'] = true;
+            }
+
+            $details['disabled'] = false;
+            if ($disabled == 'all' || (is_array($disabled) && array_search($key, $disabled) !== false)) {
+                $details['disabled'] = true;
             }
         }
 
