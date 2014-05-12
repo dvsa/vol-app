@@ -67,6 +67,20 @@ abstract class AbstractJourneyController extends FormActionController
     private $sectionCompletion;
 
     /**
+     * Holds the steps
+     *
+     * @var array
+     */
+    private $steps = array();
+
+    /**
+     * Holds the step number
+     *
+     * @var int
+     */
+    private $stepNumber;
+
+    /**
      * Generic index action
      */
     public function indexAction()
@@ -81,6 +95,10 @@ abstract class AbstractJourneyController extends FormActionController
      */
     protected function renderSection($view = null, $params = array())
     {
+        if ($this->isButtonPressed('back')) {
+            return $this->goToPreviousStep();
+        }
+
         if (empty($view)) {
             $view = $this->getViewModel($params);
         }
@@ -92,14 +110,98 @@ abstract class AbstractJourneyController extends FormActionController
 
             $form = $this->generateFormWithData($formName, 'processForm', $data);
 
+            if ($this->getStepNumber() == 0) {
+                $form->get('form-actions')->remove('back');
+            }
+
             if ($form instanceof Response) {
                 return $form;
             }
 
             $view->setVariable('form', $form);
+
+            if ($view->getTemplate() == null) {
+                $view->setTemplate('self-serve/layout/form');
+            }
         }
 
-        $completionStatus = $this->getSectionCompletion();
+        if ($this->hasView()) {
+            $view->setTemplate($this->getViewName());
+        }
+
+        $layout = $this->getViewModel(
+            array(
+                'subSections' => $this->getSubSectionsForLayout(),
+                'journey' => $this->getJourneyName(),
+                'sectionCompletion' => $this->getSectionCompletion(),
+                'id' => $this->getIdentifier()
+            )
+        );
+
+        $layout->setTemplate('self-serve/layout/journey');
+
+        $layout->addChild($view, 'main');
+
+        return $layout;
+    }
+
+    /**
+     * Get an array of sub sections
+     */
+    protected function getSubSectionsForLayout()
+    {
+        $sectionConfig = $this->getSectionConfig();
+
+        $subSections = array();
+
+        $journey = $this->getJourneyName();
+        $section = $this->getSectionName();
+
+        foreach ($sectionConfig['subSections'] as $name => $details) {
+            $subSections[$name] = array(
+                'label' => $this->getSectionLabel($journey, $section, $name),
+                'route' => $this->getSectionRoute($journey, $section, $name),
+                'active' => ($name == $this->getSubSectionName())
+            );
+        }
+
+        return $subSections;
+    }
+
+    /**
+     * Get the section config
+     *
+     * @return array
+     */
+    protected function getSectionConfig()
+    {
+        return $this->getJourneyConfig()['sections'][$this->getSectionName()];
+    }
+
+    /**
+     * Format the section route
+     *
+     * @param string $journey
+     * @param string $section
+     * @param string $subSection
+     * @return string
+     */
+    protected function getSectionRoute($journey, $section, $subSection = null)
+    {
+        return $journey . '/' . $section . (!empty($subSection) ? '/' . $subSection : '');
+    }
+
+    /**
+     * Format the section label
+     *
+     * @param string $journey
+     * @param string $section
+     * @param string $subSection
+     * @return string
+     */
+    protected function getSectionLabel($journey, $section, $subSection)
+    {
+        return strtolower($this->camelToDash($journey . '.' . $section . '.' . $subSection));
     }
 
     /**
@@ -112,11 +214,13 @@ abstract class AbstractJourneyController extends FormActionController
         if (empty($this->sectionCompletion)) {
             $id = $this->getIdentifier();
 
-            $this->sectionCompletion = $this->makeRestCall(
+            $completionStatus = $this->makeRestCall(
                 $this->getJourneyConfig()['completionService'],
                 'GET',
-                array('id' => $id)
+                array($this->camelToUnderscode($this->getJourneyConfig()['identifier']) => $id)
             );
+
+            $this->sectionCompletion = ($completionStatus['Count'] > 0 ? $completionStatus['Results'][0] : array());
         }
 
         return $this->sectionCompletion;
@@ -168,6 +272,37 @@ abstract class AbstractJourneyController extends FormActionController
     }
 
     /**
+     * Check if the current sub section has a view
+     *
+     * @return boolean
+     */
+    protected function hasView()
+    {
+        $viewName = $this->getViewName();
+
+        return file_exists($this->getServiceLocator()->get('Config')['view_manager']['template_path_stack'][0] . '/' . $viewName . '.phtml');
+    }
+
+    /**
+     * Get form name
+     *
+     * @return string
+     */
+    protected function getViewName()
+    {
+        if (empty($this->viewName)) {
+
+            $journey = $this->getJourneyName();
+            $section = $this->getSectionName();
+            $subSection = $this->getSubSectionName();
+
+            $this->viewName = $this->camelToDash($journey . '/' . $section . '/' . $subSection);
+        }
+
+        return $this->viewName;
+    }
+
+    /**
      * Convert camel case to dash
      *
      * @param string $string
@@ -177,6 +312,83 @@ abstract class AbstractJourneyController extends FormActionController
     {
         $converter = new \Zend\Filter\Word\CamelCaseToDash();
         return strtolower($converter->filter($string));
+    }
+
+    /**
+     * Convert camel case to underscore
+     *
+     * @param string $string
+     * @return string
+     */
+    private function camelToUnderscode($string)
+    {
+        $converter = new \Zend\Filter\Word\CamelCaseToUnderscore();
+        return strtolower($converter->filter($string));
+    }
+
+    /**
+     * Get the step number
+     * @return type
+     */
+    protected function getStepNumber()
+    {
+        if (empty($this->stepNumber)) {
+            $steps = $this->getSteps();
+
+            $this->stepNumber = array_search(
+                $this->getSectionRoute(
+                    $this->getJourneyName(),
+                    $this->getSectionName(),
+                    $this->getSubSectionName()
+                ),
+                $steps
+            );
+        }
+
+        return $this->stepNumber;
+    }
+
+    /**
+     * Redirect to the previous step
+     */
+    protected function goToPreviousStep()
+    {
+        $steps = $this->getSteps();
+
+        $key = $this->getStepNumber();
+
+        $nextKey = $key - 1;
+
+        if ($steps[$nextKey]) {
+            $this->goToSection($steps[$nextKey]);
+        }
+
+        throw new \Exception('Can\'t find previous step');
+    }
+
+    /**
+     * Redirect to the next step
+     */
+    protected function goToNextStep()
+    {
+        $steps = $this->getSteps();
+
+        $key = $this->getStepNumber();
+
+        $nextKey = $key + 1;
+        if ($steps[$nextKey]) {
+            $this->goToSection($steps[$nextKey]);
+        } else {
+            $this->journeyFinished();
+        }
+    }
+
+    /**
+     * Journey finished
+     */
+    protected function journeyFinished()
+    {
+        die('Finished');
     }
 
     /**
@@ -252,7 +464,6 @@ abstract class AbstractJourneyController extends FormActionController
     protected function getSubSectionName()
     {
         if (empty($this->subSectionName)) {
-
             $this->subSectionName = str_replace('Controller', '', $this->getNamespaceParts()[4]);
         }
 
@@ -267,7 +478,6 @@ abstract class AbstractJourneyController extends FormActionController
     protected function getSectionName()
     {
         if (empty($this->sectionName)) {
-
             $this->sectionName = $this->getNamespaceParts()[3];
         }
 
@@ -282,7 +492,6 @@ abstract class AbstractJourneyController extends FormActionController
     protected function getJourneyName()
     {
         if (empty($this->journeyName)) {
-
             $this->journeyName = $this->getNamespaceParts()[2];
         }
 
@@ -301,5 +510,35 @@ abstract class AbstractJourneyController extends FormActionController
         }
 
         return $this->journeyConfig;
+    }
+
+    /**
+     * Get stepts
+     *
+     * @return array
+     */
+    protected function getSteps()
+    {
+        if (empty($this->steps)) {
+            $this->steps = array();
+
+            $config = $this->getJourneyConfig();
+
+            $journey = $this->getJourneyName();
+
+            foreach ($config['sections'] as $section => $details) {
+
+                if (isset($details['subSections'])) {
+
+                    foreach ($details['subSections'] as $subSection => $subSectionDetails) {
+                        $this->steps[] = $this->getSectionRoute($journey, $section, $subSection);
+                    }
+                } else {
+                    $this->steps[] = $this->getSectionRoute($journey, $section);
+                }
+            }
+        }
+
+        return $this->steps;
     }
 }

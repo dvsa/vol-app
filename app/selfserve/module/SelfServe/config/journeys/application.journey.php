@@ -14,6 +14,12 @@ return array(
                 'subSections' => array(
                     'OperatorLocation' => array(
 
+                    ),
+                    'OperatorType' => array(
+
+                    ),
+                    'LicenceType' => array(
+
                     )
                 )
             )

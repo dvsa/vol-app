@@ -1,6 +1,6 @@
 <?php
 
-/*$routes = [];
+$routes = [];
 
 $routeArray = array_map(
     function ($file) {
@@ -22,10 +22,6 @@ $allRoutes = array(
         'child_routes' => $routes
     )
 );
-
-$journeys = [];*/
-
-$allRoutes = array();
 
 $journeyArray = array_map(
     function ($file) {
