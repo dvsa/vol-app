@@ -72,12 +72,16 @@ class IndexController extends AbstractApplicationController
         }
 
         // collect completion status
-        $completionStatus = $this->makeRestCall('ApplicationCompletion', 'GET', array('application_id' => $applicationId));
+        $completionStatus = $this->makeRestCall(
+            'ApplicationCompletion', 'GET', array('application_id' => $applicationId)
+        );
 
         // render the view
-        $view = new ViewModel(['form' => $form,
-                                'completionStatus' => $completionStatus['Results'][0],
-                                'applicationId' => $applicationId]);
+        $view = new ViewModel(
+            ['form' => $form,
+            'completionStatus' => count($completionStatus['Results']) ? $completionStatus['Results'][0] : null,
+            'applicationId' => $applicationId]
+        );
         $view->setTemplate('self-serve/business/index');
         return $view;
     }
@@ -146,12 +150,14 @@ class IndexController extends AbstractApplicationController
     public function getRegisteredCompanyFormData()
     {
         $organisation = $this->getOrganisationEntity();
+        $companyNameFound = $this->params()->fromRoute('company-name', '');
+        $companyName = $companyNameFound ? $companyNameFound : $organisation['name'];
 
         return array(
             'version' => $organisation['version'],
             'registered-company' => array(
                 'company_number' => $organisation['registeredCompanyNumber'],
-                'company_name' => $organisation['name'],
+                'company_name' => $companyName,
                 'type_of_business' => $organisation['sicCode'],
             ),
         );
@@ -438,8 +444,21 @@ class IndexController extends AbstractApplicationController
      */
     protected function processLookupCompany($valid_data, $form, $params)
     {
-        echo 'FORM VALID looking up company';
-        exit;
+        $result = $this->makeRestCall(
+            'CompaniesHouse', 'GET', array(
+            'type' => 'numberSearch', 'value' => $valid_data['registered-company']['company_number'])
+        );
+        if ($result['Count'] == 1) {
+            $companyName = $result['Results'][0]['CompanyName'];
+            $form->get('registered-company')->get('company_name')->setValue($companyName);
+            return $form;
+        } else {
+            $form->get('registered-company')->get('company_number')->setMessages(
+                array('companyNumber' => array(
+                    'Sorry, we couldn\'t find any matching companies, '
+                    . 'please try again or enter your details manualy below'))
+            );
+        }
     }
 
     /**
