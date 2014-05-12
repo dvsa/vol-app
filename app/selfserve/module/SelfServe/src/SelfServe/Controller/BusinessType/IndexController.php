@@ -395,54 +395,6 @@ class IndexController extends AbstractApplicationController
         );
     }
 
-    /**
-     * Returns persisted data (if exists) to popuplate form
-     *
-     * @return array
-     */
-    public function getPublicAuthorityFormData()
-    {
-        $organisation = $this->getOrganisationEntity();
-
-        return array(
-            'version' => $organisation['version'],
-            'public-authority' => array(
-                'company_name' => $organisation['name'],
-                'type_of_business' => $organisation['sicCode'],
-            //'trading_names' => $organisation['name'],
-            ),
-        );
-    }
-
-    /**
-     * Method called as a callback once your business form has been validated.
-     * Should redirect to the finance form page as the next step
-     *
-     * @param array $valid_data
-     * @param \Zend\Form $form
-     * @param array $journeyData
-     * @param array $params
-     */
-    public function processPublicAuthority($valid_data, $form, $params)
-    {
-        $licence = $this->getLicenceEntity();
-        $applicationId = $this->params()->fromRoute('applicationId');
-
-        $data = array(
-            'id' => $licence['id'],
-            'name' => $valid_data['public-authority']['company_name'],
-            'sicCode' => $valid_data['public-authority']['type_of_business'],
-            'version' => $valid_data['version'],
-        );
-
-        $this->makeRestCall('LicenceOrganisation', 'PUT', $data);
-
-        $next_step = $this->evaluateNextStep($form);
-        $this->redirect()->toRoute(
-            'selfserve/business-type',
-            array('applicationId' => $applicationId, 'step' => $next_step)
-        );
-    }
 
     /**
      * Returns persisted data (if exists) to popuplate form

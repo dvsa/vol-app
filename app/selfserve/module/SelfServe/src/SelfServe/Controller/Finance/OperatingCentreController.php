@@ -95,7 +95,8 @@ class OperatingCentreController extends AbstractFinanceController
         $applicationId = $this->params()->fromRoute('applicationId');
 
         $form = $this->generateForm(
-            $this->processConfigName('operating-centre', $applicationId), 'processAddForm'
+            $this->processConfigName('operating-centre', $applicationId),
+            'processAddForm'
         );
 
         $view = $this->getViewModel(['form' => $form]);
