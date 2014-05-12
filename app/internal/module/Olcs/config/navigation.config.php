@@ -159,6 +159,31 @@ return array(
                                     'action' => 'index'
                                 ),
                                 array(
+                                    'label' => 'Case Conditions &amp; Undertakings',
+                                    'route' => 'case_conditions_undertakings',
+                                    'action' => 'index',
+                                    'pages' => array(
+                                        array(
+                                            'label' => 'Add Condition',
+                                            'route' => 'condition',
+                                            'action' => 'add'
+                                        ),
+                                        array(
+                                            'label' => 'Edit Condition',
+                                            'route' => 'condition',
+                                        ),
+                                        array(
+                                            'label' => 'Add Undertaking',
+                                            'route' => 'undertaking',
+                                            'action' => 'add'
+                                        ),
+                                        array(
+                                            'label' => 'Edit Undertaking',
+                                            'route' => 'undertaking',
+                                        )
+                                    ),
+                                ),
+                                array(
                                     'label' => 'Impounding',
                                     'route' => 'case_impounding',
                                     'action' => 'index',

@@ -35,14 +35,32 @@ return array(
                     'case_manage',
                     true
                 ) . '">' . $row['caseNumber'] . '</a>';
-            }
+            },
+            'sort' => 'caseNumber'
         ),
         array(
-            'title' => 'Status',
-            'name' => 'status'
+            'title' => 'Case type',
+            'name' => 'caseType',
+            'sort' => 'caseType'
+        ),
+        array(
+            'title' => 'Created',
+            'formatter' => 'Date',
+            'name' => 'createdOn',
+            'sort' => 'createdOn'
+        ),
+        array(
+            'title' => 'Closed',
+            'formatter' => 'Date',
+            'name' => 'closedTime',
+            'sort' => 'closedTime'
         ),
         array(
             'title' => 'Description',
+            'formatter' => function ($row) {
+                $append = strlen($row['description']) > 250 ? '...' : '';
+                return substr($row['description'], 0, 250) . $append;
+            },
             'name' => 'description'
         ),
         array(

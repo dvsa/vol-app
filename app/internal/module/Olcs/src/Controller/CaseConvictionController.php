@@ -19,9 +19,9 @@ class CaseConvictionController extends CaseController
     {
         $postParams = $this->params()->fromPost();
         $routeParams = $this->params()->fromRoute();
-        
+
         $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $routeParams['licence'])));
-        
+
         if (isset($postParams['action'])) {
             return $this->redirect()->toRoute($postParams['table'], array('licence' => $routeParams['licence'],
                         'case' => $routeParams['case'],
@@ -42,6 +42,16 @@ class CaseConvictionController extends CaseController
         $details = $this->getCaseDetailsArray($case);
 
         $results = $this->makeRestCall('Conviction', 'GET', array('vosaCase' => $caseId));
+
+        //if there are results, sort them by date of conviction
+        if ($results['Count']) {
+            foreach ($results['Results'] as $key => $row) {
+                $convictionDate[$key] = $row['dateOfConviction'];
+                $id[$key] = $row['id'];
+            }
+
+            array_multisort($convictionDate, SORT_DESC, $id, SORT_ASC, $results['Results']);
+        }
 
         $data = [];
         $data['url'] = $this->url();
@@ -90,6 +100,6 @@ class CaseConvictionController extends CaseController
         $data = array_intersect_key($data, array_flip(['id', 'convictionData', 'version']));
         $this->processEdit($data, 'VosaCase');
 
-        return $this->redirect()->toRoute('case_convictions', array('case' => $data['id']));
+        return $this->redirect()->toRoute('case_convictions', [], [], true);
     }
 }

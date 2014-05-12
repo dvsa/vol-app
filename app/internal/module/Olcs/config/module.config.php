@@ -1,6 +1,7 @@
 <?php
 
 return array(
+    'application-name' => 'internal',
     'router' => array(
         'routes' => array(
             'dashboard' => array(
@@ -238,6 +239,32 @@ return array(
                     )
                 )
             ),
+            'case_conditions_undertakings' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/licence/[:licence]/case/:case/conditions-undertakings',
+                    'constraints' => array(
+                        'case' => '[0-9]+',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'CaseConditionUndertakingController',
+                        'action' => 'index'
+                    )
+                )
+            ),
+            'conditions_undertakings' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/licence/:licence/case/:case/conditions-undertakings/:action[/:id]',
+                    'constraints' => array(
+                        'case' => '[0-9]+',
+                        'id' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'CaseConditionUndertakingController',
+                    )
+                )
+            ),
             'case_impounding' => array(
                 'type' => 'segment',
                 'options' => array(
@@ -278,7 +305,8 @@ return array(
             'CaseStayController' => 'Olcs\Controller\CaseStayController',
             'CasePenaltyController' => 'Olcs\Controller\CasePenaltyController',
             'CaseProhibitionController' => 'Olcs\Controller\CaseProhibitionController',
-            'CaseImpoundingController' => 'Olcs\Controller\CaseImpoundingController'
+            'CaseImpoundingController' => 'Olcs\Controller\CaseImpoundingController',
+            'CaseConditionUndertakingController' => 'Olcs\Controller\CaseConditionUndertakingController'
         )
     ),
     'view_manager' => array(

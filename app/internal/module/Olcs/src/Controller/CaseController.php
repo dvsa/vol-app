@@ -263,6 +263,11 @@ class CaseController extends FormActionController
                 'label' => 'Notes',
                 'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'notes'], [], true),
             ],
+            'conditions-undertakings' => [
+                'key' => 'conditions-undertakings',
+                'label' => 'Conditions &amp; Undertakings',
+                'url' => $pm->get('url')->fromRoute('case_conditions_undertakings', ['tab' => 'conditions-undertakings'], [], true),
+            ],
             'impounding' => [
                 'key' => 'impounding',
                 'label' => 'Impounding',
@@ -408,17 +413,25 @@ class CaseController extends FormActionController
                     )
                 );
             } else {
-                return $this->redirect()->toRoute('licence_case_action', array('action' => $action, 'licence' => $licence));
+                return $this->redirect()->toRoute(
+                    'licence_case_action',
+                    array('action' => $action, 'licence' => $licence)
+                );
             }
         }
 
         $pageData = $this->getPageData($licence);
 
-        $results = $this->makeRestCall('VosaCase', 'GET', array('licence' => $licence));
+        $pagination['url'] = $this->url();
+        $pagination['licence'] = $this->fromRoute('licence');
+        $pagination['page'] = $this->fromRoute('page', 1);
+        $pagination['sort'] = $this->fromRoute('sort', 'caseNumber');
+        $pagination['order'] = $this->fromRoute('order', 'desc');
+        $pagination['limit'] = $this->fromRoute('limit', 10);
 
-        $data['url'] = $this->getPluginManager()->get('url');
+        $results = $this->makeRestCall('VosaCase', 'GET', $pagination);
 
-        $table = $this->getServiceLocator()->get('Table')->buildTable('case', $results, $data);
+        $table = $this->getServiceLocator()->get('Table')->buildTable('case', $results, $pagination);
 
         $view = $this->getView(array('licence' => $licence, 'table' => $table, 'data' => $pageData));
         $view->setTemplate('case/list');
