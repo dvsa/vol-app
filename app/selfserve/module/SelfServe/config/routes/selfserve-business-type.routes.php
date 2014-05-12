@@ -4,7 +4,7 @@ return [
     'business-type' => array(
         'type' => 'segment',
         'options' => array(
-            'route' => '/:applicationId/business-type[/[:step]][/company-name/:company-name][/]',
+            'route' => '/:applicationId/business-type[/][:step]',
             'defaults' => array(
                 'controller' => 'Selfserve\BusinessType\Index',
                 'action' => 'generateStepForm'
