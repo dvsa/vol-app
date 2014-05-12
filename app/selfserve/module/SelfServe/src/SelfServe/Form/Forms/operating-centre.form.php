@@ -56,7 +56,8 @@ return [
             array(
                 'name' => 'form-actions',
                 'class' => 'action-buttons',
-                'options' => array(0),
+                'options' => array(),
+                'attributes' => array('class' => 'actions-container'),
                 'elements' => array(
                     'submit' => array(
                         'type' => 'submit',
