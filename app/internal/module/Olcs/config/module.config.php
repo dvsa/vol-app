@@ -1,6 +1,7 @@
 <?php
 
 return array(
+    'application-name' => 'internal',
     'router' => array(
         'routes' => array(
             'dashboard' => array(

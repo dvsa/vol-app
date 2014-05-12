@@ -6,6 +6,7 @@ return [
         'attributes' => [
             'method' => 'post',
         ],
+        'type' => 'Common\Form\Form',
         'fieldsets' => [
             [
                 'name' => 'search',
@@ -39,8 +40,9 @@ return [
                         'class' => 'long',
                     ],
                     'dateOfBirth' => [
-                        'type' => 'dateSelect',
-                        'label' => 'Date of birth'
+                        'type' => 'dateSelectWithEmpty',
+                        'label' => 'Date of birth',
+                        'filters' => '\Common\Form\Elements\InputFilters\DateNotRequiredNotInFuture'
                     ],
                     'search' => [
                         'type' => 'submit',
