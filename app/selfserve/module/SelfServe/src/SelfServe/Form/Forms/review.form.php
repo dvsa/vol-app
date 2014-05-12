@@ -1,35 +1,40 @@
 <?php
-return array(
-    'review' => array(
+return [
+    'review' => [
         'name' => 'review',
-        'attributes' => array(
-            'class' => 'read-only'
-        ),
-        'fieldsets' => array(
-            array(
+
+        // this key means whatever happens we'll always
+        // disable every element within the form
+        'disabled' => true,
+
+        'attributes' => [
+            'class' => 'read-only',
+        ],
+        'fieldsets' => [
+            [
                 'name' => 'title',
-                'elements' => array(
-                    'title' => array(
+                'elements' => [
+                    'title' => [
                         'type' => 'hidden',
                         'label' => '<h2>1. Type of licence</h2>',
-                    )
-                ),
-            ),
-            array(
-                'type' => 'operator-location',
-            ),
-            array(
+                    ]
+                ],
+            ],
+            [
+                'type' => 'operator-location'
+            ],
+            [
                 'type' => 'operator-type',
-                'options' => array(
+                'options' => [
                     // we want to suppress the default label within
                     // this particular form. A blank label won't render
                     // an empty <legend> element, don't worry
                     'label' => '',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'type' => 'licence-type',
-            ),
-        ),
-    ),
-);
+            ],
+        ],
+    ],
+];
