@@ -31,9 +31,16 @@ class IndexController extends AbstractApplicationController
         // collect completion status
         $completionStatus = $this->makeRestCall('ApplicationCompletion', 'GET', array('application_id' => $applicationId));
 
+        $form = $this->generateForm('review', null);
+
         // render the view
-        $view = new ViewModel(array('completionStatus' => $completionStatus['Results'][0],
-                                            'applicationId' => $applicationId));
+        $view = new ViewModel(
+            array(
+                'completionStatus' => $completionStatus['Results'][0],
+                'applicationId' => $applicationId,
+                'form' => $form,
+            )
+        );
         $view->setTemplate('self-serve/declarations/index');
 
         return $view;
