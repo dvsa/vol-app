@@ -41,7 +41,10 @@ abstract class AbstractApplicationController extends FormJourneyActionController
             'dispatch',
             function ($e) use ($controller) {
 
-                if (empty($controller->getApplicationId()) || empty ($controller->getCurrentSection())) {
+                $applicationId = $controller->getApplicationId();
+                $currentSection = $controller->getCurrentSection();
+
+                if (empty($applicationId) || empty ($currentSection)) {
                     return null;
                 }
 
