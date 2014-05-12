@@ -65,7 +65,7 @@ class OperatingCentreController extends AbstractFinanceController
             true
         );
 
-        $form->get('form-actions')->get('home')->setValue($this->getUrlFromRoute('selfserve/dashboard-home'));
+        $form->get('form-actions')->get('home')->setValue($this->getUrlFromRoute('selfserve/business-details', ['applicationId' => $applicationId]));
 
         $view = $this->getViewModel(
             array(
