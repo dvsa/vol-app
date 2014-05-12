@@ -27,18 +27,17 @@ return [
                     'caseId' => [
                         'type' => 'hidden',
                     ],
-                    'status' => [
+                    'isDraft' => [
                         'type' => 'hidden',
-                        'value' => 'Approved',
+                        'value' => 0,
                     ],
-                    'description' => [
+                    'notes' => [
                         'type' => 'textarea',
                         'filters' => '\Common\Form\Elements\InputFilters\TextMax4000',
-                        'label' => 'Description',
                         'class' => 'extra-long'
                     ],
                     'isFulfilled' => [
-                        'type' => 'checkbox-yn',
+                        'type' => 'checkbox-boolean',
                         'label' => 'Fulfilled',
                     ],
                     'attachedTo' => [

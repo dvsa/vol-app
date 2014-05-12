@@ -23,14 +23,15 @@ use Zend\View\Model\ViewModel;
 class ConditionUndertakingController extends FormActionController
 {
 
+
     /**
-     * Add form action
+     * Method to generate the add form
      *
-     * @return ViewModel
+     * @return \Zend\View\Model\ViewModel
      */
     public function addAction()
     {
-        $routeParams = $this->getParams(array('case', 'licence', 'id', 'type'));
+        $routeParams = $this->getParams(array('case', 'licence', 'type'));
         $type = $routeParams['type'];
 
         if (null !== $this->params()->fromPost('cancel-conditionUndertaking')) {
@@ -54,10 +55,6 @@ class ConditionUndertakingController extends FormActionController
         // todo hardcoded organisation id for now
         $results = $this->makeRestCall('VosaCase', 'GET', array('id' => $routeParams['case']));
 
-        // todo hardcoded organisation id for now
-        $data['organisation-details']['id'] = 7;
-        $data['organisation-details']['version'] = 1;
-
         if (empty($routeParams['case']) || empty($routeParams['licence']) || empty($results)) {
             return $this->getResponse()->setStatusCode(404);
         }
@@ -65,12 +62,11 @@ class ConditionUndertakingController extends FormActionController
         $form = $this->generateForm(
             'condition-undertaking-form', 'processConditionUndertaking'
         );
-        
+
         // set form dependent aspects
-        $form->get('condition-undertaking')->get('description')->setLabel(ucfirst($type));
+        $form->get('condition-undertaking')->get('notes')->setLabel(ucfirst($type));
 
         $form->setData($data);
-        //$form->setMessages(array('blah' => 'This is a test message'));
         $view = new ViewModel(
             array(
             'form' => $form,
@@ -85,15 +81,16 @@ class ConditionUndertakingController extends FormActionController
         return $view;
     }
 
+    /**
+     * Method to generate the edit form
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
     public function editAction()
     {
-        $routeParams = $this->getParams(
-            array(
-                'case',
-                'licence',
-                'id',
-            )
-        );
+        $routeParams = $this->getParams(array('case', 'licence', 'type', 'id'));
+        $type = $routeParams['type'];
+
         if (null !== $this->params()->fromPost('cancel-conditionUndertaking')) {
             return $this->redirect()->toRoute(
                 'case_conditionUndertakings', array(
@@ -102,32 +99,35 @@ class ConditionUndertakingController extends FormActionController
                 )
             );
         }
+
         $this->setBreadcrumb(
             array(
                 'licence_case_list/pagination' => array('licence' => $routeParams['licence']),
-                'case_conditionUndertakings' => array('licence' => $routeParams['licence'], 'case' => $routeParams['case'])
+                'case_conditions_undertakings' => array('case' => $routeParams['case'])
             )
         );
 
         $bundle = $this->getConditionUndertakingBundle();
 
-        $data = $this->makeRestCall('ConditionUndertaking', 'GET', array('id' => $routeParams['id'], 'bundle' => json_encode($bundle)));
-        if (isset($data['id'])) {
-            $data['vosaCase'] = $data['id'];
-        }
+        $data['condition-undertaking'] = $this->makeRestCall('ConditionUndertaking', 'GET', array('id' => $routeParams['id'], 'bundle' => json_encode($bundle)));
 
         if (empty($routeParams['case']) || empty($routeParams['licence']) || empty($data)) {
             return $this->getResponse()->setStatusCode(404);
         }
 
-        $data['organisation-details'] = $data['organisation'];
-        $data['conditionUndertaking-details'] = $data;
-        $data['complainant-details'] = $data['complainant']['person'];
-        $data['driver-details'] = $data['driver']['contactDetails']['person'];
+        // assign data as required by the form
+        $data['condition-undertaking']['caseId'] = $data['condition-undertaking']['vosaCase']['id'];
 
         $form = $this->generateFormWithData(
-            'conditionUndertaking', 'processConditionUndertaking', $data, true
+            'condition-undertaking-form', 'processConditionUndertaking', $data, true
         );
+
+        $ocAddressList = $this->getOCAddressByLicence($routeParams['licence']);
+
+        // set form dependent aspects
+        $form->get('condition-undertaking')->get('notes')->setLabel(ucfirst($type));
+        $form->get('condition-undertaking')->get('operatingCentreAddressId')->setValueOptions($ocAddressList);
+
 
         $view = new ViewModel(
             array(
@@ -136,8 +136,8 @@ class ConditionUndertakingController extends FormActionController
                     '/static/js/conditionUndertaking.js'
                 ),
                 'params' => array(
-                    'pageTitle' => 'edit-conditionUndertaking',
-                    'pageSubTitle' => 'subtitle-conditionUndertaking-text'
+                    'pageTitle' => 'edit-' . $type,
+                    'pageSubTitle' => 'subtitle-' . $type . '-text'
                 )
             )
         );
@@ -190,6 +190,44 @@ class ConditionUndertakingController extends FormActionController
     }
 
     /**
+     * Method to extract all Operating Centre Addresses for a given licence
+     * and reformat into array suitable for select options
+     *
+     * @param integer $licenceId
+     * @return array address_id => [address details]
+     */
+    private function getOCAddressByLicence($licenceId)
+    {
+        $operatingCentreAddressBundle = $this->getOCAddressBundle();
+        $result = $this->makeRestCall(
+                'OperatingCentre',
+                'GET',
+                array(
+                    'licence' => $licenceId,
+                    'bundle' => json_encode($operatingCentreAddressBundle)
+                )
+        );
+
+        $operatingCentreAddresses = array();
+
+        if ($result['Count'])
+        {
+            foreach($result['Results'] as $oc)
+            {
+                $address = $oc['address'];
+                $operatingCentreAddresses[$oc['id']] =
+                    $address['addressLine1'] . ', ' .
+                    $address['addressLine2'] . ', ' .
+                    $address['addressLine3'] . ', ' .
+                    $address['addressLine4'] . ', ' .
+                    $address['postcode'] . ', ' .
+                    $address['country'];
+            }
+        }
+        return $operatingCentreAddresses;
+    }
+
+    /**
      * Method to return the bundle required for getting conditionUndertakings and related
      * entities from the database.
      *
@@ -198,45 +236,66 @@ class ConditionUndertakingController extends FormActionController
     private function getConditionUndertakingBundle()
     {
         return array(
-           'conditionUndertaking' => array(
-               'properties' => array('ALL'),
-           ),
             'children' => array(
-                'driver' => array(
-                    'properties' => array('id', 'version'),
+                'vosaCase' => array(
+                    'properties' => array(
+                        'id',
+                    ),
+                ),
+                'operatingCentre' => array(
+                    'properties' => array(
+                        'id',
+                        'address',
+                    ),
                     'children' => array(
-                        'contactDetails' => array(
-                            'properties' => array('id', 'version'),
-                            'children' => array(
-                                'person' => array(
-                                    'properties' => array(
-                                        'id',
-                                        'version',
-                                        'firstName',
-                                        'middleName',
-                                        'surname',
-                                    )
-                                )
+                        'address' => array(
+                            'properties' => array(
+                                'addressLine1',
+                                'addressLine2',
+                                'addressLine3',
+                                'addressLine4',
+                                'paon_desc',
+                                'saon_desc',
+                                'street',
+                                'locality',
+                                'postcode',
+                                'country'
                             )
                         )
                     )
-                ),
-                'complainant' => array(
-                   'properties' => array('person'),
-                   'children' => array(
-                       'person' => array(
-                           'properties' => array(
-                               'id',
-                               'version',
-                               'firstName',
-                               'middleName',
-                               'surname',
-                           )
-                       )
-                   )
-                ),
-                'organisation' => array(
-                   'properties' => array('id', 'version', 'name'),
+                )
+            )
+        );
+    }
+
+    /**
+     * Method to return the bundle required for getting all operating centre
+     * addresses for a given licence
+     *
+     * @return array
+     */
+    private function getOCAddressBundle()
+    {
+        return array(
+            'properties' => array(
+                'id',
+                'address'
+            ),
+            'children' => array(
+                'address' => array(
+                    'properties' => array(
+                        'id',
+                        'addressLine1',
+                        'addressLine2',
+                        'addressLine3',
+                        'addressLine4',
+                        'paon_desc',
+                        'saon_desc',
+                        'street',
+                        'locality',
+                        'postcode',
+                        'country'
+                    )
                 )
             )
         );
