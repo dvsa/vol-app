@@ -45,7 +45,7 @@ return [
                         'label' => 'Attached condition to',
                         'value_options' => 'conditionundertaking_attachedTo_types'
                     ],
-                    'operatingCentreAddressId' => [
+                    'operatingCentre' => [
                         'type' => 'select',
                         'label' => 'OC Address',
                         'value_options' => 'oc-addresses'

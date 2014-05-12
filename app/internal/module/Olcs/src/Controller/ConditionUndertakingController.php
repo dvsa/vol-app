@@ -117,6 +117,7 @@ class ConditionUndertakingController extends FormActionController
 
         // assign data as required by the form
         $data['condition-undertaking']['caseId'] = $data['condition-undertaking']['vosaCase']['id'];
+        $data['condition-undertaking']['operatingCentre'] = $data['condition-undertaking']['operatingCentre']['id'];
 
         $form = $this->generateFormWithData(
             'condition-undertaking-form', 'processConditionUndertaking', $data, true
@@ -126,7 +127,7 @@ class ConditionUndertakingController extends FormActionController
 
         // set form dependent aspects
         $form->get('condition-undertaking')->get('notes')->setLabel(ucfirst($type));
-        $form->get('condition-undertaking')->get('operatingCentreAddressId')->setValueOptions($ocAddressList);
+        $form->get('condition-undertaking')->get('operatingCentre')->setValueOptions($ocAddressList);
 
 
         $view = new ViewModel(
@@ -244,24 +245,7 @@ class ConditionUndertakingController extends FormActionController
                 ),
                 'operatingCentre' => array(
                     'properties' => array(
-                        'id',
-                        'address',
-                    ),
-                    'children' => array(
-                        'address' => array(
-                            'properties' => array(
-                                'addressLine1',
-                                'addressLine2',
-                                'addressLine3',
-                                'addressLine4',
-                                'paon_desc',
-                                'saon_desc',
-                                'street',
-                                'locality',
-                                'postcode',
-                                'country'
-                            )
-                        )
+                        'id'
                     )
                 )
             )
