@@ -33,6 +33,8 @@ class IndexController extends AbstractApplicationController
 
         $form = $this->generateForm('review', null);
 
+        $form->setData($this->mapEntitiesToForm());
+
         // render the view
         $view = new ViewModel(
             array(
@@ -49,5 +51,21 @@ class IndexController extends AbstractApplicationController
     public function completeAction()
     {
 
+    }
+
+    protected function mapEntitiesToForm()
+    {
+        $licence = $this->getLicenceEntity();
+        return [
+            'operator_location' => [
+                'operator_location' => $licence['niFlag'] ? 'ni' : 'uk',
+            ],
+            'operator-type' => [
+                'operator-type' => $licence['goodsOrPsv'],
+            ],
+            'licence-type' => [
+                'licence_type' => $licence['licenceType'],
+            ]
+        ];
     }
 }
