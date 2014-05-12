@@ -4,6 +4,7 @@
  * Business Type Controller
  *
  * @author S Lizzio <shaun.lizzio@valtech.co.uk>
+ * @author Jakub Igla <jakub.igla@valtech.co.uk>
  */
 
 namespace SelfServe\Controller\BusinessType;
@@ -11,6 +12,7 @@ namespace SelfServe\Controller\BusinessType;
 use SelfServe\Controller\AbstractApplicationController;
 use Zend\View\Model\ViewModel;
 use Zend\Http\Response;
+
 /**
  * Business Type Controller
  *
@@ -22,6 +24,10 @@ class IndexController extends AbstractApplicationController
 
     protected $messages;
 
+
+    /**
+     * Set current section
+     */
     public function __construct()
     {
         $this->setCurrentSection('business-type');
@@ -102,6 +108,11 @@ class IndexController extends AbstractApplicationController
         );
     }
 
+    /**
+     * Check if business type is set. if no redirects to page, where user can do this
+     *
+     * @return bool|Response
+     */
     public function checkBusinessType()
     {
         $organisation = $this->getOrganisationEntity();
@@ -115,6 +126,11 @@ class IndexController extends AbstractApplicationController
         return !empty($organisation['organisationType']);
     }
 
+    /**
+     * Details action
+     *
+     * @return bool|mixed|Response
+     */
     public function detailsAction()
     {
         $businessStatus = $this->checkBusinessType();
@@ -135,16 +151,16 @@ class IndexController extends AbstractApplicationController
 
             //redirect to correct step
             if ($val == $organisation['organisationType']) {
-                return $this->forward()->dispatch('Selfserve\BusinessType\Index', [
+                $forward = $this->forward()->dispatch('Selfserve\BusinessType\Index', [
                     'action' => 'generateStepForm',
                     'applicationId' => $applicationId,
                     'step' => $step,
                 ]);
+                break;
             }
         }
 
-        //no value has been found. redirect to business type choice
-        return $this->redirect()->toRoute('selfserve/business-type', ['applicationId' => $applicationId]);
+        return $forward;
     }
 
     /**
@@ -503,6 +519,7 @@ class IndexController extends AbstractApplicationController
      * @param object $view
      * @param string $current
      * @param string $journey
+     * @param mixed $disabled
      * @return ViewModel
      */
     public function renderLayoutWithSubSections($view, $current = '', $journey = 'business-type', $disabled = null)
@@ -538,6 +555,7 @@ class IndexController extends AbstractApplicationController
         );
 
         $subSections = $this->getSubSections();
+
         if ($current != 'business-type' && !array_key_exists($current, $subSections)) {
             reset($subSections);
             $current = key($subSections);

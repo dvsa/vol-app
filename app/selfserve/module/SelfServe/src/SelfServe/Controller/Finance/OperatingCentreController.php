@@ -65,7 +65,10 @@ class OperatingCentreController extends AbstractFinanceController
             true
         );
 
-        $form->get('form-actions')->get('home')->setValue($this->getUrlFromRoute('selfserve/business-details', ['applicationId' => $applicationId]));
+        $form->get('form-actions')->get('home')->setValue($this->getUrlFromRoute(
+            'selfserve/business-details',
+            ['applicationId' => $applicationId]
+        ));
 
         $view = $this->getViewModel(
             array(
@@ -215,7 +218,10 @@ class OperatingCentreController extends AbstractFinanceController
         );
 
         $data = $this->makeRestCall(
-            'ApplicationOperatingCentre', 'GET', array('application' => $applicationId), $bundle
+            'ApplicationOperatingCentre',
+            'GET',
+            array('application' => $applicationId),
+            $bundle
         );
 
         $newData = array();

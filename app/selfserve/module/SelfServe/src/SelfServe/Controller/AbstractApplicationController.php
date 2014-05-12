@@ -4,6 +4,7 @@
  * Abstract Application Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
+ * @author Jakub Igla <jakub.igla@valtech.co.uk>
  */
 
 namespace SelfServe\Controller;
@@ -16,6 +17,7 @@ use Zend\View\Model\ViewModel;
  * Abstract Application Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
+ * @author Jakub Igla <jakub.igla@valtech.co.uk>
  */
 abstract class AbstractApplicationController extends FormJourneyActionController
 {
@@ -181,7 +183,7 @@ abstract class AbstractApplicationController extends FormJourneyActionController
      */
     protected function getLicenceEntity($applicationId = false)
     {
-        if ( ! $applicationId ) {
+        if (!$applicationId) {
             $applicationId = (int) $this->getApplicationId('applicationId');
         }
 
