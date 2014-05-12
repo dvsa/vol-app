@@ -8,7 +8,6 @@
 
 namespace SelfServe\Controller;
 
-use Common\Controller\FormJourneyActionController;
 use Zend\EventManager\EventManagerInterface;
 
 /**
@@ -16,7 +15,7 @@ use Zend\EventManager\EventManagerInterface;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-abstract class AbstractApplicationController extends FormJourneyActionController
+abstract class AbstractApplicationController extends AbstractJourneyController
 {
     /**
      * Holds the applicationId

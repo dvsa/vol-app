@@ -1,58 +1,39 @@
 <?php
 
-/**
- * OLCS doc API Configuration
- *
- * @package OlcsDoc
- * @author  Mike Cooper
- */
-$routes = [];
+list($allRoutes, $controllers, $journeys) = include(__DIR__ . '/journeys.config.php');
 
-$routeArray = array_map(
-    function ($file) {
-        return include $file;
-    },
-    glob(__DIR__ . '/routes/*.routes.php')
+$invokeables = array_merge(
+    $controllers,
+    array(
+        'SelfServe\Dashboard\Index' => 'SelfServe\Controller\Dashboard\IndexController',
+        'SelfServe\LicenceType\Index' => 'SelfServe\Controller\LicenceType\IndexController',
+        'SelfServe\BusinessType\Index' => 'SelfServe\Controller\BusinessType\IndexController',
+        'SelfServe\Finance\Index' => 'SelfServe\Controller\Finance\IndexController',
+        'SelfServe\Finance\OperatingCentreController' => 'SelfServe\Controller\Finance\OperatingCentreController',
+        'SelfServe\VehicleSafety\Vehicle' => 'SelfServe\Controller\VehicleSafety\VehicleController',
+        'SelfServe\VehicleSafety\Safety' => 'SelfServe\Controller\VehicleSafety\SafetyController',
+        'SelfServe\VehicleSafety\Workshop' => 'SelfServe\Controller\VehicleSafety\WorkshopController',
+        'SelfServe\Finance\FinancialEvidenceController'
+            => 'SelfServe\Controller\Finance\FinancialEvidenceController',
+        'SelfServe\PreviousHistory\Index' => 'SelfServe\Controller\PreviousHistory\IndexController',
+        'SelfServe\VehiclesSafety\Safety' => 'SelfServe\Controller\VehiclesSafety\SafetyController',
+        'SelfServe\TransportManagers\Index' => 'SelfServe\Controller\TransportManagers\IndexController',
+        'SelfServe\PaymentDetails\Index' => 'SelfServe\Controller\PaymentDetails\IndexController',
+        'SelfServe\Summary\Index' => 'SelfServe\Controller\Summary\IndexController',
+        'SelfServe\Declarations\Index' => 'SelfServe\Controller\Declarations\IndexController'
+    )
 );
-
-foreach ($routeArray as $rs) {
-    $routes += $rs;
-}
 
 /**
  * Module routes configuration
  */
 return array(
+    'journeys' => $journeys,
     'router' => array(
-        'routes' => array(
-            'selfserve' => array(
-                'type' => 'literal',
-                'options' => array(
-                    'route' => '/selfserve'
-                ),
-                'child_routes' => $routes
-            )
-        )
+        'routes' => $allRoutes
     ),
     'controllers' => array(
-        'invokables' => array(
-            'SelfServe\Dashboard\Index' => 'SelfServe\Controller\Dashboard\IndexController',
-            'SelfServe\LicenceType\Index' => 'SelfServe\Controller\LicenceType\IndexController',
-            'SelfServe\BusinessType\Index' => 'SelfServe\Controller\BusinessType\IndexController',
-            'SelfServe\Finance\Index' => 'SelfServe\Controller\Finance\IndexController',
-            'SelfServe\Finance\OperatingCentreController' => 'SelfServe\Controller\Finance\OperatingCentreController',
-            'SelfServe\VehicleSafety\Vehicle' => 'SelfServe\Controller\VehicleSafety\VehicleController',
-            'SelfServe\VehicleSafety\Safety' => 'SelfServe\Controller\VehicleSafety\SafetyController',
-            'SelfServe\VehicleSafety\Workshop' => 'SelfServe\Controller\VehicleSafety\WorkshopController',
-            'SelfServe\Finance\FinancialEvidenceController'
-                => 'SelfServe\Controller\Finance\FinancialEvidenceController',
-            'SelfServe\PreviousHistory\Index' => 'SelfServe\Controller\PreviousHistory\IndexController',
-            'SelfServe\VehiclesSafety\Safety' => 'SelfServe\Controller\VehiclesSafety\SafetyController',
-            'SelfServe\TransportManagers\Index' => 'SelfServe\Controller\TransportManagers\IndexController',
-            'SelfServe\PaymentDetails\Index' => 'SelfServe\Controller\PaymentDetails\IndexController',
-            'SelfServe\Summary\Index' => 'SelfServe\Controller\Summary\IndexController',
-            'SelfServe\Declarations\Index' => 'SelfServe\Controller\Declarations\IndexController'
-        )
+        'invokables' => $invokeables
     ),
     'local_forms_path' => __DIR__ . '/../src/SelfServe/Form/Forms/',
     'tables' => array(
