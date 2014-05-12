@@ -244,7 +244,7 @@ return array(
                 'options' => array(
                     'route' => '/licence/:licence[/case/:case][/:type/:typeId][/:section]/note[/:action][/:id]',
                     'defaults' => array(
-                        'controller' => 'NoteFormController',
+                        'controller' => 'SubmissionNoteController',
                     )
                 )
             ),
@@ -299,7 +299,7 @@ return array(
             'CaseStayController' => 'Olcs\Controller\CaseStayController',
             'CasePenaltyController' => 'Olcs\Controller\CasePenaltyController',
             'CaseProhibitionController' => 'Olcs\Controller\CaseProhibitionController',
-            'NoteFormController' => 'Olcs\Controller\NoteFormController',
+            'SubmissionNoteController' => 'Olcs\Controller\Submission\SubmissionNoteController',
             'CaseConditionUndertakingController' => 'Olcs\Controller\CaseConditionUndertakingController'
         )
     ),

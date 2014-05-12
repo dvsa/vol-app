@@ -5,7 +5,7 @@
             $headerSubTitle .= $this->translate($subTitle);
         }
     } else {
-        $headerSubTitle = $this->translate($subTitle);
+        $headerSubTitle = $this->translate($this->params['pageSubTitle']);
     }
     echo $this->render(
         '/partials/page-header.phtml',

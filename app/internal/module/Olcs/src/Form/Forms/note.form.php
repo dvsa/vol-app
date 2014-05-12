@@ -22,9 +22,6 @@ return [
             ]
         ],
         'elements' => [
-            'section' => [
-                'type' => 'hidden',
-            ],
             'id' => [
                 'type' => 'hidden'
             ],

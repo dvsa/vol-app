@@ -55,7 +55,7 @@ class SubmissionController extends FormActionController
     }
     
     /**
-     * Edit a conviction
+     * Edit a submission
      * @return type
      */
     public function editAction()
@@ -73,7 +73,7 @@ class SubmissionController extends FormActionController
     }
     
     /**
-     * Edit a conviction
+     * Add a section note
      * @return type
      */
     public function addnoteAction()
@@ -164,7 +164,8 @@ class SubmissionController extends FormActionController
             } else {
                 $view->setTemplate('submission/partials/blank');
             }
-            $renderedViews[$sectionName] = $viewRender->render($view);
+            $renderedViews[$sectionName]['view'] = $viewRender->render($view);
+            $renderedViews[$sectionName]['notes'] = $section['notes'];
         }
         return $renderedViews;
     }

@@ -6,8 +6,25 @@
 <div>
 <?php
 $routeParams['action'] = 'addnote';
-echo $data;
+echo $data['view'];
 ?>
+</div>
+<div class="notes-container">
+    <?php
+        foreach($data['notes'] as $key => $note) :
+    ?>
+        <div class="note">
+                <div class="note__text">
+                        <p><b>Note:</b> <?php echo $note['note'];  ?></p>
+                </div>
+                <div class="note__meta">
+                        <p><b>By:</b> <?php echo $note['user'];  ?></p>
+                        <p><b>Created:</b> <?php echo date('d/m/Y', strtotime($note['date'])); ?></p>
+                </div>
+        </div><!-- end .note -->
+    <?php
+        endforeach;
+    ?>
 </div>
 <div>
     <form method="POST" action=<?php echo $this->url('submission', $routeParams); ?>>
