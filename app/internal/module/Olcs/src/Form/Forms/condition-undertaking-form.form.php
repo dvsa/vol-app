@@ -21,17 +21,20 @@ return [
                         'type' => 'hidden'
                     ],
                     'addedVia' => [
-                        'type' => 'hidden'
+                        'type' => 'hidden',
+                        'value' => 'Case'
+                    ],
+                    'caseId' => [
+                        'type' => 'hidden',
                     ],
                     'status' => [
-                        'type' => 'radio',
-                        'label' => 'Status',
-                        'value_options' => 'conditionundertaking_status_types'
+                        'type' => 'hidden',
+                        'value' => 'Approved',
                     ],
                     'description' => [
                         'type' => 'textarea',
                         'filters' => '\Common\Form\Elements\InputFilters\TextMax4000',
-                        'label' => 'Condition/Undertaking',
+                        'label' => 'Description',
                         'class' => 'extra-long'
                     ],
                     'isFulfilled' => [
@@ -40,7 +43,7 @@ return [
                     ],
                     'attachedTo' => [
                         'type' => 'radio',
-                        'label' => 'Attached to',
+                        'label' => 'Attached condition to',
                         'value_options' => 'conditionundertaking_attachedTo_types'
                     ],
                     'operatingCentreAddressId' => [

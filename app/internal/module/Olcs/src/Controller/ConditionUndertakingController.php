@@ -49,7 +49,7 @@ class ConditionUndertakingController extends FormActionController
             )
         );
 
-        $data = array('vosaCase' => $routeParams['case']);
+        $data = array('conditionType' => $type, 'vosaCase' => $routeParams['case']);
 
         // todo hardcoded organisation id for now
         $results = $this->makeRestCall('VosaCase', 'GET', array('id' => $routeParams['case']));
@@ -65,6 +65,9 @@ class ConditionUndertakingController extends FormActionController
         $form = $this->generateForm(
             'condition-undertaking-form', 'processConditionUndertaking'
         );
+        
+        // set form dependent aspects
+        $form->get('condition-undertaking')->get('description')->setLabel(ucfirst($type));
 
         $form->setData($data);
         //$form->setMessages(array('blah' => 'This is a test message'));
