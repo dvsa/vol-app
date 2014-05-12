@@ -33,22 +33,17 @@ return [
                     ],
                     'notes' => [
                         'type' => 'textarea',
-                        'filters' => '\Common\Form\Elements\InputFilters\TextMax4000',
-                        'class' => 'extra-long'
+                        'filters' => '\Common\Form\Elements\InputFilters\TextMax4000Required',
+                        'class' => 'extra-long',
+
                     ],
                     'isFulfilled' => [
                         'type' => 'checkbox-boolean',
                         'label' => 'Fulfilled',
                     ],
                     'attachedTo' => [
-                        'type' => 'radio',
-                        'label' => 'Attached condition to',
-                        'value_options' => 'conditionundertaking_attachedTo_types'
-                    ],
-                    'operatingCentre' => [
-                        'type' => 'select',
-                        'label' => 'OC Address',
-                        'value_options' => 'oc-addresses'
+                        'type' => 'select-group',
+                        'label' => 'Attached to'
                     ],
                ],
            ],

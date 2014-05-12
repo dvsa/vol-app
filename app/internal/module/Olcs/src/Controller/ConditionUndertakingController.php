@@ -63,9 +63,18 @@ class ConditionUndertakingController extends FormActionController
             'condition-undertaking-form', 'processConditionUndertaking'
         );
 
-        // set form dependent aspects
-        $form->get('condition-undertaking')->get('notes')->setLabel(ucfirst($type));
 
+        $ocAddressList = $this->getOCAddressByLicence($routeParams['licence']);
+
+        // set form dependent aspects
+        $form->get('condition-undertaking')->get('notes')->setLabel($type);
+        $form->get('condition-undertaking')
+                ->get('attachedTo')
+                ->setValueOptions($ocAddressList);
+
+/*        var_dump($form->get('condition-undertaking')
+                ->get('attachedTo')
+                ->disableInArrayValidator());exit;*/
         $form->setData($data);
         $view = new ViewModel(
             array(
@@ -117,8 +126,14 @@ class ConditionUndertakingController extends FormActionController
 
         // assign data as required by the form
         $data['condition-undertaking']['caseId'] = $data['condition-undertaking']['vosaCase']['id'];
-        $data['condition-undertaking']['operatingCentre'] = $data['condition-undertaking']['operatingCentre']['id'];
-
+        if ($data['condition-undertaking']['attachedTo'] == 'Licence')
+        {
+            $data['condition-undertaking']['attachedTo'] = 'Licence';
+        }
+        else
+        {
+            $data['condition-undertaking']['attachedTo'] = $data['condition-undertaking']['operatingCentre']['id'];
+        }
         $form = $this->generateFormWithData(
             'condition-undertaking-form', 'processConditionUndertaking', $data, true
         );
@@ -127,7 +142,7 @@ class ConditionUndertakingController extends FormActionController
 
         // set form dependent aspects
         $form->get('condition-undertaking')->get('notes')->setLabel(ucfirst($type));
-        $form->get('condition-undertaking')->get('operatingCentre')->setValueOptions($ocAddressList);
+        $form->get('condition-undertaking')->get('attachedTo')->setValueOptions($ocAddressList);
 
 
         $view = new ViewModel(
@@ -146,39 +161,26 @@ class ConditionUndertakingController extends FormActionController
         return $view;
     }
 
+    /**
+     * Method to process the CRUD form submission
+     * @param array $data
+     */
     public function processConditionUndertaking($data)
     {
+        var_dump($data);
+        exit;
         $routeParams = $this->getParams(array('action', 'licence', 'case'));
 
         if (strtolower($routeParams['action']) == 'edit') {
-            // not sure how the version info is to be handled for entities
-            // that are not directly updated (e.g. ContactDetails)
-            // todo this *may* be possible in a single rest call
+
             $result = $this->processEdit($data['conditionUndertaking-details'], 'ConditionUndertaking');
-            $result = $this->processEdit($data['complainant-details'], 'Person');
-            $result = $this->processEdit($data['driver-details'], 'Person');
+
         } else {
             // configure conditionUndertaking data
-            unset($data['conditionUndertaking-details']['version']);
-            unset($data['organisation-details']['version']);
 
-            $newData = $data['conditionUndertaking-details'];
-            $newData['vosaCases'][] = $data['vosaCase'];
-            $newData['value'] = '';
-            $newData['vehicle_id'] = 1;
-            $newData['organisation'] = $data['organisation-details'];
+            $data['conditionUndertaking-details'];
 
-            $newData['driver']['contactDetails']['contactDetailsType'] = 'Driver';
-            $newData['driver']['contactDetails']['is_deleted'] = 0;
-            $newData['driver']['contactDetails']['person'] = $data['driver-details'];
-            unset($newData['driver']['contactDetails']['person']['version']);
-
-            $newData['complainant']['contactDetailsType'] = 'Complainant';
-            $newData['complainant']['is_deleted'] = 0;
-            $newData['complainant']['person'] = $data['complainant-details'];
-            unset($newData['complainant']['person']['version']);
-
-            $result = $this->processAdd($newData, 'ConditionUndertaking');
+            $result = $this->processAdd($data, 'ConditionUndertaking');
 
         }
 
@@ -209,8 +211,6 @@ class ConditionUndertakingController extends FormActionController
                 )
         );
 
-        $operatingCentreAddresses = array();
-
         if ($result['Count'])
         {
             foreach($result['Results'] as $oc)
@@ -225,7 +225,20 @@ class ConditionUndertakingController extends FormActionController
                     $address['country'];
             }
         }
-        return $operatingCentreAddresses;
+        $options = array(
+            'Licence' => array(
+                'label' => 'Licence',
+                'options' => array(
+                    'Licence' => 'Licence ' . $licenceId
+                ),
+            ),
+            'OC' => array(
+                'label' => 'OC Address',
+                'options' => $operatingCentreAddresses
+            )
+        );
+
+        return $options;
     }
 
     /**
