@@ -2,8 +2,19 @@
 return array(
     'review' => array(
         'name' => 'review',
-        //'type' => 'read-only',
+        'attributes' => array(
+            'class' => 'read-only'
+        ),
         'fieldsets' => array(
+            array(
+                'name' => 'title',
+                'elements' => array(
+                    'title' => array(
+                        'type' => 'hidden',
+                        'label' => '<h2>1. Type of licence</h2>',
+                    )
+                ),
+            ),
             array(
                 'type' => 'operator-location',
             ),
