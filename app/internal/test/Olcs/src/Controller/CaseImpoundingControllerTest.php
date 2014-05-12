@@ -31,9 +31,12 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
                 'buildTable',
                 'setBreadcrumb',
                 'fromRoute',
+                'fromPost',
                 'notFoundAction',
+                'redirect',
                 'generateFormWithData',
-                'redirectToAction'
+                'processAdd',
+                'processEdit'
             ]
         );
 
@@ -60,8 +63,12 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
         $this->getFrom('Route', 1, 'case', 24);
         $this->getFrom('Post', 2, 'action', $action);
 
+        $redirectInfo = $this->getActionRedirect($action);
+        $redirect = $this->getRedirectMock($redirectInfo);
+
         $this->controller->expects($this->once())
-            ->method('redirectToAction');
+            ->method('redirect')
+            ->will($this->returnValue($redirect));
 
         $this->controller->indexAction();
     }
@@ -179,6 +186,10 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
         $this->getFrom('Route', 2, 'id', $id);
 
         $this->controller->expects($this->once())
+            ->method('makeRestCall')
+            ->will($this->returnValue($this->getSampleImpoundingFormArray()));
+
+        $this->controller->expects($this->once())
             ->method('generateFormWithData');
 
         $this->controller->expects($this->once())
@@ -196,91 +207,17 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
-     * Tests the addAction if the licence ID is not found
+     * Tests the not found action is called when the record being edited is not found
      */
-    /*public function testAddActionNotFoundLicence()
-    {
-        $licenceId = null;
-        $this->getFrom('Route', 0, 'licence', $licenceId);
-
-        $this->controller->expects($this->once())
-            ->method('notFoundAction');
-
-        $this->controller->addAction();
-    }/*
-
-    /**
-     * Tests addAction if no licence information comes back from the rest call
-     */
-    /*public function testAddActionNoResults()
-    {
-        $licenceId = 7;
-        $this->getFrom('Route', 0, 'licence', $licenceId);
-
-        $this->controller->expects($this->once())
-            ->method('makeRestCall')
-            ->will($this->returnValue(array()));
-
-        $this->controller->expects($this->once())
-            ->method('notFoundAction');
-
-        $this->controller->addAction();
-    }*/
-
-    /**
-     * Tests editAction
-     */
-    /*public function testEditAction()
+    public function testEditActionNotFound()
     {
         $licenceId = 7;
         $caseId = 24;
-        $caseObject = $this->getSampleCaseArray($caseId, $licenceId);
+        $id = 1;
 
         $this->getFrom('Route', 0, 'licence', $licenceId);
         $this->getFrom('Route', 1, 'case', $caseId);
-
-        $this->controller->expects($this->exactly(2))
-            ->method('makeRestCall')
-            ->will(
-                $this->onConsecutiveCalls(
-                    $this->returnValue(
-                        $caseObject
-                    ),
-                    $this->returnValue(
-                        $this->getPageDataRestArray($licenceId)
-                    )
-                )
-            );
-
-        $this->controller->expects($this->once())
-            ->method('generateFormWithData');
-
-        $this->controller->expects($this->once())
-            ->method('getServiceLocator')
-            ->will($this->returnValue($this->getServiceLocatorStaticData()));
-
-        $this->controller->expects($this->once())
-            ->method('getView')
-            ->will($this->returnValue($this->view));
-
-        $this->view->expects($this->once())
-            ->method('setTemplate')
-            ->with($this->equalTo('case/edit'));
-
-        $this->assertSame($this->view, $this->controller->editAction());
-    }*/
-
-    /**
-     * Tests the edit action when no result is found
-     */
-    /*public function testEditActionNotFound()
-    {
-        $licenceId = 7;
-        $caseId = 24;
-
-        $this->getFrom('Route', 0, 'licence', $licenceId);
-        $this->getFrom('Route', 1, 'case', $caseId);
-        $this->getFrom('Route', 1, 'case', $caseId);
+        $this->getFrom('Route', 2, 'id', $id);
 
         $this->controller->expects($this->once())
             ->method('makeRestCall')
@@ -290,7 +227,152 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
             ->method('notFoundAction');
 
         $this->controller->editAction();
-    }*/
+    }
+
+    /**
+     * Tests processAddImpounding
+     *
+     * @dataProvider processAddEditProvider
+     */
+    public function testProcessAddImpounding($data)
+    {
+        $this->controller->expects($this->once())
+            ->method('processAdd')
+            ->will($this->returnValue(array('id' => 1)));
+
+        $redirectInfo = $this->getAddSuccessRedirect();
+        $redirect = $this->getRedirectMock($redirectInfo);
+
+        $this->controller->expects($this->once())
+            ->method('redirect')
+            ->will($this->returnValue($redirect));
+
+        $this->controller->processAddImpounding($data);
+
+    }
+
+    /**
+     * Tests processAddImpounding does the correct redirect on failure
+     *
+     * @dataProvider processAddEditProvider
+     */
+    public function testProcessAddImpoundingFail($data)
+    {
+        $this->controller->expects($this->once())
+            ->method('processAdd')
+            ->will($this->returnValue(array()));
+
+        $redirectInfo = $this->getActionRedirect('add');
+        $redirect = $this->getRedirectMock($redirectInfo);
+
+        $this->controller->expects($this->once())
+            ->method('redirect')
+            ->will($this->returnValue($redirect));
+
+        $this->controller->processAddImpounding($data);
+    }
+
+    /**
+     * Tests processAddImpounding does the correct redirect on cancel
+     *
+     * @dataProvider processAddEditCancelProvider
+     */
+    public function testProcessAddImpoundingCancel($data)
+    {
+        $redirectInfo = $this->getActionRedirect('add');
+        $redirect = $this->getRedirectMock($redirectInfo);
+
+        $this->controller->expects($this->at(0))
+            ->method('redirect')
+            ->will($this->returnValue($redirect));
+
+        $this->controller->processAddImpounding($data);
+    }
+
+    /**
+     * Tests processAddImpounding
+     *
+     * @dataProvider processAddEditProvider
+     */
+    public function testProcessEditImpounding($data)
+    {
+        $this->controller->expects($this->once())
+            ->method('processEdit')
+            ->will($this->returnValue(array()));
+
+        $redirectInfo = $this->getEditSuccessRedirect();
+        $redirect = $this->getRedirectMock($redirectInfo);
+
+        $this->controller->expects($this->once())
+            ->method('redirect')
+            ->will($this->returnValue($redirect));
+
+        $this->controller->processEditImpounding($data);
+    }
+
+    /**
+     * Tests processEditImpounding does the correct redirect on failure
+     *
+     * @dataProvider processAddEditProvider
+     */
+    public function testProcessEditImpoundingFail($data)
+    {
+        $this->controller->expects($this->once())
+            ->method('processEdit')
+            ->will($this->returnValue(array('fail' => 1)));
+
+        $redirectInfo = $this->getActionRedirect('edit');
+        $redirect = $this->getRedirectMock($redirectInfo);
+
+        $this->controller->expects($this->once())
+            ->method('redirect')
+            ->will($this->returnValue($redirect));
+
+        $this->controller->processEditImpounding($data);
+    }
+
+    /**
+     * Tests processEditImpounding does the correct redirect on cancel
+     *
+     * @dataProvider processAddEditCancelProvider
+     */
+    public function testProcessEditImpoundingCancel($data)
+    {
+        $redirectInfo = $this->getActionRedirect('edit');
+        $redirect = $this->getRedirectMock($redirectInfo);
+
+        $this->controller->expects($this->at(0))
+            ->method('redirect')
+            ->will($this->returnValue($redirect));
+
+        $this->controller->processEditImpounding($data);
+    }
+
+    /**
+     * Data provider for add/edit process
+     *
+     * @return array
+     */
+    public function processAddEditProvider(){
+        return array(
+            array(
+                $this->getSampleImpoundingPostData(true)
+            )
+        );
+    }
+
+    /**
+     * Data provider for add/edit cancel
+     *
+     * @return array
+     */
+    public function processAddEditCancelProvider(){
+        return array(
+            array(
+                $this->getSampleImpoundingPostData(false)
+            )
+        );
+    }
 
     /**
      * Creates a mock class (used for the redirect method)
@@ -309,17 +391,48 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
-     * Information required for a redirect follwing success
+     * Information required for a redirect following add success
      *
-     * @param int $licenceId
      * @return array
      */
-    private function getSuccessRedirect($licenceId)
+    private function getAddSuccessRedirect()
     {
         return array(
-            'string' => 'licence_case_list',
+            'string' => 'case_impounding',
             'options' => array(
-                'licence' => $licenceId,
+                'action' => null,
+            )
+        );
+    }
+
+    /**
+     * Information required for a redirect following edit success
+     *
+     * @return array
+     */
+    private function getEditSuccessRedirect()
+    {
+        return array(
+            'string' => 'case_impounding',
+            'options' => array(
+                'action' => null,
+                'id' => null,
+            )
+        );
+    }
+
+    /**
+     * Information required for a redirect follwing success
+     *
+     * @param string $action
+     * @return array
+     */
+    private function getActionRedirect($action)
+    {
+        return array(
+            'string' => 'case_impounding',
+            'options' => array(
+                'action' => $action,
             )
         );
     }
@@ -348,30 +461,94 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
         }
     }
 
-    /**
-     * Gets a mock call to get parameters
-     */
-    private function getParams ($returnValue)
-    {
-        $paramsMock = $this->getMock('\stdClass', array('fromPost'));
-
-        $paramsMock->expects($this->once())
-            ->method('fromPost')
-            ->will($this->returnValue($returnValue));
-
-        return $paramsMock;
-    }
-
     private function getSampleImpoundingArray()
     {
         return array(
             'impoundings' => array(
                 0 => array(
-                    'presidingTC' => array(
+                    'presidingTc' => array(
                         'tcName' => 'Name of TC'
-                    )
+                    ),
+                    'outcome' => array(
+                        'handle' => 'Name of Outcome'
+                    ),
                 )
-            )
+            ),
+        );
+    }
+
+    private function getSampleImpoundingFormArray()
+    {
+        return array(
+            'id' => 5,
+            'hearingDate' => '2011-03-05T09:05:00+0000',
+            'applicationReceiptDate' => '2010-04-05T00:00:00+0100',
+            'outcomeSentDate' => '1998-03-16T00:00:00+0000',
+            'notes' => 'dgjdhdhfd',
+            'version' => 1,
+            'case' => array
+                (
+                    'id' => 24
+                ),
+
+            'impoundingType' => array
+                (
+                    'handle' => 'impounding_type.1'
+                ),
+
+            'hearingLocation' => array
+                (
+                    'handle' => 'hearing_location.1'
+                ),
+
+            'presidingTc' => array
+                (
+                    'id' => 1
+                ),
+
+            'outcome' => array
+                (
+                    'handle' => 'impounding_outcome.2'
+                )
+        );
+    }
+
+    /**
+     * Sample postdata for impoundings add/edit
+     *
+     * @param bool $submit
+     * @return type
+     */
+    private function getSampleImpoundingPostData($submit = true)
+    {
+        return array(
+            'case' => 24,
+            'id' => 5,
+            'version' => 2,
+            'crsf' => 'e92c3acf055e3e45a131bb46e8a062ca',
+            'submit' => ($submit ? '' : false),
+            'cancel' => ($submit ? false : ''),
+            'application_details' => array
+                (
+                    'impoundingType' => 'impounding_type.1',
+                    'applicationReceiptDate' => '2010-04-05',
+                ),
+
+            'hearing' => array
+                (
+                    'hearingDate' => '2011-03-05',
+                    'hearingTime' => '09:05',
+                    'hearingLocation' => 'hearing_location.1'
+                ),
+
+            'outcome' => array
+                (
+                    'presidingTc' => 'presiding_tc.1',
+                    'outcome' => 'impounding_outcome.2',
+                    'outcomeSentDate' => '1998-03-16',
+                    'notes' => 'dgjdhdhfd'
+                ),
+
         );
     }
 }

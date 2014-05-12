@@ -107,12 +107,16 @@ class CaseImpoundingController extends CaseController
      */
     public function processAddImpounding ($data)
     {
-        $formattedData = $this->formatForSave($data);
+        unset($data['cancel']);
 
-        $result = $this->processAdd($formattedData, 'Impounding');
+        if($data['submit'] === ''){
+            $formattedData = $this->formatForSave($data);
 
-        if (isset($result['id'])) {
-            return $this->redirectToAction();
+            $result = $this->processAdd($formattedData, 'Impounding');
+
+            if (isset($result['id'])) {
+                return $this->redirectToAction();
+            }
         }
 
         return $this->redirectToAction('add');
@@ -123,21 +127,26 @@ class CaseImpoundingController extends CaseController
      *
      * @param array $data
      */
-    public function processEditImpounding ($data) {
-        $formattedData = $this->formatForSave($data);
+    public function processEditImpounding ($data)
+    {
+        unset($data['cancel']);
 
-        $result = $this->processEdit($formattedData, 'Impounding');
+        if ($data['submit'] === '') {
+            $formattedData = $this->formatForSave($data);
 
-        if (empty($result)) {
-            return $this->redirect()->toRoute(
-            'case_impounding',
-            array(
-                'action' => null,
-                'id' => null
-            ),
-            array(),
-            true
-            );
+            $result = $this->processEdit($formattedData, 'Impounding');
+
+            if (empty($result)) {
+                return $this->redirect()->toRoute(
+                'case_impounding',
+                array(
+                    'action' => null,
+                    'id' => null
+                ),
+                array(),
+                true
+                );
+            }
         }
 
         return $this->redirectToAction('edit');

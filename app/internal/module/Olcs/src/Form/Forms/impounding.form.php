@@ -18,13 +18,13 @@ return [
                         'type' => 'select',
                         'label' => 'Impounding type',
                         'value_options' => 'impounding_type',
-                        'required' => false,
+                        'required' => true,
                         'class' => 'medium'
                     ],
                     'applicationReceiptDate' => [
                         'type' => 'dateSelectWithEmpty',
                         'label' => 'Application received',
-                        'required' => false
+                        'filters' => '\Common\Form\Elements\InputFilters\DateNotInFuture'
                     ]
                 ]
             ],
@@ -49,7 +49,7 @@ return [
                         'type' => 'select',
                         'label' => 'Hearing location',
                         'value_options' => 'hearing_location',
-                        'required' => false,
+                        'filters' => '\Common\Form\Elements\InputFilters\SelectEmpty',
                         'class' => 'medium'
                     ],
                 ],
@@ -64,24 +64,24 @@ return [
                         'type' => 'select',
                         'label' => 'Presiding TC/DTC',
                         'value_options' => 'presiding_tc',
-                        'required' => false,
+                        'filters' => '\Common\Form\Elements\InputFilters\SelectEmpty',
                         'class' => 'medium'
                     ],
                     'outcome' => [
                         'label' => 'Outcome',
                         'type' => 'select',
                         'value_options' => 'impounding_outcome',
-                        'required' => true,
+                        'filters' => '\Common\Form\Elements\InputFilters\SelectEmpty',
                         'class' => 'medium'
                     ],
                     'outcomeSentDate' => [
                         'label' => 'Outcome sent date',
                         'type' => 'dateSelectWithEmpty',
-                        'required' => true
+                        'filters' => '\Common\Form\Elements\InputFilters\DateNotRequiredNotInFuture'
                     ],
                     'notes' => [
                         'type' => 'text',
-                        'filters' => '\Common\Form\Elements\InputFilters\TextMax4000Required',
+                        'filters' => '\Common\Form\Elements\InputFilters\TextMax4000',
                         'label' => 'Notes',
                         'class' => 'extra-long'
                     ]
