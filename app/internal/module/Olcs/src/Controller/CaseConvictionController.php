@@ -43,6 +43,16 @@ class CaseConvictionController extends CaseController
 
         $results = $this->makeRestCall('Conviction', 'GET', array('vosaCase' => $caseId));
 
+        //if there are results, sort them by date of conviction
+        if ($results['Count']) {
+            foreach ($results['Results'] as $key => $row) {
+                $convictionDate[$key] = $row['dateOfConviction'];
+                $id[$key] = $row['id'];
+            }
+
+            array_multisort($convictionDate, SORT_DESC, $id, SORT_ASC, $results['Results']);
+        }
+
         $data = [];
         $data['url'] = $this->url();
 
