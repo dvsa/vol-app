@@ -26,11 +26,13 @@ class CaseConditionUndertakingController extends CaseController
     {
         $caseId = $this->fromRoute('case');
         $licenceId = $this->fromRoute('licence');
+        $id = $this->fromRoute('id');
 
         $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licenceId)));
 
         // checks for CRUD and redirects as required
-        $this->checkForCrudAction('conditionUndertaking', array('case' => $caseId, 'licence' => $licenceId), 'id');
+        $this->checkForCrudAction('conditions', array('case' => $caseId, 'licence' => $licenceId), 'id');
+        $this->checkForCrudAction('undertakings', array('case' => $caseId, 'licence' => $licenceId), 'id');
 
         // no crud, generate the main complaints table
         $view = $this->getView();
@@ -59,6 +61,43 @@ class CaseConditionUndertakingController extends CaseController
 
         $view->setTemplate('case/manage');
         return $view;
+    }
+
+    /**
+     * Check for crud actions
+     *
+     * @param string $route
+     * @param array $params
+     * @param string $itemIdParam
+     *
+     * @return boolean
+     */
+    protected function checkForCrudAction($route = null, $params = array(), $itemIdParam = 'id')
+    {
+        $action = $this->params()->fromPost('action');
+
+        if (empty($action)) {
+            return false;
+        }
+
+        $action = strtolower($action);
+
+        $params = array_merge($params, array('action' => $action));
+
+        if ($action !== 'add') {
+
+            $id = $this->params()->fromPost('id');
+
+            if (empty($id)) {
+
+                $this->crudActionMissingId();
+                return false;
+            }
+
+            $params[$itemIdParam] = $id;
+        }
+
+        $this->redirect()->toRoute($route, $params, [], true);
     }
 
     /**
