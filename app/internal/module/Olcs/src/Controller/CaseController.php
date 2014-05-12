@@ -106,8 +106,8 @@ class CaseController extends FormActionController
         foreach ($results['Results'] as $k => $result) {
             foreach ($result['submissionActions'] as $ak => $action) {
                 $results['Results'][$k]['urgent'] = $action['urgent'];
-                if (isset($action['userRecipient']['displayName'])) {
-                    $results['Results'][$k]['currentlyWith'] = $action['userRecipient']['displayName'];
+                if (isset($action['userRecipient']['name'])) {
+                    $results['Results'][$k]['currentlyWith'] = $action['userRecipient']['name'];
                 }
                 $actions = isset($submissionActions['submission_'.$action['submissionActionType']])
                     ? $submissionActions['submission_'.$action['submissionActionType']] : '';

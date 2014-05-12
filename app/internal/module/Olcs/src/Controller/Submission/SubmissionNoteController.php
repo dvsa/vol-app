@@ -43,6 +43,7 @@ class SubmissionNoteController extends FormActionController
         );
         
         $callback = 'processNote';
+        $user = $this->makeRestCall('user', 'GET', array('id' => $this->getLoggedInUser()));
         $submission = $this->makeRestCall('Submission', 'GET', array('id' => $this->routeParams['typeId']));
         $form = $this->generateNoteForm(
             array('version' => $submission['version']),
@@ -94,7 +95,7 @@ class SubmissionNoteController extends FormActionController
         $newNote = array();
         $newNote['note'] = $postParams['main']['note'];
         $user = $this->makeRestCall('user', 'GET', array('id' => $this->getLoggedInUser()));
-        $newNote['user'] = $user['displayName'];
+        $newNote['user'] = $user['name'];
         $newNote['date'] = date("c");
         $i = count($submissionData[$this->routeParams['section']]['notes'])+1;
         $submissionData[$this->routeParams['section']]['notes'][$i] = $newNote;

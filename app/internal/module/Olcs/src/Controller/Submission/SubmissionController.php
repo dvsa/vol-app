@@ -295,7 +295,7 @@ class SubmissionController extends FormActionController
         $users = $this->makeRestCall('User', 'GET', array());
         $userList = [];
         foreach ($users['Results'] as $user) {
-            $userList[$user['id']] = $user['displayName'];
+            $userList[$user['id']] = $user['name'];
         }
         return $userList;
     }
