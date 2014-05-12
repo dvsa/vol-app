@@ -19,6 +19,8 @@ use Zend\View\Model\ViewModel;
 class IndexController extends AbstractApplicationController
 {
 
+    protected $applicationData = [];
+
     public function __construct()
     {
         $this->setCurrentSection('declarations');
@@ -32,6 +34,8 @@ class IndexController extends AbstractApplicationController
         $completionStatus = $this->makeRestCall('ApplicationCompletion', 'GET', ['application_id' => $applicationId]);
 
         $form = $this->generateForm('review', null);
+
+        $this->cleanForm($form);
 
         $form->setData($this->mapEntitiesToForm());
 
@@ -55,17 +59,42 @@ class IndexController extends AbstractApplicationController
 
     protected function mapEntitiesToForm()
     {
-        $licence = $this->getLicenceEntity();
+        $data = $this->getApplicationData();
         return [
             'operator_location' => [
-                'operator_location' => $licence['niFlag'] ? 'ni' : 'uk',
+                'operator_location' => $data['licence']['niFlag'] ? 'ni' : 'uk',
             ],
             'operator-type' => [
-                'operator-type' => $licence['goodsOrPsv'],
+                'operator-type' => $data['licence']['goodsOrPsv'],
             ],
             'licence-type' => [
-                'licence_type' => $licence['licenceType'],
+                'licence_type' => $data['licence']['licenceType'],
             ]
         ];
+    }
+
+    protected function cleanForm($form)
+    {
+        $data = $this->getApplicationData();
+
+        // it's simpler to post-process the form to remove
+        // the operator type rather than try and make the
+        // original config too clever
+        if ($data['licence']['niFlag']) {
+            $form->remove('operator-type');
+        }
+    }
+
+    protected function getApplicationData()
+    {
+        if (count($this->applicationData) === 0) {
+            // using an associative array allows the data room to
+            // expand when the review page displays information from
+            // more sections than just licence
+            $this->applicationData = [
+                'licence' => $this->getLicenceEntity()
+            ];
+        }
+        return $this->applicationData;
     }
 }
