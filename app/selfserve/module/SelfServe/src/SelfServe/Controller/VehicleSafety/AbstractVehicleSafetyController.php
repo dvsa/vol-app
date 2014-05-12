@@ -17,6 +17,12 @@ use SelfServe\Controller\AbstractApplicationController;
  */
 abstract class AbstractVehicleSafetyController extends AbstractApplicationController
 {
+
+    public function __construct()
+    {
+        $this->setCurrentSection('vehicle-safety');
+    }
+
     /**
      * Render the layout
 

@@ -4,6 +4,7 @@
  * licence type Controller
  *
  * @author S Lizzio <shaun.lizzio@valtech.co.uk>
+ * @author Jakub Igla <jakub.igla@valtech.co.uk>
  */
 
 namespace SelfServe\Controller\LicenceType;
@@ -15,6 +16,7 @@ use Zend\View\Model\ViewModel;
  * licence type Controller
  *
  * @author S Lizzio <shaun.lizzio@valtech.co.uk>
+ * @author Jakub Igla <jakub.igla@valtech.co.uk>
  */
 class IndexController extends AbstractApplicationController
 {

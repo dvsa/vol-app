@@ -10,7 +10,8 @@ return array(
             array(
                 'name' => 'data',
                 'options' => array(
-                    'label' => 'Secure payment information'
+                    'label' => 'Secure payment information',
+                    'hint' => 'To submit your application, please enter your card details below'
                 ),
                 'elements' => array(
                     'cardTypes' => array(
