@@ -30,7 +30,8 @@ class ConditionUndertakingController extends FormActionController
      */
     public function addAction()
     {
-        $routeParams = $this->getParams(array('case', 'licence', 'id', 'conditionType'));
+        $routeParams = $this->getParams(array('case', 'licence', 'id', 'type'));
+        $type = $routeParams['type'];
 
         if (null !== $this->params()->fromPost('cancel-conditionUndertaking')) {
             return $this->redirect()->toRoute(
@@ -72,8 +73,8 @@ class ConditionUndertakingController extends FormActionController
             'form' => $form,
             'headScript' => array('/static/js/conditionUndertaking.js'),
             'params' => array(
-                'pageTitle' => 'add-condition-ndertaking',
-                'pageSubTitle' => 'subtitle-conditionUndertaking-text'
+                'pageTitle' => 'add-' . $type,
+                'pageSubTitle' => 'subtitle-' . $type . '-text'
             )
             )
         );

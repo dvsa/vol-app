@@ -261,6 +261,7 @@ return array(
                     ),
                     'defaults' => array(
                         'controller' => 'ConditionUndertakingController',
+                        'type' => 'condition'
                     )
                 )
             ),
@@ -274,6 +275,7 @@ return array(
                     ),
                     'defaults' => array(
                         'controller' => 'ConditionUndertakingController',
+                        'type' => 'undertaking'
                     )
                 )
             ),
