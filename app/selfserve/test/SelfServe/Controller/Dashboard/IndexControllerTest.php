@@ -76,7 +76,8 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
             ->method('params')
             ->will($this->returnValue($mockParams));
 
-        $this->controller->indexAction();
+        $action = $this->controller->indexAction();
+        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $action);
     }
 
     /**
@@ -314,7 +315,7 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->any())
             ->method('makeRestCall')
-            ->will($this->returnValueMap($this->restCallMap(1,1,0)))
+            ->will($this->returnValueMap($this->restCallMap(1, 1, 0)))
         ;
 
 
@@ -355,6 +356,4 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
             ]
         ];
     }
-
-
 }
