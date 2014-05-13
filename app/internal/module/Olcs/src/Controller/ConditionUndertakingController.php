@@ -41,7 +41,7 @@ class ConditionUndertakingController extends FormActionController
         // check for cancel button
         if (null !== $this->params()->fromPost('cancel-conditionUndertaking')) {
             return $this->redirect()->toRoute(
-                'case_conditionUndertakings', array(
+                'case_conditions_undertakings', array(
                     'licence' => $routeParams['licence'],
                     'case' => $routeParams['case']
                 )
@@ -102,7 +102,7 @@ class ConditionUndertakingController extends FormActionController
         // check for cancel button
         if (null !== $this->params()->fromPost('cancel-conditionUndertaking')) {
             return $this->redirect()->toRoute(
-                'case_conditionUndertakings', array(
+                'case_conditions_undertakings', array(
                     'licence' => $routeParams['licence'],
                     'case' => $routeParams['case']
                 )
@@ -118,7 +118,6 @@ class ConditionUndertakingController extends FormActionController
             'GET',
             array('id' => $routeParams['id'], 'bundle' => json_encode($bundle))
         );
-
         // assign data as required by the form
         $data['condition-undertaking']['vosaCase'] = $data['condition-undertaking']['vosaCase']['id'];
         $data['condition-undertaking']['licence'] = $data['condition-undertaking']['licence']['id'];
@@ -194,7 +193,7 @@ class ConditionUndertakingController extends FormActionController
      * @param integer $licenceId
      * @return array address_id => [address details]
      */
-    private function getOCAddressByLicence($licenceId)
+    public function getOCAddressByLicence($licenceId)
     {
         $operatingCentreAddressBundle = $this->getOCAddressBundle();
         $result = $this->makeRestCall(
@@ -243,7 +242,7 @@ class ConditionUndertakingController extends FormActionController
      *
      * @return array
      */
-    private function getConditionUndertakingBundle()
+    public function getConditionUndertakingBundle()
     {
         return array(
 
@@ -275,7 +274,7 @@ class ConditionUndertakingController extends FormActionController
      *
      * @return array
      */
-    private function getOCAddressBundle()
+    public function getOCAddressBundle()
     {
         return array(
             'properties' => array(
@@ -317,8 +316,7 @@ class ConditionUndertakingController extends FormActionController
         {
             $data['condition-undertaking']['attachedTo'] =
                 isset($data['condition-undertaking']['operatingCentre']['id']) ?
-                    $data['condition-undertaking']['operatingCentre']['id'] :
-                    '';
+                    $data['condition-undertaking']['operatingCentre']['id'] : '';
         }
 
         return $data;
@@ -381,7 +379,7 @@ class ConditionUndertakingController extends FormActionController
      * @param string $type
      * @return \Zend\Form\Form $form
      */
-    private function configureFormForConditionType($form, $licenceId, $type)
+    public function configureFormForConditionType($form, $licenceId, $type)
     {
 
         $ocAddressList = $this->getOCAddressByLicence($licenceId);
