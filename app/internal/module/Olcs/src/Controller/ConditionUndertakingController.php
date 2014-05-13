@@ -23,7 +23,6 @@ use Zend\View\Model\ViewModel;
 class ConditionUndertakingController extends FormActionController
 {
 
-
     /**
      * Method to generate the add form
      *
@@ -32,58 +31,48 @@ class ConditionUndertakingController extends FormActionController
     public function addAction()
     {
         $routeParams = $this->getParams(array('case', 'licence', 'type'));
-        $type = $routeParams['type'];
 
+        // check valid case exists
+        $results = $this->makeRestCall('VosaCase', 'GET', array('id' => $routeParams['case']));
+        if (empty($routeParams['case']) || empty($routeParams['licence']) || empty($results)) {
+            return $this->getResponse()->setStatusCode(404);
+        }
+
+        // check for cancel button
         if (null !== $this->params()->fromPost('cancel-conditionUndertaking')) {
             return $this->redirect()->toRoute(
-                'case_conditions_undertakings', array(
+                'case_conditionUndertakings', array(
                     'licence' => $routeParams['licence'],
                     'case' => $routeParams['case']
                 )
             );
         }
-        // Below is for setting route params for the breadcrumb
-        $this->setBreadcrumb(
-            array(
-                'licence_case_list/pagination' => array('licence' => $routeParams['licence']),
-                'case_conditions_undertakings' => array('case' => $routeParams['case'])
-            )
-        );
+
+        $this->determineBreadcrumbs($routeParams);
 
         $data['condition-undertaking'] = array(
             'addedVia' => 'Case',
-            'conditionType' => $type,
+            'conditionType' => $routeParams['type'],
             'isDraft' => 0,
             'vosaCase' => $routeParams['case'],
             'licence' => $routeParams['licence']
         );
 
-        $results = $this->makeRestCall('VosaCase', 'GET', array('id' => $routeParams['case']));
-
-        if (empty($routeParams['case']) || empty($routeParams['licence']) || empty($results)) {
-            return $this->getResponse()->setStatusCode(404);
-        }
-
         $form = $this->generateFormWithData(
             'condition-undertaking-form', 'processConditionUndertaking', $data
         );
+        // set the OC address list and label for conditionType
+        $form = $this->configureFormForConditionType($form,
+            $routeParams['licence'],
+            $routeParams['type']);
 
-        $ocAddressList = $this->getOCAddressByLicence($routeParams['licence']);
-
-        // set form dependent aspects
-        $form->get('condition-undertaking')->get('notes')->setLabel(ucfirst($type));
-        $form->get('condition-undertaking')
-                ->get('attachedTo')
-                ->setValueOptions($ocAddressList);
-
-        //$form->setData($data);
         $view = new ViewModel(
             array(
             'form' => $form,
             'headScript' => array('/static/js/conditionUndertaking.js'),
             'params' => array(
-                'pageTitle' => 'add-' . $type,
-                'pageSubTitle' => 'subtitle-' . $type . '-text'
+                'pageTitle' => 'add-' . $routeParams['type'],
+                'pageSubTitle' => 'subtitle-' . $routeParams['type'] . '-text'
             )
             )
         );
@@ -99,8 +88,18 @@ class ConditionUndertakingController extends FormActionController
     public function editAction()
     {
         $routeParams = $this->getParams(array('case', 'licence', 'type', 'id'));
-        $type = $routeParams['type'];
 
+        // check valid case exists
+        $results = $this->makeRestCall(
+            'VosaCase',
+            'GET',
+            array('id' => $routeParams['case'])
+        );
+        if (empty($routeParams['case']) || empty($routeParams['licence']) || empty($results)) {
+            return $this->getResponse()->setStatusCode(404);
+        }
+
+        // check for cancel button
         if (null !== $this->params()->fromPost('cancel-conditionUndertaking')) {
             return $this->redirect()->toRoute(
                 'case_conditionUndertakings', array(
@@ -110,48 +109,31 @@ class ConditionUndertakingController extends FormActionController
             );
         }
 
-        $this->setBreadcrumb(
-            array(
-                'licence_case_list/pagination' => array('licence' => $routeParams['licence']),
-                'case_conditions_undertakings' => array('case' => $routeParams['case'])
-            )
-        );
+        $this->determineBreadcrumbs($routeParams);
 
         $bundle = $this->getConditionUndertakingBundle();
 
-        $data['condition-undertaking'] = $this->makeRestCall('ConditionUndertaking', 'GET', array('id' => $routeParams['id'], 'bundle' => json_encode($bundle)));
-
-        if (empty($routeParams['case']) || empty($routeParams['licence']) || empty($data)) {
-            return $this->getResponse()->setStatusCode(404);
-        }
+        $data['condition-undertaking'] = $this->makeRestCall(
+            'ConditionUndertaking',
+            'GET',
+            array('id' => $routeParams['id'], 'bundle' => json_encode($bundle))
+        );
 
         // assign data as required by the form
         $data['condition-undertaking']['vosaCase'] = $data['condition-undertaking']['vosaCase']['id'];
         $data['condition-undertaking']['licence'] = $data['condition-undertaking']['licence']['id'];
         $data['condition-undertaking']['isDraft'] = $data['condition-undertaking']['isDraft'] ? 1 : 0;
 
-        if ($data['condition-undertaking']['attachedTo'] == 'Licence')
-        {
-            $data['condition-undertaking']['attachedTo'] = 'Licence';
-        }
-        else
-        {
-            $data['condition-undertaking']['attachedTo'] =
-                isset($data['condition-undertaking']['operatingCentre']['id']) ?
-                    $data['condition-undertaking']['operatingCentre']['id'] :
-                    '';
-        }
-
+        $data = $this->determineFormAttachedTo($data);
 
         $form = $this->generateFormWithData(
             'condition-undertaking-form', 'processConditionUndertaking', $data, true
         );
 
-        $ocAddressList = $this->getOCAddressByLicence($routeParams['licence']);
-
-        // set form dependent aspects
-        $form->get('condition-undertaking')->get('notes')->setLabel(ucfirst($type));
-        $form->get('condition-undertaking')->get('attachedTo')->setValueOptions($ocAddressList);
+        // set the OC address list and label for conditionType
+        $form = $this->configureFormForConditionType($form,
+            $routeParams['licence'],
+            $routeParams['type']);
 
         $view = new ViewModel(
             array(
@@ -160,8 +142,8 @@ class ConditionUndertakingController extends FormActionController
                     '/static/js/conditionUndertaking.js'
                 ),
                 'params' => array(
-                    'pageTitle' => 'edit-' . $type,
-                    'pageSubTitle' => 'subtitle-' . $type . '-text'
+                    'pageTitle' => 'edit-' . $routeParams['type'],
+                    'pageSubTitle' => 'subtitle-' . $routeParams['type'] . '-text'
                 )
             )
         );
@@ -170,7 +152,8 @@ class ConditionUndertakingController extends FormActionController
     }
 
     /**
-     * Method to process the CRUD form submission
+     * Method to process the CRUD form submission. Calls process Edit or Add
+     *
      * @param array $data
      */
     public function processConditionUndertaking($data)
@@ -178,25 +161,19 @@ class ConditionUndertakingController extends FormActionController
 
         $routeParams = $this->getParams(array('action', 'licence', 'case'));
 
-        if (strtolower($data['condition-undertaking']['attachedTo']) !== 'licence')
-        {
-            $data['condition-undertaking']['operatingCentre'] = $data['condition-undertaking']['attachedTo'];
-            $data['condition-undertaking']['attachedTo'] = 'OC';
-        }
-        else
-        {
-            $data['condition-undertaking']['operatingCentre'] = null;
-            $data['condition-undertaking']['attachedTo'] = 'Licence';
-        }
+        $data = $this->determineSavingAttachedTo($data);
 
         if (strtolower($routeParams['action']) == 'edit') {
 
+            $data['condition-undertaking']['lastUpdatedOn'] = date('d-m-Y h:i:s');
             $result = $this->processEdit($data['condition-undertaking'], 'ConditionUndertaking');
 
         } else {
             // configure condition-undertaking data
             unset($data['condition-undertaking']['version']);
             unset($data['condition-undertaking']['id']);
+            $data['condition-undertaking']['createdOn'] = date('d-m-Y h:i:s');
+            $data['condition-undertaking']['lastUpdatedOn'] = date('d-m-Y h:i:s');
 
             $result = $this->processAdd($data['condition-undertaking'], 'ConditionUndertaking');
 
@@ -323,5 +300,99 @@ class ConditionUndertakingController extends FormActionController
                 )
             )
         );
+    }
+
+    /**
+     * The attachedTo dropdown has values of either 'licence' or an OC id
+     * However what is stored is either 'OC' or 'Licence' so this method
+     * sets the value to the OC id in preparation for generating the edit form
+     *
+     * @param array $data
+     * @return array
+     */
+    private function determineFormAttachedTo($data)
+    {
+        // for form
+        if ($data['condition-undertaking']['attachedTo'] != 'Licence')
+        {
+            $data['condition-undertaking']['attachedTo'] =
+                isset($data['condition-undertaking']['operatingCentre']['id']) ?
+                    $data['condition-undertaking']['operatingCentre']['id'] :
+                    '';
+        }
+
+        return $data;
+    }
+
+     /**
+     * The attachedTo dropdown has values of either 'licence' or an OC id
+     * However what is stored is either 'OC' or 'Licence' so this method
+     * sets the value from OC id to the value 'OC' or 'Licence'
+     * in preparation for saving the data
+     *
+     * @param array $data
+     * @return array
+     */
+    private function determineSavingAttachedTo($data)
+    {
+        if (strtolower($data['condition-undertaking']['attachedTo']) !== 'licence')
+        {
+            $data['condition-undertaking']['operatingCentre'] =
+                $data['condition-undertaking']['attachedTo'];
+            $data['condition-undertaking']['attachedTo'] = 'OC';
+        }
+        else
+        {
+            $data['condition-undertaking']['operatingCentre'] = null;
+            $data['condition-undertaking']['attachedTo'] = 'Licence';
+        }
+
+        return $data;
+
+    }
+
+    /**
+     * Sets up the breadcrumbs
+     *
+     * @param type $routeParams
+     */
+    private function determineBreadcrumbs($routeParams)
+    {
+        $this->setBreadcrumb(
+            array(
+                'licence_case_list/pagination' => array(
+                    'licence' => $routeParams['licence']
+                ),
+                'case_conditions_undertakings' => array(
+                    'case' => $routeParams['case']
+                )
+            )
+        );
+    }
+
+    /**
+     * Sets the notes field label accoring to the type of condition.
+     * i.e. Undertaking or Condition
+     * Also extracts the Operating Centre addresses for the licence and sets
+     * up the group options for the attachedTo drop down
+     *
+     * @param \Zend\Form\Form $form
+     * @param integer $licenceId
+     * @param string $type
+     * @return \Zend\Form\Form $form
+     */
+    private function configureFormForConditionType($form, $licenceId, $type)
+    {
+
+        $ocAddressList = $this->getOCAddressByLicence($licenceId);
+
+        // set form dependent aspects
+        $form->get('condition-undertaking')->get('notes')->setLabel(ucfirst($type));
+        $form->get('condition-undertaking')
+                ->get('attachedTo')
+                ->setValueOptions($ocAddressList);
+
+        return $form;
+
     }
 }
