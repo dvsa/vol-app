@@ -17,6 +17,13 @@ use SelfServe\Controller\Application\ApplicationController;
 class TypeOfLicenceController extends ApplicationController
 {
     /**
+     * Set the service for the "Free" save behaviour
+     *
+     * @var string
+     */
+    protected $service = 'Licence';
+
+    /**
      * Redirect to the first section
      *
      * @return Response
@@ -24,5 +31,31 @@ class TypeOfLicenceController extends ApplicationController
     public function indexAction()
     {
         return $this->goToFirstSubSection();
+    }
+
+    /**
+     * Get licence data
+     *
+     * @param array $properties
+     * @return array
+     */
+    protected function getLicenceData($properties = array())
+    {
+        $properties = array_merge(
+            array('id', 'version'),
+            $properties
+        );
+
+        $bundle = array(
+            'children' => array(
+                'licence' => array(
+                    'properties' => $properties
+                )
+            )
+        );
+
+        $application = $this->makeRestCall('Application', 'GET', array('id' => $id), $bundle);
+
+        return $application['licence'];
     }
 }

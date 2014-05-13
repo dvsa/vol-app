@@ -18,6 +18,13 @@ use Zend\Http\Response;
 abstract class AbstractJourneyController extends FormActionController
 {
     /**
+     * Holds the service name
+     *
+     * @var string
+     */
+    protected $service = null;
+
+    /**
      * Hold the journey name
      *
      * @var string
@@ -106,6 +113,10 @@ abstract class AbstractJourneyController extends FormActionController
             return $this->goToNextStep();
         }
 
+        if (!$this->isSectionEnabled($this->getJourneyName(), $this->getSectionName(), $this->getSubSectionName())) {
+            return $this->goToPreviousStep();
+        }
+
         if ($this->isButtonPressed('back')) {
             return $this->goToPreviousStep();
         }
@@ -129,6 +140,8 @@ abstract class AbstractJourneyController extends FormActionController
             if ($form instanceof Response) {
                 return $form;
             }
+
+            $form = $this->alterForm($form);
 
             $view->setVariable('form', $form);
 
@@ -160,6 +173,19 @@ abstract class AbstractJourneyController extends FormActionController
     }
 
     /**
+     * Alter the form
+     *
+     * This method should be overridden
+     *
+     * @param Form $form
+     * @return Form
+     */
+    protected function alterForm($form)
+    {
+        return $form;
+    }
+
+    /**
      * Load data for the form
      *
      * This method should be overridden
@@ -184,15 +210,15 @@ abstract class AbstractJourneyController extends FormActionController
     }
 
     /**
-     * Save data from the form
-     *
-     * This method should be overriden
+     * Save data
      *
      * @param array $data
      */
-    protected function save($data)
+    public function save($data)
     {
-        return null;
+        $this->makeRestCall($this->service, 'PUT', $data['data']);
+
+        return $this->goToNextStep();
     }
 
     /**
@@ -337,13 +363,50 @@ abstract class AbstractJourneyController extends FormActionController
     }
 
     /**
+     * Check if a section is enabled
+     *
+     * @param array|string $details
+     * @param string $section
+     * @param string $subSection
+     * @return boolean
+     */
+    protected function isSectionEnabled($details, $section = null, $subSection = null)
+    {
+        if (is_string($details)) {
+            $details = $this->getConfig($details, $section, $subSection);
+        }
+
+        $sectionCompletion = $this->getSectionCompletion();
+
+        $enabled = true;
+
+        $completeKey = array_search('complete', $this->getJourneyConfig()['completionStatusMap']);
+
+        if (isset($details['required'])) {
+
+            foreach ($details['required'] as $requiredSection) {
+                $requiredSection = str_replace('/', '', $requiredSection);
+
+                if (!isset($sectionCompletion['section' . $requiredSection . 'Status'])
+                    || $sectionCompletion['section' . $requiredSection . 'Status'] != $completeKey) {
+
+                    $enabled = false;
+                }
+            }
+        }
+
+        return $enabled;
+    }
+
+    /**
      * Get a list of access keys to match the restrictions
      *
      * This method should be extended
      *
+     * @param boolean $force
      * @return array
      */
-    protected function getAccessKeys()
+    protected function getAccessKeys($force = false)
     {
         return array(null);
     }
@@ -365,14 +428,14 @@ abstract class AbstractJourneyController extends FormActionController
     {
         $sectionConfig = $this->getSectionConfig();
 
-        $sectionCompletion = $this->getSectionCompletion();
-
         $subSections = array();
+
+        $sectionCompletion = $this->getSectionCompletion();
 
         $journey = $this->getJourneyName();
         $section = $this->getSectionName();
 
-        $completeKey = array_search('complete', $this->getJourneyConfig()['completionStatusMap']);
+        $config = $this->getJourneyConfig();
 
         foreach ($sectionConfig['subSections'] as $name => $details) {
 
@@ -380,26 +443,20 @@ abstract class AbstractJourneyController extends FormActionController
                 continue;
             }
 
-            $enabled = true;
+            $enabled = $this->isSectionEnabled($details);
 
-            if (isset($details['required'])) {
+            $key = 'section' . $this->getSectionName() . $name . 'Status';
 
-                foreach ($details['required'] as $requiredSection) {
-                    $requiredSection = str_replace('/', '', $requiredSection);
+            $statusKey = (int)$sectionCompletion[$key];
 
-                    if (!isset($sectionCompletion['section' . $requiredSection . 'Status'])
-                        || $sectionCompletion['section' . $requiredSection . 'Status'] != $completeKey) {
-
-                        $enabled = false;
-                    }
-                }
-            }
+            $status = $config['completionStatusMap'][$statusKey];
 
             $subSections[$name] = array(
                 'label' => $this->getSectionLabel($journey, $section, $name),
                 'route' => $this->getSectionRoute($journey, $section, $name),
                 'active' => ($name == $this->getSubSectionName()),
-                'enabled' => $enabled
+                'enabled' => $enabled,
+                'status' => $status
             );
         }
 
@@ -464,7 +521,7 @@ abstract class AbstractJourneyController extends FormActionController
         if (empty($this->sectionCompletion)) {
             $id = $this->getIdentifier();
 
-            $foreignKey = $this->camelToUnderscode($this->getJourneyConfig()['identifier']);
+            $foreignKey = $this->getJourneyConfig()['completionStatusJourneyIdColumn'];
 
             $completionStatus = $this->makeRestCall(
                 $this->getJourneyConfig()['completionService'],
@@ -474,7 +531,7 @@ abstract class AbstractJourneyController extends FormActionController
 
             $this->sectionCompletion = ($completionStatus['Count'] > 0 ? $completionStatus['Results'][0] : array());
 
-            $this->sectionCompletion[str_replace('_id', '', $foreignKey)] = $id;
+            $this->sectionCompletion[$foreignKey] = $id;
         }
 
         return $this->sectionCompletion;
@@ -615,11 +672,7 @@ abstract class AbstractJourneyController extends FormActionController
 
         while (isset($steps[$nextKey])) {
 
-            if ($this->isSectionAccessible(
-                    $steps[$nextKey][0],
-                    $steps[$nextKey][1],
-                    $steps[$nextKey][2]
-                )) {
+            if ($this->isSectionAccessible($steps[$nextKey][0], $steps[$nextKey][1], $steps[$nextKey][2])) {
                 return $this->goToSection(
                     $this->getSectionRoute(
                         $steps[$nextKey][0],
@@ -646,6 +699,8 @@ abstract class AbstractJourneyController extends FormActionController
 
         $nextKey = $key + 1;
 
+        $this->getAccessKeys(true);
+
         while (isset($steps[$nextKey])) {
 
             if ($this->isSectionAccessible($steps[$nextKey][0], $steps[$nextKey][1], $steps[$nextKey][2])) {
@@ -669,6 +724,10 @@ abstract class AbstractJourneyController extends FormActionController
      */
     protected function journeyFinished()
     {
+        print '<pre>';
+        print_r($this->getAccessKeys());
+        print_r($this->getSteps());
+        print '</pre>';
         die('Finished');
     }
 

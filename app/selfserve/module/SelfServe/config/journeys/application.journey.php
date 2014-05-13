@@ -9,6 +9,7 @@ return array(
     'Application' => array(
         'identifier' => 'applicationId',
         'completionService' => 'ApplicationCompletion',
+        'completionStatusJourneyIdColumn' => 'application',
         'completionStatusMap' => array(
             0 => '',
             1 => 'incomplete',
@@ -53,7 +54,18 @@ return array(
                     'psv-special-restricted'
                 ),
                 'subSections' => array(
+                    'BusinessType' => array(
 
+                    ),
+                    'BusinessDetails' => array(
+
+                    ),
+                    'Addresses' => array(
+
+                    ),
+                    'People' => array(
+
+                    )
                 )
             ),
             'TaxiPhv' => array(

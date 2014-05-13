@@ -17,6 +17,13 @@ use SelfServe\Controller\AbstractJourneyController;
 class ApplicationController extends AbstractJourneyController
 {
     /**
+     * Holds the service name
+     *
+     * @var string
+     */
+    protected $service = 'Application';
+
+    /**
      * Redirect to the first section
      *
      * @return Resposne
@@ -29,11 +36,12 @@ class ApplicationController extends AbstractJourneyController
     /**
      * Return an array of access keys
      *
+     * @param boolean $force
      * @return array
      */
-    protected function getAccessKeys()
+    protected function getAccessKeys($force = false)
     {
-        if (empty($this->accessKeys)) {
+        if (empty($this->accessKeys) || $force) {
             $licence = $this->getLicenceEntity();
 
             if (empty($licence)) {
@@ -47,9 +55,12 @@ class ApplicationController extends AbstractJourneyController
             }
 
             $this->accessKeys = array(
-                ($licence['niFlag'] == 1 ? 'ni' : 'gb'),
                 trim(strtolower($licence['goodsOrPsv']) . '-' . $type, '-')
             );
+
+            if (isset($licence['niFlag']) && !is_null($licence['niFlag']) && $licence['niFlag'] !== '') {
+                $this->accessKeys[] = ($licence['niFlag'] == 1 ? 'ni' : 'gb');
+            }
         }
 
         return $this->accessKeys;

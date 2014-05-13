@@ -44,9 +44,9 @@ foreach ($journeyArray as $journey) {
 
         $journeys[$name] = $details;
 
-        $namespace = 'SelfServe\Controller\\' . $name;
+        $journeyNamespace = 'SelfServe\Controller\\' . $name;
 
-        $controller = $namespace . '\\' . $name . 'Controller';
+        $controller = $journeyNamespace . '\\' . $name . 'Controller';
         $controllers[$controller] = $controller;
 
         $allRoutes[$name] = array(
@@ -67,7 +67,7 @@ foreach ($journeyArray as $journey) {
 
         foreach ($details['sections'] as $sectionName => $sectionDetails) {
 
-            $namespace .= '\\' . $sectionName;
+            $namespace = $journeyNamespace . '\\' . $sectionName;
 
             $controller = $namespace . '\\' . $sectionName . 'Controller';
             $controllers[$controller] = $controller;

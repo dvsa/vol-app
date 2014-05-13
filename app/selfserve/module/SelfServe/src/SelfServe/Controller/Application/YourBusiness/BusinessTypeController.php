@@ -1,18 +1,18 @@
 <?php
 
 /**
- * OperatorType Controller
+ * BusinessType Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-namespace SelfServe\Controller\Application\TypeOfLicence;
+namespace SelfServe\Controller\Application\YourBusiness;
 
 /**
- * OperatorType Controller
+ * BusinessType Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class OperatorTypeController extends TypeOfLicenceController
+class BusinessTypeController extends YourBusinessController
 {
     /**
      * Render the section form
@@ -25,12 +25,21 @@ class OperatorTypeController extends TypeOfLicenceController
     }
 
     /**
+     * Save data
+     *
+     * @param array $data
+     */
+    public function save($data)
+    {
+    }
+
+    /**
      * Load data from id
      *
      * @param int $id
      */
     public function load($id)
     {
-        return array('data' => $this->getLicenceData(array('goodsOrPsv')));
+        return array('data' => array());
     }
 }

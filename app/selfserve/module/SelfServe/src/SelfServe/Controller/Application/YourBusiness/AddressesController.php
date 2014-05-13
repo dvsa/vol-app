@@ -1,20 +1,19 @@
 <?php
 
 /**
- * OperatorLocation Controller
+ * Addresses Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-namespace SelfServe\Controller\Application\TypeOfLicence;
+namespace SelfServe\Controller\Application\YourBusiness;
 
 /**
- * OperatorLocation Controller
+ * Addresses Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class OperatorLocationController extends TypeOfLicenceController
+class AddressesController extends YourBusinessController
 {
-
     /**
      * Render the section form
      *
@@ -22,7 +21,9 @@ class OperatorLocationController extends TypeOfLicenceController
      */
     public function indexAction()
     {
-        return $this->renderSection();
+        // @todo For now skip this section
+        //return $this->renderSection();
+        return $this->goToNextStep();
     }
 
     /**
@@ -32,11 +33,6 @@ class OperatorLocationController extends TypeOfLicenceController
      */
     public function save($data)
     {
-        if ($data['data']['niFlag'] == 1) {
-            $data['data']['goodsOrPsv'] = 'goods';
-        }
-
-        return parent::save($data);
     }
 
     /**
@@ -46,6 +42,6 @@ class OperatorLocationController extends TypeOfLicenceController
      */
     public function load($id)
     {
-        return array('data' => $this->getLicenceData(array('niFlag')));
+        return array('data' => array());
     }
 }
