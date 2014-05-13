@@ -13,7 +13,7 @@ if (!empty($subSections)) {
 
             $label = $this->translate($subSection['label']);
 
-            if ($subSection['active']) {
+            if ($subSection['active'] || $subSection['disabled']) {
                 ?>
                 <li class="current vertical-navigation__item">
                     <?php echo $label; ?>

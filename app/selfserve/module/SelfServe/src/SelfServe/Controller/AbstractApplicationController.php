@@ -4,17 +4,20 @@
  * Abstract Application Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
+ * @author Jakub Igla <jakub.igla@valtech.co.uk>
  */
 
 namespace SelfServe\Controller;
 
 use Common\Controller\FormJourneyActionController;
 use Zend\EventManager\EventManagerInterface;
+use Zend\View\Model\ViewModel;
 
 /**
  * Abstract Application Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
+ * @author Jakub Igla <jakub.igla@valtech.co.uk>
  */
 abstract class AbstractApplicationController extends FormJourneyActionController
 {
@@ -38,7 +41,7 @@ abstract class AbstractApplicationController extends FormJourneyActionController
         $controller = $this;
         $events->attach(
             'dispatch',
-            function ($e) use ($controller) {
+            function () use ($controller) {
 
                 $applicationId = $controller->getApplicationId();
                 $currentSection = $controller->getCurrentSection();
@@ -94,8 +97,10 @@ abstract class AbstractApplicationController extends FormJourneyActionController
      * @param object $view
      * @param string $current
      * @param string $journey
+     * @param mixed $disabled
+     * @return ViewModel
      */
-    public function renderLayoutWithSubSections($view, $current = '', $journey = '')
+    public function renderLayoutWithSubSections($view, $current = '', $journey = '', $disabled = null)
     {
         $subSections = $this->getSubSections();
 
@@ -104,6 +109,11 @@ abstract class AbstractApplicationController extends FormJourneyActionController
             $details['active'] = false;
             if ($key == $current) {
                 $details['active'] = true;
+            }
+
+            $details['disabled'] = false;
+            if ($disabled == 'all' || (is_array($disabled) && array_search($key, $disabled) !== false)) {
+                $details['disabled'] = true;
             }
         }
 
@@ -173,7 +183,7 @@ abstract class AbstractApplicationController extends FormJourneyActionController
      */
     protected function getLicenceEntity($applicationId = false)
     {
-        if ( ! $applicationId ) {
+        if (!$applicationId) {
             $applicationId = (int) $this->getApplicationId('applicationId');
         }
 

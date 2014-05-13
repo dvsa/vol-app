@@ -58,7 +58,7 @@ return array(
                     ),
                     'home' => array(
                         'type' => 'submit',
-                        'label' => 'Back to home',
+                        'label' => 'Back',
                         'filters' => '\Common\Form\Elements\InputFilters\ActionLink'
                     )
                 )
