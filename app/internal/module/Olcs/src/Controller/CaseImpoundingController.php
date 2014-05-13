@@ -31,9 +31,9 @@ class CaseImpoundingController extends CaseController
         }
 
         $action = $this->fromPost('action');
+        $id = $this->fromPost('id');
 
         if ($action) {
-            $id = $this->fromPost('id');
             $action = strtolower($action);
 
             if ($action == 'add') {

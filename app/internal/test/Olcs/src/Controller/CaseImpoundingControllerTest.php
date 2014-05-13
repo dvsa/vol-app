@@ -57,7 +57,7 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
      *
      * @param string $action
      */
-    public function testIndexActionRedirect($action,$id)
+    public function testIndexActionRedirect($action, $id)
     {
         $this->getFrom('Route', 0, 'licence', 7);
         $this->getFrom('Route', 1, 'case', 24);
@@ -79,7 +79,8 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
      *
      * @return array
      */
-    public function indexRedirectProvider(){
+    public function indexRedirectProvider()
+    {
         return array(
             array('add',null),
             array('edit',1)
@@ -103,16 +104,17 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
-     * Tests the index action
+     * Tests the index action. Also covers what happens if the
+     * edit button is clicked without a row being selected
+     *
+     * @dataProvider indexActionProvider
      */
-    public function testIndexAction()
+    public function testIndexAction($licenceId, $caseId, $action)
     {
-        $licenceId = 7;
-        $caseId = 24;
-
         $this->getFrom('Route', 0, 'licence', $licenceId);
         $this->getFrom('Route', 1, 'case', $caseId);
-        $this->getFrom('Post', 2, 'action', null);
+        $this->getFrom('Post', 2, 'action', $action);
+        $this->getFrom('Post', 3, 'id', null);
 
         $this->controller->expects($this->once())
             ->method('setBreadcrumb');
@@ -142,6 +144,14 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
         return array(
             array(7,null),
             array(null,24)
+        );
+    }
+
+    public function indexActionProvider()
+    {
+        return array(
+            array(7,24,null),
+            array(7,24,'edit')
         );
     }
 
@@ -354,7 +364,8 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
      *
      * @return array
      */
-    public function processAddEditProvider(){
+    public function processAddEditProvider()
+    {
         return array(
             array(
                 $this->getSampleImpoundingPostData(true)
@@ -367,7 +378,8 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
      *
      * @return array
      */
-    public function processAddEditCancelProvider(){
+    public function processAddEditCancelProvider()
+    {
         return array(
             array(
                 $this->getSampleImpoundingPostData(false)
