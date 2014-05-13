@@ -126,15 +126,23 @@ class ConditionUndertakingController extends FormActionController
         }
 
         // assign data as required by the form
-        $data['condition-undertaking']['caseId'] = $data['condition-undertaking']['vosaCase']['id'];
+        $data['condition-undertaking']['vosaCase'] = $data['condition-undertaking']['vosaCase']['id'];
+        $data['condition-undertaking']['licence'] = $data['condition-undertaking']['licence']['id'];
+        $data['condition-undertaking']['isDraft'] = $data['condition-undertaking']['isDraft'] ? 1 : 0;
+
         if ($data['condition-undertaking']['attachedTo'] == 'Licence')
         {
             $data['condition-undertaking']['attachedTo'] = 'Licence';
         }
         else
         {
-            $data['condition-undertaking']['attachedTo'] = $data['condition-undertaking']['operatingCentre']['id'];
+            $data['condition-undertaking']['attachedTo'] =
+                isset($data['condition-undertaking']['operatingCentre']['id']) ?
+                    $data['condition-undertaking']['operatingCentre']['id'] :
+                    '';
         }
+
+
         $form = $this->generateFormWithData(
             'condition-undertaking-form', 'processConditionUndertaking', $data, true
         );
@@ -144,7 +152,6 @@ class ConditionUndertakingController extends FormActionController
         // set form dependent aspects
         $form->get('condition-undertaking')->get('notes')->setLabel(ucfirst($type));
         $form->get('condition-undertaking')->get('attachedTo')->setValueOptions($ocAddressList);
-
 
         $view = new ViewModel(
             array(
@@ -171,24 +178,25 @@ class ConditionUndertakingController extends FormActionController
 
         $routeParams = $this->getParams(array('action', 'licence', 'case'));
 
+        if (strtolower($data['condition-undertaking']['attachedTo']) !== 'licence')
+        {
+            $data['condition-undertaking']['operatingCentre'] = $data['condition-undertaking']['attachedTo'];
+            $data['condition-undertaking']['attachedTo'] = 'OC';
+        }
+        else
+        {
+            $data['condition-undertaking']['operatingCentre'] = null;
+            $data['condition-undertaking']['attachedTo'] = 'Licence';
+        }
+
         if (strtolower($routeParams['action']) == 'edit') {
 
-            $result = $this->processEdit($data['conditionUndertaking-details'], 'ConditionUndertaking');
+            $result = $this->processEdit($data['condition-undertaking'], 'ConditionUndertaking');
 
         } else {
             // configure condition-undertaking data
             unset($data['condition-undertaking']['version']);
             unset($data['condition-undertaking']['id']);
-            if (strtolower($data['condition-undertaking']['attachedTo']) !== 'licence')
-            {
-                $data['condition-undertaking']['operatingCentre'] = $data['condition-undertaking']['attachedTo'];
-                $data['condition-undertaking']['attachedTo'] = 'OC';
-            }
-            else
-            {
-                $data['condition-undertaking']['operatingCentre'] = null;
-                $data['condition-undertaking']['attachedTo'] = 'Licence';
-            }
 
             $result = $this->processAdd($data['condition-undertaking'], 'ConditionUndertaking');
 
@@ -235,6 +243,7 @@ class ConditionUndertakingController extends FormActionController
                     $address['country'];
             }
         }
+        // set up the group options required by Zend
         $options = array(
             'Licence' => array(
                 'label' => 'Licence',
@@ -260,8 +269,16 @@ class ConditionUndertakingController extends FormActionController
     private function getConditionUndertakingBundle()
     {
         return array(
+
             'children' => array(
                 'vosaCase' => array(
+                    'properties' => array(
+                        'id',
+                        'operating_centre_id',
+                        'licence_id'
+                    ),
+                ),
+                'licence' => array(
                     'properties' => array(
                         'id',
                     ),
@@ -269,8 +286,8 @@ class ConditionUndertakingController extends FormActionController
                 'operatingCentre' => array(
                     'properties' => array(
                         'id'
-                    )
-                )
+                    ),
+                ),
             )
         );
     }
