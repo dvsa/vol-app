@@ -16,6 +16,9 @@ use Zend\View\Model\ViewModel;
  */
 class SafetyController extends AbstractVehicleSafetyController
 {
+
+    private $isPsv = null;
+
     /**
      * Safety form
      *
@@ -79,7 +82,10 @@ class SafetyController extends AbstractVehicleSafetyController
         $tableData = $this->formatTableData($data);
 
         $form = $this->generateTableFormWithData(
-            'vehicle-safety',
+            $this->processConfigName(
+                'vehicle-safety',
+                $applicationId
+            ),
             array(
                 'success' => 'processVehicleSafetySuccess',
                 'crud_action' => 'processVehicleSafetyCrudAction'
@@ -266,15 +272,50 @@ class SafetyController extends AbstractVehicleSafetyController
             $licenceData['safetyInsVehicles']
         );
 
-        $licenceData['safetyInsTrailers'] = str_replace(
-            'inspection_interval_trailer.',
-            '',
-            $licenceData['safetyInsTrailers']
-        );
+        if ( isset($licenceData['safetyInsTrailers']) ) {
+            $licenceData['safetyInsTrailers'] = str_replace(
+                'inspection_interval_trailer.',
+                '',
+                $licenceData['safetyInsTrailers']
+            );
+        } else {
+            $licenceData['safetyInsTrailers']=0;
+        }
 
         $licenceData['tachographIns'] = str_replace('tachograph_analyser.', '', $licenceData['tachographIns']);
 
         return $licenceData;
+    }
+
+
+    /**
+     * Check if licence type is psv
+     *
+     * @param int $applicationId
+     * @return boolean
+     */
+    private function isPsvLicence($applicationId)
+    {
+        if (is_null($this->isPsv)) {
+            $licence = $this->getLicenceEntity($applicationId);
+            $this->isPsv = $licence['goodsOrPsv'] == 'psv';
+        }
+        return $this->isPsv;
+    }
+
+    /**
+     * Adds -psv suffix if the licence type is psv
+     *
+     * @param $applicationId
+     * @param $name
+     * @return string
+     */
+    private function processConfigName($name, $applicationId)
+    {
+        if ($this->isPsvLicence($applicationId)) {
+            $name .= '-psv';
+        }
+        return $name;
     }
 
     /**
