@@ -33,7 +33,14 @@ class CaseImpoundingController extends CaseController
         $action = $this->fromPost('action');
 
         if ($action) {
-            return $this->redirectToAction(strtolower($action));
+            $id = $this->fromPost('id');
+            $action = strtolower($action);
+
+            if ($action == 'add') {
+                return $this->redirectToCrud($action, null);
+            } elseif ($id) {
+                return $this->redirectToCrud($action, $id);
+            }
         }
 
         $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licenceId)));
@@ -109,7 +116,7 @@ class CaseImpoundingController extends CaseController
     {
         unset($data['cancel']);
 
-        if($data['submit'] === ''){
+        if ($data['submit'] === '') {
             $formattedData = $this->formatForSave($data);
 
             $result = $this->processAdd($formattedData, 'Impounding');
@@ -138,13 +145,13 @@ class CaseImpoundingController extends CaseController
 
             if (empty($result)) {
                 return $this->redirect()->toRoute(
-                'case_impounding',
-                array(
-                    'action' => null,
-                    'id' => null
-                ),
-                array(),
-                true
+                    'case_impounding',
+                    array(
+                        'action' => null,
+                        'id' => null
+                    ),
+                    array(),
+                    true
                 );
             }
         }
@@ -249,6 +256,9 @@ class CaseImpoundingController extends CaseController
 
     /**
      * Formats data for use in the form
+     *
+     * @param array $results
+     * @return array
      */
     private function formatDataForForm($results)
     {
@@ -277,7 +287,7 @@ class CaseImpoundingController extends CaseController
         );
 
         if (isset($results['presidingTc']['id'])) {
-           $formatted['outcome']['presidingTc'] = 'presiding_tc.' . $results['presidingTc']['id'];
+            $formatted['outcome']['presidingTc'] = 'presiding_tc.' . $results['presidingTc']['id'];
         }
 
         if (isset($results['outcome']['handle'])) {
@@ -309,6 +319,24 @@ class CaseImpoundingController extends CaseController
     }
 
     /**
+     * Redirects to the add or edit action
+     *
+     * @param string $action
+     */
+    private function redirectToCrud($action, $id = null)
+    {
+        return $this->redirect()->toRoute(
+            'case_impounding',
+            array(
+                'action' => $action,
+                'id' => $id,
+            ),
+            array(),
+            true
+        );
+    }
+
+    /**
      * Hearing date and time are separate fields on the form but are one field in the database
      *
      * @param string $hearingDate
@@ -316,7 +344,8 @@ class CaseImpoundingController extends CaseController
      *
      * @return string
      */
-    private function joinHearingDateAndTime($hearingDate, $hearingTime){
+    private function joinHearingDateAndTime($hearingDate, $hearingTime)
+    {
         return $hearingDate . ' ' . $hearingTime . ':00';
     }
 

@@ -57,13 +57,14 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
      *
      * @param string $action
      */
-    public function testIndexActionRedirect($action)
+    public function testIndexActionRedirect($action,$id)
     {
         $this->getFrom('Route', 0, 'licence', 7);
         $this->getFrom('Route', 1, 'case', 24);
         $this->getFrom('Post', 2, 'action', $action);
+        $this->getFrom('Post', 3, 'id', $id);
 
-        $redirectInfo = $this->getActionRedirect($action);
+        $redirectInfo = $this->getCrudRedirect($action, $id);
         $redirect = $this->getRedirectMock($redirectInfo);
 
         $this->controller->expects($this->once())
@@ -80,8 +81,8 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
      */
     public function indexRedirectProvider(){
         return array(
-            array('add'),
-            array('edit')
+            array('add',null),
+            array('edit',1)
         );
     }
 
@@ -433,6 +434,23 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
             'string' => 'case_impounding',
             'options' => array(
                 'action' => $action,
+            )
+        );
+    }
+
+    /**
+     * Information required for a redirect follwing success
+     *
+     * @param string $action
+     * @return array
+     */
+    private function getCrudRedirect($action, $id)
+    {
+        return array(
+            'string' => 'case_impounding',
+            'options' => array(
+                'action' => $action,
+                'id' => $id,
             )
         );
     }
