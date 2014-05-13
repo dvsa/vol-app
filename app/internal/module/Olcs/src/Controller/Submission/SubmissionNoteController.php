@@ -22,8 +22,6 @@ class SubmissionNoteController extends FormActionController
     
     public function addAction()
     {
-        $postParams = $this->params()->fromPost();
-        $routeParams = $this->params()->fromRoute();
         
         $this->setBreadcrumb(
             array(
@@ -43,7 +41,6 @@ class SubmissionNoteController extends FormActionController
         );
         
         $callback = 'processNote';
-        $user = $this->makeRestCall('user', 'GET', array('id' => $this->getLoggedInUser()));
         $submission = $this->makeRestCall('Submission', 'GET', array('id' => $this->routeParams['typeId']));
         $form = $this->generateNoteForm(
             array('version' => $submission['version']),
@@ -91,10 +88,9 @@ class SubmissionNoteController extends FormActionController
     public function createNote($submissionData)
     {
         $postParams = $this->params()->fromPost();
-        
         $newNote = array();
         $newNote['note'] = $postParams['main']['note'];
-        $user = $this->makeRestCall('user', 'GET', array('id' => $this->getLoggedInUser()));
+        $user = $this->makeRestCall('User', 'GET', array('id' => $this->getLoggedInUser()));
         $newNote['user'] = $user['name'];
         $newNote['date'] = date("c");
         $i = count($submissionData[$this->routeParams['section']]['notes'])+1;

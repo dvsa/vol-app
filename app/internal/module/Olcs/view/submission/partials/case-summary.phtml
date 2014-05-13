@@ -7,28 +7,29 @@
     </div>        
     <ul class="case-summary__list">
         <li class="summary__item">
-            <b><?php echo $this->translate('licence-number-full') ?></b><?php echo $this->sectionData['licenceNumber']; ?>
+            <b><?php echo $this->translate('licence-number-full') ?></b><?php echo $this->escapeHtml($this->sectionData['licenceNumber']); ?>
         </li>
         <li class="summary__item">
-            <b><?php echo $this->translate('operator-name') ?></b><?php echo $this->sectionData['name']; ?>
+            <b><?php echo $this->translate('operator-name') ?></b><?php echo $this->escapeHtml($this->sectionData['name']); ?>
         </li>
         <li class="summary__item">
-            <b><?php echo $this->translate('MLH') ?></b><?php echo $this->sectionData['isMlh']; ?>
+            <b><?php echo $this->translate('MLH') ?></b><?php echo $this->escapeHtml($this->sectionData['isMlh']); ?>
         </li>
         <li class="summary__item">
-            <b><?php echo $this->translate('business-type') ?></b><?php echo $this->translate('sic_code.'.$this->sectionData['sicCode']); ?>
+            <b><?php echo $this->translate('business-type') ?></b>
+                <?php echo !empty($this->sectionData['sicCode']) ? $this->translate('sic_code.'.$this->escapeHtml($this->sectionData['sicCode'])) : ''; ?>
         </li>
         <li class="summary__item">
-            <b><?php echo $this->translate('licence-type') ?></b><?php echo $this->sectionData['licenceType']; ?>
+            <b><?php echo $this->translate('licence-type') ?></b><?php echo $this->escapeHtml($this->sectionData['licenceType']); ?>
         </li>
         <li class="summary__item">
             <b><?php echo $this->translate('v-auth-t-auth') ?></b>
                 <?php
                 if ($this->sectionData['authorisedVehicles']) {
-                    echo $this->sectionData['authorisedVehicles'].' vehicles';
+                    echo $this->escapeHtml($this->sectionData['authorisedVehicles'].' vehicles');
                 }
                 if ($this->sectionData['authorisedTrailers']) {
-                    echo ', '.$this->sectionData['authorisedTrailers'].' trailers';
+                    echo $this->escapeHtml(', '.$this->sectionData['authorisedTrailers'].' trailers');
                 }
                 ?>
         </li>
@@ -39,13 +40,13 @@
             <b><?php echo $this->translate('vehicles-in-posession') ?></b>TBD
         </li>
         <li class="summary__item">
-            <b><?php echo $this->translate('entity-type') ?></b><?php echo $this->sectionData['organisationType']; ?>
+            <b><?php echo $this->translate('entity-type') ?></b><?php echo $this->escapeHtml($this->sectionData['organisationType']); ?>
         </li>
         <li class="summary__item">
-            <b><?php echo $this->translate('ecms') ?></b><?php echo $this->sectionData['ecms']; ?>
+            <b><?php echo $this->translate('ecms') ?></b><?php echo $this->escapeHtml($this->sectionData['ecms']); ?>
         </li>
         <li class="summary__item">
-            <b><?php echo $this->translate('case-summary') ?></b><?php echo $this->sectionData['description']; ?>
+            <b><?php echo $this->translate('case-summary') ?></b><?php echo $this->escapeHtml($this->sectionData['description']); ?>
         </li>
     </ul>
 </div>

@@ -64,25 +64,32 @@ trait SubmissionSectionTrait
         $section['notes'] = array();
         $bundle = isset($config['bundle']) ? $config['bundle'] : array();
         if (isset($config['dataPath'])) {
-            $sectionData = $this->makeRestCall($config['dataPath'], 'GET', array('id' => $routeParams['case']), $bundle);
-            $filter = new DashToCamelCase();
-            $method = $filter->filter($sectionName);
-            $section['data'] = $this->getFilteredSectionData($method, $sectionData);
+            $this->sectionData = $this->makeRestCall($config['dataPath'], 'GET', array('id' => $routeParams['case']), $bundle);
         }
+        $filter = new DashToCamelCase();
+        $method = $filter->filter($sectionName);
+        if (method_exists($this, $method)) {
+            $section['data'] = $this->getFilteredSectionData($method, $this->sectionData);
+        }
+        
         return $section;
     }
     
+    /**
+     * Gets filtered result data for each submission section
+     */
     public function getFilteredSectionData($method, $sectionData)
     {
         $data = call_user_func(array($this, $method), $sectionData);
         return $data;
     }
 
+    /**
+     * section case-summary-info
+     */
     public function caseSummaryInfo(array $data = array())
     {
-        $this->dataToReturnArray = array();
-        
-        $this->dataToReturnArray = array(
+        $dataToReturnArray = array(
             'caseNumber' =>  $data['caseNumber'],
             'licenceNumber' =>  $data['licence']['licenceNumber'],
             'name' =>  $data['licence']['organisation']['name'],
@@ -96,7 +103,28 @@ trait SubmissionSectionTrait
             'authorisedVehicles' =>  $data['licence']['authorisedVehicles'],
             'authorisedTrailers' =>  $data['licence']['authorisedTrailers'],
             );
-        return $this->dataToReturnArray;
+        return $dataToReturnArray;
+    }
+    
+    /**
+     * section conviction-history
+     */
+    public function convictionHistory(array $data = array())
+    {
+        $dataToReturnArray = array();
+        foreach ($data['convictions'] as $conviction) {
+            $thisConviction['dateOfOffence'] = $conviction['dateOfOffence'];
+            $thisConviction['dateOfConviction'] = $conviction['dateOfConviction'];
+            $thisConviction['name'] = $conviction['personFirstname'] . ' ' . $conviction['personLastname'];
+            $thisConviction['description'] = $conviction['description'];
+            $thisConviction['courtFpm'] = $conviction['courtFpm'];
+            $thisConviction['penalty'] = $conviction['penalty'];
+            $thisConviction['si'] = $conviction['si'];
+            $thisConviction['decToTc'] = $conviction['decToTc'];
+            $thisConviction['dealtWith'] = $conviction['dealtWith'];
+            $dataToReturnArray[] = $thisConviction;
+        }
+        return $dataToReturnArray;
     }
     
     public function getFilteredDataValues($value, $key)

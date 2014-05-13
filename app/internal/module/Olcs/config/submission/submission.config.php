@@ -12,6 +12,9 @@ return array(
                             'name'
                         )
                     ),
+                    'convictions' => array(
+                        'properties' => 'ALL'
+                    ),
                     'licence' => array(
                         'properties' => 'ALL',
                         'children' => array(
@@ -47,7 +50,9 @@ return array(
         'undertakings' => null,
         'annual-test-history' => null,
         'prohibition-history' => null,
-        'conviction-history' => null,
+        'conviction-history' => array(
+            'view' => 'submission/partials/conviction-history',
+        ),
         'bus-services-registered' => array(
             'exclude' => array(
                 'column' => 'goodsOrPsv',

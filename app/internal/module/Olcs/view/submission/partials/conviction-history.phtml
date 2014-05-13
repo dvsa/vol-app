@@ -1,0 +1,38 @@
+<?php
+    //print_r($this->sectionData);
+?>
+<div class="table__wrapper">
+    <table>
+        <thead>
+            <tr>
+                <th class="" width="">Date of conviction</th>
+                <th class="" width="">Date of offence</th>
+                <th class="" width="">Name / defendant type</th>
+                <th class="" width="">Description</th><th class="" width="">Court/FPN</th>
+                <th class="" width="">Penalty</th>
+                <th class="" width="">SI</th>
+                <th class="" width="">Declared</th>
+                <th class="" width="">Dealt with</th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php
+            foreach ($this->sectionData as $conviction) :
+        ?>
+            <tr>
+                <td><?php echo date('d/m/Y', strtotime($conviction['dateOfConviction']));  ?></td>
+                <td><?php echo date('d/m/Y', strtotime($conviction['dateOfOffence']));  ?></td>
+                <td><?php echo $this->escapeHtml($conviction['name']); ?></td>
+                <td><?php echo $this->escapeHtml($conviction['description']); ?></td>
+                <td><?php echo $this->escapeHtml($conviction['courtFpm']); ?></td>         
+                <td><?php echo $this->escapeHtml($conviction['penalty']); ?></td>
+                <td><?php echo $this->escapeHtml($conviction['si']); ?></td>
+                <td><?php echo $this->escapeHtml($conviction['decToTc']); ?></td>
+                <td><?php echo $this->escapeHtml($conviction['dealtWith']); ?></td>
+            </tr>
+        <?php
+            endforeach;
+        ?>
+        </tbody>
+    </table>
+</div>
