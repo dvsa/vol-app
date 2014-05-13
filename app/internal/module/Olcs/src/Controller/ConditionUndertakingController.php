@@ -162,9 +162,11 @@ class ConditionUndertakingController extends FormActionController
 
         $data = $this->determineSavingAttachedTo($data);
 
+        $data['condition-undertaking']['lastUpdatedOn'] = date('d-m-Y h:i:s');
+        $data['condition-undertaking']['createdBy'] = $this->getLoggedInUser();
+
         if (strtolower($routeParams['action']) == 'edit') {
 
-            $data['condition-undertaking']['lastUpdatedOn'] = date('d-m-Y h:i:s');
             $result = $this->processEdit($data['condition-undertaking'], 'ConditionUndertaking');
 
         } else {
@@ -172,7 +174,6 @@ class ConditionUndertakingController extends FormActionController
             unset($data['condition-undertaking']['version']);
             unset($data['condition-undertaking']['id']);
             $data['condition-undertaking']['createdOn'] = date('d-m-Y h:i:s');
-            $data['condition-undertaking']['lastUpdatedOn'] = date('d-m-Y h:i:s');
 
             $result = $this->processAdd($data['condition-undertaking'], 'ConditionUndertaking');
 
