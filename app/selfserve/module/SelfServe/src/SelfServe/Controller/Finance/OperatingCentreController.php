@@ -65,7 +65,10 @@ class OperatingCentreController extends AbstractFinanceController
             true
         );
 
-        $form->get('form-actions')->get('home')->setValue($this->getUrlFromRoute('selfserve/dashboard-home'));
+        $form->get('form-actions')->get('home')->setValue($this->getUrlFromRoute(
+            'selfserve/business-details',
+            ['applicationId' => $applicationId]
+        ));
 
         $view = $this->getViewModel(
             array(
@@ -95,7 +98,8 @@ class OperatingCentreController extends AbstractFinanceController
         $applicationId = $this->params()->fromRoute('applicationId');
 
         $form = $this->generateForm(
-            $this->processConfigName('operating-centre', $applicationId), 'processAddForm'
+            $this->processConfigName('operating-centre', $applicationId),
+            'processAddForm'
         );
 
         $view = $this->getViewModel(['form' => $form]);
@@ -214,7 +218,10 @@ class OperatingCentreController extends AbstractFinanceController
         );
 
         $data = $this->makeRestCall(
-            'ApplicationOperatingCentre', 'GET', array('application' => $applicationId), $bundle
+            'ApplicationOperatingCentre',
+            'GET',
+            array('application' => $applicationId),
+            $bundle
         );
 
         $newData = array();
