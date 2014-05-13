@@ -50,16 +50,14 @@ class OperatingCentreController extends AbstractFinanceController
         }
 
         $results = $this->getOperatingCentresForApplication($applicationId);
+        $flatResults = $this->convertOperatingCentresDataToFlatFormat($results);
 
-        $table = $this->getOperatingCentreTable($results, $applicationId);
+        $table = $this->getOperatingCentreTable($flatResults, $applicationId);
 
-        $data = $this->formatDataForForm($data, $applicationId, $results);
+        $data = $this->formatDataForForm($data, $applicationId, $flatResults);
 
         $form = $this->generateFormWithData(
-            $this->processConfigName(
-                'operating-centre-authorisation',
-                $applicationId
-            ),
+            $this->processConfigName('operating-centre-authorisation', $applicationId),
             'processAuthorisation',
             $data,
             true
@@ -129,6 +127,11 @@ class OperatingCentreController extends AbstractFinanceController
         if (empty($result)) {
             return $this->notFoundAction();
         }
+        $resultsOperatingCentre = $this->getOperatingCentresForApplication($applicationId);
+        if (empty($resultsOperatingCentre) || !count($resultsOperatingCentre['Results'])) {
+            return $this->notFoundAction();
+        }
+        $resultsOperatingCentre = current($resultsOperatingCentre['Results']);
 
         $data = array(
             'version' => $result['version'],
@@ -137,6 +140,18 @@ class OperatingCentreController extends AbstractFinanceController
                 'no-of-trailers' => $result['numberOfTrailers'],
                 'parking-spaces-confirmation' => $result['sufficientParking'],
                 'permission-confirmation' => $result['permission']
+            ),
+            'address' => array(
+                'id' => $resultsOperatingCentre['operatingCentre']['address']['id'],
+                'version' => $resultsOperatingCentre['operatingCentre']['address']['version'],
+                'addressLine1' => $resultsOperatingCentre['operatingCentre']['address']['addressLine1'],
+                'addressLine2' => $resultsOperatingCentre['operatingCentre']['address']['addressLine2'],
+                'addressLine3' => $resultsOperatingCentre['operatingCentre']['address']['addressLine3'],
+                'addressLine4' => $resultsOperatingCentre['operatingCentre']['address']['addressLine4'],
+                'postcode' => $resultsOperatingCentre['operatingCentre']['address']['postcode'],
+                'county' => $resultsOperatingCentre['operatingCentre']['address']['county'],
+                'city' => $resultsOperatingCentre['operatingCentre']['address']['city'],
+                'country' => 'country.' . $resultsOperatingCentre['operatingCentre']['address']['country']
             )
         );
 
@@ -202,6 +217,8 @@ class OperatingCentreController extends AbstractFinanceController
                     'children' => array(
                         'address' => array(
                             'properties' => array(
+                                'id',
+                                'version',
                                 'addressLine1',
                                 'addressLine2',
                                 'addressLine3',
@@ -223,7 +240,18 @@ class OperatingCentreController extends AbstractFinanceController
             array('application' => $applicationId),
             $bundle
         );
+        
+        return $data;
+    }
 
+    /**
+     * Converts operating centres details to flat format
+     *
+     * @param array $data
+     * @return array
+     */
+    public function convertOperatingCentresDataToFlatFormat($data)
+    {
         $newData = array();
 
         foreach ($data['Results'] as $row) {
@@ -231,6 +259,9 @@ class OperatingCentreController extends AbstractFinanceController
             $newRow = $row;
 
             if (isset($row['operatingCentre']['address'])) {
+
+                unset($row['operatingCentre']['address']['id']);
+                unset($row['operatingCentre']['address']['version']);
 
                 $newRow = array_merge($newRow, $row['operatingCentre']['address']);
             }
@@ -386,6 +417,11 @@ class OperatingCentreController extends AbstractFinanceController
             'id' => $operatingCentreId,
             'version' => $validData['version'],
         );
+
+        $validData['address']['country'] = str_replace('country.', '', $validData['address']['country']);
+        //saving address
+        $this->makeRestCall('Address', 'PUT', $validData['address']);
+
         $data = array_merge($this->mapData($validData), $data);
 
         $this->makeRestCall('ApplicationOperatingCentre', 'PUT', $data);
@@ -417,7 +453,9 @@ class OperatingCentreController extends AbstractFinanceController
         if (isset($validData['authorised-vehicles']['no-of-trailers'])) {
             $data = array_merge(
                 $data,
-                array('numberOfTrailers' => $validData['authorised-vehicles']['no-of-trailers'])
+                array(
+                    'numberOfTrailers' => $validData['authorised-vehicles']['no-of-trailers']
+                )
             );
         }
 
