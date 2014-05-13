@@ -21,9 +21,10 @@ class BusinessDetailsController extends YourBusinessController
      */
     public function indexAction()
     {
-        // @todo For now skip this section
-        //return $this->renderSection();
-        return $this->goToNextStep();
+        $view = $this->getViewModel();
+        $view->setTemplate('self-serve/journey/placeholder');
+
+        return $this->renderSection($view);
     }
 
     /**

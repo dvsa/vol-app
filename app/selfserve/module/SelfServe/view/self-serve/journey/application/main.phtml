@@ -1,4 +1,11 @@
 <?php
+if (isset($title)) {
+    ?>
+    <h2><?php echo $title; ?></h2>
+    <?php
+}
+
+
 if (isset($table)) {
     echo $table;
 }

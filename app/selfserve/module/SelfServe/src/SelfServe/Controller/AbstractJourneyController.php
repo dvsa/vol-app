@@ -109,15 +109,18 @@ abstract class AbstractJourneyController extends FormActionController
      */
     protected function renderSection($view = null, $params = array())
     {
-        if (!$this->isSectionAccessible($this->getJourneyName(), $this->getSectionName(), $this->getSubSectionName())) {
+        $journeyName = $this->getJourneyName();
+        $sectionName = $this->getSectionName();
+        $subSectionName = $this->getSubSectionName();
+
+        if (!$this->isSectionAccessible($journeyName, $sectionName, null)
+            || !$this->isSectionAccessible($journeyName, $sectionName, $subSectionName)) {
             return $this->goToNextStep();
         }
 
-        if (!$this->isSectionEnabled($this->getJourneyName(), $this->getSectionName(), $this->getSubSectionName())) {
-            return $this->goToPreviousStep();
-        }
-
-        if ($this->isButtonPressed('back')) {
+        if (!$this->isSectionEnabled($journeyName, $sectionName, null)
+            || !$this->isSectionEnabled($journeyName, $sectionName, $subSectionName)
+            || $this->isButtonPressed('back')) {
             return $this->goToPreviousStep();
         }
 
@@ -126,7 +129,26 @@ abstract class AbstractJourneyController extends FormActionController
         }
 
         if ($view->getTemplate() == null) {
-            $view->setTemplate('self-serve/journey/' . strtolower($this->getJourneyName()) . '/main');
+            $view->setTemplate('self-serve/journey/' . strtolower($journeyName) . '/main');
+        }
+
+        if ($this->hasTable()) {
+
+            $action = $this->checkForCrudAction();
+
+            if ($action instanceof Response) {
+                return $action;
+            }
+
+            $tableName = $this->getTableName();
+
+            $data = $this->getTableData($this->getIdentifier());
+
+            $settings = $this->getTableSettings();
+
+            $table = $this->alertTable($this->getTable($tableName, $data, $settings));
+
+            $view->setVariable('table', $table->render());
         }
 
         if ($this->hasForm()) {
@@ -153,6 +175,43 @@ abstract class AbstractJourneyController extends FormActionController
         }
 
         return $this->render($view);
+    }
+
+    /**
+     * Get table data
+     *
+     * This method should be overridden
+     *
+     * @return array
+     */
+    protected function getTableData($id)
+    {
+        return array();
+    }
+
+    /**
+     * Get table settings
+     *
+     * This method should be overridden
+     *
+     * @return array
+     */
+    protected function getTableSettings()
+    {
+        return array();
+    }
+
+    /**
+     * Alter table
+     *
+     * This method should be overridden
+     *
+     * @param object $table
+     * @return object
+     */
+    protected function alertTable($table)
+    {
+        return $table;
     }
 
     /**
@@ -561,6 +620,43 @@ abstract class AbstractJourneyController extends FormActionController
     }
 
     /**
+     * Check if the current sub section has a table
+     *
+     * @return boolean
+     */
+    protected function hasTable()
+    {
+        $tableName = $this->getTableName();
+
+        $found = false;
+
+        foreach ($this->getServiceLocator()->get('Config')['tables']['config'] as $location) {
+
+            if (file_exists($location . $tableName . '.table.php' )) {
+                $found = true;
+                break;
+            }
+        }
+
+        return $found;
+    }
+
+    /**
+     * Get table name
+     *
+     * @return string
+     */
+    protected function getTableName()
+    {
+        if (empty($this->tableName)) {
+
+            $this->tableName = $this->getFormName();
+        }
+
+        return $this->tableName;
+    }
+
+    /**
      * Check if the current sub section has a form
      *
      * @return boolean
@@ -585,7 +681,15 @@ abstract class AbstractJourneyController extends FormActionController
             $section = $this->getSectionName();
             $subSection = $this->getSubSectionName();
 
-            $this->formName = $this->camelToDash($journey . '_' . $section . '_' . $subSection);
+            $action = $this->params()->fromRoute('action');
+
+            $suffix = '';
+
+            if ($action !== 'index') {
+                $suffix = '-sub-action';
+            }
+
+            $this->formName = $this->camelToDash($journey . '_' . $section . '_' . $subSection . $suffix);
         }
 
         return $this->formName;

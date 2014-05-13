@@ -46,6 +46,9 @@ return array(
                 )
             ),
             'YourBusiness' => array(
+                'required' => array(
+                    'TypeOfLicence'
+                ),
                 'restriction' => array(
                     'goods-standard',
                     'psv-standard',
@@ -69,6 +72,9 @@ return array(
                 )
             ),
             'TaxiPhv' => array(
+                'required' => array(
+                    'TypeOfLicence'
+                ),
                 'restriction' => array(
                     'psv-special-restricted'
                 ),
@@ -77,6 +83,9 @@ return array(
                 )
             ),
             'OperatingCentres' => array(
+                'required' => array(
+                    'TypeOfLicence'
+                ),
                 'restriction' => array(
                     'goods-standard',
                     'psv-standard',
@@ -93,6 +102,9 @@ return array(
                 )
             ),
             'TransportManagers' => array(
+                'required' => array(
+                    'TypeOfLicence'
+                ),
                 'restriction' => array(
                     'goods-standard',
                     'psv-standard'
@@ -102,6 +114,9 @@ return array(
                 )
             ),
             'VehicleSafety' => array(
+                'required' => array(
+                    'TypeOfLicence'
+                ),
                 'restriction' => array(
                     'goods-standard',
                     'psv-standard',
@@ -113,6 +128,9 @@ return array(
                 )
             ),
             'PreviousHistory' => array(
+                'required' => array(
+                    'TypeOfLicence'
+                ),
                 'restriction' => array(
                     'goods-standard',
                     'psv-standard',
@@ -124,6 +142,9 @@ return array(
                 )
             ),
             'ReviewDeclarations' => array(
+                'required' => array(
+                    'TypeOfLicence'
+                ),
                 'restriction' => array(
                     'goods-standard',
                     'psv-standard',
@@ -136,6 +157,9 @@ return array(
                 )
             ),
             'PaymentSubmission' => array(
+                'required' => array(
+                    'TypeOfLicence'
+                ),
                 'restriction' => array(
                     'goods-standard',
                     'psv-standard',

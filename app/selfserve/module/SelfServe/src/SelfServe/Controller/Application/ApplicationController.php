@@ -42,7 +42,7 @@ class ApplicationController extends AbstractJourneyController
     protected function getAccessKeys($force = false)
     {
         if (empty($this->accessKeys) || $force) {
-            $licence = $this->getLicenceEntity();
+            $licence = $this->getLicenceDataForAccess();
 
             if (empty($licence)) {
                 return array(null);
@@ -71,19 +71,22 @@ class ApplicationController extends AbstractJourneyController
      *
      * @return array|object
      */
-    protected function getLicenceEntity($applicationId = false)
+    protected function getLicenceDataForAccess()
     {
-        if ( ! $applicationId ) {
-            $applicationId = (int) $this->getIdentifier();
-        }
-
         $bundle = array(
             'children' => array(
-                'licence'
+                'licence' => array(
+                    'properties' => array(
+                        'goodsOrPsv',
+                        'niFlag',
+                        'licenceType'
+                    )
+                )
             )
         );
 
-        $application = $this->makeRestCall('Application', 'GET', array('id' => $applicationId), $bundle);
+        $application = $this->makeRestCall('Application', 'GET', array('id' => $this->getIdentifier()), $bundle);
+
         return $application['licence'];
     }
 }

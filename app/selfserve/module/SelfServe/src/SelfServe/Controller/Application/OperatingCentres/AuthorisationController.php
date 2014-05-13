@@ -7,8 +7,6 @@
  */
 namespace SelfServe\Controller\Application\OperatingCentres;
 
-use Zend\Http\Response;
-
 /**
  * Authorisation Controller
  *
@@ -23,32 +21,15 @@ class AuthorisationController extends OperatingCentresController
      */
     public function indexAction()
     {
-        $action = $this->checkForCrudAction();
+        return $this->renderSection();
+    }
 
-        if ($action instanceof Response) {
-            return $action;
-        }
-
-        $bundle = array(
-            'properties' => array(
-                'version',
-                'totAuthVehicles',
-                'totAuthTrailers'
-            )
-        );
-
-        $data = $this->makeRestCall('Application', 'GET', array('id' => $this->getIdentifier()), $bundle);
-
-        if (empty($data)) {
-            return $this->render($this->notFoundAction());
-        }
-
-        $results = $this->getOperatingCentresForApplication($this->getIdentifier());
-
-        $table = $this->getOperatingCentreTable($results);
-
-        $view = $this->getViewModel(array('table' => $table));
-
+    /**
+     * Add operating centre
+     */
+    public function addAction()
+    {
+        $view = $this->getViewModel(array('title' => 'Add operating centre'));
         return $this->renderSection($view);
     }
 
@@ -72,12 +53,12 @@ class AuthorisationController extends OperatingCentresController
     }
 
     /**
-     * Get operating centres for application
+     * Get table data
      *
-     * @param int $applicationId
+     * @param int $id
      * @return array
      */
-    private function getOperatingCentresForApplication($applicationId)
+    protected function getTableData($id)
     {
         $bundle = array(
             'properties' => array(
@@ -108,12 +89,7 @@ class AuthorisationController extends OperatingCentresController
             )
         );
 
-        $data = $this->makeRestCall(
-            'ApplicationOperatingCentre',
-            'GET',
-            array('application' => $applicationId),
-            $bundle
-        );
+        $data = $this->makeRestCall('ApplicationOperatingCentre', 'GET', array('application' => $id), $bundle);
 
         $newData = array();
 
@@ -132,27 +108,5 @@ class AuthorisationController extends OperatingCentresController
         }
 
         return $newData;
-    }
-
-    /**
-     * Get the operating centre table
-     *
-     * @param array $results
-     * @return object
-     */
-    private function getOperatingCentreTable($results)
-    {
-        $settings = array(
-            'sort' => 'address',
-            'order' => 'ASC',
-            'limit' => 10,
-            'page' => 1
-        );
-
-        return $this->buildTable(
-            'operatingcentre',
-            $results,
-            $settings
-        );
     }
 }
