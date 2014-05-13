@@ -239,14 +239,17 @@ class CaseImpoundingController extends CaseController
      */
     private function formatForTable($results)
     {
+        $config = $this->getServiceLocator()->get('Config');
+        $static = $config['static-list-data'];
+
         if (!empty($results)) {
             foreach ($results as $key => $result) {
                 if (isset($result['presidingTc']['tcName'])) {
                     $results[$key]['tcName'] = $result['presidingTc']['tcName'];
                 }
 
-                if (isset($result['outcome']['handle'])) {
-                    $results[$key]['outcome'] = $result['outcome']['handle'];
+                if (isset($result['outcome']['handle'])  && isset($static['impounding_outcome'][$result['outcome']['handle']])) {
+                    $results[$key]['outcome'] = $static['impounding_outcome'][$result['outcome']['handle']];
                 }
             }
         }

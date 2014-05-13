@@ -36,7 +36,8 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
                 'redirect',
                 'generateFormWithData',
                 'processAdd',
-                'processEdit'
+                'processEdit',
+                'getServiceLocator',
             ]
         );
 
@@ -122,6 +123,10 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
         $this->controller->expects($this->once())
             ->method('makeRestCall')
             ->will($this->returnValue($this->getSampleImpoundingArray($licenceId)));
+
+        $this->controller->expects($this->once())
+            ->method('getServiceLocator')
+            ->will($this->returnValue($this->getServiceLocatorStaticData()));
 
         $this->controller->expects($this->once())
             ->method('buildTable');
@@ -500,7 +505,7 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
                         'tcName' => 'Name of TC'
                     ),
                     'outcome' => array(
-                        'handle' => 'Name of Outcome'
+                        'handle' => 'impounding_outcome.1'
                     ),
                 )
             ),
@@ -580,5 +585,56 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
                 ),
 
         );
+    }
+
+    /**
+     * Sample static data
+     *
+     * @return array
+     */
+    private function getSampleStaticData()
+    {
+        return array(
+             'impounding_type' => array
+             (
+                 'impounding_type.1' => 'Hearing',
+                 'impounding_type.2' => 'Paperwork only'
+             ),
+
+             'impounding_outcome' => array
+             (
+                 'impounding_outcome.1' => 'Vehicle(s) returned',
+                 'impounding_outcome.2' => 'Vehicle(s) not returned'
+             ),
+
+             'hearing_location' => array
+             (
+                 'hearing_location.1' => 'Hearing location 1',
+                 'hearing_location.2' => 'Hearing location 2',
+                 'hearing_location.3' => 'Hearing location 3'
+             ),
+
+             'presiding_tc' => array
+             (
+                 'presiding_tc.1' => 'Presiding TC 1',
+                 'presiding_tc.2' => 'Presiding TC 2',
+                 'presiding_tc.3' => 'Presiding TC 3'
+             )
+        );
+    }
+
+    /**
+     * Gets a mock version of static-list-data
+     */
+    private function getServiceLocatorStaticData ()
+    {
+        $serviceMock = $this->getMock('\stdClass', array('get'));
+
+        $serviceMock->expects($this->once())
+            ->method('get')
+            ->with($this->equalTo('Config'))
+            ->will($this->returnValue(array('static-list-data' => $this->getSampleStaticData())));
+
+        return $serviceMock;
     }
 }

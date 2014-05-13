@@ -99,7 +99,7 @@ class CaseController extends FormActionController
             )
         );
 
-        $config = $config = $this->getServiceLocator()->get('Config');
+        $config = $this->getServiceLocator()->get('Config');
         $submissionActions = $config['static-list-data'];
         $results = $this->makeRestCall('Submission', 'GET', array('vosaCase' => $caseId), $bundle);
 
