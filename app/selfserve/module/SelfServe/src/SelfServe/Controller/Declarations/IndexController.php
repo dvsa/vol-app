@@ -99,7 +99,7 @@ class IndexController extends AbstractApplicationController
     /**
      * Remove any unwanted data from our form object
      *
-     * @param \Zend\Form $form - the form object
+     * @param \Zend\Form\Form $form - the form object
      *
      * @return void
      */
