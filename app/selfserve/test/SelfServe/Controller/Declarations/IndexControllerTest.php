@@ -48,8 +48,16 @@ class IndexControllerTest extends PHPUnit_Framework_TestCase
     public function testIndexActionWithInvalidApplication()
     {
         $this->createMockController(
-            ['makeRestCall', 'notFoundAction']
+            ['makeRestCall', 'notFoundAction', 'params', 'setEventManager']
         );
+
+        $mockParams = $this->getMock('\stdClass', ['fromRoute']);
+        $mockParams->expects($this->once())
+            ->method('fromRoute');
+
+        $this->controller->expects($this->once())
+            ->method('params')
+            ->will($this->returnValue($mockParams));
 
         $this->controller->expects($this->once())
             ->method('makeRestCall')
@@ -62,11 +70,145 @@ class IndexControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(404, $this->controller->indexAction());
     }
 
-    public function testIndexActionWithNILicence()
+    public function testIndexActionWithNILicenceRemovesOperatorType()
     {
+        $this->createMockController(
+            [
+                'generateForm',
+                'getLicenceEntity',
+                'getApplicationId',
+                'getRequest',
+                'makeRestCall'
+            ]
+        );
+
+        $this->controller->expects($this->any())
+            ->method('getApplicationId')
+            ->will($this->returnValue(1));
+
+        $mockStatus = [
+            'Results' => ['foo']
+        ];
+        $this->controller->expects($this->once())
+            ->method('makeRestCall')
+            ->will($this->returnValue($mockStatus));
+
+        $licenceData = [
+            'niFlag' => true,
+            'goodsOrPsv' => 'goods',
+            'licenceType' => '1'
+        ];
+        $this->controller->expects($this->once())
+            ->method('getLicenceEntity')
+            ->will($this->returnValue($licenceData));
+
+        $mockForm = $this->getMock('\stdClass', ['remove', 'setData']);
+        $mockForm->expects($this->once())
+            ->method('remove')
+            ->with('operator-type');
+
+        $formData = [
+            'operator_location' => [
+                'operator_location' => 'ni'
+            ],
+            'operator-type' => [
+                'operator-type' => 'goods'
+            ],
+            'licence-type' => [
+                'licence_type' => '1'
+            ]
+        ];
+        $mockForm->expects($this->once())
+            ->method('setData')
+            ->with($formData);
+
+        $this->controller->expects($this->once())
+            ->method('generateForm')
+            ->will($this->returnValue($mockForm));
+
+        $mockRequest = $this->getMock('\stdClass', ['getRequestUri']);
+        $mockRequest->expects($this->any())
+            ->method('getRequestUri')
+            ->will($this->returnValue('/foo/bar'));
+
+        $this->controller->expects($this->once())
+            ->method('getRequest')
+            ->will($this->returnValue($mockRequest));
+
+        $view = $this->controller->indexAction();
+        $this->assertEquals('/foo/bar', $view->getVariable('currentUrl'));
     }
 
     public function testIndexActionWithNonNILicence()
     {
+        /**
+         * although this test bootstraps quite a bit as
+         * per the previous one, it makes less assertions;
+         * basically it only cares that the form isn't
+         * manipulated (as the NI flag is false)
+         */
+        $this->createMockController(
+            [
+                'generateForm',
+                'getLicenceEntity',
+                'getApplicationId',
+                'getRequest',
+                'makeRestCall'
+            ]
+        );
+
+        $this->controller->expects($this->any())
+            ->method('getApplicationId')
+            ->will($this->returnValue(1));
+
+        $mockStatus = [
+            'Results' => ['foo']
+        ];
+        $this->controller->expects($this->once())
+            ->method('makeRestCall')
+            ->will($this->returnValue($mockStatus));
+
+        $licenceData = [
+            'niFlag' => false,
+            'goodsOrPsv' => 'goods',
+            'licenceType' => '1'
+        ];
+        $this->controller->expects($this->once())
+            ->method('getLicenceEntity')
+            ->will($this->returnValue($licenceData));
+
+        $mockForm = $this->getMock('\stdClass', ['remove', 'setData']);
+        $mockForm->expects($this->never())
+            ->method('remove');
+
+        $formData = [
+            'operator_location' => [
+                'operator_location' => 'uk'
+            ],
+            'operator-type' => [
+                'operator-type' => 'goods'
+            ],
+            'licence-type' => [
+                'licence_type' => '1'
+            ]
+        ];
+        $mockForm->expects($this->once())
+            ->method('setData')
+            ->with($formData);
+
+        $this->controller->expects($this->once())
+            ->method('generateForm')
+            ->will($this->returnValue($mockForm));
+
+        $mockRequest = $this->getMock('\stdClass', ['getRequestUri']);
+        $mockRequest->expects($this->any())
+            ->method('getRequestUri')
+            ->will($this->returnValue('/foo/bar'));
+
+        $this->controller->expects($this->once())
+            ->method('getRequest')
+            ->will($this->returnValue($mockRequest));
+
+        $this->controller->indexAction();
     }
 }

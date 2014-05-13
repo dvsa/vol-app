@@ -37,7 +37,7 @@ class IndexController extends AbstractApplicationController
      */
     public function indexAction()
     {
-        $applicationId = $this->params()->fromRoute('applicationId');
+        $applicationId = $this->getApplicationId();
 
         // collect completion status
         $completionStatus = $this->makeRestCall(
@@ -45,6 +45,10 @@ class IndexController extends AbstractApplicationController
             'GET',
             ['application_id' => $applicationId]
         );
+
+        if ($completionStatus === null) {
+            return $this->notFoundAction();
+        }
 
         $form = $this->generateForm('review', null);
 
