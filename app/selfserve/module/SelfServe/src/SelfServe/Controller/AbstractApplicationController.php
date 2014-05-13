@@ -41,7 +41,7 @@ abstract class AbstractApplicationController extends FormJourneyActionController
         $controller = $this;
         $events->attach(
             'dispatch',
-            function ($e) use ($controller) {
+            function () use ($controller) {
 
                 $applicationId = $controller->getApplicationId();
                 $currentSection = $controller->getCurrentSection();
