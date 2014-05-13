@@ -17,15 +17,18 @@ return [
                     'version' => [
                         'type' => 'hidden'
                     ],
+                    'vosaCase' => [
+                        'type' => 'hidden'
+                    ],
+                    'licence' => [
+                        'type' => 'hidden'
+                    ],
                     'conditionType' => [
                         'type' => 'hidden'
                     ],
                     'addedVia' => [
                         'type' => 'hidden',
                         'value' => 'Case'
-                    ],
-                    'caseId' => [
-                        'type' => 'hidden',
                     ],
                     'isDraft' => [
                         'type' => 'hidden',
@@ -49,22 +52,13 @@ return [
            ],
         ],
         'elements' => [
-            'vosaCase' => [
-                'type' => 'hidden'
-            ],
-            'id' => [
-                'type' => 'hidden'
-            ],
-            'version' => [
-                'type' => 'hidden'
-            ],
-            'complaint' => [
+            'condition-undertaking-submit' => [
                 'type' => 'submit',
                 'label' => 'Save',
                 'class' => 'action--primary large'
             ],
             'cancel' => [
-                'name' => 'cancel-complaint',
+                'name' => 'cancel-conditionUndertaking',
                 'type' => 'submit',
                 'label' => 'Cancel',
                 'class' => 'action--secondary large'

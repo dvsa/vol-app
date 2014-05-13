@@ -50,32 +50,33 @@ class ConditionUndertakingController extends FormActionController
             )
         );
 
-        $data = array('conditionType' => $type, 'vosaCase' => $routeParams['case']);
+        $data['condition-undertaking'] = array(
+            'addedVia' => 'Case',
+            'conditionType' => $type,
+            'isDraft' => 0,
+            'vosaCase' => $routeParams['case'],
+            'licence' => $routeParams['licence']
+        );
 
-        // todo hardcoded organisation id for now
         $results = $this->makeRestCall('VosaCase', 'GET', array('id' => $routeParams['case']));
 
         if (empty($routeParams['case']) || empty($routeParams['licence']) || empty($results)) {
             return $this->getResponse()->setStatusCode(404);
         }
 
-        $form = $this->generateForm(
-            'condition-undertaking-form', 'processConditionUndertaking'
+        $form = $this->generateFormWithData(
+            'condition-undertaking-form', 'processConditionUndertaking', $data
         );
-
 
         $ocAddressList = $this->getOCAddressByLicence($routeParams['licence']);
 
         // set form dependent aspects
-        $form->get('condition-undertaking')->get('notes')->setLabel($type);
+        $form->get('condition-undertaking')->get('notes')->setLabel(ucfirst($type));
         $form->get('condition-undertaking')
                 ->get('attachedTo')
                 ->setValueOptions($ocAddressList);
 
-/*        var_dump($form->get('condition-undertaking')
-                ->get('attachedTo')
-                ->disableInArrayValidator());exit;*/
-        $form->setData($data);
+        //$form->setData($data);
         $view = new ViewModel(
             array(
             'form' => $form,
@@ -167,8 +168,7 @@ class ConditionUndertakingController extends FormActionController
      */
     public function processConditionUndertaking($data)
     {
-        var_dump($data);
-        exit;
+
         $routeParams = $this->getParams(array('action', 'licence', 'case'));
 
         if (strtolower($routeParams['action']) == 'edit') {
@@ -176,16 +176,26 @@ class ConditionUndertakingController extends FormActionController
             $result = $this->processEdit($data['conditionUndertaking-details'], 'ConditionUndertaking');
 
         } else {
-            // configure conditionUndertaking data
+            // configure condition-undertaking data
+            unset($data['condition-undertaking']['version']);
+            unset($data['condition-undertaking']['id']);
+            if (strtolower($data['condition-undertaking']['attachedTo']) !== 'licence')
+            {
+                $data['condition-undertaking']['operatingCentre'] = $data['condition-undertaking']['attachedTo'];
+                $data['condition-undertaking']['attachedTo'] = 'OC';
+            }
+            else
+            {
+                $data['condition-undertaking']['operatingCentre'] = null;
+                $data['condition-undertaking']['attachedTo'] = 'Licence';
+            }
 
-            $data['conditionUndertaking-details'];
-
-            $result = $this->processAdd($data, 'ConditionUndertaking');
+            $result = $this->processAdd($data['condition-undertaking'], 'ConditionUndertaking');
 
         }
 
         return $this->redirect()->toRoute(
-            'case_conditionUndertakings',
+            'case_conditions_undertakings',
             array(
                 'case' => $routeParams['case'], 'licence' => $routeParams['licence']
             )
