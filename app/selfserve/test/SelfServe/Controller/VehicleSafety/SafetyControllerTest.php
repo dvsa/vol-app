@@ -78,7 +78,8 @@ class SafetyControllerTest extends PHPUnit_Framework_TestCase
                 'safetyInsVaries' => 1,
                 'tachographIns' => 1,
                 'tachographInsName' => 'Foo',
-                'version' => 3
+                'version' => 3,
+                'goodsOrPsv' => 'goods'
             ),
             'workshops' => array(
                 array(
@@ -133,7 +134,7 @@ class SafetyControllerTest extends PHPUnit_Framework_TestCase
             ->with('form-actions')
             ->will($this->returnValue($mockFormActions));
 
-        $this->controller->expects($this->once())
+        $this->controller->expects($this->exactly(2))
             ->method('makeRestCall')
             ->with('Application', 'GET', array('id' => $applicationId))
             ->will($this->returnValue($data));
