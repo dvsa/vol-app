@@ -37,13 +37,12 @@ return [
                 'elements' => [
                     'hearingDate' => [
                         'type' => 'dateSelectWithEmpty',
-                        'label' => 'Hearing date',
-                        'required' => false
+                        'label' => 'Hearing date'
                     ],
                     'hearingTime' => [
                         'type' => 'timeSelect',
                         'label' => 'Hearing time',
-                        'required' => false
+                        'filters' => '\Common\Form\Elements\InputFilters\HearingTimeHasDate',
                     ],
                     'hearingLocation' => [
                         'type' => 'select',
