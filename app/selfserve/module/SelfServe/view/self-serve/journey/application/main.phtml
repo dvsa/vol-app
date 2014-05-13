@@ -1,0 +1,9 @@
+<?php
+if (isset($table)) {
+    echo $table;
+}
+
+if (isset($form)) {
+    $form->prepare();
+    echo $this->form($form);
+}

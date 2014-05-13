@@ -21,7 +21,7 @@ class YourBusinessController extends ApplicationController
      *
      * @var string
      */
-    protected $service = '';
+    protected $service = 'Organisation';
 
     /**
      * Redirect to the first section
@@ -31,5 +31,35 @@ class YourBusinessController extends ApplicationController
     public function indexAction()
     {
         return $this->goToFirstSubSection();
+    }
+
+    /**
+     * Get organisation data
+     *
+     * @param array $properties
+     * @return array
+     */
+    protected function getOrgnisationData($properties = array())
+    {
+        $properties = array_merge(
+            array('id', 'version'),
+            $properties
+        );
+
+        $bundle = array(
+            'children' => array(
+                'licence' => array(
+                    'children' => array(
+                        'organisation' => array(
+                            'properties' => $properties
+                        )
+                    )
+                )
+            )
+        );
+
+        $application = $this->makeRestCall('Application', 'GET', array('id' => $this->getIdentifier()), $bundle);
+
+        return $application['licence']['organisation'];
     }
 }

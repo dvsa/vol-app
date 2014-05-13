@@ -125,6 +125,10 @@ abstract class AbstractJourneyController extends FormActionController
             $view = $this->getViewModel($params);
         }
 
+        if ($view->getTemplate() == null) {
+            $view->setTemplate('self-serve/journey/' . strtolower($this->getJourneyName()) . '/main');
+        }
+
         if ($this->hasForm()) {
 
             $formName = $this->getFormName();
@@ -141,19 +145,24 @@ abstract class AbstractJourneyController extends FormActionController
                 return $form;
             }
 
-            $form = $this->alterForm($form);
-
-            $view->setVariable('form', $form);
-
-            if ($view->getTemplate() == null) {
-                $view->setTemplate('self-serve/layout/form');
-            }
+            $view->setVariable('form', $this->alterForm($form));
         }
 
         if ($this->hasView()) {
             $view->setTemplate($this->getViewName());
         }
 
+        return $this->render($view);
+    }
+
+    /**
+     * Render the view
+     *
+     * @param ViewModel $view
+     * @return ViewModel
+     */
+    protected function render($view)
+    {
         $navigation = $this->getNavigationView();
 
         $layout = $this->getViewModel(
@@ -163,7 +172,7 @@ abstract class AbstractJourneyController extends FormActionController
             )
         );
 
-        $layout->setTemplate('self-serve/layout/journey');
+        $layout->setTemplate('self-serve/journey/' . strtolower($this->getJourneyName()) . '/layout');
 
         $layout->addChild($view, 'main');
 

@@ -54,7 +54,7 @@ class TypeOfLicenceController extends ApplicationController
             )
         );
 
-        $application = $this->makeRestCall('Application', 'GET', array('id' => $id), $bundle);
+        $application = $this->makeRestCall('Application', 'GET', array('id' => $this->getIdentifier()), $bundle);
 
         return $application['licence'];
     }

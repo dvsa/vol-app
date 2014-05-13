@@ -1,18 +1,18 @@
 <?php
 
 /**
- * BusinessType Controller
+ * FinancialEvidence Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-namespace SelfServe\Controller\Application\YourBusiness;
+namespace SelfServe\Controller\Application\OperatingCentres;
 
 /**
- * BusinessType Controller
+ * FinancialEvidence Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class BusinessTypeController extends YourBusinessController
+class FinancialEvidenceController extends OperatingCentresController
 {
     /**
      * Render the section form
@@ -31,7 +31,6 @@ class BusinessTypeController extends YourBusinessController
      */
     public function save($data)
     {
-        parent::save($data);
     }
 
     /**
@@ -41,6 +40,6 @@ class BusinessTypeController extends YourBusinessController
      */
     public function load($id)
     {
-        return array('data' => $this->getOrgnisationData(array('organisationType')));
+        return array('data' => array());
     }
 }

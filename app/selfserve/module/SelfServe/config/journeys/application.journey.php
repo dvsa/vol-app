@@ -84,7 +84,12 @@ return array(
                     'psv-restricted'
                 ),
                 'subSections' => array(
+                    'Authorisation' => array(
 
+                    ),
+                    'FinancialEvidence' => array(
+
+                    )
                 )
             ),
             'TransportManagers' => array(
