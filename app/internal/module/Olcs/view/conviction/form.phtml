@@ -1,6 +1,6 @@
 <?php
     foreach($this->headScript as $headScript) {
-        $this->headScript()->prependFile($this->basePath() . $headScript);
+        $this->headScript()->appendFile($this->basePath() . $headScript);
     }
     echo $this->render(
         '/partials/page-header.phtml',
