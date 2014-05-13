@@ -268,6 +268,11 @@ class CaseController extends FormActionController
                 'label' => 'Conditions &amp; Undertakings',
                 'url' => $pm->get('url')->fromRoute('case_conditions_undertakings', ['tab' => 'conditions-undertakings'], [], true),
             ],
+            'revoke' => [
+                'key' => 'revoke',
+                'label' => 'Proposal To Revoke',
+                'url' => $pm->get('url')->fromRoute('case_revoke', ['tab' => 'revoke'], [], true),
+            ],
         ];
 
         return $tabs;

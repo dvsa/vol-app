@@ -265,6 +265,19 @@ return array(
                     )
                 )
             ),
+            'case_revoke' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/licence/:licence/case/:case/revoke/:action[/:id]',
+                    'constraints' => array(
+                        'case' => '[0-9]+',
+                        'id' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'CaseRevokeController',
+                    )
+                )
+            ),
         )
     ),
     'tables' => array(
@@ -290,7 +303,8 @@ return array(
             'CaseStayController' => 'Olcs\Controller\CaseStayController',
             'CasePenaltyController' => 'Olcs\Controller\CasePenaltyController',
             'CaseProhibitionController' => 'Olcs\Controller\CaseProhibitionController',
-            'CaseConditionUndertakingController' => 'Olcs\Controller\CaseConditionUndertakingController'
+            'CaseConditionUndertakingController' => 'Olcs\Controller\CaseConditionUndertakingController',
+            'CaseRevokeController' => 'Olcs\Controller\CaseRevokeController'
         )
     ),
     'view_manager' => array(
