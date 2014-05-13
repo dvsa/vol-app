@@ -38,7 +38,8 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
                 'processAdd',
                 'getServiceManager',
                 'getPluginManager',
-                'configureFormForConditionType'
+                'configureFormForConditionType',
+                'getLoggedInUser'
             )
         );
         parent::setUp();
@@ -596,6 +597,7 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
         $addData['lastUpdatedOn'] = date('d-m-Y h:i:s');
         $addData['operatingCentre'] = null;
         $addData['attachedTo'] = 'Licence';
+        $addData['createdBy'] = 1;
 
         $toRoute = $this->getMock('\stdClass', array('toRoute'));
         $toRoute->expects($this->once())
@@ -609,6 +611,10 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
         $this->controller->expects($this->once())
             ->method('redirect')
             ->will($this->returnValue($toRoute));
+
+        $this->controller->expects($this->once())
+            ->method('getLoggedInUser')
+            ->will($this->returnValue(1));
 
         $this->controller->expects($this->once())
             ->method('processAdd')
@@ -636,6 +642,7 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
         $addData['lastUpdatedOn'] = date('d-m-Y h:i:s');
         $addData['operatingCentre'] = 21;
         $addData['attachedTo'] = 'OC';
+        $addData['createdBy'] = 1;
 
         $toRoute = $this->getMock('\stdClass', array('toRoute'));
         $toRoute->expects($this->once())
@@ -649,6 +656,10 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
         $this->controller->expects($this->once())
             ->method('redirect')
             ->will($this->returnValue($toRoute));
+
+        $this->controller->expects($this->once())
+            ->method('getLoggedInUser')
+            ->will($this->returnValue(1));
 
         $this->controller->expects($this->once())
             ->method('processAdd')
@@ -675,6 +686,7 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
         $editData['lastUpdatedOn'] = date('d-m-Y h:i:s');
         $editData['operatingCentre'] = null;
         $editData['attachedTo'] = 'Licence';
+        $editData['createdBy'] = 1;
 
         $toRoute = $this->getMock('\stdClass', array('toRoute'));
         $toRoute->expects($this->once())
@@ -688,6 +700,10 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
         $this->controller->expects($this->once())
             ->method('redirect')
             ->will($this->returnValue($toRoute));
+
+        $this->controller->expects($this->once())
+            ->method('getLoggedInUser')
+            ->will($this->returnValue(1));
 
         $this->controller->expects($this->once())
             ->method('processEdit')
@@ -714,6 +730,7 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
         $editData['lastUpdatedOn'] = date('d-m-Y h:i:s');
         $editData['operatingCentre'] = 21;
         $editData['attachedTo'] = 'OC';
+        $editData['createdBy'] = 1;
 
         $toRoute = $this->getMock('\stdClass', array('toRoute'));
         $toRoute->expects($this->once())
@@ -729,10 +746,16 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue($toRoute));
 
         $this->controller->expects($this->once())
+            ->method('getLoggedInUser')
+            ->will($this->returnValue(1));
+
+        $this->controller->expects($this->once())
             ->method('processEdit')
             ->with($editData, 'ConditionUndertaking')
             ->will($this->returnValue(['id' => 1]));
 
         $this->controller->processConditionUndertaking($functionData);
     }
+
+
 }
