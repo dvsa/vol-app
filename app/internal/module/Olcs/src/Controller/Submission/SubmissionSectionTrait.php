@@ -126,11 +126,4 @@ trait SubmissionSectionTrait
         }
         return $dataToReturnArray;
     }
-    
-    public function getFilteredDataValues($value, $key)
-    {
-        if (in_array($key, $this->requiredDataKeys)) {
-            $this->dataToReturnArray[$key] = $value;
-        }
-    }
 }

@@ -15,97 +15,90 @@ class SubmissionTraitTest extends AbstractHttpControllerTestCase
     public function setUp()
     {
         $this->setApplicationConfig(
-            include __DIR__.'/../../../../'  . 'config/application.config.php'
-        );
-        $this->controller = $this->getMock(
-            '\Olcs\Controller\Submission\SubmissionController',
-            array(
-                'getServiceLocator',
-                'generateFormWithData',
-                'generateForm',
-                'params',
-                'getParams',
-                'makeRestCall',
-                'setData',
-                'createSubmission',
-            )
-        );
-        $this->controller->routeParams = array();
-        $this->licenceData = array(
-            'id' => 7,
-            'licenceType' => 'Standard National',
-            'goodsOrPsv' => 'Psv'
+            include __DIR__.'/../../../../../'  . 'config/application.config.php'
         );
         
         parent::setUp();
     }
     
-    public function testCreateSubmission()
+    public function testCaseSummaryInfo()
     {
-        /*$this->controller = $this->getMock(
-            '\Olcs\Controller\Submission\SubmissionController',
-            array(
-                'makeRestCall',
-                'getServiceLocator',
-                'createSection'
+        $submissionSectionTrait = $this->getMockForTrait(
+            '\Olcs\Controller\Submission\SubmissionSectionTrait'
+        );
+        $data = array(
+            'caseNumber' => 54,
+            'ecms' => 123123,
+            'description' => 'Case 1',
+            'licence' => array(
+                'licenceNumber' => 7,
+                'startDate' => '2014-01-01',
+                'authorisedVehicles' => 12,
+                'authorisedTrailers' => 4,
+                'organisation' => array(
+                    'name' => 'Fred SMith',
+                    'organisationType' => 'Bus company',
+                    'sicCode' => 123345,
+                    'isMlh' => 'Y'
+                ),
+                'licenceType' => 'Standard National'
             )
         );
-        $this->licenceData['licenceType'] = 'blah';
-        $this->controller->expects($this->once())
-            ->method('makeRestCall')
-            ->with('Licence', 'GET', array('id' => 7))
-            ->will($this->returnValue($this->licenceData));
+        $result = $submissionSectionTrait->caseSummaryInfo($data);
+        $this->assertContains('Case 1', $result);
+        $this->assertArrayHasKey('ecms', $result);
+    }
+    
+    public function testConvictionHistory()
+    {
+        $submissionSectionTrait = $this->getMockForTrait(
+            '\Olcs\Controller\Submission\SubmissionSectionTrait'
+        );
+        $data = array('convictions' => []);
+        $thisConviction['dateOfOffence'] = '2014-01-01';
+        $thisConviction['dateOfConviction'] = '2014-01-01';
+        $thisConviction['personFirstname'] = 'Fred';
+        $thisConviction['personLastname'] = 'Smith';
+        $thisConviction['description'] = 'Done for speeding';
+        $thisConviction['courtFpm'] = 'Court 12';
+        $thisConviction['penalty'] = 'A monkey';
+        $thisConviction['si'] = 'Y';
+        $thisConviction['decToTc'] = 'Y';
+        $thisConviction['dealtWith'] = 'N';
+        $data['convictions'][] = $thisConviction;
         
-        $this->controller->submissionConfig = array(
-                'sections' => array(
-                    'case-summary-info' => null,
-                    'transport-managers' => array(
-                        'exclude' => array(
-                            'column' => 'licenceType',
-                            'values' => array(
-                                'standard national',
-                                'standard international'
-                            )
-                        )
-                    )
-                )
+        $result = $submissionSectionTrait->convictionHistory($data);
+//print_r($result);
+        $this->assertContains('Court 12', $result[0]);
+        $this->assertArrayHasKey('dateOfConviction', $result[0]);
+    }
+    
+    public function testGetFilteredSectionData()
+    {
+        $submissionSectionTrait = $this->getMockForTrait(
+            '\Olcs\Controller\Submission\SubmissionSectionTrait'
         );
         
-        $this->controller->expects($this->once())
-            ->method('createSection')
-            ->with('case-summary-info', $this->controller->submissionConfig)
-            ->will($this->returnValue(array()));
+        $data = array(
+            'caseNumber' => 54,
+            'ecms' => 123123,
+            'description' => 'Case 1',
+            'licence' => array(
+                'licenceNumber' => 7,
+                'startDate' => '2014-01-01',
+                'authorisedVehicles' => 12,
+                'authorisedTrailers' => 4,
+                'organisation' => array(
+                    'name' => 'Fred SMith',
+                    'organisationType' => 'Bus company',
+                    'sicCode' => 123345,
+                    'isMlh' => 'Y'
+                ),
+                'licenceType' => 'Standard National'
+            )
+        );
         
-        $serviceLocator = $this->getMock('\stdClass', array('get'));
-        
-        $serviceLocator->expects($this->once())
-            ->method('get')
-            ->with('config')
-            ->will(
-                $this->returnValue(
-                    array(
-                        'submission_config' => array(
-                            'sections' => array(
-                                'case-summary-info' => null,
-                                'transport-managers' => array(
-                                    'exclude' => array(
-                                        'column' => 'licenceType',
-                                        'values' => array(
-                                            'standard national',
-                                            'standard international'
-                                        )
-                                    )
-                                )
-                            )
-                        )
-                    )
-                )
-            );
-        
-        $this->controller->expects($this->once())
-            ->method('getServiceLocator')
-            ->will($this->returnValue($serviceLocator));
-        
-        $this->controller->createSubmission(array('licence' => 7, 'case' => 54));*/
+        $result = $submissionSectionTrait->getFilteredSectionData('caseSummaryInfo', $data);
+        $this->assertArrayHasKey('ecms', $result);
     }
 }
