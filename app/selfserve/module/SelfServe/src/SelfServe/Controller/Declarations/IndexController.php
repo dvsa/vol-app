@@ -87,17 +87,26 @@ class IndexController extends AbstractApplicationController
     protected function mapEntitiesToForm()
     {
         $data = $this->getApplicationData();
-        return [
+
+        $formData = [
             'operator_location' => [
                 'operator_location' => $data['licence']['niFlag'] ? 'ni' : 'uk',
             ],
             'operator-type' => [
                 'operator-type' => $data['licence']['goodsOrPsv'],
-            ],
-            'licence-type' => [
-                'licence_type' => $data['licence']['licenceType'],
             ]
         ];
+        if ($data['licence']['goodsOrPsv'] === 'psv') {
+            $formData['licence-type-psv'] = [
+                'licence-type-psv' => $data['licence']['licenceType'],
+            ];
+        } else {
+            $formData['licence-type'] = [
+                'licence_type' => $data['licence']['licenceType'],
+            ];
+        }
+        return $formData;
+
     }
 
     /**
@@ -117,6 +126,11 @@ class IndexController extends AbstractApplicationController
         if ($data['licence']['niFlag']) {
             $form->remove('operator-type');
         }
+
+        // likewise, depending on our licence type we want
+        // to hide one of the licence-type fieldsets
+        $remove = $data['licence']['goodsOrPsv'] === 'goods' ? '-psv' : '';
+        $form->remove('licence-type' . $remove);
     }
 
     /**

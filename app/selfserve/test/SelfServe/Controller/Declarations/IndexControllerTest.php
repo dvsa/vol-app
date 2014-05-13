@@ -70,7 +70,7 @@ class IndexControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(404, $this->controller->indexAction());
     }
 
-    public function testIndexActionWithNILicenceRemovesOperatorType()
+    public function testIndexActionWithNIAndGoodsLicenceRemovesCorrectFieldsets()
     {
         $this->createMockController(
             [
@@ -103,9 +103,12 @@ class IndexControllerTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue($licenceData));
 
         $mockForm = $this->getMock('\stdClass', ['remove', 'setData']);
-        $mockForm->expects($this->once())
+        $mockForm->expects($this->at(0))
             ->method('remove')
             ->with('operator-type');
+        $mockForm->expects($this->at(1))
+            ->method('remove')
+            ->with('licence-type-psv');
 
         $formData = [
             'operator_location' => [
@@ -139,7 +142,7 @@ class IndexControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('/foo/bar', $view->getVariable('currentUrl'));
     }
 
-    public function testIndexActionWithNonNILicence()
+    public function testIndexActionWithNonNIAndGoodsLicence()
     {
         /**
          * although this test bootstraps quite a bit as
@@ -178,8 +181,9 @@ class IndexControllerTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue($licenceData));
 
         $mockForm = $this->getMock('\stdClass', ['remove', 'setData']);
-        $mockForm->expects($this->never())
-            ->method('remove');
+        $mockForm->expects($this->once())
+            ->method('remove')
+            ->with('licence-type-psv');
 
         $formData = [
             'operator_location' => [
@@ -190,6 +194,79 @@ class IndexControllerTest extends PHPUnit_Framework_TestCase
             ],
             'licence-type' => [
                 'licence_type' => '1'
+            ]
+        ];
+        $mockForm->expects($this->once())
+            ->method('setData')
+            ->with($formData);
+
+        $this->controller->expects($this->once())
+            ->method('generateForm')
+            ->will($this->returnValue($mockForm));
+
+        $mockRequest = $this->getMock('\stdClass', ['getRequestUri']);
+        $mockRequest->expects($this->any())
+            ->method('getRequestUri')
+            ->will($this->returnValue('/foo/bar'));
+
+        $this->controller->expects($this->once())
+            ->method('getRequest')
+            ->will($this->returnValue($mockRequest));
+
+        $this->controller->indexAction();
+    }
+
+    public function testIndexActionWithNonNIAndPsvLicence()
+    {
+        /**
+         * the key assertions in this test revolve around ensuring
+         * all licence-type stuff is replaced with licence-type-psv
+         * NI/UK is incidental
+         */
+        $this->createMockController(
+            [
+                'generateForm',
+                'getLicenceEntity',
+                'getApplicationId',
+                'getRequest',
+                'makeRestCall'
+            ]
+        );
+
+        $this->controller->expects($this->any())
+            ->method('getApplicationId')
+            ->will($this->returnValue(1));
+
+        $mockStatus = [
+            'Results' => ['foo']
+        ];
+        $this->controller->expects($this->once())
+            ->method('makeRestCall')
+            ->will($this->returnValue($mockStatus));
+
+        $licenceData = [
+            'niFlag' => false,
+            'goodsOrPsv' => 'psv',
+            'licenceType' => '1'
+        ];
+        $this->controller->expects($this->once())
+            ->method('getLicenceEntity')
+            ->will($this->returnValue($licenceData));
+
+        $mockForm = $this->getMock('\stdClass', ['remove', 'setData']);
+        $mockForm->expects($this->once())
+            ->method('remove')
+            ->with('licence-type');
+
+        $formData = [
+            'operator_location' => [
+                'operator_location' => 'uk'
+            ],
+            'operator-type' => [
+                'operator-type' => 'psv'
+            ],
+            'licence-type-psv' => [
+                'licence-type-psv' => '1'
             ]
         ];
         $mockForm->expects($this->once())

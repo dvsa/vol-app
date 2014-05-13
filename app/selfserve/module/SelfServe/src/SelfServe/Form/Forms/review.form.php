@@ -35,6 +35,14 @@ return [
             [
                 'type' => 'licence-type',
             ],
+            /*
+             * don't worry; we define all our config here but we strip
+             * the irrelevent parts out in our controller; in this case
+             * naturally we can only have licence-type OR licence-type-psv
+             */
+            [
+                'type' => 'licence-type-psv',
+            ],
         ],
     ],
 ];
