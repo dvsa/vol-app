@@ -10,17 +10,18 @@ return array(
             array(
                 'name' => 'data',
                 'options' => array(
-                    'label' => 'Operator details'
+                    'label' => 'application_type-of-licence_operator-location.data'
                 ),
                 'elements' => array(
-                    'operator-location' => array(
-                        'name' => 'operator_location',
-                        'label' => 'Where do you operate from?',
+                    'id' => array(
+                        'type' => 'hidden'
+                    ),
+                    'version' => array(
+                        'type' => 'hidden'
+                    ),
+                    'niFlag' => array(
+                        'label' => 'application_type-of-licence_operator-location.data.niFlag',
                         'type' => 'radio',
-                        'attributes' => array(
-                            'id' => 'operator-location',
-                            'class' => ''
-                        ),
                         'value_options' => 'operator_locations'
                     )
                 )

@@ -1,11 +1,12 @@
 <?php
 
-echo $this->journey($journey, $sectionCompletion, $id);
+echo $this->navigation;
 
 if (!empty($subSections)) {
     ?>
 <!-- Vertical navigation -->
 <div class="one-quarter">
+    <h4><?php echo $this->translate('In this section'); ?></h4>
     <ol class="vertical-navigation" role="navigation">
         <?php
 
@@ -16,6 +17,12 @@ if (!empty($subSections)) {
             if ($subSection['active']) {
                 ?>
                 <li class="current vertical-navigation__item">
+                    <?php echo $label; ?>
+                </li>
+                <?php
+            } elseif (!$subSection['enabled']) {
+                ?>
+                <li class="disabled vertical-navigation__item">
                     <?php echo $label; ?>
                 </li>
                 <?php

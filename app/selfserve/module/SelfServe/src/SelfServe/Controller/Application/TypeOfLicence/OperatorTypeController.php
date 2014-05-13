@@ -25,12 +25,38 @@ class OperatorTypeController extends TypeOfLicenceController
     }
 
     /**
-     * Process the form
+     * Save data
      *
      * @param array $data
      */
-    public function processForm($data)
+    public function save($data)
     {
+        $this->makeRestCall('Licence', 'PUT', $data['data']);
+
         return $this->goToNextStep();
+    }
+
+    /**
+     * Load data from id
+     *
+     * @param int $id
+     */
+    public function load($id)
+    {
+        $bundle = array(
+            'children' => array(
+                'licence' => array(
+                    'properties' => array(
+                        'id',
+                        'version',
+                        'goodsOrPsv'
+                    )
+                )
+            )
+        );
+
+        $application = $this->makeRestCall('Application', 'GET', array('id' => $id), $bundle);
+
+        return array('data' => $application['licence']);
     }
 }

@@ -10,17 +10,18 @@ return array(
             array(
                 'name' => 'data',
                 'options' => array(
-                    'label' => 'Operator details'
+                    'label' => 'application_type-of-licence_operator-type.data'
                 ),
                 'elements' => array(
-                    'operator-type' => array(
-                        'name' => 'operator-type',
-                        'label' => 'What type of operator are you?',
+                    'id' => array(
+                        'type' => 'hidden'
+                    ),
+                    'version' => array(
+                        'type' => 'hidden'
+                    ),
+                    'goodsOrPsv' => array(
+                        'label' => 'application_type-of-licence_operator-type.data.goodsOrPsv',
                         'type' => 'radio',
-                        'attributes' => array(
-                            'id' => 'operator-location',
-                            'class' => ''
-                        ),
                         'value_options' => 'operator_types'
                     )
                 )

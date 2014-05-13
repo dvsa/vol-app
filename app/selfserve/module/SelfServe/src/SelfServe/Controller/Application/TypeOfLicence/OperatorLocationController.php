@@ -25,28 +25,42 @@ class OperatorLocationController extends TypeOfLicenceController
     }
 
     /**
-     * Process the form
+     * Save data
      *
      * @param array $data
      */
-    public function processForm($data)
+    public function save($data)
     {
-        /*$operatorLocation = $data['data']['operator_location'];
-
-        $licence = $this->getLicenceEntity();
-
-        $data = array(
-            'id' => $licence['id'],
-            'niFlag' => (bool)$operatorLocation,
-            'version' => $data['version'],
-        );
-
-        if ($operatorLocation == '1') {
-            $data['goodsOrPsv'] = 'goods';
+        if ($data['data']['niFlag'] == 1) {
+            $data['data']['goodsOrPsv'] = 'goods';
         }
 
-        $this->processEdit($data, 'Licence');*/
+        $this->makeRestCall('Licence', 'PUT', $data['data']);
 
         return $this->goToNextStep();
+    }
+
+    /**
+     * Load data from id
+     *
+     * @param int $id
+     */
+    public function load($id)
+    {
+        $bundle = array(
+            'children' => array(
+                'licence' => array(
+                    'properties' => array(
+                        'id',
+                        'version',
+                        'niFlag'
+                    )
+                )
+            )
+        );
+
+        $application = $this->makeRestCall('Application', 'GET', array('id' => $id), $bundle);
+
+        return array('data' => $application['licence']);
     }
 }

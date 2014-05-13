@@ -81,6 +81,13 @@ abstract class AbstractJourneyController extends FormActionController
     private $stepNumber;
 
     /**
+     * Holds the access keys
+     *
+     * @var array
+     */
+    protected $accessKeys;
+
+    /**
      * Generic index action
      */
     public function indexAction()
@@ -95,6 +102,10 @@ abstract class AbstractJourneyController extends FormActionController
      */
     protected function renderSection($view = null, $params = array())
     {
+        if (!$this->isSectionAccessible($this->getJourneyName(), $this->getSectionName(), $this->getSubSectionName())) {
+            return $this->goToNextStep();
+        }
+
         if ($this->isButtonPressed('back')) {
             return $this->goToPreviousStep();
         }
@@ -106,9 +117,10 @@ abstract class AbstractJourneyController extends FormActionController
         if ($this->hasForm()) {
 
             $formName = $this->getFormName();
-            $data = array();
 
-            $form = $this->generateFormWithData($formName, 'processForm', $data);
+            $data = $this->processLoad($this->load($this->getIdentifier()));
+
+            $form = $this->generateFormWithData($formName, 'processSave', $data);
 
             if ($this->getStepNumber() == 0) {
                 $form->get('form-actions')->remove('back');
@@ -129,11 +141,11 @@ abstract class AbstractJourneyController extends FormActionController
             $view->setTemplate($this->getViewName());
         }
 
+        $navigation = $this->getNavigationView();
+
         $layout = $this->getViewModel(
             array(
                 'subSections' => $this->getSubSectionsForLayout(),
-                'journey' => $this->getJourneyName(),
-                'sectionCompletion' => $this->getSectionCompletion(),
                 'id' => $this->getIdentifier()
             )
         );
@@ -142,7 +154,208 @@ abstract class AbstractJourneyController extends FormActionController
 
         $layout->addChild($view, 'main');
 
+        $layout->addChild($navigation, 'navigation');
+
         return $layout;
+    }
+
+    /**
+     * Load data for the form
+     *
+     * This method should be overridden
+     *
+     * @param int $id
+     * @return array
+     */
+    protected function load($id)
+    {
+        return array();
+    }
+
+    /**
+     * Map the data on load
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function processLoad($data)
+    {
+        return $data;
+    }
+
+    /**
+     * Save data from the form
+     *
+     * This method should be overriden
+     *
+     * @param array $data
+     */
+    protected function save($data)
+    {
+        return null;
+    }
+
+    /**
+     * Map the data to save
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function processSave($data)
+    {
+        $this->completeSubSection();
+
+        return $this->save($data);
+    }
+
+    /**
+     * Complete sub section
+     */
+    protected function completeSubSection()
+    {
+        $sectionCompletion = $this->getSectionCompletion();
+
+        $sectionName = $this->getSectionName();
+
+        $key = 'section' . $sectionName . $this->getSubSectionName() . 'Status';
+
+        $completeKey = array_search('complete', $this->getJourneyConfig()['completionStatusMap']);
+
+        $sectionCompletion[$key] = $completeKey;
+
+        $sectionConfig = $this->getSectionConfig();
+
+        $complete = true;
+
+        foreach ($sectionConfig['subSections'] as $subSectionName => $details) {
+            if (!isset($sectionCompletion['section' . $sectionName . $subSectionName . 'Status'])
+                || $sectionCompletion['section' . $sectionName . $subSectionName . 'Status'] != $completeKey) {
+                $complete = false;
+                break;
+            }
+        }
+
+        if ($complete) {
+
+            $sectionCompletion['section' . $sectionName . 'Status'] = $completeKey;
+        }
+
+        $this->setSectionCompletion($sectionCompletion);
+
+        $this->makeRestCall(
+            $this->getJourneyConfig()['completionService'],
+            'PUT',
+            $this->getSectionCompletion()
+        );
+    }
+
+    /**
+     * Build the navigation view
+     *
+     * @return ViewModel
+     */
+    protected function getNavigationView()
+    {
+        $sections = $this->getAccessibleSections();
+
+        $view = $this->getViewModel(
+            array(
+                'sections' => $sections
+            )
+        );
+
+        $view->setTemplate('self-serve/journey/' . strtolower($this->getJourneyName()) . '/navigation');
+
+        return $view;
+    }
+
+    /**
+     * Get a list of accessible sections
+     *
+     * @return array
+     */
+    protected function getAccessibleSections()
+    {
+        $sections = $this->getSections();
+
+        $sectionCompletion = $this->getSectionCompletion();
+
+        $accessibleSections = array();
+
+        $journeyName = $this->getJourneyName();
+
+        $statusMap = $this->getJourneyConfig()['completionStatusMap'];
+
+        foreach ($sections as $name => $details) {
+
+            if (!$this->isSectionAccessible($details)) {
+                continue;
+            }
+
+            $sectionCompletion['section' . $name . 'Status'] = (int)$sectionCompletion['section' . $name . 'Status'];
+
+            $status = $statusMap[$sectionCompletion['section' . $name . 'Status']];
+
+            if ($name == $this->getSectionName()) {
+                $status = 'current';
+            }
+
+            $accessibleSections[$name] = array(
+                'status' => $status,
+                'title' => $this->getSectionLabel($journeyName, $name),
+                'route' => $this->getSectionRoute($journeyName, $name)
+            );
+        }
+
+        return $accessibleSections;
+    }
+
+    /**
+     * Check if a section is accessible
+     *
+     * @param array|string $details
+     * @param string $section
+     * @param string $subSection
+     * @return boolean
+     */
+    protected function isSectionAccessible($details, $section = null, $subSection = null)
+    {
+        if (is_string($details)) {
+            $details = $this->getConfig($details, $section, $subSection);
+        }
+
+        if (isset($details['restriction'])) {
+
+            $accessKeys = $this->getAccessKeys();
+
+            $intersection = array_intersect($accessKeys, $details['restriction']);
+
+            return !empty($intersection);
+        }
+
+        return true;
+    }
+
+    /**
+     * Get a list of access keys to match the restrictions
+     *
+     * This method should be extended
+     *
+     * @return array
+     */
+    protected function getAccessKeys()
+    {
+        return array(null);
+    }
+
+    /**
+     * Get the sections
+     *
+     * @return array
+     */
+    protected function getSections()
+    {
+        return $this->getJourneyConfig()['sections'];
     }
 
     /**
@@ -152,16 +365,41 @@ abstract class AbstractJourneyController extends FormActionController
     {
         $sectionConfig = $this->getSectionConfig();
 
+        $sectionCompletion = $this->getSectionCompletion();
+
         $subSections = array();
 
         $journey = $this->getJourneyName();
         $section = $this->getSectionName();
 
+        $completeKey = array_search('complete', $this->getJourneyConfig()['completionStatusMap']);
+
         foreach ($sectionConfig['subSections'] as $name => $details) {
+
+            if (!$this->isSectionAccessible($details)) {
+                continue;
+            }
+
+            $enabled = true;
+
+            if (isset($details['required'])) {
+
+                foreach ($details['required'] as $requiredSection) {
+                    $requiredSection = str_replace('/', '', $requiredSection);
+
+                    if (!isset($sectionCompletion['section' . $requiredSection . 'Status'])
+                        || $sectionCompletion['section' . $requiredSection . 'Status'] != $completeKey) {
+
+                        $enabled = false;
+                    }
+                }
+            }
+
             $subSections[$name] = array(
                 'label' => $this->getSectionLabel($journey, $section, $name),
                 'route' => $this->getSectionRoute($journey, $section, $name),
-                'active' => ($name == $this->getSubSectionName())
+                'active' => ($name == $this->getSubSectionName()),
+                'enabled' => $enabled
             );
         }
 
@@ -199,9 +437,21 @@ abstract class AbstractJourneyController extends FormActionController
      * @param string $subSection
      * @return string
      */
-    protected function getSectionLabel($journey, $section, $subSection)
+    protected function getSectionLabel($journey, $section, $subSection = null)
     {
-        return strtolower($this->camelToDash($journey . '.' . $section . '.' . $subSection));
+        return strtolower(
+            $this->camelToDash($journey . '.' . $section . (!empty($subSection) ? '.' . $subSection : ''))
+        );
+    }
+
+    /**
+     * Setter for section completion
+     *
+     * @param array $sectionCompletion
+     */
+    protected function setSectionCompletion($sectionCompletion)
+    {
+        $this->sectionCompletion = $sectionCompletion;
     }
 
     /**
@@ -214,13 +464,17 @@ abstract class AbstractJourneyController extends FormActionController
         if (empty($this->sectionCompletion)) {
             $id = $this->getIdentifier();
 
+            $foreignKey = $this->camelToUnderscode($this->getJourneyConfig()['identifier']);
+
             $completionStatus = $this->makeRestCall(
                 $this->getJourneyConfig()['completionService'],
                 'GET',
-                array($this->camelToUnderscode($this->getJourneyConfig()['identifier']) => $id)
+                array($foreignKey => $id)
             );
 
             $this->sectionCompletion = ($completionStatus['Count'] > 0 ? $completionStatus['Results'][0] : array());
+
+            $this->sectionCompletion[str_replace('_id', '', $foreignKey)] = $id;
         }
 
         return $this->sectionCompletion;
@@ -336,7 +590,7 @@ abstract class AbstractJourneyController extends FormActionController
             $steps = $this->getSteps();
 
             $this->stepNumber = array_search(
-                $this->getSectionRoute(
+                array(
                     $this->getJourneyName(),
                     $this->getSectionName(),
                     $this->getSubSectionName()
@@ -359,8 +613,23 @@ abstract class AbstractJourneyController extends FormActionController
 
         $nextKey = $key - 1;
 
-        if ($steps[$nextKey]) {
-            $this->goToSection($steps[$nextKey]);
+        while (isset($steps[$nextKey])) {
+
+            if ($this->isSectionAccessible(
+                    $steps[$nextKey][0],
+                    $steps[$nextKey][1],
+                    $steps[$nextKey][2]
+                )) {
+                return $this->goToSection(
+                    $this->getSectionRoute(
+                        $steps[$nextKey][0],
+                        $steps[$nextKey][1],
+                        $steps[$nextKey][2]
+                    )
+                );
+            }
+
+            $nextKey--;
         }
 
         throw new \Exception('Can\'t find previous step');
@@ -376,11 +645,23 @@ abstract class AbstractJourneyController extends FormActionController
         $key = $this->getStepNumber();
 
         $nextKey = $key + 1;
-        if ($steps[$nextKey]) {
-            $this->goToSection($steps[$nextKey]);
-        } else {
-            $this->journeyFinished();
+
+        while (isset($steps[$nextKey])) {
+
+            if ($this->isSectionAccessible($steps[$nextKey][0], $steps[$nextKey][1], $steps[$nextKey][2])) {
+                return $this->goToSection(
+                    $this->getSectionRoute(
+                        $steps[$nextKey][0],
+                        $steps[$nextKey][1],
+                        $steps[$nextKey][2]
+                    )
+                );
+            }
+
+            $nextKey++;
         }
+
+        return $this->journeyFinished();
     }
 
     /**
@@ -464,7 +745,12 @@ abstract class AbstractJourneyController extends FormActionController
     protected function getSubSectionName()
     {
         if (empty($this->subSectionName)) {
+
             $this->subSectionName = str_replace('Controller', '', $this->getNamespaceParts()[4]);
+
+            if (!isset($this->getSectionConfig()['subSections'][$this->subSectionName])) {
+                $this->subSectionName = null;
+            }
         }
 
         return $this->subSectionName;
@@ -531,14 +817,40 @@ abstract class AbstractJourneyController extends FormActionController
                 if (isset($details['subSections'])) {
 
                     foreach ($details['subSections'] as $subSection => $subSectionDetails) {
-                        $this->steps[] = $this->getSectionRoute($journey, $section, $subSection);
+                        $this->steps[] = array($journey, $section, $subSection);
                     }
                 } else {
-                    $this->steps[] = $this->getSectionRoute($journey, $section);
+                    $this->steps[] = array($journey, $section, null);
                 }
             }
         }
 
         return $this->steps;
+    }
+
+    /**
+     * Get a journey, section, or sub section config
+     *
+     * @param string $journey
+     * @param string $section
+     * @param string $subSection
+     * @return array
+     */
+    protected function getConfig($journey, $section = null, $subSection = null)
+    {
+        $config = $this->getJourneyConfig();
+
+        if (!is_null($subSection)) {
+
+            return isset($config['sections'][$section]['subSections'][$subSection])
+                ? $config['sections'][$section]['subSections'][$subSection]
+                : array();
+        }
+
+        if (!is_null($section)) {
+            return isset($config['sections'][$section]) ? $config['sections'][$section] : array();
+        }
+
+        return $config;
     }
 }
