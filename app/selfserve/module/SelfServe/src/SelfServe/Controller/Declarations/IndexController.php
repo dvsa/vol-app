@@ -21,17 +21,30 @@ class IndexController extends AbstractApplicationController
 
     protected $applicationData = [];
 
+    /**
+     * Set the current section upon construction
+     *
+     */
     public function __construct()
     {
         $this->setCurrentSection('declarations');
     }
 
+    /**
+     * Default index action; show full review summary
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
     public function indexAction()
     {
         $applicationId = $this->params()->fromRoute('applicationId');
 
         // collect completion status
-        $completionStatus = $this->makeRestCall('ApplicationCompletion', 'GET', ['application_id' => $applicationId]);
+        $completionStatus = $this->makeRestCall(
+            'ApplicationCompletion',
+            'GET',
+            ['application_id' => $applicationId]
+        );
 
         $form = $this->generateForm('review', null);
 
@@ -39,7 +52,6 @@ class IndexController extends AbstractApplicationController
 
         $form->setData($this->mapEntitiesToForm());
 
-        // render the view
         $view = new ViewModel(
             [
                 'completionStatus' => $completionStatus['Results'][0],
@@ -53,11 +65,21 @@ class IndexController extends AbstractApplicationController
         return $view;
     }
 
+    /**
+     * Our complete action; a no-op so far...
+     *
+     * @return void
+     */
     public function completeAction()
     {
 
     }
 
+    /**
+     * Map all gathered entity data to its corresponding form input data
+     *
+     * @return array
+     */
     protected function mapEntitiesToForm()
     {
         $data = $this->getApplicationData();
@@ -74,6 +96,13 @@ class IndexController extends AbstractApplicationController
         ];
     }
 
+    /**
+     * Remove any unwanted data from our form object
+     *
+     * @param \Zend\Form $form - the form object
+     *
+     * @return void
+     */
     protected function cleanForm($form)
     {
         $data = $this->getApplicationData();
@@ -86,6 +115,11 @@ class IndexController extends AbstractApplicationController
         }
     }
 
+    /**
+     * Fetch the user's entire application data so far
+     *
+     * @return array
+     */
     protected function getApplicationData()
     {
         if (count($this->applicationData) === 0) {
