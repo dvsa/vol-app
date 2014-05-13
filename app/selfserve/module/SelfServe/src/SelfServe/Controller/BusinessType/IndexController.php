@@ -55,6 +55,10 @@ class IndexController extends AbstractApplicationController
 
         // create form
         $form = $this->generateSectionForm();
+        $form->get($this->getCurrentStep())->get('edit_business_type')->setValue($this->getUrlFromRoute(
+            'selfserve/business-type',
+            ['applicationId' => $applicationId]
+        ));
 
         // prefill form data if persisted
         $formData = $this->getPersistedFormData($form);
@@ -367,6 +371,7 @@ class IndexController extends AbstractApplicationController
             'version' => $organisation['version'],
             'llp' => array(
                 'company_number' => $organisation['registeredCompanyNumber'],
+                'company_name' => $organisation['name'],
             //'trading_names' => $organisation['name'],
             ),
         );
