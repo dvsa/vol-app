@@ -45,6 +45,7 @@ class IndexController extends AbstractApplicationController
                 'completionStatus' => $completionStatus['Results'][0],
                 'applicationId' => $applicationId,
                 'form' => $form,
+                'currentUrl' => $this->getRequest()->getRequestUri()
             ]
         );
         $view->setTemplate('self-serve/declarations/index');
