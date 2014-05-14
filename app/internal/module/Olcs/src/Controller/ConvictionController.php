@@ -180,13 +180,15 @@ class ConvictionController extends CaseController
             ->get('parentCategory')
             ->setValueOptions($parentCategory);
 
-        $subCategory = $this->getConvictionSubCategories($data['parentCategory']);
         $formSubCategory = array();
 
-        foreach ($subCategory['Results'] as $category) {
-            $formSubCategory[$category['id']] = $category['description'];
-        }
+        if (isset($data['parentCategory'])) {
+            $subCategory = $this->getConvictionSubCategories($data['parentCategory']);
 
+            foreach ($subCategory['Results'] as $category) {
+                $formSubCategory[$category['id']] = $category['description'];
+            }
+        }
         $form->get('offence')
             ->get('category')
             ->setValueOptions($formSubCategory);
@@ -211,7 +213,6 @@ class ConvictionController extends CaseController
     public function processConviction($data)
     {
         $data = array_merge($data, $data['defendant-details'], $data['offence']);
-        unset($data['parentCategory']);
 
         //two unsets here keeps line length under 120
         //keeps phpunit happy as it isn't detecting the code has
@@ -227,7 +228,7 @@ class ConvictionController extends CaseController
         $routeParams = $this->getParams(array('action', 'licence', 'case'));
 
         if (strtolower($routeParams['action']) == 'edit' || strtolower($routeParams['action']) == 'dealt') {
-            unset($data['vosaCase']);
+            unset($data['vosaCase'], $data['parentCategory']);
             $result = $this->processEdit($data, 'Conviction');
         } else {
             $result = $this->processAdd($data, 'Conviction');
