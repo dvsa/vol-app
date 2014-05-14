@@ -9,6 +9,7 @@ namespace SelfServe\Controller;
 
 use Common\Controller\FormActionController;
 use Zend\Http\Response;
+use Zend\Filter\Word\CamelCaseToDash;
 
 /**
  * Abstract Journey Controller
@@ -25,18 +26,11 @@ abstract class AbstractJourneyController extends FormActionController
     protected $service = null;
 
     /**
-     * Holds the sub action service name
+     * Holds the action service name
      *
      * @var string
      */
-    protected $subActionService = null;
-
-    /**
-     * Holds the action name
-     *
-     * @var string
-     */
-    private $action;
+    protected $actionService = null;
 
     /**
      * Hold the journey name
@@ -58,6 +52,13 @@ abstract class AbstractJourneyController extends FormActionController
      * @var string
      */
     private $subSectionName;
+
+    /**
+     * Holds the action name
+     *
+     * @var string
+     */
+    private $actionName;
 
     /**
      * Hold the journey config
@@ -123,311 +124,46 @@ abstract class AbstractJourneyController extends FormActionController
     protected $accessKeys;
 
     /**
+     * Holds the view name
+     *
+     * @var string
+     */
+    protected $viewName;
+
+    /**
+     * Holds the action id
+     *
+     * @var int
+     */
+    protected $actionId;
+
+    /**
+     * Holds hasView
+     *
+     * @var boolean
+     */
+    protected $hasView = null;
+
+    /**
+     * Holds hasTable
+     *
+     * @var boolean
+     */
+    protected $hasTable = null;
+
+    /**
+     * Holds hasView
+     *
+     * @var boolean
+     */
+    protected $hasForm = null;
+
+    /**
      * Generic index action
      */
     public function indexAction()
     {
         return $this->goToFirstSection();
-    }
-
-    /**
-     * Render the section
-     *
-     * @return Response
-     */
-    protected function renderSection($view = null, $params = array())
-    {
-        $journeyName = $this->getJourneyName();
-        $sectionName = $this->getSectionName();
-        $subSectionName = $this->getSubSectionName();
-
-        if (!$this->isSectionAccessible($journeyName, $sectionName, null)
-            || !$this->isSectionAccessible($journeyName, $sectionName, $subSectionName)) {
-            return $this->goToNextStep();
-        }
-
-        if (!$this->isSectionEnabled($journeyName, $sectionName, null)
-            || !$this->isSectionEnabled($journeyName, $sectionName, $subSectionName)
-            || $this->isButtonPressed('back')) {
-            return $this->goToPreviousStep();
-        }
-
-        if (empty($view)) {
-            $view = $this->getViewModel($params);
-        }
-
-        if ($this->isSubAction()) {
-            $view->setVariable('title', $this->getSectionReference());
-        }
-
-        if ($view->getTemplate() == null) {
-            $view->setTemplate('self-serve/journey/' . strtolower($journeyName) . '/main');
-        }
-
-        if ($this->hasTable()) {
-
-            $action = $this->checkForCrudAction();
-
-            if ($action instanceof Response) {
-                return $action;
-            }
-
-            $tableName = $this->getTableName();
-
-            $data = $this->getTableData($this->getIdentifier());
-
-            $settings = $this->getTableSettings();
-
-            $table = $this->alertTable($this->getTable($tableName, $data, $settings));
-
-            $view->setVariable('table', $table->render());
-        }
-
-        if ($this->hasForm()) {
-
-            if ($this->isSubAction() && $this->isButtonPressed('cancel')) {
-                return $this->goBackToSection();
-            }
-
-            $formName = $this->getFormName();
-
-            $callback = 'processSave';
-
-            $data = array();
-
-            if ($this->isSubAction()) {
-                $callback = 'processSubActionSave';
-
-                $action = $this->getAction();
-
-                if ($action === 'edit') {
-                    $id = $this->params()->fromRoute('id');
-
-                    $data = $this->loadSubSection($id);
-
-                    if ($data instanceof Response) {
-                        return $data;
-                    }
-
-                    $data = $this->processSubSectionLoad($data);
-                }
-
-            } else {
-                $data = $this->processLoad($this->load($this->getIdentifier()));
-            }
-
-            $form = $this->generateFormWithData($formName, $callback, $data);
-
-            if ($this->getStepNumber() == 0) {
-                $form->get('form-actions')->remove('back');
-            }
-
-            if ($this->isSubAction() && $this->getAction() == 'edit') {
-                $form->get('form-actions')->remove('addAnother');
-            }
-
-            if ($form instanceof Response) {
-                return $form;
-            }
-
-            $view->setVariable('form', $this->alterForm($form));
-        }
-
-        if ($this->hasView()) {
-            $view->setTemplate($this->getViewName());
-        }
-
-        return $this->render($view);
-    }
-
-    /**
-     * Redirect to sub section
-     *
-     * @return Response
-     */
-    protected function goBackToSection()
-    {
-        $route = $this->getSectionRoute(
-            $this->getJourneyName(),
-            $this->getSectionName(),
-            $this->getSubSectionName()
-        );
-
-        return $this->goToSection(
-            $route,
-            array($this->getJourneyConfig()['identifier'] => $this->getIdentifier()),
-            false
-        );
-    }
-
-    /**
-     * Go back to sub action
-     *
-     * @return Response
-     */
-    protected function goBackToAddAnother()
-    {
-        $route = $this->getSectionRoute(
-            $this->getJourneyName(),
-            $this->getSectionName(),
-            $this->getSubSectionName()
-        );
-
-        return $this->goToSection($route);
-    }
-
-    /**
-     * Check if we have a sub action
-     *
-     * @return boolean
-     */
-    protected function isSubAction()
-    {
-        $action = $this->getAction();
-
-        return ($action != 'index');
-    }
-
-    /**
-     * Getter for action
-     *
-     * @return string
-     */
-    protected function getAction()
-    {
-        if (empty($this->action)) {
-            $this->action = $this->params()->fromRoute('action');
-        }
-
-        return $this->action;
-    }
-
-    /**
-     * Get table data
-     *
-     * This method should be overridden
-     *
-     * @return array
-     */
-    protected function getTableData($id)
-    {
-        return array();
-    }
-
-    /**
-     * Get table settings
-     *
-     * This method should be overridden
-     *
-     * @return array
-     */
-    protected function getTableSettings()
-    {
-        return array();
-    }
-
-    /**
-     * Alter table
-     *
-     * This method should be overridden
-     *
-     * @param object $table
-     * @return object
-     */
-    protected function alertTable($table)
-    {
-        return $table;
-    }
-
-    /**
-     * Render the view
-     *
-     * @param ViewModel $view
-     * @return ViewModel
-     */
-    protected function render($view)
-    {
-        $navigation = $this->getNavigationView();
-
-        $layout = $this->getViewModel(
-            array(
-                'subSections' => $this->getSubSectionsForLayout(),
-                'id' => $this->getIdentifier()
-            )
-        );
-
-        $layout->setTemplate('self-serve/journey/' . strtolower($this->getJourneyName()) . '/layout');
-
-        $layout->addChild($view, 'main');
-
-        $layout->addChild($navigation, 'navigation');
-
-        return $layout;
-    }
-
-    /**
-     * Alter the form
-     *
-     * This method should be overridden
-     *
-     * @param Form $form
-     * @return Form
-     */
-    protected function alterForm($form)
-    {
-        return $form;
-    }
-
-    /**
-     * Load sub section data
-     *
-     * @param int $id
-     * @return array
-     */
-    protected function loadSubSection($id)
-    {
-        $result = $this->makeRestCall($this->getSubActionService(), 'GET', array('id' => $id));
-
-        if (empty($result)) {
-            return $this->notFoundAction();
-        }
-
-        return $result;
-    }
-
-    /**
-     * Load data for the form
-     *
-     * This method should be overridden
-     *
-     * @param int $id
-     * @return array
-     */
-    protected function load($id)
-    {
-        return array();
-    }
-
-    /**
-     * Process loading the sub section data
-     *
-     * @param array $data
-     * @return array
-     */
-    protected function processSubSectionLoad($data)
-    {
-        return $data;
-    }
-
-    /**
-     * Map the data on load
-     *
-     * @param array $data
-     * @return array
-     */
-    protected function processLoad($data)
-    {
-        return $data;
     }
 
     /**
@@ -451,10 +187,15 @@ abstract class AbstractJourneyController extends FormActionController
      *
      * @return Response
      */
-    protected function deleteAction()
+    public function deleteAction()
     {
-        if (!empty($this->getSubActionService()) && !empty($this->getSubActionId())) {
-            $this->makeRestCall($this->getSubActionService(), 'DELETE', array('id' => $this->getSubActionId()));
+        $actionService = $this->getActionService();
+        $actionId = $this->getActionId();
+
+        if (!empty($actionService) && !empty($actionId)) {
+
+            $this->makeRestCall($actionService, 'DELETE', array('id' => $actionId));
+
             return $this->goBackToSection();
         }
 
@@ -462,13 +203,14 @@ abstract class AbstractJourneyController extends FormActionController
     }
 
     /**
-     * Get the sub action service
-     *
-     * @return string
+     * Override the not found action
      */
-    protected function getSubActionService()
+    public function notFoundAction()
     {
-        return $this->subActionService;
+        $view = $this->getViewModel();
+        $view->setTemplate('self-serve/journey/not-found');
+
+        return $this->render($view);
     }
 
     /**
@@ -482,248 +224,88 @@ abstract class AbstractJourneyController extends FormActionController
     }
 
     /**
-     * Get the sub action id
+     * Get the sub action service
      *
-     * @return int
+     * @return string
      */
-    protected function getSubActionId()
+    protected function getActionService()
     {
-        return $this->params()->fromRoute('id');
+        return $this->actionService;
     }
 
     /**
-     * Save sub action data
+     * Getter for journey name
      *
-     * @param array $data
+     * @return string
      */
-    protected function saveSubAction($data)
+    protected function getJourneyName()
     {
-        $method = 'PUT';
-
-        if (isset($data['data']['id'])) {
-            $method = 'POST';
+        if (empty($this->journeyName)) {
+            $this->journeyName = $this->getNamespaceParts()[2];
         }
 
-        $this->makeRestCall($this->getSubActionService(), $method, $data['data']);
+        return $this->journeyName;
+    }
 
-        if ($this->isButtonPressed('addAnother')) {
-            return $this->goBackToAddAnother();
+    /**
+     * Getter for the current section name
+     *
+     * @return string
+     */
+    protected function getSectionName()
+    {
+        if (empty($this->sectionName)) {
+            $this->sectionName = $this->getNamespaceParts()[3];
         }
 
-        return $this->goBackToSection();
+        return $this->sectionName;
     }
 
     /**
-     * Save data
+     * Getter for the current sub section name
      *
-     * @param array $data
+     * @return string
      */
-    protected function save($data)
+    protected function getSubSectionName()
     {
-        $this->makeRestCall($this->getService(), 'PUT', $data['data']);
+        if (empty($this->subSectionName)) {
 
-        return $this->goToNextStep();
-    }
+            $this->subSectionName = str_replace('Controller', '', $this->getNamespaceParts()[4]);
 
-    /**
-     * Save the sub action
-     *
-     * @param array $data
-     * @return array
-     */
-    protected function processSubActionSave($data)
-    {
-        return $this->saveSubAction($data);
-    }
-
-    /**
-     * Complete section and save
-     *
-     * @param array $data
-     * @return array
-     */
-    protected function processSave($data)
-    {
-        $this->completeSubSection();
-
-        return $this->save($data);
-    }
-
-    /**
-     * Complete sub section
-     */
-    protected function completeSubSection()
-    {
-        $sectionCompletion = $this->getSectionCompletion();
-
-        $sectionName = $this->getSectionName();
-
-        $key = 'section' . $sectionName . $this->getSubSectionName() . 'Status';
-
-        $completeKey = array_search('complete', $this->getJourneyConfig()['completionStatusMap']);
-
-        $sectionCompletion[$key] = $completeKey;
-
-        $sectionConfig = $this->getSectionConfig();
-
-        $complete = true;
-
-        foreach ($sectionConfig['subSections'] as $subSectionName => $details) {
-            if (!isset($sectionCompletion['section' . $sectionName . $subSectionName . 'Status'])
-                || $sectionCompletion['section' . $sectionName . $subSectionName . 'Status'] != $completeKey) {
-                $complete = false;
-                break;
+            if (!isset($this->getSectionConfig()['subSections'][$this->subSectionName])) {
+                $this->subSectionName = null;
             }
         }
 
-        if ($complete) {
+        return $this->subSectionName;
+    }
 
-            $sectionCompletion['section' . $sectionName . 'Status'] = $completeKey;
+    /**
+     * Getter for action name
+     *
+     * @return string
+     */
+    protected function getActionName()
+    {
+        if (empty($this->actionName)) {
+            $this->actionName = $this->params()->fromRoute('action');
         }
 
-        $this->setSectionCompletion($sectionCompletion);
-
-        $this->makeRestCall(
-            $this->getJourneyConfig()['completionService'],
-            'PUT',
-            $this->getSectionCompletion()
-        );
+        return $this->actionName;
     }
 
     /**
-     * Build the navigation view
-     *
-     * @return ViewModel
-     */
-    protected function getNavigationView()
-    {
-        $sections = $this->getAccessibleSections();
-
-        $view = $this->getViewModel(
-            array(
-                'sections' => $sections
-            )
-        );
-
-        $view->setTemplate('self-serve/journey/' . strtolower($this->getJourneyName()) . '/navigation');
-
-        return $view;
-    }
-
-    /**
-     * Get a list of accessible sections
+     * Getter for the current journey config
      *
      * @return array
      */
-    protected function getAccessibleSections()
+    protected function getJourneyConfig()
     {
-        $sections = $this->getSections();
-
-        $sectionCompletion = $this->getSectionCompletion();
-
-        $accessibleSections = array();
-
-        $journeyName = $this->getJourneyName();
-
-        $statusMap = $this->getJourneyConfig()['completionStatusMap'];
-
-        foreach ($sections as $name => $details) {
-
-            if (!$this->isSectionAccessible($details)) {
-                continue;
-            }
-
-            $sectionCompletion['section' . $name . 'Status'] = (int)$sectionCompletion['section' . $name . 'Status'];
-
-            $status = $statusMap[$sectionCompletion['section' . $name . 'Status']];
-
-            if ($name == $this->getSectionName()) {
-                $status = 'current';
-            }
-
-            $accessibleSections[$name] = array(
-                'status' => $status,
-                'title' => $this->getSectionLabel($journeyName, $name),
-                'route' => $this->getSectionRoute($journeyName, $name)
-            );
+        if (empty($this->journeyConfig)) {
+            $this->journeyConfig = $this->getServiceLocator()->get('Config')['journeys'][$this->getJourneyName()];
         }
 
-        return $accessibleSections;
-    }
-
-    /**
-     * Check if a section is accessible
-     *
-     * @param array|string $details
-     * @param string $section
-     * @param string $subSection
-     * @return boolean
-     */
-    protected function isSectionAccessible($details, $section = null, $subSection = null)
-    {
-        if (is_string($details)) {
-            $details = $this->getConfig($details, $section, $subSection);
-        }
-
-        if (isset($details['restriction'])) {
-
-            $accessKeys = $this->getAccessKeys();
-
-            $intersection = array_intersect($accessKeys, $details['restriction']);
-
-            return !empty($intersection);
-        }
-
-        return true;
-    }
-
-    /**
-     * Check if a section is enabled
-     *
-     * @param array|string $details
-     * @param string $section
-     * @param string $subSection
-     * @return boolean
-     */
-    protected function isSectionEnabled($details, $section = null, $subSection = null)
-    {
-        if (is_string($details)) {
-            $details = $this->getConfig($details, $section, $subSection);
-        }
-
-        $sectionCompletion = $this->getSectionCompletion();
-
-        $enabled = true;
-
-        $completeKey = array_search('complete', $this->getJourneyConfig()['completionStatusMap']);
-
-        if (isset($details['required'])) {
-
-            foreach ($details['required'] as $requiredSection) {
-                $requiredSection = str_replace('/', '', $requiredSection);
-
-                if (!isset($sectionCompletion['section' . $requiredSection . 'Status'])
-                    || $sectionCompletion['section' . $requiredSection . 'Status'] != $completeKey) {
-
-                    $enabled = false;
-                }
-            }
-        }
-
-        return $enabled;
-    }
-
-    /**
-     * Get a list of access keys to match the restrictions
-     *
-     * This method should be extended
-     *
-     * @param boolean $force
-     * @return array
-     */
-    protected function getAccessKeys($force = false)
-    {
-        return array(null);
+        return $this->journeyConfig;
     }
 
     /**
@@ -737,100 +319,118 @@ abstract class AbstractJourneyController extends FormActionController
     }
 
     /**
-     * Get an array of sub sections
-     */
-    protected function getSubSectionsForLayout()
-    {
-        $sectionConfig = $this->getSectionConfig();
-
-        $subSections = array();
-
-        $journey = $this->getJourneyName();
-        $section = $this->getSectionName();
-
-        foreach ($sectionConfig['subSections'] as $name => $details) {
-
-            if (!$this->isSectionAccessible($details)) {
-                continue;
-            }
-
-            $enabled = $this->isSectionEnabled($details);
-
-            $class = '';
-            $link = true;
-
-            if ($name == $this->getSubSectionName()) {
-                $class = 'current';
-            }
-
-            if ($name == $this->getSubSectionName() && !$this->isSubAction()) {
-                $link = false;
-            }
-
-            if (!$enabled) {
-                $class = 'disabled';
-                $link = false;
-            }
-
-            $subAction = false;
-
-            $routeParams = array(
-                $this->getJourneyConfig()['identifier'] => $this->getIdentifier()
-            );
-
-            if ($name == $this->getSubSectionName() && $this->isSubAction()) {
-                $subAction = $this->getSectionReference();
-            }
-
-            $subSections[$name] = array(
-                'label' => $this->getSectionLabel($journey, $section, $name),
-                'class' => $class,
-                'link' => $link,
-                'route' => $this->getSectionRoute($journey, $section, $name),
-                'routeParams' => $routeParams,
-                'subAction' => $subAction
-            );
-        }
-
-        return $subSections;
-    }
-
-    /**
      * Get the section config
      *
      * @return array
      */
     protected function getSectionConfig()
     {
-        return $this->getJourneyConfig()['sections'][$this->getSectionName()];
+        return $this->getSections()[$this->getSectionName()];
     }
 
     /**
-     * Format the section route
+     * Get a journey, section, or sub section config
      *
-     * @param string $journey
      * @param string $section
      * @param string $subSection
-     * @return string
+     * @return array
      */
-    protected function getSectionRoute($journey, $section, $subSection = null)
+    protected function getConfig($section = null, $subSection = null)
     {
-        return $journey . '/' . $section . (!empty($subSection) ? '/' . $subSection : '');
+        $config = $this->getJourneyConfig();
+
+        if (!is_null($subSection)) {
+
+            return isset($config['sections'][$section]['subSections'][$subSection])
+                ? $config['sections'][$section]['subSections'][$subSection]
+                : array();
+        }
+
+        if (!is_null($section)) {
+            return isset($config['sections'][$section]) ? $config['sections'][$section] : array();
+        }
+
+        return $config;
     }
 
     /**
-     * Format the section label
+     * Get the section reference
      *
-     * @param string $journey
-     * @param string $section
-     * @param string $subSection
      * @return string
      */
-    protected function getSectionLabel($journey, $section, $subSection = null)
+    protected function getSectionReference()
     {
-        return strtolower(
-            $this->camelToDash($journey . '.' . $section . (!empty($subSection) ? '.' . $subSection : ''))
-        );
+        if (empty($this->sectionReference)) {
+
+            $journey = $this->getJourneyName();
+            $section = $this->getSectionName();
+            $subSection = $this->getSubSectionName();
+
+            $suffix = '';
+
+            if ($this->isAction()) {
+
+                $suffix = '-' . $this->getActionName();
+            }
+
+            $this->sectionReference = $this->camelToDash($journey . '_' . $section . '_' . $subSection . $suffix);
+        }
+
+        return $this->sectionReference;
+    }
+
+    /**
+     * Get table name
+     *
+     * @return string
+     */
+    protected function getTableName()
+    {
+        if (empty($this->tableName)) {
+            $this->tableName = $this->getFormName();
+        }
+
+        return $this->tableName;
+    }
+
+    /**
+     * Get form name
+     *
+     * @return string
+     */
+    protected function getFormName()
+    {
+        if (empty($this->formName)) {
+
+            $journey = $this->getJourneyName();
+            $section = $this->getSectionName();
+            $subSection = $this->getSubSectionName();
+
+            $suffix = '';
+
+            if ($this->isAction()) {
+
+                $suffix = '-sub-action';
+            }
+
+            $this->formName = $this->camelToDash($journey . '_' . $section . '_' . $subSection . $suffix);
+        }
+
+        return $this->formName;
+    }
+
+    /**
+     * Get the journey identifier
+     *
+     * @return int
+     */
+    protected function getIdentifier()
+    {
+        if (empty($this->identifier)) {
+            $this->identifier = $this->params()->fromRoute($this->getJourneyConfig()['identifier']);
+        }
+
+        return $this->identifier;
     }
 
     /**
@@ -870,173 +470,36 @@ abstract class AbstractJourneyController extends FormActionController
     }
 
     /**
-     * Get the journey identifier
-     *
-     * @return int
+     * Set the steps
      */
-    protected function getIdentifier()
+    protected function setSteps()
     {
-        if (empty($this->identifier)) {
-            $this->identifier = $this->params()->fromRoute($this->getJourneyConfig()['identifier']);
-        }
+        $this->steps = array();
 
-        return $this->identifier;
-    }
+        $config = $this->getJourneyConfig();
 
-    /**
-     * Check if the current sub section has a table
-     *
-     * @return boolean
-     */
-    protected function hasTable()
-    {
-        $tableName = $this->getTableName();
+        $journey = $this->getJourneyName();
 
-        $found = false;
+        foreach ($config['sections'] as $section => $details) {
 
-        foreach ($this->getServiceLocator()->get('Config')['tables']['config'] as $location) {
-
-            if (file_exists($location . $tableName . '.table.php' )) {
-                $found = true;
-                break;
+            foreach (array_keys($details['subSections']) as $subSection) {
+                $this->steps[] = array($journey, $section, $subSection);
             }
         }
-
-        return $found;
     }
 
     /**
-     * Get table name
+     * Get stepts
      *
-     * @return string
+     * @return array
      */
-    protected function getTableName()
+    protected function getSteps()
     {
-        if (empty($this->tableName)) {
-
-            $this->tableName = $this->getFormName();
+        if (empty($this->steps)) {
+            $this->setSteps();
         }
 
-        return $this->tableName;
-    }
-
-    /**
-     * Check if the current sub section has a form
-     *
-     * @return boolean
-     */
-    protected function hasForm()
-    {
-        $formName = $this->getFormName();
-
-        return file_exists($this->getServiceLocator()->get('Config')['local_forms_path'] . $formName . '.form.php');
-    }
-
-    /**
-     * Get form name
-     *
-     * @return string
-     */
-    protected function getFormName()
-    {
-        if (empty($this->formName)) {
-
-            $journey = $this->getJourneyName();
-            $section = $this->getSectionName();
-            $subSection = $this->getSubSectionName();
-
-            $suffix = '';
-
-            if ($this->isSubAction()) {
-
-                $suffix = '-sub-action';
-            }
-
-            $this->formName = $this->camelToDash($journey . '_' . $section . '_' . $subSection . $suffix);
-        }
-
-        return $this->formName;
-    }
-
-    /**
-     * Get the section reference
-     *
-     * @return string
-     */
-    protected function getSectionReference()
-    {
-        if (empty($this->sectionReference)) {
-
-            $journey = $this->getJourneyName();
-            $section = $this->getSectionName();
-            $subSection = $this->getSubSectionName();
-
-            $suffix = '';
-
-            if ($this->isSubAction()) {
-
-                $suffix = '-' . $this->getAction();
-            }
-
-            $this->sectionReference = $this->camelToDash($journey . '_' . $section . '_' . $subSection . $suffix);
-        }
-
-        return $this->sectionReference;
-    }
-
-    /**
-     * Check if the current sub section has a view
-     *
-     * @return boolean
-     */
-    protected function hasView()
-    {
-        $viewName = $this->getViewName();
-
-        return file_exists($this->getServiceLocator()->get('Config')['view_manager']['template_path_stack'][0] . '/' . $viewName . '.phtml');
-    }
-
-    /**
-     * Get form name
-     *
-     * @return string
-     */
-    protected function getViewName()
-    {
-        if (empty($this->viewName)) {
-
-            $journey = $this->getJourneyName();
-            $section = $this->getSectionName();
-            $subSection = $this->getSubSectionName();
-
-            $this->viewName = $this->camelToDash($journey . '/' . $section . '/' . $subSection);
-        }
-
-        return $this->viewName;
-    }
-
-    /**
-     * Convert camel case to dash
-     *
-     * @param string $string
-     * @return string
-     */
-    private function camelToDash($string)
-    {
-        $converter = new \Zend\Filter\Word\CamelCaseToDash();
-        return strtolower($converter->filter($string));
-    }
-
-    /**
-     * Convert camel case to underscore
-     *
-     * @param string $string
-     * @return string
-     */
-    private function camelToUnderscode($string)
-    {
-        $converter = new \Zend\Filter\Word\CamelCaseToUnderscore();
-        return strtolower($converter->filter($string));
+        return $this->steps;
     }
 
     /**
@@ -1062,67 +525,762 @@ abstract class AbstractJourneyController extends FormActionController
     }
 
     /**
-     * Redirect to the previous step
+     * Get a list of access keys to match the restrictions
+     *
+     * This method should be extended
+     *
+     * @param boolean $force
+     * @return array
      */
-    protected function goToPreviousStep()
+    protected function getAccessKeys($force = false)
     {
-        $steps = $this->getSteps();
-
-        $key = $this->getStepNumber();
-
-        $nextKey = $key - 1;
-
-        while (isset($steps[$nextKey])) {
-
-            if ($this->isSectionAccessible($steps[$nextKey][0], $steps[$nextKey][1], $steps[$nextKey][2])) {
-                return $this->goToSection(
-                    $this->getSectionRoute(
-                        $steps[$nextKey][0],
-                        $steps[$nextKey][1],
-                        $steps[$nextKey][2]
-                    )
-                );
-            }
-
-            $nextKey--;
+        if (empty($this->accessKeys)) {
+            $this->accessKeys = array(null);
         }
 
-        throw new \Exception('Can\'t find previous step');
+        return $this->accessKeys;
     }
 
     /**
-     * Redirect to the next step
+     * Get form name
+     *
+     * @return string
      */
-    protected function goToNextStep()
+    protected function getViewName()
     {
-        $steps = $this->getSteps();
+        if (empty($this->viewName)) {
 
-        $key = $this->getStepNumber();
+            $journey = $this->getJourneyName();
+            $section = $this->getSectionName();
+            $subSection = $this->getSubSectionName();
 
-        $nextKey = $key + 1;
-
-        $this->getAccessKeys(true);
-
-        while (isset($steps[$nextKey])) {
-
-            if ($this->isSectionAccessible($steps[$nextKey][0], $steps[$nextKey][1], $steps[$nextKey][2])) {
-                return $this->goToSection(
-                    $this->getSectionRoute(
-                        $steps[$nextKey][0],
-                        $steps[$nextKey][1],
-                        $steps[$nextKey][2]
-                    )
-                );
-            }
-
-            $nextKey++;
+            $this->viewName = $this->camelToDash($journey . '/' . $section . '/' . $subSection);
         }
 
-        return $this->journeyFinished();
+        return $this->viewName;
+    }
+
+    /**
+     * Get the sub action id
+     *
+     * @return int
+     */
+    protected function getActionId()
+    {
+        if (empty($this->actionId)) {
+            $this->actionId = $this->params()->fromRoute('id');
+        }
+
+        return $this->actionId;
+    }
+
+    /**
+     * Get table data
+     *
+     * This method should be overridden
+     *
+     * @return array
+     */
+    protected function getTableData($id)
+    {
+        return array();
+    }
+
+    /**
+     * Get table settings
+     *
+     * This method should be overridden
+     *
+     * @return array
+     */
+    protected function getTableSettings()
+    {
+        return array();
+    }
+
+    /**
+     * Get a list of accessible sections
+     *
+     * @return array
+     */
+    protected function getAccessibleSections()
+    {
+        $accessibleSections = array();
+
+        $sections = $this->getSections();
+
+        foreach ($sections as $name => $details) {
+
+            if (!$this->isSectionAccessible($details)) {
+                continue;
+            }
+
+            $accessibleSections[$name] = $this->getAccessibleSection($name);
+        }
+
+        return $accessibleSections;
+    }
+
+    /**
+     * Format the accessible section
+     *
+     * @param string $name
+     * @return array
+     */
+    protected function getAccessibleSection($name)
+    {
+        $sectionCompletion = $this->getSectionCompletion();
+        $journeyName = $this->getJourneyName();
+        $sectionName = $this->getSectionName();
+        $statusMap = $this->getJourneyConfig()['completionStatusMap'];
+
+        $status = $statusMap[(int)$sectionCompletion['section' . $name . 'Status']];
+
+        if ($name == $sectionName) {
+            $status = 'current';
+        }
+
+        return array(
+            'status' => $status,
+            'title' => $this->getSectionLabel($journeyName, $name),
+            'route' => $this->getSectionRoute($journeyName, $name)
+        );
+    }
+
+    /**
+     * Build the navigation view
+     *
+     * @return ViewModel
+     */
+    protected function getNavigationView()
+    {
+        $sections = $this->getAccessibleSections();
+
+        $view = $this->getViewModel(array('sections' => $sections));
+
+        $view->setTemplate('self-serve/journey/' . strtolower($this->getJourneyName()) . '/navigation');
+
+        return $view;
+    }
+
+    /**
+     * Format the section label
+     *
+     * @param string $journey
+     * @param string $section
+     * @param string $subSection
+     * @return string
+     */
+    protected function getSectionLabel($journey, $section, $subSection = null)
+    {
+        return strtolower(
+            $this->camelToDash($journey . '.' . $section . (!empty($subSection) ? '.' . $subSection : ''))
+        );
+    }
+
+    /**
+     * Format the section route
+     *
+     * @param string $journey
+     * @param string $section
+     * @param string $subSection
+     * @return string
+     */
+    protected function getSectionRoute($journey, $section, $subSection = null)
+    {
+        return $journey . '/' . $section . (!empty($subSection) ? '/' . $subSection : '');
+    }
+
+    /**
+     * Get an array of sub sections
+     */
+    protected function getSubSectionsForLayout()
+    {
+        $sectionConfig = $this->getSectionConfig();
+
+        $subSections = array();
+
+        foreach ($sectionConfig['subSections'] as $name => $details) {
+
+            if (!$this->isSectionAccessible($details)) {
+                continue;
+            }
+
+            $subSections[$name] = $this->getSectionDetailsForLayout($name, $details);
+        }
+
+        return $subSections;
+    }
+
+    /**
+     * Format the section details for the layout
+     *
+     * @param string $name
+     * @param array $details
+     * @return array
+     */
+    protected function getSectionDetailsForLayout($name, $details)
+    {
+        $journey = $this->getJourneyName();
+        $section = $this->getSectionName();
+        $subSection = $this->getSubSectionName();
+        $isAction = $this->isAction();
+
+        $sectionDetails = array(
+            'label' => $this->getSectionLabel($journey, $section, $name),
+            'class' => '',
+            'link' => true,
+            'route' => $this->getSectionRoute($journey, $section, $name),
+            'routeParams' => array($this->getJourneyConfig()['identifier'] => $this->getIdentifier()),
+            'action' => false
+        );
+
+        if (!$this->isSectionEnabled($details)) {
+            $sectionDetails['class'] = 'disabled';
+            $sectionDetails['link'] = false;
+        } else {
+
+            if ($name == $subSection) {
+                $sectionDetails['class'] = 'current';
+            }
+
+            if ($name == $subSection && !$isAction) {
+                $sectionDetails['link'] = false;
+            }
+        }
+
+        if ($name == $subSection && $isAction) {
+            $sectionDetails['action'] = $this->getSectionReference();
+        }
+
+        return $sectionDetails;
+    }
+
+    /**
+     * Check if the current sub section has a view
+     *
+     * @return boolean
+     */
+    protected function hasView()
+    {
+        if (is_null($this->hasView)) {
+
+            $this->hasView = file_exists(
+                $this->getServiceLocator()->get(
+                    'Config'
+                )['view_manager']['template_path_stack'][0] . '/' . $this->getViewName() . '.phtml'
+            );
+        }
+
+        return $this->hasView;
+    }
+
+    /**
+     * Check if the current sub section has a table
+     *
+     * @return boolean
+     */
+    protected function hasTable()
+    {
+        if (is_null($this->hasTable)) {
+
+            $tableName = $this->getTableName();
+
+            $this->hasTable = false;
+
+            foreach ($this->getServiceLocator()->get('Config')['tables']['config'] as $location) {
+
+                if (file_exists($location . $tableName . '.table.php' )) {
+                    $this->hasTable = true;
+                    break;
+                }
+            }
+        }
+
+        return $this->hasTable;
+    }
+
+    /**
+     * Check if the current sub section has a form
+     *
+     * @return boolean
+     */
+    protected function hasForm()
+    {
+        if (is_null($this->hasForm)) {
+
+            $this->hasForm = file_exists(
+                $this->getServiceLocator()->get('Config')['local_forms_path'] . $this->getFormName() . '.form.php'
+            );
+        }
+
+        return $this->hasForm;
+    }
+
+    /**
+     * Check if a section is accessible
+     *
+     * @param array|string $details (Section if string)
+     * @param string $subSection
+     * @return boolean
+     */
+    protected function isSectionAccessible($details, $subSection = null)
+    {
+        if (is_string($details)) {
+            $details = $this->getConfig($details, $subSection);
+        }
+
+        if (isset($details['restriction'])) {
+
+            $accessKeys = $this->getAccessKeys();
+
+            $intersection = array_intersect($accessKeys, $details['restriction']);
+
+            return !empty($intersection);
+        }
+
+        return true;
+    }
+
+    /**
+     * Check if a section is enabled
+     *
+     * @param array|string $details (Section if string)
+     * @param string $subSection
+     * @return boolean
+     */
+    protected function isSectionEnabled($details, $subSection = null)
+    {
+        if (is_string($details)) {
+            $details = $this->getConfig($details, $subSection);
+        }
+
+        $sectionCompletion = $this->getSectionCompletion();
+
+        $enabled = true;
+
+        $completeKey = array_search('complete', $this->getJourneyConfig()['completionStatusMap']);
+
+        if (isset($details['required'])) {
+
+            foreach ($details['required'] as $requiredSection) {
+                $requiredSection = str_replace('/', '', $requiredSection);
+
+                if (!isset($sectionCompletion['section' . $requiredSection . 'Status'])
+                    || $sectionCompletion['section' . $requiredSection . 'Status'] != $completeKey) {
+
+                    $enabled = false;
+                }
+            }
+        }
+
+        return $enabled;
+    }
+
+    /**
+     * Check if we have a sub action
+     *
+     * @return boolean
+     */
+    protected function isAction()
+    {
+        $action = $this->getActionName();
+
+        return ($action != 'index');
+    }
+
+    /**
+     * Alter table
+     *
+     * This method should be overridden
+     *
+     * @param object $table
+     * @return object
+     */
+    protected function alterTable($table)
+    {
+        return $table;
+    }
+
+    /**
+     * Alter the form
+     *
+     * This method should be overridden
+     *
+     * @param Form $form
+     * @return Form
+     */
+    protected function alterForm($form)
+    {
+        return $form;
+    }
+
+    /**
+     * Render the section
+     *
+     * @return Response
+     */
+    protected function renderSection($view = null, $params = array())
+    {
+        $redirect = $this->checkForRedirect();
+
+        if ($redirect instanceof Response) {
+            return $redirect;
+        }
+
+        $view = $this->setupView($view, $params);
+
+        $this->maybeAddTable($view);
+
+        $this->maybeAddForm($view);
+
+        return $this->render($view);
+    }
+
+    /**
+     * Potentiall add a table to the view
+     *
+     * @param ViewModel $view
+     */
+    protected function maybeAddTable($view)
+    {
+        if ($this->hasTable()) {
+
+            $tableName = $this->getTableName();
+
+            $data = $this->getTableData($this->getIdentifier());
+
+            $settings = $this->getTableSettings();
+
+            $table = $this->alterTable($this->getTable($tableName, $data, $settings));
+
+            $view->setVariable('table', $table->render());
+        }
+    }
+
+    /**
+     * Potentially add a form
+     *
+     * @param ViewModel $view
+     * @return Response
+     */
+    protected function maybeAddForm($view)
+    {
+        if ($this->hasForm()) {
+
+            $form = $this->generateFormWithData($this->getFormName(), $this->getFormCallback(), $this->getFormData());
+
+            if ($this->getStepNumber() == 0) {
+                $form->get('form-actions')->remove('back');
+            }
+
+            if ($this->isAction() && $this->getActionName() == 'edit') {
+                $form->get('form-actions')->remove('addAnother');
+            }
+
+            if ($form instanceof Response) {
+                return $form;
+            }
+
+            $view->setVariable('form', $this->alterForm($form));
+        }
+    }
+
+    /**
+     * Get the form data
+     *
+     * @return array
+     */
+    protected function getFormData()
+    {
+        if ($this->isAction()) {
+
+            $action = $this->getActionName();
+
+            if ($action === 'edit') {
+
+                $data = $this->actionLoad($this->getActionId());
+
+            } else {
+                $data = array();
+            }
+
+            if ($data instanceof Response) {
+                return $data;
+            }
+
+            $processedData = $this->processActionLoad($data);
+
+        } else {
+
+            $data = $this->load($this->getIdentifier());
+
+            if ($data instanceof Response) {
+                return $data;
+            }
+
+            $processedData = $this->processLoad($data);
+        }
+
+        return $processedData;
+    }
+
+    /**
+     * Get the form callback
+     *
+     * @return string
+     */
+    protected function getFormCallback()
+    {
+        $callback = 'processSave';
+
+        if ($this->isAction()) {
+            $callback = 'processActionSave';
+        }
+
+        return $callback;
+    }
+
+    /**
+     * Setup the view for renderring
+     *
+     * @param ViewModel $view
+     * @return ViewModel
+     */
+    protected function setupView($view = null, $params = array())
+    {
+        $journeyName = $this->getJourneyName();
+
+        if (empty($view)) {
+            $view = $this->getViewModel($params);
+        }
+
+        if ($this->isAction()) {
+            $view->setVariable('title', $this->getSectionReference());
+        }
+
+        if ($this->hasView()) {
+            $view->setTemplate($this->getViewName());
+        } elseif ($view->getTemplate() == null) {
+            $view->setTemplate('self-serve/journey/' . strtolower($journeyName) . '/main');
+        }
+
+        return $view;
+    }
+
+    /**
+     * Check for redirect
+     *
+     * @return Response
+     */
+    protected function checkForRedirect()
+    {
+        $sectionName = $this->getSectionName();
+        $subSectionName = $this->getSubSectionName();
+
+        if (!$this->isSectionAccessible($sectionName, null)
+            || !$this->isSectionAccessible($sectionName, $subSectionName)) {
+            return $this->goToNextStep();
+        }
+
+        if (!$this->isSectionEnabled($sectionName, null)
+            || !$this->isSectionEnabled($sectionName, $subSectionName)
+            || $this->isButtonPressed('back')) {
+            return $this->goToPreviousStep();
+        }
+
+        if ($this->isAction() && $this->isButtonPressed('cancel')) {
+            return $this->goBackToSection();
+        }
+
+        $crudAction = $this->checkForCrudAction();
+
+        if ($crudAction instanceof Response) {
+            return $crudAction;
+        }
+    }
+
+    /**
+     * Render the view
+     *
+     * @param ViewModel $view
+     * @return ViewModel
+     */
+    protected function render($view)
+    {
+        $navigation = $this->getNavigationView();
+
+        $layout = $this->getViewModel(
+            array(
+                'subSections' => $this->getSubSectionsForLayout(),
+                'id' => $this->getIdentifier()
+            )
+        );
+
+        $layout->setTemplate('self-serve/journey/' . strtolower($this->getJourneyName()) . '/layout');
+
+        $layout->addChild($view, 'main');
+
+        $layout->addChild($navigation, 'navigation');
+
+        return $layout;
+    }
+
+    /**
+     * Load data for the form
+     *
+     * This method should be overridden
+     *
+     * @param int $id
+     * @return array
+     */
+    protected function load($id)
+    {
+        $result = $this->makeRestCall($this->getService(), 'GET', array('id' => $id));
+
+        if (empty($result)) {
+            return $this->notFoundAction();
+        }
+
+        return $result;
+    }
+
+    /**
+     * Map the data on load
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function processLoad($data)
+    {
+        return $data;
+    }
+
+    /**
+     * Load sub section data
+     *
+     * @param int $id
+     * @return array
+     */
+    protected function actionLoad($id)
+    {
+        $result = $this->makeRestCall($this->getActionService(), 'GET', array('id' => $id));
+
+        if (empty($result)) {
+            return $this->notFoundAction();
+        }
+
+        return $result;
+    }
+
+    /**
+     * Process loading the sub section data
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function processActionLoad($data)
+    {
+        return $data;
+    }
+
+    /**
+     * Save data
+     *
+     * @param array $data
+     */
+    protected function save($data)
+    {
+        $this->makeRestCall($this->getService(), 'PUT', $data['data']);
+
+        return $this->goToNextStep();
+    }
+
+    /**
+     * Complete section and save
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function processSave($data)
+    {
+        $this->completeSubSection();
+
+        return $this->save($data);
+    }
+
+    /**
+     * Save sub action data
+     *
+     * @param array $data
+     */
+    protected function actionSave($data)
+    {
+        $method = 'PUT';
+
+        if (isset($data['data']['id'])) {
+            $method = 'POST';
+        }
+
+        $this->makeRestCall($this->getActionService(), $method, $data['data']);
+
+        if ($this->isButtonPressed('addAnother')) {
+            return $this->goBackToAddAnother();
+        }
+
+        return $this->goBackToSection();
+    }
+
+    /**
+     * Save the sub action
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function processActionSave($data)
+    {
+        return $this->actionSave($data);
+    }
+
+    /**
+     * Complete sub section
+     */
+    protected function completeSubSection()
+    {
+        $sectionCompletion = $this->getSectionCompletion();
+        $sectionName = $this->getSectionName();
+        $key = 'section' . $sectionName . $this->getSubSectionName() . 'Status';
+        $completeKey = array_search('complete', $this->getJourneyConfig()['completionStatusMap']);
+        $incompleteKey = array_search('incomplete', $this->getJourneyConfig()['completionStatusMap']);
+        $sectionConfig = $this->getSectionConfig();
+
+        $sectionCompletion[$key] = $completeKey;
+
+        $complete = true;
+
+        foreach (array_keys($sectionConfig['subSections']) as $subSectionName) {
+            $sectionStatusKey = 'section' . $sectionName . $subSectionName . 'Status';
+
+            if (!isset($sectionCompletion[$sectionStatusKey])
+                || $sectionCompletion[$sectionStatusKey] != $completeKey) {
+                $complete = false;
+                break;
+            }
+        }
+
+        $sectionCompletionKey = ($complete ? $completeKey : $incompleteKey);
+
+        $sectionCompletion['section' . $sectionName . 'Status'] = $sectionCompletionKey;
+
+        $this->setSectionCompletion($sectionCompletion);
+
+        $this->makeRestCall($this->getJourneyConfig()['completionService'], 'PUT', $sectionCompletion);
     }
 
     /**
      * Journey finished
+     *
+     * @todo Implement this
      */
     protected function journeyFinished()
     {
@@ -1134,23 +1292,15 @@ abstract class AbstractJourneyController extends FormActionController
     }
 
     /**
-     * Go to the first subSection
+     * Redirect to a section
      *
+     * @param string $name
+     * @param array $params
      * @return Response
      */
-    protected function goToFirstSubSection()
+    protected function goToSection($name, $params = array(), $reuse = true)
     {
-        $name = $this->getJourneyName();
-        $section = $this->getSectionName();
-        $config = $this->getJourneyConfig();
-
-        $route = $name . '/' . $section;
-
-        if (isset($config['sections'][$section]['subSections'])) {
-            $route .= '/' . array_keys($config['sections'][$section]['subSections'])[0];
-        }
-
-        return $this->goToSection($route);
+        return $this->redirect()->toRoute($name, $params, array(), $reuse);
     }
 
     /**
@@ -1175,15 +1325,119 @@ abstract class AbstractJourneyController extends FormActionController
     }
 
     /**
-     * Redirect to a section
+     * Go to the first subSection
      *
-     * @param string $name
-     * @param array $params
      * @return Response
      */
-    protected function goToSection($name, $params = array(), $reuse = true)
+    protected function goToFirstSubSection()
     {
-        return $this->redirect()->toRoute($name, $params, array(), $reuse);
+        $name = $this->getJourneyName();
+        $section = $this->getSectionName();
+        $config = $this->getJourneyConfig();
+
+        $route = $name . '/' . $section;
+
+        if (isset($config['sections'][$section]['subSections'])) {
+            $route .= '/' . array_keys($config['sections'][$section]['subSections'])[0];
+        }
+
+        return $this->goToSection($route);
+    }
+
+    /**
+     * Redirect to the next step
+     */
+    protected function goToNextStep()
+    {
+        $steps = $this->getSteps();
+
+        $key = $this->getStepNumber();
+
+        $nextKey = $key + 1;
+
+        $this->getAccessKeys(true);
+
+        while (isset($steps[$nextKey])) {
+
+            if ($this->isSectionAccessible($steps[$nextKey][1], $steps[$nextKey][2])) {
+                return $this->goToSection(
+                    $this->getSectionRoute(
+                        $steps[$nextKey][0],
+                        $steps[$nextKey][1],
+                        $steps[$nextKey][2]
+                    )
+                );
+            }
+
+            $nextKey++;
+        }
+
+        return $this->journeyFinished();
+    }
+
+    /**
+     * Redirect to the previous step
+     */
+    protected function goToPreviousStep()
+    {
+        $steps = $this->getSteps();
+
+        $key = $this->getStepNumber();
+
+        $nextKey = $key - 1;
+
+        while (isset($steps[$nextKey])) {
+
+            if ($this->isSectionAccessible($steps[$nextKey][1], $steps[$nextKey][2])) {
+                return $this->goToSection(
+                    $this->getSectionRoute(
+                        $steps[$nextKey][0],
+                        $steps[$nextKey][1],
+                        $steps[$nextKey][2]
+                    )
+                );
+            }
+
+            $nextKey--;
+        }
+
+        throw new \Exception('Can\'t find previous step');
+    }
+
+    /**
+     * Redirect to sub section
+     *
+     * @return Response
+     */
+    protected function goBackToSection()
+    {
+        $route = $this->getSectionRoute(
+            $this->getJourneyName(),
+            $this->getSectionName(),
+            $this->getSubSectionName()
+        );
+
+        return $this->goToSection(
+            $route,
+            array($this->getJourneyConfig()['identifier'] => $this->getIdentifier()),
+            false
+        );
+    }
+
+    /**
+     * Go back to sub action
+     *
+     * @return Response
+     */
+    protected function goBackToAddAnother()
+    {
+        $route = $this->getSectionRoute(
+            $this->getJourneyName(),
+            $this->getSectionName(),
+            $this->getSubSectionName()
+        );
+
+        return $this->goToSection($route);
     }
 
     /**
@@ -1199,119 +1453,14 @@ abstract class AbstractJourneyController extends FormActionController
     }
 
     /**
-     * Getter for the current sub section name
+     * Convert camel case to dash
      *
+     * @param string $string
      * @return string
      */
-    protected function getSubSectionName()
+    private function camelToDash($string)
     {
-        if (empty($this->subSectionName)) {
-
-            $this->subSectionName = str_replace('Controller', '', $this->getNamespaceParts()[4]);
-
-            if (!isset($this->getSectionConfig()['subSections'][$this->subSectionName])) {
-                $this->subSectionName = null;
-            }
-        }
-
-        return $this->subSectionName;
-    }
-
-    /**
-     * Getter for the current section name
-     *
-     * @return string
-     */
-    protected function getSectionName()
-    {
-        if (empty($this->sectionName)) {
-            $this->sectionName = $this->getNamespaceParts()[3];
-        }
-
-        return $this->sectionName;
-    }
-
-    /**
-     * Getter for journey name
-     *
-     * @return string
-     */
-    protected function getJourneyName()
-    {
-        if (empty($this->journeyName)) {
-            $this->journeyName = $this->getNamespaceParts()[2];
-        }
-
-        return $this->journeyName;
-    }
-
-    /**
-     * Getter for the current journey config
-     *
-     * @return array
-     */
-    protected function getJourneyConfig()
-    {
-        if (empty($this->journeyConfig)) {
-            $this->journeyConfig = $this->getServiceLocator()->get('Config')['journeys'][$this->getJourneyName()];
-        }
-
-        return $this->journeyConfig;
-    }
-
-    /**
-     * Get stepts
-     *
-     * @return array
-     */
-    protected function getSteps()
-    {
-        if (empty($this->steps)) {
-            $this->steps = array();
-
-            $config = $this->getJourneyConfig();
-
-            $journey = $this->getJourneyName();
-
-            foreach ($config['sections'] as $section => $details) {
-
-                if (isset($details['subSections'])) {
-
-                    foreach ($details['subSections'] as $subSection => $subSectionDetails) {
-                        $this->steps[] = array($journey, $section, $subSection);
-                    }
-                } else {
-                    $this->steps[] = array($journey, $section, null);
-                }
-            }
-        }
-
-        return $this->steps;
-    }
-
-    /**
-     * Get a journey, section, or sub section config
-     *
-     * @param string $journey
-     * @param string $section
-     * @param string $subSection
-     * @return array
-     */
-    protected function getConfig($journey, $section = null, $subSection = null)
-    {
-        $config = $this->getJourneyConfig();
-
-        if (!is_null($subSection)) {
-
-            return isset($config['sections'][$section]['subSections'][$subSection])
-                ? $config['sections'][$section]['subSections'][$subSection]
-                : array();
-        }
-
-        if (!is_null($section)) {
-            return isset($config['sections'][$section]) ? $config['sections'][$section] : array();
-        }
-
-        return $config;
+        $converter = new CamelCaseToDash();
+        return strtolower($converter->filter($string));
     }
 }
