@@ -37,6 +37,31 @@ class IndexController extends AbstractApplicationController
      */
     public function indexAction()
     {
+        return $this->generateView('index');
+    }
+
+    /**
+     * Display a simple, chromeless review form. Suitable for printing
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
+    public function simpleAction()
+    {
+        return $this->generateView('simple', 'layout/simple');
+    }
+
+    /**
+     * Our complete action; a no-op so far...
+     *
+     * @return void
+     */
+    public function completeAction()
+    {
+
+    }
+
+    protected function generateView($template, $layoutTemplate = null)
+    {
         $applicationId = $this->getApplicationId();
 
         // collect completion status
@@ -60,23 +85,17 @@ class IndexController extends AbstractApplicationController
             [
                 'completionStatus' => $completionStatus['Results'][0],
                 'applicationId' => $applicationId,
-                'form' => $form,
-                'currentUrl' => $this->getRequest()->getRequestUri()
+                'form' => $form
             ]
         );
-        $view->setTemplate('self-serve/declarations/index');
+        $view->setTemplate('self-serve/declarations/' . $template);
+
+        if ($layoutTemplate !== null) {
+            $layout = $this->layout();
+            $layout->setTemplate($layoutTemplate);
+        }
 
         return $view;
-    }
-
-    /**
-     * Our complete action; a no-op so far...
-     *
-     * @return void
-     */
-    public function completeAction()
-    {
-
     }
 
     /**

@@ -12,7 +12,7 @@
 <div class="three-quarters">
     <div>
         <h2 class="inline">Application summary</h2>
-        <a href="<?php echo $currentUrl ?>" class="right-aligned    action--tertiary" target="_blank">View in another window</a>
+        <a href="<?php echo $this->url('selfserve/declarations-simple', ['applicationId' => $applicationId]) ?>" class="right-aligned    action--tertiary" target="_blank">View in another window</a>
     </div>
     <?php echo $this->form($form); ?>
 </div>

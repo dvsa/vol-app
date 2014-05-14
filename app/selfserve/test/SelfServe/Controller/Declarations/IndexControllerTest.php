@@ -77,7 +77,6 @@ class IndexControllerTest extends PHPUnit_Framework_TestCase
                 'generateForm',
                 'getLicenceEntity',
                 'getApplicationId',
-                'getRequest',
                 'makeRestCall'
             ]
         );
@@ -129,17 +128,7 @@ class IndexControllerTest extends PHPUnit_Framework_TestCase
             ->method('generateForm')
             ->will($this->returnValue($mockForm));
 
-        $mockRequest = $this->getMock('\stdClass', ['getRequestUri']);
-        $mockRequest->expects($this->any())
-            ->method('getRequestUri')
-            ->will($this->returnValue('/foo/bar'));
-
-        $this->controller->expects($this->once())
-            ->method('getRequest')
-            ->will($this->returnValue($mockRequest));
-
-        $view = $this->controller->indexAction();
-        $this->assertEquals('/foo/bar', $view->getVariable('currentUrl'));
+        $this->controller->indexAction();
     }
 
     public function testIndexActionWithNonNIAndGoodsLicence()
@@ -155,7 +144,6 @@ class IndexControllerTest extends PHPUnit_Framework_TestCase
                 'generateForm',
                 'getLicenceEntity',
                 'getApplicationId',
-                'getRequest',
                 'makeRestCall'
             ]
         );
@@ -204,15 +192,6 @@ class IndexControllerTest extends PHPUnit_Framework_TestCase
             ->method('generateForm')
             ->will($this->returnValue($mockForm));
 
-        $mockRequest = $this->getMock('\stdClass', ['getRequestUri']);
-        $mockRequest->expects($this->any())
-            ->method('getRequestUri')
-            ->will($this->returnValue('/foo/bar'));
-
-        $this->controller->expects($this->once())
-            ->method('getRequest')
-            ->will($this->returnValue($mockRequest));
-
         $this->controller->indexAction();
     }
 
@@ -228,7 +207,6 @@ class IndexControllerTest extends PHPUnit_Framework_TestCase
                 'generateForm',
                 'getLicenceEntity',
                 'getApplicationId',
-                'getRequest',
                 'makeRestCall'
             ]
         );
@@ -276,15 +254,6 @@ class IndexControllerTest extends PHPUnit_Framework_TestCase
         $this->controller->expects($this->once())
             ->method('generateForm')
             ->will($this->returnValue($mockForm));
-
-        $mockRequest = $this->getMock('\stdClass', ['getRequestUri']);
-        $mockRequest->expects($this->any())
-            ->method('getRequestUri')
-            ->will($this->returnValue('/foo/bar'));
-
-        $this->controller->expects($this->once())
-            ->method('getRequest')
-            ->will($this->returnValue($mockRequest));
 
         $this->controller->indexAction();
     }
