@@ -48,6 +48,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         );
         
         parent::setUp();
+        
     }
     
     public function testAddPostAction()
@@ -314,7 +315,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         
         $viewModel = $this->getMock('\stdClass', array('setTemplate'));
         
-       $viewModel->expects($this->once())
+        $viewModel->expects($this->once())
             ->method('setTemplate')
             ->with('submission/page');
         
@@ -324,6 +325,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
                 array(
                     'params' => array(
                         'formAction' => '/licence/7/case/28/submission/edit/166',
+                        'routeParams' => $this->controller->routeParams,
                         'pageTitle' => 'case-submission',
                         'pageSubTitle' => 'case-submission-text',
                         'submission' => array('data' => array(), 'views' => array()),
@@ -561,7 +563,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
             'Results' => array(
                 array(
                     'id' => 1,
-                    'displayName' => 'Fred Smith'
+                    'name' => 'Fred Smith'
                 )
             )
         );
@@ -664,6 +666,153 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $this->controller->expects($this->once())
             ->method('setBreadcrumb')
             ->with($thisNavRoutes);
+        
         $this->controller->setSubmissionBreadcrumb(array());
+    }
+    
+    public function testAddNoteAction()
+    {
+        $this->controller = $this->getMock(
+            '\Olcs\Controller\Submission\SubmissionController',
+            array(
+                'makeRestCall',
+                'setBreadcrumb',
+                'params',
+                'getRequest',
+                'redirect'
+            )
+        );
+        
+        $this->controller->routeParams = array(
+            'case' => 54,
+            'licence' => 7,
+            'action' => 'add',
+            'id' => 8,
+            'type' => 'submission',
+            'section' => 'case-summary-info',
+            'typeId' => 8);
+        
+        $obj = $this->getMock('\stdClass', array('fromPost', 'toRoute', 'isPost'));
+         
+         $obj->expects($this->once())
+            ->method('fromPost')
+            ->will($this->returnValue(array('section' => 'case-summary-info')));
+         
+         $this->controller->expects($this->once())
+             ->method('params')
+             ->will($this->returnValue($obj));
+         
+        $obj->expects($this->once())
+            ->method('isPost')
+            ->will($this->returnValue(true));
+        
+        $this->controller->expects($this->once())
+            ->method('getRequest')
+            ->will($this->returnValue($obj));
+        
+        $routeParams = array(
+            'case' => 54,
+            'licence' => 7,
+            'action' => 'add',
+            'type' => 'submission',
+            'section' => 'case-summary-info',
+            'typeId' => 8);
+        
+        $obj->expects($this->once())
+            ->method('toRoute')
+            ->with('note', $routeParams);
+        
+        $this->controller->expects($this->once())
+             ->method('redirect')
+             ->will($this->returnValue($obj));
+        
+        $this->controller->addnoteAction();
+    }
+    
+    public function testGetSubmissionSectionViews()
+    {
+        $this->controller = $this->getMock(
+            '\Olcs\Controller\Submission\SubmissionController',
+            array(
+                'makeRestCall',
+                'setBreadcrumb',
+                'params',
+                'getRequest',
+                'redirect',
+                'getServiceLocator',
+                'getViewModel'
+            )
+        );
+        
+        $this->controller->submissionConfig = array(
+            'sections' => array(
+                'case-summary-info' => array(
+                    'view' => 'submission/partials/case-summary',
+                    'dataPath' => 'VosaCase',
+                    'bundle' => array(
+                        'children' => array(
+                            'categories' => array(
+                                'properties' => array(
+                                    'id',
+                                    'name'
+                                )
+                            ),
+                            'convictions' => array(
+                                'properties' => 'ALL'
+                            ),
+                            'licence' => array(
+                                'properties' => 'ALL',
+                                'children' => array(
+                                    'trafficArea' => array(
+                                        'properties' => 'ALL'
+                                    ),
+                                    'organisation' => array(
+                                        'properties' => 'ALL'
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        );
+        
+        $obj = $this->getMock('\stdClass', array('get', 'setTemplate'));
+        
+        $viewRenderer = $this->getMock('\stdClass', array('render'));
+        
+        $viewRenderer->expects($this->at(1))
+            ->method('render')
+            ->with($obj)
+            ->will($this->returnValue('rendered HTML'));
+        
+        $obj->expects($this->once())
+            ->method('get')
+            ->with('ViewRenderer')
+            ->will($this->returnValue($viewRenderer));
+        
+        $this->controller->expects($this->once())
+            ->method('getServiceLocator')
+            ->will($this->returnValue($obj));
+        
+        $obj->expects($this->at(1))
+            ->method('setTemplate')
+            ->with('submission/partials/case-summary');
+        
+        $obj->expects($this->at(2))
+            ->method('setTemplate')
+            ->with('submission/partials/blank');
+        
+        $this->controller->expects($this->atLeastOnce())
+            ->method('getViewModel')
+            ->with(array('sectionData' => []))
+            ->will($this->returnValue($obj));
+        
+        $this->controller->getSubmissionSectionViews(
+            array(
+                'case-summary-info' => array('data' => [], 'notes' => []),
+                'persons' => array('data' => [], 'notes' => [])
+            )
+        );
     }
 }

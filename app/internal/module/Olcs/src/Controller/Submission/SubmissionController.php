@@ -157,6 +157,7 @@ class SubmissionController extends FormActionController
     public function getSubmissionSectionViews(array $sections)
     {
         $viewRender = $this->getServiceLocator()->get('ViewRenderer');
+        $renderedViews = array();
         foreach ($sections as $sectionName => $section) {
             $view = $this->getViewModel(array('sectionData' => $section['data']));
             if (isset($this->submissionConfig['sections'][$sectionName]['view'])) {

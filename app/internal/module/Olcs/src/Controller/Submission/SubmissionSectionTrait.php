@@ -25,7 +25,7 @@ trait SubmissionSectionTrait
         $licenceData = $this->makeRestCall('Licence', 'GET', array('id' => $routeParams['licence']));
         $submission = array();
         foreach ($this->submissionConfig['sections'] as $sectionName => $config) {
-            if ($this->submissionExclude($sectionName, $config, $licenceData)) {
+            if ($this->submissionExclude($config, $licenceData)) {
                 $submission[$sectionName] = $this->createSubmissionSection($sectionName, $config);
             }
         }
@@ -41,7 +41,7 @@ trait SubmissionSectionTrait
      * @param type $licenceData
      * @return boolean
      */
-    public function submissionExclude($section, $config, $licenceData)
+    public function submissionExclude($config, $licenceData)
     {
         if (!isset($config['exclude'])) {
             return true;
