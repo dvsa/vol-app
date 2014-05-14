@@ -15,6 +15,13 @@ namespace SelfServe\Controller\Application\OperatingCentres;
 class AuthorisationController extends OperatingCentresController
 {
     /**
+     * Holds the sub action service
+     *
+     * @var string
+     */
+    protected $subActionService = 'ApplicationOperatingCentre';
+
+    /**
      * Render the section form
      *
      * @return Response
@@ -25,12 +32,27 @@ class AuthorisationController extends OperatingCentresController
     }
 
     /**
-     * Add operating centre
+     * Load data for the sub section
+     *
+     * @param int $id
+     * @return array
      */
-    public function addAction()
+    protected function loadSubSection($id)
     {
-        $view = $this->getViewModel(array('title' => 'Add operating centre'));
-        return $this->renderSection($view);
+        
+    }
+
+    protected function saveSubAction($data)
+    {
+        $id = $this->getSubActionId();
+
+        $data = $data['data'];
+
+        if (!empty($id)) {
+            $data['id'] = $id;
+        }
+
+        $this->makeRestCall('ApplicationOperatingCentre', 'PUT', $data);
     }
 
     /**
@@ -38,7 +60,7 @@ class AuthorisationController extends OperatingCentresController
      *
      * @param array $data
      */
-    public function save($data)
+    protected function save($data)
     {
     }
 
@@ -47,7 +69,7 @@ class AuthorisationController extends OperatingCentresController
      *
      * @param int $id
      */
-    public function load($id)
+    protected function load($id)
     {
         return array('data' => array());
     }

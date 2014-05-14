@@ -30,7 +30,7 @@ class OperatorLocationController extends TypeOfLicenceController
      *
      * @param array $data
      */
-    public function save($data)
+    protected function save($data)
     {
         if ($data['data']['niFlag'] == 1) {
             $data['data']['goodsOrPsv'] = 'goods';

@@ -76,7 +76,7 @@ class LicenceTypeController extends TypeOfLicenceController
      *
      * @param int $id
      */
-    public function load($id)
+    protected function load($id)
     {
         return array('data' => $this->loadData($id));
     }

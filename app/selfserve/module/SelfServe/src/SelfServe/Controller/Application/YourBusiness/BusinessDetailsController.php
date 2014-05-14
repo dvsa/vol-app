@@ -32,7 +32,7 @@ class BusinessDetailsController extends YourBusinessController
      *
      * @param array $data
      */
-    public function save($data)
+    protected function save($data)
     {
     }
 
@@ -41,7 +41,7 @@ class BusinessDetailsController extends YourBusinessController
      *
      * @param int $id
      */
-    public function load($id)
+    protected function load($id)
     {
         return array('data' => array());
     }

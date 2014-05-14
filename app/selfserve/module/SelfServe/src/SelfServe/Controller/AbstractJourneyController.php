@@ -25,6 +25,20 @@ abstract class AbstractJourneyController extends FormActionController
     protected $service = null;
 
     /**
+     * Holds the sub action service name
+     *
+     * @var string
+     */
+    protected $subActionService = null;
+
+    /**
+     * Holds the action name
+     *
+     * @var string
+     */
+    private $action;
+
+    /**
      * Hold the journey name
      *
      * @var string
@@ -51,6 +65,20 @@ abstract class AbstractJourneyController extends FormActionController
      * @var array
      */
     private $journeyConfig = array();
+
+    /**
+     * Holds the section reference
+     *
+     * @var string
+     */
+    private $sectionReference;
+
+    /**
+     * Holds the table name
+     *
+     * @var string
+     */
+    private $tableName;
 
     /**
      * Holds the form name
@@ -128,6 +156,10 @@ abstract class AbstractJourneyController extends FormActionController
             $view = $this->getViewModel($params);
         }
 
+        if ($this->isSubAction()) {
+            $view->setVariable('title', $this->getSectionReference());
+        }
+
         if ($view->getTemplate() == null) {
             $view->setTemplate('self-serve/journey/' . strtolower($journeyName) . '/main');
         }
@@ -153,14 +185,45 @@ abstract class AbstractJourneyController extends FormActionController
 
         if ($this->hasForm()) {
 
+            if ($this->isSubAction() && $this->isButtonPressed('cancel')) {
+                return $this->goBackToSection();
+            }
+
             $formName = $this->getFormName();
 
-            $data = $this->processLoad($this->load($this->getIdentifier()));
+            $callback = 'processSave';
 
-            $form = $this->generateFormWithData($formName, 'processSave', $data);
+            $data = array();
+
+            if ($this->isSubAction()) {
+                $callback = 'processSubActionSave';
+
+                $action = $this->getAction();
+
+                if ($action === 'edit') {
+                    $id = $this->params()->fromRoute('id');
+
+                    $data = $this->loadSubSection($id);
+
+                    if ($data instanceof Response) {
+                        return $data;
+                    }
+
+                    $data = $this->processSubSectionLoad($data);
+                }
+
+            } else {
+                $data = $this->processLoad($this->load($this->getIdentifier()));
+            }
+
+            $form = $this->generateFormWithData($formName, $callback, $data);
 
             if ($this->getStepNumber() == 0) {
                 $form->get('form-actions')->remove('back');
+            }
+
+            if ($this->isSubAction() && $this->getAction() == 'edit') {
+                $form->get('form-actions')->remove('addAnother');
             }
 
             if ($form instanceof Response) {
@@ -175,6 +238,68 @@ abstract class AbstractJourneyController extends FormActionController
         }
 
         return $this->render($view);
+    }
+
+    /**
+     * Redirect to sub section
+     *
+     * @return Response
+     */
+    protected function goBackToSection()
+    {
+        $route = $this->getSectionRoute(
+            $this->getJourneyName(),
+            $this->getSectionName(),
+            $this->getSubSectionName()
+        );
+
+        return $this->goToSection(
+            $route,
+            array($this->getJourneyConfig()['identifier'] => $this->getIdentifier()),
+            false
+        );
+    }
+
+    /**
+     * Go back to sub action
+     *
+     * @return Response
+     */
+    protected function goBackToAddAnother()
+    {
+        $route = $this->getSectionRoute(
+            $this->getJourneyName(),
+            $this->getSectionName(),
+            $this->getSubSectionName()
+        );
+
+        return $this->goToSection($route);
+    }
+
+    /**
+     * Check if we have a sub action
+     *
+     * @return boolean
+     */
+    protected function isSubAction()
+    {
+        $action = $this->getAction();
+
+        return ($action != 'index');
+    }
+
+    /**
+     * Getter for action
+     *
+     * @return string
+     */
+    protected function getAction()
+    {
+        if (empty($this->action)) {
+            $this->action = $this->params()->fromRoute('action');
+        }
+
+        return $this->action;
     }
 
     /**
@@ -254,6 +379,23 @@ abstract class AbstractJourneyController extends FormActionController
     }
 
     /**
+     * Load sub section data
+     *
+     * @param int $id
+     * @return array
+     */
+    protected function loadSubSection($id)
+    {
+        $result = $this->makeRestCall($this->getSubActionService(), 'GET', array('id' => $id));
+
+        if (empty($result)) {
+            return $this->notFoundAction();
+        }
+
+        return $result;
+    }
+
+    /**
      * Load data for the form
      *
      * This method should be overridden
@@ -264,6 +406,17 @@ abstract class AbstractJourneyController extends FormActionController
     protected function load($id)
     {
         return array();
+    }
+
+    /**
+     * Process loading the sub section data
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function processSubSectionLoad($data)
+    {
+        return $data;
     }
 
     /**
@@ -278,19 +431,113 @@ abstract class AbstractJourneyController extends FormActionController
     }
 
     /**
+     * Add operating centre
+     */
+    public function addAction()
+    {
+        return $this->renderSection();
+    }
+
+    /**
+     * Edit operating centre
+     */
+    public function editAction()
+    {
+        return $this->renderSection();
+    }
+
+    /**
+     * Delete sub action
+     *
+     * @return Response
+     */
+    protected function deleteAction()
+    {
+        if (!empty($this->getSubActionService()) && !empty($this->getSubActionId())) {
+            $this->makeRestCall($this->getSubActionService(), 'DELETE', array('id' => $this->getSubActionId()));
+            return $this->goBackToSection();
+        }
+
+        return $this->notFoundAction();
+    }
+
+    /**
+     * Get the sub action service
+     *
+     * @return string
+     */
+    protected function getSubActionService()
+    {
+        return $this->subActionService;
+    }
+
+    /**
+     * Get the service name
+     *
+     * @return string
+     */
+    protected function getService()
+    {
+        return $this->service;
+    }
+
+    /**
+     * Get the sub action id
+     *
+     * @return int
+     */
+    protected function getSubActionId()
+    {
+        return $this->params()->fromRoute('id');
+    }
+
+    /**
+     * Save sub action data
+     *
+     * @param array $data
+     */
+    protected function saveSubAction($data)
+    {
+        $method = 'PUT';
+
+        if (isset($data['data']['id'])) {
+            $method = 'POST';
+        }
+
+        $this->makeRestCall($this->getSubActionService(), $method, $data['data']);
+
+        if ($this->isButtonPressed('addAnother')) {
+            return $this->goBackToAddAnother();
+        }
+
+        return $this->goBackToSection();
+    }
+
+    /**
      * Save data
      *
      * @param array $data
      */
-    public function save($data)
+    protected function save($data)
     {
-        $this->makeRestCall($this->service, 'PUT', $data['data']);
+        $this->makeRestCall($this->getService(), 'PUT', $data['data']);
 
         return $this->goToNextStep();
     }
 
     /**
-     * Map the data to save
+     * Save the sub action
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function processSubActionSave($data)
+    {
+        return $this->saveSubAction($data);
+    }
+
+    /**
+     * Complete section and save
      *
      * @param array $data
      * @return array
@@ -498,12 +745,8 @@ abstract class AbstractJourneyController extends FormActionController
 
         $subSections = array();
 
-        $sectionCompletion = $this->getSectionCompletion();
-
         $journey = $this->getJourneyName();
         $section = $this->getSectionName();
-
-        $config = $this->getJourneyConfig();
 
         foreach ($sectionConfig['subSections'] as $name => $details) {
 
@@ -513,18 +756,39 @@ abstract class AbstractJourneyController extends FormActionController
 
             $enabled = $this->isSectionEnabled($details);
 
-            $key = 'section' . $this->getSectionName() . $name . 'Status';
+            $class = '';
+            $link = true;
 
-            $statusKey = (int)$sectionCompletion[$key];
+            if ($name == $this->getSubSectionName()) {
+                $class = 'current';
+            }
 
-            $status = $config['completionStatusMap'][$statusKey];
+            if ($name == $this->getSubSectionName() && !$this->isSubAction()) {
+                $link = false;
+            }
+
+            if (!$enabled) {
+                $class = 'disabled';
+                $link = false;
+            }
+
+            $subAction = false;
+
+            $routeParams = array(
+                $this->getJourneyConfig()['identifier'] => $this->getIdentifier()
+            );
+
+            if ($name == $this->getSubSectionName() && $this->isSubAction()) {
+                $subAction = $this->getSectionReference();
+            }
 
             $subSections[$name] = array(
                 'label' => $this->getSectionLabel($journey, $section, $name),
+                'class' => $class,
+                'link' => $link,
                 'route' => $this->getSectionRoute($journey, $section, $name),
-                'active' => ($name == $this->getSubSectionName()),
-                'enabled' => $enabled,
-                'status' => $status
+                'routeParams' => $routeParams,
+                'subAction' => $subAction
             );
         }
 
@@ -681,11 +945,10 @@ abstract class AbstractJourneyController extends FormActionController
             $section = $this->getSectionName();
             $subSection = $this->getSubSectionName();
 
-            $action = $this->params()->fromRoute('action');
-
             $suffix = '';
 
-            if ($action !== 'index') {
+            if ($this->isSubAction()) {
+
                 $suffix = '-sub-action';
             }
 
@@ -693,6 +956,32 @@ abstract class AbstractJourneyController extends FormActionController
         }
 
         return $this->formName;
+    }
+
+    /**
+     * Get the section reference
+     *
+     * @return string
+     */
+    protected function getSectionReference()
+    {
+        if (empty($this->sectionReference)) {
+
+            $journey = $this->getJourneyName();
+            $section = $this->getSectionName();
+            $subSection = $this->getSubSectionName();
+
+            $suffix = '';
+
+            if ($this->isSubAction()) {
+
+                $suffix = '-' . $this->getAction();
+            }
+
+            $this->sectionReference = $this->camelToDash($journey . '_' . $section . '_' . $subSection . $suffix);
+        }
+
+        return $this->sectionReference;
     }
 
     /**
@@ -892,9 +1181,9 @@ abstract class AbstractJourneyController extends FormActionController
      * @param array $params
      * @return Response
      */
-    protected function goToSection($name, $params = array())
+    protected function goToSection($name, $params = array(), $reuse = true)
     {
-        return $this->redirect()->toRoute($name, $params, array(), true);
+        return $this->redirect()->toRoute($name, $params, array(), $reuse);
     }
 
     /**

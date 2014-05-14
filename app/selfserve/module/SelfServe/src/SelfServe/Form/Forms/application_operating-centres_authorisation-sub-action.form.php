@@ -10,48 +10,37 @@ return array(
         ),
         'fieldsets' => array(
             array(
+                'type' => 'address',
                 'options' => array(
                     'label' => 'Address',
-                ),
-                // this will ensure the common address fieldset is pulled in
-                // to avoid having to redeclare it here
-                'type' => 'address',
+                )
             ),
             'authorised-vehicles' => array(
-                'name' => 'authorised-vehicles',
+                'name' => 'data',
                 'options' => array(
-                    'label' => 'Vehicles & trailers',
+                    'label' => $translationPrefix,
                 ),
                 'elements' => array(
-                    'no-of-vehicles' => array(
+                    'numberOfVehicles' => array(
                         'type' => 'vehiclesNumber',
-                        'label' => 'Total no. of vehicles',
+                        'label' => $translationPrefix . '.numberOfVehicles',
                     ),
-                    'no-of-trailers' => array(
+                    'numberOfTrailers' => array(
                         'type' => 'vehiclesNumber',
-                        'label' => 'Total no. of trailers',
+                        'label' => $translationPrefix . '.numberOfTrailers',
                     ),
-                    'parking-spaces-confirmation' => array(
+                    'sufficientParking' => array(
                         'type' => 'checkbox',
-                        'label' =>
-                        'I have enough parking spaces available for the ' .
-                        'total number of vehicles and trailers that I want ' .
-                        'to keep at this address',
+                        'label' => $translationPrefix . '.sufficientParking',
                         'options' => array(
-                            'must_be_checked' => true,
-                            'not_checked_message' => 'You must confirm that you have enough parking spaces',
+                            'must_be_checked' => true
                         ),
                     ),
-                    'permission-confirmation' => array(
+                    'permission' => array(
                         'type' => 'checkbox',
-                        'label' =>
-                        'I am either the site owner or have permission from ' .
-                        'the site owner to use the premises to park the number ' .
-                        'of vehicles and trailers stated',
+                        'label' => $translationPrefix . '.permission',
                         'options' => array(
-                            'must_be_checked' => true,
-                            'not_checked_message' => 'You must confirm that you have permission to use the premises to
-                                park the number of vehicles & trailers stated',
+                            'must_be_checked' => true
                         ),
                     ),
                 )

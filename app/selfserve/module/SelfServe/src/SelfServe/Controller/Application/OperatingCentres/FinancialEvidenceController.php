@@ -29,7 +29,7 @@ class FinancialEvidenceController extends OperatingCentresController
      *
      * @param array $data
      */
-    public function save($data)
+    protected function save($data)
     {
     }
 
@@ -38,7 +38,7 @@ class FinancialEvidenceController extends OperatingCentresController
      *
      * @param int $id
      */
-    public function load($id)
+    protected function load($id)
     {
         return array('data' => array());
     }

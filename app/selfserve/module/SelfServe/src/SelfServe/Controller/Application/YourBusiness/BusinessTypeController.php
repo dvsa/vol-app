@@ -29,7 +29,7 @@ class BusinessTypeController extends YourBusinessController
      *
      * @param array $data
      */
-    public function save($data)
+    protected function save($data)
     {
         parent::save($data);
     }
@@ -39,7 +39,7 @@ class BusinessTypeController extends YourBusinessController
      *
      * @param int $id
      */
-    public function load($id)
+    protected function load($id)
     {
         return array('data' => $this->getOrgnisationData(array('organisationType')));
     }
