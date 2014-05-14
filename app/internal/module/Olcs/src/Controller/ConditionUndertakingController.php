@@ -62,9 +62,11 @@ class ConditionUndertakingController extends FormActionController
             'condition-undertaking-form', 'processConditionUndertaking', $data
         );
         // set the OC address list and label for conditionType
-        $form = $this->configureFormForConditionType($form,
+        $form = $this->configureFormForConditionType(
+            $form,
             $routeParams['licence'],
-            $routeParams['type']);
+            $routeParams['type']
+        );
 
         $view = new ViewModel(
             array(
@@ -130,9 +132,11 @@ class ConditionUndertakingController extends FormActionController
         );
 
         // set the OC address list and label for conditionType
-        $form = $this->configureFormForConditionType($form,
+        $form = $this->configureFormForConditionType(
+            $form,
             $routeParams['licence'],
-            $routeParams['type']);
+            $routeParams['type']
+        );
 
         $view = new ViewModel(
             array(
@@ -194,22 +198,20 @@ class ConditionUndertakingController extends FormActionController
      * @param integer $licenceId
      * @return array address_id => [address details]
      */
-    public function getOCAddressByLicence($licenceId)
+    public function getOcAddressByLicence($licenceId)
     {
-        $operatingCentreAddressBundle = $this->getOCAddressBundle();
+        $operatingCentreAddressBundle = $this->getOcAddressBundle();
         $result = $this->makeRestCall(
-                'OperatingCentre',
-                'GET',
-                array(
-                    'licence' => $licenceId,
-                    'bundle' => json_encode($operatingCentreAddressBundle)
-                )
+            'OperatingCentre',
+            'GET',
+            array(
+                'licence' => $licenceId,
+                'bundle' => json_encode($operatingCentreAddressBundle)
+            )
         );
 
-        if ($result['Count'])
-        {
-            foreach($result['Results'] as $oc)
-            {
+        if ($result['Count']) {
+            foreach ($result['Results'] as $oc) {
                 $address = $oc['address'];
                 $operatingCentreAddresses[$oc['id']] =
                     $address['addressLine1'] . ', ' .
@@ -275,7 +277,7 @@ class ConditionUndertakingController extends FormActionController
      *
      * @return array
      */
-    public function getOCAddressBundle()
+    public function getOcAddressBundle()
     {
         return array(
             'properties' => array(
@@ -313,8 +315,7 @@ class ConditionUndertakingController extends FormActionController
     private function determineFormAttachedTo($data)
     {
         // for form
-        if ($data['condition-undertaking']['attachedTo'] != 'Licence')
-        {
+        if ($data['condition-undertaking']['attachedTo'] != 'Licence') {
             $data['condition-undertaking']['attachedTo'] =
                 isset($data['condition-undertaking']['operatingCentre']['id']) ?
                     $data['condition-undertaking']['operatingCentre']['id'] : '';
@@ -334,14 +335,11 @@ class ConditionUndertakingController extends FormActionController
      */
     private function determineSavingAttachedTo($data)
     {
-        if (strtolower($data['condition-undertaking']['attachedTo']) !== 'licence')
-        {
+        if (strtolower($data['condition-undertaking']['attachedTo']) !== 'licence') {
             $data['condition-undertaking']['operatingCentre'] =
                 $data['condition-undertaking']['attachedTo'];
             $data['condition-undertaking']['attachedTo'] = 'OC';
-        }
-        else
-        {
+        } else {
             $data['condition-undertaking']['operatingCentre'] = null;
             $data['condition-undertaking']['attachedTo'] = 'Licence';
         }
@@ -383,7 +381,7 @@ class ConditionUndertakingController extends FormActionController
     public function configureFormForConditionType($form, $licenceId, $type)
     {
 
-        $ocAddressList = $this->getOCAddressByLicence($licenceId);
+        $ocAddressList = $this->getOcAddressByLicence($licenceId);
 
         // set form dependent aspects
         $form->get('condition-undertaking')->get('notes')->setLabel(ucfirst($type));

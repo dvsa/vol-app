@@ -89,7 +89,6 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
             ->with('condition-undertaking-form', 'processConditionUndertaking', $data)
             ->will($this->returnValue($form));
 
-
         $mockOcAddressResults = [
             'Count' => 1,
             'Results' => [
@@ -186,7 +185,6 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->addAction();
 
-
     }
 
     public function testEditAction()
@@ -235,10 +233,11 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->at(4))
             ->method('makeRestCall')
-            ->with($this->equalTo('ConditionUndertaking'),
-                   $this->equalTo('GET'),
-                   $this->equalTo(array('id' => $conditionId, 'bundle' => json_encode($bundle)))
-                  )
+            ->with(
+                $this->equalTo('ConditionUndertaking'),
+                $this->equalTo('GET'),
+                $this->equalTo(array('id' => $conditionId, 'bundle' => json_encode($bundle)))
+            )
             ->will($this->returnValue($mockResults));
 
         $form = $this->getMock('\stdClass', array('setData'));
@@ -252,7 +251,6 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
             'attachedTo' => 21,
             'operatingCentre' => ['id' => 21]
         );
-
 
         $this->controller->expects($this->once())
             ->method('generateFormWithData')
@@ -331,10 +329,11 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->at(4))
             ->method('makeRestCall')
-            ->with($this->equalTo('ConditionUndertaking'),
-                   $this->equalTo('GET'),
-                   $this->equalTo(array('id' => $conditionId, 'bundle' => json_encode($bundle)))
-                  )
+            ->with(
+                $this->equalTo('ConditionUndertaking'),
+                $this->equalTo('GET'),
+                $this->equalTo(array('id' => $conditionId, 'bundle' => json_encode($bundle)))
+            )
             ->will($this->returnValue($mockResults));
 
         $form = $this->getMock('\stdClass', array('setData'));
@@ -348,7 +347,6 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
             'attachedTo' => '',
             'operatingCentre' => ['iddoesntexist' => 21]
         );
-
 
         $this->controller->expects($this->once())
             ->method('generateFormWithData')
@@ -454,7 +452,10 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
         $this->controller->editAction();
     }
 
-    public function testGetOCAddressByLicence()
+    /**
+     * Method to test getting OC address list for a given licence
+     */
+    public function testGetOcAddressByLicence()
     {
         $licenceId = 7;
 
@@ -480,14 +481,13 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->once())
             ->method('makeRestCall')
-            ->with('OperatingCentre', 'GET', array(
-                    'licence' => $licenceId,
-                    'bundle' => json_encode($operatingCentreAddressBundle)
-                ))
+            ->with(
+                'OperatingCentre', 'GET', array(
+                'licence' => $licenceId,
+                'bundle' => json_encode($operatingCentreAddressBundle)
+                )
+            )
             ->will($this->returnValue($mockOcAddressResults));
-
-
-
 
         $this->controller->getOCAddressByLicence($licenceId);
     }
@@ -566,14 +566,12 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
         $mockForm->expects($this->at(0))
             ->method('get')
             ->with($this->equalTo('condition-undertaking'))
-            ->will($this->returnValue($mockFieldset)
-        );
+            ->will($this->returnValue($mockFieldset));
 
         $mockForm->expects($this->at(1))
             ->method('get')
             ->with($this->equalTo('condition-undertaking'))
-            ->will($this->returnValue($mockFieldset)
-        );
+            ->will($this->returnValue($mockFieldset));
 
         $this->controller->configureFormForConditionType($mockForm, $licenceId, $type);
     }
@@ -591,7 +589,6 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
             'attachedTo' => 'Licence',
             ]
         ];
-
 
         $addData['createdOn'] = date('d-m-Y h:i:s');
         $addData['lastUpdatedOn'] = date('d-m-Y h:i:s');
@@ -624,7 +621,7 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
         $this->controller->processConditionUndertaking($functionData);
     }
 
-    public function testProcessConditionUndertakingAddAttachedToOCAction()
+    public function testAddAttachedToOcAction()
     {
 
         $this->controller->expects($this->once())
@@ -713,7 +710,7 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
         $this->controller->processConditionUndertaking($functionData);
     }
 
-    public function testProcessConditionUndertakingEditAttachedToOCAction()
+    public function testEditAttachedToOcAction()
     {
 
         $this->controller->expects($this->once())
@@ -756,6 +753,4 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->processConditionUndertaking($functionData);
     }
-
-
 }
