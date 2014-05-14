@@ -27,12 +27,13 @@ class Journey extends AbstractHelper implements ServiceLocatorAwareInterface
 
         $config = $this->getServiceLocator()->getServiceLocator()->get('config');
 
-        $journeyConfig = array();
-        foreach ($config['journey'] as $applicationKey => $applicationStage) {
-
-            $thisCompletionStatus = $completionStatus['section' . $applicationStage['dbkey'] . 'Status'];
-            if ($thisCompletionStatus == "") {
-                $thisCompletionStatus = 0;
+        $journeyConfig=Array();
+        foreach($config['journey'] as $applicationKey=>$applicationStage) {
+            
+            $thisCompletionStatus = array_key_exists('section'.$applicationStage['dbkey'].'Status', $completionStatus) !== false ?
+                                    $completionStatus['section'.$applicationStage['dbkey'].'Status'] : '';
+            if ( $thisCompletionStatus == "" ) {
+                $thisCompletionStatus=0;
             }
 
             $journeyItem = Array(
