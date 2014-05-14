@@ -29,7 +29,7 @@ abstract class AbstractFinanceController extends AbstractApplicationController
      * @param object $view
      * @param string $current
      */
-    public function renderLayoutWithSubSections($view, $current = '', $journey = 'operating-centre')
+    public function renderLayoutWithSubSections($view, $current = '', $journey = 'operating-centre', $disabled = null)
     {
         $applicationId = $this->getApplicationId();
 
@@ -52,6 +52,6 @@ abstract class AbstractFinanceController extends AbstractApplicationController
             )
         );
 
-        return parent::renderLayoutWithSubSections($view, $current, $journey);
+        return parent::renderLayoutWithSubSections($view, $current, $journey, $disabled);
     }
 }

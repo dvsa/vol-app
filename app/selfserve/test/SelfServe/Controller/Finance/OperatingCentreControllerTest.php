@@ -355,13 +355,9 @@ class OperatingCentreControllerTest extends PHPUnit_Framework_TestCase
         $ocId = 2;
         $applicationId = 3;
 
-        $data = array(
-            'version' => 1,
-            'numberOfVehicles' => 10,
-            'numberOfTrailers' => 10,
-            'sufficientParking' => 1,
-            'permission' => 1,
-            'licence' => array('goodsOrPsv' => 'psv'),
+        $this->getMockController(
+            array('makeRestCall', 'params', 'generateFormWithData', 'getViewModel', 'renderLayout',
+                'getOperatingCentresForApplication')
         );
 
         $mockFormActions = $this->getMock('\stdClass', array('remove'));
@@ -415,7 +411,51 @@ class OperatingCentreControllerTest extends PHPUnit_Framework_TestCase
             ->with($mockViewModel)
             ->will($this->returnValue('LAYOUT'));
 
+        $mockParams->expects($this->any())
+            ->method('getOperatingCentresForApplication')
+            ->with('applicationId');
+
         $this->assertEquals('LAYOUT', $this->controller->editAction());
+    }
+
+    /**
+     * Test editAction with missing applicationId
+     */
+    public function testEditActionWithMissingApplicationId()
+    {
+        $this->getMockController(
+            array('makeRestCall', 'params', 'generateFormWithData', 'getViewModel', 'renderLayout',
+                  'notFoundAction', 'getOperatingCentresForApplication')
+        );
+
+        $ocId = 2;
+        $applicationId = 2;
+
+        $mockParams = $this->getMock('\stdClass', array('fromRoute'));
+
+        $mockParams->expects($this->at(0))
+            ->method('fromRoute')
+            ->with('id')
+            ->will($this->returnValue($ocId));
+
+        $mockParams->expects($this->at(1))
+            ->method('fromRoute')
+            ->with('applicationId')
+            ->will($this->returnValue($applicationId));
+
+        $this->controller->expects($this->any())
+            ->method('params')
+            ->will($this->returnValue($mockParams));
+
+        $this->controller->expects($this->any())
+            ->method('makeRestCall')
+            ->will($this->returnCallback(array($this, 'mockRestCall')));
+
+        $this->controller->expects($this->once())
+            ->method('notFoundAction')
+            ->will($this->returnValue(404));
+
+        $this->assertEquals(404, $this->controller->editAction());
     }
 
     /**
@@ -746,9 +786,9 @@ class OperatingCentreControllerTest extends PHPUnit_Framework_TestCase
             ->method('params')
             ->will($this->returnValue($mockParams));
 
-        $this->controller->expects($this->once())
+        $this->controller->expects($this->exactly(2))
             ->method('makeRestCall')
-            ->with('ApplicationOperatingCentre', 'PUT');
+            ->will($this->returnCallback(array($this, 'mockRestCall')));
 
         $mockRedirect = $this->getMock('\stdClass', array('toRoute'));
 
@@ -792,6 +832,8 @@ class OperatingCentreControllerTest extends PHPUnit_Framework_TestCase
                         'operatingCentre' => array(
                             'id' => 2,
                             'address' => array(
+                                'id' => '',
+                                'version' => '',
                                 'addressLine1' => '',
                                 'addressLine2' => '',
                                 'addressLine3' => '',
@@ -809,7 +851,8 @@ class OperatingCentreControllerTest extends PHPUnit_Framework_TestCase
         );
 
         $aocsById = array(
-            2=> array(
+            1 => array(),
+            2 => array(
                         'id' => 2,
                         'numberOfTrailers' => 5,
                         'numberOfVehicles' => 5,
@@ -818,6 +861,8 @@ class OperatingCentreControllerTest extends PHPUnit_Framework_TestCase
                         'operatingCentre' => array(
                             'id' => 2,
                             'address' => array(
+                                'id' => '',
+                                'version' => '',
                                 'addressLine1' => '',
                                 'addressLine2' => '',
                                 'addressLine3' => '',
@@ -830,7 +875,7 @@ class OperatingCentreControllerTest extends PHPUnit_Framework_TestCase
                         ),
                         'version' => 1,
                         'sufficientParking' => 1
-                    )
+                    ),
         );
 
         $applications = array(
@@ -858,10 +903,12 @@ class OperatingCentreControllerTest extends PHPUnit_Framework_TestCase
 
             case 'ApplicationOperatingCentre':
                 $this->assertTrue(array_key_exists('application', $data) or array_key_exists('id', $data));
-                if ( array_key_exists('application', $data) ) {
-                    $response = $aocs[$data['application']];
-                } else {
-                    $response = $aocsById[$data['id']];
+                if ($method != 'PUT') {
+                    if ( array_key_exists('application', $data) ) {
+                        $response = $aocs[$data['application']];
+                    } else {
+                        $response = $aocsById[$data['id']];
+                    }
                 }
                 break;
 

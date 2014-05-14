@@ -79,6 +79,12 @@ return [
                     )
                 )
             )
+        ],
+        'elements' => [
+            'version' => array(
+                'type' => 'hidden'
+            )
         ]
+        
     ]
 ];

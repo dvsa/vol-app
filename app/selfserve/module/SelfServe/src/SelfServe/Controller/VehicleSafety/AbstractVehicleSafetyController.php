@@ -29,7 +29,7 @@ abstract class AbstractVehicleSafetyController extends AbstractApplicationContro
      * @param object $view
      * @param string $current
      */
-    public function renderLayoutWithSubSections($view, $current = '', $journey = 'vehicle-safety')
+    public function renderLayoutWithSubSections($view, $current = '', $journey = 'vehicle-safety', $disabled = null)
     {
         $applicationId = $this->getApplicationId();
 
@@ -52,7 +52,7 @@ abstract class AbstractVehicleSafetyController extends AbstractApplicationContro
             )
         );
 
-        return parent::renderLayoutWithSubSections($view, $current, $journey);
+        return parent::renderLayoutWithSubSections($view, $current, $journey, $disabled);
     }
 
     /**

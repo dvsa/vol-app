@@ -4,23 +4,30 @@
  * Business Type Controller
  *
  * @author S Lizzio <shaun.lizzio@valtech.co.uk>
+ * @author Jakub Igla <jakub.igla@valtech.co.uk>
  */
 
 namespace SelfServe\Controller\BusinessType;
 
 use SelfServe\Controller\AbstractApplicationController;
 use Zend\View\Model\ViewModel;
+use Zend\Http\Response;
 
 /**
  * Business Type Controller
  *
  * @author S Lizzio <shaun.lizzio@valtech.co.uk>
+ * @author Jakub Igla <jakub.igla@valtech.co.uk>
  */
 class IndexController extends AbstractApplicationController
 {
 
     protected $messages;
 
+
+    /**
+     * Set current section
+     */
     public function __construct()
     {
         $this->setCurrentSection('business-type');
@@ -40,20 +47,27 @@ class IndexController extends AbstractApplicationController
         $step = $this->params()->fromRoute('step');
         $this->setCurrentStep($step);
 
+        $businessStatus = $this->checkBusinessType();
+
+        if ($businessStatus instanceof Response) {
+            return $businessStatus;
+        }
+
         // create form
         $form = $this->generateSectionForm();
 
         // prefill form data if persisted
         $formData = $this->getPersistedFormData($form);
+
         if (isset($formData)) {
             $form->setData($formData);
         }
 
         // check for submit buttons
-        $submit_posted = $this->determineSubmitButtonPressed($this->getRequest());
+        $submitPosted = $this->determineSubmitButtonPressed($this->getRequest());
 
         // Do the post if required
-        switch ($submit_posted) {
+        switch ($submitPosted) {
             case 'lookup_company':
                 $form->setValidationGroup([$step => ['company_number']]);
                 $form = $this->formPost($form, 'processLookupCompany', ['applicationId' => $applicationId]);
@@ -73,7 +87,9 @@ class IndexController extends AbstractApplicationController
 
         // collect completion status
         $completionStatus = $this->makeRestCall(
-            'ApplicationCompletion', 'GET', array('application_id' => $applicationId)
+            'ApplicationCompletion',
+            'GET',
+            array('application_id' => $applicationId)
         );
 
         // render the view
@@ -83,7 +99,68 @@ class IndexController extends AbstractApplicationController
             'applicationId' => $applicationId]
         );
         $view->setTemplate('self-serve/business/index');
-        return $view;
+
+        return $this->renderLayoutWithSubSections(
+            $view,
+            $this->getCurrentStep(),
+            'business-type',
+            $businessStatus ? null : 'all'
+        );
+    }
+
+    /**
+     * Check if business type is set. if no redirects to page, where user can do this
+     *
+     * @return bool|Response
+     */
+    public function checkBusinessType()
+    {
+        $organisation = $this->getOrganisationEntity();
+        $applicationId = $this->getApplicationId();
+
+        //redirect to business type if was not yet set
+        if ($this->getCurrentStep() != 'business-type' && empty($organisation['organisationType'])) {
+            return $this->redirect()->toRoute('selfserve/business-type', ['applicationId' => $applicationId]);
+        }
+
+        return !empty($organisation['organisationType']);
+    }
+
+    /**
+     * Details action
+     *
+     * @return bool|mixed|Response
+     */
+    public function detailsAction()
+    {
+        $businessStatus = $this->checkBusinessType();
+        if ($businessStatus instanceof Response) {
+            return $businessStatus;
+        }
+
+        $applicationId = $this->getApplicationId();
+        $organisation = $this->getOrganisationEntity();
+
+        $mainStep = 'business-type';
+        $this->setCurrentStep($mainStep);
+        $form = $this->generateSectionForm();
+
+        $valueStepPairs = $form->get($mainStep)->getOptions()['next_step']['values'];
+
+        foreach ($valueStepPairs as $val => $step) {
+
+            //redirect to correct step
+            if ($val == $organisation['organisationType']) {
+                $forward = $this->forward()->dispatch('Selfserve\BusinessType\Index', [
+                    'action' => 'generateStepForm',
+                    'applicationId' => $applicationId,
+                    'step' => $step,
+                ]);
+                break;
+            }
+        }
+
+        return $forward;
     }
 
     /**
@@ -117,28 +194,26 @@ class IndexController extends AbstractApplicationController
      * Method called as a callback once business type form has been validated.
      * Should redirect to the correct business type form page as the next step
      *
-     * @param array $valid_data
+     * @param array $validData
      * @param \Zend\Form $form
-     * @param array $journeyData
-     * @param array $params
      */
-    public function processBusinessType($valid_data, $form, $params)
+    public function processBusinessType($validData, $form)
     {
         $licence = $this->getLicenceEntity();
         $applicationId = $this->params()->fromRoute('applicationId');
 
         $data = array(
             'id' => $licence['id'],
-            'organisationType' => $valid_data['business-type']['business-type'],
-            'version' => $valid_data['version'],
+            'organisationType' => $validData['business-type']['business-type'],
+            'version' => $validData['version'],
         );
 
         $this->makeRestCall('LicenceOrganisation', 'PUT', $data);
 
-        $next_step = $this->evaluateNextStep($form);
+        $nextStep = $this->evaluateNextStep($form);
         $this->redirect()->toRoute(
             'selfserve/business-type',
-            array('applicationId' => $applicationId, 'step' => $next_step)
+            array('applicationId' => $applicationId, 'step' => $nextStep)
         );
     }
 
@@ -167,30 +242,28 @@ class IndexController extends AbstractApplicationController
      * Method called as a callback once your business form has been validated.
      * Should redirect to the finance form page as the next step
      *
-     * @param array $valid_data
+     * @param array $validData
      * @param \Zend\Form $form
-     * @param array $journeyData
-     * @param array $params
      */
-    public function processRegisteredCompany($valid_data, $form, $params)
+    public function processRegisteredCompany($validData, $form)
     {
         $licence = $this->getLicenceEntity();
         $applicationId = $this->params()->fromRoute('applicationId');
 
         $data = array(
             'id' => $licence['id'],
-            'name' => $valid_data['registered-company']['company_name'],
-            'registeredCompanyNumber' => $valid_data['registered-company']['company_number'],
-            'sicCode' => $valid_data['registered-company']['type_of_business'],
-            'version' => $valid_data['version'],
+            'name' => $validData['registered-company']['company_name'],
+            'registeredCompanyNumber' => $validData['registered-company']['company_number'],
+            'sicCode' => $validData['registered-company']['type_of_business'],
+            'version' => $validData['version'],
         );
 
         $this->makeRestCall('LicenceOrganisation', 'PUT', $data);
 
-        $next_step = $this->evaluateNextStep($form);
+        $nextStep = $this->evaluateNextStep($form);
         $this->redirect()->toRoute(
             'selfserve/business-type',
-            array('applicationId' => $applicationId, 'step' => $next_step)
+            array('applicationId' => $applicationId, 'step' => $nextStep)
         );
     }
 
@@ -215,28 +288,26 @@ class IndexController extends AbstractApplicationController
      * Method called as a callback once your business form has been validated.
      * Should redirect to the finance form page as the next step
      *
-     * @param array $valid_data
+     * @param array $validData
      * @param \Zend\Form $form
-     * @param array $journeyData
-     * @param array $params
      */
-    public function processSoleTrader($valid_data, $form, $params)
+    public function processSoleTrader($validData, $form)
     {
         $licence = $this->getLicenceEntity();
         $applicationId = $this->params()->fromRoute('applicationId');
 
         $data = array(
             'id' => $licence['id'],
-            'sicCode' => $valid_data['sole-trader']['type_of_business'],
-            'version' => $valid_data['version'],
+            'sicCode' => $validData['sole-trader']['type_of_business'],
+            'version' => $validData['version'],
         );
 
         $this->makeRestCall('LicenceOrganisation', 'PUT', $data);
 
-        $next_step = $this->evaluateNextStep($form);
+        $nextStep = $this->evaluateNextStep($form);
         $this->redirect()->toRoute(
             'selfserve/business-type',
-            array('applicationId' => $applicationId, 'step' => $next_step)
+            array('applicationId' => $applicationId, 'step' => $nextStep)
         );
     }
 
@@ -263,29 +334,27 @@ class IndexController extends AbstractApplicationController
      * Method called as a callback once your business form has been validated.
      * Should redirect to the finance form page as the next step
      *
-     * @param array $valid_data
+     * @param array $validData
      * @param \Zend\Form $form
-     * @param array $journeyData
-     * @param array $params
      */
-    public function processPartnership($valid_data, $form, $params)
+    public function processPartnership($validData, $form)
     {
         $licence = $this->getLicenceEntity();
         $applicationId = $this->params()->fromRoute('applicationId');
 
         $data = array(
             'id' => $licence['id'],
-            'name' => $valid_data['partnership']['company_name'],
-            'sicCode' => $valid_data['partnership']['type_of_business'],
-            'version' => $valid_data['version'],
+            'name' => $validData['partnership']['company_name'],
+            'sicCode' => $validData['partnership']['type_of_business'],
+            'version' => $validData['version'],
         );
 
         $this->makeRestCall('LicenceOrganisation', 'PUT', $data);
 
-        $next_step = $this->evaluateNextStep($form);
+        $nextStep = $this->evaluateNextStep($form);
         $this->redirect()->toRoute(
             'selfserve/business-type',
-            array('applicationId' => $applicationId, 'step' => $next_step)
+            array('applicationId' => $applicationId, 'step' => $nextStep)
         );
     }
 
@@ -311,79 +380,29 @@ class IndexController extends AbstractApplicationController
      * Method called as a callback once your business form has been validated.
      * Should redirect to the finance form page as the next step
      *
-     * @param array $valid_data
+     * @param array $validData
      * @param \Zend\Form $form
-     * @param array $journeyData
-     * @param array $params
      */
-    public function processLlp($valid_data, $form, $params)
+    public function processLlp($validData, $form)
     {
         $licence = $this->getLicenceEntity();
         $applicationId = $this->params()->fromRoute('applicationId');
 
         $data = array(
             'id' => $licence['id'],
-            'registeredCompanyNumber' => $valid_data['llp']['company_number'],
-            'version' => $valid_data['version'],
+            'registeredCompanyNumber' => $validData['llp']['company_number'],
+            'version' => $validData['version'],
         );
 
         $this->makeRestCall('LicenceOrganisation', 'PUT', $data);
 
-        $next_step = $this->evaluateNextStep($form);
+        $nextStep = $this->evaluateNextStep($form);
         $this->redirect()->toRoute(
             'selfserve/business-type',
-            array('applicationId' => $applicationId, 'step' => $next_step)
+            array('applicationId' => $applicationId, 'step' => $nextStep)
         );
     }
 
-    /**
-     * Returns persisted data (if exists) to popuplate form
-     *
-     * @return array
-     */
-    public function getPublicAuthorityFormData()
-    {
-        $organisation = $this->getOrganisationEntity();
-
-        return array(
-            'version' => $organisation['version'],
-            'public-authority' => array(
-                'company_name' => $organisation['name'],
-                'type_of_business' => $organisation['sicCode'],
-            //'trading_names' => $organisation['name'],
-            ),
-        );
-    }
-
-    /**
-     * Method called as a callback once your business form has been validated.
-     * Should redirect to the finance form page as the next step
-     *
-     * @param array $valid_data
-     * @param \Zend\Form $form
-     * @param array $journeyData
-     * @param array $params
-     */
-    public function processPublicAuthority($valid_data, $form, $params)
-    {
-        $licence = $this->getLicenceEntity();
-        $applicationId = $this->params()->fromRoute('applicationId');
-
-        $data = array(
-            'id' => $licence['id'],
-            'name' => $valid_data['public-authority']['company_name'],
-            'sicCode' => $valid_data['public-authority']['type_of_business'],
-            'version' => $valid_data['version'],
-        );
-
-        $this->makeRestCall('LicenceOrganisation', 'PUT', $data);
-
-        $next_step = $this->evaluateNextStep($form);
-        $this->redirect()->toRoute(
-            'selfserve/business-type',
-            array('applicationId' => $applicationId, 'step' => $next_step)
-        );
-    }
 
     /**
      * Returns persisted data (if exists) to popuplate form
@@ -408,34 +427,33 @@ class IndexController extends AbstractApplicationController
      * Method called as a callback once your business form has been validated.
      * Should redirect to the finance form page as the next step
      *
-     * @param array $valid_data
+     * @param array $validData
      * @param \Zend\Form $form
-     * @param array $journeyData
      * @param array $params
      */
-    public function processOther($valid_data, $form, $params)
+    public function processOther($validData, $form, $params)
     {
         $licenceId = $params['licenceId'];
         $data = array(
             'id' => $licenceId,
-            'name' => $valid_data['other']['company_name'],
-            'sicCode' => $valid_data['other']['type_of_business'],
-            'version' => $valid_data['version'],
+            'name' => $validData['other']['company_name'],
+            'sicCode' => $validData['other']['type_of_business'],
+            'version' => $validData['version'],
         );
 
         $this->makeRestCall('LicenceOrganisation', 'PUT', $data);
 
-        $next_step = $this->evaluateNextStep($form);
+        $nextStep = $this->evaluateNextStep($form);
         $this->redirect()->toRoute(
             'selfserve/business-type',
-            array('licenceId' => $licenceId, 'step' => $next_step)
+            array('licenceId' => $licenceId, 'step' => $nextStep)
         );
     }
 
     /**
      * Method called once a valid company look up form has been submitted.
      *
-     * @param array $valid_data
+     * @param array $validData
      * @param \Zend\Form $form
      * @param array $journeyData
      */
@@ -463,12 +481,12 @@ class IndexController extends AbstractApplicationController
      * Needs to call CH Controller and implement PRG and redirect back to
      * indexAction.
      *
-     * @param array $valid_data
+     * @param array $validData
      * @param \Zend\Form $form
      * @param array $journeyData
      * @param array $params
      */
-    protected function processAddTradingName($valid_data, $form, $params)
+    protected function processAddTradingName($validData, $form, $params)
     {
         echo 'FORM VALID adding trading name';
 
@@ -494,5 +512,56 @@ class IndexController extends AbstractApplicationController
 
         $application = $this->makeRestCall('Application', 'GET', array('id' => $applicationId), $bundle);
         return $application['licence']['organisation'];
+    }
+
+    /**
+     * Render the layout
+     *
+     * @param object $view
+     * @param string $current
+     * @param string $journey
+     * @param mixed $disabled
+     * @return ViewModel
+     */
+    public function renderLayoutWithSubSections($view, $current = '', $journey = 'business-type', $disabled = null)
+    {
+        $applicationId = $this->getApplicationId();
+
+        $this->setSubSections(
+            array(
+                'business-details' => array(
+                    'label' => 'selfserve-app-subSection-business-details',
+                    'route' => 'selfserve/business-details',
+                    'routeParams' => array(
+                        'applicationId' => $applicationId,
+                    )
+                ),
+                'addresses' => array(
+                    'label' => 'selfserve-app-subSection-business-addresses',
+                    'route' => 'selfserve/business-type',
+                    'routeParams' => array(
+                        'applicationId' => $applicationId,
+                        'step' => 'addresses',
+                    )
+                ),
+                'people' => array(
+                    'label' => 'selfserve-app-subSection-business-people',
+                    'route' => 'selfserve/business-type',
+                    'routeParams' => array(
+                        'applicationId' => $applicationId,
+                        'step' => 'people',
+                    )
+                ),
+            )
+        );
+
+        $subSections = $this->getSubSections();
+
+        if ($current != 'business-type' && !array_key_exists($current, $subSections)) {
+            reset($subSections);
+            $current = key($subSections);
+        }
+
+        return parent::renderLayoutWithSubSections($view, $current, $journey, $disabled);
     }
 }
