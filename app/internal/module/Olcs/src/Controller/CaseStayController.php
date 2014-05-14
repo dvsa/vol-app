@@ -190,8 +190,7 @@ class CaseStayController extends CaseController
         $form = $this->generateFormWithData(
             'case-stay',
             'processEditStay',
-            $result,
-            true
+            $result
         );
 
         //add in that this is an an action (reflected in the title)

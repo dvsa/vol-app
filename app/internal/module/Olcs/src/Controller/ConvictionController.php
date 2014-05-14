@@ -140,8 +140,7 @@ class ConvictionController extends FormActionController
         $form = $this->generateFormWithData(
             'conviction',
             'processConviction',
-            $data,
-            true
+            $data
         );
 
         $view = new ViewModel(

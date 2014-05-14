@@ -122,7 +122,7 @@ class ComplaintController extends FormActionController
         $data['driver-details'] = $data['driver']['contactDetails']['person'];
 
         $form = $this->generateFormWithData(
-            'complaint', 'processComplaint', $data, true
+            'complaint', 'processComplaint', $data
         );
 
         $view = new ViewModel(

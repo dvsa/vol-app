@@ -517,8 +517,7 @@ class CaseController extends FormActionController
         $form = $this->generateFormWithData(
             'case',
             'processEditCase',
-            $result,
-            true
+            $result
         );
 
         $pageData = $this->getPageData($licence);

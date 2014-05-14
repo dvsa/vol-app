@@ -91,8 +91,7 @@ class CaseAppealController extends CaseController
         $form = $this->generateFormWithData(
             'appeal',
             'processEditAppeal',
-            $data,
-            true
+            $data
         );
 
         $view = $this->getView(

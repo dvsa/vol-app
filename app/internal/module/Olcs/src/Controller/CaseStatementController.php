@@ -114,8 +114,7 @@ class CaseStatementController extends CaseController
         $form = $this->generateFormWithData(
             'statement',
             'processEditStatement',
-            $data,
-            true
+            $data
         );
 
         $view = $this->getView(
