@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Index Controller. Used to generate a static page which is where the user 
+ * Index Controller. Used to generate a static page which is where the user
  * journey will begin.
  * This page essentially sets up all the required database entries and redirects
  * the user to the route
@@ -101,8 +101,8 @@ class IndexController extends AbstractApplicationController
 
 
     /**
-     * Method to add the required database entries and redirect to beginning 
-     * of the application journey. 
+     * Method to add the required database entries and redirect to beginning
+     * of the application journey.
      *
      * @return \Zend\Http\Response
      */
@@ -145,10 +145,9 @@ class IndexController extends AbstractApplicationController
         $this->makeRestCall('ApplicationCompletion', 'POST', $data);
 
         return $this->redirect()->toRoute(
-            'selfserve/licence-type',
+            'Application',
             [
                 'applicationId' => $applicationId,
-                'step' => 'operator-location',
             ]
         );
     }

@@ -9,6 +9,7 @@
 
 namespace SelfServe\Controller;
 
+use Common\Controller\FormJourneyActionController;
 use Zend\EventManager\EventManagerInterface;
 use Zend\View\Model\ViewModel;
 
@@ -18,7 +19,7 @@ use Zend\View\Model\ViewModel;
  * @author Rob Caiger <rob@clocal.co.uk>
  * @author Jakub Igla <jakub.igla@valtech.co.uk>
  */
-abstract class AbstractApplicationController extends AbstractJourneyController
+abstract class AbstractApplicationController extends FormJourneyActionController
 {
     /**
      * Holds the applicationId

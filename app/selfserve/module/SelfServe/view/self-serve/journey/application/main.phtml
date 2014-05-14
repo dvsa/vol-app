@@ -12,5 +12,6 @@ if (isset($table)) {
 
 if (isset($form)) {
     $form->prepare();
+    echo $this->formErrors($form);
     echo $this->form($form);
 }

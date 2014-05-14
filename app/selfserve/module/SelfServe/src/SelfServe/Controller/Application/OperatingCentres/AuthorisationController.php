@@ -5,6 +5,7 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+
 namespace SelfServe\Controller\Application\OperatingCentres;
 
 /**
@@ -14,12 +15,72 @@ namespace SelfServe\Controller\Application\OperatingCentres;
  */
 class AuthorisationController extends OperatingCentresController
 {
+
+    /**
+     * Action data map
+     *
+     * @var array
+     */
+    protected $actionDataMap = array(
+        '_addresses' => array(
+            'address'
+        ),
+        'main' => array(
+            'mapFrom' => array(
+                'data'
+            ),
+            'children' => array(
+                'addresses' => array(
+                    'mapFrom' => array(
+                        'addresses'
+                    )
+                )
+            )
+        )
+    );
+
+    /**
+     * Holds the actionDataBundle
+     *
+     * @var array
+     */
+    protected $actionDataBundle = array(
+        'properties' => array(
+            'id',
+            'numberOfTrailers',
+            'numberOfVehicles',
+            'permission',
+            'adPlaced'
+        ),
+        'children' => array(
+            'operatingCentre' => array(
+                'properties' => array('id'),
+                'children' => array(
+                    'address' => array(
+                        'properties' => array(
+                            'id',
+                            'version',
+                            'addressLine1',
+                            'addressLine2',
+                            'addressLine3',
+                            'addressLine4',
+                            'postcode',
+                            'county',
+                            'city',
+                            'country'
+                        )
+                    )
+                )
+            )
+        )
+    );
+
     /**
      * Holds the sub action service
      *
      * @var string
      */
-    protected $subActionService = 'ApplicationOperatingCentre';
+    protected $actionService = 'ApplicationOperatingCentre';
 
     /**
      * Render the section form
@@ -32,46 +93,45 @@ class AuthorisationController extends OperatingCentresController
     }
 
     /**
-     * Load data for the sub section
+     * Remove trailer related columns for PSV
      *
-     * @param int $id
-     * @return array
+     * @param object $table
+     * @return object
      */
-    protected function loadSubSection($id)
+    protected function alterTable($table)
     {
-        
-    }
+        if ($this->isPsv()) {
+            $cols = $table->getColumns();
 
-    protected function saveSubAction($data)
-    {
-        $id = $this->getSubActionId();
+            unset($cols['trailersCol']);
 
-        $data = $data['data'];
+            $table->setColumns($cols);
 
-        if (!empty($id)) {
-            $data['id'] = $id;
+            $footer = $table->getFooter();
+
+            $footer['total']['content'] .= '-psv';
+
+            unset($footer['trailersCol']);
+
+            $table->setFooter($footer);
         }
 
-        $this->makeRestCall('ApplicationOperatingCentre', 'PUT', $data);
+        return $table;
     }
 
     /**
-     * Save data
+     * Remove trailer elements for PSV
      *
-     * @param array $data
+     * @param object $form
+     * @return object
      */
-    protected function save($data)
+    protected function alterForm($form)
     {
-    }
-
-    /**
-     * Load data from id
-     *
-     * @param int $id
-     */
-    protected function load($id)
-    {
-        return array('data' => array());
+        if ($this->isPsv()) {
+            $form->get('data')->remove('totAuthTrailers');
+            $form->get('data')->remove('minTrailerAuth');
+        }
+        return $form;
     }
 
     /**
@@ -130,5 +190,41 @@ class AuthorisationController extends OperatingCentresController
         }
 
         return $newData;
+    }
+
+    /**
+     * Save the operating centre
+     *
+     * @param array $data
+     */
+    public function actionSave($data)
+    {
+        $saved = parent::actionSave($data);
+
+        if (!isset($saved['id'])) {
+            return $this->notFoundAction();
+        }
+
+        $data['operatingCentre'] = $saved['id'];
+
+        $data['application'] = $this->getIdentifier();
+
+        $this->makeRestCall('ApplicationOperatingCentre', 'POST', $data);
+    }
+
+    /**
+     * Process the action load data
+     *
+     * @param array $data
+     */
+    protected function processActionLoad($data)
+    {
+        //$data = parent::processActionLoad($data);
+        print '<pre>';
+        print_r($data);
+        print '</pre>';
+        exit;
+
+        return array('data' => $data);
     }
 }

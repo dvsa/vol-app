@@ -87,7 +87,7 @@ class VehicleController extends AbstractVehicleSafetyController
 
         // generate form with data
         $form = $this->generateFormWithData(
-            'vehicle', 'processGoodsVehicleForm', $data, true
+            'vehicle', 'processGoodsVehicleForm', $data
         );
 
         $form->get('data')->setLabel('Edit vehicle');

@@ -12,7 +12,8 @@ return array(
             array(
                 'name' => 'data',
                 'options' => array(
-                    'label' => $translationPrefix
+                    'label' => $translationPrefix,
+                    'hint' => $translationPrefix . '.hint'
                 ),
                 'elements' => array(
                     'totAuthVehicles' => array(
@@ -45,7 +46,7 @@ return array(
                     ),
                     'maxTrailerAuth' => array(
                         'type' => 'hidden'
-                    ),
+                    )
                 )
             ),
             array(

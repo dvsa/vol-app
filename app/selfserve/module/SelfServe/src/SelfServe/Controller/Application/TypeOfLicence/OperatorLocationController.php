@@ -14,7 +14,6 @@ namespace SelfServe\Controller\Application\TypeOfLicence;
  */
 class OperatorLocationController extends TypeOfLicenceController
 {
-
     /**
      * Render the section form
      *
@@ -32,8 +31,8 @@ class OperatorLocationController extends TypeOfLicenceController
      */
     protected function save($data)
     {
-        if ($data['data']['niFlag'] == 1) {
-            $data['data']['goodsOrPsv'] = 'goods';
+        if ($data['niFlag'] == 1) {
+            $data['goodsOrPsv'] = 'goods';
         }
 
         return parent::save($data);

@@ -94,7 +94,7 @@ class WorkshopController extends AbstractVehicleSafetyController
 
         $data = $this->formatDataForForm($result);
 
-        $form = $this->generateFormWithData('vehicle-safety-workshop', 'processEditWorkshop', $data, true);
+        $form = $this->generateFormWithData('vehicle-safety-workshop', 'processEditWorkshop', $data);
 
         $form->get('data')->setLabel('Update safety inspection provider');
 

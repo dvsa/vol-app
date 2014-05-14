@@ -59,8 +59,7 @@ class OperatingCentreController extends AbstractFinanceController
         $form = $this->generateFormWithData(
             $this->processConfigName('operating-centre-authorisation', $applicationId),
             'processAuthorisation',
-            $data,
-            true
+            $data
         );
 
         $form->get('form-actions')->get('home')->setValue($this->getUrlFromRoute(
@@ -161,8 +160,7 @@ class OperatingCentreController extends AbstractFinanceController
                 $applicationId
             ),
             'processEditForm',
-            $data,
-            true
+            $data
         );
 
         $form->get('form-actions')->remove('addAnother');
@@ -240,7 +238,7 @@ class OperatingCentreController extends AbstractFinanceController
             array('application' => $applicationId),
             $bundle
         );
-        
+
         return $data;
     }
 

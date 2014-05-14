@@ -25,16 +25,6 @@ class BusinessTypeController extends YourBusinessController
     }
 
     /**
-     * Save data
-     *
-     * @param array $data
-     */
-    protected function save($data)
-    {
-        parent::save($data);
-    }
-
-    /**
      * Load data from id
      *
      * @param int $id

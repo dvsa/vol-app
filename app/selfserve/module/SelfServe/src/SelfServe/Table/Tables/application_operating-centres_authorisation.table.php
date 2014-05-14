@@ -2,7 +2,7 @@
 
 return array(
     'variables' => array(
-        'title' => 'Operating centres'
+        'title' => 'application_operating-centres_authorisation.table.title'
     ),
     'settings' => array(
         'crud' => array(
@@ -21,7 +21,7 @@ return array(
             'format' => '{{[elements/radio]}}'
         ),
         array(
-            'title' => 'Operating centre address',
+            'title' => 'application_operating-centres_authorisation.table.address',
             'formatter' => function ($data, $column) {
 
                 $column['formatter'] = 'Address';
@@ -31,40 +31,40 @@ return array(
             'name' => 'address'
         ),
         array(
-            'title' => 'Vehicles',
+            'title' => 'application_operating-centres_authorisation.table.vehicles',
             'name' => 'numberOfVehicles'
         ),
         'trailersCol' => array(
-            'title' => 'Trailers',
+            'title' => 'application_operating-centres_authorisation.table.trailers',
             'name' => 'numberOfTrailers'
         ),
         array(
-            'title' => 'Permission',
+            'title' => 'application_operating-centres_authorisation.table.permission',
             'name' => 'permission',
             'formatter' => 'YesNo'
         ),
         array(
-            'title' => 'Advertised',
+            'title' => 'application_operating-centres_authorisation.table.advertised',
             'name' => 'adPlaced',
             'formatter' => 'YesNo'
         )
     ),
-    // Footer configuration
     'footer' => array(
-        array(
+        'total' => array(
             'type' => 'th',
-            'format' => 'Total vehicles and trailers', // i.e. 'Title: {{title}}'
+            'content' => 'application_operating-centres_authorisation.table.footer.total',
+            'formatter' => 'Translate',
             'colspan' => 2
         ),
         array(
             'formatter' => 'Sum',
             'name' => 'numberOfVehicles'
         ),
-        array(
+        'trailersCol' => array(
             'formatter' => 'Sum',
             'name' => 'numberOfTrailers'
         ),
-        array(
+        'remainingColspan' => array(
             'colspan' => 2
         )
     )

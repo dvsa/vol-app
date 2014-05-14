@@ -96,8 +96,7 @@ class SafetyController extends AbstractVehicleSafetyController
                     'config' => 'safety-inspection-providers',
                     'data' => $tableData
                 )
-            ),
-            true
+            )
         );
 
         $form->get('form-actions')->get('home')->setValue($this->getUrlFromRoute('selfserve/dashboard-home'));

@@ -46,16 +46,6 @@ class TypeOfLicenceController extends ApplicationController
             $properties
         );
 
-        $bundle = array(
-            'children' => array(
-                'licence' => array(
-                    'properties' => $properties
-                )
-            )
-        );
-
-        $application = $this->makeRestCall('Application', 'GET', array('id' => $this->getIdentifier()), $bundle);
-
-        return $application['licence'];
+        return parent::getLicenceData($properties);
     }
 }

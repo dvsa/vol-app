@@ -15,12 +15,18 @@ return array(
                     'label' => 'Address',
                 )
             ),
-            'authorised-vehicles' => array(
+            array(
                 'name' => 'data',
                 'options' => array(
                     'label' => $translationPrefix,
                 ),
                 'elements' => array(
+                    'id' => array(
+                        'type' => 'hidden'
+                    ),
+                    'version' => array(
+                        'type' => 'hidden'
+                    ),
                     'numberOfVehicles' => array(
                         'type' => 'vehiclesNumber',
                         'label' => $translationPrefix . '.numberOfVehicles',
@@ -34,15 +40,15 @@ return array(
                         'label' => $translationPrefix . '.sufficientParking',
                         'options' => array(
                             'must_be_checked' => true
-                        ),
+                        )
                     ),
                     'permission' => array(
                         'type' => 'checkbox',
                         'label' => $translationPrefix . '.permission',
                         'options' => array(
                             'must_be_checked' => true
-                        ),
-                    ),
+                        )
+                    )
                 )
             ),
             array(

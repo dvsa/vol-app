@@ -24,6 +24,13 @@ class ApplicationController extends AbstractJourneyController
     protected $service = 'Application';
 
     /**
+     * Check if is psv
+     *
+     * @var boolean
+     */
+    protected $isPsv;
+
+    /**
      * Redirect to the first section
      *
      * @return Resposne
@@ -31,6 +38,26 @@ class ApplicationController extends AbstractJourneyController
     public function indexAction()
     {
         return $this->goToFirstSection();
+    }
+
+    /**
+     * Check if application is psv
+     *
+     * @return boolean
+     */
+    protected function isPsv()
+    {
+        if (is_null($this->isPsv)) {
+            $data = $this->getLicenceData(array('goodsOrPsv'));
+
+            if (strtolower($data['goodsOrPsv']) == 'psv') {
+                $this->isPsv = true;
+            } else {
+                $this->isPsv = false;
+            }
+        }
+
+        return $this->isPsv;
     }
 
     /**
@@ -46,6 +73,12 @@ class ApplicationController extends AbstractJourneyController
 
             if (empty($licence)) {
                 return array(null);
+            }
+
+            if (strtolower($licence['goodsOrPsv']) == 'psv') {
+                $this->isPsv = true;
+            } else {
+                $this->isPsv = false;
             }
 
             $type = str_replace(' ', '-', strtolower($licence['licenceType']));
@@ -73,14 +106,21 @@ class ApplicationController extends AbstractJourneyController
      */
     protected function getLicenceDataForAccess()
     {
+        return $this->getLicenceData(array('goodsOrPsv', 'niFlag', 'licenceType'));
+    }
+
+    /**
+     * Get the licence data
+     *
+     * @param array $properties
+     * @return array
+     */
+    protected function getLicenceData($properties = array())
+    {
         $bundle = array(
             'children' => array(
                 'licence' => array(
-                    'properties' => array(
-                        'goodsOrPsv',
-                        'niFlag',
-                        'licenceType'
-                    )
+                    'properties' => $properties
                 )
             )
         );
