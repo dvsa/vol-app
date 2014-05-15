@@ -314,7 +314,7 @@ class ComplaintControllerTest extends AbstractHttpControllerTestCase
     {
         $functionData['complaint-details'] = [['id => 1']];
         $functionData['vosaCase'] = ['vc'];
-        $functionData['organisation-details'] = ['od'];
+        $functionData['organisation-details'] = 1;
         $functionData['driver-details'] = ['dd'];
         $functionData['complainant-details'] = ['cnd'];
 
