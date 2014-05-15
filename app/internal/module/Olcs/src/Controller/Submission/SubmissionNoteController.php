@@ -22,7 +22,6 @@ class SubmissionNoteController extends FormActionController
     
     public function addAction()
     {
-        
         $this->setBreadcrumb(
             array(
                 'licence_case_list/pagination' => array('licence' => $this->routeParams['licence']),
@@ -39,6 +38,10 @@ class SubmissionNoteController extends FormActionController
                 )
             )
         );
+        
+        if (isset($_POST['cancel-note'])) {
+            return $this->backToSubmissionButton();
+        }
         
         $callback = 'processNote';
         $submission = $this->makeRestCall('Submission', 'GET', array('id' => $this->routeParams['typeId']));
@@ -61,6 +64,18 @@ class SubmissionNoteController extends FormActionController
 
         $view->setTemplate('form');
         return $view;
+    }
+    
+    public function backToSubmissionButton()
+    {
+        return $this->redirect()->toRoute(
+            'submission',
+            array(
+                'case' => $this->routeParams['case'],
+                'licence' => $this->routeParams['licence'],
+                'id' => $this->routeParams['typeId'],
+                'action' => 'edit')
+        );
     }
 
     /**

@@ -34,7 +34,7 @@ return [
                 'class' => 'action--primary large'
             ],
             'cancel' => [
-                'name' => 'cancel-submission',
+                'name' => 'cancel-note',
                 'type' => 'submit',
                 'label' => 'Cancel',
                 'class' => 'action--secondary large'
