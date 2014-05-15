@@ -126,4 +126,19 @@ trait SubmissionSectionTrait
         }
         return $dataToReturnArray;
     }
+    
+    /**
+     * section persons
+     */
+    public function persons(array $data = array())
+    {
+        $dataToReturnArray = array();
+        foreach ($data['licence']['organisation']['organisationOwners'] as $organisationOwner) {
+            $thisOrganisationOwner['lastName'] = $organisationOwner['person']['surname'];
+            $thisOrganisationOwner['firstName'] = $organisationOwner['person']['firstName'];
+            $thisOrganisationOwner['dob'] = $organisationOwner['person']['dateOfBirth'];
+            $dataToReturnArray[] = $thisOrganisationOwner;
+        }
+        return $dataToReturnArray;
+    }
 }
