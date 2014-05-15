@@ -9,11 +9,10 @@
     );
 
 ?>
-    <h2>
-        <small><a href="<?php echo $currentUrl ?>" class="right-aligned" target="_blank">View in another window</a></small>
-        Application summary
-    </h2>
-<?php
-
-    echo $this->form($form);
-?>
+<div class="three-quarters">
+    <div>
+        <h2 class="inline">Application summary</h2>
+        <a href="<?php echo $this->url('selfserve/declarations-simple', ['applicationId' => $applicationId]) ?>" class="right-aligned    action--tertiary" target="_blank">View in another window</a>
+    </div>
+    <?php echo $this->form($form); ?>
+</div>
