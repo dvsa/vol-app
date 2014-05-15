@@ -151,6 +151,16 @@ return array(
                     )
                 )
             ),
+            'conviction_ajax' => array(
+                'type' => 'Literal',
+                'options' => array(
+                    'route' => '/ajax/convictions/categories',
+                    'defaults' => array(
+                        'controller' => 'ConvictionController',
+                        'action' => 'categories',
+                    )
+                )
+            ),
             'case_stay_action' => array(
                 'type' => 'segment',
                 'options' => array(
