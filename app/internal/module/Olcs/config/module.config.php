@@ -151,6 +151,16 @@ return array(
                     )
                 )
             ),
+            'conviction_ajax' => array(
+                'type' => 'Literal',
+                'options' => array(
+                    'route' => '/ajax/convictions/categories',
+                    'defaults' => array(
+                        'controller' => 'ConvictionController',
+                        'action' => 'categories',
+                    )
+                )
+            ),
             'case_stay_action' => array(
                 'type' => 'segment',
                 'options' => array(
@@ -239,6 +249,15 @@ return array(
                     )
                 )
             ),
+            'note' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/licence/:licence[/case/:case][/:type/:typeId][/:section]/note[/:action][/:id]',
+                    'defaults' => array(
+                        'controller' => 'SubmissionNoteController',
+                    )
+                )
+            ),
             'case_conditions_undertakings' => array(
                 'type' => 'segment',
                 'options' => array(
@@ -264,7 +283,7 @@ return array(
                         'controller' => 'CaseConditionUndertakingController',
                     )
                 )
-            ),
+            )
         )
     ),
     'tables' => array(
@@ -286,10 +305,11 @@ return array(
             'CaseComplaintController' => 'Olcs\Controller\CaseComplaintController',
             'ComplaintController' => 'Olcs\Controller\ComplaintController',
             'CaseConvictionController' => 'Olcs\Controller\CaseConvictionController',
-            'SubmissionController' => 'Olcs\Controller\SubmissionController',
+            'SubmissionController' => 'Olcs\Controller\Submission\SubmissionController',
             'CaseStayController' => 'Olcs\Controller\CaseStayController',
             'CasePenaltyController' => 'Olcs\Controller\CasePenaltyController',
             'CaseProhibitionController' => 'Olcs\Controller\CaseProhibitionController',
+            'SubmissionNoteController' => 'Olcs\Controller\Submission\SubmissionNoteController',
             'CaseConditionUndertakingController' => 'Olcs\Controller\CaseConditionUndertakingController'
         )
     ),
