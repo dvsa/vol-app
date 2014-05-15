@@ -288,7 +288,9 @@ class CaseController extends FormActionController
                 $categoryNames[] = $category['name'];
             }
         }
-
+        //echo'<pre>';
+        //print_r($case);
+        //echo'</pre>';
         $smmary = [
 
             'case_number' => [
@@ -306,14 +308,34 @@ class CaseController extends FormActionController
                 'value' => $case['licence']['licenceNumber'],
                 'url' => ''
             ],
+            'licence_type' => [
+                'label' => 'Licence type',
+                'value' => $case['licence']['licenceType'],
+                'url' => ''
+            ],
             'ecms' => [
                 'label' => 'ECMS',
                 'value' => $case['ecms'],
                 'url' => ''
             ],
             'categories' => [
-                'label' => 'Categories',
+                'label' => 'Categorie(s)',
                 'value' => implode(', ', $categoryNames),
+                'url' => ''
+            ],
+            'status' => [
+                'label' => 'Status',
+                'value' => $case['status'],
+                'url' => ''
+            ],
+            'licence_status' => [
+                'label' => 'Licence status',
+                'value' => $case['licence']['licenceStatus'],
+                'url' => ''
+            ],
+            'open_date' => [
+                'label' => 'Open date',
+                'value' => $case['openTime'],
                 'url' => ''
             ],
             'summary' => [
