@@ -63,13 +63,14 @@ return array(
                 return '<a href="' . $this->generateUrl(
                     array(
                         'controller' => 'Document',
-                        'action' => 'generate',
+                        'action' => 'retrieve',
                         'statement' => $data['id'],
                         'format' => 'rtf',
                         'country' => 'en_GB',
+                        'filename' => 'generated_S43_Letter',
                         'template' => 'S43_Letter'
                     ),
-                    'document_generate',
+                    'document_retrieve',
                     true
                 ) . '">Generate Letter</a>';
             },

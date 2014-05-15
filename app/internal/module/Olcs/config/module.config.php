@@ -310,6 +310,16 @@ return array(
                     )
                 ),
             ),
+            'document_retrieve' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/document/retrieve/:filename[/:format][/:country]',
+                    'defaults' => array(
+                        'controller' => 'DocumentController',
+                        'action' => 'retrieveDocument'
+                    )
+                )
+            ),
         )
     ),
     'tables' => array(

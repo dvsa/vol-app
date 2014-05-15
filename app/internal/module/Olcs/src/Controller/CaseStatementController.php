@@ -215,7 +215,7 @@ class CaseStatementController extends CaseController
             'country' => 'en_GB',
             'templateId' => 'S43_Letter'
             ]);
-var_dump($documentData);exit;
+
         $this->redirect()->toRoute(
             'case_statement',
             ['case'=>$this->fromRoute('case'), 'licence'=>$this->fromRoute('licence')],

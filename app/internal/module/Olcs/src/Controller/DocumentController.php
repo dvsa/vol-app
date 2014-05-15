@@ -76,8 +76,12 @@ class DocumentController extends AbstractActionController
         $country = $this->params('country');
         $format = $this->params('format');
 
-        $serviceData = $this->service('Olcs\Document')->get('retrieve/'.$filename.'/'.$format.'/'.$country);
-
+        $serviceData = $this->service('Olcs\Document\Retrieve')->get('retrieve/'.$filename.'/'.$format.'/'.$country);
+        $documentData = $this->sendPost('Olcs\Document\Retrieve', [
+            'filename' => $filename,
+            'format' => $format,
+            'country' => $country
+            ]);
         $filename = $serviceData['filename'];
         $response = $this->getResponse();
         $response->setStatusCode(200);
