@@ -11,15 +11,15 @@
 
 namespace Olcs\Controller;
 
-use Common\Controller\FormActionController;
 use Zend\View\Model\ViewModel;
+use \Zend\Json\Json as Json;
 
 /**
  * Conviction controller
  *
  * Manages convictions
  */
-class ConvictionController extends FormActionController
+class ConvictionController extends CaseController
 {
     public function dealtAction()
     {
@@ -78,15 +78,22 @@ class ConvictionController extends FormActionController
 
         $form = $this->generateForm('conviction', 'processConviction');
         $form->setData($data);
-        //$form->setMessages(array('blah' => 'This is a test message'));
+
+        $parentCategory = $this->getConvictionParentCategories();
+
+        $form->get('offence')
+            ->get('parentCategory')
+            ->setValueOptions($parentCategory)
+            ->setValue('');
+
         $view = new ViewModel(
             array(
-            'form' => $form,
-            'headScript' => array('/static/js/conviction.js'),
-            'params' => array(
-                'pageTitle' => 'add-conviction',
-                'pageSubTitle' => 'add-conviction-text'
-            )
+                'form' => $form,
+                'headScript' => array('/static/js/conviction.js'),
+                'params' => array(
+                    'pageTitle' => 'add-conviction',
+                    'pageSubTitle' => 'add-conviction-text'
+                )
             )
         );
         $view->setTemplate('conviction/form');
@@ -120,17 +127,40 @@ class ConvictionController extends FormActionController
             'children' => array(
                 'vosaCase' => array(
                     'properties' => 'ALL'
+                ),
+                'category' => array(
+                    'properties' => array(
+                        'id',
+                        'description'
+                    ),
+                    'children' => array(
+                        'parent' => array(
+                            'properties' => 'id'
+                        )
+                    )
                 )
             )
         );
 
         $data = $this->makeRestCall('Conviction', 'GET', array('id' => $routeParams['id']), $bundle);
+
         if (isset($data['vosaCase'])) {
             $data['vosaCase'] = $data['vosaCase']['id'];
         }
 
         if (empty($routeParams['case']) || empty($routeParams['licence']) || empty($data)) {
             return $this->getResponse()->setStatusCode(404);
+        }
+
+        if (!empty($data['category'])) {
+            $data['parentCategory'] = $data['category']['parent']['id'];
+
+            //check for user defined text
+            if ($data['category']['id'] != 168) {
+                $data['categoryText'] = $data['category']['description'];
+            }
+
+            $data['category'] = $data['category']['id'];
         }
 
         $data['id'] = $routeParams['id'];
@@ -142,6 +172,25 @@ class ConvictionController extends FormActionController
             'processConviction',
             $data
         );
+
+        $parentCategory = $this->getConvictionParentCategories();
+
+        $form->get('offence')
+            ->get('parentCategory')
+            ->setValueOptions($parentCategory);
+
+        $formSubCategory = array();
+
+        if (isset($data['parentCategory'])) {
+            $subCategory = $this->getConvictionSubCategories($data['parentCategory']);
+
+            foreach ($subCategory['Results'] as $category) {
+                $formSubCategory[$category['id']] = $category['description'];
+            }
+        }
+        $form->get('offence')
+            ->get('category')
+            ->setValueOptions($formSubCategory);
 
         $view = new ViewModel(
             array(
@@ -155,6 +204,7 @@ class ConvictionController extends FormActionController
                 )
             )
         );
+
         $view->setTemplate('conviction/form');
         return $view;
     }
@@ -165,7 +215,7 @@ class ConvictionController extends FormActionController
 
         //two unsets here keeps line length under 120
         //keeps phpunit happy as it isn't detecting the code has
-        //been run when the parameters on on more than one line!
+        //been run when the parameters are on more than one line!
         unset(
             $data['defendant-details'], $data['cancel-conviction'], $data['offence'], $data['save']
         );
@@ -177,7 +227,7 @@ class ConvictionController extends FormActionController
         $routeParams = $this->getParams(array('action', 'licence', 'case'));
 
         if (strtolower($routeParams['action']) == 'edit' || strtolower($routeParams['action']) == 'dealt') {
-            unset($data['vosaCase']);
+            unset($data['vosaCase'], $data['parentCategory']);
             $result = $this->processEdit($data, 'Conviction');
         } else {
             $result = $this->processAdd($data, 'Conviction');
@@ -188,6 +238,81 @@ class ConvictionController extends FormActionController
             array(
                 'case' => $routeParams['case'],
                 'licence' => $routeParams['licence']
+            )
+        );
+    }
+
+    public function categoriesAction()
+    {
+        $response = $this->getResponse();
+        $parent = $this->fromPost('parent', null);
+
+        if (!$parent) {
+            $response->setContent(Json::encode(array('success' => 1, 'error' => 'Category not found')));
+        } else {
+            $categories = $this->getConvictionSubCategories($parent);
+
+            $response->setContent(Json::encode(array('success' => 1, 'categories'=> $categories['Results'])));
+        }
+
+        return $response;
+    }
+
+    private function getConvictionParentCategories()
+    {
+        $bundle = array(
+            'children' => array(
+                'parent' => array(
+                    'properties' => array(
+                        'id'
+                    )
+                )
+            )
+        );
+
+        $categories = $this->makeRestCall(
+            'ConvictionCategory',
+            'GET',
+            array(
+                'limit' => 'all',
+                'sort' => 'description',
+                'bundle' => Json::encode($bundle)
+            )
+        );
+
+        $parentCategory = array();
+
+        //not efficient but can't match against a null value in bundler
+        foreach ($categories['Results'] as $category) {
+            if (empty($category['parent'])) {
+                $parentCategory[$category['id']] = $category['description'];
+            }
+        }
+
+        return $parentCategory;
+    }
+    /**
+     *
+     * @param int $parent
+     * @return array
+     */
+    private function getConvictionSubCategories($parent)
+    {
+        $bundle = array(
+                'properties' => array(
+                    'id',
+                    'description'
+                ),
+            );
+
+        return $this->makeRestCall(
+            'ConvictionCategory',
+            'GET',
+            array(
+                'parent' => $parent,
+                'limit' => 'all',
+                'sort' => 'description',
+                'bundle' => Json::encode($bundle)
             )
         );
     }

@@ -3,7 +3,8 @@ return array(
     'service_api_mapping' => array(
         'endpoints' => array(
             'payments' => 'http://olcspayment.dev/api/',
-            'backend' => 'http://olcs-backend/'
+            'backend' => 'http://olcs-backend/',
+            'postcode' => 'http://dvsa-postcode.olcsdv-ap01.olcs.npm/'
         ),
     )
 );
