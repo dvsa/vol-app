@@ -1,20 +1,20 @@
 <?php
 
 /**
- * OperatingCentres Controller
+ * TaxiPhv Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-namespace SelfServe\Controller\Application\OperatingCentres;
+namespace SelfServe\Controller\Application\TaxiPhv;
 
 use SelfServe\Controller\Application\ApplicationController;
 
 /**
- * OperatingCentres Controller
+ * TaxiPhv Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class OperatingCentresController extends ApplicationController
+class TaxiPhvController extends ApplicationController
 {
     /**
      * Redirect to the first section

@@ -79,7 +79,9 @@ return array(
                     'psv-special-restricted'
                 ),
                 'subSections' => array(
+                    'Placeholder' => array(
 
+                    )
                 )
             ),
             'OperatingCentres' => array(
@@ -110,7 +112,9 @@ return array(
                     'psv-standard'
                 ),
                 'subSections' => array(
+                    'Placeholder' => array(
 
+                    )
                 )
             ),
             'VehicleSafety' => array(
@@ -124,7 +128,12 @@ return array(
                     'psv-restricted'
                 ),
                 'subSections' => array(
+                    'Vehicle' => array(
 
+                    ),
+                    'Safety' => array(
+
+                    )
                 )
             ),
             'PreviousHistory' => array(

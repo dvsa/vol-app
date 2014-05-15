@@ -1,20 +1,20 @@
 <?php
 
 /**
- * OperatingCentres Controller
+ * TransportManagers Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-namespace SelfServe\Controller\Application\OperatingCentres;
+namespace SelfServe\Controller\Application\TransportManagers;
 
 use SelfServe\Controller\Application\ApplicationController;
 
 /**
- * OperatingCentres Controller
+ * TransportManagers Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class OperatingCentresController extends ApplicationController
+class TransportManagersController extends ApplicationController
 {
     /**
      * Redirect to the first section
@@ -24,5 +24,14 @@ class OperatingCentresController extends ApplicationController
     public function indexAction()
     {
         return $this->goToFirstSubSection();
+    }
+
+    /**
+     * Placeholder save method
+     *
+     * @param array $data
+     */
+    protected function save($data)
+    {
     }
 }

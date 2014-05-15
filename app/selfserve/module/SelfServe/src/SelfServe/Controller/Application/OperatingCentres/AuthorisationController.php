@@ -15,6 +15,33 @@ namespace SelfServe\Controller\Application\OperatingCentres;
  */
 class AuthorisationController extends OperatingCentresController
 {
+    /**
+     * Holds the table data
+     *
+     * @var array
+     */
+    private $tableData = null;
+
+    /**
+     * Holds the data bundle
+     *
+     * @var array
+     */
+    protected $dataBundle = array(
+        'properties' => array(
+            'id',
+            'version',
+            'totAuthVehicles',
+            'totAuthTrailers'
+        )
+    );
+
+    /**
+     * Holds the sub action service
+     *
+     * @var string
+     */
+    protected $actionService = 'ApplicationOperatingCentre';
 
     /**
      * Action data map
@@ -26,13 +53,22 @@ class AuthorisationController extends OperatingCentresController
             'address'
         ),
         'main' => array(
-            'mapFrom' => array(
-                'data'
-            ),
             'children' => array(
-                'addresses' => array(
+                'applicationOperatingCentre' => array(
                     'mapFrom' => array(
-                        'addresses'
+                        'data'
+                    )
+                ),
+                'operatingCentre' => array(
+                    'mapFrom' => array(
+                        'operatingCentre'
+                    ),
+                    'children' => array(
+                        'addresses' => array(
+                            'mapFrom' => array(
+                                'addresses'
+                            )
+                        )
                     )
                 )
             )
@@ -47,14 +83,19 @@ class AuthorisationController extends OperatingCentresController
     protected $actionDataBundle = array(
         'properties' => array(
             'id',
+            'version',
             'numberOfTrailers',
             'numberOfVehicles',
+            'sufficientParking',
             'permission',
             'adPlaced'
         ),
         'children' => array(
             'operatingCentre' => array(
-                'properties' => array('id'),
+                'properties' => array(
+                    'id',
+                    'version'
+                ),
                 'children' => array(
                     'address' => array(
                         'properties' => array(
@@ -74,13 +115,6 @@ class AuthorisationController extends OperatingCentresController
             )
         )
     );
-
-    /**
-     * Holds the sub action service
-     *
-     * @var string
-     */
-    protected $actionService = 'ApplicationOperatingCentre';
 
     /**
      * Render the section form
@@ -142,89 +176,115 @@ class AuthorisationController extends OperatingCentresController
      */
     protected function getTableData($id)
     {
-        $bundle = array(
-            'properties' => array(
-                'id',
-                'numberOfTrailers',
-                'numberOfVehicles',
-                'permission',
-                'adPlaced'
-            ),
-            'children' => array(
-                'operatingCentre' => array(
-                    'properties' => array('id'),
-                    'children' => array(
-                        'address' => array(
-                            'properties' => array(
-                                'addressLine1',
-                                'addressLine2',
-                                'addressLine3',
-                                'addressLine4',
-                                'postcode',
-                                'county',
-                                'city',
-                                'country'
-                            )
-                        )
-                    )
-                )
-            )
-        );
+        if (is_null($this->tableData)) {
+            $data = $this->makeRestCall(
+                'ApplicationOperatingCentre',
+                'GET',
+                array('application' => $id),
+                $this->getActionDataBundle()
+            );
 
-        $data = $this->makeRestCall('ApplicationOperatingCentre', 'GET', array('application' => $id), $bundle);
+            $newData = array();
 
-        $newData = array();
+            foreach ($data['Results'] as $row) {
 
-        foreach ($data['Results'] as $row) {
+                $newRow = $row;
 
-            $newRow = $row;
+                if (isset($row['operatingCentre']['address'])) {
 
-            if (isset($row['operatingCentre']['address'])) {
+                    unset($row['operatingCentre']['address']['id']);
+                    unset($row['operatingCentre']['address']['version']);
 
-                $newRow = array_merge($newRow, $row['operatingCentre']['address']);
+                    $newRow = array_merge($newRow, $row['operatingCentre']['address']);
+                }
+
+                unset($newRow['operatingCentre']);
+
+                $newData[] = $newRow;
             }
 
-            unset($newRow['operatingCentre']);
-
-            $newData[] = $newRow;
+            $this->tableData = $newData;
         }
 
-        return $newData;
+        return $this->tableData;
     }
 
     /**
      * Save the operating centre
      *
      * @param array $data
+     * @param string $service
+     * @return null|Response
      */
-    public function actionSave($data)
+    protected function actionSave($data, $service = null)
     {
-        $saved = parent::actionSave($data);
+        $saved = parent::actionSave($data['operatingCentre'], 'OperatingCentre');
 
-        if (!isset($saved['id'])) {
-            return $this->notFoundAction();
+        if ($this->getActionName() == 'add') {
+            if (!isset($saved['id'])) {
+                return $this->notFoundAction();
+            }
+
+            $data['applicationOperatingCentre']['operatingCentre'] = $saved['id'];
         }
 
-        $data['operatingCentre'] = $saved['id'];
+        $saved = parent::actionSave($data['applicationOperatingCentre'], $service);
 
-        $data['application'] = $this->getIdentifier();
-
-        $this->makeRestCall('ApplicationOperatingCentre', 'POST', $data);
+        if ($this->getActionName() == 'add' && !isset($saved['id'])) {
+            return $this->notFoundAction();
+        }
     }
 
     /**
      * Process the action load data
      *
+     * @param array $oldData
+     */
+    protected function processActionLoad($oldData)
+    {
+        $data['data'] = $oldData;
+
+        if ($this->getActionName() != 'add') {
+            $data['operatingCentre'] = $data['data']['operatingCentre'];
+            $data['address'] = $data['operatingCentre']['address'];
+            $data['address']['country'] = 'country.' . $data['address']['country'];
+            unset($data['data']['operatingCentre']);
+        }
+
+        $data['data']['application'] = $this->getIdentifier();
+
+        return $data;
+    }
+
+    /**
+     * Process the loading of data
+     *
      * @param array $data
      */
-    protected function processActionLoad($data)
+    protected function processLoad($oldData)
     {
-        //$data = parent::processActionLoad($data);
-        print '<pre>';
-        print_r($data);
-        print '</pre>';
-        exit;
+        $results = $this->getTableData($this->getIdentifier());
 
-        return array('data' => $data);
+        $data['data'] = $oldData;
+
+        $data['data']['noOfOperatingCentres'] = count($results);
+        $data['data']['minVehicleAuth'] = 0;
+        $data['data']['maxVehicleAuth'] = 0;
+        $data['data']['minTrailerAuth'] = 0;
+        $data['data']['maxTrailerAuth'] = 0;
+
+        foreach ($results as $row) {
+
+            $data['data']['minVehicleAuth'] = max(
+                array($data['data']['minVehicleAuth'], $row['numberOfVehicles'])
+            );
+            $data['data']['minTrailerAuth'] = max(
+                array($data['data']['minTrailerAuth'], $row['numberOfTrailers'])
+            );
+            $data['data']['maxVehicleAuth'] += (int) $row['numberOfVehicles'];
+            $data['data']['maxTrailerAuth'] += (int) $row['numberOfTrailers'];
+        }
+
+        return $data;
     }
 }

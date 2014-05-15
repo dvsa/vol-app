@@ -27,6 +27,9 @@ return array(
                     'version' => array(
                         'type' => 'hidden'
                     ),
+                    'application' => array(
+                        'type' => 'hidden'
+                    ),
                     'numberOfVehicles' => array(
                         'type' => 'vehiclesNumber',
                         'label' => $translationPrefix . '.numberOfVehicles',
@@ -52,28 +55,17 @@ return array(
                 )
             ),
             array(
-                'name' => 'form-actions',
-                'class' => 'action-buttons',
+                'type' => 'journey-crud-buttons'
+            ),
+            array(
+                'name' => 'operatingCentre',
                 'options' => array(),
-                'attributes' => array('class' => 'actions-container'),
                 'elements' => array(
-                    'submit' => array(
-                        'type' => 'submit',
-                        'filters' => '\Common\Form\Elements\InputFilters\ActionButton',
-                        'label' => 'Save',
-                        'class' => 'action--primary large'
+                    'id' => array(
+                        'type' => 'hidden'
                     ),
-                    'addAnother' => array(
-                        'type' => 'submit',
-                        'filters' => '\Common\Form\Elements\InputFilters\ActionButton',
-                        'label' => 'Save & add another',
-                        'class' => 'action--primary large'
-                    ),
-                    'cancel' => array(
-                        'type' => 'submit',
-                        'filters' => '\Common\Form\Elements\InputFilters\ActionButton',
-                        'label' => 'Cancel',
-                        'class' => 'action--secondary large'
+                    'version' => array(
+                        'type' => 'hidden'
                     )
                 )
             )

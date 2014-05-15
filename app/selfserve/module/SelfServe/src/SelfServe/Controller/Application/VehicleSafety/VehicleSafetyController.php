@@ -1,20 +1,20 @@
 <?php
 
 /**
- * OperatingCentres Controller
+ * VehicleSafety Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-namespace SelfServe\Controller\Application\OperatingCentres;
+namespace SelfServe\Controller\Application\VehicleSafety;
 
 use SelfServe\Controller\Application\ApplicationController;
 
 /**
- * OperatingCentres Controller
+ * VehicleSafety Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class OperatingCentresController extends ApplicationController
+class VehicleSafetyController extends ApplicationController
 {
     /**
      * Redirect to the first section

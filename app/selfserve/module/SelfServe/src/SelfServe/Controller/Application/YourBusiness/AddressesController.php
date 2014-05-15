@@ -28,7 +28,7 @@ class AddressesController extends YourBusinessController
     }
 
     /**
-     * Save data
+     * Placeholder save method
      *
      * @param array $data
      */

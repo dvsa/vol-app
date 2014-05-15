@@ -33,11 +33,24 @@ abstract class AbstractJourneyController extends FormActionController
     );
 
     /**
-     * Holds the action data map
+     * Holds the Data Bundle
      *
      * @var array
      */
-    protected $actionDataMap = array();
+    protected $dataBundle = null;
+
+    /**
+     * Action data map
+     *
+     * @var array
+     */
+    protected $actionDataMap = array(
+        'main' => array(
+            'mapFrom' => array(
+                'data'
+            )
+        )
+    );
 
     /**
      * Holds the actionDataBundle
@@ -249,6 +262,16 @@ abstract class AbstractJourneyController extends FormActionController
     protected function getDataMap()
     {
         return $this->dataMap;
+    }
+
+    /**
+     * Getter for data bundle
+     *
+     * @return array
+     */
+    protected function getDataBundle()
+    {
+        return $this->dataBundle;
     }
 
     /**
@@ -612,7 +635,7 @@ abstract class AbstractJourneyController extends FormActionController
             $section = $this->getSectionName();
             $subSection = $this->getSubSectionName();
 
-            $this->viewName = $this->camelToDash($journey . '/' . $section . '/' . $subSection);
+            $this->viewName = $this->camelToDash('self-serve/' . $journey . '/' . $section . '/' . $subSection);
         }
 
         return $this->viewName;
@@ -1223,7 +1246,7 @@ abstract class AbstractJourneyController extends FormActionController
             return array();
         }
 
-        $result = $this->makeRestCall($service, 'GET', array('id' => $id));
+        $result = $this->makeRestCall($service, 'GET', array('id' => $id), $this->getDataBundle());
 
         if (empty($result)) {
             return $this->notFoundAction();
@@ -1273,8 +1296,6 @@ abstract class AbstractJourneyController extends FormActionController
      */
     protected function processActionLoad($data)
     {
-        $data = $this->processDataMapForLoad($data, $this->getActionDataMap());
-
         return $data;
     }
 
@@ -1314,15 +1335,17 @@ abstract class AbstractJourneyController extends FormActionController
      *
      * @param array $data
      */
-    protected function actionSave($data)
+    protected function actionSave($data, $service = null)
     {
-        $method = 'PUT';
+        $method = 'POST';
 
-        if (isset($data['id'])) {
-            $method = 'POST';
+        if (isset($data['id']) && !empty($data['id'])) {
+            $method = 'PUT';
         }
 
-        $service = $this->getActionService();
+        if (is_null($service)) {
+            $service = $this->getActionService();
+        }
 
         if (empty($service)) {
             throw new \Exception('Action service not defined');
@@ -1365,51 +1388,6 @@ abstract class AbstractJourneyController extends FormActionController
     }
 
     /**
-     * Process data map for load
-     *
-     * @param array $oldData
-     * @param array $map
-     * @param string $section
-     * @return array
-     */
-    protected function processDataMapForLoad($oldData, $map = array(), $section = 'main')
-    {
-        if (empty($map)) {
-            return $oldData;
-        }
-
-        if (isset($map['_addresses'])) {
-
-            foreach ($map['_addresses'] as $address) {
-
-                $oldData[$address] = $oldData['addresses'][$address];
-            }
-        }
-
-        if (isset($map[$section]['mapFrom'])) {
-
-            foreach ($map[$section]['mapFrom'] as $key) {
-
-                $data[$key] = $oldData;
-            }
-
-        } else {
-
-            $data = $oldData;
-        }
-
-        if (isset($map[$section]['children'])) {
-
-            foreach ($map[$section]['children'] as $child => $options) {
-
-                $data[$child] = $this->processDataMapForLoad($oldData, array($child => $options), $child);
-            }
-        }
-
-        return $data;
-    }
-
-    /**
      * Process the data map for saving
      *
      * @param type $data
@@ -1434,12 +1412,14 @@ abstract class AbstractJourneyController extends FormActionController
 
             foreach ($map[$section]['mapFrom'] as $key) {
 
+                if (!isset($oldData[$key])) {
+                    return $oldData;
+                }
+
                 $data = array_merge($data, $oldData[$key]);
             }
-
         } else {
-
-            $data = $oldData;
+            $data = array();
         }
 
         if (isset($map[$section]['children'])) {
@@ -1448,6 +1428,10 @@ abstract class AbstractJourneyController extends FormActionController
 
                 $data[$child] = $this->processDataMapForSave($oldData, array($child => $options), $child);
             }
+        }
+
+        if (isset($map[$section]['values'])) {
+            $data = array_merge($data, $map[$section]['values']);
         }
 
         return $data;

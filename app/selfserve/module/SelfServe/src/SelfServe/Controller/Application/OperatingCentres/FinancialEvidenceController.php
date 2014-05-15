@@ -25,21 +25,11 @@ class FinancialEvidenceController extends OperatingCentresController
     }
 
     /**
-     * Save data
+     * Placeholder save method
      *
      * @param array $data
      */
     protected function save($data)
     {
-    }
-
-    /**
-     * Load data from id
-     *
-     * @param int $id
-     */
-    protected function load($id)
-    {
-        return array('data' => array());
     }
 }

@@ -24,6 +24,13 @@ class ApplicationController extends AbstractJourneyController
     protected $service = 'Application';
 
     /**
+     * Cache licence data requests
+     *
+     * @var array
+     */
+    private $licenceData = array();
+
+    /**
      * Check if is psv
      *
      * @var boolean
@@ -117,16 +124,22 @@ class ApplicationController extends AbstractJourneyController
      */
     protected function getLicenceData($properties = array())
     {
-        $bundle = array(
-            'children' => array(
-                'licence' => array(
-                    'properties' => $properties
+        $key = json_encode($properties);
+
+        if (!isset($this->licenceData[$key])) {
+            $bundle = array(
+                'children' => array(
+                    'licence' => array(
+                        'properties' => $properties
+                    )
                 )
-            )
-        );
+            );
 
-        $application = $this->makeRestCall('Application', 'GET', array('id' => $this->getIdentifier()), $bundle);
+            $application = $this->makeRestCall('Application', 'GET', array('id' => $this->getIdentifier()), $bundle);
 
-        return $application['licence'];
+            $this->licenceData[$key] = $application['licence'];
+        }
+
+        return $this->licenceData[$key];
     }
 }
