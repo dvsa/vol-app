@@ -265,6 +265,16 @@ return array(
                     )
                 )
             ),
+            'document_generate' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/document/generate/:template[/:format][/:country]',
+                    'defaults' => array(
+                        'controller' => 'DocumentController',
+                        'action' => 'generateDocument'
+                    )
+                ),
+            ),
         )
     ),
     'tables' => array(
@@ -290,7 +300,8 @@ return array(
             'CaseStayController' => 'Olcs\Controller\CaseStayController',
             'CasePenaltyController' => 'Olcs\Controller\CasePenaltyController',
             'CaseProhibitionController' => 'Olcs\Controller\CaseProhibitionController',
-            'CaseConditionUndertakingController' => 'Olcs\Controller\CaseConditionUndertakingController'
+            'CaseConditionUndertakingController' => 'Olcs\Controller\CaseConditionUndertakingController',
+            'DocumentController' => 'Olcs\Controller\DocumentController'
         )
     ),
     'view_manager' => array(

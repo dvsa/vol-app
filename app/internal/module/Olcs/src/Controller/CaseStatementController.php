@@ -208,12 +208,50 @@ class CaseStatementController extends CaseController
 
         $this->processEdit($data, 'Statement');
 
+        $bookmarks = $this->mapDataToBookmarks($data);
+
+        $documentData = $this->sendPost('Olcs\Document\Generate', [
+            'bookmarks' => $bookmarks,
+            'country' => 'en_GB',
+            'templateId' => 'S43_Letter'
+            ]);
+var_dump($documentData);exit;
         $this->redirect()->toRoute(
             'case_statement',
             ['case'=>$this->fromRoute('case'), 'licence'=>$this->fromRoute('licence')],
             [],
             false
         );
+    }
+
+    public function mapDataToBookmarks($data)
+    {
+        $bookmarks = [];
+        $bookmarks['TAName'] = '<TAName>';
+        $bookmarks['TAAddress_2'] = '<TAAddress_2>';
+        $bookmarks['Address_1'] = $this->concatAddress($data['addresses']['requestorsAddress']);
+        $bookmarks['Ref'] = '<Ref>';
+        $bookmarks['Name'] = '<Name>';
+        $bookmarks['RequestMode'] = '<RequestMode>';
+        $bookmarks['RequestDate'] = '<RequestDate>';
+        $bookmarks['UserKnownAs'] = '<UserKnownAs>';
+        $bookmarks['AuthorisorTeam'] = '<AuthorisorTeam>';
+        $bookmarks['AuthorisorName2'] = '<AuthorisorName2>';
+        $bookmarks['AuthorisedDecision'] = '<AuthorisedDecision>';
+        $bookmarks['AuthorisorName3'] = '<AuthorisorName3>';
+
+        return $bookmarks;
+    }
+
+    public function concatAddress($data)
+    {
+        return $data['addressLine1'] . ', ' .
+               $data['addressLine2'] . ', ' .
+               $data['addressLine3'] . ', ' .
+               $data['addressLine4'] . ', ' .
+               $data['city'] . ', ' .
+               $data['postcode'] . ', ' .
+               $data['country'];
     }
 
     /**

@@ -56,6 +56,24 @@ return array(
         array(
             'title' => 'VRM',
             'name' => 'vrm'
-        )
+        ),
+        array(
+            'title' => 'Documents',
+            'formatter' => function ($data, $column) {
+                return '<a href="' . $this->generateUrl(
+                    array(
+                        'controller' => 'Document',
+                        'action' => 'generate',
+                        'statement' => $data['id'],
+                        'format' => 'rtf',
+                        'country' => 'en_GB',
+                        'template' => 'S43_Letter'
+                    ),
+                    'document_generate',
+                    true
+                ) . '">Generate Letter</a>';
+            },
+            'name' => 'dateRequested'
+        ),
     )
 );
