@@ -46,6 +46,7 @@ class SubmissionNoteControllerTest extends AbstractHttpControllerTestCase
         );
         
         parent::setUp();
+        $_POST = array();
     }
     
     public function testAddAction()
@@ -105,6 +106,64 @@ class SubmissionNoteControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue($viewModel));
         
         $this->controller->addAction();
+    }
+    
+    public function testCancelButton()
+    {
+        $this->controller = $this->getMock(
+            '\Olcs\Controller\Submission\SubmissionNoteController',
+            array(
+                'setBreadcrumb',
+                'backToSubmissionButton'
+            )
+        );
+        $this->controller->routeParams = array('case' => 54, 'licence' => 7, 'typeId' => 12, 'type' => 'submission', 'action' => 'add');
+        $_POST['cancel-note'] = '';
+        
+        $this->controller->expects($this->once())
+            ->method('setBreadcrumb')
+            ->with(array(
+                'licence_case_list/pagination' => array('licence' => $this->controller->routeParams['licence']),
+                'case_manage' => array(
+                        'case' => $this->controller->routeParams['case'],
+                        'licence' => $this->controller->routeParams['licence'],
+                        'tab' => 'overview'
+                ),
+                'submission' => array(
+                        'case' => $this->controller->routeParams['case'],
+                        'licence' => $this->controller->routeParams['licence'],
+                        'id' => $this->controller->routeParams['typeId'],
+                        'action' => 'edit'
+                )
+            ));
+        
+        $this->controller->expects($this->once())
+            ->method('backToSubmissionButton');
+        
+        $this->controller->addAction();
+    }
+    
+    public function testBackToSubmissionButton()
+    {
+        $this->controller = $this->getMock(
+            '\Olcs\Controller\Submission\SubmissionNoteController',
+            array(
+                'redirect'
+            )
+        );
+        $this->controller->routeParams = array('case' => 54, 'licence' => 7, 'typeId' => 12);
+        
+        $redirect = $this->getMock('\stdClass', array('toRoute'));
+        
+        $redirect->expects($this->once())
+            ->method('toRoute')
+            ->with('submission', array('case' => 54, 'licence' => 7, 'id' => 12, 'action' => 'edit'));
+        
+        $this->controller->expects($this->once())
+             ->method('redirect')
+             ->will($this->returnValue($redirect));
+        
+        $this->controller->backToSubmissionButton();
     }
     
     public function testGenerateNoteForm()
