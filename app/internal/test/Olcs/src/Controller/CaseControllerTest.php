@@ -168,7 +168,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
                 )
             );
 
-        $this->controller->expects($this->exactly(2))
+        $this->controller->expects($this->exactly(1))
             ->method('makeRestCall')
             ->will(
                 $this->onConsecutiveCalls(
@@ -650,7 +650,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
     /**
      * Tests both the fromRoute and fromPost functions
      *
-     * @dataProvider testGetFromProvider
+     * @dataProvider getFromProvider
      * @param string $function
      */
     public function testGetFrom($function)
@@ -675,7 +675,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
     /**
      * Data provider for testGetFrom
      */
-    public function testGetFromProvider()
+    public function getFromProvider()
     {
         return array(
             array('fromRoute'),

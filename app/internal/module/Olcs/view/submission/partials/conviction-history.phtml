@@ -1,0 +1,36 @@
+<div class="table__wrapper">
+    <table>
+        <thead>
+            <tr>
+                <th><?php echo $this->translate('date-of-conviction'); ?></th>
+                <th><?php echo $this->translate('date-of-offence'); ?></th>
+                <th><?php echo $this->translate('name-defendant-type'); ?></th>
+                <th><?php echo $this->translate('description'); ?></th>
+                <th><?php echo $this->translate('court-fpn'); ?></th>
+                <th><?php echo $this->translate('penalty'); ?></th>
+                <th><?php echo $this->translate('si'); ?>SI</th>
+                <th><?php echo $this->translate('declared'); ?></th>
+                <th><?php echo $this->translate('dealt-with'); ?></th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php
+            foreach ($this->sectionData as $conviction) :
+        ?>
+            <tr>
+                <td><?php echo date('d/m/Y', strtotime($conviction['dateOfConviction']));  ?></td>
+                <td><?php echo date('d/m/Y', strtotime($conviction['dateOfOffence']));  ?></td>
+                <td><?php echo $this->escapeHtml($conviction['name']); ?></td>
+                <td><?php echo $this->escapeHtml($conviction['description']); ?></td>
+                <td><?php echo $this->escapeHtml($conviction['courtFpm']); ?></td>         
+                <td><?php echo $this->escapeHtml($conviction['penalty']); ?></td>
+                <td><?php echo $this->escapeHtml($conviction['si']); ?></td>
+                <td><?php echo $this->escapeHtml($conviction['decToTc']); ?></td>
+                <td><?php echo $this->escapeHtml($conviction['dealtWith']); ?></td>
+            </tr>
+        <?php
+            endforeach;
+        ?>
+        </tbody>
+    </table>
+</div>

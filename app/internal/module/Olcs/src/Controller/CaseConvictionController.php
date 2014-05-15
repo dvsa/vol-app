@@ -59,15 +59,17 @@ class CaseConvictionController extends CaseController
         $tableBuilder = $this->getServiceLocator()->get('Table');
         $table = $tableBuilder->buildTable('convictions', $results, $data);
 
-        $view->setVariables([
-            'case' => $case,
-            'tabs' => $tabs,
-            'tab' => $action,
-            'summary' => $summary,
-            'details' => $details,
-            'table' => $table,
-            'commentForm' => $form,
-        ]);
+        $view->setVariables(
+            [
+                'case' => $case,
+                'tabs' => $tabs,
+                'tab' => $action,
+                'summary' => $summary,
+                'details' => $details,
+                'table' => $table,
+                'commentForm' => $form,
+            ]
+        );
 
         $view->setTemplate('case/manage');
         return $view;

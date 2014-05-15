@@ -24,13 +24,13 @@ return [
                         'type' => 'personName',
                         'label' => 'Complainant first name',
                         'class' => 'medium',
-                        'filters' => '\Common\Form\Elements\InputFilters\TextMax70Mandatory'
+                        'filters' => '\Common\Form\Elements\InputFilters\NameRequired'
                     ],
                     'surname' => [
                         'type' => 'personName',
                         'label' => 'Complainant last name',
                         'class' => 'medium',
-                        'filters' => '\Common\Form\Elements\InputFilters\TextMax70Mandatory'
+                        'filters' => '\Common\Form\Elements\InputFilters\NameRequired'
                     ],
                ],
            ],
@@ -114,13 +114,11 @@ return [
                         'type' => 'personName',
                         'label' => 'Driver first name',
                         'class' => 'medium',
-                        'filters' => '\Common\Form\Elements\InputFilters\TextMax70'
                     ],
                     'surname' => [
                         'type' => 'personName',
                         'label' => 'Driver last name',
                         'class' => 'medium',
-                        'filters' => '\Common\Form\Elements\InputFilters\TextMax70'
                     ]
                 ]
             ]
