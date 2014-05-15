@@ -151,11 +151,12 @@ class IndexController extends AbstractApplicationController
 
             //redirect to correct step
             if ($val == $organisation['organisationType']) {
-                $forward = $this->forward()->dispatch('Selfserve\BusinessType\Index', [
+                $forward = $this->forward()->dispatch(
+                    'Selfserve\BusinessType\Index', [
                     'action' => 'generateStepForm',
                     'applicationId' => $applicationId,
-                    'step' => $step,
-                ]);
+                    'step' => $step]
+                );
                 break;
             }
         }
@@ -459,16 +460,23 @@ class IndexController extends AbstractApplicationController
      */
     protected function processLookupCompany($valid_data, $form)
     {
+        if (array_key_exists('registered-company', $valid_data)) {
+            $key = 'registered-company';
+        } elseif (array_key_exists('llp', $valid_data)) {
+            $key = 'llp';
+        } else {
+            return $form;
+        }
         $result = $this->makeRestCall(
             'CompaniesHouse', 'GET', array(
-            'type' => 'numberSearch', 'value' => $valid_data['registered-company']['company_number'])
+            'type' => 'numberSearch', 'value' => $valid_data[$key]['company_number'])
         );
         if ($result['Count'] == 1) {
             $companyName = $result['Results'][0]['CompanyName'];
-            $form->get('registered-company')->get('company_name')->setValue($companyName);
+            $form->get($key)->get('company_name')->setValue($companyName);
             return $form;
         } else {
-            $form->get('registered-company')->get('company_number')->setMessages(
+            $form->get($key)->get('company_number')->setMessages(
                 array('companyNumber' => array(
                     'Sorry, we couldn\'t find any matching companies, '
                     . 'please try again or enter your details manualy below'))
