@@ -1,8 +1,14 @@
 <div class="table__header">
-    <h3>Revoke</h3>
+    <h3>Proposal to revoke</h3>
+    <?php if (null == $this->revoke):?>
     <div class="actions-container">
-        <a href="<?php echo $this->url('case_revoke', array('action' => 'edit', 'appeal' => $this->revoke['id']), array(), true); ?>" class="action--primary" />Edit</a>
-        <a href="<?php echo ''; ?>" class="action--warning" />Delete</a>
+        <a href="<?php echo $this->url('case_revoke', ['action' => 'add'], [], true); ?>" class="action--primary" />Add</a>
+    </div>
+    <p>No revoke proposal present.</p>
+    <?php else: ?>
+    <div class="actions-container">
+        <a href="<?php echo $this->url('case_revoke', ['action' => 'edit', 'id' => $this->revoke['id']], [], true); ?>" class="action--primary" />Edit</a>
+        <a href="<?php echo $this->url('case_revoke', ['action' => 'delete', 'id' => $this->revoke['id']], [], true); ?>" class="action--warning" />Delete</a>
     </div>
     <p>
         <strong><?php echo $this->translate('Legislation'); ?></strong><br />
@@ -28,4 +34,5 @@
         <strong><?php echo $this->translate('Notes'); ?></strong><br />
         <?php echo isset($this->revoke['comment']) ? $this->revoke['comment'] : ''; ?>
     </p>
+    <?php endif;?>
 </div>
