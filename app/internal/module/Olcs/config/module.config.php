@@ -151,6 +151,16 @@ return array(
                     )
                 )
             ),
+            'conviction_ajax' => array(
+                'type' => 'Literal',
+                'options' => array(
+                    'route' => '/ajax/convictions/categories',
+                    'defaults' => array(
+                        'controller' => 'ConvictionController',
+                        'action' => 'categories',
+                    )
+                )
+            ),
             'case_stay_action' => array(
                 'type' => 'segment',
                 'options' => array(
@@ -239,6 +249,15 @@ return array(
                     )
                 )
             ),
+            'note' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/licence/:licence[/case/:case][/:type/:typeId][/:section]/note[/:action][/:id]',
+                    'defaults' => array(
+                        'controller' => 'SubmissionNoteController',
+                    )
+                )
+            ),
             'case_conditions_undertakings' => array(
                 'type' => 'segment',
                 'options' => array(
@@ -252,16 +271,32 @@ return array(
                     )
                 )
             ),
-            'conditions_undertakings' => array(
+            'conditions' => array(
                 'type' => 'segment',
                 'options' => array(
-                    'route' => '/licence/:licence/case/:case/conditions-undertakings/:action[/:id]',
+                    'route' => '/licence/:licence/case/:case/conditions/:action[/:id]',
                     'constraints' => array(
                         'case' => '[0-9]+',
                         'id' => '[0-9]+'
                     ),
                     'defaults' => array(
-                        'controller' => 'CaseConditionUndertakingController',
+                        'controller' => 'ConditionUndertakingController',
+                        'type' => 'condition'
+                    )
+                )
+            ),
+
+            'undertakings' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/licence/:licence/case/:case/undertaking/:action[/:id]',
+                    'constraints' => array(
+                        'case' => '[0-9]+',
+                        'id' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'ConditionUndertakingController',
+                        'type' => 'undertaking'
                     )
                 )
             ),
@@ -296,10 +331,13 @@ return array(
             'CaseComplaintController' => 'Olcs\Controller\CaseComplaintController',
             'ComplaintController' => 'Olcs\Controller\ComplaintController',
             'CaseConvictionController' => 'Olcs\Controller\CaseConvictionController',
-            'SubmissionController' => 'Olcs\Controller\SubmissionController',
+            'SubmissionController' => 'Olcs\Controller\Submission\SubmissionController',
             'CaseStayController' => 'Olcs\Controller\CaseStayController',
             'CasePenaltyController' => 'Olcs\Controller\CasePenaltyController',
             'CaseProhibitionController' => 'Olcs\Controller\CaseProhibitionController',
+            'ConditionUndertakingController' => 'Olcs\Controller\ConditionUndertakingController',
+            'ConditionUndertakingController' => 'Olcs\Controller\ConditionUndertakingController',
+            'SubmissionNoteController' => 'Olcs\Controller\Submission\SubmissionNoteController',
             'CaseConditionUndertakingController' => 'Olcs\Controller\CaseConditionUndertakingController',
             'DocumentController' => 'Olcs\Controller\DocumentController'
         )

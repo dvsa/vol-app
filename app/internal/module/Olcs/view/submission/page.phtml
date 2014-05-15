@@ -7,10 +7,12 @@
         )
     );
 ?>
-<div  class="two-thirds">
-<?php 
-    foreach($this->params['submission']['data'] as $key => $section) { 
+<div class="full-width">
+<?php
+    foreach($this->params['submission']['views'] as $key => $section) { 
         echo $this->partial('submission/partials/section.phtml', array(
+        'config' => $this->params['submissionConfig'],
+        'routeParams' => $this->params['routeParams'],
         'heading' => $key,
         'data' => $section)); 
     } 
