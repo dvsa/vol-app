@@ -80,6 +80,7 @@ class WorkshopController extends AbstractVehicleSafetyController
                                 'addressLine1',
                                 'addressLine2',
                                 'addressLine3',
+                                'addressLine4',
                                 'city',
                                 'country',
                                 'postcode'
