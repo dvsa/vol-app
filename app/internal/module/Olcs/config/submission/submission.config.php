@@ -1,7 +1,34 @@
 <?php
 return array(
     'sections' => array(
-        'case-summary-info' => null,
+        'case-summary-info' => array(
+            'view' => 'submission/partials/case-summary',
+            'dataPath' => 'VosaCase',
+            'bundle' => array(
+                'children' => array(
+                    'categories' => array(
+                        'properties' => array(
+                            'id',
+                            'name'
+                        )
+                    ),
+                    'convictions' => array(
+                        'properties' => 'ALL'
+                    ),
+                    'licence' => array(
+                        'properties' => 'ALL',
+                        'children' => array(
+                            'trafficArea' => array(
+                                'properties' => 'ALL'
+                            ),
+                            'organisation' => array(
+                                'properties' => 'ALL'
+                            )
+                        )
+                    )
+                )
+            )
+        ),
         'persons' => null,
         'transport-managers' => array(
             'exclude' => array(
@@ -23,7 +50,9 @@ return array(
         'undertakings' => null,
         'annual-test-history' => null,
         'prohibition-history' => null,
-        'conviction-history' => null,
+        'conviction-history' => array(
+            'view' => 'submission/partials/conviction-history',
+        ),
         'bus-services-registered' => array(
             'exclude' => array(
                 'column' => 'goodsOrPsv',

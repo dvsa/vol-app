@@ -34,6 +34,11 @@ return array(
                                                     'label' => 'Recommendation',
                                                     'route' => 'submission',
                                                     'action' => 'recommendation'
+                                                ),
+                                                array(
+                                                    'label' => 'Add note',
+                                                    'route' => 'note',
+                                                    'action' => 'add'
                                                 )
                                             )
                                         ),
@@ -51,6 +56,11 @@ return array(
                                                     'label' => 'Recommendation',
                                                     'route' => 'submission',
                                                     'action' => 'recommendation'
+                                                ),
+                                                array(
+                                                    'label' => 'Add note',
+                                                    'route' => 'note',
+                                                    'action' => 'add'
                                                 )
                                             )
                                         )
@@ -159,27 +169,27 @@ return array(
                                     'action' => 'index'
                                 ),
                                 array(
-                                    'label' => 'Case Conditions &amp; Undertakings',
+                                    'label' => 'Conditions &amp; Undertakings',
                                     'route' => 'case_conditions_undertakings',
                                     'action' => 'index',
                                     'pages' => array(
                                         array(
                                             'label' => 'Add Condition',
-                                            'route' => 'condition',
+                                            'route' => 'conditions',
                                             'action' => 'add'
                                         ),
                                         array(
                                             'label' => 'Edit Condition',
-                                            'route' => 'condition',
+                                            'route' => 'conditions',
                                         ),
                                         array(
                                             'label' => 'Add Undertaking',
-                                            'route' => 'undertaking',
+                                            'route' => 'undertakings',
                                             'action' => 'add'
                                         ),
                                         array(
                                             'label' => 'Edit Undertaking',
-                                            'route' => 'undertaking',
+                                            'route' => 'undertakings',
                                         )
                                     ),
                                 ),

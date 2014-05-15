@@ -27,10 +27,16 @@ class CaseConditionUndertakingController extends CaseController
         $caseId = $this->fromRoute('case');
         $licenceId = $this->fromRoute('licence');
 
+        $table = $this->params()->fromPost('table');
+
+        $id = $this->fromRoute('id');
+
         $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licenceId)));
 
-        // checks for CRUD and redirects as required
-        $this->checkForCrudAction('conditionUndertaking', array('case' => $caseId, 'licence' => $licenceId), 'id');
+        if (!empty($table)) {
+            // checks for CRUD and redirects as required
+            $this->checkForCrudAction($table, array('case' => $caseId, 'licence' => $licenceId), 'id');
+        }
 
         // no crud, generate the main complaints table
         $view = $this->getView();

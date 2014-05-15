@@ -26,6 +26,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
                 'fromRoute',
                 'setBreadcrumb',
                 'checkForCrudAction',
+                'params',
                 'getView',
                 'getTabInformationArray',
                 'getCase',
@@ -47,6 +48,17 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
         $viewMock = $this->getMock('\stdClass', array('setVariables', 'setTemplate'));
         $viewMock->expects($this->once())
                 ->method('setVariables');
+
+        $mockParams = $this->getMock('\stdClass', array('fromPost'));
+
+        $mockParams->expects($this->once())
+                ->method('fromPost')
+                ->with('table')
+                ->will($this->returnValue('conditionUndertaking'));
+
+        $controller->expects($this->once())
+            ->method('params')
+            ->will($this->returnValue($mockParams));
 
         $controller->expects($this->at(0))
             ->method('fromRoute')
