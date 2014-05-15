@@ -99,7 +99,7 @@ class CaseController extends FormActionController
             )
         );
 
-        $config = $config = $this->getServiceLocator()->get('Config');
+        $config = $this->getServiceLocator()->get('Config');
         $submissionActions = $config['static-list-data'];
         $results = $this->makeRestCall('Submission', 'GET', array('vosaCase' => $caseId), $bundle);
 
@@ -268,6 +268,11 @@ class CaseController extends FormActionController
                 'label' => 'Conditions &amp; Undertakings',
                 'url' => $pm->get('url')->fromRoute('case_conditions_undertakings', ['tab' => 'conditions-undertakings'], [], true),
             ],
+            'impounding' => [
+                'key' => 'impounding',
+                'label' => 'Impounding',
+                'url' => $pm->get('url')->fromRoute('case_impounding', ['tab' => 'impounding', 'action' => null], [], true),
+            ]
         ];
 
         return $tabs;
