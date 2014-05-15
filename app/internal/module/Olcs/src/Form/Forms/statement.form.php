@@ -40,12 +40,12 @@ return [
                     'dateStopped' => [
                         'type' => 'dateSelectWithEmpty',
                         'label' => 'Date stopped',
-                        'filters' => '\Common\Form\Elements\InputFilters\DateNotInFuture'
+                        'filters' => '\Common\Form\Elements\InputFilters\StopDateBeforeRequestDate'
                     ],
                     'dateRequested' => [
                         'type' => 'dateSelectWithEmpty',
                         'label' => 'Date requested',
-                        'filters' => '\Common\Form\Elements\InputFilters\RequestDateBeforeStopDate'
+                        'filters' => '\Common\Form\Elements\InputFilters\DateNotInFuture'
                     ],
                     'contactType' => [
                         'type' => 'select',
