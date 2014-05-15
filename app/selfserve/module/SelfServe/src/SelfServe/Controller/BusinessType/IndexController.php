@@ -458,18 +458,18 @@ class IndexController extends AbstractApplicationController
      * @param \Zend\Form $form
      * @param array $journeyData
      */
-    protected function processLookupCompany($valid_data, $form)
+    protected function processLookupCompany($validData, $form)
     {
-        if (array_key_exists('registered-company', $valid_data)) {
+        if (array_key_exists('registered-company', $validData)) {
             $key = 'registered-company';
-        } elseif (array_key_exists('llp', $valid_data)) {
+        } elseif (array_key_exists('llp', $validData)) {
             $key = 'llp';
         } else {
             return $form;
         }
         $result = $this->makeRestCall(
             'CompaniesHouse', 'GET', array(
-            'type' => 'numberSearch', 'value' => $valid_data[$key]['company_number'])
+            'type' => 'numberSearch', 'value' => $validData[$key]['company_number'])
         );
         if ($result['Count'] == 1) {
             $companyName = $result['Results'][0]['CompanyName'];
@@ -479,7 +479,7 @@ class IndexController extends AbstractApplicationController
             $form->get($key)->get('company_number')->setMessages(
                 array('companyNumber' => array(
                     'Sorry, we couldn\'t find any matching companies, '
-                    . 'please try again or enter your details manualy below'))
+                    . 'please try again or enter your details manually below'))
             );
         }
     }
