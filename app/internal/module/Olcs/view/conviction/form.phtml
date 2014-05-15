@@ -1,10 +1,8 @@
 <?php
-/**
- * Removed for now and hardcoded into layout - orders of Sam
- */
-//foreach($this->headScript as $headScript) {
-        //$this->headScript()->appendFile($this->basePath() . $headScript);
-    //}
+    foreach($this->headScript as $headScript) {
+        $this->headScript()->appendFile($this->basePath() . $headScript);
+    }
+
     echo $this->render(
         '/partials/page-header.phtml',
         array(
