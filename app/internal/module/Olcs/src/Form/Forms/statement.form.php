@@ -71,6 +71,10 @@ return [
             ]
         ],
         'elements' => [
+            'generateDocument' => [
+                'type' => 'checkbox-boolean',
+                'label' => 'Generate document',
+            ],
             'case' => [
                 'type' => 'hidden'
             ],

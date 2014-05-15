@@ -208,7 +208,7 @@ class CaseStatementController extends CaseController
 
         $this->processEdit($data, 'Statement');
 
-        $bookmarks = $this->mapDataToBookmarks($data);
+        $bookmarks = $this->mapDocumentData($data);
 
         $documentData = $this->sendPost('Olcs\Document\Generate', [
             'bookmarks' => $bookmarks,
@@ -224,7 +224,7 @@ var_dump($documentData);exit;
         );
     }
 
-    public function mapDataToBookmarks($data)
+    public function mapDocumentData($data)
     {
         $bookmarks = [];
         $bookmarks['TAName'] = '<TAName>';

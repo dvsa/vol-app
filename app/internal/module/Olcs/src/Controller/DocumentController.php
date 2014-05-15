@@ -54,7 +54,6 @@ class DocumentController extends AbstractActionController
 
     public function generateDocumentAction()
     {
-
         $country = $this->params('country');
         $format = $this->params('format');
         $templateId = $this->params('templateId');
