@@ -285,21 +285,6 @@ return array(
                     )
                 )
             ),
-            'case_impounding' => array(
-                'type' => 'segment',
-                'options' => array(
-                    'route' => '/licence/[:licence]/case/[:case]/action/manage/impounding[/:action][/:id]',
-                    'constraints' => array(
-                        'licence' => '[0-9]+',
-                        'case' => '[0-9]+',
-                        'id' => '[0-9]+'
-                    ),
-                    'defaults' => array(
-                        'controller' => 'CaseImpoundingController',
-                        'action' => 'index'
-                    )
-                )
-            ),
             'undertakings' => array(
                 'type' => 'segment',
                 'options' => array(
@@ -314,6 +299,21 @@ return array(
                     )
                 )
             ),
+            'case_impounding' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/licence/[:licence]/case/[:case]/action/manage/impounding[/:action][/:id]',
+                    'constraints' => array(
+                        'licence' => '[0-9]+',
+                        'case' => '[0-9]+',
+                        'id' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'CaseImpoundingController',
+                        'action' => 'index'
+                    )
+                )
+            )
         ),
     ),
     'tables' => array(

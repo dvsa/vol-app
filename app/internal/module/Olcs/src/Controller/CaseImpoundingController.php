@@ -56,7 +56,7 @@ class CaseImpoundingController extends CaseController
 
         $variables = array(
             'tab' => 'impounding',
-            'table' => $this->buildTable('Impounding', $impoundings, array())
+            'table' => $this->buildTable('impounding', $impoundings, array())
         );
 
         $caseVariables = $this->getCaseVariables($caseId, $variables);
