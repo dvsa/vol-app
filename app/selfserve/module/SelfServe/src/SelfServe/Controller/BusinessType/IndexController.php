@@ -74,7 +74,10 @@ class IndexController extends AbstractApplicationController
         // get initial form
         $stepFormConfig = $formGenerator->getFormConfig($section);
         if (isset($stepFormConfig[$section]['fieldsets'])) {
-            $stepFormConfig[$section] = $formGenerator->addFieldset($stepFormConfig[$section], $this->determineFormFieldset());
+            $stepFormConfig[$section] = $formGenerator->addFieldset(
+                $stepFormConfig[$section],
+                $this->determineFormFieldset()
+            );
         }
 
         // set form config on formGenerator
@@ -90,11 +93,14 @@ class IndexController extends AbstractApplicationController
             ));
         }
 
+
         // pre fill form data if persisted
         $formData = $this->getPersistedFormData();
         if (isset($formData)) {
             $form->setData($formData);
         }
+
+
 
         // check for submit buttons
         $submitPosted = $this->determineSubmitButtonPressed($this->getRequest());
@@ -133,11 +139,14 @@ class IndexController extends AbstractApplicationController
             array('application_id' => $applicationId)
         );
 
+
         // render the view
         $view = new ViewModel(['form' => $form,
                                 'completionStatus' => $completionStatus['Results'][0],
                                 'applicationId' => $applicationId]);
         $view->setTemplate('self-serve/business/index');
+
+
 
         return $this->renderLayoutWithSubSections(
             $view,
@@ -201,16 +210,16 @@ class IndexController extends AbstractApplicationController
      */
     public function processBusinessType($validData, $form)
     {
-        $licence = $this->getLicenceEntity();
+        $organisation = $this->getOrganisationEntity();
         $applicationId = $this->params()->fromRoute('applicationId');
 
         $data = array(
-            'id' => $licence['id'],
+            'id' => $organisation['id'],
             'organisationType' => $validData['business-type']['business-type'],
-            'version' => $validData['version'],
+            'version' => $organisation['version'],
         );
 
-        $this->makeRestCall('LicenceOrganisation', 'PUT', $data);
+        $this->makeRestCall('Organisation', 'PUT', $data);
 
         $nextStep = $this->evaluateNextStep($form);
         $this->redirect()->toRoute(
@@ -405,6 +414,7 @@ class IndexController extends AbstractApplicationController
     private function determineFormFieldset()
     {
         $organisation = $this->getOrganisationEntity();
+
         if ($this->getCurrentStep() == 'details') {
 
             switch ($organisation['organisationType']) {
@@ -475,6 +485,7 @@ class IndexController extends AbstractApplicationController
         );
 
         $subSections = $this->getSubSections();
+
 
         if ($current != 'business-type' && !array_key_exists($current, $subSections)) {
             reset($subSections);

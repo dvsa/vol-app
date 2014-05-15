@@ -32,6 +32,38 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
 
     }
 
+
+    private function formGeneratorMocking()
+    {
+
+        $fieldset = new \Zend\Form\Fieldset();
+        $fieldset->add([
+            'name' => 'edit_business_type',
+        ]);
+
+        $formMock = $this->getMock('\Zend\Form\Form', array('get'));
+        $formMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValue($fieldset));
+
+
+        $mock = $this->getMock('\stdClass', [
+            'getFormConfig', 'setFormConfig', 'createForm', 'addFieldset',
+        ]);
+        $mock->expects($this->any())
+            ->method('createForm')
+            ->will($this->returnValue($formMock));
+
+        $mock->expects($this->any())
+            ->method('getFormConfig')
+            ->will($this->returnValue(array(
+                'business-type' => ['fieldsets' => []],
+            )));
+
+        return $mock;
+    }
+
+
     public function testBusinessTypeWithNoTypePersisted()
     {
         $this->setUpMockController(array(
@@ -39,7 +71,14 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
             'makeRestCall',
             'generateSectionForm',
             'getPersistedFormData',
+            'getFormGenerator',
         ));
+
+        $formMock = $this->formGeneratorMocking();
+
+        $this->controller->expects($this->once())
+            ->method('getFormGenerator')
+            ->will($this->returnValue($formMock));
 
         $mockParams = $this->getMock('\stdClass', array('fromRoute'));
         $mockParams->expects($this->any())
@@ -53,10 +92,6 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
         $this->controller->expects($this->any())
             ->method('makeRestCall')
             ->will($this->returnValueMap($this->makeRestCallMap()));
-
-        $this->controller->expects($this->once())
-            ->method('generateSectionForm')
-            ->will($this->returnValue($this->getMock('\Zend\Form\Form')));
 
         $this->controller->expects($this->once())
             ->method('getPersistedFormData')
@@ -66,17 +101,31 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
         $this->controller->generateStepFormAction();
     }
 
-    public function testSoleTraderWithTypePersisted()
+    /**
+     * @group thecurrent
+     */
+    public function testDetailsTradersWithTypePersisted()
     {
-        $this->step = 'sole-trader';
+        $this->step = 'details';
         $this->applicationId = 2;
 
         $this->setUpMockController(array(
             'params',
             'makeRestCall',
-            'generateSectionForm',
             'getPersistedFormData',
+            'getFormGenerator',
+            'getUrlFromRoute',
         ));
+
+        $params = new \Zend\Stdlib\Parameters();
+        $params->set('sole-trader', ['trading_names' => ['submit_add_trading_name' => '']]);
+        $this->controller->getRequest()->setPost($params);
+
+        $formMock = $this->formGeneratorMocking();
+
+        $this->controller->expects($this->once())
+            ->method('getFormGenerator')
+            ->will($this->returnValue($formMock));
 
         $mockParams = $this->getMock('\stdClass', array('fromRoute'));
         $mockParams->expects($this->any())
@@ -92,8 +141,48 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValueMap($this->makeRestCallMap()));
 
         $this->controller->expects($this->once())
-            ->method('generateSectionForm')
-            ->will($this->returnValue($this->getMock('\Zend\Form\Form')));
+            ->method('getPersistedFormData')
+            ->will($this->returnValue(array()));
+
+
+        $this->controller->generateStepFormAction();
+    }
+
+    /**
+     * @group thecurrent
+     */
+    public function testDetailsWithTypePersisted()
+    {
+        $this->step = 'details';
+        $this->applicationId = 2;
+
+        $this->setUpMockController(array(
+            'params',
+            'makeRestCall',
+            'getPersistedFormData',
+            'getFormGenerator',
+            'getUrlFromRoute',
+        ));
+
+
+        $formMock = $this->formGeneratorMocking();
+
+        $this->controller->expects($this->once())
+            ->method('getFormGenerator')
+            ->will($this->returnValue($formMock));
+
+        $mockParams = $this->getMock('\stdClass', array('fromRoute'));
+        $mockParams->expects($this->any())
+            ->method('fromRoute')
+            ->will($this->returnValueMap($this->fromRouteMap()));
+
+        $this->controller->expects($this->any())
+            ->method('params')
+            ->will($this->returnValue($mockParams));
+
+        $this->controller->expects($this->any())
+            ->method('makeRestCall')
+            ->will($this->returnValueMap($this->makeRestCallMap()));
 
         $this->controller->expects($this->once())
             ->method('getPersistedFormData')
@@ -101,6 +190,37 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
 
 
         $this->controller->generateStepFormAction();
+    }
+
+    /**
+     * @group thecurrent
+     */
+    public function testGetBusinessTypeFormData()
+    {
+        $this->applicationId = 2;
+        $this->setUpMockController(array(
+            'params',
+            'makeRestCall',
+            'getPersistedFormData',
+            'getFormGenerator',
+            'getUrlFromRoute',
+        ));
+
+        $mockParams = $this->getMock('\stdClass', array('fromRoute'));
+        $mockParams->expects($this->any())
+            ->method('fromRoute')
+            ->will($this->returnValueMap($this->fromRouteMap()));
+
+        $this->controller->expects($this->any())
+            ->method('params')
+            ->will($this->returnValue($mockParams));
+
+        $this->controller->expects($this->any())
+            ->method('makeRestCall')
+            ->will($this->returnValueMap($this->makeRestCallMap()));
+
+        $result = $this->controller->getBusinessTypeFormData();
+        $this->assertArrayHasKey('business-type', $result);
     }
 
     public function testStepWithNoTypePersisted()
@@ -141,104 +261,6 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
         $this->assertInstanceOf('\Zend\Http\Response', $action);
     }
 
-    public function testDetailsActionWithNoTypePersisted()
-    {
-        $this->step = 'sole-trader';
-        $this->setUpMockController(array(
-            'params',
-            'makeRestCall',
-            'redirect'
-        ));
-
-        $mockParams = $this->getMock('\stdClass', array('fromRoute'));
-        $mockParams->expects($this->any())
-            ->method('fromRoute')
-            ->will($this->returnValueMap($this->fromRouteMap()));
-
-        $this->controller->expects($this->any())
-            ->method('params')
-            ->will($this->returnValue($mockParams));
-
-        $this->controller->expects($this->any())
-            ->method('makeRestCall')
-            ->will($this->returnValueMap($this->makeRestCallMap()));
-
-        $responseMock = $this->getMock('\Zend\Http\Response');
-
-        $mockRedirect = $this->getMock('\stdClass', array('toRoute'));
-        $mockRedirect->expects($this->any())
-            ->method('toRoute')
-            ->will($this->returnValue($responseMock));
-
-
-        $this->controller->expects($this->any())
-            ->method('redirect')
-            ->will($this->returnValue($mockRedirect));
-
-        $action = $this->controller->detailsAction();
-        $this->assertInstanceOf('\Zend\Http\Response', $action);
-    }
-
-    public function testDetailsActionWithTypePersisted()
-    {
-        $this->step = 'sole-trader';
-        $this->applicationId = 2;
-
-        $this->setUpMockController(array(
-            'params',
-            'makeRestCall',
-            'redirect',
-            'generateSectionForm',
-            'forward',
-        ));
-
-        $mockParams = $this->getMock('\stdClass', array('fromRoute'));
-        $mockParams->expects($this->any())
-            ->method('fromRoute')
-            ->will($this->returnValueMap($this->fromRouteMap()));
-
-        $this->controller->expects($this->any())
-            ->method('params')
-            ->will($this->returnValue($mockParams));
-
-        $this->controller->expects($this->any())
-            ->method('makeRestCall')
-            ->will($this->returnValueMap($this->makeRestCallMap()));
-
-        $responseMock = $this->getMock('\Zend\Http\Response');
-
-        $mockRedirect = $this->getMock('\stdClass', array('toRoute'));
-        $mockRedirect->expects($this->any())
-            ->method('toRoute')
-            ->will($this->returnValue($responseMock));
-
-        $fieldsetMock = $this->getMock('\stdClass', array('getOptions'));
-        $fieldsetMock->expects($this->once())
-            ->method('getOptions')
-            ->will($this->returnValue(['next_step' => ['values' => ['org_type.st']]]));
-
-        $mockForm = $this->getMock('\Zend\Form\Form', array('get'));
-        $mockForm->expects($this->once())
-            ->method('get')
-            ->will($this->returnValue($fieldsetMock));
-
-        $this->controller->expects($this->once())
-            ->method('generateSectionForm')
-            ->will($this->returnValue($mockForm));
-
-        $mockForward = $this->getMock('\stdClass', array('dispatch'));
-        $mockForward->expects($this->once())
-            ->method('dispatch')
-            ->will($this->returnValue($responseMock));
-
-        $this->controller->expects($this->once())
-            ->method('forward')
-            ->will($this->returnValue($mockForward));
-
-
-        $action = $this->controller->detailsAction();
-        $this->assertInstanceOf('\Zend\Http\Response', $action);
-    }
 
     private function fromRouteMap()
     {
@@ -271,6 +293,7 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
                 'organisation' => [
                     'id' => 1,
                     'organisationType' => 'org_type.st',
+                    'version' => 1,
                 ]
             ]
         ];
