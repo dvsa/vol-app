@@ -39,7 +39,7 @@ return array(
         ),
         array(
             'title' => 'Presiding TC/DTC',
-            'format' => '{{tcName}}'
+            'format' => '{{name}}'
         ),
         array(
             'title' => 'Outcome',

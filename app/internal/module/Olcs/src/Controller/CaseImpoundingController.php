@@ -244,8 +244,8 @@ class CaseImpoundingController extends CaseController
 
         if (!empty($results)) {
             foreach ($results as $key => $result) {
-                if (isset($result['presidingTc']['tcName'])) {
-                    $results[$key]['tcName'] = $result['presidingTc']['tcName'];
+                if (isset($result['presidingTc']['name'])) {
+                    $results[$key]['name'] = $result['presidingTc']['name'];
                 }
 
                 if (isset($result['outcome']['handle'])  && isset($static['impounding_outcome'][$result['outcome']['handle']])) {
@@ -378,7 +378,7 @@ class CaseImpoundingController extends CaseController
                         ),
                         'presidingTc' => array(
                             'properties' => array(
-                                'tcName'
+                                'name'
                             ),
                         ),
                         'outcome' => array(

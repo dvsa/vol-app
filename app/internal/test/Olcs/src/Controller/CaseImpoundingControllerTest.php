@@ -502,7 +502,7 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
             'impoundings' => array(
                 0 => array(
                     'presidingTc' => array(
-                        'tcName' => 'Name of TC'
+                        'name' => 'Name of TC'
                     ),
                     'outcome' => array(
                         'handle' => 'impounding_outcome.1'
