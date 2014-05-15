@@ -1,10 +1,11 @@
 <?php
 
+$translationPrefix = 'safety-inspection-providers.table';
+
 return array(
     'variables' => array(
-        'title' => 'Safety inspection providers',
-        'empty_message' => 'Please tell us about who will carry out the safety inspections on the vehicles and trailers
-            you intend to operate under your licence.',
+        'title' => $translationPrefix . '.title',
+        'empty_message' => $translationPrefix . '.empty_message',
         'within_form' => true
     ),
     'settings' => array(
@@ -20,21 +21,20 @@ return array(
     ),
     'columns' => array(
         array(
-            'title' => '',
             'width' => 'checkbox',
             'type' => 'Selector'
         ),
         array(
-            'title' => 'Provider\'s name',
+            'title' => $translationPrefix . '.providerName',
             'name' => 'fao'
         ),
         array(
-            'title' => 'External?',
+            'title' => $translationPrefix . '.external',
             'name' => 'isExternal',
             'formatter' => 'YesNo'
         ),
         array(
-            'title' => 'Workshop address',
+            'title' => $translationPrefix . '.address',
             'formatter' => 'Address'
         )
     )

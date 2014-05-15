@@ -20,6 +20,13 @@ use Zend\View\Model\ViewModel;
 abstract class AbstractJourneyController extends FormActionController
 {
     /**
+     * Holds the form tables
+     *
+     * @var array
+     */
+    protected $formTables;
+
+    /**
      * Data map
      *
      * @var array
@@ -668,6 +675,18 @@ abstract class AbstractJourneyController extends FormActionController
     }
 
     /**
+     * Get form table data
+     *
+     * @param int $id
+     * @param string $name
+     * @return array
+     */
+    protected function getFormTableData($id, $name)
+    {
+        return array();
+    }
+
+    /**
      * Get table settings
      *
      * This method should be overridden
@@ -1006,6 +1025,17 @@ abstract class AbstractJourneyController extends FormActionController
     }
 
     /**
+     * Alter the action form
+     *
+     * @param Form $form
+     * @return Form
+     */
+    protected function alterActionForm($form)
+    {
+        return $form;
+    }
+
+    /**
      * Render the section
      *
      * @return Response
@@ -1072,22 +1102,70 @@ abstract class AbstractJourneyController extends FormActionController
                 return $data;
             }
 
-            $form = $this->generateFormWithData($this->getFormName(), $this->getFormCallback(), $data);
+            if ($this->isAction() || empty($this->formTables)) {
+                $form = $this->generateFormWithData($this->getFormName(), $this->getFormCallback(), $data);
+            } else {
+                $tableConfigs = array();
 
-            if ($this->getStepNumber() == 0) {
-                $form->get('form-actions')->remove('back');
-            }
+                foreach ($this->formTables as $table => $config) {
+                    $tableConfigs[$table] = array(
+                        'config' => $config,
+                        'data' => $this->getFormTableData($this->getIdentifier(), $table)
+                    );
+                }
 
-            if ($this->isAction() && $this->getActionName() == 'edit') {
-                $form->get('form-actions')->remove('addAnother');
+                $form = $this->generateTableFormWithData(
+                    $this->getFormName(),
+                    array(
+                        'success' => $this->getFormCallback(),
+                        'crud_action' => $this->getFormCallback() . 'Crud'
+                    ),
+                    $data,
+                    $tableConfigs
+                );
             }
 
             if ($form instanceof Response || $form instanceof ViewModel) {
                 return $form;
             }
 
-            $view->setVariable('form', $this->alterForm($form));
+            $view->setVariable('form', $form);
         }
+    }
+
+    /**
+     * Alter the form before validation
+     *
+     * @param Form $form
+     * @return Form
+     */
+    protected function alterFormBeforeValidation($form)
+    {
+        if ($this->getStepNumber() == 0) {
+            $form->get('form-actions')->remove('back');
+        }
+
+        if ($this->isAction() && $this->getActionName() == 'edit') {
+            $form->get('form-actions')->remove('addAnother');
+        }
+
+        $alterMethod = $this->getAlterFormMethod();
+
+        return $this->$alterMethod($form);
+    }
+
+    /**
+     * Determine the alter form method name
+     *
+     * @return string
+     */
+    protected function getAlterFormMethod()
+    {
+        if ($this->isAction()) {
+            return 'alterActionForm';
+        }
+
+        return 'alterForm';
     }
 
     /**
@@ -1182,6 +1260,12 @@ abstract class AbstractJourneyController extends FormActionController
         $sectionName = $this->getSectionName();
         $subSectionName = $this->getSubSectionName();
 
+        $crudAction = $this->checkForCrudAction();
+
+        if ($crudAction instanceof Response || $crudAction instanceof ViewModel) {
+            return $crudAction;
+        }
+
         if (!$this->isSectionAccessible($sectionName, null)
             || !$this->isSectionAccessible($sectionName, $subSectionName)) {
             return $this->goToNextStep();
@@ -1195,12 +1279,6 @@ abstract class AbstractJourneyController extends FormActionController
 
         if ($this->isAction() && $this->isButtonPressed('cancel')) {
             return $this->goBackToSection();
-        }
-
-        $crudAction = $this->checkForCrudAction();
-
-        if ($crudAction instanceof Response || $crudAction instanceof ViewModel) {
-            return $crudAction;
         }
     }
 
@@ -1303,10 +1381,22 @@ abstract class AbstractJourneyController extends FormActionController
      * Save data
      *
      * @param array $data
+     * @param string $service
+     * @return array
      */
-    protected function save($data)
+    protected function save($data, $service = null)
     {
-        $this->makeRestCall($this->getService(), 'PUT', $data);
+        $method = 'POST';
+
+        if (isset($data['id']) && !empty($data['id'])) {
+            $method = 'PUT';
+        }
+
+        if (empty($service)) {
+            $service = $this->getService();
+        }
+
+        return $this->makeRestCall($service, $method, $data);
     }
 
     /**
@@ -1328,6 +1418,59 @@ abstract class AbstractJourneyController extends FormActionController
         }
 
         return $this->goToNextStep();
+    }
+
+    /**
+     * Process save when we have a table form
+     *
+     * @param array $data
+     */
+    protected function processSaveCrud($data)
+    {
+        $oldData = $data;
+
+        $data = $this->processDataMapForSave($data, $this->getDataMap());
+
+        $response = $this->saveCrud($data);
+
+        if ($response instanceof Response || $response instanceof ViewModel) {
+            return $response;
+        }
+
+        foreach (array_keys($this->formTables) as $table) {
+
+            $action = strtolower($oldData[$table]['action']);
+
+            if (empty($action)) {
+                continue;
+            }
+
+            if ($action == 'add') {
+                return $this->redirectToRoute(null, array('action' => $action), array(), true);
+            } else {
+                if (!isset($data[$table]['id']) || empty($data[$table]['id'])) {
+
+                    return $this->crudActionMissingId();
+                }
+                return $this->redirectToRoute(
+                    null,
+                    array('action' => $action, 'id' => $data[$table]['id']),
+                    array(),
+                    true
+                );
+            }
+        }
+    }
+
+    /**
+     * Save crud data
+     *
+     * @param array $data
+     * @return mixed
+     */
+    protected function saveCrud($data)
+    {
+        return $this->save($data);
     }
 
     /**

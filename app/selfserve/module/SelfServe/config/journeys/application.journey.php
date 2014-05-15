@@ -147,7 +147,15 @@ return array(
                     'psv-restricted'
                 ),
                 'subSections' => array(
+                    'FinancialHistory' => array(
 
+                    ),
+                    'LicenceHistory' => array(
+
+                    ),
+                    'ConvictionsPenalties' => array(
+
+                    )
                 )
             ),
             'ReviewDeclarations' => array(

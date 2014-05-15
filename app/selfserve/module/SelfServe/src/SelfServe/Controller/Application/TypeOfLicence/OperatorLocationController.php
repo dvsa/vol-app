@@ -28,8 +28,9 @@ class OperatorLocationController extends TypeOfLicenceController
      * Save data
      *
      * @param array $data
+     * @parem string $service
      */
-    protected function save($data)
+    protected function save($data, $service = null)
     {
         if ($data['niFlag'] == 1) {
             $data['goodsOrPsv'] = 'goods';

@@ -30,8 +30,9 @@ class TransportManagersController extends ApplicationController
      * Placeholder save method
      *
      * @param array $data
+     * @parem string $service
      */
-    protected function save($data)
+    protected function save($data, $service = null)
     {
     }
 }

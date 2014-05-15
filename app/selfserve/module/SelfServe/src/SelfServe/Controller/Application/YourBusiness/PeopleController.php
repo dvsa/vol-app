@@ -31,8 +31,9 @@ class PeopleController extends YourBusinessController
      * Save data
      *
      * @param array $data
+     * @parem string $service
      */
-    protected function save($data)
+    protected function save($data, $service = null)
     {
     }
 
