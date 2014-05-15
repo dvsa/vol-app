@@ -50,14 +50,22 @@ return [
                     'class' => 'extra-long'
                 ],
                 'elements' => [
-                    /*'actsi' => [
-                         'type' => 'select',
-                         'label' => 'Act/si'
+                    'parentCategory' => [
+                         'type' => 'selectAjax',
+                         'label' => 'Act/si',
+                         'class' => 'extra-long'
                     ],
-                    'conviction-description' => [
-                         'type' => 'select',
-                         'label' => 'Conviction description:'
-                    ],*/
+                    'category' => [
+                         'type' => 'selectAjax',
+                         'label' => 'Conviction description:',
+                         'class' => 'extra-long'
+                    ],
+                    'categoryText' => [
+                         'type' => 'textarea',
+                         'filters' => '\Common\Form\Elements\InputFilters\TextMax4000',
+                         'label' => 'Conviction description detail:',
+                        'class' => 'extra-long'
+                    ],
                     'dateOfOffence' => [
                          'type' => 'dateSelectWithEmpty',
                          'label' => 'Offence date:',
@@ -138,4 +146,3 @@ return [
         ]
     ]
 ];
-
