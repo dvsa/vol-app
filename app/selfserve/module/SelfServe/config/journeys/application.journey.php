@@ -170,7 +170,9 @@ return array(
                     'psv-special-restricted'
                 ),
                 'subSections' => array(
+                    'Summary' => array(
 
+                    )
                 )
             ),
             'PaymentSubmission' => array(

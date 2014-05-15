@@ -1,18 +1,18 @@
 <?php
 
 /**
- * ConvictionsPenalties Controller
+ * Summary Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-namespace SelfServe\Controller\Application\PreviousHistory;
+namespace SelfServe\Controller\Application\ReviewDeclarations;
 
 /**
- * ConvictionsPenalties Controller
+ * Summary Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ConvictionsPenaltiesController extends PreviousHistoryController
+class SummaryController extends ReviewDeclarationsController
 {
     /**
      * Render the section form
@@ -21,10 +21,7 @@ class ConvictionsPenaltiesController extends PreviousHistoryController
      */
     public function indexAction()
     {
-        $view = $this->getViewModel();
-        $view->setTemplate('self-serve/journey/placeholder');
-
-        return $this->renderSection($view);
+        return $this->renderSection();
     }
 
     /**

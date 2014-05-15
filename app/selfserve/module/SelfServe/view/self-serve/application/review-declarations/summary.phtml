@@ -1,0 +1,8 @@
+<h2 class="inline">Application summary</h2>
+<a href="<?php echo $this->url('selfserve/declarations-simple', ['applicationId' => $applicationId]) ?>" class="right-aligned    action--tertiary" target="_blank">View in another window</a>
+<?php
+
+if (isset($form)) {
+    $form->prepare();
+    echo $this->form($form);
+}

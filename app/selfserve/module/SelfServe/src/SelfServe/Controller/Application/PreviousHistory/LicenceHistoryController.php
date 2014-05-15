@@ -21,6 +21,19 @@ class LicenceHistoryController extends PreviousHistoryController
      */
     public function indexAction()
     {
-        return $this->renderSection();
+        $view = $this->getViewModel();
+        $view->setTemplate('self-serve/journey/placeholder');
+
+        return $this->renderSection($view);
+    }
+
+    /**
+     * Placeholder save method
+     *
+     * @param array $data
+     * @parem string $service
+     */
+    protected function save($data, $service = null)
+    {
     }
 }
