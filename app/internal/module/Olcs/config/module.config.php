@@ -249,6 +249,15 @@ return array(
                     )
                 )
             ),
+            'note' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/licence/:licence[/case/:case][/:type/:typeId][/:section]/note[/:action][/:id]',
+                    'defaults' => array(
+                        'controller' => 'SubmissionNoteController',
+                    )
+                )
+            ),
             'case_conditions_undertakings' => array(
                 'type' => 'segment',
                 'options' => array(
@@ -289,7 +298,7 @@ return array(
                         'type' => 'undertaking'
                     )
                 )
-            ),
+            )
         )
     ),
     'tables' => array(
@@ -311,12 +320,14 @@ return array(
             'CaseComplaintController' => 'Olcs\Controller\CaseComplaintController',
             'ComplaintController' => 'Olcs\Controller\ComplaintController',
             'CaseConvictionController' => 'Olcs\Controller\CaseConvictionController',
-            'SubmissionController' => 'Olcs\Controller\SubmissionController',
+            'SubmissionController' => 'Olcs\Controller\Submission\SubmissionController',
             'CaseStayController' => 'Olcs\Controller\CaseStayController',
             'CasePenaltyController' => 'Olcs\Controller\CasePenaltyController',
             'CaseProhibitionController' => 'Olcs\Controller\CaseProhibitionController',
-            'CaseConditionUndertakingController' => 'Olcs\Controller\CaseConditionUndertakingController',
-            'ConditionUndertakingController' => 'Olcs\Controller\ConditionUndertakingController'
+            'ConditionUndertakingController' => 'Olcs\Controller\ConditionUndertakingController',
+            'ConditionUndertakingController' => 'Olcs\Controller\ConditionUndertakingController',
+            'SubmissionNoteController' => 'Olcs\Controller\Submission\SubmissionNoteController',
+            'CaseConditionUndertakingController' => 'Olcs\Controller\CaseConditionUndertakingController'
         )
     ),
     'view_manager' => array(
