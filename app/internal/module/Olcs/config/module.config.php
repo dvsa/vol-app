@@ -323,7 +323,7 @@ return array(
                         'id' => '[0-9]+'
                     ),
                     'defaults' => array(
-                        'controller' => 'CaseRevokeController',
+                        'controller' => 'CaseRevokeController'
                     )
                 )
             ),
