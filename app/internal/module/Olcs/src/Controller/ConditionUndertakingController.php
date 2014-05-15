@@ -120,9 +120,10 @@ class ConditionUndertakingController extends FormActionController
             'GET',
             array('id' => $routeParams['id'], 'bundle' => json_encode($bundle))
         );
+
         // assign data as required by the form
         $data['condition-undertaking']['vosaCase'] = $data['condition-undertaking']['vosaCase']['id'];
-        $data['condition-undertaking']['licence'] = $data['condition-undertaking']['licence']['id'];
+        $data['condition-undertaking']['licence'] = $routeParams['licence'];
         $data['condition-undertaking']['isDraft'] = $data['condition-undertaking']['isDraft'] ? 1 : 0;
 
         $data = $this->determineFormAttachedTo($data);
@@ -355,12 +356,14 @@ class ConditionUndertakingController extends FormActionController
      */
     private function determineBreadcrumbs($routeParams)
     {
+
         $this->setBreadcrumb(
             array(
                 'licence_case_list/pagination' => array(
                     'licence' => $routeParams['licence']
                 ),
                 'case_conditions_undertakings' => array(
+                    'licence' => $routeParams['licence'],
                     'case' => $routeParams['case']
                 )
             )
