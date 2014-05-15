@@ -290,6 +290,7 @@ return array(
                 'options' => array(
                     'route' => '/licence/:licence/case/:case/undertaking/:action[/:id]',
                     'constraints' => array(
+                        'licence' => '[0-9]+',
                         'case' => '[0-9]+',
                         'id' => '[0-9]+'
                     ),
@@ -319,6 +320,7 @@ return array(
                 'options' => array(
                     'route' => '/licence/:licence/case/:case/revoke/:action[/:id]',
                     'constraints' => array(
+                        'licence' => '[0-9]+',
                         'case' => '[0-9]+',
                         'id' => '[0-9]+'
                     ),
@@ -327,7 +329,7 @@ return array(
                     )
                 )
             ),
-        )
+        ),
     ),
     'tables' => array(
         'config' => array(
@@ -352,7 +354,6 @@ return array(
             'CaseStayController' => 'Olcs\Controller\CaseStayController',
             'CasePenaltyController' => 'Olcs\Controller\CasePenaltyController',
             'CaseProhibitionController' => 'Olcs\Controller\CaseProhibitionController',
-            'ConditionUndertakingController' => 'Olcs\Controller\ConditionUndertakingController',
             'ConditionUndertakingController' => 'Olcs\Controller\ConditionUndertakingController',
             'SubmissionNoteController' => 'Olcs\Controller\Submission\SubmissionNoteController',
             'CaseImpoundingController' => 'Olcs\Controller\CaseImpoundingController',
