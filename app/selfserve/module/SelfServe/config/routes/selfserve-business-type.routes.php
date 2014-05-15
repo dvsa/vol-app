@@ -12,16 +12,6 @@ return [
             )
         ),
     ),
-    'business-details' => array(
-        'type' => 'segment',
-        'options' => array(
-            'route' => '/:applicationId/your-business/details',
-            'defaults' => array(
-                'controller' => 'Selfserve\BusinessType\Index',
-                'action' => 'details',
-            )
-        ),
-    ),
     'business-complete' => array(
         'type' => 'segment',
         'options' => array(

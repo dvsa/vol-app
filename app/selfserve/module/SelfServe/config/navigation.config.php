@@ -15,8 +15,8 @@ return array(
         ),
         'business-type' => array(
             'dbkey' => 'Yb',
-            'route' => 'business-details',
-            'step' => 'business-type',
+            'route' => 'business-type',
+            'step' => 'details',
             'label' => 'your-business'
         ),
         'operating-centre' => array(

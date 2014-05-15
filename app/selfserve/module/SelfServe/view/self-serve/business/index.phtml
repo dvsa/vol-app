@@ -1,14 +1,4 @@
 <?php
-    echo $this->render(
-        '/partials/page-header.phtml',
-        array(
-        'pageTitle' => 'Your business',
-        // 'pageSubTitle'=> 'Tell us about the type of licence you are applying for'
-        )
-    );
-?>
-
-<?php
     echo $this->partial('self-serve/forms/business-type', array(
         'form' => $form,
     ));
