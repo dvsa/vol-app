@@ -8,11 +8,9 @@
     );
 ?>
 
-<div class="two-thirds">
 <?php
     echo $this->partial('self-serve/forms/business-type', array(
         'form' => $form,
     ));
 ?>
 <a href="<?php echo $this->url('selfserve/licence-type', ['step' => 'operator-location'], null, true); ?>">Back</a>
-</div><!-- end .two-thirds -->

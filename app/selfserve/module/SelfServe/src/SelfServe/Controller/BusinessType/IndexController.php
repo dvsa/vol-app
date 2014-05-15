@@ -12,6 +12,7 @@ namespace SelfServe\Controller\BusinessType;
 use SelfServe\Controller\AbstractApplicationController;
 use Zend\View\Model\ViewModel;
 use Zend\Http\Response;
+use Zend\Form\Element as FormElement;
 
 /**
  * Business Type Controller
@@ -53,22 +54,39 @@ class IndexController extends AbstractApplicationController
             return $businessStatus;
         }
 
+        $formData = $this->getPersistedFormData();
+
+        //configure number of elements if trading names collection
+        $dynamicOptions = null;
+        $tradingNamesArray = $formData[$this->getCurrentStep()]['trading_names'];
+
+        if (!empty($tradingNamesArray)) {
+            $dynamicOptions = ['trading_names_number' => (count($tradingNamesArray['trading_name']) + 1)];
+        }
+
         // create form
-        $form = $this->generateSectionForm();
+        $form = $this->generateSectionForm($dynamicOptions);
+
         $form->get($this->getCurrentStep())->get('edit_business_type')->setValue($this->getUrlFromRoute(
             'selfserve/business-type',
             ['applicationId' => $applicationId]
         ));
 
-        // prefill form data if persisted
-        $formData = $this->getPersistedFormData($form);
-
+        // pre fill form data if persisted
         if (isset($formData)) {
             $form->setData($formData);
         }
 
         // check for submit buttons
         $submitPosted = $this->determineSubmitButtonPressed($this->getRequest());
+
+        $tradingNamesButton = $this->getRequest()->getPost(
+            $this->getCurrentStep()
+        )['trading_names']['submit_add_trading_name'];
+
+        if (isset($tradingNamesButton)) {
+            $submitPosted = 'add_trading_name';
+        }
 
         // Do the post if required
         switch ($submitPosted) {
@@ -77,7 +95,7 @@ class IndexController extends AbstractApplicationController
                 $form = $this->formPost($form, 'processLookupCompany', ['applicationId' => $applicationId]);
                 break;
             case 'add_trading_name':
-                $form->setValidationGroup([$step => ['trading_names']]);
+                $form->setValidationGroup([$step => ['trading_names' => ['trading_name']]]);
                 $form = $this->formPost($form, 'processAddTradingName', ['applicationId' => $applicationId]);
                 break;
             default:
@@ -226,16 +244,23 @@ class IndexController extends AbstractApplicationController
      */
     public function getRegisteredCompanyFormData()
     {
-        $organisation = $this->getOrganisationEntity();
+        $licence = $this->getLicenceForBusiness();
+        $organisation = $licence['organisation'];
 
-        return array(
+        foreach ($licence['tradingNames'] as $tradingName) {
+            $tradingNames[] = ['text' => $tradingName['tradingName']];
+        }
+        $tradingNames[] = ['text' => ''];
+
+        return [
             'version' => $organisation['version'],
-            'registered-company' => array(
+            'registered-company' => [
                 'company_number' => $organisation['registeredCompanyNumber'],
                 'company_name' => $organisation['name'],
                 'type_of_business' => $organisation['sicCode'],
-            ),
-        );
+                'trading_names' => ['trading_name' => $tradingNames],
+            ],
+        ];
     }
 
     /**
@@ -474,14 +499,28 @@ class IndexController extends AbstractApplicationController
      *
      * @param array $validData
      * @param \Zend\Form $form
-     * @param array $journeyData
      * @param array $params
      */
-    protected function processAddTradingName($validData, $form, $params)
+    protected function processAddTradingName($validData, $form = null, $params = null)
     {
-        echo 'FORM VALID adding trading name';
+        $tNames = $validData[$this->getCurrentStep()]['trading_names']['trading_name'];
+        foreach ($tNames as $key => $name) {
 
-        exit;
+            //remove all elements
+            $form->get($this->getCurrentStep())->get('trading_names')->get('trading_name')->remove($key);
+
+            //remove empty itemes
+            if (strlen(trim($name['text'])) == 0) {
+                unset($tNames[$key]);
+            }
+        }
+
+        $tNames[] = ['text' => ''];
+        $tNames = array_merge($tNames);
+
+        $validData[$this->getCurrentStep()]['trading_names']['trading_name'] = $tNames;
+
+        $form->setData($validData);
     }
 
     /**
@@ -503,6 +542,23 @@ class IndexController extends AbstractApplicationController
 
         $application = $this->makeRestCall('Application', 'GET', array('id' => $applicationId), $bundle);
         return $application['licence']['organisation'];
+    }
+
+    private function getLicenceForBusiness()
+    {
+        $applicationId = (int) $this->params()->fromRoute('applicationId');
+        $bundle = [
+            'children' => [
+                'licence' => [
+                    'children' => [
+                        'organisation',
+                        'tradingNames',
+                    ]
+                ],
+            ],
+        ];
+        $application = $this->makeRestCall('Application', 'GET', array('id' => $applicationId), $bundle);
+        return $application['licence'];
     }
 
     /**
