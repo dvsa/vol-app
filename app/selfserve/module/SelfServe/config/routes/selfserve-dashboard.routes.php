@@ -1,10 +1,10 @@
 <?php
 
 return [
-    'dashboard-home' => array(
+    'dashboard' => array(
         'type' => 'segment',
         'options' => array(
-            'route' => '/dashboard[/user/:userId]',
+            'route' => 'dashboard[/user/:userId]',
             'defaults' => array(
                 'controller' => 'Selfserve\Dashboard\Index',
                 'action' => 'index'
@@ -14,7 +14,7 @@ return [
     'determine-section' => array(
         'type' => 'segment',
         'options' => array(
-            'route' => '/:applicationId/continue-journey',
+            'route' => ':applicationId/continue-journey',
             'defaults' => array(
                 'controller' => 'Selfserve\Dashboard\Index',
                 'action' => 'determineSection'
@@ -24,7 +24,7 @@ return [
     'new-licence' => array(
         'type' => 'literal',
         'options' => array(
-            'route' => '/dashboard/application/create',
+            'route' => 'dashboard/application/create',
             'defaults' => array(
                 'controller' => 'Selfserve\Dashboard\Index',
                 'action' => 'createApplication'

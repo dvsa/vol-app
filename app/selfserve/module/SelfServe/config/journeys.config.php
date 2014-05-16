@@ -14,10 +14,10 @@ foreach ($routeArray as $rs) {
 }
 
 $allRoutes = array(
-    'selfserve' => array(
+    'home' => array(
         'type' => 'literal',
         'options' => array(
-            'route' => '/selfserve'
+            'route' => '/'
         ),
         'child_routes' => $routes
     )

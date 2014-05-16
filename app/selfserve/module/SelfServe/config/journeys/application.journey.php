@@ -7,6 +7,7 @@
  */
 return array(
     'Application' => array(
+        'homeRoute' => 'home/dashboard',
         'identifier' => 'applicationId',
         'completionService' => 'ApplicationCompletion',
         'completionStatusJourneyIdColumn' => 'application',
@@ -187,7 +188,9 @@ return array(
                     'psv-special-restricted'
                 ),
                 'subSections' => array(
+                    'Payment' => array(
 
+                    )
                 )
             )
         )

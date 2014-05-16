@@ -1,8 +1,8 @@
 <?php
 
 return array(
-    'payment' => array(
-        'name' => 'payment',
+    'application_payment-submission_payment' => array(
+        'name' => 'application_payment-submission_payment',
         'attributes' => array(
             'method' => 'post',
         ),
@@ -55,13 +55,9 @@ return array(
                         )
                     )
                 )
-            )
-        ),
-        'elements' => array(
-            'submit' => array(
-                'type' => 'submit',
-                'label' => 'Pay and submit',
-                'class' => 'action--primary large'
+            ),
+            array(
+                'type' => 'journey-buttons'
             )
         )
     )

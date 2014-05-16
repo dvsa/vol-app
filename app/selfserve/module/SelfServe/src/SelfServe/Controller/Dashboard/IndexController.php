@@ -42,7 +42,6 @@ class IndexController extends AbstractApplicationController
      */
     public function indexAction()
     {
-
         $user = $this->getUser();
         if ($user instanceof \Zend\Http\Response) {
             return $user;

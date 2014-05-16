@@ -20,6 +20,27 @@ use Zend\View\Model\ViewModel;
 abstract class AbstractJourneyController extends FormActionController
 {
     /**
+     * Holds the isAction
+     *
+     * @var boolean
+     */
+    protected $isAction;
+
+    /**
+     * Holds the layout
+     *
+     * @var string
+     */
+    protected $layout;
+
+    /**
+     * Render the navigation
+     *
+     * @var boolean
+     */
+    protected $renderNavigation = true;
+
+    /**
      * Holds the form tables
      *
      * @var array
@@ -200,7 +221,7 @@ abstract class AbstractJourneyController extends FormActionController
     protected $hasTable = null;
 
     /**
-     * Holds hasView
+     * Holds hasForm
      *
      * @var boolean
      */
@@ -259,6 +280,46 @@ abstract class AbstractJourneyController extends FormActionController
         $view->setTemplate('self-serve/journey/not-found');
 
         return $this->render($view);
+    }
+
+    /**
+     * Set the layout
+     *
+     * @param string $layout
+     */
+    protected function setLayout($layout)
+    {
+        $this->layout = $layout;
+    }
+
+    /**
+     * Get the layout
+     *
+     * @param string $layout
+     */
+    protected function getLayout()
+    {
+        return $this->layout;
+    }
+
+    /**
+     * Render navigation
+     *
+     * @param boolean $renderNavigation
+     */
+    protected function setRenderNavigation($renderNavigation)
+    {
+        $this->renderNavigation = $renderNavigation;
+    }
+
+    /**
+     * Get render navigation
+     *
+     * @return boolean
+     */
+    protected function getRenderNavigation()
+    {
+        return $this->renderNavigation;
     }
 
     /**
@@ -490,21 +551,36 @@ abstract class AbstractJourneyController extends FormActionController
     {
         if (empty($this->formName)) {
 
-            $journey = $this->getJourneyName();
-            $section = $this->getSectionName();
-            $subSection = $this->getSubSectionName();
-
-            $suffix = '';
-
-            if ($this->isAction()) {
-
-                $suffix = '-sub-action';
-            }
-
-            $this->formName = $this->camelToDash($journey . '_' . $section . '_' . $subSection . $suffix);
+            $this->formName = $this->formatFormName(
+                $this->getJourneyName(),
+                $this->getSectionName(),
+                $this->getSubSectionName(),
+                $this->isAction()
+            );
         }
 
         return $this->formName;
+    }
+
+    /**
+     * Format a form name for a section
+     *
+     * @param string $journey
+     * @param string $section
+     * @param string $subSection
+     * @param string $isAction
+     * @return string
+     */
+    protected function formatFormName($journey, $section, $subSection, $isAction = false)
+    {
+        $suffix = '';
+
+        if ($isAction) {
+
+            $suffix = '-sub-action';
+        }
+
+        return $this->camelToDash($journey . '_' . $section . '_' . $subSection . $suffix);
     }
 
     /**
@@ -643,6 +719,10 @@ abstract class AbstractJourneyController extends FormActionController
             $subSection = $this->getSubSectionName();
 
             $this->viewName = $this->camelToDash('self-serve/' . $journey . '/' . $section . '/' . $subSection);
+
+            if ($this->isAction()) {
+                $this->viewName .= '-' . $this->getActionName();
+            }
         }
 
         return $this->viewName;
@@ -909,12 +989,34 @@ abstract class AbstractJourneyController extends FormActionController
     {
         if (is_null($this->hasForm)) {
 
-            $this->hasForm = file_exists(
-                $this->getServiceLocator()->get('Config')['local_forms_path'] . $this->getFormName() . '.form.php'
-            );
+            $this->hasForm = $this->formExists($this->getFormName());
         }
 
         return $this->hasForm;
+    }
+
+    /**
+     * Check if a form exists
+     *
+     * @param string $formName
+     * @return boolean
+     */
+    protected function formExists($formName)
+    {
+        return file_exists(
+            $this->getFormLocation($formName)
+        );
+    }
+
+    /**
+     * Get a form location
+     *
+     * @param string $formName
+     * @return string
+     */
+    protected function getFormLocation($formName)
+    {
+        return $this->getServiceLocator()->get('Config')['local_forms_path'] . $formName . '.form.php';
     }
 
     /**
@@ -993,9 +1095,37 @@ abstract class AbstractJourneyController extends FormActionController
      */
     protected function isAction()
     {
-        $action = $this->getActionName();
+        if (is_null($this->isAction)) {
+            $action = $this->getActionName();
 
-        return ($action != 'index');
+            $this->isAction = ($action != 'index');
+        }
+
+        return $this->isAction;
+    }
+
+    /**
+     * Get a form config for section
+     *
+     * @param string $section
+     * @param string $subSection
+     * @param string $action
+     * @return array
+     */
+    protected function getFormConfigForSection($section, $subSection, $action = false)
+    {
+        $formName = $this->formatFormName(
+            $this->getJourneyName(),
+            $section,
+            $subSection,
+            $action
+        );
+
+        if (!$this->formExists($formName)) {
+            return null;
+        }
+
+        return include($this->getFormLocation($formName));
     }
 
     /**
@@ -1290,8 +1420,6 @@ abstract class AbstractJourneyController extends FormActionController
      */
     protected function render($view)
     {
-        $navigation = $this->getNavigationView();
-
         $layout = $this->getViewModel(
             array(
                 'subSections' => $this->getSubSectionsForLayout(),
@@ -1299,11 +1427,27 @@ abstract class AbstractJourneyController extends FormActionController
             )
         );
 
-        $layout->setTemplate('self-serve/journey/' . strtolower($this->getJourneyName()) . '/layout');
+        $layoutName = $this->getLayout();
+
+        if (empty($layoutName)) {
+             $layoutName = 'self-serve/journey/' . strtolower($this->getJourneyName()) . '/layout';
+        }
+
+        $layout->setTemplate($layoutName);
+
+        $children = array();
+
+        if ($this->getRenderNavigation()) {
+            $navigation = $this->getNavigationView();
+            $layout->addChild($navigation, 'navigation');
+            $children[] = 'navigation';
+        }
+
+        $children[] = 'main';
 
         $layout->addChild($view, 'main');
 
-        $layout->addChild($navigation, 'navigation');
+        $layout->setVariable('children', $children);
 
         return $layout;
     }
@@ -1624,11 +1768,7 @@ abstract class AbstractJourneyController extends FormActionController
      */
     protected function journeyFinished()
     {
-        print '<pre>';
-        print_r($this->getAccessKeys());
-        print_r($this->getSteps());
-        print '</pre>';
-        die('Finished');
+        return $this->goHome();
     }
 
     /**
@@ -1741,7 +1881,7 @@ abstract class AbstractJourneyController extends FormActionController
             $nextKey--;
         }
 
-        throw new \Exception('Can\'t find previous step');
+        return $this->goHome();
     }
 
     /**
@@ -1778,6 +1918,16 @@ abstract class AbstractJourneyController extends FormActionController
         );
 
         return $this->goToSection($route);
+    }
+
+    /**
+     * Go back to the home route
+     *
+     * @return Response
+     */
+    protected function goHome()
+    {
+        return $this->redirectToRoute($this->getJourneyConfig()['homeRoute']);
     }
 
     /**

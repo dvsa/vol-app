@@ -1,5 +1,7 @@
-<h2 class="inline">Application summary</h2>
-<a href="<?php echo $this->url('selfserve/declarations-simple', ['applicationId' => $applicationId]) ?>" class="right-aligned    action--tertiary" target="_blank">View in another window</a>
+<h2 class="inline"><?php echo $this->translate('application.review-declarations.summary'); ?></h2>
+<a href="<?php echo $this->url(null, array('action' => 'simple'), array(), true) ?>" class="right-aligned action--tertiary" target="_blank">
+    <?php echo $this->translate('application.review-declarations.summary.new-window'); ?>
+</a>
 <?php
 
 if (isset($form)) {
