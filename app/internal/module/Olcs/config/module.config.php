@@ -290,6 +290,7 @@ return array(
                 'options' => array(
                     'route' => '/licence/:licence/case/:case/undertaking/:action[/:id]',
                     'constraints' => array(
+                        'licence' => '[0-9]+',
                         'case' => '[0-9]+',
                         'id' => '[0-9]+'
                     ),
@@ -313,7 +314,21 @@ return array(
                         'action' => 'index'
                     )
                 )
-            )
+            ),
+            'case_revoke' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/licence/:licence/case/:case/revoke/:action[/:id]',
+                    'constraints' => array(
+                        'licence' => '[0-9]+',
+                        'case' => '[0-9]+',
+                        'id' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'CaseRevokeController'
+                    )
+                )
+            ),
         ),
     ),
     'tables' => array(
@@ -340,10 +355,10 @@ return array(
             'CasePenaltyController' => 'Olcs\Controller\CasePenaltyController',
             'CaseProhibitionController' => 'Olcs\Controller\CaseProhibitionController',
             'ConditionUndertakingController' => 'Olcs\Controller\ConditionUndertakingController',
-            'ConditionUndertakingController' => 'Olcs\Controller\ConditionUndertakingController',
             'SubmissionNoteController' => 'Olcs\Controller\Submission\SubmissionNoteController',
             'CaseImpoundingController' => 'Olcs\Controller\CaseImpoundingController',
-            'CaseConditionUndertakingController' => 'Olcs\Controller\CaseConditionUndertakingController'
+            'CaseConditionUndertakingController' => 'Olcs\Controller\CaseConditionUndertakingController',
+            'CaseRevokeController' => 'Olcs\Controller\CaseRevokeController'
         )
     ),
     'view_manager' => array(

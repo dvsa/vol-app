@@ -30,14 +30,15 @@ return [
             ],
             [
                 'name' => 'hearing',
-                'id' => 'hearing',
                 'options' => [
-                    'label' => 'Hearing'
+                    'label' => 'Hearing',
+                    'id' => 'hearing_fieldset'
                 ],
                 'elements' => [
                     'hearingDate' => [
                         'type' => 'dateSelectWithEmpty',
-                        'label' => 'Hearing date'
+                        'label' => 'Hearing date',
+                        'filters' => '\Common\Form\Elements\InputFilters\HearingDateHasTime',
                     ],
                     'hearingTime' => [
                         'type' => 'timeSelect',
