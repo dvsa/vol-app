@@ -31,7 +31,6 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
                 'getTabInformationArray',
                 'getCase',
                 'getCaseSummaryArray',
-                'getCaseDetailsArray',
                 'generateConditionTable',
                 'generateUndertakingTable',
             )
@@ -97,11 +96,6 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
 
         $controller->expects($this->once())
             ->method('getCaseSummaryArray')
-            ->with($this->equalTo($caseArray))
-            ->will($this->returnValue($caseArray));
-
-        $controller->expects($this->once())
-            ->method('getCaseDetailsArray')
             ->with($this->equalTo($caseArray))
             ->will($this->returnValue($caseArray));
 
