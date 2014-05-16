@@ -145,7 +145,7 @@ class CaseRevokeController extends CaseController
         $this->setBreadcrumb(
             array(
                 'licence_case_list/pagination' => array('licence' => $routeParams['licence']),
-                'case_convictions' => array('case' => $routeParams['case'], 'licence' => $routeParams['licence'])
+                'case_revoke' => array('case' => $routeParams['case'], 'licence' => $routeParams['licence'])
             )
         );
     }

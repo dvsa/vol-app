@@ -143,6 +143,23 @@ return array(
                                     )
                                 ),
                                 array(
+                                    'label' => 'Propsal to revoke',
+                                    'route' => 'case_revoke',
+                                    'action' => 'index',
+                                    'pages' => array(
+                                        array(
+                                            'label' => 'Add a proposal to revoke',
+                                            'route' => 'case_revoke',
+                                            'action' => 'add'
+                                        ),
+                                        array(
+                                            'label' => 'Edit proposal to revoke',
+                                            'route' => 'case_revoke',
+                                            'action' => 'edit'
+                                        )
+                                    )
+                                ),
+                                array(
                                     'label' => 'Case Complaints',
                                     'route' => 'case_complaints',
                                     'action' => 'index',
