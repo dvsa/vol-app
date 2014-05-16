@@ -285,6 +285,21 @@ return array(
                     )
                 )
             ),
+            'undertakings' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/licence/:licence/case/:case/undertaking/:action[/:id]',
+                    'constraints' => array(
+                        'licence' => '[0-9]+',
+                        'case' => '[0-9]+',
+                        'id' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'ConditionUndertakingController',
+                        'type' => 'undertaking'
+                    )
+                )
+            ),
             'case_impounding' => array(
                 'type' => 'segment',
                 'options' => array(
@@ -300,17 +315,17 @@ return array(
                     )
                 )
             ),
-            'undertakings' => array(
+            'case_revoke' => array(
                 'type' => 'segment',
                 'options' => array(
-                    'route' => '/licence/:licence/case/:case/undertaking/:action[/:id]',
+                    'route' => '/licence/:licence/case/:case/revoke/:action[/:id]',
                     'constraints' => array(
+                        'licence' => '[0-9]+',
                         'case' => '[0-9]+',
                         'id' => '[0-9]+'
                     ),
                     'defaults' => array(
-                        'controller' => 'ConditionUndertakingController',
-                        'type' => 'undertaking'
+                        'controller' => 'CaseRevokeController'
                     )
                 )
             ),
@@ -340,10 +355,10 @@ return array(
             'CasePenaltyController' => 'Olcs\Controller\CasePenaltyController',
             'CaseProhibitionController' => 'Olcs\Controller\CaseProhibitionController',
             'ConditionUndertakingController' => 'Olcs\Controller\ConditionUndertakingController',
-            'ConditionUndertakingController' => 'Olcs\Controller\ConditionUndertakingController',
             'SubmissionNoteController' => 'Olcs\Controller\Submission\SubmissionNoteController',
             'CaseImpoundingController' => 'Olcs\Controller\CaseImpoundingController',
-            'CaseConditionUndertakingController' => 'Olcs\Controller\CaseConditionUndertakingController'
+            'CaseConditionUndertakingController' => 'Olcs\Controller\CaseConditionUndertakingController',
+            'CaseRevokeController' => 'Olcs\Controller\CaseRevokeController'
         )
     ),
     'view_manager' => array(

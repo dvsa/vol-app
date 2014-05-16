@@ -615,7 +615,6 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->once())
             ->method('processAdd')
-            ->with($addData, 'ConditionUndertaking')
             ->will($this->returnValue(['id' => 1]));
 
         $this->controller->processConditionUndertaking($functionData);
@@ -660,7 +659,6 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->once())
             ->method('processAdd')
-            ->with($addData, 'ConditionUndertaking')
             ->will($this->returnValue(['id' => 1]));
 
         $this->controller->processConditionUndertaking($functionData);
@@ -704,7 +702,6 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->once())
             ->method('processEdit')
-            ->with($editData, 'ConditionUndertaking')
             ->will($this->returnValue(['id' => 1]));
 
         $this->controller->processConditionUndertaking($functionData);

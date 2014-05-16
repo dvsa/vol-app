@@ -9,6 +9,7 @@
 namespace Olcs\Controller;
 
 use Zend\View\Model\ViewModel;
+use Zend\Validator\Date as DateValidator;
 
 /**
  * Class to manage Impounding
@@ -48,15 +49,22 @@ class CaseImpoundingController extends CaseController
         $bundle = $this->getIndexBundle();
 
         $results = $this->makeRestCall(
-            'VosaCase', 'GET', array(
-            'id' => $caseId, 'bundle' => json_encode($bundle))
+            'Impounding',
+            'GET',
+            array(
+                'case' => $caseId,
+                'bundle' => json_encode($bundle),
+                'sort' => 'applicationReceiptDate',
+                'order' => 'DESC'
+            )
         );
 
-        $impoundings = $this->formatForTable($results['impoundings']);
+        $impoundings = $this->formatForTable($results['Results']);
 
         $variables = array(
             'tab' => 'impounding',
-            'table' => $this->buildTable('Impounding', $impoundings, array())
+            'headScript' => array('/static/js/impounding.js'),
+            'table' => $this->buildTable('impounding', $impoundings, array())
         );
 
         $caseVariables = $this->getCaseVariables($caseId, $variables);
@@ -98,11 +106,12 @@ class CaseImpoundingController extends CaseController
                     'pageTitle' => 'Add impounding',
                     'pageSubTitle' => ''
                 ],
-                'form' => $form
+                'form' => $form,
+                'headScript' => array('/static/js/impounding.js')
             ]
         );
 
-        $view->setTemplate('form');
+        $view->setTemplate('impounding/form');
 
         return $view;
     }
@@ -200,11 +209,12 @@ class CaseImpoundingController extends CaseController
                     'pageTitle' => 'Edit impounding',
                     'pageSubTitle' => ''
                 ],
-                'form' => $form
+                'form' => $form,
+                'headScript' => array('/static/js/impounding.js')
             ]
         );
 
-        $view->setTemplate('form');
+        $view->setTemplate('impounding/form');
 
         return $view;
     }
@@ -250,6 +260,10 @@ class CaseImpoundingController extends CaseController
 
                 if (isset($result['outcome']['handle'])  && isset($static['impounding_outcome'][$result['outcome']['handle']])) {
                     $results[$key]['outcome'] = $static['impounding_outcome'][$result['outcome']['handle']];
+                }
+
+                if (isset($result['impoundingType']['handle'])  && isset($static['impounding_type'][$result['impoundingType']['handle']])) {
+                    $results[$key]['impoundingType'] = $static['impounding_type'][$result['impoundingType']['handle']];
                 }
             }
         }
@@ -349,7 +363,13 @@ class CaseImpoundingController extends CaseController
      */
     private function joinHearingDateAndTime($hearingDate, $hearingTime)
     {
-        return $hearingDate . ' ' . $hearingTime . ':00';
+        $combined = '';
+
+        if (!empty($hearingDate) && !empty($hearingTime)) {
+            $combined = $hearingDate . ' ' . $hearingTime . ':00';
+        }
+
+        return $combined;
     }
 
     /**
@@ -361,37 +381,35 @@ class CaseImpoundingController extends CaseController
     {
         return array(
             'properties' => array(
-                'id'
+                'id',
+                'applicationReceiptDate',
+                'outcomeSentDate'
             ),
             'children' => array(
-                'impoundings' => array(
+                'impoundingType' => array(
                     'properties' => array(
-                        'id',
-                        'applicationReceiptDate',
-                        'outcomeSentDate'
-                    ),
-                    'children' => array(
-                        'impoundingType' => array(
-                            'properties' => array(
-                                'handle'
-                            )
-                        ),
-                        'presidingTc' => array(
-                            'properties' => array(
-                                'name'
-                            ),
-                        ),
-                        'outcome' => array(
-                            'properties' => array(
-                                'handle'
-                            ),
-                        ),
+                        'handle'
                     )
-                )
+                ),
+                'presidingTc' => array(
+                    'properties' => array(
+                        'name'
+                    ),
+                ),
+                'outcome' => array(
+                    'properties' => array(
+                        'handle'
+                    ),
+                ),
             )
         );
     }
 
+    /**
+     * Returns a bundle to populate the add/edit forms
+     *
+     * @return array
+     */
     private function getFormBundle()
     {
         return array(

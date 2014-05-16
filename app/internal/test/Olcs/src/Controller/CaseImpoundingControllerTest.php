@@ -183,7 +183,7 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
 
         $this->view->expects($this->once())
             ->method('setTemplate')
-            ->with($this->equalTo('form'));
+            ->with($this->equalTo('impounding/form'));
 
         $this->assertSame($this->view, $this->controller->addAction());
     }
@@ -217,7 +217,7 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
 
         $this->view->expects($this->once())
             ->method('setTemplate')
-            ->with($this->equalTo('form'));
+            ->with($this->equalTo('impounding/form'));
 
         $this->assertSame($this->view, $this->controller->editAction());
     }
@@ -499,13 +499,16 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
     private function getSampleImpoundingArray()
     {
         return array(
-            'impoundings' => array(
+            'Results' => array(
                 0 => array(
                     'presidingTc' => array(
                         'name' => 'Name of TC'
                     ),
                     'outcome' => array(
                         'handle' => 'impounding_outcome.1'
+                    ),
+                    'impoundingType' => array(
+                        'handle' => 'impounding_type.1'
                     ),
                 )
             ),

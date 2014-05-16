@@ -11,10 +11,6 @@ use Zend\Filter\Word\DashToCamelCase;
 trait SubmissionSectionTrait
 {
     
-    public $requiredDataKeys = array();
-    
-    public $dataToReturnArray = array();
-    
     /**
      * Return json encoded submission based on submission_config
      * @param type $routeParams
@@ -116,13 +112,28 @@ trait SubmissionSectionTrait
             $thisConviction['dateOfOffence'] = $conviction['dateOfOffence'];
             $thisConviction['dateOfConviction'] = $conviction['dateOfConviction'];
             $thisConviction['name'] = $conviction['personFirstname'] . ' ' . $conviction['personLastname'];
-            $thisConviction['description'] = $conviction['description'];
+            $thisConviction['description'] = isset($conviction['description']) ? $conviction['description'] : '';
             $thisConviction['courtFpm'] = $conviction['courtFpm'];
             $thisConviction['penalty'] = $conviction['penalty'];
             $thisConviction['si'] = $conviction['si'];
             $thisConviction['decToTc'] = $conviction['decToTc'];
             $thisConviction['dealtWith'] = $conviction['dealtWith'];
             $dataToReturnArray[] = $thisConviction;
+        }
+        return $dataToReturnArray;
+    }
+    
+    /**
+     * section persons
+     */
+    public function persons(array $data = array())
+    {
+        $dataToReturnArray = array();
+        foreach ($data['licence']['organisation']['organisationOwners'] as $organisationOwner) {
+            $thisOrganisationOwner['lastName'] = $organisationOwner['person']['surname'];
+            $thisOrganisationOwner['firstName'] = $organisationOwner['person']['firstName'];
+            $thisOrganisationOwner['dob'] = $organisationOwner['person']['dateOfBirth'];
+            $dataToReturnArray[] = $thisOrganisationOwner;
         }
         return $dataToReturnArray;
     }

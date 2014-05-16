@@ -265,7 +265,12 @@ class CaseController extends FormActionController
                 'key' => 'impounding',
                 'label' => 'Impounding',
                 'url' => $pm->get('url')->fromRoute('case_impounding', ['tab' => 'impounding', 'action' => null], [], true),
-            ]
+            ],
+            'revoke' => [
+                'key' => 'revoke',
+                'label' => 'Proposal to revoke',
+                'url' => $pm->get('url')->fromRoute('case_revoke', ['tab' => 'revoke', 'action' => 'index'], [], true),
+            ],
         ];
 
         return $tabs;

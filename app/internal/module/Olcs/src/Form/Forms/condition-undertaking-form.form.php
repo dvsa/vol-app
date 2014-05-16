@@ -36,7 +36,7 @@ return [
                     ],
                     'notes' => [
                         'type' => 'textarea',
-                        'filters' => '\Common\Form\Elements\InputFilters\TextMax4000Required',
+                        'filters' => '\Common\Form\Elements\InputFilters\TextMax8000Required',
                         'class' => 'extra-long',
 
                     ],
