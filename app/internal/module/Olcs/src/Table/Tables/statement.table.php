@@ -60,19 +60,23 @@ return array(
         array(
             'title' => 'Documents',
             'formatter' => function ($data, $column) {
-                return '<a href="' . $this->generateUrl(
+                $filename =
+                    $data['id'] . '_' .
+                    'statement' . '_' .
+                    'S43_letter';
+                return file_exists('/tmp/rtf/' . $filename . '.rtf') ? '<a href="' . $this->generateUrl(
                     array(
                         'controller' => 'Document',
                         'action' => 'retrieve',
                         'format' => 'rtf',
                         'country' => 'en_GB',
-                        'filename' => 'generated_S43_Letter'
+                        'filename' => $filename
                         ),
                     'document_retrieve',
                     true
-                ) . '">S43 Letter</a>';
+                ) . '">'.$filename.'</a>' : '';
             },
-            'name' => 'dateRequested'
+            'name' => 'document'
         ),
     )
 );

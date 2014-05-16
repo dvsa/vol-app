@@ -216,34 +216,89 @@ class CaseStatementController extends CaseController
         );
     }
 
+    /**
+     * Method to map form data to bookmark data for replacement in the document
+     * template
+     *
+     * @param array $data
+     * @return array of bookmark mappings
+     */
     public function mapDocumentData($data)
     {
+        $bookmarkData = $this->getBookmarkData($data);
         $bookmarks = [];
-        $bookmarks['TAName'] = '<TAName>';
-        $bookmarks['TAAddress_2'] = '<TAAddress_2>';
-        $bookmarks['Address_1'] = $this->concatAddress($data['addresses']['requestorsAddress']);
-        $bookmarks['Ref'] = '<Ref>';
-        $bookmarks['Name'] = '<Name>';
-        $bookmarks['RequestMode'] = '<RequestMode>';
-        $bookmarks['RequestDate'] = '<RequestDate>';
-        $bookmarks['UserKnownAs'] = '<UserKnownAs>';
-        $bookmarks['AuthorisorTeam'] = '<AuthorisorTeam>';
-        $bookmarks['AuthorisorName2'] = '<AuthorisorName2>';
-        $bookmarks['AuthorisedDecision'] = '<AuthorisedDecision>';
-        $bookmarks['AuthorisorName3'] = '<AuthorisorName3>';
+        $bookmarks['TAName'] = $bookmarkData['licence']['trafficArea']['areaName']; // Traffic area name;
+        $bookmarks['TAAddress_2'] = '<user\'s location address>'; // users location address
+
+        $bookmarks['Address_1'] =
+            $data['addresses']['requestorsAddress']['addressLine1'] . " \line " .
+            $data['addresses']['requestorsAddress']['addressLine2'] . " \line " .
+            $data['addresses']['requestorsAddress']['addressLine3'] . " \line " .
+            $data['addresses']['requestorsAddress']['addressLine4'] . " \line" .
+            $data['addresses']['requestorsAddress']['city'] . " \line" .
+            $data['addresses']['requestorsAddress']['postcode'] . " \line" .
+            $data['addresses']['requestorsAddress']['country'];
+        $bookmarks['Ref'] = '184130/' . $bookmarkData['licence']['licenceNumber'];
+        $bookmarks['Name'] = $data['requestorsForename'] . ' ' . $data['requestorsFamilyName'];
+        $bookmarks['RequestMode'] = 'correspondence';
+        $bookmarks['RequestDate'] = $data['dateRequested'];
+        $bookmarks['UserKnownAs'] = '<user\'s name>';
+        $bookmarks['AuthorisorTeam'] = 'Authoriser Team';
+        $bookmarks['AuthorisorName2'] = '<user\'s name> <olcs job role>';
+        $bookmarks['AuthorisedDecision'] = '<user\'s location address>' .
+            "\n\n" .
+            $data['authorisersDecision'];
+        $bookmarks['AuthorisorName3'] = '<user\'s name> <olcs job role>';
 
         return $bookmarks;
     }
 
-    public function concatAddress($data)
+    /**
+     * Gets bookmark data for the document tempate
+     *
+     * @param array $data
+     * @return array
+     */
+    public function getBookmarkData($data)
     {
-        return $data['addressLine1'] . ', ' .
-               $data['addressLine2'] . ', ' .
-               $data['addressLine3'] . ', ' .
-               $data['addressLine4'] . ', ' .
-               $data['city'] . ', ' .
-               $data['postcode'] . ', ' .
-               $data['country'];
+        $bundle = $this->getBookmarkBundle();
+
+        $bookmarkData = $this->makeRestCall('VosaCase', 'GET',['id' => $data['case'], 'bundle' => json_encode($bundle)]);
+
+        return $bookmarkData;
+
+    }
+
+    /**
+     * Gets the bookmark bundle
+     *
+     * @return array
+     */
+    public function getBookmarkBundle()
+    {
+         return array(
+            'properties' => array(
+                'id',
+                'licence'
+            ),
+            'children' => array(
+                'licence' => array(
+                    'properties' => array(
+                        'id',
+                        'licenceNumber',
+                        'trafficArea',
+                    ),
+                    'children' => array(
+                        'trafficArea' => array(
+                            'properties' => array(
+                                'id',
+                                'areaName'
+                            ),
+                        )
+                    )
+                )
+            )
+        );
     }
 
     /**
