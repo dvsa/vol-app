@@ -64,15 +64,13 @@ return array(
                     array(
                         'controller' => 'Document',
                         'action' => 'retrieve',
-                        'statement' => $data['id'],
                         'format' => 'rtf',
                         'country' => 'en_GB',
-                        'filename' => 'generated_S43_Letter',
-                        'template' => 'S43_Letter'
-                    ),
+                        'filename' => 'generated_S43_Letter'
+                        ),
                     'document_retrieve',
                     true
-                ) . '">Generate Letter</a>';
+                ) . '">S43 Letter</a>';
             },
             'name' => 'dateRequested'
         ),

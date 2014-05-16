@@ -76,20 +76,21 @@ class DocumentController extends AbstractActionController
         $country = $this->params('country');
         $format = $this->params('format');
 
-        $serviceData = $this->service('Olcs\Document\Retrieve')->get('retrieve/'.$filename.'/'.$format.'/'.$country);
-        $documentData = $this->sendPost('Olcs\Document\Retrieve', [
+        //$serviceData = $this->service('Olcs\Document\Retrieve')->get('retrieve/'.$filename.'/'.$format.'/'.$country);
+        $documentData = $this->sendGet('Olcs\Document\Retrieve', [
             'filename' => $filename,
             'format' => $format,
             'country' => $country
             ]);
-        $filename = $serviceData['filename'];
+
+        $filename = $documentData['filename'];
         $response = $this->getResponse();
         $response->setStatusCode(200);
         $response->getHeaders()->addHeaders(array("Content-type"=>"application/rtf",
                                                   "Content-Disposition: attachment; filename=".$filename.".rtf"));
 
 
-        $documentData = $serviceData['documentData'];
+        $documentData = $documentData['documentData'];
         $response->setContent($documentData);
         return $response;
 
