@@ -141,6 +141,16 @@ class ApplicationController extends AbstractJourneyController
             if (isset($licence['niFlag']) && !is_null($licence['niFlag']) && $licence['niFlag'] !== '') {
                 $this->accessKeys[] = ($licence['niFlag'] == 1 ? 'ni' : 'gb');
             }
+
+            $sectionCompletion = $this->getSectionCompletion();
+
+            if (isset($sectionCompletion['sectionPaymentSubmissionStatus'])
+                && $sectionCompletion['sectionPaymentSubmissionStatus'] == 2) {
+
+                $this->accessKeys[] = 'paid';
+            } else {
+                $this->accessKeys[] = 'unpaid';
+            }
         }
 
         return $this->accessKeys;

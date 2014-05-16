@@ -196,7 +196,14 @@ return array(
                 ),
                 'subSections' => array(
                     'Payment' => array(
-
+                        'restriction' => array(
+                            'unpaid'
+                        )
+                    ),
+                    'Summary' => array(
+                        'restriction' => array(
+                            'paid'
+                        )
                     )
                 )
             )
