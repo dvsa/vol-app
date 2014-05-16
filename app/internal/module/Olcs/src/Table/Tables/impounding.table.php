@@ -38,6 +38,10 @@ return array(
             'name' => 'applicationReceiptDate'
         ),
         array(
+            'title' => 'Type',
+            'format' => '{{impoundingType}}'
+        ),
+        array(
             'title' => 'Presiding TC/DTC',
             'format' => '{{name}}'
         ),
