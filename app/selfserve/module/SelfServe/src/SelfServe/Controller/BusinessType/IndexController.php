@@ -93,9 +93,11 @@ class IndexController extends AbstractApplicationController
         );
 
         // render the view
-        $view = new ViewModel(['form' => $form,
-                                'completionStatus' => $completionStatus['Results'][0],
-                                'applicationId' => $applicationId]);
+        $view = new ViewModel(
+            ['form' => $form,
+            'completionStatus' => count($completionStatus['Results']) ? $completionStatus['Results'][0] : null,
+            'applicationId' => $applicationId]
+        );
         $view->setTemplate('self-serve/business/index');
 
         return $this->renderLayoutWithSubSections(
@@ -149,11 +151,12 @@ class IndexController extends AbstractApplicationController
 
             //redirect to correct step
             if ($val == $organisation['organisationType']) {
-                $forward = $this->forward()->dispatch('Selfserve\BusinessType\Index', [
+                $forward = $this->forward()->dispatch(
+                    'Selfserve\BusinessType\Index', [
                     'action' => 'generateStepForm',
                     'applicationId' => $applicationId,
-                    'step' => $step,
-                ]);
+                    'step' => $step]
+                );
                 break;
             }
         }
@@ -223,12 +226,14 @@ class IndexController extends AbstractApplicationController
     public function getRegisteredCompanyFormData()
     {
         $organisation = $this->getOrganisationEntity();
+        $companyNameFound = $this->params()->fromRoute('company-name', '');
+        $companyName = $companyNameFound ? $companyNameFound : $organisation['name'];
 
         return array(
             'version' => $organisation['version'],
             'registered-company' => array(
                 'company_number' => $organisation['registeredCompanyNumber'],
-                'company_name' => $organisation['name'],
+                'company_name' => $companyName,
                 'type_of_business' => $organisation['sicCode'],
             ),
         );
@@ -448,18 +453,35 @@ class IndexController extends AbstractApplicationController
 
     /**
      * Method called once a valid company look up form has been submitted.
-     * Needs to call CH Controller and implement PRG and redirect back to
-     * indexAction.
      *
      * @param array $validData
      * @param \Zend\Form $form
      * @param array $journeyData
-     * @param array $params
      */
-    protected function processLookupCompany($validData, $form, $params)
+    protected function processLookupCompany($validData, $form)
     {
-        echo 'FORM VALID looking up company';
-        exit;
+        if (array_key_exists('registered-company', $validData)) {
+            $key = 'registered-company';
+        } elseif (array_key_exists('llp', $validData)) {
+            $key = 'llp';
+        } else {
+            return $form;
+        }
+        $result = $this->makeRestCall(
+            'CompaniesHouse', 'GET', array(
+            'type' => 'numberSearch', 'value' => $validData[$key]['company_number'])
+        );
+        if ($result['Count'] == 1) {
+            $companyName = $result['Results'][0]['CompanyName'];
+            $form->get($key)->get('company_name')->setValue($companyName);
+            return $form;
+        } else {
+            $form->get($key)->get('company_number')->setMessages(
+                array('companyNumber' => array(
+                    'Sorry, we couldn\'t find any matching companies, '
+                    . 'please try again or enter your details manually below'))
+            );
+        }
     }
 
     /**
