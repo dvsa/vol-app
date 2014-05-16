@@ -208,14 +208,6 @@ class CaseStatementController extends CaseController
 
         $this->processEdit($data, 'Statement');
 
-        $bookmarks = $this->mapDocumentData($data);
-
-        $documentData = $this->sendPost('Olcs\Document\Generate', [
-            'bookmarks' => $bookmarks,
-            'country' => 'en_GB',
-            'templateId' => 'S43_Letter'
-            ]);
-
         $this->redirect()->toRoute(
             'case_statement',
             ['case'=>$this->fromRoute('case'), 'licence'=>$this->fromRoute('licence')],
