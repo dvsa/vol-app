@@ -39,7 +39,6 @@ class CaseConvictionController extends CaseController
         $form = $this->generateCommentForm($case);
 
         $summary = $this->getCaseSummaryArray($case);
-        $details = $this->getCaseDetailsArray($case);
 
         $results = $this->makeRestCall('Conviction', 'GET', array('vosaCase' => $caseId));
 
@@ -65,7 +64,6 @@ class CaseConvictionController extends CaseController
                 'tabs' => $tabs,
                 'tab' => $action,
                 'summary' => $summary,
-                'details' => $details,
                 'table' => $table,
                 'commentForm' => $form,
             ]

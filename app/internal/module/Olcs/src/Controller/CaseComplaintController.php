@@ -41,7 +41,6 @@ class CaseComplaintController extends CaseController
         $case = $this->getCase($caseId);
 
         $summary = $this->getCaseSummaryArray($case);
-        $details = $this->getCaseDetailsArray($case);
 
         $bundle = $this->getComplaintBundle();
 
@@ -61,7 +60,6 @@ class CaseComplaintController extends CaseController
             'tabs' => $tabs,
             'tab' => $action,
             'summary' => $summary,
-            'details' => $details,
             'table' => $table,
             ]
         );

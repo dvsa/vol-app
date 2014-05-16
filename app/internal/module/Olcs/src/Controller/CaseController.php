@@ -50,7 +50,6 @@ class CaseController extends FormActionController
         $case = $this->getCase($caseId);
 
         $summary = $this->getCaseSummaryArray($case);
-        $details = $this->getCaseDetailsArray($case);
 
         // -- submissions
 
@@ -72,7 +71,6 @@ class CaseController extends FormActionController
                 'tabs' => $tabs,
                 'tab' => $action,
                 'summary' => $summary,
-                'details' => $details,
                 'submissions' => $submissionsTable
             )
         );
@@ -296,23 +294,6 @@ class CaseController extends FormActionController
         $opentimeDate = date('d/m/Y', strtotime($case['openTime']));
 
         $smmary = [
-
-           /* 'case_number' => [
-                'label' => 'Case number',
-                'value' => $case['caseNumber'],
-                'url' => '',
-            ],
-            'operator_name' => [
-                'label' => 'Operator name',
-                'value' => $case['licence']['organisation']['name'],
-                'url' => ''
-            ],
-            'licence_number' => [
-                'label' => 'Licence number',
-                'value' => $case['licence']['licenceNumber'],
-                'url' => ''
-            ],*/
-
             'description' => [
                 'label' => 'Description',
                 'value' => $case['description'],
@@ -356,58 +337,6 @@ class CaseController extends FormActionController
         ];
 
         return $smmary;
-    }
-
-    public function getCaseDetailsArray(array $case)
-    {
-        $opentimeDate = date('d/m/Y', strtotime($case['openTime']));
-        $licenceStartDate = date('d/m/Y', strtotime($case['licence']['startDate']));
-
-        $details = [
-
-            'open_date' => [
-                'label' => 'Open date',
-                'value' => $opentimeDate,
-                'url' => '',
-            ],
-            'traffic_area' => [
-                'label' => 'Traffic area',
-                'value' => $case['licence']['trafficArea']['areaName'],
-                'url' => '',
-            ],
-            'status' => [
-                'label' => 'Status',
-                'value' => ucfirst($case['status']),
-                'url' => '',
-            ],
-            'entity_type' => [
-                'label' => 'Entity type',
-                'value' => $case['licence']['organisation']['organisationType'],
-                'url' => '',
-            ],
-            'licence_start_date' => [
-                'label' => 'Licence start date',
-                'value' => $licenceStartDate,
-                'url' => '',
-            ],
-            'licence_type' => [
-                'label' => 'Licence type',
-                'value' => $case['licence']['licenceType'],
-                'url' => '',
-            ],
-            'licence_category' => [
-                'label' => 'Licence category',
-                'value' => $case['licence']['goodsOrPsv'],
-                'url' => '',
-            ],
-            'licence_status' => [
-                'label' => 'Licence status',
-                'value' => $case['licence']['licenceStatus'],
-                'url' => '',
-            ],
-        ];
-
-        return $details;
     }
 
     /**
@@ -693,7 +622,6 @@ class CaseController extends FormActionController
             if (preg_match('/case_categories_([a-z]+)/', $key, $matches)) {
 
                 foreach (array_keys($array) as $id) {
-
                     $translations[str_replace('case_category.', '', $id)] = $matches[1];
                 }
             }
@@ -724,7 +652,6 @@ class CaseController extends FormActionController
         $defaults = array(
             'case' => $case,
             'tabs' => $this->getTabInformationArray(),
-            'details' => $this->getCaseDetailsArray($case),
             'summary' => $this->getCaseSummaryArray($case)
         );
 
