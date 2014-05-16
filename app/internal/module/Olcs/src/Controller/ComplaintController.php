@@ -44,7 +44,10 @@ class ComplaintController extends FormActionController
         $this->setBreadcrumb(
             array(
                 'licence_case_list/pagination' => array('licence' => $routeParams['licence']),
-                'case_complaints' => array('case' => $routeParams['case'])
+                'case_complaints' => array(
+                    'licence' => $routeParams['licence'],
+                    'case' => $routeParams['case']
+                )
             )
         );
 
@@ -161,7 +164,7 @@ class ComplaintController extends FormActionController
             $newData['vosaCases'][] = $data['vosaCase'];
             $newData['value'] = '';
             $newData['vehicle_id'] = 1;
-            $newData['organisation'] = $data['organisation-details'];
+            $newData['organisation'] = 1;
 
             $newData['driver']['contactDetails']['contactDetailsType'] = 'Driver';
             $newData['driver']['contactDetails']['is_deleted'] = 0;

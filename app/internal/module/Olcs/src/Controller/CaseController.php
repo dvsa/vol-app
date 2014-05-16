@@ -99,16 +99,16 @@ class CaseController extends FormActionController
             )
         );
 
-        $config = $config = $this->getServiceLocator()->get('Config');
+        $config = $this->getServiceLocator()->get('Config');
         $submissionActions = $config['static-list-data'];
         $results = $this->makeRestCall('Submission', 'GET', array('vosaCase' => $caseId), $bundle);
 
         foreach ($results['Results'] as $k => $result) {
-            $actions = $this->makeRestCall('SubmissionAction', 'GET', array('submission' => $result['id']));
+            $results['Results'][$k]['status'] = 'Draft';
             foreach ($result['submissionActions'] as $ak => $action) {
                 $results['Results'][$k]['urgent'] = $action['urgent'];
-                if (isset($action['userRecipient']['displayName'])) {
-                    $results['Results'][$k]['currentlyWith'] = $action['userRecipient']['displayName'];
+                if (isset($action['userRecipient']['name'])) {
+                    $results['Results'][$k]['currentlyWith'] = $action['userRecipient']['name'];
                 }
                 $actions = isset($submissionActions['submission_'.$action['submissionActionType']])
                     ? $submissionActions['submission_'.$action['submissionActionType']] : '';
@@ -267,6 +267,16 @@ class CaseController extends FormActionController
                 'key' => 'conditions-undertakings',
                 'label' => 'Conditions &amp; Undertakings',
                 'url' => $pm->get('url')->fromRoute('case_conditions_undertakings', ['tab' => 'conditions-undertakings'], [], true),
+            ],
+            'impounding' => [
+                'key' => 'impounding',
+                'label' => 'Impounding',
+                'url' => $pm->get('url')->fromRoute('case_impounding', ['tab' => 'impounding', 'action' => null], [], true),
+            ],
+            'revoke' => [
+                'key' => 'revoke',
+                'label' => 'Proposal to revoke',
+                'url' => $pm->get('url')->fromRoute('case_revoke', ['tab' => 'revoke', 'action' => 'index'], [], true),
             ],
         ];
 
