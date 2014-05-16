@@ -65,7 +65,7 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
             true,
             array(
                 'makeRestCall',
-                'createSubmissionSection'
+                'createSubmissionSection',
             )
         );
         
@@ -207,9 +207,34 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
         $data['convictions'][] = $thisConviction;
         
         $result = $submissionSectionTrait->convictionHistory($data);
-//print_r($result);
         $this->assertContains('Court 12', $result[0]);
         $this->assertArrayHasKey('dateOfConviction', $result[0]);
+    }
+    
+    public function testPersons()
+    {
+        $submissionSectionTrait = $this->getMockForTrait(
+            '\Olcs\Controller\Submission\SubmissionSectionTrait'
+        );
+        $data = array(
+            'licence' => array(
+                'organisation' => array(
+                    'organisationOwners' => array(
+                        array(
+                            'person' => array(
+                                'surname' => 'Smith',
+                                'firstName' => 'Fred',
+                                'dateOfBirth' => '1975-03-15T00:00:00+0000'
+                            )
+                        )
+                    )
+                )
+            ),
+        );
+        
+        $result = $submissionSectionTrait->persons($data);
+        $this->assertContains('Fred', $result[0]);
+        $this->assertArrayHasKey('firstName', $result[0]);
     }
     
     public function testGetFilteredSectionData()
