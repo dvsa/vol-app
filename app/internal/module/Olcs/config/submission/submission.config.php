@@ -40,7 +40,7 @@ return array(
             )
         ),
         'persons' => array(
-            'view' => 'submission/partials/persons',
+            'view' => 'submission/partials/persons'
         ),
         'transport-managers' => array(
             'exclude' => array(

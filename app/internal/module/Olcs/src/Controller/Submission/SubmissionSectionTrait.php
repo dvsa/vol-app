@@ -11,10 +11,6 @@ use Zend\Filter\Word\DashToCamelCase;
 trait SubmissionSectionTrait
 {
     
-    public $requiredDataKeys = array();
-    
-    public $dataToReturnArray = array();
-    
     /**
      * Return json encoded submission based on submission_config
      * @param type $routeParams
