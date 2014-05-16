@@ -961,6 +961,26 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
+     * Returns a sample categories array
+     *
+     * @return array
+     */
+    private function getSampleOrganisationTypeArray()
+    {
+        return array(
+            'business_types' =>
+                [
+                    'org_type.lc' => 'Limited company',
+                    'org_type.st' => 'Sole Trader',
+                    'org_type.p' => 'Partnership',
+                    'org_type.llp' => 'Limited Liability Partnership',
+                    'org_type.o' => 'Other (e.g. public authority, charity, trust, university)',
+                ],
+        );
+
+    }
+
+    /**
      * Provides a sample case object
      *
      * @param int $caseId
@@ -1037,7 +1057,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
                     'registeredCompanyNumber' => 1234567,
                     'name' => 'test',
                     'tradingAs' => '',
-                    'organisationType' => 'Registered company',
+                    'organisationType' => 'org_type.o',
                     'sicCode' => '',
                     'createdBy' => array
                         (

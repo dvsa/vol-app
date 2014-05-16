@@ -248,11 +248,6 @@ class CaseController extends FormActionController
                 'label' => 'Complaints',
                 'url' => $pm->get('url')->fromRoute('case_complaints', ['tab' => 'complaints'], [], true),
             ],
-            'reports' => [
-                'key' => 'reports',
-                'label' => 'Reports',
-                'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'reports'], [], true),
-            ],
             'documents' => [
                 'key' => 'documents',
                 'label' => 'Documents',
@@ -282,18 +277,27 @@ class CaseController extends FormActionController
     {
         $categoryNames = array();
 
+        $config = $this->getServiceLocator()->get('Config');
+        $static = $config['static-list-data'];
+
+        $entityType = '';
+
+        if(isset($static['business_types'][$case['licence']['organisation']['organisationType']])){
+            $entityType = $static['business_types'][$case['licence']['organisation']['organisationType']];
+        }
+
         if (isset($case['categories']) && !empty($case['categories'])) {
 
             foreach ($case['categories'] as $category) {
                 $categoryNames[] = $category['name'];
             }
         }
-        //echo'<pre>';
-        //print_r($case);
-        //echo'</pre>';
+
+        $opentimeDate = date('d/m/Y', strtotime($case['openTime']));
+
         $smmary = [
 
-            'case_number' => [
+           /* 'case_number' => [
                 'label' => 'Case number',
                 'value' => $case['caseNumber'],
                 'url' => '',
@@ -307,15 +311,26 @@ class CaseController extends FormActionController
                 'label' => 'Licence number',
                 'value' => $case['licence']['licenceNumber'],
                 'url' => ''
+            ],*/
+
+            'description' => [
+                'label' => 'Description',
+                'value' => $case['description'],
+                'url' => ''
+            ],
+            'open_date' => [
+                'label' => 'Open date',
+                'value' => $opentimeDate,
+                'url' => ''
             ],
             'licence_type' => [
                 'label' => 'Licence type',
                 'value' => $case['licence']['licenceType'],
                 'url' => ''
             ],
-            'ecms' => [
-                'label' => 'ECMS',
-                'value' => $case['ecms'],
+            'entity_type' => [
+                'label' => 'Entity type',
+                'value' => $entityType,
                 'url' => ''
             ],
             'categories' => [
@@ -333,14 +348,9 @@ class CaseController extends FormActionController
                 'value' => $case['licence']['licenceStatus'],
                 'url' => ''
             ],
-            'open_date' => [
-                'label' => 'Open date',
-                'value' => $case['openTime'],
-                'url' => ''
-            ],
-            'summary' => [
-                'label' => 'Summary',
-                'value' => $case['description'],
+            'ecms' => [
+                'label' => 'ECMS',
+                'value' => $case['ecms'],
                 'url' => ''
             ],
         ];
