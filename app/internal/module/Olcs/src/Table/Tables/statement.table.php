@@ -64,7 +64,7 @@ return array(
                     $data['id'] . '_' .
                     'statement' . '_' .
                     'S43_letter';
-                return file_exists('/tmp/rtf/' . $filename . '.rtf') ? '<a href="' . $this->generateUrl(
+                return file_exists('/tmp/' . $filename . '.rtf') ? '<a href="' . $this->generateUrl(
                     array(
                         'controller' => 'Document',
                         'action' => 'retrieve',
