@@ -24,14 +24,11 @@ class CaseRevokeController extends CaseController
      */
     public function indexAction()
     {
-        $caseId = $this->fromRoute('case');
+        $routeParams = $this->getParams(['action', 'licence', 'case', 'id']);
 
-        if ((int) $caseId == 0) {
-            return $this->notFoundAction();
-        }
+        $caseId = $routeParams['case'];
 
-        $licenceId = $this->fromRoute('licence');
-        $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licenceId)));
+        $this->setBreadcrumbRevoke();
 
         $revokes = $this->getRevokes($caseId);
 
@@ -96,22 +93,10 @@ class CaseRevokeController extends CaseController
      */
     public function addAction()
     {
-        $routeParams = $this->getParams(array('case', 'licence', 'id', 'action'));
+        $this->checkCancel();
+        $this->setBreadcrumbRevoke();
 
-        if (isset($_POST['cancel-revoke'])) {
-            return $this->redirect()->toRoute(
-                'case_revoke',
-                array('case' => $routeParams['case'], 'licence' => $routeParams['licence'], 'action' => 'index')
-            );
-        }
-
-        // Below is for setting route params for the breadcrumb
-        $this->setBreadcrumb(
-            array(
-                'licence_case_list/pagination' => array('licence' => $routeParams['licence']),
-                'case_convictions' => array('case' => $routeParams['case'], 'licence' => $routeParams['licence'])
-            )
-        );
+        $routeParams = $this->getParams(['action', 'licence', 'case', 'id']);
 
         $data = ['case' => $routeParams['case']];
 
@@ -127,17 +112,42 @@ class CaseRevokeController extends CaseController
         $form = $this->generateForm('revoke', 'processRevoke');
         $form->setData($data);
 
-        $view = new ViewModel(
+        $view = $this->getView(
             array(
-            'form' => $form,
-            'params' => array(
-                'pageTitle' => 'propose-to-revoke',
-                'pageSubTitle' => 'propose-to-revoke-text'
-            )
+                'form' => $form,
+                'params' => array(
+                    'pageTitle' => 'propose-to-revoke',
+                    'pageSubTitle' => 'propose-to-revoke-text'
+                )
             )
         );
         $view->setTemplate('revoke/form');
         return $view;
+    }
+
+    public function checkCancel()
+    {
+        $routeParams = $this->getParams(['action', 'licence', 'case', 'id']);
+
+        if (isset($_POST['cancel-revoke'])) {
+            return $this->redirect()->toRoute(
+                'case_revoke',
+                array('case' => $routeParams['case'], 'licence' => $routeParams['licence'], 'action' => 'index')
+            );
+        }
+    }
+
+    public function setBreadcrumbRevoke()
+    {
+        $routeParams = $this->getParams(['action', 'licence', 'case', 'id']);
+
+        // Below is for setting route params for the breadcrumb
+        $this->setBreadcrumb(
+            array(
+                'licence_case_list/pagination' => array('licence' => $routeParams['licence']),
+                'case_convictions' => array('case' => $routeParams['case'], 'licence' => $routeParams['licence'])
+            )
+        );
     }
 
     public function formatDataForForm($data)
@@ -182,16 +192,12 @@ class CaseRevokeController extends CaseController
      * @param boolean $tables
      * @return object
      */
-    protected function generateForm($name, $callback, $tables = false)
+    public function generateForm($name, $callback, $tables = false)
     {
         $form = $this->getForm($name);
 
         $form->get('piReasons')->setValueOptions($this->getPiReasonsNvpArray());
         $form->get('presidingTc')->setValueOptions($this->getPresidingTcArray());
-
-        if ($tables) {
-            return $form;
-        }
 
         return $this->formPost($form, $callback);
     }
@@ -221,12 +227,6 @@ class CaseRevokeController extends CaseController
     public function deleteAction()
     {
         $routeParams = $this->getParams(array('action', 'licence', 'case', 'id'));
-
-        $result = $this->makeRestCall('Revoke', 'GET', array('id' => $routeParams['id']));
-
-        if (empty($result)) {
-            return $this->notFoundAction();
-        }
 
         $this->makeRestCall('Revoke', 'DELETE', array('id' => $routeParams['id']));
 
