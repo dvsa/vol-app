@@ -44,7 +44,47 @@ class ApplicationController extends AbstractJourneyController
      */
     public function indexAction()
     {
+        $completion = $this->getSectionCompletion();
+
+        if (isset($completion['lastSection'])) {
+            return $this->goToSection($completion['lastSection']);
+        }
+
         return $this->goToFirstSection();
+    }
+
+    /**
+     * Save the last section
+     *
+     * @param ViewModel $view
+     * @return ViewModel
+     */
+    protected function preRender($view)
+    {
+        $this->saveLastSection();
+
+        return parent::preRender($view);
+    }
+
+    /**
+     * Save the last section
+     */
+    protected function saveLastSection()
+    {
+        // We use the full section completion as it gets cached and will be used again
+        $completion = $this->getSectionCompletion();
+
+        $data = array(
+            'id' => $completion['id'],
+            'version' => $completion['version'],
+            'lastSection' => $this->getJourneyName() . '/' . $this->getSectionName() . '/' . $this->getSubSectionName()
+        );
+
+        $this->makeRestCall('ApplicationCompletion', 'PUT', $data);
+
+        $completion['version']++;
+
+        $this->setSectionCompletion($completion);
     }
 
     /**

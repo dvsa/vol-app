@@ -26,7 +26,7 @@ return array(
             'title' => 'App ID',
             'formatter' => function ($row) {
                 return '<a href="' . $this->url->fromRoute(
-                    'selfserve/determine-section',
+                    'Application',
                     ['applicationId' => $row['id']]
                 ) . '">'.$row['id'].'</a>';
             },

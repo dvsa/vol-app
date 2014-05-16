@@ -2,17 +2,17 @@
     echo $this->render(
         '/partials/page-header.phtml',
         array(
-            'pageTitle' => 'Dashboard',
-            'pageSubTitle'=> 'These are all your current licences and licence applications you have.',
+            'pageTitle' => $this->translate('dashboard.title'),
+            'pageSubTitle'=> $this->translate('dashboard.subtitle'),
         )
     );
 ?>
-
 <div class="three-quarters">
     <?php echo $applicationsTable; ?>
-    <br />
     <div class="actions-container">
-        <a href="<?php echo $this->url('selfserve/new-licence'); ?>" class="action--primary large">Start new application</a>
+        <a href="<?php echo $this->url('home/new-licence'); ?>" class="action--primary large">
+            <?php echo $this->translate('application.new.button'); ?>
+        </a>
     </div>
 </div>
 <div class="one-quarter">

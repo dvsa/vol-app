@@ -7,9 +7,7 @@
  */
 namespace SelfServe\Controller;
 
-use Common\Controller\FormActionController;
 use Zend\Http\Response;
-use Zend\Filter\Word\CamelCaseToDash;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -17,7 +15,7 @@ use Zend\View\Model\ViewModel;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-abstract class AbstractJourneyController extends FormActionController
+abstract class AbstractJourneyController extends AbstractController
 {
     /**
      * Holds the isAction
@@ -25,13 +23,6 @@ abstract class AbstractJourneyController extends FormActionController
      * @var boolean
      */
     protected $isAction;
-
-    /**
-     * Holds the layout
-     *
-     * @var string
-     */
-    protected $layout;
 
     /**
      * Render the navigation
@@ -46,26 +37,6 @@ abstract class AbstractJourneyController extends FormActionController
      * @var array
      */
     protected $formTables;
-
-    /**
-     * Data map
-     *
-     * @var array
-     */
-    protected $dataMap = array(
-        'main' => array(
-            'mapFrom' => array(
-                'data'
-            )
-        )
-    );
-
-    /**
-     * Holds the Data Bundle
-     *
-     * @var array
-     */
-    protected $dataBundle = null;
 
     /**
      * Action data map
@@ -86,13 +57,6 @@ abstract class AbstractJourneyController extends FormActionController
      * @var array
      */
     protected $actionDataBundle = null;
-
-    /**
-     * Holds the service name
-     *
-     * @var string
-     */
-    protected $service = null;
 
     /**
      * Holds the action service name
@@ -283,26 +247,6 @@ abstract class AbstractJourneyController extends FormActionController
     }
 
     /**
-     * Set the layout
-     *
-     * @param string $layout
-     */
-    protected function setLayout($layout)
-    {
-        $this->layout = $layout;
-    }
-
-    /**
-     * Get the layout
-     *
-     * @param string $layout
-     */
-    protected function getLayout()
-    {
-        return $this->layout;
-    }
-
-    /**
      * Render navigation
      *
      * @param boolean $renderNavigation
@@ -323,26 +267,6 @@ abstract class AbstractJourneyController extends FormActionController
     }
 
     /**
-     * Gets the data map
-     *
-     * @return array
-     */
-    protected function getDataMap()
-    {
-        return $this->dataMap;
-    }
-
-    /**
-     * Getter for data bundle
-     *
-     * @return array
-     */
-    protected function getDataBundle()
-    {
-        return $this->dataBundle;
-    }
-
-    /**
      * Gets the action data map
      *
      * @return array
@@ -360,16 +284,6 @@ abstract class AbstractJourneyController extends FormActionController
     protected function getActionDataBundle()
     {
         return $this->actionDataBundle;
-    }
-
-    /**
-     * Get the service name
-     *
-     * @return string
-     */
-    protected function getService()
-    {
-        return $this->service;
     }
 
     /**
@@ -518,7 +432,6 @@ abstract class AbstractJourneyController extends FormActionController
             $suffix = '';
 
             if ($this->isAction()) {
-
                 $suffix = '-' . $this->getActionName();
             }
 
@@ -576,7 +489,6 @@ abstract class AbstractJourneyController extends FormActionController
         $suffix = '';
 
         if ($isAction) {
-
             $suffix = '-sub-action';
         }
 
@@ -591,7 +503,7 @@ abstract class AbstractJourneyController extends FormActionController
     protected function getIdentifier()
     {
         if (empty($this->identifier)) {
-            $this->identifier = $this->params()->fromRoute($this->getJourneyConfig()['identifier']);
+            $this->identifier = $this->params()->fromRoute($this->getIdentifierName());
         }
 
         return $this->identifier;
@@ -676,11 +588,7 @@ abstract class AbstractJourneyController extends FormActionController
             $steps = $this->getSteps();
 
             $this->stepNumber = array_search(
-                array(
-                    $this->getJourneyName(),
-                    $this->getSectionName(),
-                    $this->getSubSectionName()
-                ),
+                array($this->getJourneyName(), $this->getSectionName(), $this->getSubSectionName()),
                 $steps
             );
         }
@@ -740,42 +648,6 @@ abstract class AbstractJourneyController extends FormActionController
         }
 
         return $this->actionId;
-    }
-
-    /**
-     * Get table data
-     *
-     * This method should be overridden
-     *
-     * @return array
-     */
-    protected function getTableData($id)
-    {
-        return array();
-    }
-
-    /**
-     * Get form table data
-     *
-     * @param int $id
-     * @param string $name
-     * @return array
-     */
-    protected function getFormTableData($id, $name)
-    {
-        return array();
-    }
-
-    /**
-     * Get table settings
-     *
-     * This method should be overridden
-     *
-     * @return array
-     */
-    protected function getTableSettings()
-    {
-        return array();
     }
 
     /**
@@ -866,8 +738,14 @@ abstract class AbstractJourneyController extends FormActionController
      * @param string $subSection
      * @return string
      */
-    protected function getSectionRoute($journey, $section, $subSection = null)
+    protected function getSectionRoute($journey = null, $section = null, $subSection = null)
     {
+        if (is_null($journey) && is_null($section) && is_null($subSection)) {
+            $journey = $this->getJourneyName();
+            $section = $this->getSectionName();
+            $subSection = $this->getSubSectionName();
+        }
+
         return $journey . '/' . $section . (!empty($subSection) ? '/' . $subSection : '');
     }
 
@@ -911,7 +789,7 @@ abstract class AbstractJourneyController extends FormActionController
             'class' => '',
             'link' => true,
             'route' => $this->getSectionRoute($journey, $section, $name),
-            'routeParams' => array($this->getJourneyConfig()['identifier'] => $this->getIdentifier()),
+            'routeParams' => array($this->getIdentifierName() => $this->getIdentifier()),
             'action' => false
         );
 
@@ -988,35 +866,10 @@ abstract class AbstractJourneyController extends FormActionController
     protected function hasForm()
     {
         if (is_null($this->hasForm)) {
-
             $this->hasForm = $this->formExists($this->getFormName());
         }
 
         return $this->hasForm;
-    }
-
-    /**
-     * Check if a form exists
-     *
-     * @param string $formName
-     * @return boolean
-     */
-    protected function formExists($formName)
-    {
-        return file_exists(
-            $this->getFormLocation($formName)
-        );
-    }
-
-    /**
-     * Get a form location
-     *
-     * @param string $formName
-     * @return string
-     */
-    protected function getFormLocation($formName)
-    {
-        return $this->getServiceLocator()->get('Config')['local_forms_path'] . $formName . '.form.php';
     }
 
     /**
@@ -1097,7 +950,6 @@ abstract class AbstractJourneyController extends FormActionController
     {
         if (is_null($this->isAction)) {
             $action = $this->getActionName();
-
             $this->isAction = ($action != 'index');
         }
 
@@ -1114,12 +966,7 @@ abstract class AbstractJourneyController extends FormActionController
      */
     protected function getFormConfigForSection($section, $subSection, $action = false)
     {
-        $formName = $this->formatFormName(
-            $this->getJourneyName(),
-            $section,
-            $subSection,
-            $action
-        );
+        $formName = $this->formatFormName($this->getJourneyName(), $section, $subSection, $action);
 
         if (!$this->formExists($formName)) {
             return null;
@@ -1192,7 +1039,20 @@ abstract class AbstractJourneyController extends FormActionController
             return $response;
         }
 
+        $view = $this->preRender($view);
+
         return $this->render($view);
+    }
+
+    /**
+     * Pre render
+     *
+     * @param ViewModel $view
+     * @return ViewModel
+     */
+    protected function preRender($view)
+    {
+        return $view;
     }
 
     /**
@@ -1271,6 +1131,7 @@ abstract class AbstractJourneyController extends FormActionController
      */
     protected function alterFormBeforeValidation($form)
     {
+        // @todo Might want to take this out so we can go back to dashboard
         if ($this->getStepNumber() == 0) {
             $form->get('form-actions')->remove('back');
         }
@@ -1453,42 +1314,6 @@ abstract class AbstractJourneyController extends FormActionController
     }
 
     /**
-     * Load data for the form
-     *
-     * This method should be overridden
-     *
-     * @param int $id
-     * @return array
-     */
-    protected function load($id)
-    {
-        $service = $this->getService();
-
-        if (empty($service)) {
-            return array();
-        }
-
-        $result = $this->makeRestCall($service, 'GET', array('id' => $id), $this->getDataBundle());
-
-        if (empty($result)) {
-            return $this->notFoundAction();
-        }
-
-        return $result;
-    }
-
-    /**
-     * Map the data on load
-     *
-     * @param array $data
-     * @return array
-     */
-    protected function processLoad($data)
-    {
-        return $data;
-    }
-
-    /**
      * Load sub section data
      *
      * @param int $id
@@ -1522,28 +1347,6 @@ abstract class AbstractJourneyController extends FormActionController
     }
 
     /**
-     * Save data
-     *
-     * @param array $data
-     * @param string $service
-     * @return array
-     */
-    protected function save($data, $service = null)
-    {
-        $method = 'POST';
-
-        if (isset($data['id']) && !empty($data['id'])) {
-            $method = 'PUT';
-        }
-
-        if (empty($service)) {
-            $service = $this->getService();
-        }
-
-        return $this->makeRestCall($service, $method, $data);
-    }
-
-    /**
      * Complete section and save
      *
      * @param array $data
@@ -1551,70 +1354,15 @@ abstract class AbstractJourneyController extends FormActionController
      */
     protected function processSave($data)
     {
-        $data = $this->processDataMapForSave($data, $this->getDataMap());
-
         $this->completeSubSection();
 
-        $response = $this->save($data);
+        $response = parent::processSave($data);
 
         if ($response instanceof Response || $response instanceof ViewModel) {
             return $response;
         }
 
         return $this->goToNextStep();
-    }
-
-    /**
-     * Process save when we have a table form
-     *
-     * @param array $data
-     */
-    protected function processSaveCrud($data)
-    {
-        $oldData = $data;
-
-        $data = $this->processDataMapForSave($data, $this->getDataMap());
-
-        $response = $this->saveCrud($data);
-
-        if ($response instanceof Response || $response instanceof ViewModel) {
-            return $response;
-        }
-
-        foreach (array_keys($this->formTables) as $table) {
-
-            $action = strtolower($oldData[$table]['action']);
-
-            if (empty($action)) {
-                continue;
-            }
-
-            if ($action == 'add') {
-                return $this->redirectToRoute(null, array('action' => $action), array(), true);
-            } else {
-                if (!isset($data[$table]['id']) || empty($data[$table]['id'])) {
-
-                    return $this->crudActionMissingId();
-                }
-                return $this->redirectToRoute(
-                    null,
-                    array('action' => $action, 'id' => $data[$table]['id']),
-                    array(),
-                    true
-                );
-            }
-        }
-    }
-
-    /**
-     * Save crud data
-     *
-     * @param array $data
-     * @return mixed
-     */
-    protected function saveCrud($data)
-    {
-        return $this->save($data);
     }
 
     /**
@@ -1675,56 +1423,6 @@ abstract class AbstractJourneyController extends FormActionController
     }
 
     /**
-     * Process the data map for saving
-     *
-     * @param type $data
-     */
-    protected function processDataMapForSave($oldData, $map = array(), $section = 'main')
-    {
-        if (empty($map)) {
-            return $oldData;
-        }
-
-        if (isset($map['_addresses'])) {
-
-            foreach ($map['_addresses'] as $address) {
-
-                $oldData = $this->processAddressData($oldData, $address);
-            }
-        }
-
-        if (isset($map[$section]['mapFrom'])) {
-
-            $data = array();
-
-            foreach ($map[$section]['mapFrom'] as $key) {
-
-                if (!isset($oldData[$key])) {
-                    return $oldData;
-                }
-
-                $data = array_merge($data, $oldData[$key]);
-            }
-        } else {
-            $data = array();
-        }
-
-        if (isset($map[$section]['children'])) {
-
-            foreach ($map[$section]['children'] as $child => $options) {
-
-                $data[$child] = $this->processDataMapForSave($oldData, array($child => $options), $child);
-            }
-        }
-
-        if (isset($map[$section]['values'])) {
-            $data = array_merge($data, $map[$section]['values']);
-        }
-
-        return $data;
-    }
-
-    /**
      * Complete sub section
      */
     protected function completeSubSection()
@@ -1743,10 +1441,9 @@ abstract class AbstractJourneyController extends FormActionController
         foreach (array_keys($sectionConfig['subSections']) as $subSectionName) {
             $sectionStatusKey = 'section' . $sectionName . $subSectionName . 'Status';
 
-            if (
-                $this->isSectionAccessible($sectionName, $subSectionName)
-                && (!isset($sectionCompletion[$sectionStatusKey])
-                || $sectionCompletion[$sectionStatusKey] != $completeKey)) {
+            if ($this->isSectionAccessible($sectionName, $subSectionName)
+                    && (!isset($sectionCompletion[$sectionStatusKey])
+                    || $sectionCompletion[$sectionStatusKey] != $completeKey)) {
                 $complete = false;
                 break;
             }
@@ -1756,15 +1453,17 @@ abstract class AbstractJourneyController extends FormActionController
 
         $sectionCompletion['section' . $sectionName . 'Status'] = $sectionCompletionKey;
 
-        $this->setSectionCompletion($sectionCompletion);
-
         $this->makeRestCall($this->getJourneyConfig()['completionService'], 'PUT', $sectionCompletion);
+
+        $sectionCompletion['version']++;
+
+        $this->setSectionCompletion($sectionCompletion);
     }
 
     /**
      * Journey finished
      *
-     * @todo Implement this
+     * @todo Maybe want to do something before going home
      */
     protected function journeyFinished()
     {
@@ -1780,7 +1479,7 @@ abstract class AbstractJourneyController extends FormActionController
      */
     protected function goToSection($name, $params = array(), $reuse = true)
     {
-        return $this->redirect()->toRoute($name, $params, array(), $reuse);
+        return $this->redirectToRoute($name, $params, array(), $reuse);
     }
 
     /**
@@ -1841,11 +1540,7 @@ abstract class AbstractJourneyController extends FormActionController
 
             if ($this->isSectionAccessible($steps[$nextKey][1], $steps[$nextKey][2])) {
                 return $this->goToSection(
-                    $this->getSectionRoute(
-                        $steps[$nextKey][0],
-                        $steps[$nextKey][1],
-                        $steps[$nextKey][2]
-                    )
+                    $this->getSectionRoute($steps[$nextKey][0], $steps[$nextKey][1], $steps[$nextKey][2])
                 );
             }
 
@@ -1870,11 +1565,7 @@ abstract class AbstractJourneyController extends FormActionController
 
             if ($this->isSectionAccessible($steps[$nextKey][1], $steps[$nextKey][2])) {
                 return $this->goToSection(
-                    $this->getSectionRoute(
-                        $steps[$nextKey][0],
-                        $steps[$nextKey][1],
-                        $steps[$nextKey][2]
-                    )
+                    $this->getSectionRoute($steps[$nextKey][0], $steps[$nextKey][1], $steps[$nextKey][2])
                 );
             }
 
@@ -1891,17 +1582,19 @@ abstract class AbstractJourneyController extends FormActionController
      */
     protected function goBackToSection()
     {
-        $route = $this->getSectionRoute(
-            $this->getJourneyName(),
-            $this->getSectionName(),
-            $this->getSubSectionName()
-        );
+        $route = $this->getSectionRoute();
 
-        return $this->goToSection(
-            $route,
-            array($this->getJourneyConfig()['identifier'] => $this->getIdentifier()),
-            false
-        );
+        return $this->goToSection($route, array($this->getIdentifierName() => $this->getIdentifier()), false);
+    }
+
+    /**
+     * Get the identifier name
+     *
+     * @return string
+     */
+    protected function getIdentifierName()
+    {
+        return $this->getJourneyConfig()['identifier'];
     }
 
     /**
@@ -1911,11 +1604,7 @@ abstract class AbstractJourneyController extends FormActionController
      */
     protected function goBackToAddAnother()
     {
-        $route = $this->getSectionRoute(
-            $this->getJourneyName(),
-            $this->getSectionName(),
-            $this->getSubSectionName()
-        );
+        $route = $this->getSectionRoute();
 
         return $this->goToSection($route);
     }
@@ -1928,29 +1617,5 @@ abstract class AbstractJourneyController extends FormActionController
     protected function goHome()
     {
         return $this->redirectToRoute($this->getJourneyConfig()['homeRoute']);
-    }
-
-    /**
-     * Get the namespace parts
-     *
-     * @return array
-     */
-    private function getNamespaceParts()
-    {
-        $controller = get_called_class();
-
-        return explode('\\', $controller);
-    }
-
-    /**
-     * Convert camel case to dash
-     *
-     * @param string $string
-     * @return string
-     */
-    private function camelToDash($string)
-    {
-        $converter = new CamelCaseToDash();
-        return strtolower($converter->filter($string));
     }
 }

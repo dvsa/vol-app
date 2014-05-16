@@ -10,7 +10,6 @@ class Module
         $config = array();
         $configFiles = array(
             include __DIR__ . '/config/module.config.php',
-            include __DIR__ . '/config/navigation.config.php',
         );
         foreach ($configFiles as $file) {
             $config = \Zend\Stdlib\ArrayUtils::merge($config, $file);
@@ -32,7 +31,6 @@ class Module
     public function onBootstrap($e)
     {
         $eventManager        = $e->getApplication()->getEventManager();
-        $serviceManager      = $e->getApplication()->getServiceManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
         //$this->bootstrapSession($e);
@@ -100,5 +98,4 @@ class Module
             ),
         );
     }
-
 }

@@ -3,30 +3,11 @@
 list($allRoutes, $controllers, $journeys) = include(__DIR__ . '/journeys.config.php');
 
 $invokeables = array_merge(
-    $controllers,
-    array(
-        'SelfServe\Dashboard\Index' => 'SelfServe\Controller\Dashboard\IndexController',
-        'SelfServe\LicenceType\Index' => 'SelfServe\Controller\LicenceType\IndexController',
-        'SelfServe\BusinessType\Index' => 'SelfServe\Controller\BusinessType\IndexController',
-        'SelfServe\Finance\Index' => 'SelfServe\Controller\Finance\IndexController',
-        'SelfServe\Finance\OperatingCentreController' => 'SelfServe\Controller\Finance\OperatingCentreController',
-        'SelfServe\VehicleSafety\Vehicle' => 'SelfServe\Controller\VehicleSafety\VehicleController',
-        'SelfServe\VehicleSafety\Safety' => 'SelfServe\Controller\VehicleSafety\SafetyController',
-        'SelfServe\VehicleSafety\Workshop' => 'SelfServe\Controller\VehicleSafety\WorkshopController',
-        'SelfServe\Finance\FinancialEvidenceController'
-            => 'SelfServe\Controller\Finance\FinancialEvidenceController',
-        'SelfServe\PreviousHistory\Index' => 'SelfServe\Controller\PreviousHistory\IndexController',
-        'SelfServe\VehiclesSafety\Safety' => 'SelfServe\Controller\VehiclesSafety\SafetyController',
-        'SelfServe\TransportManagers\Index' => 'SelfServe\Controller\TransportManagers\IndexController',
-        'SelfServe\PaymentDetails\Index' => 'SelfServe\Controller\PaymentDetails\IndexController',
-        'SelfServe\Summary\Index' => 'SelfServe\Controller\Summary\IndexController',
-        'SelfServe\Declarations\Index' => 'SelfServe\Controller\Declarations\IndexController'
+    $controllers, array(
+    'SelfServe\Dashboard\Index' => 'SelfServe\Controller\Dashboard\IndexController',
     )
 );
 
-/**
- * Module routes configuration
- */
 return array(
     'journeys' => $journeys,
     'router' => array(
@@ -41,14 +22,11 @@ return array(
             __DIR__ . '/../src/SelfServe/Table/Tables/'
         )
     ),
-    'local_forms_path' => __DIR__ . '/../src/SelfServe/Form/Forms/',
     'service_manager' => array(
-        'factories' => array(
-        )
+        'factories' => array()
     ),
     'controller_plugins' => array(
-        'invokables' => array(
-        )
+        'invokables' => array()
     ),
     'simple_date_format' => array(
         'default' => 'd-m-Y'
@@ -56,14 +34,6 @@ return array(
     'view_manager' => array(
         'template_path_stack' => array(
             __DIR__ . '/../view'
-        ),
-        'strategies' => array(
-            'ViewJsonStrategy',
-        ),
-    ),
-    'view_helpers' => array(
-        'invokables' => array(
-            'journey' => 'SelfServe\View\Helper\Journey'
-        ),
+        )
     )
 );

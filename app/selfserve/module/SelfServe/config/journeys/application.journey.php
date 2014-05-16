@@ -62,13 +62,20 @@ return array(
 
                     ),
                     'BusinessDetails' => array(
-
+                        'required' => array(
+                            'YourBusiness/BusinessType'
+                        )
                     ),
                     'Addresses' => array(
+                        'required' => array(
+                            'YourBusiness/BusinessType'
+                        )
 
                     ),
                     'People' => array(
-
+                        'required' => array(
+                            'YourBusiness/BusinessType'
+                        )
                     )
                 )
             ),
