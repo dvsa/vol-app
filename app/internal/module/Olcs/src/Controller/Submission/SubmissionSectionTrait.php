@@ -137,4 +137,20 @@ trait SubmissionSectionTrait
         }
         return $dataToReturnArray;
     }
+    
+    /**
+     * section transportManagers
+     */
+    public function transportManagers(array $data = array())
+    {
+        $dataToReturnArray = array();
+        foreach ($data['licence']['transportManagerLicences'] as $transportManagerLicence) {
+            $thisTransportManagerLicence['lastName'] = $transportManagerLicence['transportManager']['contactDetails']['person']['surname'];
+            $thisTransportManagerLicence['firstName'] = $transportManagerLicence['transportManager']['contactDetails']['person']['firstName'];
+            $thisTransportManagerLicence['tmType'] = $transportManagerLicence['transportManager']['tmType'];
+            $thisTransportManagerLicence['dob'] = $transportManagerLicence['transportManager']['contactDetails']['person']['dateOfBirth'];
+            $dataToReturnArray[] = $thisTransportManagerLicence;
+        }
+        return $dataToReturnArray;
+    }
 }
