@@ -40,6 +40,9 @@ return array(
                                     'transportManager' => array(
                                         'properties' => 'ALL',
                                         'children' => array(
+                                            'qualifications' => array(
+                                                'properties' => 'ALL'
+                                            ),
                                             'contactDetails' => array(
                                                 'properties' => 'ALL',
                                                 'children' => array(

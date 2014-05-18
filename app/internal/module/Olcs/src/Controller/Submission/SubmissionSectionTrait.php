@@ -148,6 +148,10 @@ trait SubmissionSectionTrait
             $thisTransportManagerLicence['lastName'] = $transportManagerLicence['transportManager']['contactDetails']['person']['surname'];
             $thisTransportManagerLicence['firstName'] = $transportManagerLicence['transportManager']['contactDetails']['person']['firstName'];
             $thisTransportManagerLicence['tmType'] = $transportManagerLicence['transportManager']['tmType'];
+            $thisTransportManagerLicence['qualifications'] = '';
+            foreach ($transportManagerLicence['transportManager']['qualifications'] as $key => $qualification) {
+                $thisTransportManagerLicence['qualifications'] .= $qualification['qualificationType'].' ';
+            }
             $thisTransportManagerLicence['dob'] = $transportManagerLicence['transportManager']['contactDetails']['person']['dateOfBirth'];
             $dataToReturnArray[] = $thisTransportManagerLicence;
         }
