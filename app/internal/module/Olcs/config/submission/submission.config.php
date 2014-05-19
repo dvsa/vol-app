@@ -33,6 +33,27 @@ return array(
                                         )
                                     )
                                 )
+                            ),
+                            'transportManagerLicences' => array(
+                                'properties' => 'ALL',
+                                'children' => array(
+                                    'transportManager' => array(
+                                        'properties' => 'ALL',
+                                        'children' => array(
+                                            'qualifications' => array(
+                                                'properties' => 'ALL'
+                                            ),
+                                            'contactDetails' => array(
+                                                'properties' => 'ALL',
+                                                'children' => array(
+                                                    'person' => array(
+                                                        'properties' => 'ALL'
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
                             )
                         )
                     )
@@ -43,6 +64,7 @@ return array(
             'view' => 'submission/partials/persons'
         ),
         'transport-managers' => array(
+            'view' => 'submission/partials/transport-managers',
             'exclude' => array(
                 'column' => 'licenceType',
                 'values' => array(

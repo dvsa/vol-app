@@ -112,7 +112,7 @@ trait SubmissionSectionTrait
             $thisConviction['dateOfOffence'] = $conviction['dateOfOffence'];
             $thisConviction['dateOfConviction'] = $conviction['dateOfConviction'];
             $thisConviction['name'] = $conviction['personFirstname'] . ' ' . $conviction['personLastname'];
-            $thisConviction['description'] = isset($conviction['description']) ? $conviction['description'] : '';
+            $thisConviction['description'] = isset($conviction['categoryText']) ? $conviction['categoryText'] : '';
             $thisConviction['courtFpm'] = $conviction['courtFpm'];
             $thisConviction['penalty'] = $conviction['penalty'];
             $thisConviction['si'] = $conviction['si'];
@@ -134,6 +134,26 @@ trait SubmissionSectionTrait
             $thisOrganisationOwner['firstName'] = $organisationOwner['person']['firstName'];
             $thisOrganisationOwner['dob'] = $organisationOwner['person']['dateOfBirth'];
             $dataToReturnArray[] = $thisOrganisationOwner;
+        }
+        return $dataToReturnArray;
+    }
+    
+    /**
+     * section transportManagers
+     */
+    public function transportManagers(array $data = array())
+    {
+        $dataToReturnArray = array();
+        foreach ($data['licence']['transportManagerLicences'] as $transportManagerLicence) {
+            $thisTransportManagerLicence['lastName'] = $transportManagerLicence['transportManager']['contactDetails']['person']['surname'];
+            $thisTransportManagerLicence['firstName'] = $transportManagerLicence['transportManager']['contactDetails']['person']['firstName'];
+            $thisTransportManagerLicence['tmType'] = $transportManagerLicence['transportManager']['tmType'];
+            $thisTransportManagerLicence['qualifications'] = '';
+            foreach ($transportManagerLicence['transportManager']['qualifications'] as $key => $qualification) {
+                $thisTransportManagerLicence['qualifications'] .= $qualification['qualificationType'].' ';
+            }
+            $thisTransportManagerLicence['dob'] = $transportManagerLicence['transportManager']['contactDetails']['person']['dateOfBirth'];
+            $dataToReturnArray[] = $thisTransportManagerLicence;
         }
         return $dataToReturnArray;
     }
