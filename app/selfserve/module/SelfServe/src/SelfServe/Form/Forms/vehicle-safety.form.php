@@ -28,6 +28,7 @@ return array(
                     'licence.safetyInsVaries' => array(
                         'type' => 'yesNoRadio',
                         'label' => $translationPrefix . 'moreFrequentInspections',
+                        'hint' => $translationPrefix . 'moreFrequentInspectionsHint',
                         'required' => true
                     ),
                     'licence.tachographIns' => array(
