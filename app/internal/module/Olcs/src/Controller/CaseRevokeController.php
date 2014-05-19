@@ -205,7 +205,11 @@ class CaseRevokeController extends CaseController
     public function getPiReasonsNvpArray()
     {
         $reasons = [];
-        $piReasons = $this->makeRestCall('PiReason', 'GET', ['proposeToRevoke' => '1', 'limit' => '100', 'page' => '1']);
+        $piReasons = $this->makeRestCall(
+            'PiReason',
+            'GET',
+           ['proposeToRevoke' => '1', 'limit' => '100', 'page' => '1']
+        );
         foreach ($piReasons['Results'] as $result) {
             $reasons[$result['id']] = $result['sectionCode'] . ' - ' . $result['description'];
         }
@@ -243,7 +247,9 @@ class CaseRevokeController extends CaseController
 
     public function processRevoke($data)
     {
-        if (array_key_exists('cancel-revoke', $data)) unset($data['cancel-revoke']);
+        if (array_key_exists('cancel-revoke', $data)) {
+            unset($data['cancel-revoke']);
+        }
 
         $routeParams = $this->getParams(array('action', 'licence', 'case'));
 
