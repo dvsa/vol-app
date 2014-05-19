@@ -112,7 +112,7 @@ trait SubmissionSectionTrait
             $thisConviction['dateOfOffence'] = $conviction['dateOfOffence'];
             $thisConviction['dateOfConviction'] = $conviction['dateOfConviction'];
             $thisConviction['name'] = $conviction['personFirstname'] . ' ' . $conviction['personLastname'];
-            $thisConviction['description'] = isset($conviction['description']) ? $conviction['description'] : '';
+            $thisConviction['description'] = isset($conviction['categoryText']) ? $conviction['categoryText'] : '';
             $thisConviction['courtFpm'] = $conviction['courtFpm'];
             $thisConviction['penalty'] = $conviction['penalty'];
             $thisConviction['si'] = $conviction['si'];
