@@ -90,12 +90,14 @@ return [
                     'penalty' => [
                         'type' => 'text',
                         'label' => 'Penalty:',
-                        'class' => 'medium'
+                        'class' => 'medium',
+                        'filters' => '\Common\Form\Elements\InputFilters\TextMax255',
                     ],
                     'costs' => [
                         'type' => 'text',
                         'label' => 'Costs:',
-                        'class' => 'medium'
+                        'class' => 'medium',
+                        'filters' => '\Common\Form\Elements\InputFilters\TextMax255',
                     ],
                     'convictionNotes' => [
                         'type' => 'textarea',

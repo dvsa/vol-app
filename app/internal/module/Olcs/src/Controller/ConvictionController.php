@@ -21,6 +21,10 @@ use \Zend\Json\Json as Json;
  */
 class ConvictionController extends CaseController
 {
+
+    /**
+     * Dealt action
+     */
     public function dealtAction()
     {
         $params = $this->getParams(['id', 'case', 'licence']);
@@ -46,9 +50,9 @@ class ConvictionController extends CaseController
     }
 
     /**
-     * Search form action
+     * add action
      *
-     * @return ViewModel
+     * @return \Zend\View\Model\ViewModel
      */
     public function addAction()
     {
@@ -76,15 +80,32 @@ class ConvictionController extends CaseController
             return $this->getResponse()->setStatusCode(404);
         }
 
-        $form = $this->generateForm('conviction', 'processConviction');
-        $form->setData($data);
+        $form = $this->generateFormWithData(
+            'conviction',
+            'processConviction',
+            $data,
+            true
+        );
+
+        $posted = $this->getRequest()->getPost();
 
         $parentCategory = $this->getConvictionParentCategories();
 
         $form->get('offence')
             ->get('parentCategory')
-            ->setValueOptions($parentCategory)
-            ->setValue('');
+            ->setValueOptions($parentCategory);
+
+        if(isset($posted['offence']['parentCategory']) && $posted['offence']['parentCategory']){
+            $subCategory = $this->getConvictionSubCategories($posted['offence']['parentCategory']);
+
+            foreach ($subCategory['Results'] as $category) {
+                $formSubCategory[$category['id']] = $category['description'];
+            }
+
+            $form->get('offence')
+            ->get('category')
+            ->setValueOptions($formSubCategory);
+        }
 
         $view = new ViewModel(
             array(
@@ -100,6 +121,11 @@ class ConvictionController extends CaseController
         return $view;
     }
 
+    /**
+     * The edit action
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
     public function editAction()
     {
         $routeParams = $this->getParams(
@@ -182,6 +208,12 @@ class ConvictionController extends CaseController
 
         $formSubCategory = array();
 
+        $posted = $this->getRequest()->getPost();
+
+        if(isset($posted['offence']['parentCategory']) && $posted['offence']['parentCategory']){
+            $data['parentCategory'] = $posted['offence']['parentCategory'];
+        }
+
         if (isset($data['parentCategory'])) {
             $subCategory = $this->getConvictionSubCategories($data['parentCategory']);
 
@@ -210,6 +242,11 @@ class ConvictionController extends CaseController
         return $view;
     }
 
+    /**
+     * Processes the conviction form
+     *
+     * @param array $data
+     */
     public function processConviction($data)
     {
         $data = array_merge($data, $data['defendant-details'], $data['offence']);
@@ -243,6 +280,11 @@ class ConvictionController extends CaseController
         );
     }
 
+    /**
+     * Gets categories (used in ajax call)
+     *
+     * @return \Zend\Http\PhpEnvironment\Response
+     */
     public function categoriesAction()
     {
         $response = $this->getResponse();
@@ -259,6 +301,11 @@ class ConvictionController extends CaseController
         return $response;
     }
 
+    /**
+     * Gets conviction parent categories
+     *
+     * @return array
+     */
     private function getConvictionParentCategories()
     {
         $bundle = array(
@@ -293,6 +340,7 @@ class ConvictionController extends CaseController
         return $parentCategory;
     }
     /**
+     * Gets sub categories
      *
      * @param int $parent
      * @return array
