@@ -27,7 +27,6 @@ class OlcsConvictionControllerTest extends AbstractHttpControllerTestCase
                 'getServiceLocator',
                 'setBreadcrumb',
                 'generateFormWithData',
-                'generateForm',
                 'getPluginManager',
                 'redirect',
                 'params',
@@ -38,7 +37,8 @@ class OlcsConvictionControllerTest extends AbstractHttpControllerTestCase
                 'processEdit',
                 'processAdd',
                 'notFoundAction',
-                'fromPost'
+                'fromPost',
+                'getRequest'
             )
         );
 
@@ -124,55 +124,59 @@ class OlcsConvictionControllerTest extends AbstractHttpControllerTestCase
         $form = $this->getFormMock();
 
         $this->controller->expects($this->once())
-            ->method('generateForm')
-            ->with('conviction', 'processConviction')
+            ->method('generateFormWithData')
             ->will($this->returnValue($form));
 
-        $form->expects($this->once())
-            ->method('setData')
-            ->with(array('vosaCase' => 54));
+        $this->controller->expects($this->once())
+            ->method('getRequest')
+            ->will($this->returnValue($this->getPostDataMock()));
 
         $this->controller->addAction();
     }
 
-    private function getFormMock()
+    public function testAddActionFailedWithPostedCategory()
     {
-        $formMock = $this->getMock('\stdClass', array('setData', 'get'));
+        /*$this->controller->expects($this->once())
+            ->method('setBreadcrumb')
+            ->with(array('operators/operators-params' => array('operatorName' => 'a')));*/
 
-        $getMock = $this->getMock(
-            'stdClass',
-            [
-                'get'
-            ]
-        );
+        $this->controller->expects($this->once())
+            ->method('getParams')
+            ->with(array('case', 'licence', 'id'))
+            ->will($this->returnValue(array ( 'licence' => 7, 'case' => 54 )));
 
-        $setValueOptionsMock = $this->getMock(
-            'stdClass',
-            [
-                'setValueOptions'
-            ]
-        );
+        $this->controller->expects($this->exactly(3))
+            ->method('makeRestCall')
+            ->will(
+                $this->onConsecutiveCalls(
+                    $this->returnValue(
+                        $this->returnValue(array('id' => 54))
+                    ),
+                    $this->returnValue(
+                        $this->sampleParentCategory()
+                    ),
+                    $this->returnValue(
+                        $this->sampleParentCategory()
+                    )
+                )
+            );
 
-        $setValueMock = $this->getMock(
-            'stdClass',
-            [
-                'setValue'
-            ]
-        );
+        $form = $this->getFormMock();
 
-        $setValueOptionsMock->expects($this->any())
-            ->method('setValueOptions')
-            ->will($this->returnValue($setValueMock));
+        $this->controller->expects($this->once())
+            ->method('generateFormWithData')
+            ->will($this->returnValue($form));
 
-        $getMock->expects($this->any())
-            ->method('get')
-            ->will($this->returnValue($setValueOptionsMock));
+        $this->controller->expects($this->once())
+            ->method('getRequest')
+            ->will($this->returnValue($this->getPostDataMock(array(
+                'offence' => array(
+                    'category' => 38,
+                    'parentCategory' => 1
+                )
+            ))));
 
-        $formMock->expects($this->any())
-            ->method('get')
-            ->will($this->returnValue($getMock));
-
-        return $formMock;
+        $this->controller->addAction();
     }
 
     public function testAddCancelAction()
@@ -247,6 +251,19 @@ class OlcsConvictionControllerTest extends AbstractHttpControllerTestCase
             ->method('generateFormWithData')
             ->with('conviction', 'processConviction')
             ->will($this->returnValue($form));
+
+        $this->controller->expects($this->once())
+            ->method('getRequest')
+            ->will($this->returnValue($this->getPostDataMock(
+                    array(
+                        'offence' => array(
+                            'category' => 38,
+                            'parentCategory' => 1
+                        )
+                    )
+                )
+            )
+        );
 
         $this->controller->editAction();
     }
@@ -473,5 +490,67 @@ class OlcsConvictionControllerTest extends AbstractHttpControllerTestCase
                 ->method('from' . $function)
                 ->with($this->equalTo($with));
         }
+    }
+
+    /**
+     *  Gets a form mock
+     */
+    private function getFormMock()
+    {
+        $formMock = $this->getMock('\stdClass', array('setData', 'get'));
+
+        $getMock = $this->getMock(
+            'stdClass',
+            [
+                'get'
+            ]
+        );
+
+        $setValueOptionsMock = $this->getMock(
+            'stdClass',
+            [
+                'setValueOptions'
+            ]
+        );
+
+        $setValueMock = $this->getMock(
+            'stdClass',
+            [
+                'setValue'
+            ]
+        );
+
+        $setValueOptionsMock->expects($this->any())
+            ->method('setValueOptions')
+            ->will($this->returnValue($setValueMock));
+
+        $getMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValue($setValueOptionsMock));
+
+        $formMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValue($getMock));
+
+        return $formMock;
+    }
+
+    /**
+     *  Gets a form mock
+     */
+    private function getPostDataMock($returnValue = array())
+    {
+        $getPostMock = $this->getMock(
+            'stdClass',
+            [
+                'getPost'
+            ]
+        );
+
+        $getPostMock->expects($this->once())
+            ->method('getPost')
+            ->will($this->returnValue($returnValue));
+
+        return $getPostMock;
     }
 }

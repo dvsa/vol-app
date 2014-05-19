@@ -16,7 +16,7 @@ return [
                 'elements' => [
                     'licenceNumber' => [
                         'type' => 'text',
-                        'label' => 'License number',
+                        'label' => 'Licence number',
                         'class' => 'medium',
                     ],
                     'operatorName' => [
