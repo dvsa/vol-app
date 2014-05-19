@@ -113,10 +113,11 @@ class ConvictionController extends CaseController
                 'headScript' => array('/static/js/conviction.js'),
                 'params' => array(
                     'pageTitle' => 'add-conviction',
-                    'pageSubTitle' => 'add-conviction-text'
+                    'pageSubTitle' => 'Please add conviction details'
                 )
             )
         );
+
         $view->setTemplate('conviction/form');
         return $view;
     }
@@ -232,8 +233,8 @@ class ConvictionController extends CaseController
                     '/static/js/conviction.js'
                 ),
                 'params' => array(
-                    'pageTitle' => 'add-conviction',
-                    'pageSubTitle' => 'add-conviction-text'
+                    'pageTitle' => 'edit-conviction',
+                    'pageSubTitle' => 'Edit the conviction'
                 )
             )
         );
@@ -261,6 +262,11 @@ class ConvictionController extends CaseController
         unset(
             $data['cancel'], $data['conviction'], $data['conviction-operator']
         );
+
+        //we only have category text in the conviction table for the user defined type
+        if ($data['category'] != 168) {
+            $data['categoryText'] = '';
+        }
 
         $routeParams = $this->getParams(array('action', 'licence', 'case'));
 
@@ -339,6 +345,7 @@ class ConvictionController extends CaseController
 
         return $parentCategory;
     }
+    
     /**
      * Gets sub categories
      *

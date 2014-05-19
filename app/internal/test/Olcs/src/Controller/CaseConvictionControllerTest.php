@@ -122,7 +122,6 @@ class CaseConvictionControllerTest  extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->once())
             ->method('makeRestCall')
-                ->with('Conviction', 'GET', array('vosaCase' => 54))
             ->will($this->returnValue($this->getSampleResultsArray()));
 
         $this->controller->expects($this->once())
@@ -199,13 +198,18 @@ class CaseConvictionControllerTest  extends AbstractHttpControllerTestCase
         return array
         (
             'Count' => 3,
-            'Results' => Array
+            'Results' => array
             (
-                0 => Array
-                    (
-                        'id' => 25,
-                        'dateOfConviction' => '2012-06-15T00:00:00+0100'
+                0 => array
+                (
+                    'id' => 25,
+                    'dateOfConviction' => '2012-06-15T00:00:00+0100',
+                    'categoryText' => 'Category text',
+                    'category' => array(
+                        'id' => 48,
+                        'description' => 'Category description'
                     )
+                )
             )
         );
     }

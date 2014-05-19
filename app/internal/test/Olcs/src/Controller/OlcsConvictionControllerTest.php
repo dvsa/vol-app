@@ -316,7 +316,9 @@ class OlcsConvictionControllerTest extends AbstractHttpControllerTestCase
         $data = array(
             'id' => 33,
             'defendant-details' => array(),
-            'offence' => array()
+            'offence' => array(),
+            'categoryText' => 'Category text',
+            'category' => 1
             );
 
         $this->controller->expects($this->once())
@@ -326,7 +328,7 @@ class OlcsConvictionControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->once())
             ->method('processEdit')
-            ->with(array('id' => 33), 'Conviction')
+            ->with(array('id' => 33, 'categoryText' => '', 'category' => 1), 'Conviction')
             ->will($this->returnValue(array('id' => 33)));
 
         $toRoute = $this->getMock('\stdClass', array('toRoute'));
@@ -353,7 +355,9 @@ class OlcsConvictionControllerTest extends AbstractHttpControllerTestCase
         $data = array(
             'id' => 33,
             'defendant-details' => array(),
-            'offence' => array()
+            'offence' => array(),
+            'categoryText' => 'Category text',
+            'category' => 1
             );
 
         $this->controller->expects($this->once())
@@ -363,7 +367,7 @@ class OlcsConvictionControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->once())
             ->method('processAdd')
-            ->with(array('id' => 33), 'Conviction')
+            ->with(array('id' => 33, 'categoryText' => '', 'category' => 1), 'Conviction')
             ->will($this->returnValue(array('id' => 33)));
 
         $toRoute = $this->getMock('\stdClass', array('toRoute'));
