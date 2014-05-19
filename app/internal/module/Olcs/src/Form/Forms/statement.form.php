@@ -85,7 +85,7 @@ return [
                      'templateId' => [
                          'type' => 'hidden',
                          'attributes' => [
-                            'value' => 'S43_letter'
+                            'value' => 'S43_Letter'
                          ]
                      ],
                      'country' => [
