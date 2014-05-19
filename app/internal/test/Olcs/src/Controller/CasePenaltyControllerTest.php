@@ -27,7 +27,6 @@ class CasePenaltyControllerTest extends AbstractHttpControllerTestCase
             array(
                 'getTabInformationArray',
                 'getCase',
-                'getCaseDetailsArray',
                 'getCaseSummaryArray',
                 'makeRestCall',
                 'generateForm',
@@ -73,10 +72,6 @@ class CasePenaltyControllerTest extends AbstractHttpControllerTestCase
         $this->controller->expects($this->once())
             ->method('getCase')
             ->will($this->returnValue(array()));
-
-        $this->controller->expects($this->once())
-            ->method('getCaseDetailsArray')
-            ->with($this->equalTo(array()));
 
         $this->controller->expects($this->once())
             ->method('getCaseSummaryArray')

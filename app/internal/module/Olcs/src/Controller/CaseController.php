@@ -50,7 +50,6 @@ class CaseController extends FormActionController
         $case = $this->getCase($caseId);
 
         $summary = $this->getCaseSummaryArray($case);
-        $details = $this->getCaseDetailsArray($case);
 
         // -- submissions
 
@@ -72,7 +71,6 @@ class CaseController extends FormActionController
                 'tabs' => $tabs,
                 'tab' => $action,
                 'summary' => $summary,
-                'details' => $details,
                 'submissions' => $submissionsTable
             )
         );
@@ -99,16 +97,16 @@ class CaseController extends FormActionController
             )
         );
 
-        $config = $config = $this->getServiceLocator()->get('Config');
+        $config = $this->getServiceLocator()->get('Config');
         $submissionActions = $config['static-list-data'];
         $results = $this->makeRestCall('Submission', 'GET', array('vosaCase' => $caseId), $bundle);
 
         foreach ($results['Results'] as $k => $result) {
-            $actions = $this->makeRestCall('SubmissionAction', 'GET', array('submission' => $result['id']));
+            $results['Results'][$k]['status'] = 'Draft';
             foreach ($result['submissionActions'] as $ak => $action) {
                 $results['Results'][$k]['urgent'] = $action['urgent'];
-                if (isset($action['userRecipient']['displayName'])) {
-                    $results['Results'][$k]['currentlyWith'] = $action['userRecipient']['displayName'];
+                if (isset($action['userRecipient']['name'])) {
+                    $results['Results'][$k]['currentlyWith'] = $action['userRecipient']['name'];
                 }
                 $actions = isset($submissionActions['submission_'.$action['submissionActionType']])
                     ? $submissionActions['submission_'.$action['submissionActionType']] : '';
@@ -248,11 +246,6 @@ class CaseController extends FormActionController
                 'label' => 'Complaints',
                 'url' => $pm->get('url')->fromRoute('case_complaints', ['tab' => 'complaints'], [], true),
             ],
-            'reports' => [
-                'key' => 'reports',
-                'label' => 'Reports',
-                'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'reports'], [], true),
-            ],
             'documents' => [
                 'key' => 'documents',
                 'label' => 'Documents',
@@ -268,6 +261,16 @@ class CaseController extends FormActionController
                 'label' => 'Conditions &amp; Undertakings',
                 'url' => $pm->get('url')->fromRoute('case_conditions_undertakings', ['tab' => 'conditions-undertakings'], [], true),
             ],
+            'impounding' => [
+                'key' => 'impounding',
+                'label' => 'Impounding',
+                'url' => $pm->get('url')->fromRoute('case_impounding', ['tab' => 'impounding', 'action' => null], [], true),
+            ],
+            'revoke' => [
+                'key' => 'revoke',
+                'label' => 'Proposal to revoke',
+                'url' => $pm->get('url')->fromRoute('case_revoke', ['tab' => 'revoke', 'action' => 'index'], [], true),
+            ],
         ];
 
         return $tabs;
@@ -277,6 +280,15 @@ class CaseController extends FormActionController
     {
         $categoryNames = array();
 
+        $config = $this->getServiceLocator()->get('Config');
+        $static = $config['static-list-data'];
+
+        $entityType = '';
+
+        if(isset($static['business_types'][$case['licence']['organisation']['organisationType']])){
+            $entityType = $static['business_types'][$case['licence']['organisation']['organisationType']];
+        }
+
         if (isset($case['categories']) && !empty($case['categories'])) {
 
             foreach ($case['categories'] as $category) {
@@ -284,21 +296,42 @@ class CaseController extends FormActionController
             }
         }
 
-        $smmary = [
+        $opentimeDate = date('d/m/Y', strtotime($case['openTime']));
 
-            'case_number' => [
-                'label' => 'Case number',
-                'value' => $case['caseNumber'],
-                'url' => '',
-            ],
-            'operator_name' => [
-                'label' => 'Operator name',
-                'value' => $case['licence']['organisation']['name'],
+        $smmary = [
+            'description' => [
+                'label' => 'Description',
+                'value' => $case['description'],
                 'url' => ''
             ],
-            'licence_number' => [
-                'label' => 'Licence number',
-                'value' => $case['licence']['licenceNumber'],
+            'open_date' => [
+                'label' => 'Open date',
+                'value' => $opentimeDate,
+                'url' => ''
+            ],
+            'licence_type' => [
+                'label' => 'Licence type',
+                'value' => $case['licence']['licenceType'],
+                'url' => ''
+            ],
+            'entity_type' => [
+                'label' => 'Entity type',
+                'value' => $entityType,
+                'url' => ''
+            ],
+            'categories' => [
+                'label' => 'Categorie(s)',
+                'value' => implode(', ', $categoryNames),
+                'url' => ''
+            ],
+            'status' => [
+                'label' => 'Status',
+                'value' => $case['status'],
+                'url' => ''
+            ],
+            'licence_status' => [
+                'label' => 'Licence status',
+                'value' => $case['licence']['licenceStatus'],
                 'url' => ''
             ],
             'ecms' => [
@@ -306,71 +339,9 @@ class CaseController extends FormActionController
                 'value' => $case['ecms'],
                 'url' => ''
             ],
-            'categories' => [
-                'label' => 'Categories',
-                'value' => implode(', ', $categoryNames),
-                'url' => ''
-            ],
-            'summary' => [
-                'label' => 'Summary',
-                'value' => $case['description'],
-                'url' => ''
-            ],
         ];
 
         return $smmary;
-    }
-
-    public function getCaseDetailsArray(array $case)
-    {
-        $opentimeDate = date('d/m/Y', strtotime($case['openTime']));
-        $licenceStartDate = date('d/m/Y', strtotime($case['licence']['startDate']));
-
-        $details = [
-
-            'open_date' => [
-                'label' => 'Open date',
-                'value' => $opentimeDate,
-                'url' => '',
-            ],
-            'traffic_area' => [
-                'label' => 'Traffic area',
-                'value' => $case['licence']['trafficArea']['areaName'],
-                'url' => '',
-            ],
-            'status' => [
-                'label' => 'Status',
-                'value' => ucfirst($case['status']),
-                'url' => '',
-            ],
-            'entity_type' => [
-                'label' => 'Entity type',
-                'value' => $case['licence']['organisation']['organisationType'],
-                'url' => '',
-            ],
-            'licence_start_date' => [
-                'label' => 'Licence start date',
-                'value' => $licenceStartDate,
-                'url' => '',
-            ],
-            'licence_type' => [
-                'label' => 'Licence type',
-                'value' => $case['licence']['licenceType'],
-                'url' => '',
-            ],
-            'licence_category' => [
-                'label' => 'Licence category',
-                'value' => $case['licence']['goodsOrPsv'],
-                'url' => '',
-            ],
-            'licence_status' => [
-                'label' => 'Licence status',
-                'value' => $case['licence']['licenceStatus'],
-                'url' => '',
-            ],
-        ];
-
-        return $details;
     }
 
     /**
@@ -656,7 +627,6 @@ class CaseController extends FormActionController
             if (preg_match('/case_categories_([a-z]+)/', $key, $matches)) {
 
                 foreach (array_keys($array) as $id) {
-
                     $translations[str_replace('case_category.', '', $id)] = $matches[1];
                 }
             }
@@ -687,7 +657,6 @@ class CaseController extends FormActionController
         $defaults = array(
             'case' => $case,
             'tabs' => $this->getTabInformationArray(),
-            'details' => $this->getCaseDetailsArray($case),
             'summary' => $this->getCaseSummaryArray($case)
         );
 

@@ -39,7 +39,6 @@ class CaseConvictionController extends CaseController
         $form = $this->generateCommentForm($case);
 
         $summary = $this->getCaseSummaryArray($case);
-        $details = $this->getCaseDetailsArray($case);
 
         $results = $this->makeRestCall('Conviction', 'GET', array('vosaCase' => $caseId));
 
@@ -59,15 +58,16 @@ class CaseConvictionController extends CaseController
         $tableBuilder = $this->getServiceLocator()->get('Table');
         $table = $tableBuilder->buildTable('convictions', $results, $data);
 
-        $view->setVariables([
-            'case' => $case,
-            'tabs' => $tabs,
-            'tab' => $action,
-            'summary' => $summary,
-            'details' => $details,
-            'table' => $table,
-            'commentForm' => $form,
-        ]);
+        $view->setVariables(
+            [
+                'case' => $case,
+                'tabs' => $tabs,
+                'tab' => $action,
+                'summary' => $summary,
+                'table' => $table,
+                'commentForm' => $form,
+            ]
+        );
 
         $view->setTemplate('case/manage');
         return $view;

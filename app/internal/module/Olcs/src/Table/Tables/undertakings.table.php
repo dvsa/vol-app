@@ -6,6 +6,7 @@ return array(
     ),
     'settings' => array(
         'crud' => array(
+            'formName' => 'undertakings',
             'actions' => array(
                 'add' => array('class' => 'primary'),
                 'edit' => array('requireRows' => true),
@@ -21,6 +22,13 @@ return array(
         ),
         array(
             'title' => 'No.',
+            'formatter' => function ($data, $column) {
+                return '<a href="' . $this->generateUrl(
+                    array('action' => 'edit', 'id' => $data['id'], 'type' => 'undertakings'),
+                    'undertakings',
+                    true
+                ) . '">' . $data['id'] . '</a>';
+            },
             'name' => 'id'
         ),
         array(

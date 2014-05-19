@@ -136,8 +136,6 @@ class CaseStayController extends CaseController
     /**
      * Loads the edit page
      *
-     * @param array $data
-     *
      * @todo Check to make sure the stay ID is really related to the case ID
      */
     public function editAction()

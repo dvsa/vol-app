@@ -56,7 +56,6 @@ class CaseProhibitionController extends CaseController
 
         $case = $this->getCase($caseId);
         $summary = $this->getCaseSummaryArray($case);
-        $details = $this->getCaseDetailsArray($case);
 
         $view->setVariables(
             [
@@ -64,7 +63,6 @@ class CaseProhibitionController extends CaseController
                 'tabs' => $tabs,
                 'tab' => 'prohibitions',
                 'summary' => $summary,
-                'details' => $details,
                 'commentForm' => $form,
             ]
         );

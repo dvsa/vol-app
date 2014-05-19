@@ -32,7 +32,6 @@ class CaseConvictionControllerTest  extends AbstractHttpControllerTestCase
                 'getCase',
                 'generateCommentForm',
                 'getCaseSummaryArray',
-                'getCaseDetailsArray',
                 'url',
                 'getServiceLocator'
             )
@@ -122,13 +121,9 @@ class CaseConvictionControllerTest  extends AbstractHttpControllerTestCase
             ->will($this->returnValue(array()));
 
         $this->controller->expects($this->once())
-            ->method('getCaseDetailsArray')
-            ->will($this->returnValue(array()));
-
-        $this->controller->expects($this->once())
             ->method('makeRestCall')
                 ->with('Conviction', 'GET', array('vosaCase' => 54))
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue($this->getSampleResultsArray()));
 
         $this->controller->expects($this->once())
             ->method('url')
@@ -197,5 +192,21 @@ class CaseConvictionControllerTest  extends AbstractHttpControllerTestCase
             ->will($this->returnValue($toRoute));
 
         $this->controller->saveCommentForm($data);
+    }
+
+    private function getSampleResultsArray()
+    {
+        return array
+        (
+            'Count' => 3,
+            'Results' => Array
+            (
+                0 => Array
+                    (
+                        'id' => 25,
+                        'dateOfConviction' => '2012-06-15T00:00:00+0100'
+                    )
+            )
+        );
     }
 }
