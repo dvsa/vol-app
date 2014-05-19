@@ -285,6 +285,7 @@ return array(
                     )
                 )
             ),
+
             'undertakings' => array(
                 'type' => 'segment',
                 'options' => array(
@@ -297,6 +298,26 @@ return array(
                     'defaults' => array(
                         'controller' => 'ConditionUndertakingController',
                         'type' => 'undertaking'
+                    )
+                )
+            ),
+            'document_generate' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/document/generate/:template[/:format][/:country]',
+                    'defaults' => array(
+                        'controller' => 'DocumentController',
+                        'action' => 'generateDocument'
+                    )
+                ),
+            ),
+            'document_retrieve' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/document/retrieve/:filename[/:format][/:country]',
+                    'defaults' => array(
+                        'controller' => 'DocumentController',
+                        'action' => 'retrieveDocument'
                     )
                 )
             ),
@@ -358,7 +379,8 @@ return array(
             'SubmissionNoteController' => 'Olcs\Controller\Submission\SubmissionNoteController',
             'CaseImpoundingController' => 'Olcs\Controller\CaseImpoundingController',
             'CaseConditionUndertakingController' => 'Olcs\Controller\CaseConditionUndertakingController',
-            'CaseRevokeController' => 'Olcs\Controller\CaseRevokeController'
+            'CaseRevokeController' => 'Olcs\Controller\CaseRevokeController',
+            'DocumentController' => 'Olcs\Controller\DocumentController'
         )
     ),
     'view_manager' => array(

@@ -458,4 +458,99 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
 
         $controller->processEditStatement($data);
     }
+
+    public function testMapDocumentData()
+    {
+        $controller = $this->getMock(
+            'Olcs\Controller\CaseStatementController',
+            array(
+                'getBookmarkData',
+            )
+        );
+
+        $data['addresses']['requestorsAddress']['addressLine1'] = 'line1';
+        $data['addresses']['requestorsAddress']['addressLine2'] = 'line2';
+        $data['addresses']['requestorsAddress']['addressLine3'] = 'line3';
+        $data['addresses']['requestorsAddress']['addressLine4'] = 'line4';
+        $data['addresses']['requestorsAddress']['city'] = 'city';
+        $data['addresses']['requestorsAddress']['postcode'] = 'AB1 2CD';
+        $data['addresses']['requestorsAddress']['country'] = 'GB';
+        $data['requestorsForename'] = 'Joe';
+        $data['requestorsFamilyName'] = 'Bloggs';
+        $data['dateRequested'] = '2014-07-19';
+        $data['authorisersDecision'] = 'Licence granted';
+
+        $bookmarkData['licence']['trafficArea']['areaName'] = 'North East of England';
+        $bookmarkData['licence']['licenceNumber'] =  'OB12345';
+
+        $controller->expects($this->once())
+                ->method('getBookmarkData')
+                ->with($data)
+                ->will($this->returnValue($bookmarkData));
+
+        $bookmarks = $controller->mapDocumentData($data);
+
+    }
+
+    public function testgetBookmarkData()
+    {
+        $controller = $this->getMock(
+            'Olcs\Controller\CaseStatementController',
+            array(
+                'makeRestCall'
+            )
+        );
+
+        $data['addresses']['requestorsAddress']['addressLine1'] = 'line1';
+        $data['addresses']['requestorsAddress']['addressLine2'] = 'line2';
+        $data['addresses']['requestorsAddress']['addressLine3'] = 'line3';
+        $data['addresses']['requestorsAddress']['addressLine4'] = 'line4';
+        $data['addresses']['requestorsAddress']['city'] = 'city';
+        $data['addresses']['requestorsAddress']['postcode'] = 'AB1 2CD';
+        $data['addresses']['requestorsAddress']['country'] = 'GB';
+        $data['requestorsForename'] = 'Joe';
+        $data['requestorsFamilyName'] = 'Bloggs';
+        $data['dateRequested'] = '2014-07-19';
+        $data['authorisersDecision'] = 'Licence granted';
+
+        $bookmarkData['licence']['trafficArea']['areaName'] = 'North East of England';
+        $bookmarkData['licence']['licenceNumber'] =  'OB12345';
+
+        $data['case'] = 24;
+        $bundle = array(
+            'properties' => array(
+                'id',
+                'licence'
+            ),
+            'children' => array(
+                'licence' => array(
+                    'properties' => array(
+                        'id',
+                        'licenceNumber',
+                        'trafficArea',
+                    ),
+                    'children' => array(
+                        'trafficArea' => array(
+                            'properties' => array(
+                                'id',
+                                'areaName'
+                            ),
+                        )
+                    )
+                )
+            )
+        );
+
+        $controller->expects($this->once())
+                ->method('makeRestCall')
+                ->with(
+                    $this->equalTo('VosaCase'),
+                    'GET',
+                    ['id' => $data['case'], 'bundle' => json_encode($bundle)]
+                )
+                ->will($this->returnValue($bookmarkData));
+
+        $bookmarks = $controller->mapDocumentData($data);
+
+    }
 }
