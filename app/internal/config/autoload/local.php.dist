@@ -4,7 +4,8 @@ return array(
         'endpoints' => array(
             'payments' => 'http://olcspayment.dev/api/',
             'backend' => 'http://olcs-backend/',
-            'postcode' => 'http://dvsa-postcode.olcsdv-ap01.olcs.npm/'
+            'postcode' => 'http://dvsa-postcode.olcsdv-ap01.olcs.npm/',
+            'document' => 'http://olcs-document/api/',
         ),
     )
 );

@@ -24,9 +24,9 @@ class CaseConvictionController extends CaseController
 
         if (isset($postParams['action'])) {
             return $this->redirect()->toRoute($postParams['table'], array('licence' => $routeParams['licence'],
-                        'case' => $routeParams['case'],
-                        'id' => isset($postParams['id']) ? $postParams['id'] : '',
-                        'action' => strtolower($postParams['action'])));
+                'case' => $routeParams['case'],
+                'id' => isset($postParams['id']) ? $postParams['id'] : '',
+                'action' => strtolower($postParams['action'])));
         }
 
         $view = $this->getView();
@@ -39,18 +39,24 @@ class CaseConvictionController extends CaseController
         $form = $this->generateCommentForm($case);
 
         $summary = $this->getCaseSummaryArray($case);
-        $details = $this->getCaseDetailsArray($case);
 
-        $results = $this->makeRestCall('Conviction', 'GET', array('vosaCase' => $caseId));
+        $bundle = $this->getIndexBundle();
 
-        //if there are results, sort them by date of conviction
-        if ($results['Count']) {
-            foreach ($results['Results'] as $key => $row) {
-                $convictionDate[$key] = $row['dateOfConviction'];
-                $id[$key] = $row['id'];
+        $results = $this->makeRestCall(
+            'Conviction',
+            'GET',
+            array(
+                'vosaCase' => $caseId,
+                'sort' => 'dateOfConviction',
+                'order' => 'DESC',
+                'bundle' => json_encode($bundle)
+            )
+        );
+
+        foreach ($results['Results'] as $key => $row) {
+            if ($row['category']['id'] != 168) {
+                $results['Results'][$key]['categoryText'] = $row['category']['description'];
             }
-
-            array_multisort($convictionDate, SORT_DESC, $id, SORT_ASC, $results['Results']);
         }
 
         $data = [];
@@ -65,7 +71,6 @@ class CaseConvictionController extends CaseController
                 'tabs' => $tabs,
                 'tab' => $action,
                 'summary' => $summary,
-                'details' => $details,
                 'table' => $table,
                 'commentForm' => $form,
             ]
@@ -103,5 +108,19 @@ class CaseConvictionController extends CaseController
         $this->processEdit($data, 'VosaCase');
 
         return $this->redirect()->toRoute('case_convictions', [], [], true);
+    }
+
+    private function getIndexBundle()
+    {
+        return array(
+            'children' => array(
+                'category' => array(
+                    'properties' => array(
+                        'id',
+                        'description'
+                    )
+                )
+            )
+        );
     }
 }

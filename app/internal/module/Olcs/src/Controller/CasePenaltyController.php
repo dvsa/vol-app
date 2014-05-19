@@ -55,14 +55,12 @@ class CasePenaltyController extends CaseController
 
         $case = $this->getCase($caseId);
         $summary = $this->getCaseSummaryArray($case);
-        $details = $this->getCaseDetailsArray($case);
 
         $view->setVariables([
             'case' => $case,
             'tabs' => $tabs,
             'tab' => 'penalties',
             'summary' => $summary,
-            'details' => $details,
             'commentForm' => $form,
         ]);
 

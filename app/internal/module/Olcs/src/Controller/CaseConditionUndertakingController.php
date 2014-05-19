@@ -46,7 +46,6 @@ class CaseConditionUndertakingController extends CaseController
         $case = $this->getCase($caseId);
 
         $summary = $this->getCaseSummaryArray($case);
-        $details = $this->getCaseDetailsArray($case);
 
         $conditionsTable = $this->generateConditionTable($caseId);
         $undertakingsTable = $this->generateUndertakingTable($caseId);
@@ -57,7 +56,6 @@ class CaseConditionUndertakingController extends CaseController
             'tabs' => $tabs,
             'tab' => $action,
             'summary' => $summary,
-            'details' => $details,
             'conditionsTable' => $conditionsTable,
             'undertakingsTable' => $undertakingsTable,
             ]

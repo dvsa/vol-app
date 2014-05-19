@@ -155,10 +155,13 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
             ->with($this->equalTo($caseId))
             ->will($this->returnValue($caseObject));
 
-        $this->controller->expects($this->exactly(2))
+        $this->controller->expects($this->exactly(3))
             ->method('getServiceLocator')
             ->will(
                 $this->onConsecutiveCalls(
+                    $this->returnValue(
+                        $this->getServiceLocatorStaticData('getSampleOrganisationTypeArray')
+                    ),
                     $this->returnValue(
                         $this->getServiceLocatorStaticData()
                     ),
@@ -580,6 +583,10 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
         $caseObject = $this->getSampleCaseArray($caseId, $licenceId);
 
         $this->controller->expects($this->once())
+            ->method('getServiceLocator')
+            ->will($this->returnValue($this->getServiceLocatorStaticData('getSampleOrganisationTypeArray')));
+
+        $this->controller->expects($this->once())
             ->method('getCase')
             ->with($caseId)
             ->will($this->returnValue($caseObject));
@@ -823,15 +830,17 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
 
     /**
      * Gets a mock version of static-list-data
+     *
+     * @param $function
      */
-    private function getServiceLocatorStaticData ()
+    private function getServiceLocatorStaticData ($function = 'getSampleCategoriesArray')
     {
         $serviceMock = $this->getMock('\stdClass', array('get'));
 
-        $serviceMock->expects($this->once())
+        $serviceMock->expects($this->any())
             ->method('get')
             ->with($this->equalTo('Config'))
-            ->will($this->returnValue(array('static-list-data' => $this->getSampleCategoriesArray())));
+            ->will($this->returnValue(array('static-list-data' => $this->$function())));
 
         return $serviceMock;
     }
@@ -961,6 +970,25 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
+     * Returns a sample organisation type array
+     *
+     * @return array
+     */
+    private function getSampleOrganisationTypeArray()
+    {
+        return array(
+            'business_types' =>
+                [
+                    'org_type.lc' => 'Limited company',
+                    'org_type.st' => 'Sole Trader',
+                    'org_type.p' => 'Partnership',
+                    'org_type.llp' => 'Limited Liability Partnership',
+                    'org_type.o' => 'Other (e.g. public authority, charity, trust, university)',
+                ],
+        );
+    }
+
+    /**
      * Provides a sample case object
      *
      * @param int $caseId
@@ -1037,7 +1065,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
                     'registeredCompanyNumber' => 1234567,
                     'name' => 'test',
                     'tradingAs' => '',
-                    'organisationType' => 'Registered company',
+                    'organisationType' => 'org_type.o',
                     'sicCode' => '',
                     'createdBy' => array
                         (
@@ -1188,6 +1216,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
                                                     'isDeleted' => 0,
                                                     'createdBy' => '',
                                                     'lastUpdatedBy' => '',
+                                                    'name' => 'Person name',
                                                     'roles' => array
                                                         (
                                                         )

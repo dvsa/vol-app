@@ -17,28 +17,28 @@ return [
                 'elements' => [
                     'defType' => [
                         'type' => 'select',
-                        'label' => 'Defendant type:',
+                        'label' => 'Defendant type',
                         'value_options' => 'defendant_types'
                     ],
                     'personFirstname' => [
                         'type' => 'personName',
-                        'label' => 'First name:',
+                        'label' => 'First name',
                          'class' => 'long'
                     ],
                     'personLastname' => [
                         'type' => 'personName',
-                        'label' => 'Last name:',
+                        'label' => 'Last name',
                         'class' => 'long'
                     ],
                     'operatorName' => [
                         'type' => 'text',
                         'filters' => '\Common\Form\Elements\InputFilters\TextMax70',
-                        'label' => 'Operator name:',
+                        'label' => 'Operator name',
                         'class' => 'long'
                     ],
                     'dateOfBirth' => [
                          'type' => 'dateSelectWithEmpty',
-                         'label' => 'Date of birth:',
+                         'label' => 'Date of birth',
                          'filters' => '\Common\Form\Elements\InputFilters\DateNotRequiredNotInFuture'
                      ],
                 ]
@@ -57,23 +57,23 @@ return [
                     ],
                     'category' => [
                          'type' => 'selectAjax',
-                         'label' => 'Conviction description:',
+                         'label' => 'Conviction description',
                          'class' => 'extra-long'
                     ],
                     'categoryText' => [
                          'type' => 'textarea',
                          'filters' => '\Common\Form\Elements\InputFilters\TextMax4000',
-                         'label' => 'Conviction description detail:',
+                         'label' => 'Conviction description detail',
                         'class' => 'extra-long'
                     ],
                     'dateOfOffence' => [
                          'type' => 'dateSelectWithEmpty',
-                         'label' => 'Offence date:',
+                         'label' => 'Offence date',
                          'filters' => '\Common\Form\Elements\InputFilters\OffenceDateBeforeConvictionDate'
                      ],
                     'dateOfConviction' => [
                          'type' => 'dateSelectWithEmpty',
-                         'label' => 'Conviction date:',
+                         'label' => 'Conviction date',
                          'filters' => '\Common\Form\Elements\InputFilters\DateNotInFuture'
                      ],
                     'si' => [
@@ -84,34 +84,36 @@ return [
                     'courtFpm' => [
                         'type' => 'text',
                         'filters' => '\Common\Form\Elements\InputFilters\TextMax70',
-                        'label' => 'Court Fpn:',
+                        'label' => 'Court/FPN',
                         'class' => 'medium'
                     ],
                     'penalty' => [
                         'type' => 'text',
-                        'label' => 'Penalty:',
-                        'class' => 'medium'
+                        'label' => 'Penalty',
+                        'class' => 'medium',
+                        'filters' => '\Common\Form\Elements\InputFilters\TextMax255Required',
                     ],
                     'costs' => [
                         'type' => 'text',
-                        'label' => 'Costs:',
-                        'class' => 'medium'
+                        'label' => 'Costs',
+                        'class' => 'medium',
+                        'filters' => '\Common\Form\Elements\InputFilters\TextMax255',
                     ],
                     'convictionNotes' => [
                         'type' => 'textarea',
                         'filters' => '\Common\Form\Elements\InputFilters\TextMax4000',
-                        'label' => 'Conviction notes:',
+                        'label' => 'Conviction notes',
                         'class' => 'extra-long'
                     ],
                     'takenIntoConsideration' => [
                         'type' => 'textarea',
                         'filters' => '\Common\Form\Elements\InputFilters\TextMax4000',
-                        'label' => 'Taken into consideration:',
+                        'label' => 'Taken into consideration',
                         'class' => 'extra-long'
                     ],
                     'decToTc' => [
                         'type' => 'select',
-                        'label' => 'Declared to TC/TR:',
+                        'label' => 'Declared to TC/TR',
                         'value_options' => 'yes_no'
                     ]
                 ]

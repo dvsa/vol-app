@@ -28,7 +28,6 @@ class CaseComplaintControllerTest extends AbstractHttpControllerTestCase
                 'fromRoute',
                 'getCase',
                 'getCaseSummaryArray',
-                'getCaseDetailsArray',
                 'makeRestCall',
                 'buildTable',
                 'getPluginManager',
@@ -136,11 +135,6 @@ class CaseComplaintControllerTest extends AbstractHttpControllerTestCase
 
         $controller->expects($this->once())
             ->method('getCaseSummaryArray')
-            ->with($this->equalTo($caseArray))
-            ->will($this->returnValue($caseArray));
-
-        $controller->expects($this->once())
-            ->method('getCaseDetailsArray')
             ->with($this->equalTo($caseArray))
             ->will($this->returnValue($caseArray));
 

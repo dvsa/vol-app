@@ -1,4 +1,13 @@
-<?php echo $this->render('partials/page-header.phtml', array('pageTitle' => 'Case details')); ?>
+<?php
+echo $this->render(
+    'partials/page-header.phtml',
+    array(
+        'pageTitle' => 'Case',
+        'pageSubTitle' => $case['licence']['organisation']['name'] . ' ' . '#' . $case['licence']['licenceNumber'],
+        'caseId' => $case['id']
+    )
+);
+?>
 
 <div class="full-width">
 
@@ -11,8 +20,6 @@
 <?php
 
 $array = (array)$this->vars();
-
-$array['case'] = $details;
 
 if (isset($table)) {
     $array['table'] = $table;
