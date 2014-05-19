@@ -68,7 +68,40 @@ return [
                     'label' => 'Requestors Address'
                 ],
                 'type' => 'address'
-            ]
+            ],
+            [
+                'name' => 'document',
+                'elements' => [
+                    'formName' =>  [
+                         'type' => 'hidden',
+                         'attributes' => [
+                            'value' => 'statement'
+                         ]
+                     ],
+                    'generate' => [
+                         'type' => 'checkbox-boolean',
+                         'label' => 'Generate document',
+                     ],
+                     'templateId' => [
+                         'type' => 'hidden',
+                         'attributes' => [
+                            'value' => 'S43_letter'
+                         ]
+                     ],
+                     'country' => [
+                         'type' => 'hidden',
+                         'attributes' => [
+                            'value' => 'en_GB'
+                         ]
+                     ],
+                     'format' => [
+                         'type' => 'hidden',
+                         'attributes' => [
+                            'value' => 'rtf'
+                         ]
+                     ]
+                ]
+            ],
         ],
         'elements' => [
             'case' => [
