@@ -65,7 +65,7 @@ class LicenceTypeController extends TypeOfLicenceController
     {
         if (empty($this->data)) {
 
-            $this->data = $this->getLicenceData(array('licenceType', 'goodsOrPsv'));
+            $this->data = $this->getLicenceData();
         }
 
         return $this->data;

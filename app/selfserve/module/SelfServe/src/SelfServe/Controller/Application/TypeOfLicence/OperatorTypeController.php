@@ -31,6 +31,6 @@ class OperatorTypeController extends TypeOfLicenceController
      */
     protected function load($id)
     {
-        return array('data' => $this->getLicenceData(array('goodsOrPsv')));
+        return array('data' => $this->getLicenceData());
     }
 }

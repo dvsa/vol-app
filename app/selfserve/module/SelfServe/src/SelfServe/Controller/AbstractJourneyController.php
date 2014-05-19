@@ -200,27 +200,22 @@ abstract class AbstractJourneyController extends AbstractController
     }
 
     /**
-     * Add operating centre
+     * Override the not found action
      */
-    public function addAction()
+    public function notFoundAction()
     {
-        return $this->renderSection();
+        $view = $this->getViewModel();
+        $view->setTemplate('self-serve/journey/not-found');
+
+        return $this->render($view);
     }
 
     /**
-     * Edit operating centre
-     */
-    public function editAction()
-    {
-        return $this->renderSection();
-    }
-
-    /**
-     * Delete sub action
+     * Delete
      *
      * @return Response
      */
-    public function deleteAction()
+    protected function delete()
     {
         $actionService = $this->getActionService();
         $actionId = $this->getActionId();
@@ -233,17 +228,6 @@ abstract class AbstractJourneyController extends AbstractController
         }
 
         return $this->notFoundAction();
-    }
-
-    /**
-     * Override the not found action
-     */
-    public function notFoundAction()
-    {
-        $view = $this->getViewModel();
-        $view->setTemplate('self-serve/journey/not-found');
-
-        return $this->render($view);
     }
 
     /**
@@ -1029,13 +1013,13 @@ abstract class AbstractJourneyController extends AbstractController
 
         $response = $this->maybeAddTable($view);
 
-        if ($response instanceof Resposne || $response instanceof ViewModel) {
+        if ($response instanceof Response || $response instanceof ViewModel) {
             return $response;
         }
 
         $response = $this->maybeAddForm($view);
 
-        if ($response instanceof Resposne || $response instanceof ViewModel) {
+        if ($response instanceof Response || $response instanceof ViewModel) {
             return $response;
         }
 
@@ -1086,10 +1070,14 @@ abstract class AbstractJourneyController extends AbstractController
     {
         if ($this->hasForm()) {
 
-            $data = $this->getFormData();
+            $data = array();
 
-            if ($data instanceof Response || $data instanceof ViewModel) {
-                return $data;
+            if (!$this->getRequest()->isPost()) {
+                $data = $this->getFormData();
+
+                if ($data instanceof Response || $data instanceof ViewModel) {
+                    return $data;
+                }
             }
 
             if ($this->isAction() || empty($this->formTables)) {
@@ -1115,8 +1103,10 @@ abstract class AbstractJourneyController extends AbstractController
                 );
             }
 
-            if ($form instanceof Response || $form instanceof ViewModel) {
-                return $form;
+            $response = $this->getCaughtResponse();
+
+            if ($response instanceof Response || $response instanceof ViewModel) {
+                return $response;
             }
 
             $view->setVariable('form', $form);
@@ -1359,10 +1349,11 @@ abstract class AbstractJourneyController extends AbstractController
         $response = parent::processSave($data);
 
         if ($response instanceof Response || $response instanceof ViewModel) {
-            return $response;
+            $this->setCaughtResponse($response);
+            return;
         }
 
-        return $this->goToNextStep();
+        $this->setCaughtResponse($this->goToNextStep());
     }
 
     /**
@@ -1395,17 +1386,18 @@ abstract class AbstractJourneyController extends AbstractController
      * @param array $data
      * @return array
      */
-    protected function processActionSave($data)
+    protected function processActionSave($data, $form)
     {
         $data = $this->processDataMapForSave($data, $this->getActionDataMap());
 
         $response = $this->actionSave($data);
 
         if ($response instanceof Response || $response instanceof ViewModel) {
-            return $response;
+            $this->setCaughtResponse($response);
+            return;
         }
 
-        return $this->postActionSave();
+        $this->setCaughtResponse($this->postActionSave());
     }
 
     /**

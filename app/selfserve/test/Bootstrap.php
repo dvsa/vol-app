@@ -1,6 +1,6 @@
 <?php
 
-namespace SelfServe\test;
+namespace SelfServe\Test;
 
 use Zend\Mvc\Service\ServiceManagerConfig;
 use Zend\ServiceManager\ServiceManager;
@@ -14,14 +14,15 @@ chdir(dirname(__DIR__));
  */
 class Bootstrap
 {
+
     protected static $serviceManager;
-    
     protected static $di;
 
     public static function init()
     {
         // Setup the autloader
-        static::initAutoloader();
+        $loader = static::initAutoloader();
+        $loader->addPsr4('SelfServe\Test\\', __dir__ . '/SelfServe');
 
         // Grab the application config
         $config = include dirname(__DIR__) . '/config/application.config.php';
@@ -30,14 +31,14 @@ class Bootstrap
         $serviceManager->setService('ApplicationConfig', $config);
         $serviceManager->get('ModuleManager')->loadModules();
         static::$serviceManager = $serviceManager;
-        
+
         // Setup Di
         $di = new Di();
-        
+
         $di->instanceManager()->addTypePreference('Zend\ServiceManager\ServiceLocatorInterface', 'Zend\ServiceManager\ServiceManager');
         $di->instanceManager()->addTypePreference('Zend\EventManager\EventManagerInterface', 'Zend\EventManager\EventManager');
         $di->instanceManager()->addTypePreference('Zend\EventManager\SharedEventManagerInterface', 'Zend\EventManager\SharedEventManager');
-        
+
         self::$di = $di;
     }
 
@@ -48,9 +49,9 @@ class Bootstrap
 
     protected static function initAutoloader()
     {
-        require('vendor/autoload.php');
+        return require('vendor/autoload.php');
     }
-    
+
     static public function getDi()
     {
         return self::$di;

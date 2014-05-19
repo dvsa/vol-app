@@ -46,6 +46,6 @@ class OperatorLocationController extends TypeOfLicenceController
      */
     public function load($id)
     {
-        return array('data' => $this->getLicenceData(array('niFlag')));
+        return array('data' => $this->getLicenceData());
     }
 }

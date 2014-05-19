@@ -171,6 +171,32 @@ class SafetyController extends VehicleSafetyController
     }
 
     /**
+     * Add operating centre
+     */
+    public function addAction()
+    {
+        return $this->renderSection();
+    }
+
+    /**
+     * Edit operating centre
+     */
+    public function editAction()
+    {
+        return $this->renderSection();
+    }
+
+    /**
+     * Delete sub action
+     *
+     * @return Response
+     */
+    public function deleteAction()
+    {
+        return $this->delete();
+    }
+
+    /**
      * Action save
      *
      * @param array $data

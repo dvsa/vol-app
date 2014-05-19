@@ -53,14 +53,19 @@ class VehicleController extends VehicleSafetyController
     }
 
     /**
-     * Placeholder for save
-     *
-     * @param array $data
-     * @parem string $service
+     * Add operating centre
      */
-    protected function save($data, $service = null)
+    public function addAction()
     {
+        return $this->renderSection();
+    }
 
+    /**
+     * Edit operating centre
+     */
+    public function editAction()
+    {
+        return $this->renderSection();
     }
 
     /**
@@ -72,7 +77,7 @@ class VehicleController extends VehicleSafetyController
     {
         $vehicleId = $this->getActionId();
 
-        $licence = $this->getLicenceData(array('id'));
+        $licence = $this->getLicenceData();
 
         $cond = array(
             'vehicle' => $vehicleId,
@@ -94,6 +99,17 @@ class VehicleController extends VehicleSafetyController
         $this->makeRestCall('LicenceVehicle', 'DELETE', array('id' => $licenceVehicle['Results'][0]['id']));
 
         return $this->goBackToSection();
+    }
+
+    /**
+     * Placeholder for save
+     *
+     * @param array $data
+     * @parem string $service
+     */
+    protected function save($data, $service = null)
+    {
+
     }
 
     /**
@@ -122,7 +138,7 @@ class VehicleController extends VehicleSafetyController
             )
         );
 
-        $licence = $this->getLicenceData(array('id'));
+        $licence = $this->getLicenceData();
 
         $data = $this->makeRestCall('Licence', 'GET', array('id' => $licence['id']), $bundle);
 
@@ -158,7 +174,7 @@ class VehicleController extends VehicleSafetyController
                 return $this->notFoundAction();
             }
 
-            $licence = $this->getLicenceData(array('id'));
+            $licence = $this->getLicenceData();
 
             $licenceVehicleData = array(
                 'licence' => $licence['id'],

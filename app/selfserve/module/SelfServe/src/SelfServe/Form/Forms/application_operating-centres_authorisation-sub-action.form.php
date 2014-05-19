@@ -1,10 +1,10 @@
 <?php
 
-$translationPrefix = 'application_operating-centres_authorisation-sub-action.data';
+$translationPrefix = 'application_operating-centres_authorisation-sub-action';
 
 return array(
-    'application_operating-centres_authorisation-sub-action' => array(
-        'name' => 'application_operating-centres_authorisation-sub-action',
+    $translationPrefix => array(
+        'name' => $translationPrefix,
         'attributes' => array(
             'method' => 'post',
         ),
@@ -18,7 +18,7 @@ return array(
             array(
                 'name' => 'data',
                 'options' => array(
-                    'label' => $translationPrefix,
+                    'label' => $translationPrefix . '.data',
                 ),
                 'elements' => array(
                     'id' => array(
@@ -32,22 +32,22 @@ return array(
                     ),
                     'numberOfVehicles' => array(
                         'type' => 'vehiclesNumber',
-                        'label' => $translationPrefix . '.numberOfVehicles',
+                        'label' => $translationPrefix . '.data.numberOfVehicles',
                     ),
                     'numberOfTrailers' => array(
                         'type' => 'vehiclesNumber',
-                        'label' => $translationPrefix . '.numberOfTrailers',
+                        'label' => $translationPrefix . '.data.numberOfTrailers',
                     ),
                     'sufficientParking' => array(
                         'type' => 'checkbox',
-                        'label' => $translationPrefix . '.sufficientParking',
+                        'label' => $translationPrefix . '.data.sufficientParking',
                         'options' => array(
                             'must_be_checked' => true
                         )
                     ),
                     'permission' => array(
                         'type' => 'checkbox',
-                        'label' => $translationPrefix . '.permission',
+                        'label' => $translationPrefix . '.data.permission',
                         'options' => array(
                             'must_be_checked' => true
                         )

@@ -19,6 +19,12 @@ use Zend\View\Model\ViewModel;
  */
 abstract class AbstractController extends FormActionController
 {
+    /**
+     * Holds the caught response
+     *
+     * @var mixed
+     */
+    protected $caughtResponse = null;
 
     /**
      * Holds the layout
@@ -53,6 +59,26 @@ abstract class AbstractController extends FormActionController
      * @var string
      */
     protected $service = null;
+
+    /**
+     * Sets the caught response
+     *
+     * @param mixed $response
+     */
+    protected function setCaughtResponse($response)
+    {
+        $this->caughtResponse = $response;
+    }
+
+    /**
+     * Getter for caughtResponse
+     *
+     * @return mixed
+     */
+    protected function getCaughtResponse()
+    {
+        return $this->caughtResponse;
+    }
 
     /**
      * Set the layout
@@ -148,9 +174,7 @@ abstract class AbstractController extends FormActionController
      */
     protected function formExists($formName)
     {
-        return file_exists(
-            $this->getFormLocation($formName)
-        );
+        return file_exists($this->getFormLocation($formName));
     }
 
     /**
@@ -207,11 +231,7 @@ abstract class AbstractController extends FormActionController
     {
         $data = $this->processDataMapForSave($data, $this->getDataMap());
 
-        $response = $this->save($data);
-
-        if ($response instanceof Response || $response instanceof ViewModel) {
-            return $response;
-        }
+        return $this->save($data);
     }
 
     /**
@@ -228,7 +248,8 @@ abstract class AbstractController extends FormActionController
         $response = $this->saveCrud($data);
 
         if ($response instanceof Response || $response instanceof ViewModel) {
-            return $response;
+            $this->setCaughtResponse($response);
+            return;
         }
 
         foreach (array_keys($this->formTables) as $table) {
@@ -240,18 +261,24 @@ abstract class AbstractController extends FormActionController
             }
 
             if ($action == 'add') {
-                return $this->redirectToRoute(null, array('action' => $action), array(), true);
+                $this->setCaughtResponse($this->redirectToRoute(null, array('action' => $action), array(), true));
+                return;
             } else {
-                if (!isset($data[$table]['id']) || empty($data[$table]['id'])) {
 
-                    return $this->crudActionMissingId();
+                if (!isset($data[$table]['id']) || empty($data[$table]['id'])) {
+                    $this->setCaughtResponse($this->crudActionMissingId());
+                    return;
                 }
-                return $this->redirectToRoute(
-                    null,
-                    array('action' => $action, 'id' => $data[$table]['id']),
-                    array(),
-                    true
+
+                $this->setCaughtResponse(
+                    $this->redirectToRoute(
+                        null,
+                        array('action' => $action, 'id' => $data[$table]['id']),
+                        array(),
+                        true
+                    )
                 );
+                return;
             }
         }
     }
@@ -286,7 +313,8 @@ abstract class AbstractController extends FormActionController
         $result = $this->makeRestCall($service, 'GET', array('id' => $id), $this->getDataBundle());
 
         if (empty($result)) {
-            return $this->notFoundAction();
+            $this->setCaughtResponse($this->notFoundAction());
+            return;
         }
 
         return $result;

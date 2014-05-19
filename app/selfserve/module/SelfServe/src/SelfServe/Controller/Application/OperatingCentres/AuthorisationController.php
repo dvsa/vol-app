@@ -127,6 +127,32 @@ class AuthorisationController extends OperatingCentresController
     }
 
     /**
+     * Add operating centre
+     */
+    public function addAction()
+    {
+        return $this->renderSection();
+    }
+
+    /**
+     * Edit operating centre
+     */
+    public function editAction()
+    {
+        return $this->renderSection();
+    }
+
+    /**
+     * Delete sub action
+     *
+     * @return Response
+     */
+    public function deleteAction()
+    {
+        return $this->delete();
+    }
+
+    /**
      * Remove trailer related columns for PSV
      *
      * @param object $table
@@ -164,7 +190,28 @@ class AuthorisationController extends OperatingCentresController
         if ($this->isPsv()) {
             $form->get('data')->remove('totAuthTrailers');
             $form->get('data')->remove('minTrailerAuth');
+            $form->get('data')->remove('maxTrailerAuth');
         }
+        return $form;
+    }
+
+    /**
+     * Remove trailers for PSV
+     *
+     * @param Form $form
+     */
+    protected function alterActionForm($form)
+    {
+        if ($this->isPsv()) {
+            $form->get('data')->remove('numberOfTrailers');
+            $label = $form->get('data')->getLabel();
+            $form->get('data')->setLabel($label .= '-psv');
+            $label = $form->get('data')->get('sufficientParking')->getLabel();
+            $form->get('data')->get('sufficientParking')->setLabel($label .= '-psv');
+            $label = $form->get('data')->get('permission')->getLabel();
+            $form->get('data')->get('permission')->setLabel($label .= '-psv');
+        }
+
         return $form;
     }
 
@@ -222,7 +269,7 @@ class AuthorisationController extends OperatingCentresController
 
         if ($this->getActionName() == 'add') {
             if (!isset($saved['id'])) {
-                return $this->notFoundAction();
+                throw new \Exception('Unable to save operating centre');
             }
 
             $data['applicationOperatingCentre']['operatingCentre'] = $saved['id'];
@@ -231,7 +278,7 @@ class AuthorisationController extends OperatingCentresController
         $saved = parent::actionSave($data['applicationOperatingCentre'], $service);
 
         if ($this->getActionName() == 'add' && !isset($saved['id'])) {
-            return $this->notFoundAction();
+            throw new \Exception('Unable to save application operating centre');
         }
     }
 
