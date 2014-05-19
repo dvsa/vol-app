@@ -240,13 +240,13 @@ class CaseStatementController extends CaseController
             $data['addresses']['requestorsAddress']['country'];
         $bookmarks['Ref'] = '184130/' . $bookmarkData['licence']['licenceNumber'];
         $bookmarks['Name'] = $data['requestorsForename'] . ' ' . $data['requestorsFamilyName'];
-        $bookmarks['RequestMode'] = 'correspondence';
+        $bookmarks['RequestMode'] = 'letter';
         $bookmarks['RequestDate'] = $data['dateRequested'];
         $bookmarks['UserKnownAs'] = '<user\'s name>';
         $bookmarks['AuthorisorTeam'] = 'Authoriser Team';
         $bookmarks['AuthorisorName2'] = '<user\'s name> <olcs job role>';
         $bookmarks['AuthorisedDecision'] = '<user\'s location address>' .
-            "\n\n" .
+            " \line \line " .
             $data['authorisersDecision'];
         $bookmarks['AuthorisorName3'] = '<user\'s name> <olcs job role>';
 
