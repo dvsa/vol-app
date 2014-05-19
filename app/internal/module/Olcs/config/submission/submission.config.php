@@ -22,14 +22,26 @@ return array(
                                 'properties' => 'ALL'
                             ),
                             'organisation' => array(
-                                'properties' => 'ALL'
+                                'properties' => 'ALL',
+                                'children' => array(
+                                    'organisationOwners' => array(
+                                        'properties' => 'ALL',
+                                        'children' => array(
+                                            'person' => array(
+                                                'properties' => 'ALL'
+                                            )
+                                        )
+                                    )
+                                )
                             )
                         )
                     )
                 )
             )
         ),
-        'persons' => null,
+        'persons' => array(
+            'view' => 'submission/partials/persons'
+        ),
         'transport-managers' => array(
             'exclude' => array(
                 'column' => 'licenceType',

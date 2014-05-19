@@ -32,7 +32,6 @@ class CaseConvictionControllerTest  extends AbstractHttpControllerTestCase
                 'getCase',
                 'generateCommentForm',
                 'getCaseSummaryArray',
-                'getCaseDetailsArray',
                 'url',
                 'getServiceLocator'
             )
@@ -119,10 +118,6 @@ class CaseConvictionControllerTest  extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->once())
             ->method('getCaseSummaryArray')
-            ->will($this->returnValue(array()));
-
-        $this->controller->expects($this->once())
-            ->method('getCaseDetailsArray')
             ->will($this->returnValue(array()));
 
         $this->controller->expects($this->once())
