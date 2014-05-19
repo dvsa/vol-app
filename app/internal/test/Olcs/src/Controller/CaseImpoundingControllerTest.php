@@ -563,7 +563,7 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
             'case' => 24,
             'id' => 5,
             'version' => 2,
-            'crsf' => 'e92c3acf055e3e45a131bb46e8a062ca',
+            'csrf' => 'e92c3acf055e3e45a131bb46e8a062ca',
             'submit' => ($submit ? '' : false),
             'cancel' => ($submit ? false : ''),
             'application_details' => array
