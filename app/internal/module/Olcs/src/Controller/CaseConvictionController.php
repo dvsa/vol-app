@@ -54,7 +54,7 @@ class CaseConvictionController extends CaseController
         );
 
         foreach ($results['Results'] as $key => $row) {
-            if ($row['category']['id'] != 168) {
+            if(!$this->isUserDefinedConvictionCategory($row['category']['id'])) {
                 $results['Results'][$key]['categoryText'] = $row['category']['description'];
             }
         }

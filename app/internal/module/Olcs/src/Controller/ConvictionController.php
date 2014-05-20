@@ -183,7 +183,7 @@ class ConvictionController extends CaseController
             $data['parentCategory'] = $data['category']['parent']['id'];
 
             //check for user defined text
-            if ($data['category']['id'] != 168) {
+            if (!$this->isUserDefinedConvictionCategory($data['category']['id'])) {
                 $data['categoryText'] = $data['category']['description'];
             }
 
@@ -264,7 +264,7 @@ class ConvictionController extends CaseController
         );
 
         //we only have category text in the conviction table for the user defined type
-        if ($data['category'] != 168) {
+        if (!$this->isUserDefinedConvictionCategory($data['category'])) {
             $data['categoryText'] = '';
         }
 
@@ -345,7 +345,7 @@ class ConvictionController extends CaseController
 
         return $parentCategory;
     }
-    
+
     /**
      * Gets sub categories
      *
