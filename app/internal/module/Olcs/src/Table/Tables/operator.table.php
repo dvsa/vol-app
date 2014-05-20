@@ -78,7 +78,29 @@ return array(
         ),
         array(
             'title' => 'Info',
-            'format' => '[Info]'
+            'formatter' => 'Date',
+            'formatter' => function ($data, $column, $sm) {
+                $translator = $sm->get('translator');
+                $string = '<span class="tooltip">';
+                $string .= !empty($data['startDate']) ?
+                        ucfirst($translator->translate('start')) . ': ' .
+                        $data['startDate'] . '<br />' : '';
+                $string .= !empty($data['reviewDate']) ?
+                        ucfirst($translator->translate('review')) . ': ' .
+                        $data['reviewDate'] . '<br />' : '';
+                $string .= !empty($data['endDate']) ?
+                        ucfirst($translator->translate('end')) . ': ' .
+                        $data['endDate'] . '<br />' : '';
+                $string .= !empty($data['fabsReference']) ?
+                        ucfirst($translator->translate('fabs-reference')) . ': ' .
+                        $data['fabsReference'] . '<br />' : '';
+                $string .= '</span>';
+
+                if ($string == '<span class="tooltip"></span>') {
+                    $string = '';
+                }
+                return $string;
+            }
         )
     )
 );

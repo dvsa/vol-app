@@ -63,7 +63,7 @@ return array(
                 $filename =
                     $data['id'] . '_' .
                     'statement' . '_' .
-                    'S43_letter';
+                    'S43_Letter';
                 return file_exists('/tmp/' . $filename . '.rtf') ? '<a href="' . $this->generateUrl(
                     array(
                         'controller' => 'Document',

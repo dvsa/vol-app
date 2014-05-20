@@ -237,7 +237,11 @@ class CaseRevokeControllerTest extends AbstractHttpControllerTestCase
         $controller = $this->getController(['getParams', 'makeRestCall']);
         $controller->expects($this->once())
                    ->method('makeRestCall')
-                   ->with($this->equalTo('PiReason'), $this->equalTo('GET'), $this->equalTo([]))
+                   ->with(
+                       $this->equalTo('PiReason'),
+                       $this->equalTo('GET'),
+                       $this->equalTo(['proposeToRevoke' => '1', 'limit' => '100', 'page' => '1'])
+                   )
                    ->will($this->returnValue($pi));
 
         $this->assertEquals($return, $controller->getPiReasonsNvpArray());
