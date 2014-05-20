@@ -107,7 +107,7 @@ class BusinessDetailsController extends YourBusinessController
         return $form;
     }
 
-    protected function processDataMapForSave($oldData, $map = array(), $section = 'main')
+    public function processDataMapForSave($oldData, $map = array(), $section = 'main')
     {
         $data = parent::processDataMapForSave($oldData, $map, $section);
 
