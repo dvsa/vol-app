@@ -46,18 +46,13 @@ class BusinessDetailsController extends YourBusinessController
      */
     protected function save($data, $service = null)
     {
+        if (isset($data['tradingNames'])) {
+            $this->makeRestCall('TradingNames', 'POST', $data['tradingNames']);
+        }
+
         // @TODO we shouldn't really need to do this; it's only
         // because our $service property is set to Application
-        // so we can fetch tradingNames as a child valueo
-
-        /*
-         * @TODO re-implement tradingNames persistence too
-         *
-         * They've already been processed by this point, they
-         * just need saving
-         *
-        $this->makeRestCall('TradingNames', 'POST', $tradingNames);
-         */
+        // so we can fetch tradingNames as a child value
         return parent::save($data, 'Organisation');
     }
 
@@ -114,14 +109,19 @@ class BusinessDetailsController extends YourBusinessController
         // the disabled input will always be null, so ignore it...
         unset($data['organisationType']);
 
-        // unfortunately the company number field is a complex one so can't
-        // be mapped directly
-        $data['registeredCompanyNumber'] = $data['companyNumber']['company_number'];
+        if (isset($data['companyNumber'])) {
+            // unfortunately the company number field is a complex one so can't
+            // be mapped directly
+            $data['registeredCompanyNumber'] = $data['companyNumber']['company_number'];
+        }
 
         if (isset($data['tradingNames'])) {
             $licence = $this->getLicenceData(['id']);
             $tradingNames = [];
             foreach ($data['tradingNames']['trading_name'] as $tradingName) {
+                if (trim($tradingName['text']) === '') {
+                    continue;
+                }
                 $tradingNames[] = [
                     'tradingName' => $tradingName['text'],
                     'licence' => $licence['id'],
