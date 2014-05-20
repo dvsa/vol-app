@@ -195,7 +195,7 @@ class ComplaintControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->once())
             ->method('generateFormWithData')
-            ->with('complaint', 'processComplaint', $returnArray, true)
+            ->with('complaint', 'processComplaint', $returnArray)
             ->will($this->returnValue($form));
 
         $this->controller->editAction();
