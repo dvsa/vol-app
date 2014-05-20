@@ -1,24 +1,24 @@
 <?php
 
 /**
- * OperatingCentres Controller Test
+ * FinancialHistoryControllerTest
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
-namespace SelfServe\Test\Controller\Application\OperatingCentres;
+namespace SelfServe\Test\Controller\Application\PreviousHistory;
 
 use SelfServe\Test\Controller\Application\AbstractApplicationControllerTestCase;
 use SelfServe\Controller\Application\ApplicationController;
 
 /**
- * OperatingCentres Controller Test
+ * FinancialHistoryControllerTest
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class OperatingCentresControllerTest extends AbstractApplicationControllerTestCase
+class FinancialHistoryControllerTest extends AbstractApplicationControllerTestCase
 {
-    protected $controllerName =  '\SelfServe\Controller\Application\OperatingCentres\OperatingCentresController';
+    protected $controllerName =  '\SelfServe\Controller\Application\PreviousHistory\FinancialHistoryController';
 
     protected $defaultRestResponse = array();
 
@@ -29,6 +29,40 @@ class OperatingCentresControllerTest extends AbstractApplicationControllerTestCa
     {
         $this->setUpAction('index');
 
+        $response = $this->controller->indexAction();
+
+        // Make sure we get a view not a response
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+    }
+
+    /**
+     * Test indexAction with submit
+     */
+    public function testIndexActionWithSubmit()
+    {
+        $this->setUpAction(
+            'index',
+            null,
+            array(
+                'data' => array(
+                    'id' => 'Y',
+                    'version' => 'Y',
+                    'bankrupt' => 'Y',
+                    'liquidation' => 'Y',
+                    'receivership' => 'Y',
+                    'administration' => 'Y',
+                    'disqualified' => 'Y'
+                ),
+                'insolvencyDetails' => array(
+                    'insolvencyDetails' => str_repeat('a', 200)
+                ),
+                'insolvencyConfirmation' => array(
+                    'insolvencyConfirmation' => '1'
+                )
+            )
+        );
+
+        $this->controller->setEnabledCsrf(false);
         $response = $this->controller->indexAction();
 
         // Make sure we get a view not a response
@@ -95,6 +129,35 @@ class OperatingCentresControllerTest extends AbstractApplicationControllerTestCa
                         'lastSection' => ''
                     )
                 )
+            );
+        }
+
+        $dataBundle = array(
+            'properties' => array(
+                'id',
+                'version',
+                'bankrupt',
+                'liquidation',
+                'receivership',
+                'administration',
+                'disqualified',
+                'insolvencyDetails',
+                'insolvencyConfirmation'
+            )
+        );
+
+        if ($service == 'Application' && $method == 'GET' && $bundle == $bundle) {
+
+            return array(
+                'id' => 1,
+                'version' => 1,
+                'bankrupt' => 1,
+                'liquidation' => 1,
+                'receivership' => 1,
+                'administration' => 1,
+                'disqualified' => 1,
+                'insolvencyDetails' => str_repeat('a', 200),
+                'insolvencyConfirmation' => 1
             );
         }
     }

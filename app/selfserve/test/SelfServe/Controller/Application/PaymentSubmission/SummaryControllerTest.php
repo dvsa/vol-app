@@ -1,24 +1,24 @@
 <?php
 
 /**
- * OperatingCentres Controller Test
+ * Summary Controller Test
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
-namespace SelfServe\Test\Controller\Application\OperatingCentres;
+namespace SelfServe\Test\Controller\Application\PaymentSubmission;
 
 use SelfServe\Test\Controller\Application\AbstractApplicationControllerTestCase;
 use SelfServe\Controller\Application\ApplicationController;
 
 /**
- * OperatingCentres Controller Test
+ * Summary Controller Test
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class OperatingCentresControllerTest extends AbstractApplicationControllerTestCase
+class SummaryControllerTest extends AbstractApplicationControllerTestCase
 {
-    protected $controllerName =  '\SelfServe\Controller\Application\OperatingCentres\OperatingCentresController';
+    protected $controllerName =  '\SelfServe\Controller\Application\PaymentSubmission\SummaryController';
 
     protected $defaultRestResponse = array();
 
@@ -32,7 +32,7 @@ class OperatingCentresControllerTest extends AbstractApplicationControllerTestCa
         $response = $this->controller->indexAction();
 
         // Make sure we get a view not a response
-        $this->assertInstanceOf('Zend\Http\Response', $response);
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
     }
 
     /**

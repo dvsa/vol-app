@@ -1,24 +1,24 @@
 <?php
 
 /**
- * OperatingCentres Controller Test
+ * PreviousHistory Controller Test
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
-namespace SelfServe\Test\Controller\Application\OperatingCentres;
+namespace SelfServe\Test\Controller\Application\PreviousHistory;
 
 use SelfServe\Test\Controller\Application\AbstractApplicationControllerTestCase;
 use SelfServe\Controller\Application\ApplicationController;
 
 /**
- * OperatingCentres Controller Test
+ * PreviousHistory Controller Test
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class OperatingCentresControllerTest extends AbstractApplicationControllerTestCase
+class PreviousHistoryControllerTest extends AbstractApplicationControllerTestCase
 {
-    protected $controllerName =  '\SelfServe\Controller\Application\OperatingCentres\OperatingCentresController';
+    protected $controllerName =  '\SelfServe\Controller\Application\PreviousHistory\PreviousHistoryController';
 
     protected $defaultRestResponse = array();
 

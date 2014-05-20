@@ -1,24 +1,24 @@
 <?php
 
 /**
- * OperatingCentres Controller Test
+ * TransportManagers Controller Test
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
-namespace SelfServe\Test\Controller\Application\OperatingCentres;
+namespace SelfServe\Test\Controller\Application\TransportManagers;
 
 use SelfServe\Test\Controller\Application\AbstractApplicationControllerTestCase;
 use SelfServe\Controller\Application\ApplicationController;
 
 /**
- * OperatingCentres Controller Test
+ * TransportManagers Controller Test
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class OperatingCentresControllerTest extends AbstractApplicationControllerTestCase
+class TransportManagersControllerTest extends AbstractApplicationControllerTestCase
 {
-    protected $controllerName =  '\SelfServe\Controller\Application\OperatingCentres\OperatingCentresController';
+    protected $controllerName =  '\SelfServe\Controller\Application\TransportManagers\TransportManagersController';
 
     protected $defaultRestResponse = array();
 

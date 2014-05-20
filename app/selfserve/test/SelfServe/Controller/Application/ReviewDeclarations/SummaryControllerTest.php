@@ -1,24 +1,24 @@
 <?php
 
 /**
- * OperatingCentres Controller Test
+ * Summary Controller Test
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
-namespace SelfServe\Test\Controller\Application\OperatingCentres;
+namespace SelfServe\Test\Controller\Application\ReviewDeclarations;
 
 use SelfServe\Test\Controller\Application\AbstractApplicationControllerTestCase;
 use SelfServe\Controller\Application\ApplicationController;
 
 /**
- * OperatingCentres Controller Test
+ * Summary Controller Test
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class OperatingCentresControllerTest extends AbstractApplicationControllerTestCase
+class SummaryControllerTest extends AbstractApplicationControllerTestCase
 {
-    protected $controllerName =  '\SelfServe\Controller\Application\OperatingCentres\OperatingCentresController';
+    protected $controllerName =  '\SelfServe\Controller\Application\ReviewDeclarations\SummaryController';
 
     protected $defaultRestResponse = array();
 
@@ -29,6 +29,33 @@ class OperatingCentresControllerTest extends AbstractApplicationControllerTestCa
     {
         $this->setUpAction('index');
 
+        $response = $this->controller->indexAction();
+
+        // Make sure we get a view not a response
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+    }
+
+    /**
+     * Test simpleAction
+     */
+    public function testSimpleAction()
+    {
+        $this->setUpAction('simple');
+
+        $response = $this->controller->simpleAction();
+
+        // Make sure we get a view not a response
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+    }
+
+    /**
+     * Test indexAction with submit
+     */
+    public function testIndexActionWithSubmit()
+    {
+        $this->setUpAction('index', null, array('foo' => 'bar'));
+
+        $this->controller->setEnabledCsrf(false);
         $response = $this->controller->indexAction();
 
         // Make sure we get a view not a response

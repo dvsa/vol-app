@@ -1,7 +1,7 @@
 <?php
 
 /**
- * OperatingCentres Controller Test
+ * Payment Controller Test
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
@@ -12,13 +12,13 @@ use SelfServe\Test\Controller\Application\AbstractApplicationControllerTestCase;
 use SelfServe\Controller\Application\ApplicationController;
 
 /**
- * OperatingCentres Controller Test
+ * Payment Controller Test
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class OperatingCentresControllerTest extends AbstractApplicationControllerTestCase
+class PaymentControllerTest extends AbstractApplicationControllerTestCase
 {
-    protected $controllerName =  '\SelfServe\Controller\Application\OperatingCentres\OperatingCentresController';
+    protected $controllerName =  '\SelfServe\Controller\Application\PaymentSubmission\PaymentController';
 
     protected $defaultRestResponse = array();
 
@@ -32,7 +32,29 @@ class OperatingCentresControllerTest extends AbstractApplicationControllerTestCa
         $response = $this->controller->indexAction();
 
         // Make sure we get a view not a response
-        $this->assertInstanceOf('Zend\Http\Response', $response);
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+    }
+
+    /**
+     * Test indexActionSubmit
+     */
+    public function testIndexActionSubmit()
+    {
+        $this->setUpAction(
+            'index',
+            null,
+            array(
+                'data' => array(
+                    'cardTypes' => 1
+                )
+            )
+        );
+
+        $this->controller->setEnabledCsrf(false);
+
+        $response = $this->controller->indexAction();
+
+        $this->assertInstanceOf('\Zend\Http\Response', $response);
     }
 
     /**
@@ -89,7 +111,7 @@ class OperatingCentresControllerTest extends AbstractApplicationControllerTestCa
                         'sectionPreviousHistoryLicenceHistoryStatus' => 2,
                         'sectionPreviousHistoryConvictionPenaltiesStatus' => 2,
                         'sectionReviewDeclarationsStatus' => 2,
-                        'sectionPaymentSubmissionStatus' => 2,
+                        'sectionPaymentSubmissionStatus' => 0,
                         'sectionPaymentSubmissionPaymentStatus' => 0,
                         'sectionPaymentSubmissionSummaryStatus' => 0,
                         'lastSection' => ''

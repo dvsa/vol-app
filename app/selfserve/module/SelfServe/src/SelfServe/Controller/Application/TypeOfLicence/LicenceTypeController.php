@@ -39,9 +39,7 @@ class LicenceTypeController extends TypeOfLicenceController
      */
     protected function alterForm($form)
     {
-        $data = $this->loadData($this->getIdentifier());
-
-        if ($data['goodsOrPsv'] != 'psv') {
+        if (!$this->isPsv()) {
 
             $licenceTypeElement = $form->get('data')->get('licenceType');
 

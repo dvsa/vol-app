@@ -1,24 +1,24 @@
 <?php
 
 /**
- * OperatingCentres Controller Test
+ * Placeholder Controller Test
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
-namespace SelfServe\Test\Controller\Application\OperatingCentres;
+namespace SelfServe\Test\Controller\Application\TaxiPhv;
 
 use SelfServe\Test\Controller\Application\AbstractApplicationControllerTestCase;
 use SelfServe\Controller\Application\ApplicationController;
 
 /**
- * OperatingCentres Controller Test
+ * Placeholder Controller Test
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class OperatingCentresControllerTest extends AbstractApplicationControllerTestCase
+class PlaceholderControllerTest extends AbstractApplicationControllerTestCase
 {
-    protected $controllerName =  '\SelfServe\Controller\Application\OperatingCentres\OperatingCentresController';
+    protected $controllerName =  '\SelfServe\Controller\Application\TaxiPhv\PlaceholderController';
 
     protected $defaultRestResponse = array();
 
@@ -32,7 +32,7 @@ class OperatingCentresControllerTest extends AbstractApplicationControllerTestCa
         $response = $this->controller->indexAction();
 
         // Make sure we get a view not a response
-        $this->assertInstanceOf('Zend\Http\Response', $response);
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
     }
 
     /**
@@ -51,9 +51,9 @@ class OperatingCentresControllerTest extends AbstractApplicationControllerTestCa
                 'licence' => array(
                     'id' => 10,
                     'version' => 1,
-                    'goodsOrPsv' => 'goods',
+                    'goodsOrPsv' => 'psv',
                     'niFlag' => 0,
-                    'licenceType' => 'standard-national'
+                    'licenceType' => 'special-restricted'
                 )
             );
         }

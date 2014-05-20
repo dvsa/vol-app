@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Authorisation Controller
+ * Authorisation Controller Test
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
@@ -12,7 +12,7 @@ use SelfServe\Test\Controller\Application\AbstractApplicationControllerTestCase;
 use SelfServe\Controller\Application\ApplicationController;
 
 /**
- * Authorisation Controller
+ * Authorisation Controller Test
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
