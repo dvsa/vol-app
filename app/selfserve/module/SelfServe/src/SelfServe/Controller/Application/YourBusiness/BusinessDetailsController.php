@@ -47,7 +47,17 @@ class BusinessDetailsController extends YourBusinessController
     protected function save($data, $service = null)
     {
         // @TODO we shouldn't really need to do this; it's only
-        // because the $service is Application so we can fetch tradingNames
+        // because our $service property is set to Application
+        // so we can fetch tradingNames as a child valueo
+
+        /*
+         * @TODO re-implement tradingNames persistence too
+         *
+         * They've already been processed by this point, they
+         * just need saving
+         *
+        $this->makeRestCall('TradingNames', 'POST', $tradingNames);
+         */
         return parent::save($data, 'Organisation');
     }
 
@@ -55,7 +65,9 @@ class BusinessDetailsController extends YourBusinessController
     {
         $form = parent::alterFormBeforeValidation($form);
 
-        // @TODO alter based on submit button potentially
+        // @TODO alter based on submit button potentially; may
+        // not want to validate based on whether we were
+        // adding a trading name or submitting a CH lookup
 
         return $form;
     }
@@ -102,7 +114,10 @@ class BusinessDetailsController extends YourBusinessController
         // the disabled input will always be null, so ignore it...
         unset($data['organisationType']);
 
+        // unfortunately the company number field is a complex one so can't
+        // be mapped directly
         $data['registeredCompanyNumber'] = $data['companyNumber']['company_number'];
+
         if (isset($data['tradingNames'])) {
             $licence = $this->getLicenceData(['id']);
             $tradingNames = [];
@@ -113,8 +128,6 @@ class BusinessDetailsController extends YourBusinessController
                 ];
             }
             $data['tradingNames'] = $tradingNames;
-
-            //$this->makeRestCall('TradingNames', 'POST', $tradingNames);
         }
 
         return $data;
