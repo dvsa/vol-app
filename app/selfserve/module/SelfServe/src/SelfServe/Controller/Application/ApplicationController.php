@@ -105,20 +105,12 @@ class ApplicationController extends AbstractJourneyController
     /**
      * Check if application is psv
      *
+     * GetAccessKeys "should" always be called first so psv should be set
+     *
      * @return boolean
      */
     protected function isPsv()
     {
-        if (is_null($this->isPsv)) {
-            $data = $this->getLicenceData();
-
-            if (strtolower($data['goodsOrPsv']) == 'psv') {
-                $this->isPsv = true;
-            } else {
-                $this->isPsv = false;
-            }
-        }
-
         return $this->isPsv;
     }
 
@@ -134,7 +126,7 @@ class ApplicationController extends AbstractJourneyController
             $licence = $this->getLicenceData();
 
             if (empty($licence)) {
-                return array(null);
+                return parent::getAccessKeys($force);
             }
 
             if (strtolower($licence['goodsOrPsv']) == 'psv') {

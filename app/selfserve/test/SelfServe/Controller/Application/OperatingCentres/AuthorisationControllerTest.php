@@ -36,6 +36,18 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
     private $goodsOrPsv;
 
     /**
+     * Test back button
+     */
+    public function testBackButton()
+    {
+        $this->setUpAction('index', null, array('form-actions' => array('back' => 'Back')));
+
+        $response = $this->controller->indexAction();
+
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
      * Test indexAction
      *
      * @dataProvider psvProvider
@@ -179,6 +191,43 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                 'numberOfTrailers' => 10,
                 'sufficientParking' => '1',
                 'permission' => '1'
+            )
+        );
+
+        $this->setUpAction('add', null, $post);
+
+        $this->goodsOrPsv = $goodsOrPsv;
+
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->addAction();
+
+        $this->assertInstanceOf('\Zend\Http\Response', $response);
+    }
+
+    /**
+     * Test addAction with submit with add another
+     *
+     * @dataProvider psvProvider
+     */
+    public function testAddActionWithSubmitWithAddAnother($goodsOrPsv, $hasTrailers)
+    {
+        $post = array(
+            'address' => array(
+                'id' => '',
+                'version' => '',
+                'addressLine1' => 'Some street',
+                'city' => 'City',
+                'postcode' => 'AN1 1ND',
+                'country' => 'country.GB'
+            ),
+            'data' => array(
+                'numberOfVehicles' => 10,
+                'numberOfTrailers' => 10,
+                'sufficientParking' => '1',
+                'permission' => '1'
+            ),
+            'form-actions' => array(
+                'addAnother' => 'Add another'
             )
         );
 

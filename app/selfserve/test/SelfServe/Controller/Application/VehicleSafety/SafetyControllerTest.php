@@ -24,6 +24,18 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
     private $goodsOrPsv;
 
     /**
+     * Test back button
+     */
+    public function testBackButton()
+    {
+        $this->setUpAction('index', null, array('form-actions' => array('back' => 'Back')));
+
+        $response = $this->controller->indexAction();
+
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
      * Test indexAction
      *
      * @dataProvider psvProvider
@@ -122,6 +134,41 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
                 'country' => 'country.GB',
                 'postcode' => 'AB1 1BA'
             )
+            )
+        );
+
+        $this->goodsOrPsv = 'goods';
+
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->addAction();
+
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
+     * Test addAction with submit with add another
+     */
+    public function testAddActionWithSubmitWithAddAnother()
+    {
+        $this->setUpAction(
+            'add', null, array(
+                'data' => array(
+                    'isExternal' => 'Y'
+                ),
+                'contactDetails' => array(
+                    'fao' => 'Someone'
+                ),
+                'address' => array(
+                    'id' => '',
+                    'version' => '',
+                    'addressLine1' => 'Address 1',
+                    'city' => 'City',
+                    'country' => 'country.GB',
+                    'postcode' => 'AB1 1BA'
+                ),
+                'form-actions' => array(
+                    'addAnother' => 'Add another'
+                )
             )
         );
 

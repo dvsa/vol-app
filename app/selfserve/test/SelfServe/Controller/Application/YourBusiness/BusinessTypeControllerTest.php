@@ -1,25 +1,25 @@
 <?php
 
 /**
- * FinancialHistoryControllerTest
+ * BusinessType Controller Test
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
-namespace SelfServe\Test\Controller\Application\PreviousHistory;
+namespace SelfServe\Test\Controller\Application\YourBusiness;
 
 use SelfServe\Test\Controller\Application\AbstractApplicationControllerTestCase;
 use SelfServe\Controller\Application\ApplicationController;
 
 /**
- * FinancialHistoryControllerTest
+ * BusinessType Controller Test
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class FinancialHistoryControllerTest extends AbstractApplicationControllerTestCase
+class BusinessTypeControllerTest extends AbstractApplicationControllerTestCase
 {
-    protected $controllerName =  '\SelfServe\Controller\Application\PreviousHistory\FinancialHistoryController';
 
+    protected $controllerName = '\SelfServe\Controller\Application\YourBusiness\BusinessTypeController';
     protected $defaultRestResponse = array();
 
     /**
@@ -45,40 +45,6 @@ class FinancialHistoryControllerTest extends AbstractApplicationControllerTestCa
 
         // Make sure we get a view not a response
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
-    }
-
-    /**
-     * Test indexAction with submit
-     */
-    public function testIndexActionWithSubmit()
-    {
-        $this->setUpAction(
-            'index',
-            null,
-            array(
-                'data' => array(
-                    'id' => 'Y',
-                    'version' => 'Y',
-                    'bankrupt' => 'Y',
-                    'liquidation' => 'Y',
-                    'receivership' => 'Y',
-                    'administration' => 'Y',
-                    'disqualified' => 'Y'
-                ),
-                'insolvencyDetails' => array(
-                    'insolvencyDetails' => str_repeat('a', 200)
-                ),
-                'insolvencyConfirmation' => array(
-                    'insolvencyConfirmation' => '1'
-                )
-            )
-        );
-
-        $this->controller->setEnabledCsrf(false);
-        $response = $this->controller->indexAction();
-
-        // Make sure we get a view not a response
-        $this->assertInstanceOf('Zend\Http\Response', $response);
     }
 
     /**
@@ -141,35 +107,6 @@ class FinancialHistoryControllerTest extends AbstractApplicationControllerTestCa
                         'lastSection' => ''
                     )
                 )
-            );
-        }
-
-        $dataBundle = array(
-            'properties' => array(
-                'id',
-                'version',
-                'bankrupt',
-                'liquidation',
-                'receivership',
-                'administration',
-                'disqualified',
-                'insolvencyDetails',
-                'insolvencyConfirmation'
-            )
-        );
-
-        if ($service == 'Application' && $method == 'GET' && $bundle == $bundle) {
-
-            return array(
-                'id' => 1,
-                'version' => 1,
-                'bankrupt' => 1,
-                'liquidation' => 1,
-                'receivership' => 1,
-                'administration' => 1,
-                'disqualified' => 1,
-                'insolvencyDetails' => str_repeat('a', 200),
-                'insolvencyConfirmation' => 1
             );
         }
     }

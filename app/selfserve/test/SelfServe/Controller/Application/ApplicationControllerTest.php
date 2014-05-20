@@ -1,38 +1,28 @@
 <?php
 
 /**
- * FinancialHistoryControllerTest
+ * Application Controller Test
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
-namespace SelfServe\Test\Controller\Application\PreviousHistory;
+namespace SelfServe\Test\Controller\Application;
 
 use SelfServe\Test\Controller\Application\AbstractApplicationControllerTestCase;
 use SelfServe\Controller\Application\ApplicationController;
 
 /**
- * FinancialHistoryControllerTest
+ * Application Controller Test
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class FinancialHistoryControllerTest extends AbstractApplicationControllerTestCase
+class ApplicationControllerTest extends AbstractApplicationControllerTestCase
 {
-    protected $controllerName =  '\SelfServe\Controller\Application\PreviousHistory\FinancialHistoryController';
+    protected $controllerName =  '\SelfServe\Controller\Application\ApplicationController';
 
     protected $defaultRestResponse = array();
 
-    /**
-     * Test back button
-     */
-    public function testBackButton()
-    {
-        $this->setUpAction('index', null, array('form-actions' => array('back' => 'Back')));
-
-        $response = $this->controller->indexAction();
-
-        $this->assertInstanceOf('Zend\Http\Response', $response);
-    }
+    private $lastSection = null;
 
     /**
      * Test indexAction
@@ -41,40 +31,21 @@ class FinancialHistoryControllerTest extends AbstractApplicationControllerTestCa
     {
         $this->setUpAction('index');
 
+        $this->lastSection = 'Application/YourBusiness/BusinessDetails';
+
         $response = $this->controller->indexAction();
 
         // Make sure we get a view not a response
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+        $this->assertInstanceOf('Zend\Http\Response', $response);
     }
 
     /**
-     * Test indexAction with submit
+     * Test indexAction without last section
      */
-    public function testIndexActionWithSubmit()
+    public function testIndexActionWithoutLastSection()
     {
-        $this->setUpAction(
-            'index',
-            null,
-            array(
-                'data' => array(
-                    'id' => 'Y',
-                    'version' => 'Y',
-                    'bankrupt' => 'Y',
-                    'liquidation' => 'Y',
-                    'receivership' => 'Y',
-                    'administration' => 'Y',
-                    'disqualified' => 'Y'
-                ),
-                'insolvencyDetails' => array(
-                    'insolvencyDetails' => str_repeat('a', 200)
-                ),
-                'insolvencyConfirmation' => array(
-                    'insolvencyConfirmation' => '1'
-                )
-            )
-        );
+        $this->setUpAction('index');
 
-        $this->controller->setEnabledCsrf(false);
         $response = $this->controller->indexAction();
 
         // Make sure we get a view not a response
@@ -138,38 +109,9 @@ class FinancialHistoryControllerTest extends AbstractApplicationControllerTestCa
                         'sectionPaymentSubmissionStatus' => 2,
                         'sectionPaymentSubmissionPaymentStatus' => 0,
                         'sectionPaymentSubmissionSummaryStatus' => 0,
-                        'lastSection' => ''
+                        'lastSection' => $this->lastSection
                     )
                 )
-            );
-        }
-
-        $dataBundle = array(
-            'properties' => array(
-                'id',
-                'version',
-                'bankrupt',
-                'liquidation',
-                'receivership',
-                'administration',
-                'disqualified',
-                'insolvencyDetails',
-                'insolvencyConfirmation'
-            )
-        );
-
-        if ($service == 'Application' && $method == 'GET' && $bundle == $bundle) {
-
-            return array(
-                'id' => 1,
-                'version' => 1,
-                'bankrupt' => 1,
-                'liquidation' => 1,
-                'receivership' => 1,
-                'administration' => 1,
-                'disqualified' => 1,
-                'insolvencyDetails' => str_repeat('a', 200),
-                'insolvencyConfirmation' => 1
             );
         }
     }

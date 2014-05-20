@@ -192,14 +192,6 @@ abstract class AbstractJourneyController extends AbstractController
     protected $hasForm = null;
 
     /**
-     * Generic index action
-     */
-    public function indexAction()
-    {
-        return $this->goToFirstSection();
-    }
-
-    /**
      * Override the not found action
      */
     public function notFoundAction()
@@ -317,10 +309,8 @@ abstract class AbstractJourneyController extends AbstractController
     {
         if (empty($this->subSectionName)) {
 
-            $this->subSectionName = str_replace('Controller', '', $this->getNamespaceParts()[4]);
-
-            if (!isset($this->getSectionConfig()['subSections'][$this->subSectionName])) {
-                $this->subSectionName = null;
+            if (isset($this->getNamespaceParts()[4])) {
+                $this->subSectionName = str_replace('Controller', '', $this->getNamespaceParts()[4]);
             }
         }
 
@@ -396,8 +386,6 @@ abstract class AbstractJourneyController extends AbstractController
         if (!is_null($section)) {
             return isset($config['sections'][$section]) ? $config['sections'][$section] : array();
         }
-
-        return $config;
     }
 
     /**
@@ -941,25 +929,6 @@ abstract class AbstractJourneyController extends AbstractController
     }
 
     /**
-     * Get a form config for section
-     *
-     * @param string $section
-     * @param string $subSection
-     * @param string $action
-     * @return array
-     */
-    protected function getFormConfigForSection($section, $subSection, $action = false)
-    {
-        $formName = $this->formatFormName($this->getJourneyName(), $section, $subSection, $action);
-
-        if (!$this->formExists($formName)) {
-            return null;
-        }
-
-        return include($this->getFormLocation($formName));
-    }
-
-    /**
      * Alter table
      *
      * This method should be overridden
@@ -1011,11 +980,7 @@ abstract class AbstractJourneyController extends AbstractController
 
         $view = $this->setupView($view, $params);
 
-        $response = $this->maybeAddTable($view);
-
-        if ($response instanceof Response || $response instanceof ViewModel) {
-            return $response;
-        }
+        $this->maybeAddTable($view);
 
         $response = $this->maybeAddForm($view);
 
@@ -1311,18 +1276,12 @@ abstract class AbstractJourneyController extends AbstractController
      */
     protected function actionLoad($id)
     {
-        $result = $this->makeRestCall(
+        return $this->makeRestCall(
             $this->getActionService(),
             'GET',
             array('id' => $id),
             $this->getActionDataBundle()
         );
-
-        if (empty($result)) {
-            return $this->notFoundAction();
-        }
-
-        return $result;
     }
 
     /**
