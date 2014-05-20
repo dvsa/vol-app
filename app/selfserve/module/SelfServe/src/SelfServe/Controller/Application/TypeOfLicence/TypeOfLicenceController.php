@@ -32,20 +32,4 @@ class TypeOfLicenceController extends ApplicationController
     {
         return $this->goToFirstSubSection();
     }
-
-    /**
-     * Get licence data
-     *
-     * @param array $properties
-     * @return array
-     */
-    protected function getLicenceData($properties = array())
-    {
-        $properties = array_merge(
-            array('id', 'version'),
-            $properties
-        );
-
-        return parent::getLicenceData($properties);
-    }
 }

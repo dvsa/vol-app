@@ -5,6 +5,7 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+
 namespace SelfServe\Controller\Application;
 
 use SelfServe\Controller\AbstractJourneyController;
@@ -16,6 +17,20 @@ use SelfServe\Controller\AbstractJourneyController;
  */
 class ApplicationController extends AbstractJourneyController
 {
+    public static $licenceDataBundle = array(
+        'children' => array(
+            'licence' => array(
+                'properties' => array(
+                    'id',
+                    'version',
+                    'goodsOrPsv',
+                    'niFlag',
+                    'licenceType'
+                )
+            )
+        )
+    );
+
     /**
      * Holds the service name
      *
@@ -35,12 +50,12 @@ class ApplicationController extends AbstractJourneyController
      *
      * @var boolean
      */
-    protected $isPsv;
+    protected $isPsv = null;
 
     /**
      * Redirect to the first section
      *
-     * @return Resposne
+     * @return Response
      */
     public function indexAction()
     {
@@ -82,7 +97,7 @@ class ApplicationController extends AbstractJourneyController
 
         $this->makeRestCall('ApplicationCompletion', 'PUT', $data);
 
-        $completion['version']++;
+        $completion['version'] ++;
 
         $this->setSectionCompletion($completion);
     }
@@ -90,20 +105,12 @@ class ApplicationController extends AbstractJourneyController
     /**
      * Check if application is psv
      *
+     * GetAccessKeys "should" always be called first so psv should be set
+     *
      * @return boolean
      */
     protected function isPsv()
     {
-        if (is_null($this->isPsv)) {
-            $data = $this->getLicenceData(array('goodsOrPsv'));
-
-            if (strtolower($data['goodsOrPsv']) == 'psv') {
-                $this->isPsv = true;
-            } else {
-                $this->isPsv = false;
-            }
-        }
-
         return $this->isPsv;
     }
 
@@ -116,10 +123,10 @@ class ApplicationController extends AbstractJourneyController
     protected function getAccessKeys($force = false)
     {
         if (empty($this->accessKeys) || $force) {
-            $licence = $this->getLicenceDataForAccess();
+            $licence = $this->getLicenceData();
 
             if (empty($licence)) {
-                return array(null);
+                return parent::getAccessKeys($force);
             }
 
             if (strtolower($licence['goodsOrPsv']) == 'psv') {
@@ -144,8 +151,7 @@ class ApplicationController extends AbstractJourneyController
 
             $sectionCompletion = $this->getSectionCompletion();
 
-            if (isset($sectionCompletion['sectionPaymentSubmissionStatus'])
-                && $sectionCompletion['sectionPaymentSubmissionStatus'] == 2) {
+            if (isset($sectionCompletion['sectionPaymentSubmissionStatus']) && $sectionCompletion['sectionPaymentSubmissionStatus'] == 2) {
 
                 $this->accessKeys[] = 'paid';
             } else {
@@ -157,39 +163,24 @@ class ApplicationController extends AbstractJourneyController
     }
 
     /**
-     * Get licence entity based on route id value
-     *
-     * @return array|object
-     */
-    protected function getLicenceDataForAccess()
-    {
-        return $this->getLicenceData(array('goodsOrPsv', 'niFlag', 'licenceType'));
-    }
-
-    /**
      * Get the licence data
      *
-     * @param array $properties
      * @return array
      */
-    protected function getLicenceData($properties = array())
+    protected function getLicenceData()
     {
-        $key = json_encode($properties);
+        if (empty($this->licenceData)) {
 
-        if (!isset($this->licenceData[$key])) {
-            $bundle = array(
-                'children' => array(
-                    'licence' => array(
-                        'properties' => $properties
-                    )
-                )
+            $application = $this->makeRestCall(
+                'Application',
+                'GET',
+                array('id' => $this->getIdentifier()),
+                self::$licenceDataBundle
             );
 
-            $application = $this->makeRestCall('Application', 'GET', array('id' => $this->getIdentifier()), $bundle);
-
-            $this->licenceData[$key] = $application['licence'];
+            $this->licenceData = $application['licence'];
         }
 
-        return $this->licenceData[$key];
+        return $this->licenceData;
     }
 }

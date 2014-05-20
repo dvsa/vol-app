@@ -171,6 +171,32 @@ class SafetyController extends VehicleSafetyController
     }
 
     /**
+     * Add operating centre
+     */
+    public function addAction()
+    {
+        return $this->renderSection();
+    }
+
+    /**
+     * Edit operating centre
+     */
+    public function editAction()
+    {
+        return $this->renderSection();
+    }
+
+    /**
+     * Delete sub action
+     *
+     * @return Response
+     */
+    public function deleteAction()
+    {
+        return $this->delete();
+    }
+
+    /**
      * Action save
      *
      * @param array $data
@@ -184,7 +210,7 @@ class SafetyController extends VehicleSafetyController
         if ($this->getActionName() == 'add') {
 
             if (!isset($saved['id'])) {
-                return $this->notFoundAction();
+                throw new \Exception('Unable to save contact details');
             }
 
             $data['workshop']['contactDetails'] = $saved['id'];
@@ -232,6 +258,8 @@ class SafetyController extends VehicleSafetyController
      */
     protected function getFormTableData($id, $name)
     {
+        $this->load($id);
+
         $data = $this->data['workshops'];
 
         $tableData = array();
@@ -347,10 +375,12 @@ class SafetyController extends VehicleSafetyController
      */
     protected function load($id)
     {
-        $data = parent::load($id);
+        if (empty($this->data)) {
+            $data = parent::load($id);
 
-        $this->data = $data;
+            $this->data = $data;
+        }
 
-        return $data;
+        return $this->data;
     }
 }

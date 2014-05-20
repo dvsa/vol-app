@@ -5,6 +5,7 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+
 namespace SelfServe\Controller\Application\VehicleSafety;
 
 /**
@@ -14,6 +15,30 @@ namespace SelfServe\Controller\Application\VehicleSafety;
  */
 class VehicleController extends VehicleSafetyController
 {
+
+    /**
+     * Holds the table data bundle
+     *
+     * @var array
+     */
+    protected $tableDataBundle = array(
+        'properties' => null,
+        'children' => array(
+            'licenceVehicles' => array(
+                'properties' => null,
+                'children' => array(
+                    'vehicle' => array(
+                        'properties' => array(
+                            'id',
+                            'vrm',
+                            'platedWeight'
+                        )
+                    )
+                )
+            )
+        )
+    );
+
     /**
      * Action service
      *
@@ -53,14 +78,19 @@ class VehicleController extends VehicleSafetyController
     }
 
     /**
-     * Placeholder for save
-     *
-     * @param array $data
-     * @parem string $service
+     * Add operating centre
      */
-    protected function save($data, $service = null)
+    public function addAction()
     {
+        return $this->renderSection();
+    }
 
+    /**
+     * Edit operating centre
+     */
+    public function editAction()
+    {
+        return $this->renderSection();
     }
 
     /**
@@ -72,7 +102,7 @@ class VehicleController extends VehicleSafetyController
     {
         $vehicleId = $this->getActionId();
 
-        $licence = $this->getLicenceData(array('id'));
+        $licence = $this->getLicenceData();
 
         $cond = array(
             'vehicle' => $vehicleId,
@@ -97,6 +127,16 @@ class VehicleController extends VehicleSafetyController
     }
 
     /**
+     * Placeholder for save
+     *
+     * @param array $data
+     * @parem string $service
+     */
+    protected function save($data, $service = null)
+    {
+    }
+
+    /**
      * Get table data
      *
      * @param int $id
@@ -104,27 +144,9 @@ class VehicleController extends VehicleSafetyController
      */
     protected function getTableData($id)
     {
-        $bundle = array(
-            'properties' => null,
-            'children' => array(
-                'licenceVehicles' => array(
-                    'properties' => null,
-                    'children' => array(
-                        'vehicle' => array(
-                            'properties' => array(
-                                'id',
-                                'vrm',
-                                'platedWeight'
-                            )
-                        )
-                    )
-                )
-            )
-        );
+        $licence = $this->getLicenceData();
 
-        $licence = $this->getLicenceData(array('id'));
-
-        $data = $this->makeRestCall('Licence', 'GET', array('id' => $licence['id']), $bundle);
+        $data = $this->makeRestCall('Licence', 'GET', array('id' => $licence['id']), $this->tableDataBundle);
 
         $results = array();
 
@@ -142,6 +164,17 @@ class VehicleController extends VehicleSafetyController
     }
 
     /**
+     * We don't need to load anything as there is no form
+     *
+     * @param int $id
+     * @return array
+     */
+    protected function load($id)
+    {
+        return array();
+    }
+
+    /**
      * Save the vehicle
      *
      * @param array $data
@@ -155,10 +188,10 @@ class VehicleController extends VehicleSafetyController
 
             if (!isset($saved['id'])) {
 
-                return $this->notFoundAction();
+                throw new \Exception('Unable to save vehicle');
             }
 
-            $licence = $this->getLicenceData(array('id'));
+            $licence = $this->getLicenceData();
 
             $licenceVehicleData = array(
                 'licence' => $licence['id'],
