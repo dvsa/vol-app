@@ -383,9 +383,7 @@ abstract class AbstractJourneyController extends AbstractController
                 : array();
         }
 
-        if (!is_null($section)) {
-            return isset($config['sections'][$section]) ? $config['sections'][$section] : array();
-        }
+        return isset($config['sections'][(string)$section]) ? $config['sections'][(string)$section] : array();
     }
 
     /**
@@ -1039,10 +1037,6 @@ abstract class AbstractJourneyController extends AbstractController
 
             if (!$this->getRequest()->isPost()) {
                 $data = $this->getFormData();
-
-                if ($data instanceof Response || $data instanceof ViewModel) {
-                    return $data;
-                }
             }
 
             if ($this->isAction() || empty($this->formTables)) {
@@ -1133,19 +1127,11 @@ abstract class AbstractJourneyController extends AbstractController
                 $data = array();
             }
 
-            if ($data instanceof Response || $data instanceof ViewModel) {
-                return $data;
-            }
-
             $processedData = $this->processActionLoad($data);
 
         } else {
 
             $data = $this->load($this->getIdentifier());
-
-            if ($data instanceof Response || $data instanceof ViewModel) {
-                return $data;
-            }
 
             $processedData = $this->processLoad($data);
         }
@@ -1330,10 +1316,6 @@ abstract class AbstractJourneyController extends AbstractController
 
         if (is_null($service)) {
             $service = $this->getActionService();
-        }
-
-        if (empty($service)) {
-            throw new \Exception('Action service not defined');
         }
 
         return $this->makeRestCall($service, $method, $data);

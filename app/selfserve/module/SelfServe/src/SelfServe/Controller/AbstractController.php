@@ -131,30 +131,6 @@ abstract class AbstractController extends FormActionController
     }
 
     /**
-     * Get table data
-     *
-     * This method should be overridden
-     *
-     * @return array
-     */
-    protected function getTableData($id)
-    {
-        return array();
-    }
-
-    /**
-     * Get form table data
-     *
-     * @param int $id
-     * @param string $name
-     * @return array
-     */
-    protected function getFormTableData($id, $name)
-    {
-        return array();
-    }
-
-    /**
      * Get table settings
      *
      * This method should be overridden
@@ -306,10 +282,6 @@ abstract class AbstractController extends FormActionController
     {
         $service = $this->getService();
 
-        if (empty($service)) {
-            return array();
-        }
-
         $result = $this->makeRestCall($service, 'GET', array('id' => $id), $this->getDataBundle());
 
         if (empty($result)) {
@@ -325,7 +297,7 @@ abstract class AbstractController extends FormActionController
      *
      * @param type $data
      */
-    protected function processDataMapForSave($oldData, $map = array(), $section = 'main')
+    public function processDataMapForSave($oldData, $map = array(), $section = 'main')
     {
         if (empty($map)) {
             return $oldData;
@@ -375,7 +347,7 @@ abstract class AbstractController extends FormActionController
      *
      * @return array
      */
-    protected function getNamespaceParts()
+    public function getNamespaceParts()
     {
         $controller = get_called_class();
 

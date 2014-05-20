@@ -23,32 +23,76 @@ use Zend\Http\Response;
  */
 class IndexController extends AbstractController
 {
+
     /**
-     * User
+     * Holds the applications bundle
      *
      * @var array
      */
-    private $user;
+    private $applicationsBundle = array(
+        'properties' => array(),
+        'children' => array(
+            'organisation' => array(
+                'properties' => array(),
+                'children' => array(
+                    'licences' => array(
+                        'properties' => array(
+                            'licenceNumber'
+                        ),
+                        'children' => array(
+                            'applications' => array(
+                                'properties' => array(
+                                    'id',
+                                    'createdOn',
+                                    'receivedDate',
+                                    'status'
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        )
+    );
+
+    /**
+     * Holds the organisation bundle
+     *
+     * @var array
+     */
+    private $organisationIdBundle = array(
+        'properties' => array(
+
+        ),
+        'children' => array(
+            'organisation' => array(
+                'properties' => array('id')
+            )
+        )
+    );
 
     /**
      * Index action
      *
-     * @return array|ViewModel
+     * @return ViewModel
      */
     public function indexAction()
     {
         $user = $this->getUser();
 
-        if ($user instanceof Response) {
-            return $user;
-        }
+        $data = $this->makeRestCall('User', 'GET', array('id' => $user['id']), $this->applicationsBundle);
 
-        $applications = $this->makeRestCall(
-            'OrganisationApplication',
-            'GET',
-            ['organisation' => $this->getOrganisationId()],
-            ['children' => ['licence']]
-        );
+        $applications = array();
+
+        if (isset($data['organisation']['licences'])) {
+            foreach ($data['organisation']['licences'] as $licence) {
+                foreach ($licence['applications'] as $application) {
+                    $newRow = $application;
+                    $newRow['licenceNumber'] = $licence['licenceNumber'];
+                    $applications[] = $newRow;
+                }
+            }
+        }
 
         $settings = array(
             'sort' => 'createdOn',
@@ -71,20 +115,16 @@ class IndexController extends AbstractController
      *
      * @return Response
      */
-    public function createApplicationAction()
+    public function createAction()
     {
         $user = $this->getUser();
-
-        if ($user instanceof Response) {
-            return $user;
-        }
 
         $data = [
             'version'       => 1,
             'licenceNumber' => '',
             'licenceType'   => '',
             'licenceStatus' => 'lic_status.new',
-            'organisation'  => $this->getOrganisationId(),
+            'organisation'  => $this->getOrganisationId($user['id']),
         ];
 
         $licenceResult = $this->makeRestCall('Licence', 'POST', $data);
@@ -114,14 +154,10 @@ class IndexController extends AbstractController
      * @throws \Exception
      * @return int
      */
-    private function getOrganisationId()
+    private function getOrganisationId($userId)
     {
-        $restBundle = ['children' => ['organisation']];
-        $user = $this->makeRestCall('User', 'GET', ['id' => $this->user['id']], $restBundle);
+        $user = $this->makeRestCall('User', 'GET', ['id' => $userId], $this->organisationIdBundle);
 
-        if ($user === false) {
-            throw new ResourceNotFoundException('User not found');
-        }
         return $user['organisation']['id'];
     }
 
@@ -132,25 +168,6 @@ class IndexController extends AbstractController
      */
     private function getUser()
     {
-        if (empty($this->user)) {
-
-            $userId = $this->params()->fromRoute('userId');
-            $session = new Container();
-
-            if (empty($userId)) {
-
-                if (empty($session->user)) {
-
-                    // @todo redirect to temp user
-                    return $this->redirectToRoute('home/dashboard', ['userId' => 1]);
-                }
-
-                $this->user = $session->user;
-
-            } else {
-                $session->user = $this->user = array('id' => $userId);
-            }
-        }
-        return $this->user;
+        return array('id' => 1);
     }
 }

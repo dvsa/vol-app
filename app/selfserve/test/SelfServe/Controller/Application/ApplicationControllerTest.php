@@ -25,6 +25,89 @@ class ApplicationControllerTest extends AbstractApplicationControllerTestCase
     private $lastSection = null;
 
     /**
+     * Test that getNamespaceParts does what is expected
+     */
+    public function testGetNamespaceParts()
+    {
+        $controller = new \SelfServe\Controller\Application\ApplicationController();
+        $parts = $controller->getNamespaceParts();
+
+        $expected = array(
+            'SelfServe',
+            'Controller',
+            'Application',
+            'ApplicationController'
+        );
+
+        $this->assertEquals($expected, $parts);
+    }
+
+    /**
+     * Test processDataMap without map
+     */
+    public function testProcessDataMapForSaveWithoutMap()
+    {
+        $input = array(
+            'foo' => 'bar'
+        );
+
+        $controller = new \SelfServe\Controller\Application\ApplicationController();
+        $output = $controller->processDataMapForSave($input);
+
+        $this->assertEquals($input, $output);
+    }
+
+    /**
+     * Test processDataMap
+     */
+    public function testProcessDataMapForSave()
+    {
+        $input = array(
+            'foo' => array(
+                'a' => 'A',
+                'b' => 'B'
+            ),
+            'bar' => array(
+                'c' => 'C',
+                'd' => 'D'
+            ),
+            'bob' => array(
+                'e' => 'E',
+                'f' => 'F'
+            )
+        );
+
+        $map = array(
+            'main' => array(
+                'mapFrom' => array('foo', 'bar'),
+                'values' => array('cake' => 'cats'),
+                'children' => array(
+                    'bobs' => array(
+                        'mapFrom' => array('bob')
+                    )
+                )
+            )
+        );
+
+        $expected = array(
+            'a' => 'A',
+            'b' => 'B',
+            'c' => 'C',
+            'd' => 'D',
+            'cake' => 'cats',
+            'bobs' => array(
+                'e' => 'E',
+                'f' => 'F'
+            )
+        );
+
+        $controller = new \SelfServe\Controller\Application\ApplicationController();
+        $output = $controller->processDataMapForSave($input, $map);
+
+        $this->assertEquals($expected, $output);
+    }
+
+    /**
      * Test indexAction
      */
     public function testIndexAction()

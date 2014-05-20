@@ -21,6 +21,20 @@ class SummaryController extends PaymentSubmissionController
      */
     public function indexAction()
     {
+        if ($this->isButtonPressed('goToSummary')) {
+            return $this->goToSection('Application/ReviewDeclarations/Summary');
+        }
+
         return $this->renderSection();
+    }
+
+    /**
+     * Placeholdre save method
+     *
+     * @param array $data
+     * @param string $service
+     */
+    protected function save($data, $service = null)
+    {
     }
 }

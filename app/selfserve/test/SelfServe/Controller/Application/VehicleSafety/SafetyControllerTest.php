@@ -100,6 +100,109 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
     }
 
     /**
+     * Test indexAction With Add Crud Action
+     */
+    public function testIndexActionWithAddCrudAction()
+    {
+        $this->goodsOrPsv = 'goods';
+
+        $this->setUpAction(
+            'index', null, array(
+                'licence' => array(
+                    'safetyInsVehicles' => 'inspection_interval_vehicle.1',
+                    'safetyInsTrailers' => 'inspection_interval_trailer.1',
+                    'safetyInsVaries' => 'Y',
+                    'tachographIns' => 'tachograph_analyser.2'
+                ),
+                'table' => array(
+                    'rows' => 1,
+                    'action' => 'Add'
+                ),
+                'application' => array(
+                    'id' => 1,
+                    'version' => 1,
+                    'safetyConfirmation' => '1'
+                )
+            )
+        );
+
+        $this->controller->setEnabledCsrf(false);
+
+        $response = $this->controller->indexAction();
+
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
+     * Test indexAction With Edit Crud Action without id
+     */
+    public function testIndexActionWithEditCrudActionWithoutId()
+    {
+        $this->goodsOrPsv = 'goods';
+
+        $this->setUpAction(
+            'index', null, array(
+                'licence' => array(
+                    'safetyInsVehicles' => 'inspection_interval_vehicle.1',
+                    'safetyInsTrailers' => 'inspection_interval_trailer.1',
+                    'safetyInsVaries' => 'Y',
+                    'tachographIns' => 'tachograph_analyser.2'
+                ),
+                'table' => array(
+                    'rows' => 1,
+                    'action' => 'Edit'
+                ),
+                'application' => array(
+                    'id' => 1,
+                    'version' => 1,
+                    'safetyConfirmation' => '1'
+                )
+            )
+        );
+
+        $this->controller->setEnabledCsrf(false);
+
+        $response = $this->controller->indexAction();
+
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
+     * Test indexAction With Edit Crud Action
+     */
+    public function testIndexActionWithEditCrudAction()
+    {
+        $this->goodsOrPsv = 'goods';
+
+        $this->setUpAction(
+            'index', null, array(
+                'licence' => array(
+                    'safetyInsVehicles' => 'inspection_interval_vehicle.1',
+                    'safetyInsTrailers' => 'inspection_interval_trailer.1',
+                    'safetyInsVaries' => 'Y',
+                    'tachographIns' => 'tachograph_analyser.2'
+                ),
+                'table' => array(
+                    'rows' => 1,
+                    'action' => 'Edit',
+                    'id' => 2
+                ),
+                'application' => array(
+                    'id' => 1,
+                    'version' => 1,
+                    'safetyConfirmation' => '1'
+                )
+            )
+        );
+
+        $this->controller->setEnabledCsrf(false);
+
+        $response = $this->controller->indexAction();
+
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
      * Test addAction
      */
     public function testAddAction()
@@ -111,6 +214,48 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
         $response = $this->controller->addAction();
 
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+    }
+
+    /**
+     * Test addAction with cancel
+     */
+    public function testAddActionWithCancel()
+    {
+        $post = array(
+            'form-actions' => array(
+                'cancel' => 'Cancel'
+            )
+        );
+
+        $this->setUpAction('add', null, $post);
+
+        $this->goodsOrPsv = 'goods';
+
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->addAction();
+
+        $this->assertInstanceOf('\Zend\Http\Response', $response);
+    }
+
+    /**
+     * Test editAction with cancel
+     */
+    public function testEditActionWithCancel()
+    {
+        $post = array(
+            'form-actions' => array(
+                'cancel' => 'Cancel'
+            )
+        );
+
+        $this->setUpAction('edit', 1, $post);
+
+        $this->goodsOrPsv = 'goods';
+
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->editAction();
+
+        $this->assertInstanceOf('\Zend\Http\Response', $response);
     }
 
     /**
