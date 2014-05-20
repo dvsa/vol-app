@@ -162,7 +162,11 @@ class ComplaintControllerTest extends AbstractHttpControllerTestCase
             ->with(array('case', 'licence', 'id'))
             ->will($this->returnValue(array('case' => 24, 'licence' => 7, 'id' => 1)));
 
-        $bundle = '{"complaint":{"properties":["ALL"]},"children":{"driver":{"properties":["id","version"],"children":{"contactDetails":{"properties":["id","version"],"children":{"person":{"properties":["id","version","firstName","middleName","surname"]}}}}},"complainant":{"properties":["person"],"children":{"person":{"properties":["id","version","firstName","middleName","surname"]}}},"organisation":{"properties":["id","version","name"]}}}';
+        $bundle = '{"complaint":{"properties":["ALL"]},"children":{"driver":{"properties":["id","version"],"children":'
+            . '{"contactDetails":{"properties":["id","version"],"children":{"person":{"properties":["id","version",'
+            . '"firstName","middleName","surname"]}}}}},"complainant":{"properties":["person"],"children":{"person":'
+            . '{"properties":["id","version","firstName","middleName","surname"]}}},"organisation":{"properties":["id",'
+            . '"version","name"]}}}';
         $mockParams = $this->getMock('\stdClass', array('fromPost'));
 
         $mockParams->expects($this->once())
@@ -248,7 +252,11 @@ class ComplaintControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue(array('case' => null, 'licence' => null, 'id' => '')));
 
         $mockParams = $this->getMock('\stdClass', array('fromPost'));
-        $bundle = '{"complaint":{"properties":["ALL"]},"children":{"driver":{"properties":["id","version"],"children":{"contactDetails":{"properties":["id","version"],"children":{"person":{"properties":["id","version","firstName","middleName","surname"]}}}}},"complainant":{"properties":["person"],"children":{"person":{"properties":["id","version","firstName","middleName","surname"]}}},"organisation":{"properties":["id","version","name"]}}}';
+        $bundle = '{"complaint":{"properties":["ALL"]},"children":{"driver":{"properties":["id","version"],"children":'
+            . '{"contactDetails":{"properties":["id","version"],"children":{"person":{"properties":["id","version",'
+            . '"firstName","middleName","surname"]}}}}},"complainant":{"properties":["person"],"children":{"person":'
+            . '{"properties":["id","version","firstName","middleName","surname"]}}},"organisation":{"properties":["id",'
+            . '"version","name"]}}}';
 
         $mockParams->expects($this->once())
                 ->method('fromPost')

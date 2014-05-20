@@ -262,7 +262,11 @@ class CaseStatementController extends CaseController
     {
         $bundle = $this->getBookmarkBundle();
 
-        $bookmarkData = $this->makeRestCall('VosaCase', 'GET',['id' => $data['case'], 'bundle' => json_encode($bundle)]);
+        $bookmarkData = $this->makeRestCall(
+            'VosaCase',
+            'GET',
+            ['id' => $data['case'], 'bundle' => json_encode($bundle)]
+        );
 
         return $bookmarkData;
 
