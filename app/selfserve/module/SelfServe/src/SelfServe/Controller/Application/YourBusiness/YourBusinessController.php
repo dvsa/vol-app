@@ -39,12 +39,14 @@ class YourBusinessController extends ApplicationController
      * @param array $properties
      * @return array
      */
-    protected function getOrgnisationData($properties = array())
+    protected function getOrganisationData($properties = array())
     {
-        $properties = array_merge(
-            array('id', 'version'),
-            $properties
-        );
+        if (is_array($properties)) {
+            $properties = array_merge(
+                array('id', 'version'),
+                $properties
+            );
+        }
 
         $bundle = array(
             'children' => array(
