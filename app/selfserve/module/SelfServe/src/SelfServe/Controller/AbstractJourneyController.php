@@ -380,7 +380,9 @@ abstract class AbstractJourneyController extends AbstractController
 
         if (!is_null($subSection)) {
 
-            return isset($config['sections'][$section]['subSections'][$subSection]) ? $config['sections'][$section]['subSections'][$subSection] : array();
+            return isset($config['sections'][$section]['subSections'][$subSection])
+                ? $config['sections'][$section]['subSections'][$subSection]
+                : array();
         }
 
         return isset($config['sections'][(string) $section]) ? $config['sections'][(string) $section] : array();
@@ -893,7 +895,9 @@ abstract class AbstractJourneyController extends AbstractController
 
                 $requiredSection = str_replace('/', '', $requiredSection);
 
-                if ($this->isSectionAccessible($sectionName, $subSectionName) && (!isset($sectionCompletion['section' . $requiredSection . 'Status']) || $sectionCompletion['section' . $requiredSection . 'Status'] != $completeKey)) {
+                if ($this->isSectionAccessible($sectionName, $subSectionName)
+                    && (!isset($sectionCompletion['section' . $requiredSection . 'Status'])
+                    || $sectionCompletion['section' . $requiredSection . 'Status'] != $completeKey)) {
 
                     $enabled = false;
                 }
@@ -1185,11 +1189,14 @@ abstract class AbstractJourneyController extends AbstractController
             return $crudAction;
         }
 
-        if (!$this->isSectionAccessible($sectionName, null) || !$this->isSectionAccessible($sectionName, $subSectionName)) {
+        if (!$this->isSectionAccessible($sectionName, null)
+            || !$this->isSectionAccessible($sectionName, $subSectionName)) {
             return $this->goToNextStep();
         }
 
-        if (!$this->isSectionEnabled($sectionName, null) || !$this->isSectionEnabled($sectionName, $subSectionName) || $this->isButtonPressed('back')) {
+        if (!$this->isSectionEnabled($sectionName, null)
+            || !$this->isSectionEnabled($sectionName, $subSectionName)
+            || $this->isButtonPressed('back')) {
             return $this->goToPreviousStep();
         }
 
@@ -1247,7 +1254,7 @@ abstract class AbstractJourneyController extends AbstractController
     protected function actionLoad($id)
     {
         return $this->makeRestCall(
-                $this->getActionService(), 'GET', array('id' => $id), $this->getActionDataBundle()
+            $this->getActionService(), 'GET', array('id' => $id), $this->getActionDataBundle()
         );
     }
 
@@ -1355,7 +1362,9 @@ abstract class AbstractJourneyController extends AbstractController
         foreach (array_keys($sectionConfig['subSections']) as $subSectionName) {
             $sectionStatusKey = 'section' . $sectionName . $subSectionName . 'Status';
 
-            if ($this->isSectionAccessible($sectionName, $subSectionName) && (!isset($sectionCompletion[$sectionStatusKey]) || $sectionCompletion[$sectionStatusKey] != $completeKey)) {
+            if ($this->isSectionAccessible($sectionName, $subSectionName)
+                && (!isset($sectionCompletion[$sectionStatusKey])
+                || $sectionCompletion[$sectionStatusKey] != $completeKey)) {
                 $complete = false;
                 break;
             }
@@ -1452,7 +1461,7 @@ abstract class AbstractJourneyController extends AbstractController
 
             if ($this->isSectionAccessible($steps[$nextKey][1], $steps[$nextKey][2])) {
                 return $this->goToSection(
-                        $this->getSectionRoute($steps[$nextKey][0], $steps[$nextKey][1], $steps[$nextKey][2])
+                    $this->getSectionRoute($steps[$nextKey][0], $steps[$nextKey][1], $steps[$nextKey][2])
                 );
             }
 
@@ -1477,7 +1486,7 @@ abstract class AbstractJourneyController extends AbstractController
 
             if ($this->isSectionAccessible($steps[$nextKey][1], $steps[$nextKey][2])) {
                 return $this->goToSection(
-                        $this->getSectionRoute($steps[$nextKey][0], $steps[$nextKey][1], $steps[$nextKey][2])
+                    $this->getSectionRoute($steps[$nextKey][0], $steps[$nextKey][1], $steps[$nextKey][2])
                 );
             }
 
