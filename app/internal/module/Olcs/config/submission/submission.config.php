@@ -13,7 +13,15 @@ return array(
                         )
                     ),
                     'convictions' => array(
-                        'properties' => 'ALL'
+                        'properties' => 'ALL',
+                        'children' => array(
+                            'category' => array(
+                                'properties' => array(
+                                    'id',
+                                    'description'
+                                )
+                            )
+                        )
                     ),
                     'licence' => array(
                         'properties' => 'ALL',

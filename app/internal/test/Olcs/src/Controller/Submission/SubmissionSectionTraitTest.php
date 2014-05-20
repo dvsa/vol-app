@@ -17,9 +17,9 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
         $this->setApplicationConfig(
             include __DIR__.'/../../../../../'  . 'config/application.config.php'
         );
-        
+
         parent::setUp();
-        
+
         $this->submissionConfig = array(
             'sections' => array(
                 'case-summary-info' => array(
@@ -34,7 +34,15 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
                                 )
                             ),
                             'convictions' => array(
-                                'properties' => 'ALL'
+                                'properties' => 'ALL',
+                                'children' => array(
+                                    'category' => array(
+                                        'properties' => array(
+                                            'id',
+                                            'description'
+                                        )
+                                    )
+                                )
                             ),
                             'licence' => array(
                                 'properties' => 'ALL',
@@ -43,17 +51,92 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
                                         'properties' => 'ALL'
                                     ),
                                     'organisation' => array(
-                                        'properties' => 'ALL'
+                                        'properties' => 'ALL',
+                                        'children' => array(
+                                            'organisationOwners' => array(
+                                                'properties' => 'ALL',
+                                                'children' => array(
+                                                    'person' => array(
+                                                        'properties' => 'ALL'
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    ),
+                                    'transportManagerLicences' => array(
+                                        'properties' => 'ALL',
+                                        'children' => array(
+                                            'transportManager' => array(
+                                                'properties' => 'ALL',
+                                                'children' => array(
+                                                    'qualifications' => array(
+                                                        'properties' => 'ALL'
+                                                    ),
+                                                    'contactDetails' => array(
+                                                        'properties' => 'ALL',
+                                                        'children' => array(
+                                                            'person' => array(
+                                                                'properties' => 'ALL'
+                                                            )
+                                                        )
+                                                    )
+                                                )
+                                            )
+                                        )
                                     )
                                 )
                             )
                         )
                     )
-                )
+                ),
+                'persons' => array(
+                    'view' => 'submission/partials/persons'
+                ),
+                'transport-managers' => array(
+                    'view' => 'submission/partials/transport-managers',
+                    'exclude' => array(
+                        'column' => 'licenceType',
+                        'values' => array(
+                            'standard national',
+                            'standard international'
+                        )
+                    )
+                ),
+                'outstanding-applications' => null,
+                'objections' => null,
+                'representations' => null,
+                'complaints' => null,
+                'environmental' => null,
+                'previous-history' => null,
+                'operating-centre' => null,
+                'conditions' => null,
+                'undertakings' => null,
+                'annual-test-history' => null,
+                'prohibition-history' => null,
+                'conviction-history' => array(
+                    'view' => 'submission/partials/conviction-history',
+                ),
+                'bus-services-registered' => array(
+                    'exclude' => array(
+                        'column' => 'goodsOrPsv',
+                        'values' => array(
+                            'psv',
+                        )
+                    )
+                ),
+                'bus-compliance-issues' => array(
+                    'exclude' => array(
+                        'column' => 'goodsOrPsv',
+                        'values' => array(
+                            'psv',
+                        )
+                    )
+                ),
+                'current-submission' => null
             )
         );
     }
-    
+
     public function testCreateSubmission()
     {
         $submissionSectionTrait = $this->getMockForTrait(
@@ -68,14 +151,14 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
                 'createSubmissionSection',
             )
         );
-        
+
         $routeParams = array('licence' => 7);
-        
+
         $submissionSectionTrait->expects($this->once())
             ->method('makeRestCall')
             ->with('Licence', 'GET', array('id' => $routeParams['licence']))
             ->will($this->returnValue(array('id' => 7)));
-        
+
         $submissionSectionTrait->submissionConfig = array(
             'sections' => array(
                 'case-summary-info' => array(
@@ -108,15 +191,15 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
                 )
             )
         );
-        
+
         $submissionSectionTrait->expects($this->once())
             ->method('createSubmissionSection')
             ->with('case-summary-info', $submissionSectionTrait->submissionConfig['sections']['case-summary-info'])
             ->will($this->returnValue(array('data' => array())));
-        
+
         $result = $submissionSectionTrait->createSubmission($routeParams);
     }
-    
+
     public function testCreateSubmissionSection()
     {
         $submissionSectionTrait = $this->getMockForTrait(
@@ -132,28 +215,28 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
                 'getFilteredSectionData'
             )
         );
-        
+
         $submissionSectionTrait->expects($this->once())
             ->method('getParams')
             ->with(array('case'))
             ->will($this->returnValue(array('case' => 54)));
-        
+
          $submissionSectionTrait->expects($this->once())
             ->method('makeRestCall')
             ->with('VosaCase', 'GET', array('id' => 54))
             ->will($this->returnValue(array('id' => 7)));
-         
+
          $submissionSectionTrait->expects($this->once())
             ->method('getFilteredSectionData')
             ->with('CaseSummaryInfo', array('id' => 7))
             ->will($this->returnValue(array('caseNumber' => 'x1234567')));
-        
+
         $result = $submissionSectionTrait->createSubmissionSection(
             'case-summary-info',
             $this->submissionConfig['sections']['case-summary-info']
         );
     }
-    
+
     public function testCaseSummaryInfo()
     {
         $submissionSectionTrait = $this->getMockForTrait(
@@ -187,14 +270,25 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
         $this->assertContains('Case 1', $result);
         $this->assertArrayHasKey('ecms', $result);
     }
-    
-    public function testConvictionHistory()
+
+    /**
+     * @dataProvider convictionHistoryProvider
+     *
+     * @param int $categoryId
+     * @param string $operatorName
+     */
+    public function testConvictionHistory($categoryId, $operatorName)
     {
         $submissionSectionTrait = $this->getMockForTrait(
             '\Olcs\Controller\Submission\SubmissionSectionTrait'
         );
         $data = array('convictions' => []);
         $thisConviction['dateOfOffence'] = '2014-01-01';
+        $thisConviction['category']['id'] = $categoryId;
+        $thisConviction['category']['description'] = 'category description';
+        $thisConviction['categoryText'] = 'category text';
+        $thisConviction['defType'] = 'defendent type';
+        $thisConviction['operatorName'] = $operatorName;
         $thisConviction['dateOfConviction'] = '2014-01-01';
         $thisConviction['personFirstname'] = 'Fred';
         $thisConviction['personLastname'] = 'Smith';
@@ -205,12 +299,25 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
         $thisConviction['decToTc'] = 'Y';
         $thisConviction['dealtWith'] = 'N';
         $data['convictions'][] = $thisConviction;
-        
+
         $result = $submissionSectionTrait->convictionHistory($data);
         $this->assertContains('Court 12', $result[0]);
         $this->assertArrayHasKey('dateOfConviction', $result[0]);
     }
-    
+
+    /**
+     * Data provider for testConvictionHistory
+     *
+     * @return array
+     */
+    public function convictionHistoryProvider()
+    {
+        return array(
+            array(1,'Operator Name'),
+            array(168,'')
+        );
+    }
+
     public function testPersons()
     {
         $submissionSectionTrait = $this->getMockForTrait(
@@ -231,12 +338,12 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
                 )
             ),
         );
-        
+
         $result = $submissionSectionTrait->persons($data);
         $this->assertContains('Fred', $result[0]);
         $this->assertArrayHasKey('firstName', $result[0]);
     }
-    
+
     public function testTransportManagers()
     {
         $submissionSectionTrait = $this->getMockForTrait(
@@ -265,18 +372,18 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
                 )
             )
         );
-        
+
         $result = $submissionSectionTrait->transportManagers($data);
         $this->assertContains('Fred', $result[0]);
         $this->assertArrayHasKey('firstName', $result[0]);
     }
-    
+
     public function testGetFilteredSectionData()
     {
         $submissionSectionTrait = $this->getMockForTrait(
             '\Olcs\Controller\Submission\SubmissionSectionTrait'
         );
-        
+
         $data = array(
             'caseNumber' => 54,
             'ecms' => 123123,
@@ -295,9 +402,9 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
                 'licenceType' => 'Standard National'
             )
         );
-        
+
         $result = $submissionSectionTrait->getFilteredSectionData('caseSummaryInfo', $data);
         $this->assertArrayHasKey('ecms', $result);
     }
-    
+
 }

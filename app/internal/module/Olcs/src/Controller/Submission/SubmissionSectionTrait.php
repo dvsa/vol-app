@@ -10,7 +10,7 @@ use Zend\Filter\Word\DashToCamelCase;
  */
 trait SubmissionSectionTrait
 {
-    
+
     /**
      * Return json encoded submission based on submission_config
      * @param type $routeParams
@@ -28,7 +28,7 @@ trait SubmissionSectionTrait
         $jsonSubmission = json_encode($submission);
         return $jsonSubmission;
     }
-    
+
     /**
      * builds a submission and excludes sections based on rules in
      * the submission config
@@ -47,7 +47,7 @@ trait SubmissionSectionTrait
         }
         return false;
     }
-    
+
     /**
      * Create a sction from the submission config
      * @param type $config
@@ -67,10 +67,10 @@ trait SubmissionSectionTrait
         if (method_exists($this, $method)) {
             $section['data'] = $this->getFilteredSectionData($method, $this->sectionData);
         }
-        
+
         return $section;
     }
-    
+
     /**
      * Gets filtered result data for each submission section
      */
@@ -101,7 +101,7 @@ trait SubmissionSectionTrait
             );
         return $dataToReturnArray;
     }
-    
+
     /**
      * section conviction-history
      */
@@ -109,10 +109,23 @@ trait SubmissionSectionTrait
     {
         $dataToReturnArray = array();
         foreach ($data['convictions'] as $conviction) {
+            if ($conviction['category']['id'] != 168) {
+                $thisConviction['description'] = $conviction['category']['description'];
+            } else {
+                $thisConviction['description'] = $conviction['categoryText'];
+            }
+
+            if ($conviction['operatorName']) {
+                $thisConviction['name'] = $conviction['operatorName'];
+            } else {
+                $thisConviction['name'] = $conviction['personFirstname'] . ' ' . $conviction['personLastname'];
+            }
+
+            $thisConviction['name'] .= ' / ' . $conviction['defType'];
+
             $thisConviction['dateOfOffence'] = $conviction['dateOfOffence'];
             $thisConviction['dateOfConviction'] = $conviction['dateOfConviction'];
-            $thisConviction['name'] = $conviction['personFirstname'] . ' ' . $conviction['personLastname'];
-            $thisConviction['description'] = isset($conviction['categoryText']) ? $conviction['categoryText'] : '';
+
             $thisConviction['courtFpm'] = $conviction['courtFpm'];
             $thisConviction['penalty'] = $conviction['penalty'];
             $thisConviction['si'] = $conviction['si'];
@@ -120,9 +133,10 @@ trait SubmissionSectionTrait
             $thisConviction['dealtWith'] = $conviction['dealtWith'];
             $dataToReturnArray[] = $thisConviction;
         }
+
         return $dataToReturnArray;
     }
-    
+
     /**
      * section persons
      */
@@ -137,7 +151,7 @@ trait SubmissionSectionTrait
         }
         return $dataToReturnArray;
     }
-    
+
     /**
      * section transportManagers
      */
