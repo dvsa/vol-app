@@ -28,7 +28,7 @@ class OperatorLocationController extends TypeOfLicenceController
      * Save data
      *
      * @param array $data
-     * @parem string $service
+     * @param string $service
      */
     protected function save($data, $service = null)
     {
@@ -43,8 +43,9 @@ class OperatorLocationController extends TypeOfLicenceController
      * Load data from id
      *
      * @param int $id
+     * @return array
      */
-    public function load($id)
+    protected function load($id)
     {
         return array('data' => $this->getLicenceData());
     }
