@@ -31,6 +31,6 @@ class BusinessTypeController extends YourBusinessController
      */
     protected function load($id)
     {
-        return array('data' => $this->getOrgnisationData(array('organisationType')));
+        return array('data' => $this->getOrganisationData(array('organisationType')));
     }
 }
