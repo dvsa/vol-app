@@ -35,9 +35,18 @@ class Bootstrap
         // Setup Di
         $di = new Di();
 
-        $di->instanceManager()->addTypePreference('Zend\ServiceManager\ServiceLocatorInterface', 'Zend\ServiceManager\ServiceManager');
-        $di->instanceManager()->addTypePreference('Zend\EventManager\EventManagerInterface', 'Zend\EventManager\EventManager');
-        $di->instanceManager()->addTypePreference('Zend\EventManager\SharedEventManagerInterface', 'Zend\EventManager\SharedEventManager');
+        $di->instanceManager()->addTypePreference(
+            'Zend\ServiceManager\ServiceLocatorInterface',
+            'Zend\ServiceManager\ServiceManager'
+        );
+        $di->instanceManager()->addTypePreference(
+            'Zend\EventManager\EventManagerInterface',
+            'Zend\EventManager\EventManager'
+        );
+        $di->instanceManager()->addTypePreference(
+            'Zend\EventManager\SharedEventManagerInterface',
+            'Zend\EventManager\SharedEventManager'
+        );
 
         self::$di = $di;
     }
@@ -52,7 +61,7 @@ class Bootstrap
         return require('vendor/autoload.php');
     }
 
-    static public function getDi()
+    public static function getDi()
     {
         return self::$di;
     }

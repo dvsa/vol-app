@@ -663,8 +663,5 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
                 )
             );
         }
-
-        var_dump($service, $method, $bundle, $data);
-        exit;
     }
 }

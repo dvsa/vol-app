@@ -74,11 +74,7 @@ abstract class AbstractApplicationControllerTestCase extends PHPUnit_Framework_T
 
         $this->controller->expects($this->any())
             ->method('getNamespaceParts')
-            ->will(
-                $this->returnValue(
-                    explode('\\', trim($this->controllerName, '\\'))
-                )
-        );
+            ->will($this->returnValue(explode('\\', trim($this->controllerName, '\\'))));
 
         $this->controller->expects($this->any())
             ->method('makeRestCall')

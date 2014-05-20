@@ -151,7 +151,8 @@ class ApplicationController extends AbstractJourneyController
 
             $sectionCompletion = $this->getSectionCompletion();
 
-            if (isset($sectionCompletion['sectionPaymentSubmissionStatus']) && $sectionCompletion['sectionPaymentSubmissionStatus'] == 2) {
+            if (isset($sectionCompletion['sectionPaymentSubmissionStatus'])
+                && $sectionCompletion['sectionPaymentSubmissionStatus'] == 2) {
 
                 $this->accessKeys[] = 'paid';
             } else {

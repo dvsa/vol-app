@@ -10,6 +10,7 @@ namespace SelfServe\Test\Controller\Application\OperatingCentres;
 
 use SelfServe\Test\Controller\Application\AbstractApplicationControllerTestCase;
 use SelfServe\Controller\Application\ApplicationController;
+
 /**
  * Financial Evidence Controller Test
  *

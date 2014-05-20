@@ -4,9 +4,8 @@ $routes = [];
 
 $routeArray = array_map(
     function ($file) {
-        return include $file;
-    },
-    glob(__DIR__ . '/routes/*.routes.php')
+    return include $file;
+}, glob(__DIR__ . '/routes/*.routes.php')
 );
 
 foreach ($routeArray as $rs) {
@@ -25,15 +24,14 @@ $allRoutes = array(
 
 $journeyArray = array_map(
     function ($file) {
-        return include $file;
-    },
-    glob(__DIR__ . '/journeys/*.journey.php')
+    return include $file;
+}, glob(__DIR__ . '/journeys/*.journey.php')
 );
 
-function camelToHyphen($string) {
+function camelToHyphen($string)
+{
     return strtolower(preg_replace('/([a-zA-Z])(?=[A-Z])/', '$1-', $string));
 }
-
 $controllers = array();
 
 $journeys = array();

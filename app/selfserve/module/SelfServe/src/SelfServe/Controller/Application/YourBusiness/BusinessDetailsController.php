@@ -78,7 +78,6 @@ class BusinessDetailsController extends YourBusinessController
 
         $fieldset = $form->get('data');
 
-
         // always set the edit link
         $fieldset->get('edit_business_type')->setValue(
             $this->getUrlFromRoute(

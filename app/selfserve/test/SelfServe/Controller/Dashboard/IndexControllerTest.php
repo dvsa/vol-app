@@ -161,7 +161,5 @@ class IndexControllerTest extends PHPUnit_Framework_TestCase
                 )
             );
         }
-        var_dump($service, $method, $data, $bundle);
-        exit;
     }
 }
