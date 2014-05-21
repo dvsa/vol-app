@@ -20,8 +20,25 @@ class BusinessDetailsControllerTest extends AbstractApplicationControllerTestCas
 {
 
     protected $controllerName = '\SelfServe\Controller\Application\YourBusiness\BusinessDetailsController';
+
     protected $defaultRestResponse = [];
+
+    // must be set if you want to use it
     protected $mockOrganisationData = [];
+
+    // defaults are okay in the main for this one...
+    protected $mockLicenceData = [
+        'licence' => [
+            'organisation' => [
+                'organisationType' => 'org_type.lc',
+                'registeredCompanyNumber' => 12345678,
+                'name' => 'A Co Ltd'
+            ],
+            'tradingNames' => []
+        ]
+    ];
+
+    protected $mockCompaniesHouseData = [];
 
     /**
      * Test back button
@@ -78,15 +95,49 @@ class BusinessDetailsControllerTest extends AbstractApplicationControllerTestCas
         $this->assertFormElements('o', ['name'], ['companyNumber', 'tradingNames']);
     }
 
-    /**
-     * Test indexAction with submit
-     */
-    public function testIndexActionWithSubmit()
+    public function testIndexActionWithMultipleTradingNamesPresent()
     {
-        $this->markTestIncomplete('not refactored yet');
+        $this->setUpAction('index');
+        $this->setOrganisationType('lc');
+
+        $this->mockLicenceData = [
+            'licence' => [
+                'organisation' => [
+                    'organisationType' => 'org_type.lc',
+                    'registeredCompanyNumber' => 12345678,
+                    'name' => 'A Co Ltd'
+                ],
+                'tradingNames' => [
+                    ['tradingName' => 'foo'],
+                    ['tradingName' => 'bar'],
+                ]
+            ]
+        ];
+
+        $tradingNames = $this->getFormFromResponse(
+            $this->controller->indexAction()
+        )->get('data')->get('tradingNames')->get('trading_name');
+
+        // always one extra, a blank placeholder
+        $this->assertCount(3, $tradingNames->getFieldsets());
+    }
+
+    public function testFullSubmitForLimitedCompany()
+    {
+        $this->setOrganisationType('lc');
         $post = [
             'data' => [
-                // @TODO: various scenarios
+                'organisationType' => null,
+                'companyNumber' => [
+                    'company_number' => '12345678',
+                ],
+                'name' => 'Company Ltd',
+                'tradingNames' => [
+                    'trading_name' => [
+                        ['text' => 'A Name'],
+                        ['text' => '']
+                    ]
+                ]
             ]
         ];
         $this->setUpAction('index', null, $post);
@@ -95,6 +146,64 @@ class BusinessDetailsControllerTest extends AbstractApplicationControllerTestCas
         $response = $this->controller->indexAction();
 
         $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    public function testSuccessfulCompaniesHouseLookupPopulatesCompanyName()
+    {
+        $this->mockCompaniesHouseData = [
+            'Count' => 1,
+            'Results' => [
+                ['CompanyName' => 'A TEST CO LTD']
+            ]
+        ];
+        $this->setOrganisationType('lc');
+        $post = [
+            'data' => [
+                'companyNumber' => [
+                    'company_number' => '12345678',
+                    'submit_lookup_company' => '',
+                ]
+            ]
+        ];
+        $this->setUpAction('index', null, $post);
+
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->indexAction();
+
+        $companyName = $this->getFormFromResponse(
+            $this->controller->indexAction()
+        )->get('data')->get('name');
+
+        $this->assertEquals('A TEST CO LTD', $companyName->getValue());
+    }
+
+    public function testFailedCompaniesHouseLookup()
+    {
+        $this->mockCompaniesHouseData = [
+            'Count' => 0
+        ];
+        $this->setOrganisationType('lc');
+        $post = [
+            'data' => [
+                'companyNumber' => [
+                    'company_number' => '12345678',
+                    'submit_lookup_company' => '',
+                ]
+            ]
+        ];
+        $this->setUpAction('index', null, $post);
+
+        $this->controller->setEnabledCsrf(false);
+
+        $fieldset = $this->getFormFromResponse(
+            $this->controller->indexAction()
+        )->get('data');
+
+        $companyNumber = $fieldset->get('companyNumber');
+        $companyName = $fieldset->get('name');
+
+        $this->assertCount(1, $companyNumber->getMessages());
+        $this->assertEquals(null, $companyName->getValue());
     }
 
     /**
@@ -146,21 +255,18 @@ class BusinessDetailsControllerTest extends AbstractApplicationControllerTestCas
 
             if ($bundle == $fullBundle) {
 
-                return [
-                    'licence' => [
-                        'organisation' => [
-                            'organisationType' => 'org_type.lc',
-                            'registeredCompanyNumber' => 12345678,
-                            'name' => 'A Co Ltd'
-                        ],
-                        'tradingNames' => []
-                    ]
-                ];
+                return $this->mockLicenceData;
             }
 
             if ($bundle == $orgBundle) {
+
                 return $this->mockOrganisationData;
             }
+        }
+
+        if ($service === 'CompaniesHouse') {
+
+            return $this->mockCompaniesHouseData;
         }
 
         if ($service == 'ApplicationCompletion' && $method == 'GET') {
