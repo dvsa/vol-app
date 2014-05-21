@@ -1,0 +1,53 @@
+<!-- Financial evidence -->
+<form>
+    <div class="table__header">
+        <h3 id="financial-evidence">Financial evidence</h3>
+        <div class="actions-container">
+            <input class="action--primary" type="submit" value="Upload">
+            <input class="action--warning" type="submit" value="Delete">
+        </div><!-- end .actions-container -->
+    </div><!-- end .table__header -->
+    <div class="table__wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>File name</th>
+                    <th>Evidence type</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input name="row" type="radio"></td>
+                    <td>Amber_taxis_accounts_2012-2013.xls</td>
+                    <td>Accounts</td>
+                </tr>
+            </tbody>
+        </table>
+    </div><!-- end .table_wrapper -->
+    <p class="hint">Please upload copies of your accounts or bank statements to prove you have sufficient funds</p>
+</form>
+
+<!-- Totals -->
+<h3 id="totals">Totals</h3>
+<div class="table__wrapper">
+    <table class="totals">
+        <tfoot>
+            <tr>
+                <th>Total finance available</th>
+                <td style="width: 12%;">£22,083</td>
+            </tr>
+            <tr>
+                <th>Required finance</th>
+                <td style="width: 12%;"><strong>£10,000</strong></td>
+            </tr>
+        </tfoot>
+    </table>
+</div><!-- end .table-wrapper -->
+
+<?php
+
+if (isset($form)) {
+    $form->prepare();
+    echo $this->form($form);
+}

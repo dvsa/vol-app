@@ -1,0 +1,30 @@
+<!-- start progress -->
+<div class="full-width">
+    <ul class="app-navigation items-<?php echo count($sections); ?>" role="navigation">
+        <?php
+        foreach($sections as $section) {
+
+            ?>
+        <li class="app-navigation__item <?php echo $section['status']; ?>">
+            <?php
+            if ($section['status'] != 'current') {
+                ?>
+                <a href="<?php echo $this->url($section['route'], array(), array(), true); ?>">
+                <?php
+                }
+            ?>
+            <span><?php echo $this->translate($section['title']); ?></span>
+            <?php
+            if ( $section['status'] != "current" ) {
+                ?>
+                </a>
+                <?php
+            }
+            ?>
+        </li>
+            <?php
+        }
+        ?>
+    </ul>
+</div>
+<!-- end .progress -->

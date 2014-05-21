@@ -1,359 +1,165 @@
 <?php
 
-namespace OlcsTest\Controller\Dashboard;
+/**
+ * Index Controller Test
+ *
+ * @author Rob Caiger <rob@clocal.co.uk>
+ */
 
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
-use Zend\ServiceManager\ServiceManager;
-use Zend\Mvc\Service\ServiceManagerConfig;
+namespace SelfServe\Test\Controller\Dashboard;
 
-class IndexControllerTest extends AbstractHttpControllerTestCase
+use SelfServe\Test\Bootstrap;
+use Zend\Mvc\Router\Http\TreeRouteStack as HttpRouter;
+use Zend\Http\Request;
+use Zend\Http\Response;
+use Zend\Mvc\MvcEvent;
+use Zend\Mvc\Router\RouteMatch;
+use PHPUnit_Framework_TestCase;
+
+/**
+ * Index Controller Test
+ *
+ * @author Rob Caiger <rob@clocal.co.uk>
+ */
+class IndexControllerTest extends PHPUnit_Framework_TestCase
 {
-
-    protected function setUpMockController($methods)
+    /**
+     * SetUp the controller
+     */
+    public function setUpAction($action = 'index')
     {
         $this->controller = $this->getMock(
-            '\SelfServe\Controller\Dashboard\IndexController',
-            $methods
+            'SelfServe\Controller\Dashboard\IndexController',
+            array('makeRestCall')
         );
 
-        $this->controller->setServiceLocator($this->getApplicationServiceLocator());
+        $this->controller->expects($this->any())
+            ->method('makeRestCall')
+            ->will($this->returnCallback(array($this, 'mockRestCall')));
 
-    }
+        $serviceManager = Bootstrap::getServiceManager();
 
-    protected function setUp()
-    {
-        $this->setApplicationConfig(
-            include __DIR__.'/../../../../config/application.config.php'
-        );
+        $this->request = new Request();
+        $this->response = new Response();
+        $this->routeMatch = new RouteMatch(array('action' => $action));
 
-        parent::setUp();
+        $this->routeMatch->setMatchedRouteName('home/dashboard');
 
+        $this->event = new MvcEvent();
+        $config = $serviceManager->get('Config');
+        $routerConfig = isset($config['router']) ? $config['router'] : array();
+        $router = HttpRouter::factory($routerConfig);
+
+        $this->event->setRouter($router);
+        $this->event->setRouteMatch($this->routeMatch);
+        $this->event->setRequest($this->request);
+        $this->event->setResponse($this->response);
+
+        $this->controller->setEvent($this->event);
+        $this->controller->setServiceLocator($serviceManager);
     }
 
     /**
-     * @group Dashboard
-     *
+     * Test indexAction
      */
     public function testIndexAction()
     {
-        $this->setUpMockController([
-            'makeRestCall',
-            'getPluginManager',
-            'redirect',
-            'params',
-        ]);
+        $this->setUpAction();
 
-        $urlPlugin = $this->getMock('\stdClass', array('fromRoute'));
+        $response = $this->controller->indexAction();
 
-        $mockPluginManager = $this->getMock('\stdClass', array('get'));
-        $mockPluginManager->expects($this->any())
-            ->method('get')
-            ->will($this->returnValue($urlPlugin));
-
-        $this->controller->expects($this->any())
-            ->method('getPluginManager')
-            ->will($this->returnValue($mockPluginManager));
-
-
-        $this->controller->expects($this->any())
-            ->method('makeRestCall')
-            ->will($this->returnValueMap($this->restCallMap()))
-        ;
-
-        $redirectMock = $this->getMock('\stdClass', array('toRoute'));
-        $this->controller->expects($this->any())
-            ->method('redirect')
-            ->will($this->returnValue($redirectMock))
-        ;
-
-        $mockParams = $this->getMock('\stdClass', array('fromRoute'));
-        $mockParams->expects($this->any())
-            ->method('fromRoute')
-            ->with('userId')
-            ->will($this->returnValue(1));
-
-        $this->controller->expects($this->any())
-            ->method('params')
-            ->will($this->returnValue($mockParams));
-
-        $action = $this->controller->indexAction();
-        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $action);
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
     }
 
     /**
-     * @group Dashboard
+     * Test createAction
+     */
+    public function testCreateAction()
+    {
+        $this->setUpAction('create');
+
+        $response = $this->controller->createAction();
+
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
+     * Mock rest calls
      *
+     * @param string $service
+     * @param string $method
+     * @param array $data
+     * @param array $bundle
      */
-    public function testIndexActionWithNoUser()
+    public function mockRestCall($service, $method, $data = array(), $bundle = array())
     {
-        $this->setUpMockController([
-            'makeRestCall',
-            'getPluginManager',
-            'redirect',
-            'params',
-        ]);
+        if ($method == 'POST') {
+            return array('id' => 1);
+        }
 
-        $this->controller->expects($this->any())
-            ->method('makeRestCall')
-            ->will($this->returnValueMap($this->restCallMap()))
-        ;
+        $organisationIdBundle = array(
+            'properties' => array(
 
-        $redirectMock = $this->getMock('\stdClass', array('toRoute'));
-        $redirectMock->expects($this->once())
-            ->method('toRoute')
-            ->will($this->returnValue(new \Zend\Http\Response));
+            ),
+            'children' => array(
+                'organisation' => array(
+                    'properties' => array('id')
+                )
+            )
+        );
 
-        $this->controller->expects($this->any())
-            ->method('redirect')
-            ->will($this->returnValue($redirectMock))
-        ;
+        if ($service == 'User' && $method == 'GET' && $bundle == $organisationIdBundle) {
+            return array(
+                'organisation' => array(
+                    'id' => 1
+                )
+            );
+        }
 
-        $mockParams = $this->getMock('\stdClass', array('fromRoute'));
+        $applicationsBundle = array(
+            'properties' => array(),
+            'children' => array(
+                'organisation' => array(
+                    'properties' => array(),
+                    'children' => array(
+                        'licences' => array(
+                            'properties' => array(
+                                'licenceNumber'
+                            ),
+                            'children' => array(
+                                'applications' => array(
+                                    'properties' => array(
+                                        'id',
+                                        'createdOn',
+                                        'receivedDate',
+                                        'status'
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        );
 
-        $mockParams->expects($this->any())
-            ->method('fromRoute')
-            ->with('userId')
-            ->will($this->returnValue(null));
-
-        $this->controller->expects($this->any())
-            ->method('params')
-            ->will($this->returnValue($mockParams));
-
-        $this->controller->indexAction();
-    }
-
-    /**
-     * @group Dashboard
-     * @group current
-     * @expectedException \Common\Exception\ResourceNotFoundException
-     */
-    public function testIndexActionWithUserNotFound()
-    {
-        $this->setUpMockController([
-            'makeRestCall',
-            'getPluginManager',
-            'redirect',
-            'params',
-        ]);
-
-        $this->controller->expects($this->any())
-            ->method('makeRestCall')
-            ->will($this->returnValueMap($this->restCallMap(2, 1, 1)))
-        ;
-
-        $redirectMock = $this->getMock('\stdClass', array('toRoute'));
-        $redirectMock->expects($this->any())
-            ->method('toRoute')
-            ->will($this->returnValue(new \Zend\Http\Response));
-
-        $this->controller->expects($this->any())
-            ->method('redirect')
-            ->will($this->returnValue($redirectMock))
-        ;
-
-        $mockParams = $this->getMock('\stdClass', array('fromRoute'));
-
-        $mockParams->expects($this->any())
-            ->method('fromRoute')
-            ->with('userId')
-            ->will($this->returnValue(2));
-
-        $this->controller->expects($this->any())
-            ->method('params')
-            ->will($this->returnValue($mockParams));
-
-        $this->controller->indexAction();
-    }
-
-
-    /**
-     * @group Dashboard
-     *
-     */
-    public function testCreateApplicationAction()
-    {
-        $this->setUpMockController([
-            'makeRestCall',
-            'redirect',
-            'params',
-        ]);
-
-        $this->controller->expects($this->any())
-            ->method('makeRestCall')
-            ->will($this->returnValueMap($this->restCallMap()))
-        ;
-
-        $redirectMock = $this->getMock('\stdClass', array('toRoute'));
-        $redirectMock->expects($this->once())
-            ->method('toRoute')
-            ->will($this->returnValue(new \Zend\Http\Response));
-
-        $this->controller->expects($this->once())
-            ->method('redirect')
-            ->will($this->returnValue($redirectMock))
-        ;
-
-
-
-        $mockParams = $this->getMock('\stdClass', array('fromRoute'));
-        $mockParams->expects($this->any())
-            ->method('fromRoute')
-            ->with('userId')
-            ->will($this->returnValue(1));
-
-        $this->controller->expects($this->any())
-            ->method('params')
-            ->will($this->returnValue($mockParams));
-
-        $this->controller->createApplicationAction();
-    }
-
-    /**
-     * @group Dashboard
-     *
-     */
-    public function testCreateApplicationActionWithNoUser()
-    {
-        $this->setUpMockController([
-            'makeRestCall',
-            'redirect',
-            'params',
-        ]);
-
-        $this->controller->expects($this->any())
-            ->method('makeRestCall')
-            ->will($this->returnValueMap($this->restCallMap()))
-        ;
-
-        $redirectMock = $this->getMock('\stdClass', array('toRoute'));
-        $redirectMock->expects($this->once())
-            ->method('toRoute')
-            ->will($this->returnValue(new \Zend\Http\Response));
-
-        $this->controller->expects($this->once())
-            ->method('redirect')
-            ->will($this->returnValue($redirectMock))
-        ;
-
-
-
-        $mockParams = $this->getMock('\stdClass', array('fromRoute'));
-        $mockParams->expects($this->any())
-            ->method('fromRoute')
-            ->with('userId')
-            ->will($this->returnValue(null));
-
-        $this->controller->expects($this->any())
-            ->method('params')
-            ->will($this->returnValue($mockParams));
-
-        $this->controller->createApplicationAction();
-    }
-
-    /**
-     *
-     * @group Dashboard
-     */
-    public function testDetermineSectionAction()
-    {
-        $this->setUpMockController([
-            'makeRestCall',
-            'redirect',
-            'params',
-        ]);
-
-        $mockParams = $this->getMock('\stdClass', array('fromRoute'));
-        $mockParams->expects($this->any())
-            ->method('fromRoute')
-            ->with('applicationId')
-            ->will($this->returnValue(1));
-
-        $this->controller->expects($this->any())
-            ->method('params')
-            ->will($this->returnValue($mockParams));
-
-        $this->controller->expects($this->any())
-            ->method('makeRestCall')
-            ->will($this->returnValueMap($this->restCallMap()))
-        ;
-
-        $redirectMock = $this->getMock('\stdClass', array('toRoute'));
-        $redirectMock->expects($this->once())
-            ->method('toRoute')
-            ->will($this->returnValue(new \Zend\Http\Response));
-
-        $this->controller->expects($this->once())
-            ->method('redirect')
-            ->will($this->returnValue($redirectMock))
-        ;
-
-        $this->controller->determineSectionAction();
-    }
-
-    /**
-     *
-     * @group Dashboard
-     * @expectedException \Common\Exception\ResourceNotFoundException
-     */
-    public function testDetermineSectionActionWithNoResults()
-    {
-        $this->setUpMockController([
-            'makeRestCall',
-            'redirect',
-            'params',
-        ]);
-
-        $mockParams = $this->getMock('\stdClass', array('fromRoute'));
-        $mockParams->expects($this->any())
-            ->method('fromRoute')
-            ->with('applicationId')
-            ->will($this->returnValue(1));
-
-        $this->controller->expects($this->any())
-            ->method('params')
-            ->will($this->returnValue($mockParams));
-
-        $this->controller->expects($this->any())
-            ->method('makeRestCall')
-            ->will($this->returnValueMap($this->restCallMap(1, 1, 0)))
-        ;
-
-
-        $this->controller->determineSectionAction();
-    }
-
-
-    private function restCallMap($userId = 1, $organisationId = 1, $applicationId = 1)
-    {
-        return [
-            [
-                'User',
-                'GET',
-                ['id' => $userId],
-                ['children' => ['organisation']],
-                $userId == 1 ? ['organisation' => ['id' => $organisationId]] : false
-            ],
-            [
-                'OrganisationApplication',
-                'GET',
-                ['organisation' => $organisationId],
-                ['children' => ['licence']],
-                []
-            ],
-            [
-            'ApplicationCompletion',
-                'GET',
-                ['application' => $applicationId],
-                null,
-                [
-                    'Count' => $applicationId == 1 ? 1 : 0,
-                    'Results' => [
-                        [
-                            'lastSection' => 'business-type',
-                        ]
-                    ]
-                ]
-            ]
-        ];
+        if ($service == 'User' && $method == 'GET' && $bundle == $applicationsBundle) {
+            return array(
+                'organisation' => array(
+                    'licences' => array(
+                        array(
+                            'licenceNumber' => 123,
+                            'applications' => array(
+                                array(
+                                    'id' => 1,
+                                    'createdOn' => '2014-01-01 00:00:00',
+                                    'receivedDate' => '2014-01-01 00:00:00',
+                                    'status' => 'app_status.new'
+                                )
+                            )
+                        )
+                    )
+                )
+            );
+        }
     }
 }
