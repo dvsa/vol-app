@@ -26,7 +26,11 @@ return array(
 
                 $column['formatter'] = 'Address';
 
-                return "<a href='#'>" . $this->callFormatter($column, $data) . "</a>";
+                return '<a href="' . $this->generateUrl(
+                    array('action' => 'edit', 'id' => $data['id']),
+                    null,
+                    true
+                ) . '">' . $this->callFormatter($column, $data) . '</a>';
             },
             'name' => 'address'
         ),
