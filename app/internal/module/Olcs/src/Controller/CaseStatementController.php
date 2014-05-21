@@ -114,8 +114,7 @@ class CaseStatementController extends CaseController
         $form = $this->generateFormWithData(
             'statement',
             'processEditStatement',
-            $data,
-            true
+            $data
         );
 
         $view = $this->getView(
@@ -263,7 +262,11 @@ class CaseStatementController extends CaseController
     {
         $bundle = $this->getBookmarkBundle();
 
-        $bookmarkData = $this->makeRestCall('VosaCase', 'GET',['id' => $data['case'], 'bundle' => json_encode($bundle)]);
+        $bookmarkData = $this->makeRestCall(
+            'VosaCase',
+            'GET',
+            ['id' => $data['case'], 'bundle' => json_encode($bundle)]
+        );
 
         return $bookmarkData;
 
