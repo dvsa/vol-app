@@ -159,9 +159,65 @@ class BusinessDetailsController extends YourBusinessController
 
     protected function getForm($type)
     {
-        return $this->processLookupCompany(
-            parent::getForm($type)
-        );
+        $form = parent::getForm($type);
+
+        $form = $this->processLookupCompany($form);
+        $form = $this->processAddTradingName($form);
+
+        return $form;
+    }
+
+    /**
+     * @param \Zend\Form\Form $form
+     * @return \Zend\Form\Form mixed
+     */
+    protected function processAddTradingName($form)
+    {
+        $request = $this->getRequest();
+
+        if (!$request->isPost()) {
+            return $form;
+        }
+
+        $post = (array)$request->getPost()['data'];
+        if (isset($post['tradingNames']['submit_add_trading_name'])) {
+
+            $this->setPersist(false);
+
+            $form->setValidationGroup(array('data' => ['tradingNames']));
+
+            $form->setData($request->getPost());
+            if ($form->isValid()) {
+
+                $tradingNames = $form->getData()['data']['tradingNames']['trading_name'];
+
+                //remove existing entries from collection
+                foreach ($form->get('data')->get('tradingNames')->get('trading_name') as $key => $element) {
+                    $form->get('data')->get('tradingNames')->get('trading_name')->remove($key);
+                }
+
+                \Zend\Debug\Debug::dump($form->get('data')->get('tradingNames')->get('trading_name'));exit;
+
+                //check for empty entries
+                foreach ($tradingNames as $key => $val) {
+                    if (empty(trim($val['text']))) {
+                        unset($tradingNames[$key]);
+                    }
+                }
+                $tradingNames[] = array('text' => '');
+
+                $data = array('data' => array(
+                    'tradingNames' => array('trading_name' => $tradingNames)
+                ));
+
+                $form->setData($data);
+
+            }
+
+        }
+
+        return $form;
+
     }
 
     protected function processLookupCompany($form)
