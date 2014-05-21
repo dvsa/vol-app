@@ -5,8 +5,6 @@ list($allRoutes, $controllers, $journeys) = include(__DIR__ . '/journeys.config.
 $invokeables = array_merge(
     $controllers, array(
     'SelfServe\Dashboard\Index' => 'SelfServe\Controller\Dashboard\IndexController',
-    'SelfServe\PreviousHistory\ConvictionsAndPenalties'
-        => 'SelfServe\Controller\PreviousHistory\ConvictionsAndPenaltiesController',
     )
 );
 
