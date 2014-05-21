@@ -162,15 +162,28 @@ class BusinessDetailsController extends YourBusinessController
         $form = parent::getForm($type);
 
         $form = $this->processLookupCompany($form);
+
+        return $form;
+    }
+
+    public function generateFormWithData($name, $callback, $data = null, $tables = false)
+    {
+        $request = $this->getRequest();
+
+        $post = (array)$request->getPost();
+        if (isset($post['data']['tradingNames']['submit_add_trading_name'])) {
+
+            $this->setPersist(false);
+
+        }
+
+        $form = parent::generateFormWithData($name, $callback, $data, $tables);
+
         $form = $this->processAddTradingName($form);
 
         return $form;
     }
 
-    /**
-     * @param \Zend\Form\Form $form
-     * @return \Zend\Form\Form mixed
-     */
     protected function processAddTradingName($form)
     {
         $request = $this->getRequest();
@@ -182,8 +195,6 @@ class BusinessDetailsController extends YourBusinessController
         $post = (array)$request->getPost()['data'];
         if (isset($post['tradingNames']['submit_add_trading_name'])) {
 
-            $this->setPersist(false);
-
             $form->setValidationGroup(array('data' => ['tradingNames']));
 
             $form->setData($request->getPost());
@@ -191,27 +202,24 @@ class BusinessDetailsController extends YourBusinessController
 
                 $tradingNames = $form->getData()['data']['tradingNames']['trading_name'];
 
-                //remove existing entries from collection
-                foreach ($form->get('data')->get('tradingNames')->get('trading_name') as $key => $element) {
-                    $form->get('data')->get('tradingNames')->get('trading_name')->remove($key);
-                }
-
-                \Zend\Debug\Debug::dump($form->get('data')->get('tradingNames')->get('trading_name'));exit;
-
-                //check for empty entries
+                //remove existing entries from collection and check for empty entries
                 foreach ($tradingNames as $key => $val) {
-                    if (empty(trim($val['text']))) {
+                    $form->get('data')->get('tradingNames')->get('trading_name')->remove($key);
+
+                    if (strlen(trim($val['text'])) == 0) {
                         unset($tradingNames[$key]);
                     }
                 }
                 $tradingNames[] = array('text' => '');
+
+                //reset keys
+                $tradingNames = array_merge($tradingNames);
 
                 $data = array('data' => array(
                     'tradingNames' => array('trading_name' => $tradingNames)
                 ));
 
                 $form->setData($data);
-
             }
 
         }
