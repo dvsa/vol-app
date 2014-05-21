@@ -20,7 +20,8 @@ class BusinessDetailsControllerTest extends AbstractApplicationControllerTestCas
 {
 
     protected $controllerName = '\SelfServe\Controller\Application\YourBusiness\BusinessDetailsController';
-    protected $defaultRestResponse = array();
+    protected $defaultRestResponse = [];
+    protected $mockOrganisationData = [];
 
     /**
      * Test back button
@@ -34,17 +35,47 @@ class BusinessDetailsControllerTest extends AbstractApplicationControllerTestCas
         $this->assertInstanceOf('Zend\Http\Response', $response);
     }
 
-    /**
-     * Test indexAction
-     */
-    public function testIndexAction()
+    public function testIndexActionShowsCorrectBackLink()
     {
         $this->setUpAction('index');
+        $this->setOrganisationType('lc');   // not important for this test
 
         $response = $this->controller->indexAction();
+        $fieldset = $this->getFormFromResponse($response)->get('data');
 
         // Make sure we get a view not a response
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+
+        $this->assertEquals(
+            '/application/1/your-business/business-type/',
+            $fieldset->get('edit_business_type')->getValue()
+        );
+    }
+
+    public function testIndexActionWithLimitedCompanyShowsFullForm()
+    {
+        $this->assertFormElements('lc', ['name', 'companyNumber', 'tradingNames']);
+    }
+
+
+    public function testIndexActionWithLlpShowsFullForm()
+    {
+        $this->assertFormElements('llp', ['name', 'companyNumber', 'tradingNames']);
+    }
+
+    public function testIndexActionWithSoleTraderShowsLimitedForm()
+    {
+        $this->assertFormElements('st', ['tradingNames'], ['name', 'companyNumber']);
+    }
+
+    public function testIndexActionWithPartnershipShowsLimitedForm()
+    {
+        $this->assertFormElements('p', ['name', 'tradingNames'], ['companyNumber']);
+    }
+
+    public function testIndexActionWithOtherShowsLimitedForm()
+    {
+        $this->assertFormElements('o', ['name'], ['companyNumber', 'tradingNames']);
     }
 
     /**
@@ -52,9 +83,13 @@ class BusinessDetailsControllerTest extends AbstractApplicationControllerTestCas
      */
     public function testIndexActionWithSubmit()
     {
-        $this->markTestIncomplete('not yet refactored');
-
-        $this->setUpAction('index', null, array('foo' => 'bar'));
+        $this->markTestIncomplete('not refactored yet');
+        $post = [
+            'data' => [
+                // @TODO: various scenarios
+            ]
+        ];
+        $this->setUpAction('index', null, $post);
 
         $this->controller->setEnabledCsrf(false);
         $response = $this->controller->indexAction();
@@ -84,6 +119,17 @@ class BusinessDetailsControllerTest extends AbstractApplicationControllerTestCas
                     ],
                 ],
             ];
+            $orgBundle = [
+                'children' => [
+                    'licence' => [
+                        'children' => [
+                            'organisation' => [
+                                'properties' => ['id', 'version', 'organisationType']
+                            ]
+                        ]
+                    ]
+                ]
+            ];
 
             if ($bundle == ApplicationController::$licenceDataBundle) {
 
@@ -110,6 +156,10 @@ class BusinessDetailsControllerTest extends AbstractApplicationControllerTestCas
                         'tradingNames' => []
                     ]
                 ];
+            }
+
+            if ($bundle == $orgBundle) {
+                return $this->mockOrganisationData;
             }
         }
 
@@ -151,6 +201,35 @@ class BusinessDetailsControllerTest extends AbstractApplicationControllerTestCas
                     )
                 )
             );
+        }
+    }
+
+    protected function setOrganisationType($type)
+    {
+        $this->mockOrganisationData = [
+            'licence' => [
+                'organisation' => [
+                    'organisationType' => 'org_type.' . $type
+                ]
+            ]
+        ];
+    }
+
+    protected function assertFormElements($type, $present = array(), $missing = array())
+    {
+        $this->setUpAction('index');
+        $this->setOrganisationType($type);
+
+        $fieldset = $this->getFormFromResponse(
+            $this->controller->indexAction()
+        )->get('data');
+
+        foreach ($present as $element) {
+            $this->assertTrue($fieldset->has($element));
+        }
+
+        foreach ($missing as $element) {
+            $this->assertFalse($fieldset->has($element));
         }
     }
 }
