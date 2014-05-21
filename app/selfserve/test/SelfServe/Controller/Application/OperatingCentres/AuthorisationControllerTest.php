@@ -577,6 +577,7 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                 'Count' => 1,
                 'Results' => array(
                     array(
+                        'id' => 1,
                         'adPlaced' => 1,
                         'permission' => 1,
                         'numberOfVehicles' => 10,
