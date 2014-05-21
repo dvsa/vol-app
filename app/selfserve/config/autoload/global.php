@@ -1,4 +1,5 @@
 <?php
+
 return array(
     'service_api_mapping' => array(
         array(
@@ -18,4 +19,3 @@ return array(
         )
     )
 );
-

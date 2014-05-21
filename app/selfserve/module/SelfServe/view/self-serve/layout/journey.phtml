@@ -1,0 +1,53 @@
+<?php
+
+echo $this->navigation;
+
+if (!empty($subSections)) {
+    ?>
+<!-- Vertical navigation -->
+<div class="one-quarter">
+    <h4><?php echo $this->translate('In this section'); ?></h4>
+    <ol class="vertical-navigation" role="navigation">
+        <?php
+
+        foreach ($subSections as $key => $subSection) {
+
+            $label = $this->translate($subSection['label']);
+
+            if ($subSection['active']) {
+                ?>
+                <li class="current vertical-navigation__item">
+                    <?php echo $label; ?>
+                </li>
+                <?php
+            } elseif (!$subSection['enabled']) {
+                ?>
+                <li class="disabled vertical-navigation__item">
+                    <?php echo $label; ?>
+                </li>
+                <?php
+            } else {
+                ?>
+                <li class="vertical-navigation__item">
+                    <a href="<?php echo $this->url($subSection['route'], (isset($subSection['routeParams']) ? $subSection['routeParams'] : array()), array(), true); ?>">
+                        <?php echo $label; ?>
+                    </a>
+                </li>
+                <?php
+            }
+        }
+
+        ?>
+    </ol><!-- end .vertical-navigation -->
+</div><!-- end .one-quarter -->
+<div class="three-quarters">
+    <?php
+} else {
+    ?>
+<div class="full-width">
+    <?php
+}
+
+?>
+    <?php echo $this->main; ?>
+</div>

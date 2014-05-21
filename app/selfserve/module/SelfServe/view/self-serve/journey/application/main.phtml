@@ -1,0 +1,17 @@
+<?php
+if (isset($title)) {
+    ?>
+    <h2><?php echo $this->translate($title); ?></h2>
+    <?php
+}
+
+
+if (isset($table)) {
+    echo $table;
+}
+
+if (isset($form)) {
+    $form->prepare();
+    echo $this->formErrors($form);
+    echo $this->form($form);
+}

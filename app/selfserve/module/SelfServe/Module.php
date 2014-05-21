@@ -1,16 +1,30 @@
 <?php
+
+/**
+ * Module.php
+ *
+ * @author Someone <someone@somewhere.com>
+ */
+
 namespace SelfServe;
+
 use Zend\Session\SessionManager;
 use Zend\Session\Container;
 use Zend\Mvc\ModuleRouteListener;
 
+/**
+ * Module.php
+ *
+ * @author Someone <someone@somewhere.com>
+ */
 class Module
 {
-    public function getConfig() {
+
+    public function getConfig()
+    {
         $config = array();
         $configFiles = array(
             include __DIR__ . '/config/module.config.php',
-            include __DIR__ . '/config/navigation.config.php',
         );
         foreach ($configFiles as $file) {
             $config = \Zend\Stdlib\ArrayUtils::merge($config, $file);
@@ -31,8 +45,7 @@ class Module
 
     public function onBootstrap($e)
     {
-        $eventManager        = $e->getApplication()->getEventManager();
-        $serviceManager      = $e->getApplication()->getServiceManager();
+        $eventManager = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
         //$this->bootstrapSession($e);
@@ -41,14 +54,14 @@ class Module
     public function bootstrapSession($e)
     {
         $session = $e->getApplication()
-                     ->getServiceManager()
-                     ->get('Zend\Session\SessionManager');
+            ->getServiceManager()
+            ->get('Zend\Session\SessionManager');
         $session->start();
 
         $container = new Container('initialized');
         if (!isset($container->init)) {
-             $session->regenerateId(true);
-             $container->init = 1;
+            $session->regenerateId(true);
+            $container->init = 1;
         }
     }
 
@@ -63,7 +76,9 @@ class Module
 
                         $sessionConfig = null;
                         if (isset($session['config'])) {
-                            $class = isset($session['config']['class'])  ? $session['config']['class'] : 'Zend\Session\Config\SessionConfig';
+                            $class = isset($session['config']['class'])
+                                ? $session['config']['class']
+                                : 'Zend\Session\Config\SessionConfig';
                             $options = isset($session['config']['options']) ? $session['config']['options'] : array();
                             $sessionConfig = new $class();
                             $sessionConfig->setOptions($options);
@@ -88,7 +103,6 @@ class Module
                             foreach ($session['validator'] as $validator) {
                                 $validator = new $validator();
                                 $chain->attach('session.validate', array($validator, 'isValid'));
-
                             }
                         }
                     } else {
@@ -96,9 +110,8 @@ class Module
                     }
                     Container::setDefaultManager($sessionManager);
                     return $sessionManager;
-                },
-            ),
+                }
+            )
         );
     }
-
 }

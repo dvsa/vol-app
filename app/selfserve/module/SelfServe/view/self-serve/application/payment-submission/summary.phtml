@@ -1,0 +1,35 @@
+<?php
+echo $this->render(
+    '/partials/page-header.phtml',
+    array(
+        'pageTitle' => $this->translate('application.payment-submission.summary.title'),
+        'pageSubTitle' => $this->translate('application.payment-submission.summary.subtitle')
+    )
+);
+?>
+<div class="three-quarters">
+    <h3>Summary</h3>
+    <dl>
+        <dt>Application ID</dt>
+        <dd>7987</dd>
+        <dt>Licence number</dt>
+        <dd>OB767877</dd>
+        <dt>Licence type</dt>
+        <dd>Standard</dd>
+        <dt>Type of operator</dt>
+        <dd>Goods Vehicle</dd>
+        <dt>Date Submitted</dt>
+        <dd>01/09/2014</dd>
+    </dl>
+    <br /><br />
+    <div class="highlight-box">
+        <h3>What happens next?</h3>
+        <p>Your application will be processed by the <a href="#">Driver & Vehicle Standards Agency</a> which can take up
+            to 3 weeks. Should there be any issues with your application or further information required their team will
+            contact you directly. You can track the progress of your application on your dashboard.</p>
+    </div>
+    <?php
+    $form->prepare();
+    echo $this->form($form);
+    ?>
+</div>
