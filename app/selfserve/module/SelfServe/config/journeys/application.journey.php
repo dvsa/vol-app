@@ -41,6 +41,7 @@ return array(
                     ),
                     'LicenceType' => array(
                         'required' => array(
+                            'TypeOfLicence/OperatorLocation',
                             'TypeOfLicence/OperatorType'
                         )
                     )

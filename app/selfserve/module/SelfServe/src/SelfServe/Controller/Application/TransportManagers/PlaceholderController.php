@@ -25,4 +25,14 @@ class PlaceholderController extends TransportManagersController
         $view->setTemplate('self-serve/journey/placeholder');
         return $this->renderSection($view);
     }
+
+    /**
+     * Placeholder save method
+     *
+     * @param array $data
+     * @param string $service
+     */
+    protected function save($data, $service = null)
+    {
+    }
 }
