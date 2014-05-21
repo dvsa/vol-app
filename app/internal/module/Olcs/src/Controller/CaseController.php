@@ -271,6 +271,11 @@ class CaseController extends FormActionController
                 'label' => 'Proposal to revoke',
                 'url' => $pm->get('url')->fromRoute('case_revoke', ['tab' => 'revoke', 'action' => 'index'], [], true),
             ],
+            'pi' => [
+                'key' => 'pi',
+                'label' => 'Public inquiry',
+                'url' => $pm->get('url')->fromRoute('case_pi', ['tab' => 'pi', 'action' => 'index'], [], true),
+            ],
         ];
 
         return $tabs;
@@ -670,7 +675,8 @@ class CaseController extends FormActionController
      *
      * @return bool
      */
-    public function isUserDefinedConvictionCategory($categoryId) {
+    public function isUserDefinedConvictionCategory($categoryId)
+    {
         $userDefined = array(168);
         return in_array($categoryId, $userDefined);
     }

@@ -350,6 +350,21 @@ return array(
                     )
                 )
             ),
+            'case_pi' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/licence/[:licence]/case/[:case]/action/manage/pi[/:action][/:type][/:id]',
+                    'constraints' => array(
+                        'licence' => '[0-9]+',
+                        'case' => '[0-9]+',
+                        'id' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'CasePiController',
+                        'action' => 'index'
+                    )
+                )
+            ),
         ),
     ),
     'tables' => array(
@@ -380,6 +395,7 @@ return array(
             'CaseImpoundingController' => 'Olcs\Controller\CaseImpoundingController',
             'CaseConditionUndertakingController' => 'Olcs\Controller\CaseConditionUndertakingController',
             'CaseRevokeController' => 'Olcs\Controller\CaseRevokeController',
+            'CasePiController' => 'Olcs\Controller\CasePiController',
             'DocumentController' => 'Olcs\Controller\DocumentController'
         )
     ),
