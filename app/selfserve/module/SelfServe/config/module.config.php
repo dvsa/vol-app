@@ -47,6 +47,8 @@ return array(
             'SelfServe\Finance\FinancialEvidenceController'
                 => 'SelfServe\Controller\Finance\FinancialEvidenceController',
             'SelfServe\PreviousHistory\Index' => 'SelfServe\Controller\PreviousHistory\IndexController',
+            'SelfServe\PreviousHistory\ConvictionsAndPenalties'
+                => 'SelfServe\Controller\PreviousHistory\ConvictionsAndPenaltiesController',
             'SelfServe\VehiclesSafety\Safety' => 'SelfServe\Controller\VehiclesSafety\SafetyController',
             'SelfServe\TransportManagers\Index' => 'SelfServe\Controller\TransportManagers\IndexController',
             'SelfServe\PaymentDetails\Index' => 'SelfServe\Controller\PaymentDetails\IndexController',
