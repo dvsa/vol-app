@@ -30,10 +30,10 @@ $journeyArray = array_map(
     glob(__DIR__ . '/journeys/*.journey.php')
 );
 
-function camelToHyphen($string) {
+function camelToHyphen($string)
+{
     return strtolower(preg_replace('/([a-zA-Z])(?=[A-Z])/', '$1-', $string));
 }
-
 $controllers = array();
 
 $journeys = array();

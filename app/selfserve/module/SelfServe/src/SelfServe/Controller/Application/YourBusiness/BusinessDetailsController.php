@@ -73,7 +73,6 @@ class BusinessDetailsController extends YourBusinessController
 
         $fieldset = $form->get('data');
 
-
         // always set the edit link
         $fieldset->get('edit_business_type')->setValue(
             $this->getUrlFromRoute(
@@ -102,7 +101,7 @@ class BusinessDetailsController extends YourBusinessController
         return $form;
     }
 
-    protected function processDataMapForSave($oldData, $map = array(), $section = 'main')
+    public function processDataMapForSave($oldData, $map = array(), $section = 'main')
     {
         $data = parent::processDataMapForSave($oldData, $map, $section);
 

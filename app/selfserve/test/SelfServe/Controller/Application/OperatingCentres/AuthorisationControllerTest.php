@@ -95,6 +95,20 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
     }
 
     /**
+     * Test indexAction with crud action
+     */
+    public function testIndexActionWithCrudAction()
+    {
+        $this->setUpAction('index', null, array('action' => 'Add'));
+
+        $this->goodsOrPsv = 'goods';
+
+        $response = $this->controller->indexAction();
+
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
      * Test indexActionSubmit
      *
      * @dataProvider psvProvider
@@ -200,6 +214,48 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
 
         $this->controller->setEnabledCsrf(false);
         $response = $this->controller->addAction();
+
+        $this->assertInstanceOf('\Zend\Http\Response', $response);
+    }
+
+    /**
+     * Test addAction with cancel
+     */
+    public function testAddActionWithCancel()
+    {
+        $post = array(
+            'form-actions' => array(
+                'cancel' => 'Cancel'
+            )
+        );
+
+        $this->setUpAction('add', null, $post);
+
+        $this->goodsOrPsv = 'goods';
+
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->addAction();
+
+        $this->assertInstanceOf('\Zend\Http\Response', $response);
+    }
+
+    /**
+     * Test editAction with cancel
+     */
+    public function testEditActionWithCancel()
+    {
+        $post = array(
+            'form-actions' => array(
+                'cancel' => 'Cancel'
+            )
+        );
+
+        $this->setUpAction('edit', 1, $post);
+
+        $this->goodsOrPsv = 'goods';
+
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->editAction();
 
         $this->assertInstanceOf('\Zend\Http\Response', $response);
     }

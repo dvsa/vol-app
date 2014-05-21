@@ -48,6 +48,18 @@ class VehicleControllerTest extends AbstractApplicationControllerTestCase
     }
 
     /**
+     * Test indexAction with crud action
+     */
+    public function testIndexActionWithCrudAction()
+    {
+        $this->setUpAction('index', null, array('action' => 'Add'));
+
+        $response = $this->controller->indexAction();
+
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
      * Test indexAction with submit
      */
     public function testIndexActionWithSubmit()
@@ -70,6 +82,44 @@ class VehicleControllerTest extends AbstractApplicationControllerTestCase
         $response = $this->controller->addAction();
 
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+    }
+
+    /**
+     * Test addAction with cancel
+     */
+    public function testAddActionWithCancel()
+    {
+        $post = array(
+            'form-actions' => array(
+                'cancel' => 'Cancel'
+            )
+        );
+
+        $this->setUpAction('add', null, $post);
+
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->addAction();
+
+        $this->assertInstanceOf('\Zend\Http\Response', $response);
+    }
+
+    /**
+     * Test editAction with cancel
+     */
+    public function testEditActionWithCancel()
+    {
+        $post = array(
+            'form-actions' => array(
+                'cancel' => 'Cancel'
+            )
+        );
+
+        $this->setUpAction('edit', 1, $post);
+
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->editAction();
+
+        $this->assertInstanceOf('\Zend\Http\Response', $response);
     }
 
     /**
@@ -337,8 +387,5 @@ class VehicleControllerTest extends AbstractApplicationControllerTestCase
                 )
             );
         }
-
-        var_dump($service, $method, $bundle, $data);
-        exit;
     }
 }

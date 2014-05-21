@@ -48,6 +48,34 @@ class SummaryControllerTest extends AbstractApplicationControllerTestCase
     }
 
     /**
+     * Test indexAction with goToSummary
+     */
+    public function testIndexActionWithGoToSummary()
+    {
+        $this->setUpAction('index', null, array('form-actions' => array('goToSummary' => 'Go to summary')));
+
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->indexAction();
+
+        // Make sure we get a view not a response
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
+     * Test indexAction with journey finish
+     */
+    public function testIndexActionWithJourneyFinish()
+    {
+        $this->setUpAction('index', null, array('foo' => 'bar'));
+
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->indexAction();
+
+        // Make sure we get a view not a response
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
      * Mock the rest call
      *
      * @param string $service

@@ -12,15 +12,14 @@ return array(
             'width' => 'checkbox',
             'format' => '{{[elements/radio]}}'
         ),
-
         array(
             'title' => 'Lic/App number',
             'formatter' => function ($row, $col, $sm) {
-                if (!empty($row['licence']['licenceNumber'])) {
-                    return $row['licence']['licenceNumber'];
+                if (!empty($row['licenceNumber'])) {
+                    return $row['licenceNumber'];
                 }
                 return $sm->get('translator')->translate('Not issued yet');
-            },
+            }
         ),
         array(
             'title' => 'App ID',
@@ -29,22 +28,22 @@ return array(
                     'Application',
                     ['applicationId' => $row['id']]
                 ) . '">'.$row['id'].'</a>';
-            },
+            }
         ),
         array(
             'title' => 'Date created',
             'name' => 'createdOn',
-            'formatter' => 'Date',
+            'formatter' => 'Date'
         ),
         array(
             'title' => 'Date submitted',
             'name' => 'receivedDate',
-            'formatter' => 'Date',
+            'formatter' => 'Date'
         ),
         array(
             'title' => 'Status',
             'name' => 'status',
-            'formatter' => 'Translate',
-        ),
-    ),
+            'formatter' => 'Translate'
+        )
+    )
 );

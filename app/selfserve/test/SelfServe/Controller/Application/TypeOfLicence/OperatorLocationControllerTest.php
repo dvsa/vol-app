@@ -48,6 +48,58 @@ class OperatorLocationControllerTest extends AbstractApplicationControllerTestCa
     }
 
     /**
+     * Test indexAction With Disabled Sections
+     */
+    public function testIndexActionWithDisabledSections()
+    {
+        $this->setUpAction('index');
+
+        $completion = array(
+            'Count' => 1,
+            'Results' => array(
+                array(
+                    'id' => 1,
+                    'version' => 1,
+                    'application' => '1',
+                    'sectionTypeOfLicenceStatus' => 1,
+                    'sectionTypeOfLicenceOperatorLocationStatus' => 2,
+                    'sectionTypeOfLicenceOperatorTypeStatus' => 2,
+                    'sectionTypeOfLicenceOperatorLocationStatus' => 0,
+                    'sectionYourBusinessStatus' => 0,
+                    'sectionYourBusinessBusinessTypeStatus' => 0,
+                    'sectionYourBusinessBusinessDetailsStatus' => 0,
+                    'sectionYourBusinessAddressesStatus' => 0,
+                    'sectionYourBusinessPeopleStatus' => 0,
+                    'sectionTaxiPhvStatus' => 0,
+                    'sectionOperatingCentresStatus' => 0,
+                    'sectionOperatingCentresAuthorisationStatus' => 0,
+                    'sectionOperatingCentresFinancialEvidenceStatus' => 0,
+                    'sectionTransportManagersStatus' => 0,
+                    'sectionVehicleSafetyStatus' => 0,
+                    'sectionVehicleSafetyVehicleStatus' => 0,
+                    'sectionVehicleSafetySafetyStatus' => 0,
+                    'sectionPreviousHistoryStatus' => 0,
+                    'sectionPreviousHistoryFinancialHistoryStatus' => 0,
+                    'sectionPreviousHistoryLicenceHistoryStatus' => 0,
+                    'sectionPreviousHistoryConvictionPenaltiesStatus' => 0,
+                    'sectionReviewDeclarationsStatus' => 0,
+                    'sectionPaymentSubmissionStatus' => 0,
+                    'sectionPaymentSubmissionPaymentStatus' => 0,
+                    'sectionPaymentSubmissionSummaryStatus' => 0,
+                    'lastSection' => ''
+                )
+            )
+        );
+
+        $this->setRestResponse('ApplicationCompletion', 'GET', $completion);
+
+        $response = $this->controller->indexAction();
+
+        // Make sure we get a view not a response
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+    }
+
+    /**
      * Test indexAction without licence data
      */
     public function testIndexActionWithoutLicenceData()

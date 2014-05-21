@@ -5,6 +5,7 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+
 namespace SelfServe\Controller;
 
 use Zend\Http\Response;
@@ -17,6 +18,7 @@ use Zend\View\Model\ViewModel;
  */
 abstract class AbstractJourneyController extends AbstractController
 {
+
     /**
      * Holds the isAction
      *
@@ -383,9 +385,7 @@ abstract class AbstractJourneyController extends AbstractController
                 : array();
         }
 
-        if (!is_null($section)) {
-            return isset($config['sections'][$section]) ? $config['sections'][$section] : array();
-        }
+        return isset($config['sections'][(string) $section]) ? $config['sections'][(string) $section] : array();
     }
 
     /**
@@ -437,10 +437,7 @@ abstract class AbstractJourneyController extends AbstractController
         if (empty($this->formName)) {
 
             $this->formName = $this->formatFormName(
-                $this->getJourneyName(),
-                $this->getSectionName(),
-                $this->getSubSectionName(),
-                $this->isAction()
+                $this->getJourneyName(), $this->getSectionName(), $this->getSubSectionName(), $this->isAction()
             );
         }
 
@@ -504,9 +501,7 @@ abstract class AbstractJourneyController extends AbstractController
             $foreignKey = $this->getJourneyConfig()['completionStatusJourneyIdColumn'];
 
             $completionStatus = $this->makeRestCall(
-                $this->getJourneyConfig()['completionService'],
-                'GET',
-                array($foreignKey => $id)
+                $this->getJourneyConfig()['completionService'], 'GET', array($foreignKey => $id)
             );
 
             $this->sectionCompletion = ($completionStatus['Count'] > 0 ? $completionStatus['Results'][0] : array());
@@ -560,8 +555,7 @@ abstract class AbstractJourneyController extends AbstractController
             $steps = $this->getSteps();
 
             $this->stepNumber = array_search(
-                array($this->getJourneyName(), $this->getSectionName(), $this->getSubSectionName()),
-                $steps
+                array($this->getJourneyName(), $this->getSectionName(), $this->getSubSectionName()), $steps
             );
         }
 
@@ -658,7 +652,7 @@ abstract class AbstractJourneyController extends AbstractController
         $sectionName = $this->getSectionName();
         $statusMap = $this->getJourneyConfig()['completionStatusMap'];
 
-        $status = $statusMap[(int)$sectionCompletion['section' . $name . 'Status']];
+        $status = $statusMap[(int) $sectionCompletion['section' . $name . 'Status']];
 
         if ($name == $sectionName) {
             $status = 'current';
@@ -820,7 +814,7 @@ abstract class AbstractJourneyController extends AbstractController
 
             foreach ($this->getServiceLocator()->get('Config')['tables']['config'] as $location) {
 
-                if (file_exists($location . $tableName . '.table.php' )) {
+                if (file_exists($location . $tableName . '.table.php')) {
                     $this->hasTable = true;
                     break;
                 }
@@ -1039,10 +1033,6 @@ abstract class AbstractJourneyController extends AbstractController
 
             if (!$this->getRequest()->isPost()) {
                 $data = $this->getFormData();
-
-                if ($data instanceof Response || $data instanceof ViewModel) {
-                    return $data;
-                }
             }
 
             if ($this->isAction() || empty($this->formTables)) {
@@ -1058,13 +1048,10 @@ abstract class AbstractJourneyController extends AbstractController
                 }
 
                 $form = $this->generateTableFormWithData(
-                    $this->getFormName(),
-                    array(
-                        'success' => $this->getFormCallback(),
-                        'crud_action' => $this->getFormCallback() . 'Crud'
-                    ),
-                    $data,
-                    $tableConfigs
+                    $this->getFormName(), array(
+                    'success' => $this->getFormCallback(),
+                    'crud_action' => $this->getFormCallback() . 'Crud'
+                    ), $data, $tableConfigs
                 );
             }
 
@@ -1128,24 +1115,14 @@ abstract class AbstractJourneyController extends AbstractController
             if ($action === 'edit') {
 
                 $data = $this->actionLoad($this->getActionId());
-
             } else {
                 $data = array();
             }
 
-            if ($data instanceof Response || $data instanceof ViewModel) {
-                return $data;
-            }
-
             $processedData = $this->processActionLoad($data);
-
         } else {
 
             $data = $this->load($this->getIdentifier());
-
-            if ($data instanceof Response || $data instanceof ViewModel) {
-                return $data;
-            }
 
             $processedData = $this->processLoad($data);
         }
@@ -1246,7 +1223,7 @@ abstract class AbstractJourneyController extends AbstractController
         $layoutName = $this->getLayout();
 
         if (empty($layoutName)) {
-             $layoutName = 'self-serve/journey/' . strtolower($this->getJourneyName()) . '/layout';
+            $layoutName = 'self-serve/journey/' . strtolower($this->getJourneyName()) . '/layout';
         }
 
         $layout->setTemplate($layoutName);
@@ -1277,10 +1254,7 @@ abstract class AbstractJourneyController extends AbstractController
     protected function actionLoad($id)
     {
         return $this->makeRestCall(
-            $this->getActionService(),
-            'GET',
-            array('id' => $id),
-            $this->getActionDataBundle()
+            $this->getActionService(), 'GET', array('id' => $id), $this->getActionDataBundle()
         );
     }
 
@@ -1330,10 +1304,6 @@ abstract class AbstractJourneyController extends AbstractController
 
         if (is_null($service)) {
             $service = $this->getActionService();
-        }
-
-        if (empty($service)) {
-            throw new \Exception('Action service not defined');
         }
 
         return $this->makeRestCall($service, $method, $data);
@@ -1393,8 +1363,8 @@ abstract class AbstractJourneyController extends AbstractController
             $sectionStatusKey = 'section' . $sectionName . $subSectionName . 'Status';
 
             if ($this->isSectionAccessible($sectionName, $subSectionName)
-                    && (!isset($sectionCompletion[$sectionStatusKey])
-                    || $sectionCompletion[$sectionStatusKey] != $completeKey)) {
+                && (!isset($sectionCompletion[$sectionStatusKey])
+                || $sectionCompletion[$sectionStatusKey] != $completeKey)) {
                 $complete = false;
                 break;
             }
@@ -1406,7 +1376,7 @@ abstract class AbstractJourneyController extends AbstractController
 
         $this->makeRestCall($this->getJourneyConfig()['completionService'], 'PUT', $sectionCompletion);
 
-        $sectionCompletion['version']++;
+        $sectionCompletion['version'] ++;
 
         $this->setSectionCompletion($sectionCompletion);
     }
