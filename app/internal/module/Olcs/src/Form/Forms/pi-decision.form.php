@@ -2,8 +2,8 @@
 
 
 return [
-    'pi-schedule' => [
-        'name' => 'Public inquiry Schedule and Publish',
+    'pi-decision' => [
+        'name' => 'Public inquiry Register Decision',
         'attributes' => [
             'method' => 'post',
         ],
@@ -12,16 +12,6 @@ return [
             'piNumber' => [
                 'type' => 'text',
                 'label' => 'PI number'
-            ],
-            'agreedDate' => [
-                'type' => 'dateSelect',
-                'label' => 'Agreed date',
-                'class' => 'long'
-            ],
-            'legislation' => [
-                'type' => 'select',
-                'label' => 'Legislation',
-                'class' => 'medium'
             ],
             'venue' => [
                 'type' => 'select',
@@ -48,22 +38,36 @@ return [
                 'label' => 'Presiding TC/DTC/TR/DTR role',
                 'class' => 'medium'
             ],
+            'piReason' => [
+                'type' => 'text',
+                'label' => 'Reason for PI',
+                'class' => 'medium'
+            ],
             'witnesses' => [
                 'type' => 'select',
                 'label' => 'Witnesses',
                 'class' => 'small'
             ],
-            'cancelled' => [
-                'type' => 'checkbox',
-                'label' => 'Cancelled'
+            'decisionDate' => [
+                'type' => 'dateSelect',
+                'label' => 'Date of decision'
             ],
-            'ajourned' => [
-                'type' => 'checkbox',
-                'label' => 'Ajourned'
+            'notificationDate' => [
+                'type' => 'dateSelect',
+                'label' => 'Date of notification'
             ],
-            'definitionsForConsideration' => [
+            'licenceRevoked' => [
+                'type' => 'checkbox',
+                'label' => 'Licence revoked due to public inquiry'
+            ],
+            'definitionCategory' => [
                 'type' => 'select',
-                'label' => 'Definitions for consideration',
+                'label' => 'Definition category',
+                'class' => 'medium'
+            ],
+            'definition' => [
+                'type' => 'select',
+                'label' => 'Definition',
                 'class' => 'medium'
             ],
             'detailsToBePublished' => [

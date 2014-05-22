@@ -63,6 +63,10 @@ class CasePiController extends CaseController
                 return $this->addSlaAction($caseId);
             case 'agreed':
                 return $this->addAgreedAction($caseId);
+            case 'schedule':
+                return $this->addScheduleAction($caseId);
+            case 'decision':
+                return $this->addDecisionAction($caseId);
         }
 
     }
@@ -132,6 +136,70 @@ class CasePiController extends CaseController
     }
 
     /**
+     * Add Public Inquiry decision data for a case
+     *
+     * @return ViewModel
+     */
+    public function addScheduleAction($caseId)
+    {
+        $form = $this->generateFormWithData(
+            'pi-schedule',
+            'processSchedule',
+            array(
+                'case' => $caseId
+            ),
+            true
+        );
+
+        $view = $this->getView(
+            [
+                'params' => [
+                    'pageTitle' => 'Add Schedule and Publish',
+                    'pageSubTitle' => ''
+                ],
+                'form' => $form,
+                'headScript' => array('/static/js/impounding.js')
+            ]
+        );
+
+        $view->setTemplate('/form');
+
+        return $view;
+    }
+
+    /**
+     * Add Public Inquiry decision data for a case
+     *
+     * @return ViewModel
+     */
+    public function addDecisionAction($caseId)
+    {
+        $form = $this->generateFormWithData(
+            'pi-decision',
+            'processDecision',
+            array(
+                'case' => $caseId
+            ),
+            true
+        );
+
+        $view = $this->getView(
+            [
+                'params' => [
+                    'pageTitle' => 'Add Register Decision',
+                    'pageSubTitle' => ''
+                ],
+                'form' => $form,
+                'headScript' => array('/static/js/impounding.js')
+            ]
+        );
+
+        $view->setTemplate('/form');
+
+        return $view;
+    }
+
+    /**
      * Processes an SLA form
      */
     public function processSla()
@@ -147,5 +215,21 @@ class CasePiController extends CaseController
     public function editAction()
     {
 
+    }
+
+    /**
+     * Build the data for a witness select box
+     *
+     * @return array
+     */
+    public function getWitnessData()
+    {
+        $witness = array();
+
+        for ($i = 0; $i <= 100; $i++) {
+            $witness[$i] = $i;
+        }
+
+        return $witness;
     }
 }

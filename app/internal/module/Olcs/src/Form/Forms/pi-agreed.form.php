@@ -13,30 +13,29 @@ return [
                 'type' => 'select',
                 'label' => 'Type of PI'
             ],
-            'presidingTc' => [
-                'type' => 'dateSelect',
-                'label' => 'Date of PI',
-                 'class' => 'long'
+            'caseworker' => [
+                'type' => 'select',
+                'label' => 'Caseworker assigned to',
+                 'class' => 'medium'
             ],
             'legislation' => [
                 'type' => 'select',
                 'label' => 'Legislation',
-                 'class' => 'long'
+                 'class' => 'medium'
             ],
             'agreedDate' => [
                 'type' => 'dateSelect',
-                'label' => 'Agreed date',
-                 'class' => 'long'
+                'label' => 'Agreed date'
             ],
             'presidingTc' => [
                 'type' => 'select',
                 'label' => 'Agreed by',
-                 'class' => 'long'
+                 'class' => 'medium'
             ],
             'role' => [
                 'type' => 'select',
                 'label' => 'Agreed by role',
-                 'class' => 'long'
+                 'class' => 'medium'
             ],
             'comments' => [
                 'type' => 'textarea',
