@@ -280,14 +280,30 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
     public function testConvictionHistory($categoryId, $operatorName)
     {
         $submissionSectionTrait = $this->getMockForTrait(
-            '\Olcs\Controller\Submission\SubmissionSectionTrait'
+            '\Olcs\Controller\Submission\SubmissionSectionTrait',
+            array(),
+            '',
+            true,
+            true,
+            true,
+            array(
+                'getServiceLocator'
+            )
         );
+
+        $configServiceLocator = $this->getMock('\stdClass', array('get'));
+
+        $configServiceLocator->expects($this->once())
+            ->method('get')
+            ->with('Config')
+            ->will($this->returnValue($this->getStaticDefTypes()));
+
         $data = array('convictions' => []);
         $thisConviction['dateOfOffence'] = '2014-01-01';
         $thisConviction['category']['id'] = $categoryId;
         $thisConviction['category']['description'] = 'category description';
         $thisConviction['categoryText'] = 'category text';
-        $thisConviction['defType'] = 'defendent type';
+        $thisConviction['defType'] = 'defendant_type.operator';
         $thisConviction['operatorName'] = $operatorName;
         $thisConviction['dateOfConviction'] = '2014-01-01';
         $thisConviction['personFirstname'] = 'Fred';
@@ -299,6 +315,10 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
         $thisConviction['decToTc'] = 'Y';
         $thisConviction['dealtWith'] = 'N';
         $data['convictions'][] = $thisConviction;
+
+        $submissionSectionTrait->expects($this->once())
+            ->method('getServiceLocator')
+            ->will($this->returnValue($configServiceLocator));
 
         $result = $submissionSectionTrait->convictionHistory($data);
         $this->assertContains('Court 12', $result[0]);
@@ -407,4 +427,21 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
         $this->assertArrayHasKey('ecms', $result);
     }
 
+    private function getStaticDefTypes()
+    {
+        return array(
+            'static-list-data' => array(
+                'defendant_types' =>
+                [
+                    'defendant_type.operator' => 'Operator',
+                    'defendant_type.owner' => 'Owner',
+                    'defendant_type.partner' => 'Partner',
+                    'defendant_type.director' => 'Director',
+                    'defendant_type.driver' => 'Driver',
+                    'defendant_type.transport_manager' => 'Transport Manager',
+                    'defendant_type.other' => 'Other'
+                ]
+            )
+        );
+    }
 }
