@@ -63,12 +63,8 @@ class FinancialHistoryControllerTest extends AbstractApplicationControllerTestCa
                     'liquidation' => 'Y',
                     'receivership' => 'Y',
                     'administration' => 'Y',
-                    'disqualified' => 'Y'
-                ),
-                'insolvencyDetails' => array(
-                    'insolvencyDetails' => str_repeat('a', 200)
-                ),
-                'insolvencyConfirmation' => array(
+                    'disqualified' => 'Y',
+                    'insolvencyDetails' => str_repeat('a', 200),
                     'insolvencyConfirmation' => '1'
                 )
             )
