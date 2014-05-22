@@ -71,9 +71,9 @@ return array(
                                     'route' => 'case_convictions',
                                     'pages' => array(
                                         array(
-                                        'label' => 'Add Conviction',
-                                        'route' => 'conviction',
-                                        'action' => 'add'
+                                            'label' => 'Add Conviction',
+                                            'route' => 'conviction',
+                                            'action' => 'add'
                                         ),
                                         array(
                                             'label' => 'Edit Conviction',

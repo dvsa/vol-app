@@ -32,6 +32,7 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
         );
 
         $caseId = 3;
+        $licenceId = 7;
 
         $restResults = array();
 
@@ -44,10 +45,15 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
         $controller->expects($this->once())
             ->method('setBreadcrumb');
 
-        $controller->expects($this->once())
+        $controller->expects($this->at(0))
             ->method('fromRoute')
             ->with('case')
             ->will($this->returnValue($caseId));
+
+        $controller->expects($this->at(1))
+            ->method('fromRoute')
+            ->with('licence')
+            ->will($this->returnValue($licenceId));
 
         $controller->expects($this->once())
             ->method('makeRestCall')
@@ -77,7 +83,8 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
      */
     public function testAddAction()
     {
-        $caseId = 7;
+        $caseId = 24;
+        $licenceId = 7;
         $form = '<form></form>';
 
         $viewMock = $this->getMock('\stdClass', array('setTemplate'));
@@ -94,10 +101,15 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
         $controller->expects($this->once())
             ->method('setBreadcrumb');
 
-        $controller->expects($this->once())
+        $controller->expects($this->at(0))
             ->method('fromRoute')
             ->with('case')
             ->will($this->returnValue($caseId));
+
+        $controller->expects($this->at(1))
+            ->method('fromRoute')
+            ->with('licence')
+            ->will($this->returnValue($licenceId));
 
         $controller->expects($this->once())
             ->method('generateFormWithData')
@@ -151,6 +163,8 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
      */
     public function testEditAction()
     {
+        $caseId = 24;
+        $licenceId = 7;
         $statementId = 7;
 
         $statementDetails = array(
@@ -185,7 +199,7 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
                 'country' => 'country.GB',
                 'city' => 'Leeds'
             ),
-            'case' => 3
+            'case' => $caseId
         );
 
         $viewMock = $this->getMock('\stdClass', array('setTemplate'));
@@ -204,13 +218,20 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
 
         $controller->expects($this->at(0))
             ->method('fromRoute')
-            ->will($this->returnValue(3));
+            ->with('case')
+            ->will($this->returnValue($caseId));
+
+        $controller->expects($this->at(1))
+            ->method('fromRoute')
+            ->with('licence')
+            ->will($this->returnValue($licenceId));
 
         $controller->expects($this->at(2))
             ->method('fromRoute')
+            ->with('statement')
             ->will($this->returnValue($statementId));
 
-        $controller->expects($this->at(3))
+        $controller->expects($this->once())
             ->method('makeRestCall')
             ->with('Statement')
             ->will($this->returnValue($statementDetails));

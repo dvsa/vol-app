@@ -11,8 +11,6 @@ namespace Olcs\Controller;
 /**
  * Case Statement Controller
  *
- * @todo For Breadcrumbs we need to pull the real licence id in
- *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 class CaseStatementController extends CaseController
@@ -24,9 +22,10 @@ class CaseStatementController extends CaseController
      */
     public function indexAction()
     {
-        $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => 1)));
-
         $caseId = $this->fromRoute('case');
+        $licenceId = $this->fromRoute('licence');
+
+        $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licenceId)));
 
         $this->checkForCrudAction('case_statement', array('case' => $caseId), 'statement', true);
 
@@ -49,11 +48,12 @@ class CaseStatementController extends CaseController
     public function addAction()
     {
         $caseId = $this->fromRoute('case');
+        $licenceId = $this->fromRoute('licence');
 
         $this->setBreadcrumb(
             array(
-                'licence_case_list/pagination' => array('licence' => 1),
-                'case_statement' => array('case' => $caseId)
+                'licence_case_list/pagination' => array('licence' => $licenceId),
+                'case_statement' => array('case' => $caseId, 'licence' => $licenceId)
             )
         );
 
@@ -84,15 +84,15 @@ class CaseStatementController extends CaseController
     public function editAction()
     {
         $caseId = $this->fromRoute('case');
+        $licenceId = $this->fromRoute('licence');
+        $statementId = $this->fromRoute('statement');
 
         $this->setBreadcrumb(
             array(
-                'licence_case_list/pagination' => array('licence' => 1),
-                'case_statement' => array('case' => $caseId)
+                'licence_case_list/pagination' => array('licence' => $licenceId),
+                'case_statement' => array('case' => $caseId, 'licence' => $licenceId)
             )
         );
-
-        $statementId = $this->fromRoute('statement');
 
         $bundle = array(
             'children' => array(

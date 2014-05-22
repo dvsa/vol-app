@@ -116,7 +116,8 @@ return array(
                 'options' => array(
                     'route' => '/licence/[:licence]/case/:case/statements[/:action][/:statement]',
                     'constraints' => array(
-                        'case' => '[0-9]+'
+                        'case' => '[0-9]+',
+                        'licence' => '[0-9]+'
                     ),
                     'defaults' => array(
                         'controller' => 'CaseStatementController',
