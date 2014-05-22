@@ -83,8 +83,7 @@ class ConvictionController extends CaseController
         $form = $this->generateFormWithData(
             'conviction',
             'processConviction',
-            $data,
-            true
+            $data
         );
 
         $posted = $this->getRequest()->getPost();

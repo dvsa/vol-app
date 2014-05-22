@@ -96,8 +96,7 @@ class CaseImpoundingController extends CaseController
             'processAddImpounding',
             array(
                 'case' => $caseId
-            ),
-            true
+            )
         );
 
         $view = $this->getView(
@@ -181,7 +180,14 @@ class CaseImpoundingController extends CaseController
 
         $bundle = $this->getFormBundle();
 
-        $details = $this->makeRestCall('Impounding', 'GET', array('id' => $impoundingId, 'bundle' => json_encode($bundle)));
+        $details = $this->makeRestCall(
+            'Impounding',
+            'GET',
+            array(
+                'id' => $impoundingId,
+                'bundle' => json_encode($bundle)
+            )
+        );
 
         if (empty($details)) {
             return $this->notFoundAction();
@@ -199,8 +205,7 @@ class CaseImpoundingController extends CaseController
         $form = $this->generateFormWithData(
             'impounding',
             'processEditImpounding',
-            $data,
-            true
+            $data
         );
 
         $view = $this->getView(
@@ -231,7 +236,10 @@ class CaseImpoundingController extends CaseController
         $formatted = array_merge(array(), $data['outcome'], $data['application_details']);
 
         $formatted['hearingLocation'] = $data['hearing']['hearingLocation'];
-        $formatted['hearingDate'] = $this->joinHearingDateAndTime($data['hearing']['hearingDate'], $data['hearing']['hearingTime']);
+        $formatted['hearingDate'] = $this->joinHearingDateAndTime(
+            $data['hearing']['hearingDate'],
+            $data['hearing']['hearingTime']
+        );
         $formatted['presidingTc'] = str_replace('presiding_tc.', '', $formatted['presidingTc']);
         $formatted['id'] = $data['id'];
         $formatted['case'] = $data['case'];
@@ -258,11 +266,13 @@ class CaseImpoundingController extends CaseController
                     $results[$key]['name'] = $result['presidingTc']['name'];
                 }
 
-                if (isset($result['outcome']['handle'])  && isset($static['impounding_outcome'][$result['outcome']['handle']])) {
+                if (isset($result['outcome']['handle'])
+                    && isset($static['impounding_outcome'][$result['outcome']['handle']])) {
                     $results[$key]['outcome'] = $static['impounding_outcome'][$result['outcome']['handle']];
                 }
 
-                if (isset($result['impoundingType']['handle'])  && isset($static['impounding_type'][$result['impoundingType']['handle']])) {
+                if (isset($result['impoundingType']['handle'])
+                    && isset($static['impounding_type'][$result['impoundingType']['handle']])) {
                     $results[$key]['impoundingType'] = $static['impounding_type'][$result['impoundingType']['handle']];
                 }
             }
