@@ -46,32 +46,19 @@ return array(
                         'type' => 'radio',
                         'label' => $translationPrefix . '.finance.disqualified',
                         'value_options' => 'yes_no'
-                    )
-                )
-            ),
-            array(
-                'name' => 'insolvencyDetails',
-                'attributes' => array(
-                    'class' => 'highlight-box'
-                ),
-                'options' => array(
-                    'label' => $translationPrefix . '.insolvencyDetails.title',
-                    'hint' => $translationPrefix . '.insolvencyDetails.hint'
-                ),
-                'elements' => array(
+                    ),
                     'insolvencyDetails' => array(
+                        'label' => $translationPrefix . '.insolvencyDetails.title',
+                        'hint' => $translationPrefix . '.insolvencyDetails.hint',
                         'type' => 'financialHistoryTextarea',
                         'class' => 'long',
-                        'placeholder' => $translationPrefix . '.insolvencyDetails.placeholder'
-                    )
-                )
-            ),
-            array(
-                'name' => 'insolvencyConfirmation',
-                'elements' => array(
+                        'placeholder' => $translationPrefix . '.insolvencyDetails.placeholder',
+                    ),
                     'insolvencyConfirmation' => array(
-                        'type' => 'checkbox',
-                        'label' => $translationPrefix . '.insolvencyConfirmation.title',
+                        'type' => 'multicheckbox',
+                        'value_options' => array(
+                            '1' => $translationPrefix . '.insolvencyConfirmation.title'
+                        ),
                         'options' => array(
                             'must_be_checked' => true
                         )
