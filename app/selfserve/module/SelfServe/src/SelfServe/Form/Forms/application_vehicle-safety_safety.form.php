@@ -60,12 +60,8 @@ return array(
                 'options' => array(0),
                 'elements' => array(
                     'safetyConfirmation' => array(
-                        // @todo See if we can make this a checkbox
-                        'type' => 'multicheckbox',
-                        'label' => 'Confirm',
-                        'value_options' => array(
-                            '1' => $translationPrefix . '.application.safetyConfirmation'
-                        )
+                        'type' => 'singlecheckbox',
+                        'label' => $translationPrefix . '.application.safetyConfirmation'
                     ),
                     'id' => array(
                         'type' => 'hidden'

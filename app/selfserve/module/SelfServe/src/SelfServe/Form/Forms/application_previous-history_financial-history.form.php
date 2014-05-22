@@ -23,42 +23,36 @@ return array(
                         'type' => 'hidden'
                     ),
                     'bankrupt' => array(
-                        'type' => 'radio',
-                        'label' => $translationPrefix . '.finance.bankrupt',
-                        'value_options' => 'yes_no'
+                        'type' => 'yesNoRadio',
+                        'label' => $translationPrefix . '.finance.bankrupt'
                     ),
                     'liquidation' => array(
-                        'type' => 'radio',
-                        'label' => $translationPrefix . '.finance.liquidation',
-                        'value_options' => 'yes_no'
+                        'type' => 'yesNoRadio',
+                        'label' => $translationPrefix . '.finance.liquidation'
                     ),
                     'receivership' => array(
-                        'type' => 'radio',
-                        'label' => $translationPrefix . '.finance.receivership',
-                        'value_options' => 'yes_no'
+                        'type' => 'yesNoRadio',
+                        'label' => $translationPrefix . '.finance.receivership'
                     ),
                     'administration' => array(
-                        'type' => 'radio',
-                        'label' => $translationPrefix . '.finance.administration',
-                        'value_options' => 'yes_no'
+                        'type' => 'yesNoRadio',
+                        'label' => $translationPrefix . '.finance.administration'
                     ),
                     'disqualified' => array(
-                        'type' => 'radio',
-                        'label' => $translationPrefix . '.finance.disqualified',
-                        'value_options' => 'yes_no'
+                        'type' => 'yesNoRadio',
+                        'label' => $translationPrefix . '.finance.disqualified'
                     ),
                     'insolvencyDetails' => array(
                         'label' => $translationPrefix . '.insolvencyDetails.title',
                         'hint' => $translationPrefix . '.insolvencyDetails.hint',
                         'type' => 'financialHistoryTextarea',
                         'class' => 'long',
+                        'data-container-class' => 'highlight-box',
                         'placeholder' => $translationPrefix . '.insolvencyDetails.placeholder',
                     ),
                     'insolvencyConfirmation' => array(
-                        'type' => 'multicheckbox',
-                        'value_options' => array(
-                            '1' => $translationPrefix . '.insolvencyConfirmation.title'
-                        ),
+                        'type' => 'singlecheckbox',
+                        'label' => $translationPrefix . '.insolvencyConfirmation.title',
                         'options' => array(
                             'must_be_checked' => true
                         )
