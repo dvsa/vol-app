@@ -23,10 +23,17 @@ class CaseConvictionController extends CaseController
         $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $routeParams['licence'])));
 
         if (isset($postParams['action'])) {
-            return $this->redirect()->toRoute($postParams['table'], array('licence' => $routeParams['licence'],
-                'case' => $routeParams['case'],
-                'id' => isset($postParams['id']) ? $postParams['id'] : '',
-                'action' => strtolower($postParams['action'])));
+            return $this->redirect()->toRoute(
+                $postParams['table'],
+                array(
+                    'licence' => $routeParams['licence'],
+                    'case' => $routeParams['case'],
+                    'id' => isset($postParams['id']) ? $postParams['id'] : '',
+                    'action' => strtolower(
+                        $postParams['action']
+                    )
+                )
+            );
         }
 
         $view = $this->getView();
@@ -52,9 +59,11 @@ class CaseConvictionController extends CaseController
                 'bundle' => json_encode($bundle)
             )
         );
+        echo'<pre>';
+        print_r($results);
 
         foreach ($results['Results'] as $key => $row) {
-            if(!$this->isUserDefinedConvictionCategory($row['category']['id'])) {
+            if (!$this->isUserDefinedConvictionCategory($row['category']['id'])) {
                 $results['Results'][$key]['categoryText'] = $row['category']['description'];
             }
         }
