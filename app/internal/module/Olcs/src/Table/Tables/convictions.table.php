@@ -52,7 +52,7 @@ return array(
         array(
             'title' => 'Name / defendant type',
             'formatter' => function ($data) {
-                $person = $data['personFirstname'] . ' ' . $data['personLastname'];
+                $person = $data['personFirstname'] . ' ' . $data['personLastname'] . ' / ' . $data['defType'];
                 $organisationName = $data['operatorName'];
                 return ($organisationName == '') ? $person : $organisationName;
             }

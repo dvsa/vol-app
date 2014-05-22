@@ -59,12 +59,16 @@ class CaseConvictionController extends CaseController
                 'bundle' => json_encode($bundle)
             )
         );
-        echo'<pre>';
-        print_r($results);
+
+        $config = $this->getServiceLocator()->get('Config');
 
         foreach ($results['Results'] as $key => $row) {
             if (!$this->isUserDefinedConvictionCategory($row['category']['id'])) {
                 $results['Results'][$key]['categoryText'] = $row['category']['description'];
+            }
+
+            if (isset($config['static-list-data']['defendant_types'][$row['defType']])) {
+                $results['Results'][$key]['defType'] = $config['static-list-data']['defendant_types'][$row['defType']];
             }
         }
 
