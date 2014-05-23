@@ -142,7 +142,11 @@ class AddressesController extends YourBusinessController
                 parent::save($phone, $service);
 
             } else {
-                $this->makeRestCall($service, 'DELETE', $phone);
+
+                if ((int)$phone['id'] > 0) {
+                    $this->makeRestCall($service, 'DELETE', $phone);
+                }
+
             }
         }
 
