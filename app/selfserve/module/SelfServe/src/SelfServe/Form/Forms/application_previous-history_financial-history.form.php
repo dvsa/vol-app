@@ -23,54 +23,35 @@ return array(
                         'type' => 'hidden'
                     ),
                     'bankrupt' => array(
-                        'type' => 'radio',
-                        'label' => $translationPrefix . '.finance.bankrupt',
-                        'value_options' => 'yes_no'
+                        'type' => 'yesNoRadio',
+                        'label' => $translationPrefix . '.finance.bankrupt'
                     ),
                     'liquidation' => array(
-                        'type' => 'radio',
-                        'label' => $translationPrefix . '.finance.liquidation',
-                        'value_options' => 'yes_no'
+                        'type' => 'yesNoRadio',
+                        'label' => $translationPrefix . '.finance.liquidation'
                     ),
                     'receivership' => array(
-                        'type' => 'radio',
-                        'label' => $translationPrefix . '.finance.receivership',
-                        'value_options' => 'yes_no'
+                        'type' => 'yesNoRadio',
+                        'label' => $translationPrefix . '.finance.receivership'
                     ),
                     'administration' => array(
-                        'type' => 'radio',
-                        'label' => $translationPrefix . '.finance.administration',
-                        'value_options' => 'yes_no'
+                        'type' => 'yesNoRadio',
+                        'label' => $translationPrefix . '.finance.administration'
                     ),
                     'disqualified' => array(
-                        'type' => 'radio',
-                        'label' => $translationPrefix . '.finance.disqualified',
-                        'value_options' => 'yes_no'
-                    )
-                )
-            ),
-            array(
-                'name' => 'insolvencyDetails',
-                'attributes' => array(
-                    'class' => 'highlight-box'
-                ),
-                'options' => array(
-                    'label' => $translationPrefix . '.insolvencyDetails.title',
-                    'hint' => $translationPrefix . '.insolvencyDetails.hint'
-                ),
-                'elements' => array(
+                        'type' => 'yesNoRadio',
+                        'label' => $translationPrefix . '.finance.disqualified'
+                    ),
                     'insolvencyDetails' => array(
+                        'label' => $translationPrefix . '.insolvencyDetails.title',
+                        'hint' => $translationPrefix . '.insolvencyDetails.hint',
                         'type' => 'financialHistoryTextarea',
                         'class' => 'long',
-                        'placeholder' => $translationPrefix . '.insolvencyDetails.placeholder'
-                    )
-                )
-            ),
-            array(
-                'name' => 'insolvencyConfirmation',
-                'elements' => array(
+                        'data-container-class' => 'highlight-box',
+                        'placeholder' => $translationPrefix . '.insolvencyDetails.placeholder',
+                    ),
                     'insolvencyConfirmation' => array(
-                        'type' => 'checkbox',
+                        'type' => 'singlecheckbox',
                         'label' => $translationPrefix . '.insolvencyConfirmation.title',
                         'options' => array(
                             'must_be_checked' => true
