@@ -647,12 +647,10 @@ abstract class AbstractJourneyController extends AbstractController
      */
     protected function getAccessibleSection($name)
     {
-        $sectionCompletion = $this->getSectionCompletion();
         $journeyName = $this->getJourneyName();
         $sectionName = $this->getSectionName();
-        $statusMap = $this->getJourneyConfig()['completionStatusMap'];
 
-        $status = $statusMap[(int) $sectionCompletion['section' . $name . 'Status']];
+        $status = $this->getSectionStatus($name);
 
         if ($name == $sectionName) {
             $status = 'current';
@@ -660,9 +658,25 @@ abstract class AbstractJourneyController extends AbstractController
 
         return array(
             'status' => $status,
+            'enabled' => $this->isSectionEnabled($name),
             'title' => $this->getSectionLabel($journeyName, $name),
             'route' => $this->getSectionRoute($journeyName, $name)
         );
+    }
+
+    /**
+     * Get section status
+     *
+     * @param string $section
+     * @return string
+     */
+    protected function getSectionStatus($section)
+    {
+        $sectionCompletion = $this->getSectionCompletion();
+
+        $statusMap = $this->getJourneyConfig()['completionStatusMap'];
+
+        return $statusMap[(int) $sectionCompletion['section' . $section . 'Status']];
     }
 
     /**
@@ -901,6 +915,13 @@ abstract class AbstractJourneyController extends AbstractController
 
                     $enabled = false;
                 }
+            }
+        }
+
+        if ($enabled && isset($details['enabled'])) {
+
+            if (is_callable(array($this, $details['enabled']))) {
+                $enabled = $this->$details['enabled']();
             }
         }
 

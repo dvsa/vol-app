@@ -17,6 +17,11 @@ use SelfServe\Controller\AbstractJourneyController;
  */
 class ApplicationController extends AbstractJourneyController
 {
+    /**
+     * Holds the licenceDataBundle
+     *
+     * @var array
+     */
     public static $licenceDataBundle = array(
         'children' => array(
             'licence' => array(
@@ -66,6 +71,20 @@ class ApplicationController extends AbstractJourneyController
         }
 
         return $this->goToFirstSection();
+    }
+
+    /**
+     * Check if the vehicle safety section is enabled
+     *
+     * @return boolean
+     */
+    public function isVehicleSafetyEnabled()
+    {
+        if (!$this->isPsv()) {
+            return true;
+        }
+
+        return ($this->getSectionStatus('OperatingCentres') == 'complete');
     }
 
     /**
