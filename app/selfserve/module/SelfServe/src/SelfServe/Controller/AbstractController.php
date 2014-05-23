@@ -230,7 +230,15 @@ abstract class AbstractController extends FormActionController
 
         foreach (array_keys($this->formTables) as $table) {
 
-            $action = strtolower($oldData[$table]['action']);
+            if (!is_array($oldData[$table]['action'])) {
+                $action = strtolower($oldData[$table]['action']);
+                $id = isset($oldData[$table]['id']) ? $oldData[$table]['id'] : null;
+            } else {
+                $action = array_keys($oldData[$table]['action'])[0];
+                $id = (isset($oldData[$table]['action'][$action])
+                    ? array_keys($oldData[$table]['action'][$action])[0]
+                    : null);
+            }
 
             if (empty($action)) {
                 continue;
@@ -239,23 +247,22 @@ abstract class AbstractController extends FormActionController
             if ($action == 'add') {
                 $this->setCaughtResponse($this->redirectToRoute(null, array('action' => $action), array(), true));
                 return;
-            } else {
+            }
 
-                if (!isset($data[$table]['id']) || empty($data[$table]['id'])) {
-                    $this->setCaughtResponse($this->crudActionMissingId());
-                    return;
-                }
-
-                $this->setCaughtResponse(
-                    $this->redirectToRoute(
-                        null,
-                        array('action' => $action, 'id' => $data[$table]['id']),
-                        array(),
-                        true
-                    )
-                );
+            if (empty($id)) {
+                $this->setCaughtResponse($this->crudActionMissingId());
                 return;
             }
+
+            $this->setCaughtResponse(
+                $this->redirectToRoute(
+                    null,
+                    array('action' => $action, 'id' => $id),
+                    array(),
+                    true
+                )
+            );
+            return;
         }
     }
 

@@ -26,7 +26,10 @@ return array(
         ),
         array(
             'title' => $translationPrefix . '.providerName',
-            'name' => 'fao'
+            'class' => 'action--tertiary',
+            'action' => 'edit',
+            'name' => 'fao',
+            'type' => 'Action'
         ),
         array(
             'title' => $translationPrefix . '.external',
