@@ -247,23 +247,22 @@ abstract class AbstractController extends FormActionController
             if ($action == 'add') {
                 $this->setCaughtResponse($this->redirectToRoute(null, array('action' => $action), array(), true));
                 return;
-            } else {
+            }
 
-                if (empty($id)) {
-                    $this->setCaughtResponse($this->crudActionMissingId());
-                    return;
-                }
-
-                $this->setCaughtResponse(
-                    $this->redirectToRoute(
-                        null,
-                        array('action' => $action, 'id' => $id),
-                        array(),
-                        true
-                    )
-                );
+            if (empty($id)) {
+                $this->setCaughtResponse($this->crudActionMissingId());
                 return;
             }
+
+            $this->setCaughtResponse(
+                $this->redirectToRoute(
+                    null,
+                    array('action' => $action, 'id' => $id),
+                    array(),
+                    true
+                )
+            );
+            return;
         }
     }
 
