@@ -203,6 +203,41 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
     }
 
     /**
+     * Test indexAction With Edit Link Crud action
+     */
+    public function testIndexActionWithEditLinkCrudAction()
+    {
+        $this->goodsOrPsv = 'goods';
+
+        $this->setUpAction(
+            'index', null, array(
+                'licence' => array(
+                    'safetyInsVehicles' => 'inspection_interval_vehicle.1',
+                    'safetyInsTrailers' => 'inspection_interval_trailer.1',
+                    'safetyInsVaries' => 'Y',
+                    'tachographIns' => 'tachograph_analyser.2'
+                ),
+                'table' => array(
+                    'rows' => 1,
+                    'action' => array('edit' => array('2' => 'String')),
+                    'id' => 2
+                ),
+                'application' => array(
+                    'id' => 1,
+                    'version' => 1,
+                    'safetyConfirmation' => '1'
+                )
+            )
+        );
+
+        $this->controller->setEnabledCsrf(false);
+
+        $response = $this->controller->indexAction();
+
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
      * Test addAction
      */
     public function testAddAction()

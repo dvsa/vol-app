@@ -360,10 +360,6 @@ class SafetyController extends VehicleSafetyController
             );
         }
 
-        $data['application']['safetyConfirmation'] = isset($data['application']['safetyConfirmation'][0])
-            ? $data['application']['safetyConfirmation'][0]
-            : 0;
-
         parent::save($data['licence'], 'Licence');
 
         parent::save($data['application'], 'Application');
