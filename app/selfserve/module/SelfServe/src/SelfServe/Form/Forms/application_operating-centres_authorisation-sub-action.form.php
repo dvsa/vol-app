@@ -39,14 +39,14 @@ return array(
                         'label' => $translationPrefix . '.data.numberOfTrailers',
                     ),
                     'sufficientParking' => array(
-                        'type' => 'checkbox',
+                        'type' => 'singlecheckbox',
                         'label' => $translationPrefix . '.data.sufficientParking',
                         'options' => array(
                             'must_be_checked' => true
                         )
                     ),
                     'permission' => array(
-                        'type' => 'checkbox',
+                        'type' => 'singlecheckbox',
                         'label' => $translationPrefix . '.data.permission',
                         'options' => array(
                             'must_be_checked' => true

@@ -39,6 +39,17 @@ class SummaryController extends ReviewDeclarationsController
     );
 
     /**
+     * Summary sections
+     *
+     * @var array
+     */
+    private $summarySections = array(
+        'TypeOfLicence/OperatorLocation',
+        'TypeOfLicence/OperatorType',
+        'TypeOfLicence/LicenceType'
+    );
+
+    /**
      * Render the section form
      *
      * @return Response
@@ -46,6 +57,37 @@ class SummaryController extends ReviewDeclarationsController
     public function indexAction()
     {
         return $this->renderSection();
+    }
+
+    /**
+     * Alter the form
+     *
+     * @param Form $form
+     * @return Form
+     */
+    protected function alterForm($form)
+    {
+        $options = array(
+            'isPsv' => $this->isPsv()
+        );
+
+        foreach ($this->summarySections as $summarySection) {
+            list($section, $subSection) = explode('/', $summarySection);
+
+            $formName = $this->formatFormName('Application', $section, $subSection);
+            $fieldsetName = $formName . '-1';
+
+            if (!$this->isSectionAccessible($section, $subSection)) {
+                $form->remove($fieldsetName);
+            } else {
+                $controller = '\SelfServe\Controller\Application\\' . $section . '\\' . $subSection . 'Controller';
+                if (method_exists($controller, 'makeFormAlterations')) {
+                    $newOptions = array_merge($options, array('fieldset' => $fieldsetName));
+                    $form = $controller::makeFormAlterations($form, $newOptions);
+                }
+            }
+        }
+        return $form;
     }
 
     /**

@@ -5,9 +5,9 @@
         foreach($sections as $section) {
 
             ?>
-        <li class="app-navigation__item <?php echo $section['status']; ?>">
+        <li class="app-navigation__item <?php echo $section['status'] . ($section['enabled'] ? '' : ' disabled'); ?>">
             <?php
-            if ($section['status'] != 'current') {
+            if ($section['status'] != 'current' && $section['enabled']) {
                 ?>
                 <a href="<?php echo $this->url($section['route'], array(), array(), true); ?>">
                 <?php
@@ -15,7 +15,7 @@
             ?>
             <span><?php echo $this->translate($section['title']); ?></span>
             <?php
-            if ( $section['status'] != "current" ) {
+            if ($section['status'] != "current" && $section['enabled']) {
                 ?>
                 </a>
                 <?php
