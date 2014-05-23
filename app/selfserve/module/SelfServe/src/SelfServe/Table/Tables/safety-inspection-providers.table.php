@@ -6,7 +6,7 @@ return array(
     'variables' => array(
         'title' => $translationPrefix . '.title',
         'empty_message' => $translationPrefix . '.empty_message',
-        'required_label' => $translationPrefix . '.required_label',
+        'required_label' => 'safety inspection provider',
         'within_form' => true
     ),
     'settings' => array(
