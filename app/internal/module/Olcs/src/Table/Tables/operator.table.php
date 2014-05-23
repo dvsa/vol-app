@@ -32,8 +32,12 @@ return array(
             'sort' => 'operatorName'
         ),
         array(
-            'title' => 'Company/Lic type',
-            'name' => 'licenceType'
+            'title' => 'Entity',
+            'name' => 'organisation_type'
+        ),
+        array(
+            'title' => 'Licence type',
+            'name' => 'licence_type'
         ),
         array(
             'title' => 'Last act CN/Date',
