@@ -75,17 +75,17 @@ class AddressesController extends YourBusinessController
             )
         ];
 
-        $establishmentAllowance = ['standard-national', 'standard-international'];
-        $registeredCompanyAllowance = ['org_type.lc', 'org_type.llp'];
+        $allowedLicTypes = ['standard-national', 'standard-international'];
+        $allowedOrgTypes = ['org_type.lc', 'org_type.llp'];
 
         $data = $this->makeRestCall('Application', 'GET', ['id' => $this->getIdentifier()], $bundle);
 
-        if (array_search($data['licence']['licenceType'], $establishmentAllowance) === false) {
+        if (array_search($data['licence']['licenceType'], $allowedLicTypes) === false) {
             $form->remove('establishment');
             $form->remove('establishment_address');
         }
 
-        if (array_search($data['licence']['organisation']['organisationType'], $registeredCompanyAllowance) === false) {
+        if (array_search($data['licence']['organisation']['organisationType'], $allowedOrgTypes) === false) {
             $form->remove('registered_office');
             $form->remove('registered_office_address');
         }
