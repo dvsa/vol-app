@@ -43,7 +43,7 @@ foreach ($forms as $form) {
 
         $fieldset['name'] = $form . '-' . $i;
 
-        $formConfig['application_review-declarations_summary']['fieldsets'] [] = $fieldset;
+        $formConfig['application_review-declarations_summary']['fieldsets'][] = $fieldset;
 
         $i++;
     }
