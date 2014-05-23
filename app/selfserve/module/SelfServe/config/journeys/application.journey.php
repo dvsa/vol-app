@@ -127,6 +127,7 @@ return array(
                 )
             ),
             'VehicleSafety' => array(
+                'enabled' => 'isVehicleSafetyEnabled',
                 'required' => array(
                     'TypeOfLicence'
                 ),
@@ -169,7 +170,13 @@ return array(
             ),
             'ReviewDeclarations' => array(
                 'required' => array(
-                    'TypeOfLicence'
+                    'TypeOfLicence',
+                    'YourBusiness',
+                    'TaxiPhv',
+                    'OperatingCentres',
+                    'TransportManagers',
+                    'VehicleSafety',
+                    'PreviousHistory'
                 ),
                 'restriction' => array(
                     'goods-standard',
@@ -186,7 +193,14 @@ return array(
             ),
             'PaymentSubmission' => array(
                 'required' => array(
-                    'TypeOfLicence'
+                    'TypeOfLicence',
+                    'YourBusiness',
+                    'TaxiPhv',
+                    'OperatingCentres',
+                    'TransportManagers',
+                    'VehicleSafety',
+                    'PreviousHistory',
+                    'ReviewDeclarations'
                 ),
                 'restriction' => array(
                     'goods-standard',
