@@ -922,8 +922,6 @@ abstract class AbstractJourneyController extends AbstractController
 
             if (is_callable(array($this, $details['enabled']))) {
                 $enabled = $this->$details['enabled']();
-            } elseif(is_callable($details['enabled'])) {
-                $enabled = call_user_func($details['enabled']);
             }
         }
 

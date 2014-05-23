@@ -48,6 +48,19 @@ class PlaceholderControllerTest extends AbstractApplicationControllerTestCase
     }
 
     /**
+     * Test indexAction with submit
+     */
+    public function testIndexActionWithSubmit()
+    {
+        $this->setUpAction('index', null, array('foo' => 'var'));
+
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->indexAction();
+
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
      * Mock the rest call
      *
      * @param string $service
