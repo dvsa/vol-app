@@ -52,9 +52,9 @@ return array(
         array(
             'title' => 'Name / defendant type',
             'formatter' => function ($data) {
-                $person = $data['personFirstname'] . ' ' . $data['personLastname'] . ' / ' . $data['defType'];
+                $person = $data['personFirstname'] . ' ' . $data['personLastname'];
                 $organisationName = $data['operatorName'];
-                return ($organisationName == '') ? $person : $organisationName;
+                return ($organisationName == '' ? $person : $organisationName) . ' / ' . $data['defType'];
             }
         ),
         array(

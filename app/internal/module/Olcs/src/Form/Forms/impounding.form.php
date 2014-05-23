@@ -42,7 +42,7 @@ return [
                     ],
                     'hearingTime' => [
                         'type' => 'timeSelect',
-                        'label' => 'Hearing time',
+                        'label' => 'Hearing time (hh:mm)',
                         'filters' => '\Common\Form\Elements\InputFilters\HearingTimeHasDate',
                     ],
                     'hearingLocation' => [
