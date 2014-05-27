@@ -721,7 +721,9 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
             )
         );
 
-        if ($service == 'ApplicationOperatingCentre' && $method == 'GET' && $bundle === $actionDataBundle && isset($data['id'])) {
+        if ($service == 'ApplicationOperatingCentre'
+            && $method == 'GET'
+            && $bundle === $actionDataBundle && isset($data['id'])) {
 
             return array(
                 'id' => 1,
