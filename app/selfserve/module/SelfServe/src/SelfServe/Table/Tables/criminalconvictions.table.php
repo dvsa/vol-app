@@ -2,7 +2,9 @@
 
 return array(
     'variables' => array(
-        'title' => 'selfserve-app-subSection-previous-history-criminal-conviction-tableHeader'
+        'title' => 'selfserve-app-subSection-previous-history-criminal-conviction-tableHeader',
+        'within_form' => true,
+        'empty_message' => 'selfserve-app-subSection-previous-history-criminal-conviction-tableEmptyMessage'
     ),
     'settings' => array(
         'crud' => array(
@@ -16,13 +18,21 @@ return array(
     'attributes' => array(),
     'columns' => array(
         array(
-            'title' => '',
             'width' => 'checkbox',
-            'format' => '{{[elements/radio]}}'
+            'type' => 'Selector'
         ),
         array(
             'title' => 'selfserve-app-subSection-previous-history-criminal-conviction-columnName',
             'name' => 'name',
+            'formatter' => function ($row) {
+                return '<a href="' . $this->generateUrl(
+                    array(
+                        'id' => $row['id'],
+                        'action' => 'edit'
+                    ),
+                    'Application/PreviousHistory/ConvictionsPenalties'
+                ) . '">' . $row['name'] . '</a>';
+            }
         ),
         array(
             'title' => 'selfserve-app-subSection-previous-history-criminal-conviction-columnDate',

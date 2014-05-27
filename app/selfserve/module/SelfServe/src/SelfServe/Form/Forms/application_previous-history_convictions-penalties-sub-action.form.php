@@ -1,8 +1,8 @@
 <?php
 
 return array(
-    'conviction' => array(
-        'name' => 'conviction',
+    'application_previous-history_convictions-penalties-sub-action' => array(
+        'name' => 'application_previous-history_convictions-penalties-sub-action',
         'attributes' => array(
             'method' => 'post',
         ),
@@ -16,7 +16,7 @@ return array(
                 'version' => array(
                     'type' => 'hidden',
                 ),
-                'title' => array(
+                'personTitle' => array(
                     'type' => 'select',
                     'label' => 'selfserve-app-subSection-previous-history-criminal-conviction-formTitle',
                     'value_options' => [
@@ -27,19 +27,18 @@ return array(
                     ],
                     'required' => true
                 ),
-                'first_name' => array(
+                'personFirstname' => array(
                     'type' => 'text',
                     'label' => 'selfserve-app-subSection-previous-history-criminal-conviction-formFirstName',
                     'class' => 'long'
                 ),
-                'last_name' => array(
+                'personLastname' => array(
                     'type' => 'text',
                     'label' => 'selfserve-app-subSection-previous-history-criminal-conviction-formLastName',
                     'class' => 'long'
                 ),
-                'doc' => [
+                'dateOfConviction' => [
                     'type' => 'dateSelect',
-                    'name' => 'doc',
                     'label' => 'selfserve-app-subSection-previous-history-criminal-conviction-formDateOfConviction',
                     'options' => [
                         'create_empty_option' => false,
@@ -49,17 +48,13 @@ return array(
                         'id' => 'dob'
                     ]
                 ],
-                'offence_details' => array(
-                    'label' => 'Offence',
+                'convictionNotes' => array(
+                    'label' => 'selfserve-app-subSection-previous-history-criminal-conviction-formOffenceDetails',
                     'type' => 'convictionTextarea',
                     'class' => 'long',
-                    'options' => [
-                        'label' => 'selfserve-app-subSection-previous-history-criminal-conviction-formOffenceDetails',
-                        'help-block' =>
-                         'selfserve-app-subSection-previous-history-criminal-conviction-formOffenceDetaisHelpBlock'
-                    ],
+                    'hint' => 'selfserve-app-subSection-previous-history-criminal-conviction-formOffenceDetaisHelpBlock'
                 ),
-                'name_of_court' => array(
+                'courtFpm' => array(
                     'label' => 'selfserve-app-subSection-previous-history-criminal-conviction-formNameOfCourt',
                     'type' => 'text',
                     'class' => 'long'
@@ -72,31 +67,7 @@ return array(
                 )
             ),
             array(
-                'name' => 'form-actions',
-                'class' => 'action-buttons',
-                'attributes' => array('class' => 'actions-container'),
-                'options' => array(),
-                'elements' => array(
-                    'submit' => array(
-                        'type' => 'submit',
-                        'filters' => '\Common\Form\Elements\InputFilters\ActionButton',
-                        'label' => 'selfserve-app-subSection-previous-history-criminal-conviction-formSave',
-                        'class' => 'action--primary large'
-                    ),
-                    'addAnother' => array(
-                        'type' => 'submit',
-                        'filters' => '\Common\Form\Elements\InputFilters\ActionButton',
-                        'label' =>
-                            'selfserve-app-subSection-previous-history-criminal-conviction-formSaveAndAddAnother',
-                        'class' => 'action--primary large'
-                    ),
-                    'cancel' => array(
-                        'type' => 'submit',
-                        'filters' => '\Common\Form\Elements\InputFilters\ActionButton',
-                        'label' => 'selfserve-app-subSection-previous-history-criminal-conviction-formCancel',
-                        'class' => 'action--secondary large'
-                    )
-                )
+                'type' => 'journey-crud-buttons',
             )
         )
     )

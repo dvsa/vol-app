@@ -241,7 +241,7 @@ abstract class AbstractController extends FormActionController
                 return;
             } else {
 
-                if (!isset($data[$table]['id']) || empty($data[$table]['id'])) {
+                if (!isset($oldData[$table]['id']) || empty($oldData[$table]['id'])) {
                     $this->setCaughtResponse($this->crudActionMissingId());
                     return;
                 }
@@ -249,7 +249,7 @@ abstract class AbstractController extends FormActionController
                 $this->setCaughtResponse(
                     $this->redirectToRoute(
                         null,
-                        array('action' => $action, 'id' => $data[$table]['id']),
+                        array('action' => $action, 'id' => $oldData[$table]['id']),
                         array(),
                         true
                     )
