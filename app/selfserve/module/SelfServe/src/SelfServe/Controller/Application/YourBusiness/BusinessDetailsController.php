@@ -159,9 +159,73 @@ class BusinessDetailsController extends YourBusinessController
 
     protected function getForm($type)
     {
-        return $this->processLookupCompany(
-            parent::getForm($type)
-        );
+        $form = parent::getForm($type);
+
+        $form = $this->processLookupCompany($form);
+
+        return $form;
+    }
+
+    public function generateFormWithData($name, $callback, $data = null, $tables = false)
+    {
+        $request = $this->getRequest();
+
+        $post = (array)$request->getPost();
+        if (isset($post['data']['tradingNames']['submit_add_trading_name'])) {
+
+            $this->setPersist(false);
+
+        }
+
+        $form = parent::generateFormWithData($name, $callback, $data, $tables);
+
+        $form = $this->processAddTradingName($form);
+
+        return $form;
+    }
+
+    protected function processAddTradingName($form)
+    {
+        $request = $this->getRequest();
+
+        if (!$request->isPost()) {
+            return $form;
+        }
+
+        $post = (array)$request->getPost()['data'];
+        if (isset($post['tradingNames']['submit_add_trading_name'])) {
+
+            $form->setValidationGroup(array('data' => ['tradingNames']));
+
+            $form->setData($request->getPost());
+            if ($form->isValid()) {
+
+                $tradingNames = $form->getData()['data']['tradingNames']['trading_name'];
+
+                //remove existing entries from collection and check for empty entries
+                foreach ($tradingNames as $key => $val) {
+                    $form->get('data')->get('tradingNames')->get('trading_name')->remove($key);
+
+                    if (strlen(trim($val['text'])) == 0) {
+                        unset($tradingNames[$key]);
+                    }
+                }
+                $tradingNames[] = array('text' => '');
+
+                //reset keys
+                $tradingNames = array_merge($tradingNames);
+
+                $data = array('data' => array(
+                    'tradingNames' => array('trading_name' => $tradingNames)
+                ));
+
+                $form->setData($data);
+            }
+
+        }
+
+        return $form;
+
     }
 
     protected function processLookupCompany($form)

@@ -207,6 +207,47 @@ class BusinessDetailsControllerTest extends AbstractApplicationControllerTestCas
     }
 
     /**
+     * @group current
+     */
+    public function testAddAnotherTradingName()
+    {
+        $this->setOrganisationType('lc');
+
+        $testTradingNames = [
+            ['text' => 'string one'],
+            ['text' => ''],
+            ['text' => 'string two']
+        ];
+
+        $expectedTradingNames = [
+            ['text' => 'string one'],
+            ['text' => 'string two'],
+            ['text' => ''],
+        ];
+
+        $post = [
+            'data' => [
+                'tradingNames' => [
+                    'trading_name' => $testTradingNames,
+                    'submit_add_trading_name' => '',
+                ]
+            ]
+        ];
+        $this->setUpAction('index', null, $post);
+
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->indexAction();
+
+        $isValid = $this->getFormFromResponse($response)->isValid($post);
+
+        $this->assertTrue($isValid);
+        $data = $this->getFormFromResponse($response)->getData()['data']['tradingNames']['trading_name'];
+
+        $this->assertEquals($expectedTradingNames, $data);
+    }
+
+
+    /**
      * Mock the rest call
      *
      * @param string $service

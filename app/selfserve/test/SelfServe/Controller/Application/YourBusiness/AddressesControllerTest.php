@@ -10,6 +10,7 @@ namespace SelfServe\Test\Controller\Application\YourBusiness;
 
 use SelfServe\Test\Controller\Application\AbstractApplicationControllerTestCase;
 use SelfServe\Controller\Application\ApplicationController;
+use SelfServe\Controller\Application\YourBusiness\AddressesController;
 
 /**
  * Addresses Controller Test
@@ -21,6 +22,9 @@ class AddressesControllerTest extends AbstractApplicationControllerTestCase
 
     protected $controllerName = '\SelfServe\Controller\Application\YourBusiness\AddressesController';
     protected $defaultRestResponse = array();
+
+    private $orgType = 'org_type.lc';
+    private $licType = 'standard-national';
 
     /**
      * Test back button
@@ -45,14 +49,59 @@ class AddressesControllerTest extends AbstractApplicationControllerTestCase
 
         // Make sure we get a view not a response
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+
+        $form = $this->getFormFromResponse($response);
+
+        $this->assertInstanceOf('Zend\Form\Fieldset', $form->get('registered_office'));
+        $this->assertInstanceOf('Zend\Form\Fieldset', $form->get('establishment'));
+    }
+
+    /**
+     * Test indexAction
+     */
+    public function testIndexWithRemovedFieldsetsAction()
+    {
+        $this->orgType = 'org_type.o';
+        $this->licType = 'restricted';
+
+        $this->setUpAction('index');
+
+        $response = $this->controller->indexAction();
+
+        // Make sure we get a view not a response
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+
+        $form = $this->getFormFromResponse($response);
+
+        $this->assertFalse($form->has('registered_office'));
+        $this->assertFalse($form->has('establishment'));
     }
 
     /**
      * Test indexAction with submit
+     *
      */
     public function testIndexActionWithSubmit()
     {
-        $this->setUpAction('index', null, array('foo' => 'bar'));
+        $address = [
+            'addressLine1' => 'addressLine1',
+            'postcode' => 'LS8 4DW',
+            'city' => 'Leeds',
+            'country' => 'country.GB',
+        ];
+
+        $post = [
+            'contact' => [
+                'phone-validator' => true,
+                'email' => 'test@mail.com',
+                'phone_business' => '123123123',
+            ],
+            'correspondence_address' => $address,
+            'registered_office_address' => $address,
+            'establishment_address' => $address,
+        ];
+
+        $this->setUpAction('index', null, $post);
 
         $this->controller->setEnabledCsrf(false);
         $response = $this->controller->indexAction();
@@ -70,17 +119,74 @@ class AddressesControllerTest extends AbstractApplicationControllerTestCase
      */
     protected function mockRestCalls($service, $method, $data = array(), $bundle = array())
     {
-        if ($service == 'Application' && $method == 'GET' && $bundle == ApplicationController::$licenceDataBundle) {
+        if ($service == 'Application' && $method == 'GET') {
 
-            return array(
-                'licence' => array(
+            $address = [
+                'id' => 1,
+                'version' => 1,
+                'addressLine1' => 'addressLine1',
+                'postcode' => 'LS8 4DW',
+                'city' => 'Leeds',
+                'country' => 'country.GB',
+            ];
+
+            return [
+                'licence' => [
                     'id' => 10,
                     'version' => 1,
                     'goodsOrPsv' => 'goods',
                     'niFlag' => 0,
-                    'licenceType' => 'standard-national'
-                )
-            );
+                    'licenceType' => $this->licType,
+                    'organisation' => [
+                        'id' => 1,
+                        'organisationType' => $this->orgType,
+                        'contactDetails' => [
+                            [
+                                'id' => 1,
+                                'version' => 1,
+                                'contactDetailsType' => 'registered_office',
+                                'address' => $address
+                            ]
+                        ]
+                    ],
+                    'contactDetails' => [
+                        [
+                            'id' => 1,
+                            'version' => 1,
+                            'contactDetailsType' => 'correspondence',
+                            'emailAddress' => 'dummy@mail.com',
+                            'address' => $address,
+                            'phoneContacts' => [
+                                [
+                                    'id' => 1,
+                                    'version' => 1,
+                                    'type' => 'business',
+                                    'number' => 22091986,
+                                ],
+                                [
+                                    'id' => 2,
+                                    'version' => 1,
+                                    'type' => 'home',
+                                    'number' => 22091986,
+                                ],
+                                [
+                                    'id' => 3,
+                                    'version' => 1,
+                                    'type' => 'mobile',
+                                    'number' => 22091986,
+                                ]
+                            ]
+                        ],
+                        [
+                            'id' => 1,
+                            'version' => 1,
+                            'contactDetailsType' => 'establishment',
+                            'emailAddress' => 'dummy@mail.com',
+                            'address' => $address,
+                        ]
+                    ]
+                ]
+            ];
         }
 
         if ($service == 'ApplicationCompletion' && $method == 'GET') {
