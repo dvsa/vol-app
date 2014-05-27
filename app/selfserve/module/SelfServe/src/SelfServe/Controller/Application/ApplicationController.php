@@ -58,6 +58,13 @@ class ApplicationController extends AbstractJourneyController
     protected $isPsv = null;
 
     /**
+     * Licence type
+     *
+     * @var string
+     */
+    protected $licenceType = null;
+
+    /**
      * Redirect to the first section
      *
      * @return Response
@@ -131,6 +138,22 @@ class ApplicationController extends AbstractJourneyController
     protected function isPsv()
     {
         return $this->isPsv;
+    }
+
+    /**
+     * Get the licence type
+     *
+     * @return string
+     */
+    protected function getLicenceType()
+    {
+        if (empty($this->licenceType)) {
+            $licenceData = $this->getLicenceData();
+
+            $this->licenceType = $licenceData['licenceType'];
+        }
+
+        return $this->licenceType;
     }
 
     /**

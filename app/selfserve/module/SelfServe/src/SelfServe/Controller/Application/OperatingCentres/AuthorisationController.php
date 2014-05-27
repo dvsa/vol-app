@@ -31,6 +31,10 @@ class AuthorisationController extends OperatingCentresController
         'properties' => array(
             'id',
             'version',
+            'totAuthSmallVehicles',
+            'totAuthMediumVehicles',
+            'totAuthLargeVehicles',
+            'totCommunityLicences',
             'totAuthVehicles',
             'totAuthTrailers'
         )
@@ -187,8 +191,17 @@ class AuthorisationController extends OperatingCentresController
      */
     protected function alterForm($form)
     {
+        if (!in_array($this->getLicenceType(), array('standard-national', 'standard-international'))) {
+            $form->get('data')->remove('totAuthLargeVehicles');
+        }
+
+        if (!in_array($this->getLicenceType(), array('standard-international', 'restricted'))) {
+            $form->get('data')->remove('totCommunityLicences');
+        }
+
         if ($this->isPsv()) {
-            $form->get('data')->remove('totAuthTrailers');
+
+            //$form->get('data')->remove('totAuthTrailers');
             $form->get('data')->remove('minTrailerAuth');
             $form->get('data')->remove('maxTrailerAuth');
         }
@@ -322,6 +335,7 @@ class AuthorisationController extends OperatingCentresController
         $data['data']['maxVehicleAuth'] = 0;
         $data['data']['minTrailerAuth'] = 0;
         $data['data']['maxTrailerAuth'] = 0;
+        $data['data']['licenceType'] = $this->getLicenceType();
 
         foreach ($results as $row) {
 

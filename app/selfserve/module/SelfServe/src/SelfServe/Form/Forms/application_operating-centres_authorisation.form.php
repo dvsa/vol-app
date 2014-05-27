@@ -16,16 +16,45 @@ return array(
                     'hint' => $translationPrefix . '.hint'
                 ),
                 'elements' => array(
-                    'totAuthVehicles' => array(
+                    'licenceType' => array(
+                        'type' => 'hidden'
+                    ),
+                    'totAuthSmallVehicles' => array(
+                        'type' => 'text',
+                        'label' => $translationPrefix . '.totAuthSmallVehicles',
+                        'class' => 'short',
+                        'filters' => '\Common\Form\Elements\InputFilters\OperatingCentreVehicleAuthorisations'
+                    ),
+                    'totAuthMediumVehicles' => array(
+                        'type' => 'text',
+                        'label' => $translationPrefix . '.totAuthMediumVehicles',
+                        'class' => 'short',
+                        'filters' => '\Common\Form\Elements\InputFilters\OperatingCentreVehicleAuthorisations'
+                    ),
+                    'totAuthLargeVehicles' => array(
+                        'type' => 'text',
+                        'label' => $translationPrefix . '.totAuthLargeVehicles',
+                        'class' => 'short',
+                        'filters' => '\Common\Form\Elements\InputFilters\OperatingCentreVehicleAuthorisations'
+                    ),
+                    'totCommunityLicences' => array(
+                        'type' => 'text',
+                        'label' => $translationPrefix . '.totCommunityLicences',
+                        'class' => 'short',
+                        'filters' => '\Common\Form\Elements\InputFilters\OperatingCentreCommunityLicences'
+                    ),
+                    /*'totAuthVehicles' => array(
                         'type' => 'text',
                         'label' => $translationPrefix . '.totAuthVehicles',
+                        'class' => 'short',
                         'filters' => '\Common\Form\Elements\InputFilters\OperatingCentreVehicleAuthorisations'
                     ),
                     'totAuthTrailers' => array(
                         'type' => 'text',
                         'label' => $translationPrefix . '.totAuthTrailers',
+                        'class' => 'short',
                         'filters' => '\Common\Form\Elements\InputFilters\OperatingCentreTrailerAuthorisations'
-                    ),
+                    ),*/
                     'id' => array(
                         'type' => 'hidden'
                     ),
