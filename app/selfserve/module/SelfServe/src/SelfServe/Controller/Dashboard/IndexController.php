@@ -89,19 +89,16 @@ class IndexController extends AbstractController
                 foreach ($licence['applications'] as $application) {
                     $newRow = $application;
                     $newRow['licenceNumber'] = $licence['licenceNumber'];
-                    $applications[] = $newRow;
+                    $applications[$newRow['id']] = $newRow;
                 }
             }
         }
 
-        $settings = array(
-            'sort' => 'createdOn',
-            'order' => 'DESC',
-            'limit' => 10,
-            'page' => 1
-        );
+        ksort($applications);
 
-        $applicationsTable = $this->buildTable('dashboard-applications', $applications, $settings);
+        $applications = array_reverse($applications);
+
+        $applicationsTable = $this->buildTable('dashboard-applications', $applications);
 
         $view = $this->getViewModel(['applicationsTable' => $applicationsTable]);
         $view->setTemplate('self-serve/dashboard/index');

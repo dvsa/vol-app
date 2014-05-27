@@ -4,9 +4,6 @@ $formConfig = array(
     'application_review-declarations_summary' => array(
         'name' => 'application_review-declarations_summary',
         'disabled' => true,
-        'attributes' => array(
-            'class' => 'read-only'
-        ),
         'fieldsets' => array(
             array(
                 'name' => 'title',
@@ -46,7 +43,7 @@ foreach ($forms as $form) {
 
         $fieldset['name'] = $form . '-' . $i;
 
-        $formConfig['application_review-declarations_summary']['fieldsets'] [] = $fieldset;
+        $formConfig['application_review-declarations_summary']['fieldsets'][] = $fieldset;
 
         $i++;
     }

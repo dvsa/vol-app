@@ -3,8 +3,24 @@
     <?php echo $this->translate('application.review-declarations.summary.new-window'); ?>
 </a>
 <?php
-
 if (isset($form)) {
+
     $form->prepare();
-    echo $this->form($form);
+    echo $this->form()->openTag($form);
+
+    ?>
+    <div class="read-only">
+        <?php
+        foreach ($form->getFieldsets() as $fieldset) {
+
+            if ($fieldset->getName() != 'form-actions') {
+                echo $this->formCollection($fieldset);
+            }
+        }
+        ?>
+    </div>
+    <?php
+
+    echo $this->formCollection($form->get('form-actions'));
+    echo $this->form()->closeTag();
 }

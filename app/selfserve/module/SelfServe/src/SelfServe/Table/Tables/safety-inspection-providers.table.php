@@ -6,6 +6,7 @@ return array(
     'variables' => array(
         'title' => $translationPrefix . '.title',
         'empty_message' => $translationPrefix . '.empty_message',
+        'required_label' => 'safety inspection provider',
         'within_form' => true
     ),
     'settings' => array(
@@ -26,7 +27,10 @@ return array(
         ),
         array(
             'title' => $translationPrefix . '.providerName',
-            'name' => 'fao'
+            'class' => 'action--tertiary',
+            'action' => 'edit',
+            'name' => 'fao',
+            'type' => 'Action'
         ),
         array(
             'title' => $translationPrefix . '.external',

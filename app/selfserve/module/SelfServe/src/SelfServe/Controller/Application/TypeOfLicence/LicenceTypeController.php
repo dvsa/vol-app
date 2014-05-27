@@ -39,9 +39,23 @@ class LicenceTypeController extends TypeOfLicenceController
      */
     protected function alterForm($form)
     {
-        if (!$this->isPsv()) {
+        return self::makeFormAlterations($form, array('isPsv' => $this->isPsv(), 'fieldset' => 'data'));
+    }
 
-            $licenceTypeElement = $form->get('data')->get('licenceType');
+    /**
+     * Make form alterations
+     *
+     * This method enables the summary to apply the same form alterations
+     *
+     * @param Form $form
+     * @param array $options
+     * @return $form
+     */
+    public static function makeFormAlterations($form, $options = array())
+    {
+        if (!$options['isPsv']) {
+
+            $licenceTypeElement = $form->get($options['fieldset'])->get('licenceType');
 
             $options = $licenceTypeElement->getValueOptions();
 

@@ -48,6 +48,33 @@ class SummaryControllerTest extends AbstractApplicationControllerTestCase
     }
 
     /**
+     * Test indexAction with form alterations
+     */
+    public function testIndexActionWithFormAlterations()
+    {
+        $this->setUpAction('index');
+
+        $this->setRestResponse(
+            'Application',
+            'GET',
+            array(
+                'licence' => array(
+                    'id' => 10,
+                    'version' => 1,
+                    'goodsOrPsv' => 'goods',
+                    'niFlag' => 1,
+                    'licenceType' => 'standard-national'
+                )
+            )
+        );
+
+        $response = $this->controller->indexAction();
+
+        // Make sure we get a view not a response
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+    }
+
+    /**
      * Test simpleAction
      */
     public function testSimpleAction()

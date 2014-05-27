@@ -41,9 +41,7 @@ class FinancialHistoryController extends PreviousHistoryController
     protected $dataMap = array(
         'main' => array(
             'mapFrom' => array(
-                'data',
-                'insolvencyDetails',
-                'insolvencyConfirmation'
+                'data'
             )
         )
     );
@@ -65,14 +63,6 @@ class FinancialHistoryController extends PreviousHistoryController
      */
     protected function processLoad($oldData)
     {
-        $data['data'] = $oldData;
-
-        unset($data['data']['insolvencyDetails']);
-        unset($data['data']['insolvencyConfirmation']);
-
-        $data['insolvencyDetails']['insolvencyDetails'] = $oldData['insolvencyDetails'];
-        $data['insolvencyConfirmation']['insolvencyConfirmation'] = $oldData['insolvencyConfirmation'];
-
-        return $data;
+        return array('data' => $oldData);
     }
 }

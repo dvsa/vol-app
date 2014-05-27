@@ -204,10 +204,13 @@ class AuthorisationController extends OperatingCentresController
     {
         if ($this->isPsv()) {
             $form->get('data')->remove('numberOfTrailers');
+
             $label = $form->get('data')->getLabel();
             $form->get('data')->setLabel($label .= '-psv');
+
             $label = $form->get('data')->get('sufficientParking')->getLabel();
             $form->get('data')->get('sufficientParking')->setLabel($label .= '-psv');
+
             $label = $form->get('data')->get('permission')->getLabel();
             $form->get('data')->get('permission')->setLabel($label .= '-psv');
         }
