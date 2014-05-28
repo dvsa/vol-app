@@ -6,7 +6,7 @@
  * @author adminmwc
  */
 
-namespace OlcsTest\Controller;
+/* namespace OlcsTest\Controller;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
@@ -27,4 +27,4 @@ class OlcsIndexControllerTest  extends AbstractHttpControllerTestCase
         $this->assertControllerClass('IndexController');
         $this->assertMatchedRouteName('dashboard');
     }
-}
+} */
