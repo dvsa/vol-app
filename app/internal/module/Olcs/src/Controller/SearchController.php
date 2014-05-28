@@ -103,6 +103,15 @@ class SearchController extends FormActionController
         $data = $this->params()->fromRoute();
         $results = $this->makeRestCall('OperatorSearch', 'GET', $data);
 
+        $config = $this->getServiceLocator()->get('Config');
+        $static = $config['static-list-data'];
+
+        foreach ($results['Results'] as $key => $result) {
+            if (isset($static['business_types'][$result['organisation_type']])) {
+                $results['Results'][$key]['organisation_type'] = $static['business_types'][$result['organisation_type']];
+            }
+        }
+
         $data['url'] = $this->url();
         $table = $this->getServiceLocator()->get('Table')->buildTable('operator', $results, $data);
 
@@ -110,5 +119,4 @@ class SearchController extends FormActionController
         $view->setTemplate('results-operator');
         return $view;
     }
-
 }

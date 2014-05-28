@@ -108,6 +108,10 @@ trait SubmissionSectionTrait
     public function convictionHistory(array $data = array())
     {
         $dataToReturnArray = array();
+        $config = $this->getServiceLocator()->get('Config');
+
+        $staticDefType = $config['static-list-data']['defendant_types'];
+
         foreach ($data['convictions'] as $conviction) {
             if ($conviction['category']['id'] != 168) {
                 $thisConviction['description'] = $conviction['category']['description'];
@@ -121,7 +125,9 @@ trait SubmissionSectionTrait
                 $thisConviction['name'] = $conviction['personFirstname'] . ' ' . $conviction['personLastname'];
             }
 
-            $thisConviction['name'] .= ' / ' . $conviction['defType'];
+            if (isset($staticDefType[$conviction['defType']])) {
+                $thisConviction['name'] .= ' / ' . $staticDefType[$conviction['defType']];
+            }
 
             $thisConviction['dateOfOffence'] = $conviction['dateOfOffence'];
             $thisConviction['dateOfConviction'] = $conviction['dateOfConviction'];

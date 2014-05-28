@@ -91,7 +91,7 @@ return [
                         'type' => 'text',
                         'label' => 'Penalty',
                         'class' => 'medium',
-                        'filters' => '\Common\Form\Elements\InputFilters\TextMax255Required',
+                        'filters' => '\Common\Form\Elements\InputFilters\TextMax255RequiredNoMin',
                     ],
                     'costs' => [
                         'type' => 'text',
