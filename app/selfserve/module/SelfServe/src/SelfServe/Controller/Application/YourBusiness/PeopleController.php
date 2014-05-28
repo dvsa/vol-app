@@ -43,7 +43,7 @@ class PeopleController extends YourBusinessController
      * @var string
      */
     protected $actionService = 'Person';
-    
+
     /**
      * Render the section form
      *
@@ -96,13 +96,11 @@ class PeopleController extends YourBusinessController
                 $finalData[$lastElemntIndex]['hasOtherNames'] = 'Yes';
                 unset($finalData[$lastElemntIndex]['otherNames']);
             }
-            
-            
         }
 
         return $finalData;
     }
-    
+
     /**
      * Add customisation to the table
      *
@@ -115,7 +113,7 @@ class PeopleController extends YourBusinessController
         $orgType = $this->getOrganisationData(array('organisationType'));
         $translate = $this->getServiceLocator()->get('viewhelpermanager')->get('translate');
         $guidance = $form->get('guidance')->get('guidance');
-        
+
         switch ($orgType['organisationType']) {
             case 'org_type.lc':
                 $table->setVariable('title', $translate('selfserve-app-subSection-your-business-people-tableHeaderDirectors'));
@@ -140,10 +138,10 @@ class PeopleController extends YourBusinessController
         if ($orgType['organisationType'] != 'org_type.o') {
             $table->removeColumn('position');
         }
-        
+
         return $form;
     }
-    
+
     /**
      * Customize form
      *
@@ -157,7 +155,7 @@ class PeopleController extends YourBusinessController
         }
         return $form;
     }
-    
+
     /**
      * Add person
      */
@@ -183,7 +181,7 @@ class PeopleController extends YourBusinessController
     {
         return $this->delete();
     }
-    
+
     /**
      * Process action load data
      *
@@ -197,7 +195,7 @@ class PeopleController extends YourBusinessController
 
         return $returnData;
     }
-    
+
     /**
      * Save method
      *
@@ -207,7 +205,7 @@ class PeopleController extends YourBusinessController
     protected function save($validData, $service = null)
     {
     }
-    
+
     /**
      * Action save
      *
@@ -220,5 +218,4 @@ class PeopleController extends YourBusinessController
         $data['application'] = $applicationId;
         parent::actionSave($data, 'Person');
     }
-    
 }

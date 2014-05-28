@@ -24,7 +24,7 @@ return array(
                         )
                     ),
                 )
-            ),    
+            ),
             array(
                 'type' => 'journey-buttons'
             )
