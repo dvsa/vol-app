@@ -22,6 +22,8 @@ class ConvictionsPenaltiesControllerTest extends AbstractApplicationControllerTe
 
     protected $defaultRestResponse = array();
 
+    protected $previousConviction;
+
     /**
      * Test back button
      */
@@ -41,6 +43,37 @@ class ConvictionsPenaltiesControllerTest extends AbstractApplicationControllerTe
     public function testIndexAction()
     {
         $this->setUpAction('index');
+        $this->previousConviction = true;
+
+        $response = $this->controller->indexAction();
+
+        // Make sure we get a view not a response
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+
+    }
+
+    /**
+     * Test indexAction with no conviction flag
+     */
+    public function testIndexActionWithNoConvictionFlag()
+    {
+        $this->setUpAction('index');
+        $this->previousConviction = false;
+
+        $response = $this->controller->indexAction();
+
+        // Make sure we get a view not a response
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+
+    }
+
+    /**
+     * Test indexAction with undefined conviction flag
+     */
+    public function testIndexActionWithUndefinedConvictionFlag()
+    {
+        $this->setUpAction('index');
+        $this->previousConviction = null;
 
         $response = $this->controller->indexAction();
 
@@ -122,7 +155,6 @@ class ConvictionsPenaltiesControllerTest extends AbstractApplicationControllerTe
 
     /**
      * Test indexAction With Edit Crud Action
-     * @group acurrent
      */
     public function testIndexActionWithEditCrudAction()
     {
@@ -460,7 +492,7 @@ class ConvictionsPenaltiesControllerTest extends AbstractApplicationControllerTe
             return array(
                 'id' => 1,
                 'version' => 1,
-                'prevConviction' => true,
+                'prevConviction' => $this->previousConviction,
                 'convictionsConfirmation' => true
             );
         }
