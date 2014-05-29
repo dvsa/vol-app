@@ -21,9 +21,11 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
 
     protected $controllerName = '\SelfServe\Controller\Application\YourBusiness\PeopleController';
     protected $defaultRestResponse = array();
+    protected $organisation = 'org_type.lc';
 
     /**
      * Test back button
+     * @group acurrent
      */
     public function testBackButton()
     {
@@ -36,19 +38,22 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
 
     /**
      * Test indexAction
+     * @group acurrent
      */
     public function testIndexAction()
     {
         $this->setUpAction('index');
 
         $response = $this->controller->indexAction();
-
+//print_r($response);
+//die();
         // Make sure we get a view not a response
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
     }
 
     /**
      * Test indexAction with submit
+     * @group acurrent
      */
     public function testIndexActionWithSubmit()
     {
@@ -70,19 +75,17 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
      */
     protected function mockRestCalls($service, $method, $data = array(), $bundle = array())
     {
-        if ($service == 'Application' && $method == 'GET' && $bundle == ApplicationController::$licenceDataBundle) {
+        if ($service == 'Application' && $method == 'GET') {
 
-            return array(
-                'licence' => array(
-                    'id' => 10,
-                    'version' => 1,
-                    'goodsOrPsv' => 'goods',
-                    'niFlag' => 0,
-                    'licenceType' => 'standard-national'
-                )
-            );
+            $orgTypeBundle = array('organisationType');
+            if ($bundle == $orgTypeBundle) {
+                return array(
+                    'licence' => array(
+                        'organisation' => $this->organisation,
+                    )
+                );
+            }
         }
-
         if ($service == 'ApplicationCompletion' && $method == 'GET') {
 
             return array(
@@ -122,5 +125,39 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
                 )
             );
         }
+        
+        $personDataBundle = array(
+            'properties' => array(
+                'id',
+                'title',
+                'firstName',
+                'surname',
+                'dateOfBirth',
+                'otherNames',
+                'position'
+            ),
+        );
+        if ($service == 'Person' && $method = 'GET' && $bundle == $personDataBundle) {
+            return array(
+                'Count'  => 1,
+                'Results' => array(
+                    array(
+                        'id' => 1,
+                        'title' => 'Mr',
+                        'firstName' => 'A',
+                        'surname' => 'P',
+                        'dateOfBirth' => '20014-01-01',
+                        'otherNames' => 'other names',
+                        'position' => 'position'
+                    )
+                )
+            );
+        }
+        
+    }
+    
+    public function setUpOrganisation()
+    {
+        
     }
 }
