@@ -1069,10 +1069,13 @@ abstract class AbstractJourneyController extends AbstractController
                 }
 
                 $form = $this->generateTableFormWithData(
-                    $this->getFormName(), array(
-                    'success' => $this->getFormCallback(),
-                    'crud_action' => $this->getFormCallback() . 'Crud'
-                    ), $data, $tableConfigs
+                    $this->getFormName(),
+                    array(
+                        'success' => $this->getFormCallback(),
+                        'crud_action' => $this->getFormCallback() . 'Crud'
+                    ),
+                    $data,
+                    $tableConfigs
                 );
             }
 
@@ -1099,8 +1102,16 @@ abstract class AbstractJourneyController extends AbstractController
             $form->get('form-actions')->remove('back');
         }
 
-        if ($this->isAction() && $this->getActionName() == 'edit') {
-            $form->get('form-actions')->remove('addAnother');
+        if ($this->isAction()) {
+            $action = $this->getActionName();
+
+            if (strstr($action, '-')) {
+                list($prefix, $action) = explode('-', $action);
+            }
+
+            if ($action == 'edit') {
+                $form->get('form-actions')->remove('addAnother');
+            }
         }
 
         $alterMethod = $this->getAlterFormMethod();
@@ -1132,6 +1143,10 @@ abstract class AbstractJourneyController extends AbstractController
         if ($this->isAction()) {
 
             $action = $this->getActionName();
+
+            if (strstr($action, '-')) {
+                list($prefix, $action) = explode('-', $action);
+            }
 
             if ($action === 'edit') {
 
