@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit bootstrap="Bootstrap.php" colors="true" syntaxCheck="true" strict="true">
+    <testsuites>
+        <testsuite name="OLCS Selfserve Application">
+            <directory>./</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="false">
+            <directory suffix=".php">../module/SelfServe/src</directory>
+            <directory suffix=".php">../../olcs-common/Common/src</directory>
+            <exclude>
+                <directory>../module/SelfServe/src/SelfServe/Table/</directory>
+                <directory>../module/SelfServe/src/SelfServe/Form/</directory>
+                <directory>../../olcs-common/Common/src/Common/Form/Forms/</directory>
+                <directory>../../olcs-common/Common/src/Common/Form/Fieldsets/*.fieldset.php</directory>
+                <directory>../../olcs-common/Common/src/Common/Form/Elements/*.element.php</directory>
+                <directory>../../olcs-common/Common/src/Common/Table/Tables/</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+</phpunit>
