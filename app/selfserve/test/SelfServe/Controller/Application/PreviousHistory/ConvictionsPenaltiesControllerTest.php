@@ -22,6 +22,8 @@ class ConvictionsPenaltiesControllerTest extends AbstractApplicationControllerTe
 
     protected $defaultRestResponse = array();
 
+    protected $previousConviction;
+
     /**
      * Test back button
      */
@@ -32,6 +34,7 @@ class ConvictionsPenaltiesControllerTest extends AbstractApplicationControllerTe
         $response = $this->controller->indexAction();
 
         $this->assertInstanceOf('Zend\Http\Response', $response);
+
     }
 
     /**
@@ -40,11 +43,43 @@ class ConvictionsPenaltiesControllerTest extends AbstractApplicationControllerTe
     public function testIndexAction()
     {
         $this->setUpAction('index');
+        $this->previousConviction = true;
 
         $response = $this->controller->indexAction();
 
         // Make sure we get a view not a response
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+
+    }
+
+    /**
+     * Test indexAction with no conviction flag
+     */
+    public function testIndexActionWithNoConvictionFlag()
+    {
+        $this->setUpAction('index');
+        $this->previousConviction = false;
+
+        $response = $this->controller->indexAction();
+
+        // Make sure we get a view not a response
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+
+    }
+
+    /**
+     * Test indexAction with undefined conviction flag
+     */
+    public function testIndexActionWithUndefinedConvictionFlag()
+    {
+        $this->setUpAction('index');
+        $this->previousConviction = null;
+
+        $response = $this->controller->indexAction();
+
+        // Make sure we get a view not a response
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+
     }
 
     /**
@@ -55,9 +90,308 @@ class ConvictionsPenaltiesControllerTest extends AbstractApplicationControllerTe
         $this->setUpAction('index', null, array('foo' => 'bar'));
 
         $this->controller->setEnabledCsrf(false);
+
         $response = $this->controller->indexAction();
 
         // Make sure we get a view not a response
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+    }
+
+    /**
+     * Test indexAction With Add Crud Action
+     */
+    public function testIndexActionWithAddCrudAction()
+    {
+        $this->setUpAction(
+            'index', null, array(
+                'data' => array(
+                    'prevConviction' => 'Y',
+                    'id' => 1,
+                    'version' => 1
+                ),
+                'table' => array(
+                    'rows' => 1,
+                    'action' => 'Add'
+                ),
+                'convictionsConfirmation' => array(
+                    'convictionsConfirmation' => array(1),
+                )
+            )
+        );
+        $this->controller->setEnabledCsrf(false);
+
+        $response = $this->controller->indexAction();
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
+     * Test indexAction With Edit Crud Action without id
+     */
+    public function testIndexActionWithEditCrudActionWithoutId()
+    {
+        $this->setUpAction(
+            'index', null, array(
+                'data' => array(
+                    'prevConviction' => 'Y',
+                    'id' => 1,
+                    'version' => 1
+                ),
+                'table' => array(
+                    'rows' => 1,
+                    'action' => 'Edit'
+                ),
+                'convictionsConfirmation' => array(
+                    'convictionsConfirmation' => array(1),
+                )
+            )
+        );
+
+        $this->controller->setEnabledCsrf(false);
+
+        $response = $this->controller->indexAction();
+
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
+     * Test indexAction With Edit Crud Action
+     */
+    public function testIndexActionWithEditCrudAction()
+    {
+        $this->setUpAction(
+            'index', null, array(
+                'data' => array(
+                    'prevConviction' => 'Y',
+                    'id' => 1,
+                    'version' => 1
+                ),
+                'table' => array(
+                    'rows' => 1,
+                    'action' => 'Edit',
+                    'id' => 1
+                ),
+                'convictionsConfirmation' => array(
+                    'convictionsConfirmation' => array(1),
+                )
+            )
+        );
+
+        $this->controller->setEnabledCsrf(false);
+
+        $response = $this->controller->indexAction();
+
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
+     * Test indexAction With Edit Link Crud action
+     */
+    public function testIndexActionWithEditLinkCrudAction()
+    {
+        $this->setUpAction(
+            'index', null, array(
+                'data' => array(
+                    'prevConviction' => 'Y',
+                    'id' => 1,
+                    'version' => 1
+                ),
+                'table' => array(
+                    'rows' => 1,
+                    'action' => array('Edit' => array('2' => 'String')),
+                    'id' => 1
+                ),
+                'convictionsConfirmation' => array(
+                    'convictionsConfirmation' => array(1),
+                )
+            )
+        );
+
+        $this->controller->setEnabledCsrf(false);
+
+        $response = $this->controller->indexAction();
+
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
+     * Test editAction
+     */
+    public function testEditAction()
+    {
+        $this->setUpAction('edit', 1);
+
+        $response = $this->controller->editAction();
+
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+    }
+
+    /**
+     * Test editAction with submit
+     */
+    public function testEditActionWithSubmit()
+    {
+        $this->setUpAction(
+            'edit', 1, array(
+                'data' => array(
+                    'id' => 1,
+                    'version' => 1,
+                    'personTitle' => 'Mr',
+                    'personFirstname' => 'Alex',
+                    'personLastname' => 'P',
+                    'dateOfConviction' => array(
+                        'month' => 1,
+                        'day'   => 1,
+                        'year'  => 2014
+                     ),
+                    'convictionNotes' => 'No MOT',
+                    'courtFpm' => 'Leeds court',
+                    'penalty' => '100£'
+                ),
+            )
+        );
+
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->editAction();
+
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
+     * Test editAction with cancel
+     */
+    public function testEditActionWithCancel()
+    {
+        $post = array(
+            'form-actions' => array(
+                'cancel' => 'Cancel'
+            )
+        );
+
+        $this->setUpAction('edit', 1, $post);
+
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->editAction();
+
+        $this->assertInstanceOf('\Zend\Http\Response', $response);
+    }
+
+
+    /**
+     * Test deleteAction
+     */
+    public function testDeleteAction()
+    {
+        $this->setUpAction('delete', 1);
+
+        $response = $this->controller->deleteAction();
+
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
+     * Test deleteAction without id
+     */
+    public function testDeleteActionWithoutId()
+    {
+        $this->setUpAction('delete');
+
+        $response = $this->controller->deleteAction();
+
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+    }
+
+    /**
+     * Test addAction
+     */
+    public function testAddAction()
+    {
+        $this->setUpAction('add');
+
+        $response = $this->controller->addAction();
+
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+    }
+
+    /**
+     * Test addAction with cancel
+     */
+    public function testAddActionWithCancel()
+    {
+        $post = array(
+            'form-actions' => array(
+                'cancel' => 'Cancel'
+            )
+        );
+
+        $this->setUpAction('add', null, $post);
+
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->addAction();
+
+        $this->assertInstanceOf('\Zend\Http\Response', $response);
+    }
+
+    /**
+     * Test addAction with submit
+     */
+    public function testAddActionWithSubmit()
+    {
+        $this->setUpAction(
+            'add', null, array(
+                'data' => array(
+                    'id' => 1,
+                    'version' => 1,
+                    'personTitle' => 'Mr',
+                    'personFirstname' => 'Alex',
+                    'personLastname' => 'P',
+                    'dateOfConviction' => array(
+                        'month' => 1,
+                        'day'   => 1,
+                        'year'  => 2014
+                     ),
+                    'convictionNotes' => 'No MOT',
+                    'courtFpm' => 'Leeds court',
+                    'penalty' => '100£'
+                ),
+            )
+        );
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->addAction();
+
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
+     * Test addAction with submit with add another
+     */
+    public function testAddActionWithSubmitWithAddAnother()
+    {
+        $this->setUpAction(
+            'add', null, array(
+                'data' => array(
+                    'id' => 1,
+                    'version' => 1,
+                    'personTitle' => 'Mr',
+                    'personFirstname' => 'Alex',
+                    'personLastname' => 'P',
+                    'dateOfConviction' => array(
+                        'month' => 1,
+                        'day'   => 1,
+                        'year'  => 2014
+                     ),
+                    'convictionNotes' => 'No MOT',
+                    'courtFpm' => 'Leeds court',
+                    'penalty' => '100£'
+                ),
+                'form-actions' => array(
+                    'addAnother' => 'Add another'
+                )
+            )
+        );
+
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->addAction();
+
         $this->assertInstanceOf('Zend\Http\Response', $response);
     }
 
@@ -121,6 +455,45 @@ class ConvictionsPenaltiesControllerTest extends AbstractApplicationControllerTe
                         'lastSection' => ''
                     )
                 )
+            );
+        }
+
+        $convictionDataBundle = array(
+            'properties' => array(
+                'id',
+                'personTitle',
+                'personFirstname',
+                'personLastname',
+                'dateOfConviction',
+                'convictionNotes',
+                'courtFpm',
+                'penalty'
+            ),
+        );
+        if ($service == 'Conviction' && $method = 'GET' && $bundle == $convictionDataBundle) {
+            return array(
+                'Count'  => 1,
+                'Results' => array(
+                    array(
+                        'id' => 1,
+                        'personTitle' => 'Mr',
+                        'personFirstname' => 'Alex',
+                        'personLastname' => 'P',
+                        'dateOfConviction' => '01/01/2014',
+                        'convictionNotes' => 'No MOT',
+                        'courtFpm' => 'Leeds court',
+                        'penalty' => '100£'
+                    )
+                )
+            );
+        }
+
+        if ($service == 'Application' && $method = 'GET') {
+            return array(
+                'id' => 1,
+                'version' => 1,
+                'prevConviction' => $this->previousConviction,
+                'convictionsConfirmation' => true
             );
         }
     }
