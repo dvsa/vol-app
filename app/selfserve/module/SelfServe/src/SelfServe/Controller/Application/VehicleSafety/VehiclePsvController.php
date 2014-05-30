@@ -232,6 +232,10 @@ class VehiclePsvController extends VehicleSafetyController
         $isPost = $this->getRequest()->isPost();
         $post = $this->getRequest()->getPost();
 
+        $isCrudPressed = (isset($post['large']['action']) && !empty($post['large']['action']))
+            || (isset($post['medium']['action']) && !empty($post['medium']['action']))
+            || (isset($post['small']['action']) && !empty($post['small']['action']));
+
         foreach (array_keys($this->formTables) as $table) {
 
             $ucTable = ucwords($table);
@@ -240,7 +244,7 @@ class VehiclePsvController extends VehicleSafetyController
 
                 $form->remove($table);
 
-            } elseif ($isPost && isset($post['data']['enterReg']) && $post['data']['enterReg'] == 'Y') {
+            } elseif (!$isCrudPressed && $isPost && isset($post['data']['enterReg']) && $post['data']['enterReg'] == 'Y') {
 
                 $input = $form->getInputFilter()->get($table)->get('table');
                 $input->setRequired(true)->setAllowEmpty(false)->setContinueIfEmpty(true);
