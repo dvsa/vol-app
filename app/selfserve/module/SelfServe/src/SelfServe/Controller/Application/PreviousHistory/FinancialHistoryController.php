@@ -30,6 +30,16 @@ class FinancialHistoryController extends PreviousHistoryController
             'disqualified',
             'insolvencyDetails',
             'insolvencyConfirmation'
+        ),
+        'children' => array(
+            'documents' => array(
+                'properties' => array(
+                    'id',
+                    'fileName',
+                    'identifier',
+                    'size'
+                )
+            )
         )
     );
 
@@ -54,6 +64,62 @@ class FinancialHistoryController extends PreviousHistoryController
     public function indexAction()
     {
         return $this->renderSection();
+    }
+
+    /**
+     * Alter the form
+     *
+     * @param Form $form
+     * @return Form
+     */
+    protected function alterForm($form)
+    {
+        $this->processFileUploads(array('data' => array('file' => 'processFinancialFileUpload')), $form);
+
+        $fileList = $form->get('data')->get('file')->get('list');
+
+        $fileData = $this->load($this->getIdentifier())['documents'];
+
+        $fileList->setFiles($fileData, $this->url());
+
+        $this->processFileDeletions(array('data' => array('file' => 'deleteFile')), $form);
+
+        return $form;
+    }
+
+    /**
+     * Handle the file upload
+     *
+     * @param array $file
+     */
+    protected function processFinancialFileUpload($file)
+    {
+        $uploader = $this->getServiceLocator()->get('FileUploader')->getUploader();
+
+        try {
+            $uploader->setFile($file);
+            $uploader->upload();
+            $file = $uploader->getFile();
+        } catch (\Exception $ex) {
+            die($ex->getMessage());
+        }
+
+        $fileData = $file->toArray();
+
+        $licence = $this->getLicenceData();
+
+        $fileData['fileName'] = $fileData['name'];
+        $fileData['description'] = 'Insolvency document';
+        $fileData['documentCategory'] = 1;
+        $fileData['documentSubCategory'] = 1;
+        $fileData['application'] = $this->getIdentifier();
+        $fileData['licence'] = $licence['id'];
+
+        unset($fileData['path']);
+        unset($fileData['type']);
+        unset($fileData['name']);
+
+        $this->makeRestCall('Document', 'POST', $fileData);
     }
 
     /**
