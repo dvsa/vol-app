@@ -110,6 +110,40 @@ class AddressesControllerTest extends AbstractApplicationControllerTestCase
     }
 
     /**
+     * Test indexAction with submit
+     *
+     */
+    public function testIndexActionWithSubmitWithDeletedPhone()
+    {
+        $address = [
+            'addressLine1' => 'addressLine1',
+            'postcode' => 'LS8 4DW',
+            'city' => 'Leeds',
+            'country' => 'country.GB',
+        ];
+
+        $post = [
+            'contact' => [
+                'phone-validator' => true,
+                'email' => 'test@mail.com',
+                'phone_business' => '123123123',
+                'phone_home' => '',
+                'phone_home_id' => '1',
+            ],
+            'correspondence_address' => $address,
+            'registered_office_address' => $address,
+            'establishment_address' => $address,
+        ];
+
+        $this->setUpAction('index', null, $post);
+
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->indexAction();
+
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
      * Mock the rest call
      *
      * @param string $service

@@ -27,6 +27,13 @@ abstract class AbstractController extends FormActionController
     protected $caughtResponse = null;
 
     /**
+     * Holds the loaded data
+     *
+     * @var array
+     */
+    protected $loadedData;
+
+    /**
      * Holds the layout
      *
      * @var string
@@ -240,29 +247,36 @@ abstract class AbstractController extends FormActionController
                     : null);
             }
 
-            if (empty($action)) {
-                continue;
-            }
+            if (!empty($action)) {
 
-            if ($action == 'add') {
-                $this->setCaughtResponse($this->redirectToRoute(null, array('action' => $action), array(), true));
+                $routeAction = $action;
+
+                if ($table !== 'table') {
+                    $routeAction = $table . '-' . $action;
+                }
+
+                if ($action == 'add') {
+                    $this->setCaughtResponse(
+                        $this->redirectToRoute(null, array('action' => $routeAction), array(), true)
+                    );
+                    return;
+                }
+
+                if (empty($id)) {
+                    $this->setCaughtResponse($this->crudActionMissingId());
+                    return;
+                }
+
+                $this->setCaughtResponse(
+                    $this->redirectToRoute(
+                        null,
+                        array('action' => $routeAction, 'id' => $id),
+                        array(),
+                        true
+                    )
+                );
                 return;
             }
-
-            if (empty($id)) {
-                $this->setCaughtResponse($this->crudActionMissingId());
-                return;
-            }
-
-            $this->setCaughtResponse(
-                $this->redirectToRoute(
-                    null,
-                    array('action' => $action, 'id' => $id),
-                    array(),
-                    true
-                )
-            );
-            return;
         }
     }
 
@@ -287,16 +301,20 @@ abstract class AbstractController extends FormActionController
      */
     protected function load($id)
     {
-        $service = $this->getService();
+        if (empty($this->loadedData)) {
+            $service = $this->getService();
 
-        $result = $this->makeRestCall($service, 'GET', array('id' => $id), $this->getDataBundle());
+            $result = $this->makeRestCall($service, 'GET', array('id' => $id), $this->getDataBundle());
 
-        if (empty($result)) {
-            $this->setCaughtResponse($this->notFoundAction());
-            return;
+            if (empty($result)) {
+                $this->setCaughtResponse($this->notFoundAction());
+                return;
+            }
+
+            $this->loadedData = $result;
         }
 
-        return $result;
+        return $this->loadedData;
     }
 
     /**

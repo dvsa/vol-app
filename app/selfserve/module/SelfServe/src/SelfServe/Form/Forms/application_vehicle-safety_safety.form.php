@@ -53,7 +53,7 @@ return array(
             array(
                 'name' => 'table',
                 'options' => array(0),
-                'type' => 'table'
+                'type' => 'table-required'
             ),
             array(
                 'name' => 'application',

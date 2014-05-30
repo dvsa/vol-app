@@ -165,6 +165,9 @@ class ApplicationController extends AbstractJourneyController
     protected function getAccessKeys($force = false)
     {
         if (empty($this->accessKeys) || $force) {
+
+            $this->accessKeys = array();
+
             $licence = $this->getLicenceData();
 
             if (empty($licence)) {
@@ -173,8 +176,10 @@ class ApplicationController extends AbstractJourneyController
 
             if (strtolower($licence['goodsOrPsv']) == 'psv') {
                 $this->isPsv = true;
+                $this->accessKeys[] = 'psv';
             } else {
                 $this->isPsv = false;
+                $this->accessKeys[] = 'goods';
             }
 
             $type = str_replace(' ', '-', strtolower($licence['licenceType']));
@@ -183,9 +188,7 @@ class ApplicationController extends AbstractJourneyController
                 $type = 'standard';
             }
 
-            $this->accessKeys = array(
-                trim(strtolower($licence['goodsOrPsv']) . '-' . $type, '-')
-            );
+            $this->accessKeys[] = trim(strtolower($licence['goodsOrPsv']) . '-' . $type, '-');
 
             if (isset($licence['niFlag']) && !is_null($licence['niFlag']) && $licence['niFlag'] !== '') {
                 $this->accessKeys[] = ($licence['niFlag'] == 1 ? 'ni' : 'gb');
