@@ -1419,8 +1419,6 @@ abstract class AbstractJourneyController extends AbstractController
 
     /**
      * Journey finished
-     *
-     * @todo Maybe want to do something before going home
      */
     protected function journeyFinished()
     {
