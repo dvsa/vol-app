@@ -55,14 +55,6 @@ class VehicleController extends VehicleSafetyController
         'main' => array(
             'mapFrom' => array(
                 'data'
-            ),
-            'values' => array(
-                'bodyType' => 'vhl_body_type.flat',
-                'isTipper' => 0,
-                'isRefrigerated' => 0,
-                'isArticulated' => 0,
-                'certificateNumber' => '',
-                'viAction' => ''
             )
         )
     );
@@ -182,25 +174,7 @@ class VehicleController extends VehicleSafetyController
      */
     protected function actionSave($data, $service = null)
     {
-        $saved = parent::actionSave($data);
-
-        if ($this->getActionName() == 'add') {
-
-            if (!isset($saved['id'])) {
-
-                throw new \Exception('Unable to save vehicle');
-            }
-
-            $licence = $this->getLicenceData();
-
-            $licenceVehicleData = array(
-                'licence' => $licence['id'],
-                'dateApplicationReceived' => date('Y-m-d H:i:s'),
-                'vehicle' => $saved['id']
-            );
-
-            parent::actionSave($licenceVehicleData, 'LicenceVehicle');
-        }
+        $this->saveVehicle($data, $this->getActionName());
     }
 
     /**

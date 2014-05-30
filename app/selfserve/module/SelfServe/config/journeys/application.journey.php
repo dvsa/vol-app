@@ -138,7 +138,15 @@ return array(
                     'psv-restricted'
                 ),
                 'subSections' => array(
+                    'VehiclePsv' => array(
+                        'restriction' => array(
+                            'psv'
+                        )
+                    ),
                     'Vehicle' => array(
+                        'restriction' => array(
+                            'goods'
+                        )
 
                     ),
                     'Safety' => array(
