@@ -247,35 +247,34 @@ abstract class AbstractController extends FormActionController
                     : null);
             }
 
-            if (empty($action)) {
-                continue;
-            }
+            if (!empty($action)) {
 
-            $routeAction = $action;
+                $routeAction = $action;
 
-            if ($table !== 'table') {
-                $routeAction = $table . '-' . $action;
-            }
+                if ($table !== 'table') {
+                    $routeAction = $table . '-' . $action;
+                }
 
-            if ($action == 'add') {
-                $this->setCaughtResponse($this->redirectToRoute(null, array('action' => $routeAction), array(), true));
+                if ($action == 'add') {
+                    $this->setCaughtResponse($this->redirectToRoute(null, array('action' => $routeAction), array(), true));
+                    return;
+                }
+
+                if (empty($id)) {
+                    $this->setCaughtResponse($this->crudActionMissingId());
+                    return;
+                }
+
+                $this->setCaughtResponse(
+                    $this->redirectToRoute(
+                        null,
+                        array('action' => $routeAction, 'id' => $id),
+                        array(),
+                        true
+                    )
+                );
                 return;
             }
-
-            if (empty($id)) {
-                $this->setCaughtResponse($this->crudActionMissingId());
-                return;
-            }
-
-            $this->setCaughtResponse(
-                $this->redirectToRoute(
-                    null,
-                    array('action' => $routeAction, 'id' => $id),
-                    array(),
-                    true
-                )
-            );
-            return;
         }
     }
 
