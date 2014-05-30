@@ -116,19 +116,31 @@ class PeopleController extends YourBusinessController
 
         switch ($orgType['organisationType']) {
             case 'org_type.lc':
-                $table->setVariable('title', $translate('selfserve-app-subSection-your-business-people-tableHeaderDirectors'));
+                $table->setVariable(
+                    'title',
+                    $translate('selfserve-app-subSection-your-business-people-tableHeaderDirectors')
+                );
                 $guidance->setValue($translate('selfserve-app-subSection-your-business-people-guidanceLC'));
                 break;
             case 'org_type.llp':
-                $table->setVariable('title', $translate('selfserve-app-subSection-your-business-people-tableHeaderPartners'));
+                $table->setVariable(
+                    'title',
+                    $translate('selfserve-app-subSection-your-business-people-tableHeaderPartners')
+                );
                 $guidance->setValue($translate('selfserve-app-subSection-your-business-people-guidanceLLP'));
                 break;
             case 'org_type.p':
-                $table->setVariable('title', $translate('selfserve-app-subSection-your-business-people-tableHeaderPartners'));
+                $table->setVariable(
+                    'title',
+                    $translate('selfserve-app-subSection-your-business-people-tableHeaderPartners')
+                );
                 $guidance->setValue($translate('selfserve-app-subSection-your-business-people-guidanceP'));
                 break;
             case 'org_type.o':
-                $table->setVariable('title', $translate('selfserve-app-subSection-your-business-people-tableHeaderPeople'));
+                $table->setVariable(
+                    'title',
+                    $translate('selfserve-app-subSection-your-business-people-tableHeaderPeople')
+                );
                 $guidance->setValue($translate('selfserve-app-subSection-your-business-people-guidanceO'));
                 break;
             default:
