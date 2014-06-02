@@ -75,8 +75,7 @@ class CaseConvictionController extends CaseController
         $data = [];
         $data['url'] = $this->url();
 
-        $tableBuilder = $this->getServiceLocator()->get('Table');
-        $table = $tableBuilder->buildTable('convictions', $results, $data);
+        $table = $this->getServiceLocator()->get('Table')->buildTable('convictions', $results, $data);
 
         $view->setVariables(
             [

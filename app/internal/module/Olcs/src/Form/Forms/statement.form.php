@@ -23,18 +23,18 @@ return [
                         'type' => 'vrm'
                     ],
                     'requestorsForename' => [
-                        'type' => 'text',
-                        'filters' => '\Common\Form\Elements\InputFilters\TextMax75Required',
-                        'label' => 'Requestors first name'
+                        'type' => 'personName',
+                        'label' => 'Requestors first name',
+                        'filters' => '\Common\Form\Elements\InputFilters\NameRequired'
                     ],
                     'requestorsFamilyName' => [
-                        'type' => 'text',
-                        'filters' => '\Common\Form\Elements\InputFilters\TextMax75Required',
-                        'label' => 'Requestors last name'
+                        'type' => 'personName',
+                        'label' => 'Requestors last name',
+                        'filters' => '\Common\Form\Elements\InputFilters\NameRequired'
                     ],
                     'requestorsBody' => [
                         'type' => 'text',
-                        'filters' => '\Common\Form\Elements\InputFilters\TextMax40Required',
+                        'filters' => '\Common\Form\Elements\InputFilters\NameRequired',
                         'label' => 'Requestor body'
                     ],
                     'dateStopped' => [
