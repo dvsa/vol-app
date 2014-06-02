@@ -94,15 +94,11 @@ class FinancialHistoryController extends PreviousHistoryController
      */
     protected function processFinancialFileUpload($file)
     {
-        $uploader = $this->getServiceLocator()->get('FileUploader')->getUploader();
+        $uploader = $this->getUploader();
 
-        try {
-            $uploader->setFile($file);
-            $uploader->upload();
-            $file = $uploader->getFile();
-        } catch (\Exception $ex) {
-            die($ex->getMessage());
-        }
+        $uploader->setFile($file);
+        $uploader->upload();
+        $file = $uploader->getFile();
 
         $fileData = $file->toArray();
 
