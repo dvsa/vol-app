@@ -25,7 +25,8 @@ return [
                         'type' => 'dateSelectWithEmpty',
                         'label' => 'Application received',
                         'filters' => '\Common\Form\Elements\InputFilters\DateNotInFuture'
-                    ]
+                    ],
+
                 ]
             ],
             [
@@ -42,16 +43,20 @@ return [
                     ],
                     'hearingTime' => [
                         'type' => 'timeSelect',
-                        'label' => 'Hearing time',
+                        'label' => 'Hearing time (hh:mm)',
                         'filters' => '\Common\Form\Elements\InputFilters\HearingTimeHasDate',
                     ],
-                    'hearingLocation' => [
+                    'piVenue' => [
                         'type' => 'select',
                         'label' => 'Hearing location',
-                        'value_options' => 'hearing_location',
                         'filters' => '\Common\Form\Elements\InputFilters\SelectEmpty',
                         'class' => 'medium'
                     ],
+                    'piVenueOther' => [
+                        'type' => 'text',
+                        'label' => 'Other hearing location',
+                        'class' => 'medium'
+                    ]
                 ],
             ],
             [
@@ -98,9 +103,6 @@ return [
             ],
             'version' => [
                 'type' => 'hidden'
-            ],
-            'crsf' => [
-                'type' => 'crsf',
             ],
             'submit' => [
                 'type' => 'submit',

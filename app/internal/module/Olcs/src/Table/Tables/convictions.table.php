@@ -54,7 +54,7 @@ return array(
             'formatter' => function ($data) {
                 $person = $data['personFirstname'] . ' ' . $data['personLastname'];
                 $organisationName = $data['operatorName'];
-                return ($organisationName == '') ? $person : $organisationName;
+                return ($organisationName == '' ? $person : $organisationName) . ' / ' . $data['defType'];
             }
         ),
         array(

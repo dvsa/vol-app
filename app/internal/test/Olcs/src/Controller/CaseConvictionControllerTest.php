@@ -128,6 +128,13 @@ class CaseConvictionControllerTest  extends AbstractHttpControllerTestCase
             ->method('url')
             ->will($this->returnValue(array()));
 
+        $configServiceLocator = $this->getMock('\stdClass', array('get'));
+
+        $configServiceLocator->expects($this->once())
+            ->method('get')
+            ->with('Config')
+            ->will($this->returnValue($this->getStaticDefTypes()));
+
         $serviceLocator = $this->getMock('\stdClass', array('get'));
         $tableBuilder = $this->getMock('\stdClass', array('buildTable'));
 
@@ -136,9 +143,14 @@ class CaseConvictionControllerTest  extends AbstractHttpControllerTestCase
             ->with('Table')
             ->will($this->returnValue($tableBuilder));
 
-        $this->controller->expects($this->once())
+        $this->controller->expects($this->exactly(2))
             ->method('getServiceLocator')
-            ->will($this->returnValue($serviceLocator));
+            ->will(
+                $this->onConsecutiveCalls(
+                    $configServiceLocator,
+                    $serviceLocator
+                )
+            );
 
         $this->controller->indexAction();
     }
@@ -205,11 +217,30 @@ class CaseConvictionControllerTest  extends AbstractHttpControllerTestCase
                     'id' => 25,
                     'dateOfConviction' => '2012-06-15T00:00:00+0100',
                     'categoryText' => 'Category text',
+                    'defType' => 'defendant_type.operator',
                     'category' => array(
                         'id' => 48,
                         'description' => 'Category description'
                     )
                 )
+            )
+        );
+    }
+
+    private function getStaticDefTypes()
+    {
+        return array(
+            'static-list-data' => array(
+                'defendant_types' =>
+                [
+                    'defendant_type.operator' => 'Operator',
+                    'defendant_type.owner' => 'Owner',
+                    'defendant_type.partner' => 'Partner',
+                    'defendant_type.director' => 'Director',
+                    'defendant_type.driver' => 'Driver',
+                    'defendant_type.transport_manager' => 'Transport Manager',
+                    'defendant_type.other' => 'Other'
+                ]
             )
         );
     }

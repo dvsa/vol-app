@@ -208,7 +208,7 @@ class CaseRevokeController extends CaseController
         $piReasons = $this->makeRestCall(
             'PiReason',
             'GET',
-           ['proposeToRevoke' => '1', 'limit' => '100', 'page' => '1']
+            ['proposeToRevoke' => '1', 'limit' => '100', 'page' => '1']
         );
         foreach ($piReasons['Results'] as $result) {
             $reasons[$result['id']] = $result['sectionCode'] . ' - ' . $result['description'];

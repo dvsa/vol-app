@@ -259,12 +259,22 @@ class CaseController extends FormActionController
             'conditions-undertakings' => [
                 'key' => 'conditions-undertakings',
                 'label' => 'Conditions &amp; Undertakings',
-                'url' => $pm->get('url')->fromRoute('case_conditions_undertakings', ['tab' => 'conditions-undertakings'], [], true),
+                'url' => $pm->get('url')->fromRoute(
+                    'case_conditions_undertakings',
+                    ['tab' => 'conditions-undertakings'],
+                    [],
+                    true
+                ),
             ],
             'impounding' => [
                 'key' => 'impounding',
                 'label' => 'Impounding',
-                'url' => $pm->get('url')->fromRoute('case_impounding', ['tab' => 'impounding', 'action' => null], [], true),
+                'url' => $pm->get('url')->fromRoute(
+                    'case_impounding',
+                    ['tab' => 'impounding', 'action' => null],
+                    [],
+                    true
+                ),
             ],
             'revoke' => [
                 'key' => 'revoke',
@@ -290,7 +300,7 @@ class CaseController extends FormActionController
 
         $entityType = '';
 
-        if(isset($static['business_types'][$case['licence']['organisation']['organisationType']])){
+        if (isset($static['business_types'][$case['licence']['organisation']['organisationType']])) {
             $entityType = $static['business_types'][$case['licence']['organisation']['organisationType']];
         }
 
@@ -325,7 +335,7 @@ class CaseController extends FormActionController
                 'url' => ''
             ],
             'categories' => [
-                'label' => 'Categorie(s)',
+                'label' => 'Categories',
                 'value' => implode(', ', $categoryNames),
                 'url' => ''
             ],
@@ -493,8 +503,7 @@ class CaseController extends FormActionController
         $form = $this->generateFormWithData(
             'case',
             'processEditCase',
-            $result,
-            true
+            $result
         );
 
         $pageData = $this->getPageData($licence);

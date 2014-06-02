@@ -33,11 +33,10 @@ return [
                         'label' => 'Reason',
                         'type' => 'select',
                         'value_options' => 'appeal_reasons',
-                        'required' => true
                     ],
                     'outlineGround' => [
                         'type' => 'text',
-                        'filters' => '\Common\Form\Elements\InputFilters\TextMax4000Required',
+                        'filters' => '\Common\Form\Elements\InputFilters\TextMax4000',
                         'label' => 'Outline ground',
                         'class' => 'extra-long'
                     ],
@@ -65,11 +64,11 @@ return [
                         'label' => 'Outcome',
                         'type' => 'select',
                         'value_options' => 'appeal_outcomes',
-                        'required' => true
+                        'filters' => '\Common\Form\Elements\InputFilters\SelectEmpty'
                     ],
                     'comment' => [
                         'type' => 'text',
-                        'filters' => '\Common\Form\Elements\InputFilters\TextMax4000Required',
+                        'filters' => '\Common\Form\Elements\InputFilters\TextMax4000',
                         'label' => 'Comments',
                         'class' => 'extra-long'
                     ]
@@ -85,9 +84,6 @@ return [
             ],
             'version' => [
                 'type' => 'hidden'
-            ],
-            'crsf' => [
-                'type' => 'crsf',
             ],
             'submit' => [
                 'type' => 'submit',

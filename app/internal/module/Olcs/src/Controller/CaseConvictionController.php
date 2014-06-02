@@ -23,10 +23,17 @@ class CaseConvictionController extends CaseController
         $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $routeParams['licence'])));
 
         if (isset($postParams['action'])) {
-            return $this->redirect()->toRoute($postParams['table'], array('licence' => $routeParams['licence'],
-                'case' => $routeParams['case'],
-                'id' => isset($postParams['id']) ? $postParams['id'] : '',
-                'action' => strtolower($postParams['action'])));
+            return $this->redirect()->toRoute(
+                $postParams['table'],
+                array(
+                    'licence' => $routeParams['licence'],
+                    'case' => $routeParams['case'],
+                    'id' => isset($postParams['id']) ? $postParams['id'] : '',
+                    'action' => strtolower(
+                        $postParams['action']
+                    )
+                )
+            );
         }
 
         $view = $this->getView();
@@ -53,17 +60,22 @@ class CaseConvictionController extends CaseController
             )
         );
 
+        $config = $this->getServiceLocator()->get('Config');
+
         foreach ($results['Results'] as $key => $row) {
-            if(!$this->isUserDefinedConvictionCategory($row['category']['id'])) {
+            if (!$this->isUserDefinedConvictionCategory($row['category']['id'])) {
                 $results['Results'][$key]['categoryText'] = $row['category']['description'];
+            }
+
+            if (isset($config['static-list-data']['defendant_types'][$row['defType']])) {
+                $results['Results'][$key]['defType'] = $config['static-list-data']['defendant_types'][$row['defType']];
             }
         }
 
         $data = [];
         $data['url'] = $this->url();
 
-        $tableBuilder = $this->getServiceLocator()->get('Table');
-        $table = $tableBuilder->buildTable('convictions', $results, $data);
+        $table = $this->getServiceLocator()->get('Table')->buildTable('convictions', $results, $data);
 
         $view->setVariables(
             [

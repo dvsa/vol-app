@@ -83,8 +83,7 @@ class ConvictionController extends CaseController
         $form = $this->generateFormWithData(
             'conviction',
             'processConviction',
-            $data,
-            true
+            $data
         );
 
         $posted = $this->getRequest()->getPost();
@@ -95,7 +94,7 @@ class ConvictionController extends CaseController
             ->get('parentCategory')
             ->setValueOptions($parentCategory);
 
-        if(isset($posted['offence']['parentCategory']) && $posted['offence']['parentCategory']){
+        if (isset($posted['offence']['parentCategory']) && $posted['offence']['parentCategory']) {
             $subCategory = $this->getConvictionSubCategories($posted['offence']['parentCategory']);
 
             foreach ($subCategory['Results'] as $category) {
@@ -197,8 +196,7 @@ class ConvictionController extends CaseController
         $form = $this->generateFormWithData(
             'conviction',
             'processConviction',
-            $data,
-            true
+            $data
         );
 
         $parentCategory = $this->getConvictionParentCategories();
@@ -211,7 +209,7 @@ class ConvictionController extends CaseController
 
         $posted = $this->getRequest()->getPost();
 
-        if(isset($posted['offence']['parentCategory']) && $posted['offence']['parentCategory']){
+        if (isset($posted['offence']['parentCategory']) && $posted['offence']['parentCategory']) {
             $data['parentCategory'] = $posted['offence']['parentCategory'];
         }
 
