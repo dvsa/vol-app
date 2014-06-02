@@ -76,7 +76,21 @@ return array(
                     'People' => array(
                         'required' => array(
                             'YourBusiness/BusinessType'
-                        )
+                        ),
+                        'restriction' => array(
+                            'org_type.lc',
+                            'org_type.llp',
+                            'org_type.p',
+                            'org_type.o'
+                        ),
+                    ),
+                    'SoleTrader' => array(
+                        'required' => array(
+                            'YourBusiness/BusinessType'
+                        ),
+                        'restriction' => array(
+                            'org_type.st'
+                        ),
                     )
                 )
             ),
