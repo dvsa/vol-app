@@ -104,7 +104,6 @@ class SoleTraderController extends YourBusinessController
             $finalData['data']['id'] = $data['Results'][0]['id'];
             $finalData['data']['version'] = $data['Results'][0]['version'];
         }
-
         return $finalData;
     }
 }
