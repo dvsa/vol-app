@@ -43,18 +43,18 @@ return array(
                         'class' => 'short',
                         'filters' => '\Common\Form\Elements\InputFilters\OperatingCentreCommunityLicences'
                     ),
-                    /*'totAuthVehicles' => array(
+                    'totAuthVehicles' => array(
                         'type' => 'text',
                         'label' => $translationPrefix . '.totAuthVehicles',
                         'class' => 'short',
-                        'filters' => '\Common\Form\Elements\InputFilters\OperatingCentreVehicleAuthorisations'
+                        'filters' => '\Common\Form\Elements\InputFilters\OperatingCentreTotalVehicleAuthorisations'
                     ),
                     'totAuthTrailers' => array(
                         'type' => 'text',
                         'label' => $translationPrefix . '.totAuthTrailers',
                         'class' => 'short',
                         'filters' => '\Common\Form\Elements\InputFilters\OperatingCentreTrailerAuthorisations'
-                    ),*/
+                    ),
                     'id' => array(
                         'type' => 'hidden'
                     ),
