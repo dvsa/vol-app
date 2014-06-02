@@ -171,8 +171,11 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
         $this->getFrom('Route', 0, 'licence', $licenceId);
         $this->getFrom('Route', 1, 'case', $caseId);
 
+        $form = $this->getFormMock();
+
         $this->controller->expects($this->once())
-            ->method('generateFormWithData');
+            ->method('generateFormWithData')
+            ->will($this->returnValue($form));
 
         $this->controller->expects($this->once())
             ->method('setBreadcrumb');
@@ -180,6 +183,15 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
         $this->controller->expects($this->once())
             ->method('getView')
             ->will($this->returnValue($this->view));
+
+        $this->controller->expects($this->exactly(2))
+            ->method('makeRestCall')
+            ->will(
+                $this->onConsecutiveCalls(
+                    $this->getLicenceRestCall(),
+                    $this->getVenueRestCall()
+                )
+            );
 
         $this->view->expects($this->once())
             ->method('setTemplate')
@@ -201,12 +213,21 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
         $this->getFrom('Route', 1, 'case', $caseId);
         $this->getFrom('Route', 2, 'id', $id);
 
-        $this->controller->expects($this->once())
+        $this->controller->expects($this->exactly(3))
             ->method('makeRestCall')
-            ->will($this->returnValue($this->getSampleImpoundingFormArray()));
+            ->will(
+                $this->onConsecutiveCalls(
+                    $this->getSampleImpoundingFormArray(),
+                    $this->getLicenceRestCall(),
+                    $this->getVenueRestCall()
+                )
+            );
+
+        $form = $this->getFormMock();
 
         $this->controller->expects($this->once())
-            ->method('generateFormWithData');
+            ->method('generateFormWithData')
+            ->will($this->returnValue($form));
 
         $this->controller->expects($this->once())
             ->method('setBreadcrumb');
@@ -524,6 +545,8 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
             'outcomeSentDate' => '1998-03-16T00:00:00+0000',
             'notes' => 'dgjdhdhfd',
             'version' => 1,
+            'piVenue' => 1,
+            'piVenueOther' => 'Other Pi Venue',
             'case' => array
                 (
                     'id' => 24
@@ -532,11 +555,6 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
             'impoundingType' => array
                 (
                     'handle' => 'impounding_type.1'
-                ),
-
-            'hearingLocation' => array
-                (
-                    'handle' => 'hearing_location.1'
                 ),
 
             'presidingTc' => array
@@ -576,7 +594,8 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
                 (
                     'hearingDate' => '2011-03-05',
                     'hearingTime' => '09:05',
-                    'hearingLocation' => 'hearing_location.1'
+                    'piVenue' => '1',
+                    'piVenueOther' => 'Other Pi Venue'
                 ),
 
             'outcome' => array
@@ -639,5 +658,80 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue(array('static-list-data' => $this->getSampleStaticData())));
 
         return $serviceMock;
+    }
+
+    /**
+     * Sample licence rest call
+     *
+     * @return array
+     */
+    private function getLicenceRestCall()
+    {
+        return array(
+            'trafficArea' => array(
+                'areaCode' => 1
+            )
+        );
+    }
+
+    /**
+     * Sample venue rest call
+     *
+     * @return array
+     */
+    private function getVenueRestCall()
+    {
+        return array(
+            'Results' => array(
+                0 => array(
+                    'trafficArea' => array(
+                        'areaCode' => 1
+                    )
+                )
+            )
+        );
+    }
+
+    /**
+     *  Gets a form mock
+     */
+    private function getFormMock()
+    {
+        $formMock = $this->getMock('\stdClass', array('setData', 'get'));
+
+        $getMock = $this->getMock(
+            'stdClass',
+            [
+                'get'
+            ]
+        );
+
+        $setValueOptionsMock = $this->getMock(
+            'stdClass',
+            [
+                'setValueOptions'
+            ]
+        );
+
+        $setValueMock = $this->getMock(
+            'stdClass',
+            [
+                'setValue'
+            ]
+        );
+
+        $setValueOptionsMock->expects($this->any())
+            ->method('setValueOptions')
+            ->will($this->returnValue($setValueMock));
+
+        $getMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValue($setValueOptionsMock));
+
+        $formMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValue($getMock));
+
+        return $formMock;
     }
 }

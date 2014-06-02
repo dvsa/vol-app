@@ -99,6 +99,12 @@ class CaseImpoundingController extends CaseController
             )
         );
 
+        $formVenues = $this->getVenueList($licenceId);
+
+        $form->get('hearing')
+            ->get('piVenue')
+            ->setValueOptions($formVenues);
+
         $view = $this->getView(
             [
                 'params' => [
@@ -208,6 +214,12 @@ class CaseImpoundingController extends CaseController
             $data
         );
 
+        $formVenues = $this->getVenueList($licenceId);
+
+        $form->get('hearing')
+            ->get('piVenue')
+            ->setValueOptions($formVenues);
+
         $view = $this->getView(
             [
                 'params' => [
@@ -235,7 +247,8 @@ class CaseImpoundingController extends CaseController
     {
         $formatted = array_merge(array(), $data['outcome'], $data['application_details']);
 
-        $formatted['hearingLocation'] = $data['hearing']['hearingLocation'];
+        $formatted['piVenue'] = $data['hearing']['piVenue'];
+        $formatted['piVenueOther'] = $data['hearing']['piVenueOther'];
         $formatted['hearingDate'] = $this->joinHearingDateAndTime(
             $data['hearing']['hearingDate'],
             $data['hearing']['hearingTime']
@@ -297,8 +310,11 @@ class CaseImpoundingController extends CaseController
             $formatted['hearing']['hearingDate'] = $results['hearingDate'];
         }
 
-        if (!empty($results['hearingLocation'])) {
-            $formatted['hearing']['hearingLocation'] = $results['hearingLocation']['handle'];
+        if (!empty($results['piVenue'])) {
+            $formatted['hearing']['piVenue'] = $results['piVenue']['id'];
+        } elseif ($results['piVenueOther']) {
+            $formatted['hearing']['piVenue'] = 0;
+            $formatted['hearing']['piVenueOther'] = $results['piVenueOther'];
         }
 
         //application details fieldset
@@ -382,6 +398,38 @@ class CaseImpoundingController extends CaseController
         return $combined;
     }
 
+    private function getVenueList($licenceId)
+    {
+        $matchedVenues = array();
+
+        $bundle = $this->getLicenceTrafficBundle();
+
+        //get traffic area
+        $licence = $this->makeRestCall(
+            'Licence',
+            'GET',
+            array('id' => $licenceId, 'bundle' => json_encode($bundle))
+        );
+
+        $venues = $this->makeRestCall(
+            'PiVenue',
+            'GET',
+            array(
+                'limit' => 'all'
+            )
+        );
+
+        foreach ($venues['Results'] as $venue) {
+            if ($licence['trafficArea']['areaCode'] == $venue['trafficArea']) {
+                $matchedVenues[$venue['id']] = $venue['name'];
+            }
+        }
+
+        $matchedVenues[0] = 'Other';
+
+        return $matchedVenues;
+    }
+
     /**
      * Method to return the bundle required for impounding
      *
@@ -428,6 +476,7 @@ class CaseImpoundingController extends CaseController
                 'applicationReceiptDate',
                 'outcomeSentDate',
                 'hearingDate',
+                'piVenueOther',
                 'notes',
                 'version'
             ),
@@ -435,6 +484,11 @@ class CaseImpoundingController extends CaseController
                 'impoundingType' => array(
                     'properties' => array(
                         'handle'
+                    )
+                ),
+                'piVenue' => array(
+                    'properties' => array(
+                        'id'
                     )
                 ),
                 'presidingTc' => array(
@@ -456,6 +510,28 @@ class CaseImpoundingController extends CaseController
                     'properties' => array(
                         'handle'
                     ),
+                )
+            )
+        );
+    }
+
+    /**
+     * Method to return the bundle required for impounding
+     *
+     * @return array
+     */
+    private function getLicenceTrafficBundle()
+    {
+        return array(
+            'properties' => array(
+                'ALL'
+            ),
+            'children' => array(
+                'trafficArea' => array(
+                    'properties' => array(
+                        'areaCode',
+                        'areaName'
+                    )
                 )
             )
         );
