@@ -24,7 +24,7 @@ class CaseAnnualTestHistoryController extends CaseController
         $caseId = $this->fromRoute('case');
         $licence = $this->fromRoute('licence');
 
-        $prohibition = array();
+        $annualTestHistory = array();
 
         $bundle = array(
             'children' => array(
@@ -36,16 +36,16 @@ class CaseAnnualTestHistoryController extends CaseController
             )
         );
 
-        $result = $this->makeRestCall('Prohibition', 'GET', array('case' => $caseId, 'bundle' => json_encode($bundle)));
+        $result = $this->makeRestCall('AnnualTestHistory', 'GET', array('case' => $caseId, 'bundle' => json_encode($bundle)));
 
         if ($result['Count']) {
-            $prohibition = $result['Results'][0];
-            $prohibition['case'] = $prohibition['case']['id'];
+            $annualTestHistory = $result['Results'][0];
+            $annualTestHistory['case'] = $annualTestHistory['case']['id'];
         } else {
-            $prohibition['case'] = $caseId;
+            $annualTestHistory['case'] = $caseId;
         }
 
-        $form = $this->generateProhibitionForm($prohibition);
+        $form = $this->generateAnnualTestHistoryForm($annualTestHistory);
 
         $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licence)));
 
@@ -75,13 +75,13 @@ class CaseAnnualTestHistoryController extends CaseController
      * @param array $prohibition
      * @return \Zend\Form
      */
-    private function generateProhibitionForm($prohibition)
+    private function generateAnnualTestHistoryForm($annualTestHistory)
     {
         $form = $this->generateForm(
-            'prohibition-comment',
-            'saveProhibitionForm'
+            'annual-test-history-comment',
+            'saveAnnualTestHistoryForm'
         );
-        $form->setData($prohibition);
+        $form->setData($annualTestHistory);
 
         return $form;
     }
@@ -91,18 +91,18 @@ class CaseAnnualTestHistoryController extends CaseController
      *
      * @param array $data
      */
-    public function saveProhibitionForm($data)
+    public function saveAnnualTestHistoryForm($data)
     {
         unset($data['cancel']);
 
         if ($data['submit'] === '') {
             if (!empty($data['id'])) {
-                $this->processEdit($data, 'Prohibition');
+                $this->processEdit($data, 'AnnualTestHistory');
             } else {
-                $this->processAdd($data, 'Prohibition');
+                $this->processAdd($data, 'AnnualTestHistory');
             }
         }
 
-        return $this->redirect()->toRoute('case_prohibition', array(), array(), true);
+        return $this->redirect()->toRoute('case_annual_test_history', array(), array(), true);
     }
 }
