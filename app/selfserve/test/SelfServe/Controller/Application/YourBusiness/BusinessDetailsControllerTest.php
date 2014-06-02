@@ -52,23 +52,6 @@ class BusinessDetailsControllerTest extends AbstractApplicationControllerTestCas
         $this->assertInstanceOf('Zend\Http\Response', $response);
     }
 
-    public function testIndexActionShowsCorrectBackLink()
-    {
-        $this->setUpAction('index');
-        $this->setOrganisationType('lc');   // not important for this test
-
-        $response = $this->controller->indexAction();
-        $fieldset = $this->getFormFromResponse($response)->get('data');
-
-        // Make sure we get a view not a response
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
-
-        $this->assertEquals(
-            '/application/1/your-business/business-type/',
-            $fieldset->get('edit_business_type')->getValue()
-        );
-    }
-
     public function testIndexActionWithLimitedCompanyShowsFullForm()
     {
         $this->assertFormElements('lc', ['name', 'companyNumber', 'tradingNames']);

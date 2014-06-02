@@ -23,13 +23,13 @@ return array(
                     'organisationType' => [
                         'label' => $translationPrefix . '_business-type.data.organisationType',
                         'type' => 'selectDisabled',
-                        'value_options' => 'business_types',
-                        'class' => 'inline',
+                        'value_options' => 'business_types'
                     ],
                     'edit_business_type' => [
                         'type' => 'submit',
-                        'label' => 'edit',
-                        'filters' => '\Common\Form\Elements\InputFilters\ActionLink'
+                        'label' => 'Edit',
+                        'filters' => '\Common\Form\Elements\InputFilters\ActionLink',
+                        'route' => 'Application/YourBusiness/BusinessType'
                     ],
                     'companyNumber' =>
                     [

@@ -90,29 +90,21 @@ class BusinessDetailsController extends YourBusinessController
 
         $fieldset = $form->get('data');
 
-        // always set the edit link
-        $fieldset->get('edit_business_type')->setValue(
-            $this->getUrlFromRoute(
-                'Application/YourBusiness/BusinessType',
-                ['applicationId' => $this->getIdentifier()]
-            )
-        );
-
         switch ($organisation['organisationType']) {
             case 'org_type.lc':
             case 'org_type.llp':
                 // no-op; the full form is fine
                 break;
             case 'org_type.st':
-                $fieldset->remove('name')
-                    ->remove('companyNumber');
+                $fieldset->remove('name')->remove('companyNumber');
                 break;
             case 'org_type.p':
                 $fieldset->remove('companyNumber');
+                $fieldset->get('name')->setLabel($fieldset->get('name')->getLabel() . '.partnership');
                 break;
             case 'org_type.o':
-                $fieldset->remove('companyNumber')
-                    ->remove('tradingNames');
+                $fieldset->remove('companyNumber')->remove('tradingNames');
+                $fieldset->get('name')->setLabel($fieldset->get('name')->getLabel() . '.other');
                 break;
         }
         return $form;
