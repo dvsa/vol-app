@@ -330,7 +330,7 @@ class CaseController extends FormActionController
                 'url' => ''
             ],
             'categories' => [
-                'label' => 'Categorie(s)',
+                'label' => 'Categories',
                 'value' => implode(', ', $categoryNames),
                 'url' => ''
             ],
