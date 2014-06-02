@@ -23,7 +23,8 @@ return array(
                     'organisationType' => [
                         'label' => $translationPrefix . '_business-type.data.organisationType',
                         'type' => 'selectDisabled',
-                        'value_options' => 'business_types'
+                        'value_options' => 'business_types',
+                        'class' => 'inline'
                     ],
                     'edit_business_type' => [
                         'type' => 'submit',
