@@ -46,25 +46,42 @@ class BusinessDetailsController extends YourBusinessController
      */
     protected function save($data, $service = null)
     {
+        unset($data['organisationType']);
+
+        if (isset($data['companyNumber'])) {
+            // unfortunately the company number field is a complex one so can't
+            // be mapped directly
+            $data['registeredCompanyNumber'] = $data['companyNumber']['company_number'];
+        }
+
         if (isset($data['tradingNames'])) {
-            $this->makeRestCall('TradingNames', 'POST', $data['tradingNames']);
+
+            $licence = $this->getLicenceData();
+            $tradingNames = [];
+
+            foreach ($data['tradingNames']['trading_name'] as $tradingName) {
+
+                if (trim($tradingName['text']) !== '') {
+                    $tradingNames[] = [
+                        'tradingName' => $tradingName['text']
+                    ];
+                }
+            }
+
+            $data['tradingNames'] = $tradingNames;
+
+            $tradingNameData = array(
+                'licence' => $licence['id'],
+                'tradingNames' => $tradingNames
+            );
+
+            $this->makeRestCall('TradingNames', 'POST', $tradingNameData);
         }
 
         // @TODO we shouldn't really need to do this; it's only
         // because our $service property is set to Application
         // so we can fetch tradingNames as a child value
         return parent::save($data, 'Organisation');
-    }
-
-    protected function alterFormBeforeValidation($form)
-    {
-        $form = parent::alterFormBeforeValidation($form);
-
-        // @TODO alter based on submit button potentially; may
-        // not want to validate based on whether we were
-        // adding a trading name or submitting a CH lookup
-
-        return $form;
     }
 
     protected function alterForm($form)
@@ -99,37 +116,6 @@ class BusinessDetailsController extends YourBusinessController
                 break;
         }
         return $form;
-    }
-
-    public function processDataMapForSave($oldData, $map = array(), $section = 'main')
-    {
-        $data = parent::processDataMapForSave($oldData, $map, $section);
-
-        // the disabled input will always be null, so ignore it...
-        unset($data['organisationType']);
-
-        if (isset($data['companyNumber'])) {
-            // unfortunately the company number field is a complex one so can't
-            // be mapped directly
-            $data['registeredCompanyNumber'] = $data['companyNumber']['company_number'];
-        }
-
-        if (isset($data['tradingNames'])) {
-            $licence = $this->getLicenceData(['id']);
-            $tradingNames = [];
-            foreach ($data['tradingNames']['trading_name'] as $tradingName) {
-                if (trim($tradingName['text']) === '') {
-                    continue;
-                }
-                $tradingNames[] = [
-                    'tradingName' => $tradingName['text'],
-                    'licence' => $licence['id'],
-                ];
-            }
-            $data['tradingNames'] = $tradingNames;
-        }
-
-        return $data;
     }
 
     protected function processLoad($data)
