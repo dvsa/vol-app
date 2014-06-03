@@ -46,66 +46,6 @@ class BusinessDetailsController extends YourBusinessController
      */
     protected function save($data, $service = null)
     {
-        if (isset($data['tradingNames'])) {
-            $this->makeRestCall('TradingNames', 'POST', $data['tradingNames']);
-        }
-
-        // @TODO we shouldn't really need to do this; it's only
-        // because our $service property is set to Application
-        // so we can fetch tradingNames as a child value
-        return parent::save($data, 'Organisation');
-    }
-
-    protected function alterFormBeforeValidation($form)
-    {
-        $form = parent::alterFormBeforeValidation($form);
-
-        // @TODO alter based on submit button potentially; may
-        // not want to validate based on whether we were
-        // adding a trading name or submitting a CH lookup
-
-        return $form;
-    }
-
-    protected function alterForm($form)
-    {
-        $organisation = $this->getOrganisationData(['organisationType']);
-
-        $fieldset = $form->get('data');
-
-        // always set the edit link
-        $fieldset->get('edit_business_type')->setValue(
-            $this->getUrlFromRoute(
-                'Application/YourBusiness/BusinessType',
-                ['applicationId' => $this->getIdentifier()]
-            )
-        );
-
-        switch ($organisation['organisationType']) {
-            case 'org_type.lc':
-            case 'org_type.llp':
-                // no-op; the full form is fine
-                break;
-            case 'org_type.st':
-                $fieldset->remove('name')
-                    ->remove('companyNumber');
-                break;
-            case 'org_type.p':
-                $fieldset->remove('companyNumber');
-                break;
-            case 'org_type.o':
-                $fieldset->remove('companyNumber')
-                    ->remove('tradingNames');
-                break;
-        }
-        return $form;
-    }
-
-    public function processDataMapForSave($oldData, $map = array(), $section = 'main')
-    {
-        $data = parent::processDataMapForSave($oldData, $map, $section);
-
-        // the disabled input will always be null, so ignore it...
         unset($data['organisationType']);
 
         if (isset($data['companyNumber'])) {
@@ -115,21 +55,59 @@ class BusinessDetailsController extends YourBusinessController
         }
 
         if (isset($data['tradingNames'])) {
-            $licence = $this->getLicenceData(['id']);
+
+            $licence = $this->getLicenceData();
             $tradingNames = [];
+
             foreach ($data['tradingNames']['trading_name'] as $tradingName) {
-                if (trim($tradingName['text']) === '') {
-                    continue;
+
+                if (trim($tradingName['text']) !== '') {
+                    $tradingNames[] = [
+                        'tradingName' => $tradingName['text']
+                    ];
                 }
-                $tradingNames[] = [
-                    'tradingName' => $tradingName['text'],
-                    'licence' => $licence['id'],
-                ];
             }
+
             $data['tradingNames'] = $tradingNames;
+
+            $tradingNameData = array(
+                'licence' => $licence['id'],
+                'tradingNames' => $tradingNames
+            );
+
+            $this->makeRestCall('TradingNames', 'POST', $tradingNameData);
         }
 
-        return $data;
+        // @TODO we shouldn't really need to do this; it's only
+        // because our $service property is set to Application
+        // so we can fetch tradingNames as a child value
+        return parent::save($data, 'Organisation');
+    }
+
+    protected function alterForm($form)
+    {
+        $organisation = $this->getOrganisationData(['organisationType']);
+
+        $fieldset = $form->get('data');
+
+        switch ($organisation['organisationType']) {
+            case 'org_type.lc':
+            case 'org_type.llp':
+                // no-op; the full form is fine
+                break;
+            case 'org_type.st':
+                $fieldset->remove('name')->remove('companyNumber');
+                break;
+            case 'org_type.p':
+                $fieldset->remove('companyNumber');
+                $fieldset->get('name')->setLabel($fieldset->get('name')->getLabel() . '.partnership');
+                break;
+            case 'org_type.o':
+                $fieldset->remove('companyNumber')->remove('tradingNames');
+                $fieldset->get('name')->setLabel($fieldset->get('name')->getLabel() . '.other');
+                break;
+        }
+        return $form;
     }
 
     protected function processLoad($data)

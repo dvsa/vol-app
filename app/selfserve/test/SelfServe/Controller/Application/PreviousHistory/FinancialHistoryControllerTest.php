@@ -22,6 +22,8 @@ class FinancialHistoryControllerTest extends AbstractApplicationControllerTestCa
 
     protected $defaultRestResponse = array();
 
+    protected $mockedMethods = array('getUploader');
+
     /**
      * Test back button
      */
@@ -65,7 +67,26 @@ class FinancialHistoryControllerTest extends AbstractApplicationControllerTestCa
                     'administration' => 'Y',
                     'disqualified' => 'Y',
                     'insolvencyDetails' => str_repeat('a', 200),
-                    'insolvencyConfirmation' => '1'
+                    'insolvencyConfirmation' => '1',
+                    'file' => array(
+                        'file-controls' => array(
+                            'upload' => ''
+                        )
+                    )
+                )
+            ),
+            array(
+                'data' => array(
+                    'file' => array(
+                        'file-controls' => array(
+                            'file' => array(
+                                'tmp_name' => '',
+                                'name' => '',
+                                'type' => '',
+                                'error' => 4
+                            )
+                        )
+                    )
                 )
             )
         );
@@ -75,6 +96,56 @@ class FinancialHistoryControllerTest extends AbstractApplicationControllerTestCa
 
         // Make sure we get a view not a response
         $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
+     * Test indexAction with file upload
+     */
+    public function testIndexActionWithFileUpload()
+    {
+        $file = array(
+            'tmp_name' => 'ngipushfdlgjk',
+            'name' => 'ajkhdfjklah',
+            'type' => 'image/png',
+            'error' => 0
+        );
+
+        $this->setUpAction(
+            'index',
+            null,
+            array(
+                'data' => array(
+                    'file' => array(
+                        'file-controls' => array(
+                            'upload' => 'Upload'
+                        )
+                    )
+                )
+            ),
+            array(
+                'data' => array(
+                    'file' => array(
+                        'file-controls' => array(
+                            'file' => $file
+                        )
+                    )
+                )
+            )
+        );
+
+        $mockUploader = $this->getMock('\Common\Service\File\DiskStoreFileUploader', array('upload'));
+
+        $mockUploader->expects($this->once())
+            ->method('upload');
+
+        $this->controller->expects($this->any())
+            ->method('getUploader')
+            ->will($this->returnValue($mockUploader));
+
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->indexAction();
+
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
     }
 
     /**
@@ -151,6 +222,16 @@ class FinancialHistoryControllerTest extends AbstractApplicationControllerTestCa
                 'disqualified',
                 'insolvencyDetails',
                 'insolvencyConfirmation'
+            ),
+            'children' => array(
+                'documents' => array(
+                    'properties' => array(
+                        'id',
+                        'fileName',
+                        'identifier',
+                        'size'
+                    )
+                )
             )
         );
 
@@ -165,7 +246,15 @@ class FinancialHistoryControllerTest extends AbstractApplicationControllerTestCa
                 'administration' => 1,
                 'disqualified' => 1,
                 'insolvencyDetails' => str_repeat('a', 200),
-                'insolvencyConfirmation' => 1
+                'insolvencyConfirmation' => 1,
+                'documents' => array(
+                    array(
+                        'id' => 1,
+                        'fileName' => 'Test.png',
+                        'identifier' => 'ajfhljkdsafhflksdjf',
+                        'size' => 50505
+                    )
+                )
             );
         }
     }

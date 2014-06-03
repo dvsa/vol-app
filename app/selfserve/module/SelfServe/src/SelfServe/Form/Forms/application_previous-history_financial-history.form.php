@@ -50,6 +50,9 @@ return array(
                         'data-container-class' => 'highlight-box',
                         'placeholder' => $translationPrefix . '.insolvencyDetails.placeholder',
                     ),
+                    'file' => array(
+                        'type' => 'multipleFileUpload'
+                    ),
                     'insolvencyConfirmation' => array(
                         'type' => 'singlecheckbox',
                         'label' => $translationPrefix . '.insolvencyConfirmation.title',
