@@ -68,7 +68,7 @@ class LicenceTypeControllerTest extends AbstractApplicationControllerTestCase
 
         $form = $this->getFormFromResponse($response);
 
-        $options = $form->get('data')->get('licenceType')->getValueOptions();
+        $options = $form->get('licence-type')->get('licenceType')->getValueOptions();
 
         $this->assertEquals($hasSpecial, isset($options['special-restricted']));
     }

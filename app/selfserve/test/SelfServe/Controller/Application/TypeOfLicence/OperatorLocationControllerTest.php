@@ -124,7 +124,7 @@ class OperatorLocationControllerTest extends AbstractApplicationControllerTestCa
             'index',
             null,
             array(
-                'data' => array(
+                'operator-location' => array(
                     'niFlag' => 1
                 )
             )
@@ -146,7 +146,7 @@ class OperatorLocationControllerTest extends AbstractApplicationControllerTestCa
             'index',
             null,
             array(
-                'data' => array(
+                'operator-location' => array(
                     'niFlag' => 0
                 )
             )

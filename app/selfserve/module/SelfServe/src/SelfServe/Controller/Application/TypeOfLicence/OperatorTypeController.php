@@ -14,23 +14,5 @@ namespace SelfServe\Controller\Application\TypeOfLicence;
  */
 class OperatorTypeController extends TypeOfLicenceController
 {
-    /**
-     * Render the section form
-     *
-     * @return Response
-     */
-    public function indexAction()
-    {
-        return $this->renderSection();
-    }
-
-    /**
-     * Load data from id
-     *
-     * @param int $id
-     */
-    protected function load($id)
-    {
-        return array('data' => $this->getLicenceData());
-    }
+    protected $fieldset = 'operator-type';
 }
