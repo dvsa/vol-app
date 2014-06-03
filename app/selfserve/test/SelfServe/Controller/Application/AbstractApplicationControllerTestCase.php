@@ -31,6 +31,7 @@ abstract class AbstractApplicationControllerTestCase extends PHPUnit_Framework_T
     protected $response;
     protected $routeMatch;
     protected $event;
+    protected $mockedMethods = array();
 
     /**
      * Reset all
@@ -63,13 +64,15 @@ abstract class AbstractApplicationControllerTestCase extends PHPUnit_Framework_T
      * @param int $id
      * @param array $data
      */
-    protected function setUpAction($action = 'index', $id = null, $data = array())
+    protected function setUpAction($action = 'index', $id = null, $data = array(), $files = array())
     {
         $this->tearDown();
 
+        $methods = array_merge($this->mockedMethods, array('makeRestCall', 'getNamespaceParts'));
+
         $this->controller = $this->getMock(
             $this->controllerName,
-            array('makeRestCall', 'getNamespaceParts')
+            $methods
         );
 
         $this->controller->expects($this->any())
@@ -115,9 +118,17 @@ abstract class AbstractApplicationControllerTestCase extends PHPUnit_Framework_T
         $this->controller->setServiceLocator($serviceManager);
 
         if (!empty($data)) {
+
             $post = new \Zend\Stdlib\Parameters($data);
 
             $this->controller->getRequest()->setMethod('post')->setPost($post);
+        }
+
+        if (!empty($files)) {
+
+            $files = new \Zend\Stdlib\Parameters($files);
+
+            $this->controller->getRequest()->setFiles($files);
         }
     }
 
