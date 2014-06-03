@@ -138,9 +138,9 @@ class TypeOfLicenceController extends ApplicationController
         // we ensure the current fieldset is shown
         $form->get($this->fieldset)->removeAttribute('class');
 
-        $form = self::makeFormAlterations(
+        $form = static::makeFormAlterations(
             $form,
-            ['isPsv' => $this->isPsv(), 'fieldset' => 'licence-type']
+            $this->getFormAlterationOptions()
         );
 
         if ($this->isPartialSubmission()) {
@@ -193,28 +193,12 @@ class TypeOfLicenceController extends ApplicationController
      */
     public static function makeFormAlterations($form, $options = array())
     {
-        // get rid of the special restricted licence if they're a goods operator
-        /*
-        if (!$options['isPsv']) {
-            $fieldset = $form->get($options['fieldset']);
-
-            if (!$fieldset->has('licenceType')) {
-                return $form;
-            }
-
-            $licenceTypeElement = $fieldset->get('licenceType');
-
-            $options = $licenceTypeElement->getValueOptions();
-
-            unset($options['special-restricted']);
-
-            $licenceTypeElement->setValueOptions($options);
-        }
-        */
-
         return $form;
     }
 
+    protected function getFormAlterationOptions() {
+        return [];
+    }
 
     public function processDataMapForSave($oldData, $map = array(), $section = 'main')
     {
