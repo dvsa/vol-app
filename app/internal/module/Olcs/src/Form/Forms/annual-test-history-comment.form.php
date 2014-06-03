@@ -7,15 +7,12 @@ return [
             'method' => 'post',
         ],
         'elements' => [
-            'notes' => [
+            'annualTestHistory' => [
                 'type' => 'textarea',
                 'label' => 'Enter annual test history',
                 'class' => 'extra-long'
             ],
             'id' => [
-                'type' => 'hidden'
-            ],
-            'case' => [
                 'type' => 'hidden'
             ],
             'version' => [

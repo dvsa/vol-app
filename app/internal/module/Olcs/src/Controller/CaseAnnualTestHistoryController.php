@@ -13,6 +13,7 @@ namespace Olcs\Controller;
  */
 class CaseAnnualTestHistoryController extends CaseController
 {
+    protected $case;
 
     /**
      * Index action loads the form data
@@ -24,35 +25,17 @@ class CaseAnnualTestHistoryController extends CaseController
         $caseId = $this->fromRoute('case');
         $licence = $this->fromRoute('licence');
 
-        $annualTestHistory = array();
+        $case = $this->getCase($caseId);
 
-        $bundle = array(
-            'children' => array(
-                'case' => array(
-                    'properties' => array(
-                        'id'
-                    )
-                )
-            )
-        );
+       // echo '<pre>';var_export($case); die();
 
-        $result = $this->makeRestCall('AnnualTestHistory', 'GET', array('case' => $caseId, 'bundle' => json_encode($bundle)));
-
-        if ($result['Count']) {
-            $annualTestHistory = $result['Results'][0];
-            $annualTestHistory['case'] = $annualTestHistory['case']['id'];
-        } else {
-            $annualTestHistory['case'] = $caseId;
-        }
-
-        $form = $this->generateAnnualTestHistoryForm($annualTestHistory);
+        $form = $this->generateAnnualTestHistoryForm($case);
 
         $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licence)));
 
         $view = $this->getView();
         $tabs = $this->getTabInformationArray();
 
-        $case = $this->getCase($caseId);
         $summary = $this->getCaseSummaryArray($case);
 
         $view->setVariables(
@@ -75,13 +58,17 @@ class CaseAnnualTestHistoryController extends CaseController
      * @param array $prohibition
      * @return \Zend\Form
      */
-    private function generateAnnualTestHistoryForm($annualTestHistory)
+    protected function generateAnnualTestHistoryForm($case)
     {
         $form = $this->generateForm(
             'annual-test-history-comment',
             'saveAnnualTestHistoryForm'
         );
-        $form->setData($annualTestHistory);
+        $form->setData([
+            'annualTestHistory' => $case['annualTestHistory'],
+            'id' => $case['id'],
+            'version' => $case['version']
+        ]);
 
         return $form;
     }
@@ -95,12 +82,8 @@ class CaseAnnualTestHistoryController extends CaseController
     {
         unset($data['cancel']);
 
-        if ($data['submit'] === '') {
-            if (!empty($data['id'])) {
-                $this->processEdit($data, 'AnnualTestHistory');
-            } else {
-                $this->processAdd($data, 'AnnualTestHistory');
-            }
+        if ($data['submit'] === '' && !empty($data['id'])) {
+            $this->processEdit($data, 'VosaCase');
         }
 
         return $this->redirect()->toRoute('case_annual_test_history', array(), array(), true);
