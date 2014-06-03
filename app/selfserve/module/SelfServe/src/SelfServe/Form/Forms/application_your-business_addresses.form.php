@@ -78,6 +78,19 @@ return array(
                         'name' => 'phone_mobile_version',
                     ],
                     [
+                        'type' => 'phone',
+                        'name' => 'phone_fax',
+                        'label' => 'application_your-business_business-type.contact-details.fax-phone',
+                    ],
+                    [
+                        'type' => 'hidden',
+                        'name' => 'phone_fax_id',
+                    ],
+                    [
+                        'type' => 'hidden',
+                        'name' => 'phone_fax_version',
+                    ],
+                    [
                         'type' => 'email',
                         'name' => 'email',
                         'label' => 'application_your-business_business-type.contact-details.email',
