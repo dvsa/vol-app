@@ -27,6 +27,8 @@ class SoleTraderController extends YourBusinessController
         )
     );
 
+    protected $service = 'Person';
+
     /**
      * Data bundle
      *
@@ -71,6 +73,7 @@ class SoleTraderController extends YourBusinessController
      *
      * @return array
      */
+    /*
     protected function getFormData()
     {
         $applicationId = $this->params()->fromRoute('applicationId');
@@ -105,5 +108,20 @@ class SoleTraderController extends YourBusinessController
             $finalData['data']['version'] = $data['Results'][0]['version'];
         }
         return $finalData;
+    }
+*/
+
+
+    protected function load($id)
+    {
+        $data = $this->makeRestCall(
+            $this->getService(),
+            'GET',
+            array('application' => $id),
+            $this->getDataBundle()
+        );
+        return array(
+            'data' => $data['Results'][0]
+        );
     }
 }
