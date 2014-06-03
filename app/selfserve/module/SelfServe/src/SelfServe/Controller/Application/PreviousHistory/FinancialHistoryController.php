@@ -94,28 +94,14 @@ class FinancialHistoryController extends PreviousHistoryController
      */
     protected function processFinancialFileUpload($file)
     {
-        $uploader = $this->getUploader();
-
-        $uploader->setFile($file);
-        $uploader->upload();
-        $file = $uploader->getFile();
-
-        $fileData = $file->toArray();
-
-        $licence = $this->getLicenceData();
-
-        $fileData['fileName'] = $fileData['name'];
-        $fileData['description'] = 'Insolvency document';
-        $fileData['documentCategory'] = 1;
-        $fileData['documentSubCategory'] = 1;
-        $fileData['application'] = $this->getIdentifier();
-        $fileData['licence'] = $licence['id'];
-
-        unset($fileData['path']);
-        unset($fileData['type']);
-        unset($fileData['name']);
-
-        $this->makeRestCall('Document', 'POST', $fileData);
+        $this->uploadFile(
+            $file,
+            array(
+                'description' => 'Insolvency document',
+                'documentCategory' => 1,
+                'documentSubCategory' => 1
+            )
+        );
     }
 
     /**

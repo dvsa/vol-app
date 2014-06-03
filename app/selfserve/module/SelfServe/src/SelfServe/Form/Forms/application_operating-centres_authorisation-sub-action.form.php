@@ -55,6 +55,33 @@ return array(
                 )
             ),
             array(
+                'name' => 'advertisements',
+                'options' => array(
+                    'label' => $translationPrefix . '.advertisements'
+                ),
+                'elements' => array(
+                    'adPlaced' => array(
+                        'type' => 'yesNoRadio',
+                        'label' => $translationPrefix . '.advertisements.adPlaced'
+                    ),
+                    'adPlacedIn' => array(
+                        'type' => 'text',
+                        'filters' => '\Common\Form\Elements\InputFilters\OperatingCentreAdPlacedIn',
+                        'label' => $translationPrefix . '.advertisements.adPlacedIn'
+                    ),
+                    'dateAdPlaced' => array(
+                        'type' => 'dateSelectWithEmpty',
+                        'filters' => '\Common\Form\Elements\InputFilters\OperatingCentreDateAdPlaced',
+                        'label' => $translationPrefix . '.advertisements.dateAdPlaced'
+                    ),
+                    'file' => array(
+                        'type' => 'multipleFileUpload',
+                        'label' => $translationPrefix . '.advertisements.file',
+                        'hint' => $translationPrefix . '.advertisements.file.hint'
+                    )
+                )
+            ),
+            array(
                 'type' => 'journey-crud-buttons'
             ),
             array(

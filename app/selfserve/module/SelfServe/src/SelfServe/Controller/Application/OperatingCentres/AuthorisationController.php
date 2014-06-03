@@ -60,7 +60,8 @@ class AuthorisationController extends OperatingCentresController
             'children' => array(
                 'applicationOperatingCentre' => array(
                     'mapFrom' => array(
-                        'data'
+                        'data',
+                        'advertisements'
                     )
                 ),
                 'operatingCentre' => array(
@@ -92,7 +93,9 @@ class AuthorisationController extends OperatingCentresController
             'numberOfVehicles',
             'sufficientParking',
             'permission',
-            'adPlaced'
+            'adPlaced',
+            'adPlacedIn',
+            'dateAdPlaced'
         ),
         'children' => array(
             'operatingCentre' => array(
@@ -113,6 +116,14 @@ class AuthorisationController extends OperatingCentresController
                             'county',
                             'city',
                             'country'
+                        )
+                    ),
+                    'adDocuments' => array(
+                        'properties' => array(
+                            'id',
+                            'fileName',
+                            'identifier',
+                            'size'
                         )
                     )
                 )
@@ -230,6 +241,7 @@ class AuthorisationController extends OperatingCentresController
     {
         if ($this->isPsv()) {
             $form->get('data')->remove('numberOfTrailers');
+            $form->remove('advertisements');
 
             $label = $form->get('data')->getLabel();
             $form->get('data')->setLabel($label .= '-psv');
@@ -239,6 +251,39 @@ class AuthorisationController extends OperatingCentresController
 
             $label = $form->get('data')->get('permission')->getLabel();
             $form->get('data')->get('permission')->setLabel($label .= '-psv');
+        } else {
+
+            $this->processFileUploads(
+                array('advertisements' => array('file' => 'processAdvertisementFileUpload')),
+                $form
+            );
+
+            if ($this->getActionName() == 'edit') {
+
+                $fileList = $form->get('advertisements')->get('file')->get('list');
+
+                $data = $this->makeRestCall(
+                    'Document',
+                    'GET',
+                    array(
+                        'application' => $this->getIdentifier(),
+                        'documentCategory' => 1,
+                        'documentSubCategory' => 2,
+                        'operatingCentre' => null
+                    )
+                );
+
+                print '<pre>';
+                print_r($data);
+                print '</pre>';
+                exit;
+
+                $fileData = $this->actionLoad($this->getActionId())['operatingCentre']['adDocuments'];
+
+                $fileList->setFiles($fileData, $this->url());
+            }
+
+            $this->processFileDeletions(array('advertisements' => array('file' => 'deleteFile')), $form);
         }
 
         return $form;
@@ -294,6 +339,10 @@ class AuthorisationController extends OperatingCentresController
      */
     protected function actionSave($data, $service = null)
     {
+        print '<pre>';
+        print_r($data);
+        print '</pre>';
+        exit;
         $saved = parent::actionSave($data['operatingCentre'], 'OperatingCentre');
 
         if ($this->getActionName() == 'add') {
@@ -324,6 +373,16 @@ class AuthorisationController extends OperatingCentresController
             $data['operatingCentre'] = $data['data']['operatingCentre'];
             $data['address'] = $data['operatingCentre']['address'];
             $data['address']['country'] = 'country.' . $data['address']['country'];
+
+            $data['advertisements'] = array(
+                'adPlaced' => $data['data']['adPlaced'],
+                'adPlacedIn' => $data['data']['adPlacedIn'],
+                'dateAdPlaced' => $data['data']['dateAdPlaced']
+            );
+
+            unset($data['data']['adPlaced']);
+            unset($data['data']['adPlacedIn']);
+            unset($data['data']['dateAdPlaced']);
             unset($data['data']['operatingCentre']);
         }
 
@@ -363,5 +422,22 @@ class AuthorisationController extends OperatingCentresController
         }
 
         return $data;
+    }
+
+    /**
+     * Handle the file upload
+     *
+     * @param array $file
+     */
+    protected function processAdvertisementFileUpload($file)
+    {
+        $this->uploadFile(
+            $file,
+            array(
+                'description' => 'Advertisement',
+                'documentCategory' => 1,
+                'documentSubCategory' => 2
+            )
+        );
     }
 }

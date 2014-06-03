@@ -27,6 +27,13 @@ abstract class AbstractJourneyController extends AbstractController
     protected $isAction;
 
     /**
+     * Holds the action data
+     *
+     * @var array
+     */
+    protected $actionData;
+
+    /**
      * Render the navigation
      *
      * @var boolean
@@ -1289,9 +1296,14 @@ abstract class AbstractJourneyController extends AbstractController
      */
     protected function actionLoad($id)
     {
-        return $this->makeRestCall(
-            $this->getActionService(), 'GET', array('id' => $id), $this->getActionDataBundle()
-        );
+        if (empty($this->actionData)) {
+
+            $this->actionData = $this->makeRestCall(
+                $this->getActionService(), 'GET', array('id' => $id), $this->getActionDataBundle()
+            );
+        }
+
+        return $this->actionData;
     }
 
     /**
