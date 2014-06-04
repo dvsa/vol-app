@@ -38,11 +38,12 @@ class BusinessDetailsController extends YourBusinessController
     protected $actionDataBundle = array(
         'properties' => array(
             'id',
+            'version',
             'name',
             'companyNo',
         ),
     );
-    
+
     /**
      * Form tables name
      *
@@ -51,14 +52,14 @@ class BusinessDetailsController extends YourBusinessController
     protected $formTables = array(
         'table' => 'application_your-business_business_details-subsidiaries'
     );
-    
+
     /**
      * Holds the sub action service
      *
      * @var string
      */
     protected $actionService = 'CompanySubsidiary';
-    
+
     /**
      * Render the section form
      *
@@ -109,7 +110,7 @@ class BusinessDetailsController extends YourBusinessController
             $this->makeRestCall('TradingNames', 'POST', $tradingNameData);
         }
 
-        // @TODO we shouldn't really need to do this; it's only
+        // we shouldn't really need to do this; it's only
         // because our $service property is set to Application
         // so we can fetch tradingNames as a child value
         return parent::save($data, 'Organisation');
@@ -249,8 +250,12 @@ class BusinessDetailsController extends YourBusinessController
         }
 
         $post = (array)$request->getPost()['data'];
-
-        if (isset($post['companyNumber']['submit_lookup_company'])) {
+        if (isset($post['companyNumber'])) {
+            $companyKey = 'companyNumber';
+        } else {
+            $companyKey = 'companyNo';
+        }
+        if (isset($post[$companyKey]['submit_lookup_company'])) {
 
             $this->setPersist(false);
 
@@ -259,7 +264,7 @@ class BusinessDetailsController extends YourBusinessController
                 'GET',
                 [
                     'type' => 'numberSearch',
-                    'value' => $post['companyNumber']['company_number']
+                    'value' => $post[$companyKey]['company_number']
                 ]
             );
 
@@ -268,7 +273,7 @@ class BusinessDetailsController extends YourBusinessController
                 $post['name'] = $companyName;
                 $this->setFieldValue('data', $post);
             } else {
-                $form->get('data')->get('companyNumber')->setMessages(
+                $form->get('data')->get($companyKey)->setMessages(
                     array('company_number' => array(
                         'Sorry, we couldn\'t find any matching companies, '
                         . 'please try again or enter your details manually below'))
@@ -278,7 +283,7 @@ class BusinessDetailsController extends YourBusinessController
 
         return $form;
     }
-    
+
     /**
      * Add subsidiary company
      */
@@ -294,7 +299,7 @@ class BusinessDetailsController extends YourBusinessController
     {
         return $this->renderSection();
     }
-    
+
     /**
      * Delete subsidiary company
      *
@@ -304,7 +309,7 @@ class BusinessDetailsController extends YourBusinessController
     {
         return $this->delete();
     }
-    
+
     /**
      * Action save
      *
@@ -315,9 +320,12 @@ class BusinessDetailsController extends YourBusinessController
     {
         $organisation = $this->getOrganisationData(['organisationType', 'id']);
         $data['organisation'] = $organisation['id'];
+        if (isset($data['companyNo'])) {
+            $data['companyNo'] = $data['companyNo']['company_number'];
+        }
         parent::actionSave($data, 'CompanySubsidiary');
     }
-    
+
     /**
      * Format the data for the form
      *
@@ -326,9 +334,13 @@ class BusinessDetailsController extends YourBusinessController
      */
     protected function processActionLoad($data)
     {
+        if (array_key_exists('companyNo', $data)) {
+            $data['companyNo'] = array('company_number' => $data['companyNo']);
+        }
+
         return array('data' => $data);
     }
-    
+
     /**
      * Get the form table data
      *
@@ -337,7 +349,7 @@ class BusinessDetailsController extends YourBusinessController
     protected function getFormTableData()
     {
         $organisation = $this->getOrganisationData(array('id'));
-        
+
         $data = $this->makeRestCall(
             $this->getActionService(),
             'GET',
@@ -347,6 +359,4 @@ class BusinessDetailsController extends YourBusinessController
 
         return $data;
     }
-    
-    
 }

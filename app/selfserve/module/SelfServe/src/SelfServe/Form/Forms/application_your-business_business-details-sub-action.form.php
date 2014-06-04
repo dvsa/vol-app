@@ -17,12 +17,12 @@ return array(
                     'type' => 'hidden',
                 ),
                 'name' => array(
-                    'type' => 'text',
+                    'type' => 'companyName',
                     'label' => 'application_your-business_business-details-formName',
                     'class' => 'long',
                 ),
                 'companyNo' => array(
-                    'type' => 'text',
+                    'type' => 'companyNumber',
                     'label' => 'application_your-business_business-details-formCompanyNo',
                     'class' => 'long',
                 ),
