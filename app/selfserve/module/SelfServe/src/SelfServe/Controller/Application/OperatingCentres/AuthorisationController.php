@@ -191,20 +191,33 @@ class AuthorisationController extends OperatingCentresController
      */
     protected function alterForm($form)
     {
-        if (!in_array($this->getLicenceType(), array('standard-national', 'standard-international'))) {
-            $form->get('data')->remove('totAuthLargeVehicles');
-        }
+        if ($this->isPsv()) {
 
-        if (!in_array($this->getLicenceType(), array('standard-international', 'restricted'))) {
+            $options = $form->get('data')->getOptions();
+            $options['hint'] .= '.psv';
+            $form->get('data')->setOptions($options);
+
+            if (!in_array($this->getLicenceType(), array('standard-national', 'standard-international'))) {
+                $form->get('data')->remove('totAuthLargeVehicles');
+            }
+
+            if (!in_array($this->getLicenceType(), array('standard-international', 'restricted'))) {
+                $form->get('data')->remove('totCommunityLicences');
+            }
+
+            $form->get('data')->remove('totAuthVehicles');
+            $form->get('data')->remove('totAuthTrailers');
+            $form->get('data')->remove('minTrailerAuth');
+            $form->get('data')->remove('maxTrailerAuth');
+
+        } else {
+
+            $form->get('data')->remove('totAuthSmallVehicles');
+            $form->get('data')->remove('totAuthMediumVehicles');
+            $form->get('data')->remove('totAuthLargeVehicles');
             $form->get('data')->remove('totCommunityLicences');
         }
 
-        if ($this->isPsv()) {
-
-            //$form->get('data')->remove('totAuthTrailers');
-            $form->get('data')->remove('minTrailerAuth');
-            $form->get('data')->remove('maxTrailerAuth');
-        }
         return $form;
     }
 

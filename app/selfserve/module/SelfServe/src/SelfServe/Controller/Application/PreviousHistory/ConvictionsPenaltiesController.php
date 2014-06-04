@@ -163,15 +163,6 @@ class ConvictionsPenaltiesController extends PreviousHistoryController
      */
     protected function alterForm($form)
     {
-        $table = $form->getInputFilter()->get('table')->get('table');
-        $newValidatorChain = new \Zend\Validator\ValidatorChain();
-        foreach ($table->getValidatorChain()->getValidators() as $validator) {
-            if (!($validator['instance'] instanceof \Common\Form\Elements\Validators\TableRequiredValidator)) {
-                $newValidatorChain->attach($validator['instance'], $validator['breakChainOnFailure']);
-            }
-        }
-        $table->setValidatorChain($newValidatorChain);
-
         $post = (array)$this->getRequest()->getPost();
         if (!(array_key_exists('table', $post) && array_key_exists('action', $post['table']))) {
             $rows = $form->get('table')->get('rows')->getValue();
