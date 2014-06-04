@@ -69,49 +69,11 @@ class SoleTraderController extends YourBusinessController
     }
 
     /**
-     * Get the form data
+     * Load data
      *
+     * @param $id
      * @return array
      */
-    /*
-    protected function getFormData()
-    {
-        $applicationId = $this->params()->fromRoute('applicationId');
-
-        $bundle = array(
-            'properties' => array(
-                'id',
-                'version',
-                'title',
-                'firstName',
-                'surname',
-                'dateOfBirth',
-                'otherNames'
-            ),
-        );
-
-        $data = $this->makeRestCall(
-            'Person',
-            'GET',
-            array('application' => $applicationId),
-            $bundle
-        );
-
-        $finalData = array();
-        if (array_key_exists('Results', $data) !== false && count($data['Results']) >= 1) {
-            $finalData['data']['title'] = $data['Results'][0]['title'];
-            $finalData['data']['firstName'] = $data['Results'][0]['firstName'];
-            $finalData['data']['surname'] = $data['Results'][0]['surname'];
-            $finalData['data']['otherNames'] = $data['Results'][0]['otherNames'];
-            $finalData['data']['dateOfBirth'] = $data['Results'][0]['dateOfBirth'];
-            $finalData['data']['id'] = $data['Results'][0]['id'];
-            $finalData['data']['version'] = $data['Results'][0]['version'];
-        }
-        return $finalData;
-    }
-*/
-
-
     protected function load($id)
     {
         $data = $this->makeRestCall(
