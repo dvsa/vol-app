@@ -32,17 +32,20 @@ return array(
                         'action' => 'edit'
                     ),
                     'Application/YourBusiness/People'
-                ) . '">' . $row['name'] . '</a>';
+                ) . '">' . $row['title'] . ' ' . $row['firstName'] . ' ' . $row['surname'] . '</a>';
+            },
+        ),
+        array(
+            'title' => 'selfserve-app-subSection-your-business-people-columnHasOtherNames',
+            'name' => 'otherNames',
+            'formatter' => function ($row) {
+                return ($row['otherNames'] ? 'Yes' : 'No');
             }
         ),
         array(
             'title' => 'selfserve-app-subSection-your-business-people-columnDate',
             'name' => 'dateOfBirth',
             'formatter' => 'Date',
-        ),
-        array(
-            'title' => 'selfserve-app-subSection-your-business-people-columnHasOtherNames',
-            'name' => 'hasOtherNames',
         ),
         array(
             'title' => 'selfserve-app-subSection-your-business-people-columnPosition',

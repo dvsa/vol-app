@@ -82,23 +82,7 @@ class PeopleController extends YourBusinessController
             $bundle
         );
 
-        $finalData = array();
-        foreach ($data['Results'] as $result) {
-            $finalData[] = $result;
-            $lastElemntIndex = count($finalData) - 1;
-            $finalData[$lastElemntIndex]['name'] = $finalData[$lastElemntIndex]['title'] . ' ' .
-                $finalData[$lastElemntIndex]['firstName'] . ' ' .
-                $finalData[$lastElemntIndex]['surname'];
-            unset($finalData[$lastElemntIndex]['title']);
-            unset($finalData[$lastElemntIndex]['firtName']);
-            unset($finalData[$lastElemntIndex]['surname']);
-            if ($finalData[$lastElemntIndex]['otherNames']) {
-                $finalData[$lastElemntIndex]['hasOtherNames'] = 'Yes';
-                unset($finalData[$lastElemntIndex]['otherNames']);
-            }
-        }
-
-        return $finalData;
+        return array_key_exists('Results', $data) ? $data['Results'] : array();
     }
 
     /**
@@ -229,5 +213,16 @@ class PeopleController extends YourBusinessController
         $applicationId = $this->getIdentifier();
         $data['application'] = $applicationId;
         parent::actionSave($data, 'Person');
+    }
+    
+    /**
+     * We should have this method to display empty form
+     *
+     * @param int $id
+     * @param array
+     */
+    protected function load($id)
+    {
+        return array();
     }
 }
