@@ -420,17 +420,17 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
      */
     protected function mockRestCalls($service, $method, $data = array(), $bundle = array())
     {
-        if ($service == 'Application' && $method == 'GET') {
-            $licenceBundle = array(
-                'children' => array(
-                    'licence' => array(
-                        'properties' => array(
-                            'id',
-                            'version',
-                            'goodsOrPsv',
-                            'niFlag',
-                            'licenceType'
-                        )
+        if ($service == 'Application' && $method == 'GET' && $bundle == ApplicationController::$licenceDataBundle) {
+
+            return array(
+                'licence' => array(
+                    'id' => 10,
+                    'version' => 1,
+                    'goodsOrPsv' => 'goods',
+                    'niFlag' => 0,
+                    'licenceType' => 'standard-national',
+                    'organisation' => array(
+                        'organisationType' => 'org_type.lc'
                     )
                 )
             );
