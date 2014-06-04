@@ -50,6 +50,11 @@ return array(
                 ]
             ),
             array(
+                'name' => 'table',
+                'options' => array(0),
+                'type' => 'table'
+            ),
+            array(
                 'type' => 'journey-buttons'
             )
         )

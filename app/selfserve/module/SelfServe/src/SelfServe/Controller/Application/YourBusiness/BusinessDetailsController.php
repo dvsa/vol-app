@@ -4,6 +4,7 @@
  * BusinessDetails Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 namespace SelfServe\Controller\Application\YourBusiness;
 
@@ -11,6 +12,7 @@ namespace SelfServe\Controller\Application\YourBusiness;
  * BusinessDetails Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 class BusinessDetailsController extends YourBusinessController
 {
@@ -28,6 +30,35 @@ class BusinessDetailsController extends YourBusinessController
         ],
     ];
 
+    /**
+     * Holds the actionDataBundle
+     *
+     * @var array
+     */
+    protected $actionDataBundle = array(
+        'properties' => array(
+            'id',
+            'name',
+            'companyNo',
+        ),
+    );
+    
+    /**
+     * Form tables name
+     *
+     * @var string
+     */
+    protected $formTables = array(
+        'table' => 'application_your-business_business_details-subsidiaries'
+    );
+    
+    /**
+     * Holds the sub action service
+     *
+     * @var string
+     */
+    protected $actionService = 'CompanySubsidiary';
+    
     /**
      * Render the section form
      *
@@ -97,14 +128,17 @@ class BusinessDetailsController extends YourBusinessController
                 break;
             case 'org_type.st':
                 $fieldset->remove('name')->remove('companyNumber');
+                $form->remove('table');
                 break;
             case 'org_type.p':
                 $fieldset->remove('companyNumber');
                 $fieldset->get('name')->setLabel($fieldset->get('name')->getLabel() . '.partnership');
+                $form->remove('table');
                 break;
             case 'org_type.o':
                 $fieldset->remove('companyNumber')->remove('tradingNames');
                 $fieldset->get('name')->setLabel($fieldset->get('name')->getLabel() . '.other');
+                $form->remove('table');
                 break;
         }
         return $form;
@@ -244,4 +278,75 @@ class BusinessDetailsController extends YourBusinessController
 
         return $form;
     }
+    
+    /**
+     * Add subsidiary company
+     */
+    public function addAction()
+    {
+        return $this->renderSection();
+    }
+
+    /**
+     * Edit subsidiary company
+     */
+    public function editAction()
+    {
+        return $this->renderSection();
+    }
+    
+    /**
+     * Delete subsidiary company
+     *
+     * @return Response
+     */
+    public function deleteAction()
+    {
+        return $this->delete();
+    }
+    
+    /**
+     * Action save
+     *
+     * @param array $data
+     * @param string $service
+     */
+    protected function actionSave($data, $service = null)
+    {
+        $organisation = $this->getOrganisationData(['organisationType', 'id']);
+        $data['organisation'] = $organisation['id'];
+        parent::actionSave($data, 'CompanySubsidiary');
+    }
+    
+    /**
+     * Format the data for the form
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function processActionLoad($data)
+    {
+        return array('data' => $data);
+    }
+    
+    /**
+     * Get the form table data
+     *
+     * @return array
+     */
+    protected function getFormTableData()
+    {
+        $organisation = $this->getOrganisationData(array('id'));
+        
+        $data = $this->makeRestCall(
+            $this->getActionService(),
+            'GET',
+            array('organisation' => $organisation['id']),
+            $this->getActionDataBundle()
+        );
+
+        return $data;
+    }
+    
+    
 }
