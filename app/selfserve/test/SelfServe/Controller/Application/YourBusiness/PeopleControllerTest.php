@@ -3,7 +3,7 @@
 /**
  * People Controller Test
  *
- * @author Rob Caiger <rob@clocal.co.uk>
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 
 namespace SelfServe\Test\Controller\Application\YourBusiness;
@@ -14,13 +14,14 @@ use SelfServe\Controller\Application\ApplicationController;
 /**
  * People Controller Test
  *
- * @author Rob Caiger <rob@clocal.co.uk>
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 class PeopleControllerTest extends AbstractApplicationControllerTestCase
 {
 
     protected $controllerName = '\SelfServe\Controller\Application\YourBusiness\PeopleController';
     protected $defaultRestResponse = array();
+    protected $organisation = 'org_type.lc';
 
     /**
      * Test back button
@@ -35,12 +36,64 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
     }
 
     /**
-     * Test indexAction
+     * Test indexAction - organisation's type - limited company
      */
-    public function testIndexAction()
+    public function testIndexActionOrgTypeLc()
     {
         $this->setUpAction('index');
 
+        $response = $this->controller->indexAction();
+
+        // Make sure we get a view not a response
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+    }
+
+    /**
+     * Test indexAction - organisation's type - LLP
+     */
+    public function testIndexActionOrgTypeLlp()
+    {
+        $this->setUpAction('index');
+        $this->organisation = 'org_type.llp';
+        $response = $this->controller->indexAction();
+
+        // Make sure we get a view not a response
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+    }
+
+    /**
+     * Test indexAction - organisation's type - partners
+     */
+    public function testIndexActionOrgTypePartners()
+    {
+        $this->setUpAction('index');
+        $this->organisation = 'org_type.p';
+        $response = $this->controller->indexAction();
+
+        // Make sure we get a view not a response
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+    }
+
+    /**
+     * Test indexAction - organisation's type not defined
+     */
+    public function testIndexActionOrgTypeNotDefined()
+    {
+        $this->setUpAction('index');
+        $this->organisation = '';
+        $response = $this->controller->indexAction();
+
+        // Make sure we get a view not a response
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+    }
+
+    /**
+     * Test indexAction - organisation's type - other
+     */
+    public function testIndexActionOrgTypeOther()
+    {
+        $this->setUpAction('index');
+        $this->organisation = 'org_type.o';
         $response = $this->controller->indexAction();
 
         // Make sure we get a view not a response
@@ -52,10 +105,307 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
      */
     public function testIndexActionWithSubmit()
     {
-        $this->setUpAction('index', null, array('foo' => 'bar'));
+        $this->setUpAction('index', null, array('action' => 'add'));
 
         $this->controller->setEnabledCsrf(false);
         $response = $this->controller->indexAction();
+
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
+     * Test indexAction With Add Crud Action
+     */
+    public function testIndexActionWithAddCrudAction()
+    {
+        $this->setUpAction(
+            'index', null, array(
+                'data' => array(
+                    'id' => 1,
+                    'title' => 'Mr',
+                    'firstName' => 'A',
+                    'surname' => 'B',
+                    'dateOfBirth' => '2014-01-',
+                    'otherNames' => 'other',
+                    'position' => 'position'
+                ),
+                'table' => array(
+                    'rows' => 1,
+                    'action' => 'Add'
+                ),
+            )
+        );
+        $this->controller->setEnabledCsrf(false);
+
+        $response = $this->controller->indexAction();
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
+     * Test indexAction With Edit Crud Action without id
+     * @group acurrent
+     */
+    public function testIndexActionWithEditCrudActionWithoutId()
+    {
+        $this->setUpAction(
+            'index', null, array(
+                'data' => array(
+                    'id' => 1,
+                    'title' => 'Mr',
+                    'firstName' => 'A',
+                    'surname' => 'B',
+                    'dateOfBirth' => '2014-01-',
+                    'otherNames' => 'other',
+                    'position' => 'position'
+                ),
+                'table' => array(
+                    'rows' => 1,
+                    'action' => 'Edit'
+                ),
+            )
+        );
+
+        $this->controller->setEnabledCsrf(false);
+
+        $response = $this->controller->indexAction();
+
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
+     * Test indexAction With Edit Crud Action
+     */
+    public function testIndexActionWithEditCrudAction()
+    {
+        $this->setUpAction(
+            'index', null, array(
+                'data' => array(
+                    'id' => 1,
+                    'title' => 'Mr',
+                    'firstName' => 'A',
+                    'surname' => 'B',
+                    'dateOfBirth' => '2014-01-',
+                    'otherNames' => 'other',
+                    'position' => 'position'
+                ),
+                'table' => array(
+                    'rows' => 1,
+                    'action' => 'Edit',
+                    'id' => 1
+                ),
+            )
+        );
+
+        $this->controller->setEnabledCsrf(false);
+
+        $response = $this->controller->indexAction();
+
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
+     * Test indexAction With Edit Link Crud action
+     */
+    public function testIndexActionWithEditLinkCrudAction()
+    {
+        $this->setUpAction(
+            'index', null, array(
+                'data' => array(
+                    'id' => 1,
+                    'title' => 'Mr',
+                    'firstName' => 'A',
+                    'surname' => 'B',
+                    'dateOfBirth' => '2014-01-01',
+                    'otherNames' => 'other',
+                    'position' => 'position'
+                ),
+                'table' => array(
+                    'rows' => 1,
+                    'action' => array('Edit' => array('2' => 'String')),
+                    'id' => 1
+                ),
+            )
+        );
+
+        $this->controller->setEnabledCsrf(false);
+
+        $response = $this->controller->indexAction();
+
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
+     * Test editAction
+     */
+    public function testEditAction()
+    {
+        $this->setUpAction('edit', 1);
+
+        $response = $this->controller->editAction();
+
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+    }
+
+    /**
+     * Test editAction with submit
+     */
+    public function testEditActionWithSubmit()
+    {
+        $this->setUpAction(
+            'edit', 1, array(
+                'data' => array(
+                    'id' => 1,
+                    'title' => 'Mr',
+                    'firstName' => 'A',
+                    'surname' => 'B',
+                    'otherNames' => 'other',
+                    'position' => 'position',
+                    'dateOfBirth' => array(
+                        'month' => 1,
+                        'day'   => 1,
+                        'year'  => 2014
+                     ),
+                ),
+            )
+        );
+
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->editAction();
+
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
+     * Test editAction with cancel
+     */
+    public function testEditActionWithCancel()
+    {
+        $post = array(
+            'form-actions' => array(
+                'cancel' => 'Cancel'
+            )
+        );
+
+        $this->setUpAction('edit', 1, $post);
+
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->editAction();
+
+        $this->assertInstanceOf('\Zend\Http\Response', $response);
+    }
+
+
+    /**
+     * Test deleteAction
+     */
+    public function testDeleteAction()
+    {
+        $this->setUpAction('delete', 1);
+
+        $response = $this->controller->deleteAction();
+
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
+     * Test deleteAction without id
+     */
+    public function testDeleteActionWithoutId()
+    {
+        $this->setUpAction('delete');
+
+        $response = $this->controller->deleteAction();
+
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+    }
+
+    /**
+     * Test addAction
+     */
+    public function testAddAction()
+    {
+        $this->setUpAction('add');
+
+        $response = $this->controller->addAction();
+
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+    }
+
+    /**
+     * Test addAction with cancel
+     */
+    public function testAddActionWithCancel()
+    {
+        $post = array(
+            'form-actions' => array(
+                'cancel' => 'Cancel'
+            )
+        );
+
+        $this->setUpAction('add', null, $post);
+
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->addAction();
+
+        $this->assertInstanceOf('\Zend\Http\Response', $response);
+    }
+
+    /**
+     * Test addAction with submit
+     */
+    public function testAddActionWithSubmit()
+    {
+        $this->setUpAction(
+            'add', null, array(
+                'data' => array(
+                    'id' => 1,
+                    'title' => 'Mr',
+                    'firstName' => 'A',
+                    'surname' => 'B',
+                    'otherNames' => 'other',
+                    'position' => 'position',
+                    'dateOfBirth' => array(
+                        'month' => 1,
+                        'day'   => 1,
+                        'year'  => 2014
+                     ),
+                ),
+            )
+        );
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->addAction();
+
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
+     * Test addAction with submit with add another
+     */
+    public function testAddActionWithSubmitWithAddAnother()
+    {
+        $this->setUpAction(
+            'add', null, array(
+                'data' => array(
+                    'id' => 1,
+                    'title' => 'Mr',
+                    'firstName' => 'A',
+                    'surname' => 'B',
+                    'otherNames' => 'other',
+                    'position' => 'position',
+                    'dateOfBirth' => array(
+                        'month' => 1,
+                        'day'   => 1,
+                        'year'  => 2014
+                     ),
+                ),
+                'form-actions' => array(
+                    'addAnother' => 'Add another'
+                )
+            )
+        );
+
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->addAction();
 
         $this->assertInstanceOf('Zend\Http\Response', $response);
     }
@@ -70,19 +420,60 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
      */
     protected function mockRestCalls($service, $method, $data = array(), $bundle = array())
     {
-        if ($service == 'Application' && $method == 'GET' && $bundle == ApplicationController::$licenceDataBundle) {
-
-            return array(
-                'licence' => array(
-                    'id' => 10,
-                    'version' => 1,
-                    'goodsOrPsv' => 'goods',
-                    'niFlag' => 0,
-                    'licenceType' => 'standard-national'
+        if ($service == 'Application' && $method == 'GET') {
+            $licenceBundle = array(
+                'children' => array(
+                    'licence' => array(
+                        'properties' => array(
+                            'id',
+                            'version',
+                            'goodsOrPsv',
+                            'niFlag',
+                            'licenceType'
+                        )
+                    )
                 )
             );
+            $orgTypeBundle = array(
+                'children' => array(
+                    'licence' => array(
+                        'children' => array(
+                            'organisation' => array(
+                                'properties' => array(
+                                    'id',
+                                    'version',
+                                    'organisationType',
+                                )
+                            )
+                        )
+                    )
+                )
+            );
+            if ($bundle == $orgTypeBundle) {
+                return array(
+                    'licence' => array(
+                        'organisation' => array(
+                            'organisationType' => $this->organisation,
+                        )
+                    )
+                );
+            } elseif ($bundle == $licenceBundle) {
+                return array(
+                    'licence' => array(
+                        'id' => 10,
+                        'version' => 1,
+                        'goodsOrPsv' => 'goods',
+                        'niFlag' => 0,
+                        'licenceType' => 'standard-national'
+                    )
+                );
+            } else {
+                return array(
+                    'id' => 1,
+                    'version' => 1,
+                );
+            }
         }
-
         if ($service == 'ApplicationCompletion' && $method == 'GET') {
 
             return array(
@@ -122,5 +513,34 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
                 )
             );
         }
+
+        $personDataBundle = array(
+            'properties' => array(
+                'id',
+                'title',
+                'firstName',
+                'surname',
+                'dateOfBirth',
+                'otherNames',
+                'position'
+            ),
+        );
+        if ($service == 'Person' && $method = 'GET' && $bundle == $personDataBundle) {
+            return array(
+                'Count'  => 1,
+                'Results' => array(
+                    array(
+                        'id' => 1,
+                        'title' => 'Mr',
+                        'firstName' => 'A',
+                        'surname' => 'P',
+                        'dateOfBirth' => '2014-01-01',
+                        'otherNames' => 'other names',
+                        'position' => 'position'
+                    )
+                )
+            );
+        }
+
     }
 }
