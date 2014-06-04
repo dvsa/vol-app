@@ -37,6 +37,7 @@ class SoleTraderController extends YourBusinessController
     protected $dataBundle = array(
         'properties' => array(
                 'id',
+                'version',
                 'title',
                 'firstName',
                 'surname',
@@ -83,7 +84,7 @@ class SoleTraderController extends YourBusinessController
             $this->getDataBundle()
         );
         return array(
-            'data' => $data['Results'][0]
+            'data' => count($data['Results']) ? $data['Results'][0] : array()
         );
     }
 }
