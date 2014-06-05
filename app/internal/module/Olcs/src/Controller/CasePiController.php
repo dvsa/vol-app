@@ -16,12 +16,7 @@ use Zend\View\Model\ViewModel;
 class CasePiController extends CaseController
 {
 
-    /**
-     * Gets public inquiry data
-     *
-     * @return ViewModel
-     */
-    public function indexAction()
+    public function onDispatch(\Zend\Mvc\MvcEvent $e)
     {
         $licenceId = $this->fromRoute('licence');
         $caseId = $this->fromRoute('case');
@@ -32,10 +27,29 @@ class CasePiController extends CaseController
 
         $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licenceId)));
 
-        //$bundle = $this->getIndexBundle();
+        return parent::onDispatch($e);
+    }
+
+    /**
+     * Gets public inquiry data
+     *
+     * @return ViewModel
+     */
+    public function indexAction()
+    {
+        $licenceId = $this->fromRoute('licence');
+        $caseId = $this->fromRoute('case');
+
+        $pi = $this->getPiInfo($caseId);
+        /* echo '<pre>';
+        die(print_r($pi, 1)); */
+
+        $table = $this->buildPiHearingsTable($pi);
 
         $variables = array(
-            'tab' => 'pi'
+            'tab' => 'pi',
+            'pi' => $pi,
+            'piTable' => $table,
         );
 
         $caseVariables = $this->getCaseVariables($caseId, $variables);
@@ -43,6 +57,56 @@ class CasePiController extends CaseController
         $view->setTemplate('case/manage');
 
         return $view;
+    }
+
+    public function buildPiHearingsTable($pi)
+    {
+        if (!isset($pi['piHearings'])) {
+            return null;
+        }
+
+        return $this->buildTable('hearings', $pi['piHearings'], array());
+    }
+
+    public function getPiInfo($caseId)
+    {
+        $pis = $this->makeRestCall('Pi', 'GET', array('case' => $caseId));
+        if (isset($pis['Results']['0'])) {
+            $bundle = [
+                'children' => [
+                    'presidingTc' => [
+                        'properties' => 'ALL',
+                    ],
+                    'piReasons' => [
+                        'properties' => 'ALL',
+                    ],
+                    'piHearings' => array(
+                        'properties' => 'ALL',
+                        'children' => [
+                            'presidingTc' => [
+                                'properties' => 'ALL',
+                            ],
+                        ],
+                    ),
+                    'decisionPresidingTc' => array(
+                        'properties' => 'ALL'
+                    ),
+                    'decisionReasons' => array(
+                        'properties' => 'ALL'
+                    ),
+                    'user' => array(
+                        'properties' => 'ALL'
+                    )
+                ]
+            ];
+            $pi = $this->makeRestCall('Pi', 'GET', array('id' => $pis['Results']['0']), $bundle);
+        }
+
+        if ($pi) {
+            return $pi;
+        }
+
+        return null;
     }
 
     public function addAction()
@@ -215,21 +279,5 @@ class CasePiController extends CaseController
     public function editAction()
     {
 
-    }
-
-    /**
-     * Build the data for a witness select box
-     *
-     * @return array
-     */
-    public function getWitnessData()
-    {
-        $witness = array();
-
-        for ($i = 0; $i <= 100; $i++) {
-            $witness[$i] = $i;
-        }
-
-        return $witness;
     }
 }

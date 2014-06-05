@@ -1,0 +1,66 @@
+<div class="table__header">
+
+    <h3>Agreed and legislation</h3>
+    <div class="actions-container">
+        <a href="<?php echo $this->url($this->route, ['action' => 'edit', 'id' => $pi['id']], [], true); ?>" class="action--secondary" />Edit</a>
+    </div>
+
+    <div style="clear: both"></div>
+
+    <?php
+
+    $summary = [
+        'agreedDate' => [
+            'label' => 'Agreed date',
+            'value' => isset($pi['dateAgreed']) ? date('m/d/Y', strtotime($pi['dateAgreed'])) : 'dd-mm-yyyy',
+        ],
+        'agreedBy' => [
+            'label' => 'Agreed By',
+            'value' => $pi['presidingTc']['name']
+        ],
+        'agreedByRole' => [
+            'label' => 'Agreed By Role',
+            'value' => $pi['presidingTcRole']
+        ]
+    ];
+
+    $typeKeys = [
+        'typeAppNew' => 'Application - New',
+        'typeAppVar' => 'Application - Variation',
+        'typeAppDisciplinary' => 'Application - Disciplinary',
+        'typeAppNewDisciplinary' => 'Application - New - Disiplinary',
+        'typeAppVarDisciplinary' => 'Application - Variation - Disiplinary',
+        'typeEnvNew' => 'Environmental - New',
+        'typeEnvVar' => 'Environmental - Variation',
+        'typeOcReview' => 'O/C Review',
+        'typeImpounding' => 'Impounding'
+    ];
+
+    $types = [];
+    foreach ($typeKeys as $key => $value) {
+        if ($pi[$key] == 'Y') {
+            $types[] = $value;
+        }
+    }
+    if (is_array($types)) {
+        $summary += [
+            'piType' => [
+                'label' => 'Public Inquiry Type',
+                'value' => implode(', ', $types),
+            ],
+        ];
+    }
+
+    $summary += [
+        'assignedTo' => [
+            'label' => 'Assigned To',
+            'value' => $pi['user']['name'],
+        ],
+        'legislation' => [
+            'label' => 'Legislation',
+            'value' => is_array($pi['piReasons']) ? implode(', ', array_map(function($item){return $item['sectionCode'];}, $pi['piReasons'])) : 'None selected',
+        ],
+    ];
+
+    echo $this->render('partials/summary/summary__list', ['items' => $summary, 'title' => 'Agreement and legislation']); ?>
+</div>

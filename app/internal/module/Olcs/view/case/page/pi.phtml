@@ -1,8 +1,31 @@
 <div class="full-width">
-    <?php
-        echo $this->render('case/page/partials/pi-empty.phtml', array('heading' => 'Agreed and Legislation', 'route' => 'case_pi', 'type' => 'agreed'));
-        echo $this->render('case/page/partials/pi-empty.phtml', array('heading' => 'Schedule and publish', 'route' => 'case_pi', 'type' => 'schedule'));
-        echo $this->render('case/page/partials/pi-empty.phtml', array('heading' => 'Register decision', 'route' => 'case_pi', 'type' => 'register'));
-        echo $this->render('case/page/partials/pi-empty.phtml', array('heading' => 'Summary / SLA', 'route' => 'case_pi', 'type' => 'sla'));
-    ?>
-</div><!-- end .full-width -->
+    <div class="four-fifths">
+        <?php
+        //die(print_r((array)$this->vars()['complete'], 1));
+
+        if (isset($pi['dateAgreed'])):
+            echo $this->render('case/page/partials/pi-agreed.phtml', array('pi' => $pi));
+        else:
+            echo $this->render('case/page/partials/pi-empty.phtml', array('heading' => 'Agreed and legislation', 'route' => 'case_pi', 'type' => 'agreed'));
+        endif;
+
+        if (isset($pi['piHearings']) && !empty($pi['piHearings'])):
+            echo $this->render('case/page/partials/pi-hearings.phtml', array('pi' => $pi, 'table' => $piTable));
+        else:
+            echo $this->render('case/page/partials/pi-empty.phtml', array('heading' => 'Hearing', 'route' => 'case_pi', 'type' => 'schedule'));
+        endif;
+
+        if (isset($pi['decisionDate']) && !empty($pi['decisionDate'])):
+            echo $this->render('case/page/partials/pi-decision.phtml', array('pi' => $pi));
+        else:
+            echo $this->render('case/page/partials/pi-empty.phtml', array('heading' => 'Decision', 'route' => 'case_pi', 'type' => 'decision'));
+        endif;
+
+        if (isset($pi['dateCallUpLetterIssued']) && !empty($pi['dateCallUpLetterIssued'])):
+            echo $this->render('case/page/partials/pi-sla.phtml', array('pi' => $pi));
+        else:
+            echo $this->render('case/page/partials/pi-empty.phtml', array('heading' => 'Service level agreement', 'route' => 'case_pi', 'type' => 'sla'));
+        endif;
+        ?>
+    </div><!-- end .full-width -->
+</div>
