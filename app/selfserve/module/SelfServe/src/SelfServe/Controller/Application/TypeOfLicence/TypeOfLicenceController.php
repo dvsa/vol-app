@@ -49,6 +49,8 @@ class TypeOfLicenceController extends ApplicationController
      */
     protected $service = 'Licence';
 
+    protected $inlineScripts = ['type-of-licence'];
+
     /**
      * Redirect to the first section
      *
@@ -232,10 +234,5 @@ class TypeOfLicenceController extends ApplicationController
             );
         }
         return parent::goToNextStep();
-    }
-
-    protected function getInlineScripts()
-    {
-        return ['type-of-licence'];
     }
 }

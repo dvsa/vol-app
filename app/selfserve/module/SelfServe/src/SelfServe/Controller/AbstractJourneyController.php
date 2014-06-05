@@ -68,6 +68,13 @@ abstract class AbstractJourneyController extends AbstractController
     protected $actionService = null;
 
     /**
+     * Holds any inline scripts for the current page
+     *
+     * @var array
+     */
+    protected $inlineScripts = [];
+
+    /**
      * Hold the journey name
      *
      * @var string
@@ -1037,7 +1044,7 @@ abstract class AbstractJourneyController extends AbstractController
 
     protected function getInlineScripts()
     {
-        return [];
+        return $this->inlineScripts;
     }
 
     /**
