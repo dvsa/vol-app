@@ -159,7 +159,8 @@ class TypeOfLicenceController extends ApplicationController
     /**
      * make sure we map our data to save from all three fieldsets
      */
-    protected function getDataMap() {
+    protected function getDataMap()
+    {
         return [
             'main' => [
                 'mapFrom' => $this->fieldsets
@@ -185,7 +186,8 @@ class TypeOfLicenceController extends ApplicationController
     /**
      * Make form alterations
      *
-     * This method enables the summary to apply the same form alterations
+     * This method enables the summary to apply the same form alterations. We declare
+     * it here as an identity function but child classes can optionally override it
      *
      * @param Form $form
      * @param array $options
@@ -196,7 +198,12 @@ class TypeOfLicenceController extends ApplicationController
         return $form;
     }
 
-    protected function getFormAlterationOptions() {
+    /**
+     * child classes should override this if they want to pass any options through
+     * to the form alteration method
+     */
+    protected function getFormAlterationOptions()
+    {
         return [];
     }
 
@@ -225,5 +232,10 @@ class TypeOfLicenceController extends ApplicationController
             );
         }
         return parent::goToNextStep();
+    }
+
+    protected function getInlineScripts()
+    {
+        return ['type-of-licence'];
     }
 }

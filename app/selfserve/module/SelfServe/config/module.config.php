@@ -17,6 +17,7 @@ return array(
         'invokables' => $invokeables
     ),
     'local_forms_path' => __DIR__ . '/../src/SelfServe/Form/Forms/',
+    'local_scripts_path' => __DIR__ . '/../src/SelfServe/Script/',
     'tables' => array(
         'config' => array(
             __DIR__ . '/../src/SelfServe/Table/Tables/'

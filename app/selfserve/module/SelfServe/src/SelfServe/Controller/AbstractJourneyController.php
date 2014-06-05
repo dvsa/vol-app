@@ -1003,6 +1003,8 @@ abstract class AbstractJourneyController extends AbstractController
             return $response;
         }
 
+        $this->maybeAddScripts($view);
+
         $view = $this->preRender($view);
 
         return $this->render($view);
@@ -1017,6 +1019,23 @@ abstract class AbstractJourneyController extends AbstractController
     protected function preRender($view)
     {
         return $view;
+    }
+
+    protected function maybeAddScripts($view)
+    {
+        $scripts = $this->getInlineScripts();
+        if (empty($scripts)) {
+            return;
+        }
+
+        // this process defers to a service which takes care of checking
+        // whether the script(s) exist
+        $view->setVariable('scripts', $this->loadScripts($scripts));
+    }
+
+    protected function getInlineScripts()
+    {
+        return [];
     }
 
     /**
