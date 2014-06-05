@@ -112,7 +112,10 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                     'version' => 1,
                     'goodsOrPsv' => $this->goodsOrPsv,
                     'niFlag' => 0,
-                    'licenceType' => 'standard-national'
+                    'licenceType' => 'standard-national',
+                    'organisation' => array(
+                        'organisationType' => 'org_type.lc'
+                    )
                 )
             )
         );
@@ -174,7 +177,10 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                     'version' => 1,
                     'goodsOrPsv' => $this->goodsOrPsv,
                     'niFlag' => 0,
-                    'licenceType' => 'standard-international'
+                    'licenceType' => 'standard-international',
+                    'organisation' => array(
+                        'organisationType' => 'org_type.lc'
+                    )
                 )
             )
         );
@@ -236,7 +242,10 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                     'version' => 1,
                     'goodsOrPsv' => $this->goodsOrPsv,
                     'niFlag' => 0,
-                    'licenceType' => 'restricted'
+                    'licenceType' => 'restricted',
+                    'organisation' => array(
+                        'organisationType' => 'org_type.lc'
+                    )
                 )
             )
         );
@@ -298,7 +307,10 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                     'version' => 1,
                     'goodsOrPsv' => $this->goodsOrPsv,
                     'niFlag' => 0,
-                    'licenceType' => 'standard-national'
+                    'licenceType' => 'standard-national',
+                    'organisation' => array(
+                        'organisationType' => 'org_type.lc'
+                    )
                 )
             )
         );
@@ -360,7 +372,10 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                     'version' => 1,
                     'goodsOrPsv' => $this->goodsOrPsv,
                     'niFlag' => 0,
-                    'licenceType' => 'standard-international'
+                    'licenceType' => 'standard-international',
+                    'organisation' => array(
+                        'organisationType' => 'org_type.lc'
+                    )
                 )
             )
         );
@@ -422,7 +437,10 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                     'version' => 1,
                     'goodsOrPsv' => $this->goodsOrPsv,
                     'niFlag' => 0,
-                    'licenceType' => 'restricted'
+                    'licenceType' => 'restricted',
+                    'organisation' => array(
+                        'organisationType' => 'org_type.lc'
+                    )
                 )
             )
         );
@@ -826,7 +844,10 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                     'version' => 1,
                     'goodsOrPsv' => $this->goodsOrPsv,
                     'niFlag' => 0,
-                    'licenceType' => 'standard-national'
+                    'licenceType' => 'standard-national',
+                    'organisation' => array(
+                        'organisationType' => 'org_type.lc'
+                    )
                 )
             );
         }

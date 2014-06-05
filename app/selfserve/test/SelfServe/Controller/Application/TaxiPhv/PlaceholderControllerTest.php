@@ -65,7 +65,10 @@ class PlaceholderControllerTest extends AbstractApplicationControllerTestCase
                     'version' => 1,
                     'goodsOrPsv' => 'psv',
                     'niFlag' => 0,
-                    'licenceType' => 'special-restricted'
+                    'licenceType' => 'special-restricted',
+                    'organisation' => array(
+                        'organisationType' => 'org_type.lc'
+                    )
                 )
             );
         }
