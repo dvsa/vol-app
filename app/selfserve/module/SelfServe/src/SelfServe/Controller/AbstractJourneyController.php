@@ -579,6 +579,8 @@ abstract class AbstractJourneyController extends AbstractController
      */
     protected function getAccessKeys($force = false)
     {
+        unset($force);
+
         if (empty($this->accessKeys)) {
             $this->accessKeys = array(null);
         }
