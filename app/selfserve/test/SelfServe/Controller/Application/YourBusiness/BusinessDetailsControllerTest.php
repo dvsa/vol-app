@@ -4,6 +4,7 @@
  * BusinessDetails Controller Test
  *
  * @author Rob Caiger <rob@clocal.co.uk>
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 
 namespace SelfServe\Test\Controller\Application\YourBusiness;
@@ -15,6 +16,7 @@ use SelfServe\Controller\Application\ApplicationController;
  * BusinessDetails Controller Test
  *
  * @author Rob Caiger <rob@clocal.co.uk>
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 class BusinessDetailsControllerTest extends AbstractApplicationControllerTestCase
 {
@@ -39,6 +41,15 @@ class BusinessDetailsControllerTest extends AbstractApplicationControllerTestCas
     ];
 
     protected $mockCompaniesHouseData = [];
+
+    protected $subsidiaryCompanyData = [
+        'data' => [
+            'id' => 1,
+            'version' => 1,
+            'name' => 'name',
+            'companyNo' => ['company_number' => '12345678']
+        ]
+    ];
 
     /**
      * Test back button
@@ -151,7 +162,7 @@ class BusinessDetailsControllerTest extends AbstractApplicationControllerTestCas
         $this->setUpAction('index', null, $post);
 
         $this->controller->setEnabledCsrf(false);
-        $response = $this->controller->indexAction();
+        $this->controller->indexAction();
 
         $companyName = $this->getFormFromResponse(
             $this->controller->indexAction()
@@ -189,17 +200,15 @@ class BusinessDetailsControllerTest extends AbstractApplicationControllerTestCas
         $this->assertEquals(null, $companyName->getValue());
     }
 
-    /**
-     * @group current
-     */
+
     public function testAddAnotherTradingName()
     {
         $this->setOrganisationType('lc');
 
         $testTradingNames = [
             ['text' => 'string one'],
+            ['text' => 'string two'],
             ['text' => ''],
-            ['text' => 'string two']
         ];
 
         $expectedTradingNames = [
@@ -332,6 +341,27 @@ class BusinessDetailsControllerTest extends AbstractApplicationControllerTestCas
                 )
             );
         }
+
+        if ($service == 'CompanySubsidiary' && $method == 'GET') {
+            $companySubsidiariesBundle = [
+                'properties' => [
+                    'id',
+                    'version',
+                    'name',
+                    'companyNo'
+                ]
+            ];
+
+            if ($bundle == $companySubsidiariesBundle) {
+                return array(
+                    'id' => 1,
+                    'version' => 1,
+                    'name' => 'name',
+                    'companyNo' => '12345678'
+                );
+            }
+        }
+
     }
 
     protected function setOrganisationType($type)
@@ -361,5 +391,127 @@ class BusinessDetailsControllerTest extends AbstractApplicationControllerTestCas
         foreach ($missing as $element) {
             $this->assertFalse($fieldset->has($element));
         }
+    }
+
+    /**
+     * Test editAction
+     */
+    public function testEditAction()
+    {
+        $this->setUpAction('edit', 1);
+
+        $response = $this->controller->editAction();
+
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+    }
+
+    /**
+     * Test editAction with submit
+     */
+    public function testEditActionWithSubmit()
+    {
+        $this->setUpAction(
+            'edit', 1, $this->subsidiaryCompanyData
+        );
+
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->editAction();
+
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
+     * Test editAction with cancel
+     */
+    public function testEditActionWithCancel()
+    {
+        $post = array(
+            'form-actions' => array(
+                'cancel' => 'Cancel'
+            )
+        );
+
+        $this->setUpAction('edit', 1, $post);
+
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->editAction();
+
+        $this->assertInstanceOf('\Zend\Http\Response', $response);
+    }
+
+    /**
+     * Test deleteAction
+     */
+    public function testDeleteAction()
+    {
+        $this->setUpAction('delete', 1);
+
+        $response = $this->controller->deleteAction();
+
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
+     * Test addAction
+     */
+    public function testAddAction()
+    {
+        $this->setUpAction('add');
+
+        $response = $this->controller->addAction();
+
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+    }
+
+    /**
+     * Test addAction with cancel
+     */
+    public function testAddActionWithCancel()
+    {
+        $post = array(
+            'form-actions' => array(
+                'cancel' => 'Cancel'
+            )
+        );
+
+        $this->setUpAction('add', null, $post);
+
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->addAction();
+
+        $this->assertInstanceOf('\Zend\Http\Response', $response);
+    }
+
+    /**
+     * Test addAction with submit
+     */
+    public function testAddActionWithSubmit()
+    {
+        $this->setUpAction(
+            'add', null, $this->subsidiaryCompanyData
+        );
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->addAction();
+
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
+     * Test addAction with submit with add another
+     */
+    public function testAddActionWithSubmitWithAddAnother()
+    {
+        $data = array_merge(
+            $this->subsidiaryCompanyData,
+            array('form-actions' => array('addAnother' => 'Add another'))
+        );
+        $this->setUpAction(
+            'add', null, $data
+        );
+
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->addAction();
+
+        $this->assertInstanceOf('Zend\Http\Response', $response);
     }
 }
