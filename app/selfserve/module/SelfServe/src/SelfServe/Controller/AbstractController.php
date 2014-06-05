@@ -341,11 +341,9 @@ abstract class AbstractController extends FormActionController
 
             foreach ($map[$section]['mapFrom'] as $key) {
 
-                if (!isset($oldData[$key])) {
-                    continue;
-                    //return $oldData;
+                if (isset($oldData[$key])) {
+                    $data = array_merge($data, $oldData[$key]);
                 }
-                $data = array_merge($data, $oldData[$key]);
             }
 
         } else {
