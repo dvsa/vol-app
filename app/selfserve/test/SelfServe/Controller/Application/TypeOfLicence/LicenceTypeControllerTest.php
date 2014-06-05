@@ -104,7 +104,10 @@ class LicenceTypeControllerTest extends AbstractApplicationControllerTestCase
                     'version' => 1,
                     'goodsOrPsv' => $this->goodsOrPsv,
                     'niFlag' => $this->niFlag,
-                    'licenceType' => 'standard-national'
+                    'licenceType' => 'standard-national',
+                    'organisation' => array(
+                        'organisationType' => 'org_type.lc'
+                    )
                 )
             );
         }
