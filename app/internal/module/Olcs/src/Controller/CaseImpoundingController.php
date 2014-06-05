@@ -112,7 +112,8 @@ class CaseImpoundingController extends CaseController
                     'pageSubTitle' => ''
                 ],
                 'form' => $form,
-                'headScript' => array('/static/js/impounding.js')
+                'headScript' => [],
+                'inlineScript' => $this->getServiceLocator()->get('Script')->loadFiles(['impounding']),
             ]
         );
 
