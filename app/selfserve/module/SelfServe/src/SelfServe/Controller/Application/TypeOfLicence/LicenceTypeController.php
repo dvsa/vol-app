@@ -27,10 +27,6 @@ class LicenceTypeController extends TypeOfLicenceController
         if (!$options['isPsv']) {
             $fieldset = $form->get($options['fieldset']);
 
-            if (!$fieldset->has('licenceType')) {
-                return $form;
-            }
-
             $licenceTypeElement = $fieldset->get('licenceType');
 
             $options = $licenceTypeElement->getValueOptions();
