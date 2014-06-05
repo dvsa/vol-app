@@ -73,7 +73,6 @@ class ComplaintController extends FormActionController
         $view = new ViewModel(
             array(
             'form' => $form,
-            'headScript' => array('/static/js/complaint.js'),
             'params' => array(
                 'pageTitle' => 'add-complaint',
                 'pageSubTitle' => 'subtitle-complaint-text'
@@ -131,9 +130,6 @@ class ComplaintController extends FormActionController
         $view = new ViewModel(
             array(
                 'form' => $form,
-                'headScript' => array(
-                    '/static/js/complaint.js'
-                ),
                 'params' => array(
                     'pageTitle' => 'edit-complaint',
                     'pageSubTitle' => 'subtitle-complaint-text'
