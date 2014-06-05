@@ -230,6 +230,7 @@ class FinancialHistoryControllerTest extends AbstractApplicationControllerTestCa
                 'documents' => array(
                     'properties' => array(
                         'id',
+                        'version',
                         'fileName',
                         'identifier',
                         'size'
@@ -253,6 +254,7 @@ class FinancialHistoryControllerTest extends AbstractApplicationControllerTestCa
                 'documents' => array(
                     array(
                         'id' => 1,
+                        'version' => 1,
                         'fileName' => 'Test.png',
                         'identifier' => 'ajfhljkdsafhflksdjf',
                         'size' => 50505
