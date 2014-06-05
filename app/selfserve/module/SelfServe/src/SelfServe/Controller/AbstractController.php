@@ -331,7 +331,6 @@ abstract class AbstractController extends FormActionController
         if (isset($map['_addresses'])) {
 
             foreach ($map['_addresses'] as $address) {
-
                 $oldData = $this->processAddressData($oldData, $address);
             }
         }
@@ -343,11 +342,12 @@ abstract class AbstractController extends FormActionController
             foreach ($map[$section]['mapFrom'] as $key) {
 
                 if (!isset($oldData[$key])) {
-                    return $oldData;
+                    continue;
+                    //return $oldData;
                 }
-
                 $data = array_merge($data, $oldData[$key]);
             }
+
         } else {
             $data = array();
         }
@@ -355,7 +355,6 @@ abstract class AbstractController extends FormActionController
         if (isset($map[$section]['children'])) {
 
             foreach ($map[$section]['children'] as $child => $options) {
-
                 $data[$child] = $this->processDataMapForSave($oldData, array($child => $options), $child);
             }
         }

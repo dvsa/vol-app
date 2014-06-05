@@ -47,6 +47,8 @@ class AddressesController extends YourBusinessController
         ],
     ];
 
+    protected $dataMap = null;
+
 
     /**
      * Render the section form

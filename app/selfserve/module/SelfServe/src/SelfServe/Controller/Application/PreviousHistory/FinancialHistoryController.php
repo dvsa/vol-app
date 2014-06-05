@@ -35,6 +35,7 @@ class FinancialHistoryController extends PreviousHistoryController
             'documents' => array(
                 'properties' => array(
                     'id',
+                    'version',
                     'fileName',
                     'identifier',
                     'size'

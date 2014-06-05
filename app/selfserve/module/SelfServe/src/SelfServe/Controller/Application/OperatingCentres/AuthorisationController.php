@@ -121,6 +121,7 @@ class AuthorisationController extends OperatingCentresController
                     'adDocuments' => array(
                         'properties' => array(
                             'id',
+                            'version',
                             'fileName',
                             'identifier',
                             'size'
@@ -258,30 +259,39 @@ class AuthorisationController extends OperatingCentresController
                 $form
             );
 
+            $fileList = $form->get('advertisements')->get('file')->get('list');
+
+            $bundle = array(
+                'properties' => array(
+                    'id',
+                    'version',
+                    'identifier',
+                    'fileName',
+                    'size'
+                )
+            );
+
+            $unlinkedFiledData = $this->makeRestCall(
+                'Document',
+                'GET',
+                array(
+                    'application' => $this->getIdentifier(),
+                    'documentCategory' => 1,
+                    'documentSubCategory' => 2,
+                    'operatingCentre' => 'NULL'
+                ),
+                $bundle
+            );
+
+            $fileData = array();
+
             if ($this->getActionName() == 'edit') {
-
-                $fileList = $form->get('advertisements')->get('file')->get('list');
-
-                $data = $this->makeRestCall(
-                    'Document',
-                    'GET',
-                    array(
-                        'application' => $this->getIdentifier(),
-                        'documentCategory' => 1,
-                        'documentSubCategory' => 2,
-                        'operatingCentre' => null
-                    )
-                );
-
-                print '<pre>';
-                print_r($data);
-                print '</pre>';
-                exit;
-
                 $fileData = $this->actionLoad($this->getActionId())['operatingCentre']['adDocuments'];
-
-                $fileList->setFiles($fileData, $this->url());
             }
+
+            $fileData = array_merge($fileData, $unlinkedFiledData['Results']);
+
+            $fileList->setFiles($fileData, $this->url());
 
             $this->processFileDeletions(array('advertisements' => array('file' => 'deleteFile')), $form);
         }
@@ -339,10 +349,6 @@ class AuthorisationController extends OperatingCentresController
      */
     protected function actionSave($data, $service = null)
     {
-        print '<pre>';
-        print_r($data);
-        print '</pre>';
-        exit;
         $saved = parent::actionSave($data['operatingCentre'], 'OperatingCentre');
 
         if ($this->getActionName() == 'add') {
@@ -351,6 +357,24 @@ class AuthorisationController extends OperatingCentresController
             }
 
             $data['applicationOperatingCentre']['operatingCentre'] = $saved['id'];
+
+            $operatingCentreId = $saved['id'];
+        } else {
+            $operatingCentreId = $data['operatingCentre']['id'];
+        }
+
+        if (isset($data['applicationOperatingCentre']['file']['list'])) {
+            foreach ($data['applicationOperatingCentre']['file']['list'] as $file) {
+                $this->makeRestCall(
+                    'Document',
+                    'PUT',
+                    array('id' => $file['id'], 'version' => $file['version'], 'operatingCentre' => $operatingCentreId)
+                );
+            }
+        }
+
+        if ($this->isPsv()) {
+            $data['applicationOperatingCentre']['adPlaced'] = 0;
         }
 
         $saved = parent::actionSave($data['applicationOperatingCentre'], $service);
