@@ -1,0 +1,40 @@
+<div class="table__header">
+
+    <h3>Decision</h3>
+    <div class="actions-container">
+        <a href="<?php echo $this->url($this->route, ['action' => 'edit', 'id' => $pi['id']], [], true); ?>" class="action--secondary" />Edit</a>
+    </div>
+
+    <div style="clear: both"></div>
+
+    <?php
+
+    $summary = [
+        'decisionPresidingTc' => [
+            'label' => 'Presiding commissioner / regulator',
+            'value' => $pi['decisionPresidingTc']['name']
+        ],
+        'decisionPresidingTcRole' => [
+            'label' => 'Presiding commissioner / regulator role',
+            'value' => $pi['decisionPresidingTcRole']
+        ],
+        'decisionType' => [
+            'label' => 'Decision',
+            'value' => $pi['decisionType']
+        ],
+        'whitnesses' => [
+            'label' => 'Witnesses',
+            'value' => $pi['witnesses'],
+        ],
+        'decisionDate' => [
+            'label' => 'Date of decision',
+            'value' => isset($pi['decisionDate']) ? date('m/d/Y', strtotime($pi['decisionDate'])) : 'dd-mm-yyyy',
+        ]/* ,
+        'legislation' => [
+            'label' => 'Decision Definition',
+            'value' => is_array($pi['decisionReasons']) ? implode(', ', array_map(function($item){return $item['sectionCode'];}, $pi['decisionReasons'])) : 'None selected',
+        ], */
+    ];
+
+    echo $this->render('partials/summary/summary__list', ['items' => $summary, 'title' => 'Agreement and legislation']); ?>
+</div>

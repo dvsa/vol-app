@@ -178,6 +178,20 @@ return array(
                     )
                 )
             ),
+            'case_annual_test_history' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/licence/[:licence]/case/[:case]/action/manage/annual-test-history',
+                    'constraints' => array(
+                        'licence' => '[0-9]+',
+                        'case' => '[0-9]+',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'CaseAnnualTestHistoryController',
+                        'action' => 'index'
+                    )
+                )
+            ),
             'case_prohibition' => array(
                 'type' => 'segment',
                 'options' => array(
@@ -351,6 +365,21 @@ return array(
                     )
                 )
             ),
+            'case_pi' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/licence/[:licence]/case/[:case]/action/manage/pi[/:action][/:type][/:id]',
+                    'constraints' => array(
+                        'licence' => '[0-9]+',
+                        'case' => '[0-9]+',
+                        'id' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'CasePiController',
+                        'action' => 'index'
+                    )
+                )
+            ),
         ),
     ),
     'tables' => array(
@@ -376,11 +405,13 @@ return array(
             'CaseStayController' => 'Olcs\Controller\CaseStayController',
             'CasePenaltyController' => 'Olcs\Controller\CasePenaltyController',
             'CaseProhibitionController' => 'Olcs\Controller\CaseProhibitionController',
+            'CaseAnnualTestHistoryController' => 'Olcs\Controller\CaseAnnualTestHistoryController',
             'ConditionUndertakingController' => 'Olcs\Controller\ConditionUndertakingController',
             'SubmissionNoteController' => 'Olcs\Controller\Submission\SubmissionNoteController',
             'CaseImpoundingController' => 'Olcs\Controller\CaseImpoundingController',
             'CaseConditionUndertakingController' => 'Olcs\Controller\CaseConditionUndertakingController',
             'CaseRevokeController' => 'Olcs\Controller\CaseRevokeController',
+            'CasePiController' => 'Olcs\Controller\CasePiController',
             'DocumentController' => 'Olcs\Controller\DocumentController'
         )
     ),

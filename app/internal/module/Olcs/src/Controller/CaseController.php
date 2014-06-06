@@ -211,6 +211,16 @@ class CaseController extends FormActionController
                 'label' => 'Prohibitions',
                 'url' => $pm->get('url')->fromRoute('case_prohibition', ['tab' => 'prohibitions'], [], true),
             ],
+            'annual_test_history' => [
+                'key' => 'annual_test_history',
+                'label' => 'Annual test history',
+                'url' => $pm->get('url')->fromRoute(
+                    'case_annual_test_history',
+                    ['tab' => 'annual_test_history'],
+                    [],
+                    true
+                ),
+            ],
             'penalties' => [
                 'key' => 'penalties',
                 'label' => 'Penalties',
@@ -280,6 +290,11 @@ class CaseController extends FormActionController
                 'key' => 'revoke',
                 'label' => 'Proposal to revoke',
                 'url' => $pm->get('url')->fromRoute('case_revoke', ['tab' => 'revoke', 'action' => 'index'], [], true),
+            ],
+            'pi' => [
+                'key' => 'pi',
+                'label' => 'Public inquiry',
+                'url' => $pm->get('url')->fromRoute('case_pi', ['tab' => 'pi', 'action' => 'index'], [], true),
             ],
         ];
 

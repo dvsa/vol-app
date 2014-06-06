@@ -186,6 +186,11 @@ return array(
                                     'action' => 'index'
                                 ),
                                 array(
+                                    'label' => 'Case Annual Test History',
+                                    'route' => 'case_annual_test_history',
+                                    'action' => 'index'
+                                ),
+                                array(
                                     'label' => 'Conditions &amp; Undertakings',
                                     'route' => 'case_conditions_undertakings',
                                     'action' => 'index',
@@ -225,6 +230,14 @@ return array(
                                             'route' => 'case_impounding',
                                             'action' => 'edit'
                                         )
+                                    )
+                                ),
+                                array(
+                                    'label' => 'Public inquiry',
+                                    'route' => 'case_pi',
+                                    'action' => 'index',
+                                    'pages' => array(
+
                                     )
                                 ),
                             )
