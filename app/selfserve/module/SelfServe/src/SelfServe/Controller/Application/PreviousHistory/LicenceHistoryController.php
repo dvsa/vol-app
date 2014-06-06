@@ -3,17 +3,24 @@
 /**
  * LicenceHistory Controller
  *
- * @author Rob Caiger <rob@clocal.co.uk>
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 namespace SelfServe\Controller\Application\PreviousHistory;
 
 /**
  * LicenceHistory Controller
  *
- * @author Rob Caiger <rob@clocal.co.uk>
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 class LicenceHistoryController extends PreviousHistoryController
 {
+    /**
+     * Set the service for the "Free" save behaviour
+     *
+     * @var string
+     */
+    protected $service = 'PreviousHistory';
+    
     /**
      * Render the section form
      *
@@ -21,10 +28,7 @@ class LicenceHistoryController extends PreviousHistoryController
      */
     public function indexAction()
     {
-        $view = $this->getViewModel();
-        $view->setTemplate('self-serve/journey/placeholder');
-
-        return $this->renderSection($view);
+        return $this->renderSection();
     }
 
     /**
