@@ -232,6 +232,14 @@ return array(
                                         )
                                     )
                                 ),
+                                array(
+                                    'label' => 'Public inquiry',
+                                    'route' => 'case_pi',
+                                    'action' => 'index',
+                                    'pages' => array(
+
+                                    )
+                                ),
                             )
                         )
                     )
