@@ -1109,6 +1109,7 @@ abstract class AbstractJourneyController extends AbstractController
 
             if (strstr($action, '-')) {
                 list($prefix, $action) = explode('-', $action);
+                unset($prefix);
             }
 
             if ($action == 'edit') {
@@ -1148,6 +1149,7 @@ abstract class AbstractJourneyController extends AbstractController
 
             if (strstr($action, '-')) {
                 list($prefix, $action) = explode('-', $action);
+                unset($prefix);
             }
 
             if ($action === 'edit') {
@@ -1355,6 +1357,8 @@ abstract class AbstractJourneyController extends AbstractController
      */
     protected function processActionSave($data, $form)
     {
+        unset($form);
+
         $data = $this->processDataMapForSave($data, $this->getActionDataMap());
 
         $response = $this->actionSave($data);

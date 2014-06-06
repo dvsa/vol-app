@@ -244,8 +244,10 @@ class VehiclePsvController extends VehicleSafetyController
 
                 $form->remove($table);
 
-            } elseif (!$isCrudPressed && $isPost && isset($post['data']['enterReg']) && $post['data']['enterReg'] == 'Y') {
-
+            } elseif (
+                !$isCrudPressed && $isPost
+                && isset($post['data']['enterReg']) && $post['data']['enterReg'] == 'Y'
+            ) {
                 $input = $form->getInputFilter()->get($table)->get('table');
                 $input->setRequired(true)->setAllowEmpty(false)->setContinueIfEmpty(true);
 
@@ -264,7 +266,7 @@ class VehiclePsvController extends VehicleSafetyController
      */
     protected function getFormTableData($id, $table)
     {
-        $data = $this->load($this->getIdentifier());
+        $data = $this->load($id);
 
         $rows = array();
 
@@ -289,6 +291,8 @@ class VehiclePsvController extends VehicleSafetyController
     {
         list($type, $action) = explode('-', $this->getActionName());
 
+        unset($type);
+
         $this->saveVehicle($data, $action);
     }
 
@@ -312,6 +316,8 @@ class VehiclePsvController extends VehicleSafetyController
     protected function processActionLoad($data)
     {
         list($type, $action) = explode('-', $this->getActionName());
+
+        unset($action);
 
         $data['psvType'] = $type;
 

@@ -258,6 +258,8 @@ class SafetyController extends VehicleSafetyController
      */
     protected function getFormTableData($id, $name)
     {
+        unset($name);
+
         $this->load($id);
 
         $data = $this->data['workshops'];
