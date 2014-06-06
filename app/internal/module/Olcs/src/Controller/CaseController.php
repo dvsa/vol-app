@@ -214,7 +214,12 @@ class CaseController extends FormActionController
             'annual_test_history' => [
                 'key' => 'annual_test_history',
                 'label' => 'Annual test history',
-                'url' => $pm->get('url')->fromRoute('case_annual_test_history', ['tab' => 'annual_test_history'], [], true),
+                'url' => $pm->get('url')->fromRoute(
+                    'case_annual_test_history',
+                    ['tab' => 'annual_test_history'],
+                    [],
+                    true
+                ),
             ],
             'penalties' => [
                 'key' => 'penalties',
