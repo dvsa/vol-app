@@ -110,7 +110,12 @@ class ComplaintController extends FormActionController
 
         $bundle = $this->getComplaintBundle();
 
-        $data = $this->makeRestCall('Complaint', 'GET', array('id' => $routeParams['id'], 'bundle' => json_encode($bundle)));
+        $data = $this->makeRestCall(
+            'Complaint',
+            'GET',
+            array('id' => $routeParams['id'], 'bundle' => json_encode($bundle))
+        );
+
         if (isset($data['id'])) {
             $data['vosaCase'] = $data['id'];
         }

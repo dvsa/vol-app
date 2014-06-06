@@ -194,6 +194,8 @@ class CaseRevokeController extends CaseController
      */
     public function generateForm($name, $callback, $tables = false)
     {
+        unset($tables);
+
         $form = $this->getForm($name);
 
         $form->get('piReasons')->setValueOptions($this->getPiReasonsNvpArray());

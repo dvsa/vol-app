@@ -26,7 +26,6 @@ class CaseComplaintController extends CaseController
     {
         $caseId = $this->fromRoute('case');
         $licenceId = $this->fromRoute('licence');
-        $complaintId = $this->fromRoute('complaint');
 
         $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licenceId)));
 

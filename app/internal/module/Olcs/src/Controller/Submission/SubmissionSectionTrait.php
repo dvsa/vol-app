@@ -60,7 +60,12 @@ trait SubmissionSectionTrait
         $section['notes'] = array();
         $bundle = isset($config['bundle']) ? $config['bundle'] : array();
         if (isset($config['dataPath'])) {
-            $this->sectionData = $this->makeRestCall($config['dataPath'], 'GET', array('id' => $routeParams['case']), $bundle);
+            $this->sectionData = $this->makeRestCall(
+                $config['dataPath'],
+                'GET',
+                array('id' => $routeParams['case']),
+                $bundle
+            );
         }
         $filter = new DashToCamelCase();
         $method = $filter->filter($sectionName);
@@ -85,21 +90,20 @@ trait SubmissionSectionTrait
      */
     public function caseSummaryInfo(array $data = array())
     {
-        $dataToReturnArray = array(
-            'caseNumber' =>  $data['caseNumber'],
-            'licenceNumber' =>  $data['licence']['licenceNumber'],
-            'name' =>  $data['licence']['organisation']['name'],
-            'licenceType' =>  $data['licence']['licenceType'],
-            'ecms' =>  $data['ecms'],
-            'description' =>  $data['description'],
-            'organisationType' =>  $data['licence']['organisation']['organisationType'],
-            'sicCode' =>  $data['licence']['organisation']['sicCode'],
-            'isMlh' =>  $data['licence']['organisation']['isMlh'],
-            'startDate' =>  $data['licence']['startDate'],
-            'authorisedVehicles' =>  $data['licence']['authorisedVehicles'],
-            'authorisedTrailers' =>  $data['licence']['authorisedTrailers'],
-            );
-        return $dataToReturnArray;
+        return array(
+            'caseNumber' => $data['caseNumber'],
+            'licenceNumber' => $data['licence']['licenceNumber'],
+            'name' => $data['licence']['organisation']['name'],
+            'licenceType' => $data['licence']['licenceType'],
+            'ecms' => $data['ecms'],
+            'description' => $data['description'],
+            'organisationType' => $data['licence']['organisation']['organisationType'],
+            'sicCode' => $data['licence']['organisation']['sicCode'],
+            'isMlh' => $data['licence']['organisation']['isMlh'],
+            'startDate' => $data['licence']['startDate'],
+            'authorisedVehicles' => $data['licence']['authorisedVehicles'],
+            'authorisedTrailers' => $data['licence']['authorisedTrailers'],
+        );
     }
 
     /**
@@ -149,12 +153,16 @@ trait SubmissionSectionTrait
     public function persons(array $data = array())
     {
         $dataToReturnArray = array();
+
         foreach ($data['licence']['organisation']['organisationOwners'] as $organisationOwner) {
+
             $thisOrganisationOwner['lastName'] = $organisationOwner['person']['surname'];
             $thisOrganisationOwner['firstName'] = $organisationOwner['person']['firstName'];
             $thisOrganisationOwner['dob'] = $organisationOwner['person']['dateOfBirth'];
             $dataToReturnArray[] = $thisOrganisationOwner;
+
         }
+
         return $dataToReturnArray;
     }
 
@@ -164,17 +172,22 @@ trait SubmissionSectionTrait
     public function transportManagers(array $data = array())
     {
         $dataToReturnArray = array();
-        foreach ($data['licence']['transportManagerLicences'] as $transportManagerLicence) {
-            $thisTransportManagerLicence['lastName'] = $transportManagerLicence['transportManager']['contactDetails']['person']['surname'];
-            $thisTransportManagerLicence['firstName'] = $transportManagerLicence['transportManager']['contactDetails']['person']['firstName'];
-            $thisTransportManagerLicence['tmType'] = $transportManagerLicence['transportManager']['tmType'];
-            $thisTransportManagerLicence['qualifications'] = '';
-            foreach ($transportManagerLicence['transportManager']['qualifications'] as $key => $qualification) {
-                $thisTransportManagerLicence['qualifications'] .= $qualification['qualificationType'].' ';
+
+        foreach ($data['licence']['transportManagerLicences'] as $TmLicence) {
+
+            $thisTmLicence['lastName'] = $TmLicence['transportManager']['contactDetails']['person']['surname'];
+            $thisTmLicence['firstName'] = $TmLicence['transportManager']['contactDetails']['person']['firstName'];
+            $thisTmLicence['tmType'] = $TmLicence['transportManager']['tmType'];
+            $thisTmLicence['qualifications'] = '';
+
+            foreach ($TmLicence['transportManager']['qualifications'] as $qualification) {
+                $thisTmLicence['qualifications'] .= $qualification['qualificationType'].' ';
             }
-            $thisTransportManagerLicence['dob'] = $transportManagerLicence['transportManager']['contactDetails']['person']['dateOfBirth'];
-            $dataToReturnArray[] = $thisTransportManagerLicence;
+
+            $thisTmLicence['dob'] = $TmLicence['transportManager']['contactDetails']['person']['dateOfBirth'];
+            $dataToReturnArray[] = $thisTmLicence;
         }
+
         return $dataToReturnArray;
     }
 }

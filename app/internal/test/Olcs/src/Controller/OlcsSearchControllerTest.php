@@ -60,8 +60,6 @@ class OlcsSearchControllerTest  extends AbstractHttpControllerTestCase
             ->with('search', 'processSearch')
             ->will($this->returnValue('zendForm'));
 
-        $this->setServiceLocator('navigation', 'navigation');
-
         $this->controller->indexAction();
     }
 

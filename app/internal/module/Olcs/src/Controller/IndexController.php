@@ -1,16 +1,20 @@
 <?php
 
 /**
- * @package    olcs
- * @subpackage
- * @author     Mike Cooper
+ * IndexController
+ *
+ * @author Mike Cooper
  */
-
 namespace Olcs\Controller;
 
 use Common\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
+/**
+ * IndexController
+ *
+ * @author Mike Cooper
+ */
 class IndexController extends AbstractActionController
 {
 
@@ -23,5 +27,4 @@ class IndexController extends AbstractActionController
         $view->setTemplate('index/home.phtml');
         return $view;
     }
-
 }
