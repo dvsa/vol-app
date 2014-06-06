@@ -206,7 +206,7 @@ class BusinessDetailsController extends YourBusinessController
 
     }
 
-    protected function processLookupCompany($form)
+    protected function processLookupCompany(\Zend\Form\Form $form)
     {
         $request = $this->getRequest();
 
@@ -220,25 +220,35 @@ class BusinessDetailsController extends YourBusinessController
 
             $this->setPersist(false);
 
-            $result = $this->makeRestCall(
-                'CompaniesHouse',
-                'GET',
-                [
-                    'type' => 'numberSearch',
-                    'value' => $post['companyNumber']['company_number']
-                ]
-            );
-
-            if ($result['Count'] == 1) {
-                $companyName = $result['Results'][0]['CompanyName'];
-                $post['name'] = $companyName;
-                $this->setFieldValue('data', $post);
-            } else {
+            if (strlen(trim($post['companyNumber']['company_number'])) != 8) {
                 $form->get('data')->get('companyNumber')->setMessages(
-                    array('company_number' => array(
-                        'Sorry, we couldn\'t find any matching companies, '
-                        . 'please try again or enter your details manually below'))
+                    array(
+                        'company_number' => array(
+                            'The input must be 8 characters long'
+                        )
+                    )
                 );
+            } else {
+                $result = $this->makeRestCall(
+                    'CompaniesHouse',
+                    'GET',
+                    [
+                        'type' => 'numberSearch',
+                        'value' => $post['companyNumber']['company_number']
+                    ]
+                );
+
+                if ($result['Count'] == 1) {
+                    $companyName = $result['Results'][0]['CompanyName'];
+                    $post['name'] = $companyName;
+                    $this->setFieldValue('data', $post);
+                } else {
+                    $form->get('data')->get('companyNumber')->setMessages(
+                        array('company_number' => array(
+                            'Sorry, we couldn\'t find any matching companies, '
+                            . 'please try again or enter your details manually below'))
+                    );
+                }
             }
         }
 
