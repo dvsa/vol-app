@@ -33,7 +33,6 @@ return [
                         'label' => 'Reason',
                         'type' => 'select',
                         'value_options' => 'appeal_reasons',
-                        'filters' => '\Common\Form\Elements\InputFilters\SelectEmpty'
                     ],
                     'outlineGround' => [
                         'type' => 'text',
