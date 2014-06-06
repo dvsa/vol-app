@@ -63,7 +63,7 @@ class CaseImpoundingController extends CaseController
 
         $variables = array(
             'tab' => 'impounding',
-            'headScript' => array('/static/js/impounding.js'),
+            'inlineScript' => $this->getServiceLocator()->get('Script')->loadFiles(['impounding']),
             'table' => $this->buildTable('impounding', $impoundings, array())
         );
 
@@ -112,7 +112,6 @@ class CaseImpoundingController extends CaseController
                     'pageSubTitle' => ''
                 ],
                 'form' => $form,
-                'headScript' => [],
                 'inlineScript' => $this->getServiceLocator()->get('Script')->loadFiles(['impounding']),
             ]
         );
@@ -228,7 +227,7 @@ class CaseImpoundingController extends CaseController
                     'pageSubTitle' => ''
                 ],
                 'form' => $form,
-                'headScript' => array('/static/js/impounding.js')
+                'inlineScript' => $this->getServiceLocator()->get('Script')->loadFiles(['conviction']),
             ]
         );
 

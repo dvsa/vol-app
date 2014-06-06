@@ -1,7 +1,4 @@
 <?php
-    foreach($this->headScript as $headScript) {
-        $this->headScript()->prependFile($this->basePath() . $headScript);
-    }
     foreach($this->inlineScript as $inlineScript) {
         $this->inlineScript()->appendScript($inlineScript);
     }
