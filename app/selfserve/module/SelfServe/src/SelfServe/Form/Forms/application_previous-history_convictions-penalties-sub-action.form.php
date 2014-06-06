@@ -1,5 +1,7 @@
 <?php
 
+$translationPrefix = 'selfserve-app-subSection-previous-history-criminal-conviction';
+
 return array(
     'application_previous-history_convictions-penalties-sub-action' => array(
         'name' => 'application_previous-history_convictions-penalties-sub-action',
@@ -11,59 +13,56 @@ return array(
                 'name' => 'data',
                 'elements' => array(
                     'id' => array(
-                    'type' => 'hidden',
-                ),
-                'version' => array(
-                    'type' => 'hidden',
-                ),
-                'personTitle' => array(
-                    'type' => 'select',
-                    'label' => 'selfserve-app-subSection-previous-history-criminal-conviction-formTitle',
-                    'value_options' => [
-                        'Mr'   => 'selfserve-app-subSection-previous-history-criminal-conviction-formTitleValueMr',
-                        'Mrs'  => 'selfserve-app-subSection-previous-history-criminal-conviction-formTitleValueMrs',
-                        'Miss' => 'selfserve-app-subSection-previous-history-criminal-conviction-formTitleValueMiss',
-                        'Ms'   => 'selfserve-app-subSection-previous-history-criminal-conviction-formTitleValueMs'
+                        'type' => 'hidden',
+                    ),
+                    'version' => array(
+                        'type' => 'hidden',
+                    ),
+                    'personTitle' => array(
+                        'type' => 'select',
+                        'label' => $translationPrefix . '-formTitle',
+                        'value_options' => [
+                            'Mr' => $translationPrefix . '-formTitleValueMr',
+                            'Mrs' => $translationPrefix . '-formTitleValueMrs',
+                            'Miss' => $translationPrefix . '-formTitleValueMiss',
+                            'Ms' => $translationPrefix . '-formTitleValueMs'
+                        ],
+                        'required' => true
+                    ),
+                    'personFirstname' => array(
+                        'type' => 'text',
+                        'filters' => '\Common\Form\Elements\InputFilters\TextRequired',
+                        'label' => $translationPrefix . '-formFirstName',
+                        'class' => 'long'
+                    ),
+                    'personLastname' => array(
+                        'type' => 'text',
+                        'filters' => '\Common\Form\Elements\InputFilters\TextRequired',
+                        'label' => $translationPrefix . '-formLastName',
+                        'class' => 'long'
+                    ),
+                    'dateOfConviction' => [
+                        'type' => 'dateSelectWithEmpty',
+                        'label' => $translationPrefix . '-formDateOfConviction'
                     ],
-                    'required' => true
-                ),
-                'personFirstname' => array(
-                    'type' => 'text',
-                    'label' => 'selfserve-app-subSection-previous-history-criminal-conviction-formFirstName',
-                    'class' => 'long'
-                ),
-                'personLastname' => array(
-                    'type' => 'text',
-                    'label' => 'selfserve-app-subSection-previous-history-criminal-conviction-formLastName',
-                    'class' => 'long'
-                ),
-                'dateOfConviction' => [
-                    'type' => 'dateSelect',
-                    'label' => 'selfserve-app-subSection-previous-history-criminal-conviction-formDateOfConviction',
-                    'options' => [
-                        'create_empty_option' => false,
-                        'render_delimiters' => 'd m y'
-                    ],
-                    'attributes' => [
-                        'id' => 'dob'
-                    ]
-                ],
-                'convictionNotes' => array(
-                    'label' => 'selfserve-app-subSection-previous-history-criminal-conviction-formOffenceDetails',
-                    'type' => 'convictionTextarea',
-                    'class' => 'long',
-                    'hint' => 'selfserve-app-subSection-previous-history-criminal-conviction-formOffenceDetaisHelpBlock'
-                ),
-                'courtFpm' => array(
-                    'label' => 'selfserve-app-subSection-previous-history-criminal-conviction-formNameOfCourt',
-                    'type' => 'text',
-                    'class' => 'long'
-                ),
-                'penalty' => array(
-                    'label' => 'selfserve-app-subSection-previous-history-criminal-conviction-formPenalty',
-                    'type' => 'text',
-                    'class' => 'long'
-                )
+                    'convictionNotes' => array(
+                        'label' => $translationPrefix . '-formOffenceDetails',
+                        'type' => 'convictionTextarea',
+                        'class' => 'long',
+                        'hint' => $translationPrefix . '-formOffenceDetaisHelpBlock'
+                    ),
+                    'courtFpm' => array(
+                        'label' => $translationPrefix . '-formNameOfCourt',
+                        'type' => 'text',
+                        'filters' => '\Common\Form\Elements\InputFilters\TextRequired',
+                        'class' => 'long'
+                    ),
+                    'penalty' => array(
+                        'label' => $translationPrefix . '-formPenalty',
+                        'type' => 'text',
+                        'filters' => '\Common\Form\Elements\InputFilters\TextRequired',
+                        'class' => 'long'
+                    )
                 )
             ),
             array(
