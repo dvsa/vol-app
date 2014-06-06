@@ -214,7 +214,7 @@ class PeopleController extends YourBusinessController
         $data['application'] = $applicationId;
         parent::actionSave($data, 'Person');
     }
-    
+
     /**
      * We should have this method to display empty form
      *

@@ -38,4 +38,32 @@ class LicenceTypeController extends TypeOfLicenceController
 
         return $form;
     }
+
+    /**
+     * Cache the data for the form
+     *
+     * @param int $id
+     * @return array
+     */
+    protected function loadData($id)
+    {
+        unset($id);
+
+        if (empty($this->data)) {
+
+            $this->data = $this->getLicenceData();
+        }
+
+        return $this->data;
+    }
+
+    /**
+     * Load data from id
+     *
+     * @param int $id
+     */
+    protected function load($id)
+    {
+        return array('data' => $this->loadData($id));
+    }
 }
