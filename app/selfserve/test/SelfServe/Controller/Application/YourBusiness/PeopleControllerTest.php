@@ -434,46 +434,8 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
                     )
                 )
             );
-            $orgTypeBundle = array(
-                'children' => array(
-                    'licence' => array(
-                        'children' => array(
-                            'organisation' => array(
-                                'properties' => array(
-                                    'id',
-                                    'version',
-                                    'organisationType',
-                                )
-                            )
-                        )
-                    )
-                )
-            );
-            if ($bundle == $orgTypeBundle) {
-                return array(
-                    'licence' => array(
-                        'organisation' => array(
-                            'organisationType' => $this->organisation,
-                        )
-                    )
-                );
-            } elseif ($bundle == $licenceBundle) {
-                return array(
-                    'licence' => array(
-                        'id' => 10,
-                        'version' => 1,
-                        'goodsOrPsv' => 'goods',
-                        'niFlag' => 0,
-                        'licenceType' => 'standard-national'
-                    )
-                );
-            } else {
-                return array(
-                    'id' => 1,
-                    'version' => 1,
-                );
-            }
         }
+
         if ($service == 'ApplicationCompletion' && $method == 'GET') {
 
             return array(
