@@ -27,8 +27,6 @@ class CaseAnnualTestHistoryController extends CaseController
 
         $case = $this->getCase($caseId);
 
-       // echo '<pre>';var_export($case); die();
-
         $form = $this->generateAnnualTestHistoryForm($case);
 
         $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licence)));
@@ -64,11 +62,13 @@ class CaseAnnualTestHistoryController extends CaseController
             'annual-test-history-comment',
             'saveAnnualTestHistoryForm'
         );
-        $form->setData([
-            'annualTestHistory' => $case['annualTestHistory'],
-            'id' => $case['id'],
-            'version' => $case['version']
-        ]);
+        $form->setData(
+            array(
+                'annualTestHistory' => $case['annualTestHistory'],
+                'id' => $case['id'],
+                'version' => $case['version']
+            )
+        );
 
         return $form;
     }

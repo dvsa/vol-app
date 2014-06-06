@@ -3,13 +3,17 @@
 /**
  * Search controller form post tests
  *
- * @author adminmwc
+ * @author adminmwc <michael.cooper@valtech.co.uk>
  */
-
 namespace OlcsTest\Controller\Submission;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
+/**
+ * Search controller form post tests
+ *
+ * @author adminmwc <michael.cooper@valtech.co.uk>
+ */
 class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
 {
     public function setUp()

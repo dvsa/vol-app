@@ -3,14 +3,18 @@
 /**
  * Search controller form post tests
  *
- * @author adminmwc
+ * @author adminmwc <michael.cooper@valtech.co.uk>
  */
-
 namespace OlcsTest\Controller;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
-class CaseConvictionControllerTest  extends AbstractHttpControllerTestCase
+/**
+ * Search controller form post tests
+ *
+ * @author adminmwc <michael.cooper@valtech.co.uk>
+ */
+class CaseConvictionControllerTest extends AbstractHttpControllerTestCase
 {
     public function setUp()
     {

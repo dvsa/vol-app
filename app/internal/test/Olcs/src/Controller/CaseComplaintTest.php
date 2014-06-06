@@ -159,5 +159,4 @@ class CaseComplaintControllerTest extends AbstractHttpControllerTestCase
 
         $this->assertEquals($viewMock, $controller->indexAction());
     }
-
 }

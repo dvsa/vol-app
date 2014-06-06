@@ -2,14 +2,11 @@
 
 /**
  * Search controller
- *
  * Search for operators and licences
  *
- * @package    olcs
- * @author     Mike Cooper
- * @author     Rob Caiger <rob@clocal.co.uk>
+ * @author Mike Cooper <michael.cooper@valtech.co.uk>
+ * @author Rob Caiger <rob@clocal.co.uk>
  */
-
 namespace Olcs\Controller;
 
 use Common\Controller\FormActionController;
@@ -17,12 +14,10 @@ use Zend\View\Model\ViewModel;
 
 /**
  * Search controller
- *
  * Search for operators and licences
  *
- * @package    olcs
- * @author     Mike Cooper
- * @author     Rob Caiger <rob@clocal.co.uk>
+ * @author Mike Cooper <michael.cooper@valtech.co.uk>
+ * @author Rob Caiger <rob@clocal.co.uk>
  */
 class SearchController extends FormActionController
 {

@@ -3,7 +3,7 @@
 /**
  * Test document services.
  *
- * @author Shaun Lizzio
+ * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
 namespace Olcs\Controller;
 
@@ -14,7 +14,7 @@ use Zend\View\Model\JsonModel;
 /**
  * Test document services.
  *
- * @author Shaun Lizzio
+ * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
 class DocumentController extends AbstractActionController
 {

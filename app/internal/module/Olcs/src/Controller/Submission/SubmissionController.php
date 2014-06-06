@@ -129,7 +129,9 @@ class SubmissionController extends FormActionController
 
         $submission['data'] = json_decode($submissionData['text'], true);
         foreach ($submissionData['submissionActions'] as &$action) {
-            $actions = isset($submissionActions['submission_' . $action['submissionActionType']]) ? $submissionActions['submission_' . $action['submissionActionType']] : '';
+            $actions = isset($submissionActions['submission_' . $action['submissionActionType']])
+                ? $submissionActions['submission_' . $action['submissionActionType']]
+                : '';
             $action['submissionActionStatus'] = $actions[$action['submissionActionStatus']];
         }
         $submission['submissionActions'] = $submissionData['submissionActions'];
@@ -203,7 +205,8 @@ class SubmissionController extends FormActionController
             $params['action'] = 'recommendation';
         }
         return $this->redirect()->toRoute(
-                'submission', $params
+            'submission',
+            $params
         );
     }
 

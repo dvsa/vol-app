@@ -3,7 +3,7 @@
 /**
  * Submission Notes Controller
  *
- * @author Mike Cooper
+ * @author Mike Cooper <michael.cooper@valtech.co.uk>
  */
 namespace Olcs\Controller\Submission;
 
@@ -12,7 +12,7 @@ use Common\Controller\FormActionController;
 /**
  * Submission Notes Controller
  *
- * @author Mike Cooper
+ * @author Mike Cooper <michael.cooper@valtech.co.uk>
  */
 class SubmissionNoteController extends FormActionController
 {
@@ -73,11 +73,13 @@ class SubmissionNoteController extends FormActionController
     public function backToSubmissionButton()
     {
         return $this->redirect()->toRoute(
-                'submission', array(
+            'submission',
+            array(
                 'case' => $this->routeParams['case'],
                 'licence' => $this->routeParams['licence'],
                 'id' => $this->routeParams['typeId'],
-                'action' => 'edit')
+                'action' => 'edit'
+            )
         );
     }
 

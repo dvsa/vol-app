@@ -154,14 +154,16 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
 
         $controller->expects($this->once())
             ->method('makeRestCall')
-            ->with($this->equalTo('VosaCase'),
-                    $this->equalTo('GET'),
-                    $this->equalTo(
-                        array(
-                            'id' => $caseId,
-                            'bundle' => json_encode($bundle)
-                        )
-                    ))
+            ->with(
+                $this->equalTo('VosaCase'),
+                $this->equalTo('GET'),
+                $this->equalTo(
+                    array(
+                        'id' => $caseId,
+                        'bundle' => json_encode($bundle)
+                    )
+                )
+            )
             ->willReturn($restResults);
 
         $controller->expects($this->once())
@@ -218,14 +220,16 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
 
         $controller->expects($this->once())
             ->method('makeRestCall')
-            ->with($this->equalTo('VosaCase'),
-                    $this->equalTo('GET'),
-                    $this->equalTo(
-                        array(
-                            'id' => $caseId,
-                            'bundle' => json_encode($bundle)
-                        )
-                    ))
+            ->with(
+                $this->equalTo('VosaCase'),
+                $this->equalTo('GET'),
+                $this->equalTo(
+                    array(
+                        'id' => $caseId,
+                        'bundle' => json_encode($bundle)
+                    )
+                )
+            )
             ->willReturn($restResults);
 
         $controller->expects($this->once())
@@ -291,5 +295,4 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
             )
         );
     }
-
 }

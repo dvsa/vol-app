@@ -3,21 +3,23 @@
 /**
  * Search controller form post tests
  *
- * @author adminmwc
+ * @author adminmwc <michael.cooper@valtech.co.uk>
  */
-
 namespace OlcsTest\Controller;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
-class OlcsSearchControllerTest  extends AbstractHttpControllerTestCase
+/**
+ * Search controller form post tests
+ *
+ * @author adminmwc <michael.cooper@valtech.co.uk>
+ */
+class OlcsSearchControllerTest extends AbstractHttpControllerTestCase
 {
     public function setUp()
     {
-        $this->setApplicationConfig(
-            include __DIR__.'/../../../../'
-                . 'config/application.config.php'
-        );
+        $this->setApplicationConfig(include __DIR__.'/../../../../config/application.config.php');
+
         $this->controller = $this->getMock(
             '\Olcs\Controller\SearchController',
             array(
@@ -63,7 +65,7 @@ class OlcsSearchControllerTest  extends AbstractHttpControllerTestCase
         $this->controller->indexAction();
     }
 
-     public function testProcessSearchAction()
+    public function testProcessSearchAction()
     {
         $data = array(
             'search' => [

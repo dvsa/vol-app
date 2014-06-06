@@ -3,7 +3,7 @@
 /**
  * IndexController
  *
- * @author Mike Cooper
+ * @author Mike Cooper <michael.cooper@valtech.co.uk>
  */
 namespace Olcs\Controller;
 
@@ -13,7 +13,7 @@ use Zend\View\Model\ViewModel;
 /**
  * IndexController
  *
- * @author Mike Cooper
+ * @author Mike Cooper <michael.cooper@valtech.co.uk>
  */
 class IndexController extends AbstractActionController
 {

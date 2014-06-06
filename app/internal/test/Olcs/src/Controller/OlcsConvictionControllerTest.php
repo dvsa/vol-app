@@ -169,12 +169,18 @@ class OlcsConvictionControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->once())
             ->method('getRequest')
-            ->will($this->returnValue($this->getPostDataMock(array(
-                'offence' => array(
-                    'category' => 38,
-                    'parentCategory' => 1
+            ->will(
+                $this->returnValue(
+                    $this->getPostDataMock(
+                        array(
+                            'offence' => array(
+                                'category' => 38,
+                                'parentCategory' => 1
+                            )
+                        )
+                    )
                 )
-            ))));
+            );
 
         $this->controller->addAction();
     }
@@ -254,16 +260,18 @@ class OlcsConvictionControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->once())
             ->method('getRequest')
-            ->will($this->returnValue($this->getPostDataMock(
-                    array(
-                        'offence' => array(
-                            'category' => 38,
-                            'parentCategory' => 1
+            ->will(
+                $this->returnValue(
+                    $this->getPostDataMock(
+                        array(
+                            'offence' => array(
+                                'category' => 38,
+                                'parentCategory' => 1
+                            )
                         )
                     )
                 )
-            )
-        );
+            );
 
         $this->controller->editAction();
     }

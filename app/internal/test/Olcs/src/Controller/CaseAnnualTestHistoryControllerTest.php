@@ -8,8 +8,6 @@
 
 namespace OlcsTest\Controller;
 
-use Olcs\Controller\CaseAnnualTestHistoryController;
-
 /**
  * Case Prohibition Controller tests
  *
@@ -79,12 +77,14 @@ class CaseAnnualTestHistoryControllerTest extends \PHPUnit_Framework_TestCase
         );
 
         $mockParam = $this->getMock('stdClass', array('fromRoute'));
-        $mockParam->expects($this->exactly(2))->method('fromRoute')->will($this->returnValueMap(
-            array(
-                array('case', null, 25),
-                array('licence', null, 7),
+        $mockParam->expects($this->exactly(2))->method('fromRoute')->will(
+            $this->returnValueMap(
+                array(
+                    array('case', null, 25),
+                    array('licence', null, 7),
+                )
             )
-        ));
+        );
 
         $mockPluginManager = $this->getMock('Zend\Mvc\Controller\PluginManager', array('setController', 'get'));
         $mockPluginManager->expects($this->any())->method('get')->with('params')->will($this->returnValue($mockParam));
