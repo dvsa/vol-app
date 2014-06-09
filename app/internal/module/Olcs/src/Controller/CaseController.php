@@ -102,16 +102,23 @@ class CaseController extends FormActionController
         $results = $this->makeRestCall('Submission', 'GET', array('vosaCase' => $caseId), $bundle);
 
         foreach ($results['Results'] as $k => $result) {
+
             $results['Results'][$k]['status'] = 'Draft';
-            foreach ($result['submissionActions'] as $ak => $action) {
+
+            foreach ($result['submissionActions'] as $action) {
+
                 $results['Results'][$k]['urgent'] = $action['urgent'];
+
                 if (isset($action['userRecipient']['name'])) {
                     $results['Results'][$k]['currentlyWith'] = $action['userRecipient']['name'];
                 }
+
                 $actions = isset($submissionActions['submission_'.$action['submissionActionType']])
                     ? $submissionActions['submission_'.$action['submissionActionType']] : '';
+
                 $results['Results'][$k]['status'] = isset($actions[$action['submissionActionStatus']])
                     ? $actions[$action['submissionActionStatus']] : '';
+
                 $results['Results'][$k]['type'] = ucfirst($action['submissionActionType']);
 
                 //We only need the data from the top action - which is the latest.

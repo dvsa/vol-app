@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Case Test Controller
  *
@@ -16,10 +17,11 @@ use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
  */
 class CaseControllerTest extends AbstractHttpControllerTestCase
 {
+
     public function setUp()
     {
         $this->setApplicationConfig(
-            include __DIR__.'/../../../../config/application.config.php'
+            include __DIR__ . '/../../../../config/application.config.php'
         );
 
         $this->controller = $this->getMock(
@@ -91,7 +93,6 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
         $this->controller->manageAction();
     }
 
-
     /**
      * Tests that manageAction recognises the add action
      */
@@ -161,15 +162,13 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
                 $this->onConsecutiveCalls(
                     $this->returnValue(
                         $this->getServiceLocatorStaticData('getSampleOrganisationTypeArray')
-                    ),
-                    $this->returnValue(
+                    ), $this->returnValue(
                         $this->getServiceLocatorStaticData()
-                    ),
-                    $this->returnValue(
+                    ), $this->returnValue(
                         $this->getServiceLocatorGetTable()
                     )
                 )
-            );
+        );
 
         $this->controller->expects($this->exactly(1))
             ->method('makeRestCall')
@@ -177,12 +176,11 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
                 $this->onConsecutiveCalls(
                     $this->returnValue(
                         $this->getSampleSubmissions()
-                    ),
-                    $this->returnValue(
+                    ), $this->returnValue(
                         array()
                     )
                 )
-            );
+        );
 
         $this->controller->expects($this->once())
             ->method('getPluginManager')
@@ -201,7 +199,6 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
 
         $this->assertSame($this->view, $this->controller->manageAction());
     }
-
 
     /**
      * Tests the index action returns not found if no licence present
@@ -233,8 +230,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
                 $this->onConsecutiveCalls(
                     $this->returnValue(
                         $this->getPageDataRestArray($licenceId)
-                    ),
-                    $this->returnValue(
+                    ), $this->returnValue(
                         array()
                     )
                 )
@@ -287,7 +283,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
     /**
      * Tests the index action
      */
-    public function testIndexActionEditNoId ()
+    public function testIndexActionEditNoId()
     {
         $licenceId = 7;
         $action = 'edit';
@@ -306,7 +302,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
     /**
      * Tests the index action
      */
-    public function testIndexActionAddNoId ()
+    public function testIndexActionAddNoId()
     {
         $licenceId = 7;
         $action = 'add';
@@ -338,7 +334,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
     /**
      * Tests the delete action
      */
-    public function testDeleteAction ()
+    public function testDeleteAction()
     {
         $licenceId = 7;
         $caseId = 24;
@@ -363,7 +359,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
     /**
      * Tests deleteAction if the record is not found
      */
-    public function testDeleteActionNotFound ()
+    public function testDeleteActionNotFound()
     {
         $licenceId = 7;
         $caseId = 24;
@@ -395,12 +391,11 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
                 $this->onConsecutiveCalls(
                     $this->returnValue(
                         array('data' => 'data')
-                    ),
-                    $this->returnValue(
+                    ), $this->returnValue(
                         $this->getPageDataRestArray($licenceId)
                     )
                 )
-            );
+        );
 
         $this->controller->expects($this->once())
             ->method('generateFormWithData');
@@ -414,7 +409,6 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
             ->with($this->equalTo('case/add'));
 
         $this->assertSame($this->view, $this->controller->addAction());
-
     }
 
     /**
@@ -467,12 +461,11 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
                 $this->onConsecutiveCalls(
                     $this->returnValue(
                         $caseObject
-                    ),
-                    $this->returnValue(
+                    ), $this->returnValue(
                         $this->getPageDataRestArray($licenceId)
                     )
                 )
-            );
+        );
 
         $this->controller->expects($this->once())
             ->method('generateFormWithData');
@@ -520,7 +513,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
      *
      * @param array $data
      */
-    public function testProcessAddCase ($data)
+    public function testProcessAddCase($data)
     {
         $redirectInfo = $this->getCaseAddRedirect(24, $data['licence']);
         $redirect = $this->getRedirectMock($redirectInfo);
@@ -543,7 +536,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
      *
      * @param array $data
      */
-    public function testProcessEditCase ($data)
+    public function testProcessEditCase($data)
     {
         $redirectInfo = $this->getSuccessRedirect($data['licence']);
         $redirect = $this->getRedirectMock($redirectInfo);
@@ -567,7 +560,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
     {
         return array(
             array(
-                array('fields' => array(),'licence' => 7, 'categories' => $this->getSampleCategoriesArray())
+                array('fields' => array(), 'licence' => 7, 'categories' => $this->getSampleCategoriesArray())
             )
         );
     }
@@ -600,16 +593,14 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
     public function testGetTabInformationArray()
     {
         $pluginMock = $this->getMock(
-            'stdClass',
-            [
-                'get'
+            'stdClass', [
+            'get'
             ]
         );
 
         $routeMock = $this->getMock(
-            'stdClass',
-            [
-                'fromRoute'
+            'stdClass', [
+            'fromRoute'
             ]
         );
 
@@ -622,9 +613,8 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue($routeMock));
 
         $sut = $this->getMock(
-            '\Olcs\Controller\CaseController',
-            [
-                'getPluginManager'
+            '\Olcs\Controller\CaseController', [
+            'getPluginManager'
             ]
         );
 
@@ -641,9 +631,8 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
     public function testGetCase()
     {
         $controller = $this->getMock(
-            '\Olcs\Controller\CaseController',
-            [
-                'makeRestCall'
+            '\Olcs\Controller\CaseController', [
+            'makeRestCall'
             ]
         );
 
@@ -667,14 +656,14 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
 
         $params = $this->getMock('stdClass', [$function]);
         $params->expects($this->once())
-               ->method($function)
-               ->with($this->equalTo($request))
-               ->will($this->returnValue($return));
+            ->method($function)
+            ->with($this->equalTo($request))
+            ->will($this->returnValue($return));
 
         $sut = $this->getMock('\Olcs\Controller\CaseController', ['params']);
         $sut->expects($this->once())
-               ->method('params')
-               ->will($this->returnValue($params));
+            ->method('params')
+            ->will($this->returnValue($params));
 
         $this->assertSame($return, $sut->$function($request));
     }
@@ -816,7 +805,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
     /**
      * Gets a mock plugin manager url call
      */
-    private function getPluginManagerUrl ()
+    private function getPluginManagerUrl()
     {
         $pm = $this->getMock('\stdClass', array('get'));
 
@@ -833,7 +822,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
      *
      * @param $function
      */
-    private function getServiceLocatorStaticData ($function = 'getSampleCategoriesArray')
+    private function getServiceLocatorStaticData($function = 'getSampleCategoriesArray')
     {
         $serviceMock = $this->getMock('\stdClass', array('get'));
 
@@ -848,7 +837,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
     /**
      * Gets a mock call to get parameters
      */
-    private function getParams ($returnValue)
+    private function getParams($returnValue)
     {
         $paramsMock = $this->getMock('\stdClass', array('fromPost'));
 
@@ -862,7 +851,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
     /**
      * Gets a call to forwward->dispatch()
      */
-    private function getForwardDispatch ()
+    private function getForwardDispatch()
     {
         $paramsMock = $this->getMock('\stdClass', array('dispatch'));
 
@@ -875,19 +864,17 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
     /**
      * Gets a mock plugin manager url call
      */
-    private function getServiceLocatorGetTable ()
+    private function getServiceLocatorGetTable()
     {
         $serviceMock = $this->getMock(
-            'stdClass',
-            [
-                'get'
+            'stdClass', [
+            'get'
             ]
         );
 
         $tableMock = $this->getMock(
-            'stdClass',
-            [
-                'buildTable'
+            'stdClass', [
+            'buildTable'
             ]
         );
 
@@ -966,7 +953,6 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
                 'case_category.28' => 'Proposal to revoke'
             ),
         );
-
     }
 
     /**
@@ -978,13 +964,13 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
     {
         return array(
             'business_types' =>
-                [
-                    'org_type.lc' => 'Limited company',
-                    'org_type.st' => 'Sole Trader',
-                    'org_type.p' => 'Partnership',
-                    'org_type.llp' => 'Limited Liability Partnership',
-                    'org_type.o' => 'Other (e.g. public authority, charity, trust, university)',
-                ],
+            [
+                'org_type.lc' => 'Limited company',
+                'org_type.st' => 'Sole Trader',
+                'org_type.p' => 'Partnership',
+                'org_type.llp' => 'Limited Liability Partnership',
+                'org_type.o' => 'Other (e.g. public authority, charity, trust, university)',
+            ],
         );
     }
 
@@ -999,65 +985,60 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
     private function getSampleCaseArray($caseId, $licenceId)
     {
         return array
-        (
-        'createdOn' => '',
-        'lastUpdatedOn' => '',
-        'version' => 1,
-        'id' => $caseId,
-        'caseNumber' => 12345678,
-        'status' => 'Open',
-        'description' => 'Convictions against operator',
-        'convictionData' => '',
-        'ecms' => 'E123444',
-        'openTime' => '2012-06-13T00:00:00+0100',
-        'owner' => 'TBC',
-        'caseType' => 'Compliance',
-        'closedTime' => '',
-        'createdBy' => '',
-        'lastUpdatedBy' => '',
-        'categories' => array
             (
+            'createdOn' => '',
+            'lastUpdatedOn' => '',
+            'version' => 1,
+            'id' => $caseId,
+            'caseNumber' => 12345678,
+            'status' => 'Open',
+            'description' => 'Convictions against operator',
+            'convictionData' => '',
+            'ecms' => 'E123444',
+            'openTime' => '2012-06-13T00:00:00+0100',
+            'owner' => 'TBC',
+            'caseType' => 'Compliance',
+            'closedTime' => '',
+            'createdBy' => '',
+            'lastUpdatedBy' => '',
+            'categories' => array
+                (
                 array(
                     'id' => 1,
                     'name' => 'Category name'
                 )
             ),
-
-        'licence' => array
-            (
-            'createdOn' => '2014-04-02T13:39:54+0100',
-            'lastUpdatedOn' => '2014-04-02T13:39:54+0100',
-            'version' => 1,
-            'id' => 7,
-            'goodsOrPsv' => 'Goods',
-            'licenceNumber' => 'OB1234567',
-            'licenceStatus' => 'Valid',
-            'niFlag' => '',
-            'licenceType' => 'Standard National',
-            'startDate' => '2010-01-12T00:00:00+0000',
-            'reviewDate' => '2010-01-12T00:00:00+0000',
-            'endDate' => '2010-01-12T00:00:00+0000',
-            'fabsReference' => '',
-            'tradeType' => 'Utilities',
-            'authorisedTrailers' => '',
-            'authorisedVehicles' => '',
-            'safetyInsVehicles' => '',
-            'safetyInsTrailers' => '',
-            'safetyInsVaries' => '',
-            'tachographIns' => '',
-            'tachographInsName' => '',
-            'createdBy' => array
+            'licence' => array
                 (
-
+                'createdOn' => '2014-04-02T13:39:54+0100',
+                'lastUpdatedOn' => '2014-04-02T13:39:54+0100',
+                'version' => 1,
+                'id' => 7,
+                'goodsOrPsv' => 'Goods',
+                'licenceNumber' => 'OB1234567',
+                'licenceStatus' => 'Valid',
+                'niFlag' => '',
+                'licenceType' => 'Standard National',
+                'startDate' => '2010-01-12T00:00:00+0000',
+                'reviewDate' => '2010-01-12T00:00:00+0000',
+                'endDate' => '2010-01-12T00:00:00+0000',
+                'fabsReference' => '',
+                'tradeType' => 'Utilities',
+                'authorisedTrailers' => '',
+                'authorisedVehicles' => '',
+                'safetyInsVehicles' => '',
+                'safetyInsTrailers' => '',
+                'safetyInsVaries' => '',
+                'tachographIns' => '',
+                'tachographInsName' => '',
+                'createdBy' => array
+                (
                 ),
-
-            'lastUpdatedBy' => array
+                'lastUpdatedBy' => array
                 (
-
                 ),
-
-            'organisation' => Array
-                (
+                'organisation' => Array
+                    (
                     'createdOn' => '2014-04-02T13:39:54+0100',
                     'lastUpdatedOn' => '2014-04-02T13:39:54+0100',
                     'version' => 2,
@@ -1068,21 +1049,17 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
                     'organisationType' => 'org_type.o',
                     'sicCode' => '',
                     'createdBy' => array
-                        (
-                        ),
-
+                    (
+                    ),
                     'lastUpdatedBy' => array
-                        (
-                        ),
-
+                    (
+                    ),
                 ),
-
-            'operatingCentres' => array
+                'operatingCentres' => array
                 (
                 ),
-
-            'trafficArea' => array
-                (
+                'trafficArea' => array
+                    (
                     'createdOn' => '',
                     'lastUpdatedOn' => '',
                     'version' => 1,
@@ -1091,53 +1068,40 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
                     'createdBy' => '',
                     'lastUpdatedBy' => ''
                 ),
-
-            'cases' => array
+                'cases' => array
                 (
                 ),
-
-            'transportManagers' => array
+                'transportManagers' => array
                 (
                 ),
-
-            'fees' => array
+                'fees' => array
                 (
                 ),
-
-            'conditions' => array
-                (
+                'conditions' => array
+                    (
                     0 => array
-                        (
-                        )
-
+                    (
+                    )
                 ),
-
-            'tradingNames' => array
+                'tradingNames' => array
                 (
                 ),
-
-            'contactDetails' => array
+                'contactDetails' => array
                 (
                 ),
-
-        ),
-
-        'convictions' => array
+            ),
+            'convictions' => array
             (
             ),
-
-        'complaints' => array
+            'complaints' => array
             (
             ),
-
-        'penalties' => array
+            'penalties' => array
             (
             ),
-
-        'prohibitions' => array
+            'prohibitions' => array
             (
             )
-
         );
     }
 
@@ -1149,92 +1113,62 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
     private function getSampleSubmissions()
     {
         return array(
-
             'Count' => 1,
-            'Results' => array
-                (
-                    0 => array
-                        (
-                            'createdOn' => '2014-05-07T09:31:02+0100',
-                            'lastUpdatedOn' => '2014-05-07T09:31:02+0100',
+            'Results' => array(
+                0 => array(
+                    'createdOn' => '2014-05-07T09:31:02+0100',
+                    'lastUpdatedOn' => '2014-05-07T09:31:02+0100',
+                    'version' => 1,
+                    'id' => 1,
+                    'text' => '',
+                    'dateClosed' => '',
+                    'createdBy' => array(),
+                    'lastUpdatedBy' => '',
+                    'vosaCase' => array(),
+                    'submissionActions' => array(
+                        0 => array(
+                            'createdOn' => '2014-05-07T09:31:45+0100',
+                            'lastUpdatedOn' => '2014-05-07T09:31:45+0100',
                             'version' => 1,
                             'id' => 1,
-                            'text' => '',
-                            'dateClosed' => '',
-                            'createdBy' => array
-                                (
-
-                                ),
-
+                            'comment' => 'test ddd',
+                            'urgent' => 'Y',
+                            'submissionActionStatus' => 'submission_recommendation.undertakings-conditions',
+                            'submissionActionType' => 'recommendation',
+                            'createdBy' => '',
                             'lastUpdatedBy' => '',
-                            'vosaCase' => Array
-                                (
-
-                                ),
-
-                            'submissionActions' => Array
-                                (
-                                    0 => Array
-                                        (
-                                            'createdOn' => '2014-05-07T09:31:45+0100',
-                                            'lastUpdatedOn' => '2014-05-07T09:31:45+0100',
-                                            'version' => 1,
-                                            'id' => 1,
-                                            'comment' => 'test ddd',
-                                            'urgent' => 'Y',
-                                            'submissionActionStatus' => 'submission_recommendation.undertakings-conditions',
-                                            'submissionActionType' => 'recommendation',
-                                            'createdBy' => '',
-                                            'lastUpdatedBy' => '',
-                                            'userSender' => array
-                                                (
-                                                    'createdOn' => '2013-11-27T00:00:00+0000',
-                                                    'lastUpdatedOn' => '2013-11-27T00:00:00+0000',
-                                                    'version' => 1,
-                                                    'id' => 1,
-                                                    'username' => 'Logged in user',
-                                                    'password' => '',
-                                                    'displayName' => 'Logged in User',
-                                                    'isDeleted' => 0,
-                                                    'createdBy' => '',
-                                                    'lastUpdatedBy' => '',
-                                                    'roles' => array
-                                                        (
-                                                        )
-
-                                                ),
-
-                                            'userRecipient' => array
-                                                (
-                                                    'createdOn' => '2013-11-27T00:00:00+0000',
-                                                    'lastUpdatedOn' => '2013-11-27T00:00:00+0000',
-                                                    'version' => 1,
-                                                    'id' => 1,
-                                                    'username' => 'Logged in user',
-                                                    'password' => '',
-                                                    'displayName' => 'Logged in User',
-                                                    'isDeleted' => 0,
-                                                    'createdBy' => '',
-                                                    'lastUpdatedBy' => '',
-                                                    'name' => 'Person name',
-                                                    'roles' => array
-                                                        (
-                                                        )
-
-                                                ),
-
-                                            'submission' => array
-                                                (
-                                                )
-
-                                        )
-
-                                )
-
+                            'userSender' => array(
+                                'createdOn' => '2013-11-27T00:00:00+0000',
+                                'lastUpdatedOn' => '2013-11-27T00:00:00+0000',
+                                'version' => 1,
+                                'id' => 1,
+                                'username' => 'Logged in user',
+                                'password' => '',
+                                'displayName' => 'Logged in User',
+                                'isDeleted' => 0,
+                                'createdBy' => '',
+                                'lastUpdatedBy' => '',
+                                'roles' => array()
+                            ),
+                            'userRecipient' => array(
+                                'createdOn' => '2013-11-27T00:00:00+0000',
+                                'lastUpdatedOn' => '2013-11-27T00:00:00+0000',
+                                'version' => 1,
+                                'id' => 1,
+                                'username' => 'Logged in user',
+                                'password' => '',
+                                'displayName' => 'Logged in User',
+                                'isDeleted' => 0,
+                                'createdBy' => '',
+                                'lastUpdatedBy' => '',
+                                'name' => 'Person name',
+                                'roles' => array()
+                            ),
+                            'submission' => array()
                         )
-
+                    )
                 )
-
+            )
         );
     }
 }

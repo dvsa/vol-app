@@ -123,11 +123,6 @@ class CaseComplaintControllerTest extends AbstractHttpControllerTestCase
             ->with('licence')
             ->will($this->returnValue($licenceId));
 
-        $controller->expects($this->at(2))
-            ->method('fromRoute')
-            ->with('complaint')
-            ->will($this->returnValue($complaintId));
-
         $controller->expects($this->once())
             ->method('getCase')
             ->with($this->equalTo($caseId))
@@ -164,5 +159,4 @@ class CaseComplaintControllerTest extends AbstractHttpControllerTestCase
 
         $this->assertEquals($viewMock, $controller->indexAction());
     }
-
 }

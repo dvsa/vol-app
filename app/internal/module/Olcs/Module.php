@@ -1,23 +1,36 @@
 <?php
+
+/**
+ * Module
+ *
+ * @author Someone <someone@valtech.co.uk>
+ */
 namespace Olcs;
+
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 
+/**
+ * Module
+ *
+ * @author Someone <someone@valtech.co.uk>
+ */
 class Module
 {
+
     public function onBootstrap(MvcEvent $e)
     {
-        $eventManager        = $e->getApplication()->getEventManager();
+        $eventManager = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
     }
-    
+
     public function getConfig()
     {
         $base = include __DIR__ . '/config/module.config.php';
         return $base;
     }
-    
+
     public function getAutoloaderConfig()
     {
         return array(

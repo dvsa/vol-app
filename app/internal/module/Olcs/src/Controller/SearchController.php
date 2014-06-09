@@ -2,14 +2,11 @@
 
 /**
  * Search controller
- *
  * Search for operators and licences
  *
- * @package    olcs
- * @author     Mike Cooper
- * @author     Rob Caiger <rob@clocal.co.uk>
+ * @author Mike Cooper <michael.cooper@valtech.co.uk>
+ * @author Rob Caiger <rob@clocal.co.uk>
  */
-
 namespace Olcs\Controller;
 
 use Common\Controller\FormActionController;
@@ -17,12 +14,10 @@ use Zend\View\Model\ViewModel;
 
 /**
  * Search controller
- *
  * Search for operators and licences
  *
- * @package    olcs
- * @author     Mike Cooper
- * @author     Rob Caiger <rob@clocal.co.uk>
+ * @author Mike Cooper <michael.cooper@valtech.co.uk>
+ * @author Rob Caiger <rob@clocal.co.uk>
  */
 class SearchController extends FormActionController
 {
@@ -36,7 +31,6 @@ class SearchController extends FormActionController
     {
         // Below is for setting route params for the breadcrumb
         $this->setBreadcrumb(array('search' => array()));
-        $navigation = $this->getServiceLocator()->get('navigation');
         $form = $this->generateFormWithData('search', 'processSearch');
 
         $view = new ViewModel(['form' => $form]);
@@ -107,8 +101,10 @@ class SearchController extends FormActionController
         $static = $config['static-list-data'];
 
         foreach ($results['Results'] as $key => $result) {
-            if (isset($static['business_types'][$result['organisation_type']])) {
-                $results['Results'][$key]['organisation_type'] = $static['business_types'][$result['organisation_type']];
+
+            $orgType = $result['organisation_type'];
+            if (isset($static['business_types'][$orgType])) {
+                $results['Results'][$key]['organisation_type'] = $static['business_types'][$orgType];
             }
         }
 

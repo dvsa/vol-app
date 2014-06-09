@@ -29,8 +29,6 @@ class CaseConditionUndertakingController extends CaseController
 
         $table = $this->params()->fromPost('table');
 
-        $id = $this->fromRoute('id');
-
         $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licenceId)));
 
         if (!empty($table)) {

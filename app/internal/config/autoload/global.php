@@ -1,4 +1,5 @@
 <?php
+
 return array(
     'service_api_mapping' => array(
         'endpoints' => array(
@@ -7,4 +8,3 @@ return array(
         ),
     )
 );
-

@@ -322,7 +322,12 @@ class CaseProhibitionControllerTest extends AbstractHttpControllerTestCase
         $redirect = $this->getMock('stdClass', ['toRoute']);
         $redirect->expects($this->once())
             ->method('toRoute')
-            ->with($this->equalTo('case_prohibition'), $this->equalTo(array()), $this->equalTo(array()), $this->equalTo(true));
+            ->with(
+                $this->equalTo('case_prohibition'),
+                $this->equalTo(array()),
+                $this->equalTo(array()),
+                $this->equalTo(true)
+            );
 
         return $redirect;
     }

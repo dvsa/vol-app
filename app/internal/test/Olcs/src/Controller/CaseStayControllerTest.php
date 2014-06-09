@@ -519,7 +519,16 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
      */
     public function getStayRestResult($stayTypeId)
     {
-        return array('Results' => array(0 => array('id' => 1,'stayType' => $stayTypeId, 'outcome' => 'stay_status_granted', 'requestDate' => strtotime(time()))));
+        return array(
+            'Results' => array(
+                0 => array(
+                    'id' => 1,
+                    'stayType' => $stayTypeId,
+                    'outcome' => 'stay_status_granted',
+                    'requestDate' => strtotime(time())
+                )
+            )
+        );
     }
 
     /**
@@ -585,7 +594,12 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
     private function getRedirectAddFail($caseId, $stayTypeId, $licenceId)
     {
         $redirectInfo['string'] = $this->getRedirectAction();
-        $redirectInfo['options'] = array('action' => 'add', 'case' => $caseId, 'stayType' => $stayTypeId, 'licence' => $licenceId);
+        $redirectInfo['options'] = array(
+            'action' => 'add',
+            'case' => $caseId,
+            'stayType' => $stayTypeId,
+            'licence' => $licenceId
+        );
         return $redirectInfo;
     }
 
@@ -615,7 +629,13 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
     private function getRedirectEditFail($caseId, $stayId, $stayTypeId, $licenceId)
     {
         $redirectInfo['string'] = $this->getRedirectAction();
-        $redirectInfo['options'] = array('action' => 'edit', 'case' => $caseId, 'stayType' => $stayTypeId, 'stay' => $stayId, 'licence' => $licenceId);
+        $redirectInfo['options'] = array(
+            'action' => 'edit',
+            'case' => $caseId,
+            'stayType' => $stayTypeId,
+            'stay' => $stayId,
+            'licence' => $licenceId
+        );
         return $redirectInfo;
     }
 
