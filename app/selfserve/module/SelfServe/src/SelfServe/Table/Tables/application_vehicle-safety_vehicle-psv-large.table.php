@@ -27,7 +27,16 @@ return array(
         ),
         array(
             'title' => $translationPrefix . '.vrm',
-            'name' => 'vrm'
+            'name' => 'vrm',
+            'formatter' => function ($row) {
+                return '<a href="' . $this->generateUrl(
+                    array(
+                        'id' => $row['id'],
+                        'action' => 'large-edit'
+                    ),
+                    'Application/VehicleSafety/VehiclePsv'
+                ) . '">' . $row['vrm'] . '</a>';
+            }
         )
     )
 );

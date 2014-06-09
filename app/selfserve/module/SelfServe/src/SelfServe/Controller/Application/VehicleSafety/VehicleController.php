@@ -136,6 +136,8 @@ class VehicleController extends VehicleSafetyController
      */
     protected function getTableData($id)
     {
+        unset($id);
+
         $licence = $this->getLicenceData();
 
         $data = $this->makeRestCall('Licence', 'GET', array('id' => $licence['id']), $this->tableDataBundle);

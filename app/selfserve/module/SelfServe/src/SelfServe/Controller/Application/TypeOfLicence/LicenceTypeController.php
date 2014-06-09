@@ -75,6 +75,8 @@ class LicenceTypeController extends TypeOfLicenceController
      */
     protected function loadData($id)
     {
+        unset($id);
+
         if (empty($this->data)) {
 
             $this->data = $this->getLicenceData();
