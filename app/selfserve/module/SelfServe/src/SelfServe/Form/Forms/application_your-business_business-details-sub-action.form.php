@@ -17,14 +17,16 @@ return array(
                     'type' => 'hidden',
                 ),
                 'name' => array(
-                    'type' => 'companyName',
+                    'type' => 'text',
                     'label' => 'application_your-business_business-details-formName',
                     'class' => 'long',
+                    'filters' => '\Common\Form\Elements\InputFilters\TextRequired'
                 ),
                 'companyNo' => array(
-                    'type' => 'companyNumber',
+                    'type' => 'text',
                     'label' => 'application_your-business_business-details-formCompanyNo',
                     'class' => 'long',
+                    'filters' => '\Common\Form\Elements\InputFilters\TextRequired'
                 ),
                 )
             ),

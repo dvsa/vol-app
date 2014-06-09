@@ -250,12 +250,8 @@ class BusinessDetailsController extends YourBusinessController
         }
 
         $post = (array)$request->getPost()['data'];
-        if (isset($post['companyNumber'])) {
-            $companyKey = 'companyNumber';
-        } else {
-            $companyKey = 'companyNo';
-        }
-        if (isset($post[$companyKey]['submit_lookup_company'])) {
+
+        if (isset($post['companyNumber']['submit_lookup_company'])) {
 
             $this->setPersist(false);
 
@@ -264,7 +260,7 @@ class BusinessDetailsController extends YourBusinessController
                 'GET',
                 [
                     'type' => 'numberSearch',
-                    'value' => $post[$companyKey]['company_number']
+                    'value' => $post['companyNumber']['company_number']
                 ]
             );
 
@@ -273,7 +269,7 @@ class BusinessDetailsController extends YourBusinessController
                 $post['name'] = $companyName;
                 $this->setFieldValue('data', $post);
             } else {
-                $form->get('data')->get($companyKey)->setMessages(
+                $form->get('data')->get('companyNumber')->setMessages(
                     array('company_number' => array(
                         'Sorry, we couldn\'t find any matching companies, '
                         . 'please try again or enter your details manually below'))
@@ -320,9 +316,6 @@ class BusinessDetailsController extends YourBusinessController
     {
         $organisation = $this->getOrganisationData(['organisationType', 'id']);
         $data['organisation'] = $organisation['id'];
-        if (isset($data['companyNo'])) {
-            $data['companyNo'] = $data['companyNo']['company_number'];
-        }
         parent::actionSave($data, 'CompanySubsidiary');
     }
 
@@ -334,10 +327,6 @@ class BusinessDetailsController extends YourBusinessController
      */
     protected function processActionLoad($data)
     {
-        if (array_key_exists('companyNo', $data)) {
-            $data['companyNo'] = array('company_number' => $data['companyNo']);
-        }
-
         return array('data' => $data);
     }
 
