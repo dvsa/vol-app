@@ -71,7 +71,6 @@ class ConditionUndertakingController extends FormActionController
         $view = new ViewModel(
             array(
             'form' => $form,
-            'headScript' => array('/static/js/conditionUndertaking.js'),
             'params' => array(
                 'pageTitle' => 'add-' . $routeParams['type'],
                 'pageSubTitle' => 'subtitle-' . $routeParams['type'] . '-text'
@@ -142,9 +141,6 @@ class ConditionUndertakingController extends FormActionController
         $view = new ViewModel(
             array(
                 'form' => $form,
-                'headScript' => array(
-                    '/static/js/conditionUndertaking.js'
-                ),
                 'params' => array(
                     'pageTitle' => 'edit-' . $routeParams['type'],
                     'pageSubTitle' => 'subtitle-' . $routeParams['type'] . '-text'

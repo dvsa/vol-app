@@ -109,7 +109,7 @@ class ConvictionController extends CaseController
         $view = new ViewModel(
             array(
                 'form' => $form,
-                'headScript' => array('/static/js/conviction.js'),
+                'inlineScript' => $this->getServiceLocator()->get('Script')->loadFiles(['conviction']),
                 'params' => array(
                     'pageTitle' => 'add-conviction',
                     'pageSubTitle' => 'Please add conviction details'
@@ -227,9 +227,7 @@ class ConvictionController extends CaseController
         $view = new ViewModel(
             array(
                 'form' => $form,
-                'headScript' => array(
-                    '/static/js/conviction.js'
-                ),
+                'inlineScript' => $this->getServiceLocator()->get('Script')->loadFiles(['conviction']),
                 'params' => array(
                     'pageTitle' => 'edit-conviction',
                     'pageSubTitle' => 'Edit the conviction'

@@ -124,7 +124,7 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
             ->method('makeRestCall')
             ->will($this->returnValue($this->getSampleImpoundingArray($licenceId)));
 
-        $this->controller->expects($this->once())
+        $this->controller->expects($this->any())
             ->method('getServiceLocator')
             ->will($this->returnValue($this->getServiceLocatorStaticData()));
 
@@ -197,6 +197,20 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
             ->method('setTemplate')
             ->with($this->equalTo('impounding/form'));
 
+        $scriptMock = $this->getMock('\stdClass', ['loadFiles']);
+        $scriptMock->expects($this->any())
+            ->method('loadFiles')
+            ->will($this->returnValue([]));
+
+        $serviceMock = $this->getMock('\stdClass', ['get']);
+        $serviceMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValue($scriptMock));
+
+        $this->controller->expects($this->once())
+            ->method('getServiceLocator')
+            ->will($this->returnValue($serviceMock));
+
         $this->assertSame($this->view, $this->controller->addAction());
     }
 
@@ -239,6 +253,20 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
         $this->view->expects($this->once())
             ->method('setTemplate')
             ->with($this->equalTo('impounding/form'));
+
+        $scriptMock = $this->getMock('\stdClass', ['loadFiles']);
+        $scriptMock->expects($this->any())
+            ->method('loadFiles')
+            ->will($this->returnValue([]));
+
+        $serviceMock = $this->getMock('\stdClass', ['get']);
+        $serviceMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValue($scriptMock));
+
+        $this->controller->expects($this->once())
+            ->method('getServiceLocator')
+            ->will($this->returnValue($serviceMock));
 
         $this->assertSame($this->view, $this->controller->editAction());
     }
@@ -652,10 +680,19 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
     {
         $serviceMock = $this->getMock('\stdClass', array('get'));
 
-        $serviceMock->expects($this->once())
+        $scriptMock = $this->getMock('\stdClass', ['loadFiles']);
+        $scriptMock->expects($this->any())
+            ->method('loadFiles')
+            ->will($this->returnValue([]));
+
+        $serviceMock->expects($this->any())
             ->method('get')
-            ->with($this->equalTo('Config'))
-            ->will($this->returnValue(array('static-list-data' => $this->getSampleStaticData())));
+            ->will(
+                $this->onConsecutiveCalls(
+                    array('static-list-data' => $this->getSampleStaticData()),
+                    $scriptMock
+                )
+            );
 
         return $serviceMock;
     }

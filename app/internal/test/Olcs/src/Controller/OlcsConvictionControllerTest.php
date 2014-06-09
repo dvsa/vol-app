@@ -131,6 +131,20 @@ class OlcsConvictionControllerTest extends AbstractHttpControllerTestCase
             ->method('getRequest')
             ->will($this->returnValue($this->getPostDataMock()));
 
+        $scriptMock = $this->getMock('\stdClass', ['loadFiles']);
+        $scriptMock->expects($this->any())
+            ->method('loadFiles')
+            ->will($this->returnValue([]));
+
+        $serviceMock = $this->getMock('\stdClass', ['get']);
+        $serviceMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValue($scriptMock));
+
+        $this->controller->expects($this->once())
+            ->method('getServiceLocator')
+            ->will($this->returnValue($serviceMock));
+
         $this->controller->addAction();
     }
 
@@ -181,6 +195,20 @@ class OlcsConvictionControllerTest extends AbstractHttpControllerTestCase
                     )
                 )
             );
+
+        $scriptMock = $this->getMock('\stdClass', ['loadFiles']);
+        $scriptMock->expects($this->any())
+            ->method('loadFiles')
+            ->will($this->returnValue([]));
+
+        $serviceMock = $this->getMock('\stdClass', ['get']);
+        $serviceMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValue($scriptMock));
+
+        $this->controller->expects($this->once())
+            ->method('getServiceLocator')
+            ->will($this->returnValue($serviceMock));
 
         $this->controller->addAction();
     }
@@ -272,6 +300,20 @@ class OlcsConvictionControllerTest extends AbstractHttpControllerTestCase
                     )
                 )
             );
+
+        $scriptMock = $this->getMock('\stdClass', ['loadFiles']);
+        $scriptMock->expects($this->any())
+            ->method('loadFiles')
+            ->will($this->returnValue([]));
+
+        $serviceMock = $this->getMock('\stdClass', ['get']);
+        $serviceMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValue($scriptMock));
+
+        $this->controller->expects($this->once())
+            ->method('getServiceLocator')
+            ->will($this->returnValue($serviceMock));
 
         $this->controller->editAction();
     }

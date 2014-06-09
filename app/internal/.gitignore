@@ -14,3 +14,4 @@ config/autoload/local.php
 .sass-cache/
 public/static
 *.sw?
+node_modules
