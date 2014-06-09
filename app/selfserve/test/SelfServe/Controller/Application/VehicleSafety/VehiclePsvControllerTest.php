@@ -740,7 +740,10 @@ class VehiclePsvControllerTest extends AbstractApplicationControllerTestCase
                     'version' => 1,
                     'goodsOrPsv' => 'psv',
                     'niFlag' => 0,
-                    'licenceType' => 'standard-national'
+                    'licenceType' => 'standard-national',
+                    'organisation' => array(
+                        'organisationType' => 'org_type.lc'
+                    )
                 )
             );
         }

@@ -200,7 +200,38 @@ class BusinessDetailsControllerTest extends AbstractApplicationControllerTestCas
         $this->assertEquals(null, $companyName->getValue());
     }
 
+    public function testFailedCompaniesHouseLookupTooLong()
+    {
+        $this->mockCompaniesHouseData = [
+            'Count' => 0
+        ];
+        $this->setOrganisationType('lc');
+        $post = [
+            'data' => [
+                'companyNumber' => [
+                    'company_number' => '123456789',
+                    'submit_lookup_company' => '',
+                ]
+            ]
+        ];
+        $this->setUpAction('index', null, $post);
 
+        $this->controller->setEnabledCsrf(false);
+
+        $fieldset = $this->getFormFromResponse(
+            $this->controller->indexAction()
+        )->get('data');
+
+        $companyNumber = $fieldset->get('companyNumber');
+        $companyName = $fieldset->get('name');
+
+        $this->assertCount(1, $companyNumber->getMessages());
+        $this->assertEquals(null, $companyName->getValue());
+    }
+
+    /**
+     * @group current
+     */
     public function testAddAnotherTradingName()
     {
         $this->setOrganisationType('lc');
@@ -281,7 +312,10 @@ class BusinessDetailsControllerTest extends AbstractApplicationControllerTestCas
                         'version' => 1,
                         'goodsOrPsv' => 'goods',
                         'niFlag' => 0,
-                        'licenceType' => 'standard-national'
+                        'licenceType' => 'standard-national',
+                        'organisation' => array(
+                            'organisationType' => 'org_type.lc'
+                        )
                     )
                 );
             }

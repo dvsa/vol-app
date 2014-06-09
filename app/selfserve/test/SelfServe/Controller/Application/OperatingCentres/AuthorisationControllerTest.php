@@ -112,7 +112,10 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                     'version' => 1,
                     'goodsOrPsv' => $this->goodsOrPsv,
                     'niFlag' => 0,
-                    'licenceType' => 'standard-national'
+                    'licenceType' => 'standard-national',
+                    'organisation' => array(
+                        'organisationType' => 'org_type.lc'
+                    )
                 )
             )
         );
@@ -174,7 +177,10 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                     'version' => 1,
                     'goodsOrPsv' => $this->goodsOrPsv,
                     'niFlag' => 0,
-                    'licenceType' => 'standard-international'
+                    'licenceType' => 'standard-international',
+                    'organisation' => array(
+                        'organisationType' => 'org_type.lc'
+                    )
                 )
             )
         );
@@ -236,7 +242,10 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                     'version' => 1,
                     'goodsOrPsv' => $this->goodsOrPsv,
                     'niFlag' => 0,
-                    'licenceType' => 'restricted'
+                    'licenceType' => 'restricted',
+                    'organisation' => array(
+                        'organisationType' => 'org_type.lc'
+                    )
                 )
             )
         );
@@ -283,7 +292,7 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
     /**
      * Test indexAction standard national
      */
-    public function testIndexActionStandardNationalPSV()
+    public function testIndexActionStandardNationalPsv()
     {
         $this->setUpAction('index');
 
@@ -298,7 +307,10 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                     'version' => 1,
                     'goodsOrPsv' => $this->goodsOrPsv,
                     'niFlag' => 0,
-                    'licenceType' => 'standard-national'
+                    'licenceType' => 'standard-national',
+                    'organisation' => array(
+                        'organisationType' => 'org_type.lc'
+                    )
                 )
             )
         );
@@ -345,7 +357,7 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
     /**
      * Test indexAction standard internation
      */
-    public function testIndexActionStandardInternationalPSV()
+    public function testIndexActionStandardInternationalPsv()
     {
         $this->setUpAction('index');
 
@@ -360,7 +372,10 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                     'version' => 1,
                     'goodsOrPsv' => $this->goodsOrPsv,
                     'niFlag' => 0,
-                    'licenceType' => 'standard-international'
+                    'licenceType' => 'standard-international',
+                    'organisation' => array(
+                        'organisationType' => 'org_type.lc'
+                    )
                 )
             )
         );
@@ -407,7 +422,7 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
     /**
      * Test indexAction restricted
      */
-    public function testIndexActionRestrictedPSV()
+    public function testIndexActionRestrictedPsv()
     {
         $this->setUpAction('index');
 
@@ -422,7 +437,10 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                     'version' => 1,
                     'goodsOrPsv' => $this->goodsOrPsv,
                     'niFlag' => 0,
-                    'licenceType' => 'restricted'
+                    'licenceType' => 'restricted',
+                    'organisation' => array(
+                        'organisationType' => 'org_type.lc'
+                    )
                 )
             )
         );
@@ -826,7 +844,10 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                     'version' => 1,
                     'goodsOrPsv' => $this->goodsOrPsv,
                     'niFlag' => 0,
-                    'licenceType' => 'standard-national'
+                    'licenceType' => 'standard-national',
+                    'organisation' => array(
+                        'organisationType' => 'org_type.lc'
+                    )
                 )
             );
         }

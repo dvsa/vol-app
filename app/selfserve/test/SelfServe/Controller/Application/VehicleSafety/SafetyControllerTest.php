@@ -503,7 +503,10 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
                     'version' => 1,
                     'goodsOrPsv' => $this->goodsOrPsv,
                     'niFlag' => 0,
-                    'licenceType' => 'standard-national'
+                    'licenceType' => 'standard-national',
+                    'organisation' => array(
+                        'organisationType' => 'org_type.lc'
+                    )
                 )
             );
         }

@@ -30,7 +30,14 @@ class ApplicationController extends AbstractJourneyController
                     'version',
                     'goodsOrPsv',
                     'niFlag',
-                    'licenceType'
+                    'licenceType',
+                ),
+                'children' => array(
+                    'organisation' => array(
+                        'properties' => array(
+                            'organisationType'
+                        )
+                    )
                 )
             )
         )
@@ -203,6 +210,9 @@ class ApplicationController extends AbstractJourneyController
             } else {
                 $this->accessKeys[] = 'unpaid';
             }
+
+            $this->accessKeys[] = $licence['organisation']['organisationType'];
+
         }
 
         return $this->accessKeys;
