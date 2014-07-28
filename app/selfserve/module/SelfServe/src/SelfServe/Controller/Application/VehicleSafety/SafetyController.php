@@ -160,6 +160,8 @@ class SafetyController extends VehicleSafetyController
         )
     );
 
+    protected $dataMap = null;
+
     /**
      * Redirect to the first section
      *

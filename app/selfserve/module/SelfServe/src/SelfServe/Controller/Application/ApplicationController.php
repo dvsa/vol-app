@@ -239,4 +239,33 @@ class ApplicationController extends AbstractJourneyController
 
         return $this->licenceData;
     }
+
+    /**
+     * Upload a file
+     *
+     * @param array $file
+     * @param array $data
+     */
+    protected function uploadFile($file, $data)
+    {
+        $uploader = $this->getUploader();
+        $uploader->setFile($file);
+        $uploader->upload();
+
+        $file = $uploader->getFile();
+
+        $fileData = $file->toArray();
+
+        $licence = $this->getLicenceData();
+
+        $fileData['fileName'] = $fileData['name'];
+        $fileData['application'] = $this->getIdentifier();
+        $fileData['licence'] = $licence['id'];
+
+        unset($fileData['path']);
+        unset($fileData['type']);
+        unset($fileData['name']);
+
+        $this->makeRestCall('Document', 'POST', array_merge($fileData, $data));
+    }
 }
