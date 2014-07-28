@@ -271,7 +271,7 @@ class AuthorisationController extends OperatingCentresController
                 )
             );
 
-            $unlinkedFiledData = $this->makeRestCall(
+            $unlinkedFileData = $this->makeRestCall(
                 'Document',
                 'GET',
                 array(
@@ -289,7 +289,7 @@ class AuthorisationController extends OperatingCentresController
                 $fileData = $this->actionLoad($this->getActionId())['operatingCentre']['adDocuments'];
             }
 
-            $fileData = array_merge($fileData, $unlinkedFiledData['Results']);
+            $fileData = array_merge($fileData, $unlinkedFileData['Results']);
 
             $fileList->setFiles($fileData, $this->url());
 
