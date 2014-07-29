@@ -37,5 +37,6 @@ return array(
             __DIR__ . '/../view'
         )
     ),
-    'application-name' => 'selfserve'
+    'application-name' => 'selfserve',
+    'asset_path' => '//olcs-frontend'
 );
