@@ -109,9 +109,8 @@ class CaseRevokeController extends CaseController
 
         $data = $revoke + $data;
 
-        $form = $this->generateForm('revoke', 'processRevoke');
-        $form->setData($data);
-
+        $form = $this->generateFormWithData('revoke', 'processRevoke', $data);
+        
         $view = $this->getView(
             array(
                 'form' => $form,

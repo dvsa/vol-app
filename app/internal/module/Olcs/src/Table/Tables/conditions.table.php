@@ -62,6 +62,7 @@ return array(
         ),
         array(
             'title' => 'OC Address',
+            'width' => '350px',
             'formatter' => function ($data, $column) {
                 // TODO remove this once address entity has been finalised
                 if (isset($data['operatingCentre']['address'])) {
