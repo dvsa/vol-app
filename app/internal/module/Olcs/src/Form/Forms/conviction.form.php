@@ -10,6 +10,13 @@ return [
         'type' => 'Common\Form\Form',
         'fieldsets' => [
             [
+                'name' => 'defendant',
+                'options' => [
+                    'label' => 'Defendant details'
+                ],
+                'type' => 'person',
+            ],
+            [
                 'name' => 'defendant-details',
                 'options' => [
                     'label' => 'Defendant details',
