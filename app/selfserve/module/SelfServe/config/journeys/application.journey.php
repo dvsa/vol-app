@@ -94,19 +94,6 @@ return array(
                     )
                 )
             ),
-            'TaxiPhv' => array(
-                'required' => array(
-                    'TypeOfLicence'
-                ),
-                'restriction' => array(
-                    'psv-special-restricted'
-                ),
-                'subSections' => array(
-                    'Placeholder' => array(
-
-                    )
-                )
-            ),
             'OperatingCentres' => array(
                 'required' => array(
                     'TypeOfLicence'
@@ -186,6 +173,19 @@ return array(
 
                     ),
                     'ConvictionsPenalties' => array(
+
+                    )
+                )
+            ),
+            'TaxiPhv' => array(
+                'required' => array(
+                    'TypeOfLicence'
+                ),
+                'restriction' => array(
+                    'psv-special-restricted'
+                ),
+                'subSections' => array(
+                    'Licence' => array(
 
                     )
                 )
