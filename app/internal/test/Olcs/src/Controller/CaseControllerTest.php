@@ -950,7 +950,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
                 'case_category.25' => 'Financial standing issue (continuation)',
                 'case_category.26' => 'Repute fitness of director',
                 'case_category.27' => 'Period of grace',
-                'case_category.28' => 'Proposal to revoke'
+                'case_category.28' => 'In-Office revocation'
             ),
         );
     }
