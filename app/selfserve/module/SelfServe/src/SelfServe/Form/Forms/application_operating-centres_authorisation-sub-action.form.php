@@ -33,10 +33,12 @@ return array(
                     'numberOfVehicles' => array(
                         'type' => 'vehiclesNumber',
                         'label' => $translationPrefix . '.data.numberOfVehicles',
+                        'filters' => '\Common\Form\Elements\InputFilters\NumberOfVehicles',
                     ),
                     'numberOfTrailers' => array(
                         'type' => 'vehiclesNumber',
                         'label' => $translationPrefix . '.data.numberOfTrailers',
+                        'filters' => '\Common\Form\Elements\InputFilters\NumberOfVehicles',
                     ),
                     'sufficientParking' => array(
                         'type' => 'singlecheckbox',
