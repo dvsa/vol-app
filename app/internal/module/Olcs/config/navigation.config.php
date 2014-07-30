@@ -143,17 +143,17 @@ return array(
                                     )
                                 ),
                                 array(
-                                    'label' => 'Propsal to revoke',
+                                    'label' => 'Propose In-Office revocation',
                                     'route' => 'case_revoke',
                                     'action' => 'index',
                                     'pages' => array(
                                         array(
-                                            'label' => 'Add a proposal to revoke',
+                                            'label' => 'Add In-Office revocation',
                                             'route' => 'case_revoke',
                                             'action' => 'add'
                                         ),
                                         array(
-                                            'label' => 'Edit proposal to revoke',
+                                            'label' => 'Edit In-Office revocation',
                                             'route' => 'case_revoke',
                                             'action' => 'edit'
                                         )

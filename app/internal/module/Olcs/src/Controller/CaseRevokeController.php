@@ -109,8 +109,7 @@ class CaseRevokeController extends CaseController
 
         $data = $revoke + $data;
 
-        $form = $this->generateForm('revoke', 'processRevoke');
-        $form->setData($data);
+        $form = $this->generateFormWithData('revoke', 'processRevoke', $data);
 
         $view = $this->getView(
             array(
@@ -196,24 +195,51 @@ class CaseRevokeController extends CaseController
     {
         unset($tables);
 
+        $licenceId = $this->fromRoute('licence');
+
+        $licence = $this->makeRestCall(
+            'Licence',
+            'GET',
+            ['id' => $licenceId]
+        );
+
         $form = $this->getForm($name);
 
-        $form->get('piReasons')->setValueOptions($this->getPiReasonsNvpArray());
+        $form->get('piReasons')->setValueOptions($this->getPiReasonsNvpArray($licence['goodsOrPsv']));
         $form->get('presidingTc')->setValueOptions($this->getPresidingTcArray());
 
         return $this->formPost($form, $callback);
     }
 
-    public function getPiReasonsNvpArray()
+    public function getPiReasonsNvpArray($licenceType)
     {
         $reasons = [];
+
+        //licence type should really be a lookup table in
+        //both Licence and PiReason entities!
+        switch (strtolower($licenceType)) {
+            case 'goods':
+                $goodsOrPsv = 'GV';
+                break;
+            case 'psv':
+                $goodsOrPsv = 'PSV';
+                break;
+            default:
+                break;
+        }
+
         $piReasons = $this->makeRestCall(
             'PiReason',
             'GET',
-            ['proposeToRevoke' => '1', 'limit' => '100', 'page' => '1']
+            [
+                'proposeToRevoke' => '1',
+                'isDecision' => '0',
+                'goodsOrPsv' => $goodsOrPsv,
+                'limit' => 'all'
+            ]
         );
         foreach ($piReasons['Results'] as $result) {
-            $reasons[$result['id']] = $result['sectionCode'] . ' - ' . $result['description'];
+            $reasons[$result['id']] = mb_substr($result['sectionCode'] . ' - ' . $result['description'], 0, 150);
         }
 
         return $reasons;

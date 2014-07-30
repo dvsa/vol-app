@@ -8,8 +8,8 @@
                 <h3><?php echo ucfirst($action['submissionActionType']); ?>: <?php echo $action['submissionActionStatus']; ?></h3>
                 <p><?php echo $action['comment']; ?></p>
                 <ul class="summary__list">
-                    <li class="summary__item"><b>From</b><a href=""><?php echo ucfirst($action['userSender']['name']); ?></a></li>
-                    <li class="summary__item"><b>To</b><a href=""><?php echo ucfirst($action['userRecipient']['name']); ?></a></li>
+                    <li class="summary__item"><b>From</b><?php echo ucfirst($action['userSender']['name']); ?></li>
+                    <li class="summary__item"><b>To</b><?php echo ucfirst($action['userRecipient']['name']); ?></li>
                     <li class="summary__item"><b>Created</b><?php echo date('d/m/Y', strtotime($action['createdOn'])); ?></li>
                     <li class="summary__item"><b>Urgent</b><?php echo ucfirst($action['urgent']); ?></li>
                 </ul>
