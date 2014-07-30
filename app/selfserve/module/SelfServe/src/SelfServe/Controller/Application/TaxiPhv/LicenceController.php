@@ -224,7 +224,10 @@ class LicenceController extends TaxiPhvController
         } elseif (isset($results['id'])) {
             $contactDetailsId = $results['id'];
         } else {
-            // @todo Handle failire to save contactDetails
+            /**
+             * @todo Handle failure to save contactDetails. For now we just throw an exception until the story has been
+             * complete which encompassess feeding back errors to the user
+             */
             throw new \Exception('Unable to save contact details');
         }
 
@@ -234,14 +237,14 @@ class LicenceController extends TaxiPhvController
     }
 
     /**
-     * Save the form data
+     * Overrides the abstract save method which normally tries to automatically save the application, we don't need
+     * to save anything so we just return
      *
      * @param array $data
      * @param string $service
      */
     protected function save($data, $service = null)
     {
-        // Do nothing
         return;
     }
 }

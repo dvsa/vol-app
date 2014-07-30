@@ -11,7 +11,7 @@ return array(
         'fieldsets' => array(
             array(
                 'name' => 'table',
-                'options' => array(0),
+                'options' => array(),
                 'type' => 'table-required'
             ),
             array(
