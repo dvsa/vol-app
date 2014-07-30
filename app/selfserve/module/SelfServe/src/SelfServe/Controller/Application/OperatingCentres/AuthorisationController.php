@@ -60,7 +60,8 @@ class AuthorisationController extends OperatingCentresController
             'children' => array(
                 'applicationOperatingCentre' => array(
                     'mapFrom' => array(
-                        'data'
+                        'data',
+                        'advertisements'
                     )
                 ),
                 'operatingCentre' => array(
@@ -92,7 +93,9 @@ class AuthorisationController extends OperatingCentresController
             'numberOfVehicles',
             'sufficientParking',
             'permission',
-            'adPlaced'
+            'adPlaced',
+            'adPlacedIn',
+            'dateAdPlaced'
         ),
         'children' => array(
             'operatingCentre' => array(
@@ -113,6 +116,15 @@ class AuthorisationController extends OperatingCentresController
                             'county',
                             'city',
                             'country'
+                        )
+                    ),
+                    'adDocuments' => array(
+                        'properties' => array(
+                            'id',
+                            'version',
+                            'fileName',
+                            'identifier',
+                            'size'
                         )
                     )
                 )
@@ -230,6 +242,7 @@ class AuthorisationController extends OperatingCentresController
     {
         if ($this->isPsv()) {
             $form->get('data')->remove('numberOfTrailers');
+            $form->remove('advertisements');
 
             $label = $form->get('data')->getLabel();
             $form->get('data')->setLabel($label .= '-psv');
@@ -239,6 +252,48 @@ class AuthorisationController extends OperatingCentresController
 
             $label = $form->get('data')->get('permission')->getLabel();
             $form->get('data')->get('permission')->setLabel($label .= '-psv');
+        } else {
+
+            $this->processFileUploads(
+                array('advertisements' => array('file' => 'processAdvertisementFileUpload')),
+                $form
+            );
+
+            $fileList = $form->get('advertisements')->get('file')->get('list');
+
+            $bundle = array(
+                'properties' => array(
+                    'id',
+                    'version',
+                    'identifier',
+                    'fileName',
+                    'size'
+                )
+            );
+
+            $unlinkedFileData = $this->makeRestCall(
+                'Document',
+                'GET',
+                array(
+                    'application' => $this->getIdentifier(),
+                    'documentCategory' => 1,
+                    'documentSubCategory' => 2,
+                    'operatingCentre' => 'NULL'
+                ),
+                $bundle
+            );
+
+            $fileData = array();
+
+            if ($this->getActionName() == 'edit') {
+                $fileData = $this->actionLoad($this->getActionId())['operatingCentre']['adDocuments'];
+            }
+
+            $fileData = array_merge($fileData, $unlinkedFileData['Results']);
+
+            $fileList->setFiles($fileData, $this->url());
+
+            $this->processFileDeletions(array('advertisements' => array('file' => 'deleteFile')), $form);
         }
 
         return $form;
@@ -302,6 +357,24 @@ class AuthorisationController extends OperatingCentresController
             }
 
             $data['applicationOperatingCentre']['operatingCentre'] = $saved['id'];
+
+            $operatingCentreId = $saved['id'];
+        } else {
+            $operatingCentreId = $data['operatingCentre']['id'];
+        }
+
+        if (isset($data['applicationOperatingCentre']['file']['list'])) {
+            foreach ($data['applicationOperatingCentre']['file']['list'] as $file) {
+                $this->makeRestCall(
+                    'Document',
+                    'PUT',
+                    array('id' => $file['id'], 'version' => $file['version'], 'operatingCentre' => $operatingCentreId)
+                );
+            }
+        }
+
+        if ($this->isPsv()) {
+            $data['applicationOperatingCentre']['adPlaced'] = 0;
         }
 
         $saved = parent::actionSave($data['applicationOperatingCentre'], $service);
@@ -324,6 +397,16 @@ class AuthorisationController extends OperatingCentresController
             $data['operatingCentre'] = $data['data']['operatingCentre'];
             $data['address'] = $data['operatingCentre']['address'];
             $data['address']['country'] = 'country.' . $data['address']['country'];
+
+            $data['advertisements'] = array(
+                'adPlaced' => $data['data']['adPlaced'],
+                'adPlacedIn' => $data['data']['adPlacedIn'],
+                'dateAdPlaced' => $data['data']['dateAdPlaced']
+            );
+
+            unset($data['data']['adPlaced']);
+            unset($data['data']['adPlacedIn']);
+            unset($data['data']['dateAdPlaced']);
             unset($data['data']['operatingCentre']);
         }
 
@@ -363,5 +446,22 @@ class AuthorisationController extends OperatingCentresController
         }
 
         return $data;
+    }
+
+    /**
+     * Handle the file upload
+     *
+     * @param array $file
+     */
+    protected function processAdvertisementFileUpload($file)
+    {
+        $this->uploadFile(
+            $file,
+            array(
+                'description' => 'Advertisement',
+                'documentCategory' => 1,
+                'documentSubCategory' => 2
+            )
+        );
     }
 }

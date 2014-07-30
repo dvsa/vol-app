@@ -22,7 +22,7 @@ class FinancialHistoryControllerTest extends AbstractApplicationControllerTestCa
 
     protected $defaultRestResponse = array();
 
-    protected $mockedMethods = array('getUploader');
+    protected $mockedMethods = array('getUploader', 'getFileSizeValidator');
 
     /**
      * Test back button
@@ -142,6 +142,15 @@ class FinancialHistoryControllerTest extends AbstractApplicationControllerTestCa
             ->method('getUploader')
             ->will($this->returnValue($mockUploader));
 
+        $mockValidator = $this->getMock('\stdClass', array('isValid'));
+        $mockValidator->expects($this->once())
+            ->method('isValid')
+            ->will($this->returnValue(true));
+
+        $this->controller->expects($this->any())
+            ->method('getFileSizeValidator')
+            ->will($this->returnValue($mockValidator));
+
         $this->controller->setEnabledCsrf(false);
         $response = $this->controller->indexAction();
 
@@ -230,6 +239,7 @@ class FinancialHistoryControllerTest extends AbstractApplicationControllerTestCa
                 'documents' => array(
                     'properties' => array(
                         'id',
+                        'version',
                         'fileName',
                         'identifier',
                         'size'
@@ -253,6 +263,7 @@ class FinancialHistoryControllerTest extends AbstractApplicationControllerTestCa
                 'documents' => array(
                     array(
                         'id' => 1,
+                        'version' => 1,
                         'fileName' => 'Test.png',
                         'identifier' => 'ajfhljkdsafhflksdjf',
                         'size' => 50505
