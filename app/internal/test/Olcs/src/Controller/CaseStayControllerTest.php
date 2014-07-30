@@ -36,7 +36,8 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
                 'redirect',
                 'processAdd',
                 'processEdit',
-                'setBreadcrumb'
+                'setBreadcrumb',
+                'getServiceLocator'
             ]
         );
 
@@ -127,6 +128,10 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->once())
             ->method('generateFormWithData');
+
+        $this->controller->expects($this->once())
+            ->method('getServiceLocator')
+            ->will($this->returnValue($this->getScriptLoadFilesMock()));
 
         $this->controller->expects($this->never())
             ->method('notFoundAction');
@@ -301,6 +306,10 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->once())
             ->method('setBreadcrumb');
+
+        $this->controller->expects($this->once())
+            ->method('getServiceLocator')
+            ->will($this->returnValue($this->getScriptLoadFilesMock()));
 
         $this->controller->editAction();
     }
@@ -686,5 +695,20 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
                 ->method('fromRoute')
                 ->with($this->equalTo($with));
         }
+    }
+
+    private function getScriptLoadFilesMock ()
+    {
+        $scriptMock = $this->getMock('\stdClass', ['loadFiles']);
+        $scriptMock->expects($this->any())
+            ->method('loadFiles')
+            ->will($this->returnValue([]));
+
+        $serviceMock = $this->getMock('\stdClass', ['get']);
+        $serviceMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValue($scriptMock));
+
+        return $serviceMock;
     }
 }

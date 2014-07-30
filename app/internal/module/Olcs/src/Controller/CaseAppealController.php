@@ -44,7 +44,8 @@ class CaseAppealController extends CaseController
                     'pageTitle' => 'Add appeal',
                     'pageSubTitle' => ''
                 ],
-                'form' => $form
+                'form' => $form,
+                'inlineScript' => $this->getServiceLocator()->get('Script')->loadFiles(['withdrawn'])
             ]
         );
 
@@ -100,7 +101,8 @@ class CaseAppealController extends CaseController
                     'pageTitle' => 'Edit appeal',
                     'pageSubTitle' => ''
                 ],
-                'form' => $form
+                'form' => $form,
+                'inlineScript' => $this->getServiceLocator()->get('Script')->loadFiles(['withdrawn'])
             ]
         );
 
