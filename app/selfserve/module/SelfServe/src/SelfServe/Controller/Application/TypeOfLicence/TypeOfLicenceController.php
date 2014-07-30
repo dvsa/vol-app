@@ -235,4 +235,15 @@ class TypeOfLicenceController extends ApplicationController
         }
         return parent::goToNextStep();
     }
+
+    /**
+     * We have to make sure that the sub section nav is hidden if the user has JS
+     * support, since we render all three sections on one page in this case
+     *
+     * @return string
+     */
+    protected function getSubSectionsClass()
+    {
+      return 'js-hidden';
+    }
 }
