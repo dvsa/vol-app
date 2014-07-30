@@ -10,45 +10,11 @@ return [
         'type' => 'Common\Form\Form',
         'fieldsets' => [
             [
-                'name' => 'defendant',
+                'name' => 'defendant-details',
                 'options' => [
                     'label' => 'Defendant details'
                 ],
-                'type' => 'person',
-            ],
-            [
-                'name' => 'defendant-details',
-                'options' => [
-                    'label' => 'Defendant details',
-                ],
-                'elements' => [
-                    'defType' => [
-                        'type' => 'select',
-                        'label' => 'Defendant type',
-                        'value_options' => 'defendant_types'
-                    ],
-                    'personFirstname' => [
-                        'type' => 'personName',
-                        'label' => 'First name',
-                         'class' => 'long'
-                    ],
-                    'personLastname' => [
-                        'type' => 'personName',
-                        'label' => 'Last name',
-                        'class' => 'long'
-                    ],
-                    'operatorName' => [
-                        'type' => 'text',
-                        'filters' => '\Common\Form\Elements\InputFilters\TextMax70',
-                        'label' => 'Operator name',
-                        'class' => 'long'
-                    ],
-                    'dateOfBirth' => [
-                         'type' => 'dateSelectWithEmpty',
-                         'label' => 'Date of birth',
-                         'filters' => '\Common\Form\Elements\InputFilters\DateNotRequiredNotInFuture'
-                     ],
-                ]
+                'type' => 'defendant',
             ],
             [
                 'name' => 'offence',
