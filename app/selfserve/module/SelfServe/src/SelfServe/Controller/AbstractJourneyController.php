@@ -1303,7 +1303,10 @@ abstract class AbstractJourneyController extends AbstractController
         if (empty($this->actionData)) {
 
             $this->actionData = $this->makeRestCall(
-                $this->getActionService(), 'GET', array('id' => $id), $this->getActionDataBundle()
+                $this->getActionService(),
+                'GET',
+                array('id' => $id),
+                $this->getActionDataBundle()
             );
         }
 
@@ -1532,17 +1535,17 @@ abstract class AbstractJourneyController extends AbstractController
 
         $key = $this->getStepNumber();
 
-        $nextKey = $key - 1;
+        $prevKey = $key - 1;
 
-        while (isset($steps[$nextKey])) {
+        while (isset($steps[$prevKey])) {
 
-            if ($this->isSectionAccessible($steps[$nextKey][1], $steps[$nextKey][2])) {
+            if ($this->isSectionAccessible($steps[$prevKey][1], $steps[$prevKey][2])) {
                 return $this->goToSection(
-                    $this->getSectionRoute($steps[$nextKey][0], $steps[$nextKey][1], $steps[$nextKey][2])
+                    $this->getSectionRoute($steps[$prevKey][0], $steps[$prevKey][1], $steps[$prevKey][2])
                 );
             }
 
-            $nextKey--;
+            $prevKey--;
         }
 
         return $this->goHome();
