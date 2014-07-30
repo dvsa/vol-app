@@ -1303,7 +1303,10 @@ abstract class AbstractJourneyController extends AbstractController
         if (empty($this->actionData)) {
 
             $this->actionData = $this->makeRestCall(
-                $this->getActionService(), 'GET', array('id' => $id), $this->getActionDataBundle()
+                $this->getActionService(),
+                'GET',
+                array('id' => $id),
+                $this->getActionDataBundle()
             );
         }
 

@@ -21,9 +21,6 @@ return array(
                     'version' => array(
                         'type' => 'hidden'
                     ),
-                    'application' => array(
-                        'type' => 'hidden'
-                    ),
                     'privateHireLicenceNumber' => array(
                         'type' => 'text-required',
                         'label' => $translationPrefix . '.data.licenceNumber'

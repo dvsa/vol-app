@@ -225,7 +225,7 @@ class LicenceController extends TaxiPhvController
             $contactDetailsId = $results['id'];
         } else {
             // @todo Handle failire to save contactDetails
-            throw \Exception('Unable to save contact details');
+            throw new \Exception('Unable to save contact details');
         }
 
         $data['privateHireLicence']['contactDetails'] = $contactDetailsId;
@@ -241,6 +241,7 @@ class LicenceController extends TaxiPhvController
      */
     protected function save($data, $service = null)
     {
-
+        // Do nothing
+        return;
     }
 }
