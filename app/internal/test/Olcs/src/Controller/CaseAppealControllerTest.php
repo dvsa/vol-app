@@ -159,14 +159,18 @@ class CaseAppealControllerTest extends \PHPUnit_Framework_TestCase
             'case' => 9,
             'details' => array(
                 'reason' => 'appeal_reason.6',
-                'outcome' => 'appeal_outcome.3'
+                'outcome' => 'appeal_outcome.3',
+                'isWithdrawn' => 'Y',
+                'withdrawnDate' => '2014-01-01'
             )
         );
 
         $expectedProcessedData = array(
             'case' => 9,
             'reason' => 6,
-            'outcome' => 3
+            'outcome' => 3,
+            'isWithdrawn' => 'Y',
+            'withdrawnDate' => '2014-01-01'
         );
 
         $mockRedirect = $this->getMock('\stdClass', array('toRoute'));
@@ -204,14 +208,18 @@ class CaseAppealControllerTest extends \PHPUnit_Framework_TestCase
             'case' => 9,
             'details' => array(
                 'reason' => 'appeal_reason.6',
-                'outcome' => 'appeal_outcome.3'
+                'outcome' => 'appeal_outcome.3',
+                'isWithdrawn' => 'N',
+                'withdrawnDate' => null
             )
         );
 
         $expectedProcessedData = array(
             'case' => 9,
             'reason' => 6,
-            'outcome' => 3
+            'outcome' => 3,
+            'isWithdrawn' => 'N',
+            'withdrawnDate' => null
         );
 
         $mockRedirect = $this->getMock('\stdClass', array('toRoute'));
