@@ -171,6 +171,11 @@ class CaseAppealController extends CaseController
         $data['reason'] = str_replace('appeal_reason.', '', $data['reason']);
         $data['outcome'] = str_replace('appeal_outcome.', '', $data['outcome']);
 
+        //if the withdrawn checkbox is 'N' then make sure withdrawn date is null
+        if ($data['isWithdrawn'] == 'N') {
+            $data['withdrawnDate'] = null;
+        }
+
         return $data;
     }
 }
