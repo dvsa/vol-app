@@ -225,15 +225,9 @@ class TypeOfLicenceController extends ApplicationController
         return parent::processDataMapForSave($oldData, $map, $section);
     }
 
-    protected function goToNextStep()
+    protected function shouldSkipSubsections()
     {
-        if ($this->isFullSubmission()) {
-            return $this->goToSection(
-                // @TODO we need to get the next section without hard-coding the values below...
-                $this->getSectionRoute('Application', 'YourBusiness', 'BusinessType')
-            );
-        }
-        return parent::goToNextStep();
+        return $this->isFullSubmission();
     }
 
     /**
@@ -244,6 +238,6 @@ class TypeOfLicenceController extends ApplicationController
      */
     protected function getSubSectionsClass()
     {
-      return 'js-hidden';
+        return 'js-hidden';
     }
 }

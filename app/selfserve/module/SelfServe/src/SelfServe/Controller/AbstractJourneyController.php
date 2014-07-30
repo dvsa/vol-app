@@ -1359,7 +1359,11 @@ abstract class AbstractJourneyController extends AbstractController
      */
     protected function processSave($data)
     {
-        $this->completeSubSection();
+        if ($this->shouldSkipSubSections()) {
+            $this->completeSection();
+        } else {
+            $this->completeSubSection();
+        }
 
         $response = parent::processSave($data);
 
@@ -1432,37 +1436,52 @@ abstract class AbstractJourneyController extends AbstractController
      */
     protected function completeSubSection()
     {
+        return $this->completeSubSections([$this->getSubSectionName()]);
+    }
+
+    protected function completeSubSections(array $subSections)
+    {
+
         $sectionCompletion = $this->getSectionCompletion();
         $sectionName = $this->getSectionName();
-        $key = 'section' . $sectionName . $this->getSubSectionName() . 'Status';
         $completeKey = array_search('complete', $this->getJourneyConfig()['completionStatusMap']);
         $incompleteKey = array_search('incomplete', $this->getJourneyConfig()['completionStatusMap']);
         $sectionConfig = $this->getSectionConfig();
 
-        $sectionCompletion[$key] = $completeKey;
+        foreach ($subSections as $subSection) {
+            $key = 'section' . $sectionName . $subSection . 'Status';
+            $sectionCompletion[$key] = $completeKey;
 
-        $complete = true;
+            $complete = true;
 
-        foreach (array_keys($sectionConfig['subSections']) as $subSectionName) {
-            $sectionStatusKey = 'section' . $sectionName . $subSectionName . 'Status';
+            foreach (array_keys($sectionConfig['subSections']) as $subSectionName) {
+                $sectionStatusKey = 'section' . $sectionName . $subSectionName . 'Status';
 
-            if ($this->isSectionAccessible($sectionName, $subSectionName)
-                && (!isset($sectionCompletion[$sectionStatusKey])
-                || $sectionCompletion[$sectionStatusKey] != $completeKey)) {
-                $complete = false;
-                break;
+                if ($this->isSectionAccessible($sectionName, $subSectionName)
+                    && (!isset($sectionCompletion[$sectionStatusKey])
+                    || $sectionCompletion[$sectionStatusKey] != $completeKey)) {
+                    $complete = false;
+                    break;
+                }
             }
+
+            $sectionCompletionKey = ($complete ? $completeKey : $incompleteKey);
+
+            $sectionCompletion['section' . $sectionName . 'Status'] = $sectionCompletionKey;
         }
-
-        $sectionCompletionKey = ($complete ? $completeKey : $incompleteKey);
-
-        $sectionCompletion['section' . $sectionName . 'Status'] = $sectionCompletionKey;
 
         $this->makeRestCall($this->getJourneyConfig()['completionService'], 'PUT', $sectionCompletion);
 
         $sectionCompletion['version'] ++;
 
         $this->setSectionCompletion($sectionCompletion);
+    }
+
+    protected function completeSection()
+    {
+        $section = $this->getSectionConfig();
+        $subSections = array_keys($section['subSections']);
+        return $this->completeSubSections($subSections);
     }
 
     /**
@@ -1535,19 +1554,26 @@ abstract class AbstractJourneyController extends AbstractController
 
         $key = $this->getStepNumber();
 
+        $startSection = $steps[$key][1];
+
         $nextKey = $key + 1;
 
         $this->getAccessKeys(true);
 
         while (isset($steps[$nextKey])) {
-
-            if ($this->isSectionAccessible($steps[$nextKey][1], $steps[$nextKey][2])) {
-                return $this->goToSection(
-                    $this->getSectionRoute($steps[$nextKey][0], $steps[$nextKey][1], $steps[$nextKey][2])
-                );
-            }
+            list($app, $section, $subSection) = $steps[$nextKey];
 
             $nextKey++;
+
+            if ($this->shouldSkipSubSections() && $section === $startSection) {
+                continue;
+            }
+
+            if ($this->isSectionAccessible($section, $subSection)) {
+                return $this->goToSection(
+                    $this->getSectionRoute($app, $section, $subSection)
+                );
+            }
         }
 
         return $this->journeyFinished();
@@ -1632,5 +1658,10 @@ abstract class AbstractJourneyController extends AbstractController
     protected function getSubSectionsClass()
     {
         return '';
+    }
+
+    protected function shouldSkipSubSections()
+    {
+        return false;
     }
 }
