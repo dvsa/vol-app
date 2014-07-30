@@ -9,7 +9,6 @@ return array(
             'formName' => 'conviction',
             'actions' => array(
                 'add' => array('class' => 'primary'),
-                'dealt' => array('requireRows' => true, 'value' => 'Dealt With'),
                 'edit' => array('requireRows' => true),
                 'delete' => array('class' => 'warning', 'requireRows' => true)
             )
