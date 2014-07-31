@@ -96,7 +96,7 @@ class CaseConvictionController extends CaseController
      * Creates and returns the comment form.
      *
      * @param array $case
-     * @return \Zend\Form
+     * @return \Zend\Form\Form
      */
     public function generateCommentForm($case)
     {
