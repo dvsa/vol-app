@@ -557,12 +557,28 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
      */
     public function processAddStayProvider()
     {
-        return array(
-            array(
-                array('case' => 1, 'stayType' => 1, 'licence' => 7, 'fields' => array()),
-                array('case' => 1, 'stayType' => 2, 'licence' => 7, 'fields' => array())
-            ),
-        );
+        return [
+            [
+                [
+                    'case' => 1,
+                    'stayType' => 1,
+                    'licence' => 7,
+                    'fields' => [
+                        'isWithdrawn' => 'Y',
+                        'withdrawnDate' => '2014-01-01'
+                    ]
+                ],
+                [
+                    'case' => 1,
+                    'stayType' => 2,
+                    'licence' => 7,
+                    'fields' => [
+                        'isWithdrawn' => 'Y',
+                        'withdrawnDate' => null
+                    ]
+                ]
+            ]
+        ];
     }
 
     /**
@@ -572,12 +588,32 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
      */
     public function processEditStayProvider()
     {
-        return array(
-            array(array('case' => 1, 'stay' => 1, 'stayType' => 1, 'licence' => 7, 'fields' => array('isWithdrawn' => 'Y',
-                'withdrawnDate' => '2014-01-01'))),
-            array(array('case' => 1, 'stay' => 1, 'stayType' => 2, 'licence' => 7, 'fields' => array('isWithdrawn' => 'N',
-                'withdrawnDate' => '2014-01-01'))),
-        );
+        return [
+            [
+                [
+                    'case' => 1,
+                    'stay' => 1,
+                    'stayType' => 1,
+                    'licence' => 7,
+                    'fields' => [
+                        'isWithdrawn' => 'Y',
+                        'withdrawnDate' => '2014-01-01'
+                    ]
+                ]
+            ],
+            [
+                [
+                    'case' => 1,
+                    'stay' => 1,
+                    'stayType' => 2,
+                    'licence' => 7,
+                    'fields' => [
+                        'isWithdrawn' => 'N',
+                        'withdrawnDate' => '2014-01-01'
+                    ]
+                ]
+            ],
+        ];
     }
 
     /**
