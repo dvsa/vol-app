@@ -23,6 +23,7 @@ jQuery(function ()
         }
         else{
             $( "select[name*='[withdrawnDate]']" ).hide();
+            $( "select[name*='[withdrawnDate]']" ).val('');
             $('label[for="withdrawnDate"]').hide();
         }
     }

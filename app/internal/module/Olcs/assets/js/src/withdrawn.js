@@ -7,11 +7,13 @@ function checkWithdrawn() {
 }
 
 function toggleWithdrawnDate(action) {
-    if (action === 'show') {
+    if(action === 'show'){
         $( "select[name*='[withdrawnDate]']" ).show();
         $('label[for="withdrawnDate"]').show();
-    } else {
+    }
+    else{
         $( "select[name*='[withdrawnDate]']" ).hide();
+        $( "select[name*='[withdrawnDate]']" ).val('');
         $('label[for="withdrawnDate"]').hide();
     }
 }
