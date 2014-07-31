@@ -1432,13 +1432,29 @@ abstract class AbstractJourneyController extends AbstractController
     }
 
     /**
-     * Complete sub section
+     * Complete the current sub section
      */
     protected function completeSubSection()
     {
-        return $this->completeSubSections([$this->getSubSectionName()]);
+        $this->completeSubSections([$this->getSubSectionName()]);
     }
 
+    /**
+     * Complete the current over-arching section and all its subsections
+     */
+    protected function completeSection()
+    {
+        $section = $this->getSectionConfig();
+        $subSections = array_keys($section['subSections']);
+        $this->completeSubSections($subSections);
+    }
+
+    /**
+     * Complete an array of sub sections; this allows multiple steps
+     * to be marked complete while only triggering a single API request
+     *
+     * @param array $subSections
+     */
     protected function completeSubSections(array $subSections)
     {
 
@@ -1475,13 +1491,6 @@ abstract class AbstractJourneyController extends AbstractController
         $sectionCompletion['version'] ++;
 
         $this->setSectionCompletion($sectionCompletion);
-    }
-
-    protected function completeSection()
-    {
-        $section = $this->getSectionConfig();
-        $subSections = array_keys($section['subSections']);
-        return $this->completeSubSections($subSections);
     }
 
     /**
