@@ -2,8 +2,10 @@ $(function() {
 
   "use strict";
 
-  var niFlag       = $("[name=operator-location\\[niFlag\\]]");
-  var operatorType = $("[name=operator-type\\[goodsOrPsv\\]]");
+  var F = OLCS.formHelper;
+
+  var niFlag       = F("operator-location", "niFlag");
+  var operatorType = F("operator-type", "goodsOrPsv");
 
   OLCS.cascadeForm({
     form: "#application_type-of-licence_form",
@@ -21,7 +23,10 @@ $(function() {
       // (in this case if the licence is NI or the user has chosen an operator type)
       "licence-type": {
         "*": function() {
-          return niFlag.filter(":checked").val() === "1" || operatorType.filter(":checked").length;
+          return (
+            niFlag.filter(":checked").val() === "1" ||
+            niFlag.filter(":checked").length && operatorType.filter(":checked").length
+          );
         },
 
         // this rule relates to an element within the fieldset
@@ -31,8 +36,12 @@ $(function() {
       }
     },
     submit: function() {
-      if (operatorType.is(":hidden")) {
-        operatorType.filter("[value=goods]").prop("checked", true);
+      if (F("operator-type").is(":hidden")) {
+        operatorType.first().prop("checked", true);
+      }
+
+      if (F("licence-type").is(":hidden")) {
+        F("licence-type", "licenceType").first().prop("checked", true);
       }
     }
   });
