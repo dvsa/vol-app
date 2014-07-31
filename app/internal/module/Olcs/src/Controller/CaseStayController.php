@@ -227,6 +227,11 @@ class CaseStayController extends CaseController
             return $this->redirectIndex($data['licence'], $data['case']);
         }
 
+        //if the withdrawn checkbox is 'N' then make sure withdrawn date is null
+        if ($data['fields']['isWithdrawn'] == 'N') {
+            $data['fields']['withdrawnDate'] = null;
+        }
+
         $data = array_merge($data, $data['fields']);
 
         $result = $this->processAdd($data, 'Stay');
