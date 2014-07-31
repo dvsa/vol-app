@@ -1608,19 +1608,49 @@ abstract class AbstractJourneyController extends AbstractController
         return $this->goHome();
     }
 
+    /**
+     * Check whether this section is suitable for collapsing (i.e. merging
+     * all sub sections into one top-level step) and whether the appropriate
+     * preconditions which satisfy a collapse are set.
+     *
+     * @param string $section
+     *
+     * @return bool
+     */
     protected function shouldCollapseSection($section = null)
+    {
+        return $this->isCollapsible($section) && $this->isJavaScriptSubmission();
+    }
+
+    /**
+     * Does this section, or a given section, indicate that it could
+     * be collapsible?
+     *
+     * @param string $section
+     *
+     * @return bool
+     */
+    protected function isCollapsible($section = null)
     {
         if ($section === null) {
             $section = $this->getSectionName();
         }
 
         $sectionConfig = $this->getConfig($section);
+
+        return isset($sectionConfig['collapsible']) && $sectionConfig['collapsible'];
+    }
+
+    /**
+     * Is this a POST, and if so was it from a JS-enabled browser?
+     *
+     * @return bool
+     */
+    protected function isJavaScriptSubmission()
+    {
         $request = $this->getRequest();
 
-        return ($request->isPost()
-            && $request->getPost('js-submit')
-            && isset($sectionConfig['collapsible'])
-            && $sectionConfig['collapsible']);
+        return $request->isPost() && $request->getPost('js-submit');
     }
 
     /**
