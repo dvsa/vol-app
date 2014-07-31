@@ -1,5 +1,12 @@
 <?php
     $headerSubTitle = null;
+    
+    if (isset($this->inlineScript)) {
+        foreach($this->inlineScript as $inlineScript) {
+            $this->inlineScript()->appendScript($inlineScript);
+        }
+    }
+    
     if (is_array($this->params['pageSubTitle'])) {
         foreach ($this->params['pageSubTitle'] as $subTitle) {
             $headerSubTitle .= $this->translate($subTitle);

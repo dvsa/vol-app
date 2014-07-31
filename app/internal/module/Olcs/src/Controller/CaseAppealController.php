@@ -44,7 +44,8 @@ class CaseAppealController extends CaseController
                     'pageTitle' => 'Add appeal',
                     'pageSubTitle' => ''
                 ],
-                'form' => $form
+                'form' => $form,
+                'inlineScript' => $this->getServiceLocator()->get('Script')->loadFiles(['withdrawn'])
             ]
         );
 
@@ -100,7 +101,8 @@ class CaseAppealController extends CaseController
                     'pageTitle' => 'Edit appeal',
                     'pageSubTitle' => ''
                 ],
-                'form' => $form
+                'form' => $form,
+                'inlineScript' => $this->getServiceLocator()->get('Script')->loadFiles(['withdrawn'])
             ]
         );
 
@@ -170,6 +172,11 @@ class CaseAppealController extends CaseController
 
         $data['reason'] = str_replace('appeal_reason.', '', $data['reason']);
         $data['outcome'] = str_replace('appeal_outcome.', '', $data['outcome']);
+
+        //if the withdrawn checkbox is 'N' then make sure withdrawn date is null
+        if ($data['isWithdrawn'] == 'N') {
+            $data['withdrawnDate'] = null;
+        }
 
         return $data;
     }
