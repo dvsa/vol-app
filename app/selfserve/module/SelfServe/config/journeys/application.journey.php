@@ -18,6 +18,7 @@ return array(
         ),
         'sections' => array(
             'TypeOfLicence' => array(
+                'collapsible' => true,
                 'restriction' => array(
                     null,
                     'goods',

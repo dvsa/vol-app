@@ -1359,7 +1359,7 @@ abstract class AbstractJourneyController extends AbstractController
      */
     protected function processSave($data)
     {
-        if ($this->shouldSkipSubSections()) {
+        if ($this->shouldCollapseSection()) {
             $this->completeSection();
         } else {
             $this->completeSubSection();
@@ -1565,7 +1565,7 @@ abstract class AbstractJourneyController extends AbstractController
 
             $nextKey++;
 
-            if ($this->shouldSkipSubSections() && $section === $startSection) {
+            if ($this->shouldCollapseSection() && $section === $startSection) {
                 continue;
             }
 
@@ -1591,17 +1591,36 @@ abstract class AbstractJourneyController extends AbstractController
         $prevKey = $key - 1;
 
         while (isset($steps[$prevKey])) {
-
-            if ($this->isSectionAccessible($steps[$prevKey][1], $steps[$prevKey][2])) {
-                return $this->goToSection(
-                    $this->getSectionRoute($steps[$prevKey][0], $steps[$prevKey][1], $steps[$prevKey][2])
-                );
-            }
+            list($app, $section, $subSection) = $steps[$prevKey];
 
             $prevKey--;
+
+            $subSection = $this->shouldCollapseSection($section) ? null : $subSection;
+
+            if ($this->isSectionAccessible($section, $subSection)) {
+
+                return $this->goToSection(
+                    $this->getSectionRoute($app, $section, $subSection)
+                );
+            }
         }
 
         return $this->goHome();
+    }
+
+    protected function shouldCollapseSection($section = null)
+    {
+        if ($section === null) {
+            $section = $this->getSectionName();
+        }
+
+        $sectionConfig = $this->getConfig($section);
+        $request = $this->getRequest();
+
+        return ($request->isPost()
+            && $request->getPost('js-submit')
+            && isset($sectionConfig['collapsible'])
+            && $sectionConfig['collapsible']);
     }
 
     /**
@@ -1658,10 +1677,5 @@ abstract class AbstractJourneyController extends AbstractController
     protected function getSubSectionsClass()
     {
         return '';
-    }
-
-    protected function shouldSkipSubSections()
-    {
-        return false;
     }
 }

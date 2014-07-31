@@ -257,18 +257,6 @@ class TypeOfLicenceController extends ApplicationController
     }
 
     /**
-     * determine whether any section related logic should skip sub sections
-     * or not; in this case we defer that decision to whether the user has
-     * JS or not
-     *
-     * @return bool
-     */
-    protected function shouldSkipSubsections()
-    {
-        return $this->isFullSubmission();
-    }
-
-    /**
      * We have to make sure that the sub section nav is hidden if the user has JS
      * support, since we render all three sections on one page in this case
      *
