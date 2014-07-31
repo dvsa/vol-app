@@ -33,10 +33,12 @@ return array(
                     'numberOfVehicles' => array(
                         'type' => 'vehiclesNumber',
                         'label' => $translationPrefix . '.data.numberOfVehicles',
+                        'filters' => '\Common\Form\Elements\InputFilters\NumberOfVehicles',
                     ),
                     'numberOfTrailers' => array(
                         'type' => 'vehiclesNumber',
                         'label' => $translationPrefix . '.data.numberOfTrailers',
+                        'filters' => '\Common\Form\Elements\InputFilters\NumberOfVehicles',
                     ),
                     'sufficientParking' => array(
                         'type' => 'singlecheckbox',
@@ -51,6 +53,33 @@ return array(
                         'options' => array(
                             'must_be_checked' => true
                         )
+                    )
+                )
+            ),
+            array(
+                'name' => 'advertisements',
+                'options' => array(
+                    'label' => $translationPrefix . '.advertisements'
+                ),
+                'elements' => array(
+                    'adPlaced' => array(
+                        'type' => 'yesNoRadio',
+                        'label' => $translationPrefix . '.advertisements.adPlaced'
+                    ),
+                    'adPlacedIn' => array(
+                        'type' => 'text',
+                        'filters' => '\Common\Form\Elements\InputFilters\OperatingCentreAdPlacedIn',
+                        'label' => $translationPrefix . '.advertisements.adPlacedIn'
+                    ),
+                    'dateAdPlaced' => array(
+                        'type' => 'dateSelectWithEmpty',
+                        'filters' => '\Common\Form\Elements\InputFilters\OperatingCentreDateAdPlaced',
+                        'label' => $translationPrefix . '.advertisements.dateAdPlaced'
+                    ),
+                    'file' => array(
+                        'type' => 'multipleFileUpload',
+                        'label' => $translationPrefix . '.advertisements.file',
+                        'hint' => $translationPrefix . '.advertisements.file.hint'
                     )
                 )
             ),
