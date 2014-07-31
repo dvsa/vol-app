@@ -4,6 +4,7 @@
  * TypeOfLicence Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
+ * @author Nick Payne <nick.payne@valtech.co.uk>
  */
 namespace SelfServe\Controller\Application\TypeOfLicence;
 
@@ -13,6 +14,7 @@ use SelfServe\Controller\Application\ApplicationController;
  * TypeOfLicence Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
+ * @author Nick Payne <nick.payne@valtech.co.uk>
  */
 class TypeOfLicenceController extends ApplicationController
 {
@@ -49,6 +51,10 @@ class TypeOfLicenceController extends ApplicationController
      */
     protected $service = 'Licence';
 
+    /**
+     * Opt-in to some inline JavaScript which will
+     * be automatically inlined in the view
+     */
     protected $inlineScripts = ['type-of-licence'];
 
     /**
@@ -80,6 +86,8 @@ class TypeOfLicenceController extends ApplicationController
      * check whether the form submission is
      * partial (e.g non JS; just validate a single
      * fieldset)
+     *
+     * @return bool
      */
     protected function isPartialSubmission()
     {
@@ -90,6 +98,8 @@ class TypeOfLicenceController extends ApplicationController
     /**
      * check whether the form submission is
      * partial (e.g with JS; validate the whole form)
+     *
+     * @return bool
      */
     protected function isFullSubmission()
     {
@@ -133,6 +143,10 @@ class TypeOfLicenceController extends ApplicationController
     /**
      * bear in mind this method is called both on a GET (e.g. before
      * rendering a form) and POST (e.g. before validating it)
+     *
+     * @param Form $form
+     *
+     * @return Form
      */
     protected function alterForm($form)
     {
@@ -140,6 +154,9 @@ class TypeOfLicenceController extends ApplicationController
         // we ensure the current fieldset is shown
         $form->get($this->fieldset)->removeAttribute('class');
 
+        // late static binding ensures the correct child method (if declared)
+        // is invoked. It's a static because it's re-used by the review & declarations
+        // page when $this obviously isn't the right controller
         $form = static::makeFormAlterations(
             $form,
             $this->getFormAlterationOptions()
@@ -160,6 +177,8 @@ class TypeOfLicenceController extends ApplicationController
 
     /**
      * make sure we map our data to save from all three fieldsets
+     *
+     * @return array
      */
     protected function getDataMap()
     {
@@ -193,6 +212,7 @@ class TypeOfLicenceController extends ApplicationController
      *
      * @param Form $form
      * @param array $options
+     *
      * @return $form
      */
     public static function makeFormAlterations($form, $options = array())
@@ -203,12 +223,23 @@ class TypeOfLicenceController extends ApplicationController
     /**
      * child classes should override this if they want to pass any options through
      * to the form alteration method
+     *
+     * @return array
      */
     protected function getFormAlterationOptions()
     {
         return [];
     }
 
+    /**
+     * data map pre-processor when saving
+     *
+     * @param array $oldData
+     * @param array $map
+     * @param string $section
+     *
+     * @return array
+     */
     public function processDataMapForSave($oldData, $map = array(), $section = 'main')
     {
         // we have to make sure each fieldset at least *exists*, otherwise
@@ -225,6 +256,13 @@ class TypeOfLicenceController extends ApplicationController
         return parent::processDataMapForSave($oldData, $map, $section);
     }
 
+    /**
+     * determine whether any section related logic should skip sub sections
+     * or not; in this case we defer that decision to whether the user has
+     * JS or not
+     *
+     * @return bool
+     */
     protected function shouldSkipSubsections()
     {
         return $this->isFullSubmission();
