@@ -2,11 +2,14 @@ $(function() {
 
   "use strict";
 
+  // get a nicer alias for our form helper
   var F = OLCS.formHelper;
 
+  // cache some input lookups
   var niFlag       = F("operator-location", "niFlag");
   var operatorType = F("operator-type", "goodsOrPsv");
 
+  // set up a cascade form with the appropriate rules
   OLCS.cascadeForm({
     form: "#application_type-of-licence_form",
     rulesets: {
@@ -24,7 +27,9 @@ $(function() {
       "licence-type": {
         "*": function() {
           return (
+            // NI...
             niFlag.filter(":checked").val() === "1" ||
+            // ... any location checked and any operator type checked
             niFlag.filter(":checked").length && operatorType.filter(":checked").length
           );
         },
@@ -36,10 +41,14 @@ $(function() {
       }
     },
     submit: function() {
+      // if we're not showing operator type yet, select a default so we don't get
+      // any backend errors
       if (F("operator-type").is(":hidden")) {
         operatorType.first().prop("checked", true);
       }
 
+      // ditto licence type; what we set here doesn't matter since as soon as the user
+      // interacts with the form again we clear these fields
       if (F("licence-type").is(":hidden")) {
         F("licence-type", "licenceType").first().prop("checked", true);
       }
