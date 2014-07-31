@@ -143,7 +143,7 @@ return array(
                                     )
                                 ),
                                 array(
-                                    'label' => 'Propose In-Office revocation',
+                                    'label' => 'In-Office revocation',
                                     'route' => 'case_revoke',
                                     'action' => 'index',
                                     'pages' => array(
