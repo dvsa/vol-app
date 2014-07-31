@@ -96,18 +96,6 @@ class TypeOfLicenceController extends ApplicationController
     }
 
     /**
-     * check whether the form submission is
-     * partial (e.g with JS; validate the whole form)
-     *
-     * @return bool
-     */
-    protected function isFullSubmission()
-    {
-        $request = $this->getRequest();
-        return ($request->isPost() && $request->getPost('js-submit'));
-    }
-
-    /**
      * Cache the data for the form
      *
      * @param int $id
@@ -254,16 +242,5 @@ class TypeOfLicenceController extends ApplicationController
             }
         }
         return parent::processDataMapForSave($oldData, $map, $section);
-    }
-
-    /**
-     * We have to make sure that the sub section nav is hidden if the user has JS
-     * support, since we render all three sections on one page in this case
-     *
-     * @return string
-     */
-    protected function getSubSectionsClass()
-    {
-        return 'js-hidden';
     }
 }
