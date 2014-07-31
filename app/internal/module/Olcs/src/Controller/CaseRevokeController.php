@@ -238,6 +238,7 @@ class CaseRevokeController extends CaseController
                 'limit' => 'all'
             ]
         );
+
         foreach ($piReasons['Results'] as $result) {
             $reasons[$result['id']] = mb_substr($result['sectionCode'] . ' - ' . $result['description'], 0, 150);
         }
