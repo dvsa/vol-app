@@ -1289,7 +1289,7 @@ abstract class AbstractJourneyController extends AbstractController
         $layout = $this->getViewModel(
             array(
                 'subSections' => $this->getSubSectionsForLayout(),
-                'subSectionsClass' => $this->getSubSectionsClass(),
+                'isCollapsible' => $this->isCollapsible(),
                 'id' => $this->getIdentifier()
             )
         );
@@ -1704,17 +1704,5 @@ abstract class AbstractJourneyController extends AbstractController
     protected function goHome()
     {
         return $this->redirectToRoute($this->getJourneyConfig()['homeRoute']);
-    }
-
-    /**
-     * Any additional classes which need applying to the sub sections
-     * wrapper. This is pretty arbitrary and is currently only used once
-     * so may be repurposes (e.g. made more specific for that one use case)
-     *
-     * @return string
-     */
-    protected function getSubSectionsClass()
-    {
-        return '';
     }
 }
