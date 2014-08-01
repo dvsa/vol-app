@@ -40,6 +40,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
             'getSubmissionView',
             'getRequest',
             'url',
+            'fromRoute',
             'setSubmissionBreadcrumb',
             'getLoggedInUser'
             )
@@ -52,6 +53,29 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         );
 
         parent::setUp();
+    }
+
+    public function testRedirectToIndex()
+    {
+        $licence = 7;
+        $case = 54;
+        $id = 1;
+
+        $this->getFromRoute(0, 'licence', $licence);
+        $this->getFromRoute(1, 'case', $case);
+        $this->getFromRoute(2, 'id', $id);
+        $redirect = $this->getMock('\stdClass', array('toRoute'));
+
+        $redirect->expects($this->once())
+            ->method('toRoute')
+            ->with('submission', array('licence' => $licence, 'case' => $case, 'id' => $id, 'action' => 'edit'));
+
+        $this->controller->expects($this->once())
+            ->method('redirect')
+            ->will($this->returnValue($redirect));
+
+        $this->controller->redirectToIndex();
+
     }
 
     public function testAddPostAction()
@@ -914,5 +938,48 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue($getMock));
 
         return $formMock;
+    }
+    
+    /**
+     * Generate a fromRoute function call
+     *
+     * @param int $at
+     * @param mixed $with
+     * @param mixed $will
+     */
+    private function getFromRoute($at, $with, $will = false)
+    {
+        if ($will) {
+            $this->controller->expects($this->at($at))
+                ->method('fromRoute')
+                ->with($this->equalTo($with))
+                ->will($this->returnValue($will));
+        } else {
+            $this->controller->expects($this->at($at))
+                ->method('fromRoute')
+                ->with($this->equalTo($with));
+        }
+    }
+
+    /**
+     * Tests the fromRoute function
+     */
+    public function testFromRoute()
+    {
+        $request = 'hello';
+        $return = 'helloRet';
+
+        $params = $this->getMock('stdClass', ['fromRoute']);
+        $params->expects($this->once())
+            ->method('fromRoute')
+            ->with($this->equalTo($request))
+            ->will($this->returnValue($return));
+
+        $sut = $this->getMock('\Olcs\Controller\Submission\SubmissionController', ['params']);
+        $sut->expects($this->once())
+            ->method('params')
+            ->will($this->returnValue($params));
+
+        $this->assertSame($return, $sut->fromRoute($request));
     }
 }
