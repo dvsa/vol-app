@@ -9,13 +9,14 @@
 namespace Olcs\Controller;
 
 use Zend\View\Model\ViewModel;
+use Common\Controller\CrudInterface;
 
 /**
  * Class to manage Revokes
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class CaseRevokeController extends CaseController
+class CaseRevokeController extends CaseController implements CrudInterface
 {
     /**
      * Show a table of stays and appeals for the given case

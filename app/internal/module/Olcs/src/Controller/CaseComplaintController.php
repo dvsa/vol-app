@@ -7,15 +7,16 @@
  */
 
 namespace Olcs\Controller;
+
+use Common\Controller\CrudInterface;
 use Olcs\Controller\Traits\DeleteActionTrait;
-use Zend\View\Model\ViewModel;
 
 /**
  * Case Complaint Controller
  *
  * @author S Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class CaseComplaintController extends CaseController
+class CaseComplaintController extends CaseController implements CrudInterface
 {
     use DeleteActionTrait;
 

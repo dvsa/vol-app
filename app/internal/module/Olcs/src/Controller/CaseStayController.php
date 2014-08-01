@@ -10,13 +10,29 @@ namespace Olcs\Controller;
 
 use Olcs\Controller\Traits\DeleteActionTrait;
 use Zend\View\Model\ViewModel;
+use Common\Controller\CrudInterface;
 
 /**
  * Class to manage Stays
  */
-class CaseStayController extends CaseController
+class CaseStayController extends CaseController implements CrudInterface
 {
     use DeleteActionTrait;
+
+
+    /**
+     * Does what it says on the tin.
+     *
+     * @return mixed
+     */
+    public function redirectToIndex()
+    {
+        $licenceId = $this->fromRoute('licence');
+        $caseId = $this->fromRoute('case');
+
+        return $this->redirectIndex($licenceId, $caseId);
+    }
+
 
     private $stayTypes = array(1 => 'Upper Tribunal', 2 => 'Traffic Commissioner / Transport Regulator');
 

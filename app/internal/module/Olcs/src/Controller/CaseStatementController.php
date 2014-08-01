@@ -9,12 +9,13 @@
 namespace Olcs\Controller;
 use Olcs\Controller\Traits\DeleteActionTrait;
 
+use Common\Controller\CrudInterface;
 /**
  * Case Statement Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CaseStatementController extends CaseController
+class CaseStatementController extends CaseController implements CrudInterface
 {
     use DeleteActionTrait;
 

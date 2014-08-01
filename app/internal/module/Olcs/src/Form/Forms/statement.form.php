@@ -102,6 +102,29 @@ return [
                      ]
                 ]
             ],
+            array(
+                'name' => 'form-actions',
+                'attributes' => array(
+                    'class' => 'actions-container'
+                ),
+                'options' => array(0),
+                'elements' => array(
+                    'submit' => array(
+                        'enable' => true,
+                        'type' => 'submit',
+                        'filters' => '\Common\Form\Elements\InputFilters\ActionButton',
+                        'label' => 'Save',
+                        'class' => 'action--primary large'
+                    ),
+                    'cancel' => array(
+                        'enable' => true,
+                        'type' => 'submit',
+                        'filters' => '\Common\Form\Elements\InputFilters\ActionButton',
+                        'label' => 'Cancel',
+                        'class' => 'action--secondary large'
+                    )
+                )
+            )
         ],
         'elements' => [
             'case' => [
@@ -113,11 +136,11 @@ return [
             'version' => [
                 'type' => 'hidden'
             ],
-            'submit' => [
+            /* 'submit' => [
                 'type' => 'submit',
                 'label' => 'Save',
                 'class' => 'action--primary large'
-            ]
+            ] */
         ]
     ]
 ];
