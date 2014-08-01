@@ -34,7 +34,7 @@ return [
                     ],
                     'requestorsBody' => [
                         'type' => 'text',
-                        'filters' => '\Common\Form\Elements\InputFilters\NameRequired',
+                        'filters' => '\Common\Form\Elements\InputFilters\TextMax40Required',
                         'label' => 'Requestor body'
                     ],
                     'dateStopped' => [

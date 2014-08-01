@@ -144,7 +144,14 @@ class CaseStayController extends CaseController implements CrudInterface
         //add in that this is an an action (reflected in the title)
         $pageData['pageHeading'] = 'Add ' . $stayTypeName . ' Stay';
 
-        $view = new ViewModel(['form' => $form, 'data' => $pageData]);
+        $view = new ViewModel(
+            [
+                'form' => $form,
+                'data' => $pageData,
+                'inlineScript' => $this->getServiceLocator()->get('Script')->loadFiles(['withdrawn'])
+            ]
+        );
+
         $view->setTemplate('case/add-stay');
         return $view;
     }
@@ -210,7 +217,14 @@ class CaseStayController extends CaseController implements CrudInterface
         //add in that this is an an action (reflected in the title)
         $pageData['pageHeading'] = 'Edit ' . $stayTypeName . ' Stay';
 
-        $view = new ViewModel(['form' => $form, 'data' => $pageData]);
+        $view = new ViewModel(
+            [
+                'form' => $form,
+                'data' => $pageData,
+                'inlineScript' => $this->getServiceLocator()->get('Script')->loadFiles(['withdrawn'])
+            ]
+        );
+
         $view->setTemplate('case/add-stay');
         return $view;
     }
@@ -227,6 +241,11 @@ class CaseStayController extends CaseController implements CrudInterface
 
         if ($existingRecord) {
             return $this->redirectIndex($data['licence'], $data['case']);
+        }
+
+        //if the withdrawn checkbox is 'N' then make sure withdrawn date is null
+        if ($data['fields']['isWithdrawn'] == 'N') {
+            $data['fields']['withdrawnDate'] = null;
         }
 
         $data = array_merge($data, $data['fields']);
@@ -252,17 +271,18 @@ class CaseStayController extends CaseController implements CrudInterface
      * Process editing a stay
      *
      * @param array $data
-     *
-     * @todo Once user auth is ready, check user allowed access
-     * @todo Once user auth is ready, add the user info to the data (fields are lastUpdatedBy and createdBy)
      */
     public function processEditStay($data)
     {
         $licence = $data['licence'];
         unset($data['licence']);
 
-        $data = array_merge($data, $data['fields']);
+        //if the withdrawn checkbox is 'N' then make sure withdrawn date is null
+        if ($data['fields']['isWithdrawn'] == 'N') {
+            $data['fields']['withdrawnDate'] = null;
+        }
 
+        $data = array_merge($data, $data['fields']);
         $result = $this->processEdit($data, 'Stay');
 
         if (empty($result)) {
@@ -290,7 +310,8 @@ class CaseStayController extends CaseController implements CrudInterface
                 $stay = $this->formatDates(
                     $stay,
                     array(
-                        'requestDate'
+                        'requestDate',
+                        'withdrawnDate'
                     )
                 );
 
@@ -321,7 +342,8 @@ class CaseStayController extends CaseController implements CrudInterface
                     'hearingDate',
                     'decisionDate',
                     'papersDue',
-                    'papersSent'
+                    'papersSent',
+                    'withdrawnDate'
                 )
             );
         }

@@ -295,7 +295,7 @@ class CaseController extends FormActionController
             ],
             'revoke' => [
                 'key' => 'revoke',
-                'label' => 'Proposal to revoke',
+                'label' => 'In-Office revocation',
                 'url' => $pm->get('url')->fromRoute('case_revoke', ['tab' => 'revoke', 'action' => 'index'], [], true),
             ],
             'pi' => [
