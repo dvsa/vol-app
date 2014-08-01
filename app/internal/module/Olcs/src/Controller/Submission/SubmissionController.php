@@ -9,6 +9,7 @@
 
 namespace Olcs\Controller\Submission;
 
+use Common\Controller\CrudInterface;
 use Common\Controller\FormActionController;
 use Zend\View\Model\ViewModel;
 
@@ -18,7 +19,7 @@ use Zend\View\Model\ViewModel;
  *
  * @author Mike Cooper <michael.cooper@valtech.co.uk>
  */
-class SubmissionController extends FormActionController
+class SubmissionController extends FormActionController implements CrudInterface
 {
     use SubmissionSectionTrait;
 
@@ -29,6 +30,52 @@ class SubmissionController extends FormActionController
         $this->routeParams = $this->getParams(array('case', 'licence', 'id', 'action'));
         $this->submissionConfig = $this->getServiceLocator()->get('config')['submission_config'];
         parent::onDispatch($e);
+    }
+
+    /**
+     * Does what it says on the tin.
+     *
+     * @return mixed
+     */
+    public function redirectToIndex()
+    {
+        $licenceId = $this->fromRoute('licence');
+        $caseId = $this->fromRoute('case');
+        $id = $this->fromRoute('id');
+
+        return $this->redirect()->toRoute(
+            'submission',
+            array(
+                'action' => 'edit',
+                'licence' => $licenceId,
+                'case' => $caseId,
+                'id' => $id,
+            )
+        );
+    }
+
+    /**
+     * @return mixed
+     */
+    public function deleteAction()
+    {
+        $this->response->setStatusCode(501);
+
+        return array(
+            'content' => 'Delete Method Not Implemented in ' . __CLASS__
+        );
+    }
+
+    /**
+     * Gets a variable from the route
+     *
+     * @param string $param
+     * @param mixed $default
+     * @return type
+     */
+    public function fromRoute($param, $default = null)
+    {
+        return $this->params()->fromRoute($param, $default);
     }
 
     /**
