@@ -211,7 +211,7 @@ return array(
                 'options' => array(
                     'route' => '/licence/[:licence]/case/[:case]/conviction[/:action][/][:id]',
                     'defaults' => array(
-                        'controller' => 'ConvictionController',
+                        'controller' => 'CaseConvictionController',
                     )
                 )
             ),
@@ -393,9 +393,6 @@ return array(
             'IndexController' => 'Olcs\Controller\IndexController',
             'SearchController' => 'Olcs\Controller\SearchController',
             'CaseController' => 'Olcs\Controller\CaseController',
-            'ConvictionController' => 'Olcs\Controller\ConvictionController',
-            'CaseConvictionController' => 'Olcs\Controller\CaseConvictionController',
-            'CaseStatementController' => 'Olcs\Controller\CaseStatementController',
             'CaseStatementController' => 'Olcs\Controller\CaseStatementController',
             'CaseAppealController' => 'Olcs\Controller\CaseAppealController',
             'CaseComplaintController' => 'Olcs\Controller\CaseComplaintController',
