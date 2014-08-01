@@ -81,11 +81,6 @@ return [
             'version' => [
                 'type' => 'hidden'
             ],
-            /* 'submit' => [
-                'type' => 'submit',
-                'label' => 'Save',
-                'class' => 'action--primary large'
-            ] */
         ]
     ]
 ];
