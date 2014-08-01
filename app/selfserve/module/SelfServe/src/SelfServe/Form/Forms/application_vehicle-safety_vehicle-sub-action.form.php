@@ -24,7 +24,8 @@ return array(
                     ),
                     'platedWeight' => array(
                         'label' => $translationPrefix. '.data.weight',
-                        'type' => 'vehicleGPW'
+                        'type' => 'vehicleGPW',
+                        'filters' => '\Common\Form\Elements\InputFilters\VehicleWeight',
                     )
                     //NOT PART OF THE STORY (2057)
                     /* 'body_type' => array(
