@@ -1,15 +1,15 @@
 <?php
 
 return [
-    'annual-test-history-comment' => [
-        'name' => 'annual-test-history-comment',
+    'conviction-comment' => [
+        'name' => 'conviction-comment',
         'attributes' => [
             'method' => 'post',
         ],
         'elements' => [
-            'annualTestHistory' => [
-                'type' => 'textarea',
-                'label' => 'Enter annual test history',
+            'convictionData' => [
+                'type'  => 'textarea',
+                'label' => 'Convictions from PLS',
                 'class' => 'extra-long'
             ],
             'id' => [
@@ -22,7 +22,7 @@ return [
                 'type' => 'submit',
                 'label' => 'Save',
                 'class' => 'action--primary large'
-            ],
+            ]
         ]
     ]
 ];

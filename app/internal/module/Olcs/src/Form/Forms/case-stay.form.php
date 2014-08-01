@@ -1,75 +1,32 @@
 <?php
 
 return [
-    'appeal' => [
-        'name' => 'appeal',
+    'case-stay' => [
+        'name' => 'case-stay',
         'attributes' => [
             'method' => 'post',
         ],
         'type' => 'Common\Form\Form',
         'fieldsets' => [
             [
-                'name' => 'details',
-                'options' => [
-                    'label' => 'Appeal Details'
-                ],
+                'name' => 'fields',
                 'elements' => [
-                    'deadlineDate' => [
+                    'requestDate' => [
                         'type' => 'dateSelectWithEmpty',
-                        'label' => 'Appeal deadline',
-                        'required' => false
-                    ],
-                    'appealDate' => [
-                        'type' => 'dateSelectWithEmpty',
-                        'label' => 'Date of appeal',
-                        'filters' => '\Common\Form\Elements\InputFilters\DateRequired'
-                    ],
-                    'appealNumber' => [
-                        'label' => 'Appeal number',
-                        'type' => 'text',
-                        'filters' => '\Common\Form\Elements\InputFilters\TextMax20'
-                    ],
-                    'reason' => [
-                        'label' => 'Reason',
-                        'type' => 'select',
-                        'value_options' => 'appeal_reasons',
-                    ],
-                    'outlineGround' => [
-                        'type' => 'text',
-                        'filters' => '\Common\Form\Elements\InputFilters\TextMax4000',
-                        'label' => 'Outline ground',
-                        'class' => 'extra-long'
-                    ],
-                    'hearingDate' => [
-                        'type' => 'dateSelectWithEmpty',
-                        'label' => 'Date of appeal hearing',
-                        'required' => false
-                    ],
-                    'decisionDate' => [
-                        'type' => 'dateSelectWithEmpty',
-                        'label' => 'Date of decision',
-                        'required' => false
-                    ],
-                    'papersDue' => [
-                        'type' => 'dateSelectWithEmpty',
-                        'label' => 'Papers due at tribunal',
-                        'required' => false
-                    ],
-                    'papersSent' => [
-                        'type' => 'dateSelectWithEmpty',
-                        'label' => 'Papers sent date',
-                        'required' => false
+                        'label' => 'Date of request',
+                        'class' => 'extra-long',
+                        'filters' => '\Common\Form\Elements\InputFilters\DateRequired',
                     ],
                     'outcome' => [
-                        'label' => 'Outcome',
                         'type' => 'select',
-                        'value_options' => 'appeal_outcomes',
+                        'label' => 'Outcome',
+                        'value_options' => 'case_stay_outcome',
                         'filters' => '\Common\Form\Elements\InputFilters\SelectEmpty'
                     ],
-                    'comment' => [
-                        'type' => 'text',
+                    'notes' => [
+                        'type' => 'textarea',
+                        'label' => 'Notes',
                         'filters' => '\Common\Form\Elements\InputFilters\TextMax4000',
-                        'label' => 'Comments',
                         'class' => 'extra-long'
                     ],
                     'isWithdrawn' => [
@@ -109,7 +66,13 @@ return [
             )
         ],
         'elements' => [
+            'licence' => [
+                'type' => 'hidden'
+            ],
             'case' => [
+                'type' => 'hidden'
+            ],
+            'stayType' => [
                 'type' => 'hidden'
             ],
             'id' => [

@@ -33,7 +33,7 @@ class CaseAppealControllerTest extends \PHPUnit_Framework_TestCase
 
         $controller = $this->getMock(
             'Olcs\Controller\CaseAppealController',
-            array('fromRoute', 'generateFormWithData', 'getView', 'setBreadcrumb')
+            array('fromRoute', 'generateFormWithData', 'getView', 'setBreadcrumb', 'getServiceLocator')
         );
 
         $controller->expects($this->at(0))
@@ -57,6 +57,10 @@ class CaseAppealControllerTest extends \PHPUnit_Framework_TestCase
         $controller->expects($this->once())
             ->method('getView')
             ->will($this->returnValue($viewMock));
+
+        $controller->expects($this->once())
+            ->method('getServiceLocator')
+            ->will($this->returnValue($this->getScriptLoadFilesMock()));
 
         $this->assertEquals($viewMock, $controller->addAction());
     }
@@ -123,7 +127,7 @@ class CaseAppealControllerTest extends \PHPUnit_Framework_TestCase
 
         $controller = $this->getMock(
             'Olcs\Controller\CaseAppealController',
-            array('fromRoute', 'makeRestCall', 'generateFormWithData', 'getView', 'setBreadcrumb')
+            array('fromRoute', 'makeRestCall', 'generateFormWithData', 'getView', 'setBreadcrumb', 'getServiceLocator')
         );
 
         $controller->expects($this->at(0))
@@ -147,6 +151,10 @@ class CaseAppealControllerTest extends \PHPUnit_Framework_TestCase
             ->method('getView')
             ->will($this->returnValue($viewMock));
 
+        $controller->expects($this->once())
+            ->method('getServiceLocator')
+            ->will($this->returnValue($this->getScriptLoadFilesMock()));
+
         $this->assertEquals($viewMock, $controller->editAction());
     }
 
@@ -159,14 +167,18 @@ class CaseAppealControllerTest extends \PHPUnit_Framework_TestCase
             'case' => 9,
             'details' => array(
                 'reason' => 'appeal_reason.6',
-                'outcome' => 'appeal_outcome.3'
+                'outcome' => 'appeal_outcome.3',
+                'isWithdrawn' => 'Y',
+                'withdrawnDate' => '2014-01-01'
             )
         );
 
         $expectedProcessedData = array(
             'case' => 9,
             'reason' => 6,
-            'outcome' => 3
+            'outcome' => 3,
+            'isWithdrawn' => 'Y',
+            'withdrawnDate' => '2014-01-01'
         );
 
         $mockRedirect = $this->getMock('\stdClass', array('toRoute'));
@@ -204,14 +216,18 @@ class CaseAppealControllerTest extends \PHPUnit_Framework_TestCase
             'case' => 9,
             'details' => array(
                 'reason' => 'appeal_reason.6',
-                'outcome' => 'appeal_outcome.3'
+                'outcome' => 'appeal_outcome.3',
+                'isWithdrawn' => 'N',
+                'withdrawnDate' => null
             )
         );
 
         $expectedProcessedData = array(
             'case' => 9,
             'reason' => 6,
-            'outcome' => 3
+            'outcome' => 3,
+            'isWithdrawn' => 'N',
+            'withdrawnDate' => null
         );
 
         $mockRedirect = $this->getMock('\stdClass', array('toRoute'));
@@ -238,5 +254,20 @@ class CaseAppealControllerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(7));
 
         $controller->processEditAppeal($data);
+    }
+
+    private function getScriptLoadFilesMock ()
+    {
+        $scriptMock = $this->getMock('\stdClass', ['loadFiles']);
+        $scriptMock->expects($this->any())
+            ->method('loadFiles')
+            ->will($this->returnValue([]));
+
+        $serviceMock = $this->getMock('\stdClass', ['get']);
+        $serviceMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValue($scriptMock));
+
+        return $serviceMock;
     }
 }

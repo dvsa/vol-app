@@ -8,13 +8,34 @@
 
 namespace Olcs\Controller;
 
+use Common\Controller\CrudInterface;
 /**
  * Case Appeal Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CaseAppealController extends CaseController
+class CaseAppealController extends CaseController implements CrudInterface
 {
+    /**
+     * Does what it says on the tin.
+     *
+     * @return mixed
+     */
+    public function redirectToIndex()
+    {
+        $licenceId = $this->fromRoute('licence');
+        $caseId = $this->fromRoute('case');
+
+        return $this->redirect()->toRoute(
+            'case_stay_action',
+            array(
+                'action' => 'index',
+                'licence' => $licenceId,
+                'case' => $caseId
+            )
+        );
+    }
+
     /**
      * Add appeal action
      *
@@ -44,7 +65,8 @@ class CaseAppealController extends CaseController
                     'pageTitle' => 'Add appeal',
                     'pageSubTitle' => ''
                 ],
-                'form' => $form
+                'form' => $form,
+                'inlineScript' => $this->getServiceLocator()->get('Script')->loadFiles(['withdrawn'])
             ]
         );
 
@@ -100,7 +122,8 @@ class CaseAppealController extends CaseController
                     'pageTitle' => 'Edit appeal',
                     'pageSubTitle' => ''
                 ],
-                'form' => $form
+                'form' => $form,
+                'inlineScript' => $this->getServiceLocator()->get('Script')->loadFiles(['withdrawn'])
             ]
         );
 
@@ -170,6 +193,11 @@ class CaseAppealController extends CaseController
 
         $data['reason'] = str_replace('appeal_reason.', '', $data['reason']);
         $data['outcome'] = str_replace('appeal_outcome.', '', $data['outcome']);
+
+        //if the withdrawn checkbox is 'N' then make sure withdrawn date is null
+        if ($data['isWithdrawn'] == 'N') {
+            $data['withdrawnDate'] = null;
+        }
 
         return $data;
     }

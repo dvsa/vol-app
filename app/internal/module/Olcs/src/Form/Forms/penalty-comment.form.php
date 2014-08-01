@@ -26,11 +26,6 @@ return [
                 'label' => 'Save',
                 'class' => 'action--primary large'
             ],
-            'cancel' => [
-                'type' => 'submit',
-                'label' => 'Cancel',
-                'class' => 'action--secondary large'
-            ]
         ]
     ]
 ];
