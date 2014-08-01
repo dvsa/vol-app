@@ -77,11 +77,11 @@ class FinancialHistoryController extends PreviousHistoryController
     {
         $this->processFileUploads(array('data' => array('file' => 'processFinancialFileUpload')), $form);
 
-        $fileList = $form->get('data')->get('file')->get('list');
-
-        $fileData = $this->load($this->getIdentifier())['documents'];
-
-        $fileList->setFiles($fileData, $this->url());
+        $options = array(
+            'fieldset' => 'data',
+            'data'     => $this->loadCurrent(),
+        );
+        $form = static::makeFormAlterations($form, $this, $options);
 
         $this->processFileDeletions(array('data' => array('file' => 'deleteFile')), $form);
 
@@ -115,7 +115,7 @@ class FinancialHistoryController extends PreviousHistoryController
         return array('data' => $oldData);
     }
 
-    public static function makeFormAlterations($form, $options)
+    public static function makeFormAlterations($form, $context, $options)
     {
         $data = $options['data'];
         $fieldset = $form->get($options['fieldset']);
@@ -123,6 +123,10 @@ class FinancialHistoryController extends PreviousHistoryController
         if (empty($data['insolvencyDetails'])) {
             $fieldset->remove('insolvencyDetails');
         }
+
+        $fileList = $fieldset->get('file')->get('list');
+
+        $fileList->setFiles($data['documents'], $context->url());
 
         return $form;
     }

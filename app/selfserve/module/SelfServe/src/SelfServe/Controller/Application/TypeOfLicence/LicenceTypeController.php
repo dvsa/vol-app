@@ -39,7 +39,7 @@ class LicenceTypeController extends TypeOfLicenceController
      */
     protected function alterForm($form)
     {
-        return self::makeFormAlterations($form, array('isPsv' => $this->isPsv(), 'fieldset' => 'data'));
+        return self::makeFormAlterations($form, $this, array('isPsv' => $this->isPsv(), 'fieldset' => 'data'));
     }
 
     /**
@@ -48,10 +48,11 @@ class LicenceTypeController extends TypeOfLicenceController
      * This method enables the summary to apply the same form alterations
      *
      * @param Form $form
+     * @param mixed $context
      * @param array $options
      * @return $form
      */
-    public static function makeFormAlterations($form, $options = array())
+    public static function makeFormAlterations($form, $context, $options = array())
     {
         if (!$options['isPsv']) {
 

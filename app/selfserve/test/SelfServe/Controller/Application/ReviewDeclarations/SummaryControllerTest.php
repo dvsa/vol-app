@@ -67,7 +67,8 @@ class SummaryControllerTest extends AbstractApplicationControllerTestCase
                     'organisation' => array(
                         'organisationType' => 'org_type.lc'
                     )
-                )
+                ),
+                'documents' => array()
             )
         );
 
@@ -114,8 +115,7 @@ class SummaryControllerTest extends AbstractApplicationControllerTestCase
      */
     protected function mockRestCalls($service, $method, $data = array(), $bundle = array())
     {
-        if ($service == 'Application' && $method == 'GET' && $bundle == ApplicationController::$licenceDataBundle) {
-
+        if ($service == 'Application' && $method == 'GET') {
             return array(
                 'licence' => array(
                     'id' => 10,
@@ -126,7 +126,8 @@ class SummaryControllerTest extends AbstractApplicationControllerTestCase
                     'organisation' => array(
                         'organisationType' => 'org_type.lc'
                     )
-                )
+                ),
+                'documents' => array()
             );
         }
 

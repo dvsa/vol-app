@@ -26,8 +26,8 @@ class SummaryController extends ReviewDeclarationsController
     protected $dataBundle = array(
         'properties' => 'ALL',
         'children' => array(
-            'licence' => array(
-            )
+            'licence' => array(),
+            'documents' => array()
         )
     );
 
@@ -85,7 +85,7 @@ class SummaryController extends ReviewDeclarationsController
                             'data'     => $data
                         )
                     );
-                    $form = $controller::makeFormAlterations($form, $newOptions);
+                    $form = $controller::makeFormAlterations($form, $this, $newOptions);
                 }
             }
         }
