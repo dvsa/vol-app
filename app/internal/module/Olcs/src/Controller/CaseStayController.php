@@ -8,6 +8,7 @@
 
 namespace Olcs\Controller;
 
+use Olcs\Controller\Traits\DeleteActionTrait;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -15,6 +16,7 @@ use Zend\View\Model\ViewModel;
  */
 class CaseStayController extends CaseController
 {
+    use DeleteActionTrait;
 
     private $stayTypes = array(1 => 'Upper Tribunal', 2 => 'Traffic Commissioner / Transport Regulator');
 
@@ -40,6 +42,16 @@ class CaseStayController extends CaseController
     private function getStayTypes()
     {
         return $this->stayTypes;
+    }
+
+    /**
+     * Should return the name of the service to call for deleting the item
+     *
+     * @return string
+     */
+    public function getDeleteServiceName()
+    {
+        return 'Stay';
     }
 
     /**

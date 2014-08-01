@@ -7,6 +7,7 @@
  */
 
 namespace Olcs\Controller;
+use Olcs\Controller\Traits\DeleteActionTrait;
 
 /**
  * Case Statement Controller
@@ -15,6 +16,13 @@ namespace Olcs\Controller;
  */
 class CaseStatementController extends CaseController
 {
+    use DeleteActionTrait;
+
+    public function getDeleteServiceName()
+    {
+        return 'Statement';
+    }
+
     /**
      * Show a table of statements for the given case
      *
@@ -150,7 +158,7 @@ class CaseStatementController extends CaseController
 
     /**
      * Delete action
-     */
+     *
     public function deleteAction()
     {
         $caseId = $this->fromRoute('case');

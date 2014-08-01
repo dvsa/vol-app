@@ -7,6 +7,7 @@
  */
 
 namespace Olcs\Controller;
+use Olcs\Controller\Traits\DeleteActionTrait;
 
 /**
  * Case Appeal Controller
@@ -15,6 +16,18 @@ namespace Olcs\Controller;
  */
 class CaseAppealController extends CaseController
 {
+    use DeleteActionTrait;
+
+    /**
+     * Should return the name of the service to call for deleting the item
+     *
+     * @return string
+     */
+    public function getDeleteServiceName()
+    {
+        return 'Appeal';
+    }
+
     /**
      * Add appeal action
      *

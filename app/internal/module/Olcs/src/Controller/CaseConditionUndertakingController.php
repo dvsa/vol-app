@@ -7,6 +7,7 @@
  */
 
 namespace Olcs\Controller;
+use Olcs\Controller\Traits\DeleteActionTrait;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -16,6 +17,17 @@ use Zend\View\Model\ViewModel;
  */
 class CaseConditionUndertakingController extends CaseController
 {
+    use DeleteActionTrait;
+
+    /**
+     * Should return the name of the service to call for deleting the item
+     *
+     * @return string
+     */
+    public function getDeleteServiceName()
+    {
+        return 'ConditionUndertaking';
+    }
 
     /**
      * Main index action responsible for generating the main landing page for

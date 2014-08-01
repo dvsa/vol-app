@@ -7,6 +7,8 @@
  */
 
 namespace Olcs\Controller;
+use Olcs\Controller\Traits\DeleteActionTrait;
+use Zend\View\Model\ViewModel;
 
 /**
  * Case Complaint Controller
@@ -26,6 +28,7 @@ class CaseComplaintController extends CaseController
     {
         return 'Complaint';
     }
+
     /**
      * Main index action responsible for generating the main landing page for
      * complaints.
