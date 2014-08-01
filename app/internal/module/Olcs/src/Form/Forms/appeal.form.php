@@ -17,7 +17,7 @@ return [
                     'deadlineDate' => [
                         'type' => 'dateSelectWithEmpty',
                         'label' => 'Appeal deadline',
-                        'required' => false
+                        'filters' => '\Common\Form\Elements\InputFilters\DateRequired'
                     ],
                     'appealDate' => [
                         'type' => 'dateSelectWithEmpty',
