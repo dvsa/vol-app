@@ -5,7 +5,8 @@ return [
         'attributes' => [
             'method' => 'post',
         ],
-        'fieldsets' => ['main' =>
+        'type' => 'Common\Form\Form',
+        'fieldsets' => [
             [
                 'name' => 'main',
                 'options' => [
@@ -17,6 +18,13 @@ return [
                         'type' => 'select',
                         'value_options' => 'submission_decision',
                         'required' => true
+                    ],
+                    'piReasons' => [
+                        'type' => 'multiselect',
+                        'filters' => '\Common\Form\Elements\InputFilters\SelectEmpty',
+                        'label' => 'Select legislation',
+                        'value_options' => 'pi-reasons',
+                        'help-block' => 'Use CTRL to select multiple'
                     ],
                     'userRecipient' => [
                         'label' => 'Send to',
