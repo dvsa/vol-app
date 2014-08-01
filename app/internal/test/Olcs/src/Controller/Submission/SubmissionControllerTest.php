@@ -224,7 +224,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $this->controller->editAction();
     }
 
-    public function testgetEditSubmissionData()
+    public function testGetEditSubmissionData()
     {
         $this->controller = $this->getMock(
             '\Olcs\Controller\Submission\SubmissionController', array(
@@ -242,6 +242,9 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
                             'properties' => 'ALL'
                         ),
                         'userRecipient' => array(
+                            'properties' => 'ALL'
+                        ),
+                        'piReasons' => array(
                             'properties' => 'ALL'
                         ),
                     )
@@ -264,7 +267,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
                         )
                     )
                 )
-        );
+            );
 
         $serviceLocator = $this->getMock('\stdClass', array('get'));
 
@@ -461,7 +464,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
             '\Olcs\Controller\Submission\SubmissionController', array(
             'makeRestCall',
             'getServiceLocator',
-            'getFormWithUsers',
+            'getFormWithListData',
             'formPost',
             'getViewModel',
             'getLoggedInUser'
@@ -474,7 +477,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue(1));
 
         $this->controller->expects($this->once())
-            ->method('getFormWithUsers')
+            ->method('getFormWithListData')
             ->with('decision', array('submission' => 8, 'userSender' => 1))
             ->will($this->returnValue('form'));
 
@@ -548,97 +551,78 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $this->controller->backToCaseButton(array('main' => array()));
     }
 
-    public function testGetUserList()
+    /**
+     * Tests that a notFoundAction results if we have an invalid licence type
+     */
+    public function testLicenceTypeNotFound()
     {
         $this->controller = $this->getMock(
             '\Olcs\Controller\Submission\SubmissionController', array(
-            'makeRestCall'
+                'notFoundAction',
+                'makeRestCall',
+                'getForm'
             )
         );
-        $this->controller->routeParams = array('case' => 54, 'licence' => 7, 'action' => 'decision', 'id' => 8);
-        $users = array(
-            'Results' => array(
-                array(
-                    'id' => 1,
-                    'name' => 'Fred Smith'
-                )
-            )
-        );
+
+        $this->controller->routeParams = array('licence' => 7);
 
         $this->controller->expects($this->once())
+                ->method('getForm')
+                ->will($this->returnValue($this->getFormMock()));
+        
+        $this->controller->expects($this->exactly(2))
             ->method('makeRestCall')
-            ->with('User', 'GET', array())
-            ->will($this->returnValue($users));
+            ->will(
+                $this->onConsecutiveCalls(
+                    $this->getUserListRestCall(),
+                    $this->getLicenceRestCall(1, 'InvalidLicenceType')
+                )
+            );
 
-        $this->controller->getUserList();
+        $this->controller->expects($this->once())
+                ->method('notFoundAction');
+
+        $this->controller->getFormWithListData('decision', array());
     }
 
-    public function testGetFormWithUsers()
+    /**
+     * @dataProvider getFormWithListDataProvider
+     */
+    public function testGetFormWithListData($licenceId, $niFlag, $goodsOrPsv)
     {
         $this->controller = $this->getMock(
             '\Olcs\Controller\Submission\SubmissionController', array(
-            'getUserList',
-            'getFormGenerator',
+                'getForm',
+                'makeRestCall'
             )
         );
 
+        $this->controller->routeParams = array('licence' => $licenceId);
+
+        $this->controller->expects($this->exactly(3))
+            ->method('makeRestCall')
+            ->will(
+                $this->onConsecutiveCalls(
+                    $this->getUserListRestCall(),
+                    $this->getLicenceRestCall($niFlag, $goodsOrPsv),
+                    $this->getPiReasonsRestCall()
+                )
+            );
+
         $this->controller->expects($this->once())
-            ->method('getUserList')
-            ->will($this->returnValue('user-list'));
+                ->method('getForm')
+                ->will($this->returnValue($this->getFormMock()));
 
-        $formGenerator = $this->getMock('\stdClass', array('getFormConfig', 'setFormConfig'));
+        $this->controller->getFormWithListData('decision', array());
+    }
 
-        $formConfig = [
-            'decision' => [
-                'name' => 'decision',
-                'attributes' => [
-                    'method' => 'post',
-                ],
-                'fieldsets' => ['main' =>
-                    [
-                        'name' => 'main',
-                        'options' => [
-                            'label' => 'Add decision'
-                        ],
-                        'elements' => [
-                            'userRecipient' => [
-                                'label' => 'Send to',
-                                'type' => 'select',
-                                'value_options' => 'user-list',
-                                'required' => true
-                            ],
-                        ]
-                    ]
-                ],
-            ]
+    public function getFormWithListDataProvider()
+    {
+        return
+        [
+            [7, 1, 'goods'],
+            [7, 0, 'psv']
         ];
-
-        $formGenerator->expects($this->once())
-            ->method('getFormConfig')
-            ->will($this->returnValue($formConfig));
-
-        $this->controller->expects($this->once())
-            ->method('getFormGenerator')
-            ->will($this->returnValue($formGenerator));
-
-        $createForm = $this->getMock('\stdClass', array('createForm'));
-        $form = $this->getMock('\stdClass', array('setData'));
-
-        $createForm->expects($this->once())
-            ->method('createForm')
-            ->with('decision')
-            ->will($this->returnValue($form));
-
-        $formGenerator->expects($this->once())
-            ->method('setFormConfig')
-            ->with($formConfig)
-            ->will($this->returnValue($createForm));
-
-        $form->expects($this->once())
-            ->method('setData')
-            ->with(array());
-
-        $this->controller->getFormWithUsers('decision', array());
     }
 
     public function testSetSubmissionBreadcrumb()
@@ -718,6 +702,36 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->once())
             ->method('redirect')
+            ->will($this->returnValue($obj));
+
+        $this->controller->addnoteAction();
+    }
+
+    public function testAddNoteNoPost()
+    {
+        $this->controller = $this->getMock(
+            '\Olcs\Controller\Submission\SubmissionController', array(
+                'getRequest',
+                'params'
+            )
+        );
+
+        $obj = $this->getMock('\stdClass', array('fromPost', 'isPost'));
+
+        $obj->expects($this->once())
+            ->method('fromPost')
+            ->will($this->returnValue(array()));
+        
+        $obj->expects($this->once())
+            ->method('isPost')
+            ->will($this->returnValue(false));
+        
+        $this->controller->expects($this->once())
+            ->method('params')
+            ->will($this->returnValue($obj));
+        
+        $this->controller->expects($this->once())
+            ->method('getRequest')
             ->will($this->returnValue($obj));
 
         $this->controller->addnoteAction();
@@ -807,5 +821,98 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
                 'persons' => array('data' => [], 'notes' => [])
             )
         );
+    }
+
+    /**
+     * Sample Pi Reasons rest call
+     *
+     * @return array
+     */
+    private function getPiReasonsRestCall()
+    {
+        return
+        [
+            'Results' => [
+                [
+                    'id' => 0,
+                    'sectionCode' => 'Section code',
+                    'description' => 'Description'
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * Sample user list rest call
+     *
+     * @return array
+     */
+    private function getUserListRestCall()
+    {
+        return
+        [
+            'Results' => [
+                [
+                    'id' => 0,
+                    'name' => 'User name'
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * Sample licence rest call
+     *
+     * @return array
+     */
+    private function getLicenceRestCall($niFlag, $goodsOrPsv)
+    {
+        return [
+            'niFlag' => $niFlag,
+            'goodsOrPsv' => $goodsOrPsv
+        ];
+    }
+
+    /**
+     *  Gets a form mock
+     */
+    private function getFormMock()
+    {
+        $formMock = $this->getMock('\stdClass', array('setData', 'get'));
+
+        $getMock = $this->getMock(
+            'stdClass',
+            [
+                'get'
+            ]
+        );
+
+        $setValueOptionsMock = $this->getMock(
+            'stdClass',
+            [
+                'setValueOptions',
+            ]
+        );
+
+        $setValueMock = $this->getMock(
+            'stdClass',
+            [
+                'setValue'
+            ]
+        );
+
+        $setValueOptionsMock->expects($this->any())
+            ->method('setValueOptions')
+            ->will($this->returnValue($setValueMock));
+
+        $getMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValue($setValueOptionsMock));
+
+        $formMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValue($getMock));
+
+        return $formMock;
     }
 }
