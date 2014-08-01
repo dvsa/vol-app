@@ -10,11 +10,12 @@ namespace Olcs\Controller;
 
 use Zend\View\Model\ViewModel;
 use Zend\Validator\Date as DateValidator;
+use Common\Controller\CrudInterface;
 
 /**
  * Class to manage Impounding
  */
-class CaseImpoundingController extends CaseController
+class CaseImpoundingController extends CaseController implements CrudInterface
 {
 
     /**

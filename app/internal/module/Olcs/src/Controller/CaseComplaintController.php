@@ -8,13 +8,22 @@
 
 namespace Olcs\Controller;
 
+use Common\Controller\CrudInterface;
 /**
  * Case Complaint Controller
  *
  * @author S Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class CaseComplaintController extends CaseController
+class CaseComplaintController extends CaseController implements CrudInterface
 {
+    public function deleteAction()
+    {
+        $this->response->setStatusCode(501);
+
+        return array(
+            'content' => 'Delete Method Not Implemented in ' . __CLASS__
+        );
+    }
 
     /**
      * Main index action responsible for generating the main landing page for

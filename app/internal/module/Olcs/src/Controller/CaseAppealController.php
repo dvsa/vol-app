@@ -8,13 +8,34 @@
 
 namespace Olcs\Controller;
 
+use Common\Controller\CrudInterface;
 /**
  * Case Appeal Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CaseAppealController extends CaseController
+class CaseAppealController extends CaseController implements CrudInterface
 {
+    /**
+     * Does what it says on the tin.
+     *
+     * @return mixed
+     */
+    public function redirectToIndex()
+    {
+        $licenceId = $this->fromRoute('licence');
+        $caseId = $this->fromRoute('case');
+
+        return $this->redirect()->toRoute(
+            'case_stay_action',
+            array(
+                'action' => 'index',
+                'licence' => $licenceId,
+                'case' => $caseId
+            )
+        );
+    }
+
     /**
      * Add appeal action
      *
