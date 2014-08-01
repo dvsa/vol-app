@@ -119,6 +119,9 @@ class SubmissionController extends FormActionController
                         'userRecipient' => array(
                             'properties' => 'ALL'
                         ),
+                        'piReasons' => array(
+                            'properties' => 'ALL'
+                        ),
                     )
                 )
             )
@@ -136,6 +139,7 @@ class SubmissionController extends FormActionController
         }
         $submission['submissionActions'] = $submissionData['submissionActions'];
         krsort($submission['submissionActions']);
+
         return $submission;
     }
 
@@ -216,9 +220,6 @@ class SubmissionController extends FormActionController
      */
     public function recommendationAction()
     {
-        if (isset($_POST['cancel-submission'])) {
-            return $this->backToCaseButton();
-        }
         $this->setSubmissionBreadcrumb($this->getRecDecBreadcrumb());
         return $this->formView('recommend');
     }
@@ -229,9 +230,6 @@ class SubmissionController extends FormActionController
      */
     public function decisionAction()
     {
-        if (isset($_POST['cancel-submission'])) {
-            return $this->backToCaseButton();
-        }
         $this->setSubmissionBreadcrumb($this->getRecDecBreadcrumb());
         return $this->formView('decision');
     }
@@ -255,7 +253,7 @@ class SubmissionController extends FormActionController
      */
     public function formView($type)
     {
-        $form = $this->getFormWithUsers(
+        $form = $this->getFormWithListData(
             $type, array(
             'submission' => $this->routeParams['id'],
             'userSender' => $this->getLoggedInUser())
@@ -310,7 +308,7 @@ class SubmissionController extends FormActionController
      * Gets user list for recipients
      * @return type
      */
-    public function getUserList()
+    private function getUserList()
     {
         $users = $this->makeRestCall('User', 'GET', array());
         $userList = [];
@@ -322,19 +320,74 @@ class SubmissionController extends FormActionController
 
     /**
      * Gets a form for the form type and populates the Send to list with users
-     * @param type $userList
-     * @param type $formType
+     * 
+     * @param string $formType
+     * @param array $data
+     * 
      * @return type
      */
-    public function getFormWithUsers($formType, $data = array())
+    public function getFormWithListData($formType, $data = array())
     {
         $userList = $this->getUserList();
-        $generator = $this->getFormGenerator();
-        $formConfig = $generator->getFormConfig($formType);
-        $formConfig[$formType]['fieldsets']['main']['elements']['userRecipient']['value_options'] = $userList;
-        $form = $generator->setFormConfig($formConfig)->createForm($formType);
+        $piReasons = $this->getPiReasons();
+
+        $form = $this->getForm($formType);
+        $form->get('main')->get('userRecipient')->setValueOptions($userList);
+        $form->get('main')->get('piReasons')->setValueOptions($piReasons);
+
         $form->setData($data);
         return $form;
+    }
+
+    /**
+     * 
+     * Get Pi Reasons based on licence type and whether the licence is from 
+     * Northern Ireland
+     * 
+     * @param string $licenceType
+     * @param bool $isNi
+     * @return type
+     */
+    private function getPiReasons()
+    {
+        $reasons = [];
+
+        $licence = $this->makeRestCall(
+            'Licence',
+            'GET',
+            [
+                'id' => $this->routeParams['licence']
+            ]
+        );
+
+        //licence type should really be a lookup table in
+        //both Licence and PiReason entities!
+        switch (strtolower($licence['goodsOrPsv'])) {
+            case 'goods':
+                $goodsOrPsv = 'GV';
+                break;
+            case 'psv':
+                $goodsOrPsv = 'PSV';
+                break;
+            default:
+                return $this->notFoundAction();
+        }
+
+        $piReasons = $this->makeRestCall(
+            'PiReason',
+            'GET',
+            [
+                'goodsOrPsv' => $goodsOrPsv,
+                'isNi' => $licence['niFlag'],
+                'limit' => 'all'
+            ]
+        );
+
+        foreach ($piReasons['Results'] as $result) {
+            $reasons[$result['id']] = mb_substr($result['sectionCode'] . ' - ' . $result['description'], 0, 150);
+        }
+
+        return $reasons;
     }
 
     /**
