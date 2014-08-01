@@ -250,7 +250,7 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
 
     /**
      * Test deleteAction Without matching data
-     */
+     *
     public function testDeleteActionWithoutMatchingData()
     {
         $caseId = 7;
@@ -285,7 +285,7 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
 
     /**
      * Test deleteAction Without matching case
-     */
+     *
     public function testDeleteActionWithoutMatchingCase()
     {
         $caseId = 7;
@@ -323,7 +323,7 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
 
     /**
      * Test deleteAction
-     */
+     *
     public function testDeleteAction()
     {
         $caseId = 7;

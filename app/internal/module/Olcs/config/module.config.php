@@ -251,7 +251,7 @@ return array(
                         'id' => '[0-9]+'
                     ),
                     'defaults' => array(
-                        'controller' => 'ComplaintController',
+                        'controller' => 'CaseComplaintController',
                     )
                 )
             ),
@@ -396,7 +396,6 @@ return array(
             'CaseStatementController' => 'Olcs\Controller\CaseStatementController',
             'CaseAppealController' => 'Olcs\Controller\CaseAppealController',
             'CaseComplaintController' => 'Olcs\Controller\CaseComplaintController',
-            'ComplaintController' => 'Olcs\Controller\ComplaintController',
             'CaseConvictionController' => 'Olcs\Controller\CaseConvictionController',
             'SubmissionController' => 'Olcs\Controller\Submission\SubmissionController',
             'CaseStayController' => 'Olcs\Controller\CaseStayController',
