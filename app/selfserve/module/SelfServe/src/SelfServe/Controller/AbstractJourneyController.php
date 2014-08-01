@@ -1169,12 +1169,17 @@ abstract class AbstractJourneyController extends AbstractController
             $processedData = $this->processActionLoad($data);
         } else {
 
-            $data = $this->load($this->getIdentifier());
+            $data = $this->loadCurrent();
 
             $processedData = $this->processLoad($data);
         }
 
         return $processedData;
+    }
+
+    protected function loadCurrent()
+    {
+        return $this->load($this->getIdentifier());
     }
 
     /**

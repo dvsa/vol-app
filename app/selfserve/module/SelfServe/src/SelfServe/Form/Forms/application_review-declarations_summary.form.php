@@ -25,7 +25,8 @@ $ignoreFieldsetTypes = array(
 $forms = array(
     'application_type-of-licence_operator-location',
     'application_type-of-licence_operator-type',
-    'application_type-of-licence_licence-type'
+    'application_type-of-licence_licence-type',
+    'application_previous-history_financial-history'
 );
 
 foreach ($forms as $form) {

@@ -24,16 +24,9 @@ class SummaryController extends ReviewDeclarationsController
      * @var array
      */
     protected $dataBundle = array(
-        'properties' => array(
-
-        ),
+        'properties' => 'ALL',
         'children' => array(
             'licence' => array(
-                'properties' => array(
-                    'niFlag',
-                    'goodsOrPsv',
-                    'licenceType'
-                )
             )
         )
     );
@@ -46,7 +39,8 @@ class SummaryController extends ReviewDeclarationsController
     private $summarySections = array(
         'TypeOfLicence/OperatorLocation',
         'TypeOfLicence/OperatorType',
-        'TypeOfLicence/LicenceType'
+        'TypeOfLicence/LicenceType',
+        'PreviousHistory/FinancialHistory'
     );
 
     /**
@@ -67,8 +61,10 @@ class SummaryController extends ReviewDeclarationsController
      */
     protected function alterForm($form)
     {
+        $data = $this->loadCurrent();
         $options = array(
-            'isPsv' => $this->isPsv()
+            'isPsv' => $this->isPsv(),
+            'isReview' => true
         );
 
         foreach ($this->summarySections as $summarySection) {
@@ -82,7 +78,13 @@ class SummaryController extends ReviewDeclarationsController
             } else {
                 $controller = '\SelfServe\Controller\Application\\' . $section . '\\' . $subSection . 'Controller';
                 if (method_exists($controller, 'makeFormAlterations')) {
-                    $newOptions = array_merge($options, array('fieldset' => $fieldsetName));
+                    $newOptions = array_merge(
+                        $options,
+                        array(
+                            'fieldset' => $fieldsetName,
+                            'data'     => $data
+                        )
+                    );
                     $form = $controller::makeFormAlterations($form, $newOptions);
                 }
             }
@@ -137,9 +139,34 @@ class SummaryController extends ReviewDeclarationsController
             ),
             'application_type-of-licence_licence-type-1' => array(
                 'licenceType' => $loadData['licence']['licenceType']
+            ),
+            'application_previous-history_financial-history-1' => $this->mapApplicationVariables(
+                array(
+                    'bankrupt',
+                    'liquidation',
+                    'receivership',
+                    'administration',
+                    'disqualified',
+                    'insolvencyDetails',
+                    'insolvencyConfirmation'
+                ),
+                $loadData
             )
         );
 
         return $data;
+    }
+
+    protected function mapApplicationVariables($map, $data)
+    {
+        $final = array();
+
+        foreach ($map as $entry) {
+            if (isset($data[$entry])) {
+                $final[$entry] = $data[$entry];
+            }
+        }
+
+        return $final;
     }
 }

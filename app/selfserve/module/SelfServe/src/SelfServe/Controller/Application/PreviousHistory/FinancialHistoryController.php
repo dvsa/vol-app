@@ -114,4 +114,16 @@ class FinancialHistoryController extends PreviousHistoryController
     {
         return array('data' => $oldData);
     }
+
+    public static function makeFormAlterations($form, $options)
+    {
+        $data = $options['data'];
+        $fieldset = $form->get($options['fieldset']);
+
+        if (empty($data['insolvencyDetails'])) {
+            $fieldset->remove('insolvencyDetails');
+        }
+
+        return $form;
+    }
 }
