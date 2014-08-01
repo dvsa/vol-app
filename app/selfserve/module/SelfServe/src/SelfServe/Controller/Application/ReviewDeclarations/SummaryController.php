@@ -40,7 +40,9 @@ class SummaryController extends ReviewDeclarationsController
         'TypeOfLicence/OperatorLocation',
         'TypeOfLicence/OperatorType',
         'TypeOfLicence/LicenceType',
-        'PreviousHistory/FinancialHistory'
+        'PreviousHistory/FinancialHistory',
+        'PreviousHistory/LicenceHistory',
+        'PreviousHistory/ConvictionsPenalties'
     );
 
     /**
@@ -151,7 +153,9 @@ class SummaryController extends ReviewDeclarationsController
                     'insolvencyConfirmation'
                 ),
                 $loadData
-            )
+            ),
+            // @NOTE: licence history section not yet implemented so no data to map
+            'application_previous-history_licence-history-1' => array()
         );
 
         return $data;
