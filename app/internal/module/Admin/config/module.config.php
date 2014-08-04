@@ -53,7 +53,7 @@ return [
             'admin/view' => dirname(__DIR__) . '/view',
         ]
     ],
-    'local_forms_path' => __DIR__ . '/../src/Form/Forms/',
+    'local_forms_path' => [__DIR__ . '/../src/Form/Forms/'],
     //-------- Start navigation -----------------
     'navigation' => [
         'default' => [
