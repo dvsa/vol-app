@@ -10,6 +10,7 @@
 namespace Olcs\Controller\Submission;
 
 use Common\Controller\FormActionController;
+use Olcs\Controller\Traits\DeleteActionTrait;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -21,6 +22,17 @@ use Zend\View\Model\ViewModel;
 class SubmissionController extends FormActionController
 {
     use SubmissionSectionTrait;
+    use DeleteActionTrait;
+
+    /**
+     * Should return the name of the service to call for deleting the item
+     *
+     * @return string
+     */
+    public function getDeleteServiceName()
+    {
+        return 'Submission';
+    }
 
     public $routeParams = array();
 

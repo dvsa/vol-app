@@ -18,7 +18,6 @@ use Zend\View\Model\ViewModel;
  */
 class CaseController extends FormActionController
 {
-
     /**
      * Manage action.
      */

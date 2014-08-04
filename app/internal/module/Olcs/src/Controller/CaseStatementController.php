@@ -158,35 +158,6 @@ class CaseStatementController extends CaseController implements CrudInterface
     }
 
     /**
-     * Delete action
-     *
-    public function deleteAction()
-    {
-        $caseId = $this->fromRoute('case');
-
-        $bundle = array(
-            'children' => array(
-                'case' => array(
-                    'properties' => 'ALL',
-                )
-            )
-        );
-
-        $statementId = $this->fromRoute('statement');
-
-        // Check that the statement belongs to the case before deleting
-        $results = $this->makeRestCall('Statement', 'GET', array('id' => $statementId), $bundle);
-
-        if (isset($results['case']) && $results['case']['id'] == $caseId) {
-
-            $this->makeRestCall('Statement', 'DELETE', array('id' => $statementId));
-            return $this->redirect()->toRoute('case_statement', ['statement'=>''], [], true);
-        }
-
-        return $this->notFoundAction();
-    }
-
-    /**
      * Process the add post
      *
      * @param array $data
