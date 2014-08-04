@@ -16,28 +16,6 @@ namespace SelfServe\Controller\Application\VehicleSafety;
 class UndertakingsController extends VehicleSafetyController
 {
 
-    /**
-     * Holds the table data bundle
-     *
-     * @var array
-     */
-    protected $tableDataBundle = array(
-        'properties' => null,
-        'children' => array(
-            'licenceVehicles' => array(
-                'properties' => null,
-                'children' => array(
-                    'vehicle' => array(
-                        'properties' => array(
-                            'id',
-                            'vrm',
-                            'platedWeight'
-                        )
-                    )
-                )
-            )
-        )
-    );
 
     /**
      * Action service
@@ -60,6 +38,22 @@ class UndertakingsController extends VehicleSafetyController
     );
 
     /**
+     * Holds the licenceDataBundle
+     *
+     * @var array
+     */
+    protected $dataBundle = array(
+        'children' => array(
+            'trafficArea' => array(
+                'properties' => array(
+                    'id',
+                    'applyScottishRules',
+                ),
+            )
+        )
+    );
+
+    /**
      * Redirect to the first section
      *
      * @return Response
@@ -69,54 +63,6 @@ class UndertakingsController extends VehicleSafetyController
         return $this->renderSection();
     }
 
-    /**
-     * Add operating centre
-     */
-    public function addAction()
-    {
-        return $this->renderSection();
-    }
-
-    /**
-     * Edit operating centre
-     */
-    public function editAction()
-    {
-        return $this->renderSection();
-    }
-
-    /**
-     * Performs delete action
-     *
-     * @return \Zend\Http\PhpEnvironment\Response
-     */
-    public function deleteAction()
-    {
-        $vehicleId = $this->getActionId();
-
-        $licence = $this->getLicenceData();
-
-        $cond = array(
-            'vehicle' => $vehicleId,
-            'licence' => $licence['id'],
-        );
-
-        $bundle = array(
-            'properties' => array(
-                'id'
-            )
-        );
-
-        $licenceVehicle = $this->makeRestCall('LicenceVehicle', 'GET', $cond, $bundle);
-
-        if (empty($licenceVehicle) || (isset($licenceVehicle['Count']) && $licenceVehicle['Count'] == 0)) {
-            return $this->notFoundAction();
-        }
-
-        $this->makeRestCall('LicenceVehicle', 'DELETE', array('id' => $licenceVehicle['Results'][0]['id']));
-
-        return $this->goBackToSection();
-    }
 
     /**
      * Placeholder for save
@@ -126,46 +72,6 @@ class UndertakingsController extends VehicleSafetyController
      */
     protected function save($data, $service = null)
     {
-    }
-
-    /**
-     * Get table data
-     *
-     * @param int $id
-     * @return array
-     */
-    protected function getTableData($id)
-    {
-        unset($id);
-
-        $licence = $this->getLicenceData();
-
-        $data = $this->makeRestCall('Licence', 'GET', array('id' => $licence['id']), $this->tableDataBundle);
-
-        $results = array();
-
-        if (isset($data['licenceVehicles']) && !empty($data['licenceVehicles'])) {
-
-            foreach ($data['licenceVehicles'] as $licenceVehicle) {
-
-                if (isset($licenceVehicle['vehicle']) && !empty($licenceVehicle['vehicle'])) {
-                    $results[] = $licenceVehicle['vehicle'];
-                }
-            }
-        }
-
-        return $results;
-    }
-
-    /**
-     * We don't need to load anything as there is no form
-     *
-     * @param int $id
-     * @return array
-     */
-    protected function load($id)
-    {
-        return array();
     }
 
     /**
@@ -188,5 +94,36 @@ class UndertakingsController extends VehicleSafetyController
     protected function processActionLoad($data)
     {
         return array('data' => $data);
+    }
+
+    /**
+     * Add customisation to the table
+     *
+     * @param Form $form
+     * @return Form
+     */
+    protected function alterForm($form)
+    {
+        $data = $this->load($this->getIdentifier());
+
+        var_dump($data);
+        if ( is_null($data['totAuthSmallVehicles']) ) {
+            // no smalls - case 3
+            $form->remove('smallVehiclesIntention');
+            $form->remove('smallVehiclesUndertaking');
+        } else {
+            // Small vehicles - cases 1, 2, 4, 5
+            if ( is_null($data['totAuthMediumVehicles'])
+                    && is_null($data['totAuthMediumVehicles']) ) {
+                // Small only, cases 1, 2
+                $form->remove('nineOrMore');
+                $form->get('limousinesNoveltyVehicles')->remove('optLimousinesNine');
+            } else {
+                // cases 4, 5
+                $form->remove('nineOrMore');
+            }
+        }
+
+        return $form;
     }
 }
