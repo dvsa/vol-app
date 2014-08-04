@@ -1,13 +1,8 @@
 jQuery(function () 
 {
     $( document ).ready(function() {
-        showDependantTypeFields($('#defType'));
         checkCategories();               
         
-        $('body').on("change","#defType", function(e) {
-            showDependantTypeFields(this);
-        });
-
         $('body').on("change","#parentCategory", function(e) {
             getSubCategory($('#parentCategory').val());
         });
