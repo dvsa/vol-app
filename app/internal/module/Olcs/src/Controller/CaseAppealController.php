@@ -95,7 +95,7 @@ class CaseAppealController extends CaseController implements CrudInterface
      */
     public function editAction()
     {
-        $appealId = $this->fromRoute('appeal');
+        $appealId = $this->fromRoute('id');
         $licenceId = $this->fromRoute('licence');
 
         $bundle = array(
