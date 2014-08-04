@@ -593,7 +593,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $this->controller->expects($this->once())
                 ->method('getForm')
                 ->will($this->returnValue($this->getFormMock()));
-        
+
         $this->controller->expects($this->exactly(2))
             ->method('makeRestCall')
             ->will(
@@ -745,15 +745,15 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $obj->expects($this->once())
             ->method('fromPost')
             ->will($this->returnValue(array()));
-        
+
         $obj->expects($this->once())
             ->method('isPost')
             ->will($this->returnValue(false));
-        
+
         $this->controller->expects($this->once())
             ->method('params')
             ->will($this->returnValue($obj));
-        
+
         $this->controller->expects($this->once())
             ->method('getRequest')
             ->will($this->returnValue($obj));
@@ -939,7 +939,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
 
         return $formMock;
     }
-    
+
     /**
      * Generate a fromRoute function call
      *
