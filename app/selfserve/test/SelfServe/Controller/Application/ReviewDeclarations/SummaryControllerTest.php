@@ -58,6 +58,7 @@ class SummaryControllerTest extends AbstractApplicationControllerTestCase
             'Application',
             'GET',
             array(
+                'prevConviction' => true,
                 'licence' => array(
                     'id' => 10,
                     'version' => 1,
@@ -117,6 +118,7 @@ class SummaryControllerTest extends AbstractApplicationControllerTestCase
     {
         if ($service == 'Application' && $method == 'GET') {
             return array(
+                'prevConviction' => true,
                 'licence' => array(
                     'id' => 10,
                     'version' => 1,
@@ -125,7 +127,7 @@ class SummaryControllerTest extends AbstractApplicationControllerTestCase
                     'licenceType' => 'standard-national',
                     'organisation' => array(
                         'organisationType' => 'org_type.lc'
-                    )
+                    ),
                 ),
                 'documents' => array()
             );
@@ -170,5 +172,36 @@ class SummaryControllerTest extends AbstractApplicationControllerTestCase
                 )
             );
         }
+
+        $convictionDataBundle = array(
+            'properties' => array(
+                'id',
+                'personTitle',
+                'personFirstname',
+                'personLastname',
+                'dateOfConviction',
+                'convictionNotes',
+                'courtFpm',
+                'penalty'
+            ),
+        );
+        if ($service == 'Conviction' && $method = 'GET' && $bundle == $convictionDataBundle) {
+            return array(
+                'Count'  => 1,
+                'Results' => array(
+                    array(
+                        'id' => 1,
+                        'personTitle' => 'Mr',
+                        'personFirstname' => 'Alex',
+                        'personLastname' => 'P',
+                        'dateOfConviction' => '01/01/2014',
+                        'convictionNotes' => 'No MOT',
+                        'courtFpm' => 'Leeds court',
+                        'penalty' => '100£'
+                    )
+                )
+            );
+        }
+
     }
 }

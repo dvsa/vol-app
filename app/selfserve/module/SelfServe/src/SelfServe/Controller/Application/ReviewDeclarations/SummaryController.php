@@ -45,6 +45,10 @@ class SummaryController extends ReviewDeclarationsController
         'PreviousHistory/ConvictionsPenalties'
     );
 
+    protected $formTables = array(
+        'application_previous-history_convictions-penalties-2' => 'criminalconvictions'
+    );
+
     /**
      * Render the section form
      *
@@ -155,7 +159,14 @@ class SummaryController extends ReviewDeclarationsController
                 $loadData
             ),
             // @NOTE: licence history section not yet implemented so no data to map
-            'application_previous-history_licence-history-1' => array()
+            'application_previous-history_licence-history-1' => array(),
+            'application_previous-history_convictions-penalties-1' => array(
+                'prevConviction' => $loadData['prevConviction'] ? 'Y' : 'N'
+            ),
+            'application_previous-history_convictions-penalties-3' => $this->mapApplicationVariables(
+                array('convictionsConfirmation'),
+                $loadData
+            )
         );
 
         return $data;
@@ -172,5 +183,44 @@ class SummaryController extends ReviewDeclarationsController
         }
 
         return $final;
+    }
+
+    protected function getFormTableData()
+    {
+        $applicationId = $this->params()->fromRoute('applicationId');
+
+        $bundle = array(
+            'properties' => array(
+                'id',
+                'personTitle',
+                'personFirstname',
+                'personLastname',
+                'dateOfConviction',
+                'convictionNotes',
+                'courtFpm',
+                'penalty'
+            ),
+        );
+
+        $data = $this->makeRestCall(
+            'Conviction',
+            'GET',
+            array('application' => $applicationId),
+            $bundle
+        );
+
+        $finalData = array();
+        foreach ($data['Results'] as $result) {
+            $finalData[] = $result;
+            $lastElemntIndex = count($finalData) - 1;
+            $finalData[$lastElemntIndex]['name'] = $finalData[$lastElemntIndex]['personTitle'] . ' ' .
+                $finalData[$lastElemntIndex]['personFirstname'] . ' ' .
+                $finalData[$lastElemntIndex]['personLastname'];
+            unset($finalData[$lastElemntIndex]['personTitle']);
+            unset($finalData[$lastElemntIndex]['personFirtName']);
+            unset($finalData[$lastElemntIndex]['personLastName']);
+        }
+
+        return $finalData;
     }
 }
