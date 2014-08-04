@@ -164,7 +164,7 @@ class OperatorLocationControllerTest extends AbstractApplicationControllerTestCa
         // Make sure we get a view with errors
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
 
-        list(, $mainView) = $response->getChildren();
+        $mainView = $response->getChildren()[1];
 
         $this->assertFalse($mainView->getVariable('form')->isValid());
     }
@@ -219,7 +219,7 @@ class OperatorLocationControllerTest extends AbstractApplicationControllerTestCa
         // Make sure we get a view with errors
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
 
-        list(, $mainView) = $response->getChildren();
+        $mainView = $response->getChildren()[1];
 
         $this->assertFalse($mainView->getVariable('form')->isValid());
     }
