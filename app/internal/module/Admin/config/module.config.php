@@ -61,5 +61,5 @@ return [
         ]
     ],
     //-------- End navigation -----------------
-    'local_scripts_path' => __DIR__ . '/../assets/js/inline/',
+    'local_scripts_path' => [__DIR__ . '/../assets/js/inline/'],
 ];
