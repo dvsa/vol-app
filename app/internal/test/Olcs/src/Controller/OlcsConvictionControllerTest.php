@@ -597,7 +597,8 @@ class OlcsConvictionControllerTest extends AbstractHttpControllerTestCase
         $getPostMock = $this->getMock(
             'stdClass',
             [
-                'getPost'
+                'getPost',
+                'isGet'
             ]
         );
 

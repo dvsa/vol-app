@@ -86,7 +86,8 @@ class ConvictionController extends CaseController
             $data
         );
 
-        if ($this->getRequest()->isGet())
+        $request = $this->getRequest();
+        if ($request->isGet())
         {
             $form->get('defendant-details')->remove('personSearch');
             $form->get('defendant-details')->remove('personFirstname');
@@ -94,7 +95,7 @@ class ConvictionController extends CaseController
             $form->get('defendant-details')->remove('dateOfBirth');
             $form->get('defendant-details')->remove('search');
         }
-        $posted = $this->getRequest()->getPost();
+        $posted = $request->getPost();
 
         $parentCategory = $this->getConvictionParentCategories();
 
