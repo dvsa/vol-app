@@ -192,7 +192,14 @@ class CaseRevokeControllerTest extends AbstractHttpControllerTestCase
                       ->will($this->returnValue(null));
 
         $form = $this->getMock('\stdClass', ['get']);
-        $form->expects($this->atLeastOnce())->method('get')->will($this->returnValue($formGetPlugin));
+        $form->expects($this->at(0))->method('get')->with('main')
+             ->will($this->returnSelf());
+        $form->expects($this->at(1))->method('get')->with('piReasons')
+             ->will($this->returnValue($formGetPlugin));
+        $form->expects($this->at(2))->method('get')->with('main')
+             ->will($this->returnSelf());
+        $form->expects($this->at(3))->method('get')->with('presidingTc')
+             ->will($this->returnValue($formGetPlugin));
 
         $controller = $this->getController(['getForm', 'getPiReasonsNvpArray', 'getPresidingTcArray', 'formPost', 'fromRoute', 'makeRestCall']);
         $controller->expects($this->once())
