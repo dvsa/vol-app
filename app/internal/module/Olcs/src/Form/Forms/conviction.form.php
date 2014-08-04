@@ -110,6 +110,10 @@ return [
             'conviction' => [
                 'type' => 'submit',
                 'label' => 'Save',
+                'attributes' => [
+                    'value' => 'save'
+                ],
+
                 'class' => 'action--primary large'
             ],
             'cancel' => [
