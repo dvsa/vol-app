@@ -36,16 +36,16 @@ return [
     ],
     'controllers' => [
         'invokables' => [
-            'IndexController' => 'Admin\Controller\IndexController',
-            'PrintingController' => 'Admin\Controller\PrintingController',
-            'ScanningController' => 'Admin\Controller\ScanningController',
-            'PublicationController' => 'Admin\Controller\PublicationController',
-            'ContinuationController' => 'Admin\Controller\ContinuationController',
-            'ReportController' => 'Admin\Controller\ReportController',
-            'UserManagementController' => 'Admin\Controller\UserManagementController',
-            'FinancialStandingController' => 'Admin\Controller\FinancialStandingController',
-            'PublicHolidayController' => 'Admin\Controller\PublicHolidayController',
-            'SystemMessageController' => 'Admin\Controller\SystemMessageController',
+            'Admin\IndexController' => 'Admin\Controller\IndexController',
+            'Admin\PrintingController' => 'Admin\Controller\PrintingController',
+            'Admin\ScanningController' => 'Admin\Controller\ScanningController',
+            'Admin\PublicationController' => 'Admin\Controller\PublicationController',
+            'Admin\ContinuationController' => 'Admin\Controller\ContinuationController',
+            'Admin\ReportController' => 'Admin\Controller\ReportController',
+            'Admin\UserManagementController' => 'Admin\Controller\UserManagementController',
+            'Admin\FinancialStandingController' => 'Admin\Controller\FinancialStandingController',
+            'Admin\PublicHolidayController' => 'Admin\Controller\PublicHolidayController',
+            'Admin\SystemMessageController' => 'Admin\Controller\SystemMessageController',
         ]
     ],
     'view_manager' => [
