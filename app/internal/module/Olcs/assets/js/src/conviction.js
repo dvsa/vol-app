@@ -81,3 +81,19 @@ function getDataCategories(parentCategory){
     });
 }
 
+function showDependantTypeFields(dependant) 
+{
+    alert('showing dependant type fields');
+/*    if ($(dependant).val() == 'defendant_type.operator') {
+        $('#personFirstname, #personLastname').val('');
+        $('#personFirstname, #personLastname').parent().addClass('visually-hidden');
+        $("[name='defendant-details[dateOfBirth][month]']").parent().addClass('visually-hidden');
+        $('#operatorName').parent().removeClass('visually-hidden');
+    } else {
+        $('#personFirstname, #personLastname').parent().removeClass('visually-hidden');
+        $('#operatorName').val('');
+        $('#operatorName').parent().addClass('visually-hidden');
+        $("[name='defendant-details[dateOfBirth][month]']").parent().removeClass('visually-hidden');
+    }
+*/
+}
