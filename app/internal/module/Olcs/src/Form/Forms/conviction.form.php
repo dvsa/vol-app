@@ -88,6 +88,10 @@ return [
                         'type' => 'select',
                         'label' => 'Declared to TC/TR',
                         'value_options' => 'yes_no'
+                    ],
+                    'dealtWith' => [
+                        'type' => 'checkbox-yn',
+                        'label' => 'Dealt with',
                     ]
                 ]
             ]

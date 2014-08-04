@@ -8,12 +8,13 @@
 
 namespace Olcs\Controller;
 
+use Common\Controller\CrudInterface;
 /**
  * Case Statement Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CaseStatementController extends CaseController
+class CaseStatementController extends CaseController implements CrudInterface
 {
     /**
      * Show a table of statements for the given case

@@ -9,13 +9,14 @@
 namespace Olcs\Controller;
 
 use Zend\View\Model\ViewModel;
+use Common\Controller\CrudInterface;
 
 /**
  * Class to manage Revokes
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class CaseRevokeController extends CaseController
+class CaseRevokeController extends CaseController implements CrudInterface
 {
     /**
      * Show a table of stays and appeals for the given case
@@ -98,7 +99,8 @@ class CaseRevokeController extends CaseController
 
         $routeParams = $this->getParams(['action', 'licence', 'case', 'id']);
 
-        $data = ['case' => $routeParams['case']];
+        $data = [];
+        $data['main'] = ['case' => $routeParams['case']];
 
         $revoke = array();
 
@@ -107,7 +109,7 @@ class CaseRevokeController extends CaseController
             $revoke = $this->formatDataForForm($revoke);
         }
 
-        $data = $revoke + $data;
+        $data['main'] = $revoke + $data['main'];
 
         $form = $this->generateFormWithData('revoke', 'processRevoke', $data);
 
@@ -205,8 +207,8 @@ class CaseRevokeController extends CaseController
 
         $form = $this->getForm($name);
 
-        $form->get('piReasons')->setValueOptions($this->getPiReasonsNvpArray($licence['goodsOrPsv']));
-        $form->get('presidingTc')->setValueOptions($this->getPresidingTcArray());
+        $form->get('main')->get('piReasons')->setValueOptions($this->getPiReasonsNvpArray($licence['goodsOrPsv']));
+        $form->get('main')->get('presidingTc')->setValueOptions($this->getPresidingTcArray());
 
         return $this->formPost($form, $callback);
     }
@@ -278,6 +280,11 @@ class CaseRevokeController extends CaseController
     {
         if (array_key_exists('cancel-revoke', $data)) {
             unset($data['cancel-revoke']);
+        }
+
+        if (isset($data['main'])) {
+            $data = $data + $data['main'];
+            unset($data['main']);
         }
 
         $routeParams = $this->getParams(array('action', 'licence', 'case'));
