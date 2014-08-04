@@ -200,6 +200,7 @@ class TypeOfLicenceController extends ApplicationController
      * it here as an identity function but child classes can optionally override it
      *
      * @param Form $form
+     * @param Controller $context
      * @param array $options
      *
      * @return $form
