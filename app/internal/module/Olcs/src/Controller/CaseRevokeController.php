@@ -99,7 +99,8 @@ class CaseRevokeController extends CaseController implements CrudInterface
 
         $routeParams = $this->getParams(['action', 'licence', 'case', 'id']);
 
-        $data = ['case' => $routeParams['case']];
+        $data = [];
+        $data['main'] = ['case' => $routeParams['case']];
 
         $revoke = array();
 
@@ -108,7 +109,7 @@ class CaseRevokeController extends CaseController implements CrudInterface
             $revoke = $this->formatDataForForm($revoke);
         }
 
-        $data = $revoke + $data;
+        $data['main'] = $revoke + $data['main'];
 
         $form = $this->generateFormWithData('revoke', 'processRevoke', $data);
 
@@ -206,8 +207,8 @@ class CaseRevokeController extends CaseController implements CrudInterface
 
         $form = $this->getForm($name);
 
-        $form->get('piReasons')->setValueOptions($this->getPiReasonsNvpArray($licence['goodsOrPsv']));
-        $form->get('presidingTc')->setValueOptions($this->getPresidingTcArray());
+        $form->get('main')->get('piReasons')->setValueOptions($this->getPiReasonsNvpArray($licence['goodsOrPsv']));
+        $form->get('main')->get('presidingTc')->setValueOptions($this->getPresidingTcArray());
 
         return $this->formPost($form, $callback);
     }
@@ -279,6 +280,11 @@ class CaseRevokeController extends CaseController implements CrudInterface
     {
         if (array_key_exists('cancel-revoke', $data)) {
             unset($data['cancel-revoke']);
+        }
+
+        if (isset($data['main'])) {
+            $data = $data + $data['main'];
+            unset($data['main']);
         }
 
         $routeParams = $this->getParams(array('action', 'licence', 'case'));
