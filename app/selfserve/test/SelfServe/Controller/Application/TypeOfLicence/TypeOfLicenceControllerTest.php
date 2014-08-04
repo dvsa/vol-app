@@ -31,8 +31,10 @@ class TypeOfLicenceControllerTest extends AbstractApplicationControllerTestCase
 
         $response = $this->controller->indexAction();
 
-        // Make sure we get a view not a response
+        // Make sure we get a response which redirects us to the first
+        // sub section
         $this->assertInstanceOf('Zend\Http\Response', $response);
+        $this->assertEquals(302, $response->getStatusCode());
     }
 
     /**

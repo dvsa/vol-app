@@ -5,7 +5,7 @@ echo $this->navigation;
 if (!empty($subSections) && count($subSections) > 1) {
     ?>
 <!-- Vertical navigation -->
-<div class="one-quarter">
+<div class="one-quarter<?php if ($isCollapsible): ?> js-hidden<?php endif; ?>">
     <h4><?php echo $this->translate('In this section'); ?></h4>
     <ol class="vertical-navigation" role="navigation">
         <?php
