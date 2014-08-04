@@ -5,7 +5,7 @@ return [
         'attributes' => [
             'method' => 'post',
         ],
-        'fieldsets' => ['main' =>
+        'fieldsets' => [
             [
                 'name' => 'main',
                 'options' => [
@@ -17,6 +17,13 @@ return [
                         'type' => 'select',
                         'value_options' => 'submission_recommendation',
                         'required' => true
+                    ],
+                    'piReasons' => [
+                        'type' => 'multiselect',
+                        'filters' => '\Common\Form\Elements\InputFilters\SelectEmpty',
+                        'label' => 'Select legislation',
+                        'value_options' => 'pi-reasons',
+                        'help-block' => 'Use CTRL to select multiple'
                     ],
                     'userRecipient' => [
                         'label' => 'Send to',
@@ -35,7 +42,30 @@ return [
                         'label' => 'Urgent',
                     ]
                 ]
-            ]
+            ],
+            array(
+                'name' => 'form-actions',
+                'attributes' => array(
+                    'class' => 'actions-container'
+                ),
+                'options' => array(0),
+                'elements' => array(
+                    'submit' => array(
+                        'enable' => true,
+                        'type' => 'submit',
+                        'filters' => '\Common\Form\Elements\InputFilters\ActionButton',
+                        'label' => 'Save',
+                        'class' => 'action--primary large'
+                    ),
+                    'cancel' => array(
+                        'enable' => true,
+                        'type' => 'submit',
+                        'filters' => '\Common\Form\Elements\InputFilters\ActionButton',
+                        'label' => 'Cancel',
+                        'class' => 'action--secondary large'
+                    )
+                )
+            )
         ],
         'elements' => [
             'submissionActionType' => [
@@ -52,17 +82,6 @@ return [
             ],
             'version' => [
                 'type' => 'hidden'
-            ],
-            'submit' => [
-                'type' => 'submit',
-                'label' => 'Save',
-                'class' => 'action--primary large'
-            ],
-            'cancel' => [
-                'name' => 'cancel-submission',
-                'type' => 'submit',
-                'label' => 'Cancel',
-                'class' => 'action--secondary large'
             ]
         ]
     ]
