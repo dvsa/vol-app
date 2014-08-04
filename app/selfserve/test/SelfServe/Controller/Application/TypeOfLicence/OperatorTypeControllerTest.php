@@ -56,7 +56,7 @@ class OperatorTypeControllerTest extends AbstractApplicationControllerTestCase
             'index',
             null,
             array(
-                'data' => array(
+                'operator-type' => array(
                     'goodsOrPsv' => 'goods'
                 )
             )

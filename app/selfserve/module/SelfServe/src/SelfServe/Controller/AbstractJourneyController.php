@@ -75,6 +75,13 @@ abstract class AbstractJourneyController extends AbstractController
     protected $actionService = null;
 
     /**
+     * Holds any inline scripts for the current page
+     *
+     * @var array
+     */
+    protected $inlineScripts = [];
+
+    /**
      * Hold the journey name
      *
      * @var string
@@ -1012,6 +1019,8 @@ abstract class AbstractJourneyController extends AbstractController
             return $response;
         }
 
+        $this->maybeAddScripts($view);
+
         $view = $this->preRender($view);
 
         return $this->render($view);
@@ -1026,6 +1035,23 @@ abstract class AbstractJourneyController extends AbstractController
     protected function preRender($view)
     {
         return $view;
+    }
+
+    protected function maybeAddScripts($view)
+    {
+        $scripts = $this->getInlineScripts();
+        if (empty($scripts)) {
+            return;
+        }
+
+        // this process defers to a service which takes care of checking
+        // whether the script(s) exist
+        $view->setVariable('scripts', $this->loadScripts($scripts));
+    }
+
+    protected function getInlineScripts()
+    {
+        return $this->inlineScripts;
     }
 
     /**
@@ -1263,6 +1289,7 @@ abstract class AbstractJourneyController extends AbstractController
         $layout = $this->getViewModel(
             array(
                 'subSections' => $this->getSubSectionsForLayout(),
+                'isCollapsible' => $this->isCollapsible(),
                 'id' => $this->getIdentifier()
             )
         );
@@ -1303,7 +1330,10 @@ abstract class AbstractJourneyController extends AbstractController
         if (empty($this->actionData)) {
 
             $this->actionData = $this->makeRestCall(
-                $this->getActionService(), 'GET', array('id' => $id), $this->getActionDataBundle()
+                $this->getActionService(),
+                'GET',
+                array('id' => $id),
+                $this->getActionDataBundle()
             );
         }
 
@@ -1329,7 +1359,11 @@ abstract class AbstractJourneyController extends AbstractController
      */
     protected function processSave($data)
     {
-        $this->completeSubSection();
+        if ($this->shouldCollapseSection()) {
+            $this->completeSection();
+        } else {
+            $this->completeSubSection();
+        }
 
         $response = parent::processSave($data);
 
@@ -1398,35 +1432,59 @@ abstract class AbstractJourneyController extends AbstractController
     }
 
     /**
-     * Complete sub section
+     * Complete the current sub section
      */
     protected function completeSubSection()
     {
+        $this->completeSubSections([$this->getSubSectionName()]);
+    }
+
+    /**
+     * Complete the current over-arching section and all its subsections
+     */
+    protected function completeSection()
+    {
+        $section = $this->getSectionConfig();
+        $subSections = array_keys($section['subSections']);
+        $this->completeSubSections($subSections);
+    }
+
+    /**
+     * Complete an array of sub sections; this allows multiple steps
+     * to be marked complete while only triggering a single API request
+     *
+     * @param array $subSections
+     */
+    protected function completeSubSections(array $subSections)
+    {
+
         $sectionCompletion = $this->getSectionCompletion();
         $sectionName = $this->getSectionName();
-        $key = 'section' . $sectionName . $this->getSubSectionName() . 'Status';
         $completeKey = array_search('complete', $this->getJourneyConfig()['completionStatusMap']);
         $incompleteKey = array_search('incomplete', $this->getJourneyConfig()['completionStatusMap']);
         $sectionConfig = $this->getSectionConfig();
 
-        $sectionCompletion[$key] = $completeKey;
+        foreach ($subSections as $subSection) {
+            $key = 'section' . $sectionName . $subSection . 'Status';
+            $sectionCompletion[$key] = $completeKey;
 
-        $complete = true;
+            $complete = true;
 
-        foreach (array_keys($sectionConfig['subSections']) as $subSectionName) {
-            $sectionStatusKey = 'section' . $sectionName . $subSectionName . 'Status';
+            foreach (array_keys($sectionConfig['subSections']) as $subSectionName) {
+                $sectionStatusKey = 'section' . $sectionName . $subSectionName . 'Status';
 
-            if ($this->isSectionAccessible($sectionName, $subSectionName)
-                && (!isset($sectionCompletion[$sectionStatusKey])
-                || $sectionCompletion[$sectionStatusKey] != $completeKey)) {
-                $complete = false;
-                break;
+                if ($this->isSectionAccessible($sectionName, $subSectionName)
+                    && (!isset($sectionCompletion[$sectionStatusKey])
+                    || $sectionCompletion[$sectionStatusKey] != $completeKey)) {
+                    $complete = false;
+                    break;
+                }
             }
+
+            $sectionCompletionKey = ($complete ? $completeKey : $incompleteKey);
+
+            $sectionCompletion['section' . $sectionName . 'Status'] = $sectionCompletionKey;
         }
-
-        $sectionCompletionKey = ($complete ? $completeKey : $incompleteKey);
-
-        $sectionCompletion['section' . $sectionName . 'Status'] = $sectionCompletionKey;
 
         $this->makeRestCall($this->getJourneyConfig()['completionService'], 'PUT', $sectionCompletion);
 
@@ -1505,19 +1563,26 @@ abstract class AbstractJourneyController extends AbstractController
 
         $key = $this->getStepNumber();
 
+        $startSection = $steps[$key][1];
+
         $nextKey = $key + 1;
 
         $this->getAccessKeys(true);
 
         while (isset($steps[$nextKey])) {
-
-            if ($this->isSectionAccessible($steps[$nextKey][1], $steps[$nextKey][2])) {
-                return $this->goToSection(
-                    $this->getSectionRoute($steps[$nextKey][0], $steps[$nextKey][1], $steps[$nextKey][2])
-                );
-            }
+            list($app, $section, $subSection) = $steps[$nextKey];
 
             $nextKey++;
+
+            if ($this->shouldCollapseSection() && $section === $startSection) {
+                continue;
+            }
+
+            if ($this->isSectionAccessible($section, $subSection)) {
+                return $this->goToSection(
+                    $this->getSectionRoute($app, $section, $subSection)
+                );
+            }
         }
 
         return $this->journeyFinished();
@@ -1532,20 +1597,69 @@ abstract class AbstractJourneyController extends AbstractController
 
         $key = $this->getStepNumber();
 
-        $nextKey = $key - 1;
+        $prevKey = $key - 1;
 
-        while (isset($steps[$nextKey])) {
+        while (isset($steps[$prevKey])) {
+            list($app, $section, $subSection) = $steps[$prevKey];
 
-            if ($this->isSectionAccessible($steps[$nextKey][1], $steps[$nextKey][2])) {
+            $prevKey--;
+
+            $subSection = $this->shouldCollapseSection($section) ? null : $subSection;
+
+            if ($this->isSectionAccessible($section, $subSection)) {
+
                 return $this->goToSection(
-                    $this->getSectionRoute($steps[$nextKey][0], $steps[$nextKey][1], $steps[$nextKey][2])
+                    $this->getSectionRoute($app, $section, $subSection)
                 );
             }
-
-            $nextKey--;
         }
 
         return $this->goHome();
+    }
+
+    /**
+     * Check whether this section is suitable for collapsing (i.e. merging
+     * all sub sections into one top-level step) and whether the appropriate
+     * preconditions which satisfy a collapse are set.
+     *
+     * @param string $section
+     *
+     * @return bool
+     */
+    protected function shouldCollapseSection($section = null)
+    {
+        return $this->isCollapsible($section) && $this->isJavaScriptSubmission();
+    }
+
+    /**
+     * Does this section, or a given section, indicate that it could
+     * be collapsible?
+     *
+     * @param string $section
+     *
+     * @return bool
+     */
+    protected function isCollapsible($section = null)
+    {
+        if ($section === null) {
+            $section = $this->getSectionName();
+        }
+
+        $sectionConfig = $this->getConfig($section);
+
+        return isset($sectionConfig['collapsible']) && $sectionConfig['collapsible'];
+    }
+
+    /**
+     * Is this a POST, and if so was it from a JS-enabled browser?
+     *
+     * @return bool
+     */
+    protected function isJavaScriptSubmission()
+    {
+        $request = $this->getRequest();
+
+        return $request->isPost() && $request->getPost('js-submit');
     }
 
     /**

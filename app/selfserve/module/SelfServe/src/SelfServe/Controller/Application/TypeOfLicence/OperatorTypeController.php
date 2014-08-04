@@ -4,6 +4,7 @@
  * OperatorType Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
+ * @author Nick Payne <nick.payne@valtech.co.uk>
  */
 namespace SelfServe\Controller\Application\TypeOfLicence;
 
@@ -11,26 +12,9 @@ namespace SelfServe\Controller\Application\TypeOfLicence;
  * OperatorType Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
+ * @author Nick Payne <nick.payne@valtech.co.uk>
  */
 class OperatorTypeController extends TypeOfLicenceController
 {
-    /**
-     * Render the section form
-     *
-     * @return Response
-     */
-    public function indexAction()
-    {
-        return $this->renderSection();
-    }
-
-    /**
-     * Load data from id
-     *
-     * @param int $id
-     */
-    protected function load($id)
-    {
-        return array('data' => $this->getLicenceData());
-    }
+    protected $fieldset = 'operator-type';
 }
