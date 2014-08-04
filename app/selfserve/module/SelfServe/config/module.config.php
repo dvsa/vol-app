@@ -17,6 +17,7 @@ return array(
         'invokables' => $invokeables
     ),
     'local_forms_path' => __DIR__ . '/../src/SelfServe/Form/Forms/',
+    'local_scripts_path' => __DIR__ . '/../assets/js/inline/',
     'tables' => array(
         'config' => array(
             __DIR__ . '/../src/SelfServe/Table/Tables/'
@@ -35,5 +36,7 @@ return array(
         'template_path_stack' => array(
             __DIR__ . '/../view'
         )
-    )
+    ),
+    'application-name' => 'selfserve',
+    'asset_path' => '//olcs-frontend'
 );
