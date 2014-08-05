@@ -111,15 +111,8 @@ class ConvictionsPenaltiesController extends PreviousHistoryController
 
     }
 
-    /**
-     * Get the form table data
-     *
-     * @return array
-     */
-    protected function getFormTableData()
+    public static function getStaticTableData($applicationId, $context)
     {
-        $applicationId = $this->params()->fromRoute('applicationId');
-
         $bundle = array(
             'properties' => array(
                 'id',
@@ -133,7 +126,7 @@ class ConvictionsPenaltiesController extends PreviousHistoryController
             ),
         );
 
-        $data = $this->makeRestCall(
+        $data = $context->makeRestCall(
             'Conviction',
             'GET',
             array('application' => $applicationId),
@@ -153,6 +146,16 @@ class ConvictionsPenaltiesController extends PreviousHistoryController
         }
 
         return $finalData;
+    }
+
+    /**
+     * Get the form table data
+     *
+     * @return array
+     */
+    protected function getFormTableData($applicationId, $tableName)
+    {
+        return static::getStaticTableData($applicationId, $this);
     }
 
     /**

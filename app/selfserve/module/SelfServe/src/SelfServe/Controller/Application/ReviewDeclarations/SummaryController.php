@@ -45,8 +45,11 @@ class SummaryController extends ReviewDeclarationsController
         'PreviousHistory/ConvictionsPenalties'
     );
 
-    protected $formTables = array(
-        'application_previous-history_convictions-penalties-2' => 'criminalconvictions'
+    private $tables = array(
+        'application_previous-history_convictions-penalties-2' => array(
+            'section' => 'PreviousHistory/ConvictionsPenalties',
+            'config'  => 'criminalconvictions'
+        )
     );
 
     /**
@@ -56,6 +59,7 @@ class SummaryController extends ReviewDeclarationsController
      */
     public function indexAction()
     {
+        $this->generateSummary();
         return $this->renderSection();
     }
 
@@ -69,21 +73,21 @@ class SummaryController extends ReviewDeclarationsController
     {
         $data = $this->loadCurrent();
         $options = array(
-            'isPsv' => $this->isPsv(),
+            'isPsv'    => $this->isPsv(),
             'isReview' => true
         );
 
         foreach ($this->summarySections as $summarySection) {
             list($section, $subSection) = explode('/', $summarySection);
 
-            $formName = $this->formatFormName('Application', $section, $subSection);
-            $fieldsetName = $formName . '-1';
+            // @NOTE this needs adjusting; we sometimes have more than one fieldset
+            $fieldsetName = $this->formatFormName('Application', $section, $subSection) . '-1';
 
             if (!$this->isSectionAccessible($section, $subSection)) {
                 $form->remove($fieldsetName);
             } else {
-                $controller = '\SelfServe\Controller\Application\\' . $section . '\\' . $subSection . 'Controller';
-                if (method_exists($controller, 'makeFormAlterations')) {
+                $controller = $this->getInvokable($summarySection, 'makeFormAlterations');
+                if ($controller) {
                     $newOptions = array_merge(
                         $options,
                         array(
@@ -185,42 +189,30 @@ class SummaryController extends ReviewDeclarationsController
         return $final;
     }
 
-    protected function getFormTableData()
+    protected function getFormTableData($applicationId, $tableName)
     {
-        $applicationId = $this->params()->fromRoute('applicationId');
-
-        $bundle = array(
-            'properties' => array(
-                'id',
-                'personTitle',
-                'personFirstname',
-                'personLastname',
-                'dateOfConviction',
-                'convictionNotes',
-                'courtFpm',
-                'penalty'
-            ),
-        );
-
-        $data = $this->makeRestCall(
-            'Conviction',
-            'GET',
-            array('application' => $applicationId),
-            $bundle
-        );
-
-        $finalData = array();
-        foreach ($data['Results'] as $result) {
-            $finalData[] = $result;
-            $lastElemntIndex = count($finalData) - 1;
-            $finalData[$lastElemntIndex]['name'] = $finalData[$lastElemntIndex]['personTitle'] . ' ' .
-                $finalData[$lastElemntIndex]['personFirstname'] . ' ' .
-                $finalData[$lastElemntIndex]['personLastname'];
-            unset($finalData[$lastElemntIndex]['personTitle']);
-            unset($finalData[$lastElemntIndex]['personFirtName']);
-            unset($finalData[$lastElemntIndex]['personLastName']);
+        $tableData = $this->tables[$tableName];
+        $controller = $this->getInvokable($tableData['section'], 'getStaticTableData');
+        if ($controller) {
+            return $controller::getStaticTableData($applicationId, $this);
         }
+    }
 
-        return $finalData;
+    private function generateSummary()
+    {
+        $this->formTables = [];
+        foreach ($this->tables as $fieldset => $tableData) {
+            $this->formTables[$fieldset] = $tableData['config'];
+        }
+    }
+
+    private function getInvokable($section, $method)
+    {
+        list($section, $subSection) = explode('/', $section);
+        $controller = '\SelfServe\Controller\Application\\' . $section . '\\' . $subSection . 'Controller';
+        if (is_callable(array($controller, $method))) {
+            return $controller;
+        }
+        return null;
     }
 }
