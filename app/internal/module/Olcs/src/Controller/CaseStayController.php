@@ -175,7 +175,7 @@ class CaseStayController extends CaseController implements CrudInterface
      */
     public function editAction()
     {
-        $stayId = $this->fromRoute('stay');
+        $stayId = $this->fromRoute('id');
 
         $bundle = array(
             'children' => array(

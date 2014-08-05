@@ -163,12 +163,12 @@ return [
     'case_stay_action' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/licence/[:licence]/case/[:case]/action/manage/stays[/:action][/:stayType][/:stay]',
+            'route' => '/licence/[:licence]/case/[:case]/action/manage/stays[/:action][/:stayType][/:id]',
             'constraints' => [
                 'licence' => '[0-9]+',
                 'case' => '[0-9]+',
                 'staytype' => '[0-9]',
-                'stay' => '[0-9]+'
+                'id' => '[0-9]+'
             ],
             'defaults' => [
                 'controller' => 'CaseStayController',
