@@ -11,7 +11,7 @@ namespace SelfServe\Controller\Application\VehicleSafety;
 /**
  * Vehicle Controller
  *
- * @author Rob Caiger <rob@clocal.co.uk>
+ * @author Jess Rowbottom <jess.rowbottom@valtech.co.uk>
  */
 class UndertakingsController extends VehicleSafetyController
 {
@@ -106,7 +106,6 @@ class UndertakingsController extends VehicleSafetyController
     {
         $data = $this->load($this->getIdentifier());
 
-        var_dump($data);
         if ( is_null($data['totAuthSmallVehicles']) ) {
             // no smalls - case 3
             $form->remove('smallVehiclesIntention');
@@ -114,13 +113,29 @@ class UndertakingsController extends VehicleSafetyController
         } else {
             // Small vehicles - cases 1, 2, 4, 5
             if ( is_null($data['totAuthMediumVehicles'])
-                    && is_null($data['totAuthMediumVehicles']) ) {
+                    && is_null($data['totAuthLargeVehicles']) ) {
                 // Small only, cases 1, 2
-                $form->remove('nineOrMore');
-                $form->get('limousinesNoveltyVehicles')->remove('optLimousinesNine');
+                if ( $data['trafficArea']['applyScottishRules'] ) {
+                    // Case 2 - Scottish small only
+                    $form->remove('smallVehiclesIntention');
+                    $form->remove('nineOrMore');
+                    $form->get('limousinesNoveltyVehicles')->remove('optLimousinesNine');
+                } else {
+                    // Case 1 - England/Wales small only
+                    $form->remove('nineOrMore');
+                    $form->get('limousinesNoveltyVehicles')->remove('optLimousinesNine');
+                }
             } else {
                 // cases 4, 5
-                $form->remove('nineOrMore');
+                if ( $data['trafficArea']['applyScottishRules'] ) {
+                    // Case 5 Mix Scotland
+                    $form->remove('smallVehiclesIntention');
+                    $form->remove('nineOrMore');
+                } else {
+                    // Case 4 Mix England/Wales
+                    $form->remove('nineOrMore');
+                }
+
             }
         }
 
