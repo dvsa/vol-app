@@ -31,11 +31,15 @@ class SummaryController extends ReviewDeclarationsController
         )
     );
 
-    private $tables = array(
-        'application_previous-history_convictions-penalties-2' => array(
-            'section' => 'PreviousHistory/ConvictionsPenalties',
-            'config'  => 'criminalconvictions'
-        )
+    /**
+     * We can't automagically map controllers to their tables, so
+     * we have to maintain a manual mapping here
+     *
+     * @var array
+     */
+    private $tableConfigs = array(
+        // controller => table config
+        'PreviousHistory/ConvictionsPenalties' => 'criminalconvictions'
     );
 
     /**
@@ -201,8 +205,13 @@ class SummaryController extends ReviewDeclarationsController
 
     protected function getFormTableData($applicationId, $tableName)
     {
-        $tableData = $this->tables[$tableName];
-        $controller = $this->getInvokable($tableData['section'], 'getSummaryTableData');
+        $section = array_search(
+            $this->formTables[$tableName],
+            $this->tableConfigs
+        );
+
+        $controller = $this->getInvokable($section, 'getSummaryTableData');
+
         if ($controller) {
             return $controller::getSummaryTableData($applicationId, $this);
         }
@@ -211,21 +220,25 @@ class SummaryController extends ReviewDeclarationsController
     private function generateSummary()
     {
         $this->summarySections = [];
-        $this->formTables = [];
+        $this->formTables      = [];
 
-        $fieldsets = array_keys($this->getForm($this->getFormName())->getFieldsets());
+        $fieldsets = $this->getForm($this->getFormName())->getFieldsets();
 
         foreach ($fieldsets as $fieldset) {
-            if (preg_match("/application_([\w-]+)_([\w-]+)-\d+/", $fieldset, $matches)) {
-                $section    = $this->dashToCamel($matches[1]);
-                $subSection = $this->dashToCamel($matches[2]);
 
-                $this->summarySections[] = $section . '/' . $subSection;
+            $name = $fieldset->getName();
+
+            if (preg_match("/application_([\w-]+)_([\w-]+)-\d+/", $name, $matches)) {
+                $section        = $this->dashToCamel($matches[1]);
+                $subSection     = $this->dashToCamel($matches[2]);
+                $summarySection = $section . '/' . $subSection;
+
+                $this->summarySections[] = $summarySection;
+
+                if ($fieldset->has('table')) {
+                    $this->formTables[$name] = $this->tableConfigs[$summarySection];
+                }
             }
-        }
-
-        foreach ($this->tables as $fieldset => $tableData) {
-            $this->formTables[$fieldset] = $tableData['config'];
         }
     }
 
