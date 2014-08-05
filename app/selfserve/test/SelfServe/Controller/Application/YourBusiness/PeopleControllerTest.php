@@ -143,7 +143,6 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
 
     /**
      * Test indexAction With Edit Crud Action without id
-     * @group acurrent
      */
     public function testIndexActionWithEditCrudActionWithoutId()
     {
@@ -487,7 +486,7 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
                 'position'
             ),
         );
-        if ($service == 'Person' && $method = 'GET' && $bundle == $personDataBundle) {
+        if ($service == 'Person' && $method == 'GET' && $bundle == $personDataBundle) {
             return array(
                 'Count'  => 1,
                 'Results' => array(
@@ -503,6 +502,101 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
                 )
             );
         }
+        $organisationTypeBundle = array(
+            'children' => array(
+                'licence' => array(
+                    'children' => array(
+                        'organisation' => array(
+                            'properties' => array(
+                                'id',
+                                'version',
+                                'organisationType',
+                                'registeredCompanyNumber'
+                            )
+                        )
+                    )
+                )
+             )
+        );
+        if ($service == 'Application' && $method == 'GET' && $bundle == $organisationTypeBundle) {
+            return array(
+                'licence' => array(
+                    'id' => 10,
+                    'version' => 1,
+                    'goodsOrPsv' => 'goods',
+                    'niFlag' => 0,
+                    'licenceType' => 'standard-national',
+                    'organisation' => array(
+                        'organisationType' => 'org_type.lc',
+                        'registeredCompanyNumber' => '12345678'
+                    )
+                )
+            );
+        }
+        $personsExistsBundle = array(
+            'properties' => array(
+                'id'
+            )
+        );
+        if ($service == 'Person' && $method == 'GET' && $bundle == $personsExistsBundle) {
+            return array(
+                'Count' => 0,
+                'Results' => array()
+            );
+        }
+        $companiesHouseData = array(
+            'type'  => 'currentCompanyOfficers',
+            'value' => '12345678'
+        );
+        if ($service == 'CompaniesHouse' && $method == 'GET' && $data == $companiesHouseData) {
+            return array(
+                'Count' => 1,
+                'Results' => array(
+                    array(
+                        'title'       => 'Title',
+                        'firstName'   => 'Firstname',
+                        'surname'     => 'Surname',
+                        'dateOfBirth' => 'DOB'
+                    )
+                )
+            );
+        }
+        $organisationDataBundle = array(
+            'children' => array(
+                'licence' => array(
+                    'children' => array(
+                        'organisation' => array(
+                            'properties' => array(
+                                'id',
+                                'version',
+                                'organisationType',
+                            )
+                        )
+                    )
+                )
+             )
+        );
+        if ($service == 'Application' && $method == 'GET' && $bundle == $organisationDataBundle) {
+            return array(
+                'licence' => array(
+                    'organisation' => array(
+                        'organisationType' => $this->organisation
+                    )
+                )
+            );
+        }
 
+    }
+
+    /**
+     * Test populatePeople method
+     */
+    public function testPopulatePeople()
+    {
+        $this->setUpAction('index');
+        $response = $this->controller->indexAction();
+
+        // Make sure we get a view not a response
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
     }
 }
