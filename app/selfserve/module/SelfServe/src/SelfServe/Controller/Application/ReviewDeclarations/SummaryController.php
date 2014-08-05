@@ -72,35 +72,45 @@ class SummaryController extends ReviewDeclarationsController
     protected function alterForm($form)
     {
         $data = $this->loadCurrent();
-        $options = array(
-            'isPsv'    => $this->isPsv(),
-            'isReview' => true
-        );
 
         foreach ($this->summarySections as $summarySection) {
             list($section, $subSection) = explode('/', $summarySection);
 
+            // extract from our uber form which fieldsets are relevant
+            // to this particular section
             $sectionFieldsets = $this->getSectionFieldsets(
                 $form,
                 $this->formatFormName('Application', $section, $subSection)
             );
 
+            // naturally if we can't yet access this section make sure we hide
+            // any fieldsets which relate to it
             if (!$this->isSectionAccessible($section, $subSection)) {
                 foreach ($sectionFieldsets as $fieldset) {
                     $form->remove($fieldset);
                 }
             } else {
+
+                // if we're in here then check to see if the relevant controller wants
+                // to make any extra form alterations based on the fact it is being
+                // rendered out of context on the review page
                 $controller = $this->getInvokable($summarySection, 'makeFormAlterations');
+
                 if ($controller) {
-                    $newOptions = array_merge(
-                        $options,
-                        array(
-                            'fieldset'  => $sectionFieldsets[0],
-                            'fieldsets' => $sectionFieldsets,
-                            'data'      => $data
-                        )
+                    $options = array(
+                        // always let the controller know this is a review
+                        'isReview'  => true,
+                        'isPsv'     => $this->isPsv(),
+                        // most forms only have one fieldset, so we pass the
+                        // first through to be helpful...
+                        'fieldset'  => $sectionFieldsets[0],
+                        // ... but pass the rest through too, just in case
+                        'fieldsets' => $sectionFieldsets,
+                        // finally, at this stage some controllers may alter based on
+                        // data available (or not); so pass that through too
+                        'data'      => $data
                     );
-                    $form = $controller::makeFormAlterations($form, $this, $newOptions);
+                    $form = $controller::makeFormAlterations($form, $this, $options);
                 }
             }
         }
@@ -134,7 +144,7 @@ class SummaryController extends ReviewDeclarationsController
      * Placeholder save method
      *
      * @param array $data
-     * @parem string $service
+     * @param string $service
      */
     protected function save($data, $service = null)
     {
@@ -207,9 +217,9 @@ class SummaryController extends ReviewDeclarationsController
     protected function getFormTableData($applicationId, $tableName)
     {
         $tableData = $this->tables[$tableName];
-        $controller = $this->getInvokable($tableData['section'], 'getStaticTableData');
+        $controller = $this->getInvokable($tableData['section'], 'getSummaryTableData');
         if ($controller) {
-            return $controller::getStaticTableData($applicationId, $this);
+            return $controller::getSummaryTableData($applicationId, $this);
         }
     }
 

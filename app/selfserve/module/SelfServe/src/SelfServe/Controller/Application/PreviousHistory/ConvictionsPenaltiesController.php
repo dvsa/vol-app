@@ -111,7 +111,7 @@ class ConvictionsPenaltiesController extends PreviousHistoryController
 
     }
 
-    public static function getStaticTableData($applicationId, $context)
+    public static function getSummaryTableData($applicationId, $context)
     {
         $bundle = array(
             'properties' => array(
@@ -155,7 +155,7 @@ class ConvictionsPenaltiesController extends PreviousHistoryController
      */
     protected function getFormTableData($applicationId, $tableName)
     {
-        return static::getStaticTableData($applicationId, $this);
+        return static::getSummaryTableData($applicationId, $this);
     }
 
     /**
