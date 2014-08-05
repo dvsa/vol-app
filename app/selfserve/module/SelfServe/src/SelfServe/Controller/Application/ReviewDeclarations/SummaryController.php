@@ -80,19 +80,24 @@ class SummaryController extends ReviewDeclarationsController
         foreach ($this->summarySections as $summarySection) {
             list($section, $subSection) = explode('/', $summarySection);
 
-            // @NOTE this needs adjusting; we sometimes have more than one fieldset
-            $fieldsetName = $this->formatFormName('Application', $section, $subSection) . '-1';
+            $sectionFieldsets = $this->getSectionFieldsets(
+                $form,
+                $this->formatFormName('Application', $section, $subSection)
+            );
 
             if (!$this->isSectionAccessible($section, $subSection)) {
-                $form->remove($fieldsetName);
+                foreach ($sectionFieldsets as $fieldset) {
+                    $form->remove($fieldset);
+                }
             } else {
                 $controller = $this->getInvokable($summarySection, 'makeFormAlterations');
                 if ($controller) {
                     $newOptions = array_merge(
                         $options,
                         array(
-                            'fieldset' => $fieldsetName,
-                            'data'     => $data
+                            'fieldset'  => $sectionFieldsets[0],
+                            'fieldsets' => $sectionFieldsets,
+                            'data'      => $data
                         )
                     );
                     $form = $controller::makeFormAlterations($form, $this, $newOptions);
@@ -225,4 +230,18 @@ class SummaryController extends ReviewDeclarationsController
         }
         return null;
     }
+
+    private function getSectionFieldsets($form, $fieldsetName)
+    {
+        $fieldsets = array_keys($form->getFieldsets());
+        $sectionFieldsets = [];
+
+        foreach ($fieldsets as $fieldset) {
+            if (strpos($fieldset, $fieldsetName) !== false) {
+                $sectionFieldsets[] = $fieldset;
+            }
+        }
+        return $sectionFieldsets;
+    }
+
 }
