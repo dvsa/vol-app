@@ -5,8 +5,7 @@
 
 namespace Admin\Controller;
 
-use Common\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
+use Common\Controller\FormActionController;
 
 /**
  * System Message Controller
@@ -14,12 +13,12 @@ use Zend\View\Model\ViewModel;
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
 
-class SystemMessageController extends AbstractActionController
+class SystemMessageController extends FormActionController
 {
     public function indexAction()
     {
-        $view = new ViewModel();
-        $view->setTemplate('admin/page/system-message.phtml');
+        $view = $this->getView();
+        $view->setTemplate('admin/page/system-message');
         return $view;
     }
 }

@@ -5,8 +5,7 @@
 
 namespace Admin\Controller;
 
-use Common\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
+use Common\Controller\FormActionController;
 
 /**
  * Scanning Controller
@@ -14,12 +13,12 @@ use Zend\View\Model\ViewModel;
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
 
-class ScanningController extends AbstractActionController
+class ScanningController extends FormActionController
 {
     public function indexAction()
     {
-        $view = new ViewModel();
-        $view->setTemplate('admin/page/scanning.phtml');
+        $view = $this->getView();
+        $view->setTemplate('admin/page/scanning');
         return $view;
     }
 }
