@@ -9,7 +9,7 @@ return [
                 'options' => [
                     'route' => '/admin',
                     'defaults' => [
-                        'controller' => 'IndexController',
+                        'controller' => 'Admin\IndexController',
                         'action' => 'index',
                     ]
                 ],
@@ -20,7 +20,87 @@ return [
                         'options' => [
                             'route' => '/scanning',
                             'defaults' => [
-                                'controller' => 'IndexController',
+                                'controller' => 'Admin\ScanningController',
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
+                    'admin-printing' => [
+                        'type' => 'Literal',
+                        'options' => [
+                            'route' => '/printing',
+                            'defaults' => [
+                                'controller' => 'Admin\PrintingController',
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
+                    'admin-publication' => [
+                        'type' => 'Literal',
+                        'options' => [
+                            'route' => '/publication',
+                            'defaults' => [
+                                'controller' => 'Admin\PublicationController',
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
+                    'admin-continuation' => [
+                        'type' => 'Literal',
+                        'options' => [
+                            'route' => '/continuation',
+                            'defaults' => [
+                                'controller' => 'Admin\ContinuationController',
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
+                    'admin-report' => [
+                        'type' => 'Literal',
+                        'options' => [
+                            'route' => '/report',
+                            'defaults' => [
+                                'controller' => 'Admin\ReportController',
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
+                    'admin-user-management' => [
+                        'type' => 'Literal',
+                        'options' => [
+                            'route' => '/user-management',
+                            'defaults' => [
+                                'controller' => 'Admin\UserManagementController',
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
+                    'admin-financial-standing' => [
+                        'type' => 'Literal',
+                        'options' => [
+                            'route' => '/financial-standing',
+                            'defaults' => [
+                                'controller' => 'Admin\FinancialStandingController',
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
+                    'admin-public-holiday' => [
+                        'type' => 'Literal',
+                        'options' => [
+                            'route' => '/public-holiday',
+                            'defaults' => [
+                                'controller' => 'Admin\PublicHolidayController',
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
+                    'admin-system-message' => [
+                        'type' => 'Literal',
+                        'options' => [
+                            'route' => '/system-message',
+                            'defaults' => [
+                                'controller' => 'Admin\SystemMessageController',
                                 'action' => 'index',
                             ]
                         ],
