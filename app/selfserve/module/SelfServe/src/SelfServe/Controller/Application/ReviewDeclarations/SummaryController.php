@@ -109,6 +109,8 @@ class SummaryController extends ReviewDeclarationsController
      */
     public function simpleAction()
     {
+        $this->generateSummary();
+
         $this->isAction = false;
 
         $this->setRenderNavigation(false);
@@ -141,6 +143,9 @@ class SummaryController extends ReviewDeclarationsController
     protected function processLoad($loadData)
     {
         $data = array(
+            /**
+             * Type of Licence
+             */
             'application_type-of-licence_operator-location-1' => array(
                 'niFlag' => ($loadData['licence']['niFlag'] == 1 ? '1' : '0')
             ),
@@ -150,6 +155,10 @@ class SummaryController extends ReviewDeclarationsController
             'application_type-of-licence_licence-type-1' => array(
                 'licenceType' => $loadData['licence']['licenceType']
             ),
+
+            /**
+             * Previous History
+             */
             'application_previous-history_financial-history-1' => $this->mapApplicationVariables(
                 array(
                     'bankrupt',
@@ -162,11 +171,12 @@ class SummaryController extends ReviewDeclarationsController
                 ),
                 $loadData
             ),
-            // @NOTE: licence history section not yet implemented so no data to map
+            // @NOTE licence history section not yet implemented so no data to map
             'application_previous-history_licence-history-1' => array(),
             'application_previous-history_convictions-penalties-1' => array(
                 'prevConviction' => $loadData['prevConviction'] ? 'Y' : 'N'
             ),
+            // @NOTE application_previous-history_convictions-penalties-2 is table data
             'application_previous-history_convictions-penalties-3' => $this->mapApplicationVariables(
                 array('convictionsConfirmation'),
                 $loadData
