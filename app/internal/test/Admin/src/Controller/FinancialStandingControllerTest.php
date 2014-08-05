@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Test PublicHolidayController
+ * Test FinancialStandingController
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
