@@ -31,20 +31,6 @@ class SummaryController extends ReviewDeclarationsController
         )
     );
 
-    /**
-     * Summary sections
-     *
-     * @var array
-     */
-    private $summarySections = array(
-        'TypeOfLicence/OperatorLocation',
-        'TypeOfLicence/OperatorType',
-        'TypeOfLicence/LicenceType',
-        'PreviousHistory/FinancialHistory',
-        'PreviousHistory/LicenceHistory',
-        'PreviousHistory/ConvictionsPenalties'
-    );
-
     private $tables = array(
         'application_previous-history_convictions-penalties-2' => array(
             'section' => 'PreviousHistory/ConvictionsPenalties',
@@ -124,13 +110,12 @@ class SummaryController extends ReviewDeclarationsController
      */
     public function simpleAction()
     {
-        $this->generateSummary();
-
         $this->isAction = false;
 
         $this->setRenderNavigation(false);
         $this->setLayout('layout/simple');
 
+        $this->generateSummary();
         $layout = $this->renderSection();
 
         if ($layout instanceof ViewModel) {
@@ -225,7 +210,20 @@ class SummaryController extends ReviewDeclarationsController
 
     private function generateSummary()
     {
+        $this->summarySections = [];
         $this->formTables = [];
+
+        $fieldsets = array_keys($this->getForm($this->getFormName())->getFieldsets());
+
+        foreach ($fieldsets as $fieldset) {
+            if (preg_match("/application_([\w-]+)_([\w-]+)-\d+/", $fieldset, $matches)) {
+                $section    = $this->dashToCamel($matches[1]);
+                $subSection = $this->dashToCamel($matches[2]);
+
+                $this->summarySections[] = $section . '/' . $subSection;
+            }
+        }
+
         foreach ($this->tables as $fieldset => $tableData) {
             $this->formTables[$fieldset] = $tableData['config'];
         }
