@@ -36,7 +36,7 @@ class CaseStatementController extends CaseController implements CrudInterface
 
         $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licenceId)));
 
-        $this->checkForCrudAction('case_statement', array('case' => $caseId), 'statement', true);
+        $this->checkForCrudAction('case_statement', array('case' => $caseId));
 
         $results = $this->makeRestCall('Statement', 'GET', array('caseId' => $caseId));
 
@@ -94,7 +94,7 @@ class CaseStatementController extends CaseController implements CrudInterface
     {
         $caseId = $this->fromRoute('case');
         $licenceId = $this->fromRoute('licence');
-        $statementId = $this->fromRoute('statement');
+        $statementId = $this->fromRoute('id');
 
         $this->setBreadcrumb(
             array(

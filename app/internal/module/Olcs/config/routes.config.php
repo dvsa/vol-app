@@ -110,10 +110,11 @@ return [
     'case_statement' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/licence/[:licence]/case/:case/statements[/:action][/:statement]',
+            'route' => '/licence/:licence/case/:case/statements[/:action][/:id]',
             'constraints' => [
                 'case' => '[0-9]+',
-                'licence' => '[0-9]+'
+                'licence' => '[0-9]+',
+                'id' => '[0-9]+'
             ],
             'defaults' => [
                 'controller' => 'CaseStatementController',
