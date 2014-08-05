@@ -117,10 +117,11 @@ class FinancialHistoryController extends PreviousHistoryController
 
     public static function makeFormAlterations($form, $context, $options)
     {
+        $isReview = isset($options['isReview']) && $options['isReview'];
         $data = $options['data'];
         $fieldset = $form->get($options['fieldset']);
 
-        if (empty($data['insolvencyDetails'])) {
+        if ($isReview && empty($data['insolvencyDetails'])) {
             $fieldset->remove('insolvencyDetails');
         }
 
