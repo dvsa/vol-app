@@ -111,7 +111,7 @@ class ConvictionsPenaltiesController extends PreviousHistoryController
 
     }
 
-    public static function getSummaryTableData($applicationId, $context, $table)
+    public static function getSummaryTableData($applicationId, $context, $table = null)
     {
         $bundle = array(
             'properties' => array(
