@@ -36,7 +36,8 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
                 'redirect',
                 'processAdd',
                 'processEdit',
-                'setBreadcrumb'
+                'setBreadcrumb',
+                'getServiceLocator'
             ]
         );
 
@@ -127,6 +128,10 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->once())
             ->method('generateFormWithData');
+
+        $this->controller->expects($this->once())
+            ->method('getServiceLocator')
+            ->will($this->returnValue($this->getScriptLoadFilesMock()));
 
         $this->controller->expects($this->never())
             ->method('notFoundAction');
@@ -301,6 +306,10 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->once())
             ->method('setBreadcrumb');
+
+        $this->controller->expects($this->once())
+            ->method('getServiceLocator')
+            ->will($this->returnValue($this->getScriptLoadFilesMock()));
 
         $this->controller->editAction();
     }
@@ -548,12 +557,28 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
      */
     public function processAddStayProvider()
     {
-        return array(
-            array(
-                array('case' => 1, 'stayType' => 1, 'licence' => 7, 'fields' => array()),
-                array('case' => 1, 'stayType' => 2, 'licence' => 7, 'fields' => array())
-            ),
-        );
+        return [
+            [
+                [
+                    'case' => 1,
+                    'stayType' => 1,
+                    'licence' => 7,
+                    'fields' => [
+                        'isWithdrawn' => 'Y',
+                        'withdrawnDate' => '2014-01-01'
+                    ]
+                ],
+                [
+                    'case' => 1,
+                    'stayType' => 2,
+                    'licence' => 7,
+                    'fields' => [
+                        'isWithdrawn' => 'Y',
+                        'withdrawnDate' => null
+                    ]
+                ]
+            ]
+        ];
     }
 
     /**
@@ -563,10 +588,32 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
      */
     public function processEditStayProvider()
     {
-        return array(
-            array(array('case' => 1, 'stay' => 1, 'stayType' => 1, 'licence' => 7, 'fields' => array())),
-            array(array('case' => 1, 'stay' => 1, 'stayType' => 2, 'licence' => 7, 'fields' => array())),
-        );
+        return [
+            [
+                [
+                    'case' => 1,
+                    'stay' => 1,
+                    'stayType' => 1,
+                    'licence' => 7,
+                    'fields' => [
+                        'isWithdrawn' => 'Y',
+                        'withdrawnDate' => '2014-01-01'
+                    ]
+                ]
+            ],
+            [
+                [
+                    'case' => 1,
+                    'stay' => 1,
+                    'stayType' => 2,
+                    'licence' => 7,
+                    'fields' => [
+                        'isWithdrawn' => 'N',
+                        'withdrawnDate' => '2014-01-01'
+                    ]
+                ]
+            ],
+        ];
     }
 
     /**
@@ -684,5 +731,20 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
                 ->method('fromRoute')
                 ->with($this->equalTo($with));
         }
+    }
+
+    private function getScriptLoadFilesMock ()
+    {
+        $scriptMock = $this->getMock('\stdClass', ['loadFiles']);
+        $scriptMock->expects($this->any())
+            ->method('loadFiles')
+            ->will($this->returnValue([]));
+
+        $serviceMock = $this->getMock('\stdClass', ['get']);
+        $serviceMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValue($scriptMock));
+
+        return $serviceMock;
     }
 }

@@ -171,9 +171,9 @@ class CaseRevokeControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
-     * Test
+     * @dataProvider licenceTypeDataProvider
      */
-    public function testGenerateForm()
+    public function testGenerateForm($licenceType)
     {
         $formName = 'form';
         $callback = 'myCallback';
@@ -192,15 +192,30 @@ class CaseRevokeControllerTest extends AbstractHttpControllerTestCase
                       ->will($this->returnValue(null));
 
         $form = $this->getMock('\stdClass', ['get']);
-        $form->expects($this->atLeastOnce())->method('get')->will($this->returnValue($formGetPlugin));
+        $form->expects($this->at(0))->method('get')->with('main')
+             ->will($this->returnSelf());
+        $form->expects($this->at(1))->method('get')->with('piReasons')
+             ->will($this->returnValue($formGetPlugin));
+        $form->expects($this->at(2))->method('get')->with('main')
+             ->will($this->returnSelf());
+        $form->expects($this->at(3))->method('get')->with('presidingTc')
+             ->will($this->returnValue($formGetPlugin));
 
-        $controller = $this->getController(['getForm', 'getPiReasonsNvpArray', 'getPresidingTcArray', 'formPost']);
+        $controller = $this->getController(['getForm', 'getPiReasonsNvpArray', 'getPresidingTcArray', 'formPost', 'fromRoute', 'makeRestCall']);
+        $controller->expects($this->once())
+                   ->method('fromRoute')
+                   ->with($this->equalTo('licence'))
+                   ->will($this->returnValue(7));
+        $controller->expects($this->once())
+                   ->method('makeRestCall')
+                   ->will($this->returnValue(['goodsOrPsv' => $licenceType]));
         $controller->expects($this->once())
                    ->method('getForm')
                    ->with($this->equalTo($formName))
                    ->will($this->returnValue($form));
         $controller->expects($this->once())
                    ->method('getPiReasonsNvpArray')
+                ->with($licenceType)
                    ->will($this->returnValue($getPiReasonsNvpArray));
         $controller->expects($this->once())
                    ->method('getPresidingTcArray')
@@ -213,10 +228,17 @@ class CaseRevokeControllerTest extends AbstractHttpControllerTestCase
         $this->assertEquals($form, $controller->generateForm($formName, $callback));
     }
 
+    public function licenceTypeDataProvider ()
+    {
+        return [
+            array('goods','GV'), array('psv','PSV')
+        ];
+    }
+
     /**
-     * Test
+     * @dataProvider licenceTypeDataProvider
      */
-    public function testGetPiReasonsNvpArray()
+    public function testGetPiReasonsNvpArray($licenceType, $shortLicenceType)
     {
         $pi = array(
             'Results' => array(
@@ -240,11 +262,18 @@ class CaseRevokeControllerTest extends AbstractHttpControllerTestCase
                    ->with(
                        $this->equalTo('PiReason'),
                        $this->equalTo('GET'),
-                       $this->equalTo(['proposeToRevoke' => '1', 'limit' => '100', 'page' => '1'])
+                       $this->equalTo(
+                           [
+                                'proposeToRevoke' => '1',
+                                'isDecision' => '0',
+                                'goodsOrPsv' => $shortLicenceType,
+                                'limit' => 'all'
+                           ]
+                       )
                    )
                    ->will($this->returnValue($pi));
 
-        $this->assertEquals($return, $controller->getPiReasonsNvpArray());
+        $this->assertEquals($return, $controller->getPiReasonsNvpArray($licenceType));
     }
 
     /**

@@ -168,7 +168,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
                         $this->getServiceLocatorGetTable()
                     )
                 )
-        );
+            );
 
         $this->controller->expects($this->exactly(1))
             ->method('makeRestCall')
@@ -180,7 +180,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
                         array()
                     )
                 )
-        );
+            );
 
         $this->controller->expects($this->once())
             ->method('getPluginManager')
@@ -395,7 +395,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
                         $this->getPageDataRestArray($licenceId)
                     )
                 )
-        );
+            );
 
         $this->controller->expects($this->once())
             ->method('generateFormWithData');
@@ -929,7 +929,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
             ),
             'case_categories_tm' => array(
                 'case_category.10' => 'Duplicate TM',
-                'case_category.11' => 'Repute / professional comptenece of TM',
+                'case_category.11' => 'Repute / professional competence of TM',
                 'case_category.12' => 'TM Hours'
             ),
             'case_categories_app' => array(
@@ -950,7 +950,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
                 'case_category.25' => 'Financial standing issue (continuation)',
                 'case_category.26' => 'Repute fitness of director',
                 'case_category.27' => 'Period of grace',
-                'case_category.28' => 'Proposal to revoke'
+                'case_category.28' => 'In-Office revocation'
             ),
         );
     }

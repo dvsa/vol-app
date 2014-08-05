@@ -12,6 +12,7 @@ namespace Olcs\Controller;
 
 use Common\Controller\FormActionController;
 use Zend\View\Model\ViewModel;
+use Common\Controller\CrudInterface;
 
 /**
  * ConditionUndertaking controller
@@ -20,8 +21,31 @@ use Zend\View\Model\ViewModel;
  *
  * @author S Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class ConditionUndertakingController extends FormActionController
+class ConditionUndertakingController extends FormActionController implements CrudInterface
 {
+    public function redirectToIndex()
+    {
+        $routeParams = $this->getParams(array('case', 'licence', 'type', 'id'));
+
+        return $this->redirect()->toRoute(
+            'case_conditions_undertakings', array(
+                'licence' => $routeParams['licence'],
+                'case' => $routeParams['case']
+            )
+        );
+    }
+
+    public function deleteAction()
+    {
+        //
+    }
+
+    public function indexAction()
+    {
+        //
+    }
+
+
 
     /**
      * Method to generate the add form
@@ -128,7 +152,7 @@ class ConditionUndertakingController extends FormActionController
         $data = $this->determineFormAttachedTo($data);
 
         $form = $this->generateFormWithData(
-            'condition-undertaking-form', 'processConditionUndertaking', $data, true
+            'condition-undertaking-form', 'processConditionUndertaking', $data
         );
 
         // set the OC address list and label for conditionType

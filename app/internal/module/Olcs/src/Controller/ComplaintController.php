@@ -12,6 +12,7 @@ namespace Olcs\Controller;
 
 use Common\Controller\FormActionController;
 use Zend\View\Model\ViewModel;
+use Common\Controller\CrudInterface;
 
 /**
  * Complaint controller
@@ -20,8 +21,28 @@ use Zend\View\Model\ViewModel;
  *
  * @author S Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class ComplaintController extends FormActionController
+class ComplaintController extends FormActionController implements CrudInterface
 {
+    public function indexAction()
+    {
+        $routeParams = $this->getParams(array('action', 'licence', 'case'));
+
+        return $this->redirect()->toRoute(
+            'case_complaints',
+            array(
+                'case' => $routeParams['case'], 'licence' => $routeParams['licence']
+            )
+        );
+    }
+
+    public function deleteAction()
+    {
+        $this->response->setStatusCode(501);
+
+        return array(
+            'content' => 'Delete Method Not Implemented in ' . __CLASS__
+        );
+    }
 
     /**
      * Add form action

@@ -1,4 +1,8 @@
 <?php
+foreach($this->inlineScript as $inlineScript) {
+    $this->inlineScript()->appendScript($inlineScript);
+}
+
 echo $this->render(
     'partials/page-header.phtml',
     array(
