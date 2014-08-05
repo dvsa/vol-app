@@ -203,17 +203,22 @@ class SummaryController extends ReviewDeclarationsController
         return $final;
     }
 
-    protected function getFormTableData($applicationId, $tableName)
+    protected function getFormTableData($applicationId, $fieldset)
     {
+        // this will contain the actual table config to load
+        $table = $this->formTables[$fieldset];
+
+        // we can use this value to map back to the controller which
+        // knows how to populate its data
         $section = array_search(
-            $this->formTables[$tableName],
+            $table,
             $this->tableConfigs
         );
 
         $controller = $this->getInvokable($section, 'getSummaryTableData');
 
         if ($controller) {
-            return $controller::getSummaryTableData($applicationId, $this);
+            return $controller::getSummaryTableData($applicationId, $this, $table);
         }
     }
 
