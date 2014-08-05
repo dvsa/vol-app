@@ -103,7 +103,7 @@ return [
             'defaults' => [
                 'controller' => 'CaseController',
                 'action' => 'manage',
-                'tab' => 'summary'
+                'tab' => 'overview'
             ]
         ]
     ],
