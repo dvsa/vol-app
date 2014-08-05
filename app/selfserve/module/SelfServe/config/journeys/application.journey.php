@@ -18,6 +18,7 @@ return array(
         ),
         'sections' => array(
             'TypeOfLicence' => array(
+                'collapsible' => true,
                 'restriction' => array(
                     null,
                     'goods',
@@ -91,19 +92,6 @@ return array(
                         'restriction' => array(
                             'org_type.st'
                         ),
-                    )
-                )
-            ),
-            'TaxiPhv' => array(
-                'required' => array(
-                    'TypeOfLicence'
-                ),
-                'restriction' => array(
-                    'psv-special-restricted'
-                ),
-                'subSections' => array(
-                    'Placeholder' => array(
-
                     )
                 )
             ),
@@ -186,6 +174,19 @@ return array(
 
                     ),
                     'ConvictionsPenalties' => array(
+
+                    )
+                )
+            ),
+            'TaxiPhv' => array(
+                'required' => array(
+                    'TypeOfLicence'
+                ),
+                'restriction' => array(
+                    'psv-special-restricted'
+                ),
+                'subSections' => array(
+                    'Licence' => array(
 
                     )
                 )
