@@ -192,8 +192,8 @@ class SubmissionController extends FormActionController implements CrudInterface
 
     /**
      * Returns a submission view containing all sections for add and edit
-     * @param type $submission
-     * @return type
+     * @param array $submission
+     * @return \Zend\View\Model\ViewModel
      */
     public function getSubmissionView($submission)
     {
@@ -295,8 +295,8 @@ class SubmissionController extends FormActionController implements CrudInterface
 
     /**
      * Gets the view for the form based on type
-     * @param type $type
-     * @return type
+     * @param string $type
+     * @return \Zend\View\Model\ViewModel
      */
     public function formView($type)
     {
@@ -321,7 +321,7 @@ class SubmissionController extends FormActionController implements CrudInterface
 
     /**
      * Adds a SubmissionAction entry
-     * @param type $data
+     * @param array $data
      * @return type
      */
     public function processRecDecForm($data)
@@ -353,7 +353,7 @@ class SubmissionController extends FormActionController implements CrudInterface
 
     /**
      * Gets user list for recipients
-     * @return type
+     * @return array
      */
     private function getUserList()
     {
@@ -390,10 +390,8 @@ class SubmissionController extends FormActionController implements CrudInterface
      * 
      * Get Pi Reasons based on licence type and whether the licence is from 
      * Northern Ireland
-     * 
-     * @param string $licenceType
-     * @param bool $isNi
-     * @return type
+     *
+     * @return array
      */
     private function getPiReasons()
     {
@@ -439,7 +437,7 @@ class SubmissionController extends FormActionController implements CrudInterface
 
     /**
      * Overrides abstract class to set breadcrumb for all submission routes
-     * @param type $navRoutes
+     * @param array $navRoutes
      */
     public function setSubmissionBreadcrumb($navRoutes = array())
     {
