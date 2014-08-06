@@ -8,9 +8,7 @@
  */
 namespace Olcs\Controller;
 
-use Common\Form\Elements\Types\Address;
-use Common\Form\Elements\Types\Person;
-use Common\Form\Elements\Types\Defendant;
+use Common\Form\Elements\Types\EntitySearch;
 use Zend\Mvc\MvcEvent;
 
 /**
@@ -32,25 +30,25 @@ class DefendantSearchController extends CaseController
 
         $form = $this->processPostcodeLookup($form);
 
-        $form = $this->processEntityTypeLookup($form);
+        $form = $this->processEntitySearchJourney($form);
 
         return $form;
     }
 
     /**
-     * Process the person lookup functionality
+     * Process the entity lookup functionality
      *
      * @param Form $form
      * @return Form
      */
-    private function processEntityTypeLookup($form)
+    private function processEntitySearchJourney($form)
     {
 
         $fieldsets = $form->getFieldsets();
 
         foreach ($fieldsets as $fieldset) {
-            if ($fieldset instanceof Defendant) {
-                $searchFieldset = $this->processDefendantSearch($fieldset);
+            if ($fieldset instanceof EntitySearch) {
+                $searchFieldset = $this->processEntitySearch($fieldset);
                 if ($searchFieldset instanceof \Common\Form\Elements\Types\PersonSearch) {
                     $elements = $searchFieldset->getElements();
                     foreach($elements as $element) {
@@ -63,6 +61,7 @@ class DefendantSearchController extends CaseController
         return $form;
     }
 
+
     /**
      * Method to manipulate the form as neccessary
      *
@@ -70,7 +69,7 @@ class DefendantSearchController extends CaseController
      * @param array $post
      * @return object
      */
-    private function processDefendantSearch($fieldset)
+    private function processEntitySearch($fieldset)
     {
         $this->setPersist(false);
         $request = $this->getRequest();
@@ -120,6 +119,11 @@ class DefendantSearchController extends CaseController
         }
 
         return $searchFieldset;
+    }
+
+    private function getSearchFieldsetFromPost()
+    {
+
     }
 
     /**
