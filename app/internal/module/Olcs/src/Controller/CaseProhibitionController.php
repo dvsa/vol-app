@@ -19,7 +19,7 @@ class CaseProhibitionController extends CaseController
     /**
      * Index action loads the form data
      *
-     * @return \Zend\Form
+     * @return \Zend\Form\Form
      */
     public function indexAction()
     {
@@ -75,7 +75,7 @@ class CaseProhibitionController extends CaseController
      * Creates and returns the prohibition form.
      *
      * @param array $prohibition
-     * @return \Zend\Form
+     * @return \Zend\Form\Form
      */
     private function generateProhibitionForm($prohibition)
     {
