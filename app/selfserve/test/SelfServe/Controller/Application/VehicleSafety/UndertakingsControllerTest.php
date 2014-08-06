@@ -21,7 +21,7 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
 
     protected $controllerName = '\SelfServe\Controller\Application\VehicleSafety\UndertakingsController';
     protected $defaultRestResponse = array();
-    private $goodsOrPsv;
+    private $taDataResponse;
 
     /**
      * Test back button
@@ -40,6 +40,26 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
      */
     public function testIndexAction()
     {
+        $this->taDataResponse=array(
+                'licence' => array(
+                    'id' => 10,
+                    'version' => 1,
+                    'goodsOrPsv' => 'psv',
+                    'niFlag' => 0,
+                    'licenceType' => 'standard-national',
+                    'organisation' => array(
+                        'organisationType' => 'org_type.lc'
+                    )
+                ),
+                'trafficArea' => array(
+                    'id' => 5,
+                    'applyScottishRules' => false
+                ),
+                'totAuthSmallVehicles' => 1,
+                'totAuthMediumVehicles' => 1,
+                'totAuthLargeVehicles' => 0
+            );
+
         $this->setUpAction('index');
 
         $response = $this->controller->indexAction();
@@ -50,6 +70,293 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
         $form = $this->getFormFromResponse($response);
     }
 
+    /**
+     * Test indexAction
+     */
+    public function testIndexActionWithCase1ShowsFullForm()
+    {
+        $taDataResponse=array(
+                'licence' => array(
+                    'id' => 10,
+                    'version' => 1,
+                    'goodsOrPsv' => 'psv',
+                    'niFlag' => 0,
+                    'licenceType' => 'standard-national',
+                    'organisation' => array(
+                        'organisationType' => 'org_type.lc'
+                    )
+                ),
+                'trafficArea' => array(
+                    'id' => 5,
+                    'applyScottishRules' => false
+                ),
+                'totAuthSmallVehicles' => 1,
+                'totAuthMediumVehicles' => 0,
+                'totAuthLargeVehicles' => 0
+            );
+
+        $presentFields=array(
+                'smallVehiclesIntention' => Array(
+                    'optSmallVehiclesIntention',            // 15b[i]
+                    'txtSmallVehiclesIntentionDetails'      // 15b[ii]
+                ),
+                'smallVehiclesUndertakings' => Array(       // 15c/d
+                    'optSmallVehiclesConfirmation'
+                ),
+                'limousinesNoveltyVehicles' => Array(
+                    'optLimousinesYesNo',                   // 15f[i]
+                                                            // 15f[ii]
+                )
+        );
+
+        $missingFields=array(
+                'nineOrMore' => Array(                      // 15e
+                    'textNineOrMorePassengers'
+                ),
+                'limousinesNoveltyVehicles' => Array(
+                    'optLimousinesNine',                    // 15g
+                )
+        );
+
+        $this->assertFormElements($taDataResponse,$presentFields);
+    }
+
+    /**
+     * Test indexAction
+     */
+    public function testIndexActionWithCase2ShowsFullForm()
+    {
+        $taDataResponse=array(
+                'licence' => array(
+                    'id' => 10,
+                    'version' => 1,
+                    'goodsOrPsv' => 'psv',
+                    'niFlag' => 0,
+                    'licenceType' => 'standard-national',
+                    'organisation' => array(
+                        'organisationType' => 'org_type.lc'
+                    )
+                ),
+                'trafficArea' => array(
+                    'id' => 8,
+                    'applyScottishRules' => true
+                ),
+                'totAuthSmallVehicles' => 1,
+                'totAuthMediumVehicles' => 0,
+                'totAuthLargeVehicles' => 0
+            );
+
+        $presentFields=array(
+                'smallVehiclesUndertakings' => Array(       // 15c/d
+                    'optSmallVehiclesConfirmation'
+                ),
+                'limousinesNoveltyVehicles' => Array(
+                    'optLimousinesYesNo',                   // 15f[i]
+                                                            // 15f[ii]
+                )
+        );
+
+        $missingFields=array(
+                'smallVehiclesIntention' => Array(
+                    'optSmallVehiclesIntention',            // 15b[i]
+                    'txtSmallVehiclesIntentionDetails'      // 15b[ii]
+                ),
+                'nineOrMore' => Array(                      // 15e
+                    'textNineOrMorePassengers'
+                ),
+                'limousinesNoveltyVehicles' => Array(
+                    'optLimousinesNine',                    // 15g
+                )
+        );
+
+        $this->assertFormElements($taDataResponse,$presentFields,$missingFields);
+    }
+
+    /**
+     * Test indexAction
+     */
+    public function testIndexActionWithCase3ShowsFullForm()
+    {
+        $taDataResponse=array(
+                'licence' => array(
+                    'id' => 10,
+                    'version' => 1,
+                    'goodsOrPsv' => 'psv',
+                    'niFlag' => 0,
+                    'licenceType' => 'standard-national',
+                    'organisation' => array(
+                        'organisationType' => 'org_type.lc'
+                    )
+                ),
+                'trafficArea' => array(
+                    'id' => 5,
+                    'applyScottishRules' => false
+                ),
+                'totAuthSmallVehicles' => 0,
+                'totAuthMediumVehicles' => 1,
+                'totAuthLargeVehicles' => 0
+            );
+
+        $presentFields=array(
+                'nineOrMore' => Array(                      // 15e
+                    'textNineOrMorePassengers'
+                ),
+                'limousinesNoveltyVehicles' => Array(
+                    'optLimousinesYesNo',                   // 15f[i]
+                                                            // 15f[ii]
+                ),
+                'limousinesNoveltyVehicles' => Array(
+                    'optLimousinesNine',                    // 15g
+                )
+        );
+
+        $missingFields=array(
+                'smallVehiclesUndertakings' => Array(       // 15c/d
+                    'optSmallVehiclesConfirmation'
+                ),
+                'smallVehiclesIntention' => Array(
+                    'optSmallVehiclesIntention',            // 15b[i]
+                    'txtSmallVehiclesIntentionDetails'      // 15b[ii]
+                ),
+        );
+
+        $this->assertFormElements($taDataResponse,$presentFields,$missingFields);
+    }
+
+    /**
+     * Test indexAction
+     */
+    public function testIndexActionWithCase4ShowsFullForm()
+    {
+        $taDataResponse=array(
+                'licence' => array(
+                    'id' => 10,
+                    'version' => 1,
+                    'goodsOrPsv' => 'psv',
+                    'niFlag' => 0,
+                    'licenceType' => 'standard-national',
+                    'organisation' => array(
+                        'organisationType' => 'org_type.lc'
+                    )
+                ),
+                'trafficArea' => array(
+                    'id' => 5,
+                    'applyScottishRules' => false
+                ),
+                'totAuthSmallVehicles' => 1,
+                'totAuthMediumVehicles' => 1,
+                'totAuthLargeVehicles' => 1
+            );
+
+        $presentFields=array(
+                'smallVehiclesIntention' => Array(
+                    'optSmallVehiclesIntention',            // 15b[i]
+                    'txtSmallVehiclesIntentionDetails'      // 15b[ii]
+                ),
+                'smallVehiclesUndertakings' => Array(       // 15c/d
+                    'optSmallVehiclesConfirmation'
+                ),
+                'limousinesNoveltyVehicles' => Array(
+                    'optLimousinesYesNo',                   // 15f[i]
+                                                            // 15f[ii]
+                ),
+                'limousinesNoveltyVehicles' => Array(
+                    'optLimousinesNine',                    // 15g
+                )
+        );
+
+        $missingFields=array(
+                'nineOrMore' => Array(                      // 15e
+                    'textNineOrMorePassengers'
+                ),
+        );
+
+        $this->assertFormElements($taDataResponse,$presentFields,$missingFields);
+    }
+
+    /**
+     * Test indexAction
+     */
+    public function testIndexActionWithCase5ShowsFullForm()
+    {
+        $taDataResponse=array(
+                'licence' => array(
+                    'id' => 10,
+                    'version' => 1,
+                    'goodsOrPsv' => 'psv',
+                    'niFlag' => 0,
+                    'licenceType' => 'standard-national',
+                    'organisation' => array(
+                        'organisationType' => 'org_type.lc'
+                    )
+                ),
+                'trafficArea' => array(
+                    'id' => 5,
+                    'applyScottishRules' => true
+                ),
+                'totAuthSmallVehicles' => 1,
+                'totAuthMediumVehicles' => 1,
+                'totAuthLargeVehicles' => 1
+            );
+
+        $presentFields=array(
+                'smallVehiclesUndertakings' => Array(       // 15c/d
+                    'optSmallVehiclesConfirmation'
+                ),
+                'limousinesNoveltyVehicles' => Array(
+                    'optLimousinesYesNo',                   // 15f[i]
+                                                            // 15f[ii]
+                ),
+                'limousinesNoveltyVehicles' => Array(
+                    'optLimousinesNine',                    // 15g
+                )
+        );
+
+        $missingFields=array(
+                'smallVehiclesIntention' => Array(
+                    'optSmallVehiclesIntention',            // 15b[i]
+                    'txtSmallVehiclesIntentionDetails'      // 15b[ii]
+                ),
+                'nineOrMore' => Array(                      // 15e
+                    'textNineOrMorePassengers'
+                ),
+        );
+
+        $this->assertFormElements($taDataResponse,$presentFields,$missingFields);
+    }
+
+    protected function assertFormElements($responseArray, $present = array(), $missing = array())
+    {
+        $this->taDataResponse=$responseArray;
+        $this->setUpAction('index');
+
+        foreach($present as $fieldsetName => $fieldsetElements) {
+            $fieldset = $this->getFormFromResponse(
+                $this->controller->indexAction()
+            )->get($fieldsetName);
+            foreach($fieldsetElements as $element) {
+                $this->assertTrue($fieldset->has($element));
+            }
+        }
+
+        foreach ($missing as $fieldsetName => $fieldsetElements) {
+            if ( $this->getFormFromResponse(
+                        $this->controller->indexAction()
+                    )->has($fieldsetName) ) {
+                $fieldset = $this->getFormFromResponse(
+                    $this->controller->indexAction()
+                )->get($fieldsetName);
+                foreach($fieldsetElements as $element) {
+                    // echo "assert false '".$element."' - is that '".($fieldset->has($element)?"TRUE":"FALSE")."'";
+                    $this->assertFalse($fieldset->has($element));
+                }
+            } else {
+                $this->assertFalse($this->getFormFromResponse(
+                                        $this->controller->indexAction()
+                                    )->has($fieldsetName));
+            }
+        }
+    }
 
     /**
      * Mock the rest call
@@ -91,25 +398,7 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
         );
 
         if ($service == 'Application' && $method == 'GET' && $bundle == $taDataBundle) {
-            return array(
-                'licence' => array(
-                    'id' => 10,
-                    'version' => 1,
-                    'goodsOrPsv' => 'psv',
-                    'niFlag' => 0,
-                    'licenceType' => 'standard-national',
-                    'organisation' => array(
-                        'organisationType' => 'org_type.lc'
-                    )
-                ),
-                'trafficArea' => array(
-                    'id' => 5,
-                    'applyScottishRules' => false
-                ),
-                'totAuthSmallVehicles' => 1,
-                'totAuthMediumVehicles' => 1,
-                'totAuthLargeVehicles' => 0
-            );
+            return $this->taDataResponse;
         }
 
         if ($service == 'ApplicationCompletion' && $method == 'GET') {

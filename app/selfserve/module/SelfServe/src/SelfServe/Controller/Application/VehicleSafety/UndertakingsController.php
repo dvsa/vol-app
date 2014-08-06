@@ -82,7 +82,6 @@ class UndertakingsController extends VehicleSafetyController
      */
     protected function actionSave($data, $service = null)
     {
-        $this->saveVehicle($data, $this->getActionName());
     }
 
     /**
@@ -105,19 +104,35 @@ class UndertakingsController extends VehicleSafetyController
     protected function alterForm($form)
     {
         $data = $this->load($this->getIdentifier());
-        
+
+        // If this traffic area has no Scottish Rules flag, set it to false.
         if ( !isset($data['trafficArea']['applyScottishRules']) ) {
             $data['trafficArea']['applyScottishRules']=false;
         }
 
+        // In some cases, totAuthSmallVehicles etc. can be set NULL, and we
+        // need to evaluate as zero, so fix that here.
         if ( is_null($data['totAuthSmallVehicles']) ) {
+            $data['totAuthSmallVehicles']=0;
+        }
+
+        if ( is_null($data['totAuthMediumVehicles']) ) {
+            $data['totAuthMediumVehicles']=0;
+        }
+
+        if ( is_null($data['totAuthLargeVehicles']) ) {
+            $data['totAuthLargeVehicles']=0;
+        }
+
+        // Now remove the form fields we don't need to display to the user.
+        if ( $data['totAuthSmallVehicles'] == 0 ) {
             // no smalls - case 3
             $form->remove('smallVehiclesIntention');
-            $form->remove('smallVehiclesUndertaking');
+            $form->remove('smallVehiclesUndertakings');
         } else {
             // Small vehicles - cases 1, 2, 4, 5
-            if ( is_null($data['totAuthMediumVehicles'])
-                    && is_null($data['totAuthLargeVehicles']) ) {
+            if ( ( $data['totAuthMediumVehicles'] == 0 )
+                    && ( $data['totAuthLargeVehicles'] == 0 ) ) {
                 // Small only, cases 1, 2
                 if ( $data['trafficArea']['applyScottishRules'] ) {
                     // Case 2 - Scottish small only
