@@ -220,7 +220,7 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
      */
     public function testEditActionFailStay()
     {
-        $this->getFromRoute(0, 'stay', false);
+        $this->getFromRoute(0, 'id', false);
 
         $this->controller->expects($this->at(1))
             ->method('makeRestCall')
@@ -237,7 +237,7 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
      */
     public function testEditActionFailCase()
     {
-        $this->getFromRoute(0, 'stay', false);
+        $this->getFromRoute(0, 'id', false);
 
         $this->controller->expects($this->at(1))
             ->method('makeRestCall')
@@ -257,7 +257,7 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
      */
     public function testEditActionFailStayType($stayTypeId)
     {
-        $this->getFromRoute(0, 'stay', false);
+        $this->getFromRoute(0, 'id', false);
 
         $this->controller->expects($this->once())
             ->method('makeRestCall')
@@ -287,7 +287,7 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
      */
     public function testEditAction($caseId, $stayTypeId, $stayId, $licenceId)
     {
-        $this->getFromRoute(0, 'stay', $stayId);
+        $this->getFromRoute(0, 'id', $stayId);
 
         $this->controller->expects($this->at(1))
             ->method('makeRestCall')

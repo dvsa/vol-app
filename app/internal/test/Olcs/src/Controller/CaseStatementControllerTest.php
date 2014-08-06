@@ -228,7 +228,7 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
 
         $controller->expects($this->at(2))
             ->method('fromRoute')
-            ->with('statement')
+            ->with('id')
             ->will($this->returnValue($statementId));
 
         $controller->expects($this->once())

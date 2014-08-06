@@ -7,9 +7,11 @@
  */
 
 namespace Olcs\Controller;
+
 use Olcs\Controller\Traits\DeleteActionTrait;
 
 use Common\Controller\CrudInterface;
+
 /**
  * Case Appeal Controller
  *
@@ -95,7 +97,7 @@ class CaseAppealController extends CaseController implements CrudInterface
      */
     public function editAction()
     {
-        $appealId = $this->fromRoute('appeal');
+        $appealId = $this->fromRoute('id');
         $licenceId = $this->fromRoute('licence');
 
         $bundle = array(

@@ -7,6 +7,7 @@
  */
 
 namespace Olcs\Controller;
+
 use Olcs\Controller\Traits\DeleteActionTrait;
 use Zend\View\Model\ViewModel;
 

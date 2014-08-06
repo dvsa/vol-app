@@ -257,11 +257,6 @@ class CaseController extends FormActionController
                 'label' => 'Stays & Appeals',
                 'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'stays'], [], true),
             ],
-            'complaints' => [
-                'key' => 'complaints',
-                'label' => 'Complaints',
-                'url' => $pm->get('url')->fromRoute('case_complaints', ['tab' => 'complaints'], [], true),
-            ],
             'documents' => [
                 'key' => 'documents',
                 'label' => 'Documents',
