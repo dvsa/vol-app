@@ -8,6 +8,7 @@
 
 namespace Olcs\Controller;
 
+use Olcs\Controller\Traits\DeleteActionTrait;
 use Zend\View\Model\ViewModel;
 use Common\Controller\CrudInterface;
 
@@ -16,6 +17,7 @@ use Common\Controller\CrudInterface;
  */
 class CaseStayController extends CaseController implements CrudInterface
 {
+    use DeleteActionTrait;
 
 
     /**
@@ -56,6 +58,16 @@ class CaseStayController extends CaseController implements CrudInterface
     private function getStayTypes()
     {
         return $this->stayTypes;
+    }
+
+    /**
+     * Should return the name of the service to call for deleting the item
+     *
+     * @return string
+     */
+    public function getDeleteServiceName()
+    {
+        return 'Stay';
     }
 
     /**

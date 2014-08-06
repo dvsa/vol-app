@@ -11,6 +11,7 @@ namespace Olcs\Controller\Submission;
 
 use Common\Controller\CrudInterface;
 use Common\Controller\FormActionController;
+use Olcs\Controller\Traits\DeleteActionTrait;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -22,6 +23,17 @@ use Zend\View\Model\ViewModel;
 class SubmissionController extends FormActionController implements CrudInterface
 {
     use SubmissionSectionTrait;
+    use DeleteActionTrait;
+
+    /**
+     * Should return the name of the service to call for deleting the item
+     *
+     * @return string
+     */
+    public function getDeleteServiceName()
+    {
+        return 'Submission';
+    }
 
     public $routeParams = array();
 
@@ -51,18 +63,6 @@ class SubmissionController extends FormActionController implements CrudInterface
                 'case' => $caseId,
                 'id' => $id,
             )
-        );
-    }
-
-    /**
-     * @return mixed
-     */
-    public function deleteAction()
-    {
-        $this->response->setStatusCode(501);
-
-        return array(
-            'content' => 'Delete Method Not Implemented in ' . __CLASS__
         );
     }
 

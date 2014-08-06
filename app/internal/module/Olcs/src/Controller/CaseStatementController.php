@@ -7,6 +7,7 @@
  */
 
 namespace Olcs\Controller;
+use Olcs\Controller\Traits\DeleteActionTrait;
 
 use Common\Controller\CrudInterface;
 /**
@@ -16,6 +17,13 @@ use Common\Controller\CrudInterface;
  */
 class CaseStatementController extends CaseController implements CrudInterface
 {
+    use DeleteActionTrait;
+
+    public function getDeleteServiceName()
+    {
+        return 'Statement';
+    }
+
     /**
      * Show a table of statements for the given case
      *
@@ -147,35 +155,6 @@ class CaseStatementController extends CaseController implements CrudInterface
         $data['details']['contactType'] = 'contact_type.' . $data['details']['contactType'];
 
         return $data;
-    }
-
-    /**
-     * Delete action
-     */
-    public function deleteAction()
-    {
-        $caseId = $this->fromRoute('case');
-
-        $bundle = array(
-            'children' => array(
-                'case' => array(
-                    'properties' => 'ALL',
-                )
-            )
-        );
-
-        $statementId = $this->fromRoute('statement');
-
-        // Check that the statement belongs to the case before deleting
-        $results = $this->makeRestCall('Statement', 'GET', array('id' => $statementId), $bundle);
-
-        if (isset($results['case']) && $results['case']['id'] == $caseId) {
-
-            $this->makeRestCall('Statement', 'DELETE', array('id' => $statementId));
-            return $this->redirect()->toRoute('case_statement', ['statement'=>''], [], true);
-        }
-
-        return $this->notFoundAction();
     }
 
     /**

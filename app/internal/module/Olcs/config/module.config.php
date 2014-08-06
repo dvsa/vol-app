@@ -211,7 +211,7 @@ return array(
                 'options' => array(
                     'route' => '/licence/[:licence]/case/[:case]/conviction[/:action][/][:id]',
                     'defaults' => array(
-                        'controller' => 'ConvictionController',
+                        'controller' => 'CaseConvictionController',
                     )
                 )
             ),
@@ -248,10 +248,11 @@ return array(
                     'route' => '/licence/:licence/case/:case/complaints/:action[/:id]',
                     'constraints' => array(
                         'case' => '[0-9]+',
+                        'licence' => '[0-9]+',
                         'id' => '[0-9]+'
                     ),
                     'defaults' => array(
-                        'controller' => 'ComplaintController',
+                        'controller' => 'CaseComplaintController',
                     )
                 )
             ),
@@ -295,7 +296,7 @@ return array(
                         'id' => '[0-9]+'
                     ),
                     'defaults' => array(
-                        'controller' => 'ConditionUndertakingController',
+                        'controller' => 'CaseConditionUndertakingController',
                         'type' => 'condition'
                     )
                 )
@@ -311,7 +312,7 @@ return array(
                         'id' => '[0-9]+'
                     ),
                     'defaults' => array(
-                        'controller' => 'ConditionUndertakingController',
+                        'controller' => 'CaseConditionUndertakingController',
                         'type' => 'undertaking'
                     )
                 )
@@ -393,20 +394,15 @@ return array(
             'IndexController' => 'Olcs\Controller\IndexController',
             'SearchController' => 'Olcs\Controller\SearchController',
             'CaseController' => 'Olcs\Controller\CaseController',
-            'ConvictionController' => 'Olcs\Controller\ConvictionController',
-            'CaseConvictionController' => 'Olcs\Controller\CaseConvictionController',
-            'CaseStatementController' => 'Olcs\Controller\CaseStatementController',
             'CaseStatementController' => 'Olcs\Controller\CaseStatementController',
             'CaseAppealController' => 'Olcs\Controller\CaseAppealController',
             'CaseComplaintController' => 'Olcs\Controller\CaseComplaintController',
-            'ComplaintController' => 'Olcs\Controller\ComplaintController',
             'CaseConvictionController' => 'Olcs\Controller\CaseConvictionController',
             'SubmissionController' => 'Olcs\Controller\Submission\SubmissionController',
             'CaseStayController' => 'Olcs\Controller\CaseStayController',
             'CasePenaltyController' => 'Olcs\Controller\CasePenaltyController',
             'CaseProhibitionController' => 'Olcs\Controller\CaseProhibitionController',
             'CaseAnnualTestHistoryController' => 'Olcs\Controller\CaseAnnualTestHistoryController',
-            'ConditionUndertakingController' => 'Olcs\Controller\ConditionUndertakingController',
             'SubmissionNoteController' => 'Olcs\Controller\Submission\SubmissionNoteController',
             'CaseImpoundingController' => 'Olcs\Controller\CaseImpoundingController',
             'CaseConditionUndertakingController' => 'Olcs\Controller\CaseConditionUndertakingController',

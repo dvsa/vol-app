@@ -7,6 +7,7 @@
  */
 
 namespace Olcs\Controller;
+use Olcs\Controller\Traits\DeleteActionTrait;
 
 use Common\Controller\CrudInterface;
 /**
@@ -16,6 +17,18 @@ use Common\Controller\CrudInterface;
  */
 class CaseAppealController extends CaseController implements CrudInterface
 {
+    use DeleteActionTrait;
+
+    /**
+     * Should return the name of the service to call for deleting the item
+     *
+     * @return string
+     */
+    public function getDeleteServiceName()
+    {
+        return 'Appeal';
+    }
+
     /**
      * Does what it says on the tin.
      *
