@@ -1,15 +1,16 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: valtech
- * Date: 04/08/14
- * Time: 09:09
- */
 
 namespace OlcsTest\Controller\Traits;
 
+/**
+ * Class DeleteActionTraitTest
+ * @package OlcsTest\Controller\Traits
+ */
 class DeleteActionTraitTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     *
+     */
     public function testDeleteAction()
     {
         $mockBuilder = $this->getMockBuilder('Olcs\Controller\Traits\DeleteActionTrait');
@@ -32,4 +33,3 @@ class DeleteActionTraitTest extends \PHPUnit_Framework_TestCase
 
     }
 }
- 

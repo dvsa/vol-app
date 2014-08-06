@@ -264,7 +264,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
                         )
                     )
                 )
-        );
+            );
 
         $serviceLocator = $this->getMock('\stdClass', array('get'));
 

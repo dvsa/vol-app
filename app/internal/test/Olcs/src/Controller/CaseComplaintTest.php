@@ -15,7 +15,7 @@ use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
  *
  * @author Shaun Lizzio  <shaun.lizzio@valtech.co.uk>
  */
-class CaseComplaintControllerTest extends AbstractHttpControllerTestCase
+class CaseComplaintTest extends AbstractHttpControllerTestCase
 {
     public function setUp()
     {
