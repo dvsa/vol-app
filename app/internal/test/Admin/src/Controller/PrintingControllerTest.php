@@ -42,7 +42,7 @@ class PrintingControllerTest extends AbstractHttpControllerTestCase
 
         $this->view->expects($this->once())
             ->method('setTemplate')
-            ->with('admin/page/printing');
+            ->with('printing/index');
 
         $this->assertSame($this->view, $this->controller->indexAction());
     }

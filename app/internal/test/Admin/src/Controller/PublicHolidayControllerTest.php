@@ -42,7 +42,7 @@ class PublicHolidayControllerTest extends AbstractHttpControllerTestCase
 
         $this->view->expects($this->once())
             ->method('setTemplate')
-            ->with('admin/page/public-holiday');
+            ->with('public-holiday/index');
 
         $this->assertSame($this->view, $this->controller->indexAction());
     }

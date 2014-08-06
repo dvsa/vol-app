@@ -42,7 +42,7 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
 
         $this->view->expects($this->once())
             ->method('setTemplate')
-            ->with('admin/home');
+            ->with('home');
 
         $this->assertSame($this->view, $this->controller->indexAction());
     }

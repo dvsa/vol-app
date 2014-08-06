@@ -42,7 +42,7 @@ class PublicationControllerTest extends AbstractHttpControllerTestCase
 
         $this->view->expects($this->once())
             ->method('setTemplate')
-            ->with('admin/page/publication');
+            ->with('publication/index');
 
         $this->assertSame($this->view, $this->controller->indexAction());
     }

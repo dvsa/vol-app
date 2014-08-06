@@ -42,7 +42,7 @@ class ScanningControllerTest extends AbstractHttpControllerTestCase
 
         $this->view->expects($this->once())
             ->method('setTemplate')
-            ->with('admin/page/scanning');
+            ->with('scanning/index');
 
         $this->assertSame($this->view, $this->controller->indexAction());
     }

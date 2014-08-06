@@ -42,7 +42,7 @@ class FinancialStandingControllerTest extends AbstractHttpControllerTestCase
 
         $this->view->expects($this->once())
             ->method('setTemplate')
-            ->with('admin/page/financial-standing');
+            ->with('financial-standing/index');
 
         $this->assertSame($this->view, $this->controller->indexAction());
     }

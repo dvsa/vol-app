@@ -42,7 +42,7 @@ class SystemMessageControllerTest extends AbstractHttpControllerTestCase
 
         $this->view->expects($this->once())
             ->method('setTemplate')
-            ->with('admin/page/system-message');
+            ->with('system-message/index');
 
         $this->assertSame($this->view, $this->controller->indexAction());
     }

@@ -42,7 +42,7 @@ class ReportControllerTest extends AbstractHttpControllerTestCase
 
         $this->view->expects($this->once())
             ->method('setTemplate')
-            ->with('admin/page/report');
+            ->with('report/index');
 
         $this->assertSame($this->view, $this->controller->indexAction());
     }

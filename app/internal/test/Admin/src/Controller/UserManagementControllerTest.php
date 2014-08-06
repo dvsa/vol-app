@@ -42,7 +42,7 @@ class UserManagementControllerTest extends AbstractHttpControllerTestCase
 
         $this->view->expects($this->once())
             ->method('setTemplate')
-            ->with('admin/page/user-management');
+            ->with('user-management/index');
 
         $this->assertSame($this->view, $this->controller->indexAction());
     }

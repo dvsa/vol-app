@@ -42,7 +42,7 @@ class ContinuationControllerTest extends AbstractHttpControllerTestCase
 
         $this->view->expects($this->once())
             ->method('setTemplate')
-            ->with('admin/page/continuation');
+            ->with('continuation/index');
 
         $this->assertSame($this->view, $this->controller->indexAction());
     }
