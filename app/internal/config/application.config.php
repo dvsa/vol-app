@@ -4,6 +4,7 @@ return array(
     'modules' => array(
         // 'Application',
         'Olcs',
+        'Admin',
         'Common',
         'DoctrineModule',
         'DoctrineORMModule',
