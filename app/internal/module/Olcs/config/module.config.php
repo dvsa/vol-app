@@ -39,16 +39,14 @@ return array(
             'olcs/view' => dirname(__DIR__) . '/view',
         )
     ),
-<<<<<<< HEAD
     'view_helpers' => array(
         'invokables' => array(
             'olcsMenu' => 'Olcs\View\Helper\Navigation\Menu'
         )
     ),
-    'local_forms_path' => __DIR__ . '/../src/Form/Forms/',
-=======
-    'local_forms_path' => [__DIR__ . '/../src/Form/Forms/'],
->>>>>>> 5598d96268e2700dea90f3fb107cb76bceec702e
+    'local_forms_path' => array(
+        __DIR__ . '/../src/Form/Forms/'
+    ),
     //-------- Start navigation -----------------
     'navigation' => array(
         'default' => array(
@@ -57,6 +55,8 @@ return array(
     ),
     //-------- End navigation -----------------
     'submission_config' => include __DIR__ . '/submission/submission.config.php',
-    'local_scripts_path' => [__DIR__ . '/../assets/js/inline/'],
+    'local_scripts_path' => array(
+        __DIR__ . '/../assets/js/inline/'
+    ),
     'asset_path' => '//olcs-frontend'
 );
