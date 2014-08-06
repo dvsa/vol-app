@@ -3,22 +3,27 @@
 return array(
     'label' => 'Home',
     'route' => 'dashboard',
+    'use_route_match' => true,
     'pages' => array(
         array(
             'label' => 'Search',
             'route' => 'search',
+            'use_route_match' => true,
             'pages' => array(
                 array(
                     'label' => 'Operators',
-                    'route' => 'operators/operators-params',
+                    'route' => 'operators',
+                    'use_route_match' => true,
                     'pages' => array(
                         array(
                             'label' => 'Case list',
-                            'route' => 'licence_case_list/pagination',
+                            'route' => 'licence_case_list',
+                            'use_route_match' => true,
                             'pages' => array(
                                 array(
                                     'label' => 'Case Summary',
                                     'route' => 'case_manage',
+                                    'use_route_match' => true,
                                     'pages' => array(
                                         array(
                                         'label' => 'Case Submission',
@@ -69,6 +74,7 @@ return array(
                                 array(
                                     'label' => 'Case Convictions',
                                     'route' => 'case_convictions',
+                                    'use_route_match' => true,
                                     'pages' => array(
                                         array(
                                             'label' => 'Add Conviction',
@@ -163,6 +169,7 @@ return array(
                                     'label' => 'Case Complaints',
                                     'route' => 'case_complaints',
                                     'action' => 'index',
+                                    'use_route_match' => true,
                                     'pages' => array(
                                         array(
                                             'label' => 'Add Complaint',
@@ -194,6 +201,7 @@ return array(
                                     'label' => 'Conditions &amp; Undertakings',
                                     'route' => 'case_conditions_undertakings',
                                     'action' => 'index',
+                                    'use_route_match' => true,
                                     'pages' => array(
                                         array(
                                             'label' => 'Add Condition',

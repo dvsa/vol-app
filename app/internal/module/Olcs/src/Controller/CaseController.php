@@ -18,7 +18,6 @@ use Zend\View\Model\ViewModel;
  */
 class CaseController extends FormActionController
 {
-
     /**
      * Manage action.
      */
@@ -257,11 +256,6 @@ class CaseController extends FormActionController
                 'key' => 'stays',
                 'label' => 'Stays & Appeals',
                 'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'stays'], [], true),
-            ],
-            'complaints' => [
-                'key' => 'complaints',
-                'label' => 'Complaints',
-                'url' => $pm->get('url')->fromRoute('case_complaints', ['tab' => 'complaints'], [], true),
             ],
             'documents' => [
                 'key' => 'documents',

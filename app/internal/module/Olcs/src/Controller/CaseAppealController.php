@@ -8,7 +8,10 @@
 
 namespace Olcs\Controller;
 
+use Olcs\Controller\Traits\DeleteActionTrait;
+
 use Common\Controller\CrudInterface;
+
 /**
  * Case Appeal Controller
  *
@@ -16,6 +19,18 @@ use Common\Controller\CrudInterface;
  */
 class CaseAppealController extends CaseController implements CrudInterface
 {
+    use DeleteActionTrait;
+
+    /**
+     * Should return the name of the service to call for deleting the item
+     *
+     * @return string
+     */
+    public function getDeleteServiceName()
+    {
+        return 'Appeal';
+    }
+
     /**
      * Does what it says on the tin.
      *
@@ -82,7 +97,7 @@ class CaseAppealController extends CaseController implements CrudInterface
      */
     public function editAction()
     {
-        $appealId = $this->fromRoute('appeal');
+        $appealId = $this->fromRoute('id');
         $licenceId = $this->fromRoute('licence');
 
         $bundle = array(

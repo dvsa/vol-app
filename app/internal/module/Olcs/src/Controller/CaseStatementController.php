@@ -8,7 +8,10 @@
 
 namespace Olcs\Controller;
 
+use Olcs\Controller\Traits\DeleteActionTrait;
+
 use Common\Controller\CrudInterface;
+
 /**
  * Case Statement Controller
  *
@@ -16,6 +19,13 @@ use Common\Controller\CrudInterface;
  */
 class CaseStatementController extends CaseController implements CrudInterface
 {
+    use DeleteActionTrait;
+
+    public function getDeleteServiceName()
+    {
+        return 'Statement';
+    }
+
     /**
      * Show a table of statements for the given case
      *
@@ -28,7 +38,7 @@ class CaseStatementController extends CaseController implements CrudInterface
 
         $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licenceId)));
 
-        $this->checkForCrudAction('case_statement', array('case' => $caseId), 'statement', true);
+        $this->checkForCrudAction('case_statement', array('case' => $caseId));
 
         $results = $this->makeRestCall('Statement', 'GET', array('caseId' => $caseId));
 
@@ -86,7 +96,7 @@ class CaseStatementController extends CaseController implements CrudInterface
     {
         $caseId = $this->fromRoute('case');
         $licenceId = $this->fromRoute('licence');
-        $statementId = $this->fromRoute('statement');
+        $statementId = $this->fromRoute('id');
 
         $this->setBreadcrumb(
             array(
@@ -147,35 +157,6 @@ class CaseStatementController extends CaseController implements CrudInterface
         $data['details']['contactType'] = 'contact_type.' . $data['details']['contactType'];
 
         return $data;
-    }
-
-    /**
-     * Delete action
-     */
-    public function deleteAction()
-    {
-        $caseId = $this->fromRoute('case');
-
-        $bundle = array(
-            'children' => array(
-                'case' => array(
-                    'properties' => 'ALL',
-                )
-            )
-        );
-
-        $statementId = $this->fromRoute('statement');
-
-        // Check that the statement belongs to the case before deleting
-        $results = $this->makeRestCall('Statement', 'GET', array('id' => $statementId), $bundle);
-
-        if (isset($results['case']) && $results['case']['id'] == $caseId) {
-
-            $this->makeRestCall('Statement', 'DELETE', array('id' => $statementId));
-            return $this->redirect()->toRoute('case_statement', ['statement'=>''], [], true);
-        }
-
-        return $this->notFoundAction();
     }
 
     /**
