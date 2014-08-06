@@ -185,7 +185,7 @@ class SummaryControllerTest extends AbstractApplicationControllerTestCase
                 'penalty'
             ),
         );
-        if ($service == 'Conviction' && $method = 'GET' && $bundle == $convictionDataBundle) {
+        if ($service == 'Conviction' && $method === 'GET' && $bundle == $convictionDataBundle) {
             return array(
                 'Count'  => 1,
                 'Results' => array(
