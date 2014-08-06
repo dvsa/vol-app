@@ -16,6 +16,11 @@ use Zend\View\Model\ViewModel;
  */
 class SummaryController extends ReviewDeclarationsController
 {
+    /**
+     * don't ever attempt to validate forms on this page
+     *
+     * @var bool
+     */
     protected $validateForm = false;
 
     /**
@@ -190,6 +195,15 @@ class SummaryController extends ReviewDeclarationsController
         return $data;
     }
 
+    /**
+     * Simple helper to map a subset of an input array
+     * into an output array, as long as they exist
+     *
+     * @param array $map
+     * @param array $data
+     *
+     * @return array
+     */
     protected function mapApplicationVariables($map, $data)
     {
         $final = array();
@@ -203,6 +217,11 @@ class SummaryController extends ReviewDeclarationsController
         return $final;
     }
 
+    /**
+     * Override the abstract method to get form data on a per-fieldset
+     * basis, deferring to the relevant controller's data method to
+     * fulfil the request
+     */
     protected function getFormTableData($applicationId, $fieldset)
     {
         // this will contain the actual table config to load
@@ -222,6 +241,12 @@ class SummaryController extends ReviewDeclarationsController
         }
     }
 
+    /**
+     * Helper method to try and automagically generate as much as we can based
+     * on the form config which drives this page. This exists to stop us having to
+     * repeat a lot of code, albeit in slightly different ways, between the
+     * form config and this controller
+     */
     private function generateSummary()
     {
         $this->summarySections = [];
@@ -247,6 +272,15 @@ class SummaryController extends ReviewDeclarationsController
         }
     }
 
+    /**
+     * Determine whether a) a controller exists and b) whether it has an
+     * invokable method we want to call
+     *
+     * @param string $section
+     * @param string $method
+     *
+     * @return Controller
+     */
     private function getInvokable($section, $method)
     {
         list($section, $subSection) = explode('/', $section);
@@ -257,6 +291,14 @@ class SummaryController extends ReviewDeclarationsController
         return null;
     }
 
+    /**
+     * Retrieve all the fieldsets within a form which relate to a given section
+     *
+     * @param Form $form
+     * @param string $fieldsetName
+     *
+     * @return array
+     */
     private function getSectionFieldsets($form, $fieldsetName)
     {
         $fieldsets = array_keys($form->getFieldsets());

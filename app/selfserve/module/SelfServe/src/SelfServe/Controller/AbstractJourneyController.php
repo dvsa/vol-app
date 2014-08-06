@@ -1203,6 +1203,11 @@ abstract class AbstractJourneyController extends AbstractController
         return $processedData;
     }
 
+    /**
+     * Simple helper method to load the current application
+     *
+     * @return array
+     */
     protected function loadCurrent()
     {
         return $this->load($this->getIdentifier());

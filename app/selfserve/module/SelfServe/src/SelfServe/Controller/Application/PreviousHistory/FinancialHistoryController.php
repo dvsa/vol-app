@@ -115,6 +115,11 @@ class FinancialHistoryController extends PreviousHistoryController
         return array('data' => $oldData);
     }
 
+    /**
+     * Make any relevant form alterations before rendering. In this case
+     * we don't show the insolvency details data if it's empty and we're
+     * on a review page
+     */
     public static function makeFormAlterations($form, $context, $options)
     {
         $isReview = isset($options['isReview']) && $options['isReview'];
