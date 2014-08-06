@@ -210,6 +210,7 @@ class DefendantSearchController extends CaseController
      */
     private function processDefendantSelected($fieldset, $post)
     {
+
         $this->setPersist(false);
 
         $search = new \Common\Form\Elements\Types\PersonSearch('searchPerson', array('label' => 'Select'));
@@ -224,7 +225,8 @@ class DefendantSearchController extends CaseController
 
         $person = $this->getPersonById($post[$fieldset->getName()]['person-list']);
 
-        $this->fieldValues[$fieldset->getName()] = array_merge($post[$fieldset->getName()], $person);
+        $fieldValues =  array_merge($post[$fieldset->getName()], $person);
+        $this->setFieldValue($fieldset->getName(), $fieldValues);
 
         return $search;
     }
