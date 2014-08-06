@@ -412,7 +412,8 @@ return array(
             'CaseConditionUndertakingController' => 'Olcs\Controller\CaseConditionUndertakingController',
             'CaseRevokeController' => 'Olcs\Controller\CaseRevokeController',
             'CasePiController' => 'Olcs\Controller\CasePiController',
-            'DocumentController' => 'Olcs\Controller\DocumentController'
+            'DocumentController' => 'Olcs\Controller\DocumentController',
+            'DefendantSearchController' => 'Olcs\DefendantSearchController'
         )
     ),
     'view_manager' => array(

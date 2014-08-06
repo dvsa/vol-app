@@ -19,7 +19,7 @@ use \Zend\Json\Json as Json;
  *
  * Manages convictions
  */
-class ConvictionController extends CaseController
+class ConvictionController extends DefendantSearchController
 {
 
     /**
