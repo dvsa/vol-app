@@ -51,6 +51,7 @@ class PeopleController extends YourBusinessController
      */
     public function indexAction()
     {
+        $this->populatePeople();
         return $this->renderSection();
     }
 
@@ -224,5 +225,61 @@ class PeopleController extends YourBusinessController
     protected function load($id)
     {
         return array();
+    }
+
+    /**
+     * Pre-populate people for company
+     *
+     */
+    protected function populatePeople()
+    {
+        $org = $this->getOrganisationData(array('organisationType', 'registeredCompanyNumber'));
+        // company is LLP or Limited
+        if ($org['organisationType'] == 'org_type.llp' || $org['organisationType'] == 'org_type.lc') {
+            // no people added
+            if (!$this->peopleAdded()) {
+                // valid company number added
+                if ($org['registeredCompanyNumber']) {
+                    $result = $this->makeRestCall(
+                        'CompaniesHouse',
+                        'GET',
+                        [
+                            'type' => 'currentCompanyOfficers',
+                            'value' => $org['registeredCompanyNumber']
+                        ]
+                    );
+                    if (is_array($result) && array_key_exists('Results', $result) && count($result['Results'])) {
+                        foreach ($result['Results'] as $person) {
+                            $person['application'] = $this->getIdentifier();
+                            $this->makeRestCall('Person', 'POST', $person);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Determine if people already added for current application
+     *
+     * @return bool
+     */
+    protected function peopleAdded()
+    {
+        $applicationId = $this->getIdentifier();
+        $bundle = array(
+            'properties' => array(
+                'id',
+            ),
+        );
+
+        $data = $this->makeRestCall(
+            'Person',
+            'GET',
+            array('application' => $applicationId),
+            $bundle
+        );
+
+        return (array_key_exists('Count', $data) && $data['Count'] > 0);
     }
 }
