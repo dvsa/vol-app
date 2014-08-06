@@ -29,7 +29,7 @@ return [
             'route' => 'admin-dashboard/admin-user-management',
         ],
         [
-            'label' => 'Financial standing',
+            'label' => 'Financial standing rates',
             'route' => 'admin-dashboard/admin-financial-standing',
         ],
         [
