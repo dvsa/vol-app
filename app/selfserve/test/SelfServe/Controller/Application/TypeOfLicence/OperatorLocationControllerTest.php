@@ -45,7 +45,12 @@ class OperatorLocationControllerTest extends AbstractApplicationControllerTestCa
 
         // Make sure we get a view not a response
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+
+        $variables = $response->getVariables();
+
+        $this->assertTrue($variables['isCollapsible']);
     }
+
 
     /**
      * Test indexAction With Disabled Sections
@@ -118,13 +123,13 @@ class OperatorLocationControllerTest extends AbstractApplicationControllerTestCa
     /**
      * Test indexAction with submit
      */
-    public function testIndexActionWithSubmit()
+    public function testIndexActionWithPartialSubmitNoJsRedirectsWithinSection()
     {
         $this->setUpAction(
             'index',
             null,
             array(
-                'data' => array(
+                'operator-location' => array(
                     'niFlag' => 1
                 )
             )
@@ -135,20 +140,51 @@ class OperatorLocationControllerTest extends AbstractApplicationControllerTestCa
 
         // Make sure we get a view not a response
         $this->assertInstanceOf('Zend\Http\Response', $response);
+
+        $location = $response->getHeaders()->get('Location')->getFieldValue();
+
+        $this->assertContains('type-of-licence', $location);
     }
 
-    /**
-     * Test indexAction with submit without niFlag
-     */
-    public function testIndexActionWithSubmitWithoutNiFlag()
+    public function testIndexActionWithPartialSubmitJsReturnsErrors()
     {
         $this->setUpAction(
             'index',
             null,
             array(
-                'data' => array(
-                    'niFlag' => 0
-                )
+                'operator-location' => array(
+                    'niFlag' => 1
+                ),
+                'js-submit' => true
+            )
+        );
+
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->indexAction();
+        // Make sure we get a view with errors
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+
+        $mainView = $response->getChildren()[1];
+
+        $this->assertFalse($mainView->getVariable('form')->isValid());
+    }
+
+    public function testIndexActionWithFullSubmitJsRedirectsToNextSection()
+    {
+        $this->setUpAction(
+            'index',
+            null,
+            array(
+                'operator-location' => array(
+                    'niFlag' => 1
+                ),
+                'operator-type' => array(
+                    'goodsOrPsv' => 'goods'
+                ),
+                'licence-type' => array(
+                    'licenceType' => 'standard-international'
+                ),
+                'js-submit' => true,
             )
         );
 
@@ -157,6 +193,35 @@ class OperatorLocationControllerTest extends AbstractApplicationControllerTestCa
 
         // Make sure we get a view not a response
         $this->assertInstanceOf('Zend\Http\Response', $response);
+
+        $location = $response->getHeaders()->get('Location')->getFieldValue();
+
+        $this->assertContains('your-business', $location);
+    }
+
+    /**
+     * Test indexAction with invalid submit
+     */
+    public function testIndexActionWithPartialSubmitWithoutNiFlag()
+    {
+        $this->setUpAction(
+            'index',
+            null,
+            array(
+                'operator-location' => array(
+                )
+            )
+        );
+
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->indexAction();
+
+        // Make sure we get a view with errors
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+
+        $mainView = $response->getChildren()[1];
+
+        $this->assertFalse($mainView->getVariable('form')->isValid());
     }
 
     /**
