@@ -20,6 +20,9 @@ use Zend\Mvc\MvcEvent;
 class DefendantSearchController extends CaseController
 {
 
+    private $entityData;
+
+
     /**
      * Gets a from from either a built or custom form config.
      * @param type $type
@@ -107,20 +110,28 @@ class DefendantSearchController extends CaseController
         } else {
             // add the search fieldset to ensure the relevant person/operator
             // form elements are present based on defType
-            $searchFieldset = new \Common\Form\Elements\Types\PersonSearch('searchPerson', array('label' => 'Select'));
-            $searchFieldset->setAttributes(
-                array(
-                    'type' => 'person-search',
-                )
-            );
-            $searchFieldset->setLabel('Search for person');
-            $searchFieldset->remove('person-list');
-            $searchFieldset->remove('select');
-
-            $this->setPersist(true);
+            $searchFieldset = $this->processGetPreparedForm($post);
         }
 
         return $searchFieldset;
+    }
+
+    private function processGetPreparedForm($post)
+    {
+        $type = $this->getEntityType($post);
+        $searchFieldset = $this->getSearchFieldsetbyEntityType($type, 'searchPerson', ['label' => 'Search for person']);
+
+        if ($searchFieldset instanceof \Common\Form\Elements\Types\OperatorSearch) {
+            $searchFieldset->remove('entity-list');
+            $searchFieldset->remove('select');
+        } elseif ($searchFieldset instanceof \Common\Form\Elements\Types\PersonSearch) {
+            $searchFieldset->setLabel('Search for person');
+            $searchFieldset->remove('person-list');
+            $searchFieldset->remove('select');
+        }
+        $this->setPersist(true);
+        return $searchFieldset;
+
     }
 
     /**
@@ -164,7 +175,7 @@ class DefendantSearchController extends CaseController
     private function processDefendantType($fieldset, $post)
     {
         $this->setPersist(false);
-        $type = $this->getEntityTypeFromPost($post);
+        $type = $this->getEntityType($post);
         $search = $this->getSearchFieldsetbyEntityType($type, 'searchPerson', ['label' => 'Search for person']);
 
         if ($search instanceof \Common\Form\Elements\Types\OperatorSearch) {
@@ -187,10 +198,16 @@ class DefendantSearchController extends CaseController
      * @param type $post
      * @return type
      */
-    private function getEntityTypeFromPost($post)
+    private function getEntityType($post)
     {
-        return isset($post['defendant-details']['defType']) ?
-            $post['defendant-details']['defType'] : false;
+        if (isset($post['defendant-details']['defType'])) {
+            return $post['defendant-details']['defType'];
+        } else {
+            // check entity data
+            $entity_data = $this->getEntityData();
+            return $entity_data['defType'];
+        }
+
     }
     /**
      * Method to process the person search button
@@ -203,7 +220,7 @@ class DefendantSearchController extends CaseController
     {
         $this->setPersist(false);
 
-        $type = $this->getEntityTypeFromPost($post);
+        $type = $this->getEntityType($post);
         $search = $this->getSearchFieldsetbyEntityType($type, 'searchPerson', ['label' => 'Search for person']);
 
         if ($search instanceof \Common\Form\Elements\Types\OperatorSearch) {
@@ -288,7 +305,7 @@ class DefendantSearchController extends CaseController
     {
         $this->setPersist(false);
 
-        $type = $this->getEntityTypeFromPost($post);
+        $type = $this->getEntityType($post);
         $search = $this->getSearchFieldsetbyEntityType($type, 'searchPerson', ['label' => 'Search for person']);
 
         if ($search instanceof \Common\Form\Elements\Types\OperatorSearch) {
@@ -322,12 +339,14 @@ class DefendantSearchController extends CaseController
     {
         $this->setPersist(false);
 
-        $type = $this->getEntityTypeFromPost($post);
+        $type = $this->getEntityType($post);
         $search = $this->getSearchFieldsetbyEntityType($type, 'searchPerson', ['label' => 'Search for person']);
 
         $search->remove('person-list');
+        $search->remove('entity-list');
         $search->remove('select');
         $search->remove('search');
+        $search->remove('operatorSearch');
         $search->remove('personSearch');
 
         return $search;
@@ -470,4 +489,14 @@ class DefendantSearchController extends CaseController
         return $result;
     }
 
+    public function setEntityData($data)
+    {
+        $this->entity_data = $data;
+        return $this;
+    }
+
+    public function getEntityData()
+    {
+        return $this->entity_data;
+    }
 }

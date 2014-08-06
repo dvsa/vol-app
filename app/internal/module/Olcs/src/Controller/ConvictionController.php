@@ -94,9 +94,9 @@ class ConvictionController extends DefendantSearchController
             $form->get('defendant-details')->remove('personLastname');
             $form->get('defendant-details')->remove('dateOfBirth');
             $form->get('defendant-details')->remove('search');
+        } else {
+            $posted = $request->getPost();
         }
-        $posted = $request->getPost();
-
         $parentCategory = $this->getConvictionParentCategories();
 
         $form->get('offence')
@@ -202,6 +202,9 @@ class ConvictionController extends DefendantSearchController
         $data['defendant-details'] = $data;
         $data['offence'] = $data;
 
+        // set entity data to make form builder aware of fieldsets it has to
+        // generate
+        $this->setEntityData($data);
         $form = $this->generateFormWithData(
             'conviction',
             'processConviction',
@@ -216,7 +219,28 @@ class ConvictionController extends DefendantSearchController
 
         $formSubCategory = array();
 
-        $posted = $this->getRequest()->getPost();
+        $request = $this->getRequest();
+
+        if ($request->isGet()) {
+            if ($data['defType'] == 'defendant_type.operator') {
+                $form->get('defendant-details')->remove('personSearch');
+                $form->get('defendant-details')->remove('personFirstname');
+                $form->get('defendant-details')->remove('personLastname');
+                $form->get('defendant-details')->remove('dateOfBirth');
+                $form->get('defendant-details')->remove('search');
+                $form->get('defendant-details')->remove('operatorSearch');
+                $form->get('defendant-details')->remove('entity-list');
+                $form->get('defendant-details')->remove('select');
+            } else {
+                $form->get('defendant-details')->remove('personSearch');
+                $form->get('defendant-details')->remove('personFirstname');
+                $form->get('defendant-details')->remove('personLastname');
+                $form->get('defendant-details')->remove('dateOfBirth');
+                $form->get('defendant-details')->remove('search');
+            }
+        } else {
+            $posted = $request->getPost();
+        }
 
         if (isset($posted['offence']['parentCategory']) && $posted['offence']['parentCategory']) {
             $data['parentCategory'] = $posted['offence']['parentCategory'];
@@ -255,6 +279,7 @@ class ConvictionController extends DefendantSearchController
      */
     public function processConviction($data)
     {
+
         $data = array_merge($data, $data['defendant-details'], $data['offence']);
 
         //two unsets here keeps line length under 120
