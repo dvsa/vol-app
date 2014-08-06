@@ -1,14 +1,15 @@
 <?php
+$prefix = 'application_previous-history_licence-history';
 
 return array(
-    'application_previous-history_licence-history' => array(
-        'name' => 'application_previous-history_licence-history',
+    $prefix => array(
+        'name' => $prefix,
         'attributes' => array(
             'method' => 'post',
         ),
         'fieldsets' => array(
             array(
-                'name' => 'data',
+                'name' => 'dataLicencesCurrent',
                 'elements' => array(
                     'id' => array(
                         'type' => 'hidden'
@@ -18,33 +19,112 @@ return array(
                     ),
                     'currentLicence' => array(
                         'type' => 'yesNoRadio',
-                        'label' => 'application_previous-history_licence-history_currentLicence'
+                        'label' => $prefix . '_currentLicence',
+                        'filters' => '\Common\Form\Elements\InputFilters\PreviousHistoryLicenceHistoryNeedLicence'
                     ),
-                    'appliedLicence' => array(
+                ),
+                'options' => array(
+                    'label' => $prefix . '.title'
+                ),
+            ),
+            array(
+                'name' => 'table-licences-current',
+                'options' => array(0),
+                'type' => 'table'
+            ),
+            array(
+                'name' => 'dataLicencesApplied',
+                'elements' => array(
+                    'personsInformation' => array(
+                        'type' => 'plainText',
+                        'label' => $prefix . '_personsInformation'
+                    ),
+                    'appliedForLicence' => array(
                         'type' => 'yesNoRadio',
-                        'label' => 'application_previous-history_licence-history_appliedLicence'
+                        'label' => $prefix . '_appliedForLicence',
+                        'filters' => '\Common\Form\Elements\InputFilters\PreviousHistoryLicenceHistoryNeedLicence'
                     ),
+                ),
+            ),
+            array(
+                'name' => 'table-licences-applied',
+                'options' => array(0),
+                'type' => 'table'
+            ),
+            array(
+                'name' => 'dataLicencesRefused',
+                'elements' => array(
                     'refusedLicence' => array(
                         'type' => 'yesNoRadio',
-                        'label' => 'application_previous-history_licence-history_refusedLicence'
+                        'label' => $prefix . '_refusedLicence',
+                        'filters' => '\Common\Form\Elements\InputFilters\PreviousHistoryLicenceHistoryNeedLicence'
                     ),
+                ),
+            ),
+            array(
+                'name' => 'table-licences-refused',
+                'options' => array(0),
+                'type' => 'table'
+            ),
+            array(
+                'name' => 'dataLicencesRevoked',
+                'elements' => array(
                     'revokedLicence' => array(
                         'type' => 'yesNoRadio',
-                        'label' => 'application_previous-history_licence-history_revokedLicence'
+                        'label' => $prefix . '_revokedLicence',
+                        'filters' => '\Common\Form\Elements\InputFilters\PreviousHistoryLicenceHistoryNeedLicence'
                     ),
+                ),
+            ),
+            array(
+                'name' => 'table-licences-revoked',
+                'options' => array(0),
+                'type' => 'table'
+            ),
+            array(
+                'name' => 'dataLicencesPublicInquiry',
+                'elements' => array(
                     'publicInquiryLicence' => array(
                         'type' => 'yesNoRadio',
-                        'label' => 'application_previous-history_licence-history_publicInquiryLicence'
+                        'label' => $prefix . '_publicInquiryLicence',
+                        'filters' => '\Common\Form\Elements\InputFilters\PreviousHistoryLicenceHistoryNeedLicence'
                     ),
+                ),
+            ),
+            array(
+                'name' => 'table-licences-public-inquiry',
+                'options' => array(0),
+                'type' => 'table'
+            ),
+            array(
+                'name' => 'dataLicencesDisqualified',
+                'elements' => array(
                     'disqualifiedLicence' => array(
                         'type' => 'yesNoRadio',
-                        'label' => 'application_previous-history_licence-history_disqualifiedLicence'
+                        'label' => $prefix . '_disqualifiedLicence',
+                        'filters' => '\Common\Form\Elements\InputFilters\PreviousHistoryLicenceHistoryNeedLicence'
                     ),
+                ),
+            ),
+            array(
+                'name' => 'table-licences-disqualified',
+                'options' => array(0),
+                'type' => 'table'
+            ),
+            array(
+                'name' => 'dataLicencesHeld',
+                'elements' => array(
                     'heldLicence' => array(
                         'type' => 'yesNoRadio',
-                        'label' => 'application_previous-history_licence-history_heldLicence'
+                        'label' => $prefix . '_heldLicence',
+                        'filters' => '\Common\Form\Elements\InputFilters\PreviousHistoryLicenceHistoryNeedLicence'
                     ),
                 )
+            ),
+            array(
+                'name' => 'table-licences-held',
+                'options' => array(0),
+                'type' => 'table'
             ),
             array(
                 'type' => 'journey-buttons'
