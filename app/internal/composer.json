@@ -5,18 +5,6 @@
         {
         "type": "package",
         "package": {
-            "name": "olcs/olcs-entities",
-            "version": "dev-develop",
-            "source": {
-                "url": "git@gitlab.clb.npm:olcs/olcs-entities.git",
-                "type": "git",
-                "reference": "origin/develop"
-                }
-            }
-        },
-        {
-        "type": "package",
-        "package": {
             "name": "olcs/OlcsCommon",
             "version": "dev-develop",
             "source": {
@@ -31,7 +19,6 @@
         "php": ">=5.4",
         "zendframework/zendframework": "2.2.*",
         "doctrine/doctrine-orm-module": "0.*",
-        "olcs/olcs-entities": "dev-develop",
         "olcs/OlcsCommon": "dev-develop"
     },
     "require-dev": {
@@ -40,7 +27,6 @@
     },
     "autoload" : {
         "psr-4": {
-            "OlcsEntities\\": "vendor/olcs/olcs-entities/OlcsEntities/src/OlcsEntities",
             "Common\\": "vendor/olcs/OlcsCommon/Common/src/Common"
         }
     }

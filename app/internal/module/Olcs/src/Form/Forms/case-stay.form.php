@@ -80,7 +80,7 @@ return [
             ],
             'version' => [
                 'type' => 'hidden'
-            ],
+            ]
         ]
     ]
 ];

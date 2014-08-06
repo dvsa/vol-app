@@ -1,11 +1,24 @@
 <?php
+
 return array(
     'service_api_mapping' => array(
-        'endpoints' => array(
-            'payments' => 'http://olcspayment.dev/api/',
-            'backend' => 'http://olcs-backend/',
-            'postcode' => 'http://dvsa-postcode.olcsdv-ap01.olcs.npm/',
-            'document' => 'http://olcs-document/api/',
+        array(
+            'endpoint' => 'http://olcspayment.dev/api/',
+            'apis' => array(
+                'Vosa\Payment\Token' => 'token',
+                'Vosa\Payment\Db' => 'paymentdb',
+                'Vosa\Payment\Card' => 'cardpayment'
+            )
         ),
+        array(
+            'endpoint' => 'http://olcs-backend',
+            'apis' => array(
+                'User' => 'user',
+                'Licence' => 'licence',
+                'VosaCase' => 'vosa-case',
+                'OperatorSearch' => 'operator-search',
+                'PersonSearch' => 'person-search'
+            )
+        )
     )
 );
