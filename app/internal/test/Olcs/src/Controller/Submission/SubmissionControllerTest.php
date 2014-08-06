@@ -104,7 +104,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $data = array(
             'createdBy' => 1,
             'text' => '{"submission":{}}',
-            'vosaCase' => 54);
+            'case' => 54);
 
         $this->controller->expects($this->once())
             ->method('getLoggedInUser')
@@ -779,7 +779,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
             'sections' => array(
                 'case-summary-info' => array(
                     'view' => 'submission/partials/case-summary',
-                    'dataPath' => 'VosaCase',
+                    'dataPath' => 'Cases',
                     'bundle' => array(
                         'children' => array(
                             'categories' => array(

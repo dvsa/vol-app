@@ -161,7 +161,7 @@ class CaseComplaintTest extends AbstractHttpControllerTestCase
         $controller->expects($this->once())
             ->method('makeRestCall')
             ->with(
-                $this->equalTo('VosaCase'),
+                $this->equalTo('Cases'),
                 $this->equalTo('GET'),
                 $this->equalTo(
                     array('id' => $caseId, 'bundle' => \json_encode($bundle))
@@ -206,7 +206,7 @@ class CaseComplaintTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->once())
             ->method('makeRestCall')
-            ->with('VosaCase', 'GET', array('id' => 24))
+            ->with('Cases', 'GET', array('id' => 24))
             ->will($this->returnValue(array('id' => 24)));
 
         $form = $this->getMock('\stdClass', array('setData'));
@@ -219,7 +219,7 @@ class CaseComplaintTest extends AbstractHttpControllerTestCase
         $form->expects($this->once())
             ->method('setData')
             ->with(
-                ['vosaCase' => 24,
+                ['case' => 24,
                     'organisation-details' => [
                         'id' => 7,
                         'version' => 1
@@ -290,7 +290,7 @@ class CaseComplaintTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->once())
             ->method('makeRestCall')
-            ->with('VosaCase', 'GET', array('id' => null))
+            ->with('Cases', 'GET', array('id' => null))
             ->will($this->returnValue(null));
 
         $this->controller->addAction();
@@ -331,7 +331,7 @@ class CaseComplaintTest extends AbstractHttpControllerTestCase
             ->with('Complaint', 'GET', array('id' => 1, 'bundle' => $bundle))
             ->will($this->returnValue($returnArray));
 
-        $returnArray['vosaCase'] = 24;
+        $returnArray['case'] = 24;
         $returnArray['organisation-details'] = $returnArray['organisation'];
         $returnArray['complaint-details'] = $returnArray;
         $returnArray['complainant-details'] = $returnArray['complainant']['person'];
@@ -463,7 +463,7 @@ class CaseComplaintTest extends AbstractHttpControllerTestCase
     public function testProcessComplaintAddAction()
     {
         $functionData['complaint-details'] = [['id => 1']];
-        $functionData['vosaCase'] = ['vc'];
+        $functionData['case'] = ['vc'];
         $functionData['organisation-details'] = 1;
         $functionData['driver-details'] = ['dd'];
         $functionData['complainant-details'] = ['cnd'];
@@ -478,7 +478,7 @@ class CaseComplaintTest extends AbstractHttpControllerTestCase
         unset($functionData['complaint-details']['version']);
         unset($functionData['organisation-details']['version']);
         $addData = $functionData['complaint-details'];
-        $addData['vosaCases'][] = $functionData['vosaCase'];
+        $addData['cases'][] = $functionData['case'];
         $addData['value'] = '';
         $addData['vehicle_id'] = 1;
         $addData['organisation'] = $functionData['organisation-details'];
@@ -522,7 +522,7 @@ class CaseComplaintTest extends AbstractHttpControllerTestCase
                 array (
                     0 => 'id => 1',
                 ),
-            'vosaCases' =>
+            'cases' =>
                 array (
                     0 =>
                         array (

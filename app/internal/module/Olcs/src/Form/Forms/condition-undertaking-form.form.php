@@ -17,7 +17,7 @@ return [
                     'version' => [
                         'type' => 'hidden'
                     ],
-                    'vosaCase' => [
+                    'case' => [
                         'type' => 'hidden'
                     ],
                     'licence' => [

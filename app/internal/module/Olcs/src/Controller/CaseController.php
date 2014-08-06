@@ -98,7 +98,7 @@ class CaseController extends FormActionController
 
         $config = $this->getServiceLocator()->get('Config');
         $submissionActions = $config['static-list-data'];
-        $results = $this->makeRestCall('Submission', 'GET', array('vosaCase' => $caseId), $bundle);
+        $results = $this->makeRestCall('Submission', 'GET', array('case' => $caseId), $bundle);
 
         foreach ($results['Results'] as $k => $result) {
 
@@ -187,7 +187,7 @@ class CaseController extends FormActionController
             )
         );
 
-        $case = $this->makeRestCall('VosaCase', 'GET', array('id' => $caseId), $bundle);
+        $case = $this->makeRestCall('Cases', 'GET', array('id' => $caseId), $bundle);
 
         return $case;
     }
@@ -421,7 +421,7 @@ class CaseController extends FormActionController
         $pagination['order'] = $this->fromRoute('order', 'desc');
         $pagination['limit'] = $this->fromRoute('limit', 10);
 
-        $results = $this->makeRestCall('VosaCase', 'GET', $pagination);
+        $results = $this->makeRestCall('Cases', 'GET', $pagination);
 
         $table = $this->getServiceLocator()->get('Table')->buildTable('case', $results, $pagination);
 
@@ -492,7 +492,7 @@ class CaseController extends FormActionController
         );
 
         $result = $this->makeRestCall(
-            'VosaCase',
+            'Cases',
             'GET',
             array('id' => $case, 'licence' => $licence),
             $bundle
@@ -552,13 +552,13 @@ class CaseController extends FormActionController
         $licence = $this->fromRoute('licence');
         $case = $this->fromRoute('case');
 
-        $result = $this->makeRestCall('VosaCase', 'GET', array('id' => $case, 'licence' => $licence));
+        $result = $this->makeRestCall('Cases', 'GET', array('id' => $case, 'licence' => $licence));
 
         if (empty($result)) {
             return $this->notFoundAction();
         }
 
-        $this->makeRestCall('VosaCase', 'DELETE', array('id' => $case));
+        $this->makeRestCall('Cases', 'DELETE', array('id' => $case));
 
         $this->redirect()->toRoute('licence_case_list', array('licence' => $licence));
     }
@@ -582,7 +582,7 @@ class CaseController extends FormActionController
         $data['categories'] = $this->formatCategories($data['categories']);
         $data = array_merge($data, $data['fields']);
 
-        $result = $this->processAdd($data, 'VosaCase');
+        $result = $this->processAdd($data, 'Cases');
 
         if (isset($result['id'])) {
             $this->redirect()->toRoute(
@@ -605,7 +605,7 @@ class CaseController extends FormActionController
         $data['categories'] = $this->formatCategories($data['categories']);
         $data = array_merge($data, $data['fields']);
 
-        $this->processEdit($data, 'VosaCase');
+        $this->processEdit($data, 'Cases');
 
         $this->redirect()->toRoute('licence_case_list', array('licence' => $data['licence']));
     }

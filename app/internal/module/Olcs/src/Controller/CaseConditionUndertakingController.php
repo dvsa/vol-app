@@ -88,7 +88,7 @@ class CaseConditionUndertakingController extends CaseController
         $bundle = $this->getConditionUndertakingBundle('condition');
 
         $conditionResults = $this->makeRestCall(
-            'VosaCase', 'GET', array(
+            'Cases', 'GET', array(
             'id' => $caseId, 'bundle' => json_encode($bundle))
         );
 
@@ -116,7 +116,7 @@ class CaseConditionUndertakingController extends CaseController
         $bundle = $this->getConditionUndertakingBundle('undertaking');
 
         $undertakingResults = $this->makeRestCall(
-            'VosaCase', 'GET', array(
+            'Cases', 'GET', array(
             'id' => $caseId, 'bundle' => json_encode($bundle))
         );
 
@@ -143,7 +143,7 @@ class CaseConditionUndertakingController extends CaseController
         $routeParams = $this->getParams(array('case', 'licence', 'type'));
 
         // check valid case exists
-        $results = $this->makeRestCall('VosaCase', 'GET', array('id' => $routeParams['case']));
+        $results = $this->makeRestCall('Cases', 'GET', array('id' => $routeParams['case']));
         if (empty($routeParams['case']) || empty($routeParams['licence']) || empty($results)) {
             return $this->getResponse()->setStatusCode(404);
         }
@@ -164,7 +164,7 @@ class CaseConditionUndertakingController extends CaseController
             'addedVia' => 'Case',
             'conditionType' => $routeParams['type'],
             'isDraft' => 0,
-            'vosaCase' => $routeParams['case'],
+            'case' => $routeParams['case'],
             'licence' => $routeParams['licence']
         );
 
@@ -202,7 +202,7 @@ class CaseConditionUndertakingController extends CaseController
 
         // check valid case exists
         $results = $this->makeRestCall(
-            'VosaCase',
+            'Cases',
             'GET',
             array('id' => $routeParams['case'])
         );
@@ -231,7 +231,7 @@ class CaseConditionUndertakingController extends CaseController
         );
 
         // assign data as required by the form
-        $data['condition-undertaking']['vosaCase'] = $data['condition-undertaking']['vosaCase']['id'];
+        $data['condition-undertaking']['case'] = $data['condition-undertaking']['case']['id'];
         $data['condition-undertaking']['licence'] = $routeParams['licence'];
         $data['condition-undertaking']['isDraft'] = $data['condition-undertaking']['isDraft'] ? 1 : 0;
 
@@ -357,7 +357,7 @@ class CaseConditionUndertakingController extends CaseController
         return array(
 
             'children' => array(
-                'vosaCase' => array(
+                'case' => array(
                     'properties' => array(
                         'id',
                         'operating_centre_id',

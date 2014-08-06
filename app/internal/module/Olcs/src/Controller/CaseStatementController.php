@@ -216,7 +216,7 @@ class CaseStatementController extends CaseController implements CrudInterface
             $data['addresses']['requestorsAddress']['addressLine2'] . " \line " .
             $data['addresses']['requestorsAddress']['addressLine3'] . " \line " .
             $data['addresses']['requestorsAddress']['addressLine4'] . " \line" .
-            $data['addresses']['requestorsAddress']['city'] . " \line" .
+            $data['addresses']['requestorsAddress']['town'] . " \line" .
             $data['addresses']['requestorsAddress']['postcode'] . " \line" .
             $data['addresses']['requestorsAddress']['country'];
         $bookmarks['Ref'] = '184130/' . $bookmarkData['licence']['licenceNumber'];
@@ -245,7 +245,7 @@ class CaseStatementController extends CaseController implements CrudInterface
         $bundle = $this->getBookmarkBundle();
 
         $bookmarkData = $this->makeRestCall(
-            'VosaCase',
+            'Cases',
             'GET',
             ['id' => $data['case'], 'bundle' => json_encode($bundle)]
         );

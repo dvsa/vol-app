@@ -28,7 +28,7 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
             'sections' => array(
                 'case-summary-info' => array(
                     'view' => 'submission/partials/case-summary',
-                    'dataPath' => 'VosaCase',
+                    'dataPath' => 'Cases',
                     'bundle' => array(
                         'children' => array(
                             'categories' => array(
@@ -167,7 +167,7 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
             'sections' => array(
                 'case-summary-info' => array(
                     'view' => 'submission/partials/case-summary',
-                    'dataPath' => 'VosaCase',
+                    'dataPath' => 'Cases',
                     'bundle' => array(
                         'children' => array(
                             'categories' => array(
@@ -227,7 +227,7 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
 
          $submissionSectionTrait->expects($this->once())
             ->method('makeRestCall')
-            ->with('VosaCase', 'GET', array('id' => 54))
+            ->with('Cases', 'GET', array('id' => 54))
             ->will($this->returnValue(array('id' => 7)));
 
          $submissionSectionTrait->expects($this->once())

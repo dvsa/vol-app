@@ -61,7 +61,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
 
         $this->controller->expects($this->at(1))
             ->method('makeRestCall')
-            ->with('VosaCase', 'GET', array('id' => $caseId))
+            ->with('Cases', 'GET', array('id' => $caseId))
             ->will($this->returnValue(array('id' => $caseId)));
 
         $mockParams = $this->getMock('\stdClass', array('fromPost'));
@@ -81,7 +81,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
             'addedVia' => 'Case',
             'conditionType' => $routeParams['type'],
             'isDraft' => 0,
-            'vosaCase' => $routeParams['case'],
+            'case' => $routeParams['case'],
             'licence' => $routeParams['licence']
         );
         $this->controller->expects($this->once())
@@ -131,7 +131,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
 
         $this->controller->expects($this->at(1))
             ->method('makeRestCall')
-            ->with('VosaCase', 'GET', array('id' => $caseId))
+            ->with('Cases', 'GET', array('id' => $caseId))
             ->will($this->returnValue(null));
 
         $this->controller->addAction();
@@ -154,7 +154,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
 
         $this->controller->expects($this->at(1))
             ->method('makeRestCall')
-            ->with('VosaCase', 'GET', array('id' => $caseId))
+            ->with('Cases', 'GET', array('id' => $caseId))
             ->will($this->returnValue(array('id' => $caseId)));
 
         $mockParams = $this->getMock('\stdClass', array('fromPost'));
@@ -205,7 +205,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
 
         $this->controller->expects($this->at(1))
             ->method('makeRestCall')
-            ->with('VosaCase', 'GET', array('id' => $caseId))
+            ->with('Cases', 'GET', array('id' => $caseId))
             ->will($this->returnValue(array('id' => $caseId)));
 
         $mockParams = $this->getMock('\stdClass', array('fromPost'));
@@ -222,7 +222,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
         $mockResults = [
             'addedVia' => 'Case',
             'conditionType' => $routeParams['type'],
-            'vosaCase' => ['id' => $caseId],
+            'case' => ['id' => $caseId],
             'licence' => ['id' => $licenceId],
             'isDraft' => 1,
             'attachedTo' => 21,
@@ -246,7 +246,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
             'addedVia' => 'Case',
             'conditionType' => $routeParams['type'],
             'isDraft' => 1,
-            'vosaCase' => $routeParams['case'],
+            'case' => $routeParams['case'],
             'licence' => $routeParams['licence'],
             'attachedTo' => 21,
             'operatingCentre' => ['id' => 21]
@@ -301,7 +301,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
 
         $this->controller->expects($this->at(1))
             ->method('makeRestCall')
-            ->with('VosaCase', 'GET', array('id' => $caseId))
+            ->with('Cases', 'GET', array('id' => $caseId))
             ->will($this->returnValue(array('id' => $caseId)));
 
         $mockParams = $this->getMock('\stdClass', array('fromPost'));
@@ -318,7 +318,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
         $mockResults = [
             'addedVia' => 'Case',
             'conditionType' => $routeParams['type'],
-            'vosaCase' => ['id' => $caseId],
+            'case' => ['id' => $caseId],
             'licence' => ['id' => $licenceId],
             'isDraft' => 1,
             'attachedTo' => 21,
@@ -342,7 +342,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
             'addedVia' => 'Case',
             'conditionType' => $routeParams['type'],
             'isDraft' => 1,
-            'vosaCase' => $routeParams['case'],
+            'case' => $routeParams['case'],
             'licence' => $routeParams['licence'],
             'attachedTo' => '',
             'operatingCentre' => ['iddoesntexist' => 21]
@@ -396,7 +396,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
 
         $this->controller->expects($this->at(1))
             ->method('makeRestCall')
-            ->with('VosaCase', 'GET', array('id' => $caseId))
+            ->with('Cases', 'GET', array('id' => $caseId))
             ->will($this->returnValue(null));
 
         $this->controller->editAction();
@@ -420,7 +420,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
 
         $this->controller->expects($this->at(1))
             ->method('makeRestCall')
-            ->with('VosaCase', 'GET', array('id' => $caseId))
+            ->with('Cases', 'GET', array('id' => $caseId))
             ->will($this->returnValue(array('id' => $caseId)));
 
         $mockParams = $this->getMock('\stdClass', array('fromPost'));
@@ -887,7 +887,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
         $controller->expects($this->once())
             ->method('makeRestCall')
             ->with(
-                $this->equalTo('VosaCase'),
+                $this->equalTo('Cases'),
                 $this->equalTo('GET'),
                 $this->equalTo(
                     array(
@@ -953,7 +953,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
         $controller->expects($this->once())
             ->method('makeRestCall')
             ->with(
-                $this->equalTo('VosaCase'),
+                $this->equalTo('Cases'),
                 $this->equalTo('GET'),
                 $this->equalTo(
                     array(

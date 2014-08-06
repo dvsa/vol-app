@@ -1124,7 +1124,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
                     'dateClosed' => '',
                     'createdBy' => array(),
                     'lastUpdatedBy' => '',
-                    'vosaCase' => array(),
+                    'case' => array(),
                     'submissionActions' => array(
                         0 => array(
                             'createdOn' => '2014-05-07T09:31:45+0100',

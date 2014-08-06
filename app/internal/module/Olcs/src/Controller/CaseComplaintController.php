@@ -59,7 +59,7 @@ class CaseComplaintController extends CaseController implements CrudInterface
         $bundle = $this->getComplaintBundle();
 
         $results = $this->makeRestCall(
-            'VosaCase', 'GET', array(
+            'Cases', 'GET', array(
             'id' => $caseId, 'bundle' => json_encode($bundle))
         );
 
@@ -110,10 +110,10 @@ class CaseComplaintController extends CaseController implements CrudInterface
             )
         );
 
-        $data = array('vosaCase' => $routeParams['case']);
+        $data = array('case' => $routeParams['case']);
 
         // todo hardcoded organisation id for now
-        $results = $this->makeRestCall('VosaCase', 'GET', array('id' => $routeParams['case']));
+        $results = $this->makeRestCall('Cases', 'GET', array('id' => $routeParams['case']));
 
         // todo hardcoded organisation id for now
         $data['organisation-details']['id'] = 7;
@@ -175,7 +175,7 @@ class CaseComplaintController extends CaseController implements CrudInterface
         );
 
         if (isset($data['id'])) {
-            $data['vosaCase'] = $data['id'];
+            $data['case'] = $data['id'];
         }
 
         if (empty($routeParams['case']) || empty($routeParams['licence']) || empty($data)) {
@@ -221,7 +221,7 @@ class CaseComplaintController extends CaseController implements CrudInterface
             unset($data['organisation-details']['version']);
 
             $newData = $data['complaint-details'];
-            $newData['vosaCases'][] = $data['vosaCase'];
+            $newData['Cases'][] = $data['case'];
             $newData['value'] = '';
             $newData['vehicle_id'] = 1;
             $newData['organisation'] = 1;

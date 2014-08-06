@@ -199,7 +199,7 @@ class CaseConvictionControllerTest extends AbstractHttpControllerTestCase
         $data = array('id' => 8, 'convictionData' => array(), 'version' => 1);
         $this->controller->expects($this->once())
             ->method('processEdit')
-            ->with($data, 'VosaCase');
+            ->with($data, 'Cases');
 
         $toRoute = $this->getMock('\stdClass', array('toRoute'));
 
@@ -458,7 +458,7 @@ class CaseConvictionControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->once())
             ->method('makeRestCall')
-            ->with('VosaCase', 'GET', array('id' => 54))
+            ->with('Cases', 'GET', array('id' => 54))
             ->will($this->returnValue(''));
 
         $this->controller->addAction();
@@ -723,7 +723,7 @@ class CaseConvictionControllerTest extends AbstractHttpControllerTestCase
                 )
 
             ),
-            'vosaCase' => array
+            'case' => array
             (
                 'id' => 24
             )

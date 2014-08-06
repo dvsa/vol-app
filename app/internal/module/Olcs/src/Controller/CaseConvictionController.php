@@ -64,7 +64,7 @@ class CaseConvictionController extends CaseController
             'Conviction',
             'GET',
             array(
-                'vosaCase' => $caseId,
+                'case' => $caseId,
                 'sort' => 'dateOfConviction',
                 'order' => 'DESC',
                 'bundle' => json_encode($bundle)
@@ -154,8 +154,8 @@ class CaseConvictionController extends CaseController
             )
         );
 
-        $data = array('vosaCase' => $routeParams['case']);
-        $results = $this->makeRestCall('VosaCase', 'GET', array('id' => $routeParams['case']));
+        $data = array('case' => $routeParams['case']);
+        $results = $this->makeRestCall('Cases', 'GET', array('id' => $routeParams['case']));
 
         if (empty($routeParams['case']) || empty($routeParams['licence']) || empty($results)) {
             return $this->getResponse()->setStatusCode(404);
@@ -232,7 +232,7 @@ class CaseConvictionController extends CaseController
 
         $bundle = array(
             'children' => array(
-                'vosaCase' => array(
+                'case' => array(
                     'properties' => 'ALL'
                 ),
                 'category' => array(
@@ -251,8 +251,8 @@ class CaseConvictionController extends CaseController
 
         $data = $this->makeRestCall('Conviction', 'GET', array('id' => $routeParams['id']), $bundle);
 
-        if (isset($data['vosaCase'])) {
-            $data['vosaCase'] = $data['vosaCase']['id'];
+        if (isset($data['case'])) {
+            $data['case'] = $data['case']['id'];
         }
 
         if (empty($routeParams['case']) || empty($routeParams['licence']) || empty($data)) {
@@ -348,7 +348,7 @@ class CaseConvictionController extends CaseController
         $routeParams = $this->getParams(array('action', 'licence', 'case'));
 
         if (strtolower($routeParams['action']) == 'edit' || strtolower($routeParams['action']) == 'dealt') {
-            unset($data['vosaCase'], $data['parentCategory']);
+            unset($data['case'], $data['parentCategory']);
             $result = $this->processEdit($data, 'Conviction');
         } else {
             $result = $this->processAdd($data, 'Conviction');
@@ -475,7 +475,7 @@ class CaseConvictionController extends CaseController
     public function saveCommentForm($data)
     {
         $data = array_intersect_key($data, array_flip(['id', 'convictionData', 'version']));
-        $this->processEdit($data, 'VosaCase');
+        $this->processEdit($data, 'Cases');
 
         return $this->redirect()->toRoute('case_convictions', [], [], true);
     }

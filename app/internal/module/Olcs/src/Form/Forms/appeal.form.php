@@ -24,7 +24,7 @@ return [
                         'label' => 'Date of appeal',
                         'filters' => '\Common\Form\Elements\InputFilters\DateRequired'
                     ],
-                    'appealNumber' => [
+                    'appealNo' => [
                         'label' => 'Appeal number',
                         'type' => 'text',
                         'filters' => '\Common\Form\Elements\InputFilters\TextMax20'
@@ -50,12 +50,12 @@ return [
                         'label' => 'Date of decision',
                         'required' => false
                     ],
-                    'papersDue' => [
+                    'papersDueDate' => [
                         'type' => 'dateSelectWithEmpty',
                         'label' => 'Papers due at tribunal',
                         'required' => false
                     ],
-                    'papersSent' => [
+                    'papersSentDate' => [
                         'type' => 'dateSelectWithEmpty',
                         'label' => 'Papers sent date',
                         'required' => false

@@ -90,7 +90,7 @@ class SubmissionController extends FormActionController implements CrudInterface
         $data = array(
             'createdBy' => $this->getLoggedInUser(),
             'text' => $submission,
-            'vosaCase' => $this->routeParams['case'],
+            'case' => $this->routeParams['case'],
         );
 
         if ($this->getRequest()->isPost()) {
@@ -367,10 +367,10 @@ class SubmissionController extends FormActionController implements CrudInterface
 
     /**
      * Gets a form for the form type and populates the Send to list with users
-     * 
+     *
      * @param string $formType
      * @param array $data
-     * 
+     *
      * @return type
      */
     public function getFormWithListData($formType, $data = array())
@@ -387,8 +387,8 @@ class SubmissionController extends FormActionController implements CrudInterface
     }
 
     /**
-     * 
-     * Get Pi Reasons based on licence type and whether the licence is from 
+     *
+     * Get Pi Reasons based on licence type and whether the licence is from
      * Northern Ireland
      *
      * @return array

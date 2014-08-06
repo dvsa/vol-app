@@ -3,7 +3,7 @@ return array(
     'sections' => array(
         'case-summary-info' => array(
             'view' => 'submission/partials/case-summary',
-            'dataPath' => 'VosaCase',
+            'dataPath' => 'Cases',
             'bundle' => array(
                 'children' => array(
                     'categories' => array(
