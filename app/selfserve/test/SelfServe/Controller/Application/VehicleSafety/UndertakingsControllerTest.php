@@ -37,14 +37,10 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
 
     /**
      * Test indexAction
-     *
-     * @dataProvider psvProvider
      */
-    public function testIndexAction($goodsOrPsv)
+    public function testIndexAction()
     {
         $this->setUpAction('index');
-
-        $this->goodsOrPsv = $goodsOrPsv;
 
         $response = $this->controller->indexAction();
 
@@ -57,7 +53,7 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
 
     /**
      * Mock the rest call
-     *
+    *
      * @param string $service
      * @param string $method
      * @param array $data
@@ -65,19 +61,54 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
      */
     protected function mockRestCalls($service, $method, $data = array(), $bundle = array())
     {
+
         if ($service == 'Application' && $method == 'GET' && $bundle == ApplicationController::$licenceDataBundle) {
 
             return array(
                 'licence' => array(
                     'id' => 10,
                     'version' => 1,
-                    'goodsOrPsv' => 'goods',
+                    'goodsOrPsv' => 'psv',
+                    'niFlag' => 0,
+                    'licenceType' => 'restricted',
+                    'organisation' => array(
+                        'organisationType' => 'org_type.lc'
+                    )
+                )
+            );
+        }
+
+
+        $taDataBundle = array(
+            'children' => array(
+                'trafficArea' => array(
+                    'properties' => array(
+                        'id',
+                        'applyScottishRules',
+                    ),
+                )
+            )
+        );
+
+        if ($service == 'Application' && $method == 'GET' && $bundle == $taDataBundle) {
+            return array(
+                'licence' => array(
+                    'id' => 10,
+                    'version' => 1,
+                    'goodsOrPsv' => 'psv',
                     'niFlag' => 0,
                     'licenceType' => 'standard-national',
                     'organisation' => array(
                         'organisationType' => 'org_type.lc'
                     )
-                )
+                ),
+                'trafficArea' => array(
+                    'id' => 5,
+                    'applyScottishRules' => false
+                ),
+                'totAuthSmallVehicles' => 1,
+                'totAuthMediumVehicles' => 1,
+                'totAuthLargeVehicles' => 0
             );
         }
 
@@ -127,6 +158,27 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
 
         if ($service == 'LicenceVehicle' && $method == 'POST') {
             return array('id' => 1);
+        }
+
+        if ($service == 'Licence' && $method == 'GET' && $bundle == $tableDataBundle) {
+            return array(
+                'licenceVehicles' => array(
+                    array(
+                        'vehicle' => array(
+                            'id' => 1,
+                            'vrm' => 'AB12 ABG',
+                            'platedWeight' => 100
+                        )
+                    ),
+                    array(
+                        'vehicle' => array(
+                            'id' => 2,
+                            'vrm' => 'DB12 ABG',
+                            'platedWeight' => 150
+                        )
+                    )
+                )
+            );
         }
 
         $tableDataBundle = array(
@@ -185,6 +237,7 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
                 )
             );
         }
+        echo "nothing";
     }
 
     /**

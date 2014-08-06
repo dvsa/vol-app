@@ -105,6 +105,10 @@ class UndertakingsController extends VehicleSafetyController
     protected function alterForm($form)
     {
         $data = $this->load($this->getIdentifier());
+        
+        if ( !isset($data['trafficArea']['applyScottishRules']) ) {
+            $data['trafficArea']['applyScottishRules']=false;
+        }
 
         if ( is_null($data['totAuthSmallVehicles']) ) {
             // no smalls - case 3
