@@ -38,7 +38,7 @@ return array(
             'olcs/view' => dirname(__DIR__) . '/view',
         )
     ),
-    'local_forms_path' => __DIR__ . '/../src/Form/Forms/',
+    'local_forms_path' => [__DIR__ . '/../src/Form/Forms/'],
     //-------- Start navigation -----------------
     'navigation' => array(
         'default' => array(
@@ -47,6 +47,6 @@ return array(
     ),
     //-------- End navigation -----------------
     'submission_config' => include __DIR__ . '/submission/submission.config.php',
-    'local_scripts_path' => __DIR__ . '/../assets/js/inline/',
+    'local_scripts_path' => [__DIR__ . '/../assets/js/inline/'],
     'asset_path' => '//olcs-frontend'
 );
