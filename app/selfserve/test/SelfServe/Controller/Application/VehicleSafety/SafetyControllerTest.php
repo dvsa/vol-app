@@ -310,7 +310,7 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
                 'id' => '',
                 'version' => '',
                 'addressLine1' => 'Address 1',
-                'city' => 'City',
+                'town' => 'City',
                 'country' => 'country.GB',
                 'postcode' => 'AB1 1BA'
             )
@@ -342,7 +342,7 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
                     'id' => '',
                     'version' => '',
                     'addressLine1' => 'Address 1',
-                    'city' => 'City',
+                    'town' => 'City',
                     'country' => 'country.GB',
                     'postcode' => 'AB1 1BA'
                 ),
@@ -379,7 +379,7 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
                 'id' => '',
                 'version' => '',
                 'addressLine1' => 'Address 1',
-                'city' => 'City',
+                'town' => 'City',
                 'country' => 'country.GB',
                 'postcode' => 'AB1 1BA'
             )
@@ -429,7 +429,7 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
                     'id' => 5,
                     'version' => 1,
                     'addressLine1' => 'Address 1',
-                    'city' => 'City',
+                    'town' => 'City',
                     'country' => 'country.GB',
                     'postcode' => 'AB1 1BA'
                 )
@@ -586,7 +586,7 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
                                         'addressLine2',
                                         'addressLine3',
                                         'addressLine4',
-                                        'city',
+                                        'town',
                                         'country',
                                         'postcode'
                                     )
@@ -635,7 +635,7 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
                                 'addressLine2' => 'Address 2',
                                 'addressLine3' => 'Address 3',
                                 'addressLine4' => 'Address 4',
-                                'city' => 'City',
+                                'town' => 'City',
                                 'country' => 'GB',
                                 'postcode' => 'AB1 1AB'
                             )
@@ -667,7 +667,7 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
                                 'addressLine2',
                                 'addressLine3',
                                 'addressLine4',
-                                'city',
+                                'town',
                                 'country',
                                 'postcode'
                             )
@@ -694,7 +694,7 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
                         'addressLine2' => '',
                         'addressLine3' => '',
                         'addressLine4' => '',
-                        'city' => 'City',
+                        'town' => 'City',
                         'country' => 'GB',
                         'postcode' => 'AB1 1AB'
                     )

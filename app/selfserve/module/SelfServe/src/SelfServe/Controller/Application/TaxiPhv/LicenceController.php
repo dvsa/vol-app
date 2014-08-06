@@ -97,8 +97,7 @@ class LicenceController extends TaxiPhvController
                             'addressLine3',
                             'addressLine4',
                             'postcode',
-                            'county',
-                            'city',
+                            'town',
                             'country'
                         )
                     )

@@ -232,7 +232,7 @@ class LicenceControllerTest extends AbstractApplicationControllerTestCase
                     'id' => '',
                     'version' => '',
                     'addressLine1' => 'Address 1',
-                    'city' => 'City',
+                    'town' => 'City',
                     'country' => 'country.GB',
                     'postcode' => 'AB1 1BA'
                 )
@@ -271,7 +271,7 @@ class LicenceControllerTest extends AbstractApplicationControllerTestCase
                     'id' => '',
                     'version' => '',
                     'addressLine1' => 'Address 1',
-                    'city' => 'City',
+                    'town' => 'City',
                     'country' => 'country.GB',
                     'postcode' => 'AB1 1BA'
                 )
@@ -331,8 +331,7 @@ class LicenceControllerTest extends AbstractApplicationControllerTestCase
                         'addressLine3' => '',
                         'addressLine4' => '',
                         'postcode' => 'AB12 1AB',
-                        'county' => '',
-                        'city' => 'Doncaster',
+                        'town' => 'Doncaster',
                         'country' => 'uk'
                     )
                 )
@@ -369,7 +368,7 @@ class LicenceControllerTest extends AbstractApplicationControllerTestCase
                     'id' => '1',
                     'version' => '1',
                     'addressLine1' => 'Address 1',
-                    'city' => 'City',
+                    'town' => 'City',
                     'country' => 'country.GB',
                     'postcode' => 'AB1 1BA'
                 )
@@ -497,8 +496,7 @@ class LicenceControllerTest extends AbstractApplicationControllerTestCase
                                 'addressLine3' => '',
                                 'addressLine4' => '',
                                 'postcode' => 'AB12 1AB',
-                                'county' => '',
-                                'city' => 'Doncaster',
+                                'town' => 'Doncaster',
                                 'country' => 'uk'
                             )
                         )

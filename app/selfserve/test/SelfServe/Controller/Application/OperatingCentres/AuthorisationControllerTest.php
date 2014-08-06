@@ -648,7 +648,7 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                 'id' => '',
                 'version' => '',
                 'addressLine1' => 'Some street',
-                'city' => 'City',
+                'town' => 'City',
                 'postcode' => 'AN1 1ND',
                 'country' => 'country.GB'
             ),
@@ -743,7 +743,7 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                 'id' => '',
                 'version' => '',
                 'addressLine1' => 'Some street',
-                'city' => 'City',
+                'town' => 'City',
                 'postcode' => 'AN1 1ND',
                 'country' => 'country.GB'
             ),
@@ -799,7 +799,7 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                 'id' => '',
                 'version' => '',
                 'addressLine1' => 'Some street',
-                'city' => 'City',
+                'town' => 'City',
                 'postcode' => 'AN1 1ND',
                 'country' => 'country.GB'
             ),
@@ -854,7 +854,7 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                 'id' => '',
                 'version' => '',
                 'addressLine1' => 'Some street',
-                'city' => 'City',
+                'town' => 'City',
                 'postcode' => 'AN1 1ND',
                 'country' => 'country.GB'
             ),
@@ -950,7 +950,7 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                 'id' => 3,
                 'version' => 1,
                 'addressLine1' => 'Some street',
-                'city' => 'City',
+                'town' => 'City',
                 'postcode' => 'AN1 1ND',
                 'country' => 'country.GB'
             ),
@@ -1117,8 +1117,7 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                                 'addressLine3',
                                 'addressLine4',
                                 'postcode',
-                                'county',
-                                'city',
+                                'town',
                                 'country'
                             )
                         ),
@@ -1161,7 +1160,7 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                         'addressLine3' => 'Some street 3',
                         'addressLine4' => 'Some street 4',
                         'postcode' => 'AB1 1AB',
-                        'city' => 'City',
+                        'town' => 'City',
                         'country' => 'GB'
                     ),
                     'adDocuments' => array(
@@ -1194,7 +1193,7 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                                 'addressLine2' => 'Address 2',
                                 'addressLine3' => 'Address 3',
                                 'addressLine4' => 'Address 4',
-                                'city' => 'City',
+                                'town' => 'City',
                                 'country' => 'GB',
                                 'postcode' => 'AB1 1AB'
                             )

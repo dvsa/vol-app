@@ -113,8 +113,7 @@ class AuthorisationController extends OperatingCentresController
                             'addressLine3',
                             'addressLine4',
                             'postcode',
-                            'county',
-                            'city',
+                            'town',
                             'country'
                         )
                     ),

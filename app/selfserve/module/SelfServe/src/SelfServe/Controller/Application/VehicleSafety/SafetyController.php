@@ -72,7 +72,7 @@ class SafetyController extends VehicleSafetyController
                                     'addressLine2',
                                     'addressLine3',
                                     'addressLine4',
-                                    'city',
+                                    'town',
                                     'country',
                                     'postcode'
                                 )
@@ -118,7 +118,7 @@ class SafetyController extends VehicleSafetyController
                             'addressLine2',
                             'addressLine3',
                             'addressLine4',
-                            'city',
+                            'town',
                             'country',
                             'postcode'
                         )
