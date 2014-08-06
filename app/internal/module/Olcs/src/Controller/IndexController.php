@@ -23,35 +23,15 @@ class IndexController extends AbstractActionController
      */
     public function indexAction()
     {
-        /*
-        $results = $this->makeRestCall(
-            'VosaCase', 'GET', array(
-            'id' => $caseId, 'bundle' => json_encode($bundle))
-        );
-         */
-
-        $data = array(
-            'url' => $this->getPluginManager()->get('url')
+        $tasks = $this->makeRestCall(
+            'Task',
+            'GET',
+            array(
+                'userId' => 123
+            )
         );
 
-        $tasks = array(
-            'Results' => array(
-                array(
-                    'id' => 1234,
-                    'type' => 'Application',
-                    'licenceNumber' => 'OB12345678',
-                    'category' => 'Application',
-                    'subCategory' => 'Address change assisted digital',
-                    'description' => 'Address change',
-                    'date' => '2014-04-5 09:00:00',
-                    'owner' => 'Gillian Fox',
-                    'name' => 'Don Tarmacadam'
-                )
-            ),
-            'Count' => 1
-        );
-
-        $table = $this->buildTable('tasks', $tasks, $data);
+        $table = $this->buildTable('tasks', $tasks);
 
         $view = new ViewModel();
         $view->setVariables(
