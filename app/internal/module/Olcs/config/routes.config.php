@@ -80,6 +80,98 @@ return [
             ]
         ]
     ],
+
+    // These routes are for the licence page
+
+    'licence' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/licence/:id',
+            'constraints' => [
+                'id' => '[0-9]+'
+            ],
+            'defaults' => [
+                'controller' => 'LicenceController',
+                'action' => 'index-jump',
+            ]
+        ],
+        'may_terminate' => true,
+        'child_routes' => [
+            'overview' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/overview',
+                    'defaults' => [
+                        'action' => 'index',
+                    ]
+                ],
+                'may_terminate' => true,
+            ],
+            'edit' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/edit',
+                    'defaults' => [
+                        'action' => 'edit',
+                    ]
+                ],
+                'may_terminate' => true,
+            ],
+            'bus' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/bus',
+                    'defaults' => [
+                        'action' => 'bus',
+                    ]
+                ],
+                'may_terminate' => true,
+            ],
+            'cases' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/caselist', // There's another route called cases!!!!!
+                    'defaults' => [
+                        'action' => 'cases',
+                    ]
+                ],
+                'may_terminate' => true,
+            ],
+            'documents' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/documents',
+                    'defaults' => [
+                        'action' => 'documents',
+                    ]
+                ],
+                'may_terminate' => true,
+            ],
+            'processing' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/processing',
+                    'defaults' => [
+                        'action' => 'processing',
+                    ]
+                ],
+                'may_terminate' => true,
+            ],
+            'fees' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/fees',
+                    'defaults' => [
+                        'action' => 'fees',
+                    ]
+                ],
+                'may_terminate' => true,
+            ]
+        ]
+    ],
+
+    // These routes are for the licence page
+
     'licence_case_action' => [
         'type' => 'segment',
         'options' => [

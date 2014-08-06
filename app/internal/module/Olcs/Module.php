@@ -23,6 +23,9 @@ class Module
         $eventManager = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
+
+        $e->getApplication()->getServiceManager()->get('ViewHelperManager')->get('navigation')
+        ->getPluginManager()->setInvokableClass('menu', 'Olcs\View\Helper\Navigation\Menu');
     }
 
     public function getConfig()

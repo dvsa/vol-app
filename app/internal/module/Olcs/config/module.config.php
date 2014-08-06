@@ -30,12 +30,18 @@ return array(
             'CaseConditionUndertakingController' => 'Olcs\Controller\CaseConditionUndertakingController',
             'CaseRevokeController' => 'Olcs\Controller\CaseRevokeController',
             'CasePiController' => 'Olcs\Controller\CasePiController',
-            'DocumentController' => 'Olcs\Controller\DocumentController'
+            'DocumentController' => 'Olcs\Controller\DocumentController',
+            'LicenceController' => 'Olcs\Controller\Licence\LicenceController'
         )
     ),
     'view_manager' => array(
         'template_path_stack' => array(
             'olcs/view' => dirname(__DIR__) . '/view',
+        )
+    ),
+    'view_helpers' => array(
+        'invokables' => array(
+            'olcsMenu' => 'Olcs\View\Helper\Navigation\Menu'
         )
     ),
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',
