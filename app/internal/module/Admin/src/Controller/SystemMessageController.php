@@ -18,7 +18,7 @@ class SystemMessageController extends FormActionController
     public function indexAction()
     {
         $view = $this->getView();
-        $view->setTemplate('admin/page/system-message');
+        $view->setTemplate('system-message/index');
         return $view;
     }
 }

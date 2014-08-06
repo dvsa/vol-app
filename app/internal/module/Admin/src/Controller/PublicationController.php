@@ -18,7 +18,7 @@ class PublicationController extends FormActionController
     public function indexAction()
     {
         $view = $this->getView();
-        $view->setTemplate('admin/page/publication');
+        $view->setTemplate('publication/index');
         return $view;
     }
 }

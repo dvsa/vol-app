@@ -18,7 +18,7 @@ class ScanningController extends FormActionController
     public function indexAction()
     {
         $view = $this->getView();
-        $view->setTemplate('admin/page/scanning');
+        $view->setTemplate('scanning/index');
         return $view;
     }
 }

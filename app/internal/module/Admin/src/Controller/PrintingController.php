@@ -18,7 +18,7 @@ class PrintingController extends FormActionController
     public function indexAction()
     {
         $view = $this->getView();
-        $view->setTemplate('admin/page/printing');
+        $view->setTemplate('printing/index');
         return $view;
     }
 }

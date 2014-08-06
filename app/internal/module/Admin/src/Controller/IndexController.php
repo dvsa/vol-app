@@ -18,7 +18,7 @@ class IndexController extends FormActionController
     public function indexAction()
     {
         $view = $this->getView();
-        $view->setTemplate('admin/home');
+        $view->setTemplate('home');
         return $view;
     }
 }

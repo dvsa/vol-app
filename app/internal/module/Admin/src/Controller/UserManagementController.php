@@ -18,7 +18,7 @@ class UserManagementController extends FormActionController
     public function indexAction()
     {
         $view = $this->getView();
-        $view->setTemplate('admin/page/user-management');
+        $view->setTemplate('user-management/index');
         return $view;
     }
 }

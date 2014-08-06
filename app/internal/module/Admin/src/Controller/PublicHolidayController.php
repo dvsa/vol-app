@@ -18,7 +18,7 @@ class PublicHolidayController extends FormActionController
     public function indexAction()
     {
         $view = $this->getView();
-        $view->setTemplate('admin/page/public-holiday');
+        $view->setTemplate('public-holiday/index');
         return $view;
     }
 }

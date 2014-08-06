@@ -18,7 +18,7 @@ class ContinuationController extends FormActionController
     public function indexAction()
     {
         $view = $this->getView();
-        $view->setTemplate('admin/page/continuation');
+        $view->setTemplate('continuation/index');
         return $view;
     }
 }

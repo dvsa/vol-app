@@ -18,7 +18,7 @@ class ReportController extends FormActionController
     public function indexAction()
     {
         $view = $this->getView();
-        $view->setTemplate('admin/page/report');
+        $view->setTemplate('report/index');
         return $view;
     }
 }

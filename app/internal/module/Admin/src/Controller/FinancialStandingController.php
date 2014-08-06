@@ -18,7 +18,7 @@ class FinancialStandingController extends FormActionController
     public function indexAction()
     {
         $view = $this->getView();
-        $view->setTemplate('admin/page/financial-standing');
+        $view->setTemplate('financial-standing/index');
         return $view;
     }
 }
