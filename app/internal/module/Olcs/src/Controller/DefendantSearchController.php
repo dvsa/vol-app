@@ -121,9 +121,34 @@ class DefendantSearchController extends CaseController
         return $searchFieldset;
     }
 
-    private function getSearchFieldsetFromPost()
+    /**
+     *
+     * @param type $name
+     * @param type $options
+     * @return \Common\Form\Elements\Types\PersonSearch
+     */
+    private function getSearchFieldsetbyEntityType($type, $name, $options)
     {
+        switch($type) {
+            case "defendant-type.operator":
+                $fieldset = new \Common\Form\Elements\Types\OperatorSearch($name, $options);
+                $fieldset->setAttributes(
+                    array(
+                        'type' => 'operator-search',
+                    )
+                );
+                break;
+            default:
+                $fieldset = new \Common\Form\Elements\Types\PersonSearch($name, $options);
+                $fieldset->setAttributes(
+                    array(
+                        'type' => 'person-search',
+                    )
+                );
+                break;
+        }
 
+        return $fieldset;
     }
 
     /**
@@ -136,15 +161,8 @@ class DefendantSearchController extends CaseController
     private function processDefendantType($fieldset, $post)
     {
         $this->setPersist(false);
-
-        $search = new \Common\Form\Elements\Types\PersonSearch('searchPerson', array('label' => 'Select'));
-        $search->setAttributes(
-            array(
-                'type' => 'person-search',
-            )
-        );
-
-        $search->setLabel('Search for person');
+        $type = $this->getEntityTypeFromPost($post);
+        $search = $this->getSearchFieldsetbyEntityType($type, 'searchPerson', ['label' => 'Search for person']);
 
         $search->remove('person-list');
         $search->remove('select');
@@ -156,6 +174,17 @@ class DefendantSearchController extends CaseController
     }
 
     /**
+     * Method to get the type of entity
+     *
+     * @param type $post
+     * @return type
+     */
+    private function getEntityTypeFromPost($post)
+    {
+        return isset($post['defendant-details']['defType']) ?
+            $post['defendant-details']['defType'] : false;
+    }
+    /**
      * Method to process the person search button
      *
      * @param object $fieldset
@@ -166,12 +195,8 @@ class DefendantSearchController extends CaseController
     {
         $this->setPersist(false);
 
-        $search = new \Common\Form\Elements\Types\PersonSearch('searchPerson', array('label' => 'Select'));
-        $search->setAttributes(
-            array(
-                'type' => 'person-search',
-            )
-        );
+        $type = $this->getEntityTypeFromPost($post);
+        $search = $this->getSearchFieldsetbyEntityType($type, 'searchPerson', ['label' => 'Search for person']);
 
         $personName = trim($post[$fieldset->getName()]['personSearch']);
 
@@ -214,16 +239,11 @@ class DefendantSearchController extends CaseController
      */
     private function processDefendantSelected($fieldset, $post)
     {
-
         $this->setPersist(false);
 
-        $search = new \Common\Form\Elements\Types\PersonSearch('searchPerson', array('label' => 'Select'));
-        $search->setAttributes(
-            array(
-                'type' => 'person-search',
-            )
-        );
-        $search->setLabel('Search for person');
+        $type = $this->getEntityTypeFromPost($post);
+        $search = $this->getSearchFieldsetbyEntityType($type, 'searchPerson', ['label' => 'Search for person']);
+
         $search->remove('person-list');
         $search->remove('select');
 
@@ -246,14 +266,9 @@ class DefendantSearchController extends CaseController
     {
         $this->setPersist(false);
 
-        $search = new \Common\Form\Elements\Types\PersonSearch('searchPerson', array('label' => 'Select'));
-        $search->setAttributes(
-            array(
-                'type' => 'person-search',
-            )
-        );
+        $type = $this->getEntityTypeFromPost($post);
+        $search = $this->getSearchFieldsetbyEntityType($type, 'searchPerson', ['label' => 'Search for person']);
 
-        $search->setLabel('Search for person');
         $search->remove('person-list');
         $search->remove('select');
         $search->remove('search');
