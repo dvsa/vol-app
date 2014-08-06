@@ -38,6 +38,8 @@ class IndexController extends AbstractActionController
             'Results' => array(
                 array(
                     'id' => 1234,
+                    'type' => 'Application',
+                    'licenceNumber' => 'OB12345678',
                     'category' => 'Application',
                     'subCategory' => 'Address change assisted digital',
                     'description' => 'Address change',
