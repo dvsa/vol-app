@@ -67,18 +67,6 @@ class SubmissionController extends FormActionController implements CrudInterface
     }
 
     /**
-     * @return mixed
-     */
-    public function deleteAction()
-    {
-        $this->response->setStatusCode(501);
-
-        return array(
-            'content' => 'Delete Method Not Implemented in ' . __CLASS__
-        );
-    }
-
-    /**
      * Gets a variable from the route
      *
      * @param string $param
