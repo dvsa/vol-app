@@ -17,7 +17,7 @@ use Olcs\Controller\Traits\DeleteActionTrait;
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class CaseConvictionController extends CaseController
+class CaseConvictionController extends DefendantSearchController
 {
     use DeleteActionTrait;
 
@@ -167,7 +167,17 @@ class CaseConvictionController extends CaseController
             $data
         );
 
-        $posted = $this->getRequest()->getPost();
+        $request = $this->getRequest();
+        if ($request->isGet())
+        {
+            $form->get('defendant-details')->remove('personSearch');
+            $form->get('defendant-details')->remove('personFirstname');
+            $form->get('defendant-details')->remove('personLastname');
+            $form->get('defendant-details')->remove('dateOfBirth');
+            $form->get('defendant-details')->remove('search');
+        } else {
+            $posted = $request->getPost();
+        }
 
         $parentCategory = $this->getConvictionParentCategories();
 
@@ -274,6 +284,9 @@ class CaseConvictionController extends CaseController
         $data['defendant-details'] = $data;
         $data['offence'] = $data;
 
+        // set entity data to make form builder aware of fieldsets it has to
+        // generate
+        $this->setEntityData($data);
         $form = $this->generateFormWithData(
             'conviction',
             'processConviction',
@@ -288,7 +301,25 @@ class CaseConvictionController extends CaseController
 
         $formSubCategory = array();
 
-        $posted = $this->getRequest()->getPost();
+        $request = $this->getRequest();
+
+        if ($request->isGet()) {
+            if ($data['defType'] == 'defendant_type.operator') {
+                $form->get('defendant-details')->remove('personSearch');
+                $form->get('defendant-details')->remove('personFirstname');
+                $form->get('defendant-details')->remove('personLastname');
+                $form->get('defendant-details')->remove('dateOfBirth');
+                $form->get('defendant-details')->remove('search');
+                $form->get('defendant-details')->remove('operatorSearch');
+                $form->get('defendant-details')->remove('entity-list');
+                $form->get('defendant-details')->remove('select');
+            } else {
+                $form->get('defendant-details')->remove('personSearch');
+                $form->get('defendant-details')->remove('search');
+            }
+        } else {
+            $posted = $request->getPost();
+        }
 
         if (isset($posted['offence']['parentCategory']) && $posted['offence']['parentCategory']) {
             $data['parentCategory'] = $posted['offence']['parentCategory'];
