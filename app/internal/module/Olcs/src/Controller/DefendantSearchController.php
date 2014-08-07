@@ -369,6 +369,10 @@ class DefendantSearchController extends CaseController
         $type = $this->getEntityType($post);
         $search = $this->getSearchFieldsetbyEntityType($type, 'searchPerson', ['label' => 'Search for person']);
 
+        // just remember the defType, but clear the rest of the fieldset
+        $defData = ['defType' => $post['defendant-details']['defType']];
+        $this->setFieldValue($fieldset->getName(), $defData);
+
         $search->remove('person-list');
         $search->remove('entity-list');
         $search->remove('select');
