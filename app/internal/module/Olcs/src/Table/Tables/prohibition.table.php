@@ -37,9 +37,23 @@ return array(
             },
             'name' => 'prohibitionDate'
         ),
-        //array(
-            //'title' => 'Type',
-            //'format' => '{{impoundingType}}'
-        //),
+        array(
+            'title' => 'Vehicle',
+            'format' => '{{vrm}}'
+        ),
+        array(
+            'title' => 'Trailer',
+            'format' => '{{isTrailer}}'
+        ),
+        array(
+            'title' => 'Imposed At',
+            'format' => '{{imposedAt}}'
+        ),
+        array(
+            'title' => 'Type',
+            'formatter' => function ($data) {
+                return $data['prohibitionType']['comment'];
+            }
+        ),
     )
 );
