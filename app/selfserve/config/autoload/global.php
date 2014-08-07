@@ -17,5 +17,6 @@ return array(
                 'Person' => 'person',
             )
         )
-    )
+    ),
+    'application-name' => 'selfserve'
 );

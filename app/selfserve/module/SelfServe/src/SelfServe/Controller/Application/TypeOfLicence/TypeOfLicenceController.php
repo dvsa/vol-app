@@ -147,6 +147,7 @@ class TypeOfLicenceController extends ApplicationController
         // page when $this obviously isn't the right controller
         $form = static::makeFormAlterations(
             $form,
+            $this,
             $this->getFormAlterationOptions()
         );
 
@@ -199,11 +200,12 @@ class TypeOfLicenceController extends ApplicationController
      * it here as an identity function but child classes can optionally override it
      *
      * @param Form $form
+     * @param Controller $context
      * @param array $options
      *
      * @return $form
      */
-    public static function makeFormAlterations($form, $options = array())
+    public static function makeFormAlterations($form, $context, $options = array())
     {
         return $form;
     }

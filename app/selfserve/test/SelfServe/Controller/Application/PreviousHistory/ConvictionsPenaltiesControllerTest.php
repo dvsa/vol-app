@@ -472,7 +472,7 @@ class ConvictionsPenaltiesControllerTest extends AbstractApplicationControllerTe
                 'penalty'
             ),
         );
-        if ($service == 'Conviction' && $method = 'GET' && $bundle == $convictionDataBundle) {
+        if ($service == 'Conviction' && $method === 'GET' && $bundle == $convictionDataBundle) {
             return array(
                 'Count'  => 1,
                 'Results' => array(
@@ -490,7 +490,7 @@ class ConvictionsPenaltiesControllerTest extends AbstractApplicationControllerTe
             );
         }
 
-        if ($service == 'Application' && $method = 'GET') {
+        if ($service == 'Application' && $method === 'GET') {
             return array(
                 'id' => 1,
                 'version' => 1,

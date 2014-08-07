@@ -1,56 +1,75 @@
 <?php
 
-$formConfig = array(
-    'application_review-declarations_summary' => array(
-        'name' => 'application_review-declarations_summary',
-        'disabled' => true,
-        'fieldsets' => array(
-            array(
-                'name' => 'title',
-                'elements' => array(
-                    'title' => array(
-                        'type' => 'hidden',
-                        'label' => '<h2>1. Type of licence</h2>',
-                    )
-                )
-            )
+$groups = array(
+    array(
+        'title' => 'Type of licence',
+        'forms' => array(
+            'application_type-of-licence_operator-location',
+            'application_type-of-licence_operator-type',
+            'application_type-of-licence_licence-type'
+        )
+    ),
+    array(
+        'title' => 'Previous history',
+        'forms' => array(
+            'application_previous-history_financial-history',
+            'application_previous-history_licence-history',
+            'application_previous-history_convictions-penalties'
         )
     )
 );
+
+$formFieldsets = [];
 
 $ignoreFieldsetTypes = array(
     'journey-buttons'
 );
 
-$forms = array(
-    'application_type-of-licence_operator-location',
-    'application_type-of-licence_operator-type',
-    'application_type-of-licence_licence-type'
-);
+foreach ($groups as $key => $group) {
 
-foreach ($forms as $form) {
+    $idx = $key + 1;
 
-    $config = include(__DIR__ . '/' . $form . '.form.php');
-    $fieldsets = $config[$form]['fieldsets'];
+    $formFieldsets[] = array(
+        'name' => 'title-' . $idx,
+        'elements' => array(
+            'title' => array(
+                'type' => 'hidden',
+                'label' => '<h2>' . $idx . '. ' . $group['title'] . '</h2>'
+            )
+        )
+    );
 
-    $i = 1;
+    foreach ($group['forms'] as $form) {
 
-    foreach ($fieldsets as $fieldset) {
+        $config = include(__DIR__ . '/' . $form . '.form.php');
+        $fieldsets = $config[$form]['fieldsets'];
 
-        if (isset($fieldset['type']) && in_array($fieldset['type'], $ignoreFieldsetTypes)) {
-            continue;
+        foreach ($fieldsets as $key => $fieldset) {
+
+            $i = $key + 1;
+
+            if (isset($fieldset['type']) && in_array($fieldset['type'], $ignoreFieldsetTypes)) {
+                continue;
+            }
+
+            $fieldset['name'] = $form . '-' . $i;
+
+            $formFieldsets[] = $fieldset;
         }
-
-        $fieldset['name'] = $form . '-' . $i;
-
-        $formConfig['application_review-declarations_summary']['fieldsets'][] = $fieldset;
-
-        $i++;
     }
 }
 
-$formConfig['application_review-declarations_summary']['fieldsets'][] = array(
-    'type' => 'journey-buttons'
+return array(
+    'application_review-declarations_summary' => array(
+        'name' => 'application_review-declarations_summary',
+        'disabled' => true,
+        'fieldsets' => array_merge(
+            $formFieldsets,
+            array(
+                array(
+                    'type' => 'journey-buttons'
+                )
+            )
+        )
+    )
 );
-
-return $formConfig;
