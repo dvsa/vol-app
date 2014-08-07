@@ -38,14 +38,15 @@ class LicenceTypeController extends TypeOfLicenceController
      * Make form alterations
      *
      * This method enables the summary to apply the same form alterations. In this
-     * case we ensurewe manipulate the form based on whether the license is PSV or not
+     * case we ensure we manipulate the form based on whether the license is PSV or not
      *
      * @param Form $form
+     * @param mixed $context
      * @param array $options
      *
      * @return $form
      */
-    public static function makeFormAlterations($form, $options = array())
+    public static function makeFormAlterations($form, $context, $options = array())
     {
         // get rid of the special restricted licence if they're a goods operator
         if (!$options['isPsv']) {
