@@ -86,9 +86,9 @@ return [
     'licence' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/licence/:id',
+            'route' => '/licence/:licence',
             'constraints' => [
-                'id' => '[0-9]+'
+                'licence' => '[0-9]+'
             ],
             'defaults' => [
                 'controller' => 'LicenceController',

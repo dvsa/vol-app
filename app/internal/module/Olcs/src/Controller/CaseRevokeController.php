@@ -234,7 +234,7 @@ class CaseRevokeController extends CaseController implements CrudInterface
             'PiReason',
             'GET',
             [
-                'proposeToRevoke' => '1',
+                'isProposeToRevoke' => '1',
                 'isDecision' => '0',
                 'goodsOrPsv' => $goodsOrPsv,
                 'limit' => 'all'

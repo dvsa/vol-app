@@ -19,7 +19,7 @@ class LicenceController extends AbstractFormActionController
 {
     public function getViewWithLicence()
     {
-        $licence = $this->getLicence($this->getFromRoute('id'));
+        $licence = $this->getLicence($this->getFromRoute('licence'));
 
         $view = $this->getView(['licence' => $licence]);
 
@@ -28,8 +28,6 @@ class LicenceController extends AbstractFormActionController
 
     public function indexAction()
     {
-        $this->setBreadcrumb(array('licence/overview' => array('id' => $this->getFromRoute('id'))));
-
         $view = $this->getViewWithLicence();
         $view->setTemplate('licence/index');
 
@@ -38,8 +36,6 @@ class LicenceController extends AbstractFormActionController
 
     public function editAction()
     {
-        $this->setBreadcrumb(array('licence/edit' => array('id' => $this->getFromRoute('id'))));
-
         $view = $this->getViewWithLicence();
         $view->setTemplate('licence/index');
 
@@ -48,8 +44,6 @@ class LicenceController extends AbstractFormActionController
 
     public function casesAction()
     {
-        $this->setBreadcrumb(array('licence/cases' => array('id' => $this->getFromRoute('id'))));
-
         $view = $this->getViewWithLicence();
         $view->setTemplate('licence/index');
 
@@ -58,8 +52,6 @@ class LicenceController extends AbstractFormActionController
 
     public function documentsAction()
     {
-        $this->setBreadcrumb(array('licence/documents' => array('id' => $this->getFromRoute('id'))));
-
         $view = $this->getViewWithLicence();
         $view->setTemplate('licence/index');
 
@@ -68,8 +60,6 @@ class LicenceController extends AbstractFormActionController
 
     public function processingAction()
     {
-        $this->setBreadcrumb(array('licence/edit' => array('id' => $this->getFromRoute('id'))));
-
         $view = $this->getViewWithLicence();
         $view->setTemplate('licence/index');
 
@@ -78,8 +68,6 @@ class LicenceController extends AbstractFormActionController
 
     public function feesAction()
     {
-        $this->setBreadcrumb(array('licence/edit' => array('id' => $this->getFromRoute('id'))));
-
         $view = $this->getViewWithLicence();
         $view->setTemplate('licence/index');
 
