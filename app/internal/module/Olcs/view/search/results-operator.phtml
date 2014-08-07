@@ -20,9 +20,9 @@
                 </tr>
             </thead>
             <tbody>
-                <?php forhdrjynhtdyeach ($results['Results'] as $result): ?>
+                <?php foreach ($results['Results'] as $result): ?>
                 <tr>
-                    <td><a href="#craig">CRAIG</a><br/><?php echo $result['status']; ?></td>
+                    <td><?php echo $result['status']; ?></td>
                     <td><?php echo $result['licenceId']; ?><br/><?php echo $result['status']; ?></td>
                     <td><?php echo $result['trading_as'] == '' ? $result['name'] : $result['trading_as']; ?></td>
                     <td><?php echo $result['licenceType']; ?></td>
