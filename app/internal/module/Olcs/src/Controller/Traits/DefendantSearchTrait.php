@@ -84,12 +84,12 @@ trait DefendantSearchTrait
         if ($request->isPost()) {
             $post = (array)$request->getPost();
         }
-        $searchFieldset = false;
+
         // If we haven't posted a form, or we haven't clicked find person
         if (isset($post[$name]['lookupTypeSubmit'])
             && !empty($post[$name]['lookupTypeSubmit'])) {
             // get the relevant search form
-            $searchFieldset = $this->processDefendantType($fieldset, $post);
+            $searchFieldset = $this->processDefendantType($post);
 
         } elseif (isset($post[$name]['search'])
             && !empty($post[$name]['search'])) {
@@ -143,8 +143,10 @@ trait DefendantSearchTrait
     /**
      * Gets the relevent search fieldset by type
      *
-     * @param array $options
-     * @param string $name
+     * @param string $type Defendant type
+     * @param array $options Options for fieldset
+     * @param string $name Name to give the new fieldset
+     *
      * @return object Fieldset
      */
     private function getSearchFieldsetbyEntityType($type, $name, $options)
@@ -175,11 +177,10 @@ trait DefendantSearchTrait
     /**
      * Method to process the defendant type
      *
-     * @param object $fieldset
      * @param array $post
      * @return \Common\Form\Elements\Types\PersonSearch
      */
-    private function processDefendantType($fieldset, $post)
+    private function processDefendantType($post)
     {
         $this->setPersist(false);
         $type = $this->getEntityType($post);
@@ -211,8 +212,8 @@ trait DefendantSearchTrait
             return $post['defendant-details']['defType'];
         } else {
             // check entity data
-            $entity_data = $this->getEntityData();
-            return $entity_data['defType'];
+            $entityData = $this->getEntityData();
+            return $entityData['defType'];
         }
 
     }
@@ -393,12 +394,13 @@ trait DefendantSearchTrait
     /**
      * Method to retrieve the results of a search by name
      *
-     * @param string $name
+     * @param array $data search params
+     * @param string RestController name
      * @return array
      */
-    private function getEntityListForName($data, $rest_controller)
+    private function getEntityListForName($data, $restController)
     {
-        $results = $this->makeRestCall($rest_controller, 'GET', $data);
+        $results = $this->makeRestCall($restController, 'GET', $data);
         return $results['Results'];
     }
 
@@ -406,14 +408,14 @@ trait DefendantSearchTrait
      * Method to format the person list result into format suitable for select
      * dropdown
      *
-     * @param array $person_list
+     * @param array $personList
      * @return array
      */
-    private function formatPersonsForSelect($person_list)
+    private function formatPersonsForSelect($personList)
     {
         $result = [];
-        if (is_array($person_list)) {
-            foreach ($person_list as $person) {
+        if (is_array($personList)) {
+            foreach ($personList as $person) {
                 $dob = new \DateTime($person['date_of_birth']);
                 $result[$person['id']] = trim(
                     $person['surname'] .
@@ -430,16 +432,17 @@ trait DefendantSearchTrait
      * Method to format the entity list result into format suitable for select
      * dropdown
      *
-     * @param array $person_list
+     * @param array $entityList
      * @return array
      */
-    private function formatEntitiesForSelect($entity_list)
+    private function formatEntitiesForSelect($entityList)
     {
         $result = [];
-        if (is_array($entity_list)) {
-            foreach ($entity_list as $entity) {
+        if (is_array($entityList)) {
+            foreach ($entityList as $entity) {
                 $result[$entity['id']] = trim(
-                    $entity['name']);
+                    $entity['name']
+                );
             }
         }
 
@@ -450,16 +453,16 @@ trait DefendantSearchTrait
      * Method to format a person details from db result into form field array
      * structure
      *
-     * @param array $person_details
+     * @param array $personDetails
      * @return array
      * @todo get date of birth to prepopulate form
      */
-    private function formatPerson($person_details)
+    private function formatPerson($personDetails)
     {
-        $result['personFirstname'] = $person_details['firstName'];
-        $result['personLastname'] = $person_details['surname'];
+        $result['personFirstname'] = $personDetails['firstName'];
+        $result['personLastname'] = $personDetails['surname'];
 
-        $result['dateOfBirth'] = $person_details['dateOfBirth'];
+        $result['dateOfBirth'] = $personDetails['dateOfBirth'];
 
         return $result;
     }
@@ -503,9 +506,9 @@ trait DefendantSearchTrait
      * @param array $person_details
      * @return array`
      */
-    private function formatOperator($entity_details)
+    private function formatOperator($entityDetails)
     {
-        $result['operatorName'] = $entity_details['name'];
+        $result['operatorName'] = $entityDetails['name'];
 
         return $result;
     }
