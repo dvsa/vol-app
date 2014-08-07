@@ -83,7 +83,7 @@ class UndertakingsController extends VehicleSafetyController
     protected function alterForm($form)
     {
         $data = $this->load($this->getIdentifier());
-        
+
         // If this traffic area has no Scottish Rules flag, set it to false.
         if ( !isset($data['trafficArea']['applyScottishRules']) ) {
             $data['trafficArea']['applyScottishRules']=false;
@@ -91,16 +91,11 @@ class UndertakingsController extends VehicleSafetyController
 
         // In some cases, totAuthSmallVehicles etc. can be set NULL, and we
         // need to evaluate as zero, so fix that here.
-        if ( is_null($data['totAuthSmallVehicles']) ) {
-            $data['totAuthSmallVehicles']=0;
-        }
-
-        if ( is_null($data['totAuthMediumVehicles']) ) {
-            $data['totAuthMediumVehicles']=0;
-        }
-
-        if ( is_null($data['totAuthLargeVehicles']) ) {
-            $data['totAuthLargeVehicles']=0;
+        $arrayCheck=array('totAuthSmallVehicles','totAuthMediumVehicles','totAuthLargeVehicles');
+        foreach($arrayCheck as $attribute) {
+            if ( is_null($data[$attribute]) ) {
+                $data[$attribute]=0;
+            }
         }
 
         // Now remove the form fields we don't need to display to the user.
