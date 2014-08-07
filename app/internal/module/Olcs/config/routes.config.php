@@ -98,7 +98,7 @@ return [
         'may_terminate' => true,
         'child_routes' => [
             'overview' => [
-                'type' => 'segment',
+                'type' => 'literal',
                 'options' => [
                     'route' => '/overview',
                     'defaults' => [
