@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Safety Controller Test
+ * Undertakings Controller Test
  *
  * @author Jessica Rowbottom <jess.rowbottom@valtech.co.uk>
  */
@@ -12,7 +12,7 @@ use SelfServe\Test\Controller\Application\AbstractApplicationControllerTestCase;
 use SelfServe\Controller\Application\ApplicationController;
 
 /**
- * Safety Controller Test
+ * Undertakings Controller Test
  *
  * @author Jessica Rowbottom <jess.rowbottom@valtech.co.uk>
  */

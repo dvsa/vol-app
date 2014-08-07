@@ -125,7 +125,8 @@ class UndertakingsController extends VehicleSafetyController
     }
 
     /**
-     * Add customisation to the table
+     * Add customisation to the form dependent on which of five scenarios
+     * is in play for OLCS-2855
      *
      * @param Form $form
      * @return Form
