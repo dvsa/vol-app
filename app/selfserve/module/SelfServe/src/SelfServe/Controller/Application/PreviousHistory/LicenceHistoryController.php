@@ -200,9 +200,6 @@ class LicenceHistoryController extends ApplicationController
             case 'table-licences-held':
                 $previousLicenceType = self::LICENCE_TYPE_HELD;
                 break;
-            default:
-                $previousLicenceType = '';
-                break;
         }
 
         $data = $this->makeRestCall(
@@ -337,7 +334,7 @@ class LicenceHistoryController extends ApplicationController
             case 'table-licences-refused-add':
             case 'table-licences-refused-edit':
             case 'table-licences-revoked-add':
-            case 'table-licences-refused-edit':
+            case 'table-licences-revoked-edit':
             case 'table-licences-public-inquiry-add':
             case 'table-licences-public-inquiry-edit':
                 $form->get('data')->remove('willSurrender');
