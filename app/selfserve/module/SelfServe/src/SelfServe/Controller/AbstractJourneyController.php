@@ -1195,12 +1195,22 @@ abstract class AbstractJourneyController extends AbstractController
             $processedData = $this->processActionLoad($data);
         } else {
 
-            $data = $this->load($this->getIdentifier());
+            $data = $this->loadCurrent();
 
             $processedData = $this->processLoad($data);
         }
 
         return $processedData;
+    }
+
+    /**
+     * Simple helper method to load the current application
+     *
+     * @return array
+     */
+    protected function loadCurrent()
+    {
+        return $this->load($this->getIdentifier());
     }
 
     /**

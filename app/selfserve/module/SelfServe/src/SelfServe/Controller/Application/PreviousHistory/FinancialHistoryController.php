@@ -77,11 +77,11 @@ class FinancialHistoryController extends PreviousHistoryController
     {
         $this->processFileUploads(array('data' => array('file' => 'processFinancialFileUpload')), $form);
 
-        $fileList = $form->get('data')->get('file')->get('list');
-
-        $fileData = $this->load($this->getIdentifier())['documents'];
-
-        $fileList->setFiles($fileData, $this->url());
+        $options = array(
+            'fieldset' => 'data',
+            'data'     => $this->loadCurrent(),
+        );
+        $form = static::makeFormAlterations($form, $this, $options);
 
         $this->processFileDeletions(array('data' => array('file' => 'deleteFile')), $form);
 
@@ -113,5 +113,27 @@ class FinancialHistoryController extends PreviousHistoryController
     protected function processLoad($oldData)
     {
         return array('data' => $oldData);
+    }
+
+    /**
+     * Make any relevant form alterations before rendering. In this case
+     * we don't show the insolvency details data if it's empty and we're
+     * on a review page
+     */
+    public static function makeFormAlterations($form, $context, $options)
+    {
+        $isReview = isset($options['isReview']) && $options['isReview'];
+        $data = $options['data'];
+        $fieldset = $form->get($options['fieldset']);
+
+        if ($isReview && empty($data['insolvencyDetails'])) {
+            $fieldset->remove('insolvencyDetails');
+        }
+
+        $fileList = $fieldset->get('file')->get('list');
+
+        $fileList->setFiles($data['documents'], $context->url());
+
+        return $form;
     }
 }

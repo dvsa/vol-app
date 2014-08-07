@@ -19,7 +19,8 @@ return array(
     'columns' => array(
         array(
             'width' => 'checkbox',
-            'type' => 'Selector'
+            'type' => 'Selector',
+            'hideWhenDisabled' => true
         ),
         array(
             'title' => 'selfserve-app-subSection-previous-history-criminal-conviction-columnName',
