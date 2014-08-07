@@ -233,9 +233,6 @@ class ConvictionController extends DefendantSearchController
                 $form->get('defendant-details')->remove('select');
             } else {
                 $form->get('defendant-details')->remove('personSearch');
-                $form->get('defendant-details')->remove('personFirstname');
-                $form->get('defendant-details')->remove('personLastname');
-                $form->get('defendant-details')->remove('dateOfBirth');
                 $form->get('defendant-details')->remove('search');
             }
         } else {

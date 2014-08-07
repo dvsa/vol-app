@@ -20,13 +20,19 @@ use Zend\Mvc\MvcEvent;
 class DefendantSearchController extends CaseController
 {
 
-    private $entityData;
+    /**
+     * Array to hold the entity data, as Edit needs to know what type of form
+     * to build
+     *
+     * @var array
+     */
+    private $entity_data;
 
 
     /**
      * Gets a from from either a built or custom form config.
-     * @param type $type
-     * @return type
+     * @param string $type
+     * @return Form
      */
     protected function getForm($type)
     {
@@ -56,7 +62,7 @@ class DefendantSearchController extends CaseController
                 if ($searchFieldset instanceof \Common\Form\Elements\Types\PersonSearch ||
                     $searchFieldset instanceof \Common\Form\Elements\Types\OperatorSearch) {
                     $elements = $searchFieldset->getElements();
-                    foreach($elements as $element) {
+                    foreach ($elements as $element) {
                         $fieldset->add($element);
                     }
                 }
@@ -116,6 +122,13 @@ class DefendantSearchController extends CaseController
         return $searchFieldset;
     }
 
+    /**
+     * Method called in the absence of any form buttons posting (e.g. on initial
+     * GET requests and edit via GET
+     *
+     * @param array $post
+     * @return object Fieldset
+     */
     private function processGetPreparedForm($post)
     {
         $type = $this->getEntityType($post);
@@ -135,10 +148,11 @@ class DefendantSearchController extends CaseController
     }
 
     /**
+     * Gets the relevent search fieldset by type
      *
-     * @param type $name
-     * @param type $options
-     * @return \Common\Form\Elements\Types\PersonSearch
+     * @param array $options
+     * @param string $name
+     * @return object Fieldset
      */
     private function getSearchFieldsetbyEntityType($type, $name, $options)
     {
@@ -210,11 +224,11 @@ class DefendantSearchController extends CaseController
 
     }
     /**
-     * Method to process the person search button
+     * Method to process the entity tyoe search button
      *
      * @param object $fieldset
      * @param array $post
-     * @return \Common\Form\Elements\Types\PersonSearch
+     * @return object fieldset
      */
     private function processDefendantLookup($fieldset, $post)
     {
@@ -238,6 +252,13 @@ class DefendantSearchController extends CaseController
         return $search;
     }
 
+    /**
+     * Method to process the person search form
+     *
+     * @param object Fieldset $search
+     * @param string $name
+     * @return object Fieldset
+     */
     private function processPersonLookup($search, $name)
     {
 
@@ -265,9 +286,15 @@ class DefendantSearchController extends CaseController
         return $search;
     }
 
+    /**
+     * Method to process the operator search form
+     *
+     * @param object Fieldset $search
+     * @param string $name
+     * @return object Fieldset
+     */
     private function processOperatorLookup(&$search, $name)
     {
-
         if (empty($name)) {
             $search->setMessages(
                 array('Please enter an operator name')
@@ -299,7 +326,7 @@ class DefendantSearchController extends CaseController
      *
      * @param object $fieldset
      * @param array $post
-     * @return \Common\Form\Elements\Types\PersonSearch
+     * @return object fieldset
      */
     private function processDefendantSelected($fieldset, $post)
     {
@@ -333,7 +360,7 @@ class DefendantSearchController extends CaseController
      *
      * @param object $fieldset
      * @param array $post
-     * @return \Common\Form\Elements\Types\PersonSearch
+     * @return object fieldset
      */
     private function processDefendantAddNew($fieldset, $post)
     {
@@ -426,8 +453,8 @@ class DefendantSearchController extends CaseController
      * Method to format a person details from db result into form field array
      * structure
      *
-     * @param type $person_details
-     * @return type
+     * @param array $person_details
+     * @return array
      * @todo get date of birth to prepopulate form
      */
     private function formatPerson($person_details)
@@ -443,9 +470,8 @@ class DefendantSearchController extends CaseController
     /**
      * Method to perform a final look up on the person selected.
      *
-     * @param type $id
-     * @return type
-     * @todo Call relevent backend service to get person details
+     * @param integer $id
+     * @return array
      */
     private function getPersonById($id)
     {
@@ -460,9 +486,8 @@ class DefendantSearchController extends CaseController
     /**
      * Method to perform a final look up on the entity selected.
      *
-     * @param type $id
-     * @return type
-     * @todo Call relevent backend service to get person details
+     * @param integer $id
+     * @return array
      */
     private function getOperatorById($id)
     {
@@ -478,9 +503,8 @@ class DefendantSearchController extends CaseController
      * Method to format an operator details from db result into form field array
      * structure
      *
-     * @param type $person_details
-     * @return type
-     * @todo get date of birth to prepopulate form
+     * @param array $person_details
+     * @return array`
      */
     private function formatOperator($entity_details)
     {
@@ -489,12 +513,23 @@ class DefendantSearchController extends CaseController
         return $result;
     }
 
+    /**
+     * Sets the entity data
+     *
+     * @param array $data
+     * @return \Olcs\Controller\DefendantSearchController
+     */
     public function setEntityData($data)
     {
         $this->entity_data = $data;
         return $this;
     }
 
+    /**
+     * Gets the entity data
+     *
+     * @return array
+     */
     public function getEntityData()
     {
         return $this->entity_data;
