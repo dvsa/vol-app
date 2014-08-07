@@ -293,7 +293,7 @@ class DefendantSearchController extends CaseController
      * @param string $name
      * @return object Fieldset
      */
-    private function processOperatorLookup(&$search, $name)
+    private function processOperatorLookup($search, $name)
     {
         if (empty($name)) {
             $search->setMessages(
