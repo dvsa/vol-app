@@ -50,13 +50,13 @@ return array(
                 'elements' => array(
                     'psvSmallVehicleScotland' => array(
                         'label' => $translationPrefix . '.smallVehiclesUndertakingsScotland.title',
-                        'type' => 'textarea',
                         'class' => 'long',
+                        'type' => 'textarea',
                     ),
                     'psvSmallVehicleUndertakings' => array(
                         'label' => $translationPrefix . '.smallVehiclesUndertakings.title',
-                        'type' => 'textarea',
                         'class' => 'long',
+                        'type' => 'textarea',
                     ),
                     // 15c/d
                     'psvSmallVehicleConfirmation' => array(

@@ -82,6 +82,10 @@ class UndertakingsController extends VehicleSafetyController
      */
     protected function processLoad($data)
     {
+        $translate = $this->getServiceLocator()->get('viewhelpermanager')->get('translate');
+
+
+
         $data['application'] = array(
             'id' => $data['id'],
             'version' => $data['version'],
@@ -96,6 +100,8 @@ class UndertakingsController extends VehicleSafetyController
         );
 
         $data['smallVehiclesUndertakings'] = array(
+            'psvSmallVehicleUndertakings' => $translate('application_vehicle-safety_undertakings.smallVehiclesUndertakings.text'),
+            'psvSmallVehicleScotland' => $translate('application_vehicle-safety_undertakings.smallVehiclesUndertakingsScotland.text'),
             'psvSmallVehicleConfirmation' => (isset($data['psvSmallVehicleConfirmation'])?
                                                     $data['psvSmallVehicleConfirmation']:false)
         );
@@ -113,6 +119,7 @@ class UndertakingsController extends VehicleSafetyController
             'psvOnlyLimousinesConfirmation' => (isset($data['psvOnlyLimousinesConfirmation'])?
                                                     $data['psvOnlyLimousinesConfirmation']:false)
         );
+
 
         return $data;
     }
