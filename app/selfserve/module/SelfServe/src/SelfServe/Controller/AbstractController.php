@@ -9,6 +9,7 @@ namespace SelfServe\Controller;
 
 use Common\Controller\FormActionController;
 use Zend\Filter\Word\CamelCaseToDash;
+use Zend\Filter\Word\DashToCamelCase;
 use Zend\Http\Response;
 use Zend\View\Model\ViewModel;
 
@@ -397,5 +398,17 @@ abstract class AbstractController extends FormActionController
     {
         $converter = new CamelCaseToDash();
         return strtolower($converter->filter($string));
+    }
+
+    /**
+     * Convert dash to camel case
+     *
+     * @param string $string
+     * @return string
+     */
+    protected function dashToCamel($string)
+    {
+        $converter = new DashToCamelCase();
+        return $converter->filter($string);
     }
 }

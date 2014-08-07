@@ -112,14 +112,12 @@ class ConvictionsPenaltiesController extends PreviousHistoryController
     }
 
     /**
-     * Get the form table data
-     *
-     * @return array
+     * Retrieve the relevant table data as we want to render it on the review summary page
+     * Note that as with most controllers this is the same data we want to render on the
+     * normal form page, hence why getFormTableData (declared later) simply wraps this
      */
-    protected function getFormTableData()
+    public static function getSummaryTableData($applicationId, $context, $tableName)
     {
-        $applicationId = $this->params()->fromRoute('applicationId');
-
         $bundle = array(
             'properties' => array(
                 'id',
@@ -133,7 +131,7 @@ class ConvictionsPenaltiesController extends PreviousHistoryController
             ),
         );
 
-        $data = $this->makeRestCall(
+        $data = $context->makeRestCall(
             'Conviction',
             'GET',
             array('application' => $applicationId),
@@ -153,6 +151,17 @@ class ConvictionsPenaltiesController extends PreviousHistoryController
         }
 
         return $finalData;
+    }
+
+    /**
+     * Get the form table data - in this case simply invoke the same logic
+     * as when rendered on a summary page, but provide the controller for context
+     *
+     * @return array
+     */
+    protected function getFormTableData($applicationId, $tableName)
+    {
+        return static::getSummaryTableData($applicationId, $this, $tableName);
     }
 
     /**
