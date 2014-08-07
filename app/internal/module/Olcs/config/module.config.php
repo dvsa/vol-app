@@ -39,9 +39,7 @@ return array(
         )
     ),
     'view_helpers' => array(
-        'invokables' => array(
-            'olcsMenu' => 'Olcs\View\Helper\Navigation\Menu'
-        )
+        'invokables' => array()
     ),
     'local_forms_path' => array(
         __DIR__ . '/../src/Form/Forms/'
