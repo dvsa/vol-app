@@ -30,7 +30,7 @@ return array(
             'CaseRevokeController' => 'Olcs\Controller\CaseRevokeController',
             'CasePiController' => 'Olcs\Controller\CasePiController',
             'DocumentController' => 'Olcs\Controller\DocumentController',
-            'DefendantSearchController' => 'Olcs\DefendantSearchController'
+            'DefendantSearchController' => 'Olcs\DefendantSearchController',
             'LicenceController' => 'Olcs\Controller\Licence\LicenceController'
         )
     ),
