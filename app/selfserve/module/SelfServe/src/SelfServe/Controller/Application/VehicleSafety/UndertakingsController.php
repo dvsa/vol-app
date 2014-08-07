@@ -16,23 +16,19 @@ namespace SelfServe\Controller\Application\VehicleSafety;
 class UndertakingsController extends VehicleSafetyController
 {
 
-
-    /**
-     * Action service
-     *
-     * @var string
-     */
-    protected $actionService = 'Vehicle';
-
     /**
      * Action data map
      *
      * @var array
      */
-    protected $actionDataMap = array(
+    protected $dataMap = array(
         'main' => array(
             'mapFrom' => array(
-                'data'
+                'application',
+                'smallVehiclesIntention',
+                'smallVehiclesUndertakings',
+                'nineOrMore',
+                'limousinesNoveltyVehicles'
             )
         )
     );
@@ -43,6 +39,21 @@ class UndertakingsController extends VehicleSafetyController
      * @var array
      */
     protected $dataBundle = array(
+        'properties' => array(
+            'id',
+            'version',
+            'status',
+            'totAuthSmallVehicles',
+            'totAuthMediumVehicles',
+            'totAuthLargeVehicles',
+            'psvOperateSmallVehicles',
+            'psvSmallVehicleNotes',
+            'psvSmallVehicleConfirmation',
+            'psvNoSmallVehicleConfirmation',
+            'psvLimousines',
+            'psvNoLimousineConfirmation',
+            'psvOnlyLimousineConfirmation',
+        ),
         'children' => array(
             'trafficArea' => array(
                 'properties' => array(
@@ -63,38 +74,6 @@ class UndertakingsController extends VehicleSafetyController
         return $this->renderSection();
     }
 
-
-    /**
-     * Placeholder for save
-     *
-     * @param array $data
-     * @parem string $service
-     */
-    protected function save($data, $service = null)
-    {
-    }
-
-    /**
-     * Save the vehicle
-     *
-     * @param array $data
-     * @param string $service
-     */
-    protected function actionSave($data, $service = null)
-    {
-    }
-
-    /**
-     * Format the data for the form
-     *
-     * @param array $data
-     * @return array
-     */
-    protected function processActionLoad($data)
-    {
-        return array('data' => $data);
-    }
-
     /**
      * Add customisation to the table
      *
@@ -104,7 +83,7 @@ class UndertakingsController extends VehicleSafetyController
     protected function alterForm($form)
     {
         $data = $this->load($this->getIdentifier());
-
+        
         // If this traffic area has no Scottish Rules flag, set it to false.
         if ( !isset($data['trafficArea']['applyScottishRules']) ) {
             $data['trafficArea']['applyScottishRules']=false;
@@ -138,11 +117,11 @@ class UndertakingsController extends VehicleSafetyController
                     // Case 2 - Scottish small only
                     $form->remove('smallVehiclesIntention');
                     $form->remove('nineOrMore');
-                    $form->get('limousinesNoveltyVehicles')->remove('optLimousinesNine');
+                    $form->get('limousinesNoveltyVehicles')->remove('psvOnlyLimousinesConfirmation');
                 } else {
                     // Case 1 - England/Wales small only
                     $form->remove('nineOrMore');
-                    $form->get('limousinesNoveltyVehicles')->remove('optLimousinesNine');
+                    $form->get('limousinesNoveltyVehicles')->remove('psvOnlyLimousinesConfirmation');
                 }
             } else {
                 // cases 4, 5

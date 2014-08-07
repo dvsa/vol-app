@@ -8,18 +8,34 @@ return array(
         'attributes' => array(
             'method' => 'post',
         ),
-        'fieldsets' =>  array(
+        'fieldsets' => array(
+            array(
+                'name' => 'application',
+                'elements' => array(
+                    'id' => array(
+                        'type' => 'hidden'
+                    ),
+                    'version' => array(
+                        'type' => 'hidden'
+                    ),
+                    'status' => array(
+                        'type' => 'hidden'
+                    ),
+                ),
+            ),
             array(
                 'name' => 'smallVehiclesIntention',
                 'options' => array(
                     'label' => $translationPrefix . '-smallVehiclesIntention'
                 ),
                 'elements' => array(
-                    'optSmallVehiclesIntention' => array(
+                    // 15b[i]
+                    'psvOperateSmallVehicles' => array(
                         'type' => 'yesNoRadio',
                         'label' => $translationPrefix . '.smallVehiclesIntention.yesNo'
                     ),
-                    'txtSmallVehiclesIntentionDetails' => array(
+                    // 15b[ii]
+                    'psvSmallVehicleNotes' => array(
                         'label' => $translationPrefix . '.smallVehiclesIntentionDetails.title',
                         'type' => 'textarea',
                         'class' => 'long',
@@ -32,17 +48,17 @@ return array(
                     'label' => $translationPrefix . '-smallVehiclesUndertakings'
                 ),
                 'elements' => array(
-                    'smallVehiclesScotland' => array(
+                    'psvSmallVehicleScotland' => array(
                         'label' => $translationPrefix . '.smallVehiclesUndertakingsScotland.title',
                         'type' => 'textarea',
                         'class' => 'long',
                     ),
-                    'smallVehiclesUndertakings' => array(
+                    'psvSmallVehicleUndertakings' => array(
                         'label' => $translationPrefix . '.smallVehiclesUndertakings.title',
                         'type' => 'textarea',
                         'class' => 'long',
                     ),
-                    'optSmallVehiclesConfirmation' => array(
+                    'psvSmallVehicleConfirmation' => array(
                         'type' => 'singlecheckbox',
                         'label' => $translationPrefix . '.smallVehiclesConfirmation'
                     )
@@ -55,7 +71,7 @@ return array(
                     'hint' => $translationPrefix . '-nineOrMore.hint'
                 ),
                 'elements' => array(
-                    'textNineOrMorePassengers' => array(
+                    'psvNoSmallVehicleConfirmation' => array(
                         'type' => 'singlecheckbox',
                         'label' => $translationPrefix . '.nineOrMore.details'
                     )
@@ -67,15 +83,15 @@ return array(
                     'label' => $translationPrefix . '-limousines'
                 ),
                 'elements' => array(
-                    'optLimousinesYesNo' => array(
+                    'psvLimousines' => array(
                         'type' => 'yesNoRadio',
                         'label' => $translationPrefix . '.limousinesApplication.yesNo'
                     ),
-                    'optAgreement' => array(
+                    'psvNoLimousinesConfirmation' => array(
                         'type' => 'singlecheckbox',
                         'label' => $translationPrefix . '.limousinesApplication.agreement'
                     ),
-                    'optLimousinesNine' => array(
+                    'psvOnlyLimousinesConfirmation' => array(
                         'type' => 'singlecheckbox',
                         'label' => $translationPrefix . '.limousinesNine.agreement'
                     )
