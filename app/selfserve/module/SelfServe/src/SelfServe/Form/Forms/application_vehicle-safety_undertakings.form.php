@@ -25,9 +25,6 @@ return array(
             ),
             array(
                 'name' => 'smallVehiclesIntention',
-                'options' => array(
-                    'label' => $translationPrefix . '-smallVehiclesIntention'
-                ),
                 'elements' => array(
                     // 15b[i]
                     'psvOperateSmallVehicles' => array(
@@ -51,12 +48,12 @@ return array(
                     'psvSmallVehicleScotland' => array(
                         'label' => $translationPrefix . '.smallVehiclesUndertakingsScotland.title',
                         'class' => 'long',
-                        'type' => 'textarea',
+                        'type' => 'textarea'
                     ),
                     'psvSmallVehicleUndertakings' => array(
                         'label' => $translationPrefix . '.smallVehiclesUndertakings.title',
                         'class' => 'long',
-                        'type' => 'textarea',
+                        'type' => 'textarea'
                     ),
                     // 15c/d
                     'psvSmallVehicleConfirmation' => array(
@@ -67,12 +64,12 @@ return array(
             ),
             array(
                 'name' => 'nineOrMore',
-                'options' => array(
-                    'label' => $translationPrefix . '-nineOrMore',
-                    'hint' => $translationPrefix . '-nineOrMore.hint'
-                ),
                 // 15e
                 'elements' => array(
+                    'psvNoSmallVehiclesConfirmationLabel' => array(
+                        'type' => 'html',
+                        'label' => $translationPrefix . '.nineOrMore.label'
+                    ),
                     'psvNoSmallVehiclesConfirmation' => array(
                         'type' => 'singlecheckbox',
                         'label' => $translationPrefix . '.nineOrMore.details'
@@ -91,11 +88,19 @@ return array(
                         'label' => $translationPrefix . '.limousinesApplication.yesNo'
                     ),
                     // 15f[ii]
+                    'psvNoLimousineConfirmationLabel' => array(
+                        'type' => 'html',
+                        'label' => $translationPrefix . '.limousinesApplication.agreement.label'
+                    ),
                     'psvNoLimousineConfirmation' => array(
                         'type' => 'singlecheckbox',
                         'label' => $translationPrefix . '.limousinesApplication.agreement'
                     ),
                     // 15g
+                    'psvOnlyLimousinesConfirmationLabel' => array(
+                        'type' => 'html',
+                        'label' => $translationPrefix . '.limousinesNine.agreement.label'
+                    ),
                     'psvOnlyLimousinesConfirmation' => array(
                         'type' => 'singlecheckbox',
                         'label' => $translationPrefix . '.limousinesNine.agreement'
