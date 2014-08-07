@@ -1,7 +1,6 @@
 <?php
 
 return array(
-    'application-name' => 'internal',
     'router' => [
         'routes' => include __DIR__ . '/routes.config.php'
     ],
@@ -48,5 +47,5 @@ return array(
     //-------- End navigation -----------------
     'submission_config' => include __DIR__ . '/submission/submission.config.php',
     'local_scripts_path' => [__DIR__ . '/../assets/js/inline/'],
-    'asset_path' => '//olcs-frontend'
+    'asset_path' => '//dvsa-static.olcsdv-ap01.olcs.npm'
 );

@@ -1,7 +1,6 @@
 <?php
 
 return [
-    'application-name' => 'internal-admin',
     'router' => [
         'routes' => [
             'admin-dashboard' => [
