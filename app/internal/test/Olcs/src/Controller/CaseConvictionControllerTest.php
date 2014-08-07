@@ -764,7 +764,8 @@ class CaseConvictionControllerTest extends AbstractHttpControllerTestCase
         $getMock = $this->getMock(
             'stdClass',
             [
-                'get'
+                'get',
+                'remove'
             ]
         );
 
@@ -778,13 +779,17 @@ class CaseConvictionControllerTest extends AbstractHttpControllerTestCase
         $setValueMock = $this->getMock(
             'stdClass',
             [
-                'setValue'
+                'setValue',
             ]
         );
 
         $setValueOptionsMock->expects($this->any())
             ->method('setValueOptions')
             ->will($this->returnValue($setValueMock));
+
+        $getMock->expects($this->any())
+            ->method('remove')
+            ->will($this->returnValue(true));
 
         $getMock->expects($this->any())
             ->method('get')
@@ -812,6 +817,78 @@ class CaseConvictionControllerTest extends AbstractHttpControllerTestCase
 
         $getPostMock->expects($this->once())
             ->method('getPost')
+            ->will($this->returnValue($returnValue));
+
+        return $getPostMock;
+    }
+
+    /**
+     * Tests the initial request to test the isGet branch which removes various
+     * person search fields
+     */
+    public function testAddInitialRequestAction()
+    {
+
+        $this->controller->expects($this->once())
+            ->method('getParams')
+            ->with(array('case', 'licence', 'id'))
+            ->will($this->returnValue(array ( 'licence' => 7, 'case' => 54 )));
+
+        $this->controller->expects($this->exactly(2))
+            ->method('makeRestCall')
+            ->will(
+                $this->onConsecutiveCalls(
+                    $this->returnValue(
+                        $this->returnValue(array('id' => 54))
+                    ),
+                    $this->returnValue(
+                        $this->sampleParentCategory()
+                    )
+                )
+            );
+
+        $form = $this->getFormMock();
+
+        $this->controller->expects($this->once())
+            ->method('generateFormWithData')
+            ->will($this->returnValue($form));
+
+        $this->controller->expects($this->once())
+            ->method('getRequest')
+            ->will($this->returnValue($this->getGetDataMock(true)));
+
+        $scriptMock = $this->getMock('\stdClass', ['loadFiles']);
+        $scriptMock->expects($this->any())
+            ->method('loadFiles')
+            ->will($this->returnValue([]));
+
+        $serviceMock = $this->getMock('\stdClass', ['get']);
+        $serviceMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValue($scriptMock));
+
+        $this->controller->expects($this->once())
+            ->method('getServiceLocator')
+            ->will($this->returnValue($serviceMock));
+
+        $this->controller->addAction();
+    }
+
+    /**
+     *  Gets a form mock via GET
+     */
+    private function getGetDataMock($returnValue = array())
+    {
+        $getPostMock = $this->getMock(
+            'stdClass',
+            [
+                'isGet',
+                'getPost'
+            ]
+        );
+
+        $getPostMock->expects($this->once())
+            ->method('isGet')
             ->will($this->returnValue($returnValue));
 
         return $getPostMock;
