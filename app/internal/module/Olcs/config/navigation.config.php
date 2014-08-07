@@ -11,6 +11,56 @@ return array(
             'use_route_match' => true,
             'pages' => array(
                 array(
+                    'id' => 'licence',
+                    'label' => 'Licence',
+                    'route' => 'licence',
+                    'use_route_match' => true,
+                    'pages' => array(
+                        array(
+                            'id' => 'licence_overview',
+                            'class' => 'horizontal-navigation__item',
+                            'label' => 'Overview',
+                            'route' => 'licence/overview',
+                            'use_route_match' => true
+                        ),
+                        array(
+                            'id' => 'licence_edit',
+                            'class' => 'horizontal-navigation__item',
+                            'label' => 'Licence',
+                            'route' => 'licence/edit',
+                            'use_route_match' => true
+                        ),
+                        array(
+                            'id' => 'licence_caselist',
+                            'class' => 'horizontal-navigation__item',
+                            'label' => 'Cases',
+                            'route' => 'licence/cases',
+                            'use_route_match' => true
+                        ),
+                        array(
+                            'id' => 'licence_documents',
+                            'class' => 'horizontal-navigation__item',
+                            'label' => 'Documents',
+                            'route' => 'licence/documents',
+                            'use_route_match' => true
+                        ),
+                        array(
+                            'id' => 'licence_processing',
+                            'class' => 'horizontal-navigation__item',
+                            'label' => 'Processing',
+                            'route' => 'licence/processing',
+                            'use_route_match' => true
+                        ),
+                        array(
+                            'id' => 'licence_fees',
+                            'class' => 'horizontal-navigation__item',
+                            'label' => 'Fees',
+                            'route' => 'licence/fees',
+                            'use_route_match' => true
+                        )
+                    )
+                ),
+                array(
                     'label' => 'Operators',
                     'route' => 'operators',
                     'use_route_match' => true,

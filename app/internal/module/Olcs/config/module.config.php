@@ -29,7 +29,8 @@ return array(
             'CaseConditionUndertakingController' => 'Olcs\Controller\CaseConditionUndertakingController',
             'CaseRevokeController' => 'Olcs\Controller\CaseRevokeController',
             'CasePiController' => 'Olcs\Controller\CasePiController',
-            'DocumentController' => 'Olcs\Controller\DocumentController'
+            'DocumentController' => 'Olcs\Controller\DocumentController',
+            'LicenceController' => 'Olcs\Controller\Licence\LicenceController'
         )
     ),
     'view_manager' => array(
@@ -37,7 +38,12 @@ return array(
             'olcs/view' => dirname(__DIR__) . '/view',
         )
     ),
-    'local_forms_path' => [__DIR__ . '/../src/Form/Forms/'],
+    'view_helpers' => array(
+        'invokables' => array()
+    ),
+    'local_forms_path' => array(
+        __DIR__ . '/../src/Form/Forms/'
+    ),
     //-------- Start navigation -----------------
     'navigation' => array(
         'default' => array(
@@ -46,6 +52,8 @@ return array(
     ),
     //-------- End navigation -----------------
     'submission_config' => include __DIR__ . '/submission/submission.config.php',
-    'local_scripts_path' => [__DIR__ . '/../assets/js/inline/'],
+    'local_scripts_path' => array(
+        __DIR__ . '/../assets/js/inline/'
+    ),
     'asset_path' => '//dvsa-static.olcsdv-ap01.olcs.npm'
 );
