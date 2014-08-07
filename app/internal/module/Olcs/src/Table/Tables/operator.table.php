@@ -20,7 +20,7 @@ return array(
             'sort' => 'licenceNumber',
             'formatter' => function ($row) {
                 return '<a href="' . $this->generateUrl(
-                    array('id' => $row['licenceId']),
+                    array('licence' => $row['licenceId']),
                     'licence'
                 ) . '">' . $row['licenceNumber'] . '</a><br/>' . $row['status'];
             },

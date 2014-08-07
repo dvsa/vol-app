@@ -9,5 +9,14 @@
 ?>
 
 <div class="full-width">
+
+    <?php
+        echo $this->navigation('navigation')
+                  ->menu($this->navigation()->findOneBy('id', 'licence'))
+                  ->setUlClass('horizontal-navigation')
+                  ->setAddClassToListItem(true)
+                  ->setPartial('licence/partials/tabs');
+    ?>
+
     <?php echo $table; ?>
 </div><!-- end .full-width -->

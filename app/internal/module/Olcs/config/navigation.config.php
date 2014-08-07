@@ -25,35 +25,30 @@ return array(
                         ),
                         array(
                             'id' => 'licence_edit',
-                            'class' => 'horizontal-navigation__item',
                             'label' => 'Licence',
                             'route' => 'licence/edit',
                             'use_route_match' => true
                         ),
                         array(
                             'id' => 'licence_caselist',
-                            'class' => 'horizontal-navigation__item',
                             'label' => 'Cases',
-                            'route' => 'licence/cases',
+                            'route' => 'licence_case_list',
                             'use_route_match' => true
                         ),
                         array(
                             'id' => 'licence_documents',
-                            'class' => 'horizontal-navigation__item',
                             'label' => 'Documents',
                             'route' => 'licence/documents',
                             'use_route_match' => true
                         ),
                         array(
                             'id' => 'licence_processing',
-                            'class' => 'horizontal-navigation__item',
                             'label' => 'Processing',
                             'route' => 'licence/processing',
                             'use_route_match' => true
                         ),
                         array(
                             'id' => 'licence_fees',
-                            'class' => 'horizontal-navigation__item',
                             'label' => 'Fees',
                             'route' => 'licence/fees',
                             'use_route_match' => true
