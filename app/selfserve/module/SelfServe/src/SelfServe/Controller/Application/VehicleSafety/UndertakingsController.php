@@ -75,6 +75,49 @@ class UndertakingsController extends VehicleSafetyController
     }
 
     /**
+     * Load the data for the form
+     *
+     * @param arary $data
+     * @return array
+     */
+    protected function processLoad($data)
+    {
+        $data['application'] = array(
+            'id' => $data['id'],
+            'version' => $data['version'],
+            'status' => $data['status']
+        );
+
+        $data['smallVehiclesIntention'] = array(
+            'psvOperateSmallVehicles' => (isset($data['psvOperateSmallVehicles'])?
+                                                    $data['psvOperateSmallVehicles']:false),
+            'psvSmallVehicleNotes' => (isset($data['psvSmallVehicleNotes'])?
+                                                    $data['psvSmallVehicleNotes']:"")
+        );
+
+        $data['smallVehiclesUndertakings'] = array(
+            'psvSmallVehicleConfirmation' => (isset($data['psvSmallVehicleConfirmation'])?
+                                                    $data['psvSmallVehicleConfirmation']:false)
+        );
+
+        $data['nineOrMore'] = array(
+            'psvNoSmallVehiclesConfirmation' => (isset($data['psvNoSmallVehiclesConfirmation'])?
+                                                $data['psvNoSmallVehiclesConfirmation']:false)
+        );
+
+        $data['limousinesNoveltyVehicles'] = array(
+            'psvLimousines' => (isset($data['psvLimousines'])?
+                                                    $data['psvLimousines']:false),
+            'psvNoLimousineConfirmation' => (isset($data['psvNoLimousineConfirmation'])?
+                                                    $data['psvNoLimousineConfirmation']:false),
+            'psvOnlyLimousinesConfirmation' => (isset($data['psvOnlyLimousinesConfirmation'])?
+                                                    $data['psvOnlyLimousinesConfirmation']:false)
+        );
+
+        return $data;
+    }
+
+    /**
      * Add customisation to the table
      *
      * @param Form $form

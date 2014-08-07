@@ -41,6 +41,16 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
     public function testIndexAction()
     {
         $this->taDataResponse=array(
+                'id' => 1,
+                'version' => 1,
+                'status' => 'test.status',
+                'psvOperateSmallVehicles' => null,
+                'psvSmallVehicleNotes' => "",
+                'psvSmallVehicleConfirmation' => null,
+                'psvNoSmallVehiclesConfirmation' => null,
+                'psvLimousines' => null,
+                'psvNoLimousineConfirmation' => null,
+                'psvOnlyLimousinesConfirmation' => null,
                 'licence' => array(
                     'id' => 10,
                     'version' => 1,
@@ -76,6 +86,16 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
     public function testIndexActionWithCase1ShowsFullForm()
     {
         $taDataResponse=array(
+                'id' => 1,
+                'version' => 1,
+                'status' => 'test.status',
+                'psvOperateSmallVehicles' => null,
+                'psvSmallVehicleNotes' => "",
+                'psvSmallVehicleConfirmation' => null,
+                'psvNoSmallVehiclesConfirmation' => null,
+                'psvLimousines' => null,
+                'psvNoLimousineConfirmation' => null,
+                'psvOnlyLimousinesConfirmation' => null,
                 'licence' => array(
                     'id' => 10,
                     'version' => 1,
@@ -127,6 +147,16 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
     public function testIndexActionWithCase2ShowsFullForm()
     {
         $taDataResponse=array(
+                'id' => 1,
+                'version' => 1,
+                'status' => 'test.status',
+                'psvOperateSmallVehicles' => null,
+                'psvSmallVehicleNotes' => "",
+                'psvSmallVehicleConfirmation' => null,
+                'psvNoSmallVehiclesConfirmation' => null,
+                'psvLimousines' => null,
+                'psvNoLimousineConfirmation' => null,
+                'psvOnlyLimousinesConfirmation' => null,
                 'licence' => array(
                     'id' => 10,
                     'version' => 1,
@@ -178,6 +208,16 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
     public function testIndexActionWithCase3ShowsFullForm()
     {
         $taDataResponse=array(
+                'id' => 1,
+                'version' => 1,
+                'status' => 'test.status',
+                'psvOperateSmallVehicles' => null,
+                'psvSmallVehicleNotes' => "",
+                'psvSmallVehicleConfirmation' => null,
+                'psvNoSmallVehiclesConfirmation' => null,
+                'psvLimousines' => null,
+                'psvNoLimousineConfirmation' => null,
+                'psvOnlyLimousinesConfirmation' => null,
                 'licence' => array(
                     'id' => 10,
                     'version' => 1,
@@ -230,6 +270,16 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
     public function testIndexActionWithCase3AndNullsShowsFullForm()
     {
         $taDataResponse=array(
+                'id' => 1,
+                'version' => 1,
+                'status' => 'test.status',
+                'psvOperateSmallVehicles' => null,
+                'psvSmallVehicleNotes' => "",
+                'psvSmallVehicleConfirmation' => null,
+                'psvNoSmallVehiclesConfirmation' => null,
+                'psvLimousines' => null,
+                'psvNoLimousineConfirmation' => null,
+                'psvOnlyLimousinesConfirmation' => null,
                 'licence' => array(
                     'id' => 10,
                     'version' => 1,
@@ -281,6 +331,16 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
     public function testIndexActionWithCase4ShowsFullForm()
     {
         $taDataResponse=array(
+                'id' => 1,
+                'version' => 1,
+                'status' => 'test.status',
+                'psvOperateSmallVehicles' => null,
+                'psvSmallVehicleNotes' => "",
+                'psvSmallVehicleConfirmation' => null,
+                'psvNoSmallVehiclesConfirmation' => null,
+                'psvLimousines' => null,
+                'psvNoLimousineConfirmation' => null,
+                'psvOnlyLimousinesConfirmation' => null,
                 'licence' => array(
                     'id' => 10,
                     'version' => 1,
@@ -332,6 +392,16 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
     public function testIndexActionWithCase5ShowsFullForm()
     {
         $taDataResponse=array(
+                'id' => 1,
+                'version' => 1,
+                'status' => 'test.status',
+                'psvOperateSmallVehicles' => null,
+                'psvSmallVehicleNotes' => "",
+                'psvSmallVehicleConfirmation' => null,
+                'psvNoSmallVehiclesConfirmation' => null,
+                'psvLimousines' => null,
+                'psvNoLimousineConfirmation' => null,
+                'psvOnlyLimousinesConfirmation' => null,
                 'licence' => array(
                     'id' => 10,
                     'version' => 1,
@@ -430,7 +500,7 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
                     'licenceType' => 'restricted',
                     'organisation' => array(
                         'organisationType' => 'org_type.lc'
-                    )
+                    ),
                 )
             );
         }
@@ -506,91 +576,6 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
             );
         }
 
-        if ($service == 'Vehicle' && $method == 'POST') {
-            return array('id' => 1);
-        }
-
-        if ($service == 'LicenceVehicle' && $method == 'POST') {
-            return array('id' => 1);
-        }
-
-        if ($service == 'Licence' && $method == 'GET' && $bundle == $tableDataBundle) {
-            return array(
-                'licenceVehicles' => array(
-                    array(
-                        'vehicle' => array(
-                            'id' => 1,
-                            'vrm' => 'AB12 ABG',
-                            'platedWeight' => 100
-                        )
-                    ),
-                    array(
-                        'vehicle' => array(
-                            'id' => 2,
-                            'vrm' => 'DB12 ABG',
-                            'platedWeight' => 150
-                        )
-                    )
-                )
-            );
-        }
-
-        $tableDataBundle = array(
-            'properties' => null,
-            'children' => array(
-                'licenceVehicles' => array(
-                    'properties' => null,
-                    'children' => array(
-                        'vehicle' => array(
-                            'properties' => array(
-                                'id',
-                                'vrm',
-                                'platedWeight'
-                            )
-                        )
-                    )
-                )
-            )
-        );
-
-        if ($service == 'Licence' && $method == 'GET' && $bundle == $tableDataBundle) {
-            return array(
-                'licenceVehicles' => array(
-                    array(
-                        'vehicle' => array(
-                            'id' => 1,
-                            'vrm' => 'AB12 ABG',
-                            'platedWeight' => 100
-                        )
-                    ),
-                    array(
-                        'vehicle' => array(
-                            'id' => 2,
-                            'vrm' => 'DB12 ABG',
-                            'platedWeight' => 150
-                        )
-                    )
-                )
-            );
-        }
-
-        if ($service == 'Vehicle' && $method == 'GET') {
-            return array(
-                'id' => 1,
-                'version' => 1,
-                'vrm' => 'AB12 ABC',
-                'platedWeight' => 100
-            );
-        }
-
-        if ($service == 'LicenceVehicle' && $method == 'GET') {
-            return array(
-                'Count' => 1,
-                'Results' => array(
-                    array('id' => 1)
-                )
-            );
-        }
-
+        echo "nowt";
     }
 }
