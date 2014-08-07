@@ -1,23 +1,16 @@
 <?php
 
-/**
- * An abstract form controller that all ordinary OLCS controllers inherit from
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- * @author Shaun <shaun.lizzio@valtech.co.uk>
- */
-namespace Olcs\Controller;
+namespace Olcs\Controller\Traits;
 
 use Common\Form\Elements\Types\EntitySearch;
 use Common\Form\Elements\Types\OperatorSearch;
 use Zend\Mvc\MvcEvent;
 
 /**
- * An abstract form controller that all ordinary OLCS controllers inherit from
- *
- * @author Shaun <shaun.lizzio@valtech.co.uk>
+ * Class DefendantSearchTrait
+ * @package Olcs\Controller
  */
-class DefendantSearchController extends CaseController
+trait DefendantSearchTrait
 {
 
     /**

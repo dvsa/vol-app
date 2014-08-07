@@ -11,15 +11,17 @@ namespace Olcs\Controller;
 use Zend\View\Model\ViewModel;
 use Zend\Json\Json as Json;
 use Olcs\Controller\Traits\DeleteActionTrait;
+use Olcs\Controller\Traits\DefendantSearchTrait;
 
 /**
  * Case Conviction Controller
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class CaseConvictionController extends DefendantSearchController
+class CaseConvictionController extends CaseController
 {
     use DeleteActionTrait;
+    use DefendantSearchTrait;
 
     public function getDeleteServiceName()
     {
