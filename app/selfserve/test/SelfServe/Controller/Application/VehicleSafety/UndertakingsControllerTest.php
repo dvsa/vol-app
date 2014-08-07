@@ -223,6 +223,58 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
         $this->assertFormElements($taDataResponse,$presentFields,$missingFields);
     }
 
+
+    /**
+     * Test indexAction
+     */
+    public function testIndexActionWithCase3AndNullsShowsFullForm()
+    {
+        $taDataResponse=array(
+                'licence' => array(
+                    'id' => 10,
+                    'version' => 1,
+                    'goodsOrPsv' => 'psv',
+                    'niFlag' => 0,
+                    'licenceType' => 'standard-national',
+                    'organisation' => array(
+                        'organisationType' => 'org_type.lc'
+                    )
+                ),
+                'trafficArea' => array(
+                    'id' => 5,
+                    'applyScottishRules' => null
+                ),
+                'totAuthSmallVehicles' => null,
+                'totAuthMediumVehicles' => 1,
+                'totAuthLargeVehicles' => null
+            );
+
+        $presentFields=array(
+                'nineOrMore' => Array(                      // 15e
+                    'psvNoSmallVehiclesConfirmation'
+                ),
+                'limousinesNoveltyVehicles' => Array(
+                    'psvLimousines',                        // 15f[i]
+                    'psvNoLimousineConfirmation'            // 15f[ii]
+                ),
+                'limousinesNoveltyVehicles' => Array(
+                    'psvOnlyLimousinesConfirmation',        // 15g
+                )
+        );
+
+        $missingFields=array(
+                'smallVehiclesIntention' => Array(
+                    'psvOperateSmallVehicles',              // 15b[i]
+                    'psvSmallVehicleNotes'                  // 15b[ii]
+                ),
+                'smallVehiclesUndertakings' => Array(       // 15c/d
+                    'psvSmallVehicleConfirmation'
+                ),
+        );
+
+        $this->assertFormElements($taDataResponse,$presentFields,$missingFields);
+    }
+
     /**
      * Test indexAction
      */
