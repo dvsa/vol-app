@@ -100,7 +100,7 @@ class CaseConvictionController extends CaseController
                 'summary' => $summary,
                 'table' => $table,
                 'commentForm' => $form,
-                'legacyOffencestable' => $legacyOffencestable
+                'legacyOffencesTable' => $legacyOffencesTable
             ]
         );
 
@@ -545,13 +545,16 @@ class CaseConvictionController extends CaseController
             'LegacyOffence',
             'GET',
             array(
-                'vosaCase' => $case['id'],
+//                'case' => $case['id'],
                 'sort' => 'offenceDate',
                 'order' => 'DESC',
                 'bundle' => json_encode($legacyOffencesBundle)
             )
         );
-        $legacyOffencestable = $this->getServiceLocator()->get('Table')->buildTable('legacyOffences', $legacyOffencesResults);
 
+        $data['url'] = $this->url();
+        $legacyOffencesTable = $this->getServiceLocator()->get('Table')->buildTable('legacyOffences', $legacyOffencesResults, $data);
+
+        return $legacyOffencesTable;
     }
 }

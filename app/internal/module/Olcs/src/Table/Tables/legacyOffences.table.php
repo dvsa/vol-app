@@ -8,9 +8,7 @@ return array(
         'crud' => array(
             'formName' => 'offence',
             'actions' => array(
-                'add' => array('class' => 'primary'),
                 'edit' => array('requireRows' => true),
-                'delete' => array('class' => 'warning', 'requireRows' => true)
             )
         ),
         'paginate' => array(
