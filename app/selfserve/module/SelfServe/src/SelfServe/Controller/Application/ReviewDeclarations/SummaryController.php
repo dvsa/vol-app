@@ -48,6 +48,13 @@ class SummaryController extends ReviewDeclarationsController
     );
 
     /**
+     * We'll populate this later when calling generateSummary()
+     *
+     * @var array
+     */
+    private $summarySections = array();
+
+    /**
      * Render the section form
      *
      * @return Response
