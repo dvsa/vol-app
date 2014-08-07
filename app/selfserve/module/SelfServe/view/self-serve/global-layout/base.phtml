@@ -1,40 +1,58 @@
 <?php echo $this->doctype(); ?>
-
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <?php echo $this->headTitle($this->translate('')); ?>
-
-        <?php echo $this->headMeta() ->appendName('viewport', 'width=device-width, initial-scale=1.0') ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
-        ?>
-
-        <?php /* echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico')); */
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8">
+    <?php echo $this->headTitle($this->translate('')); ?>
+    <?php echo $this->headMeta() ->appendName('viewport', 'width=device-width, initial-scale=1.0') ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')?>
+    <?php /* echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico')); */
         echo $this->headLink()->appendStylesheet($this->assetPath('/styles/' . $this->applicationName() . '.css')) ?>
+    <?php echo $this->headScript(); ?>
+  </head>
 
-        <?php echo $this->headScript(); ?>
-
-    </head>
-
-    <body class="<?php echo $this->applicationName(); ?>">
+  <body class="selfserve">
     <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
 
-    <?php echo $this->render('layout/partials/header.phtml'); ?>
+    <div role="banner" class="global-header">
+      <div class="global-header__wrapper">
+        <a href="/styleguides/selfserve/" title="Go to the OLCS Selfserve styleguide homepage" class="global-header__logo">
+          <img src="<?php echo $this->assetPath('/images/gov.uk_logotype_crown.png') ?>" alt="GOV.UK logo">GOV.UK
+        </a>
+        <h2 class="global-header__title">Operator Licensing</h2>
+      </div><!-- end .global-header__wrapper -->
+    </div><!-- end .global-header -->
+    
+    <div class="page-wrapper">
 
-	<div class="page-wrapper">
-        <?php  echo $this->navigation('navigation') // <-- Update this!!
-        ->breadcrumbs()
-        ->setMinDepth(0)
-        ->setPartial(array('layout/partials/breadcrumbs.phtml', 'Olcs'));
-        ?>
-        <div id="main" role="main">
-            <?php echo $this->content; ?>
+      <div class="user-header">
+        <p class="phase"><span class="phase__tag">alpha</span><span class="phase__message">This is a prototype – your <a href="">feedback</a> will help us improve it.</span></p> 
+        <ul class="user-menu">
+          <li class="user-menu__item">Sam Quayle:</li>
+          <li class="user-menu__item"><a href="/styleguides/selfserve/">Dashboard</a></li>
+          <li class="user-menu__item"><a href="">Sign out</a></li>
+        </ul>
+      </div><!-- end .user-header -->
+
+      <div id="main" role="main">
+
+        <?php echo $this->content; ?>
+      </div><!-- end .main -->
+    </div><!-- end .page-wrapper-->
+
+    <div class="global-footer">
+      <div class="global-footer__wrapper">
+        <ul class="global-footer__links">
+          <li class="global-footer__link"><a href="">Helpdesk</a></li>
+          <li class="global-footer__link"><a href="">Privacy &amp; cookies</a></li>
+          <li class="global-footer__link">Built by <a href="https://www.gov.uk/government/organisations/driver-and-vehicle-standards-agency">Driver &amp; Vehicle Standards Agency</a></li>
+        </ul>
+        <div class="global-footer__copyright">
+          <a href="">&copy; Crown copyright</a>
         </div>
-    </div><!-- .page-wrapper-->
+        </div><!-- end global-wrapper -->
+    </div><!-- end global-footer -->
 
-    <?php echo $this->render('layout/partials/footer.phtml'); ?>
 
     <?php echo $this->inlineScript()
         ->prependFile($this->assetPath('js/' . $this->applicationName() . '.js')) ?>
-
-    </body>
+  </body>
 </html>
