@@ -58,6 +58,7 @@ return array(
                         'type' => 'textarea',
                         'class' => 'long',
                     ),
+                    // 15c/d
                     'psvSmallVehicleConfirmation' => array(
                         'type' => 'singlecheckbox',
                         'label' => $translationPrefix . '.smallVehiclesConfirmation'
@@ -70,8 +71,9 @@ return array(
                     'label' => $translationPrefix . '-nineOrMore',
                     'hint' => $translationPrefix . '-nineOrMore.hint'
                 ),
+                // 15e
                 'elements' => array(
-                    'psvNoSmallVehicleConfirmation' => array(
+                    'psvNoSmallVehiclesConfirmation' => array(
                         'type' => 'singlecheckbox',
                         'label' => $translationPrefix . '.nineOrMore.details'
                     )
@@ -83,14 +85,17 @@ return array(
                     'label' => $translationPrefix . '-limousines'
                 ),
                 'elements' => array(
+                    // 15f[i]
                     'psvLimousines' => array(
                         'type' => 'yesNoRadio',
                         'label' => $translationPrefix . '.limousinesApplication.yesNo'
                     ),
-                    'psvNoLimousinesConfirmation' => array(
+                    // 15f[ii]
+                    'psvNoLimousineConfirmation' => array(
                         'type' => 'singlecheckbox',
                         'label' => $translationPrefix . '.limousinesApplication.agreement'
                     ),
+                    // 15g
                     'psvOnlyLimousinesConfirmation' => array(
                         'type' => 'singlecheckbox',
                         'label' => $translationPrefix . '.limousinesNine.agreement'

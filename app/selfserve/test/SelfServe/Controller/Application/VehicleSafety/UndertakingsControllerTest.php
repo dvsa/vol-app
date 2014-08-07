@@ -97,24 +97,24 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
 
         $presentFields=array(
                 'smallVehiclesIntention' => Array(
-                    'optSmallVehiclesIntention',            // 15b[i]
-                    'txtSmallVehiclesIntentionDetails'      // 15b[ii]
+                    'psvOperateSmallVehicles',              // 15b[i]
+                    'psvSmallVehicleNotes'                  // 15b[ii]
                 ),
                 'smallVehiclesUndertakings' => Array(       // 15c/d
-                    'optSmallVehiclesConfirmation'
+                    'psvSmallVehicleConfirmation'
                 ),
                 'limousinesNoveltyVehicles' => Array(
-                    'optLimousinesYesNo',                   // 15f[i]
-                                                            // 15f[ii]
+                    'psvLimousines',                        // 15f[i]
+                    'psvNoLimousineConfirmation'            // 15f[ii]
                 )
         );
 
         $missingFields=array(
                 'nineOrMore' => Array(                      // 15e
-                    'textNineOrMorePassengers'
+                    'psvNoSmallVehiclesConfirmation'
                 ),
                 'limousinesNoveltyVehicles' => Array(
-                    'optLimousinesNine',                    // 15g
+                    'psvOnlyLimousinesConfirmation',        // 15g
                 )
         );
 
@@ -148,24 +148,24 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
 
         $presentFields=array(
                 'smallVehiclesUndertakings' => Array(       // 15c/d
-                    'optSmallVehiclesConfirmation'
+                    'psvSmallVehicleConfirmation'
                 ),
                 'limousinesNoveltyVehicles' => Array(
-                    'optLimousinesYesNo',                   // 15f[i]
-                                                            // 15f[ii]
+                    'psvLimousines',                        // 15f[i]
+                    'psvNoLimousineConfirmation'            // 15f[ii]
                 )
         );
 
         $missingFields=array(
                 'smallVehiclesIntention' => Array(
-                    'optSmallVehiclesIntention',            // 15b[i]
-                    'txtSmallVehiclesIntentionDetails'      // 15b[ii]
+                    'psvOperateSmallVehicles',              // 15b[i]
+                    'psvSmallVehicleNotes'                  // 15b[ii]
                 ),
                 'nineOrMore' => Array(                      // 15e
-                    'textNineOrMorePassengers'
+                    'psvNoSmallVehiclesConfirmation'
                 ),
                 'limousinesNoveltyVehicles' => Array(
-                    'optLimousinesNine',                    // 15g
+                    'psvOnlyLimousinesConfirmation',        // 15g
                 )
         );
 
@@ -199,24 +199,24 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
 
         $presentFields=array(
                 'nineOrMore' => Array(                      // 15e
-                    'textNineOrMorePassengers'
+                    'psvNoSmallVehiclesConfirmation'
                 ),
                 'limousinesNoveltyVehicles' => Array(
-                    'optLimousinesYesNo',                   // 15f[i]
-                                                            // 15f[ii]
+                    'psvLimousines',                        // 15f[i]
+                    'psvNoLimousineConfirmation'            // 15f[ii]
                 ),
                 'limousinesNoveltyVehicles' => Array(
-                    'optLimousinesNine',                    // 15g
+                    'psvOnlyLimousinesConfirmation',        // 15g
                 )
         );
 
         $missingFields=array(
-                'smallVehiclesUndertakings' => Array(       // 15c/d
-                    'optSmallVehiclesConfirmation'
-                ),
                 'smallVehiclesIntention' => Array(
-                    'optSmallVehiclesIntention',            // 15b[i]
-                    'txtSmallVehiclesIntentionDetails'      // 15b[ii]
+                    'psvOperateSmallVehicles',              // 15b[i]
+                    'psvSmallVehicleNotes'                  // 15b[ii]
+                ),
+                'smallVehiclesUndertakings' => Array(       // 15c/d
+                    'psvSmallVehicleConfirmation'
                 ),
         );
 
@@ -250,24 +250,24 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
 
         $presentFields=array(
                 'smallVehiclesIntention' => Array(
-                    'optSmallVehiclesIntention',            // 15b[i]
-                    'txtSmallVehiclesIntentionDetails'      // 15b[ii]
+                    'psvOperateSmallVehicles',              // 15b[i]
+                    'psvSmallVehicleNotes'                  // 15b[ii]
                 ),
                 'smallVehiclesUndertakings' => Array(       // 15c/d
-                    'optSmallVehiclesConfirmation'
+                    'psvSmallVehicleConfirmation'
                 ),
                 'limousinesNoveltyVehicles' => Array(
-                    'optLimousinesYesNo',                   // 15f[i]
-                                                            // 15f[ii]
+                    'psvLimousines',                        // 15f[i]
+                    'psvNoLimousineConfirmation'           // 15f[ii]
                 ),
                 'limousinesNoveltyVehicles' => Array(
-                    'optLimousinesNine',                    // 15g
+                    'psvOnlyLimousinesConfirmation',        // 15g
                 )
         );
 
         $missingFields=array(
                 'nineOrMore' => Array(                      // 15e
-                    'textNineOrMorePassengers'
+                    'psvNoSmallVehiclesConfirmation'
                 ),
         );
 
@@ -301,24 +301,24 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
 
         $presentFields=array(
                 'smallVehiclesUndertakings' => Array(       // 15c/d
-                    'optSmallVehiclesConfirmation'
+                    'psvSmallVehicleConfirmation'
                 ),
                 'limousinesNoveltyVehicles' => Array(
-                    'optLimousinesYesNo',                   // 15f[i]
-                                                            // 15f[ii]
+                    'psvLimousines',                        // 15f[i]
+                    'psvNoLimousineConfirmation'           // 15f[ii]
                 ),
                 'limousinesNoveltyVehicles' => Array(
-                    'optLimousinesNine',                    // 15g
+                   'psvOnlyLimousinesConfirmation',         // 15g
                 )
         );
 
         $missingFields=array(
                 'smallVehiclesIntention' => Array(
-                    'optSmallVehiclesIntention',            // 15b[i]
-                    'txtSmallVehiclesIntentionDetails'      // 15b[ii]
+                    'psvOperateSmallVehicles',              // 15b[i]
+                    'psvSmallVehicleNotes'                  // 15b[ii]
                 ),
                 'nineOrMore' => Array(                      // 15e
-                    'textNineOrMorePassengers'
+                    'psvNoSmallVehiclesConfirmation'
                 ),
         );
 
@@ -347,7 +347,6 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
                     $this->controller->indexAction()
                 )->get($fieldsetName);
                 foreach($fieldsetElements as $element) {
-                    // echo "assert false '".$element."' - is that '".($fieldset->has($element)?"TRUE":"FALSE")."'";
                     $this->assertFalse($fieldset->has($element));
                 }
             } else {
@@ -370,7 +369,6 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
     {
 
         if ($service == 'Application' && $method == 'GET' && $bundle == ApplicationController::$licenceDataBundle) {
-
             return array(
                 'licence' => array(
                     'id' => 10,
@@ -387,6 +385,21 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
 
 
         $taDataBundle = array(
+            'properties' => array(
+                'id',
+                'version',
+                'status',
+                'totAuthSmallVehicles',
+                'totAuthMediumVehicles',
+                'totAuthLargeVehicles',
+                'psvOperateSmallVehicles',
+                'psvSmallVehicleNotes',
+                'psvSmallVehicleConfirmation',
+                'psvNoSmallVehicleConfirmation',
+                'psvLimousines',
+                'psvNoLimousineConfirmation',
+                'psvOnlyLimousineConfirmation',
+            ),
             'children' => array(
                 'trafficArea' => array(
                     'properties' => array(
@@ -526,19 +539,6 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
                 )
             );
         }
-        echo "nothing";
-    }
 
-    /**
-     * Psv provider
-     *
-     * @return array
-     */
-    public function psvProvider()
-    {
-        return array(
-            array('psv', false),
-            array('goods', true)
-        );
     }
 }
