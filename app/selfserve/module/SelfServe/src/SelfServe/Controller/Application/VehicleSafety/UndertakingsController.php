@@ -84,8 +84,6 @@ class UndertakingsController extends VehicleSafetyController
     {
         $translate = $this->getServiceLocator()->get('viewhelpermanager')->get('translate');
 
-
-
         $data['application'] = array(
             'id' => $data['id'],
             'version' => $data['version'],
@@ -100,8 +98,10 @@ class UndertakingsController extends VehicleSafetyController
         );
 
         $data['smallVehiclesUndertakings'] = array(
-            'psvSmallVehicleUndertakings' => $translate('application_vehicle-safety_undertakings.smallVehiclesUndertakings.text'),
-            'psvSmallVehicleScotland' => $translate('application_vehicle-safety_undertakings.smallVehiclesUndertakingsScotland.text'),
+            'psvSmallVehicleUndertakings' =>
+                $translate('application_vehicle-safety_undertakings.smallVehiclesUndertakings.text'),
+            'psvSmallVehicleScotland' =>
+                $translate('application_vehicle-safety_undertakings.smallVehiclesUndertakingsScotland.text'),
             'psvSmallVehicleConfirmation' => (isset($data['psvSmallVehicleConfirmation'])?
                                                     $data['psvSmallVehicleConfirmation']:false)
         );
@@ -119,7 +119,6 @@ class UndertakingsController extends VehicleSafetyController
             'psvOnlyLimousinesConfirmation' => (isset($data['psvOnlyLimousinesConfirmation'])?
                                                     $data['psvOnlyLimousinesConfirmation']:false)
         );
-
 
         return $data;
     }
@@ -143,7 +142,7 @@ class UndertakingsController extends VehicleSafetyController
         // In some cases, totAuthSmallVehicles etc. can be set NULL, and we
         // need to evaluate as zero, so fix that here.
         $arrayCheck=array('totAuthSmallVehicles','totAuthMediumVehicles','totAuthLargeVehicles');
-        foreach($arrayCheck as $attribute) {
+        foreach ($arrayCheck as $attribute) {
             if ( is_null($data[$attribute]) ) {
                 $data[$attribute]=0;
             }

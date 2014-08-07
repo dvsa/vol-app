@@ -138,7 +138,7 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
                 )
         );
 
-        $this->assertFormElements($taDataResponse,$presentFields);
+        $this->assertFormElements($taDataResponse, $presentFields);
     }
 
     /**
@@ -199,7 +199,7 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
                 )
         );
 
-        $this->assertFormElements($taDataResponse,$presentFields,$missingFields);
+        $this->assertFormElements($taDataResponse, $presentFields, $missingFields);
     }
 
     /**
@@ -260,7 +260,7 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
                 ),
         );
 
-        $this->assertFormElements($taDataResponse,$presentFields,$missingFields);
+        $this->assertFormElements($taDataResponse, $presentFields, $missingFields);
     }
 
 
@@ -322,7 +322,7 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
                 ),
         );
 
-        $this->assertFormElements($taDataResponse,$presentFields,$missingFields);
+        $this->assertFormElements($taDataResponse, $presentFields, $missingFields);
     }
 
     /**
@@ -383,7 +383,7 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
                 ),
         );
 
-        $this->assertFormElements($taDataResponse,$presentFields,$missingFields);
+        $this->assertFormElements($taDataResponse, $presentFields, $missingFields);
     }
 
     /**
@@ -444,7 +444,7 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
                 ),
         );
 
-        $this->assertFormElements($taDataResponse,$presentFields,$missingFields);
+        $this->assertFormElements($taDataResponse, $presentFields, $missingFields);
     }
 
     protected function assertFormElements($responseArray, $present = array(), $missing = array())
@@ -452,29 +452,27 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
         $this->taDataResponse=$responseArray;
         $this->setUpAction('index');
 
-        foreach($present as $fieldsetName => $fieldsetElements) {
+        foreach ($present as $fieldsetName => $fieldsetElements) {
             $fieldset = $this->getFormFromResponse(
                 $this->controller->indexAction()
             )->get($fieldsetName);
-            foreach($fieldsetElements as $element) {
+            foreach ($fieldsetElements as $element) {
                 $this->assertTrue($fieldset->has($element));
             }
         }
 
         foreach ($missing as $fieldsetName => $fieldsetElements) {
             if ( $this->getFormFromResponse(
-                        $this->controller->indexAction()
-                    )->has($fieldsetName) ) {
+                $this->controller->indexAction()
+            )->has($fieldsetName) ) {
                 $fieldset = $this->getFormFromResponse(
                     $this->controller->indexAction()
                 )->get($fieldsetName);
-                foreach($fieldsetElements as $element) {
+                foreach ($fieldsetElements as $element) {
                     $this->assertFalse($fieldset->has($element));
                 }
             } else {
-                $this->assertFalse($this->getFormFromResponse(
-                                        $this->controller->indexAction()
-                                    )->has($fieldsetName));
+                $this->assertFalse($this->getFormFromResponse($this->controller->indexAction())->has($fieldsetName));
             }
         }
     }
@@ -504,7 +502,6 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
                 )
             );
         }
-
 
         $taDataBundle = array(
             'properties' => array(
@@ -575,7 +572,5 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
                 )
             );
         }
-
-        echo "nowt";
     }
 }
