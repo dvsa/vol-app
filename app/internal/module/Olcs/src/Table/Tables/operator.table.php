@@ -16,8 +16,14 @@ return array(
     'columns' => array(
         array(
             'title' => 'Lic no/status',
-            'format' => '<a href="#">{{licenceNumber}}</a><br/>{{status}}',
-            'sort' => 'licenceNumber'
+            //'format' => '<a href="#">{{licenceNumber}}</a><br/>{{status}}',
+            'sort' => 'licenceNumber',
+            'formatter' => function ($row) {
+                return '<a href="' . $this->generateUrl(
+                    array('id' => $row['licenceId']),
+                    'licence'
+                ) . '">' . $row['licenceNumber'] . '</a><br/>' . $row['status'];
+            },
         ),
         array(
             'title' => 'App ID/status',

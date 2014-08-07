@@ -12,7 +12,7 @@
             ?>        
                 <p><strong><?php echo $this->translate('Legislation'); ?></strong><br />
                 <?php for ($i=0; $i<count($action['piReasons']); $i++): ?>
-                <?php echo $this->escapeHtml($action['piReasons'][$i]['description']); ?><?php if ($i != count($action['piReasons'])-1): ?>, <?php endif; ?>
+                <?php echo $this->escapeHtml($action['piReasons'][$i]['sectionCode']) . ' - ' . $this->escapeHtml($action['piReasons'][$i]['description']); ?><?php if ($i != count($action['piReasons'])-1): ?><br /> <?php endif; ?>
                 <?php endfor; ?>
                 </p>
             <?php } ?>

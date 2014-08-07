@@ -3,22 +3,77 @@
 return array(
     'label' => 'Home',
     'route' => 'dashboard',
+    'use_route_match' => true,
     'pages' => array(
         array(
             'label' => 'Search',
             'route' => 'search',
+            'use_route_match' => true,
             'pages' => array(
                 array(
+                    'id' => 'licence',
+                    'label' => 'Licence',
+                    'route' => 'licence',
+                    'use_route_match' => true,
+                    'pages' => array(
+                        array(
+                            'id' => 'licence_overview',
+                            'class' => 'horizontal-navigation__item',
+                            'label' => 'Overview',
+                            'route' => 'licence/overview',
+                            'use_route_match' => true
+                        ),
+                        array(
+                            'id' => 'licence_edit',
+                            'class' => 'horizontal-navigation__item',
+                            'label' => 'Licence',
+                            'route' => 'licence/edit',
+                            'use_route_match' => true
+                        ),
+                        array(
+                            'id' => 'licence_caselist',
+                            'class' => 'horizontal-navigation__item',
+                            'label' => 'Cases',
+                            'route' => 'licence/cases',
+                            'use_route_match' => true
+                        ),
+                        array(
+                            'id' => 'licence_documents',
+                            'class' => 'horizontal-navigation__item',
+                            'label' => 'Documents',
+                            'route' => 'licence/documents',
+                            'use_route_match' => true
+                        ),
+                        array(
+                            'id' => 'licence_processing',
+                            'class' => 'horizontal-navigation__item',
+                            'label' => 'Processing',
+                            'route' => 'licence/processing',
+                            'use_route_match' => true
+                        ),
+                        array(
+                            'id' => 'licence_fees',
+                            'class' => 'horizontal-navigation__item',
+                            'label' => 'Fees',
+                            'route' => 'licence/fees',
+                            'use_route_match' => true
+                        )
+                    )
+                ),
+                array(
                     'label' => 'Operators',
-                    'route' => 'operators/operators-params',
+                    'route' => 'operators',
+                    'use_route_match' => true,
                     'pages' => array(
                         array(
                             'label' => 'Case list',
-                            'route' => 'licence_case_list/pagination',
+                            'route' => 'licence_case_list',
+                            'use_route_match' => true,
                             'pages' => array(
                                 array(
                                     'label' => 'Case Summary',
                                     'route' => 'case_manage',
+                                    'use_route_match' => true,
                                     'pages' => array(
                                         array(
                                         'label' => 'Case Submission',
@@ -69,6 +124,7 @@ return array(
                                 array(
                                     'label' => 'Case Convictions',
                                     'route' => 'case_convictions',
+                                    'use_route_match' => true,
                                     'pages' => array(
                                         array(
                                             'label' => 'Add Conviction',
@@ -163,6 +219,7 @@ return array(
                                     'label' => 'Case Complaints',
                                     'route' => 'case_complaints',
                                     'action' => 'index',
+                                    'use_route_match' => true,
                                     'pages' => array(
                                         array(
                                             'label' => 'Add Complaint',
@@ -194,6 +251,7 @@ return array(
                                     'label' => 'Conditions &amp; Undertakings',
                                     'route' => 'case_conditions_undertakings',
                                     'action' => 'index',
+                                    'use_route_match' => true,
                                     'pages' => array(
                                         array(
                                             'label' => 'Add Condition',

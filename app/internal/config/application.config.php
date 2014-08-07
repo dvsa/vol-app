@@ -4,10 +4,10 @@ return array(
     'modules' => array(
         // 'Application',
         'Olcs',
+        'Admin',
         'Common',
         'DoctrineModule',
         'DoctrineORMModule',
-        'OlcsEntities',
     ),
 
     // These are various options for the listeners attached to the ModuleManager
@@ -19,7 +19,6 @@ return array(
         'module_paths' => array(
             __DIR__ . '/../module',
             __DIR__ . '/../vendor',
-            __DIR__ . '/../vendor/olcs/olcs-entities',
             __DIR__ . '/../vendor/olcs/OlcsCommon'
         ),
 
