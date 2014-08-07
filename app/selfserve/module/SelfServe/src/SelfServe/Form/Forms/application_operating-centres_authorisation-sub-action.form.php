@@ -71,10 +71,10 @@ return array(
                         'filters' => '\Common\Form\Elements\InputFilters\OperatingCentreAdPlacedIn',
                         'label' => $translationPrefix . '.advertisements.adPlacedIn'
                     ),
-                    'dateAdPlaced' => array(
+                    'adPlacedDate' => array(
                         'type' => 'dateSelectWithEmpty',
                         'filters' => '\Common\Form\Elements\InputFilters\OperatingCentreDateAdPlaced',
-                        'label' => $translationPrefix . '.advertisements.dateAdPlaced'
+                        'label' => $translationPrefix . '.advertisements.adPlacedDate'
                     ),
                     'file' => array(
                         'type' => 'multipleFileUpload',

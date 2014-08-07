@@ -505,7 +505,7 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
                     'niFlag' => 0,
                     'licenceType' => 'standard-national',
                     'organisation' => array(
-                        'organisationType' => 'org_type.lc'
+                        'type' => 'org_type.lc'
                     )
                 )
             );
@@ -517,7 +517,6 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
                 'Count' => 1,
                 'Results' => array(
                     array(
-                        'id' => 1,
                         'version' => 1,
                         'application' => '1',
                         'sectionTypeOfLicenceStatus' => 2,

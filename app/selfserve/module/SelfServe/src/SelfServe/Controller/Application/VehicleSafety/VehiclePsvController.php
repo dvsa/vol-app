@@ -45,7 +45,7 @@ class VehiclePsvController extends VehicleSafetyController
             'totAuthSmallVehicles',
             'totAuthMediumVehicles',
             'totAuthLargeVehicles',
-            'enterReg'
+            'hasEnteredReg'
         ),
         'children' => array(
             'licence' => array(
@@ -246,7 +246,7 @@ class VehiclePsvController extends VehicleSafetyController
 
             } elseif (
                 !$isCrudPressed && $isPost
-                && isset($post['data']['enterReg']) && $post['data']['enterReg'] == 'Y'
+                && isset($post['data']['hasEnteredReg']) && $post['data']['hasEnteredReg'] == 'Y'
             ) {
                 $input = $form->getInputFilter()->get($table)->get('table');
                 $input->setRequired(true)->setAllowEmpty(false)->setContinueIfEmpty(true);

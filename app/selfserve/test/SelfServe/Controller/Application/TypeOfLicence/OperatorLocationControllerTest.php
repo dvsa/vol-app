@@ -63,7 +63,6 @@ class OperatorLocationControllerTest extends AbstractApplicationControllerTestCa
             'Count' => 1,
             'Results' => array(
                 array(
-                    'id' => 1,
                     'version' => 1,
                     'application' => '1',
                     'sectionTypeOfLicenceStatus' => 1,
@@ -244,7 +243,7 @@ class OperatorLocationControllerTest extends AbstractApplicationControllerTestCa
                     'niFlag' => 0,
                     'licenceType' => 'standard-national',
                     'organisation' => array(
-                        'organisationType' => 'org_type.lc'
+                        'type' => 'org_type.lc'
                     )
                 )
             );
@@ -256,7 +255,6 @@ class OperatorLocationControllerTest extends AbstractApplicationControllerTestCa
                 'Count' => 1,
                 'Results' => array(
                     array(
-                        'id' => 1,
                         'version' => 1,
                         'application' => '1',
                         'sectionTypeOfLicenceStatus' => 2,

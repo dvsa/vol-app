@@ -95,11 +95,11 @@ class PeopleController extends YourBusinessController
     protected function alterForm($form)
     {
         $table = $form->get('table')->get('table')->getTable();
-        $orgType = $this->getOrganisationData(array('organisationType'));
+        $orgType = $this->getOrganisationData(array('type'));
         $translate = $this->getServiceLocator()->get('viewhelpermanager')->get('translate');
         $guidance = $form->get('guidance')->get('guidance');
 
-        switch ($orgType['organisationType']) {
+        switch ($orgType['type']) {
             case 'org_type.lc':
                 $table->setVariable(
                     'title',
@@ -132,7 +132,7 @@ class PeopleController extends YourBusinessController
                 break;
         }
 
-        if ($orgType['organisationType'] != 'org_type.o') {
+        if ($orgType['type'] != 'org_type.o') {
             $table->removeColumn('position');
         }
 
@@ -146,8 +146,8 @@ class PeopleController extends YourBusinessController
      */
     protected function alterActionForm($form)
     {
-        $orgType = $this->getOrganisationData(array('organisationType'));
-        if ($orgType['organisationType'] != 'org_type.o') {
+        $orgType = $this->getOrganisationData(array('type'));
+        if ($orgType['type'] != 'org_type.o') {
             $form->get('data')->remove('position');
         }
         return $form;
@@ -233,9 +233,9 @@ class PeopleController extends YourBusinessController
      */
     protected function populatePeople()
     {
-        $org = $this->getOrganisationData(array('organisationType', 'registeredCompanyNumber'));
+        $org = $this->getOrganisationData(array('type', 'registeredCompanyNumber'));
         // company is LLP or Limited
-        if ($org['organisationType'] == 'org_type.llp' || $org['organisationType'] == 'org_type.lc') {
+        if ($org['type'] == 'org_type.llp' || $org['type'] == 'org_type.lc') {
             // no people added
             if (!$this->peopleAdded()) {
                 // valid company number added

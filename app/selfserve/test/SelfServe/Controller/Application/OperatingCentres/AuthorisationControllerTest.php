@@ -118,7 +118,7 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                     'niFlag' => 0,
                     'licenceType' => 'standard-national',
                     'organisation' => array(
-                        'organisationType' => 'org_type.lc'
+                        'type' => 'org_type.lc'
                     )
                 )
             )
@@ -183,7 +183,7 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                     'niFlag' => 0,
                     'licenceType' => 'standard-international',
                     'organisation' => array(
-                        'organisationType' => 'org_type.lc'
+                        'type' => 'org_type.lc'
                     )
                 )
             )
@@ -248,7 +248,7 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                     'niFlag' => 0,
                     'licenceType' => 'restricted',
                     'organisation' => array(
-                        'organisationType' => 'org_type.lc'
+                        'type' => 'org_type.lc'
                     )
                 )
             )
@@ -313,7 +313,7 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                     'niFlag' => 0,
                     'licenceType' => 'standard-national',
                     'organisation' => array(
-                        'organisationType' => 'org_type.lc'
+                        'type' => 'org_type.lc'
                     )
                 )
             )
@@ -378,7 +378,7 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                     'niFlag' => 0,
                     'licenceType' => 'standard-international',
                     'organisation' => array(
-                        'organisationType' => 'org_type.lc'
+                        'type' => 'org_type.lc'
                     )
                 )
             )
@@ -443,7 +443,7 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                     'niFlag' => 0,
                     'licenceType' => 'restricted',
                     'organisation' => array(
-                        'organisationType' => 'org_type.lc'
+                        'type' => 'org_type.lc'
                     )
                 )
             )
@@ -1036,7 +1036,7 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                     'niFlag' => 0,
                     'licenceType' => 'standard-national',
                     'organisation' => array(
-                        'organisationType' => 'org_type.lc'
+                        'type' => 'org_type.lc'
                     )
                 )
             );
@@ -1048,7 +1048,6 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                 'Count' => 1,
                 'Results' => array(
                     array(
-                        'id' => 1,
                         'version' => 1,
                         'application' => '1',
                         'sectionTypeOfLicenceStatus' => 2,
@@ -1099,7 +1098,7 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                 'permission',
                 'adPlaced',
                 'adPlacedIn',
-                'dateAdPlaced'
+                'adPlacedDate'
             ),
             'children' => array(
                 'operatingCentre' => array(
@@ -1148,7 +1147,7 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                 'permission' => 1,
                 'adPlaced' => 0,
                 'adPlacedIn' => null,
-                'dateAdPlaced' => null,
+                'adPlacedDate' => null,
                 'operatingCentre' => array(
                     'id' => 3,
                     'version' => 1,

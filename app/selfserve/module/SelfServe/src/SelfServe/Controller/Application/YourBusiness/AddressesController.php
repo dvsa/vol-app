@@ -70,7 +70,7 @@ class AddressesController extends YourBusinessController
                     'properties' => ['licenceType'],
                     'children' => array(
                         'organisation' => array(
-                            'properties' => ['organisationType']
+                            'properties' => ['type']
                         )
                     )
                 )
@@ -87,7 +87,7 @@ class AddressesController extends YourBusinessController
             $form->remove('establishment_address');
         }
 
-        if (array_search($data['licence']['organisation']['organisationType'], $allowedOrgTypes) === false) {
+        if (array_search($data['licence']['organisation']['type'], $allowedOrgTypes) === false) {
             $form->remove('registered_office');
             $form->remove('registered_office_address');
         }

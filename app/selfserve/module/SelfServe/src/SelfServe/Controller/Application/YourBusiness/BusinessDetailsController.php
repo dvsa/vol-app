@@ -78,7 +78,7 @@ class BusinessDetailsController extends YourBusinessController
      */
     protected function save($data, $service = null)
     {
-        unset($data['organisationType']);
+        unset($data['type']);
 
         if (isset($data['companyNumber'])) {
             // unfortunately the company number field is a complex one so can't
@@ -118,11 +118,11 @@ class BusinessDetailsController extends YourBusinessController
 
     protected function alterForm($form)
     {
-        $organisation = $this->getOrganisationData(['organisationType']);
+        $organisation = $this->getOrganisationData(['type']);
 
         $fieldset = $form->get('data');
 
-        switch ($organisation['organisationType']) {
+        switch ($organisation['type']) {
             case 'org_type.lc':
             case 'org_type.llp':
                 // no-op; the full form is fine
@@ -324,7 +324,7 @@ class BusinessDetailsController extends YourBusinessController
      */
     protected function actionSave($data, $service = null)
     {
-        $organisation = $this->getOrganisationData(['organisationType', 'id']);
+        $organisation = $this->getOrganisationData(['type', 'id']);
         $data['organisation'] = $organisation['id'];
         parent::actionSave($data, 'CompanySubsidiary');
     }

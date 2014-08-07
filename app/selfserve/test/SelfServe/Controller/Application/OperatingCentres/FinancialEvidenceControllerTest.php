@@ -81,7 +81,7 @@ class FinancialEvidenceControllerTest extends AbstractApplicationControllerTestC
                     'niFlag' => 0,
                     'licenceType' => 'standard-national',
                     'organisation' => array(
-                        'organisationType' => 'org_type.lc'
+                        'type' => 'org_type.lc'
                     )
                 )
             );
@@ -93,7 +93,6 @@ class FinancialEvidenceControllerTest extends AbstractApplicationControllerTestC
                 'Count' => 1,
                 'Results' => array(
                     array(
-                        'id' => 1,
                         'version' => 1,
                         'application' => '1',
                         'sectionTypeOfLicenceStatus' => 2,

@@ -173,7 +173,7 @@ class AddressesControllerTest extends AbstractApplicationControllerTestCase
                     'licenceType' => $this->licType,
                     'organisation' => [
                         'id' => 1,
-                        'organisationType' => $this->orgType,
+                        'type' => $this->orgType,
                         'contactDetails' => [
                             [
                                 'id' => 1,
@@ -229,7 +229,6 @@ class AddressesControllerTest extends AbstractApplicationControllerTestCase
                 'Count' => 1,
                 'Results' => array(
                     array(
-                        'id' => 1,
                         'version' => 1,
                         'application' => '1',
                         'sectionTypeOfLicenceStatus' => 2,

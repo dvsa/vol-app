@@ -95,7 +95,7 @@ class AuthorisationController extends OperatingCentresController
             'permission',
             'adPlaced',
             'adPlacedIn',
-            'dateAdPlaced'
+            'adPlacedDate'
         ),
         'children' => array(
             'operatingCentre' => array(
@@ -400,12 +400,12 @@ class AuthorisationController extends OperatingCentresController
             $data['advertisements'] = array(
                 'adPlaced' => $data['data']['adPlaced'],
                 'adPlacedIn' => $data['data']['adPlacedIn'],
-                'dateAdPlaced' => $data['data']['dateAdPlaced']
+                'adPlacedDate' => $data['data']['adPlacedDate']
             );
 
             unset($data['data']['adPlaced']);
             unset($data['data']['adPlacedIn']);
-            unset($data['data']['dateAdPlaced']);
+            unset($data['data']['adPlacedDate']);
             unset($data['data']['operatingCentre']);
         }
 

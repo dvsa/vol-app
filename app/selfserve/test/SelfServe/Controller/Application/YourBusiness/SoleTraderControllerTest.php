@@ -118,7 +118,7 @@ class SoleTraderControllerTest extends AbstractApplicationControllerTestCase
                         'children' => array(
                             'organisation' => array(
                                 'properties' => array(
-                                    'organisationType'
+                                    'type'
                                 )
                             )
                         )
@@ -133,7 +133,7 @@ class SoleTraderControllerTest extends AbstractApplicationControllerTestCase
                                 'properties' => array(
                                     'id',
                                     'version',
-                                    'organisationType',
+                                    'type',
                                 )
                             )
                         )
@@ -144,7 +144,7 @@ class SoleTraderControllerTest extends AbstractApplicationControllerTestCase
                 return array(
                     'licence' => array(
                         'organisation' => array(
-                            'organisationType' => $this->organisation,
+                            'type' => $this->organisation,
                         )
                     )
                 );
@@ -157,7 +157,7 @@ class SoleTraderControllerTest extends AbstractApplicationControllerTestCase
                         'niFlag' => 0,
                         'licenceType' => 'standard-national',
                         'organisation' => array(
-                            'organisationType' => 'org_type.st'
+                            'type' => 'org_type.st'
                         )
                     )
                 );
@@ -174,7 +174,6 @@ class SoleTraderControllerTest extends AbstractApplicationControllerTestCase
                 'Count' => 1,
                 'Results' => array(
                     array(
-                        'id' => 1,
                         'version' => 1,
                         'application' => '1',
                         'sectionTypeOfLicenceStatus' => 2,

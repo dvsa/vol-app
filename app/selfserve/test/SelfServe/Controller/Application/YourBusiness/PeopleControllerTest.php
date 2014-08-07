@@ -429,7 +429,7 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
                     'niFlag' => 0,
                     'licenceType' => 'standard-national',
                     'organisation' => array(
-                        'organisationType' => 'org_type.lc'
+                        'type' => 'org_type.lc'
                     )
                 )
             );
@@ -441,7 +441,6 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
                 'Count' => 1,
                 'Results' => array(
                     array(
-                        'id' => 1,
                         'version' => 1,
                         'application' => '1',
                         'sectionTypeOfLicenceStatus' => 2,
@@ -510,7 +509,7 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
                             'properties' => array(
                                 'id',
                                 'version',
-                                'organisationType',
+                                'type',
                                 'registeredCompanyNumber'
                             )
                         )
@@ -527,7 +526,7 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
                     'niFlag' => 0,
                     'licenceType' => 'standard-national',
                     'organisation' => array(
-                        'organisationType' => 'org_type.lc',
+                        'type' => 'org_type.lc',
                         'registeredCompanyNumber' => '12345678'
                     )
                 )
@@ -569,7 +568,7 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
                             'properties' => array(
                                 'id',
                                 'version',
-                                'organisationType',
+                                'type',
                             )
                         )
                     )
@@ -580,7 +579,7 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
             return array(
                 'licence' => array(
                     'organisation' => array(
-                        'organisationType' => $this->organisation
+                        'type' => $this->organisation
                     )
                 )
             );

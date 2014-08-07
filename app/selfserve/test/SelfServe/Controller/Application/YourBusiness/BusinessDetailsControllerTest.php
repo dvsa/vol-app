@@ -32,7 +32,7 @@ class BusinessDetailsControllerTest extends AbstractApplicationControllerTestCas
     protected $mockLicenceData = [
         'licence' => [
             'organisation' => [
-                'organisationType' => 'org_type.lc',
+                'type' => 'org_type.lc',
                 'registeredCompanyNumber' => 12345678,
                 'name' => 'A Co Ltd'
             ],
@@ -97,7 +97,7 @@ class BusinessDetailsControllerTest extends AbstractApplicationControllerTestCas
         $this->mockLicenceData = [
             'licence' => [
                 'organisation' => [
-                    'organisationType' => 'org_type.lc',
+                    'type' => 'org_type.lc',
                     'registeredCompanyNumber' => 12345678,
                     'name' => 'A Co Ltd'
                 ],
@@ -121,7 +121,7 @@ class BusinessDetailsControllerTest extends AbstractApplicationControllerTestCas
         $this->setOrganisationType('lc');
         $post = [
             'data' => [
-                'organisationType' => null,
+                'type' => null,
                 'companyNumber' => [
                     'company_number' => '12345678',
                 ],
@@ -297,7 +297,7 @@ class BusinessDetailsControllerTest extends AbstractApplicationControllerTestCas
                     'licence' => [
                         'children' => [
                             'organisation' => [
-                                'properties' => ['id', 'version', 'organisationType']
+                                'properties' => ['id', 'version', 'type']
                             ]
                         ]
                     ]
@@ -314,7 +314,7 @@ class BusinessDetailsControllerTest extends AbstractApplicationControllerTestCas
                         'niFlag' => 0,
                         'licenceType' => 'standard-national',
                         'organisation' => array(
-                            'organisationType' => 'org_type.lc'
+                            'type' => 'org_type.lc'
                         )
                     )
                 );
@@ -342,7 +342,6 @@ class BusinessDetailsControllerTest extends AbstractApplicationControllerTestCas
                 'Count' => 1,
                 'Results' => array(
                     array(
-                        'id' => 1,
                         'version' => 1,
                         'application' => '1',
                         'sectionTypeOfLicenceStatus' => 2,
@@ -403,7 +402,7 @@ class BusinessDetailsControllerTest extends AbstractApplicationControllerTestCas
         $this->mockOrganisationData = [
             'licence' => [
                 'organisation' => [
-                    'organisationType' => 'org_type.' . $type
+                    'type' => 'org_type.' . $type
                 ]
             ]
         ];

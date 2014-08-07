@@ -34,8 +34,12 @@ class ApplicationController extends AbstractJourneyController
                 ),
                 'children' => array(
                     'organisation' => array(
-                        'properties' => array(
-                            'organisationType'
+                        'children' => array(
+                            'type' => array(
+                                'properties' => array(
+                                    'id'
+                                )
+                            )
                         )
                     )
                 )
@@ -122,8 +126,10 @@ class ApplicationController extends AbstractJourneyController
         // We use the full section completion as it gets cached and will be used again
         $completion = $this->getSectionCompletion();
 
+        $foreignKey = $this->getJourneyConfig()['completionStatusJourneyIdColumn'];
+
         $data = array(
-            'id' => $completion['id'],
+            $foreignKey => $completion[$foreignKey],
             'version' => $completion['version'],
             'lastSection' => $this->getJourneyName() . '/' . $this->getSectionName() . '/' . $this->getSubSectionName()
         );
@@ -211,7 +217,7 @@ class ApplicationController extends AbstractJourneyController
                 $this->accessKeys[] = 'unpaid';
             }
 
-            $this->accessKeys[] = $licence['organisation']['organisationType'];
+            $this->accessKeys[] = $licence['organisation']['type']['id'];
 
         }
 

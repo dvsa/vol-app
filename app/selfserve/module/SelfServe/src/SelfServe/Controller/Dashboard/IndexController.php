@@ -60,7 +60,7 @@ class IndexController extends AbstractController
      *
      * @var array
      */
-    private $organisationIdBundle = array(
+    private $organisationUserBundle = array(
         'properties' => array(
 
         ),
@@ -147,15 +147,22 @@ class IndexController extends AbstractController
 
     /**
      * Get organisation Id based on current user
+     * @IMPORTANT User's can now be linked to more than 1 organisation, in the future there will be a dropdown for these
+     * users to select which organisation they are dealing with, which will be stored in session so we will need @todo
+     * some changes at that stage, for now we just grab the first organisation
      *
      * @throws \Exception
      * @return int
      */
     private function getOrganisationId($userId)
     {
-        $user = $this->makeRestCall('User', 'GET', ['id' => $userId], $this->organisationIdBundle);
+        $organisation = $this->makeRestCall('OrganisationUser', 'GET', ['user' => $userId], $this->organisationUserBundle);
 
-        return $user['organisation']['id'];
+        if ($organisation['Count'] < 1) {
+            return null;
+        }
+
+        return $organisation['Results'][0]['organisation']['id'];
     }
 
     /**

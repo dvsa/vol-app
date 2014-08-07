@@ -112,7 +112,7 @@ class VehiclePsvControllerTest extends AbstractApplicationControllerTestCase
      */
     public function testIndexActionWithSubmit()
     {
-        $this->setUpAction('index', null, array('data' => array('enterReg' => 'N')));
+        $this->setUpAction('index', null, array('data' => array('hasEnteredReg' => 'N')));
 
         $this->controller->setEnabledCsrf(false);
         $response = $this->controller->indexAction();
@@ -129,7 +129,7 @@ class VehiclePsvControllerTest extends AbstractApplicationControllerTestCase
             'index',
             null,
             array(
-                'data' => array('enterReg' => 'Y'),
+                'data' => array('hasEnteredReg' => 'Y'),
                 'large' => array('rows' => 0)
             )
         );
@@ -149,7 +149,7 @@ class VehiclePsvControllerTest extends AbstractApplicationControllerTestCase
             'index',
             null,
             array(
-                'data' => array('enterReg' => 'Y'),
+                'data' => array('hasEnteredReg' => 'Y'),
                 'large' => array('rows' => 1),
                 'medium' => array('rows' => 2),
                 'small' => array('rows' => 5)
@@ -742,7 +742,7 @@ class VehiclePsvControllerTest extends AbstractApplicationControllerTestCase
                     'niFlag' => 0,
                     'licenceType' => 'standard-national',
                     'organisation' => array(
-                        'organisationType' => 'org_type.lc'
+                        'type' => 'org_type.lc'
                     )
                 )
             );
@@ -754,7 +754,6 @@ class VehiclePsvControllerTest extends AbstractApplicationControllerTestCase
                 'Count' => 1,
                 'Results' => array(
                     array(
-                        'id' => 1,
                         'version' => 1,
                         'application' => '1',
                         'sectionTypeOfLicenceStatus' => 2,
@@ -814,7 +813,7 @@ class VehiclePsvControllerTest extends AbstractApplicationControllerTestCase
                 'totAuthSmallVehicles',
                 'totAuthMediumVehicles',
                 'totAuthLargeVehicles',
-                'enterReg'
+                'hasEnteredReg'
             ),
             'children' => array(
                 'licence' => array(
@@ -846,7 +845,7 @@ class VehiclePsvControllerTest extends AbstractApplicationControllerTestCase
                 'totAuthSmallVehicles' => 10,
                 'totAuthMediumVehicles' => 10,
                 'totAuthLargeVehicles' => $this->largeVehicles,
-                'enterReg' => 'Y',
+                'hasEnteredReg' => 'Y',
                 'licence' => array(
                     'licenceVehicles' => array(
                         array(
