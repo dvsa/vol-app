@@ -22,7 +22,6 @@ class LicenceController extends AbstractFormActionController
         $licence = $this->getLicence($this->getFromRoute('id'));
 
         $view = $this->getView(['licence' => $licence]);
-        $view->setTemplate('licence/index');
 
         return $view;
     }
