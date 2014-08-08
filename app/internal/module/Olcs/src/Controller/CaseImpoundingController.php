@@ -366,6 +366,8 @@ class CaseImpoundingController extends CaseController implements CrudInterface
      * Redirects to the add or edit action
      *
      * @param string $action
+     * @param int $id
+     * @return Redirect
      */
     private function redirectToCrud($action, $id = null)
     {
