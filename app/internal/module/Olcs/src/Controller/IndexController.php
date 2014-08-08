@@ -19,26 +19,32 @@ use Zend\View\Model\ViewModel;
  */
 class IndexController extends FormActionController
 {
+    protected $enableCsrf = false;
 
     /**
      * @codeCoverageIgnore
      */
     public function indexAction()
     {
+        $filters = $this->filterRequest();
+
+        $search = array_merge(
+            $filters,
+            array(
+                'userId' => $this->getLoggedInUser()
+            )
+        );
+
         $tasks = $this->makeRestCall(
             'Task',
             'GET',
-            array(
-                'userId' => 123
-            )
+            $search
         );
 
         $table = $this->buildTable('tasks', $tasks);
 
-        $data = [];
-
         $form = $this->generateFormWithData(
-            'tasks-home', 'processTaskFilters', $data
+            'tasks-home', null, $filters
         );
 
         $view = new ViewModel();
@@ -51,5 +57,16 @@ class IndexController extends FormActionController
 
         $view->setTemplate('index/home');
         return $view;
+    }
+
+    /**
+     * Inspect the request to see if we have any filters set, and
+     * if necessary, filter them down to a valid subset
+     *
+     * @return array
+     */
+    protected function filterRequest()
+    {
+        return $this->getRequest()->getQuery()->toArray();
     }
 }
