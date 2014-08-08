@@ -266,7 +266,7 @@ class CaseRevokeControllerTest extends AbstractHttpControllerTestCase
                        $this->equalTo('GET'),
                        $this->equalTo(
                            [
-                                'proposeToRevoke' => '1',
+                                'isProposeToRevoke' => '1',
                                 'isDecision' => '0',
                                 'goodsOrPsv' => $shortLicenceType,
                                 'limit' => 'all'

@@ -1,7 +1,6 @@
 <?php
 
 return array(
-    'application-name' => 'internal',
     'router' => [
         'routes' => include __DIR__ . '/routes.config.php'
     ],
@@ -30,15 +29,32 @@ return array(
             'CaseConditionUndertakingController' => 'Olcs\Controller\CaseConditionUndertakingController',
             'CaseRevokeController' => 'Olcs\Controller\CaseRevokeController',
             'CasePiController' => 'Olcs\Controller\CasePiController',
-            'DocumentController' => 'Olcs\Controller\DocumentController'
+            'DocumentController' => 'Olcs\Controller\DocumentController',
+            'DefendantSearchController' => 'Olcs\DefendantSearchController',
+            'LicenceController' => 'Olcs\Controller\Licence\LicenceController'
         )
     ),
     'view_manager' => array(
+        'display_not_found_reason' => true,
+        'display_exceptions' => true,
+        'doctype' => 'HTML5',
+        'not_found_template' => 'error/404',
+        'exception_template' => 'error/index',
+        'template_map' => array(
+            'layout/layout'           => __DIR__ . '/../view/layout/base.phtml',
+            'error/404'               => __DIR__ . '/../view/error/404.phtml',
+            'error/index'             => __DIR__ . '/../view/error/index.phtml'
+        ),
         'template_path_stack' => array(
             'olcs/view' => dirname(__DIR__) . '/view',
         )
     ),
-    'local_forms_path' => __DIR__ . '/../src/Form/Forms/',
+    'view_helpers' => array(
+        'invokables' => array()
+    ),
+    'local_forms_path' => array(
+        __DIR__ . '/../src/Form/Forms/'
+    ),
     //-------- Start navigation -----------------
     'navigation' => array(
         'default' => array(
@@ -47,6 +63,8 @@ return array(
     ),
     //-------- End navigation -----------------
     'submission_config' => include __DIR__ . '/submission/submission.config.php',
-    'local_scripts_path' => __DIR__ . '/../assets/js/inline/',
-    'asset_path' => '//olcs-frontend'
+    'local_scripts_path' => array(
+        __DIR__ . '/../assets/js/inline/'
+    ),
+    'asset_path' => '//dvsa-static.olcsdv-ap01.olcs.npm'
 );
