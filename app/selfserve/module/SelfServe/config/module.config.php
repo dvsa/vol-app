@@ -45,7 +45,7 @@ return array(
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',
-            __DIR__ . '/../view/selfserve'
+            __DIR__ . '/../view/self-serve'
         )
     ),
     'asset_path' => '//dvsa-static.olcsdv-ap01.olcs.npm'
