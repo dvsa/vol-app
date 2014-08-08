@@ -1,37 +1,56 @@
 <?php echo $this->doctype(); ?>
-
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <?php echo $this->headTitle($this->translate('')); ?>
-
-        <?php echo $this->headMeta() ->appendName('viewport', 'width=device-width, initial-scale=1.0') ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
-        ?>
-
-        <?php /* echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico')); */
-        echo $this->headLink()->appendStylesheet($this->assetPath('/styles/' . $this->applicationName() . '.css')) ?>
-
-        <?php echo $this->headScript(); ?>
-
-    </head>
-
-    <body class="<?php echo $this->applicationName(); ?>">
+  <head>
+    <meta charset="utf-8">
+    <?php echo $this->headTitle($this->translate('')); ?>
+    <?php echo $this->headMeta() ->appendName('viewport', 'width=device-width, initial-scale=1.0') ->appendHttpEquiv('X-UA-Compatible', 'IE=edge') ?>
+    <?php /* echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico')); */
+      echo $this->headLink()->appendStylesheet($this->assetPath('/styles/' . $this->applicationName() . '.css')) ?>
+    <?php echo $this->headScript(); ?>
+  </head>
+  <body class="internal">
     <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
 
-    <?php echo $this->render('layout/partials/header.phtml'); ?>
+    <div role="banner" class="global-header">
+      <div class="global-header__wrapper">
+          <h2 class="global-header__title"><a href="/styleguides/internal/">OLCS</a></h2>
+          <div class="search">
+            <div class="search__wrapper">
+              <input class="search__input" type="text" placeholder="Search">
+              <input class="search__button" type="submit">
+            </div>
+            <a href="" class="search__advanced">Advanced</a>
+          </div><!-- end search --> 
+          <ul class="admin">
+            <li class="admin__title">Admin
+              <div class="admin__menu">
+                <ul class="admin__submenu">
+                  <li class="admin__item"><a href="/admin/scanning">Scanning</a></li>
+                  <li class="admin__item"><a href="/admin/printing">Printing</a></li>
+                  <li class="admin__item"><a href="/admin/publication">Publications</a></li>
+                  <li class="admin__item"><a href="/admin/continuation">Continuations</a></li>
+                  <li class="admin__item"><a href="/admin/report">Reports</a></li>
+                  <li class="admin__item"><a href="/admin/user-management">User management</a></li>
+                </ul>
+                <ul class="admin__submenu">
+                  <li class="admin__item">System settings</li>
+                  <li class="admin__item"><a href="/admin/financial-standing">Financial standing rates</a></li>
+                  <li class="admin__item"><a href="/admin/public-holiday">Public holidays</a></li>
+                  <li class="admin__item"><a href="/admin/system-message">System messages</a></li>
+                </ul><!-- admin__submenu -->
+              </div><!-- admin__menu -->
+            </li>
+          </ul><!-- admin -->
+      </div><!-- end global-header__wrapper -->
+    </div><!-- end global-header -->
 
-	<div class="page-wrapper">
-        <?php  echo $this->navigation('navigation') // <-- Update this!!
-        ->breadcrumbs()
-        ->setMinDepth(0)
-        ->setPartial(array('layout/partials/breadcrumbs.phtml', 'Olcs'));
-        ?>
-        <div id="main" role="main">
-            <?php echo $this->content; ?>
-        </div>
+    <?php echo $this->header; ?>
+
+    <div class="page-wrapper">
+      <div id="main" role="main">
+        <?php echo $this->content; ?>
+      </div>
     </div><!-- .page-wrapper-->
-
-    <?php echo $this->render('layout/partials/footer.phtml'); ?>
 
     <?php echo $this->inlineScript()
         ->prependFile($this->assetPath('js/' . $this->applicationName() . '.js')) ?>

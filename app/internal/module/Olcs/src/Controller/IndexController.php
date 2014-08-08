@@ -23,8 +23,25 @@ class IndexController extends AbstractActionController
      */
     public function indexAction()
     {
-        $view = new ViewModel();
-        $view->setTemplate('index/home.phtml');
-        return $view;
+    	
+    	$contentView = new ViewModel();
+        $contentView->setTemplate('index/home');
+
+        return $this->renderView($contentView, 'Home', 'Subtitle');
+    }
+
+    private function renderView($view, $pageTitle, $pageSubTitle)
+    {
+    	$base = new ViewModel();
+    	$base->setTemplate('layout/base.phtml');
+
+    	$header = new ViewModel(['pageTitle' => $pageTitle, 'pageSubTitle' => $pageSubTitle]);
+    	$header->setTemplate('layout/partials/header');
+
+    	$base->setTerminal(true);
+        $base->addChild($header, 'header');
+        $base->addChild($view, 'content');
+
+        return $base;
     }
 }
