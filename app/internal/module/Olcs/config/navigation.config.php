@@ -11,6 +11,51 @@ return array(
             'use_route_match' => true,
             'pages' => array(
                 array(
+                    'id' => 'licence',
+                    'label' => 'Licence',
+                    'route' => 'licence',
+                    'use_route_match' => true,
+                    'pages' => array(
+                        array(
+                            'id' => 'licence_overview',
+                            'class' => 'horizontal-navigation__item',
+                            'label' => 'Overview',
+                            'route' => 'licence/overview',
+                            'use_route_match' => true
+                        ),
+                        array(
+                            'id' => 'licence_edit',
+                            'label' => 'Licence',
+                            'route' => 'licence/edit',
+                            'use_route_match' => true
+                        ),
+                        array(
+                            'id' => 'licence_caselist',
+                            'label' => 'Cases',
+                            'route' => 'licence_case_list',
+                            'use_route_match' => true
+                        ),
+                        array(
+                            'id' => 'licence_documents',
+                            'label' => 'Documents',
+                            'route' => 'licence/documents',
+                            'use_route_match' => true
+                        ),
+                        array(
+                            'id' => 'licence_processing',
+                            'label' => 'Processing',
+                            'route' => 'licence/processing',
+                            'use_route_match' => true
+                        ),
+                        array(
+                            'id' => 'licence_fees',
+                            'label' => 'Fees',
+                            'route' => 'licence/fees',
+                            'use_route_match' => true
+                        )
+                    )
+                ),
+                array(
                     'label' => 'Operators',
                     'route' => 'operators',
                     'use_route_match' => true,

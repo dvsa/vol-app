@@ -1,0 +1,40 @@
+<?php echo $this->doctype(); ?>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <?php echo $this->headTitle($this->translate('')); ?>
+
+        <?php echo $this->headMeta() ->appendName('viewport', 'width=device-width, initial-scale=1.0') ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+        ?>
+
+        <?php /* echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico')); */
+        echo $this->headLink()->appendStylesheet($this->assetPath('/styles/' . $this->applicationName() . '.css')) ?>
+
+        <?php echo $this->headScript(); ?>
+
+    </head>
+
+    <body class="<?php echo $this->applicationName(); ?>">
+    <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
+
+    <?php echo $this->render('layout/partials/header.phtml'); ?>
+
+	<div class="page-wrapper">
+        <?php  echo $this->navigation('navigation') // <-- Update this!!
+        ->breadcrumbs()
+        ->setMinDepth(0)
+        ->setPartial(array('layout/partials/breadcrumbs.phtml', 'Olcs'));
+        ?>
+        <div id="main" role="main">
+            <?php echo $this->content; ?>
+        </div>
+    </div><!-- .page-wrapper-->
+
+    <?php echo $this->render('layout/partials/footer.phtml'); ?>
+
+    <?php echo $this->inlineScript()
+        ->prependFile($this->assetPath('js/' . $this->applicationName() . '.js')) ?>
+
+    </body>
+</html>
