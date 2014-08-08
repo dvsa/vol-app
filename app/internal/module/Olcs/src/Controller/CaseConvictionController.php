@@ -491,11 +491,16 @@ class CaseConvictionController extends CaseController
      */
     public function generateCommentForm($case)
     {
+        $data = [];
+        $data['main'] = $case;
+
+        //die('<pre>' . print_r($data, 1));
+
         $form = $this->generateForm(
             'conviction-comment',
             'saveCommentForm'
         );
-        $form->setData($case);
+        $form->setData($data);
 
         return $form;
     }
@@ -507,6 +512,13 @@ class CaseConvictionController extends CaseController
      */
     public function saveCommentForm($data)
     {
+        if (isset($data['main'])) {
+            $data = $data + $data['main'];
+            unset($data['main']);
+        }
+
+        //die('<pre>' . print_r($data, 1));
+
         $data = array_intersect_key($data, array_flip(['id', 'convictionData', 'version']));
         $this->processEdit($data, 'VosaCase');
 
