@@ -538,4 +538,48 @@ class CaseConvictionController extends CaseController
 
         return $legacyOffencesTable;
     }
+
+    public function viewOffenceAction()
+    {
+                $postParams = $this->params()->fromPost();
+        $routeParams = $this->params()->fromRoute();
+
+        $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $routeParams['licence'])));
+
+        if (isset($postParams['action'])) {
+            return $this->redirect()->toRoute(
+                $postParams['table'],
+                array(
+                    'licence' => $routeParams['licence'],
+                    'case' => $routeParams['case'],
+                    'id' => isset($postParams['id']) ? $postParams['id'] : '',
+                    'action' => strtolower(
+                        $postParams['action']
+                    )
+                )
+            );
+        }
+
+        $caseId = $routeParams['case'];
+
+        $case = $this->getCase($caseId);
+
+        $summary = $this->getCaseSummaryArray($case);
+
+        $view = $this->getView();
+        $tabs = $this->getTabInformationArray();
+
+        $action = 'view';
+
+        $view->setVariables(
+            [
+                'case' => $case,
+                'tabs' => $tabs,
+                'tab' => $action,
+                'summary' => $summary
+            ]
+        );
+        $view->setTemplate('case/view-offence');
+        return $view;
+    }
 }

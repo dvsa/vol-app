@@ -8,7 +8,7 @@ return array(
         'crud' => array(
             'formName' => 'offence',
             'actions' => array(
-                'edit' => array('requireRows' => true),
+                'view' => array('requireRows' => true),
             )
         ),
         'paginate' => array(
@@ -22,10 +22,15 @@ return array(
     ),
     'columns' => array(
         array(
+            'title' => '',
+            'width' => 'checkbox',
+            'format' => '{{[elements/radio]}}'
+        ),
+        array(
             'title' => 'Offence date from',
             'formatter' => function ($data, $column) {
 
-                $url = $this->generateUrl(['action' => 'edit', 'id' => $data['id']], 'conviction', true);
+                $url = $this->generateUrl(['action' => 'view', 'id' => $data['id']], 'offence', true);
 
                 if ($data['offenceDate'] == null) {
                     return '<a href="' . $url . '">N/A</a>';
