@@ -43,7 +43,16 @@ return array(
         ),
         array(
             'title' => 'Trailer',
-            'format' => '{{isTrailer}}'
+            'formatter' => function ($data) {
+                switch ($data['isTrailer']) {
+                    case 'Y':
+                        return 'Yes';
+                    case 'N':
+                        return 'No';
+                    default:
+                        return '-';
+                }
+            }
         ),
         array(
             'title' => 'Imposed At',
