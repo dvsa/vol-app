@@ -19,6 +19,7 @@ return [
                     'vrm' => [
                         'type' => 'text',
                         'label' => 'Vehicle registration mark',
+                        'filters' => '\Common\Form\Elements\InputFilters\VrmOptional',
                     ],
                     'isTrailer' => [
                         'type' => 'checkbox-yn',
@@ -37,7 +38,7 @@ return [
                     'imposedAt' => [
                         'type' => 'text',
                         'label' => 'Location prohibition issued',
-                        'filters' => '\Common\Form\Elements\InputFilters\VrmOptional',
+                        'filters' => '\Common\Form\Elements\InputFilters\TextMax255',
                     ],
                 ]
             ],
