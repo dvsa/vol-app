@@ -4,18 +4,20 @@
  * IndexController
  *
  * @author Mike Cooper <michael.cooper@valtech.co.uk>
+ * @author Nick Payne <nick.payne@valtech.co.uk>
  */
 namespace Olcs\Controller;
 
-use Common\Controller\AbstractActionController;
+use Common\Controller\FormActionController;
 use Zend\View\Model\ViewModel;
 
 /**
  * IndexController
  *
  * @author Mike Cooper <michael.cooper@valtech.co.uk>
+ * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class IndexController extends AbstractActionController
+class IndexController extends FormActionController
 {
 
     /**
@@ -33,10 +35,17 @@ class IndexController extends AbstractActionController
 
         $table = $this->buildTable('tasks', $tasks);
 
+        $data = [];
+
+        $form = $this->generateFormWithData(
+            'tasks-home', 'processTaskFilters', $data
+        );
+
         $view = new ViewModel();
         $view->setVariables(
             array(
-                'table' => $table
+                'table' => $table,
+                'form'  => $form
             )
         );
 
