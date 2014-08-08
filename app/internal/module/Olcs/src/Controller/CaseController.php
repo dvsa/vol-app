@@ -173,6 +173,17 @@ class CaseController extends FormActionController
                         'name'
                     )
                 ),
+                'legacyOffences' => array(
+                    'properties' => array(
+                        'id',
+                        'offenceDate',
+                        'isTrailer',
+                        'notes',
+                        'points',
+                        'offenceAuthority',
+                        'vrm'
+                    )
+                ),
                 'licence' => array(
                     'properties' => 'ALL',
                     'children' => array(

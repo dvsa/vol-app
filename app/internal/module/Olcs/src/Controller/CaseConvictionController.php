@@ -90,7 +90,7 @@ class CaseConvictionController extends CaseController
 
         $table = $this->getServiceLocator()->get('Table')->buildTable('convictions', $results, $data);
 
-        $legacyOffencesTable = $this->getLegacyOffencesTable($case);
+        $legacyOffencesTable = $this->getLegacyOffencesTable($case['legacyOffences']);
 
         $view->setVariables(
             [
@@ -530,28 +530,9 @@ class CaseConvictionController extends CaseController
         );
     }
 
-    private function getLegacyOffencesBundle()
+
+    private function getLegacyOffencesTable($legacyOffencesResults)
     {
-        return array(
-
-        );
-    }
-
-    private function getLegacyOffencesTable($case)
-    {
-        $legacyOffencesBundle = $this->getLegacyOffencesBundle();
-
-        $legacyOffencesResults = $this->makeRestCall(
-            'LegacyOffence',
-            'GET',
-            array(
-//                'case' => $case['id'],
-                'sort' => 'offenceDate',
-                'order' => 'DESC',
-                'bundle' => json_encode($legacyOffencesBundle)
-            )
-        );
-
         $data['url'] = $this->url();
         $legacyOffencesTable = $this->getServiceLocator()->get('Table')->buildTable('legacyOffences', $legacyOffencesResults, $data);
 

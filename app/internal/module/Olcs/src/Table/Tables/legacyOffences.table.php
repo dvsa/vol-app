@@ -22,7 +22,7 @@ return array(
     ),
     'columns' => array(
         array(
-            'title' => 'Offence date from ',
+            'title' => 'Offence date from',
             'formatter' => function ($data, $column) {
 
                 $url = $this->generateUrl(['action' => 'edit', 'id' => $data['id']], 'conviction', true);
@@ -38,7 +38,7 @@ return array(
         ),
         array(
             'title' => 'Originating authority',
-            'name' => 'originatingAuthority'
+            'name' => 'offenceAuthority'
         ),
         array(
             'title' => 'Vehicle',
