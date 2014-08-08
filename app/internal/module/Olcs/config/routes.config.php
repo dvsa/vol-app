@@ -193,10 +193,11 @@ return [
     'case_prohibition' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/licence/[:licence]/case/[:case]/action/manage/prohibitions',
+            'route' => '/licence/[:licence]/case/[:case]/action/manage/prohibitions[/:action][/:id]',
             'constraints' => [
                 'licence' => '[0-9]+',
                 'case' => '[0-9]+',
+                'id' => '[0-9]+'
             ],
             'defaults' => [
                 'controller' => 'CaseProhibitionController',
