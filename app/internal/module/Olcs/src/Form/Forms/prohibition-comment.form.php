@@ -9,7 +9,7 @@ return [
         'elements' => [
             'notes' => [
                 'type' => 'textarea',
-                'label' => 'Enter prohibitions',
+                'label' => 'Enter prohibition notes',
                 'class' => 'extra-long'
             ],
             'id' => [
