@@ -178,7 +178,7 @@ class AddressesControllerTest extends AbstractApplicationControllerTestCase
                             [
                                 'id' => 1,
                                 'version' => 1,
-                                'contactDetailsType' => 'registered_office',
+                                'contactType' => 'ct_reg',
                                 'address' => $address
                             ]
                         ]
@@ -187,7 +187,7 @@ class AddressesControllerTest extends AbstractApplicationControllerTestCase
                         [
                             'id' => 1,
                             'version' => 1,
-                            'contactDetailsType' => 'correspondence',
+                            'contactType' => 'ct_corr',
                             'emailAddress' => 'dummy@mail.com',
                             'address' => $address,
                             'phoneContacts' => [
@@ -214,7 +214,7 @@ class AddressesControllerTest extends AbstractApplicationControllerTestCase
                         [
                             'id' => 1,
                             'version' => 1,
-                            'contactDetailsType' => 'establishment',
+                            'contactType' => 'establishment',
                             'emailAddress' => 'dummy@mail.com',
                             'address' => $address,
                         ]

@@ -17,6 +17,14 @@ use SelfServe\Controller\AbstractJourneyController;
  */
 class ApplicationController extends AbstractJourneyController
 {
+    const GOODS_OR_PSV_GOODS_VEHICLE = 'lcat_gv';
+    const GOODS_OR_PSV_PSV = 'lcat_psv';
+
+    const LICENCE_TYPE_RESTRICTED = 'ltyp_r';
+    const LICENCE_TYPE_STANDARD_INTERNATIONAL = 'ltyp_si';
+    const LICENCE_TYPE_STANDARD_NATIONAL = 'ltyp_sn';
+    const LICENCE_TYPE_SPECIAL_RESTRICTED = 'ltyp_sr';
+
     /**
      * Holds the licenceDataBundle
      *
@@ -28,11 +36,19 @@ class ApplicationController extends AbstractJourneyController
                 'properties' => array(
                     'id',
                     'version',
-                    'goodsOrPsv',
-                    'niFlag',
-                    'licenceType',
+                    'niFlag'
                 ),
                 'children' => array(
+                    'goodsOrPsv' => array(
+                        'properties' => array(
+                            'id'
+                        )
+                    ),
+                    'licenceType' => array(
+                        'properties' => array(
+                            'id'
+                        )
+                    ),
                     'organisation' => array(
                         'children' => array(
                             'type' => array(
@@ -129,7 +145,7 @@ class ApplicationController extends AbstractJourneyController
         $foreignKey = $this->getJourneyConfig()['completionStatusJourneyIdColumn'];
 
         $data = array(
-            $foreignKey => $completion[$foreignKey],
+            'id' => $completion['id'],
             'version' => $completion['version'],
             'lastSection' => $this->getJourneyName() . '/' . $this->getSectionName() . '/' . $this->getSubSectionName()
         );
@@ -187,7 +203,10 @@ class ApplicationController extends AbstractJourneyController
                 return parent::getAccessKeys($force);
             }
 
-            if (strtolower($licence['goodsOrPsv']) == 'psv') {
+            $goodsOrPsv = $this->getGoodsOrPsvFromLicenceData($licence);
+            $type = $this->getLicenceTypeFromLicenceData($licence);
+
+            if ($goodsOrPsv == 'psv') {
                 $this->isPsv = true;
                 $this->accessKeys[] = 'psv';
             } else {
@@ -195,13 +214,7 @@ class ApplicationController extends AbstractJourneyController
                 $this->accessKeys[] = 'goods';
             }
 
-            $type = str_replace(' ', '-', strtolower($licence['licenceType']));
-
-            if (strstr($type, 'standard')) {
-                $type = 'standard';
-            }
-
-            $this->accessKeys[] = trim(strtolower($licence['goodsOrPsv']) . '-' . $type, '-');
+            $this->accessKeys[] = trim($goodsOrPsv . '-' . $type, '-');
 
             if (isset($licence['niFlag']) && !is_null($licence['niFlag']) && $licence['niFlag'] !== '') {
                 $this->accessKeys[] = ($licence['niFlag'] == 1 ? 'ni' : 'gb');
@@ -218,10 +231,62 @@ class ApplicationController extends AbstractJourneyController
             }
 
             $this->accessKeys[] = $licence['organisation']['type']['id'];
-
         }
 
         return $this->accessKeys;
+    }
+
+    /**
+     * Get Goods Or Psv From Licence Data
+     *
+     * @param array $licence
+     * @return string|null
+     */
+    private function getGoodsOrPsvFromLicenceData($licence)
+    {
+        if (!isset($licence['goodsOrPsv']['id'])) {
+            return null;
+        }
+
+        if ($licence['goodsOrPsv']['id'] == self::GOODS_OR_PSV_PSV) {
+            return 'psv';
+        }
+
+        return 'goods';
+    }
+
+    /**
+     * Get Licence Type From Licence Data
+     *
+     * @param array $licence
+     * @return string|null
+     */
+    private function getLicenceTypeFromLicenceData($licence)
+    {
+        if (!isset($licence['licenceType']['id'])) {
+            return null;
+        }
+
+        if (
+            in_array(
+                $licence['licenceType']['id'],
+                [self::LICENCE_TYPE_STANDARD_INTERNATIONAL, self::LICENCE_TYPE_STANDARD_NATIONAL]
+            )
+        ) {
+            return 'standard';
+        }
+
+        switch ($licence['licenceType']['id']) {
+            case self::LICENCE_TYPE_STANDARD_INTERNATIONAL:
+            case self::LICENCE_TYPE_STANDARD_NATIONAL:
+                return 'standard';
+            case self::LICENCE_TYPE_RESTRICTED:
+                return 'restricted';
+            case self::LICENCE_TYPE_SPECIAL_RESTRICTED:
+                return 'special-restricted';
+        }
+
+        return null;
     }
 
     /**

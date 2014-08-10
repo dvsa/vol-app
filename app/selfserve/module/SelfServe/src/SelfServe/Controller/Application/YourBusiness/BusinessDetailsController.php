@@ -19,16 +19,33 @@ class BusinessDetailsController extends YourBusinessController
 
     protected $service = 'Application';
 
-    protected $dataBundle = [
-        'children' => [
-            'licence' => [
-                'children' => [
-                    'organisation',
-                    'tradingNames',
-                ]
-            ],
-        ],
-    ];
+    protected $dataBundle = array(
+        'children' => array(
+            'licence' => array(
+                'children' => array(
+                    'organisation' => array(
+                        'children' => array(
+                            'type' => array(
+                                'properties' => array(
+                                    'id'
+                                )
+                            ),
+                            'tradingNames' => array(
+                                'properties' => array()
+                            )
+                        )
+                    )
+                )
+            )
+        )
+    );
+
+    /**
+     * Holds the sub action service
+     *
+     * @var string
+     */
+    protected $actionService = 'CompanySubsidiary';
 
     /**
      * Holds the actionDataBundle
@@ -52,13 +69,6 @@ class BusinessDetailsController extends YourBusinessController
     protected $formTables = array(
         'table' => 'application_your-business_business_details-subsidiaries'
     );
-
-    /**
-     * Holds the sub action service
-     *
-     * @var string
-     */
-    protected $actionService = 'CompanySubsidiary';
 
     /**
      * Render the section form
@@ -118,25 +128,35 @@ class BusinessDetailsController extends YourBusinessController
 
     protected function alterForm($form)
     {
-        $organisation = $this->getOrganisationData(['type']);
+        $organisationBundle = array(
+            'children' => array(
+                'type' => array(
+                    'properties' => array(
+                        'id'
+                    )
+                )
+            )
+        );
+
+        $organisation = $this->getOrganisationData($organisationBundle);
 
         $fieldset = $form->get('data');
 
-        switch ($organisation['type']) {
-            case 'org_type.lc':
-            case 'org_type.llp':
+        switch ($organisation['type']['id']) {
+            case 'org_t_rc':
+            case 'org_t_llp':
                 // no-op; the full form is fine
                 break;
-            case 'org_type.st':
+            case 'org_t_st':
                 $fieldset->remove('name')->remove('companyNumber');
                 $form->remove('table');
                 break;
-            case 'org_type.p':
+            case 'org_t_p':
                 $fieldset->remove('companyNumber');
                 $fieldset->get('name')->setLabel($fieldset->get('name')->getLabel() . '.partnership');
                 $form->remove('table');
                 break;
-            case 'org_type.o':
+            case 'org_t_pa':
                 $fieldset->remove('companyNumber')->remove('tradingNames');
                 $fieldset->get('name')->setLabel($fieldset->get('name')->getLabel() . '.other');
                 $form->remove('table');
@@ -151,8 +171,8 @@ class BusinessDetailsController extends YourBusinessController
         $organisation = $licence['organisation'];
 
         $tradingNames = [];
-        foreach ($licence['tradingNames'] as $tradingName) {
-            $tradingNames[] = ['text' => $tradingName['tradingName']];
+        foreach ($licence['organisation']['tradingNames'] as $tradingName) {
+            $tradingNames[] = ['text' => $tradingName['name']];
         }
         $tradingNames[] = ['text' => ''];
 
@@ -161,13 +181,19 @@ class BusinessDetailsController extends YourBusinessController
                 'trading_name' => $tradingNames,
             ],
             'companyNumber' => [
-                'company_number' => $organisation['registeredCompanyNumber']
+                'company_number' => $organisation['companyOrLlpNo']
             ]
         ];
 
-        return [
+        $data = [
             'data' => array_merge($organisation, $map)
         ];
+
+        if (isset($data['data']['type']['id'])) {
+            $data['data']['type'] = $data['data']['type']['id'];
+        }
+
+        return $data;
     }
 
     protected function getForm($type)

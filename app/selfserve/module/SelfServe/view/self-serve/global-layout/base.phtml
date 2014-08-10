@@ -18,20 +18,20 @@
     <body class="<?php echo $this->applicationName(); ?>">
     <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
 
-    <?php echo $this->render('layout/partials/header.phtml'); ?>
+    <?php echo $this->render('self-serve/global-layout/partials/header.phtml'); ?>
 
 	<div class="page-wrapper">
         <?php  echo $this->navigation('navigation') // <-- Update this!!
         ->breadcrumbs()
         ->setMinDepth(0)
-        ->setPartial(array('layout/partials/breadcrumbs.phtml', 'Olcs'));
+        ->setPartial(array('self-serve/global-layout/partials/breadcrumbs.phtml', 'Olcs'));
         ?>
         <div id="main" role="main">
             <?php echo $this->content; ?>
         </div>
     </div><!-- .page-wrapper-->
 
-    <?php echo $this->render('layout/partials/footer.phtml'); ?>
+    <?php echo $this->render('self-serve/global-layout/partials/footer.phtml'); ?>
 
     <?php echo $this->inlineScript()
         ->prependFile($this->assetPath('js/' . $this->applicationName() . '.js')) ?>

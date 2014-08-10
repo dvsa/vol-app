@@ -31,7 +31,10 @@ class AddressesController extends YourBusinessController
                         'children' => [
                             'contactDetails' => [
                                 'children' => [
-                                    'address'
+                                    'address',
+                                    'contactType' => array(
+                                        'properties' => 'id'
+                                    )
                                 ]
                             ],
                         ]
@@ -40,6 +43,9 @@ class AddressesController extends YourBusinessController
                         'children' => [
                             'phoneContacts',
                             'address',
+                            'contactType' => array(
+                                'properties' => 'id'
+                            )
                         ]
                     ],
                 ]
@@ -109,7 +115,7 @@ class AddressesController extends YourBusinessController
         $correspondence = [
             'id'                    => $data['correspondence']['id'],
             'version'               => $data['correspondence']['version'],
-            'contactDetailsType'    => 'correspondence',
+            'contactType'    => 'ct_corr',
             'licence'               => $licence['id'],
             'emailAddress'          => $data['contact']['email'],
             'addresses'             => [
@@ -153,7 +159,7 @@ class AddressesController extends YourBusinessController
             $establishment = [
                 'id'                    => $data['establishment']['id'],
                 'version'               => $data['establishment']['version'],
-                'contactDetailsType'    => 'establishment',
+                'contactType'    => 'ct_est',
                 'licence'               => $licence['id'],
                 'addresses'             => [
                     'address' => $data['establishment_address'],
@@ -170,7 +176,7 @@ class AddressesController extends YourBusinessController
             $registeredOffice = [
                 'id'                    => $data['registered_office']['id'],
                 'version'               => $data['registered_office']['version'],
-                'contactDetailsType'    => 'registered_office',
+                'contactType'    => 'ct_reg',
                 'organisation'          => $organisation['id'],
                 'addresses'             => [
                     'address' => $data['registered_office_address'],
@@ -208,7 +214,11 @@ class AddressesController extends YourBusinessController
 
         foreach ($contactDetailsMerge as $contactDetails) {
 
-            $type = $contactDetails['contactDetailsType'];
+            if (!isset($contactDetails['contactType']['id'])) {
+                continue;
+            }
+
+            $type = $contactDetails['contactType']['id'];
 
             $data[$type] = [
                 'id' => $contactDetails['id'],

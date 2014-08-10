@@ -206,7 +206,7 @@ class SafetyController extends VehicleSafetyController
      */
     protected function actionSave($data, $service = null)
     {
-        $data['contactDetails']['contactDetailsType'] = 'contact_type.work';
+        $data['contactDetails']['contactType'] = 'ct_work';
         $saved = parent::actionSave($data['contactDetails'], 'ContactDetails');
 
         if ($this->getActionName() == 'add') {

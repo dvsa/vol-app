@@ -23,7 +23,7 @@ return array(
                     ),
                     'privateHireLicenceNumber' => array(
                         'type' => 'text-required',
-                        'label' => $translationPrefix . '.data.licenceNumber'
+                        'label' => $translationPrefix . '.data.licNo'
                     ),
                     'licence' => array(
                         'type' => 'hidden'

@@ -11,8 +11,6 @@ namespace SelfServe\Controller\Dashboard;
 
 use SelfServe\Controller\AbstractController;
 use Zend\View\Model\ViewModel;
-use Zend\Session\Container;
-use Common\Exception\ResourceNotFoundException;
 use Zend\Http\Response;
 
 /**
@@ -32,20 +30,31 @@ class IndexController extends AbstractController
     private $applicationsBundle = array(
         'properties' => array(),
         'children' => array(
-            'organisation' => array(
-                'properties' => array(),
+            'organisationUsers' => array(
+                'properties' => null,
                 'children' => array(
-                    'licences' => array(
-                        'properties' => array(
-                            'licenceNumber'
-                        ),
+                    'organisation' => array(
+                        'properties' => array(),
                         'children' => array(
-                            'applications' => array(
+                            'licences' => array(
                                 'properties' => array(
-                                    'id',
-                                    'createdOn',
-                                    'receivedDate',
-                                    'status'
+                                    'licNo'
+                                ),
+                                'children' => array(
+                                    'applications' => array(
+                                        'properties' => array(
+                                            'id',
+                                            'createdOn',
+                                            'receivedDate'
+                                        ),
+                                        'children' => array(
+                                            'status' => array(
+                                                'properties' => array(
+                                                    'id'
+                                                )
+                                            )
+                                        )
+                                    )
                                 )
                             )
                         )
@@ -84,12 +93,15 @@ class IndexController extends AbstractController
 
         $applications = array();
 
-        if (isset($data['organisation']['licences'])) {
-            foreach ($data['organisation']['licences'] as $licence) {
-                foreach ($licence['applications'] as $application) {
-                    $newRow = $application;
-                    $newRow['licenceNumber'] = $licence['licenceNumber'];
-                    $applications[$newRow['id']] = $newRow;
+        if (isset($data['organisationUsers'])) {
+            foreach ($data['organisationUsers'] as $orgUser) {
+                foreach ($orgUser['organisation']['licences'] as $licence) {
+                    foreach ($licence['applications'] as $application) {
+                        $newRow = $application;
+                        $newRow['licNo'] = $licence['licNo'];
+                        $newRow['status'] = $application['status']['id'];
+                        $applications[$newRow['id']] = $newRow;
+                    }
                 }
             }
         }
@@ -118,9 +130,8 @@ class IndexController extends AbstractController
 
         $data = [
             'version'       => 1,
-            'licenceNumber' => '',
-            'licenceType'   => '',
-            'licenceStatus' => 'lic_status.new',
+            'licNo' => '',
+            'licenceStatus' => 'lsts_new',
             'organisation'  => $this->getOrganisationId($user['id']),
         ];
 
@@ -130,14 +141,14 @@ class IndexController extends AbstractController
         $data = [
             'licence' => $licenceId,
             'createdOn'   => date('Y-m-d h:i:s'),
-            'status' => 'app_status.new'
+            'status' => 'apsts_new'
         ];
 
         $applicationResult = $this->makeRestCall('Application', 'POST', $data);
         $applicationId = $applicationResult['id'];
 
         $data = [
-            'application' => $applicationId,
+            'id' => $applicationId,
         ];
 
         $this->makeRestCall('ApplicationCompletion', 'POST', $data);

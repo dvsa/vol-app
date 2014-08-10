@@ -214,7 +214,7 @@ class LicenceController extends TaxiPhvController
      */
     protected function actionSave($data, $service = null)
     {
-        $data['contactDetails']['contactDetailsType'] = 'Council';
+        $data['contactDetails']['contactType'] = 'ct_councilh';
 
         $results = parent::actionSave($data['contactDetails'], 'ContactDetails');
 
