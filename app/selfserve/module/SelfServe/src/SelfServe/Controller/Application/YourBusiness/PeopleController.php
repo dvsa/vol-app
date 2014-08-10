@@ -239,7 +239,8 @@ class PeopleController extends YourBusinessController
             // no people added
             if (!$this->peopleAdded()) {
                 // valid company number added
-                if ($org['registeredCompanyNumber']) {
+                $pattern = '/^[A-Z0-9]{8}$/';
+                if (preg_match($pattern, $org['registeredCompanyNumber'])) {
                     $result = $this->makeRestCall(
                         'CompaniesHouse',
                         'GET',

@@ -39,12 +39,13 @@ return array(
         'not_found_template' => 'error/404',
         'exception_template' => 'error/index',
         'template_map' => array(
-            'layout/layout'           => __DIR__ . '/../view/self-serve/global-layout/base.phtml',
+            'layout/layout'           => __DIR__ . '/../view/self-serve/layout/base.phtml',
             'error/404'               => __DIR__ . '/../view/self-serve/error/404.phtml',
             'error/index'             => __DIR__ . '/../view/self-serve/error/index.phtml'
         ),
         'template_path_stack' => array(
-            __DIR__ . '/../view'
+            __DIR__ . '/../view',
+            __DIR__ . '/../view/self-serve'
         )
     ),
     'asset_path' => '//dvsa-static.olcsdv-ap01.olcs.npm'
