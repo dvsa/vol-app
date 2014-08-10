@@ -92,12 +92,12 @@ trait SubmissionSectionTrait
     {
         return array(
             'caseNumber' => $data['caseNumber'],
-            'licenceNumber' => $data['licence']['licenceNumber'],
+            'licNo' => $data['licence']['licNo'],
             'name' => $data['licence']['organisation']['name'],
             'licenceType' => $data['licence']['licenceType'],
-            'ecms' => $data['ecms'],
+            'ecms_no' => $data['ecms_no'],
             'description' => $data['description'],
-            'organisationType' => $data['licence']['organisation']['organisationType'],
+            'type' => $data['licence']['organisation']['type'],
             'sicCode' => $data['licence']['organisation']['sicCode'],
             'isMlh' => $data['licence']['organisation']['isMlh'],
             'startDate' => $data['licence']['startDate'],

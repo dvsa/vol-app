@@ -254,16 +254,16 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
         );
         $data = array(
             'caseNumber' => 54,
-            'ecms' => 123123,
+            'ecms_no' => 123123,
             'description' => 'Case 1',
             'licence' => array(
-                'licenceNumber' => 7,
+                'licNo' => 7,
                 'startDate' => '2014-01-01',
                 'authorisedVehicles' => 12,
                 'authorisedTrailers' => 4,
                 'organisation' => array(
                     'name' => 'Fred SMith',
-                    'organisationType' => 'Bus company',
+                    'type' => 'Bus company',
                     'sicCode' => 123345,
                     'isMlh' => 'Y'
                 ),
@@ -272,7 +272,7 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
         );
         $result = $submissionSectionTrait->caseSummaryInfo($data);
         $this->assertContains('Case 1', $result);
-        $this->assertArrayHasKey('ecms', $result);
+        $this->assertArrayHasKey('ecms_no', $result);
     }
 
     /**
@@ -410,16 +410,16 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
 
         $data = array(
             'caseNumber' => 54,
-            'ecms' => 123123,
+            'ecms_no' => 123123,
             'description' => 'Case 1',
             'licence' => array(
-                'licenceNumber' => 7,
+                'licNo' => 7,
                 'startDate' => '2014-01-01',
                 'authorisedVehicles' => 12,
                 'authorisedTrailers' => 4,
                 'organisation' => array(
                     'name' => 'Fred SMith',
-                    'organisationType' => 'Bus company',
+                    'type' => 'Bus company',
                     'sicCode' => 123345,
                     'isMlh' => 'Y'
                 ),
@@ -428,7 +428,7 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
         );
 
         $result = $submissionSectionTrait->getFilteredSectionData('caseSummaryInfo', $data);
-        $this->assertArrayHasKey('ecms', $result);
+        $this->assertArrayHasKey('ecms_no', $result);
     }
 
     private function getStaticDefTypes()

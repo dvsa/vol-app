@@ -483,12 +483,12 @@ class CaseComplaintTest extends AbstractHttpControllerTestCase
         $addData['vehicle_id'] = 1;
         $addData['organisation'] = $functionData['organisation-details'];
 
-        $addData['driver']['contactDetails']['contactDetailsType'] = 'Driver';
+        $addData['driver']['contactDetails']['contactType'] = 'ct_driver';
         $addData['driver']['contactDetails']['is_deleted'] = 0;
         $addData['driver']['contactDetails']['person'] = $functionData['driver-details'];
         unset($addData['driver']['contactDetails']['person']['version']);
 
-        $addData['complainant']['contactDetailsType'] = 'Complainant';
+        $addData['complainant']['contactType'] = 'ct_complainant';
         $addData['complainant']['is_deleted'] = 0;
         $addData['complainant']['person'] = $functionData['complainant-details'];
         unset($addData['complainant']['person']['version']);
@@ -539,14 +539,14 @@ class CaseComplaintTest extends AbstractHttpControllerTestCase
                 array (
                     'contactDetails' =>
                         array (
-                            'contactDetailsType' => 'Driver',
+                            'contactType' => 'ct_driver',
                             'is_deleted' => 0,
                             'version' => 1,
                             'person' =>
                                 array (
                                     'contactDetails' =>
                                         array (
-                                            'contactDetailsType' => 'Driver',
+                                            'contactType' => 'ct_driver',
                                             'is_deleted' => 0,
                                             'version' => 1,
                                             'person' =>
@@ -559,12 +559,12 @@ class CaseComplaintTest extends AbstractHttpControllerTestCase
                 ),
             'complainant' =>
                 array (
-                    'contactDetailsType' => 'Complainant',
+                    'contactType' => 'ct_complainant',
                     'is_deleted' => 0,
                     'version' => 1,
                     'person' =>
                         array (
-                            'contactDetailsType' => 'Complainant',
+                            'contactType' => 'ct_complainant',
                             'is_deleted' => 0,
                             'version' => 1,
                             'person' =>

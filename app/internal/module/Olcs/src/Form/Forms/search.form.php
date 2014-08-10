@@ -14,7 +14,7 @@ return [
                     0
                 ],
                 'elements' => [
-                    'licenceNumber' => [
+                    'licNo' => [
                         'type' => 'text',
                         'label' => 'Licence number',
                         'class' => 'medium',

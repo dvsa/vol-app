@@ -219,7 +219,7 @@ class CaseStatementController extends CaseController implements CrudInterface
             $data['addresses']['requestorsAddress']['town'] . " \line" .
             $data['addresses']['requestorsAddress']['postcode'] . " \line" .
             $data['addresses']['requestorsAddress']['country'];
-        $bookmarks['Ref'] = '184130/' . $bookmarkData['licence']['licenceNumber'];
+        $bookmarks['Ref'] = '184130/' . $bookmarkData['licence']['licNo'];
         $bookmarks['Name'] = $data['requestorsForename'] . ' ' . $data['requestorsFamilyName'];
         $bookmarks['RequestMode'] = 'letter';
         $bookmarks['RequestDate'] = $data['dateRequested'];
@@ -270,7 +270,7 @@ class CaseStatementController extends CaseController implements CrudInterface
                 'licence' => array(
                     'properties' => array(
                         'id',
-                        'licenceNumber',
+                        'licNo',
                         'trafficArea',
                     ),
                     'children' => array(

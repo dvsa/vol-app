@@ -16,8 +16,8 @@ return array(
     'columns' => array(
         array(
             'title' => 'Lic no/status',
-            'format' => '<a href="#">{{licenceNumber}}</a><br/>{{status}}',
-            'sort' => 'licenceNumber'
+            'format' => '<a href="#">{{licNo}}</a><br/>{{status}}',
+            'sort' => 'licNo'
         ),
         array(
             'title' => 'App ID/status',

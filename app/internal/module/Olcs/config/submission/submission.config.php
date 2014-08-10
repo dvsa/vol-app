@@ -6,10 +6,10 @@ return array(
             'dataPath' => 'Cases',
             'bundle' => array(
                 'children' => array(
-                    'categories' => array(
+                    'submissionSections' => array(
                         'properties' => array(
                             'id',
-                            'name'
+                            'description'
                         )
                     ),
                     'convictions' => array(

@@ -226,12 +226,12 @@ class CaseComplaintController extends CaseController implements CrudInterface
             $newData['vehicle_id'] = 1;
             $newData['organisation'] = 1;
 
-            $newData['driver']['contactDetails']['contactDetailsType'] = 'Driver';
+            $newData['driver']['contactDetails']['contactType'] = 'ct_driver';
             $newData['driver']['contactDetails']['is_deleted'] = 0;
             $newData['driver']['contactDetails']['person'] = $data['driver-details'];
             unset($newData['driver']['contactDetails']['person']['version']);
 
-            $newData['complainant']['contactDetailsType'] = 'Complainant';
+            $newData['complainant']['contactType'] = 'ct_complainant';
             $newData['complainant']['is_deleted'] = 0;
             $newData['complainant']['person'] = $data['complainant-details'];
             unset($newData['complainant']['person']['version']);

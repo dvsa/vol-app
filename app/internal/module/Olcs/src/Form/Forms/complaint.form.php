@@ -51,7 +51,7 @@ return [
                          'label' => 'Complaint date',
                          'filters' => '\Common\Form\Elements\InputFilters\DateNotInFuture'
                      ],
-                    'typeOfComplaint' => [
+                    'complaintType' => [
                         'type' => 'select',
                         'label' => 'Complaint type',
                         'value_options' => 'complaint_types',

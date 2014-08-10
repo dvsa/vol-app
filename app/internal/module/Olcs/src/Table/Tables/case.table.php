@@ -52,8 +52,8 @@ return array(
         array(
             'title' => 'Closed',
             'formatter' => 'Date',
-            'name' => 'closedTime',
-            'sort' => 'closedTime'
+            'name' => 'closeDate',
+            'sort' => 'closeDate'
         ),
         array(
             'title' => 'Description',
@@ -65,7 +65,7 @@ return array(
         ),
         array(
             'title' => 'ECMS',
-            'name' => 'ecms'
+            'name' => 'ecms_no'
         )
     )
 );

@@ -69,7 +69,7 @@ class OlcsSearchControllerTest extends AbstractHttpControllerTestCase
     {
         $data = array(
             'search' => [
-                'licenceNumber' => '',
+                'licNo' => '',
                 'operatorName' => 'a',
                 'postcode' => '',
                 'firstName' => 'ken',

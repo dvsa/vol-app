@@ -902,7 +902,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
             'organisation' => array(
                 'name' => 'Orgnaisation name',
             ),
-            'licenceNumber' => $licenceId
+            'licNo' => $licenceId
         );
     }
 
@@ -994,11 +994,11 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
             'status' => 'Open',
             'description' => 'Convictions against operator',
             'convictionData' => '',
-            'ecms' => 'E123444',
-            'openTime' => '2012-06-13T00:00:00+0100',
+            'ecms_no' => 'E123444',
+            'openDate' => '2012-06-13T00:00:00+0100',
             'owner' => 'TBC',
             'caseType' => 'Compliance',
-            'closedTime' => '',
+            'closeDate' => '',
             'createdBy' => '',
             'lastUpdatedBy' => '',
             'categories' => array
@@ -1015,7 +1015,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
                 'version' => 1,
                 'id' => 7,
                 'goodsOrPsv' => 'Goods',
-                'licenceNumber' => 'OB1234567',
+                'licNo' => 'OB1234567',
                 'licenceStatus' => 'Valid',
                 'niFlag' => '',
                 'licenceType' => 'Standard National',
@@ -1046,7 +1046,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
                     'registeredCompanyNumber' => 1234567,
                     'name' => 'test',
                     'tradingAs' => '',
-                    'organisationType' => 'org_type.o',
+                    'type' => 'org_type.o',
                     'sicCode' => '',
                     'createdBy' => array
                     (

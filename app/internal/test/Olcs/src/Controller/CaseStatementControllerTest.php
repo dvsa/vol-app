@@ -380,7 +380,7 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
         $data['authorisersDecision'] = 'Licence granted';
 
         $bookmarkData['licence']['trafficArea']['areaName'] = 'North East of England';
-        $bookmarkData['licence']['licenceNumber'] =  'OB12345';
+        $bookmarkData['licence']['licNo'] =  'OB12345';
 
         $controller->expects($this->once())
                 ->method('getBookmarkData')
@@ -413,7 +413,7 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
         $data['authorisersDecision'] = 'Licence granted';
 
         $bookmarkData['licence']['trafficArea']['areaName'] = 'North East of England';
-        $bookmarkData['licence']['licenceNumber'] =  'OB12345';
+        $bookmarkData['licence']['licNo'] =  'OB12345';
 
         $data['case'] = 24;
         $bundle = array(
@@ -425,7 +425,7 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
                 'licence' => array(
                     'properties' => array(
                         'id',
-                        'licenceNumber',
+                        'licNo',
                         'trafficArea',
                     ),
                     'children' => array(

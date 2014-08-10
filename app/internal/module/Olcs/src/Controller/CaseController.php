@@ -167,10 +167,10 @@ class CaseController extends FormActionController
     {
         $bundle = array(
             'children' => array(
-                'categories' => array(
+                'submissionSections' => array(
                     'properties' => array(
                         'id',
-                        'name'
+                        'description'
                     )
                 ),
                 'licence' => array(
@@ -311,18 +311,18 @@ class CaseController extends FormActionController
 
         $entityType = '';
 
-        if (isset($static['business_types'][$case['licence']['organisation']['organisationType']])) {
-            $entityType = $static['business_types'][$case['licence']['organisation']['organisationType']];
+        if (isset($static['business_types'][$case['licence']['organisation']['type']])) {
+            $entityType = $static['business_types'][$case['licence']['organisation']['type']];
         }
 
-        if (isset($case['categories']) && !empty($case['categories'])) {
+        if (isset($case['submissionSections']) && !empty($case['submissionSections'])) {
 
-            foreach ($case['categories'] as $category) {
-                $categoryNames[] = $category['name'];
+            foreach ($case['submissionSections'] as $category) {
+                $categoryNames[] = $category['description'];
             }
         }
 
-        $opentimeDate = date('d/m/Y', strtotime($case['openTime']));
+        $openDate = date('d/m/Y', strtotime($case['openDate']));
 
         $smmary = [
             'description' => [
@@ -332,7 +332,7 @@ class CaseController extends FormActionController
             ],
             'open_date' => [
                 'label' => 'Open date',
-                'value' => $opentimeDate,
+                'value' => $openDate,
                 'url' => ''
             ],
             'licence_type' => [
@@ -345,7 +345,7 @@ class CaseController extends FormActionController
                 'value' => $entityType,
                 'url' => ''
             ],
-            'categories' => [
+            'submissionSections' => [
                 'label' => 'Categories',
                 'value' => implode(', ', $categoryNames),
                 'url' => ''
@@ -360,9 +360,9 @@ class CaseController extends FormActionController
                 'value' => $case['licence']['licenceStatus'],
                 'url' => ''
             ],
-            'ecms' => [
+            'ecms_no' => [
                 'label' => 'ECMS',
-                'value' => $case['ecms'],
+                'value' => $case['ecms_no'],
                 'url' => ''
             ],
         ];
@@ -477,7 +477,7 @@ class CaseController extends FormActionController
 
         $bundle = array(
             'children' => array(
-                'categories' => array(
+                'submissionSections' => array(
                     'properties' => array(
                         'id'
                     )
@@ -502,12 +502,12 @@ class CaseController extends FormActionController
             return $this->notFoundAction();
         }
 
-        $categories = $result['categories'];
-        unset($result['categories']);
+        $categories = $result['submissionSections'];
+        unset($result['submissionSections']);
 
         $result['fields'] = $result;
 
-        $result['categories'] = $this->unFormatCategories($categories);
+        $result['submissionSections'] = $this->unFormatCategories($categories);
 
         $result['licence'] = $result['licence']['id'];
 
@@ -543,7 +543,7 @@ class CaseController extends FormActionController
 
         return array(
             'organisation' => $licenceData['organisation']['name'],
-            'licence' => $licenceData['licenceNumber']
+            'licence' => $licenceData['licNo']
         );
     }
 
@@ -574,12 +574,12 @@ class CaseController extends FormActionController
     {
         // Additional fields (Mocked for now)
         $data['caseNumber'] = 12345678;
-        $data['openTime'] = date('Y-m-d H:i:s');
+        $data['openDate'] = date('Y-m-d H:i:s');
         $data['owner'] = 7;
 
         $licence = $this->fromRoute('licence');
 
-        $data['categories'] = $this->formatCategories($data['categories']);
+        $data['submissionSections'] = $this->formatCategories($data['submissionSections']);
         $data = array_merge($data, $data['fields']);
 
         $result = $this->processAdd($data, 'Cases');
@@ -602,7 +602,7 @@ class CaseController extends FormActionController
      */
     public function processEditCase($data)
     {
-        $data['categories'] = $this->formatCategories($data['categories']);
+        $data['submissionSections'] = $this->formatCategories($data['submissionSections']);
         $data = array_merge($data, $data['fields']);
 
         $this->processEdit($data, 'Cases');
