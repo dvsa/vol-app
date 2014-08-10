@@ -6,5 +6,6 @@ return array(
             'payments' => 'http://olcspayment.dev/api/',
             'backend' => 'http://olcs-backend/'
         ),
-    )
+    ),
+    'application-name' => 'internal'
 );
