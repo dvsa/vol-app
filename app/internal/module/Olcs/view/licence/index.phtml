@@ -1,13 +1,4 @@
-<?php
-    echo $this->render(
-        '/partials/page-header.phtml',
-        array(
-            'pageTitle' => 'Licence: ' . $this->licence['licenceNumber'],
-            'pageSubTitle'=> $this->licence['goodsOrPsv'] . ', ' . $this->licence['licenceType']
-            . ', ' . $this->licence['licenceStatus']
-        )
-    );
-?>
+
 <div class="three-quarters">
     <?php
         echo $this->navigation('navigation')
