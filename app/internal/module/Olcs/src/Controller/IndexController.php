@@ -51,10 +51,21 @@ class IndexController extends FormActionController
         );
 
         // @TODO: these all need to come from the backend
-        $form->get('team')->setValueOptions(array());
-        $form->get('owner')->setValueOptions(array());
-        $form->get('category')->setValueOptions(array());
-        $form->get('sub_category')->setValueOptions(array());
+        $selects = array(
+            'team' => array(),
+            'owner' => array(),
+            'category' => array(),
+            'sub_category' => array()
+        );
+
+        foreach ($selects as $name => $options) {
+            $form->get($name)
+                ->setEmptyOption('All')
+                ->setValueOptions($options);
+        }
+
+        $form->get('date')->setValue('today');
+        $form->get('status')->setValue('open');
 
         $view = new ViewModel();
         $view->setVariables(
