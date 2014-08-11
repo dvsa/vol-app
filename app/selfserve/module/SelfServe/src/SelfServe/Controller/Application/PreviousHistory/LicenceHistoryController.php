@@ -147,7 +147,7 @@ class LicenceHistoryController extends ApplicationController
      * Save method
      *
      * @param array $data
-     * @parem string $service
+     * @param string $service
      */
     protected function save($data, $service = null)
     {
@@ -241,6 +241,7 @@ class LicenceHistoryController extends ApplicationController
             if (array_key_exists($tables[$i], $post) &&
                   array_key_exists('action', $post[$tables[$i]])) {
                 $shouldAddValidators = false;
+                break;
             }
         }
         if ($shouldAddValidators) {
