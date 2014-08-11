@@ -61,8 +61,6 @@ class CaseAnnualTestHistoryController extends CaseController
         $data = [];
         $data['main'] = $case;
 
-        //die('<pre>' . print_r($data, 1));
-
         $form = $this->generateForm(
             'annual-test-history-comment',
             'saveAnnualTestHistoryForm'
@@ -83,8 +81,6 @@ class CaseAnnualTestHistoryController extends CaseController
             $data = $data + $data['main'];
             unset($data['main']);
         }
-
-        //die('<pre>' . print_r($data, 1));
 
         if (!empty($data['id'])) {
             $this->processEdit($data, 'VosaCase');
