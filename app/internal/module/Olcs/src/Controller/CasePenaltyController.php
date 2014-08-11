@@ -105,7 +105,6 @@ class CasePenaltyController extends CaseController
         if (!empty($data['id'])) {
             $this->processEdit($data, 'Penalty');
         } else {
-            //die('add');
             $this->processAdd($data, 'Penalty');
         }
 
