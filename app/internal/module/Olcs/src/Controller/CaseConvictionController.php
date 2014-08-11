@@ -173,8 +173,7 @@ class CaseConvictionController extends CaseController
         );
 
         $request = $this->getRequest();
-        if ($request->isGet())
-        {
+        if ($request->isGet()) {
             $form->get('defendant-details')->remove('personSearch');
             $form->get('defendant-details')->remove('personFirstname');
             $form->get('defendant-details')->remove('personLastname');
@@ -494,11 +493,14 @@ class CaseConvictionController extends CaseController
      */
     public function generateCommentForm($case)
     {
+        $data = [];
+        $data['main'] = $case;
+
         $form = $this->generateForm(
             'conviction-comment',
             'saveCommentForm'
         );
-        $form->setData($case);
+        $form->setData($data);
 
         return $form;
     }
@@ -510,6 +512,11 @@ class CaseConvictionController extends CaseController
      */
     public function saveCommentForm($data)
     {
+        if (isset($data['main'])) {
+            $data = $data + $data['main'];
+            unset($data['main']);
+        }
+
         $data = array_intersect_key($data, array_flip(['id', 'convictionData', 'version']));
         $this->processEdit($data, 'VosaCase');
 
