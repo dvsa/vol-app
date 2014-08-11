@@ -22,6 +22,9 @@ return [
                     'id' => [
                         'type' => 'hidden'
                     ],
+                    'case' => [
+                        'type' => 'hidden'
+                    ],
                     'version' => [
                         'type' => 'hidden'
                     ]

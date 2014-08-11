@@ -78,11 +78,16 @@ class CasePenaltyController extends CaseController
      */
     private function generatePenaltyForm($penalty)
     {
+        $data = [];
+        $data['main'] = $penalty;
+
+        //die('<pre>' . print_r($data, 1));
+
         $form = $this->generateForm(
             'penalty-comment',
             'savePenaltyForm'
         );
-        $form->setData($penalty);
+        $form->setData($data);
 
         return $form;
     }
@@ -94,14 +99,18 @@ class CasePenaltyController extends CaseController
      */
     public function savePenaltyForm($data)
     {
-        unset($data['cancel']);
+        if (isset($data['main'])) {
+            $data = $data + $data['main'];
+            unset($data['main']);
+        }
 
-        if ($data['submit'] === '') {
-            if (!empty($data['id'])) {
-                $this->processEdit($data, 'Penalty');
-            } else {
-                $this->processAdd($data, 'Penalty');
-            }
+        //die('<pre>' . print_r($data, 1));
+
+        if (!empty($data['id'])) {
+            $this->processEdit($data, 'Penalty');
+        } else {
+            //die('add');
+            $this->processAdd($data, 'Penalty');
         }
 
         return $this->redirect()->toRoute('case_penalty', array(), array(), true);
