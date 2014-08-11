@@ -17,31 +17,14 @@ use Zend\View\Model\ViewModel;
  */
 class IndexController extends AbstractActionController
 {
+    protected $pageTitle = 'Home';
+    protected $pageSubTitle = 'Subtitle';
 
     /**
      * @codeCoverageIgnore
      */
     public function indexAction()
     {
-    	
-    	$contentView = new ViewModel();
-        $contentView->setTemplate('index/home');
-
-        return $this->renderView($contentView, 'Home', 'Subtitle');
-    }
-
-    private function renderView($view, $pageTitle, $pageSubTitle)
-    {
-    	$base = new ViewModel();
-    	$base->setTemplate('layout/base.phtml');
-
-    	$header = new ViewModel(['pageTitle' => $pageTitle, 'pageSubTitle' => $pageSubTitle]);
-    	$header->setTemplate('layout/partials/header');
-
-    	$base->setTerminal(true);
-        $base->addChild($header, 'header');
-        $base->addChild($view, 'content');
-
-        return $base;
+        return $this->renderView('index/home');
     }
 }
