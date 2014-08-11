@@ -129,9 +129,9 @@ class CaseImpoundingController extends CaseController implements CrudInterface
      */
     public function processAddImpounding ($data)
     {
-        unset($data['cancel']);
+        unset($data['form-actions']['cancel']);
 
-        if ($data['submit'] === '') {
+        if ($data['form-actions']['submit'] === '') {
             $formattedData = $this->formatForSave($data);
 
             $result = $this->processAdd($formattedData, 'Impounding');
@@ -151,9 +151,9 @@ class CaseImpoundingController extends CaseController implements CrudInterface
      */
     public function processEditImpounding ($data)
     {
-        unset($data['cancel']);
+        unset($data['form-actions']['cancel']);
 
-        if ($data['submit'] === '') {
+        if ($data['form-actions']['submit'] === '') {
             $formattedData = $this->formatForSave($data);
 
             $result = $this->processEdit($formattedData, 'Impounding');
