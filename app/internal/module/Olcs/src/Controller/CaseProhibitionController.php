@@ -8,12 +8,16 @@
 
 namespace Olcs\Controller;
 
+use Olcs\Controller\Traits\DeleteActionTrait;
+
+use Common\Controller\CrudInterface;
+
 /**
  * Case Prohibition Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class CaseProhibitionController extends CaseController
+class CaseProhibitionController extends CaseController implements CrudInterface
 {
 
     /**
@@ -55,12 +59,11 @@ class CaseProhibitionController extends CaseController
             )
         );
 
-        $result = $this->makeRestCall('Prohibition', 'GET', array('case' => $caseId, 'bundle' => json_encode($bundle)));
+        $results = $this->makeRestCall('Prohibition', 'GET', array('case_id' => $caseId, 'bundle' => json_encode($bundle)));
 
-        if ($result['Count']) {
-            $prohibition = $result['Results'][0];
-            $prohibition['case'] = $prohibition['case']['id'];
-            $table = $this->buildTable('prohibition', [0 => $prohibition]);
+        if ($results['Count']) {
+            $results = $this->formatForTable($results);
+            $table = $this->buildTable('prohibition', $results);
         } else {
             $prohibition['case'] = $caseId;
             $table = $this->buildTable('prohibition', []);
@@ -147,7 +150,115 @@ class CaseProhibitionController extends CaseController
      */
     public function editAction()
     {
+        $licenceId = $this->fromRoute('licence');
+        $caseId = $this->fromRoute('case');
+        $prohibitionId = $this->fromRoute('id');
 
+        $this->setBreadcrumb(
+            array(
+                'licence_case_list/pagination' => array('licence' => $licenceId),
+                'case_prohibition' => array('licence' => $licenceId, 'case' => $caseId)
+            )
+        );
+
+        $bundle = array(
+            'children' => array(
+                'case' => array(
+                    'properties' => array(
+                        'id'
+                    )
+                ),
+                'prohibitionType' => array(
+                    'properties' => array(
+                        'handle',
+                        'comment'
+                    )
+                )
+            )
+        );
+
+        $details = $this->makeRestCall(
+            'Prohibition',
+            'GET',
+            array(
+                'id' => $prohibitionId,
+                'bundle' => json_encode($bundle)
+            )
+        );
+
+        if (empty($details)) {
+            return $this->notFoundAction();
+        }
+
+        $data = $this->formatDataForForm($details);
+
+        $form = $this->generateFormWithData(
+            'prohibition',
+            'processEditProhibition',
+            $data
+        );
+
+        $view = $this->getView(
+            [
+                'params' => [
+                    'pageTitle' => 'Edit prohibition',
+                    'pageSubTitle' => ''
+                ],
+                'form' => $form,
+            ]
+        );
+
+        $view->setTemplate('prohibition/form');
+
+        return $view;
+    }
+
+    /**
+     *
+     * Formats data for use in a table
+     *
+     * @param array $results
+     * @return array $results
+     */
+    private function formatForTable($results)
+    {
+        $config = $this->getServiceLocator()->get('Config');
+        $static = $config['static-list-data'];
+
+        if (!empty($results)) {
+            foreach ($results as $key => $result) {
+                if (isset($result['prohibitionType']['handle'])
+                    && isset($static['prohibition_type'][$result['prohibitionType']['handle']])) {
+                    $results[$key]['prohibitionType'] = $static['prohibition_type'][$result['prohibitionType']['handle']];
+                }
+            }
+        }
+
+        return $results;
+    }
+
+    /**
+     * Formats data for use in the form
+     *
+     * @param array $results
+     * @return array
+     */
+    private function formatDataForForm($results)
+    {
+        $formatted = array();
+
+        $formatted['fields']['prohibitionDate'] = $results['prohibitionDate'];
+        $formatted['fields']['clearedDate'] = $results['clearedDate'];
+        $formatted['fields']['vrm'] = $results['vrm'];
+        $formatted['fields']['imposedAt'] = $results['imposedAt'];
+        $formatted['fields']['prohibitionType'] = $results['prohibitionType']['handle'];
+        $formatted['fields']['isTrailer'] = $results['isTrailer'];
+
+        $formatted['id'] = $results['id'];
+        $formatted['case_id'] = $results['case']['id'];
+        $formatted['version'] = $results['version'];
+
+        return $formatted;
     }
 
     /**
@@ -192,16 +303,59 @@ class CaseProhibitionController extends CaseController
      * Processes the add prohibition form
      *
      * @param array $data
+     * @return redirect
      */
     public function processAddProhibition ($data)
     {
-        $result = $this->processAdd($data, 'Prohibition');
+        $formatted = $data['fields'];
+        $result = $this->processAdd($formatted, 'Prohibition');
 
         if (isset($result['id'])) {
             return $this->redirectToAction();
         }
 
         return $this->redirectToAction('add');
+    }
+
+    /**
+     * Processes the edit prohibition form
+     *
+     * @param array $data
+     * @return redirect
+     */
+    public function processEditProhibition ($data)
+    {
+        $result = $this->processEdit($data, 'Prohibition');
+
+        if (empty($result)) {
+            return $this->redirect()->toRoute(
+                'case_prohibition',
+                array(
+                    'action' => null,
+                    'id' => null
+                ),
+                array(),
+                true
+            );
+        }
+    }
+
+    /**
+     * Redirects to the selected action or if no action to the index
+     *
+     * @param string $action
+     * @return Redirect
+     */
+    private function redirectToAction($action = null)
+    {
+        return $this->redirect()->toRoute(
+            'case_prohibition',
+            array(
+                'action' => $action,
+            ),
+            array(),
+            true
+        );
     }
 
     /**
