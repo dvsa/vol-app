@@ -19,6 +19,7 @@ use Common\Controller\CrudInterface;
  */
 class CaseProhibitionController extends CaseController implements CrudInterface
 {
+    use DeleteActionTrait;
 
     /**
      * Index action loads the form data
@@ -29,17 +30,8 @@ class CaseProhibitionController extends CaseController implements CrudInterface
     {
         $caseId = $this->fromRoute('case');
         $licence = $this->fromRoute('licence');
-        $action = $this->fromPost('action');
 
-        if ($action) {
-            $action = strtolower($action);
-
-            if ($action == 'add') {
-                return $this->redirectToCrud($action, null);
-            } elseif ($id) {
-                return $this->redirectToCrud($action, $id);
-            }
-        }
+        $this->checkForCrudAction('case_prohibition', array('case' => $caseId, 'licence' => $licence), 'id');
 
         $prohibition = array();
 
@@ -124,7 +116,7 @@ class CaseProhibitionController extends CaseController implements CrudInterface
             'prohibition',
             'processAddProhibition',
             array(
-                'case' => $caseId
+                'case_id' => $caseId
             )
         );
 
@@ -307,7 +299,8 @@ class CaseProhibitionController extends CaseController implements CrudInterface
      */
     public function processAddProhibition ($data)
     {
-        $formatted = $data['fields'];
+        $formatted = $this->formatForSave($data);
+
         $result = $this->processAdd($formatted, 'Prohibition');
 
         if (isset($result['id'])) {
@@ -325,7 +318,9 @@ class CaseProhibitionController extends CaseController implements CrudInterface
      */
     public function processEditProhibition ($data)
     {
-        $result = $this->processEdit($data, 'Prohibition');
+        $formattedData = $this->formatForSave($data);
+
+        $result = $this->processEdit($formattedData, 'Prohibition');
 
         if (empty($result)) {
             return $this->redirect()->toRoute(
@@ -338,6 +333,21 @@ class CaseProhibitionController extends CaseController implements CrudInterface
                 true
             );
         }
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    private function formatForSave($data)
+    {
+        $formatted = $data['fields'];
+
+        $formatted['id'] = $data['id'];
+        $formatted['case'] = $data['case_id'];
+        $formatted['version'] = $data['version'];
+
+        return $formatted;
     }
 
     /**
@@ -359,6 +369,26 @@ class CaseProhibitionController extends CaseController implements CrudInterface
     }
 
     /**
+     * Does what it says on the tin.
+     *
+     * @return mixed
+     */
+    public function redirectToIndex()
+    {
+        $licenceId = $this->fromRoute('licence');
+        $caseId = $this->fromRoute('case');
+
+        return $this->redirect()->toRoute(
+            'case_prohibition',
+            array(
+                'action' => 'index',
+                'licence' => $licenceId,
+                'case' => $caseId
+            )
+        );
+    }
+
+    /**
      * Redirects to the add or edit action
      *
      * @param string $action
@@ -376,5 +406,15 @@ class CaseProhibitionController extends CaseController implements CrudInterface
             array(),
             true
         );
+    }
+
+    /**
+     * Should return the name of the service to call for deleting the item
+     *
+     * @return string
+     */
+    public function getDeleteServiceName()
+    {
+        return 'Prohibition';
     }
 }

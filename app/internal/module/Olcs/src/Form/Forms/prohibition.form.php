@@ -30,7 +30,7 @@ return [
                         'value_options' => 'prohibition_type',
                         'label' => 'Type',
                     ],
-                    'dateCleared' => [
+                    'clearedDate' => [
                         'type' => 'dateSelectWithEmpty',
                         'label' => 'Date cleared',
                         'filters' => '\Common\Form\Elements\InputFilters\DateNotRequiredNotInFuture',
