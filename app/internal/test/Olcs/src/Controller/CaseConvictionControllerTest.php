@@ -946,7 +946,7 @@ class CaseConvictionControllerTest extends AbstractHttpControllerTestCase
 
         $params->expects($this->once())
             ->method('fromRoute')
-            ->will($this->returnValue(array('licence' => 7, 'case' => 54)));
+            ->will($this->returnValue(array('licence' => 7, 'case' => 54, 'id' => 1)));
 
         $params->expects($this->once())
             ->method('fromPost')
