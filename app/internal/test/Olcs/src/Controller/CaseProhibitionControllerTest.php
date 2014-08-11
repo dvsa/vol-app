@@ -129,36 +129,20 @@ class CaseProhibitionControllerTest extends AbstractHttpControllerTestCase
     /**
      * Tests saveProhibitionForm add is called
      *
-     * @dataProvider saveProhibitionFormAddSubmitProvider
-     *
      * @param array $data
      */
-    public function testSaveProhibitionFormAddSubmit($data)
+    public function testSaveProhibitionFormAddSubmit()
     {
+        $data = array(
+            'case' => 24,
+            'notes' => 'test',
+            'submit' => '',
+            'cancel' => null
+        );
+
         $redirect = $this->getSaveRedirect();
 
         $this->controller->expects($this->once())
-            ->method('processAdd');
-
-        $this->controller->expects($this->once())
-            ->method('redirect')
-            ->will($this->returnValue($redirect));
-
-        $this->controller->saveProhibitionForm($data);
-    }
-
-    /**
-     * Tests saveProhibitionForm add is called
-     *
-     * @dataProvider saveProhibitionFormAddCancelProvider
-     *
-     * @param array $data
-     */
-    public function testSaveProhibitionFormAddCancel($data)
-    {
-        $redirect = $this->getSaveRedirect();
-
-        $this->controller->expects($this->never())
             ->method('processAdd');
 
         $this->controller->expects($this->once())
@@ -190,67 +174,6 @@ class CaseProhibitionControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
-     * Tests saveProhibitionForm edit is not called when cancel pressed
-     *
-     * @dataProvider saveProhibitionFormEditCancelProvider
-     *
-     * @param array $data
-     */
-    public function testSaveProhibitionFormEditCancel($data)
-    {
-        $redirect = $this->getSaveRedirect();
-
-        $this->controller->expects($this->never())
-            ->method('processEdit');
-
-         $this->controller->expects($this->once())
-            ->method('redirect')
-            ->will($this->returnValue($redirect));
-
-         $this->controller->saveProhibitionForm($data);
-    }
-
-    /**
-     *
-     * data provider for testSaveProhibitionForm
-     *
-     * @return array
-     */
-    public function saveProhibitionFormAddSubmitProvider()
-    {
-        return array(
-            array(
-                array(
-                    'case' => 24,
-                    'notes' => 'test',
-                    'submit' => '',
-                    'cancel' => null
-                )
-            )
-        );
-    }
-
-    /**
-     *
-     * data provider for testSaveProhibitionForm
-     *
-     * @return array
-     */
-    public function saveProhibitionFormAddCancelProvider()
-    {
-        return array(
-            array(
-            array(
-                    'case' => 24,
-                    'notes' => 'test',
-                    'submit' => null,
-                    'cancel' => ''
-            )
-                )
-        );
-    }
-
-    /**
      *
      * data provider for testSaveProhibitionSubmitForm
      *
@@ -266,27 +189,6 @@ class CaseProhibitionControllerTest extends AbstractHttpControllerTestCase
                     'notes' => 'test',
                     'submit' => '',
                     'cancel' => null
-            )
-                )
-        );
-    }
-
-    /**
-     *
-     * data provider for testSaveProhibitionCancelForm
-     *
-     * @return array
-     */
-    public function saveProhibitionFormEditCancelProvider()
-    {
-        return array(
-            array(
-            array(
-                    'id' => 1,
-                    'case' => 24,
-                    'notes' => 'test',
-                    'submit' => null,
-                    'cancel' => ''
             )
                 )
         );
