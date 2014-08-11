@@ -70,10 +70,7 @@ return [
             'licence' => [
                 'type' => 'hidden'
             ],
-            'case' => [
-                'type' => 'hidden'
-            ],
-            'stayType' => [
+            'case_id' => [
                 'type' => 'hidden'
             ],
             'id' => [
