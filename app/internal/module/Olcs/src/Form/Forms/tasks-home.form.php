@@ -28,13 +28,18 @@ return array(
                 'label' => 'tasks-home.data.date',
                 'value_options' => 'task-date-types'
             ),
+            'status' => array(
+                'type' => 'select',
+                'label' => 'tasks-home.data.status',
+                'value_options' => 'task-status-types'
+            ),
             'urgent' => array(
                 'type' => 'checkbox',
                 'label' => 'tasks-home.data.urgent',
             ),
             'filter' => array(
                 'type' => 'submit',
-                'label' => 'Filter'
+                'label' => 'tasks-home.submit.filter'
             )
         )
     )

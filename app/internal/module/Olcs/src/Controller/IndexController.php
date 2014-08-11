@@ -28,6 +28,9 @@ class IndexController extends FormActionController
     {
         $filters = $this->filterRequest();
 
+        // we want to keep $search and $filters separate
+        // as we'll use filters again later to populate
+        // the form
         $search = array_merge(
             $filters,
             array(
@@ -46,6 +49,12 @@ class IndexController extends FormActionController
         $form = $this->generateFormWithData(
             'tasks-home', null, $filters
         );
+
+        // @TODO: these all need to come from the backend
+        $form->get('team')->setValueOptions(array());
+        $form->get('owner')->setValueOptions(array());
+        $form->get('category')->setValueOptions(array());
+        $form->get('sub_category')->setValueOptions(array());
 
         $view = new ViewModel();
         $view->setVariables(
