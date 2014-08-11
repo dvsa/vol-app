@@ -51,7 +51,11 @@ class CaseProhibitionController extends CaseController implements CrudInterface
             )
         );
 
-        $results = $this->makeRestCall('Prohibition', 'GET', array('case_id' => $caseId, 'bundle' => json_encode($bundle)));
+        $results = $this->makeRestCall(
+            'Prohibition',
+            'GET',
+            array('case_id' => $caseId, 'bundle' => json_encode($bundle))
+        );
 
         if ($results['Count']) {
             $results = $this->formatForTable($results);
@@ -221,7 +225,8 @@ class CaseProhibitionController extends CaseController implements CrudInterface
             foreach ($results as $key => $result) {
                 if (isset($result['prohibitionType']['handle'])
                     && isset($static['prohibition_type'][$result['prohibitionType']['handle']])) {
-                    $results[$key]['prohibitionType'] = $static['prohibition_type'][$result['prohibitionType']['handle']];
+                    $results[$key]['prohibitionType'] =
+                        $static['prohibition_type'][$result['prohibitionType']['handle']];
                 }
             }
         }
@@ -287,9 +292,9 @@ class CaseProhibitionController extends CaseController implements CrudInterface
         }
 
         if (!empty($data['id'])) {
-            $this->processEdit($data, 'Prohibition');
+            $this->processEdit($data, 'ProhibitionNote');
         } else {
-            $this->processAdd($data, 'Prohibition');
+            $this->processAdd($data, 'ProhibitionNote');
         }
 
         return $this->redirect()->toRoute('case_prohibition', array(), array(), true);
@@ -389,26 +394,6 @@ class CaseProhibitionController extends CaseController implements CrudInterface
                 'licence' => $licenceId,
                 'case' => $caseId
             )
-        );
-    }
-
-    /**
-     * Redirects to the add or edit action
-     *
-     * @param string $action
-     * @param int $id
-     * @return Redirect
-     */
-    private function redirectToCrud($action, $id = null)
-    {
-        return $this->redirect()->toRoute(
-            'case_prohibition',
-            array(
-                'action' => $action,
-                'id' => $id,
-            ),
-            array(),
-            true
         );
     }
 
