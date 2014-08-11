@@ -547,9 +547,19 @@ class CaseConvictionController extends CaseController
         $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $routeParams['licence'])));
 
         $caseId = $routeParams['case'];
+        $offenceId = $routeParams['id'];
 
-        $case = $this->getCase($caseId);
+        $case = $this->getCase($caseId, $offenceId);
 
+        $offence = false;
+        if (!empty($case['legacyOffences'])) {
+            foreach ($case['legacyOffences'] as $legacyOffence) {
+
+                if ($legacyOffence['id'] ==  $offenceId) {
+                    $offence = $legacyOffence;
+                }
+            }
+        }
         $summary = $this->getCaseSummaryArray($case);
 
         $view = $this->getView();
@@ -560,6 +570,7 @@ class CaseConvictionController extends CaseController
         $view->setVariables(
             [
                 'case' => $case,
+                'offence' => $offence,
                 'tabs' => $tabs,
                 'tab' => $action,
                 'summary' => $summary

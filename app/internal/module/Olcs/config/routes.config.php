@@ -312,6 +312,7 @@ return [
             'constraints' => [
                 'licence' => '[0-9]+',
                 'case' => '[0-9]+',
+                'id' => '[0-9]+',
             ],
             'defaults' => [
                 'controller' => 'CaseConvictionController',
