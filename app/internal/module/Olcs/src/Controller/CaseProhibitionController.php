@@ -261,11 +261,14 @@ class CaseProhibitionController extends CaseController implements CrudInterface
      */
     private function generateProhibitionNoteForm($prohibition)
     {
+        $data = [];
+        $data['main'] = $prohibition;
+
         $form = $this->generateForm(
             'prohibition-comment',
             'saveProhibitionNoteForm'
         );
-        $form->setData($prohibition);
+        $form->setData($data);
 
         return $form;
     }
@@ -278,14 +281,15 @@ class CaseProhibitionController extends CaseController implements CrudInterface
      */
     public function saveProhibitionNoteForm($data)
     {
-        unset($data['cancel']);
+        if (isset($data['main'])) {
+            $data = $data + $data['main'];
+            unset($data['main']);
+        }
 
-        if ($data['submit'] === '') {
-            if (!empty($data['id'])) {
-                $this->processEdit($data, 'ProhibitionNote');
-            } else {
-                $this->processAdd($data, 'ProhibitionNote');
-            }
+        if (!empty($data['id'])) {
+            $this->processEdit($data, 'Prohibition');
+        } else {
+            $this->processAdd($data, 'Prohibition');
         }
 
         return $this->redirect()->toRoute('case_prohibition', array(), array(), true);

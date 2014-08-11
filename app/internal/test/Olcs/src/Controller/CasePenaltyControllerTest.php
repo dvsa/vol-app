@@ -148,27 +148,6 @@ class CasePenaltyControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
-     * Tests savePenaltyForm add is called
-     *
-     * @dataProvider savePenaltyFormAddCancelProvider
-     *
-     * @param array $data
-     */
-    public function testSavePenaltyFormAddCancel($data)
-    {
-        $redirect = $this->getSaveRedirect();
-
-        $this->controller->expects($this->never())
-            ->method('processAdd');
-
-        $this->controller->expects($this->once())
-            ->method('redirect')
-            ->will($this->returnValue($redirect));
-
-        $this->controller->savePenaltyForm($data);
-    }
-
-    /**
      * Tests savePenaltyForm edit is called when submit pressed
      *
      * @dataProvider savePenaltyFormEditSubmitProvider
@@ -180,27 +159,6 @@ class CasePenaltyControllerTest extends AbstractHttpControllerTestCase
         $redirect = $this->getSaveRedirect();
 
         $this->controller->expects($this->once())
-            ->method('processEdit');
-
-         $this->controller->expects($this->once())
-            ->method('redirect')
-            ->will($this->returnValue($redirect));
-
-         $this->controller->savePenaltyForm($data);
-    }
-
-    /**
-     * Tests savePenaltyForm edit is not called when cancel pressed
-     *
-     * @dataProvider savePenaltyFormEditCancelProvider
-     *
-     * @param array $data
-     */
-    public function testSavePenaltyFormEditCancel($data)
-    {
-        $redirect = $this->getSaveRedirect();
-
-        $this->controller->expects($this->never())
             ->method('processEdit');
 
          $this->controller->expects($this->once())
@@ -232,26 +190,6 @@ class CasePenaltyControllerTest extends AbstractHttpControllerTestCase
 
     /**
      *
-     * data provider for testSavePenaltyForm
-     *
-     * @return array
-     */
-    public function savePenaltyFormAddCancelProvider()
-    {
-        return array(
-            array(
-            array(
-                    'case' => 24,
-                    'notes' => 'test',
-                    'submit' => null,
-                    'cancel' => ''
-            )
-                )
-        );
-    }
-
-    /**
-     *
      * data provider for testSavePenaltySubmitForm
      *
      * @return array
@@ -266,27 +204,6 @@ class CasePenaltyControllerTest extends AbstractHttpControllerTestCase
                     'notes' => 'test',
                     'submit' => '',
                     'cancel' => null
-            )
-                )
-        );
-    }
-
-    /**
-     *
-     * data provider for testSavePenaltyCancelForm
-     *
-     * @return array
-     */
-    public function savePenaltyFormEditCancelProvider()
-    {
-        return array(
-            array(
-            array(
-                    'id' => 1,
-                    'case' => 24,
-                    'notes' => 'test',
-                    'submit' => null,
-                    'cancel' => ''
             )
                 )
         );
