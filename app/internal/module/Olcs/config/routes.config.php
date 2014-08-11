@@ -283,6 +283,21 @@ return [
             ]
         ]
     ],
+    'offence' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/licence/[:licence]/case/[:case]/offence/view[/:offenceId]',
+            'constraints' => [
+                'licence' => '[0-9]+',
+                'case' => '[0-9]+',
+                'offenceId' => '[0-9]+',
+            ],
+            'defaults' => [
+                'controller' => 'CaseConvictionController',
+                'action' => 'viewOffence'
+            ]
+        ]
+    ],
     'case_penalty' => [
         'type' => 'segment',
         'options' => [
