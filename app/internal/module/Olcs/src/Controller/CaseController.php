@@ -425,7 +425,10 @@ class CaseController extends FormActionController
 
         $table = $this->getServiceLocator()->get('Table')->buildTable('case', $results, $pagination);
 
-        $view = $this->getView(array('licence' => $licence, 'table' => $table, 'data' => $pageData));
+        $licenceData = $this->makeRestCall('Licence', 'GET', array('id' => $licence));;
+
+        $view = $this->getView(array('licence' => $licence, 'licenceData' => $licenceData,
+            'table' => $table, 'data' => $pageData));
         $view->setTemplate('case/list');
 
         return $view;
