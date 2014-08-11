@@ -103,12 +103,14 @@ return [
             'cases' => [
                 'type' => 'segment',
                 'options' => [
-                    'route' => '/cases/:page/:limit', // There's another route called cases!!!!!
+                    'route' => '/cases/page/:page/limit/:limit/sort/:sort/order/:order', // There's another route called cases!!!!!
                     'defaults' => [
                         'controller' => 'CaseController',
                         'action' => 'index',
                         'page' => 1,
-                        'limit' => 10
+                        'limit' => 10,
+                        'sort' => 'createdOn',
+                        'order' => 'ASC'
                     ]
                 ],
                 'may_terminate' => true,

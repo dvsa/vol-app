@@ -62,7 +62,7 @@ return array(
                     'pages' => array(
                         array(
                             'label' => 'Case list',
-                            'route' => 'licence_case_list',
+                            'route' => 'licence/cases',
                             'use_route_match' => true,
                             'pages' => array(
                                 array(

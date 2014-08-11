@@ -224,7 +224,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
         $action = '';
 
         $this->beginIndexAction($licenceId, $action);
-        $this->controller->expects($this->exactly(2))
+        $this->controller->expects($this->exactly(3))
             ->method('makeRestCall')
             ->will(
                 $this->onConsecutiveCalls(
