@@ -349,6 +349,7 @@ class CaseImpoundingController extends CaseController implements CrudInterface
      * Redirects to the selected action or if no action to the index
      *
      * @param string $action
+     * @return Redirect
      */
     private function redirectToAction($action = null)
     {
