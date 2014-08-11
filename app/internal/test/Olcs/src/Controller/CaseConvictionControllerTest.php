@@ -42,7 +42,8 @@ class CaseConvictionControllerTest extends AbstractHttpControllerTestCase
                 'getServiceLocator',
                 'notFoundAction',
                 'fromPost',
-                'getRequest'
+                'getRequest',
+                'getLegacyOffencesTable'
             )
         );
         parent::setUp();
@@ -119,10 +120,14 @@ class CaseConvictionControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->once())
             ->method('getCase')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue(array('legacyOffences' => array())));
 
         $this->controller->expects($this->once())
             ->method('generateCommentForm')
+            ->will($this->returnValue(array()));
+
+        $this->controller->expects($this->once())
+            ->method('getLegacyOffencesTable')
             ->will($this->returnValue(array()));
 
         $this->controller->expects($this->once())
@@ -892,5 +897,90 @@ class CaseConvictionControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue($returnValue));
 
         return $getPostMock;
+    }
+
+    public function testGetLegacyOffencesTable()
+    {
+        $this->controller = $this->getMock(
+            '\Olcs\Controller\CaseConvictionController',
+            array(
+                'url',
+                'getServiceLocator'
+            )
+        );
+
+        $mockUrl = 'some_url';
+        $data = ['legacyOffences' => []];
+
+        $this->controller->expects($this->once())
+            ->method('url')
+            ->willReturn($mockUrl);
+
+        $serviceLocator = $this->getMock('\stdClass', array('get'));
+
+        $tableBuilder = $this->getMock('\stdClass', array('buildTable'));
+
+        $tableBuilder->expects($this->once())
+            ->method('buildTable')
+            ->with($this->equalTo('legacyOffences'), $data, array('url' => $mockUrl))
+            ->willReturn('mocktablehtml');
+
+        $serviceLocator->expects($this->once())
+            ->method('get')
+            ->with('Table')
+            ->will($this->returnValue($tableBuilder));
+
+        $this->controller->expects($this->once())
+            ->method('getServiceLocator')
+            ->willReturn($serviceLocator);
+
+        $this->controller->getLegacyOffencesTable($data);
+
+    }
+
+    public function testViewOffenceAction()
+    {
+
+        $mockCase = [];
+        $params = $this->getMock('\stdClass', array('fromPost', 'fromRoute'));
+
+        $params->expects($this->once())
+            ->method('fromRoute')
+            ->will($this->returnValue(array('licence' => 7, 'case' => 54)));
+
+        $params->expects($this->once())
+            ->method('fromPost')
+            ->will($this->returnValue(array('action' => 'add', 'table' => 'case_convictions', 'id' => 8)));
+
+        $this->controller->expects($this->exactly(2))
+            ->method('params')
+            ->will($this->returnValue($params));
+
+        $this->controller->expects($this->once())
+            ->method('setBreadcrumb')
+            ->with(array('licence_case_list/pagination' => array('licence' => 7)));
+
+        $this->controller->expects($this->once())
+            ->method('getCase')
+            ->with(54)
+            ->willReturn($mockCase);
+
+        $this->controller->expects($this->once())
+            ->method('getCaseSummaryArray')
+            ->with($mockCase)
+            ->willReturn(array());
+
+        $viewModel = $this->getMock('\stdClass', array('setVariables', 'setTemplate'));
+
+        $this->controller->expects($this->once())
+            ->method('getView')
+            ->will($this->returnValue($viewModel));
+
+        $this->controller->expects($this->once())
+            ->method('getTabInformationArray')
+            ->will($this->returnValue(array()));
+
+        $this->controller->viewOffenceAction();
+
     }
 }
