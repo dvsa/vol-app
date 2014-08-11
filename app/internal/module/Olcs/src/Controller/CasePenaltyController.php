@@ -81,8 +81,6 @@ class CasePenaltyController extends CaseController
         $data = [];
         $data['main'] = $penalty;
 
-        //die('<pre>' . print_r($data, 1));
-
         $form = $this->generateForm(
             'penalty-comment',
             'savePenaltyForm'
@@ -103,8 +101,6 @@ class CasePenaltyController extends CaseController
             $data = $data + $data['main'];
             unset($data['main']);
         }
-
-        //die('<pre>' . print_r($data, 1));
 
         if (!empty($data['id'])) {
             $this->processEdit($data, 'Penalty');
