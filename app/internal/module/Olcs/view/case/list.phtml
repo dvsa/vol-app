@@ -2,8 +2,9 @@
     echo $this->render(
         '/partials/page-header.phtml',
         array(
-        'pageTitle' => 'Cases',
-        'pageSubTitle'=> 'Cases associated with: ' . $data['organisation']
+            'pageTitle' => 'Licence: ' . $this->licenceData['licenceNumber'],
+            'pageSubTitle'=> $this->licenceData['goodsOrPsv'] . ', ' . $this->licenceData['licenceType']
+            . ', ' . $this->licenceData['licenceStatus']
         )
     );
 ?>

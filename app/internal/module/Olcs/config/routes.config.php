@@ -53,33 +53,6 @@ return [
             ]
         ]
     ],
-    'licence_case_list' => [
-        'type' => 'segment',
-        'options' => [
-            'route' => '/licence/:licence/cases',
-            'constraints' => [
-                'licence' => '[0-9]+'
-            ],
-            'defaults' => [
-                'controller' => 'CaseController',
-                'action' => 'index'
-            ]
-        ],
-        'may_terminate' => true,
-        'child_routes' => [
-            'pagination' => [
-                'type' => 'wildcard',
-                'options' => [
-                    'key_value_delimiter' => '/',
-                    'param_delimiter' => '/',
-                    'defaults' => [
-                        'page' => 1,
-                        'limit' => 10
-                    ]
-                ]
-            ]
-        ]
-    ],
 
     // These routes are for the licence page
 
@@ -128,11 +101,16 @@ return [
                 'may_terminate' => true,
             ],
             'cases' => [
-                'type' => 'literal',
+                'type' => 'segment',
                 'options' => [
-                    'route' => '/caselist', // There's another route called cases!!!!!
+                    'route' => '/cases/page/:page/limit/:limit/sort/:sort/order/:order',
                     'defaults' => [
-                        'action' => 'cases',
+                        'controller' => 'CaseController',
+                        'action' => 'index',
+                        'page' => 1,
+                        'limit' => 10,
+                        'sort' => 'createdOn',
+                        'order' => 'ASC'
                     ]
                 ],
                 'may_terminate' => true,
