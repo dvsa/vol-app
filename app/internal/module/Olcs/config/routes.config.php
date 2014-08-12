@@ -470,4 +470,14 @@ return [
             ]
         ]
     ],
+    'tasks' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/tasks/[:type]/[:value]',
+            'defaults' => [
+                'controller' => 'IndexController',
+                'action' => 'taskFilter'
+            ]
+        ]
+    ]
 ];

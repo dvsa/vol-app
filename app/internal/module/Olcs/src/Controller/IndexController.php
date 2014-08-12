@@ -10,6 +10,7 @@ namespace Olcs\Controller;
 
 use Common\Controller\FormActionController;
 use Zend\View\Model\ViewModel;
+use Zend\View\Model\JsonModel;
 
 /**
  * IndexController
@@ -52,16 +53,28 @@ class IndexController extends FormActionController
 
         // @TODO: these all need to come from the backend
         $selects = array(
-            'team' => array(),
+            'team' => array(
+                '1' => 'Team A',
+                '2' => 'Team B',
+                '3' => 'Team C'
+            ),
             'owner' => array(),
-            'category' => array(),
+            'category' => array(
+                'A' => 'Category A',
+                'B' => 'Category B',
+                'C' => 'Category C'
+            ),
             'sub_category' => array()
         );
 
         foreach ($selects as $name => $options) {
+            $options = array_merge(
+                array('all' => 'All'),
+                $options
+            );
             $form->get($name)
-                ->setEmptyOption('All')
-                ->setValueOptions($options);
+                ->setValueOptions($options)
+                ->setEmptyOption(null);
         }
 
         $form->get('date')->setValue('today');
@@ -71,11 +84,13 @@ class IndexController extends FormActionController
         $view->setVariables(
             array(
                 'table' => $table,
-                'form'  => $form
+                'form'  => $form,
+                'inlineScript' => $this->getServiceLocator()->get('Script')->loadFiles(['tasks'])
             )
         );
 
         $view->setTemplate('index/home');
+        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
         return $view;
     }
 
@@ -88,5 +103,25 @@ class IndexController extends FormActionController
     protected function filterRequest()
     {
         return $this->getRequest()->getQuery()->toArray();
+    }
+
+    public function taskFilterAction()
+    {
+        return new JsonModel(
+            array(
+                array(
+                    'value' => 'all',
+                    'label' => 'All'
+                ),
+                array(
+                    'value' => 'foo',
+                    'label' => 'Foo'
+                ),
+                array(
+                    'value' => 'bar',
+                    'label' => 'Bar'
+                )
+            )
+        );
     }
 }
