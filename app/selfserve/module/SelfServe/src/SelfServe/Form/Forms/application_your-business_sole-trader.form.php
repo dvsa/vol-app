@@ -27,24 +27,24 @@ return array(
                     ],
                     'required' => true
                 ),
-                'firstName' => array(
+                'forename' => array(
                     'type' => 'text',
                     'label' => 'application_your-business_people-sub-action-formFirstName',
                     'class' => 'long',
                     'filters' => '\Common\Form\Elements\InputFilters\TextRequired'
                 ),
-                'surname' => array(
+                'familyName' => array(
                     'type' => 'text',
                     'label' => 'application_your-business_people-sub-action-formSurname',
                     'class' => 'long',
                     'filters' => '\Common\Form\Elements\InputFilters\TextRequired'
                 ),
-                'otherNames' => array(
+                'otherName' => array(
                     'type' => 'text',
                     'label' => 'application_your-business_people-sub-action-formOtherNames',
                     'class' => 'long'
                 ),
-                'dateOfBirth' => [
+                'birthDate' => [
                     'type' => 'dateSelect',
                     'label' => 'application_your-business_people-sub-action-formDateOfBirth',
                     'options' => [

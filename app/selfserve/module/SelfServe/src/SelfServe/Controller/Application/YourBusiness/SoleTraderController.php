@@ -39,10 +39,10 @@ class SoleTraderController extends YourBusinessController
             'id',
             'version',
             'title',
-            'firstName',
-            'surname',
-            'dateOfBirth',
-            'otherNames',
+            'forename',
+            'familyName',
+            'birthDate',
+            'otherName',
         )
     );
 

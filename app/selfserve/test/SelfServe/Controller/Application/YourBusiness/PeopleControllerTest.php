@@ -124,10 +124,10 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
                 'data' => array(
                     'id' => 1,
                     'title' => 'Mr',
-                    'firstName' => 'A',
-                    'surname' => 'B',
-                    'dateOfBirth' => '2014-01-',
-                    'otherNames' => 'other',
+                    'forename' => 'A',
+                    'familyName' => 'B',
+                    'birthDate' => '2014-01-',
+                    'otherName' => 'other',
                     'position' => 'position'
                 ),
                 'table' => array(
@@ -152,10 +152,10 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
                 'data' => array(
                     'id' => 1,
                     'title' => 'Mr',
-                    'firstName' => 'A',
-                    'surname' => 'B',
-                    'dateOfBirth' => '2014-01-',
-                    'otherNames' => 'other',
+                    'forename' => 'A',
+                    'familyName' => 'B',
+                    'birthDate' => '2014-01-',
+                    'otherName' => 'other',
                     'position' => 'position'
                 ),
                 'table' => array(
@@ -182,10 +182,10 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
                 'data' => array(
                     'id' => 1,
                     'title' => 'Mr',
-                    'firstName' => 'A',
-                    'surname' => 'B',
-                    'dateOfBirth' => '2014-01-',
-                    'otherNames' => 'other',
+                    'forename' => 'A',
+                    'familyName' => 'B',
+                    'birthDate' => '2014-01-',
+                    'otherName' => 'other',
                     'position' => 'position'
                 ),
                 'table' => array(
@@ -213,10 +213,10 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
                 'data' => array(
                     'id' => 1,
                     'title' => 'Mr',
-                    'firstName' => 'A',
-                    'surname' => 'B',
-                    'dateOfBirth' => '2014-01-01',
-                    'otherNames' => 'other',
+                    'forename' => 'A',
+                    'familyName' => 'B',
+                    'birthDate' => '2014-01-01',
+                    'otherName' => 'other',
                     'position' => 'position'
                 ),
                 'table' => array(
@@ -256,11 +256,11 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
                 'data' => array(
                     'id' => 1,
                     'title' => 'Mr',
-                    'firstName' => 'A',
-                    'surname' => 'B',
-                    'otherNames' => 'other',
+                    'forename' => 'A',
+                    'familyName' => 'B',
+                    'otherName' => 'other',
                     'position' => 'position',
-                    'dateOfBirth' => array(
+                    'birthDate' => array(
                         'month' => 1,
                         'day'   => 1,
                         'year'  => 2014
@@ -360,11 +360,11 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
                 'data' => array(
                     'id' => 1,
                     'title' => 'Mr',
-                    'firstName' => 'A',
-                    'surname' => 'B',
-                    'otherNames' => 'other',
+                    'forename' => 'A',
+                    'familyName' => 'B',
+                    'otherName' => 'other',
                     'position' => 'position',
-                    'dateOfBirth' => array(
+                    'birthDate' => array(
                         'month' => 1,
                         'day'   => 1,
                         'year'  => 2014
@@ -388,11 +388,11 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
                 'data' => array(
                     'id' => 1,
                     'title' => 'Mr',
-                    'firstName' => 'A',
-                    'surname' => 'B',
-                    'otherNames' => 'other',
+                    'forename' => 'A',
+                    'familyName' => 'B',
+                    'otherName' => 'other',
                     'position' => 'position',
-                    'dateOfBirth' => array(
+                    'birthDate' => array(
                         'month' => 1,
                         'day'   => 1,
                         'year'  => 2014
@@ -434,10 +434,10 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
             'properties' => array(
                 'id',
                 'title',
-                'firstName',
-                'surname',
-                'dateOfBirth',
-                'otherNames',
+                'forename',
+                'familyName',
+                'birthDate',
+                'otherName',
                 'position'
             ),
         );
@@ -448,10 +448,10 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
                     array(
                         'id' => 1,
                         'title' => 'Mr',
-                        'firstName' => 'A',
-                        'surname' => 'P',
-                        'dateOfBirth' => '2014-01-01',
-                        'otherNames' => 'other names',
+                        'forename' => 'A',
+                        'familyName' => 'P',
+                        'birthDate' => '2014-01-01',
+                        'otherName' => 'other names',
                         'position' => 'position'
                     )
                 )
@@ -515,9 +515,9 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
                 'Results' => array(
                     array(
                         'title'       => 'Title',
-                        'firstName'   => 'Firstname',
-                        'surname'     => 'Surname',
-                        'dateOfBirth' => 'DOB'
+                        'forename'   => 'Firstname',
+                        'familyName'     => 'Surname',
+                        'birthDate' => 'DOB'
                     )
                 )
             );

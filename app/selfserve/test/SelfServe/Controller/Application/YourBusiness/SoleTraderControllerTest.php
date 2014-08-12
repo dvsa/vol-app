@@ -56,7 +56,7 @@ class SoleTraderControllerTest extends AbstractApplicationControllerTestCase
             'index', null, array(
             'form-actions' => array('submit' => ''),
             'data' => array(
-                'dateOfBirth' => array(
+                'birthDate' => array(
                     'month' => '02',
                     'day'   => '23',
                     'year' => '2014'
@@ -64,9 +64,9 @@ class SoleTraderControllerTest extends AbstractApplicationControllerTestCase
                 'id' => 79,
                 'version' => 4,
                 'title' => 'Mrs',
-                'firstName' => 'A',
-                'surname' => 'P12',
-                'otherNames' => 'other12'
+                'forename' => 'A',
+                'familyName' => 'P12',
+                'otherName' => 'other12'
             )
             )
         );
@@ -204,10 +204,10 @@ class SoleTraderControllerTest extends AbstractApplicationControllerTestCase
                 'id',
                 'version',
                 'title',
-                'firstName',
-                'surname',
-                'dateOfBirth',
-                'otherNames'
+                'forename',
+                'familyName',
+                'birthDate',
+                'otherName'
             ),
         );
 
@@ -219,10 +219,10 @@ class SoleTraderControllerTest extends AbstractApplicationControllerTestCase
                         'id' => 1,
                         'version' => 1,
                         'title' => 'Mr',
-                        'firstName' => 'A',
-                        'surname' => 'P',
-                        'dateOfBirth' => '2014-01-01',
-                        'otherNames' => 'other names'
+                        'forename' => 'A',
+                        'familyName' => 'P',
+                        'birthDate' => '2014-01-01',
+                        'otherName' => 'other names'
                     )
                 )
             );

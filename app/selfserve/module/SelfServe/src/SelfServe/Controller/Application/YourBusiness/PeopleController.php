@@ -68,10 +68,10 @@ class PeopleController extends YourBusinessController
             'properties' => array(
                 'id',
                 'title',
-                'firstName',
-                'surname',
-                'dateOfBirth',
-                'otherNames',
+                'forename',
+                'familyName',
+                'birthDate',
+                'otherName',
                 'position'
             ),
         );
@@ -95,11 +95,22 @@ class PeopleController extends YourBusinessController
     protected function alterForm($form)
     {
         $table = $form->get('table')->get('table')->getTable();
-        $orgType = $this->getOrganisationData(array('type'));
+
+        $bundle = array(
+            'children' => array(
+                'type' => array(
+                    'properties' => array('id')
+                )
+            )
+        );
+
+        $orgType = $this->getOrganisationData($bundle);
+
+
         $translate = $this->getServiceLocator()->get('viewhelpermanager')->get('translate');
         $guidance = $form->get('guidance')->get('guidance');
 
-        switch ($orgType['type']) {
+        switch ($orgType['type']['id']) {
             case self::ORG_TYPE_REGISTERED_COMPANY:
                 $table->setVariable(
                     'title',
@@ -132,7 +143,7 @@ class PeopleController extends YourBusinessController
                 break;
         }
 
-        if ($orgType['type'] != self::ORG_TYPE_OTHER) {
+        if ($orgType['type']['id'] != self::ORG_TYPE_OTHER) {
             $table->removeColumn('position');
         }
 
@@ -146,9 +157,17 @@ class PeopleController extends YourBusinessController
      */
     protected function alterActionForm($form)
     {
-        $orgType = $this->getOrganisationData(array('type'));
+        $bundle = array(
+            'children' => array(
+                'type' => array(
+                    'properties' => 'id'
+                )
+            )
+        );
 
-        if ($orgType['type'] != self::ORG_TYPE_OTHER) {
+        $orgType = $this->getOrganisationData($bundle);
+
+        if ($orgType['type']['id'] != self::ORG_TYPE_OTHER) {
             $form->get('data')->remove('position');
         }
         return $form;
@@ -234,10 +253,19 @@ class PeopleController extends YourBusinessController
      */
     protected function populatePeople()
     {
-        $org = $this->getOrganisationData(array('type', 'companyOrLlpNo'));
+        $bundle = array(
+            'properties' => array('companyOrLlpNo'),
+            'children' => array(
+                'type' => array(
+                    'properties' => array('id')
+                )
+            )
+        );
+
+        $org = $this->getOrganisationData($bundle);
 
         // company is LLP or Limited
-        if (in_array($org['type'], array(self::ORG_TYPE_LLP, self::ORG_TYPE_REGISTERED_COMPANY))) {
+        if (in_array($org['type']['id'], array(self::ORG_TYPE_LLP, self::ORG_TYPE_REGISTERED_COMPANY))) {
             // no people added
             if (!$this->peopleAdded()) {
                 // valid company number added
