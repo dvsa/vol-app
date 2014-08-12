@@ -69,31 +69,41 @@ class AddressesController extends YourBusinessController
 
     protected function alterForm($form)
     {
-        $bundle = [
-            'properties' => [],
+        $bundle = array(
+            'properties' => array(),
             'children' => array(
                 'licence' => array(
-                    'properties' => ['licenceType'],
                     'children' => array(
+                        'licenceType' => array(
+                            'properties' => array(
+                                'id'
+                            )
+                        ),
                         'organisation' => array(
-                            'properties' => ['type']
+                            'children' => array(
+                                'type' => array(
+                                    'properties' => array(
+                                        'id'
+                                    )
+                                )
+                            )
                         )
                     )
                 )
             )
-        ];
+        );
 
-        $allowedLicTypes = ['standard-national', 'standard-international'];
-        $allowedOrgTypes = ['org_type.lc', 'org_type.llp'];
+        $allowedLicTypes = [self::LICENCE_TYPE_STANDARD_NATIONAL, self::LICENCE_TYPE_STANDARD_INTERNATIONAL];
+        $allowedOrgTypes = [self::ORG_TYPE_REGISTERED_COMPANY, self::ORG_TYPE_LLP];
 
         $data = $this->makeRestCall('Application', 'GET', ['id' => $this->getIdentifier()], $bundle);
 
-        if (array_search($data['licence']['licenceType'], $allowedLicTypes) === false) {
+        if (!in_array($data['licence']['licenceType']['id'], $allowedLicTypes)) {
             $form->remove('establishment');
             $form->remove('establishment_address');
         }
 
-        if (array_search($data['licence']['organisation']['type'], $allowedOrgTypes) === false) {
+        if (!in_array($data['licence']['organisation']['type']['id'], $allowedOrgTypes)) {
             $form->remove('registered_office');
             $form->remove('registered_office_address');
         }

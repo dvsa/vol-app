@@ -100,28 +100,28 @@ class PeopleController extends YourBusinessController
         $guidance = $form->get('guidance')->get('guidance');
 
         switch ($orgType['type']) {
-            case 'org_type.lc':
+            case self::ORG_TYPE_REGISTERED_COMPANY:
                 $table->setVariable(
                     'title',
                     $translate('selfserve-app-subSection-your-business-people-tableHeaderDirectors')
                 );
                 $guidance->setValue($translate('selfserve-app-subSection-your-business-people-guidanceLC'));
                 break;
-            case 'org_type.llp':
+            case self::ORG_TYPE_LLP:
                 $table->setVariable(
                     'title',
                     $translate('selfserve-app-subSection-your-business-people-tableHeaderPartners')
                 );
                 $guidance->setValue($translate('selfserve-app-subSection-your-business-people-guidanceLLP'));
                 break;
-            case 'org_type.p':
+            case self::ORG_TYPE_PARTNERSHIP:
                 $table->setVariable(
                     'title',
                     $translate('selfserve-app-subSection-your-business-people-tableHeaderPartners')
                 );
                 $guidance->setValue($translate('selfserve-app-subSection-your-business-people-guidanceP'));
                 break;
-            case 'org_type.o':
+            case self::ORG_TYPE_OTHER:
                 $table->setVariable(
                     'title',
                     $translate('selfserve-app-subSection-your-business-people-tableHeaderPeople')
@@ -132,7 +132,7 @@ class PeopleController extends YourBusinessController
                 break;
         }
 
-        if ($orgType['type'] != 'org_type.o') {
+        if ($orgType['type'] != self::ORG_TYPE_OTHER) {
             $table->removeColumn('position');
         }
 
@@ -147,7 +147,8 @@ class PeopleController extends YourBusinessController
     protected function alterActionForm($form)
     {
         $orgType = $this->getOrganisationData(array('type'));
-        if ($orgType['type'] != 'org_type.o') {
+
+        if ($orgType['type'] != self::ORG_TYPE_OTHER) {
             $form->get('data')->remove('position');
         }
         return $form;
@@ -233,20 +234,21 @@ class PeopleController extends YourBusinessController
      */
     protected function populatePeople()
     {
-        $org = $this->getOrganisationData(array('type', 'registeredCompanyNumber'));
+        $org = $this->getOrganisationData(array('type', 'companyOrLlpNo'));
+
         // company is LLP or Limited
-        if ($org['type'] == 'org_type.llp' || $org['type'] == 'org_type.lc') {
+        if (in_array($org['type'], array(self::ORG_TYPE_LLP, self::ORG_TYPE_REGISTERED_COMPANY))) {
             // no people added
             if (!$this->peopleAdded()) {
                 // valid company number added
                 $pattern = '/^[A-Z0-9]{8}$/';
-                if (preg_match($pattern, $org['registeredCompanyNumber'])) {
+                if (preg_match($pattern, $org['companyOrLlpNo'])) {
                     $result = $this->makeRestCall(
                         'CompaniesHouse',
                         'GET',
                         [
                             'type' => 'currentCompanyOfficers',
-                            'value' => $org['registeredCompanyNumber']
+                            'value' => $org['companyOrLlpNo']
                         ]
                     );
                     if (is_array($result) && array_key_exists('Results', $result) && count($result['Results'])) {

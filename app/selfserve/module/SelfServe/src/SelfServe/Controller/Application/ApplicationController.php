@@ -25,6 +25,12 @@ class ApplicationController extends AbstractJourneyController
     const LICENCE_TYPE_STANDARD_NATIONAL = 'ltyp_sn';
     const LICENCE_TYPE_SPECIAL_RESTRICTED = 'ltyp_sr';
 
+    const ORG_TYPE_PARTNERSHIP = 'org_t_p';
+    const ORG_TYPE_OTHER = 'org_t_pa';
+    const ORG_TYPE_REGISTERED_COMPANY = 'org_t_rc';
+    const ORG_TYPE_LLP = 'org_t_llp';
+    const ORG_TYPE_SOLE_TRADER = 'org_t_st';
+
     /**
      * Holds the licenceDataBundle
      *

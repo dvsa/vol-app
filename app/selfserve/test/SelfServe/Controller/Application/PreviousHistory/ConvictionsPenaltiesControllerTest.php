@@ -114,7 +114,7 @@ class ConvictionsPenaltiesControllerTest extends AbstractApplicationControllerTe
                     'action' => 'Add'
                 ),
                 'convictionsConfirmation' => array(
-                    'convictionsConfirmation' => array(1),
+                    'convictionsConfirmation' => 'Y',
                 )
             )
         );
@@ -141,7 +141,7 @@ class ConvictionsPenaltiesControllerTest extends AbstractApplicationControllerTe
                     'action' => 'Edit'
                 ),
                 'convictionsConfirmation' => array(
-                    'convictionsConfirmation' => array(1),
+                    'convictionsConfirmation' => 'Y',
                 )
             )
         );
@@ -171,7 +171,7 @@ class ConvictionsPenaltiesControllerTest extends AbstractApplicationControllerTe
                     'id' => 1
                 ),
                 'convictionsConfirmation' => array(
-                    'convictionsConfirmation' => array(1),
+                    'convictionsConfirmation' => 'Y',
                 )
             )
         );
@@ -201,7 +201,7 @@ class ConvictionsPenaltiesControllerTest extends AbstractApplicationControllerTe
                     'id' => 1
                 ),
                 'convictionsConfirmation' => array(
-                    'convictionsConfirmation' => array(1),
+                    'convictionsConfirmation' => 'Y',
                 )
             )
         );
@@ -232,12 +232,16 @@ class ConvictionsPenaltiesControllerTest extends AbstractApplicationControllerTe
     {
         $this->setUpAction(
             'edit', 1, array(
-                'data' => array(
+                'person' => array(
                     'id' => 1,
                     'version' => 1,
-                    'personTitle' => 'Mr',
-                    'personFirstname' => 'Alex',
-                    'personLastname' => 'P',
+                    'title' => 'Mr',
+                    'forename' => 'Alex',
+                    'familyName' => 'P'
+                ),
+                'conviction' => array(
+                    'id' => 1,
+                    'version' => 1,
                     'convictionDate' => array(
                         'month' => 1,
                         'day'   => 1,
@@ -246,7 +250,7 @@ class ConvictionsPenaltiesControllerTest extends AbstractApplicationControllerTe
                     'notes' => 'No MOT',
                     'court' => 'Leeds court',
                     'penalty' => '100£'
-                ),
+                )
             )
         );
 
@@ -338,12 +342,16 @@ class ConvictionsPenaltiesControllerTest extends AbstractApplicationControllerTe
     {
         $this->setUpAction(
             'add', null, array(
-                'data' => array(
-                    'id' => 1,
-                    'version' => 1,
-                    'personTitle' => 'Mr',
-                    'personFirstname' => 'Alex',
-                    'personLastname' => 'P',
+                'person' => array(
+                    'id' => '',
+                    'version' => '',
+                    'title' => 'Mr',
+                    'forename' => 'Alex',
+                    'familyName' => 'P',
+                ),
+                'conviction' => array(
+                    'id' => '',
+                    'version' => '',
                     'convictionDate' => array(
                         'month' => 1,
                         'day'   => 1,
@@ -368,12 +376,16 @@ class ConvictionsPenaltiesControllerTest extends AbstractApplicationControllerTe
     {
         $this->setUpAction(
             'add', null, array(
-                'data' => array(
-                    'id' => 1,
-                    'version' => 1,
-                    'personTitle' => 'Mr',
-                    'personFirstname' => 'Alex',
-                    'personLastname' => 'P',
+                'person' => array(
+                    'id' => '',
+                    'version' => '',
+                    'title' => 'Mr',
+                    'forename' => 'Alex',
+                    'familyName' => 'P',
+                ),
+                'conviction' => array(
+                    'id' => '',
+                    'version' => '',
                     'convictionDate' => array(
                         'month' => 1,
                         'day'   => 1,
@@ -407,84 +419,48 @@ class ConvictionsPenaltiesControllerTest extends AbstractApplicationControllerTe
     {
         if ($service == 'Application' && $method == 'GET' && $bundle == ApplicationController::$licenceDataBundle) {
 
-            return array(
-                'licence' => array(
-                    'id' => 10,
-                    'version' => 1,
-                    'goodsOrPsv' => 'goods',
-                    'niFlag' => 0,
-                    'licenceType' => 'standard-national',
-                    'organisation' => array(
-                        'type' => 'org_type.lc'
-                    )
-                )
-            );
+            return $this->getLicenceData('goods');
         }
 
         if ($service == 'ApplicationCompletion' && $method == 'GET') {
 
-            return array(
-                'Count' => 1,
-                'Results' => array(
-                    array(
-                        'version' => 1,
-                        'application' => '1',
-                        'sectionTypeOfLicenceStatus' => 2,
-                        'sectionTypeOfLicenceOperatorLocationStatus' => 2,
-                        'sectionTypeOfLicenceOperatorTypeStatus' => 2,
-                        'sectionTypeOfLicenceLicenceTypeStatus' => 2,
-                        'sectionYourBusinessStatus' => 2,
-                        'sectionYourBusinessBusinessTypeStatus' => 2,
-                        'sectionYourBusinessBusinessDetailsStatus' => 2,
-                        'sectionYourBusinessAddressesStatus' => 2,
-                        'sectionYourBusinessPeopleStatus' => 2,
-                        'sectionTaxiPhvStatus' => 2,
-                        'sectionOperatingCentresStatus' => 2,
-                        'sectionOperatingCentresAuthorisationStatus' => 2,
-                        'sectionOperatingCentresFinancialEvidenceStatus' => 2,
-                        'sectionTransportManagersStatus' => 2,
-                        'sectionVehicleSafetyStatus' => 2,
-                        'sectionVehicleSafetyVehicleStatus' => 2,
-                        'sectionVehicleSafetySafetyStatus' => 2,
-                        'sectionPreviousHistoryStatus' => 2,
-                        'sectionPreviousHistoryFinancialHistoryStatus' => 2,
-                        'sectionPreviousHistoryLicenceHistoryStatus' => 2,
-                        'sectionPreviousHistoryConvictionPenaltiesStatus' => 2,
-                        'sectionReviewDeclarationsStatus' => 2,
-                        'sectionPaymentSubmissionStatus' => 2,
-                        'sectionPaymentSubmissionPaymentStatus' => 0,
-                        'sectionPaymentSubmissionSummaryStatus' => 0,
-                        'lastSection' => ''
-                    )
-                )
-            );
+            return $this->getApplicationCompletionData();
         }
 
         $convictionDataBundle = array(
             'properties' => array(
                 'id',
-                'personTitle',
-                'personFirstname',
-                'personLastname',
                 'convictionDate',
                 'notes',
                 'court',
                 'penalty'
             ),
+            'children' => array(
+                'person' => array(
+                    'properties' => array(
+                        'title',
+                        'forename',
+                        'familyName'
+                    )
+                )
+            )
         );
+
         if ($service == 'Conviction' && $method === 'GET' && $bundle == $convictionDataBundle) {
             return array(
                 'Count'  => 1,
                 'Results' => array(
                     array(
                         'id' => 1,
-                        'personTitle' => 'Mr',
-                        'personFirstname' => 'Alex',
-                        'personLastname' => 'P',
                         'convictionDate' => '01/01/2014',
                         'notes' => 'No MOT',
                         'court' => 'Leeds court',
-                        'penalty' => '100£'
+                        'penalty' => '100£',
+                        'person' => array(
+                            'title' => 'Mr',
+                            'forename' => 'Alex',
+                            'familyName' => 'P'
+                        )
                     )
                 )
             );
@@ -495,7 +471,7 @@ class ConvictionsPenaltiesControllerTest extends AbstractApplicationControllerTe
                 'id' => 1,
                 'version' => 1,
                 'prevConviction' => $this->previousConviction,
-                'convictionsConfirmation' => true
+                'convictionsConfirmation' => 'Y'
             );
         }
     }

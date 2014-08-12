@@ -42,16 +42,16 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
      */
     public function testIndexAction($goodsOrPsv, $hasTrailers)
     {
-        $this->setUpAction('index');
-
         $this->goodsOrPsv = $goodsOrPsv;
+
+        $this->setUpAction('index');
 
         $response = $this->controller->indexAction();
 
         // Make sure we get a view not a response
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
 
-        $form = $this->getFormFromResponse($response);
+        $form = $this->getFormFromView($response);
 
         $this->assertEquals($hasTrailers, $form->get('licence')->has('safetyInsTrailers'));
 
@@ -74,21 +74,23 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
         $this->goodsOrPsv = 'goods';
 
         $this->setUpAction(
-            'index', null, array(
-            'licence' => array(
-                'safetyInsVehicles' => 'inspection_interval_vehicle.1',
-                'safetyInsTrailers' => 'inspection_interval_trailer.1',
-                'safetyInsVaries' => 'Y',
-                'tachographIns' => 'tachograph_analyser.2'
-            ),
-            'table' => array(
-                'rows' => 1
-            ),
-            'application' => array(
-                'id' => 1,
-                'version' => 1,
-                'safetyConfirmation' => '1'
-            )
+            'index',
+            null,
+            array(
+                'licence' => array(
+                    'safetyInsVehicles' => 'inspection_interval_vehicle.1',
+                    'safetyInsTrailers' => 'inspection_interval_trailer.1',
+                    'safetyInsVaries' => 'Y',
+                    'tachographIns' => 'tach_external'
+                ),
+                'table' => array(
+                    'rows' => 1
+                ),
+                'application' => array(
+                    'id' => 1,
+                    'version' => 1,
+                    'safetyConfirmation' => 'Y'
+                )
             )
         );
 
@@ -112,7 +114,7 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
                     'safetyInsVehicles' => 'inspection_interval_vehicle.1',
                     'safetyInsTrailers' => 'inspection_interval_trailer.1',
                     'safetyInsVaries' => 'Y',
-                    'tachographIns' => 'tachograph_analyser.2'
+                    'tachographIns' => 'tach_external'
                 ),
                 'table' => array(
                     'rows' => 1,
@@ -121,7 +123,7 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
                 'application' => array(
                     'id' => 1,
                     'version' => 1,
-                    'safetyConfirmation' => '1'
+                    'safetyConfirmation' => 'Y'
                 )
             )
         );
@@ -146,7 +148,7 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
                     'safetyInsVehicles' => 'inspection_interval_vehicle.1',
                     'safetyInsTrailers' => 'inspection_interval_trailer.1',
                     'safetyInsVaries' => 'Y',
-                    'tachographIns' => 'tachograph_analyser.2'
+                    'tachographIns' => 'tach_external'
                 ),
                 'table' => array(
                     'rows' => 1,
@@ -155,7 +157,7 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
                 'application' => array(
                     'id' => 1,
                     'version' => 1,
-                    'safetyConfirmation' => '1'
+                    'safetyConfirmation' => 'Y'
                 )
             )
         );
@@ -180,7 +182,7 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
                     'safetyInsVehicles' => 'inspection_interval_vehicle.1',
                     'safetyInsTrailers' => 'inspection_interval_trailer.1',
                     'safetyInsVaries' => 'Y',
-                    'tachographIns' => 'tachograph_analyser.2'
+                    'tachographIns' => 'tach_external'
                 ),
                 'table' => array(
                     'rows' => 1,
@@ -190,7 +192,7 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
                 'application' => array(
                     'id' => 1,
                     'version' => 1,
-                    'safetyConfirmation' => '1'
+                    'safetyConfirmation' => 'Y'
                 )
             )
         );
@@ -215,7 +217,7 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
                     'safetyInsVehicles' => 'inspection_interval_vehicle.1',
                     'safetyInsTrailers' => 'inspection_interval_trailer.1',
                     'safetyInsVaries' => 'Y',
-                    'tachographIns' => 'tachograph_analyser.2'
+                    'tachographIns' => 'tach_external'
                 ),
                 'table' => array(
                     'rows' => 1,
@@ -225,7 +227,7 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
                 'application' => array(
                     'id' => 1,
                     'version' => 1,
-                    'safetyConfirmation' => '1'
+                    'safetyConfirmation' => 'Y'
                 )
             )
         );
@@ -242,9 +244,9 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
      */
     public function testAddAction()
     {
-        $this->setUpAction('add');
-
         $this->goodsOrPsv = 'goods';
+
+        $this->setUpAction('add');
 
         $response = $this->controller->addAction();
 
@@ -262,9 +264,9 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
             )
         );
 
-        $this->setUpAction('add', null, $post);
-
         $this->goodsOrPsv = 'goods';
+
+        $this->setUpAction('add', null, $post);
 
         $this->controller->setEnabledCsrf(false);
         $response = $this->controller->addAction();
@@ -283,9 +285,9 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
             )
         );
 
-        $this->setUpAction('edit', 1, $post);
-
         $this->goodsOrPsv = 'goods';
+
+        $this->setUpAction('edit', 1, $post);
 
         $this->controller->setEnabledCsrf(false);
         $response = $this->controller->editAction();
@@ -298,26 +300,28 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
      */
     public function testAddActionWithSubmit()
     {
+        $this->goodsOrPsv = 'goods';
+
         $this->setUpAction(
-            'add', null, array(
-            'data' => array(
-                'isExternal' => 'Y'
-            ),
-            'contactDetails' => array(
-                'fao' => 'Someone'
-            ),
-            'address' => array(
-                'id' => '',
-                'version' => '',
-                'addressLine1' => 'Address 1',
-                'town' => 'City',
-                'countryCode' => 'GB',
-                'postcode' => 'AB1 1BA'
-            )
+            'add',
+            null,
+            array(
+                'data' => array(
+                    'isExternal' => 'Y'
+                ),
+                'contactDetails' => array(
+                    'fao' => 'Someone'
+                ),
+                'address' => array(
+                    'id' => '',
+                    'version' => '',
+                    'addressLine1' => 'Address 1',
+                    'town' => 'City',
+                    'countryCode' => 'GB',
+                    'postcode' => 'AB1 1BA'
+                )
             )
         );
-
-        $this->goodsOrPsv = 'goods';
 
         $this->controller->setEnabledCsrf(false);
         $response = $this->controller->addAction();
@@ -330,6 +334,8 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
      */
     public function testAddActionWithSubmitWithAddAnother()
     {
+        $this->goodsOrPsv = 'goods';
+
         $this->setUpAction(
             'add', null, array(
                 'data' => array(
@@ -352,8 +358,6 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
             )
         );
 
-        $this->goodsOrPsv = 'goods';
-
         $this->controller->setEnabledCsrf(false);
         $response = $this->controller->addAction();
 
@@ -367,6 +371,8 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
      */
     public function testAddActionWithSubmitWithFailure()
     {
+        $this->goodsOrPsv = 'goods';
+
         $this->setUpAction(
             'add',
             null,
@@ -390,8 +396,6 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
 
         $this->setRestResponse('ContactDetails', 'POST', '');
 
-        $this->goodsOrPsv = 'goods';
-
         $this->controller->setEnabledCsrf(false);
         $this->controller->addAction();
     }
@@ -401,9 +405,9 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
      */
     public function testEditAction()
     {
-        $this->setUpAction('edit', 1);
-
         $this->goodsOrPsv = 'goods';
+
+        $this->setUpAction('edit', 1);
 
         $response = $this->controller->editAction();
 
@@ -415,6 +419,8 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
      */
     public function testEditActionWithSubmit()
     {
+        $this->goodsOrPsv = 'goods';
+
         $this->setUpAction(
             'edit',
             1,
@@ -440,8 +446,6 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
             )
         );
 
-        $this->goodsOrPsv = 'goods';
-
         $this->controller->setEnabledCsrf(false);
         $response = $this->controller->editAction();
 
@@ -453,9 +457,9 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
      */
     public function testDeleteAction()
     {
-        $this->setUpAction('delete', 1);
-
         $this->goodsOrPsv = 'goods';
+
+        $this->setUpAction('delete', 1);
 
         $response = $this->controller->deleteAction();
 
@@ -467,9 +471,9 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
      */
     public function testDeleteActionWithoutId()
     {
-        $this->setUpAction('delete');
-
         $this->goodsOrPsv = 'goods';
+
+        $this->setUpAction('delete');
 
         $response = $this->controller->deleteAction();
 
@@ -501,57 +505,24 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
     {
         if ($service == 'Application' && $method == 'GET' && $bundle == ApplicationController::$licenceDataBundle) {
 
-            return array(
-                'licence' => array(
-                    'id' => 10,
-                    'version' => 1,
-                    'goodsOrPsv' => $this->goodsOrPsv,
-                    'niFlag' => 0,
-                    'licenceType' => 'standard-national',
-                    'organisation' => array(
-                        'type' => 'org_type.lc'
-                    )
-                )
-            );
+            return $this->getLicenceData($this->goodsOrPsv);
         }
 
         if ($service == 'ApplicationCompletion' && $method == 'GET') {
 
-            return array(
-                'Count' => 1,
-                'Results' => array(
-                    array(
-                        'version' => 1,
-                        'application' => '1',
-                        'sectionTypeOfLicenceStatus' => 2,
-                        'sectionTypeOfLicenceOperatorLocationStatus' => 2,
-                        'sectionTypeOfLicenceOperatorTypeStatus' => 2,
-                        'sectionTypeOfLicenceLicenceTypeStatus' => 2,
-                        'sectionYourBusinessStatus' => 2,
-                        'sectionYourBusinessBusinessTypeStatus' => 2,
-                        'sectionYourBusinessBusinessDetailsStatus' => 2,
-                        'sectionYourBusinessAddressesStatus' => 2,
-                        'sectionYourBusinessPeopleStatus' => 2,
-                        'sectionTaxiPhvStatus' => 2,
-                        'sectionOperatingCentresStatus' => 2,
-                        'sectionOperatingCentresAuthorisationStatus' => 2,
-                        'sectionOperatingCentresFinancialEvidenceStatus' => 2,
-                        'sectionTransportManagersStatus' => 2,
-                        'sectionVehicleSafetyStatus' => 2,
-                        'sectionVehicleSafetyVehicleStatus' => 2,
-                        'sectionVehicleSafetySafetyStatus' => 2,
-                        'sectionPreviousHistoryStatus' => 2,
-                        'sectionPreviousHistoryFinancialHistoryStatus' => 2,
-                        'sectionPreviousHistoryLicenceHistoryStatus' => 2,
-                        'sectionPreviousHistoryConvictionPenaltiesStatus' => 2,
-                        'sectionReviewDeclarationsStatus' => 2,
-                        'sectionPaymentSubmissionStatus' => 2,
-                        'sectionPaymentSubmissionPaymentStatus' => 0,
-                        'sectionPaymentSubmissionSummaryStatus' => 0,
-                        'lastSection' => ''
-                    )
-                )
-            );
+            return $this->getApplicationCompletionData();
+        }
+
+        if ($service == 'Licence' && $method == 'POST') {
+            return array('id' => 1);
+        }
+
+        if ($service == 'ContactDetails' && $method == 'POST') {
+            return array('id' => 7);
+        }
+
+        if ($service == 'Workshop' && $method == 'POST') {
+            return array('id' => 6);
         }
 
         $dataBundle = array(
@@ -568,33 +539,37 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
                         'safetyInsVehicles',
                         'safetyInsTrailers',
                         'safetyInsVaries',
-                        'tachographIns',
                         'tachographInsName'
-                    )
-                ),
-                'workshops' => array(
-                    'properties' => array(
-                        'id',
-                        'isExternal'
                     ),
                     'children' => array(
-                        'contactDetails' => array(
+                        'tachographIns' => array(
+                            'properties' => array('id')
+                        ),
+                        'workshops' => array(
                             'properties' => array(
-                                'fao'
+                                'id',
+                                'isExternal'
                             ),
                             'children' => array(
-                                'address' => array(
+                                'contactDetails' => array(
                                     'properties' => array(
-                                        'addressLine1',
-                                        'addressLine2',
-                                        'addressLine3',
-                                        'addressLine4',
-                                        'town',
-                                        'postcode'
+                                        'fao'
                                     ),
                                     'children' => array(
-                                        'countryCode' => array(
-                                            'properties' => array('id')
+                                        'address' => array(
+                                            'properties' => array(
+                                                'addressLine1',
+                                                'addressLine2',
+                                                'addressLine3',
+                                                'addressLine4',
+                                                'town',
+                                                'postcode'
+                                            ),
+                                            'children' => array(
+                                                'countryCode' => array(
+                                                    'properties' => array('id')
+                                                )
+                                            )
                                         )
                                     )
                                 )
@@ -604,18 +579,6 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
                 )
             )
         );
-
-        if ($service == 'Licence' && $method == 'POST') {
-            return array('id' => 1);
-        }
-
-        if ($service == 'ContactDetails' && $method == 'POST') {
-            return array('id' => 7);
-        }
-
-        if ($service == 'Workshop' && $method == 'POST') {
-            return array('id' => 6);
-        }
 
         if ($service == 'Application' && $method == 'GET' && $bundle == $dataBundle) {
             return array(
@@ -628,23 +591,25 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
                     'safetyInsVehicles' => null,
                     'safetyInsTrailers' => null,
                     'safetyInsVaries' => null,
+                    'tachographInsName' => null,
                     'tachographIns' => null,
-                    'tachographInsName' => null
-                ),
-                'workshops' => array(
-                    array(
-                        'id' => 1,
-                        'isExternal' => 1,
-                        'contactDetails' => array(
-                            'fao' => 'Someone',
-                            'address' => array(
-                                'addressLine1' => 'Address 1',
-                                'addressLine2' => 'Address 2',
-                                'addressLine3' => 'Address 3',
-                                'addressLine4' => 'Address 4',
-                                'town' => 'City',
-                                'countryCode' => 'GB',
-                                'postcode' => 'AB1 1AB'
+                    'workshops' => array(
+                        array(
+                            'id' => 1,
+                            'isExternal' => 1,
+                            'contactDetails' => array(
+                                'fao' => 'Someone',
+                                'address' => array(
+                                    'addressLine1' => 'Address 1',
+                                    'addressLine2' => 'Address 2',
+                                    'addressLine3' => 'Address 3',
+                                    'addressLine4' => 'Address 4',
+                                    'town' => 'City',
+                                    'countryCode' => array(
+                                        'id' => 'GB'
+                                    ),
+                                    'postcode' => 'AB1 1AB'
+                                )
                             )
                         )
                     )
@@ -706,7 +671,9 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
                         'addressLine3' => '',
                         'addressLine4' => '',
                         'town' => 'City',
-                        'countryCode' => 'GB',
+                        'countryCode' => array(
+                            'id' => 'GB'
+                        ),
                         'postcode' => 'AB1 1AB'
                     )
                 )

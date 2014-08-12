@@ -10,7 +10,6 @@ namespace SelfServe\Test\Controller\Application\YourBusiness;
 
 use SelfServe\Test\Controller\Application\AbstractApplicationControllerTestCase;
 use SelfServe\Controller\Application\ApplicationController;
-use SelfServe\Controller\Application\YourBusiness\AddressesController;
 
 /**
  * Addresses Controller Test
@@ -19,12 +18,11 @@ use SelfServe\Controller\Application\YourBusiness\AddressesController;
  */
 class AddressesControllerTest extends AbstractApplicationControllerTestCase
 {
-
     protected $controllerName = '\SelfServe\Controller\Application\YourBusiness\AddressesController';
     protected $defaultRestResponse = array();
 
-    private $orgType = 'org_type.lc';
-    private $licType = 'standard-national';
+    private $orgType = ApplicationController::ORG_TYPE_REGISTERED_COMPANY;
+    private $licType = ApplicationController::LICENCE_TYPE_STANDARD_NATIONAL;
 
     /**
      * Test back button
@@ -50,7 +48,7 @@ class AddressesControllerTest extends AbstractApplicationControllerTestCase
         // Make sure we get a view not a response
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
 
-        $form = $this->getFormFromResponse($response);
+        $form = $this->getFormFromView($response);
 
         $this->assertInstanceOf('Zend\Form\Fieldset', $form->get('registered_office'));
         $this->assertInstanceOf('Zend\Form\Fieldset', $form->get('establishment'));
@@ -61,8 +59,8 @@ class AddressesControllerTest extends AbstractApplicationControllerTestCase
      */
     public function testIndexWithRemovedFieldsetsAction()
     {
-        $this->orgType = 'org_type.o';
-        $this->licType = 'restricted';
+        $this->orgType = ApplicationController::ORG_TYPE_OTHER;
+        $this->licType = ApplicationController::LICENCE_TYPE_RESTRICTED;
 
         $this->setUpAction('index');
 
@@ -71,7 +69,7 @@ class AddressesControllerTest extends AbstractApplicationControllerTestCase
         // Make sure we get a view not a response
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
 
-        $form = $this->getFormFromResponse($response);
+        $form = $this->getFormFromView($response);
 
         $this->assertFalse($form->has('registered_office'));
         $this->assertFalse($form->has('establishment'));
@@ -161,24 +159,34 @@ class AddressesControllerTest extends AbstractApplicationControllerTestCase
                 'addressLine1' => 'addressLine1',
                 'postcode' => 'LS8 4DW',
                 'town' => 'Leeds',
-                'countryCode' => 'GB',
+                'countryCode' => array(
+                    'id' => 'GB'
+                ),
             ];
 
             return [
                 'licence' => [
                     'id' => 10,
                     'version' => 1,
-                    'goodsOrPsv' => 'goods',
+                    'goodsOrPsv' => array(
+                        'id' => 'lcat_gv'
+                    ),
                     'niFlag' => 0,
-                    'licenceType' => $this->licType,
+                    'licenceType' => array(
+                        'id' => $this->licType
+                    ),
                     'organisation' => [
                         'id' => 1,
-                        'type' => $this->orgType,
+                        'type' => array(
+                            'id' => $this->orgType
+                        ),
                         'contactDetails' => [
                             [
                                 'id' => 1,
                                 'version' => 1,
-                                'contactType' => 'ct_reg',
+                                'contactType' => array(
+                                    'id' => 'ct_reg'
+                                ),
                                 'address' => $address
                             ]
                         ]
@@ -225,41 +233,7 @@ class AddressesControllerTest extends AbstractApplicationControllerTestCase
 
         if ($service == 'ApplicationCompletion' && $method == 'GET') {
 
-            return array(
-                'Count' => 1,
-                'Results' => array(
-                    array(
-                        'version' => 1,
-                        'application' => '1',
-                        'sectionTypeOfLicenceStatus' => 2,
-                        'sectionTypeOfLicenceOperatorLocationStatus' => 2,
-                        'sectionTypeOfLicenceOperatorTypeStatus' => 2,
-                        'sectionTypeOfLicenceLicenceTypeStatus' => 2,
-                        'sectionYourBusinessStatus' => 2,
-                        'sectionYourBusinessBusinessTypeStatus' => 2,
-                        'sectionYourBusinessBusinessDetailsStatus' => 2,
-                        'sectionYourBusinessAddressesStatus' => 2,
-                        'sectionYourBusinessPeopleStatus' => 2,
-                        'sectionTaxiPhvStatus' => 2,
-                        'sectionOperatingCentresStatus' => 2,
-                        'sectionOperatingCentresAuthorisationStatus' => 2,
-                        'sectionOperatingCentresFinancialEvidenceStatus' => 2,
-                        'sectionTransportManagersStatus' => 2,
-                        'sectionVehicleSafetyStatus' => 2,
-                        'sectionVehicleSafetyVehicleStatus' => 2,
-                        'sectionVehicleSafetySafetyStatus' => 2,
-                        'sectionPreviousHistoryStatus' => 2,
-                        'sectionPreviousHistoryFinancialHistoryStatus' => 2,
-                        'sectionPreviousHistoryLicenceHistoryStatus' => 2,
-                        'sectionPreviousHistoryConvictionPenaltiesStatus' => 2,
-                        'sectionReviewDeclarationsStatus' => 2,
-                        'sectionPaymentSubmissionStatus' => 2,
-                        'sectionPaymentSubmissionPaymentStatus' => 0,
-                        'sectionPaymentSubmissionSummaryStatus' => 0,
-                        'lastSection' => ''
-                    )
-                )
-            );
+            return $this->getApplicationCompletionData();
         }
     }
 }

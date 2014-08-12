@@ -214,11 +214,17 @@ class AuthorisationController extends OperatingCentresController
             $options['hint'] .= '.psv';
             $form->get('data')->setOptions($options);
 
-            if (!in_array($this->getLicenceType(), array('standard-national', 'standard-international'))) {
+            if (!in_array(
+                $this->getLicenceType(),
+                array(self::LICENCE_TYPE_STANDARD_NATIONAL, self::LICENCE_TYPE_STANDARD_INTERNATIONAL)
+            )) {
                 $form->get('data')->remove('totAuthLargeVehicles');
             }
 
-            if (!in_array($this->getLicenceType(), array('standard-international', 'restricted'))) {
+            if (!in_array(
+                $this->getLicenceType(),
+                array(self::LICENCE_TYPE_STANDARD_INTERNATIONAL, self::LICENCE_TYPE_RESTRICTED)
+            )) {
                 $form->get('data')->remove('totCommunityLicences');
             }
 
