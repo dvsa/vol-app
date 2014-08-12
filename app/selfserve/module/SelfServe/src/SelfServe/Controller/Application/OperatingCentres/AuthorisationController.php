@@ -12,6 +12,7 @@ namespace SelfServe\Controller\Application\OperatingCentres;
  * Authorisation Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 class AuthorisationController extends OperatingCentresController
 {
@@ -36,10 +37,25 @@ class AuthorisationController extends OperatingCentresController
             'totAuthLargeVehicles',
             'totCommunityLicences',
             'totAuthVehicles',
-            'totAuthTrailers'
+            'totAuthTrailers',
+            'trafficArea'
         )
     );
 
+    /**
+     * Data map
+     *
+     * @var array
+     */
+    protected $dataMap = array(
+        'main' => array(
+            'mapFrom' => array(
+                'data',
+                'dataTrafficArea'
+            ),
+        ),
+    );
+    
     /**
      * Holds the sub action service
      *
@@ -133,6 +149,18 @@ class AuthorisationController extends OperatingCentresController
     );
 
     /**
+     * Holds the Traffic Area details
+     *
+     * @var array
+     */
+    private $trafficArea;
+    
+    /**
+     * Northern Ireland Traffic Area Code
+     */
+    const NORTHERN_IRELAND_TRAFFIC_AREA_CODE = 'N';
+    
+    /**
      * Render the section form
      *
      * @return Response
@@ -165,7 +193,9 @@ class AuthorisationController extends OperatingCentresController
      */
     public function deleteAction()
     {
-        return $this->delete();
+        $response = $this->delete();
+        $this->clearTrafficAreaCode();
+        return $response;
     }
 
     /**
@@ -196,7 +226,7 @@ class AuthorisationController extends OperatingCentresController
     }
 
     /**
-     * Remove trailer elements for PSV
+     * Remove trailer elements for PSV and set up Traffic Area section
      *
      * @param object $form
      * @return object
@@ -228,6 +258,24 @@ class AuthorisationController extends OperatingCentresController
             $form->get('data')->remove('totAuthMediumVehicles');
             $form->get('data')->remove('totAuthLargeVehicles');
             $form->get('data')->remove('totCommunityLicences');
+        }
+        
+        // set up Traffic Area section
+        $operatingCentresExists = count($this->tableData);
+        $trafficArea = $this->getTrafficArea();
+        $trafficAreaId = $trafficArea ? $trafficArea['id'] : '';
+        if (!$operatingCentresExists) {
+            $form->remove('dataTrafficArea');
+        } elseif ($trafficAreaId) {
+            $form->get('dataTrafficArea')->remove('trafficArea');
+            $template = $form->get('dataTrafficArea')->get('trafficAreaInfoNameExists')->getValue();
+            $newValue = str_replace('%NAME%', $trafficArea['areaName'], $template);
+            $form->get('dataTrafficArea')->get('trafficAreaInfoNameExists')->setValue($newValue);
+        } else {
+            $form->get('dataTrafficArea')->remove('trafficAreaInfoLabelExists');
+            $form->get('dataTrafficArea')->remove('trafficAreaInfoNameExists');
+            $form->get('dataTrafficArea')->remove('trafficAreaInfoHintExists');
+            $form->get('dataTrafficArea')->get('trafficArea')->setValueOptions($this->getTrafficValueOptions());
         }
 
         return $form;
@@ -425,14 +473,16 @@ class AuthorisationController extends OperatingCentresController
         $results = $this->getTableData($this->getIdentifier());
 
         $data['data'] = $oldData;
-
+        
         $data['data']['noOfOperatingCentres'] = count($results);
         $data['data']['minVehicleAuth'] = 0;
         $data['data']['maxVehicleAuth'] = 0;
         $data['data']['minTrailerAuth'] = 0;
         $data['data']['maxTrailerAuth'] = 0;
         $data['data']['licenceType'] = $this->getLicenceType();
-
+        if (array_key_exists('dataTrafficArea', $oldData) !== false) {
+            $data['dataTrafficArea']['hiddenId'] = $oldData['trafficArea']['id'];
+        }
         foreach ($results as $row) {
 
             $data['data']['minVehicleAuth'] = max(
@@ -463,5 +513,115 @@ class AuthorisationController extends OperatingCentresController
                 'documentSubCategory' => 2
             )
         );
+    }
+    
+    /**
+     * Get Traffic Area information for current application
+     *
+     * @return array
+     */
+    protected function getTrafficArea()
+    {
+        if (!$this->trafficArea) {
+            $bundle = array(
+                'properties' => array(
+                    'id',
+                    'version',
+                ),
+                'children' => array(
+                    'trafficArea' => array(
+                        'properties' => array(
+                            'id',
+                            'areaCode',
+                            'areaName'
+                        )
+                    )
+                )
+            );
+
+            $application = $this->makeRestCall(
+                'Application',
+                'GET',
+                array(
+                    'application' => $this->getIdentifier(),
+                ),
+                $bundle
+            );
+            if (count($application['Results'])) {
+                $this->trafficArea = $application['Results'][0]['trafficArea'];
+            }
+        }
+        return $this->trafficArea;
+    }
+    
+    /**
+     * Get Traffic Area value options for select element
+     *
+     * @return array
+     */
+    protected function getTrafficValueOptions()
+    {
+        $bundle = array(
+            'properties' => array(
+                'id',
+                'areaName',
+                'areaCode'
+            ),
+        );
+
+        $trafficArea = $this->makeRestCall(
+            'TrafficArea',
+            'GET',
+            array(),
+            $bundle
+        );
+        
+        $valueOptions = array();
+        $results = $trafficArea['Results'];
+        if (is_array($results) && count($results)) {
+            usort($results, function($a, $b) {
+                return strcmp($a["areaName"], $b["areaName"]);
+            });
+            
+            // remove Northern Ireland Traffic Area
+            foreach ($results as $key => $value) {
+                if ($value['areaCode'] == self::NORTHERN_IRELAND_TRAFFIC_AREA_CODE) {
+                    unset($results[$key]);
+                    break;
+                }
+            }
+
+            foreach ($results as $element) {
+                $valueOptions[$element['id']] = $element['areaName'];
+            }
+        }
+        return $valueOptions;
+    }
+    
+    /**
+     * Clear Traffic Area if there are no more operating centres
+     */
+    public function clearTrafficAreaCode()
+    {
+        $bundle = array(
+            'properties' => array(
+                'id'
+            )
+        );
+        $operatingCentres = $this->makeRestCall(
+            'ApplicationOperationgCentres',
+            'GET',
+            array(
+                'application' => $this->getIdentifier(),
+            ),
+            $bundle
+        );
+        if ($operatingCentres['Count'] === 0) {
+            $trafficArea = $this->makeRestCall(
+                'Application',
+                'PUT',
+                array('trafficArea' => NULL)
+            );
+        }
     }
 }

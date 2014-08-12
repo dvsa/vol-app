@@ -1,6 +1,7 @@
 <?php
 
 $translationPrefix = 'application_operating-centres_authorisation.data';
+$translationPrefixTrafficArea = 'application_operating-centres_authorisation.dataTrafficArea';
 
 return array(
     'application_operating-centres_authorisation' => array(
@@ -9,6 +10,35 @@ return array(
             'method' => 'post',
         ),
         'fieldsets' => array(
+            array(
+                'name' => 'dataTrafficArea',
+                'elements' => array(
+                    'trafficArea' => array(
+                        'type' => 'select',
+                        'value_options' => array(),
+                        'required' => true,
+                        'label' => $translationPrefixTrafficArea . '.label.new',
+                        'hint' => $translationPrefixTrafficArea . '.hint.new'
+                    ),
+                    'trafficAreaInfoLabelExists' => array(
+                        'type' => 'html',
+                        'label' => $translationPrefixTrafficArea . '.label.exists'
+                    ),
+                    'trafficAreaInfoNameExists' => array(
+                        'type' => 'html',
+                        'attributes' => array(
+                            'value' => '<b>%NAME%</b>'
+                        )
+                    ),
+                    'trafficAreaInfoHintExists' => array(
+                        'type' => 'html',
+                        'label' => $translationPrefixTrafficArea . '.hint.exists'
+                    ),
+                    'hiddenId' => array(
+                        'type' => 'hidden'
+                    ),
+                )
+            ),
             array(
                 'name' => 'data',
                 'options' => array(
@@ -75,7 +105,7 @@ return array(
                     ),
                     'maxTrailerAuth' => array(
                         'type' => 'hidden'
-                    )
+                    ),
                 )
             ),
             array(
