@@ -35,21 +35,7 @@ class CaseProhibitionController extends CaseController implements CrudInterface
 
         $prohibition = array();
 
-        $bundle = array(
-            'children' => array(
-                'case' => array(
-                    'properties' => array(
-                        'id'
-                    )
-                ),
-                'prohibitionType' => array(
-                    'properties' => array(
-                        'handle',
-                        'comment'
-                    )
-                )
-            )
-        );
+        $bundle = $this->getBundle();
 
         $results = $this->makeRestCall(
             'Prohibition',
@@ -157,21 +143,7 @@ class CaseProhibitionController extends CaseController implements CrudInterface
             )
         );
 
-        $bundle = array(
-            'children' => array(
-                'case' => array(
-                    'properties' => array(
-                        'id'
-                    )
-                ),
-                'prohibitionType' => array(
-                    'properties' => array(
-                        'handle',
-                        'comment'
-                    )
-                )
-            )
-        );
+        $bundle = $this->getBundle();
 
         $details = $this->makeRestCall(
             'Prohibition',
@@ -273,6 +245,7 @@ class CaseProhibitionController extends CaseController implements CrudInterface
             'prohibition-comment',
             'saveProhibitionNoteForm'
         );
+
         $form->setData($data);
 
         return $form;
@@ -282,7 +255,7 @@ class CaseProhibitionController extends CaseController implements CrudInterface
      * Saves the prohibition notes form.
      *
      * @param array $data
-     * @return Redirect
+     * @return \Zend\Http\Response
      */
     public function saveProhibitionNoteForm($data)
     {
@@ -297,14 +270,14 @@ class CaseProhibitionController extends CaseController implements CrudInterface
             $this->processAdd($data, 'ProhibitionNote');
         }
 
-        return $this->redirect()->toRoute('case_prohibition', array(), array(), true);
+        return $this->redirectToRoute('case_prohibition', array(), array(), true);
     }
 
     /**
      * Processes the add prohibition form
      *
      * @param array $data
-     * @return redirect
+     * @return \Zend\Http\Response
      */
     public function processAddProhibition ($data)
     {
@@ -313,17 +286,17 @@ class CaseProhibitionController extends CaseController implements CrudInterface
         $result = $this->processAdd($formatted, 'Prohibition');
 
         if (isset($result['id'])) {
-            return $this->redirectToAction();
+            return $this->redirectToIndex();
         }
 
-        return $this->redirectToAction('add');
+        return $this->redirectToRoute('case_prohibition', ['action' => 'add'], [], true);
     }
 
     /**
      * Processes the edit prohibition form
      *
      * @param array $data
-     * @return redirect
+     * @return \Zend\Http\Response
      */
     public function processEditProhibition ($data)
     {
@@ -332,16 +305,10 @@ class CaseProhibitionController extends CaseController implements CrudInterface
         $result = $this->processEdit($formattedData, 'Prohibition');
 
         if (empty($result)) {
-            return $this->redirect()->toRoute(
-                'case_prohibition',
-                array(
-                    'action' => null,
-                    'id' => null
-                ),
-                array(),
-                true
-            );
+            return $this->redirectToIndex();
         }
+
+        return $this->redirectToRoute('case_prohibition', ['action' => 'edit'], [], true);
     }
 
     /**
@@ -360,39 +327,25 @@ class CaseProhibitionController extends CaseController implements CrudInterface
     }
 
     /**
-     * Redirects to the selected action or if no action to the index
+     * Gets a search bundle
      *
-     * @param string $action
-     * @return Redirect
+     * @return array
      */
-    private function redirectToAction($action = null)
+    private function getBundle()
     {
-        return $this->redirect()->toRoute(
-            'case_prohibition',
-            array(
-                'action' => $action,
-            ),
-            array(),
-            true
-        );
-    }
-
-    /**
-     * Does what it says on the tin.
-     *
-     * @return mixed
-     */
-    public function redirectToIndex()
-    {
-        $licenceId = $this->fromRoute('licence');
-        $caseId = $this->fromRoute('case');
-
-        return $this->redirect()->toRoute(
-            'case_prohibition',
-            array(
-                'action' => 'index',
-                'licence' => $licenceId,
-                'case' => $caseId
+        return array(
+            'children' => array(
+                'case' => array(
+                    'properties' => array(
+                        'id'
+                    )
+                ),
+                'prohibitionType' => array(
+                    'properties' => array(
+                        'handle',
+                        'comment'
+                    )
+                )
             )
         );
     }
