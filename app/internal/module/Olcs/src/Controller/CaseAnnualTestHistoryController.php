@@ -58,17 +58,14 @@ class CaseAnnualTestHistoryController extends CaseController
      */
     protected function generateAnnualTestHistoryForm($case)
     {
+        $data = [];
+        $data['main'] = $case;
+
         $form = $this->generateForm(
             'annual-test-history-comment',
             'saveAnnualTestHistoryForm'
         );
-        $form->setData(
-            array(
-                'annualTestHistory' => $case['annualTestHistory'],
-                'id' => $case['id'],
-                'version' => $case['version']
-            )
-        );
+        $form->setData($data);
 
         return $form;
     }
@@ -80,9 +77,12 @@ class CaseAnnualTestHistoryController extends CaseController
      */
     public function saveAnnualTestHistoryForm($data)
     {
-        unset($data['cancel']);
+        if (isset($data['main'])) {
+            $data = $data + $data['main'];
+            unset($data['main']);
+        }
 
-        if ($data['submit'] === '' && !empty($data['id'])) {
+        if (!empty($data['id'])) {
             $this->processEdit($data, 'Cases');
         }
 

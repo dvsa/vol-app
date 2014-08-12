@@ -35,7 +35,13 @@ class CaseProhibitionControllerTest extends AbstractHttpControllerTestCase
                 'processEdit',
                 'processAdd',
                 'redirect',
-                'getView'
+                'getView',
+                'getServiceLocator',
+                'buildTable',
+                'generateFormWithData',
+                'redirectToIndex',
+                'redirectToRoute',
+                'notFoundAction'
             )
         );
 
@@ -56,9 +62,10 @@ class CaseProhibitionControllerTest extends AbstractHttpControllerTestCase
      * @param int $caseId
      * @param int $licenceId
      * @param array $results
+     * @param int $resultCount
      *
      */
-    public function testIndexAction($caseId, $licenceId, $results)
+    public function testIndexAction($caseId, $licenceId, $results, $resultCount)
     {
         $this->getFromRoute(0, 'case', $caseId);
         $this->getFromRoute(1, 'licence', $licenceId);
@@ -77,9 +84,21 @@ class CaseProhibitionControllerTest extends AbstractHttpControllerTestCase
             ->method('getCaseSummaryArray')
             ->with($this->equalTo(array()));
 
-        $this->controller->expects($this->once())
+        $this->controller->expects($this->any())
             ->method('makeRestCall')->
-            will($this->returnValue($results));
+            will(
+                $this->onConsecutiveCalls(
+                    $this->returnValue($this->getSampleProhibitionResult($resultCount)),
+                    $this->returnValue($results)
+                )
+            );
+
+        $this->controller->expects($this->any())
+            ->method('getServiceLocator')
+            ->will($this->returnValue($this->getServiceLocatorStaticData()));
+
+        $this->controller->expects($this->once())
+            ->method('buildTable');
 
         $form = $this->getMock('stdClass', ['setData']);
         $form->expects($this->once())
@@ -120,52 +139,201 @@ class CaseProhibitionControllerTest extends AbstractHttpControllerTestCase
                             )
                         )
                     )
-                )
+                ),
+                1
             ),
-            array(24,7,array('Count' => 0))
+            array(24,7,array('Count' => 0),0)
         );
     }
 
     /**
-     * Tests saveProhibitionForm add is called
-     *
-     * @dataProvider saveProhibitionFormAddSubmitProvider
-     *
-     * @param array $data
+     * Tests the add action
      */
-    public function testSaveProhibitionFormAddSubmit($data)
+    public function testAddAction()
     {
-        $redirect = $this->getSaveRedirect();
+        $this->getFromRoute(0, 'licence', 7);
+        $this->getFromRoute(1, 'case', 28);
 
         $this->controller->expects($this->once())
-            ->method('processAdd');
+            ->method('setBreadcrumb');
 
         $this->controller->expects($this->once())
-            ->method('redirect')
-            ->will($this->returnValue($redirect));
+            ->method('generateFormWithData');
 
-        $this->controller->saveProhibitionForm($data);
+        $this->controller->expects($this->once())
+            ->method('getView')
+            ->will($this->returnValue($this->view));
+
+        $this->view->expects($this->once())
+            ->method('setTemplate')
+            ->with('prohibition/form');
+
+        $this->controller->addAction();
+    }
+
+    /**
+     * Tests the edit action
+     */
+    public function testEditAction()
+    {
+        $this->getFromRoute(0, 'licence', 7);
+        $this->getFromRoute(1, 'case', 28);
+        $this->getFromRoute(2, 'id', 1);
+
+        $this->controller->expects($this->once())
+            ->method('setBreadcrumb');
+
+        $this->controller->expects($this->once())
+            ->method('makeRestCall')
+            ->will(
+                $this->returnValue($this->getSingleProhibitionResult())
+            );
+
+        $this->controller->expects($this->once())
+            ->method('generateFormWithData');
+
+        $this->controller->expects($this->once())
+            ->method('getView')
+            ->will($this->returnValue($this->view));
+
+        $this->view->expects($this->once())
+            ->method('setTemplate')
+            ->with('prohibition/form');
+
+        $this->controller->editAction();
+    }
+
+    /**
+     * Tests the edit action when record not found
+     */
+    public function testEditActionNotFound()
+    {
+        $this->getFromRoute(0, 'licence', 7);
+        $this->getFromRoute(1, 'case', 28);
+        $this->getFromRoute(2, 'id', 1);
+
+        $this->controller->expects($this->once())
+            ->method('setBreadcrumb');
+
+        $this->controller->expects($this->once())
+            ->method('makeRestCall')
+            ->will(
+                $this->returnValue([])
+            );
+
+        $this->controller->expects($this->once())
+            ->method('notFoundAction');
+
+        $this->controller->editAction();
+    }
+
+    /**
+     * Tests process add prohibition success
+     */
+    public function testProcessAddProhibition()
+    {
+        $data = $this->getDataForSave();
+
+        $this->controller->expects($this->once())
+             ->method('processAdd')
+             ->will($this->returnValue(['id' => 1]));
+
+        $this->controller->expects($this->once())
+             ->method('redirectToIndex');
+
+        $this->controller->processAddProhibition($data);
+    }
+
+    /**
+     * Tests process add prohibition failure
+     */
+    public function testProcessAddProhibitionFail()
+    {
+        $data = $this->getDataForSave();
+
+        $this->controller->expects($this->once())
+            ->method('processAdd')
+            ->will($this->returnValue([]));
+
+        $this->controller->expects($this->once())
+            ->method('redirectToRoute')
+            ->with(
+                $this->equalTo('case_prohibition'),
+                $this->equalTo(array('action' => 'add')),
+                $this->equalTo(array()),
+                $this->equalTo(true)
+            );
+
+        $this->controller->processAddProhibition($data);
+    }
+
+    /**
+     * Tests process edit prohibition success
+     */
+    public function testProcessEditProhibition()
+    {
+        $data = $this->getDataForSave();
+
+        $this->controller->expects($this->once())
+            ->method('processEdit')
+            ->will($this->returnValue([]));
+
+        $this->controller->expects($this->once())
+            ->method('redirectToIndex');
+
+        $this->controller->processEditProhibition($data);
+    }
+
+    /**
+     * Tests process edit prohibition failure
+     */
+    public function testProcessEditProhibitionFail()
+    {
+        $data = $this->getDataForSave();
+
+        $this->controller->expects($this->once())
+            ->method('processEdit')
+            ->will($this->returnValue(['failed' => 'failed']));
+
+        $this->controller->expects($this->once())
+            ->method('redirectToRoute')
+            ->with(
+                $this->equalTo('case_prohibition'),
+                $this->equalTo(array('action' => 'edit')),
+                $this->equalTo(array()),
+                $this->equalTo(true)
+            );
+
+        $this->controller->processEditProhibition($data);
     }
 
     /**
      * Tests saveProhibitionForm add is called
      *
-     * @dataProvider saveProhibitionFormAddCancelProvider
-     *
-     * @param array $data
+     * @return void
      */
-    public function testSaveProhibitionFormAddCancel($data)
+    public function testSaveProhibitionFormAddSubmit()
     {
-        $redirect = $this->getSaveRedirect();
+        $data = array(
+            'case' => 24,
+            'notes' => 'test',
+            'submit' => '',
+            'cancel' => null
+        );
 
-        $this->controller->expects($this->never())
+        $this->controller->expects($this->once())
             ->method('processAdd');
 
         $this->controller->expects($this->once())
-            ->method('redirect')
-            ->will($this->returnValue($redirect));
+            ->method('redirectToRoute')
+            ->with(
+                $this->equalTo('case_prohibition'),
+                $this->equalTo(array()),
+                $this->equalTo(array()),
+                $this->equalTo(true)
+            );
 
-        $this->controller->saveProhibitionForm($data);
+        $this->controller->saveProhibitionNoteForm($data);
     }
 
     /**
@@ -177,77 +345,27 @@ class CaseProhibitionControllerTest extends AbstractHttpControllerTestCase
      */
     public function testSaveProhibitionFormEditSubmit($data)
     {
-        $redirect = $this->getSaveRedirect();
-
         $this->controller->expects($this->once())
             ->method('processEdit');
 
-         $this->controller->expects($this->once())
-            ->method('redirect')
-            ->will($this->returnValue($redirect));
+        $this->controller->expects($this->once())
+            ->method('redirectToRoute')
+            ->with(
+                $this->equalTo('case_prohibition'),
+                $this->equalTo(array()),
+                $this->equalTo(array()),
+                $this->equalTo(true)
+            );
 
-         $this->controller->saveProhibitionForm($data);
+        $this->controller->saveProhibitionNoteForm($data);
     }
 
     /**
-     * Tests saveProhibitionForm edit is not called when cancel pressed
-     *
-     * @dataProvider saveProhibitionFormEditCancelProvider
-     *
-     * @param array $data
+     * Tests getDeleteServiceName
      */
-    public function testSaveProhibitionFormEditCancel($data)
+    public function testGetDeleteServiceName()
     {
-        $redirect = $this->getSaveRedirect();
-
-        $this->controller->expects($this->never())
-            ->method('processEdit');
-
-         $this->controller->expects($this->once())
-            ->method('redirect')
-            ->will($this->returnValue($redirect));
-
-         $this->controller->saveProhibitionForm($data);
-    }
-
-    /**
-     *
-     * data provider for testSaveProhibitionForm
-     *
-     * @return array
-     */
-    public function saveProhibitionFormAddSubmitProvider()
-    {
-        return array(
-            array(
-                array(
-                    'case' => 24,
-                    'notes' => 'test',
-                    'submit' => '',
-                    'cancel' => null
-                )
-            )
-        );
-    }
-
-    /**
-     *
-     * data provider for testSaveProhibitionForm
-     *
-     * @return array
-     */
-    public function saveProhibitionFormAddCancelProvider()
-    {
-        return array(
-            array(
-            array(
-                    'case' => 24,
-                    'notes' => 'test',
-                    'submit' => null,
-                    'cancel' => ''
-            )
-                )
-        );
+        $this->assertEquals('Prohibition', $this->controller->getDeleteServiceName());
     }
 
     /**
@@ -264,29 +382,7 @@ class CaseProhibitionControllerTest extends AbstractHttpControllerTestCase
                     'id' => 1,
                     'case' => 24,
                     'notes' => 'test',
-                    'submit' => '',
-                    'cancel' => null
-            )
-                )
-        );
-    }
-
-    /**
-     *
-     * data provider for testSaveProhibitionCancelForm
-     *
-     * @return array
-     */
-    public function saveProhibitionFormEditCancelProvider()
-    {
-        return array(
-            array(
-            array(
-                    'id' => 1,
-                    'case' => 24,
-                    'notes' => 'test',
-                    'submit' => null,
-                    'cancel' => ''
+                    'main' => [],
             )
                 )
         );
@@ -314,21 +410,103 @@ class CaseProhibitionControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
-     * Creates a mock class (used for the redirect method)
+     * Gets data for a save
      *
+     * @return array
      */
-    private function getSaveRedirect()
+    private function getDataForSave()
     {
-        $redirect = $this->getMock('stdClass', ['toRoute']);
-        $redirect->expects($this->once())
-            ->method('toRoute')
-            ->with(
-                $this->equalTo('case_prohibition'),
-                $this->equalTo(array()),
-                $this->equalTo(array()),
-                $this->equalTo(true)
+        return [
+            'fields' => [],
+            'id' => 1,
+            'case_id' => 28,
+            'version' => 1
+        ];
+    }
+
+    /**
+     * Sample static data
+     *
+     * @return array
+     */
+    private function getSampleStaticData()
+    {
+        return array(
+            'prohibition_type' => [
+                'prohibition_type.1' => 'Immediate (S)',
+                'prohibition_type.2' => 'Delayed (S)',
+                'prohibition_type.3' => 'Variation (S)',
+                'prohibition_type.4' => 'Immediate',
+                'prohibition_type.5' => 'Delayed',
+                'prohibition_type.6' => 'Variation',
+                'prohibition_type.7' => 'Refusals Only',
+                'prohibition_type.8' => 'Variation & Refusals Only',
+            ]
+        );
+    }
+
+    /**
+     * Gets a mock version of static-list-data
+     */
+    private function getServiceLocatorStaticData ()
+    {
+        $serviceMock = $this->getMock('\stdClass', array('get'));
+
+        $scriptMock = $this->getMock('\stdClass', ['loadFiles']);
+        $scriptMock->expects($this->any())
+            ->method('loadFiles')
+            ->will($this->returnValue([]));
+
+        $serviceMock->expects($this->any())
+            ->method('get')
+            ->will(
+                $this->onConsecutiveCalls(
+                    array('static-list-data' => $this->getSampleStaticData()),
+                    $scriptMock
+                )
             );
 
-        return $redirect;
+        return $serviceMock;
+    }
+
+    /**
+     * Returns a sample result of a prohibition rest call
+     * Accepts a result count (used to test code path in index action)
+     *
+     * @param $count
+     * @return array
+     */
+    private function getSampleProhibitionResult($count)
+    {
+        return [
+            'Count' => $count,
+            'Results' => [
+                'id' => 1,
+                'prohibitionDate' => '2014-01-01',
+                'clearedDate' => '2014-01-02',
+                'isTrailer' => 'N',
+                'vrm' => 'AB62 CDE',
+                'imposedAt' => 'Doncaster',
+                'version' => 1,
+                'prohibitionType' => [
+                    'handle' => 'prohibition_type.1'
+                ],
+                'case' => [
+                    'id' => 1
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * Gets a single result of a prohibition rest call
+     *
+     * @return array
+     */
+    private function getSingleProhibitionResult()
+    {
+        $result = $this->getSampleProhibitionResult(1);
+
+        return $result['Results'];
     }
 }

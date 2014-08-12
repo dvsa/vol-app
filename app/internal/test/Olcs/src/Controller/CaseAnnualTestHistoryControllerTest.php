@@ -17,18 +17,15 @@ class CaseAnnualTestHistoryControllerTest extends \PHPUnit_Framework_TestCase
 {
     public function testSaveAnnualTestHistoryForm()
     {
-        $data = array(
-            'submit' => '',
-            'id' => 42,
-            'datum' => 'foo'
+        $dataOne = array(
+            'main' => array(
+                'id' => 42,
+                'datum' => 'foo'
+            )
         );
 
-        $cancel = array(
-            'submit' => null,
-            'cancel' => '',
-            'id' => 42,
-            'datum' => 'foo'
-        );
+        $dataTwo = $dataOne + $dataOne['main'];
+        unset($dataTwo['main']);
 
         $sut = $this->getMock(
             '\Olcs\Controller\CaseAnnualTestHistoryController',
@@ -38,7 +35,7 @@ class CaseAnnualTestHistoryControllerTest extends \PHPUnit_Framework_TestCase
         );
 
         $mockRedirect = $this->getMock('stdClass', array('toRoute'));
-        $mockRedirect->expects($this->exactly(2))->method('toRoute')
+        $mockRedirect->expects($this->exactly(1))->method('toRoute')
             ->with(
                 $this->equalTo('case_annual_test_history'),
                 $this->equalTo(array()),
@@ -52,10 +49,9 @@ class CaseAnnualTestHistoryControllerTest extends \PHPUnit_Framework_TestCase
 
         $sut->setPluginManager($mockPluginManager);
 
-        $sut->expects($this->once())->method('processEdit')->with($this->equalTo($data), $this->equalTo('Cases'));
+        $sut->expects($this->once())->method('processEdit')->with($this->equalTo($dataTwo), $this->equalTo('Cases'));
 
-        $sut->saveAnnualTestHistoryForm($data);
-        $sut->saveAnnualTestHistoryForm($cancel);
+        $sut->saveAnnualTestHistoryForm($dataOne);
     }
 
     public function testIndexAction()
@@ -97,8 +93,10 @@ class CaseAnnualTestHistoryControllerTest extends \PHPUnit_Framework_TestCase
             'version' => 2
         );
 
+        $formData = [];
+        $formData['main'] = $mockCase;
         $mockForm = $this->getMock('stdClass', array('setData'));
-        $mockForm->expects($this->once())->method('setData')->with($this->equalTo($mockCase));
+        $mockForm->expects($this->once())->method('setData')->with($this->equalTo($formData));
 
         $sut->expects($this->once())->method('getCase')->with($this->equalTo(25))
             ->will($this->returnValue($mockCase));

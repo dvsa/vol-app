@@ -173,7 +173,7 @@ class CaseRevokeControllerTest extends AbstractHttpControllerTestCase
     /**
      * @dataProvider licenceTypeDataProvider
      */
-    public function testGenerateForm($licenceType)
+    public function testGenerateForm($licenceType, $niFlag)
     {
         $formName = 'form';
         $callback = 'myCallback';
@@ -210,7 +210,14 @@ class CaseRevokeControllerTest extends AbstractHttpControllerTestCase
                    ->will($this->returnValue(7));
         $controller->expects($this->once())
                    ->method('makeRestCall')
-                   ->will($this->returnValue(['goodsOrPsv' => $licenceType]));
+                   ->will(
+                       $this->returnValue(
+                           [
+                               'goodsOrPsv' => $licenceType,
+                               'niFlag' => $niFlag
+                           ]
+                       )
+                   );
         $controller->expects($this->once())
                    ->method('getForm')
                    ->with($this->equalTo($formName))
@@ -233,14 +240,16 @@ class CaseRevokeControllerTest extends AbstractHttpControllerTestCase
     public function licenceTypeDataProvider ()
     {
         return [
-            array('goods','GV'), array('psv','PSV')
+            array('goods', 'GV', 1),
+            array('psv', 'PSV', 1),
+            array('goods', 'GV', 0)
         ];
     }
 
     /**
      * @dataProvider licenceTypeDataProvider
      */
-    public function testGetPiReasonsNvpArray($licenceType, $shortLicenceType)
+    public function testGetPiReasonsNvpArray($licenceType, $shortLicenceType, $niFlag)
     {
         $pi = array(
             'Results' => array(
@@ -267,15 +276,15 @@ class CaseRevokeControllerTest extends AbstractHttpControllerTestCase
                        $this->equalTo(
                            [
                                 'isProposeToRevoke' => '1',
-                                'isDecision' => '0',
                                 'goodsOrPsv' => $shortLicenceType,
+                                'isNi' => $niFlag,
                                 'limit' => 'all'
                            ]
                        )
                    )
                    ->will($this->returnValue($pi));
 
-        $this->assertEquals($return, $controller->getPiReasonsNvpArray($licenceType));
+        $this->assertEquals($return, $controller->getPiReasonsNvpArray($licenceType, $niFlag));
     }
 
     /**
