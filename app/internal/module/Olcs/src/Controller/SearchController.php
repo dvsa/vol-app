@@ -47,9 +47,9 @@ class SearchController extends FormActionController
     {
         $data = array_merge($data['search'], $data['search-advanced']);
         $personSearch = array(
-            'firstName',
-            'lastName',
-            'dateOfBirth',
+            'forename',
+            'familyName',
+            'birthDate',
             'transportManagerId'
         );
 

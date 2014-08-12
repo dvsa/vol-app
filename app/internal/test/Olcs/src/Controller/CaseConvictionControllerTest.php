@@ -699,7 +699,7 @@ class CaseConvictionControllerTest extends AbstractHttpControllerTestCase
         (
             'id' => 32,
             'categoryText' => '',
-            'dateOfBirth' => '',
+            'birthDate' => '',
             'dateOfOffence' => '2014-01-01T00:00:00+0000',
             'convictionDate' => '2014-01-02T00:00:00+0000',
             'court' => 'dfdsfdsfsfds',

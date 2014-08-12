@@ -144,6 +144,7 @@ class CaseConvictionController extends CaseController
     {
         $routeParams = $this->getParams(array('case', 'licence', 'id'));
 
+        // @todo We shouldn't be accessing the POST global we should be using the request
         if (isset($_POST['cancel-conviction'])) {
             return $this->redirect()->toRoute(
                 'case_convictions',
@@ -177,7 +178,7 @@ class CaseConvictionController extends CaseController
             $form->get('defendant-details')->remove('personSearch');
             $form->get('defendant-details')->remove('personFirstname');
             $form->get('defendant-details')->remove('personLastname');
-            $form->get('defendant-details')->remove('dateOfBirth');
+            $form->get('defendant-details')->remove('birthDate');
             $form->get('defendant-details')->remove('search');
         } else {
             $posted = $request->getPost();
@@ -312,7 +313,7 @@ class CaseConvictionController extends CaseController
                 $form->get('defendant-details')->remove('personSearch');
                 $form->get('defendant-details')->remove('personFirstname');
                 $form->get('defendant-details')->remove('personLastname');
-                $form->get('defendant-details')->remove('dateOfBirth');
+                $form->get('defendant-details')->remove('birthDate');
                 $form->get('defendant-details')->remove('search');
                 $form->get('defendant-details')->remove('operatorSearch');
                 $form->get('defendant-details')->remove('entity-list');

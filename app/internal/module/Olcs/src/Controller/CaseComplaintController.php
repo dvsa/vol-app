@@ -271,9 +271,9 @@ class CaseComplaintController extends CaseController implements CrudInterface
                                     'properties' => array(
                                         'id',
                                         'version',
-                                        'firstName',
+                                        'forename',
                                         'middleName',
-                                        'surname',
+                                        'familyName',
                                     )
                                 )
                             )
@@ -287,9 +287,9 @@ class CaseComplaintController extends CaseController implements CrudInterface
                             'properties' => array(
                                 'id',
                                 'version',
-                                'firstName',
+                                'forename',
                                 'middleName',
-                                'surname',
+                                'familyName',
                             )
                         )
                     )
@@ -329,9 +329,9 @@ class CaseComplaintController extends CaseController implements CrudInterface
                            'children' => array(
                                'person' => array(
                                    'properties' => array(
-                                       'firstName',
+                                       'forename',
                                        'middleName',
-                                       'surname',
+                                       'familyName',
                                    )
                                )
                            )

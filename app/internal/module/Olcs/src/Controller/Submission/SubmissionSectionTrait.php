@@ -156,9 +156,9 @@ trait SubmissionSectionTrait
 
         foreach ($data['licence']['organisation']['organisationOwners'] as $organisationOwner) {
 
-            $thisOrganisationOwner['lastName'] = $organisationOwner['person']['surname'];
-            $thisOrganisationOwner['firstName'] = $organisationOwner['person']['firstName'];
-            $thisOrganisationOwner['dob'] = $organisationOwner['person']['dateOfBirth'];
+            $thisOrganisationOwner['familyName'] = $organisationOwner['person']['familyName'];
+            $thisOrganisationOwner['forename'] = $organisationOwner['person']['forename'];
+            $thisOrganisationOwner['birthDate'] = $organisationOwner['person']['birthDate'];
             $dataToReturnArray[] = $thisOrganisationOwner;
 
         }
@@ -175,8 +175,8 @@ trait SubmissionSectionTrait
 
         foreach ($data['licence']['transportManagerLicences'] as $TmLicence) {
 
-            $thisTmLicence['lastName'] = $TmLicence['transportManager']['contactDetails']['person']['surname'];
-            $thisTmLicence['firstName'] = $TmLicence['transportManager']['contactDetails']['person']['firstName'];
+            $thisTmLicence['familyName'] = $TmLicence['transportManager']['contactDetails']['person']['familyName'];
+            $thisTmLicence['forename'] = $TmLicence['transportManager']['contactDetails']['person']['forename'];
             $thisTmLicence['tmType'] = $TmLicence['transportManager']['tmType'];
             $thisTmLicence['qualifications'] = '';
 
@@ -184,7 +184,7 @@ trait SubmissionSectionTrait
                 $thisTmLicence['qualifications'] .= $qualification['qualificationType'].' ';
             }
 
-            $thisTmLicence['dob'] = $TmLicence['transportManager']['contactDetails']['person']['dateOfBirth'];
+            $thisTmLicence['birthDate'] = $TmLicence['transportManager']['contactDetails']['person']['birthDate'];
             $dataToReturnArray[] = $thisTmLicence;
         }
 

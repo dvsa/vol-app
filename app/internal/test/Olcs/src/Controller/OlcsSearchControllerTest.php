@@ -72,8 +72,8 @@ class OlcsSearchControllerTest extends AbstractHttpControllerTestCase
                 'licNo' => '',
                 'operatorName' => 'a',
                 'postcode' => '',
-                'firstName' => 'ken',
-                'lastName' => '',
+                'forename' => 'ken',
+                'familyName' => '',
                 'transportManagerId' => ''
             ],
             'search-advanced' => []
@@ -87,7 +87,7 @@ class OlcsSearchControllerTest extends AbstractHttpControllerTestCase
 
         $this->url->expects($this->once())
             ->method('fromRoute')
-            ->with('operators/operators-params', array ( 'operatorName' => 'a', 'firstName' => 'ken'))
+            ->with('operators/operators-params', array ( 'operatorName' => 'a', 'forename' => 'ken'))
             ->will($this->returnValue('/search/operators'));
 
         $this->controller->expects($this->once())

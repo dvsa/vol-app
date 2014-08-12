@@ -20,13 +20,13 @@ return [
                     'version' => [
                         'type' => 'hidden'
                     ],
-                    'firstName' => [
+                    'forename' => [
                         'type' => 'personName',
                         'label' => 'Complainant first name',
                         'class' => 'medium',
                         'filters' => '\Common\Form\Elements\InputFilters\NameRequired'
                     ],
-                    'surname' => [
+                    'familyName' => [
                         'type' => 'personName',
                         'label' => 'Complainant last name',
                         'class' => 'medium',
@@ -110,12 +110,12 @@ return [
                     'version' => [
                         'type' => 'hidden'
                     ],
-                    'firstName' => [
+                    'forename' => [
                         'type' => 'personName',
                         'label' => 'Driver first name',
                         'class' => 'medium',
                     ],
-                    'surname' => [
+                    'familyName' => [
                         'type' => 'personName',
                         'label' => 'Driver last name',
                         'class' => 'medium',

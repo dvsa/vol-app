@@ -40,9 +40,9 @@ return array(
         array(
             'title' => 'Complainant name',
             'formatter' => function ($data, $column) {
-                return $data['complainant']['person']['firstName'] . ' ' .
+                return $data['complainant']['person']['forename'] . ' ' .
                     $data['complainant']['person']['middleName'] . ' ' .
-                    $data['complainant']['person']['surname'];
+                    $data['complainant']['person']['familyName'];
             },
             //'format' => '{{complainantsForename}} {{complainantsFamilyName}}'
         ),

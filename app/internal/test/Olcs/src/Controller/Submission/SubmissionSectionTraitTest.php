@@ -353,9 +353,9 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
                     'organisationOwners' => array(
                         array(
                             'person' => array(
-                                'surname' => 'Smith',
-                                'firstName' => 'Fred',
-                                'dateOfBirth' => '1975-03-15T00:00:00+0000'
+                                'familyName' => 'Smith',
+                                'forename' => 'Fred',
+                                'birthDate' => '1975-03-15T00:00:00+0000'
                             )
                         )
                     )
@@ -365,7 +365,7 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
 
         $result = $submissionSectionTrait->persons($data);
         $this->assertContains('Fred', $result[0]);
-        $this->assertArrayHasKey('firstName', $result[0]);
+        $this->assertArrayHasKey('forename', $result[0]);
     }
 
     public function testTransportManagers()
@@ -386,9 +386,9 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
                             ),
                             'contactDetails' => array(
                                 'person' => array(
-                                    'surname' => 'Smith',
-                                    'firstName' => 'Fred',
-                                    'dateOfBirth' => '1975-03-15T00:00:00+0000'
+                                    'familyName' => 'Smith',
+                                    'forename' => 'Fred',
+                                    'birthDate' => '1975-03-15T00:00:00+0000'
                                 )
                             )
                         )
@@ -399,7 +399,7 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
 
         $result = $submissionSectionTrait->transportManagers($data);
         $this->assertContains('Fred', $result[0]);
-        $this->assertArrayHasKey('firstName', $result[0]);
+        $this->assertArrayHasKey('forename', $result[0]);
     }
 
     public function testGetFilteredSectionData()
