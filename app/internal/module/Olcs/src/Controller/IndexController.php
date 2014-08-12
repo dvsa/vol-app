@@ -51,6 +51,8 @@ class IndexController extends FormActionController
             'tasks-home', null, $filters
         );
 
+        // grab all the relevant backend data needed to populate the
+        // various dropdowns on the filter form
         $selects = array(
             'team' => $this->getListData('Team'),
             'owner' => $this->getListData('User'),
@@ -58,28 +60,81 @@ class IndexController extends FormActionController
             'sub_category' => $this->getListData('TaskSubCategory')
         );
 
+        // bang the relevant data into the corresponding form inputs
         foreach ($selects as $name => $options) {
             $form->get($name)
                 ->setValueOptions($options)
                 ->setEmptyOption(null);
         }
 
+        // @TODO hopefully temporary, we'd ideally set these on the
+        // inputs in the form config
         $form->get('date')->setValue('today');
         $form->get('status')->setValue('open');
 
-        $view = new ViewModel();
-        $view->setVariables(
+        $view = new ViewModel(
             array(
                 'table' => $table,
                 'form'  => $form,
-                'inlineScript' => $this->getServiceLocator()->get('Script')->loadFiles(['tasks'])
+                'inlineScript' => $this->loadScripts(['tasks'])
+            )
+        );
+        $view->setTemplate('index/home');
+        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
+
+        return $view;
+    }
+
+    /**
+     * Retrieve a list of entities, filtered by a certain key.
+     * The consumer doesn't control what the entities and keys are; they
+     * simply provide a key and a value which we look up in a map
+     *
+     * @return JSON
+     */
+    public function taskFilterAction()
+    {
+        $key = $this->params()->fromRoute('type');
+        $value = $this->params()->fromRoute('value');
+        $map = array(
+            'users' => array(
+                'entity' => 'User',
+                'field' => 'team_id'
+            ),
+            'sub-categories' => array(
+                'entity' => 'TaskSubCategory',
+                'field' => 'category_id'
             )
         );
 
-        $view->setTemplate('index/home');
-        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
-        return $view;
+        if (!isset($map[$key])) {
+            // @TODO handle separately?
+            throw new \Exception("Invalid task filter key: " . $key);
+        }
+
+        $lookup = $map[$key];
+
+        // e.g. array("category_id" => 12)
+        $search = array(
+            $lookup['field'] => $value
+        );
+
+        $results = $this->getListData($lookup['entity'], $search);
+        $viewResults = array();
+
+        // iterate over the list data and just convert it to a more
+        // JS friendly format (key/val assoc isn't quite such a neat
+        // fit for frontend)
+        foreach ($results as $id => $result) {
+            $viewResults[] = array(
+                'value' => $id,
+                'label' => $result
+            );
+        }
+
+        return new JsonModel($viewResults);
     }
+
 
     /**
      * Inspect the request to see if we have any filters set, and
@@ -92,6 +147,11 @@ class IndexController extends FormActionController
         return $this->getRequest()->getQuery()->toArray();
     }
 
+    /**
+     * Retrieve some data from the backend and convert it for use in
+     * a select. Optionally provide some search data to filter the
+     * returned data too.
+     */
     protected function getListData($entity, $data = array(), $primaryKey = 'id', $titleKey = 'name')
     {
         $response = $this->makeRestCall($entity, 'GET', $data);
@@ -104,37 +164,6 @@ class IndexController extends FormActionController
             $final[$key] = $value;
         }
         return $final;
-    }
-
-    public function taskFilterAction()
-    {
-        $map = array(
-            'users' => array(
-                'entity' => 'User',
-                'field' => 'team_id'
-            ),
-            'sub-categories' => array(
-                'entity' => 'TaskSubCategory',
-                'field' => 'category_id'
-            )
-        );
-
-        $lookup = $map[$this->params()->fromRoute('type')];
-        $search = array(
-            $lookup['field'] => $this->params()->fromRoute('value')
-        );
-
-        $results = $this->getListData($lookup['entity'], $search);
-        $viewResults = array();
-
-        foreach ($results as $id => $result) {
-            $viewResults[] = array(
-                'value' => $id,
-                'label' => $result
-            );
-        }
-
-        return new JsonModel($viewResults);
     }
 
     public function makeRestCall($entity, $method, array $options, array $bundle = null)
