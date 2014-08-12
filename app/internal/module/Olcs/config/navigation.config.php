@@ -25,14 +25,14 @@ return array(
                         ),
                         array(
                             'id' => 'licence_edit',
-                            'label' => 'Licence',
+                            'label' => 'Details',
                             'route' => 'licence/edit',
                             'use_route_match' => true
                         ),
                         array(
                             'id' => 'licence_caselist',
                             'label' => 'Cases',
-                            'route' => 'licence_case_list',
+                            'route' => 'licence/cases',
                             'use_route_match' => true
                         ),
                         array(
@@ -62,7 +62,7 @@ return array(
                     'pages' => array(
                         array(
                             'label' => 'Case list',
-                            'route' => 'licence_case_list',
+                            'route' => 'licence/cases',
                             'use_route_match' => true,
                             'pages' => array(
                                 array(
@@ -235,7 +235,19 @@ return array(
                                 array(
                                     'label' => 'Case Prohibitions',
                                     'route' => 'case_prohibition',
-                                    'action' => 'index'
+                                    'action' => 'index',
+                                    'pages' => array(
+                                        array(
+                                            'label' => 'Add Prohibition',
+                                            'route' => 'case_prohibition',
+                                            'action' => 'add'
+                                        ),
+                                        array(
+                                            'label' => 'Edit Prohibition',
+                                            'route' => 'case_prohibition',
+                                            'action' => 'edit'
+                                        )
+                                    )
                                 ),
                                 array(
                                     'label' => 'Case Annual Test History',

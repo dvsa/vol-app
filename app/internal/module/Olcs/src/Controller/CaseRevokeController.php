@@ -207,15 +207,16 @@ class CaseRevokeController extends CaseController implements CrudInterface
 
         $form = $this->getForm($name);
 
-        $form->get('main')->get('piReasons')->setValueOptions($this->getPiReasonsNvpArray($licence['goodsOrPsv']));
+        $form->get('main')->get('piReasons')->setValueOptions($this->getPiReasonsNvpArray($licence['goodsOrPsv'], $licence['niFlag']));
         $form->get('main')->get('presidingTc')->setValueOptions($this->getPresidingTcArray());
 
         return $this->formPost($form, $callback);
     }
 
-    public function getPiReasonsNvpArray($licenceType)
+    public function getPiReasonsNvpArray($licenceType, $niFlag)
     {
         $reasons = [];
+        $goodsOrPsv = '';
 
         //licence type should really be a lookup table in
         //both Licence and PiReason entities!
@@ -226,8 +227,6 @@ class CaseRevokeController extends CaseController implements CrudInterface
             case 'psv':
                 $goodsOrPsv = 'PSV';
                 break;
-            default:
-                break;
         }
 
         $piReasons = $this->makeRestCall(
@@ -235,8 +234,8 @@ class CaseRevokeController extends CaseController implements CrudInterface
             'GET',
             [
                 'isProposeToRevoke' => '1',
-                'isDecision' => '0',
                 'goodsOrPsv' => $goodsOrPsv,
+                'isNi' => $niFlag,
                 'limit' => 'all'
             ]
         );

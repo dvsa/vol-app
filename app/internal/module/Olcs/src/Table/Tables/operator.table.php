@@ -67,7 +67,7 @@ return array(
                 if (isset($data['caseCount']) && (int) $data['caseCount'] > 0) {
                     return '<a href="' . $this->generateUrl(
                         array('licence' => $data['licenceId']),
-                        'licence_case_list/pagination',
+                        'licence/cases',
                         false
                     ) . '">' . $data['caseCount'] . '</a>';
                 } else {
