@@ -965,11 +965,11 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
         return array(
             'business_types' =>
             [
-                'org_type.lc' => 'Limited company',
-                'org_type.st' => 'Sole Trader',
-                'org_type.p' => 'Partnership',
-                'org_type.llp' => 'Limited Liability Partnership',
-                'org_type.o' => 'Other (e.g. public authority, charity, trust, university)',
+                'org_t_rc' => 'Limited company',
+                'org_t_st' => 'Sole Trader',
+                'org_t_p' => 'Partnership',
+                'org_t_llp' => 'Limited Liability Partnership',
+                'org_t_pa' => 'Other (e.g. public authority, charity, trust, university)',
             ],
         );
     }
@@ -1043,10 +1043,10 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
                     'lastUpdatedOn' => '2014-04-02T13:39:54+0100',
                     'version' => 2,
                     'id' => $licenceId,
-                    'registeredCompanyNumber' => 1234567,
+                    'companyOrLlpNo' => 1234567,
                     'name' => 'test',
                     'tradingAs' => '',
-                    'type' => 'org_type.o',
+                    'type' => 'org_t_pa',
                     'sicCode' => '',
                     'createdBy' => array
                     (

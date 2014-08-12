@@ -172,11 +172,11 @@ class OlcsSearchControllerTest extends AbstractHttpControllerTestCase
             'static-list-data' => array(
                 'business_types' =>
                 [
-                    'org_type.lc' => 'Limited company',
-                    'org_type.st' => 'Sole Trader',
-                    'org_type.p' => 'Partnership',
-                    'org_type.llp' => 'Limited Liability Partnership',
-                    'org_type.o' => 'Other (e.g. public authority, charity, trust, university)',
+                    'org_t_rc' => 'Limited company',
+                    'org_t_st' => 'Sole Trader',
+                    'org_t_p' => 'Partnership',
+                    'org_t_llp' => 'Limited Liability Partnership',
+                    'org_t_pa' => 'Other (e.g. public authority, charity, trust, university)',
                 ],
             )
         );
@@ -188,7 +188,7 @@ class OlcsSearchControllerTest extends AbstractHttpControllerTestCase
             'Results' => array(
                 0 =>
                 [
-                    'organisation_type' => 'org_type.lc'
+                    'organisation_type' => 'org_t_rc'
                 ]
             )
         );
