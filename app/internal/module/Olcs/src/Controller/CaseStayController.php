@@ -245,6 +245,7 @@ class CaseStayController extends CaseController implements CrudInterface
      * Process adding the stay
      *
      * @param array $data
+     * @return Zend/Http/Response
      */
     public function processAddStay($data)
     {
@@ -283,6 +284,7 @@ class CaseStayController extends CaseController implements CrudInterface
      * Process editing a stay
      *
      * @param array $data
+     * @return Zend/Http/Response
      */
     public function processEditStay($data)
     {
@@ -369,7 +371,7 @@ class CaseStayController extends CaseController implements CrudInterface
      * @param int $licence
      * @param int $case
      *
-     * @return Response
+     * @return Zend/Http/Response
      */
     private function redirectIndex($licence, $case)
     {
@@ -391,7 +393,7 @@ class CaseStayController extends CaseController implements CrudInterface
      * @param int $stayType
      * @param int $stay
      *
-     * @return Response
+     * @return Zend/Http/Response
      */
     private function redirectEditFail($licence, $case, $stayType, $stay)
     {
