@@ -1181,8 +1181,8 @@ abstract class AbstractJourneyController extends AbstractController
             $action = $this->getActionName();
 
             if (strstr($action, '-')) {
-                list($prefix, $action) = explode('-', $action);
-                unset($prefix);
+                $splitted = explode('-', $action);
+                $action = count($splitted) ? $splitted[count($splitted) - 1] : '';
             }
 
             if ($action === 'edit') {
