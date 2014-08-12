@@ -500,7 +500,7 @@ class CaseProhibitionControllerTest extends AbstractHttpControllerTestCase
 
     /**
      * Gets a single result of a prohibition rest call
-     * 
+     *
      * @return array
      */
     private function getSingleProhibitionResult()
