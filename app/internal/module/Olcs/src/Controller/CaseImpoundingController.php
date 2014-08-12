@@ -100,6 +100,12 @@ class CaseImpoundingController extends CaseController implements CrudInterface
             )
         );
 
+        $legislationList = $this->getLegislationOptions();
+
+        $form->get('application_details')
+            ->get('legislation')
+            ->setValueOptions($legislationList);
+
         $formVenues = $this->getVenueList($licenceId);
 
         $form->get('hearing')
@@ -214,6 +220,12 @@ class CaseImpoundingController extends CaseController implements CrudInterface
             'processEditImpounding',
             $data
         );
+
+        $legislationList = $this->getLegislationOptions();
+
+        $form->get('application_details')
+            ->get('legislation')
+            ->setValueOptions($legislationList);
 
         $formVenues = $this->getVenueList($licenceId);
 
@@ -533,6 +545,58 @@ class CaseImpoundingController extends CaseController implements CrudInterface
                         'areaCode',
                         'areaName'
                     )
+                )
+            )
+        );
+    }
+
+    private function getLegislationOptions()
+    {
+        return array(
+            'Goods GB' => array(
+                'label' => 'Goods GB',
+                'options' => array(
+                    'impounding.legislation.goods.gb.1' => 'Section A The user of the vehicle held a valid '
+                    . 'operator\'s licence (whether of not authorising '
+                    . 'the use of the vehicle)',
+                    'impounding.legislation.goods.gb.2' => 'Section B It was not being, and had '
+                    . 'not been used in contravention of Section 2 of '
+                    . ' the 1995 Act.',
+                    'impounding.legislation.goods.gb.3' => 'Section C I did not know it was '
+                    . 'being or had been used in contravention of '
+                    . 'Section 2 of the 1995 Act.',
+                    'impounding.legislation.goods.gb.4' => 'That although knowing that at the time the '
+                    . 'vehicle was detained it was being or had been used in '
+                    . 'contravention of Section 2 of the 1995 Act, but;  had taken '
+                    . 'steps with a view to preventing that (ii) Has taken steps '
+                    . 'with a view to preventing any further such use.'
+                )
+           ),
+           'PSV NI' => array(
+                'label' => 'PSV GB',
+                'options' => array(
+                    'impounding.legislation.psv.gb.1' => 'Section A The user of the '
+                        . 'vehicle held a valid operator\'s licence (whether or not '
+                        . 'authorising the use of the vehicle)',
+                    'impounding.legislation.psv.gb.2' => 'Section B It was not '
+                        . 'being, and had not been used in contravention of Section '
+                        . '12 of the 1981 Act.',
+                    'impounding.legislation.psv.gb.3' => 'Section C i did not know '
+                        . 'it was being or had been used in contravention  of '
+                        . 'Section 12 of the 1981 Act.',
+                    'impounding.legislation.psv.gb.4' => 'Section D That although '
+                        . 'knowing that at the time the vehicle was detained it was '
+                        . 'being or had been used in contravention of Section 12(1) '
+                        . 'of the 1981 Act, but; (i) had taken steps with a view to '
+                        . 'preventing that (ii) Has taken steps with a view to '
+                        . 'preventing any further such use.'
+                ),
+           ),
+           'GOODS NI' => array(
+                'label' => 'Goods NI',
+                'options' => array(
+                    'impounding.legislation.goods.ni.1' => 'TBC',
+                    'impounding.legislation.goods.ni.2' => 'TBC'
                 )
             )
         );

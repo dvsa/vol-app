@@ -26,6 +26,19 @@ return [
                         'label' => 'Application received',
                         'filters' => '\Common\Form\Elements\InputFilters\DateNotInFuture'
                     ],
+                    'vrm' => [
+                        'type' => 'vehicleVrm',
+                        'label' => 'Vehicle registration mark',
+                        'class' => 'medium',
+                        'filters' => '\Common\Form\Elements\InputFilters\VrmOptional',
+                    ],
+                    'legislation' => [
+                        'type' => 'multiselect-group',
+                        'filters' => '\Common\Form\Elements\InputFilters\SelectEmpty',
+                        'label' => 'Select legislation',
+                        'value_options' => 'impounding_legislation',
+                        'help-block' => 'Use CTRL to select multiple'
+                    ],
 
                 ]
             ],
@@ -87,7 +100,7 @@ return [
                     'notes' => [
                         'type' => 'text',
                         'filters' => '\Common\Form\Elements\InputFilters\TextMax4000',
-                        'label' => 'Notes',
+                        'label' => 'Notes/ECMS number',
                         'class' => 'extra-long'
                     ]
                 ]
