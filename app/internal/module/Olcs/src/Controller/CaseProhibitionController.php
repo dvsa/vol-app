@@ -33,34 +33,9 @@ class CaseProhibitionController extends CaseController implements CrudInterface
 
         $this->checkForCrudAction('case_prohibition', array('case' => $caseId, 'licence' => $licence), 'id');
 
-        $prohibition = array();
+        $table = $this->generateProhibitionTable($caseId);
 
-        $bundle = $this->getBundle();
-
-        $results = $this->makeRestCall(
-            'Prohibition',
-            'GET',
-            array('case_id' => $caseId, 'bundle' => json_encode($bundle))
-        );
-
-        if ($results['Count']) {
-            $results = $this->formatForTable($results);
-            $table = $this->buildTable('prohibition', $results);
-        } else {
-            $prohibition['case'] = $caseId;
-            $table = $this->buildTable('prohibition', []);
-        }
-
-        $prohibitionNote = $this->makeRestCall('ProhibitionNote', 'GET', array('case' => $caseId));
-        $prohibitionNote['case'] = $caseId;
-
-        if ($prohibitionNote['Count']) {
-            $prohibitionNote = $prohibitionNote['Results'][0];
-        }
-
-        $prohibitionNote['case'] = $caseId;
-
-        $form = $this->generateProhibitionNoteForm($prohibitionNote);
+        $form = $this->generateProhibitionNoteForm($caseId);
 
         $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licence)));
 
@@ -231,15 +206,47 @@ class CaseProhibitionController extends CaseController implements CrudInterface
     }
 
     /**
+     * Gets a table of prohibitions for the specified case
+     *
+     * @param $caseId
+     * @return string
+     */
+    private function generateProhibitionTable($caseId)
+    {
+        $bundle = $this->getBundle();
+
+        $results = $this->makeRestCall(
+            'Prohibition',
+            'GET',
+            array('case_id' => $caseId, 'bundle' => json_encode($bundle))
+        );
+
+        if ($results['Count']) {
+            $results = $this->formatForTable($results);
+            return $this->buildTable('prohibition', $results);
+        }
+
+        return $this->buildTable('prohibition', []);
+    }
+
+    /**
      * Creates and returns the prohibition form.
      *
-     * @param array $prohibition
+     * @param int $caseId
      * @return \Zend\Form\Form
      */
-    private function generateProhibitionNoteForm($prohibition)
+    private function generateProhibitionNoteForm($caseId)
     {
+        $prohibitionNote = $this->makeRestCall('ProhibitionNote', 'GET', array('case' => $caseId));
+
+        if ($prohibitionNote['Count']) {
+            $prohibitionNote = $prohibitionNote['Results'][0];
+        }
+
+        $prohibitionNote['case'] = $caseId;
+
         $data = [];
-        $data['main'] = $prohibition;
+        $data['main'] = $prohibitionNote;
 
         $form = $this->generateForm(
             'prohibition-comment',
