@@ -1,5 +1,4 @@
 <?php
-
 return array(
     'variables' => array(
         'title' => 'Legacy offences'
@@ -7,9 +6,6 @@ return array(
     'settings' => array(
         'crud' => array(
             'formName' => 'offence',
-            'actions' => array(
-                'view' => array('requireRows' => true),
-            )
         ),
         'paginate' => array(
             'limit' => array(
@@ -21,16 +17,11 @@ return array(
     'attributes' => array(
     ),
     'columns' => array(
-        array(
-            'title' => '',
-            'width' => 'checkbox',
-            'format' => '{{[elements/radio]}}'
-        ),
+
         array(
             'title' => 'Offence date from',
             'formatter' => function ($data, $column) {
-
-                $url = $this->generateUrl(['action' => 'view', 'id' => $data['id']], 'offence', true);
+                $url = $this->generateUrl(['action' => 'view', 'offenceId' => $data['id']], 'offence', true);
 
                 if ($data['offenceDate'] == null) {
                     return '<a href="' . $url . '">N/A</a>';

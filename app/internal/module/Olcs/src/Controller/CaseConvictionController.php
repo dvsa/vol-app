@@ -554,7 +554,7 @@ class CaseConvictionController extends CaseController
         $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $routeParams['licence'])));
 
         $caseId = $routeParams['case'];
-        $offenceId = $routeParams['id'];
+        $offenceId = $routeParams['offenceId'];
 
         $case = $this->getCase($caseId, $offenceId);
 
