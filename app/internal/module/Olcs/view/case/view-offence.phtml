@@ -23,11 +23,20 @@ echo $this->render(
                 echo '<p>' . $this->translate('offence-not-found') . '</p>';
             } else {
                 $offenceDate = new \DateTime($offence['offenceDate']);
+                $offenceToDate = new \DateTime($offence['offenceToDate']);
+
                 echo $this->render(
                     'partials/case/summary-row.phtml',
                     array(
                         'heading' => 'offence-date-from',
                         'content' => $offenceDate->format('d/m/Y')
+                    )
+               );
+               echo $this->render(
+                    'partials/case/summary-row.phtml',
+                    array(
+                        'heading' => 'offence-date-to',
+                        'content' => $offenceToDate->format('d/m/Y')
                     )
                );
                echo $this->render(
