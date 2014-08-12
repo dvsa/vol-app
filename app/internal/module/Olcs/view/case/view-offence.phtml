@@ -25,7 +25,7 @@ echo $this->render(
                 $offenceDate = new \DateTime($offence['offenceDate']);
                 $offenceToDate = new \DateTime($offence['offenceToDate']);
 
-                echo $this->render(
+               echo $this->render(
                     'partials/case/summary-row.phtml',
                     array(
                         'heading' => 'offence-date-from',
@@ -84,15 +84,29 @@ echo $this->render(
                echo $this->render(
                     'partials/case/summary-row.phtml',
                     array(
-                        'heading' => 'offence-notes',
-                        'content' => $offence['notes']
+                        'heading' => 'operator',
+                        'content' => $case['licence']['organisation']['name']
                     )
                );
                echo $this->render(
                     'partials/case/summary-row.phtml',
                     array(
-                        'heading' => 'operator',
-                        'content' => $case['licence']['organisation']['name']
+                        'heading' => 'offence-type',
+                        'content' => $offence['offenceType']
+                    )
+               );
+               echo $this->render(
+                    'partials/case/summary-row.phtml',
+                    array(
+                        'heading' => 'offence-definition',
+                        'content' => $offence['definition']
+                    )
+               );
+               echo $this->render(
+                    'partials/case/summary-row.phtml',
+                    array(
+                        'heading' => 'offence-notes',
+                        'content' => $offence['notes']
                     )
                );
            }
