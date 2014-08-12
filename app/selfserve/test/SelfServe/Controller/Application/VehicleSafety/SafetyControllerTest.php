@@ -311,7 +311,7 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
                 'version' => '',
                 'addressLine1' => 'Address 1',
                 'town' => 'City',
-                'country' => 'country.GB',
+                'countryCode' => 'GB',
                 'postcode' => 'AB1 1BA'
             )
             )
@@ -343,7 +343,7 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
                     'version' => '',
                     'addressLine1' => 'Address 1',
                     'town' => 'City',
-                    'country' => 'country.GB',
+                    'countryCode' => 'GB',
                     'postcode' => 'AB1 1BA'
                 ),
                 'form-actions' => array(
@@ -368,21 +368,23 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
     public function testAddActionWithSubmitWithFailure()
     {
         $this->setUpAction(
-            'add', null, array(
-            'data' => array(
-                'isExternal' => 'Y'
-            ),
-            'contactDetails' => array(
-                'fao' => 'Someone'
-            ),
-            'address' => array(
-                'id' => '',
-                'version' => '',
-                'addressLine1' => 'Address 1',
-                'town' => 'City',
-                'country' => 'country.GB',
-                'postcode' => 'AB1 1BA'
-            )
+            'add',
+            null,
+            array(
+                'data' => array(
+                    'isExternal' => 'Y'
+                ),
+                'contactDetails' => array(
+                    'fao' => 'Someone'
+                ),
+                'address' => array(
+                    'id' => '',
+                    'version' => '',
+                    'addressLine1' => 'Address 1',
+                    'town' => 'City',
+                    'countryCode' => 'GB',
+                    'postcode' => 'AB1 1BA'
+                )
             )
         );
 
@@ -414,7 +416,9 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
     public function testEditActionWithSubmit()
     {
         $this->setUpAction(
-            'edit', 1, array(
+            'edit',
+            1,
+            array(
                 'data' => array(
                     'id' => 1,
                     'version' => 1,
@@ -430,7 +434,7 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
                     'version' => 1,
                     'addressLine1' => 'Address 1',
                     'town' => 'City',
-                    'country' => 'country.GB',
+                    'countryCode' => 'GB',
                     'postcode' => 'AB1 1BA'
                 )
             )
@@ -586,8 +590,12 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
                                         'addressLine3',
                                         'addressLine4',
                                         'town',
-                                        'country',
                                         'postcode'
+                                    ),
+                                    'children' => array(
+                                        'countryCode' => array(
+                                            'properties' => array('id')
+                                        )
                                     )
                                 )
                             )
@@ -635,7 +643,7 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
                                 'addressLine3' => 'Address 3',
                                 'addressLine4' => 'Address 4',
                                 'town' => 'City',
-                                'country' => 'GB',
+                                'countryCode' => 'GB',
                                 'postcode' => 'AB1 1AB'
                             )
                         )
@@ -667,8 +675,12 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
                                 'addressLine3',
                                 'addressLine4',
                                 'town',
-                                'country',
                                 'postcode'
+                            ),
+                            'children' => array(
+                                'countryCode' => array(
+                                    'properties' => array('id')
+                                )
                             )
                         )
                     )
@@ -694,7 +706,7 @@ class SafetyControllerTest extends AbstractApplicationControllerTestCase
                         'addressLine3' => '',
                         'addressLine4' => '',
                         'town' => 'City',
-                        'country' => 'GB',
+                        'countryCode' => 'GB',
                         'postcode' => 'AB1 1AB'
                     )
                 )

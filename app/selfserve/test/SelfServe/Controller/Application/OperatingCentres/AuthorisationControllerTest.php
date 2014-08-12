@@ -573,7 +573,7 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
 
         // We are not psv, so should have trailer related content
         $form = $main->getVariable('form');
-        $this->assertEquals($hasTrailers, $form->get('data')->has('numberOfTrailers'));
+        $this->assertEquals($hasTrailers, $form->get('data')->has('noOfTrailersPossessed'));
     }
 
     /**
@@ -650,11 +650,11 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                 'addressLine1' => 'Some street',
                 'town' => 'City',
                 'postcode' => 'AN1 1ND',
-                'country' => 'country.GB'
+                'countryCode' => 'GB'
             ),
             'data' => array(
-                'numberOfVehicles' => 10,
-                'numberOfTrailers' => 10,
+                'noOfVehiclesPossessed' => 10,
+                'noOfTrailersPossessed' => 10,
                 'sufficientParking' => '1',
                 'permission' => '1'
             ),
@@ -745,11 +745,11 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                 'addressLine1' => 'Some street',
                 'town' => 'City',
                 'postcode' => 'AN1 1ND',
-                'country' => 'country.GB'
+                'countryCode' => 'GB'
             ),
             'data' => array(
-                'numberOfVehicles' => 10,
-                'numberOfTrailers' => 10,
+                'noOfVehiclesPossessed' => 10,
+                'noOfTrailersPossessed' => 10,
                 'sufficientParking' => '1',
                 'permission' => '1'
             ),
@@ -801,11 +801,11 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                 'addressLine1' => 'Some street',
                 'town' => 'City',
                 'postcode' => 'AN1 1ND',
-                'country' => 'country.GB'
+                'countryCode' => 'GB'
             ),
             'data' => array(
-                'numberOfVehicles' => 10,
-                'numberOfTrailers' => 10,
+                'noOfVehiclesPossessed' => 10,
+                'noOfTrailersPossessed' => 10,
                 'sufficientParking' => '1',
                 'permission' => '1'
             ),
@@ -856,11 +856,11 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                 'addressLine1' => 'Some street',
                 'town' => 'City',
                 'postcode' => 'AN1 1ND',
-                'country' => 'country.GB'
+                'countryCode' => 'GB'
             ),
             'data' => array(
-                'numberOfVehicles' => 10,
-                'numberOfTrailers' => 10,
+                'noOfVehiclesPossessed' => 10,
+                'noOfTrailersPossessed' => 10,
                 'sufficientParking' => '1',
                 'permission' => '1'
             ),
@@ -937,7 +937,7 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
 
         // We are not psv, so should have trailer related content
         $form = $main->getVariable('form');
-        $this->assertEquals($hasTrailers, $form->get('data')->has('numberOfTrailers'));
+        $this->assertEquals($hasTrailers, $form->get('data')->has('noOfTrailersPossessed'));
     }
 
     /**
@@ -952,11 +952,11 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                 'addressLine1' => 'Some street',
                 'town' => 'City',
                 'postcode' => 'AN1 1ND',
-                'country' => 'country.GB'
+                'countryCode' => 'GB'
             ),
             'data' => array(
-                'numberOfVehicles' => 10,
-                'numberOfTrailers' => 10,
+                'noOfVehiclesPossessed' => 10,
+                'noOfTrailersPossessed' => 10,
                 'sufficientParking' => '1',
                 'permission' => '1'
             ),
@@ -1092,8 +1092,8 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
             'properties' => array(
                 'id',
                 'version',
-                'numberOfTrailers',
-                'numberOfVehicles',
+                'noOfTrailersPossessed',
+                'noOfVehiclesPossessed',
                 'sufficientParking',
                 'permission',
                 'adPlaced',
@@ -1116,15 +1116,19 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                                 'addressLine3',
                                 'addressLine4',
                                 'postcode',
-                                'town',
-                                'country'
+                                'town'
+                            ),
+                            'children' => array(
+                                'countryCode' => array(
+                                    'properties' => array('id')
+                                )
                             )
                         ),
                         'adDocuments' => array(
                             'properties' => array(
                                 'id',
                                 'version',
-                                'fileName',
+                                'filename',
                                 'identifier',
                                 'size'
                             )
@@ -1141,8 +1145,8 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
             return array(
                 'id' => 1,
                 'version' => 2,
-                'numberOfTrailers' => 10,
-                'numberOfVehicles' => 10,
+                'noOfTrailersPossessed' => 10,
+                'noOfVehiclesPossessed' => 10,
                 'sufficientParking' => 1,
                 'permission' => 1,
                 'adPlaced' => 0,
@@ -1160,14 +1164,14 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                         'addressLine4' => 'Some street 4',
                         'postcode' => 'AB1 1AB',
                         'town' => 'City',
-                        'country' => 'GB'
+                        'countryCode' => 'GB'
                     ),
                     'adDocuments' => array(
                         array(
                             'id' => 1,
                             'identifier' => 'adfasdadsag',
                             'version' => 1,
-                            'fileName' => 'nfjosjnfos',
+                            'filename' => 'nfjosjnfos',
                             'size' => 10
                         )
                     )
@@ -1183,8 +1187,8 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                         'id' => 1,
                         'adPlaced' => 1,
                         'permission' => 1,
-                        'numberOfVehicles' => 10,
-                        'numberOfTrailers' => 10,
+                        'noOfVehiclesPossessed' => 10,
+                        'noOfTrailersPossessed' => 10,
                         'operatingCentre' => array(
                             'address' => array(
                                 'id' => 1,
@@ -1193,7 +1197,7 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                                 'addressLine3' => 'Address 3',
                                 'addressLine4' => 'Address 4',
                                 'town' => 'City',
-                                'country' => 'GB',
+                                'countryCode' => 'GB',
                                 'postcode' => 'AB1 1AB'
                             )
                         )

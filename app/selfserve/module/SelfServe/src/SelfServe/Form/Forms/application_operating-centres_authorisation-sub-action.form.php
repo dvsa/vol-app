@@ -30,25 +30,25 @@ return array(
                     'application' => array(
                         'type' => 'hidden'
                     ),
-                    'numberOfVehicles' => array(
+                    'noOfVehiclesPossessed' => array(
                         'type' => 'vehiclesNumber',
-                        'label' => $translationPrefix . '.data.numberOfVehicles',
+                        'label' => $translationPrefix . '.data.noOfVehiclesPossessed',
                         'filters' => '\Common\Form\Elements\InputFilters\NumberOfVehicles',
                     ),
-                    'numberOfTrailers' => array(
+                    'noOfTrailersPossessed' => array(
                         'type' => 'vehiclesNumber',
-                        'label' => $translationPrefix . '.data.numberOfTrailers',
+                        'label' => $translationPrefix . '.data.noOfTrailersPossessed',
                         'filters' => '\Common\Form\Elements\InputFilters\NumberOfVehicles',
                     ),
                     'sufficientParking' => array(
-                        'type' => 'singlecheckbox',
+                        'type' => 'yesnocheckbox',
                         'label' => $translationPrefix . '.data.sufficientParking',
                         'options' => array(
                             'must_be_checked' => true
                         )
                     ),
                     'permission' => array(
-                        'type' => 'singlecheckbox',
+                        'type' => 'yesnocheckbox',
                         'label' => $translationPrefix . '.data.permission',
                         'options' => array(
                             'must_be_checked' => true

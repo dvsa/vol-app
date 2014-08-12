@@ -36,7 +36,7 @@ class FinancialHistoryController extends PreviousHistoryController
                 'properties' => array(
                     'id',
                     'version',
-                    'fileName',
+                    'filename',
                     'identifier',
                     'size'
                 )
@@ -99,7 +99,8 @@ class FinancialHistoryController extends PreviousHistoryController
             $file,
             array(
                 'description' => 'Insolvency document',
-                'documentCategory' => 1,
+                // @todo Add a better way to find the category id
+                'category' => 1,
                 'documentSubCategory' => 1
             )
         );

@@ -238,13 +238,13 @@ class ConvictionsPenaltiesControllerTest extends AbstractApplicationControllerTe
                     'personTitle' => 'Mr',
                     'personFirstname' => 'Alex',
                     'personLastname' => 'P',
-                    'dateOfConviction' => array(
+                    'convictionDate' => array(
                         'month' => 1,
                         'day'   => 1,
                         'year'  => 2014
                      ),
-                    'convictionNotes' => 'No MOT',
-                    'courtFpm' => 'Leeds court',
+                    'notes' => 'No MOT',
+                    'court' => 'Leeds court',
                     'penalty' => '100£'
                 ),
             )
@@ -344,13 +344,13 @@ class ConvictionsPenaltiesControllerTest extends AbstractApplicationControllerTe
                     'personTitle' => 'Mr',
                     'personFirstname' => 'Alex',
                     'personLastname' => 'P',
-                    'dateOfConviction' => array(
+                    'convictionDate' => array(
                         'month' => 1,
                         'day'   => 1,
                         'year'  => 2014
                      ),
-                    'convictionNotes' => 'No MOT',
-                    'courtFpm' => 'Leeds court',
+                    'notes' => 'No MOT',
+                    'court' => 'Leeds court',
                     'penalty' => '100£'
                 ),
             )
@@ -374,13 +374,13 @@ class ConvictionsPenaltiesControllerTest extends AbstractApplicationControllerTe
                     'personTitle' => 'Mr',
                     'personFirstname' => 'Alex',
                     'personLastname' => 'P',
-                    'dateOfConviction' => array(
+                    'convictionDate' => array(
                         'month' => 1,
                         'day'   => 1,
                         'year'  => 2014
                      ),
-                    'convictionNotes' => 'No MOT',
-                    'courtFpm' => 'Leeds court',
+                    'notes' => 'No MOT',
+                    'court' => 'Leeds court',
                     'penalty' => '100£'
                 ),
                 'form-actions' => array(
@@ -466,9 +466,9 @@ class ConvictionsPenaltiesControllerTest extends AbstractApplicationControllerTe
                 'personTitle',
                 'personFirstname',
                 'personLastname',
-                'dateOfConviction',
-                'convictionNotes',
-                'courtFpm',
+                'convictionDate',
+                'notes',
+                'court',
                 'penalty'
             ),
         );
@@ -481,9 +481,9 @@ class ConvictionsPenaltiesControllerTest extends AbstractApplicationControllerTe
                         'personTitle' => 'Mr',
                         'personFirstname' => 'Alex',
                         'personLastname' => 'P',
-                        'dateOfConviction' => '01/01/2014',
-                        'convictionNotes' => 'No MOT',
-                        'courtFpm' => 'Leeds court',
+                        'convictionDate' => '01/01/2014',
+                        'notes' => 'No MOT',
+                        'court' => 'Leeds court',
                         'penalty' => '100£'
                     )
                 )

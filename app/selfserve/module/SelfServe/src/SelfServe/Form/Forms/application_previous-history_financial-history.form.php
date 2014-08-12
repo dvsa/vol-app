@@ -54,11 +54,8 @@ return array(
                         'type' => 'multipleFileUpload'
                     ),
                     'insolvencyConfirmation' => array(
-                        'type' => 'singlecheckbox',
-                        'label' => $translationPrefix . '.insolvencyConfirmation.title',
-                        'options' => array(
-                            'must_be_checked' => true
-                        )
+                        'type' => 'yesnocheckbox',
+                        'label' => $translationPrefix . '.insolvencyConfirmation.title'
                     )
                 )
             ),

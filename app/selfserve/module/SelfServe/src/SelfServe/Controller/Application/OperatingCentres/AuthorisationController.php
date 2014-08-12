@@ -89,8 +89,8 @@ class AuthorisationController extends OperatingCentresController
         'properties' => array(
             'id',
             'version',
-            'numberOfTrailers',
-            'numberOfVehicles',
+            'noOfTrailersPossessed',
+            'noOfVehiclesPossessed',
             'sufficientParking',
             'permission',
             'adPlaced',
@@ -113,15 +113,21 @@ class AuthorisationController extends OperatingCentresController
                             'addressLine3',
                             'addressLine4',
                             'postcode',
-                            'town',
-                            'country'
+                            'town'
+                        ),
+                        'children' => array(
+                            'countryCode' => array(
+                                'properties' => array(
+                                    'id'
+                                )
+                            )
                         )
                     ),
                     'adDocuments' => array(
                         'properties' => array(
                             'id',
                             'version',
-                            'fileName',
+                            'filename',
                             'identifier',
                             'size'
                         )
@@ -240,7 +246,7 @@ class AuthorisationController extends OperatingCentresController
     protected function alterActionForm($form)
     {
         if ($this->isPsv()) {
-            $form->get('data')->remove('numberOfTrailers');
+            $form->get('data')->remove('noOfTrailersPossessed');
             $form->remove('advertisements');
 
             $label = $form->get('data')->getLabel();
@@ -265,7 +271,7 @@ class AuthorisationController extends OperatingCentresController
                     'id',
                     'version',
                     'identifier',
-                    'fileName',
+                    'filename',
                     'size'
                 )
             );
@@ -275,7 +281,8 @@ class AuthorisationController extends OperatingCentresController
                 'GET',
                 array(
                     'application' => $this->getIdentifier(),
-                    'documentCategory' => 1,
+                    // @todo Add a better way to find the category id
+                    'category' => 1,
                     'documentSubCategory' => 2,
                     'operatingCentre' => 'NULL'
                 ),
@@ -395,7 +402,7 @@ class AuthorisationController extends OperatingCentresController
         if ($this->getActionName() != 'add') {
             $data['operatingCentre'] = $data['data']['operatingCentre'];
             $data['address'] = $data['operatingCentre']['address'];
-            $data['address']['country'] = 'country.' . $data['address']['country'];
+            $data['address']['countryCode'] = $data['address']['countryCode']['id'];
 
             $data['advertisements'] = array(
                 'adPlaced' => $data['data']['adPlaced'],
@@ -435,13 +442,13 @@ class AuthorisationController extends OperatingCentresController
         foreach ($results as $row) {
 
             $data['data']['minVehicleAuth'] = max(
-                array($data['data']['minVehicleAuth'], $row['numberOfVehicles'])
+                array($data['data']['minVehicleAuth'], $row['noOfVehiclesPossessed'])
             );
             $data['data']['minTrailerAuth'] = max(
-                array($data['data']['minTrailerAuth'], $row['numberOfTrailers'])
+                array($data['data']['minTrailerAuth'], $row['noOfTrailersPossessed'])
             );
-            $data['data']['maxVehicleAuth'] += (int) $row['numberOfVehicles'];
-            $data['data']['maxTrailerAuth'] += (int) $row['numberOfTrailers'];
+            $data['data']['maxVehicleAuth'] += (int) $row['noOfVehiclesPossessed'];
+            $data['data']['maxTrailerAuth'] += (int) $row['noOfTrailersPossessed'];
         }
 
         return $data;
@@ -458,7 +465,8 @@ class AuthorisationController extends OperatingCentresController
             $file,
             array(
                 'description' => 'Advertisement',
-                'documentCategory' => 1,
+                // @todo Add a better way to find the category id
+                'category' => 1,
                 'documentSubCategory' => 2
             )
         );

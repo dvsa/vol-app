@@ -179,7 +179,9 @@ class ApplicationController extends AbstractJourneyController
         if (empty($this->licenceType)) {
             $licenceData = $this->getLicenceData();
 
-            $this->licenceType = $licenceData['licenceType'];
+            if (isset($licenceData['licenceType']['id'])) {
+                $this->licenceType = $licenceData['licenceType']['id'];
+            }
         }
 
         return $this->licenceType;
@@ -329,7 +331,7 @@ class ApplicationController extends AbstractJourneyController
 
         $licence = $this->getLicenceData();
 
-        $fileData['fileName'] = $fileData['name'];
+        $fileData['filename'] = $fileData['name'];
         $fileData['application'] = $this->getIdentifier();
         $fileData['licence'] = $licence['id'];
 

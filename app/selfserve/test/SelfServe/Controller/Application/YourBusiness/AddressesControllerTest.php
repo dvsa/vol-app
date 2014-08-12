@@ -87,7 +87,7 @@ class AddressesControllerTest extends AbstractApplicationControllerTestCase
             'addressLine1' => 'addressLine1',
             'postcode' => 'LS8 4DW',
             'town' => 'Leeds',
-            'country' => 'country.GB',
+            'countryCode' => 'GB',
         ];
 
         $post = [
@@ -119,7 +119,7 @@ class AddressesControllerTest extends AbstractApplicationControllerTestCase
             'addressLine1' => 'addressLine1',
             'postcode' => 'LS8 4DW',
             'town' => 'Leeds',
-            'country' => 'country.GB',
+            'countryCode' => 'GB',
         ];
 
         $post = [
@@ -161,7 +161,7 @@ class AddressesControllerTest extends AbstractApplicationControllerTestCase
                 'addressLine1' => 'addressLine1',
                 'postcode' => 'LS8 4DW',
                 'town' => 'Leeds',
-                'country' => 'country.GB',
+                'countryCode' => 'GB',
             ];
 
             return [

@@ -37,16 +37,16 @@ return array(
         ),
         array(
             'title' => 'selfserve-app-subSection-previous-history-criminal-conviction-columnDate',
-            'name' => 'dateOfConviction',
+            'name' => 'convictionDate',
             'formatter' => 'Date',
         ),
         array(
             'title' => 'selfserve-app-subSection-previous-history-criminal-conviction-columnOffence',
-            'name' => 'convictionNotes',
+            'name' => 'notes',
         ),
         array(
             'title' => 'selfserve-app-subSection-previous-history-criminal-conviction-columnNameOfCourt',
-            'name' => 'courtFpm',
+            'name' => 'court',
         ),
         array(
             'title' => 'selfserve-app-subSection-previous-history-criminal-conviction-columnPenalty',

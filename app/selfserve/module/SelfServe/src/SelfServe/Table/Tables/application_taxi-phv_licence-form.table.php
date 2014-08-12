@@ -35,7 +35,7 @@ return array(
                         'action' => 'edit'
                     ),
                     'Application/TaxiPhv/Licence'
-                ) . '">' . $row['privateHireLicenceNumber'] . '</a>';
+                ) . '">' . $row['privateHireLicenceNo'] . '</a>';
             }
         ),
         array(

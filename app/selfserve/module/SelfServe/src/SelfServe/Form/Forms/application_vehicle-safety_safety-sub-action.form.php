@@ -16,7 +16,7 @@ return array(
                     'id' => array(
                         'type' => 'hidden'
                     ),
-                    'application' => array(
+                    'licence' => array(
                         'type' => 'hidden'
                     ),
                     'version' => array(

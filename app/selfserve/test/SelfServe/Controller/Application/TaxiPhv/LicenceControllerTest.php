@@ -220,7 +220,7 @@ class LicenceControllerTest extends AbstractApplicationControllerTestCase
                 'data' => array(
                     'id' => '',
                     'version' => '',
-                    'privateHireLicenceNumber' => 'AB12345',
+                    'privateHireLicenceNo' => 'AB12345',
                     'licence' => 1
                 ),
                 'contactDetails' => array(
@@ -233,7 +233,7 @@ class LicenceControllerTest extends AbstractApplicationControllerTestCase
                     'version' => '',
                     'addressLine1' => 'Address 1',
                     'town' => 'City',
-                    'country' => 'country.GB',
+                    'countryCode' => 'GB',
                     'postcode' => 'AB1 1BA'
                 )
             )
@@ -259,7 +259,7 @@ class LicenceControllerTest extends AbstractApplicationControllerTestCase
                 'data' => array(
                     'id' => '',
                     'version' => '',
-                    'privateHireLicenceNumber' => 'AB12345',
+                    'privateHireLicenceNo' => 'AB12345',
                     'licence' => 1
                 ),
                 'contactDetails' => array(
@@ -272,7 +272,7 @@ class LicenceControllerTest extends AbstractApplicationControllerTestCase
                     'version' => '',
                     'addressLine1' => 'Address 1',
                     'town' => 'City',
-                    'country' => 'country.GB',
+                    'countryCode' => 'GB',
                     'postcode' => 'AB1 1BA'
                 )
             )
@@ -318,7 +318,7 @@ class LicenceControllerTest extends AbstractApplicationControllerTestCase
             array(
                 'id' => 1,
                 'version' => 1,
-                'privateHireLicenceNumber' => 'AB12345',
+                'privateHireLicenceNo' => 'AB12345',
                 'contactDetails' => array(
                     'id' => 2,
                     'version' => 2,
@@ -332,7 +332,7 @@ class LicenceControllerTest extends AbstractApplicationControllerTestCase
                         'addressLine4' => '',
                         'postcode' => 'AB12 1AB',
                         'town' => 'Doncaster',
-                        'country' => 'uk'
+                        'countryCode' => 'GB'
                     )
                 )
             )
@@ -356,7 +356,7 @@ class LicenceControllerTest extends AbstractApplicationControllerTestCase
                 'data' => array(
                     'id' => '1',
                     'version' => '1',
-                    'privateHireLicenceNumber' => 'AB12345',
+                    'privateHireLicenceNo' => 'AB12345',
                     'licence' => 1
                 ),
                 'contactDetails' => array(
@@ -369,7 +369,7 @@ class LicenceControllerTest extends AbstractApplicationControllerTestCase
                     'version' => '1',
                     'addressLine1' => 'Address 1',
                     'town' => 'City',
-                    'country' => 'country.GB',
+                    'countryCode' => 'GB',
                     'postcode' => 'AB1 1BA'
                 )
             )
@@ -482,7 +482,7 @@ class LicenceControllerTest extends AbstractApplicationControllerTestCase
                     array(
                         'id' => 1,
                         'version' => 1,
-                        'privateHireLicenceNumber' => 'AB12345',
+                        'privateHireLicenceNo' => 'AB12345',
                         'contactDetails' => array(
                             'id' => 2,
                             'version' => 2,
@@ -496,7 +496,7 @@ class LicenceControllerTest extends AbstractApplicationControllerTestCase
                                 'addressLine4' => '',
                                 'postcode' => 'AB12 1AB',
                                 'town' => 'Doncaster',
-                                'country' => 'uk'
+                                'countryCode' => 'GB'
                             )
                         )
                     )

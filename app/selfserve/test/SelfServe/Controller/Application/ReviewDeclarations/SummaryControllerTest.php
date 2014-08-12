@@ -178,9 +178,9 @@ class SummaryControllerTest extends AbstractApplicationControllerTestCase
                 'personTitle',
                 'personFirstname',
                 'personLastname',
-                'dateOfConviction',
-                'convictionNotes',
-                'courtFpm',
+                'convictionDate',
+                'notes',
+                'court',
                 'penalty'
             ),
         );
@@ -193,9 +193,9 @@ class SummaryControllerTest extends AbstractApplicationControllerTestCase
                         'personTitle' => 'Mr',
                         'personFirstname' => 'Alex',
                         'personLastname' => 'P',
-                        'dateOfConviction' => '01/01/2014',
-                        'convictionNotes' => 'No MOT',
-                        'courtFpm' => 'Leeds court',
+                        'convictionDate' => '01/01/2014',
+                        'notes' => 'No MOT',
+                        'court' => 'Leeds court',
                         'penalty' => '100£'
                     )
                 )
