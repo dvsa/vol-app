@@ -148,6 +148,7 @@ class CaseImpoundingController extends CaseController implements CrudInterface
      * Processes the edit impounding form
      *
      * @param array $data
+     * @return \Zend\Http\Response
      */
     public function processEditImpounding ($data)
     {
@@ -349,7 +350,7 @@ class CaseImpoundingController extends CaseController implements CrudInterface
      * Redirects to the selected action or if no action to the index
      *
      * @param string $action
-     * @return Redirect
+     * @return \Zend\Http\Response
      */
     private function redirectToAction($action = null)
     {
@@ -368,7 +369,7 @@ class CaseImpoundingController extends CaseController implements CrudInterface
      *
      * @param string $action
      * @param int $id
-     * @return Redirect
+     * @return \Zend\Http\Response
      */
     private function redirectToCrud($action, $id = null)
     {
