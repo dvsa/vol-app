@@ -36,7 +36,7 @@ class SearchController extends FormActionController
         $view = new ViewModel(['form' => $form]);
         $view->setTemplate('search/index');
 
-        return $this->renderView($view, 'Search', 'Search for licences using any of teh following fields');
+        return $this->renderView($view, 'Search', 'Search for licences using any of the following fields');
     }
 
     /**
