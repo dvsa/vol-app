@@ -235,7 +235,19 @@ return array(
                                 array(
                                     'label' => 'Case Prohibitions',
                                     'route' => 'case_prohibition',
-                                    'action' => 'index'
+                                    'action' => 'index',
+                                    'pages' => array(
+                                        array(
+                                            'label' => 'Add Prohibition',
+                                            'route' => 'case_prohibition',
+                                            'action' => 'add'
+                                        ),
+                                        array(
+                                            'label' => 'Edit Prohibition',
+                                            'route' => 'case_prohibition',
+                                            'action' => 'edit'
+                                        )
+                                    )
                                 ),
                                 array(
                                     'label' => 'Case Annual Test History',
