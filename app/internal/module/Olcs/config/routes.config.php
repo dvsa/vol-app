@@ -103,7 +103,7 @@ return [
             'cases' => [
                 'type' => 'segment',
                 'options' => [
-                    'route' => '/cases/page/:page/limit/:limit/sort/:sort/order/:order', // There's another route called cases!!!!!
+                    'route' => '/cases/page/:page/limit/:limit/sort/:sort/order/:order',
                     'defaults' => [
                         'controller' => 'CaseController',
                         'action' => 'index',

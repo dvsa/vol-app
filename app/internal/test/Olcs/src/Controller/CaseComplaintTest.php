@@ -462,6 +462,7 @@ class CaseComplaintTest extends AbstractHttpControllerTestCase
 
     public function testProcessComplaintAddAction()
     {
+        $functionData = [];
         $functionData['complaint-details'] = [['id => 1']];
         $functionData['vosaCase'] = ['vc'];
         $functionData['organisation-details'] = 1;

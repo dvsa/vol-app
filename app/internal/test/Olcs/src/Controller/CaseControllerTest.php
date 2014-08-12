@@ -465,7 +465,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
                         $this->getPageDataRestArray($licenceId)
                     )
                 )
-        );
+            );
 
         $this->controller->expects($this->once())
             ->method('generateFormWithData');

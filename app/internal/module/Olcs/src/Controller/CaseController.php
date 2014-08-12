@@ -428,10 +428,14 @@ class CaseController extends FormActionController
 
         $table = $this->getServiceLocator()->get('Table')->buildTable('case', $results, $pagination);
 
-        $licenceData = $this->makeRestCall('Licence', 'GET', array('id' => $licence));;
+        $licenceData = $this->makeRestCall('Licence', 'GET', array('id' => $licence));
 
-        $view = $this->getView(array('licence' => $licence, 'licenceData' => $licenceData,
-            'table' => $table, 'data' => $pageData));
+        $view = $this->getView(
+            array(
+                'licence' => $licence, 'licenceData' => $licenceData,
+                'table' => $table, 'data' => $pageData
+            )
+        );
         $view->setTemplate('case/list');
 
         return $view;
@@ -457,11 +461,7 @@ class CaseController extends FormActionController
             return $this->notFoundAction();
         }
 
-        $form = $this->generateFormWithData(
-            'case',
-            'processAddCase',
-            array('licence' => $licence)
-        );
+        $form = $this->generateFormWithData('case', 'processAddCase', array('licence' => $licence));
 
         $pageData = $this->getPageData($licence);
 
@@ -572,8 +572,6 @@ class CaseController extends FormActionController
     /**
      * Process adding the case
      *
-     * @todo Additional fields are required for persisting - Find out where these fields come from
-     *
      * @param type $data
      */
     public function processAddCase($data)
@@ -639,8 +637,6 @@ class CaseController extends FormActionController
 
     /**
      * Format the categories from the REST response into the form's format
-     *
-     * @todo Look at re-factoring this
      *
      * @param array $categories
      * @return array
