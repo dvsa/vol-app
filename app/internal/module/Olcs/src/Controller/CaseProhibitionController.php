@@ -208,7 +208,7 @@ class CaseProhibitionController extends CaseController implements CrudInterface
     /**
      * Gets a table of prohibitions for the specified case
      *
-     * @param $caseId
+     * @param int $caseId
      * @return string
      */
     private function generateProhibitionTable($caseId)
