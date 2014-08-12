@@ -62,7 +62,7 @@ class CaseProhibitionControllerTest extends AbstractHttpControllerTestCase
      * @param int $caseId
      * @param int $licenceId
      * @param array $results
-     * @param array $resultCount
+     * @param int $resultCount
      *
      */
     public function testIndexAction($caseId, $licenceId, $results, $resultCount)
@@ -228,7 +228,7 @@ class CaseProhibitionControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
-     * Tests process add prohibition
+     * Tests process add prohibition success
      */
     public function testProcessAddProhibition()
     {
@@ -245,7 +245,7 @@ class CaseProhibitionControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
-     * Tests process add prohibition
+     * Tests process add prohibition failure
      */
     public function testProcessAddProhibitionFail()
     {
@@ -268,7 +268,7 @@ class CaseProhibitionControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
-     * Tests process edit prohibition
+     * Tests process edit prohibition success
      */
     public function testProcessEditProhibition()
     {
@@ -285,7 +285,7 @@ class CaseProhibitionControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
-     * Tests process edit prohibition
+     * Tests process edit prohibition failure
      */
     public function testProcessEditProhibitionFail()
     {
@@ -360,6 +360,9 @@ class CaseProhibitionControllerTest extends AbstractHttpControllerTestCase
         $this->controller->saveProhibitionNoteForm($data);
     }
 
+    /**
+     * Tests getDeleteServiceName
+     */
     public function testGetDeleteServiceName()
     {
         $this->assertEquals('Prohibition', $this->controller->getDeleteServiceName());
@@ -468,8 +471,9 @@ class CaseProhibitionControllerTest extends AbstractHttpControllerTestCase
 
     /**
      * Returns a sample result of a prohibition rest call
+     * Accepts a result count (used to test code path in index action)
      *
-     * @param $count result count used to test code path in index action
+     * @param $count
      * @return array
      */
     private function getSampleProhibitionResult($count)
@@ -496,7 +500,7 @@ class CaseProhibitionControllerTest extends AbstractHttpControllerTestCase
 
     /**
      * Gets a single result of a prohibition rest call
-
+     * 
      * @return array
      */
     private function getSingleProhibitionResult()
