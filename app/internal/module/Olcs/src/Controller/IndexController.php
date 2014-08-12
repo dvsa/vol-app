@@ -51,27 +51,14 @@ class IndexController extends FormActionController
             'tasks-home', null, $filters
         );
 
-        // @TODO: these all need to come from the backend
         $selects = array(
-            'team' => array(
-                '1' => 'Team A',
-                '2' => 'Team B',
-                '3' => 'Team C'
-            ),
-            'owner' => array(),
-            'category' => array(
-                'A' => 'Category A',
-                'B' => 'Category B',
-                'C' => 'Category C'
-            ),
-            'sub_category' => array()
+            'team' => $this->getListData('Team'),
+            'owner' => $this->getListData('User'),
+            'category' => $this->getListData('Category'),
+            'sub_category' => $this->getListData('TaskSubCategory')
         );
 
         foreach ($selects as $name => $options) {
-            $options = array_merge(
-                array('all' => 'All'),
-                $options
-            );
             $form->get($name)
                 ->setValueOptions($options)
                 ->setEmptyOption(null);
@@ -105,23 +92,126 @@ class IndexController extends FormActionController
         return $this->getRequest()->getQuery()->toArray();
     }
 
+    protected function getListData($entity, $data = array(), $primaryKey = 'id', $titleKey = 'name')
+    {
+        $response = $this->makeRestCall($entity, 'GET', $data);
+
+        $final = array();
+        foreach ($response['Results'] as $result) {
+            $key = $result[$primaryKey];
+            $value = $result[$titleKey];
+
+            $final[$key] = $value;
+        }
+        return $final;
+    }
+
     public function taskFilterAction()
     {
-        return new JsonModel(
-            array(
-                array(
-                    'value' => 'all',
-                    'label' => 'All'
-                ),
-                array(
-                    'value' => 'foo',
-                    'label' => 'Foo'
-                ),
-                array(
-                    'value' => 'bar',
-                    'label' => 'Bar'
-                )
+        $map = array(
+            'users' => array(
+                'entity' => 'User',
+                'field' => 'team_id'
+            ),
+            'sub-categories' => array(
+                'entity' => 'TaskSubCategory',
+                'field' => 'category_id'
             )
+        );
+
+        $lookup = $map[$this->params()->fromRoute('type')];
+        $search = array(
+            $lookup['field'] => $this->params()->fromRoute('value')
+        );
+
+        $results = $this->getListData($lookup['entity'], $search);
+        $viewResults = array();
+
+        foreach ($results as $id => $result) {
+            $viewResults[] = array(
+                'value' => $id,
+                'label' => $result
+            );
+        }
+
+        return new JsonModel($viewResults);
+    }
+
+    public function makeRestCall($entity, $method, array $options, array $bundle = null)
+    {
+        // @TODO kill this filth, obviously
+        switch ($entity) {
+        case 'Team':
+            $data = array(
+                array(
+                    'id' => 'all',
+                    'name' => 'All',
+                ),
+                array(
+                    'id' => '1',
+                    'name' => 'A Team',
+                ),
+                array(
+                    'id' => '2',
+                    'name' => 'B Team',
+                )
+            );
+            break;
+        case 'User':
+            $data = array(
+                array(
+                    'id' => 'all',
+                    'name' => 'All',
+                ),
+                array(
+                    'id' => '1',
+                    'name' => 'A User',
+                ),
+                array(
+                    'id' => '2',
+                    'name' => 'B User',
+                )
+            );
+            break;
+        case 'Category':
+            $data = array(
+                array(
+                    'id' => 'all',
+                    'name' => 'All',
+                ),
+                array(
+                    'id' => '1',
+                    'name' => 'A Category',
+                ),
+                array(
+                    'id' => '2',
+                    'name' => 'B Category',
+                )
+            );
+            break;
+        case 'TaskSubCategory':
+            $data = array(
+                array(
+                    'id' => 'all',
+                    'name' => 'All',
+                ),
+                array(
+                    'id' => '1',
+                    'name' => 'A Sub Category',
+                ),
+                array(
+                    'id' => '2',
+                    'name' => 'B Sub Category',
+                )
+            );
+            break;
+        default:
+            return parent::makeRestCall($entity, $method, $options);
+        }
+
+        return array(
+            'Results' => $data,
+            'Count'   => count($data)
         );
     }
 }

@@ -15,7 +15,7 @@ $(function() {
     source: "#team",
     dest: "#owner",
     process: function(value, done) {
-      $.get("/tasks/owners/" + value, done);
+      $.get("/tasks/users/" + value, done);
     },
   });
 
