@@ -134,9 +134,9 @@ trait SubmissionSectionTrait
             }
 
             $thisConviction['dateOfOffence'] = $conviction['dateOfOffence'];
-            $thisConviction['dateOfConviction'] = $conviction['dateOfConviction'];
+            $thisConviction['convictionDate'] = $conviction['convictionDate'];
 
-            $thisConviction['courtFpm'] = $conviction['courtFpm'];
+            $thisConviction['court'] = $conviction['court'];
             $thisConviction['penalty'] = $conviction['penalty'];
             $thisConviction['si'] = $conviction['si'];
             $thisConviction['decToTc'] = $conviction['decToTc'];

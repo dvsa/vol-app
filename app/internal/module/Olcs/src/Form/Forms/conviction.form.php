@@ -44,7 +44,7 @@ return [
                          'label' => 'Offence date',
                          'filters' => '\Common\Form\Elements\InputFilters\OffenceDateBeforeConvictionDate'
                      ],
-                    'dateOfConviction' => [
+                    'convictionDate' => [
                          'type' => 'dateSelectWithEmpty',
                          'label' => 'Conviction date',
                          'filters' => '\Common\Form\Elements\InputFilters\DateNotInFuture'
@@ -54,7 +54,7 @@ return [
                         'label' => 'SI',
                         'value_options' => 'yes_no'
                     ],
-                    'courtFpm' => [
+                    'court' => [
                         'type' => 'text',
                         'filters' => '\Common\Form\Elements\InputFilters\TextMax70',
                         'label' => 'Court/FPN',
@@ -72,7 +72,7 @@ return [
                         'class' => 'medium',
                         'filters' => '\Common\Form\Elements\InputFilters\TextMax255',
                     ],
-                    'convictionNotes' => [
+                    'notes' => [
                         'type' => 'textarea',
                         'filters' => '\Common\Form\Elements\InputFilters\TextMax4000',
                         'label' => 'Conviction notes',

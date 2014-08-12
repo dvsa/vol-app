@@ -224,7 +224,7 @@ class CaseConvictionControllerTest extends AbstractHttpControllerTestCase
                 0 => array
                 (
                     'id' => 25,
-                    'dateOfConviction' => '2012-06-15T00:00:00+0100',
+                    'convictionDate' => '2012-06-15T00:00:00+0100',
                     'categoryText' => 'Category text',
                     'defType' => 'defendant_type.operator',
                     'category' => array(
@@ -696,8 +696,8 @@ class CaseConvictionControllerTest extends AbstractHttpControllerTestCase
             'categoryText' => '',
             'dateOfBirth' => '',
             'dateOfOffence' => '2014-01-01T00:00:00+0000',
-            'dateOfConviction' => '2014-01-02T00:00:00+0000',
-            'courtFpm' => 'dfdsfdsfsfds',
+            'convictionDate' => '2014-01-02T00:00:00+0000',
+            'court' => 'dfdsfdsfsfds',
             'penalty' => 'dfsdfsdfds',
             'costs' => 'sfsdfsdfsd',
             'si' => 'Y',
@@ -706,7 +706,7 @@ class CaseConvictionControllerTest extends AbstractHttpControllerTestCase
             'personLastname' => '',
             'operatorName' => 'dsfdsfdsfdsfdsf',
             'defType' => 'defendant_type.operator',
-            'convictionNotes' => 'sdfsdfdsfsdf',
+            'notes' => 'sdfsdfdsfsdf',
             'takenIntoConsideration' => 'dsfdsfsdfdsf',
             'person' => '',
             'dealtWith' => 'N',

@@ -120,7 +120,7 @@ class CaseStatementController extends CaseController implements CrudInterface
         $data = $this->formatDataForEditForm($details);
         $data['case'] = $caseId;
 
-        $data['requestorsAddress']['country'] = 'country.' . $data['requestorsAddress']['country'];
+        $data['requestorsAddress']['country'] = $data['requestorsAddress']['countryCode']['id'];
 
         $form = $this->generateFormWithData(
             'statement',

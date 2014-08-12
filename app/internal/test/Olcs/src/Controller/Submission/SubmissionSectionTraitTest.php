@@ -309,11 +309,11 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
         $thisConviction['categoryText'] = 'category text';
         $thisConviction['defType'] = 'defendant_type.operator';
         $thisConviction['operatorName'] = $operatorName;
-        $thisConviction['dateOfConviction'] = '2014-01-01';
+        $thisConviction['convictionDate'] = '2014-01-01';
         $thisConviction['personFirstname'] = 'Fred';
         $thisConviction['personLastname'] = 'Smith';
         $thisConviction['description'] = 'Done for speeding';
-        $thisConviction['courtFpm'] = 'Court 12';
+        $thisConviction['court'] = 'Court 12';
         $thisConviction['penalty'] = 'A monkey';
         $thisConviction['si'] = 'Y';
         $thisConviction['decToTc'] = 'Y';
@@ -326,7 +326,7 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
 
         $result = $submissionSectionTrait->convictionHistory($data);
         $this->assertContains('Court 12', $result[0]);
-        $this->assertArrayHasKey('dateOfConviction', $result[0]);
+        $this->assertArrayHasKey('convictionDate', $result[0]);
     }
 
     /**

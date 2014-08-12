@@ -34,14 +34,14 @@ return array(
 
                 $url = $this->generateUrl(['action' => 'edit', 'id' => $data['id']], 'conviction', true);
 
-                if ($data['dateOfConviction'] == null) {
+                if ($data['convictionDate'] == null) {
                     return '<a href="' . $url . '">N/A</a>';
                 }
 
                 $column['formatter'] = 'Date';
                 return '<a href="' . $url . '">' . $this->callFormatter($column, $data) . '</a>';
             },
-            'name' => 'dateOfConviction'
+            'name' => 'convictionDate'
         ),
         array(
             'title' => 'Date of offence',
@@ -62,7 +62,7 @@ return array(
         ),
         array(
             'title' => 'Court/FPN',
-            'name' => 'courtFpm'
+            'name' => 'court'
         ),
         array(
             'title' => 'Penalty',

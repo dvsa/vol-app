@@ -88,10 +88,10 @@ return [
                             'value' => 'S43_Letter'
                          ]
                      ],
-                     'country' => [
+                     'countryCode' => [
                          'type' => 'hidden',
                          'attributes' => [
-                            'value' => 'en_GB'
+                            'value' => 'GB'
                          ]
                      ],
                      'format' => [

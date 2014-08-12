@@ -85,24 +85,7 @@ class CaseConditionUndertakingController extends CaseController
      */
     public function generateConditionTable($caseId)
     {
-        $bundle = $this->getConditionUndertakingBundle('condition');
-
-        $conditionResults = $this->makeRestCall(
-            'Cases', 'GET', array(
-            'id' => $caseId, 'bundle' => json_encode($bundle))
-        );
-
-        // add caseId to results
-        for ($i=0; $i<count($conditionResults['conditionUndertakings']); $i++) {
-            $conditionResults['conditionUndertakings'][$i]['caseId'] = $caseId;
-        }
-
-        $data = [];
-        $data['url'] = $this->getPluginManager()->get('url');
-
-        $conditionsTable = $this->buildTable('conditions', $conditionResults['conditionUndertakings'], $data);
-
-        return $conditionsTable;
+        return $this->generateTable($caseId, 'condition');
     }
 
     /**
@@ -113,24 +96,33 @@ class CaseConditionUndertakingController extends CaseController
      */
     public function generateUndertakingTable($caseId)
     {
-        $bundle = $this->getConditionUndertakingBundle('undertaking');
+        return $this->generateTable($caseId, 'undertaking');
+    }
 
-        $undertakingResults = $this->makeRestCall(
-            'Cases', 'GET', array(
-            'id' => $caseId, 'bundle' => json_encode($bundle))
+    /**
+     * Moved duplicate generateTable logic to it's own method
+     *
+     * @param int $caseId
+     * @param string $which
+     * @return string
+     */
+    private function generateTable($caseId, $which)
+    {
+        $results = $this->makeRestCall(
+            'Cases',
+            'GET',
+            array('id' => $caseId),
+            $this->getConditionUndertakingBundle($which)
         );
 
-        // add caseId to results
-        for ($i=0; $i<count($undertakingResults['conditionUndertakings']); $i++) {
-            $undertakingResults['conditionUndertakings'][$i]['caseId'] = $caseId;
+        $conditionUndertakings = $results['conditionUndertakings'];
+
+        foreach ($conditionUndertakings as &$result) {
+            $result['caseId'] = $caseId;
+            $result['operatingCentreAddress'] = $result['operatingCentre']['address'];
         }
 
-        $data = [];
-        $data['url'] = $this->getPluginManager()->get('url');
-
-        $undertakingsTable = $this->buildTable('undertakings', $undertakingResults['conditionUndertakings'], $data);
-
-        return $undertakingsTable;
+        return $this->buildTable($which . 's', $conditionUndertakings);
     }
 
     /**
@@ -326,7 +318,7 @@ class CaseConditionUndertakingController extends CaseController
                     $address['addressLine3'] . ', ' .
                     $address['addressLine4'] . ', ' .
                     $address['postcode'] . ', ' .
-                    $address['country'];
+                    $address['countryCode']['id'];
             }
         }
         // set up the group options required by Zend
@@ -403,8 +395,14 @@ class CaseConditionUndertakingController extends CaseController
                         'saon_desc',
                         'street',
                         'locality',
-                        'postcode',
-                        'country'
+                        'postcode'
+                    ),
+                    'children' => array(
+                        'countryCode' => array(
+                            'properties' => array(
+                                'id'
+                            )
+                        )
                     )
                 )
             )
@@ -541,18 +539,20 @@ class CaseConditionUndertakingController extends CaseController
                                         'addressLine2',
                                         'addressLine3',
                                         'addressLine4',
-                                        'paon_desc',
-                                        'saon_desc',
-                                        'street',
-                                        'locality',
-                                        'postcode',
-                                        'country'
+                                        'town',
+                                        'postcode'
+                                    ),
+                                    'children' => array(
+                                        'countryCode' => array(
+                                            'properties' => array(
+                                                'id'
+                                            )
+                                        )
                                     )
                                 )
                             )
                         )
                     )
-
                 )
             )
         );

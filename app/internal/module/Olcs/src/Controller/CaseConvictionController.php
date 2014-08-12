@@ -67,7 +67,7 @@ class CaseConvictionController extends CaseController
             'GET',
             array(
                 'case' => $caseId,
-                'sort' => 'dateOfConviction',
+                'sort' => 'convictionDate',
                 'order' => 'DESC',
                 'bundle' => json_encode($bundle)
             )
@@ -170,8 +170,7 @@ class CaseConvictionController extends CaseController
         );
 
         $request = $this->getRequest();
-        if ($request->isGet())
-        {
+        if ($request->isGet()) {
             $form->get('defendant-details')->remove('personSearch');
             $form->get('defendant-details')->remove('personFirstname');
             $form->get('defendant-details')->remove('personLastname');

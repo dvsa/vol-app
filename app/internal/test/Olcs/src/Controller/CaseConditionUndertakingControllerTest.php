@@ -101,7 +101,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
                         'addressLine3' => 'Westpoint',
                         'addressLine4' => '',
                         'postcode' => 'LS9 6NA',
-                        'country' => 'UK',
+                        'countryCode' => 'UK',
                     ]
                 ]
             ]
@@ -269,7 +269,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
                         'addressLine3' => 'Westpoint',
                         'addressLine4' => '',
                         'postcode' => 'LS9 6NA',
-                        'country' => 'UK',
+                        'countryCode' => 'UK',
                     ]
                 ]
             ]
@@ -365,7 +365,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
                         'addressLine3' => 'Westpoint',
                         'addressLine4' => '',
                         'postcode' => 'LS9 6NA',
-                        'country' => 'UK',
+                        'countryCode' => 'UK',
                     ]
                 ]
             ]
@@ -471,7 +471,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
                         'addressLine3' => 'Westpoint',
                         'addressLine4' => '',
                         'postcode' => 'LS9 6NA',
-                        'country' => 'UK',
+                        'countryCode' => 'UK',
                     ]
                 ]
             ]
@@ -528,7 +528,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
                         'addressLine3' => 'Westpoint',
                         'addressLine4' => '',
                         'postcode' => 'LS9 6NA',
-                        'country' => 'UK',
+                        'countryCode' => 'UK',
                     ]
                 ]
             ]
@@ -1011,18 +1011,18 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
                                         'addressLine2',
                                         'addressLine3',
                                         'addressLine4',
-                                        'paon_desc',
-                                        'saon_desc',
-                                        'street',
-                                        'locality',
-                                        'postcode',
-                                        'country'
+                                        'town',
+                                        'postcode'
+                                    ),
+                                    'children' => array(
+                                        'countryCode' => array(
+                                            'properties' => array('id')
+                                        )
                                     )
                                 )
                             )
                         )
                     )
-
                 )
             )
         );

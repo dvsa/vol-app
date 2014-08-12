@@ -173,7 +173,7 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
             'requestorsAddress' => array(
                 'addressLine1' => '123 Street',
                 'postcode' => 'AB1 0AB',
-                'country' => 'GB',
+                'countryCode' => 'GB',
                 'town' => 'Leeds'
             )
         );
@@ -189,14 +189,14 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
                 'requestorsAddress' => array(
                     'addressLine1' => '123 Street',
                     'postcode' => 'AB1 0AB',
-                    'country' => 'GB',
+                    'countryCode' => 'GB',
                     'town' => 'Leeds'
                 ),
             ),
             'requestorsAddress' => array(
                 'addressLine1' => '123 Street',
                 'postcode' => 'AB1 0AB',
-                'country' => 'country.GB',
+                'countryCode' => 'GB',
                 'town' => 'Leeds'
             ),
             'case' => $caseId
@@ -262,7 +262,7 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
             'requestorsAddress' => array(
                 'addressLine1' => '123 street',
                 'postcode' => 'Ab1 1BD',
-                'country' => 'country.GB',
+                'countryCode' => 'GB',
                 'town' => 'Leeds'
             )
         );
@@ -275,7 +275,7 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
                 'requestorsAddress' => array(
                     'addressLine1' => '123 street',
                     'postcode' => 'Ab1 1BD',
-                    'country' => 'country.GB',
+                    'countryCode' => 'GB',
                     'town' => 'Leeds'
                 )
             )
@@ -317,7 +317,7 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
             'requestorsAddress' => array(
                 'addressLine1' => '123 street',
                 'postcode' => 'Ab1 1BD',
-                'country' => 'country.GB',
+                'countryCode' => 'GB',
                 'town' => 'Leeds'
             )
         );
@@ -330,7 +330,7 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
                 'requestorsAddress' => array(
                     'addressLine1' => '123 street',
                     'postcode' => 'Ab1 1BD',
-                    'country' => 'country.GB',
+                    'countryCode' => 'GB',
                     'town' => 'Leeds'
                 )
             )
@@ -373,7 +373,7 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
         $data['addresses']['requestorsAddress']['addressLine4'] = 'line4';
         $data['addresses']['requestorsAddress']['town'] = 'city';
         $data['addresses']['requestorsAddress']['postcode'] = 'AB1 2CD';
-        $data['addresses']['requestorsAddress']['country'] = 'GB';
+        $data['addresses']['requestorsAddress']['countryCode'] = 'GB';
         $data['requestorsForename'] = 'Joe';
         $data['requestorsFamilyName'] = 'Bloggs';
         $data['dateRequested'] = '2014-07-19';
@@ -406,7 +406,7 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
         $data['addresses']['requestorsAddress']['addressLine4'] = 'line4';
         $data['addresses']['requestorsAddress']['town'] = 'city';
         $data['addresses']['requestorsAddress']['postcode'] = 'AB1 2CD';
-        $data['addresses']['requestorsAddress']['country'] = 'GB';
+        $data['addresses']['requestorsAddress']['countryCode'] = 'GB';
         $data['requestorsForename'] = 'Joe';
         $data['requestorsFamilyName'] = 'Bloggs';
         $data['dateRequested'] = '2014-07-19';
