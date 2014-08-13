@@ -431,32 +431,41 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
         }
 
         $personDataBundle = array(
-            'properties' => array(
-                'id',
-                'title',
-                'forename',
-                'familyName',
-                'birthDate',
-                'otherName',
-                'position'
-            ),
+            'properties' => null,
+            'children' => array(
+                'person' => array(
+                    'properties' => array(
+                        'id',
+                        'title',
+                        'forename',
+                        'familyName',
+                        'birthDate',
+                        'otherName',
+                        'position'
+                    )
+                )
+            )
         );
-        if ($service == 'Person' && $method == 'GET' && $bundle == $personDataBundle) {
+
+        if ($service == 'OrganisationPerson' && $method == 'GET' && $bundle == $personDataBundle) {
             return array(
                 'Count'  => 1,
                 'Results' => array(
                     array(
-                        'id' => 1,
-                        'title' => 'Mr',
-                        'forename' => 'A',
-                        'familyName' => 'P',
-                        'birthDate' => '2014-01-01',
-                        'otherName' => 'other names',
-                        'position' => 'position'
+                        'person' => array(
+                            'id' => 1,
+                            'title' => 'Mr',
+                            'forename' => 'A',
+                            'familyName' => 'P',
+                            'birthDate' => '2014-01-01',
+                            'otherName' => 'other names',
+                            'position' => 'position'
+                        )
                     )
                 )
             );
         }
+
         $organisationTypeBundle = array(
             'children' => array(
                 'licence' => array(
@@ -476,16 +485,9 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
         if ($service == 'Application' && $method == 'GET' && $bundle == $organisationTypeBundle) {
             return array(
                 'licence' => array(
-                    'id' => 10,
-                    'version' => 1,
-                    'goodsOrPsv' => array(
-                        'id' => ($goodsOrPsv == 'goods' ? 'lcat_gv' : 'lcat_psv')
-                    ),
-                    'niFlag' => $niFlag,
-                    'licenceType' => array(
-                        'id' => $licenceType
-                    ),
                     'organisation' => array(
+                        'id' => 1,
+                        'version' => 1,
                         'type' => array(
                             'id' => PeopleController::ORG_TYPE_REGISTERED_COMPANY
                         ),
