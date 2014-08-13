@@ -257,7 +257,7 @@ class CaseController extends FormActionController
             ],
             'stays' => [
                 'key' => 'stays',
-                'label' => 'Stays & Appeals',
+                'label' => 'Appeal & Stays',
                 'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'stays'], [], true),
             ],
             'documents' => [
@@ -701,5 +701,17 @@ class CaseController extends FormActionController
     {
         $userDefined = array(168);
         return in_array($categoryId, $userDefined);
+    }
+
+    /**
+     * Returns true or false depending on whether a case has an appeal which hasn't been withdrawn
+     *
+     * @param int $caseId
+     * @return bool
+     */
+    public function caseHasAppeal($caseId)
+    {
+        $appeal = $this->makeRestCall('Appeal', 'GET', array('case' => $caseId, 'isWithdrawn' => 0));
+        return ($appeal['Count'] ? true : false);
     }
 }
