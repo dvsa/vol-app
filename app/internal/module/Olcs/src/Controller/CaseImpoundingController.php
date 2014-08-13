@@ -103,7 +103,7 @@ class CaseImpoundingController extends CaseController implements CrudInterface
         $legislationList = $this->getLegislationOptions();
 
         $form->get('application_details')
-            ->get('legislation')
+            ->get('legislationTypes')
             ->setValueOptions($legislationList);
 
         $formVenues = $this->getVenueList($licenceId);
@@ -224,7 +224,7 @@ class CaseImpoundingController extends CaseController implements CrudInterface
         $legislationList = $this->getLegislationOptions();
 
         $form->get('application_details')
-            ->get('legislation')
+            ->get('legislationTypes')
             ->setValueOptions($legislationList);
 
         $formVenues = $this->getVenueList($licenceId);
@@ -333,9 +333,16 @@ class CaseImpoundingController extends CaseController implements CrudInterface
         //application details fieldset
         $formatted['application_details'] = array(
             'impoundingType' => $results['impoundingType']['handle'],
-            'applicationReceiptDate' => $results['applicationReceiptDate']
+            'applicationReceiptDate' => $results['applicationReceiptDate'],
+            'legislationTypes' => $results['legislationTypes'],
+            'vrm' => $results['vrm']
         );
-
+        if (!empty($results['legislationTypes'])) {
+            foreach ($results['legislationTypes'] as $legislationType) {
+                $formatted['application_details']['legislationTypes'][] =
+                    $legislationType['handle'];
+            }
+        }
         //outcome fieldset
         $formatted['outcome'] = array(
             'outcomeSentDate' => $results['outcomeSentDate'],
@@ -490,6 +497,8 @@ class CaseImpoundingController extends CaseController implements CrudInterface
                 'outcomeSentDate',
                 'hearingDate',
                 'piVenueOther',
+                'vrm',
+                'legislationTypes',
                 'notes',
                 'version'
             ),
@@ -523,7 +532,12 @@ class CaseImpoundingController extends CaseController implements CrudInterface
                     'properties' => array(
                         'handle'
                     ),
-                )
+                ),
+                'legislationTypes' => array(
+                    'properties' => array(
+                        'handle'
+                    ),
+                ),
             )
         );
     }
@@ -556,16 +570,16 @@ class CaseImpoundingController extends CaseController implements CrudInterface
             'Goods GB' => array(
                 'label' => 'Goods GB',
                 'options' => array(
-                    'impounding.legislation.goods.gb.1' => 'Section A The user of the vehicle held a valid '
+                    'legislation_type.goods.gb.1' => 'Section A The user of the vehicle held a valid '
                     . 'operator\'s licence (whether of not authorising '
                     . 'the use of the vehicle)',
-                    'impounding.legislation.goods.gb.2' => 'Section B It was not being, and had '
+                    'legislation_type.goods.gb.2' => 'Section B It was not being, and had '
                     . 'not been used in contravention of Section 2 of '
                     . ' the 1995 Act.',
-                    'impounding.legislation.goods.gb.3' => 'Section C I did not know it was '
+                    'legislation_type.goods.gb.3' => 'Section C I did not know it was '
                     . 'being or had been used in contravention of '
                     . 'Section 2 of the 1995 Act.',
-                    'impounding.legislation.goods.gb.4' => 'That although knowing that at the time the '
+                    'legislation_type.goods.gb.4' => 'That although knowing that at the time the '
                     . 'vehicle was detained it was being or had been used in '
                     . 'contravention of Section 2 of the 1995 Act, but;  had taken '
                     . 'steps with a view to preventing that (ii) Has taken steps '
@@ -575,16 +589,16 @@ class CaseImpoundingController extends CaseController implements CrudInterface
            'PSV NI' => array(
                 'label' => 'PSV GB',
                 'options' => array(
-                    'impounding.legislation.psv.gb.1' => 'Section A The user of the '
+                    'legislation_type.psv.gb.1' => 'Section A The user of the '
                         . 'vehicle held a valid operator\'s licence (whether or not '
                         . 'authorising the use of the vehicle)',
-                    'impounding.legislation.psv.gb.2' => 'Section B It was not '
+                    'legislation_type.psv.gb.2' => 'Section B It was not '
                         . 'being, and had not been used in contravention of Section '
                         . '12 of the 1981 Act.',
-                    'impounding.legislation.psv.gb.3' => 'Section C i did not know '
+                    'legislation_type.psv.gb.3' => 'Section C i did not know '
                         . 'it was being or had been used in contravention  of '
                         . 'Section 12 of the 1981 Act.',
-                    'impounding.legislation.psv.gb.4' => 'Section D That although '
+                    'legislation_type.psv.gb.4' => 'Section D That although '
                         . 'knowing that at the time the vehicle was detained it was '
                         . 'being or had been used in contravention of Section 12(1) '
                         . 'of the 1981 Act, but; (i) had taken steps with a view to '
@@ -595,8 +609,8 @@ class CaseImpoundingController extends CaseController implements CrudInterface
            'GOODS NI' => array(
                 'label' => 'Goods NI',
                 'options' => array(
-                    'impounding.legislation.goods.ni.1' => 'TBC',
-                    'impounding.legislation.goods.ni.2' => 'TBC'
+                    'legislation_type.goods.ni.1' => 'TBC',
+                    'legislation_type.goods.ni.2' => 'TBC'
                 )
             )
         );
