@@ -6,25 +6,21 @@
  * @author adminmwc
  */
 
-/* namespace OlcsTest\Controller;
+namespace OlcsTest\Controller;
 
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
-
-class OlcsIndexControllerTest  extends AbstractHttpControllerTestCase
+class OlcsIndexControllerTest  extends \PHPUnit_Framework_TestCase
 {
-    public function setUp()
+    public function testIndexActionAssignsCorrectTitles()
     {
-        $this->setApplicationConfig(
-            include __DIR__.'/../../../../config/application.config.php'
-        );
-        parent::setUp();
-    }
+        $controller = new \Olcs\Controller\IndexController();
+        $view = $controller->indexAction();
 
-    public function testIndexAction()
-    {
-        $this->dispatch('/');
-        $this->assertResponseStatusCode(200);
-        $this->assertControllerClass('IndexController');
-        $this->assertMatchedRouteName('dashboard');
+        list($header, $content) = $view->getChildren();
+
+        $titles = array(
+            'pageTitle' => 'Home',
+            'pageSubTitle' => 'Subtitle'
+        );
+        $this->assertEquals($titles, $header->getVariables());
     }
-} */
+}

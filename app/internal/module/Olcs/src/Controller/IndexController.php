@@ -21,6 +21,8 @@ use Zend\View\Model\JsonModel;
 class IndexController extends FormActionController
 {
     protected $enableCsrf = false;
+    protected $pageTitle = 'Home';
+    protected $pageSubTitle = 'Subtitle';
 
     /**
      * @codeCoverageIgnore
@@ -83,6 +85,7 @@ class IndexController extends FormActionController
         $view->setTerminal($this->getRequest()->isXmlHttpRequest());
 
         return $view;
+        //@TODO reimplement: return $this->renderView('index/home');
     }
 
     /**
