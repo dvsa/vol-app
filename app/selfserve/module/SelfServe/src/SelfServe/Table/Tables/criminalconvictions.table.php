@@ -42,11 +42,11 @@ return array(
         ),
         array(
             'title' => 'selfserve-app-subSection-previous-history-criminal-conviction-columnOffence',
-            'name' => 'notes',
+            'name' => 'categoryText',
         ),
         array(
             'title' => 'selfserve-app-subSection-previous-history-criminal-conviction-columnNameOfCourt',
-            'name' => 'court',
+            'name' => 'courtFpn',
         ),
         array(
             'title' => 'selfserve-app-subSection-previous-history-criminal-conviction-columnPenalty',

@@ -26,43 +26,43 @@ class LicenceHistoryControllerTest extends AbstractApplicationControllerTestCase
         'dataLicencesCurrent' => array(
             'id' => '',
             'version' => '2',
-            'currentLicence' => 'Y'
+            'prevHasLicence' => 'Y'
         ),
         'table-licences-current' => array(
             'rows' => 1
         ),
         'dataLicencesApplied' => array(
-            'appliedForLicence' => 'N'
+            'prevHadLicence' => 'N'
         ),
         'table-licences-applied' => array(
             'rows' => 0
         ),
         'dataLicencesRevoked' => array(
-            'revokedLicence' => 'N'
+            'prevBeenRevoked' => 'N'
         ),
         'table-licences-revoked' => array(
             'rows' => 0
         ),
         'dataLicencesRefused' => array(
-            'refusedLicence' => 'N',
+            'prevBeenRefused' => 'N',
         ),
         'table-licences-refused' => array(
             'rows' => 0
         ),
         'dataLicencesDisqualified' => array(
-            'disqualifiedLicence' => 'N',
+            'prevBeenDisqualifiedTc' => 'N',
         ),
         'table-licences-disqualified' => array(
             'rows' => 0
         ),
         'dataLicencesPublicInquiry' => array(
-            'publicInquiryLicence' => 'N'
+            'prevBeenAtPi' => 'N'
         ),
         'table-licences-public-inquiry' => array(
             'rows' => 0
         ),
         'dataLicencesHeld' => array(
-            'heldLicence' => 'N'
+            'prevPurchasedAssets' => 'N'
         ),
         'table-licences-held' => array(
             'rows' => 0
@@ -1142,13 +1142,13 @@ class LicenceHistoryControllerTest extends AbstractApplicationControllerTestCase
             return array(
                 'id' => 1,
                 'version' => 1,
-                'currentLicence' => 'Y',
-                'appliedForLicence' => 'N',
-                'revokedLicence' => 'N',
-                'refusedLicence' => 'N',
-                'disqualifiedLicence' => 'N',
-                'publicInquiryLicence' => 'N',
-                'heldLicence' => ''
+                'prevHasLicence' => 'Y',
+                'prevHadLicence' => 'N',
+                'prevBeenRevoked' => 'N',
+                'prevBeenRefused' => 'N',
+                'prevBeenDisqualifiedTc' => 'N',
+                'prevBeenAtPi' => 'N',
+                'prevPurchasedAssets' => ''
             );
         }
 

@@ -10,7 +10,7 @@ return array(
         ),
         'fieldsets' => array(
             array(
-                'name' => 'person',
+                'name' => 'data',
                 'elements' => array(
                     'id' => array(
                         'type' => 'hidden',
@@ -41,29 +41,23 @@ return array(
                         'filters' => '\Common\Form\Elements\InputFilters\TextRequired',
                         'label' => $translationPrefix . '-formLastName',
                         'class' => 'long'
-                    )
-                )
-            ),
-            array(
-                'name' => 'conviction',
-                'elements' => array(
-                    'id' => array(
-                        'type' => 'hidden',
                     ),
-                    'version' => array(
-                        'type' => 'hidden',
-                    ),
-                    'convictionDate' => [
+                    'convictionDate' => array(
                         'type' => 'dateSelectWithEmpty',
                         'label' => $translationPrefix . '-formDateOfConviction'
-                    ],
+                    ),
+                    'categoryText' => array(
+                        'label' => $translationPrefix . '-formOffence',
+                        'type' => 'text',
+                        'class' => 'long'
+                    ),
                     'notes' => array(
                         'label' => $translationPrefix . '-formOffenceDetails',
                         'type' => 'convictionTextarea',
                         'class' => 'long',
                         'hint' => $translationPrefix . '-formOffenceDetaisHelpBlock'
                     ),
-                    'court' => array(
+                    'courtFpn' => array(
                         'label' => $translationPrefix . '-formNameOfCourt',
                         'type' => 'text',
                         'filters' => '\Common\Form\Elements\InputFilters\TextRequired',

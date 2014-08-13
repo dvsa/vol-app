@@ -10,6 +10,8 @@ namespace SelfServe\Controller\Application\YourBusiness;
 /**
  * People Controller
  *
+ * @todo need to re-factor this once I know how people should now be linked to applications
+ *
  * @author Alex Peshkov <alex.peshkov@clocal.co.uk>
  */
 class PeopleController extends YourBusinessController
@@ -62,7 +64,7 @@ class PeopleController extends YourBusinessController
      */
     protected function getFormTableData()
     {
-        $applicationId = $this->params()->fromRoute('applicationId');
+        $applicationId = $this->getIdentifier();
 
         $bundle = array(
             'properties' => array(
@@ -73,7 +75,7 @@ class PeopleController extends YourBusinessController
                 'birthDate',
                 'otherName',
                 'position'
-            ),
+            )
         );
 
         $data = $this->makeRestCall(
@@ -280,6 +282,8 @@ class PeopleController extends YourBusinessController
                         ]
                     );
                     if (is_array($result) && array_key_exists('Results', $result) && count($result['Results'])) {
+
+                        // @todo We need a better way to handle this, far too many rest calls could happen
                         foreach ($result['Results'] as $person) {
                             $person['application'] = $this->getIdentifier();
                             $this->makeRestCall('Person', 'POST', $person);

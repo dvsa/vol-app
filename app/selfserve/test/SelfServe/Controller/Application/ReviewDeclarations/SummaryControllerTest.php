@@ -154,36 +154,31 @@ class SummaryControllerTest extends AbstractApplicationControllerTestCase
             'properties' => array(
                 'id',
                 'convictionDate',
+                'convictionCategory',
                 'notes',
-                'court',
-                'penalty'
-            ),
-            'children' => array(
-                'person' => array(
-                    'properties' => array(
-                        'title',
-                        'forename',
-                        'familyName'
-                    )
-                )
+                'courtFpn',
+                'categoryText',
+                'penalty',
+                'title',
+                'forename',
+                'familyName'
             )
         );
 
-        if ($service == 'Conviction' && $method === 'GET' && $bundle == $convictionDataBundle) {
+        if ($service == 'PreviousConviction' && $method === 'GET' && $bundle == $convictionDataBundle) {
             return array(
                 'Count'  => 1,
                 'Results' => array(
                     array(
                         'id' => 1,
                         'convictionDate' => '01/01/2014',
+                        'convictionCategory' => 'Offence',
                         'notes' => 'No MOT',
-                        'court' => 'Leeds court',
+                        'courtFpn' => 'Leeds court',
                         'penalty' => '100£',
-                        'person' => array(
-                            'title' => 'Mr',
-                            'forename' => 'Alex',
-                            'familyName' => 'P'
-                        )
+                        'title' => 'Mr',
+                        'forename' => 'Alex',
+                        'familyName' => 'P'
                     )
                 )
             );

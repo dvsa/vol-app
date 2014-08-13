@@ -158,7 +158,7 @@ class ApplicationController extends AbstractJourneyController
 
         $this->makeRestCall('ApplicationCompletion', 'PUT', $data);
 
-        $completion['version'] ++;
+        $completion['version']++;
 
         $this->setSectionCompletion($completion);
     }

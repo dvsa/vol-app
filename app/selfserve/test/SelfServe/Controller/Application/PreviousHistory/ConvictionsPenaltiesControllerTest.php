@@ -232,23 +232,20 @@ class ConvictionsPenaltiesControllerTest extends AbstractApplicationControllerTe
     {
         $this->setUpAction(
             'edit', 1, array(
-                'person' => array(
+                'data' => array(
                     'id' => 1,
                     'version' => 1,
                     'title' => 'Mr',
                     'forename' => 'Alex',
-                    'familyName' => 'P'
-                ),
-                'conviction' => array(
-                    'id' => 1,
-                    'version' => 1,
+                    'familyName' => 'P',
                     'convictionDate' => array(
                         'month' => 1,
                         'day'   => 1,
                         'year'  => 2014
                      ),
+                    'categoryText' => 'Offence',
                     'notes' => 'No MOT',
-                    'court' => 'Leeds court',
+                    'courtFpn' => 'Leeds court',
                     'penalty' => '100£'
                 )
             )
@@ -342,23 +339,20 @@ class ConvictionsPenaltiesControllerTest extends AbstractApplicationControllerTe
     {
         $this->setUpAction(
             'add', null, array(
-                'person' => array(
+                'data' => array(
                     'id' => '',
                     'version' => '',
                     'title' => 'Mr',
                     'forename' => 'Alex',
                     'familyName' => 'P',
-                ),
-                'conviction' => array(
-                    'id' => '',
-                    'version' => '',
                     'convictionDate' => array(
                         'month' => 1,
                         'day'   => 1,
                         'year'  => 2014
                      ),
+                    'categoryText' => 'Offence',
                     'notes' => 'No MOT',
-                    'court' => 'Leeds court',
+                    'courtFpn' => 'Leeds court',
                     'penalty' => '100£'
                 ),
             )
@@ -376,23 +370,20 @@ class ConvictionsPenaltiesControllerTest extends AbstractApplicationControllerTe
     {
         $this->setUpAction(
             'add', null, array(
-                'person' => array(
+                'data' => array(
                     'id' => '',
                     'version' => '',
                     'title' => 'Mr',
                     'forename' => 'Alex',
                     'familyName' => 'P',
-                ),
-                'conviction' => array(
-                    'id' => '',
-                    'version' => '',
                     'convictionDate' => array(
                         'month' => 1,
                         'day'   => 1,
                         'year'  => 2014
                      ),
+                    'categoryText' => 'Offence',
                     'notes' => 'No MOT',
-                    'court' => 'Leeds court',
+                    'courtFpn' => 'Leeds court',
                     'penalty' => '100£'
                 ),
                 'form-actions' => array(
@@ -431,36 +422,31 @@ class ConvictionsPenaltiesControllerTest extends AbstractApplicationControllerTe
             'properties' => array(
                 'id',
                 'convictionDate',
+                'convictionCategory',
                 'notes',
-                'court',
-                'penalty'
-            ),
-            'children' => array(
-                'person' => array(
-                    'properties' => array(
-                        'title',
-                        'forename',
-                        'familyName'
-                    )
-                )
+                'courtFpn',
+                'categoryText',
+                'penalty',
+                'title',
+                'forename',
+                'familyName'
             )
         );
 
-        if ($service == 'Conviction' && $method === 'GET' && $bundle == $convictionDataBundle) {
+        if ($service == 'PreviousConviction' && $method === 'GET' && $bundle == $convictionDataBundle) {
             return array(
                 'Count'  => 1,
                 'Results' => array(
                     array(
                         'id' => 1,
                         'convictionDate' => '01/01/2014',
+                        'convictionCategory' => 'Offence',
                         'notes' => 'No MOT',
-                        'court' => 'Leeds court',
+                        'courtFpn' => 'Leeds court',
                         'penalty' => '100£',
-                        'person' => array(
-                            'title' => 'Mr',
-                            'forename' => 'Alex',
-                            'familyName' => 'P'
-                        )
+                        'title' => 'Mr',
+                        'forename' => 'Alex',
+                        'familyName' => 'P'
                     )
                 )
             );

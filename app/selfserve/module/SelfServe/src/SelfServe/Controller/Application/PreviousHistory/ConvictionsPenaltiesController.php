@@ -59,7 +59,7 @@ class ConvictionsPenaltiesController extends PreviousHistoryController
      *
      * @var string
      */
-    protected $actionService = 'Conviction';
+    protected $actionService = 'PreviousConviction';
 
     /**
      * Action data map
@@ -68,17 +68,8 @@ class ConvictionsPenaltiesController extends PreviousHistoryController
      */
     protected $actionDataMap = array(
         'main' => array(
-            'children' => array(
-                'conviction' => array(
-                    'mapFrom' => array(
-                        'conviction'
-                    )
-                ),
-                'person' => array(
-                    'mapFrom' => array(
-                        'person'
-                    )
-                )
+            'mapFrom' => array(
+                'data'
             )
         )
     );
@@ -94,19 +85,12 @@ class ConvictionsPenaltiesController extends PreviousHistoryController
             'version',
             'convictionDate',
             'notes',
-            'court',
-            'penalty'
-        ),
-        'children' => array(
-            'person' => array(
-                'properties' => array(
-                    'id',
-                    'version',
-                    'title',
-                    'forename',
-                    'familyName'
-                )
-            )
+            'courtFpn',
+            'categoryText',
+            'penalty',
+            'title',
+            'forename',
+            'familyName'
         )
     );
 
@@ -130,18 +114,9 @@ class ConvictionsPenaltiesController extends PreviousHistoryController
      */
     protected function actionSave($data, $service = null)
     {
-        $result = parent::actionSave($data['person'], 'Person');
+        $data['application'] = $this->getIdentifier();
 
-        if ($this->getActionName() == 'add' && !empty($result)) {
-            $data['conviction']['person'] = $result['id'];
-        } else {
-            $data['conviction']['person'] = $data['person']['id'];
-        }
-
-        $applicationId = $this->getIdentifier();
-        $data['conviction']['application'] = $applicationId;
-
-        parent::actionSave($data['conviction'], 'Conviction');
+        parent::actionSave($data);
     }
 
     /**
@@ -155,23 +130,19 @@ class ConvictionsPenaltiesController extends PreviousHistoryController
             'properties' => array(
                 'id',
                 'convictionDate',
+                'convictionCategory',
                 'notes',
-                'court',
-                'penalty'
-            ),
-            'children' => array(
-                'person' => array(
-                    'properties' => array(
-                        'title',
-                        'forename',
-                        'familyName'
-                    )
-                )
+                'courtFpn',
+                'categoryText',
+                'penalty',
+                'title',
+                'forename',
+                'familyName'
             )
         );
 
         $data = $context->makeRestCall(
-            'Conviction',
+            'PreviousConviction',
             'GET',
             array('application' => $applicationId),
             $bundle
@@ -182,9 +153,7 @@ class ConvictionsPenaltiesController extends PreviousHistoryController
 
             $row = $result;
 
-            $row['name'] = $row['person']['title'] . ' ' . $row['person']['forename'] . ' ' . $row['person']['familyName'];
-
-            unset($row['person']);
+            $row['name'] = $row['title'] . ' ' . $row['forename'] . ' ' . $row['familyName'];
 
             $finalData[] = $row;
         }
@@ -233,20 +202,11 @@ class ConvictionsPenaltiesController extends PreviousHistoryController
      */
     protected function processActionLoad($data)
     {
-        $data = parent::processActionLoad($data);
-
         if ($this->getActionName() == 'add') {
             return array();
         }
 
-        $returnData = array(
-            'person' => $data['person'],
-            'conviction' => $data
-        );
-
-        unset($returnData['conviction']['person']);
-
-        return $returnData;
+        return array('data' => $data);
     }
 
     /**
@@ -292,26 +252,6 @@ class ConvictionsPenaltiesController extends PreviousHistoryController
      */
     public function deleteAction()
     {
-        // Need to delete the associated person
-        $convictionId = $this->getActionId();
-
-        $bundle = array(
-            'properties' => null,
-            'children' => array(
-                'person' => array(
-                    'properties' => array(
-                        'id'
-                    )
-                )
-            )
-        );
-
-        $results = $this->makeRestCall('Conviction', 'GET', array('id' => $convictionId), $bundle);
-
-        if (isset($results['person']['id'])) {
-            $this->makeRestCall('Person', 'DELETE', array('id' => $results['person']['id']));
-        }
-
         return $this->delete();
     }
 }
