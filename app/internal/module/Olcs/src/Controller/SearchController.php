@@ -103,6 +103,7 @@ class SearchController extends FormActionController
         foreach ($results['Results'] as $key => $result) {
 
             $orgType = $result['organisation_type'];
+
             if (isset($static['business_types'][$orgType])) {
                 $results['Results'][$key]['organisation_type'] = $static['business_types'][$orgType];
             }

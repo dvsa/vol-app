@@ -129,6 +129,8 @@ class LicenceController extends AbstractFormActionController
             )
         ); */
 
+        // @todo need to define bundle here to get types/statuses etc
+
         $licence = $this->makeRestCall('Licence', 'GET', array('id' => $id));
 
         return $licence;

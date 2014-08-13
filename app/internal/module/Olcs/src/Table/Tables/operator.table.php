@@ -32,7 +32,7 @@ return array(
         array(
             'title' => 'Op/trading name',
             'formatter' => function ($data) {
-                return $data['trading_as'] ? : $data['name'];
+                return /*$data['trading_as'] ? : */$data['name'];
             },
             'sort' => 'operatorName'
         ),
