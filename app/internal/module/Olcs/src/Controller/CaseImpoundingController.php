@@ -100,6 +100,12 @@ class CaseImpoundingController extends CaseController implements CrudInterface
             )
         );
 
+        $legislationList = $this->getLegislationOptions();
+
+        $form->get('application_details')
+            ->get('legislationTypes')
+            ->setValueOptions($legislationList);
+
         $formVenues = $this->getVenueList($licenceId);
 
         $form->get('hearing')
@@ -129,9 +135,9 @@ class CaseImpoundingController extends CaseController implements CrudInterface
      */
     public function processAddImpounding ($data)
     {
-        unset($data['cancel']);
+        unset($data['form-actions']['cancel']);
 
-        if ($data['submit'] === '') {
+        if ($data['form-actions']['submit'] === '') {
             $formattedData = $this->formatForSave($data);
 
             $result = $this->processAdd($formattedData, 'Impounding');
@@ -152,9 +158,9 @@ class CaseImpoundingController extends CaseController implements CrudInterface
      */
     public function processEditImpounding ($data)
     {
-        unset($data['cancel']);
+        unset($data['form-actions']['cancel']);
 
-        if ($data['submit'] === '') {
+        if ($data['form-actions']['submit'] === '') {
             $formattedData = $this->formatForSave($data);
 
             $result = $this->processEdit($formattedData, 'Impounding');
@@ -215,6 +221,12 @@ class CaseImpoundingController extends CaseController implements CrudInterface
             'processEditImpounding',
             $data
         );
+
+        $legislationList = $this->getLegislationOptions();
+
+        $form->get('application_details')
+            ->get('legislationTypes')
+            ->setValueOptions($legislationList);
 
         $formVenues = $this->getVenueList($licenceId);
 
@@ -322,9 +334,16 @@ class CaseImpoundingController extends CaseController implements CrudInterface
         //application details fieldset
         $formatted['application_details'] = array(
             'impoundingType' => $results['impoundingType']['handle'],
-            'applicationReceiptDate' => $results['applicationReceiptDate']
+            'applicationReceiptDate' => $results['applicationReceiptDate'],
+            'legislationTypes' => $results['legislationTypes'],
+            'vrm' => $results['vrm']
         );
-
+        if (!empty($results['legislationTypes'])) {
+            foreach ($results['legislationTypes'] as $legislationType) {
+                $formatted['application_details']['legislationTypes'][] =
+                    $legislationType['handle'];
+            }
+        }
         //outcome fieldset
         $formatted['outcome'] = array(
             'outcomeSentDate' => $results['outcomeSentDate'],
@@ -482,6 +501,8 @@ class CaseImpoundingController extends CaseController implements CrudInterface
                 'outcomeSentDate',
                 'hearingDate',
                 'piVenueOther',
+                'vrm',
+                'legislationTypes',
                 'notes',
                 'version'
             ),
@@ -515,7 +536,12 @@ class CaseImpoundingController extends CaseController implements CrudInterface
                     'properties' => array(
                         'handle'
                     ),
-                )
+                ),
+                'legislationTypes' => array(
+                    'properties' => array(
+                        'handle'
+                    ),
+                ),
             )
         );
     }
@@ -537,6 +563,58 @@ class CaseImpoundingController extends CaseController implements CrudInterface
                         'areaCode',
                         'areaName'
                     )
+                )
+            )
+        );
+    }
+
+    private function getLegislationOptions()
+    {
+        return array(
+            'Goods GB' => array(
+                'label' => 'Goods GB',
+                'options' => array(
+                    'legislation_type.goods.gb.1' => 'Section A The user of the vehicle held a valid '
+                    . 'operator\'s licence (whether of not authorising '
+                    . 'the use of the vehicle)',
+                    'legislation_type.goods.gb.2' => 'Section B It was not being, and had '
+                    . 'not been used in contravention of Section 2 of '
+                    . ' the 1995 Act.',
+                    'legislation_type.goods.gb.3' => 'Section C I did not know it was '
+                    . 'being or had been used in contravention of '
+                    . 'Section 2 of the 1995 Act.',
+                    'legislation_type.goods.gb.4' => 'That although knowing that at the time the '
+                    . 'vehicle was detained it was being or had been used in '
+                    . 'contravention of Section 2 of the 1995 Act, but;  had taken '
+                    . 'steps with a view to preventing that (ii) Has taken steps '
+                    . 'with a view to preventing any further such use.'
+                )
+           ),
+           'PSV NI' => array(
+                'label' => 'PSV GB',
+                'options' => array(
+                    'legislation_type.psv.gb.1' => 'Section A The user of the '
+                        . 'vehicle held a valid operator\'s licence (whether or not '
+                        . 'authorising the use of the vehicle)',
+                    'legislation_type.psv.gb.2' => 'Section B It was not '
+                        . 'being, and had not been used in contravention of Section '
+                        . '12 of the 1981 Act.',
+                    'legislation_type.psv.gb.3' => 'Section C i did not know '
+                        . 'it was being or had been used in contravention  of '
+                        . 'Section 12 of the 1981 Act.',
+                    'legislation_type.psv.gb.4' => 'Section D That although '
+                        . 'knowing that at the time the vehicle was detained it was '
+                        . 'being or had been used in contravention of Section 12(1) '
+                        . 'of the 1981 Act, but; (i) had taken steps with a view to '
+                        . 'preventing that (ii) Has taken steps with a view to '
+                        . 'preventing any further such use.'
+                ),
+           ),
+           'GOODS NI' => array(
+                'label' => 'Goods NI',
+                'options' => array(
+                    'legislation_type.goods.ni.1' => 'TBC',
+                    'legislation_type.goods.ni.2' => 'TBC'
                 )
             )
         );
