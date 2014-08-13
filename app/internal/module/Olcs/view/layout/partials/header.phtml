@@ -1,8 +1,20 @@
-<div role="banner" class="global-header">
-    <div class="global-header__wrapper">
-        <a href="https://www.gov.uk" title="Go to the gov.uk homepage" class="global-header__logo">
-            <img src="<?php echo $this->assetPath('/images/gov.uk_logotype_crown.png') ?>" alt="GOV.UK logo">GOV.UK
-        </a>
-        <h2 class="global-header__title">Operator Licensing<span class="global-header__phase-tag">alpha <?php echo $this->version(); ?></span></h2>
-    </div><!-- end .global-header__wrapper -->
-</div><!-- end .global-header -->
+<div class="page-header">
+  <div class="page-header__wrapper">
+    <div class="user-header">
+      <?php  echo $this->navigation('navigation') // <-- Update this!!
+      ->breadcrumbs()
+      ->setMinDepth(0)
+      ->setPartial(array('layout/partials/breadcrumbs.phtml', 'Olcs'));
+      ?>
+      <ul class="user-menu">
+        <li class="user-menu__item">Sam Quayle:</li>
+        <li class="user-menu__item"><a href="">My settings</a></li>
+        <li class="user-menu__item"><a href="">Sign out</a></li>
+      </ul>
+    </div><!-- user-header -->
+
+    <h1><?php echo (isset($pageTitle) ? $pageTitle : ''); ?></h1>
+    <h3 class="page-header__subtitle"><?php echo (isset($pageSubTitle) ? $pageSubTitle : ''); ?></h3>
+
+  </div><!-- end .page-header__wrapper-->
+</div><!-- end .page-header-->

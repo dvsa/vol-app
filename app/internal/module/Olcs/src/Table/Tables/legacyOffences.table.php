@@ -51,10 +51,6 @@ return array(
 
                 return substr($data['notes'], 0, 150);
             },
-        ),
-        array(
-            'title' => 'Points',
-            'name' => 'points'
         )
     )
 );
