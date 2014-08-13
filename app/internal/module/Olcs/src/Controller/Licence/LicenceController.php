@@ -26,8 +26,8 @@ class LicenceController extends AbstractFormActionController
 
         $view = $this->getView(['licence' => $licence]);
 
-        $this->title = $view->licence['licenceNumber'];
-        $this->subTitle = $view->licence['goodsOrPsv'] . ', ' . $view->licence['licenceType']
+        $this->title = $view->licence['licNo'];
+        $this->subTitle = $view->licence['goodsOrPsv']['id'] . ', ' . $view->licence['licenceType']['id']
             . ', ' . $view->licence['licenceStatus'];
 
         return $view;
