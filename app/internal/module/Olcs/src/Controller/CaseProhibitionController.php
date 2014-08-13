@@ -218,7 +218,7 @@ class CaseProhibitionController extends CaseController implements CrudInterface
         $results = $this->makeRestCall(
             'Prohibition',
             'GET',
-            array('case_id' => $caseId, 'bundle' => json_encode($bundle))
+            array('case' => $caseId, 'bundle' => json_encode($bundle))
         );
 
         if ($results['Count']) {
