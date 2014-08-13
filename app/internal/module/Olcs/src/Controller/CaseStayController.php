@@ -11,6 +11,7 @@ namespace Olcs\Controller;
 use Olcs\Controller\Traits\DeleteActionTrait;
 use Zend\View\Model\ViewModel;
 use Common\Controller\CrudInterface;
+use Common\Exception\BadRequestException;
 
 /**
  * Class to manage Stays
@@ -39,6 +40,7 @@ class CaseStayController extends CaseController implements CrudInterface
     /**
      * temporary hardcoding of stay types until proper data available
      *
+     * @param int $stayTypeId
      * @return array|boolean
      */
     private function getStayTypeName($stayTypeId)
@@ -73,7 +75,7 @@ class CaseStayController extends CaseController implements CrudInterface
     /**
      * Show a table of stays and appeals for the given case
      *
-     * @return object
+     * @return \Zend\View\Model\ViewModel
      */
     public function indexAction()
     {
@@ -107,14 +109,14 @@ class CaseStayController extends CaseController implements CrudInterface
 
     /**
      * Add a new stay for a case
-     *
-     * @todo add message along with redirect if there's pre existing data
-     * @return ViewModel
+
+     * @return \Zend\View\Model\ViewModel
      */
     public function addAction()
     {
         $licenceId = $this->fromRoute('licence');
         $caseId = $this->fromRoute('case');
+        $this->checkCaseHasAppeal($caseId);
 
         $pageData = $this->getCase($caseId);
 
@@ -171,11 +173,13 @@ class CaseStayController extends CaseController implements CrudInterface
     /**
      * Loads the edit page
      *
-     * @todo Check to make sure the stay ID is really related to the case ID
+     * \Zend\View\Model\ViewModel
      */
     public function editAction()
     {
         $stayId = $this->fromRoute('id');
+        $caseId = $this->fromRoute('case');
+        $this->checkCaseHasAppeal($caseId);
 
         $bundle = array(
             'children' => array(
@@ -256,6 +260,9 @@ class CaseStayController extends CaseController implements CrudInterface
             return $this->redirectIndex($data['licence'], $data['case']);
         }
 
+        $caseId = $this->fromRoute('case');
+        $this->checkCaseHasAppeal($caseId);
+
         //if the withdrawn checkbox is 'N' then make sure withdrawn date is null
         if ($data['fields']['isWithdrawn'] == 'N') {
             $data['fields']['withdrawnDate'] = null;
@@ -290,6 +297,9 @@ class CaseStayController extends CaseController implements CrudInterface
     {
         $licence = $data['licence'];
         unset($data['licence']);
+
+        $caseId = $this->fromRoute('case');
+        $this->checkCaseHasAppeal($caseId);
 
         //if the withdrawn checkbox is 'N' then make sure withdrawn date is null
         if ($data['fields']['isWithdrawn'] == 'N') {
@@ -458,5 +468,12 @@ class CaseStayController extends CaseController implements CrudInterface
         }
 
         return $data;
+    }
+
+    private function checkCaseHasAppeal($caseId)
+    {
+        if (!$this->caseHasAppeal($caseId)) {
+            throw new BadRequestException('Case must have an appeal');
+        }
     }
 }
