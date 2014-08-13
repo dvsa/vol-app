@@ -20,7 +20,7 @@ use Zend\View\Model\ViewModel;
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 class SearchController extends FormActionController
-{
+{ 
 
     /**
      * Search form action
@@ -35,7 +35,8 @@ class SearchController extends FormActionController
 
         $view = new ViewModel(['form' => $form]);
         $view->setTemplate('search/index');
-        return $view;
+
+        return $this->renderView($view, 'Search', 'Search for licences using any of the following fields');
     }
 
     /**
@@ -114,6 +115,6 @@ class SearchController extends FormActionController
 
         $view = new ViewModel(['table' => $table]);
         $view->setTemplate('results-operator');
-        return $view;
+        return $this->renderView($view, 'Search results');
     }
 }

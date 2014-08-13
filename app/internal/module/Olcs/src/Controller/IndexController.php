@@ -17,14 +17,14 @@ use Zend\View\Model\ViewModel;
  */
 class IndexController extends AbstractActionController
 {
+    protected $pageTitle = 'Home';
+    protected $pageSubTitle = 'Subtitle';
 
     /**
      * @codeCoverageIgnore
      */
     public function indexAction()
     {
-        $view = new ViewModel();
-        $view->setTemplate('index/home.phtml');
-        return $view;
+        return $this->renderView('index/home');
     }
 }

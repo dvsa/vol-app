@@ -17,11 +17,18 @@ use Zend\View\Model\ViewModel;
  */
 class LicenceController extends AbstractFormActionController
 {
+    protected $title;
+    protected $subtitle;
+
     public function getViewWithLicence()
     {
         $licence = $this->getLicence($this->getFromRoute('licence'));
 
         $view = $this->getView(['licence' => $licence]);
+
+        $this->title = $view->licence['licenceNumber'];
+        $this->subTitle = $view->licence['goodsOrPsv'] . ', ' . $view->licence['licenceType']
+            . ', ' . $view->licence['licenceStatus'];
 
         return $view;
     }
@@ -31,7 +38,7 @@ class LicenceController extends AbstractFormActionController
         $view = $this->getViewWithLicence();
         $view->setTemplate('licence/index');
 
-        return $view;
+        return $this->renderView($view, $this->title, $this->subTitle);
     }
 
     public function editAction()
@@ -39,7 +46,7 @@ class LicenceController extends AbstractFormActionController
         $view = $this->getViewWithLicence();
         $view->setTemplate('licence/index');
 
-        return $view;
+        return $this->renderView($view, $this->title, $this->subTitle);
     }
 
     public function casesAction()
@@ -47,7 +54,7 @@ class LicenceController extends AbstractFormActionController
         $view = $this->getViewWithLicence();
         $view->setTemplate('licence/index');
 
-        return $view;
+        return $this->renderView($view, $this->title, $this->subTitle);
     }
 
     public function documentsAction()
@@ -55,7 +62,7 @@ class LicenceController extends AbstractFormActionController
         $view = $this->getViewWithLicence();
         $view->setTemplate('licence/index');
 
-        return $view;
+        return $this->renderView($view, $this->title, $this->subTitle);
     }
 
     public function processingAction()
@@ -63,7 +70,7 @@ class LicenceController extends AbstractFormActionController
         $view = $this->getViewWithLicence();
         $view->setTemplate('licence/index');
 
-        return $view;
+        return $this->renderView($view, $this->title, $this->subTitle);
     }
 
     public function feesAction()
@@ -71,7 +78,7 @@ class LicenceController extends AbstractFormActionController
         $view = $this->getViewWithLicence();
         $view->setTemplate('licence/index');
 
-        return $view;
+        return $this->renderView($view, $this->title, $this->subTitle);
     }
 
     /**
