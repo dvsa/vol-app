@@ -16,7 +16,7 @@ use Zend\View\Model\ViewModel;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CaseController extends FormActionController
+class CaseController extends AbstractController
 {
     /**
      * Manage action.
@@ -420,15 +420,26 @@ class CaseController extends FormActionController
         $pagination['url'] = $this->url();
         $pagination['licence'] = $this->fromRoute('licence');
         $pagination['page'] = $this->fromRoute('page', 1);
-        $pagination['sort'] = $this->fromRoute('sort', 'caseNumber');
+        $pagination['sort'] = $this->fromRoute('sort', 'id');
         $pagination['order'] = $this->fromRoute('order', 'desc');
         $pagination['limit'] = $this->fromRoute('limit', 10);
 
-        $results = $this->makeRestCall('Cases', 'GET', $pagination);
+        $bundle = array(
+            'children' => array(
+                'caseType' => array(
+                    'properties' => 'ALL'
+                )
+            )
+        );
+
+        $results = $this->makeRestCall('Cases', 'GET', $pagination, $bundle);
+        /* echo '<pre>';
+        die(print_r($results, 1)); */
 
         $table = $this->getServiceLocator()->get('Table')->buildTable('case', $results, $pagination);
 
-        $licenceData = $this->makeRestCall('Licence', 'GET', array('id' => $licence));
+
+        $licenceData = $this->getLicence($licence);
 
         $view = $this->getView(
             array(

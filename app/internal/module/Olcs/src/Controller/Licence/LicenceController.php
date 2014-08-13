@@ -9,13 +9,14 @@ namespace Olcs\Controller\Licence;
 
 use Common\Controller\FormActionController as AbstractFormActionController;
 use Zend\View\Model\ViewModel;
+use Olcs\Controller\AbstractController;
 
 /**
  * Licence Controller
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class LicenceController extends AbstractFormActionController
+class LicenceController extends AbstractController
 {
     protected $title;
     protected $subtitle;
@@ -23,6 +24,9 @@ class LicenceController extends AbstractFormActionController
     public function getViewWithLicence()
     {
         $licence = $this->getLicence($this->getFromRoute('licence'));
+
+        echo '<pre>';
+        die(print_r($licence, 1));
 
         $view = $this->getView(['licence' => $licence]);
 
@@ -104,42 +108,5 @@ class LicenceController extends AbstractFormActionController
     public function getView(array $params = null)
     {
         return new ViewModel($params);
-    }
-
-    /**
-     * Gets the licence by ID.
-     *
-     * @param integer $id
-     * @return array
-     */
-    public function getLicence($id)
-    {
-        /* $bundle = array(
-            'children' => array(
-                'categories' => array(
-                    'properties' => array(
-                        'id',
-                        'name'
-                    )
-                ),
-                'licence' => array(
-                    'properties' => 'ALL',
-                    'children' => array(
-                        'trafficArea' => array(
-                            'properties' => 'ALL'
-                        ),
-                        'organisation' => array(
-                            'properties' => 'ALL'
-                        )
-                    )
-                )
-            )
-        ); */
-
-        // @todo need to define bundle here to get types/statuses etc
-
-        $licence = $this->makeRestCall('Licence', 'GET', array('id' => $id));
-
-        return $licence;
     }
 }
