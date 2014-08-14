@@ -593,7 +593,13 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
             'outcome' => array
                 (
                     'handle' => 'impounding_outcome.2'
-                )
+                ),
+            'legislationTypes' => array
+                (
+                    array('handle' => 'test'),
+                    array('handle' => 'test2'),
+                ),
+            'vrm' => 'vrm1'
         );
     }
 
@@ -610,8 +616,10 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
             'id' => 5,
             'version' => 2,
             'csrf' => 'e92c3acf055e3e45a131bb46e8a062ca',
-            'submit' => ($submit ? '' : false),
-            'cancel' => ($submit ? false : ''),
+            'form-actions' => [
+                'submit' => ($submit ? '' : false),
+                'cancel' => ($submit ? false : '')
+            ],
             'application_details' => array
                 (
                     'impoundingType' => 'impounding_type.1',
