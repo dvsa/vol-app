@@ -376,7 +376,7 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
         $data['addresses']['requestorsAddress']['countryCode'] = 'GB';
         $data['requestorsForename'] = 'Joe';
         $data['requestorsFamilyName'] = 'Bloggs';
-        $data['dateRequested'] = '2014-07-19';
+        $data['requestedDate'] = '2014-07-19';
         $data['authorisersDecision'] = 'Licence granted';
 
         $bookmarkData['licence']['trafficArea']['areaName'] = 'North East of England';
@@ -409,7 +409,7 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
         $data['addresses']['requestorsAddress']['countryCode'] = 'GB';
         $data['requestorsForename'] = 'Joe';
         $data['requestorsFamilyName'] = 'Bloggs';
-        $data['dateRequested'] = '2014-07-19';
+        $data['requestedDate'] = '2014-07-19';
         $data['authorisersDecision'] = 'Licence granted';
 
         $bookmarkData['licence']['trafficArea']['areaName'] = 'North East of England';

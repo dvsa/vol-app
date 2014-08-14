@@ -29,7 +29,7 @@ return array(
                     true
                 ) . '">' . $this->callFormatter($column, $data) . '</a>';
             },
-            'name' => 'dateRequested'
+            'name' => 'requestedDate'
         ),
         array(
             'title' => 'Requested by',
@@ -42,7 +42,7 @@ return array(
         array(
             'title' => 'Date stopped',
             'formatter' => 'Date',
-            'name' => 'dateStopped'
+            'name' => 'stoppedDate'
         ),
         array(
             'title' => 'Requestor body',

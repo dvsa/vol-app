@@ -37,12 +37,12 @@ return [
                         'filters' => '\Common\Form\Elements\InputFilters\TextMax40Required',
                         'label' => 'Requestor body'
                     ],
-                    'dateStopped' => [
+                    'stoppedDate' => [
                         'type' => 'dateSelectWithEmpty',
                         'label' => 'Date stopped',
                         'filters' => '\Common\Form\Elements\InputFilters\StopDateBeforeRequestDate'
                     ],
-                    'dateRequested' => [
+                    'requestedDate' => [
                         'type' => 'dateSelectWithEmpty',
                         'label' => 'Date requested',
                         'filters' => '\Common\Form\Elements\InputFilters\DateNotInFuture'

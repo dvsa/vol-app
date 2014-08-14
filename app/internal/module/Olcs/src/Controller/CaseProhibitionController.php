@@ -157,31 +157,6 @@ class CaseProhibitionController extends CaseController implements CrudInterface
     }
 
     /**
-     *
-     * Formats data for use in a table
-     *
-     * @param array $results
-     * @return array $results
-     */
-    private function formatForTable($results)
-    {
-        $config = $this->getServiceLocator()->get('Config');
-        $static = $config['static-list-data'];
-
-        if (!empty($results)) {
-            foreach ($results as $key => $result) {
-                if (isset($result['prohibitionType']['handle'])
-                    && isset($static['prohibition_type'][$result['prohibitionType']['handle']])) {
-                    $results[$key]['prohibitionType'] =
-                        $static['prohibition_type'][$result['prohibitionType']['handle']];
-                }
-            }
-        }
-
-        return $results;
-    }
-
-    /**
      * Formats data for use in the form
      *
      * @param array $results
@@ -195,7 +170,7 @@ class CaseProhibitionController extends CaseController implements CrudInterface
         $formatted['fields']['clearedDate'] = $results['clearedDate'];
         $formatted['fields']['vrm'] = $results['vrm'];
         $formatted['fields']['imposedAt'] = $results['imposedAt'];
-        $formatted['fields']['prohibitionType'] = $results['prohibitionType']['handle'];
+        $formatted['fields']['prohibitionType'] = $results['prohibitionType']['id'];
         $formatted['fields']['isTrailer'] = $results['isTrailer'];
 
         $formatted['id'] = $results['id'];
@@ -213,20 +188,9 @@ class CaseProhibitionController extends CaseController implements CrudInterface
      */
     private function generateProhibitionTable($caseId)
     {
-        $bundle = $this->getBundle();
+        $results = $this->makeRestCall('Prohibition', 'GET', array('case' => $caseId), $this->getBundle());
 
-        $results = $this->makeRestCall(
-            'Prohibition',
-            'GET',
-            array('case' => $caseId, 'bundle' => json_encode($bundle))
-        );
-
-        if ($results['Count']) {
-            $results = $this->formatForTable($results);
-            return $this->buildTable('prohibition', $results);
-        }
-
-        return $this->buildTable('prohibition', []);
+        return $this->buildTable('prohibition', $results);
     }
 
     /**
@@ -237,16 +201,23 @@ class CaseProhibitionController extends CaseController implements CrudInterface
      */
     private function generateProhibitionNoteForm($caseId)
     {
-        $prohibitionNote = $this->makeRestCall('ProhibitionNote', 'GET', array('case' => $caseId));
+        $bundle = array(
+            'properties' => array(
+                'id',
+                'version',
+                'prohibitionNote'
+            )
+        );
 
-        if ($prohibitionNote['Count']) {
-            $prohibitionNote = $prohibitionNote['Results'][0];
+        $prohibitionNote = $this->makeRestCall('Cases', 'GET', array('id' => $caseId), $bundle);
+
+        if (!isset($prohibitionNote['id'])) {
+            $prohibitionNote['id'] = $caseId;
         }
 
-        $prohibitionNote['case'] = $caseId;
-
-        $data = [];
-        $data['main'] = $prohibitionNote;
+        $data = [
+            'main' => $prohibitionNote
+        ];
 
         $form = $this->generateForm(
             'prohibition-comment',
@@ -266,15 +237,10 @@ class CaseProhibitionController extends CaseController implements CrudInterface
      */
     public function saveProhibitionNoteForm($data)
     {
-        if (isset($data['main'])) {
-            $data = $data + $data['main'];
-            unset($data['main']);
-        }
-
-        if (!empty($data['id'])) {
-            $this->processEdit($data, 'ProhibitionNote');
+        if (!empty($data['main']['id'])) {
+            $this->processEdit($data['main'], 'Cases');
         } else {
-            $this->processAdd($data, 'ProhibitionNote');
+            $this->processAdd($data['main'], 'Cases');
         }
 
         return $this->redirectToRoute('case_prohibition', array(), array(), true);
@@ -286,7 +252,7 @@ class CaseProhibitionController extends CaseController implements CrudInterface
      * @param array $data
      * @return \Zend\Http\Response
      */
-    public function processAddProhibition ($data)
+    public function processAddProhibition($data)
     {
         $formatted = $this->formatForSave($data);
 
@@ -349,8 +315,7 @@ class CaseProhibitionController extends CaseController implements CrudInterface
                 ),
                 'prohibitionType' => array(
                     'properties' => array(
-                        'handle',
-                        'comment'
+                        'id'
                     )
                 )
             )

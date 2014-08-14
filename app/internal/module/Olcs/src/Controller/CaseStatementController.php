@@ -69,7 +69,9 @@ class CaseStatementController extends CaseController implements CrudInterface
         );
 
         $form = $this->generateFormWithData(
-            'statement', 'processAddStatement', array('case' => $caseId)
+            'statement',
+            'processAddStatement',
+            array('case' => $caseId)
         );
 
         $view = $this->getView(
@@ -107,11 +109,15 @@ class CaseStatementController extends CaseController implements CrudInterface
 
         $bundle = array(
             'children' => array(
-                'requestorsAddress'
+                'requestersAddress'
             )
         );
 
         $details = $this->makeRestCall('Statement', 'GET', array('id' => $statementId), $bundle);
+
+        print '<pre>';
+        print_r($details);
+        exit;
 
         if (empty($details)) {
             return $this->notFoundAction();
@@ -120,7 +126,7 @@ class CaseStatementController extends CaseController implements CrudInterface
         $data = $this->formatDataForEditForm($details);
         $data['case'] = $caseId;
 
-        $data['requestorsAddress']['country'] = $data['requestorsAddress']['countryCode']['id'];
+        $data['requestersAddress']['country'] = $data['requestersAddress']['countryCode']['id'];
 
         $form = $this->generateFormWithData(
             'statement',
@@ -172,7 +178,7 @@ class CaseStatementController extends CaseController implements CrudInterface
 
         $this->redirect()->toRoute(
             'case_statement',
-            ['case'=>$this->fromRoute('case'), 'licence'=>$this->fromRoute('licence')],
+            ['case' => $this->fromRoute('case'), 'licence' => $this->fromRoute('licence')],
             [],
             false
         );
@@ -212,17 +218,17 @@ class CaseStatementController extends CaseController implements CrudInterface
         $bookmarks['TAAddress_2'] = '<user\'s location address>'; // users location address
 
         $bookmarks['Address_1'] =
-            $data['addresses']['requestorsAddress']['addressLine1'] . " \line " .
-            $data['addresses']['requestorsAddress']['addressLine2'] . " \line " .
-            $data['addresses']['requestorsAddress']['addressLine3'] . " \line " .
-            $data['addresses']['requestorsAddress']['addressLine4'] . " \line" .
-            $data['addresses']['requestorsAddress']['town'] . " \line" .
-            $data['addresses']['requestorsAddress']['postcode'] . " \line" .
-            $data['addresses']['requestorsAddress']['country'];
+            $data['addresses']['requestersAddress']['addressLine1'] . " \line " .
+            $data['addresses']['requestersAddress']['addressLine2'] . " \line " .
+            $data['addresses']['requestersAddress']['addressLine3'] . " \line " .
+            $data['addresses']['requestersAddress']['addressLine4'] . " \line" .
+            $data['addresses']['requestersAddress']['town'] . " \line" .
+            $data['addresses']['requestersAddress']['postcode'] . " \line" .
+            $data['addresses']['requestersAddress']['countryCode'];
         $bookmarks['Ref'] = '184130/' . $bookmarkData['licence']['licNo'];
         $bookmarks['Name'] = $data['requestorsForename'] . ' ' . $data['requestorsFamilyName'];
         $bookmarks['RequestMode'] = 'letter';
-        $bookmarks['RequestDate'] = $data['dateRequested'];
+        $bookmarks['RequestDate'] = $data['requestedDate'];
         $bookmarks['UserKnownAs'] = '<user\'s name>';
         $bookmarks['AuthorisorTeam'] = 'Authoriser Team';
         $bookmarks['AuthorisorName2'] = '<user\'s name> <olcs job role>';
@@ -298,7 +304,7 @@ class CaseStatementController extends CaseController implements CrudInterface
 
         unset($data['details']);
 
-        $data = $this->processAddressData($data, 'requestorsAddress');
+        $data = $this->processAddressData($data, 'requestersAddress');
 
         $data['statementType'] = str_replace('statement_type.', '', $data['statementType']);
         $data['contactType'] = str_replace('contact_type.', '', $data['contactType']);
