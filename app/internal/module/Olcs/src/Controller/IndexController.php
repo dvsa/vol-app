@@ -160,6 +160,7 @@ class IndexController extends FormActionController
     protected function getListData($entity, $data = array(), $primaryKey = 'id', $titleKey = 'name')
     {
         $data['limit'] = 100;
+        $data['sort'] = $titleKey;  // AC says always sort alphabetically
         $response = $this->makeRestCall($entity, 'GET', $data);
 
         $final = array('' => 'All');
