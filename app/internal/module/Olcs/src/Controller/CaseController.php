@@ -218,7 +218,7 @@ class CaseController extends FormActionController
             'prohibitions' => [
                 'key' => 'prohibitions',
                 'label' => 'Prohibitions',
-                'url' => $pm->get('url')->fromRoute('case_prohibition', ['tab' => 'prohibitions'], [], true),
+                'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'prohibitions'], [], true),
             ],
             'annual_test_history' => [
                 'key' => 'annual_test_history',

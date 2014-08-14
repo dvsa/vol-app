@@ -38,6 +38,11 @@ return array(
             'name' => 'prohibitionDate'
         ),
         array(
+            'title' => 'Cleared date',
+            'formatter' => 'Date',
+            'name' => 'clearedDate',
+        ),
+        array(
             'title' => 'Vehicle',
             'format' => '{{vrm}}'
         ),
@@ -63,6 +68,6 @@ return array(
             'formatter' => function ($data) {
                 return $data['prohibitionType']['comment'];
             }
-        ),
+        )
     )
 );
