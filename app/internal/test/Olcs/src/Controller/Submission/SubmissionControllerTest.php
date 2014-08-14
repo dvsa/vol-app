@@ -262,10 +262,10 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
                 'submissionActions' => array(
                     'properties' => 'ALL',
                     'children' => array(
-                        'userSender' => array(
+                        'senderUser' => array(
                             'properties' => 'ALL'
                         ),
-                        'userRecipient' => array(
+                        'recipientUser' => array(
                             'properties' => 'ALL'
                         ),
                         'piReasons' => array(
@@ -502,7 +502,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->once())
             ->method('getFormWithListData')
-            ->with('decision', array('submission' => 8, 'userSender' => 1))
+            ->with('decision', array('submission' => 8, 'senderUser' => 1))
             ->will($this->returnValue('form'));
 
         $this->controller->expects($this->once())

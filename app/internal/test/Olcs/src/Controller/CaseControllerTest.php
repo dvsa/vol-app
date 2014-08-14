@@ -1136,7 +1136,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
                             'submissionActionType' => 'recommendation',
                             'createdBy' => '',
                             'lastUpdatedBy' => '',
-                            'userSender' => array(
+                            'senderUser' => array(
                                 'createdOn' => '2013-11-27T00:00:00+0000',
                                 'lastUpdatedOn' => '2013-11-27T00:00:00+0000',
                                 'version' => 1,
@@ -1149,7 +1149,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
                                 'lastUpdatedBy' => '',
                                 'roles' => array()
                             ),
-                            'userRecipient' => array(
+                            'recipientUser' => array(
                                 'createdOn' => '2013-11-27T00:00:00+0000',
                                 'lastUpdatedOn' => '2013-11-27T00:00:00+0000',
                                 'version' => 1,

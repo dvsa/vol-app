@@ -85,10 +85,10 @@ class CaseController extends AbstractController
                 'submissionActions' => array(
                     'properties' => 'ALL',
                     'children' => array(
-                        'userSender' => array(
+                        'senderUser' => array(
                             'properties' => 'ALL'
                         ),
-                        'userRecipient' => array(
+                        'recipientUser' => array(
                             'properties' => 'ALL'
                         ),
                     )
@@ -108,8 +108,8 @@ class CaseController extends AbstractController
 
                 $result['urgent'] = $action['urgent'];
 
-                if (isset($action['userRecipient']['name'])) {
-                    $result['currentlyWith'] = $action['userRecipient']['name'];
+                if (isset($action['recipientUser']['name'])) {
+                    $result['currentlyWith'] = $action['recipientUser']['name'];
                 }
 
                 $actions = isset($submissionActions['submission_'.$action['submissionActionType']])

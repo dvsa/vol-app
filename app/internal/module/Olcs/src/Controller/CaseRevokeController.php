@@ -230,7 +230,7 @@ class CaseRevokeController extends CaseController implements CrudInterface
         }
 
         $piReasons = $this->makeRestCall(
-            'PiReason',
+            'Reason',
             'GET',
             [
                 'isProposeToRevoke' => '1',

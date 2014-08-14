@@ -57,7 +57,7 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
                                     'organisation' => array(
                                         'properties' => 'ALL',
                                         'children' => array(
-                                            'organisationOwners' => array(
+                                            'organisationPersons' => array(
                                                 'properties' => 'ALL',
                                                 'children' => array(
                                                     'person' => array(
@@ -99,7 +99,7 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
                 'transport-managers' => array(
                     'view' => 'submission/partials/transport-managers',
                     'exclude' => array(
-                        'column' => 'licenceType',
+                        'column' => 'licenceType/id',
                         'values' => array(
                             'standard national',
                             'standard international'
@@ -122,7 +122,7 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
                 ),
                 'bus-services-registered' => array(
                     'exclude' => array(
-                        'column' => 'goodsOrPsv',
+                        'column' => 'goodsOrPsv/id',
                         'values' => array(
                             'psv',
                         )
@@ -130,7 +130,7 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
                 ),
                 'bus-compliance-issues' => array(
                     'exclude' => array(
-                        'column' => 'goodsOrPsv',
+                        'column' => 'goodsOrPsv/id',
                         'values' => array(
                             'psv',
                         )
@@ -350,7 +350,7 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
         $data = array(
             'licence' => array(
                 'organisation' => array(
-                    'organisationOwners' => array(
+                    'organisationPersons' => array(
                         array(
                             'person' => array(
                                 'familyName' => 'Smith',

@@ -26,13 +26,22 @@ return array(
                     'licence' => array(
                         'properties' => 'ALL',
                         'children' => array(
+                            'licenceType' => array(
+                                'properties' => array('id')
+                            ),
                             'trafficArea' => array(
                                 'properties' => 'ALL'
                             ),
                             'organisation' => array(
                                 'properties' => 'ALL',
                                 'children' => array(
-                                    'organisationOwners' => array(
+                                    'type' => array(
+                                        'properties' => array('id')
+                                    ),
+                                    'sicCode' => array(
+                                        'properties' => array('id')
+                                    ),
+                                    'organisationPersons' => array(
                                         'properties' => 'ALL',
                                         'children' => array(
                                             'person' => array(
@@ -74,7 +83,7 @@ return array(
         'transport-managers' => array(
             'view' => 'submission/partials/transport-managers',
             'exclude' => array(
-                'column' => 'licenceType',
+                'column' => 'licenceType/id',
                 'values' => array(
                     'standard national',
                     'standard international'
@@ -97,7 +106,7 @@ return array(
         ),
         'bus-services-registered' => array(
             'exclude' => array(
-                'column' => 'goodsOrPsv',
+                'column' => 'goodsOrPsv/id',
                 'values' => array(
                     'psv',
                 )
@@ -105,7 +114,7 @@ return array(
         ),
         'bus-compliance-issues' => array(
             'exclude' => array(
-                'column' => 'goodsOrPsv',
+                'column' => 'goodsOrPsv/id',
                 'values' => array(
                     'psv',
                 )

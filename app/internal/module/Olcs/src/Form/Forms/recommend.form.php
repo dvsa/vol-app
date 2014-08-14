@@ -25,7 +25,7 @@ return [
                         'value_options' => 'pi-reasons',
                         'help-block' => 'Use CTRL to select multiple'
                     ],
-                    'userRecipient' => [
+                    'recipientUser' => [
                         'label' => 'Send to',
                         'type' => 'select',
                         'value_options' => 'user-list',
@@ -74,7 +74,7 @@ return [
                      'value' => 'recommendation'
                 )
             ],
-            'userSender' => [
+            'senderUser' => [
                 'type' => 'hidden',
             ],
             'submission' => [

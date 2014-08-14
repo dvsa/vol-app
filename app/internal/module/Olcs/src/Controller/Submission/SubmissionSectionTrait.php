@@ -6,7 +6,7 @@ use Zend\Filter\Word\DashToCamelCase;
 
 /**
  * Trait for building submission section data
- * @author Mike Cooper
+ * @author Mike Cooper <michael.cooper@valtech.co.uk>
  */
 trait SubmissionSectionTrait
 {
@@ -42,7 +42,26 @@ trait SubmissionSectionTrait
         if (!isset($config['exclude'])) {
             return true;
         }
-        if (in_array(strtolower($licenceData[$config['exclude']['column']]), $config['exclude']['values'])) {
+
+        // If the column contains a slash, then we are trying to dig deeper into the array
+        if (!strstr($config['exclude']['column'], '/')) {
+            $key = $licenceData[$config['exclude']['column']];
+        } else {
+            $parts = explode('/', $config['exclude']['column']);
+
+            $key = $licenceData;
+
+            foreach ($parts as $part) {
+                if (isset($key[$part])) {
+                    $key = &$key[$part];
+                } else {
+                    $key = '';
+                    break;
+                }
+            }
+        }
+
+        if (in_array(strtolower($key), $config['exclude']['values'])) {
             return true;
         }
         return false;
@@ -100,9 +119,9 @@ trait SubmissionSectionTrait
             'type' => $data['licence']['organisation']['type'],
             'sicCode' => $data['licence']['organisation']['sicCode'],
             'isMlh' => $data['licence']['organisation']['isMlh'],
-            'startDate' => $data['licence']['startDate'],
-            'authorisedVehicles' => $data['licence']['authorisedVehicles'],
-            'authorisedTrailers' => $data['licence']['authorisedTrailers'],
+            'startDate' => $data['licence']['inForceDate'],
+            'authorisedVehicles' => $data['licence']['totAuthVehicles'],
+            'authorisedTrailers' => $data['licence']['totAuthTrailers'],
         );
     }
 
@@ -154,7 +173,7 @@ trait SubmissionSectionTrait
     {
         $dataToReturnArray = array();
 
-        foreach ($data['licence']['organisation']['organisationOwners'] as $organisationOwner) {
+        foreach ($data['licence']['organisation']['organisationPersons'] as $organisationOwner) {
 
             $thisOrganisationOwner['familyName'] = $organisationOwner['person']['familyName'];
             $thisOrganisationOwner['forename'] = $organisationOwner['person']['forename'];

@@ -133,6 +133,7 @@ class SubmissionController extends FormActionController implements CrudInterface
         }
 
         $submission = $this->getEditSubmissionData();
+
         return $this->getSubmissionView($submission);
     }
 
@@ -160,10 +161,10 @@ class SubmissionController extends FormActionController implements CrudInterface
                 'submissionActions' => array(
                     'properties' => 'ALL',
                     'children' => array(
-                        'userSender' => array(
+                        'senderUser' => array(
                             'properties' => 'ALL'
                         ),
-                        'userRecipient' => array(
+                        'recipientUser' => array(
                             'properties' => 'ALL'
                         ),
                         'piReasons' => array(
@@ -303,7 +304,7 @@ class SubmissionController extends FormActionController implements CrudInterface
         $form = $this->getFormWithListData(
             $type, array(
             'submission' => $this->routeParams['id'],
-            'userSender' => $this->getLoggedInUser())
+            'senderUser' => $this->getLoggedInUser())
         );
         $form = $this->formPost($form, 'processRecDecForm');
         $view = $this->getViewModel(
@@ -379,7 +380,7 @@ class SubmissionController extends FormActionController implements CrudInterface
         $piReasons = $this->getPiReasons();
 
         $form = $this->getForm($formType);
-        $form->get('main')->get('userRecipient')->setValueOptions($userList);
+        $form->get('main')->get('recipientUser')->setValueOptions($userList);
         $form->get('main')->get('piReasons')->setValueOptions($piReasons);
 
         $form->setData($data);
@@ -397,21 +398,30 @@ class SubmissionController extends FormActionController implements CrudInterface
     {
         $reasons = [];
 
+        $bundle = array(
+            'properties' => 'ALL',
+            'children' => array(
+                'licenceType' => array('properties' => array('id')),
+                'goodsOrPsv' => array('properties' => array('id'))
+            )
+        );
+
         $licence = $this->makeRestCall(
             'Licence',
             'GET',
             [
                 'id' => $this->routeParams['licence']
-            ]
+            ],
+            $bundle
         );
 
         //licence type should really be a lookup table in
         //both Licence and PiReason entities!
-        switch (strtolower($licence['goodsOrPsv'])) {
-            case 'goods':
+        switch (strtolower($licence['goodsOrPsv']['id'])) {
+            case 'lcat_gv':
                 $goodsOrPsv = 'GV';
                 break;
-            case 'psv':
+            case 'lcat_psv':
                 $goodsOrPsv = 'PSV';
                 break;
             default:
@@ -419,11 +429,11 @@ class SubmissionController extends FormActionController implements CrudInterface
         }
 
         $piReasons = $this->makeRestCall(
-            'PiReason',
+            'Reason',
             'GET',
             [
                 'goodsOrPsv' => $goodsOrPsv,
-                'isNi' => $licence['niFlag'],
+                'isNi' => ($licence['niFlag'] == 'Y' ? 1 : 0),
                 'limit' => 'all'
             ]
         );

@@ -17,10 +17,10 @@
         </li>
         <li class="summary__item">
             <b><?php echo $this->translate('business-type') ?></b>
-                <?php echo !empty($this->sectionData['sicCode']) ? $this->translate('sic_code.'.$this->escapeHtml($this->sectionData['sicCode'])) : ''; ?>
+                <?php echo !empty($this->sectionData['sicCode']) ? $this->translate('sic_code.'.$this->escapeHtml($this->sectionData['sicCode']['id'])) : ''; ?>
         </li>
         <li class="summary__item">
-            <b><?php echo $this->translate('licence-type') ?></b><?php echo $this->escapeHtml($this->sectionData['licenceType']); ?>
+            <b><?php echo $this->translate('licence-type') ?></b><?php echo $this->escapeHtml($this->sectionData['licenceType']['id']); ?>
         </li>
         <li class="summary__item">
             <b><?php echo $this->translate('v-auth-t-auth') ?></b>
@@ -40,7 +40,7 @@
             <b><?php echo $this->translate('vehicles-in-posession') ?></b>TBD
         </li>
         <li class="summary__item">
-            <b><?php echo $this->translate('entity-type') ?></b><?php echo $this->escapeHtml($this->sectionData['type']); ?>
+            <b><?php echo $this->translate('entity-type') ?></b><?php echo $this->escapeHtml($this->sectionData['type']['id']); ?>
         </li>
         <li class="summary__item">
             <b><?php echo $this->translate('ecms_no') ?></b><?php echo $this->escapeHtml($this->sectionData['ecms_no']); ?>
