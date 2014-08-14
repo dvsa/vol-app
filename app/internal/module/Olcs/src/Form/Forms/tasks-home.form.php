@@ -40,6 +40,12 @@ return array(
             'filter' => array(
                 'type' => 'submit',
                 'label' => 'tasks-home.submit.filter'
+            ),
+            'sort' => array(
+                'type' => 'hidden',
+            ),
+            'order' => array(
+                'type' => 'hidden',
             )
         )
     )

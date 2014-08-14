@@ -14,8 +14,7 @@ return array(
         ),
         'paginate' => array(
             'limit' => array(
-                'default' => 10,
-                'options' => array(10, 25, 50)
+                'options' => array(2, 5, 50)
             )
         )
     ),
@@ -44,6 +43,7 @@ return array(
             'title' => 'Date',
             'name' => 'actionDate',
             'formatter' => 'TaskDate',
+            'sort' => 'actionDate',
         ),
         array(
             'title' => 'Owner',

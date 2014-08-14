@@ -20,7 +20,6 @@ use Zend\View\Model\JsonModel;
  */
 class IndexController extends FormActionController
 {
-    protected $enableCsrf = false;
     protected $pageTitle = 'Home';
     protected $pageSubTitle = 'Subtitle';
 
@@ -34,7 +33,15 @@ class IndexController extends FormActionController
             $filters
         );
 
-        $table = $this->buildTable('tasks', $tasks);
+        $table = $this->buildTable(
+            'tasks',
+            $tasks,
+            array_merge(
+                $filters,
+                array('query' => $this->getRequest()->getQuery())
+            )
+        );
+
 
         $form = $this->getForm('tasks-home');
 
@@ -52,6 +59,9 @@ class IndexController extends FormActionController
             $form->get($name)
                 ->setValueOptions($options);
         }
+
+        // setting $this->enableCsrf = false won't sort this; we never POST
+        $form->remove('csrf');
 
         $form->setData($filters);
 
@@ -132,6 +142,10 @@ class IndexController extends FormActionController
             'team'   => 2,  // we've no stub for this, but it matches the logged in user's team
             'date'   => 'today',
             'status' => 'open',
+            'sort'   => 'actionDate',
+            'order'  => 'ASC',
+            'page'   => 1,
+            'limit'  => 2
         );
 
         $filters = array_merge(
@@ -139,11 +153,11 @@ class IndexController extends FormActionController
             $this->getRequest()->getQuery()->toArray()
         );
 
-        // map form => backend keys
-
+        // form => backend mappings
         $filters['isClosed'] = $filters['status'] === 'closed';
         $filters['isUrgent'] = isset($filters['urgent']);
 
+        // nuke any empty values too
         return array_filter(
             $filters,
             function ($v) {
