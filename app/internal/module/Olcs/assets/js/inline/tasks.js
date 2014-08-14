@@ -16,7 +16,7 @@ $(function() {
     dest: "#owner",
     process: function(value, done) {
       $.get("/tasks/users/" + value, done);
-    },
+    }
   });
 
   OLCS.cascadeInput({

@@ -24,15 +24,15 @@ return array(
     'columns' => array(
         array(
             'title' => 'Link',
-            'formatter' => 'TaskIdentifier'
+            'name' => 'id_col'
         ),
         array(
             'title' => 'Category',
-            'name' => 'category',
+            'name' => 'cat_description',
         ),
         array(
             'title' => 'Sub category',
-            'name' => 'subCategory',
+            'name' => 'task_sub_type',
         ),
         array(
             'title' => 'Description',
@@ -41,7 +41,7 @@ return array(
         array(
             'title' => 'Date',
             'formatter' => 'Date',
-            'name' => 'date'
+            'name' => 'action_date'
         ),
         array(
             'title' => 'Owner',
@@ -49,7 +49,7 @@ return array(
         ),
         array(
             'title' => 'Name',
-            'name' => 'name',
+            'name' => 'name_col',
         ),
         array(
             'title' => '',

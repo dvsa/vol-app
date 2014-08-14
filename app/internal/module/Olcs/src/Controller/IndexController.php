@@ -24,9 +24,6 @@ class IndexController extends FormActionController
     protected $pageTitle = 'Home';
     protected $pageSubTitle = 'Subtitle';
 
-    /**
-     * @codeCoverageIgnore
-     */
     public function indexAction()
     {
         $filters = $this->filterRequest();
@@ -58,7 +55,7 @@ class IndexController extends FormActionController
         $selects = array(
             'team' => $this->getListData('Team'),
             'owner' => $this->getListData('User'),
-            'category' => $this->getListData('Category'),
+            'category' => $this->getListData('Category', [], 'id', 'description'),
             'sub_category' => $this->getListData('TaskSubCategory')
         );
 
@@ -102,11 +99,11 @@ class IndexController extends FormActionController
         $map = array(
             'users' => array(
                 'entity' => 'User',
-                'field' => 'team_id'
+                'field' => 'team'
             ),
             'sub-categories' => array(
                 'entity' => 'TaskSubCategory',
-                'field' => 'category_id'
+                'field' => 'category'
             )
         );
 
@@ -157,6 +154,7 @@ class IndexController extends FormActionController
      */
     protected function getListData($entity, $data = array(), $primaryKey = 'id', $titleKey = 'name')
     {
+        $data['limit'] = 100;
         $response = $this->makeRestCall($entity, 'GET', $data);
 
         $final = array();
@@ -167,83 +165,5 @@ class IndexController extends FormActionController
             $final[$key] = $value;
         }
         return $final;
-    }
-
-    public function makeRestCall($entity, $method, array $options, array $bundle = null)
-    {
-        // @TODO kill this filth, obviously
-        switch ($entity) {
-        case 'Team':
-            $data = array(
-                array(
-                    'id' => 'all',
-                    'name' => 'All',
-                ),
-                array(
-                    'id' => '1',
-                    'name' => 'A Team',
-                ),
-                array(
-                    'id' => '2',
-                    'name' => 'B Team',
-                )
-            );
-            break;
-        case 'User':
-            $data = array(
-                array(
-                    'id' => 'all',
-                    'name' => 'All',
-                ),
-                array(
-                    'id' => '1',
-                    'name' => 'A User',
-                ),
-                array(
-                    'id' => '2',
-                    'name' => 'B User',
-                )
-            );
-            break;
-        case 'Category':
-            $data = array(
-                array(
-                    'id' => 'all',
-                    'name' => 'All',
-                ),
-                array(
-                    'id' => '1',
-                    'name' => 'A Category',
-                ),
-                array(
-                    'id' => '2',
-                    'name' => 'B Category',
-                )
-            );
-            break;
-        case 'TaskSubCategory':
-            $data = array(
-                array(
-                    'id' => 'all',
-                    'name' => 'All',
-                ),
-                array(
-                    'id' => '1',
-                    'name' => 'A Sub Category',
-                ),
-                array(
-                    'id' => '2',
-                    'name' => 'B Sub Category',
-                )
-            );
-            break;
-        default:
-            return parent::makeRestCall($entity, $method, $options);
-        }
-
-        return array(
-            'Results' => $data,
-            'Count'   => count($data)
-        );
     }
 }
