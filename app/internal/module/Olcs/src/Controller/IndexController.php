@@ -49,9 +49,9 @@ class IndexController extends FormActionController
         // various dropdowns on the filter form
         $selects = array(
             'team' => $this->getListData('Team'),
-            'owner' => $this->getListData('User'),
-            'category' => $this->getListData('Category', [], 'id', 'description'),
-            'subCategory' => $this->getListData('TaskSubCategory')
+            'owner' => $this->getListData('User', $filters),
+            'category' => $this->getListData('Category', [], 'description'),
+            'subCategory' => $this->getListData('TaskSubCategory', $filters)
         );
 
         // bang the relevant data into the corresponding form inputs
@@ -171,7 +171,7 @@ class IndexController extends FormActionController
      * a select. Optionally provide some search data to filter the
      * returned data too.
      */
-    protected function getListData($entity, $data = array(), $primaryKey = 'id', $titleKey = 'name')
+    protected function getListData($entity, $data = array(), $titleKey = 'name', $primaryKey = 'id')
     {
         $data['limit'] = 100;
         $data['sort'] = $titleKey;  // AC says always sort alphabetically
