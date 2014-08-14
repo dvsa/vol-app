@@ -21,7 +21,7 @@ $(function() {
 
   OLCS.cascadeInput({
     source: "#category",
-    dest: "#sub_category",
+    dest: "#subCategory",
     url: "/tasks/sub-categories"
   });
 });

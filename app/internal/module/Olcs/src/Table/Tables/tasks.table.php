@@ -28,11 +28,11 @@ return array(
         ),
         array(
             'title' => 'Category',
-            'name' => 'category',
+            'name' => 'categoryName',
         ),
         array(
             'title' => 'Sub category',
-            'name' => 'subCategory',
+            'name' => 'subCategoryName',
         ),
         array(
             'title' => 'Description',
@@ -45,7 +45,7 @@ return array(
         ),
         array(
             'title' => 'Owner',
-            'name' => 'user',
+            'name' => 'ownerName',
         ),
         array(
             'title' => 'Name',

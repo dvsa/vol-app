@@ -44,7 +44,7 @@ class IndexController extends FormActionController
             'team' => $this->getListData('Team'),
             'owner' => $this->getListData('User'),
             'category' => $this->getListData('Category', [], 'id', 'description'),
-            'sub_category' => $this->getListData('TaskSubCategory')
+            'subCategory' => $this->getListData('TaskSubCategory')
         );
 
         // bang the relevant data into the corresponding form inputs
@@ -130,6 +130,7 @@ class IndexController extends FormActionController
     {
         $defaults = array(
             'owner'  => $this->getLoggedInUser(),
+            'team'   => 2,  // we've no stub for this, but it matches the logged in user's team
             'date'   => 'today',
             'status' => 'open',
         );
@@ -141,8 +142,8 @@ class IndexController extends FormActionController
 
         // map form => backend keys
 
-        $filters['userId'] = $filters['owner'];
         $filters['isClosed'] = $filters['status'] === 'closed';
+        $filters['isUrgent'] = isset($filters['urgent']);
 
         return array_filter(
             $filters,

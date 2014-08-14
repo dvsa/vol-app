@@ -19,7 +19,7 @@ return array(
                 'type' => 'select',
                 'label' => 'tasks-home.data.category',
             ),
-            'sub_category' => array(
+            'subCategory' => array(
                 'type' => 'select',
                 'label' => 'tasks-home.data.sub_category',
             ),
