@@ -26,10 +26,10 @@ class IndexController extends FormActionController
 
     public function indexAction()
     {
-        $filters = $this->filterRequest();
+        $filters = $this->mapRequest();
 
         $tasks = $this->makeRestCall(
-            'Task',
+            'TaskSearchView',
             'GET',
             $filters
         );
@@ -126,19 +126,30 @@ class IndexController extends FormActionController
      *
      * @return array
      */
-    protected function filterRequest()
+    protected function mapRequest()
     {
-        $filters = $this->getRequest()->getQuery()->toArray();
-        if (!isset($filters['owner'])) {
-            $filters['owner'] = $this->getLoggedInUser();
-        }
-        if (!isset($filters['date'])) {
-            $filters['date'] = 'today';
-        }
-        if (!isset($filters['status'])) {
-            $filters['status'] = 'open';
-        }
-        return $filters;
+        $defaults = array(
+            'owner'  => $this->getLoggedInUser(),
+            'date'   => 'today',
+            'status' => 'open',
+        );
+
+        $filters = array_merge(
+            $defaults,
+            $this->getRequest()->getQuery()->toArray()
+        );
+
+        // map form => backend keys
+
+        $filters['userId'] = $filters['owner'];
+        $filters['isClosed'] = $filters['status'] === 'closed';
+
+        return array_filter(
+            $filters,
+            function ($v) {
+                return !empty($v);
+            }
+        );
     }
 
     /**

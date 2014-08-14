@@ -24,15 +24,15 @@ return array(
     'columns' => array(
         array(
             'title' => 'Link',
-            'name' => 'id_col'
+            'name' => 'identifier'
         ),
         array(
             'title' => 'Category',
-            'name' => 'cat_description',
+            'name' => 'category',
         ),
         array(
             'title' => 'Sub category',
-            'name' => 'task_sub_type',
+            'name' => 'subCategory',
         ),
         array(
             'title' => 'Description',
@@ -41,15 +41,15 @@ return array(
         array(
             'title' => 'Date',
             'formatter' => 'Date',
-            'name' => 'action_date'
+            'name' => 'actionDate'
         ),
         array(
             'title' => 'Owner',
-            'name' => 'owner',
+            'name' => 'user',
         ),
         array(
             'title' => 'Name',
-            'name' => 'name_col',
+            'name' => 'name',
         ),
         array(
             'title' => '',
