@@ -179,6 +179,9 @@ class CaseStayController extends CaseController implements CrudInterface
     {
         $stayId = $this->fromRoute('id');
         $caseId = $this->fromRoute('case');
+        $licenceId = $this->fromRoute('licence');
+        $stayTypeId = $this->fromRoute('stayType');
+
         $this->checkCaseHasAppeal($caseId);
 
         $bundle = array(
@@ -206,11 +209,10 @@ class CaseStayController extends CaseController implements CrudInterface
             return $this->notFoundAction();
         }
 
-        $result['licence'] = $this->fromRoute('licence');
+        $result['licence'] = $licenceId;
 
         $pageData = array_merge($result, $case);
 
-        $stayTypeId = $this->fromRoute('stayType');
         $stayTypeName = $this->getStayTypeName($stayTypeId);
 
         if (!$stayTypeName) {
@@ -260,9 +262,6 @@ class CaseStayController extends CaseController implements CrudInterface
             return $this->redirectIndex($data['licence'], $data['case']);
         }
 
-        $caseId = $this->fromRoute('case');
-        $this->checkCaseHasAppeal($caseId);
-
         //if the withdrawn checkbox is 'N' then make sure withdrawn date is null
         if ($data['fields']['isWithdrawn'] == 'N') {
             $data['fields']['withdrawnDate'] = null;
@@ -297,9 +296,6 @@ class CaseStayController extends CaseController implements CrudInterface
     {
         $licence = $data['licence'];
         unset($data['licence']);
-
-        $caseId = $this->fromRoute('case');
-        $this->checkCaseHasAppeal($caseId);
 
         //if the withdrawn checkbox is 'N' then make sure withdrawn date is null
         if ($data['fields']['isWithdrawn'] == 'N') {
@@ -470,6 +466,12 @@ class CaseStayController extends CaseController implements CrudInterface
         return $data;
     }
 
+    /**
+     * Returns a bad request exception if the case does not have an appeal
+     *
+     * @param $caseId
+     * @throws \Common\Exception\BadRequestException
+     */
     private function checkCaseHasAppeal($caseId)
     {
         if (!$this->caseHasAppeal($caseId)) {
