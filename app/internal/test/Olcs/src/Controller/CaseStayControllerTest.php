@@ -37,7 +37,8 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
                 'processAdd',
                 'processEdit',
                 'setBreadcrumb',
-                'getServiceLocator'
+                'getServiceLocator',
+                'caseHasAppeal',
             ]
         );
 
@@ -112,12 +113,16 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
         $this->getFromRoute(0, 'licence', $licenceId);
         $this->getFromRoute(1, 'case', $caseId);
 
-        $this->controller->expects($this->at(2))
+        $this->controller->expects($this->once())
+            ->method('caseHasAppeal')
+            ->will($this->returnValue(true));
+
+        $this->controller->expects($this->at(3))
             ->method('getCase')
             ->with($this->equalTo($caseId))
             ->will($this->returnValue(array('data' => 'data')));
 
-        $this->getFromRoute(3, 'stayType', $stayTypeId);
+        $this->getFromRoute(4, 'stayType', $stayTypeId);
 
         $this->controller->expects($this->once())
             ->method('makeRestCall')
@@ -141,6 +146,19 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
+     * Tests the add action
+     * @expectedException \Common\Exception\BadRequestException
+     */
+    public function testAddActionNoAppeal()
+    {
+        $this->controller->expects($this->once())
+            ->method('caseHasAppeal')
+            ->will($this->returnValue(false));
+
+        $this->controller->addAction();
+    }
+
+    /**
      * Tests the add action fails when a record already exists
      *
      * @dataProvider addActionProvider
@@ -158,19 +176,23 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
         $this->getFromRoute(0, 'licence', $licenceId);
         $this->getFromRoute(1, 'case', $caseId);
 
-        $this->controller->expects($this->at(2))
+        $this->controller->expects($this->once())
+            ->method('caseHasAppeal')
+            ->will($this->returnValue(true));
+
+        $this->controller->expects($this->at(3))
             ->method('getCase')
             ->with($this->equalTo($caseId))
             ->will($this->returnValue(array('data' => 'data')));
 
-        $this->getFromRoute(3, 'stayType', $stayTypeId);
+        $this->getFromRoute(4, 'stayType', $stayTypeId);
 
-        $this->controller->expects($this->at(4))
+        $this->controller->expects($this->at(5))
             ->method('makeRestCall')
             ->with('Stay', 'GET', $this->equalTo(array('case' => $caseId)))
             ->will($this->returnValue($this->getStayRestResult($stayTypeId)));
 
-        $this->controller->expects($this->at(5))
+        $this->controller->expects($this->at(6))
             ->method('redirect')
             ->will($this->returnValue($redirect));
 
@@ -184,6 +206,10 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
     {
         $this->getFromRoute(0, 'licence', false);
         $this->getFromRoute(1, 'case', false);
+
+        $this->controller->expects($this->once())
+            ->method('caseHasAppeal')
+            ->will($this->returnValue(true));
 
         $this->controller->expects($this->at(2))
             ->method('getCase')
@@ -205,11 +231,15 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
         $this->getFromRoute(0, 'licence', false);
         $this->getFromRoute(1, 'case', false);
 
-        $this->controller->expects($this->at(2))
+        $this->controller->expects($this->once())
+            ->method('caseHasAppeal')
+            ->will($this->returnValue(true));
+
+        $this->controller->expects($this->at(3))
             ->method('getCase')
             ->will($this->returnValue(array('data' => 'data')));
 
-        $this->getFromRoute(3, 'stayType', $stayTypeId);
+        $this->getFromRoute(4, 'stayType', $stayTypeId);
 
         $this->controller->expects($this->once())
             ->method('notFoundAction');
@@ -223,12 +253,19 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
     public function testEditActionFailStay()
     {
         $this->getFromRoute(0, 'id', false);
+        $this->getFromRoute(1, 'case', false);
+        $this->getFromRoute(2, 'licence', false);
+        $this->getFromRoute(3, 'stayType', false);
 
-        $this->controller->expects($this->at(1))
+        $this->controller->expects($this->once())
+            ->method('caseHasAppeal')
+            ->will($this->returnValue(true));
+
+        $this->controller->expects($this->at(2))
             ->method('makeRestCall')
             ->will($this->returnValue(''));
 
-        $this->controller->expects($this->at(2))
+        $this->controller->expects($this->at(3))
             ->method('notFoundAction');
 
         $this->controller->editAction();
@@ -240,8 +277,15 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
     public function testEditActionFailCase()
     {
         $this->getFromRoute(0, 'id', false);
+        $this->getFromRoute(1, 'case', false);
+        $this->getFromRoute(2, 'licence', false);
+        $this->getFromRoute(3, 'stayType', false);
 
-        $this->controller->expects($this->at(1))
+        $this->controller->expects($this->once())
+            ->method('caseHasAppeal')
+            ->will($this->returnValue(true));
+
+        $this->controller->expects($this->once())
             ->method('makeRestCall')
             ->will($this->returnValue(array('case' => array('id' => 24))));
 
@@ -260,6 +304,13 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
     public function testEditActionFailStayType($stayTypeId)
     {
         $this->getFromRoute(0, 'id', false);
+        $this->getFromRoute(1, 'case', false);
+        $this->getFromRoute(2, 'licence', false);
+        $this->getFromRoute(3, 'stayType', $stayTypeId);
+
+        $this->controller->expects($this->once())
+            ->method('caseHasAppeal')
+            ->will($this->returnValue(true));
 
         $this->controller->expects($this->once())
             ->method('makeRestCall')
@@ -269,11 +320,22 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
             ->method('getCase')
             ->will($this->returnValue(array('data' => 'data')));
 
-        $this->getFromRoute(3, 'licence', false);
-        $this->getFromRoute(4, 'stayType', $stayTypeId);
-
         $this->controller->expects($this->once())
             ->method('notFoundAction');
+
+        $this->controller->editAction();
+    }
+
+    /**
+     * Tests the edit action throws an exception if there is no appeal
+     *
+     * @expectedException \Common\Exception\BadRequestException
+     */
+    public function testEditActionNoAppeal()
+    {
+        $this->controller->expects($this->once())
+            ->method('caseHasAppeal')
+            ->will($this->returnValue(false));
 
         $this->controller->editAction();
     }
@@ -291,18 +353,22 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
     public function testEditAction($caseId, $stayTypeId, $stayId, $licenceId)
     {
         $this->getFromRoute(0, 'id', $stayId);
+        $this->getFromRoute(1, 'case', $caseId);
+        $this->getFromRoute(2, 'licence', $licenceId);
+        $this->getFromRoute(3, 'stayType', $stayTypeId);
 
-        $this->controller->expects($this->at(1))
+        $this->controller->expects($this->once())
             ->method('makeRestCall')
             ->will($this->returnValue((array('case' => array('id' => $caseId)))));
 
-        $this->controller->expects($this->at(2))
+        $this->controller->expects($this->once())
+            ->method('caseHasAppeal')
+            ->will($this->returnValue(true));
+
+        $this->controller->expects($this->once())
             ->method('getCase')
             ->with($this->equalTo($caseId))
             ->will($this->returnValue(array('data' => 'data')));
-
-        $this->getFromRoute(3, 'licence', $licenceId);
-        $this->getFromRoute(4, 'stayType', $stayTypeId);
 
         $this->controller->expects($this->once())
             ->method('generateFormWithData');
@@ -449,6 +515,14 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
+     * Tests getDeleteServiceName
+     */
+    public function testGetDeleteServiceName()
+    {
+        $this->assertEquals('Stay', $this->controller->getDeleteServiceName());
+    }
+
+    /**
      * Data provider for testEditAction
      *
      * @return array
@@ -566,7 +640,7 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
                     'stayType' => 1,
                     'licence' => 7,
                     'fields' => [
-                        'isWithdrawn' => 'Y',
+                        'isWithdrawn' => 'N',
                         'withdrawnDate' => '2014-01-01'
                     ]
                 ],
@@ -575,7 +649,7 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
                     'stayType' => 2,
                     'licence' => 7,
                     'fields' => [
-                        'isWithdrawn' => 'Y',
+                        'isWithdrawn' => 'N',
                         'withdrawnDate' => null
                     ]
                 ]
