@@ -34,7 +34,7 @@ return array(
                     array('case' => $row['id'], 'tab' => 'overview'),
                     'case_manage',
                     true
-                ) . '">' . $row['caseNumber'] . '</a>';
+                ) . '">' . $row['id'] . '</a>';
             },
             'sort' => 'caseNumber'
         ),

@@ -3,8 +3,8 @@
         '/partials/page-header.phtml',
         array(
             'pageTitle' => 'Licence: ' . $this->licenceData['licNo'],
-            'pageSubTitle'=> $this->licenceData['goodsOrPsv'] . ', ' . $this->licenceData['licenceType']
-            . ', ' . $this->licenceData['licenceStatus']
+            'pageSubTitle'=> $this->licenceData['goodsOrPsv']['id'] . ', ' . $this->licenceData['licenceType']['id']
+            . ', ' . $this->licenceData['status']['id']
         )
     );
 ?>

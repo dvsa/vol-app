@@ -28,7 +28,7 @@ class LicenceController extends AbstractFormActionController
 
         $this->title = $view->licence['licNo'];
         $this->subTitle = $view->licence['goodsOrPsv']['id'] . ', ' . $view->licence['licenceType']['id']
-            . ', ' . $view->licence['licenceStatus'];
+            . ', ' . $view->licence['status']['id'];
 
         return $view;
     }
@@ -114,31 +114,28 @@ class LicenceController extends AbstractFormActionController
      */
     public function getLicence($id)
     {
-        /* $bundle = array(
+        $bundle = array(
+            'properties' => 'ALL',
             'children' => array(
-                'categories' => array(
-                    'properties' => array(
-                        'id',
-                        'name'
-                    )
+                'status' => array(
+                    'properties' => array('id')
                 ),
-                'licence' => array(
-                    'properties' => 'ALL',
-                    'children' => array(
-                        'trafficArea' => array(
-                            'properties' => 'ALL'
-                        ),
-                        'organisation' => array(
-                            'properties' => 'ALL'
-                        )
-                    )
+                'goodsOrPsv' => array(
+                    'properties' => array('id')
+                ),
+                'licenceType' => array(
+                    'properties' => array('id')
+                ),
+                'trafficArea' => array(
+                    'properties' => 'ALL'
+                ),
+                'organisation' => array(
+                    'properties' => 'ALL'
                 )
             )
-        ); */
+        );
 
-        // @todo need to define bundle here to get types/statuses etc
-
-        $licence = $this->makeRestCall('Licence', 'GET', array('id' => $id));
+        $licence = $this->makeRestCall('Licence', 'GET', array('id' => $id), $bundle);
 
         return $licence;
     }

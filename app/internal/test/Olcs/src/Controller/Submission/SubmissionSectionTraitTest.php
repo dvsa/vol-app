@@ -233,7 +233,7 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
          $submissionSectionTrait->expects($this->once())
             ->method('getFilteredSectionData')
             ->with('CaseSummaryInfo', array('id' => 7))
-            ->will($this->returnValue(array('caseNumber' => 'x1234567')));
+            ->will($this->returnValue(array('id' => 'x1234567')));
 
         $result = $submissionSectionTrait->createSubmissionSection(
             'case-summary-info',
@@ -253,7 +253,7 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
             array()
         );
         $data = array(
-            'caseNumber' => 54,
+            'id' => 54,
             'ecms_no' => 123123,
             'description' => 'Case 1',
             'licence' => array(
@@ -409,7 +409,7 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
         );
 
         $data = array(
-            'caseNumber' => 54,
+            'id' => 54,
             'ecms_no' => 123123,
             'description' => 'Case 1',
             'licence' => array(

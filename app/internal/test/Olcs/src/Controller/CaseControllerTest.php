@@ -990,7 +990,6 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
             'lastUpdatedOn' => '',
             'version' => 1,
             'id' => $caseId,
-            'caseNumber' => 12345678,
             'status' => 'Open',
             'description' => 'Convictions against operator',
             'convictionData' => '',

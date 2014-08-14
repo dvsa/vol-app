@@ -91,11 +91,11 @@ trait SubmissionSectionTrait
     public function caseSummaryInfo(array $data = array())
     {
         return array(
-            'caseNumber' => $data['caseNumber'],
+            'id' => $data['id'],
             'licNo' => $data['licence']['licNo'],
             'name' => $data['licence']['organisation']['name'],
             'licenceType' => $data['licence']['licenceType'],
-            'ecms_no' => $data['ecms_no'],
+            'ecms_no' => $data['ecmsNo'],
             'description' => $data['description'],
             'type' => $data['licence']['organisation']['type'],
             'sicCode' => $data['licence']['organisation']['sicCode'],
