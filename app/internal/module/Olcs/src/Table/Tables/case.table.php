@@ -36,11 +36,13 @@ return array(
                     true
                 ) . '">' . $row['id'] . '</a>';
             },
-            'sort' => 'caseNumber'
+            'sort' => 'id'
         ),
         array(
             'title' => 'Case type',
-            'name' => 'caseType',
+            'formatter' => function ($row) {
+                return $row['caseType']['id'];
+            },
             'sort' => 'caseType'
         ),
         array(
@@ -65,7 +67,7 @@ return array(
         ),
         array(
             'title' => 'ECMS',
-            'name' => 'ecms_no'
+            'name' => 'ecmsNo'
         )
     )
 );

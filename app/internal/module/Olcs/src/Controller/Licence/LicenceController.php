@@ -9,13 +9,14 @@ namespace Olcs\Controller\Licence;
 
 use Common\Controller\FormActionController as AbstractFormActionController;
 use Zend\View\Model\ViewModel;
+use Olcs\Controller\AbstractController;
 
 /**
  * Licence Controller
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class LicenceController extends AbstractFormActionController
+class LicenceController extends AbstractController
 {
     protected $title;
     protected $subtitle;
@@ -23,6 +24,9 @@ class LicenceController extends AbstractFormActionController
     public function getViewWithLicence()
     {
         $licence = $this->getLicence($this->getFromRoute('licence'));
+
+        /* echo '<pre>';
+        die(print_r($licence, 1)); */
 
         $view = $this->getView(['licence' => $licence]);
 

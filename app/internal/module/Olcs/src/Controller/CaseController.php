@@ -16,7 +16,7 @@ use Zend\View\Model\ViewModel;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CaseController extends FormActionController
+class CaseController extends AbstractController
 {
     /**
      * Manage action.
@@ -232,7 +232,7 @@ class CaseController extends FormActionController
             'prohibitions' => [
                 'key' => 'prohibitions',
                 'label' => 'Prohibitions',
-                'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'prohibitions'], [], true),
+                'url' => $pm->get('url')->fromRoute('case_prohibition', ['tab' => 'prohibitions'], [], true),
             ],
             'annual_test_history' => [
                 'key' => 'annual_test_history',
@@ -431,33 +431,27 @@ class CaseController extends FormActionController
 
         $pageData = $this->getPageData($licence);
 
+        $pagination = [];
         $pagination['url'] = $this->url();
         $pagination['licence'] = $this->fromRoute('licence');
         $pagination['page'] = $this->fromRoute('page', 1);
-        $pagination['sort'] = $this->fromRoute('sort', 'caseNumber');
+        $pagination['sort'] = $this->fromRoute('sort', 'id');
         $pagination['order'] = $this->fromRoute('order', 'desc');
         $pagination['limit'] = $this->fromRoute('limit', 10);
 
-        $results = $this->makeRestCall('Cases', 'GET', $pagination);
-
-        $table = $this->getServiceLocator()->get('Table')->buildTable('case', $results, $pagination);
-
-        $licenceBundle = array(
-            'properties' => 'ALL',
+        $bundle = array(
             'children' => array(
-                'status' => array(
-                    'properties' => array('id')
-                ),
-                'licenceType' => array(
-                    'properties' => array('id')
-                ),
-                'goodsOrPsv' => array(
-                    'properties' => array('id')
+                'caseType' => array(
+                    'properties' => 'ALL'
                 )
             )
         );
 
-        $licenceData = $this->makeRestCall('Licence', 'GET', array('id' => $licence), $licenceBundle);
+        $results = $this->makeRestCall('Cases', 'GET', $pagination, $bundle);
+
+        $table = $this->getServiceLocator()->get('Table')->buildTable('case', $results, $pagination);
+
+        $licenceData = $this->getLicence($licence);
 
         $view = $this->getView(
             array(
