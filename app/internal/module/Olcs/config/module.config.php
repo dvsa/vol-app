@@ -67,5 +67,4 @@ return array(
         __DIR__ . '/../assets/js/inline/'
     ),
     'asset_path' => '//dvsa-static.olcsdv-ap01.olcs.npm'
-    
 );
