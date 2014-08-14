@@ -771,7 +771,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
-     * Information required for a redirect follwing success
+     * Information required for a redirect following success
      *
      * @param int $licenceId
      * @return array
@@ -779,7 +779,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
     private function getSuccessRedirect($licenceId)
     {
         return array(
-            'string' => 'licence_case_list',
+            'string' => 'licence/cases',
             'options' => array(
                 'licence' => $licenceId,
             )

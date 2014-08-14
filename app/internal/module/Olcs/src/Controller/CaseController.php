@@ -586,7 +586,7 @@ class CaseController extends FormActionController
 
         $this->makeRestCall('VosaCase', 'DELETE', array('id' => $case));
 
-        $this->redirect()->toRoute('licence_case_list', array('licence' => $licence));
+        $this->redirect()->toRoute('licence/cases', array('licence' => $licence));
     }
 
     /**
@@ -631,7 +631,7 @@ class CaseController extends FormActionController
 
         $this->processEdit($data, 'VosaCase');
 
-        $this->redirect()->toRoute('licence_case_list', array('licence' => $data['licence']));
+        $this->redirect()->toRoute('licence/cases', array('licence' => $data['licence']));
     }
 
     /**
