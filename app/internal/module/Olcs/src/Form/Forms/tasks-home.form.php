@@ -8,28 +8,28 @@ return array(
         ),
         'elements' => array(
             'team' => array(
-                'type' => 'select',
+                'type' => 'select-noempty',
                 'label' => 'tasks-home.data.team',
             ),
             'owner' => array(
-                'type' => 'select',
+                'type' => 'select-noempty',
                 'label' => 'tasks-home.data.owner',
             ),
             'category' => array(
-                'type' => 'select',
+                'type' => 'select-noempty',
                 'label' => 'tasks-home.data.category',
             ),
             'subCategory' => array(
-                'type' => 'select',
+                'type' => 'select-noempty',
                 'label' => 'tasks-home.data.sub_category',
             ),
             'date' => array(
-                'type' => 'select',
+                'type' => 'select-noempty',
                 'label' => 'tasks-home.data.date',
                 'value_options' => 'task-date-types'
             ),
             'status' => array(
-                'type' => 'select',
+                'type' => 'select-noempty',
                 'label' => 'tasks-home.data.status',
                 'value_options' => 'task-status-types'
             ),

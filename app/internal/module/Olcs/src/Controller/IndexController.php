@@ -50,8 +50,7 @@ class IndexController extends FormActionController
         // bang the relevant data into the corresponding form inputs
         foreach ($selects as $name => $options) {
             $form->get($name)
-                ->setValueOptions($options)
-                ->setEmptyOption(null);
+                ->setValueOptions($options);
         }
 
         $form->setData($filters);
