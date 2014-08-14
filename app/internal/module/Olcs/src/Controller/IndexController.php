@@ -28,27 +28,15 @@ class IndexController extends FormActionController
     {
         $filters = $this->filterRequest();
 
-        // we want to keep $search and $filters separate
-        // as we'll use filters again later to populate
-        // the form
-        $search = array_merge(
-            $filters,
-            array(
-                'userId' => $this->getLoggedInUser()
-            )
-        );
-
         $tasks = $this->makeRestCall(
             'Task',
             'GET',
-            $search
+            $filters
         );
 
         $table = $this->buildTable('tasks', $tasks);
 
-        $form = $this->generateFormWithData(
-            'tasks-home', null, $filters
-        );
+        $form = $this->getForm('tasks-home');
 
         // grab all the relevant backend data needed to populate the
         // various dropdowns on the filter form
@@ -66,10 +54,7 @@ class IndexController extends FormActionController
                 ->setEmptyOption(null);
         }
 
-        // @TODO hopefully temporary, we'd ideally set these on the
-        // inputs in the form config
-        $form->get('date')->setValue('today');
-        $form->get('status')->setValue('open');
+        $form->setData($filters);
 
         $view = new ViewModel(
             array(
@@ -81,8 +66,7 @@ class IndexController extends FormActionController
         $view->setTemplate('index/home');
         $view->setTerminal($this->getRequest()->isXmlHttpRequest());
 
-        return $view;
-        //@TODO reimplement: return $this->renderView('index/home');
+        return $this->renderView($view);
     }
 
     /**
@@ -144,7 +128,17 @@ class IndexController extends FormActionController
      */
     protected function filterRequest()
     {
-        return $this->getRequest()->getQuery()->toArray();
+        $filters = $this->getRequest()->getQuery()->toArray();
+        if (!isset($filters['owner'])) {
+            $filters['owner'] = $this->getLoggedInUser();
+        }
+        if (!isset($filters['date'])) {
+            $filters['date'] = 'today';
+        }
+        if (!isset($filters['status'])) {
+            $filters['status'] = 'open';
+        }
+        return $filters;
     }
 
     /**
@@ -157,7 +151,7 @@ class IndexController extends FormActionController
         $data['limit'] = 100;
         $response = $this->makeRestCall($entity, 'GET', $data);
 
-        $final = array();
+        $final = array('' => 'All');
         foreach ($response['Results'] as $result) {
             $key = $result[$primaryKey];
             $value = $result[$titleKey];
