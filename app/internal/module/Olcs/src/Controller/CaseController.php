@@ -218,7 +218,7 @@ class CaseController extends AbstractController
             'prohibitions' => [
                 'key' => 'prohibitions',
                 'label' => 'Prohibitions',
-                'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'prohibitions'], [], true),
+                'url' => $pm->get('url')->fromRoute('case_prohibition', ['tab' => 'prohibitions'], [], true),
             ],
             'annual_test_history' => [
                 'key' => 'annual_test_history',
@@ -417,6 +417,7 @@ class CaseController extends AbstractController
 
         $pageData = $this->getPageData($licence);
 
+        $pagination = [];
         $pagination['url'] = $this->url();
         $pagination['licence'] = $this->fromRoute('licence');
         $pagination['page'] = $this->fromRoute('page', 1);
@@ -433,13 +434,12 @@ class CaseController extends AbstractController
         );
 
         $results = $this->makeRestCall('Cases', 'GET', $pagination, $bundle);
-        /* echo '<pre>';
-        die(print_r($results, 1)); */
 
         $table = $this->getServiceLocator()->get('Table')->buildTable('case', $results, $pagination);
 
-
         $licenceData = $this->getLicence($licence);
+        /* echo '<pre>';
+        die(print_r($licenceData, 1)); */
 
         $view = $this->getView(
             array(

@@ -34,13 +34,15 @@ return array(
                     array('case' => $row['id'], 'tab' => 'overview'),
                     'case_manage',
                     true
-                ) . '"></a>';
+                ) . '">' . $row['id'] . '</a>';
             },
             'sort' => 'id'
         ),
         array(
             'title' => 'Case type',
-            'name' => 'caseType',
+            'formatter' => function ($row) {
+                return $row['caseType']['id'];
+            },
             'sort' => 'caseType'
         ),
         array(
@@ -65,7 +67,7 @@ return array(
         ),
         array(
             'title' => 'ECMS',
-            'name' => 'ecms_no'
+            'name' => 'ecmsNo'
         )
     )
 );

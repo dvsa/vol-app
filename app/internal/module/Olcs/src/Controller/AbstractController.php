@@ -26,12 +26,15 @@ class AbstractController extends FormActionController
         $bundle = array(
             'children' => array(
                 'goodsOrPsv' => array(
-                    'properties' => 'ALL'
+                    'properties' => array('id')
                 ),
                 'status' => array(
                     'properties' => 'ALL',
                 ),
                 'organisation' => array(
+                    'properties' => 'ALL',
+                ),
+                'licenceType' => array(
                     'properties' => 'ALL',
                 )
             )

@@ -25,14 +25,14 @@ class LicenceController extends AbstractController
     {
         $licence = $this->getLicence($this->getFromRoute('licence'));
 
-        echo '<pre>';
-        die(print_r($licence, 1));
+        /* echo '<pre>';
+        die(print_r($licence, 1)); */
 
         $view = $this->getView(['licence' => $licence]);
 
         $this->title = $view->licence['licNo'];
         $this->subTitle = $view->licence['goodsOrPsv']['id'] . ', ' . $view->licence['licenceType']['id']
-            . ', ' . $view->licence['licenceStatus'];
+            . ', ' . $view->licence['status']['id'];
 
         return $view;
     }
