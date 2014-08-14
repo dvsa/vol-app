@@ -47,7 +47,12 @@ return array(
         ),
         array(
             'title' => 'Owner',
-            'name' => 'ownerName',
+            'formatter' => function ($row) {
+                if (empty($row['ownerName'])) {
+                    return 'Unassigned';
+                }
+                return $row['ownerName'];
+            }
         ),
         array(
             'title' => 'Name',
