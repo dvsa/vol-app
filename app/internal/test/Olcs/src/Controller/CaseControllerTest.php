@@ -44,7 +44,9 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
                 'params',
                 'forward',
                 'processAdd',
-                'processEdit'
+                'processEdit',
+                'getTitles',
+                'renderView'
             ]
         );
 
@@ -141,6 +143,9 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
         $this->getFrom('Route', 2, 'tab', $actionTab);
 
         $this->controller->expects($this->once())
+             ->method('getTitles');
+
+        $this->controller->expects($this->once())
             ->method('setBreadcrumb');
 
         $this->controller->expects($this->once())
@@ -197,7 +202,10 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
             ->method('setTemplate')
             ->with($this->equalTo('case/manage'));
 
-        $this->assertSame($this->view, $this->controller->manageAction());
+        $this->controller->expects($this->once())
+            ->method('renderView');
+
+        $this->controller->manageAction();
     }
 
     /**
