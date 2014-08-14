@@ -24,7 +24,7 @@ return array(
     'columns' => array(
         array(
             'title' => 'Link',
-            'name' => 'identifier'
+            'formatter' => 'TaskIdentifier',
         ),
         array(
             'title' => 'Category',
@@ -36,12 +36,14 @@ return array(
         ),
         array(
             'title' => 'Description',
-            'name' => 'description',
+            'formatter' => function ($row) {
+                return '<a href=#>' . $row['description'] . '</a>';
+            }
         ),
         array(
             'title' => 'Date',
-            'formatter' => 'Date',
-            'name' => 'actionDate'
+            'name' => 'actionDate',
+            'formatter' => 'TaskDate',
         ),
         array(
             'title' => 'Owner',
