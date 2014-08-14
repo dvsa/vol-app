@@ -690,6 +690,28 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
+     * @dataProvider caseHasAppealProvider
+     *
+     * @param array $caseHasAppealResult
+     */
+    public function testCaseHasAppeal($caseHasAppealResult)
+    {
+        $this->controller->expects($this->once())
+             ->method('makeRestCall')
+             ->will($this->returnValue($caseHasAppealResult));
+
+        $this->controller->caseHasAppeal(28);
+    }
+
+    public function caseHasAppealProvider()
+    {
+        return [
+            ['Count' => 1],
+            ['Count' => 0]
+        ];
+    }
+
+    /**
      * Creates a mock class (used for the redirect method)
      *
      * @param array $redirectInfo
@@ -708,7 +730,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
     /**
      * Information required for a redirect follwing a case being added
      *
-     * @param int $caseId
+     * @param string $action
      * @param int $licenceId
      * @return array
      */
