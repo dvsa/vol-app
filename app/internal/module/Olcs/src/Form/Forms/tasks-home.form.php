@@ -46,6 +46,9 @@ return array(
             ),
             'order' => array(
                 'type' => 'hidden',
+            ),
+            'limit' => array(
+                'type' => 'hidden',
             )
         )
     )
