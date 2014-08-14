@@ -53,7 +53,7 @@ return array(
                         'options' => array(
                             'must_be_checked' => true
                         )
-                    )
+                    ),
                 )
             ),
             array(
@@ -80,6 +80,14 @@ return array(
                         'type' => 'multipleFileUpload',
                         'label' => $translationPrefix . '.advertisements.file',
                         'hint' => $translationPrefix . '.advertisements.file.hint'
+                    )
+                )
+            ),
+            array(
+                'name' => 'trafficArea',
+                'elements' => array(
+                    'id' => array(
+                        'type' => 'hidden'
                     )
                 )
             ),

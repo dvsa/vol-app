@@ -36,7 +36,7 @@ return array(
                     ),
                     'hiddenId' => array(
                         'type' => 'hidden'
-                    ),
+                    )
                 )
             ),
             array(
