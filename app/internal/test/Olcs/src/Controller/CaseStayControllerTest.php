@@ -105,6 +105,7 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
      *
      * @param int $caseId
      * @param int $stayTypeId
+     * @param int $licenceId
      */
     public function testAddAction($caseId, $stayTypeId, $licenceId)
     {
@@ -146,6 +147,7 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
      *
      * @param int $caseId
      * @param int $stayTypeId
+     * @param int $licenceId
      *
      */
     public function testAddActionFailExists($caseId, $stayTypeId, $licenceId)
@@ -284,6 +286,7 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
      * @param int $caseId
      * @param int $stayTypeId
      * @param int $stayId
+     * @param int $licenceId
      */
     public function testEditAction($caseId, $stayTypeId, $stayId, $licenceId)
     {
@@ -426,7 +429,6 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
      *
      * @dataProvider processEditStayProvider
      *
-     * @param array $result
      * @param array $data
      *
      */
