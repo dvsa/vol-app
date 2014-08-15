@@ -256,6 +256,15 @@ class CaseAppealControllerTest extends \PHPUnit_Framework_TestCase
         $controller->processEditAppeal($data);
     }
 
+    /**
+     * Tests getDeleteServiceName
+     */
+    public function testGetDeleteServiceName()
+    {
+        $controller = new \Olcs\Controller\CaseAppealController();
+        $this->assertEquals('Appeal', $controller->getDeleteServiceName());
+    }
+
     private function getScriptLoadFilesMock ()
     {
         $scriptMock = $this->getMock('\stdClass', ['loadFiles']);

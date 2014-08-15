@@ -166,7 +166,7 @@ return array(
                                     )
                                 ),
                                 array(
-                                    'label' => 'Stays & Appeals',
+                                    'label' => 'Appeal & Stays',
                                     'route' => 'case_stay_action',
                                     'action' => 'index',
                                     'pages' => array(
