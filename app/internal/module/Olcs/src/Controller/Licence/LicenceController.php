@@ -105,39 +105,4 @@ class LicenceController extends AbstractFormActionController
     {
         return new ViewModel($params);
     }
-
-    /**
-     * Gets the licence by ID.
-     *
-     * @param integer $id
-     * @return array
-     */
-    public function getLicence($id)
-    {
-        /* $bundle = array(
-            'children' => array(
-                'categories' => array(
-                    'properties' => array(
-                        'id',
-                        'name'
-                    )
-                ),
-                'licence' => array(
-                    'properties' => 'ALL',
-                    'children' => array(
-                        'trafficArea' => array(
-                            'properties' => 'ALL'
-                        ),
-                        'organisation' => array(
-                            'properties' => 'ALL'
-                        )
-                    )
-                )
-            )
-        ); */
-
-        $licence = $this->makeRestCall('Licence', 'GET', array('id' => $id));
-
-        return $licence;
-    }
 }

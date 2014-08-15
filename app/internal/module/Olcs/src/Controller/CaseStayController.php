@@ -251,7 +251,7 @@ class CaseStayController extends CaseController implements CrudInterface
      * Process adding the stay
      *
      * @param array $data
-     * @return Zend/Http/Response
+     * @return \Zend\Http\Response
      */
     public function processAddStay($data)
     {
@@ -290,7 +290,7 @@ class CaseStayController extends CaseController implements CrudInterface
      * Process editing a stay
      *
      * @param array $data
-     * @return Zend/Http/Response
+     * @return \Zend\Http\Response
      */
     public function processEditStay($data)
     {
@@ -377,7 +377,7 @@ class CaseStayController extends CaseController implements CrudInterface
      * @param int $licence
      * @param int $case
      *
-     * @return Zend/Http/Response
+     * @return Response
      */
     private function redirectIndex($licence, $case)
     {
@@ -399,7 +399,7 @@ class CaseStayController extends CaseController implements CrudInterface
      * @param int $stayType
      * @param int $stay
      *
-     * @return Zend/Http/Response
+     * @return Response
      */
     private function redirectEditFail($licence, $case, $stayType, $stay)
     {
@@ -464,18 +464,5 @@ class CaseStayController extends CaseController implements CrudInterface
         }
 
         return $data;
-    }
-
-    /**
-     * Returns a bad request exception if the case does not have an appeal
-     *
-     * @param $caseId
-     * @throws \Common\Exception\BadRequestException
-     */
-    private function checkCaseHasAppeal($caseId)
-    {
-        if (!$this->caseHasAppeal($caseId)) {
-            throw new BadRequestException('Case must have an appeal');
-        }
     }
 }
