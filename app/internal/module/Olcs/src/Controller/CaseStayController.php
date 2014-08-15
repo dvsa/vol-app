@@ -116,7 +116,10 @@ class CaseStayController extends CaseController implements CrudInterface
     {
         $licenceId = $this->fromRoute('licence');
         $caseId = $this->fromRoute('case');
+        $stayTypeId = $this->fromRoute('stayType');
+
         $this->checkCaseHasAppeal($caseId);
+        $this->checkCaseHasStay($caseId, $stayTypeId);
 
         $pageData = $this->getCase($caseId);
 
@@ -124,18 +127,10 @@ class CaseStayController extends CaseController implements CrudInterface
             return $this->notFoundAction();
         }
 
-        $stayTypeId = $this->fromRoute('stayType');
         $stayTypeName = $this->getStayTypeName($stayTypeId);
 
         if (!$stayTypeName) {
             return $this->notFoundAction();
-        }
-
-        //if data already exists don't display the add form
-        $existingRecord = $this->checkExistingStay($caseId, $stayTypeId);
-
-        if ($existingRecord) {
-            return $this->redirectIndex($licenceId, $caseId);
         }
 
         $this->setBreadcrumb(
@@ -255,13 +250,6 @@ class CaseStayController extends CaseController implements CrudInterface
      */
     public function processAddStay($data)
     {
-        //if data already exists don't add more
-        $existingRecord = $this->checkExistingStay($data['case'], $data['stayType']);
-
-        if ($existingRecord) {
-            return $this->redirectIndex($data['licence'], $data['case']);
-        }
-
         //if the withdrawn checkbox is 'N' then make sure withdrawn date is null
         if ($data['fields']['isWithdrawn'] == 'N') {
             $data['fields']['withdrawnDate'] = null;
@@ -416,35 +404,31 @@ class CaseStayController extends CaseController implements CrudInterface
     }
 
     /**
-     * Checks whether a stay already exists for the given case and staytype (only one should be allowed)
+     * Checks whether a stay already exists for the given case and stay type (only one should be allowed)
      *
      * @param int $caseId
      * @param int $stayTypeId
-     *
-     * @todo need to remove foreach stuff and make this just one rest call (as in commented out code)
-     *
-     * @return boolean
+
+     * @throws \Common\Exception\BadRequestException
      */
-    private function checkExistingStay($caseId, $stayTypeId)
+    private function checkCaseHasStay($caseId, $stayTypeId)
     {
-        $result = $this->makeRestCall('Stay', 'GET', array('case' => $caseId));
-
-        if (isset($result['Results'])) {
-            foreach ($result['Results'] as $stay) {
-                if ($stay['stayType'] == $stayTypeId) {
-                    return true;
-                }
-            }
+        if ($this->caseHasStay($caseId, $stayTypeId)) {
+            throw new BadRequestException('A stay already exists');
         }
+    }
 
-        /*
-          $result = $this->makeRestCall('Stay', 'GET', array('stayType' => $stayTypeId, 'case' => $caseId));
-
-          if(empty($result['results'])){
-          return true;
-          }
-         */
-        return false;
+    /**
+     * Returns a bad request exception if the case does not have an appeal
+     *
+     * @param $caseId
+     * @throws \Common\Exception\BadRequestException
+     */
+    private function checkCaseHasAppeal($caseId)
+    {
+        if (!$this->caseHasAppeal($caseId)) {
+            throw new BadRequestException('Case must have an appeal');
+        }
     }
 
     /**
