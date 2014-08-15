@@ -31,10 +31,13 @@ class OlcsIndexControllerTest  extends AbstractHttpControllerTestCase
         );
 
         $query = new \Zend\Stdlib\Parameters();
-        $request = new \Zend\Http\Request();
-        $request->setQuery($query);
+        $request = $this->getMock('\stdClass', ['getQuery', 'isXmlHttpRequest']);
+        $request->expects($this->any())
+            ->method('getQuery')
+            ->will($this->returnValue($query));
 
         $this->query = $query;
+        $this->request = $request;
 
         $this->controller->expects($this->any())
             ->method('getRequest')
@@ -153,6 +156,66 @@ class OlcsIndexControllerTest  extends AbstractHttpControllerTestCase
 
         $this->assertEquals('Home', $header->getVariable('pageTitle'));
         $this->assertEquals('Subtitle', $header->getVariable('pageSubTitle'));
+    }
+
+    public function testIndexActionAjax()
+    {
+        $this->controller->expects($this->at(2))
+            ->method('makeRestCall')
+            ->will($this->returnValue([]));
+
+        $form = $this->getMock('\stdClass', ['get', 'setValueOptions', 'remove', 'setData']);
+
+        $form->expects($this->any())
+            ->method('get')
+            ->will($this->returnSelf());
+
+        $this->controller->expects($this->once())
+            ->method('getForm')
+            ->will($this->returnValue($form));
+
+        $response = [
+            'Results' => [
+                [
+                    'id' => 123,
+                    'name' => 'foo'
+                ]
+            ]
+        ];
+
+        $altResponse = [
+            'Results' => [
+                [
+                    'id' => 123,
+                    'description' => 'foo'
+                ]
+            ]
+        ];
+
+        $this->controller->expects($this->at(6))
+            ->method('makeRestCall')
+            ->will($this->returnValue($response));
+
+        $this->controller->expects($this->at(7))
+            ->method('makeRestCall')
+            ->will($this->returnValue($response));
+
+        $this->controller->expects($this->at(8))
+            ->method('makeRestCall')
+            ->will($this->returnValue($altResponse));
+
+        $this->controller->expects($this->at(9))
+            ->method('makeRestCall')
+            ->will($this->returnValue($response));
+
+        $this->request->expects($this->once())
+            ->method('isXmlHttpRequest')
+            ->will($this->returnValue(true));
+
+        $view = $this->controller->indexAction();
+
+        $this->assertFalse($view->hasChildren());
+        $this->assertTrue($view->terminate());
     }
 
     public function testTaskFilterActionInvalidType()
