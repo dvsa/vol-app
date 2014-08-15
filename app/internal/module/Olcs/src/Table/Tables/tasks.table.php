@@ -14,7 +14,7 @@ return array(
         ),
         'paginate' => array(
             'limit' => array(
-                'options' => array(2, 5, 50)
+                'options' => array(10, 25, 50)
             )
         )
     ),

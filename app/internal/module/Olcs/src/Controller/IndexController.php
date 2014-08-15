@@ -145,7 +145,7 @@ class IndexController extends FormActionController
             'sort'   => 'actionDate',
             'order'  => 'ASC',
             'page'   => 1,
-            'limit'  => 2
+            'limit'  => 10
         );
 
         $filters = array_merge(
