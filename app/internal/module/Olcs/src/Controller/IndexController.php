@@ -157,6 +157,10 @@ class IndexController extends FormActionController
         $filters['isClosed'] = $filters['status'] === 'closed';
         $filters['isUrgent'] = isset($filters['urgent']);
 
+        if (isset($filters['date']) && $filters['date'] === 'today') {
+            $filters['actionDate'] = '<= ' . date('Y-m-d');
+        }
+
         // nuke any empty values too
         return array_filter(
             $filters,
