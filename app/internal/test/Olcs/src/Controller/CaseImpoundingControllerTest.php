@@ -805,7 +805,7 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
     /**
      * Tests the add action
      */
-    public function testAddActionForNILicence()
+    public function testAddActionForNiLicence()
     {
         $licenceId = 7;
         $caseId = 24;
@@ -934,5 +934,4 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
 
         $this->assertSame($this->view, $this->controller->addAction());
     }
-
 }
