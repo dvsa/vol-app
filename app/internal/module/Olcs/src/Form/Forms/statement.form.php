@@ -50,7 +50,7 @@ return [
                     'contactType' => [
                         'type' => 'select',
                         'label' => 'Request mode',
-                        'value_options' => 'contact_type',
+                        'value_options' => 'contact_method',
                         'required' => true
                     ],
                     'authorisersDecision' => [

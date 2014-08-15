@@ -109,15 +109,21 @@ class CaseStatementController extends CaseController implements CrudInterface
 
         $bundle = array(
             'children' => array(
-                'requestersAddress'
+                'contactType' => array(
+                    'properties' => array('id')
+                ),
+                'requestorsAddress' => array(
+                    'properties' => 'ALL',
+                    'children' => array(
+                        'countryCode' => array(
+                            'properties' => array('id')
+                        )
+                    )
+                )
             )
         );
 
         $details = $this->makeRestCall('Statement', 'GET', array('id' => $statementId), $bundle);
-
-        print '<pre>';
-        print_r($details);
-        exit;
 
         if (empty($details)) {
             return $this->notFoundAction();
@@ -126,13 +132,9 @@ class CaseStatementController extends CaseController implements CrudInterface
         $data = $this->formatDataForEditForm($details);
         $data['case'] = $caseId;
 
-        $data['requestersAddress']['country'] = $data['requestersAddress']['countryCode']['id'];
+        $data['requestorsAddress']['countryCode'] = $data['requestorsAddress']['countryCode']['id'];
 
-        $form = $this->generateFormWithData(
-            'statement',
-            'processEditStatement',
-            $data
-        );
+        $form = $this->generateFormWithData('statement', 'processEditStatement', $data);
 
         $view = $this->getView(
             [
@@ -160,7 +162,7 @@ class CaseStatementController extends CaseController implements CrudInterface
         $data['details'] = $data;
 
         $data['details']['statementType'] = 'statement_type.' . $data['details']['statementType'];
-        $data['details']['contactType'] = 'contact_type.' . $data['details']['contactType'];
+        $data['details']['contactType'] = $data['details']['contactType']['id'];
 
         return $data;
     }
@@ -218,13 +220,13 @@ class CaseStatementController extends CaseController implements CrudInterface
         $bookmarks['TAAddress_2'] = '<user\'s location address>'; // users location address
 
         $bookmarks['Address_1'] =
-            $data['addresses']['requestersAddress']['addressLine1'] . " \line " .
-            $data['addresses']['requestersAddress']['addressLine2'] . " \line " .
-            $data['addresses']['requestersAddress']['addressLine3'] . " \line " .
-            $data['addresses']['requestersAddress']['addressLine4'] . " \line" .
-            $data['addresses']['requestersAddress']['town'] . " \line" .
-            $data['addresses']['requestersAddress']['postcode'] . " \line" .
-            $data['addresses']['requestersAddress']['countryCode'];
+            $data['addresses']['requestorsAddress']['addressLine1'] . " \line " .
+            $data['addresses']['requestorsAddress']['addressLine2'] . " \line " .
+            $data['addresses']['requestorsAddress']['addressLine3'] . " \line " .
+            $data['addresses']['requestorsAddress']['addressLine4'] . " \line" .
+            $data['addresses']['requestorsAddress']['town'] . " \line" .
+            $data['addresses']['requestorsAddress']['postcode'] . " \line" .
+            $data['addresses']['requestorsAddress']['countryCode'];
         $bookmarks['Ref'] = '184130/' . $bookmarkData['licence']['licNo'];
         $bookmarks['Name'] = $data['requestorsForename'] . ' ' . $data['requestorsFamilyName'];
         $bookmarks['RequestMode'] = 'letter';
@@ -304,7 +306,7 @@ class CaseStatementController extends CaseController implements CrudInterface
 
         unset($data['details']);
 
-        $data = $this->processAddressData($data, 'requestersAddress');
+        $data = $this->processAddressData($data, 'requestorsAddress');
 
         $data['statementType'] = str_replace('statement_type.', '', $data['statementType']);
         $data['contactType'] = str_replace('contact_type.', '', $data['contactType']);
