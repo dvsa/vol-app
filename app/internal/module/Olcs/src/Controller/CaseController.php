@@ -32,8 +32,6 @@ class CaseController extends FormActionController
 
         $this->title = 'Case ' . $caseId;
         $this->subTitle = $case['licence']['organisation']['name'] . ' ' . '#' . $case['licence']['licenceNumber'];
-
-        return;
     }
 
     /**
@@ -745,7 +743,16 @@ class CaseController extends FormActionController
      */
     public function caseHasStay($caseId, $stayTypeId)
     {
-        $result = $this->makeRestCall('Stay', 'GET', array('stayType' => $stayTypeId, 'case' => $caseId, 'isWithdrawn' => 0));
+        $result = $this->makeRestCall(
+            'Stay',
+            'GET',
+            array(
+                'stayType' => $stayTypeId,
+                'case' => $caseId,
+                'isWithdrawn' => 0
+            )
+        );
+
         return $result['Count'] ? true : false;
     }
 }
