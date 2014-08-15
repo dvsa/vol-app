@@ -734,4 +734,18 @@ class CaseController extends FormActionController
         $appeal = $this->makeRestCall('Appeal', 'GET', array('case' => $caseId, 'isWithdrawn' => 0));
         return ($appeal['Count'] ? true : false);
     }
+
+    /**
+     * Checks whether a stay already exists for the given case and stay type (only one should be allowed)
+     *
+     * @param int $caseId
+     * @param int $stayTypeId
+
+     * @return boolean
+     */
+    public function caseHasStay($caseId, $stayTypeId)
+    {
+        $result = $this->makeRestCall('Stay', 'GET', array('stayType' => $stayTypeId, 'case' => $caseId, 'isWithdrawn' => 0));
+        return $result['Count'] ? true : false;
+    }
 }
