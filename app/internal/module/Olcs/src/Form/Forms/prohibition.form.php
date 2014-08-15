@@ -40,11 +40,6 @@ return [
                         'label' => 'Location prohibition issued',
                         'filters' => '\Common\Form\Elements\InputFilters\TextMax255',
                     ],
-                    'defects' =>
-                        [
-                            'label' => 'Defects (optional)',
-                            'type' => 'defects'
-                        ],
                 ]
             ],
             array(

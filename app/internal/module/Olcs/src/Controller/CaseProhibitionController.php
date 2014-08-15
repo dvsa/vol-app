@@ -148,6 +148,7 @@ class CaseProhibitionController extends CaseController implements CrudInterface
                     'pageSubTitle' => ''
                 ],
                 'form' => $form,
+                'table' => $this->generateProhibitionDefectTable($prohibitionId)
             ]
         );
 
@@ -227,6 +228,28 @@ class CaseProhibitionController extends CaseController implements CrudInterface
         }
 
         return $this->buildTable('prohibition', []);
+    }
+
+    /**
+     * Gets a table of defects for the prohibition
+     *
+     * @param int $prohibitionId
+     * @return string
+     */
+    private function generateProhibitionDefectTable($prohibitionId)
+    {
+        $results = $this->makeRestCall(
+            'ProhibitionDefect',
+            'GET',
+            array('prohibition' => $prohibitionId)
+        );
+
+        if ($results['Count']) {
+            $results = $this->formatForTable($results);
+            return $this->buildTable('prohibitionDefect', $results);
+        }
+
+        return $this->buildTable('prohibitionDefect', []);
     }
 
     /**
