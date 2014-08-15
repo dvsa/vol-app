@@ -33,7 +33,7 @@ return [
                         'filters' => '\Common\Form\Elements\InputFilters\VrmOptional',
                     ],
                     'legislationTypes' => [
-                        'type' => 'multiselect-group',
+                        'type' => 'multiselect',
                         'filters' => '\Common\Form\Elements\InputFilters\SelectEmpty',
                         'label' => 'Select legislation',
                         'value_options' => 'impounding_legislation',
