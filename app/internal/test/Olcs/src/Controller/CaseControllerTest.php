@@ -752,7 +752,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
-     * Information required for a redirect follwing a case being added
+     * Information required for a redirect following a case being added
      *
      * @param int $caseId
      * @param int $licenceId

@@ -245,6 +245,7 @@ class CaseStayController extends CaseController implements CrudInterface
      * Process adding the stay
      *
      * @param array $data
+     * @return \Zend\Http\Response
      */
     public function processAddStay($data)
     {
@@ -283,6 +284,7 @@ class CaseStayController extends CaseController implements CrudInterface
      * Process editing a stay
      *
      * @param array $data
+     * @return \Zend\Http\Response
      */
     public function processEditStay($data)
     {
