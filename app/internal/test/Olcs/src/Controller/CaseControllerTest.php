@@ -698,20 +698,45 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
-     * @dataProvider caseHasAppealProvider
+     * @dataProvider caseHasAppealOrStayProvider
      *
      * @param array $caseHasAppealResult
      */
     public function testCaseHasAppeal($caseHasAppealResult)
     {
+        $caseId = 28;
+
+        $searchArray = array('case' => $caseId, 'isWithdrawn' => 0);
+
         $this->controller->expects($this->once())
              ->method('makeRestCall')
+             ->with($this->equalTo('Appeal'), $this->equalTo('GET'), $this->equalTo($searchArray))
              ->will($this->returnValue($caseHasAppealResult));
 
-        $this->controller->caseHasAppeal(28);
+        $this->controller->caseHasAppeal($caseId);
     }
 
-    public function caseHasAppealProvider()
+    /**
+     * @dataProvider caseHasAppealOrStayProvider
+     *
+     * @param array $caseHasStayResult
+     */
+    public function testCaseHasStay($caseHasStayResult)
+    {
+        $caseId = 28;
+        $stayTypeId = 1;
+
+        $searchArray = array('stayType' => $stayTypeId, 'case' => $caseId, 'isWithdrawn' => 0);
+
+        $this->controller->expects($this->once())
+            ->method('makeRestCall')
+            ->with($this->equalTo('Stay'), $this->equalTo('GET'), $this->equalTo($searchArray))
+            ->will($this->returnValue($caseHasStayResult));
+
+        $this->controller->caseHasStay($caseId, $stayTypeId);
+    }
+
+    public function caseHasAppealOrStayProvider()
     {
         return [
             ['Count' => 1],
