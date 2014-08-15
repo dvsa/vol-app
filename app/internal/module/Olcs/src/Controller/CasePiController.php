@@ -41,8 +41,6 @@ class CasePiController extends CaseController
         $caseId = $this->fromRoute('case');
 
         $pi = $this->getPiInfo($caseId);
-        /* echo '<pre>';
-        die(print_r($pi, 1)); */
 
         $table = $this->buildPiHearingsTable($pi);
 

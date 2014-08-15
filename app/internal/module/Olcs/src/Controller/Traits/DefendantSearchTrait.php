@@ -153,7 +153,7 @@ trait DefendantSearchTrait
     {
 
         switch($type) {
-            case "defendant_type.operator":
+            case "def_t_op":
                 $fieldset = new \Common\Form\Elements\Types\OperatorSearch($name, $options);
                 $fieldset->setAttributes(
                     array(
@@ -208,12 +208,12 @@ trait DefendantSearchTrait
      */
     private function getEntityType($post)
     {
-        if (isset($post['defendant-details']['defType'])) {
-            return $post['defendant-details']['defType'];
+        if (isset($post['defendant-details']['defendantType'])) {
+            return $post['defendant-details']['defendantType'];
         } else {
             // check entity data
             $entityData = $this->getEntityData();
-            return $entityData['defType'];
+            return $entityData['defendantType'];
         }
 
     }

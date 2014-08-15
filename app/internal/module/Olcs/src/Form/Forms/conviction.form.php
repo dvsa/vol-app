@@ -28,7 +28,7 @@ return [
                          'label' => 'Act/si',
                          'class' => 'extra-long'
                     ],
-                    'category' => [
+                    'convictionCategory' => [
                          'type' => 'selectAjax',
                          'label' => 'Conviction description',
                          'class' => 'extra-long'
@@ -39,7 +39,7 @@ return [
                          'label' => 'Conviction description detail',
                         'class' => 'extra-long'
                     ],
-                    'dateOfOffence' => [
+                    'offenceDate' => [
                          'type' => 'dateSelectWithEmpty',
                          'label' => 'Offence date',
                          'filters' => '\Common\Form\Elements\InputFilters\OffenceDateBeforeConvictionDate'
@@ -49,7 +49,7 @@ return [
                          'label' => 'Conviction date',
                          'filters' => '\Common\Form\Elements\InputFilters\DateNotInFuture'
                      ],
-                    'si' => [
+                    'msi' => [
                         'type' => 'select',
                         'label' => 'SI',
                         'value_options' => 'yes_no'
@@ -84,12 +84,12 @@ return [
                         'label' => 'Taken into consideration',
                         'class' => 'extra-long'
                     ],
-                    'decToTc' => [
+                    'isDeclared' => [
                         'type' => 'select',
                         'label' => 'Declared to TC/TR',
                         'value_options' => 'yes_no'
                     ],
-                    'dealtWith' => [
+                    'isDealtWith' => [
                         'type' => 'checkbox-yn',
                         'label' => 'Dealt with',
                     ]

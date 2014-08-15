@@ -20,7 +20,7 @@ use Zend\View\Model\ViewModel;
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 class SearchController extends FormActionController
-{ 
+{
 
     /**
      * Search form action
@@ -68,25 +68,6 @@ class SearchController extends FormActionController
 
         $this->redirect()->toUrl($url);
     }
-
-    /**
-     * Person search results: NOT IMPLEMENTED YET
-     *
-     * @todo Implement person search results
-     *
-     * @return ViewModel
-     */
-    /*public function personAction()
-    {
-        die('Person search is out of scope');
-        $data = $this->params()->fromQuery();
-
-        $results = $this->makeRestCall('PersonSearch', 'GET', $data);
-
-        $view = new ViewModel(['results' => $results]);
-        $view->setTemplate('results');
-        return $view;
-    }*/
 
     /**
      * Operator search results
