@@ -18,6 +18,24 @@ use Zend\View\Model\ViewModel;
  */
 class CaseController extends AbstractController
 {
+    protected $title;
+    protected $subTitle;
+
+    /**
+     * @param $caseId
+     *
+     * Quick method to generate titles - needs to be done properly at some stage
+     */
+    public function getTitles($caseId)
+    {
+        $case = $this->getCase($caseId);
+
+        $this->title = 'Case ' . $caseId;
+        $this->subTitle = $case['licence']['organisation']['name'] . ' ' . '#' . $case['licence']['licenceNumber'];
+
+        return;
+    }
+
     /**
      * Manage action.
      */
@@ -26,6 +44,7 @@ class CaseController extends AbstractController
         $caseId = $this->fromRoute('case');
         $licence = $this->fromRoute('licence');
         $action = $this->fromRoute('tab');
+        $this->getTitles($caseId);
 
         $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licence)));
         $params = $this->params()->fromPost();
@@ -75,7 +94,8 @@ class CaseController extends AbstractController
         );
 
         $view->setTemplate('case/manage');
-        return $view;
+
+        return $this->renderView($view, $this->title, $this->subTitle);
     }
 
     public function getSubmissions($caseId)
@@ -600,7 +620,7 @@ class CaseController extends AbstractController
 
         $this->makeRestCall('Cases', 'DELETE', array('id' => $case));
 
-        $this->redirect()->toRoute('licence_case_list', array('licence' => $licence));
+        $this->redirect()->toRoute('licence/cases', array('licence' => $licence));
     }
 
     /**
@@ -645,7 +665,7 @@ class CaseController extends AbstractController
 
         $this->processEdit($data, 'Cases');
 
-        $this->redirect()->toRoute('licence_case_list', array('licence' => $data['licence']));
+        $this->redirect()->toRoute('licence/cases', array('licence' => $data['licence']));
     }
 
     /**
