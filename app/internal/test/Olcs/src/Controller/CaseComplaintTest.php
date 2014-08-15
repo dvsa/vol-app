@@ -93,7 +93,6 @@ class CaseComplaintTest extends AbstractHttpControllerTestCase
                                'person' => array(
                                    'properties' => array(
                                        'forename',
-                                       'middleName',
                                        'familyName',
                                    )
                                )
@@ -306,8 +305,8 @@ class CaseComplaintTest extends AbstractHttpControllerTestCase
 
         $bundle = '{"complaint":{"properties":["ALL"]},"children":{"driver":{"properties":["id","version"],"children":'
             . '{"contactDetails":{"properties":["id","version"],"children":{"person":{"properties":["id","version",'
-            . '"forename","middleName","familyName"]}}}}},"complainant":{"properties":["person"],"children":{"person":'
-            . '{"properties":["id","version","forename","middleName","familyName"]}}},"organisation":{"properties":["id",'
+            . '"forename","familyName"]}}}}},"complainant":{"properties":["person"],"children":{"person":'
+            . '{"properties":["id","version","forename","familyName"]}}},"organisation":{"properties":["id",'
             . '"version","name"]}}}';
         $mockParams = $this->getMock('\stdClass', array('fromPost'));
 
@@ -396,8 +395,8 @@ class CaseComplaintTest extends AbstractHttpControllerTestCase
         $mockParams = $this->getMock('\stdClass', array('fromPost'));
         $bundle = '{"complaint":{"properties":["ALL"]},"children":{"driver":{"properties":["id","version"],"children":'
             . '{"contactDetails":{"properties":["id","version"],"children":{"person":{"properties":["id","version",'
-            . '"forename","middleName","familyName"]}}}}},"complainant":{"properties":["person"],"children":{"person":'
-            . '{"properties":["id","version","forename","middleName","familyName"]}}},"organisation":{"properties":["id",'
+            . '"forename","familyName"]}}}}},"complainant":{"properties":["person"],"children":{"person":'
+            . '{"properties":["id","version","forename","familyName"]}}},"organisation":{"properties":["id",'
             . '"version","name"]}}}';
 
         $mockParams->expects($this->once())

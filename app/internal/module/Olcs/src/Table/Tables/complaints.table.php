@@ -40,11 +40,9 @@ return array(
         array(
             'title' => 'Complainant name',
             'formatter' => function ($data, $column) {
-                return $data['complainant']['person']['forename'] . ' ' .
-                    $data['complainant']['person']['middleName'] . ' ' .
-                    $data['complainant']['person']['familyName'];
-            },
-            //'format' => '{{complainantsForename}} {{complainantsFamilyName}}'
+                return $data['complainantContactDetails']['person']['forename'] . ' ' .
+                    $data['complainantContactDetails']['person']['familyName'];
+            }
         ),
         array(
             'title' => 'Description',
