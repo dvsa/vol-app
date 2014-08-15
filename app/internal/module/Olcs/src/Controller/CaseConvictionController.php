@@ -30,6 +30,8 @@ class CaseConvictionController extends CaseController
 
     public function indexAction()
     {
+        $translator = $this->getServiceLocator()->get('translator');
+
         $postParams = $this->params()->fromPost();
         $routeParams = $this->params()->fromRoute();
 
@@ -68,21 +70,21 @@ class CaseConvictionController extends CaseController
             array(
                 'case' => $caseId,
                 'sort' => 'convictionDate',
-                'order' => 'DESC',
-                'bundle' => json_encode($bundle)
-            )
+                'order' => 'DESC'
+            ),
+            $bundle
         );
 
         $config = $this->getServiceLocator()->get('Config');
 
+
         foreach ($results['Results'] as $key => $row) {
-            if (!$this->isUserDefinedConvictionCategory($row['category']['id'])) {
-                $results['Results'][$key]['categoryText'] = $row['category']['description'];
+            if (count($row['convictionCategory']) &&
+                !$this->isUserDefinedConvictionCategory($row['convictionCategory']['id'])) {
+                $results['Results'][$key]['categoryText'] = $row['convictionCategory']['description'];
             }
 
-            if (isset($config['static-list-data']['defendant_types'][$row['defType']])) {
-                $results['Results'][$key]['defType'] = $config['static-list-data']['defendant_types'][$row['defType']];
-            }
+            $results['Results'][$key]['defendantType'] = $translator->translate($row['defendantType']['id']);
         }
 
         $data = [];
@@ -250,16 +252,22 @@ class CaseConvictionController extends CaseController
                 'case' => array(
                     'properties' => 'ALL'
                 ),
-                'category' => array(
+                'convictionCategory' => array(
                     'properties' => array(
                         'id',
                         'description'
                     ),
                     'children' => array(
                         'parent' => array(
-                            'properties' => 'id'
+                            'properties' => array(
+                                'id',
+                                'description'
+                            )
                         )
                     )
+                ),
+                'defendantType' => array(
+                    'properties' => 'ALL'
                 )
             )
         );
@@ -274,16 +282,18 @@ class CaseConvictionController extends CaseController
             return $this->getResponse()->setStatusCode(404);
         }
 
-        if (!empty($data['category'])) {
-            $data['parentCategory'] = $data['category']['parent']['id'];
+        if (!empty($data['convictionCategory'])) {
+            $data['parentCategory'] = $data['convictionCategory']['parent']['id'];
 
             //check for user defined text
-            if (!$this->isUserDefinedConvictionCategory($data['category']['id'])) {
-                $data['categoryText'] = $data['category']['description'];
+            if (!$this->isUserDefinedConvictionCategory($data['convictionCategory']['id'])) {
+                $data['categoryText'] = $data['convictionCategory']['description'];
             }
 
-            $data['category'] = $data['category']['id'];
+            $data['convictionCategory'] = $data['convictionCategory']['id'];
         }
+
+        $data['defendantType'] = $data['defendantType']['id'];
 
         $data['id'] = $routeParams['id'];
         $data['defendant-details'] = $data;
@@ -292,6 +302,7 @@ class CaseConvictionController extends CaseController
         // set entity data to make form builder aware of fieldsets it has to
         // generate
         $this->setEntityData($data);
+
         $form = $this->generateFormWithData(
             'conviction',
             'processConviction',
@@ -309,7 +320,7 @@ class CaseConvictionController extends CaseController
         $request = $this->getRequest();
 
         if ($request->isGet()) {
-            if ($data['defType'] == 'defendant_type.operator') {
+            if ($data['defendantType'] == 'def_t_op') {
                 $form->get('defendant-details')->remove('personSearch');
                 $form->get('defendant-details')->remove('personFirstname');
                 $form->get('defendant-details')->remove('personLastname');
@@ -338,7 +349,7 @@ class CaseConvictionController extends CaseController
             }
         }
         $form->get('offence')
-            ->get('category')
+            ->get('convictionCategory')
             ->setValueOptions($formSubCategory);
 
         $view = new ViewModel(
@@ -518,7 +529,7 @@ class CaseConvictionController extends CaseController
             unset($data['main']);
         }
 
-        $data = array_intersect_key($data, array_flip(['id', 'convictionData', 'version']));
+        $data = array_intersect_key($data, array_flip(['id', 'convictionNote', 'version']));
         $this->processEdit($data, 'Cases');
 
         return $this->redirect()->toRoute('case_convictions', [], [], true);
@@ -528,11 +539,14 @@ class CaseConvictionController extends CaseController
     {
         return array(
             'children' => array(
-                'category' => array(
+                'convictionCategory' => array(
                     'properties' => array(
                         'id',
                         'description'
                     )
+                ),
+                'defendantType' => array(
+                    'properties' => 'ALL'
                 )
             )
         );

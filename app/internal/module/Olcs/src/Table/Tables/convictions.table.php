@@ -46,19 +46,22 @@ return array(
         array(
             'title' => 'Date of offence',
             'formatter' => 'Date',
-            'name' => 'dateOfOffence'
+            'name' => 'offenceDate'
         ),
         array(
             'title' => 'Name / defendant type',
             'formatter' => function ($data) {
-                $person = $data['personFirstname'] . ' ' . $data['personLastname'];
+                $person = $data['convictedName'];
                 $organisationName = $data['operatorName'];
-                return ($organisationName == '' ? $person : $organisationName) . ' / ' . $data['defType'];
+                return ($organisationName == '' ? $person : $organisationName) . ' <br /> ' . $data['defendantType'];
             }
         ),
         array(
             'title' => 'Description',
-            'name' => 'categoryText'
+            'formatter' => function ($row) {
+                $append = strlen($row['categoryText']) > 60 ? '...' : '';
+                return substr($row['categoryText'], 0, 60) . $append;
+            }
         ),
         array(
             'title' => 'Court/FPN',
@@ -70,15 +73,15 @@ return array(
         ),
         array(
             'title' => 'SI',
-            'name' => 'si'
+            'name' => 'msi'
         ),
         array(
             'title' => 'Declared',
-            'name' => 'decToTc'
+            'name' => 'isDeclared'
         ),
         array(
             'title' => 'Dealt with',
-            'name' => 'dealtWith'
+            'name' => 'isDealtWith'
         )
     )
 );

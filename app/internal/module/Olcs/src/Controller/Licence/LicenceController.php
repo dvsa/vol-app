@@ -25,9 +25,6 @@ class LicenceController extends AbstractController
     {
         $licence = $this->getLicence($this->getFromRoute('licence'));
 
-        /* echo '<pre>';
-        die(print_r($licence, 1)); */
-
         $view = $this->getView(['licence' => $licence]);
 
         $this->title = $view->licence['licNo'];
