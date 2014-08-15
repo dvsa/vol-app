@@ -31,7 +31,7 @@ class CaseController extends AbstractController
         $case = $this->getCase($caseId);
 
         $this->title = 'Case ' . $caseId;
-        $this->subTitle = $case['licence']['organisation']['name'] . ' ' . '#' . $case['licence']['licenceNumber'];
+        $this->subTitle = $case['licence']['organisation']['name'] . ' ' . '#' . $case['licence']['licNo'];
 
         return;
     }
@@ -633,6 +633,7 @@ class CaseController extends AbstractController
         // @todo sort this out - Additional fields (Mocked for now)
         $data['openDate'] = date('Y-m-d H:i:s');
         $data['owner'] = 7;
+        $data['caseType'] = 'case_t_lic';
 
         $licence = $this->fromRoute('licence');
 

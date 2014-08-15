@@ -41,7 +41,7 @@ return [
 
                     ],
                     'isFulfilled' => [
-                        'type' => 'checkbox-boolean',
+                        'type' => 'yesnocheckbox',
                         'label' => 'Fulfilled',
                     ],
                     'attachedTo' => [

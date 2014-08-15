@@ -51,7 +51,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
         $licenceId = 7;
         $operatingCentreId = 21;
 
-        $type = 'condition';
+        $type = 'cdt_con';
         $routeParams = ['case' => $caseId, 'licence' => $licenceId, 'type' => $type];
 
         $this->controller->expects($this->once())
@@ -121,7 +121,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
         $licenceId = 7;
         $operatingCentreId = 21;
 
-        $type = 'condition';
+        $type = 'cdt_con';
         $routeParams = ['case' => $caseId, 'licence' => $licenceId, 'type' => $type];
 
         $this->controller->expects($this->once())
@@ -144,7 +144,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
         $licenceId = 7;
         $operatingCentreId = 21;
 
-        $type = 'condition';
+        $type = 'cdt_con';
         $routeParams = ['case' => $caseId, 'licence' => $licenceId, 'type' => $type];
 
         $this->controller->expects($this->once())
@@ -195,7 +195,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
         $operatingCentreId = 21;
         $conditionId = 1;
 
-        $type = 'condition';
+        $type = 'cdt_con';
         $routeParams = ['case' => $caseId, 'licence' => $licenceId, 'type' => $type, 'id' => $conditionId];
 
         $this->controller->expects($this->at(0))
@@ -291,7 +291,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
         $operatingCentreId = 21;
         $conditionId = 1;
 
-        $type = 'condition';
+        $type = 'cdt_con';
         $routeParams = ['case' => $caseId, 'licence' => $licenceId, 'type' => $type, 'id' => $conditionId];
 
         $this->controller->expects($this->at(0))
@@ -386,7 +386,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
         $operatingCentreId = 21;
         $conditionId = 1;
 
-        $type = 'condition';
+        $type = 'cdt_con';
         $routeParams = ['case' => $caseId, 'licence' => $licenceId, 'type' => $type, 'id' => $conditionId];
 
         $this->controller->expects($this->at(0))
@@ -410,7 +410,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
         $operatingCentreId = 21;
         $conditionId = 1;
 
-        $type = 'condition';
+        $type = 'cdt_con';
         $routeParams = ['case' => $caseId, 'licence' => $licenceId, 'type' => $type, 'id' => $conditionId];
 
         $this->controller->expects($this->at(0))
@@ -514,7 +514,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
         );
 
         $licenceId = 7;
-        $type = 'condition';
+        $type = 'cdt_con';
 
         $mockOcAddressResults = [
             'Count' => 1,
@@ -866,7 +866,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
 
         $table = '<table></table>';
 
-        $bundle = $this->getBundle('condition');
+        $bundle = $this->getBundle('cdt_con');
         $restResults = array('conditionUndertakings' => array(array('caseId' => '24')));
 
         $urlMock = $this->getMock('\stdClass');
@@ -881,7 +881,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
 
         $controller->expects($this->any())
             ->method('getConditionUndertakingBundle')
-            ->with($this->equalTo('condition'))
+            ->with($this->equalTo('cdt_con'))
             ->willReturn($bundle);
 
         $controller->expects($this->once())
@@ -932,7 +932,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
 
         $table = '<table></table>';
 
-        $bundle = $this->getBundle('undertaking');
+        $bundle = $this->getBundle('cdt_und');
         $restResults = array('conditionUndertakings' => array(array('caseId' => '24')));
 
         $urlMock = $this->getMock('\stdClass');
@@ -947,7 +947,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
 
         $controller->expects($this->any())
             ->method('getConditionUndertakingBundle')
-            ->with($this->equalTo('undertaking'))
+            ->with($this->equalTo('cdt_und'))
             ->willReturn($bundle);
 
         $controller->expects($this->once())

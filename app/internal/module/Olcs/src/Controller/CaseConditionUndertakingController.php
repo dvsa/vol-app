@@ -10,6 +10,7 @@ namespace Olcs\Controller;
 
 use Olcs\Controller\Traits\DeleteActionTrait;
 use Zend\View\Model\ViewModel;
+use Common\Service\Table\Formatter\Address;
 
 /**
  * CaseConditionUndertaking Controller
@@ -19,6 +20,17 @@ use Zend\View\Model\ViewModel;
 class CaseConditionUndertakingController extends CaseController
 {
     use DeleteActionTrait;
+
+    const CONDITION_TYPE_CONDITION = 'cdt_con';
+    const CONDITION_TYPE_UNDERTAKING = 'cdt_und';
+
+    const ATTACHED_TO_LICENCE = 'cat_lic';
+    const ATTACHED_TO_OPERATING_CENTRE = 'cat_oc';
+
+    private $tables = array(
+        self::CONDITION_TYPE_CONDITION => 'conditions',
+        self::CONDITION_TYPE_UNDERTAKING => 'undertakings'
+    );
 
     /**
      * Should return the name of the service to call for deleting the item
@@ -78,54 +90,6 @@ class CaseConditionUndertakingController extends CaseController
     }
 
     /**
-     * Method to generate the conditions table
-     *
-     * @param id $caseId
-     * @return string
-     */
-    public function generateConditionTable($caseId)
-    {
-        return $this->generateTable($caseId, 'condition');
-    }
-
-    /**
-     * Method to generate the undertakings table
-     *
-     * @param id $caseId
-     * @return string
-     */
-    public function generateUndertakingTable($caseId)
-    {
-        return $this->generateTable($caseId, 'undertaking');
-    }
-
-    /**
-     * Moved duplicate generateTable logic to it's own method
-     *
-     * @param int $caseId
-     * @param string $which
-     * @return string
-     */
-    private function generateTable($caseId, $which)
-    {
-        $results = $this->makeRestCall(
-            'Cases',
-            'GET',
-            array('id' => $caseId),
-            $this->getConditionUndertakingBundle($which)
-        );
-
-        $conditionUndertakings = $results['conditionUndertakings'];
-
-        foreach ($conditionUndertakings as &$result) {
-            $result['caseId'] = $caseId;
-            $result['operatingCentreAddress'] = $result['operatingCentre']['address'];
-        }
-
-        return $this->buildTable($which . 's', $conditionUndertakings);
-    }
-
-    /**
      * Method to generate the add form
      *
      * @return \Zend\View\Model\ViewModel
@@ -152,9 +116,11 @@ class CaseConditionUndertakingController extends CaseController
 
         $this->determineBreadcrumbs($routeParams);
 
+        $conditionType = $this->getConditionTypeFromType($routeParams['type']);
+
         $data['condition-undertaking'] = array(
             'addedVia' => 'Case',
-            'conditionType' => $routeParams['type'],
+            'conditionType' => $conditionType,
             'isDraft' => 0,
             'case' => $routeParams['case'],
             'licence' => $routeParams['licence']
@@ -183,6 +149,18 @@ class CaseConditionUndertakingController extends CaseController
         return $view;
     }
 
+    private function getConditionTypeFromType($type)
+    {
+        switch ($type) {
+            case 'condition':
+                return self::CONDITION_TYPE_CONDITION;
+            case 'undertaking':
+                return self::CONDITION_TYPE_UNDERTAKING;
+        }
+
+        return null;
+    }
+
     /**
      * Method to generate the edit form
      *
@@ -198,6 +176,7 @@ class CaseConditionUndertakingController extends CaseController
             'GET',
             array('id' => $routeParams['case'])
         );
+
         if (empty($routeParams['case']) || empty($routeParams['licence']) || empty($results)) {
             return $this->getResponse()->setStatusCode(404);
         }
@@ -214,24 +193,26 @@ class CaseConditionUndertakingController extends CaseController
 
         $this->determineBreadcrumbs($routeParams);
 
-        $bundle = $this->getConditionUndertakingBundleForUpdate();
-
         $data['condition-undertaking'] = $this->makeRestCall(
             'ConditionUndertaking',
             'GET',
-            array('id' => $routeParams['id'], 'bundle' => json_encode($bundle))
+            array('id' => $routeParams['id']),
+            $this->getConditionUndertakingBundleForUpdate()
         );
 
         // assign data as required by the form
         $data['condition-undertaking']['case'] = $data['condition-undertaking']['case']['id'];
         $data['condition-undertaking']['licence'] = $routeParams['licence'];
         $data['condition-undertaking']['isDraft'] = $data['condition-undertaking']['isDraft'] ? 1 : 0;
+        $data['condition-undertaking']['conditionType'] = $data['condition-undertaking']['conditionType']['id'];
+        $data['condition-undertaking']['addedVia'] = isset($data['condition-undertaking']['addedVia']['id'])
+            ? $data['condition-undertaking']['addedVia']['id'] : null;
+        $data['condition-undertaking']['attachedTo'] = isset($data['condition-undertaking']['attachedTo']['id'])
+            ? $data['condition-undertaking']['attachedTo']['id'] : null;
 
         $data = $this->determineFormAttachedTo($data);
 
-        $form = $this->generateFormWithData(
-            'condition-undertaking-form', 'processConditionUndertaking', $data
-        );
+        $form = $this->generateFormWithData('condition-undertaking-form', 'processConditionUndertaking', $data);
 
         // set the OC address list and label for conditionType
         $form = $this->configureFormForConditionType(
@@ -254,13 +235,104 @@ class CaseConditionUndertakingController extends CaseController
     }
 
     /**
+     * Method to generate the conditions table
+     *
+     * @param id $caseId
+     * @return string
+     */
+    public function generateConditionTable($caseId)
+    {
+        return $this->generateTable($caseId, 'cdt_con');
+    }
+
+    /**
+     * Method to generate the undertakings table
+     *
+     * @param id $caseId
+     * @return string
+     */
+    public function generateUndertakingTable($caseId)
+    {
+        return $this->generateTable($caseId, 'cdt_und');
+    }
+
+    /**
+     * Moved duplicate generateTable logic to it's own method
+     *
+     * @param int $caseId
+     * @param string $which
+     * @return string
+     */
+    private function generateTable($caseId, $which)
+    {
+        $results = $this->makeRestCall(
+            'Cases',
+            'GET',
+            array('id' => $caseId),
+            $this->getConditionUndertakingBundle($which)
+        );
+
+        $conditionUndertakings = $results['conditionUndertakings'];
+
+        foreach ($conditionUndertakings as &$result) {
+            $result['caseId'] = $caseId;
+            $result['operatingCentreAddress'] = isset($result['operatingCentre']['address']) ? $result['operatingCentre']['address'] : null;
+        }
+
+        return $this->buildTable($this->tables[$which], $conditionUndertakings);
+    }
+
+    /**
+     * Method to return the bundle required for getting conditionUndertakings and related
+     * entities from the database.
+     *
+     * @return array
+     */
+    public function getConditionUndertakingBundleForUpdate()
+    {
+        return array(
+            'children' => array(
+                'conditionType' => array(
+                    'properties' => array(
+                        'id'
+                    )
+                ),
+                'addedVia' => array(
+                    'properties' => array(
+                        'id'
+                    )
+                ),
+                'attachedTo' => array(
+                    'properties' => array(
+                        'id'
+                    )
+                ),
+                'case' => array(
+                    'properties' => array(
+                        'id'
+                    )
+                ),
+                'licence' => array(
+                    'properties' => array(
+                        'id'
+                    )
+                ),
+                'operatingCentre' => array(
+                    'properties' => array(
+                        'id'
+                    )
+                )
+            )
+        );
+    }
+
+    /**
      * Method to process the CRUD form submission. Calls process Edit or Add
      *
      * @param array $data
      */
     public function processConditionUndertaking($data)
     {
-
         $routeParams = $this->getParams(array('action', 'licence', 'case'));
 
         $data = $this->determineSavingAttachedTo($data);
@@ -299,26 +371,16 @@ class CaseConditionUndertakingController extends CaseController
      */
     public function getOcAddressByLicence($licenceId)
     {
-        $operatingCentreAddressBundle = $this->getOcAddressBundle();
         $result = $this->makeRestCall(
             'OperatingCentre',
             'GET',
-            array(
-                'licence' => $licenceId,
-                'bundle' => json_encode($operatingCentreAddressBundle)
-            )
+            array('licence' => $licenceId),
+            $this->getOcAddressBundle()
         );
 
         if ($result['Count']) {
             foreach ($result['Results'] as $oc) {
-                $address = $oc['address'];
-                $operatingCentreAddresses[$oc['id']] =
-                    $address['addressLine1'] . ', ' .
-                    $address['addressLine2'] . ', ' .
-                    $address['addressLine3'] . ', ' .
-                    $address['addressLine4'] . ', ' .
-                    $address['postcode'] . ', ' .
-                    $address['countryCode']['id'];
+                $operatingCentreAddresses[$oc['id']] = Address::format($oc['address']);
             }
         }
         // set up the group options required by Zend
@@ -326,7 +388,7 @@ class CaseConditionUndertakingController extends CaseController
             'Licence' => array(
                 'label' => 'Licence',
                 'options' => array(
-                    'Licence' => 'Licence ' . $licenceId
+                    self::ATTACHED_TO_LICENCE => 'Licence ' . $licenceId
                 ),
             ),
             'OC' => array(
@@ -336,38 +398,6 @@ class CaseConditionUndertakingController extends CaseController
         );
 
         return $options;
-    }
-
-    /**
-     * Method to return the bundle required for getting conditionUndertakings and related
-     * entities from the database.
-     *
-     * @return array
-     */
-    public function getConditionUndertakingBundleForUpdate()
-    {
-        return array(
-
-            'children' => array(
-                'case' => array(
-                    'properties' => array(
-                        'id',
-                        'operating_centre_id',
-                        'licence_id'
-                    ),
-                ),
-                'licence' => array(
-                    'properties' => array(
-                        'id',
-                    ),
-                ),
-                'operatingCentre' => array(
-                    'properties' => array(
-                        'id'
-                    ),
-                ),
-            )
-        );
     }
 
     /**
@@ -391,10 +421,7 @@ class CaseConditionUndertakingController extends CaseController
                         'addressLine2',
                         'addressLine3',
                         'addressLine4',
-                        'paon_desc',
-                        'saon_desc',
-                        'street',
-                        'locality',
+                        'town',
                         'postcode'
                     ),
                     'children' => array(
@@ -420,10 +447,10 @@ class CaseConditionUndertakingController extends CaseController
     private function determineFormAttachedTo($data)
     {
         // for form
-        if ($data['condition-undertaking']['attachedTo'] != 'Licence') {
+        if ($data['condition-undertaking']['attachedTo'] != self::ATTACHED_TO_LICENCE) {
             $data['condition-undertaking']['attachedTo'] =
-                isset($data['condition-undertaking']['operatingCentre']['id']) ?
-                    $data['condition-undertaking']['operatingCentre']['id'] : '';
+                isset($data['condition-undertaking']['operatingCentre']['id'])
+                    ? $data['condition-undertaking']['operatingCentre']['id'] : '';
         }
 
         return $data;
@@ -440,17 +467,15 @@ class CaseConditionUndertakingController extends CaseController
      */
     private function determineSavingAttachedTo($data)
     {
-        if (strtolower($data['condition-undertaking']['attachedTo']) !== 'licence') {
-            $data['condition-undertaking']['operatingCentre'] =
-                $data['condition-undertaking']['attachedTo'];
-            $data['condition-undertaking']['attachedTo'] = 'OC';
+        if (strtolower($data['condition-undertaking']['attachedTo']) !== self::ATTACHED_TO_LICENCE) {
+            $data['condition-undertaking']['operatingCentre'] = $data['condition-undertaking']['attachedTo'];
+            $data['condition-undertaking']['attachedTo'] = self::ATTACHED_TO_OPERATING_CENTRE;
         } else {
             $data['condition-undertaking']['operatingCentre'] = null;
-            $data['condition-undertaking']['attachedTo'] = 'Licence';
+            $data['condition-undertaking']['attachedTo'] = self::ATTACHED_TO_LICENCE;
         }
 
         return $data;
-
     }
 
     /**
@@ -460,7 +485,6 @@ class CaseConditionUndertakingController extends CaseController
      */
     private function determineBreadcrumbs($routeParams)
     {
-
         $this->setBreadcrumb(
             array(
                 'licence_case_list/pagination' => array(
@@ -487,11 +511,13 @@ class CaseConditionUndertakingController extends CaseController
      */
     public function configureFormForConditionType($form, $licenceId, $type)
     {
-
         $ocAddressList = $this->getOcAddressByLicence($licenceId);
 
         // set form dependent aspects
-        $form->get('condition-undertaking')->get('notes')->setLabel(ucfirst($type));
+        $form->get('condition-undertaking')
+            ->get('notes')
+            ->setLabel(ucfirst($type));
+
         $form->get('condition-undertaking')
             ->get('attachedTo')
             ->setValueOptions($ocAddressList);
