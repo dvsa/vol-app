@@ -1,18 +1,21 @@
 <div class="full-width">
-    <?php
-    foreach ($stayTypes as $id => $type) {
-        if (isset($stayRecords[$id])) {
-            echo $this->render('partials/case/stay.phtml', array('stay' => $stayRecords[$id], 'stayType' => $type));
-        } else {
-            echo  $this->render('partials/case/stay-empty.phtml', array('heading' => $type . ' Stay', 'route' => 'case_stay_action', 'stayTypeId' => $id));
+<?php
+
+if (!empty($appealRecord)) {
+    echo  $this->render('partials/case/appeal.phtml', array('record' => $appealRecord));
+
+    if ($appealRecord['isWithdrawn'] != 'Y') {
+        foreach ($stayTypes as $id => $type) {
+            if (isset($stayRecords[$id])) {
+                echo $this->render('partials/case/stay.phtml', array('stay' => $stayRecords[$id], 'stayType' => $type));
+            } else {
+                echo  $this->render('partials/case/stay-empty.phtml', array('heading' => $type . ' Stay', 'route' => 'case_stay_action', 'stayTypeId' => $id));
+            }
         }
     }
+} else {
+    echo  $this->render('partials/case/stay-empty.phtml', array('heading' => 'Appeal', 'route' => 'case_appeal'));
+}
 
-    if(!empty($appealRecord)){
-        echo  $this->render('partials/case/appeal.phtml', array('record' => $appealRecord));
-    } else {
-        echo  $this->render('partials/case/stay-empty.phtml', array('heading' => 'Appeal', 'route' => 'case_appeal'));
-    }
-
-    ?>
+?>
 </div>

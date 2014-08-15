@@ -31,9 +31,8 @@ class CaseController extends AbstractController
         $case = $this->getCase($caseId);
 
         $this->title = 'Case ' . $caseId;
-        $this->subTitle = $case['licence']['organisation']['name'] . ' ' . '#' . $case['licence']['licNo'];
 
-        return;
+        $this->subTitle = $case['licence']['organisation']['name'] . ' ' . '#' . $case['licence']['licNo'];
     }
 
     /**
@@ -291,7 +290,7 @@ class CaseController extends AbstractController
             ],
             'stays' => [
                 'key' => 'stays',
-                'label' => 'Stays & Appeals',
+                'label' => 'Appeal & Stays',
                 'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'stays'], [], true),
             ],
             'documents' => [
@@ -756,5 +755,40 @@ class CaseController extends AbstractController
     {
         $userDefined = array(168);
         return in_array($categoryId, $userDefined);
+    }
+
+    /**
+     * Returns true or false depending on whether a case has an appeal which hasn't been withdrawn
+     *
+     * @param int $caseId
+     * @return bool
+     */
+    public function caseHasAppeal($caseId)
+    {
+        $appeal = $this->makeRestCall('Appeal', 'GET', array('case' => $caseId, 'isWithdrawn' => 0));
+        return ($appeal['Count'] ? true : false);
+    }
+
+    /**
+     * Checks whether a stay already exists for the given case and stay type (only one should be allowed)
+     *
+     * @param int $caseId
+     * @param int $stayTypeId
+
+     * @return boolean
+     */
+    public function caseHasStay($caseId, $stayTypeId)
+    {
+        $result = $this->makeRestCall(
+            'Stay',
+            'GET',
+            array(
+                'stayType' => $stayTypeId,
+                'case' => $caseId,
+                'isWithdrawn' => 0
+            )
+        );
+
+        return $result['Count'] ? true : false;
     }
 }

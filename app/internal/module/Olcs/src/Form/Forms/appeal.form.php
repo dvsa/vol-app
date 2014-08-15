@@ -79,7 +79,7 @@ return [
                     'withdrawnDate' => [
                         'type' => 'dateSelectWithEmpty',
                         'label' => 'Withdrawn date',
-                        'filters' => '\Common\Form\Elements\InputFilters\DateNotRequiredNotInFuture'
+                        'filters' => '\Common\Form\Elements\InputFilters\WithdrawnDate'
                     ],
                 ]
             ],
