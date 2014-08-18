@@ -47,7 +47,7 @@ class BusinessDetailsControllerTest extends AbstractApplicationControllerTestCas
             'id' => 1,
             'version' => 1,
             'name' => 'name',
-            'companyNo' => ['company_number' => '12345678']
+            'companyNo' => '12345678'
         ]
     ];
 
@@ -441,6 +441,7 @@ class BusinessDetailsControllerTest extends AbstractApplicationControllerTestCas
 
     /**
      * Test editAction with submit
+     * @group acurrent
      */
     public function testEditActionWithSubmit()
     {
@@ -518,6 +519,7 @@ class BusinessDetailsControllerTest extends AbstractApplicationControllerTestCas
 
     /**
      * Test addAction with submit
+     * @group acurrent
      */
     public function testAddActionWithSubmit()
     {
@@ -532,6 +534,7 @@ class BusinessDetailsControllerTest extends AbstractApplicationControllerTestCas
 
     /**
      * Test addAction with submit with add another
+     * @group acurrent
      */
     public function testAddActionWithSubmitWithAddAnother()
     {

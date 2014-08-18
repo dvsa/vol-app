@@ -26,7 +26,7 @@ return array(
                     'type' => 'text',
                     'label' => 'application_your-business_business-details-formCompanyNo',
                     'class' => 'long',
-                    'filters' => '\Common\Form\Elements\InputFilters\TextRequired'
+                    'filters' => '\Common\Form\Elements\InputFilters\CompanyNumber'
                 ),
                 )
             ),
