@@ -8,6 +8,9 @@
 
 namespace SelfServe\Controller\Application\OperatingCentres;
 
+use Common\Form\Elements\Validators\OperatingCentreTrafficAreaValidator as TrafficAreaValidator;
+use Common\Service\Postcode\Postcode;
+
 /**
  * Authorisation Controller
  *
@@ -175,6 +178,15 @@ class AuthorisationController extends OperatingCentresController
                 )
             )
         )
+    );
+
+    /**
+     * Form tables name
+     *
+     * @var string
+     */
+    protected $formTables = array(
+        'table' => 'authorisation_in_form',
     );
 
     /**
@@ -372,48 +384,24 @@ class AuthorisationController extends OperatingCentresController
             $this->processFileDeletions(array('advertisements' => array('file' => 'deleteFile')), $form);
         }
 
-        return $form;
-    }
+        // add traffic area validator
+        $licenceData = $this->getLicenceData();
 
-    /**
-     * Get table data
-     *
-     * @param int $id
-     * @return array
-     */
-    protected function getTableData($id)
-    {
-        if (is_null($this->tableData)) {
-            $data = $this->makeRestCall(
-                'ApplicationOperatingCentre',
-                'GET',
-                array('application' => $id),
-                $this->getActionDataBundle()
-            );
+        $trafficAreaValidator = $this->getServiceLocator()->get('postcodeTrafficAreaValidator');
+        $trafficAreaValidator->setNiFlag($licenceData['niFlag']);
+        $trafficAreaValidator->setOperatingCentresCount($this->getOperatingCentresCount());
+        $trafficAreaValidator->setTrafficArea($this->getTrafficArea());
 
-            $newData = array();
+        $postcodeValidators = $form->getInputFilter()->get('address')->get('postcode')->getValidatorChain();
+        $postcodeValidators->attach($trafficAreaValidator);
 
-            foreach ($data['Results'] as $row) {
+        $form->getInputFilter()->get('address')->get('postcode')->setRequired(false);
 
-                $newRow = $row;
-
-                if (isset($row['operatingCentre']['address'])) {
-
-                    unset($row['operatingCentre']['address']['id']);
-                    unset($row['operatingCentre']['address']['version']);
-
-                    $newRow = array_merge($newRow, $row['operatingCentre']['address']);
-                }
-
-                unset($newRow['operatingCentre']);
-
-                $newData[] = $newRow;
-            }
-
-            $this->tableData = $newData;
+        if (!$licenceData['niFlag'] && !$this->getTrafficArea()) {
+            $form->get('form-actions')->remove('addAnother');
         }
 
-        return $this->tableData;
+        return $form;
     }
 
     /**
@@ -459,10 +447,27 @@ class AuthorisationController extends OperatingCentresController
             throw new \Exception('Unable to save application operating centre');
         }
 
-        // process Traffic Area
-        $licenceData = $this->getLicenceData();
-        if ($licenceData['niFlag'] && !$data['trafficArea']['id']) {
-            $this->setTrafficArea(self::NORTHERN_IRELAND_TRAFFIC_AREA_CODE);
+        // set default Traffic Area if we don't have one
+        if (!array_key_exists('trafficArea', $data) || !$data['trafficArea']['id']) {
+            $licenceData = $this->getLicenceData();
+            if ($licenceData['niFlag']) {
+                $this->setTrafficArea(self::NORTHERN_IRELAND_TRAFFIC_AREA_CODE);
+            }
+            if (!$licenceData['niFlag'] && $data['operatingCentre']['addresses']['address']['postcode']) {
+                $ocCount = $this->getOperatingCentresCount();
+
+                // first Operating Centre was just added or we are editing the first one
+                if ($ocCount == 1) {
+                    $postcodeService = $this->getServiceLocator()->get('postcode');
+                    list($trafficAreaId, $trafficAreaName) =
+                        $postcodeService->getTrafficAreaByPostcode(
+                            $data['operatingCentre']['addresses']['address']['postcode']
+                        );
+                    if ($trafficAreaId) {
+                        $this->setTrafficArea($trafficAreaId);
+                    }
+                }
+            }
         }
     }
 
@@ -474,7 +479,9 @@ class AuthorisationController extends OperatingCentresController
      */
     protected function save($data, $service = null)
     {
-        $this->setTrafficArea($data['trafficArea']);
+        if (isset($data['trafficArea']) && $data['trafficArea']) {
+            $this->setTrafficArea($data['trafficArea']);
+        }
         parent::save($data, $service);
     }
 
@@ -521,7 +528,7 @@ class AuthorisationController extends OperatingCentresController
      */
     protected function processLoad($oldData)
     {
-        $results = $this->getTableData($this->getIdentifier());
+        $results = $this->getFormTableData($this->getIdentifier());
 
         $data['data'] = $oldData;
 
@@ -660,6 +667,19 @@ class AuthorisationController extends OperatingCentresController
      */
     public function maybeClearTrafficAreaId()
     {
+        $ocCount = $this->getOperatingCentresCount();
+        if ($ocCount == 1 && $this->getActionId()) {
+            $this->setTrafficArea(null);
+        }
+    }
+
+    /**
+     * Get operating centres count
+     * 
+     * @return int
+     */
+    public function getOperatingCentresCount()
+    {
         $bundle = array(
             'properties' => array(
                 'id',
@@ -674,78 +694,120 @@ class AuthorisationController extends OperatingCentresController
             ),
             $bundle
         );
-
-        if ($operatingCentres['Count'] == 1) {
-            $this->setTrafficArea(array('trafficArea' => null));
-        }
+        return $operatingCentres['Count'];
     }
 
     /**
      * Set traffic area to application's licence based on traarea id
      * 
-     * @param array $data
+     * @param string $id
      */
     public function setTrafficArea($id = null)
     {
-        if ($id) {
-            $bundle = array(
-                'properties' => array(
-                    'id',
-                    'version'
-                ),
-                'children' => array(
-                    'licence' => array(
-                        'properties' => array(
-                            'id',
-                            'version'
-                        )
+        $bundle = array(
+            'properties' => array(
+                'id',
+                'version'
+            ),
+            'children' => array(
+                'licence' => array(
+                    'properties' => array(
+                        'id',
+                        'version'
                     )
                 )
+            )
+        );
+        $application = $this->makeRestCall('Application', 'GET', array('id' => $this->getIdentifier()), $bundle);
+        if (is_array($application) && array_key_exists('licence', $application) &&
+            array_key_exists('version', $application['licence'])) {
+            $data = array(
+                        'id' => $application['licence']['id'],
+                        'version' => $application['licence']['version'],
+                        'trafficArea' => $id
             );
-            $application = $this->makeRestCall('Application', 'GET', array('id' => $this->getIdentifier()), $bundle);
-            if (is_array($application) && array_key_exists('licence', $application) &&
-                array_key_exists('version', $application['licence'])) {
-                $data = array(
-                            'id' => $application['licence']['id'],
-                            'version' => $application['licence']['version'],
-                            'trafficArea' => $id
-                );
-                $this->makeRestCall('Licence', 'PUT', $data);
-            }
+            $this->makeRestCall('Licence', 'PUT', $data);
         }
     }
 
     /**
-     * Get traffic area by postocde
-     * 
-     * @param string $postcode
-     * @return string
+     * Check for actions
+     *
+     * @param string $route
+     * @param array $params
+     * @param string $itemIdParam
+     *
+     * @return boolean
      */
-    public function getTrafficAreaByPostcode($postcode = null)
+    public function checkForCrudAction($route = null, $params = array(), $itemIdParam = 'id')
     {
-        $retv = null;
-        if ($postcode) {
-            $response = $this->sendGet('postcode\address', array('postcode' => $postcode), true);
-            if (is_array($response) && count($response)) {
-                $adminArea = $response[0]['administritive_area'];
-                if ($adminArea) {
-                    $bundle = array(
-                        'properties' => null,
-                        'children' => array(
-                            'trafficArea' => array(
-                                'properties' => array(
-                                    'id'
-                                )
-                            )
-                        )
-                    );
-                    $adminAreaTrafficArea = $this->makeRestCall('AdminAreaTrafficArea', 'GET', array('id' => $adminArea), $bundle);
-                    if (array_key_exists('trafficArea', $adminAreaTrafficArea) && count($adminAreaTrafficArea)) {
-                        $retv = $adminAreaTrafficArea['trafficArea']['id'];
-                    }
-                }
+        $table = $this->params()->fromPost('table');
+        $action = is_array($table) && isset($table['action']) ? strtolower($table['action']) : '';
+
+        if (empty($action)) {
+            return false;
+        }
+
+        $params = array_merge($params, array('action' => $action));
+
+        if ($action !== 'add') {
+            $id = $this->params()->fromPost('id');
+
+            if (empty($id)) {
+
+                return false;
+            }
+
+            $params[$itemIdParam] = $id;
+        }
+        if (!$this->getTrafficArea()) {
+            $dataTrafficArea = $this->params()->fromPost('dataTrafficArea');
+            $trafficArea = is_array($dataTrafficArea) && isset($dataTrafficArea['trafficArea']) ?
+                $dataTrafficArea['trafficArea'] : '';
+            if ($action == 'add' && !$trafficArea && $this->getOperatingCentresCount()) {
+                $this->addWarningMessage('Please select a traffic area');
+                return $this->redirectToRoute(null, array(), array(), true);
+            } elseif ($action == 'add' && $trafficArea) {
+                $this->setTrafficArea($trafficArea);
             }
         }
-        return $retv;
+
+        return $this->redirect()->toRoute($route, $params, [], true);
+    }
+
+    public function getFormTableData($applicationId)
+    {
+        if (is_null($this->tableData)) {
+            $data = $this->makeRestCall(
+                'ApplicationOperatingCentre',
+                'GET',
+                array('application' => $applicationId),
+                $this->getActionDataBundle()
+            );
+
+            $newData = array();
+
+            foreach ($data['Results'] as $row) {
+
+                $newRow = $row;
+
+                if (isset($row['operatingCentre']['address'])) {
+
+                    unset($row['operatingCentre']['address']['id']);
+                    unset($row['operatingCentre']['address']['version']);
+
+                    $newRow = array_merge($newRow, $row['operatingCentre']['address']);
+                }
+
+                unset($newRow['operatingCentre']);
+
+                $newData[] = $newRow;
+            }
+
+            $this->tableData = $newData;
+        }
+
+        return $this->tableData;
+
     }
 }

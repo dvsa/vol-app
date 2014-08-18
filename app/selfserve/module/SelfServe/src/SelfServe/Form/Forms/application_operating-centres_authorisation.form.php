@@ -11,6 +11,11 @@ return array(
         ),
         'fieldsets' => array(
             array(
+                'name' => 'table',
+                'options' => array(0),
+                'type' => 'table'
+            ),
+            array(
                 'name' => 'dataTrafficArea',
                 'elements' => array(
                     'trafficArea' => array(
