@@ -75,7 +75,8 @@ class UndertakingsController extends VehicleSafetyController
     }
 
     /**
-     * Load the data for the form
+     * Load the data for the form and format it in a way that the fieldsets can
+     * understand.
      *
      * @param arary $data
      * @return array
@@ -160,10 +161,12 @@ class UndertakingsController extends VehicleSafetyController
                     $form->remove('smallVehiclesIntention')->remove('psvOperateSmallVehicles');
                     $form->remove('smallVehiclesIntention')->remove('psvSmallVehicleNotes');
                     $form->remove('nineOrMore');
+                    $form->get('limousinesNoveltyVehicles')->remove('psvOnlyLimousinesConfirmationLabel');
                     $form->get('limousinesNoveltyVehicles')->remove('psvOnlyLimousinesConfirmation');
                 } else {
                     // Case 1 - England/Wales small only
                     $form->remove('nineOrMore');
+                    $form->get('limousinesNoveltyVehicles')->remove('psvOnlyLimousinesConfirmationLabel');
                     $form->get('limousinesNoveltyVehicles')->remove('psvOnlyLimousinesConfirmation');
                 }
             } else {
