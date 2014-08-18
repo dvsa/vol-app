@@ -23,21 +23,25 @@ return array(
                         'value_options' => array(),
                         'required' => true,
                         'label' => $translationPrefixTrafficArea . '.label.new',
-                        'hint' => $translationPrefixTrafficArea . '.hint.new'
+                        'hint' => $translationPrefixTrafficArea . '.hint.new',
                     ),
                     'trafficAreaInfoLabelExists' => array(
-                        'type' => 'html',
-                        'label' => $translationPrefixTrafficArea . '.label.exists'
+                        'type' => 'htmlTranslated',
+                        'attributes' => array(
+                            'value' => $translationPrefixTrafficArea . '.label.exists'
+                        )    
                     ),
                     'trafficAreaInfoNameExists' => array(
                         'type' => 'html',
                         'attributes' => array(
                             'value' => '<b>%NAME%</b>'
-                        )
+                        ),
                     ),
                     'trafficAreaInfoHintExists' => array(
-                        'type' => 'html',
-                        'label' => $translationPrefixTrafficArea . '.hint.exists'
+                        'type' => 'htmlTranslated',
+                        'attributes' => array(
+                            'value' => $translationPrefixTrafficArea . '.labelasahint.exists'
+                        )    
                     ),
                     'hiddenId' => array(
                         'type' => 'hidden'
