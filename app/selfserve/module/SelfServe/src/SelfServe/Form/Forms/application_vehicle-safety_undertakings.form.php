@@ -56,7 +56,8 @@ return array(
                     'psvSmallVehicleConfirmation' => array(
                         'type' => 'singlecheckbox',
                         'label' => $translationPrefix . '.smallVehiclesConfirmation',
-                        'filters' => '\Common\Form\Elements\InputFilters\VehicleUndertakingsOperateSmallVehiclesAgreement'
+                        'filters' =>
+                            '\Common\Form\Elements\InputFilters\VehicleUndertakingsOperateSmallVehiclesAgreement'
                     )
                 ),
             ),
