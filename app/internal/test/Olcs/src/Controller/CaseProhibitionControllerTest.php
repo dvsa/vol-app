@@ -489,7 +489,7 @@ class CaseProhibitionControllerTest extends AbstractHttpControllerTestCase
                 'imposedAt' => 'Doncaster',
                 'version' => 1,
                 'prohibitionType' => [
-                    'handle' => 'prohibition_type.1'
+                    'id' => 'prohibition_type.1'
                 ],
                 'case' => [
                     'id' => 1

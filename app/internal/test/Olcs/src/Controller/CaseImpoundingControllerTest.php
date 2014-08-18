@@ -574,10 +574,10 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
                         'name' => 'Name of TC'
                     ),
                     'outcome' => array(
-                        'handle' => 'impounding_outcome.1'
+                        'id' => 'impounding_outcome.1'
                     ),
                     'impoundingType' => array(
-                        'handle' => 'impounding_type.1'
+                        'id' => 'impounding_type.1'
                     ),
                 )
             ),
@@ -602,7 +602,7 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
 
             'impoundingType' => array
                 (
-                    'handle' => 'impounding_type.1'
+                    'id' => 'impounding_type.1'
                 ),
 
             'presidingTc' => array
@@ -612,12 +612,12 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
 
             'outcome' => array
                 (
-                    'handle' => 'impounding_outcome.2'
+                    'id' => 'impounding_outcome.2'
                 ),
             'legislationTypes' => array
                 (
-                    array('handle' => 'test'),
-                    array('handle' => 'test2'),
+                    array('id' => 'test'),
+                    array('id' => 'test2'),
                 ),
             'vrm' => 'vrm1'
         );
