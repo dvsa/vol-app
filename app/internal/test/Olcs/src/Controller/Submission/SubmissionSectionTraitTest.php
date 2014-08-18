@@ -254,13 +254,13 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
         );
         $data = array(
             'id' => 54,
-            'ecms_no' => 123123,
+            'ecmsNo' => 123123,
             'description' => 'Case 1',
             'licence' => array(
                 'licNo' => 7,
-                'startDate' => '2014-01-01',
-                'authorisedVehicles' => 12,
-                'authorisedTrailers' => 4,
+                'inForceDate' => '2014-01-01',
+                'totAuthVehicles' => 12,
+                'totAuthTrailers' => 4,
                 'organisation' => array(
                     'name' => 'Fred SMith',
                     'type' => 'Bus company',
@@ -272,7 +272,7 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
         );
         $result = $submissionSectionTrait->caseSummaryInfo($data);
         $this->assertContains('Case 1', $result);
-        $this->assertArrayHasKey('ecms_no', $result);
+        $this->assertArrayHasKey('ecmsNo', $result);
     }
 
     /**
@@ -410,13 +410,13 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
 
         $data = array(
             'id' => 54,
-            'ecms_no' => 123123,
+            'ecmsNo' => 123123,
             'description' => 'Case 1',
             'licence' => array(
                 'licNo' => 7,
-                'startDate' => '2014-01-01',
-                'authorisedVehicles' => 12,
-                'authorisedTrailers' => 4,
+                'inForceDate' => '2014-01-01',
+                'totAuthVehicles' => 12,
+                'totAuthTrailers' => 4,
                 'organisation' => array(
                     'name' => 'Fred SMith',
                     'type' => 'Bus company',
@@ -428,7 +428,7 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
         );
 
         $result = $submissionSectionTrait->getFilteredSectionData('caseSummaryInfo', $data);
-        $this->assertArrayHasKey('ecms_no', $result);
+        $this->assertArrayHasKey('ecmsNo', $result);
     }
 
     private function getStaticDefTypes()

@@ -315,10 +315,12 @@ class CaseProhibitionControllerTest extends AbstractHttpControllerTestCase
     public function testSaveProhibitionFormAddSubmit()
     {
         $data = array(
-            'case' => 24,
-            'notes' => 'test',
-            'submit' => '',
-            'cancel' => null
+            'main' => array(
+                'case' => 24,
+                'notes' => 'test',
+                'submit' => '',
+                'cancel' => null
+            )
         );
 
         $this->controller->expects($this->once())
@@ -378,13 +380,15 @@ class CaseProhibitionControllerTest extends AbstractHttpControllerTestCase
     {
         return array(
             array(
-            array(
-                    'id' => 1,
-                    'case' => 24,
-                    'notes' => 'test',
-                    'main' => [],
-            )
+                array(
+                    'main' => array(
+                        'id' => 1,
+                        'case' => 24,
+                        'notes' => 'test',
+                        'main' => []
+                    )
                 )
+            )
         );
     }
 
@@ -489,7 +493,7 @@ class CaseProhibitionControllerTest extends AbstractHttpControllerTestCase
                 'imposedAt' => 'Doncaster',
                 'version' => 1,
                 'prohibitionType' => [
-                    'handle' => 'pro_t_si'
+                    'id' => 'pro_t_si'
                 ],
                 'case' => [
                     'id' => 1

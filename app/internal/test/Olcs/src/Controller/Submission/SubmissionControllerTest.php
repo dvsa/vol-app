@@ -48,8 +48,8 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $this->controller->routeParams = array();
         $this->licenceData = array(
             'id' => 7,
-            'licenceType' => 'Standard National',
-            'goodsOrPsv' => 'Psv'
+            'licenceType' => array('id' => 'ltyp_sn'),
+            'goodsOrPsv' => array('id' => 'lcat_psv')
         );
 
         parent::setUp();
@@ -644,8 +644,8 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
     {
         return
         [
-            [7, 1, 'goods'],
-            [7, 0, 'psv']
+            [7, 1, 'lcat_gv'],
+            [7, 0, 'lcat_psv']
         ];
     }
 
@@ -893,7 +893,9 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
     {
         return [
             'niFlag' => $niFlag,
-            'goodsOrPsv' => $goodsOrPsv
+            'goodsOrPsv' => array(
+                'id' => $goodsOrPsv
+            )
         ];
     }
 

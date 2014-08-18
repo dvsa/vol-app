@@ -71,11 +71,11 @@ class CaseComplaintController extends CaseController implements CrudInterface
 
         $view->setVariables(
             [
-            'case' => $case,
-            'tabs' => $tabs,
-            'tab' => $action,
-            'summary' => $summary,
-            'table' => $table,
+                'case' => $case,
+                'tabs' => $tabs,
+                'tab' => $action,
+                'summary' => $summary,
+                'table' => $table,
             ]
         );
 

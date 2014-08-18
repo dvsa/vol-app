@@ -360,7 +360,7 @@ class CaseController extends AbstractController
 
         $openDate = date('d/m/Y', strtotime($case['openDate']));
 
-        $smmary = [
+        $summary = [
             'description' => [
                 'label' => 'Description',
                 'value' => $case['description'],
@@ -396,14 +396,14 @@ class CaseController extends AbstractController
                 'value' => $case['licence']['status']['id'],
                 'url' => ''
             ],
-            'ecms_no' => [
+            'ecmsNo' => [
                 'label' => 'ECMS',
                 'value' => $case['ecmsNo'],
                 'url' => ''
             ],
         ];
 
-        return $smmary;
+        return $summary;
     }
 
     /**

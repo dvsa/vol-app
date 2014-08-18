@@ -77,7 +77,6 @@ class CaseConvictionController extends CaseController
 
         $config = $this->getServiceLocator()->get('Config');
 
-
         foreach ($results['Results'] as $key => $row) {
             if (count($row['convictionCategory']) &&
                 !$this->isUserDefinedConvictionCategory($row['convictionCategory']['id'])) {

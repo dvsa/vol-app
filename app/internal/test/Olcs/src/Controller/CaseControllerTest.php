@@ -568,7 +568,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
     {
         return array(
             array(
-                array('fields' => array(), 'licence' => 7, 'categories' => $this->getSampleCategoriesArray())
+                array('fields' => array(), 'licence' => 7, 'submissionSections' => $this->getSampleCategoriesArray())
             )
         );
     }
@@ -1039,40 +1039,40 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
      */
     private function getSampleCaseArray($caseId, $licenceId)
     {
-        return array
-            (
+        return array(
             'createdOn' => '',
             'lastUpdatedOn' => '',
             'version' => 1,
             'id' => $caseId,
-            'status' => 'Open',
             'description' => 'Convictions against operator',
             'convictionData' => '',
-            'ecms_no' => 'E123444',
+            'ecmsNo' => 'E123444',
             'openDate' => '2012-06-13T00:00:00+0100',
+            'closeDate' => null,
             'owner' => 'TBC',
-            'caseType' => 'Compliance',
-            'closeDate' => '',
+            'caseType' => array(
+                'id' => 'case_t_lic'
+            ),
             'createdBy' => '',
             'lastUpdatedBy' => '',
-            'categories' => array
-                (
+            'submissionSections' => array(
                 array(
                     'id' => 1,
-                    'name' => 'Category name'
+                    'description' => 'Category name'
                 )
             ),
-            'licence' => array
-                (
+            'licence' => array (
                 'createdOn' => '2014-04-02T13:39:54+0100',
                 'lastUpdatedOn' => '2014-04-02T13:39:54+0100',
                 'version' => 1,
                 'id' => 7,
-                'goodsOrPsv' => 'Goods',
+                'goodsOrPsv' => array(
+                    'id' => 'lcat_gv'
+                ),
                 'licNo' => 'OB1234567',
-                'licenceStatus' => 'Valid',
+                'status' => array('id' => 'Valid'),
                 'niFlag' => '',
-                'licenceType' => 'Standard National',
+                'licenceType' => array('id' => 'ltyp_sn'),
                 'startDate' => '2010-01-12T00:00:00+0000',
                 'reviewDate' => '2010-01-12T00:00:00+0000',
                 'endDate' => '2010-01-12T00:00:00+0000',
@@ -1085,14 +1085,9 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
                 'safetyInsVaries' => '',
                 'tachographIns' => '',
                 'tachographInsName' => '',
-                'createdBy' => array
-                (
-                ),
-                'lastUpdatedBy' => array
-                (
-                ),
-                'organisation' => Array
-                    (
+                'createdBy' => array(),
+                'lastUpdatedBy' => array(),
+                'organisation' => array(
                     'createdOn' => '2014-04-02T13:39:54+0100',
                     'lastUpdatedOn' => '2014-04-02T13:39:54+0100',
                     'version' => 2,
@@ -1100,20 +1095,13 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
                     'companyOrLlpNo' => 1234567,
                     'name' => 'test',
                     'tradingAs' => '',
-                    'type' => 'org_t_pa',
+                    'type' => array('id' => 'org_t_pa'),
                     'sicCode' => '',
-                    'createdBy' => array
-                    (
-                    ),
-                    'lastUpdatedBy' => array
-                    (
-                    ),
+                    'createdBy' => array(),
+                    'lastUpdatedBy' => array(),
                 ),
-                'operatingCentres' => array
-                (
-                ),
-                'trafficArea' => array
-                    (
+                'operatingCentres' => array(),
+                'trafficArea' => array(
                     'createdOn' => '',
                     'lastUpdatedOn' => '',
                     'version' => 1,
@@ -1122,40 +1110,19 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
                     'createdBy' => '',
                     'lastUpdatedBy' => ''
                 ),
-                'cases' => array
-                (
+                'cases' => array(),
+                'transportManagers' => array(),
+                'fees' => array(),
+                'conditions' => array(
+                    0 => array()
                 ),
-                'transportManagers' => array
-                (
-                ),
-                'fees' => array
-                (
-                ),
-                'conditions' => array
-                    (
-                    0 => array
-                    (
-                    )
-                ),
-                'tradingNames' => array
-                (
-                ),
-                'contactDetails' => array
-                (
-                ),
+                'tradingNames' => array(),
+                'contactDetails' => array(),
             ),
-            'convictions' => array
-            (
-            ),
-            'complaints' => array
-            (
-            ),
-            'penalties' => array
-            (
-            ),
-            'prohibitions' => array
-            (
-            )
+            'convictions' => array(),
+            'complaints' => array(),
+            'penalties' => array(),
+            'prohibitions' => array()
         );
     }
 
@@ -1175,7 +1142,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
                     'version' => 1,
                     'id' => 1,
                     'text' => '',
-                    'dateClosed' => '',
+                    'closedDate' => '',
                     'createdBy' => array(),
                     'lastUpdatedBy' => '',
                     'case' => array(),

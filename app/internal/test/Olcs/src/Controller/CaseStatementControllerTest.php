@@ -169,11 +169,11 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
 
         $statementDetails = array(
             'statementType' => '5',
-            'contactType' => '9',
+            'contactType' => array('id' => '9'),
             'requestorsAddress' => array(
                 'addressLine1' => '123 Street',
                 'postcode' => 'AB1 0AB',
-                'countryCode' => 'GB',
+                'countryCode' => array('id' => 'GB'),
                 'town' => 'Leeds'
             )
         );
@@ -182,14 +182,14 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
 
         $expectedData = array(
             'statementType' => '5',
-            'contactType' => '9',
+            'contactType' => array('id' => '9'),
             'details' => array(
                 'statementType' => 'statement_type.5',
-                'contactType' => 'contact_type.9',
+                'contactType' => '9',
                 'requestorsAddress' => array(
                     'addressLine1' => '123 Street',
                     'postcode' => 'AB1 0AB',
-                    'countryCode' => 'GB',
+                    'countryCode' => array('id' => 'GB'),
                     'town' => 'Leeds'
                 ),
             ),
@@ -270,12 +270,12 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
         $expectedProcessedData = array(
             'case' => 9,
             'statementType' => 6,
-            'contactType' => 3,
+            'contactType' => array('id' => 3),
             'addresses' => array(
                 'requestorsAddress' => array(
                     'addressLine1' => '123 street',
                     'postcode' => 'Ab1 1BD',
-                    'countryCode' => 'GB',
+                    'countryCode' => array('id' => 'GB'),
                     'town' => 'Leeds'
                 )
             )
@@ -325,12 +325,12 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
         $expectedProcessedData = array(
             'case' => 9,
             'statementType' => 6,
-            'contactType' => 3,
+            'contactType' => array('id' => 3),
             'addresses' => array(
                 'requestorsAddress' => array(
                     'addressLine1' => '123 street',
                     'postcode' => 'Ab1 1BD',
-                    'countryCode' => 'GB',
+                    'countryCode' => array('id' => 'GB'),
                     'town' => 'Leeds'
                 )
             )

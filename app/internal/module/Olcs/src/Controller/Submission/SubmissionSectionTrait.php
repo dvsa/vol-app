@@ -114,7 +114,7 @@ trait SubmissionSectionTrait
             'licNo' => $data['licence']['licNo'],
             'name' => $data['licence']['organisation']['name'],
             'licenceType' => $data['licence']['licenceType'],
-            'ecms_no' => $data['ecmsNo'],
+            'ecmsNo' => $data['ecmsNo'],
             'description' => $data['description'],
             'type' => $data['licence']['organisation']['type'],
             'sicCode' => $data['licence']['organisation']['sicCode'],
