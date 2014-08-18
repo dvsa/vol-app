@@ -225,7 +225,7 @@ return [
         'options' => [
             'route' => '/ajax/convictions/categories',
             'defaults' => [
-                'controller' => 'ConvictionController',
+                'controller' => 'CaseConvictionController',
                 'action' => 'categories',
             ]
         ]
