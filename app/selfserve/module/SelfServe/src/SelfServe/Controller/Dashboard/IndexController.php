@@ -129,10 +129,10 @@ class IndexController extends AbstractController
         $user = $this->getUser();
 
         $data = [
-            'version'       => 1,
+            'version' => 1,
             'licNo' => '',
-            'licenceStatus' => 'lsts_new',
-            'organisation'  => $this->getOrganisationId($user['id']),
+            'status' => 'lsts_new',
+            'organisation' => $this->getOrganisationId($user['id']),
         ];
 
         $licenceResult = $this->makeRestCall('Licence', 'POST', $data);
@@ -140,7 +140,7 @@ class IndexController extends AbstractController
 
         $data = [
             'licence' => $licenceId,
-            'createdOn'   => date('Y-m-d h:i:s'),
+            'createdOn' => date('Y-m-d h:i:s'),
             'status' => 'apsts_new'
         ];
 
