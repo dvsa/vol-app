@@ -20,6 +20,8 @@ use Zend\View\Model\JsonModel;
  */
 class IndexController extends FormActionController
 {
+    const MAX_LIMIT = 100;
+
     protected $pageTitle = 'Home';
     protected $pageSubTitle = 'Subtitle';
 
@@ -177,7 +179,7 @@ class IndexController extends FormActionController
      */
     protected function getListData($entity, $data = array(), $titleKey = 'name', $primaryKey = 'id')
     {
-        $data['limit'] = 100;
+        $data['limit'] = self::MAX_LIMIT;
         $data['sort'] = $titleKey;  // AC says always sort alphabetically
         $response = $this->makeRestCall($entity, 'GET', $data);
 
