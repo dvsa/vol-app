@@ -207,9 +207,19 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
             ->method('get')
             ->will($this->returnValue($scriptMock));
 
-        $this->controller->expects($this->once())
+        $mockConfig = $this->getMock('\stdClass', ['get']);
+        $mockConfig->expects($this->any())
+            ->method('get')
+            ->will($this->returnValue($this->getSampleStaticData()));
+
+        $this->controller->expects($this->exactly(2))
             ->method('getServiceLocator')
-            ->will($this->returnValue($serviceMock));
+            ->will(
+                $this->onConsecutiveCalls(
+                    $this->returnValue($mockConfig),
+                    $this->returnValue($serviceMock)
+                )
+            );
 
         $this->assertSame($this->view, $this->controller->addAction());
     }
@@ -231,8 +241,8 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
             ->method('makeRestCall')
             ->will(
                 $this->onConsecutiveCalls(
-                    $this->getSampleImpoundingFormArray(),
                     $this->getLicenceRestCall(),
+                    $this->getSampleImpoundingFormArray(),
                     $this->getVenueRestCall()
                 )
             );
@@ -264,9 +274,19 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
             ->method('get')
             ->will($this->returnValue($scriptMock));
 
-        $this->controller->expects($this->once())
+        $mockConfig = $this->getMock('\stdClass', ['get']);
+        $mockConfig->expects($this->any())
+            ->method('get')
+            ->will($this->returnValue($this->getSampleStaticData()));
+
+        $this->controller->expects($this->exactly(2))
             ->method('getServiceLocator')
-            ->will($this->returnValue($serviceMock));
+            ->will(
+                $this->onConsecutiveCalls(
+                    $this->returnValue($mockConfig),
+                    $this->returnValue($serviceMock)
+                )
+            );
 
         $this->assertSame($this->view, $this->controller->editAction());
     }
@@ -284,7 +304,7 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
         $this->getFrom('Route', 1, 'case', $caseId);
         $this->getFrom('Route', 2, 'id', $id);
 
-        $this->controller->expects($this->once())
+        $this->controller->expects($this->any())
             ->method('makeRestCall')
             ->will($this->returnValue(array()));
 
@@ -710,9 +730,11 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
      *
      * @return array
      */
-    private function getLicenceRestCall()
+    private function getLicenceRestCall($niFlag = false, $goodsOrPsv = 'Goods')
     {
         return array(
+            'niFlag' => $niFlag,
+            'goodsOrPsv' => $goodsOrPsv,
             'trafficArea' => array(
                 'areaCode' => 1
             )
@@ -778,5 +800,138 @@ class CaseImpoundingControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue($getMock));
 
         return $formMock;
+    }
+
+    /**
+     * Tests the add action
+     */
+    public function testAddActionForNiLicence()
+    {
+        $licenceId = 7;
+        $caseId = 24;
+
+        $this->getFrom('Route', 0, 'licence', $licenceId);
+        $this->getFrom('Route', 1, 'case', $caseId);
+
+        $form = $this->getFormMock();
+
+        $this->controller->expects($this->once())
+            ->method('generateFormWithData')
+            ->will($this->returnValue($form));
+
+        $this->controller->expects($this->once())
+            ->method('setBreadcrumb');
+
+        $this->controller->expects($this->once())
+            ->method('getView')
+            ->will($this->returnValue($this->view));
+
+        $niFlag = true;
+
+        $this->controller->expects($this->exactly(2))
+            ->method('makeRestCall')
+            ->will(
+                $this->onConsecutiveCalls(
+                    $this->getLicenceRestCall($niFlag),
+                    $this->getVenueRestCall()
+                )
+            );
+
+        $this->view->expects($this->once())
+            ->method('setTemplate')
+            ->with($this->equalTo('impounding/form'));
+
+        $scriptMock = $this->getMock('\stdClass', ['loadFiles']);
+        $scriptMock->expects($this->any())
+            ->method('loadFiles')
+            ->will($this->returnValue([]));
+
+        $serviceMock = $this->getMock('\stdClass', ['get']);
+        $serviceMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValue($scriptMock));
+
+        $mockConfig = $this->getMock('\stdClass', ['get']);
+        $mockConfig->expects($this->any())
+            ->method('get')
+            ->will($this->returnValue($this->getSampleStaticData()));
+
+        $this->controller->expects($this->exactly(2))
+            ->method('getServiceLocator')
+            ->will(
+                $this->onConsecutiveCalls(
+                    $this->returnValue($mockConfig),
+                    $this->returnValue($serviceMock)
+                )
+            );
+
+        $this->assertSame($this->view, $this->controller->addAction());
+    }
+
+    /**
+     * Tests the add action
+     */
+    public function testAddActionForPsvLicence()
+    {
+        $licenceId = 7;
+        $caseId = 24;
+
+        $this->getFrom('Route', 0, 'licence', $licenceId);
+        $this->getFrom('Route', 1, 'case', $caseId);
+
+        $form = $this->getFormMock();
+
+        $this->controller->expects($this->once())
+            ->method('generateFormWithData')
+            ->will($this->returnValue($form));
+
+        $this->controller->expects($this->once())
+            ->method('setBreadcrumb');
+
+        $this->controller->expects($this->once())
+            ->method('getView')
+            ->will($this->returnValue($this->view));
+
+        $niFlag = false;
+        $goodsOrPsv = 'Psv';
+
+        $this->controller->expects($this->exactly(2))
+            ->method('makeRestCall')
+            ->will(
+                $this->onConsecutiveCalls(
+                    $this->getLicenceRestCall($niFlag, $goodsOrPsv),
+                    $this->getVenueRestCall()
+                )
+            );
+
+        $this->view->expects($this->once())
+            ->method('setTemplate')
+            ->with($this->equalTo('impounding/form'));
+
+        $scriptMock = $this->getMock('\stdClass', ['loadFiles']);
+        $scriptMock->expects($this->any())
+            ->method('loadFiles')
+            ->will($this->returnValue([]));
+
+        $serviceMock = $this->getMock('\stdClass', ['get']);
+        $serviceMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValue($scriptMock));
+
+        $mockConfig = $this->getMock('\stdClass', ['get']);
+        $mockConfig->expects($this->any())
+            ->method('get')
+            ->will($this->returnValue($this->getSampleStaticData()));
+
+        $this->controller->expects($this->exactly(2))
+            ->method('getServiceLocator')
+            ->will(
+                $this->onConsecutiveCalls(
+                    $this->returnValue($mockConfig),
+                    $this->returnValue($serviceMock)
+                )
+            );
+
+        $this->assertSame($this->view, $this->controller->addAction());
     }
 }
