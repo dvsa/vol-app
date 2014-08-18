@@ -90,14 +90,12 @@ class UndertakingsController extends VehicleSafetyController
             'status' => $data['status']
         );
 
+        // Load up the data in a format which can be understood by the fieldsets
         $data['smallVehiclesIntention'] = array(
             'psvOperateSmallVehicles' => (isset($data['psvOperateSmallVehicles'])?
                                                     $data['psvOperateSmallVehicles']:false),
             'psvSmallVehicleNotes' => (isset($data['psvSmallVehicleNotes'])?
-                                                    $data['psvSmallVehicleNotes']:"")
-        );
-
-        $data['smallVehiclesUndertakings'] = array(
+                                                    $data['psvSmallVehicleNotes']:""),
             'psvSmallVehicleUndertakings' =>
                 $translate('application_vehicle-safety_undertakings.smallVehiclesUndertakings.text'),
             'psvSmallVehicleScotland' =>
@@ -152,7 +150,6 @@ class UndertakingsController extends VehicleSafetyController
         if ( $data['totAuthSmallVehicles'] == 0 ) {
             // no smalls - case 3
             $form->remove('smallVehiclesIntention');
-            $form->remove('smallVehiclesUndertakings');
         } else {
             // Small vehicles - cases 1, 2, 4, 5
             if ( ( $data['totAuthMediumVehicles'] == 0 )
@@ -160,7 +157,8 @@ class UndertakingsController extends VehicleSafetyController
                 // Small only, cases 1, 2
                 if ( $data['trafficArea']['applyScottishRules'] ) {
                     // Case 2 - Scottish small only
-                    $form->remove('smallVehiclesIntention');
+                    $form->remove('smallVehiclesIntention')->remove('psvOperateSmallVehicles');
+                    $form->remove('smallVehiclesIntention')->remove('psvSmallVehicleNotes');
                     $form->remove('nineOrMore');
                     $form->get('limousinesNoveltyVehicles')->remove('psvOnlyLimousinesConfirmation');
                 } else {
@@ -172,7 +170,8 @@ class UndertakingsController extends VehicleSafetyController
                 // cases 4, 5
                 if ( $data['trafficArea']['applyScottishRules'] ) {
                     // Case 5 Mix Scotland
-                    $form->remove('smallVehiclesIntention');
+                    $form->remove('smallVehiclesIntention')->remove('psvOperateSmallVehicles');
+                    $form->remove('smallVehiclesIntention')->remove('psvSmallVehicleNotes');
                     $form->remove('nineOrMore');
                 } else {
                     // Case 4 Mix England/Wales

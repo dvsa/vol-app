@@ -36,15 +36,9 @@ return array(
                         'label' => $translationPrefix . '.smallVehiclesIntentionDetails.title',
                         'type' => 'textarea',
                         'class' => 'long',
-                    )
-                ),
-            ),
-            array(
-                'name' => 'smallVehiclesUndertakings',
-                'options' => array(
-                    'label' => $translationPrefix . '-smallVehiclesUndertakings'
-                ),
-                'elements' => array(
+                        'filters' => '\Common\Form\Elements\InputFilters\VehicleUndertakingsOperateSmallVehicles',
+                    ),
+                    // Notes to go along with 15c/d
                     'psvSmallVehicleScotland' => array(
                         'label' => $translationPrefix . '.smallVehiclesUndertakingsScotland.title',
                         'class' => 'long',
@@ -58,7 +52,8 @@ return array(
                     // 15c/d
                     'psvSmallVehicleConfirmation' => array(
                         'type' => 'singlecheckbox',
-                        'label' => $translationPrefix . '.smallVehiclesConfirmation'
+                        'label' => $translationPrefix . '.smallVehiclesConfirmation',
+                        'filters' => '\Common\Form\Elements\InputFilters\VehicleUndertakingsOperateSmallVehiclesAgreement'
                     )
                 ),
             ),
