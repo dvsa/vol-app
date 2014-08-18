@@ -47,6 +47,9 @@ return array(
         ),
         'template_path_stack' => array(
             'olcs/view' => dirname(__DIR__) . '/view',
+        ),
+        'strategies' => array(
+            'ViewJsonStrategy'
         )
     ),
     'view_helpers' => array(

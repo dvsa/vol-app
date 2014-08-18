@@ -315,7 +315,8 @@ class CaseProhibitionController extends CaseController implements CrudInterface
                 ),
                 'prohibitionType' => array(
                     'properties' => array(
-                        'id'
+                        'id',
+                        'description'
                     )
                 )
             )
