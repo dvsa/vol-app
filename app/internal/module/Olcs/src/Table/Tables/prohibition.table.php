@@ -66,7 +66,7 @@ return array(
         array(
             'title' => 'Type',
             'formatter' => function ($data) {
-                return $data['prohibitionType']['comment'];
+                return $data['prohibitionType']['description'];
             }
         )
     )
