@@ -88,10 +88,9 @@ class CaseRevokeControllerTest extends AbstractHttpControllerTestCase
         $form->expects($this->atLeastOnce())->method('setData');
 
         $controller = $this->getController(
-            ['checkCancel', 'setBreadcrumbRevoke', 'getParams', 'getRevoke', 'formatDataForForm', 'generateForm']
+            ['setBreadcrumbRevoke', 'getParams', 'getRevoke', 'formatDataForForm', 'generateForm']
         );
 
-        $controller->expects($this->once())->method('checkCancel')->will($this->returnValue(null));
         $controller->expects($this->once())->method('setBreadcrumbRevoke')->will($this->returnValue(null));
         $controller->expects($this->once())
                    ->method('getParams')
@@ -105,22 +104,6 @@ class CaseRevokeControllerTest extends AbstractHttpControllerTestCase
                    ->will($this->returnValue($form));
 
         $this->assertInstanceOf('\Zend\View\Model\ViewModel', $controller->addAction());
-    }
-
-    public function testCheckCancel()
-    {
-        global $_POST;
-        $_POST['cancel-revoke'] = 'yep';
-
-        $params = array('action' => 'edit', 'licence' => 'b', 'case' => 'c', 'id' => 123);
-
-        $controller = $this->getController(['getParams']);
-        $controller->expects($this->once())
-                   ->method('getParams')
-                   ->with($this->equalTo(['action', 'licence', 'case', 'id']))
-                   ->will($this->returnValue($params));
-
-        $controller->checkCancel();
     }
 
     public function testSetBreadcrumbRevoke()
@@ -194,7 +177,7 @@ class CaseRevokeControllerTest extends AbstractHttpControllerTestCase
         $form = $this->getMock('\stdClass', ['get']);
         $form->expects($this->at(0))->method('get')->with('main')
              ->will($this->returnSelf());
-        $form->expects($this->at(1))->method('get')->with('piReasons')
+        $form->expects($this->at(1))->method('get')->with('reasons')
              ->will($this->returnValue($formGetPlugin));
         $form->expects($this->at(2))->method('get')->with('main')
              ->will($this->returnSelf());

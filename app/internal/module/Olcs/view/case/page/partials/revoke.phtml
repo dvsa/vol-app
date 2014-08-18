@@ -12,8 +12,8 @@
     </div>
     <p>
         <strong><?php echo $this->translate('Legislation'); ?></strong><br />
-        <?php for ($i=0; $i<count($this->revoke['piReasons']); $i++): ?>
-        <?php echo $this->revoke['piReasons'][$i]['description']; ?><?php if ($i != count($this->revoke['piReasons'])-1): ?>, <?php endif; ?>
+        <?php for ($i=0; $i<count($this->revoke['reasons']); $i++): ?>
+        <?php echo $this->revoke['reasons'][$i]['description']; ?><?php if ($i != count($this->revoke['reasons'])-1): ?>, <?php endif; ?>
         <?php endfor; ?>
     </p>
     <p>
@@ -27,8 +27,8 @@
     </p>
     <p>
         <strong><?php echo $this->translate('Closed date'); ?></strong><br />
-        <?php echo isset($this->revoke['dateClosed']) && !empty($this->revoke['dateClosed']) ?
-            date('d/m/Y', strtotime($this->revoke['dateClosed'])) : '--/--/----'; ?>
+        <?php echo isset($this->revoke['closedDate']) && !empty($this->revoke['closedDate']) ?
+            date('d/m/Y', strtotime($this->revoke['closedDate'])) : '--/--/----'; ?>
     </p>
     <p>
         <strong><?php echo $this->translate('Notes'); ?></strong><br />
