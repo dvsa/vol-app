@@ -158,8 +158,8 @@ class UndertakingsController extends VehicleSafetyController
                 // Small only, cases 1, 2
                 if ( $data['trafficArea']['applyScottishRules'] ) {
                     // Case 2 - Scottish small only
-                    $form->remove('smallVehiclesIntention')->remove('psvOperateSmallVehicles');
-                    $form->remove('smallVehiclesIntention')->remove('psvSmallVehicleNotes');
+                    $form->get('smallVehiclesIntention')->remove('psvOperateSmallVehicles');
+                    $form->get('smallVehiclesIntention')->remove('psvSmallVehicleNotes');
                     $form->remove('nineOrMore');
                     $form->get('limousinesNoveltyVehicles')->remove('psvOnlyLimousinesConfirmationLabel');
                     $form->get('limousinesNoveltyVehicles')->remove('psvOnlyLimousinesConfirmation');
@@ -173,8 +173,8 @@ class UndertakingsController extends VehicleSafetyController
                 // cases 4, 5
                 if ( $data['trafficArea']['applyScottishRules'] ) {
                     // Case 5 Mix Scotland
-                    $form->remove('smallVehiclesIntention')->remove('psvOperateSmallVehicles');
-                    $form->remove('smallVehiclesIntention')->remove('psvSmallVehicleNotes');
+                    $form->get('smallVehiclesIntention')->remove('psvOperateSmallVehicles');
+                    $form->get('smallVehiclesIntention')->remove('psvSmallVehicleNotes');
                     $form->remove('nineOrMore');
                 } else {
                     // Case 4 Mix England/Wales

@@ -25,6 +25,9 @@ return array(
             ),
             array(
                 'name' => 'smallVehiclesIntention',
+                'options' => array(
+                    'label' => $translationPrefix . '-smallVehiclesUndertakings'
+                ),
                 'elements' => array(
                     // 15b[i]
                     'psvOperateSmallVehicles' => array(
