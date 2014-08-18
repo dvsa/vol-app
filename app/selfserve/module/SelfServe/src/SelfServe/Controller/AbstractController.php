@@ -172,17 +172,6 @@ abstract class AbstractController extends FormActionController
         return $this->getServiceLocator()->get('Config')['local_forms_path'] . $formName . '.form.php';
     }
 
-    /*
-     * Load an array of script files which will be rendered inline inside a view
-     *
-     * @param array $scripts
-     * @return array
-     */
-    protected function loadScripts($scripts)
-    {
-        return $this->getServiceLocator()->get('Script')->loadFiles($scripts);
-    }
-
     /**
      * Map the data on load
      *
