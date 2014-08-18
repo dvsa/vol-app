@@ -296,14 +296,14 @@ class CaseImpoundingController extends CaseController implements CrudInterface
                     $results[$key]['name'] = $result['presidingTc']['name'];
                 }
 
-                if (isset($result['outcome']['handle'])
-                    && isset($static['impounding_outcome'][$result['outcome']['handle']])) {
-                    $results[$key]['outcome'] = $static['impounding_outcome'][$result['outcome']['handle']];
+                if (isset($result['outcome']['id'])
+                    && isset($static['impounding_outcome'][$result['outcome']['id']])) {
+                    $results[$key]['outcome'] = $static['impounding_outcome'][$result['outcome']['id']];
                 }
 
-                if (isset($result['impoundingType']['handle'])
-                    && isset($static['impounding_type'][$result['impoundingType']['handle']])) {
-                    $results[$key]['impoundingType'] = $static['impounding_type'][$result['impoundingType']['handle']];
+                if (isset($result['impoundingType']['id'])
+                    && isset($static['impounding_type'][$result['impoundingType']['id']])) {
+                    $results[$key]['impoundingType'] = $static['impounding_type'][$result['impoundingType']['id']];
                 }
             }
         }
@@ -336,7 +336,7 @@ class CaseImpoundingController extends CaseController implements CrudInterface
 
         //application details fieldset
         $formatted['application_details'] = array(
-            'impoundingType' => $results['impoundingType']['handle'],
+            'impoundingType' => $results['impoundingType']['id'],
             'applicationReceiptDate' => $results['applicationReceiptDate'],
             'legislationTypes' => $results['legislationTypes'],
             'vrm' => $results['vrm']
@@ -344,7 +344,7 @@ class CaseImpoundingController extends CaseController implements CrudInterface
         if (!empty($results['legislationTypes'])) {
             foreach ($results['legislationTypes'] as $legislationType) {
                 $formatted['application_details']['legislationTypes'][] =
-                    $legislationType['handle'];
+                    $legislationType['id'];
             }
         }
         //outcome fieldset
@@ -357,8 +357,8 @@ class CaseImpoundingController extends CaseController implements CrudInterface
             $formatted['outcome']['presidingTc'] = 'presiding_tc.' . $results['presidingTc']['id'];
         }
 
-        if (isset($results['outcome']['handle'])) {
-            $formatted['outcome']['outcome'] = $results['outcome']['handle'];
+        if (isset($results['outcome']['id'])) {
+            $formatted['outcome']['outcome'] = $results['outcome']['id'];
         }
 
         $formatted['id'] = $results['id'];
@@ -464,7 +464,7 @@ class CaseImpoundingController extends CaseController implements CrudInterface
             'children' => array(
                 'impoundingType' => array(
                     'properties' => array(
-                        'handle'
+                        'id'
                     )
                 ),
                 'presidingTc' => array(
@@ -474,7 +474,7 @@ class CaseImpoundingController extends CaseController implements CrudInterface
                 ),
                 'outcome' => array(
                     'properties' => array(
-                        'handle'
+                        'id'
                     ),
                 ),
             )
@@ -503,7 +503,7 @@ class CaseImpoundingController extends CaseController implements CrudInterface
             'children' => array(
                 'impoundingType' => array(
                     'properties' => array(
-                        'handle'
+                        'id'
                     )
                 ),
                 'piVenue' => array(
@@ -523,17 +523,17 @@ class CaseImpoundingController extends CaseController implements CrudInterface
                 ),
                 'hearingLocation' => array(
                     'properties' => array(
-                        'handle'
+                        'id'
                     ),
                 ),
                 'outcome' => array(
                     'properties' => array(
-                        'handle'
+                        'id'
                     ),
                 ),
                 'legislationTypes' => array(
                     'properties' => array(
-                        'handle'
+                        'id'
                     ),
                 ),
             )
