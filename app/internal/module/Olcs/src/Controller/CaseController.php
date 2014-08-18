@@ -18,6 +18,22 @@ use Zend\View\Model\ViewModel;
  */
 class CaseController extends FormActionController
 {
+    protected $title;
+    protected $subTitle;
+
+    /**
+     * @param $caseId
+     *
+     * Quick method to generate titles - needs to be done properly at some stage
+     */
+    public function getTitles($caseId)
+    {
+        $case = $this->getCase($caseId);
+
+        $this->title = 'Case ' . $caseId;
+        $this->subTitle = $case['licence']['organisation']['name'] . ' ' . '#' . $case['licence']['licenceNumber'];
+    }
+
     /**
      * Manage action.
      */
@@ -26,6 +42,7 @@ class CaseController extends FormActionController
         $caseId = $this->fromRoute('case');
         $licence = $this->fromRoute('licence');
         $action = $this->fromRoute('tab');
+        $this->getTitles($caseId);
 
         $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licence)));
         $params = $this->params()->fromPost();
@@ -75,7 +92,8 @@ class CaseController extends FormActionController
         );
 
         $view->setTemplate('case/manage');
-        return $view;
+
+        return $this->renderView($view, $this->title, $this->subTitle);
     }
 
     public function getSubmissions($caseId)
@@ -257,7 +275,7 @@ class CaseController extends FormActionController
             ],
             'stays' => [
                 'key' => 'stays',
-                'label' => 'Stays & Appeals',
+                'label' => 'Appeal & Stays',
                 'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'stays'], [], true),
             ],
             'documents' => [
@@ -566,7 +584,7 @@ class CaseController extends FormActionController
 
         $this->makeRestCall('VosaCase', 'DELETE', array('id' => $case));
 
-        $this->redirect()->toRoute('licence_case_list', array('licence' => $licence));
+        $this->redirect()->toRoute('licence/cases', array('licence' => $licence));
     }
 
     /**
@@ -611,7 +629,7 @@ class CaseController extends FormActionController
 
         $this->processEdit($data, 'VosaCase');
 
-        $this->redirect()->toRoute('licence_case_list', array('licence' => $data['licence']));
+        $this->redirect()->toRoute('licence/cases', array('licence' => $data['licence']));
     }
 
     /**
@@ -701,5 +719,40 @@ class CaseController extends FormActionController
     {
         $userDefined = array(168);
         return in_array($categoryId, $userDefined);
+    }
+
+    /**
+     * Returns true or false depending on whether a case has an appeal which hasn't been withdrawn
+     *
+     * @param int $caseId
+     * @return bool
+     */
+    public function caseHasAppeal($caseId)
+    {
+        $appeal = $this->makeRestCall('Appeal', 'GET', array('case' => $caseId, 'isWithdrawn' => 0));
+        return ($appeal['Count'] ? true : false);
+    }
+
+    /**
+     * Checks whether a stay already exists for the given case and stay type (only one should be allowed)
+     *
+     * @param int $caseId
+     * @param int $stayTypeId
+
+     * @return boolean
+     */
+    public function caseHasStay($caseId, $stayTypeId)
+    {
+        $result = $this->makeRestCall(
+            'Stay',
+            'GET',
+            array(
+                'stayType' => $stayTypeId,
+                'case' => $caseId,
+                'isWithdrawn' => 0
+            )
+        );
+
+        return $result['Count'] ? true : false;
     }
 }
