@@ -170,10 +170,10 @@ class CaseProhibitionController extends CaseController implements CrudInterface
 
         if (!empty($results)) {
             foreach ($results as $key => $result) {
-                if (isset($result['prohibitionType']['handle'])
-                    && isset($static['prohibition_type'][$result['prohibitionType']['handle']])) {
+                if (isset($result['prohibitionType']['id'])
+                    && isset($static['prohibition_type'][$result['prohibitionType']['id']])) {
                     $results[$key]['prohibitionType'] =
-                        $static['prohibition_type'][$result['prohibitionType']['handle']];
+                        $static['prohibition_type'][$result['prohibitionType']['id']];
                 }
             }
         }
@@ -195,7 +195,7 @@ class CaseProhibitionController extends CaseController implements CrudInterface
         $formatted['fields']['clearedDate'] = $results['clearedDate'];
         $formatted['fields']['vrm'] = $results['vrm'];
         $formatted['fields']['imposedAt'] = $results['imposedAt'];
-        $formatted['fields']['prohibitionType'] = $results['prohibitionType']['handle'];
+        $formatted['fields']['prohibitionType'] = $results['prohibitionType']['id'];
         $formatted['fields']['isTrailer'] = $results['isTrailer'];
 
         $formatted['id'] = $results['id'];
@@ -349,7 +349,7 @@ class CaseProhibitionController extends CaseController implements CrudInterface
                 ),
                 'prohibitionType' => array(
                     'properties' => array(
-                        'handle',
+                        'id',
                         'description'
                     )
                 )
