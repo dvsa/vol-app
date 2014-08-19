@@ -60,12 +60,12 @@ class CaseImpoundingController extends CaseController implements CrudInterface
             )
         );
 
-        $impoundings = $this->formatForTable($results['Results']);
+        //die('<pre>' . print_r($results, 1));
 
         $variables = array(
             'tab' => 'impounding',
             'inlineScript' => $this->getServiceLocator()->get('Script')->loadFiles(['impounding']),
-            'table' => $this->buildTable('impounding', $impoundings, array())
+            'table' => $this->buildTable('impounding', $results['Results'], array())
         );
 
         $caseVariables = $this->getCaseVariables($caseId, $variables);
@@ -85,8 +85,6 @@ class CaseImpoundingController extends CaseController implements CrudInterface
         $licenceId = $this->fromRoute('licence');
         $caseId = $this->fromRoute('case');
 
-        $licence = $this->getLicenceTrafficAreaData($licenceId);
-
         $this->setBreadcrumb(
             array(
                 'licence_case_list/pagination' => array('licence' => $licenceId),
@@ -101,18 +99,6 @@ class CaseImpoundingController extends CaseController implements CrudInterface
                 'case' => $caseId
             )
         );
-
-        $legislationList = $this->getLegislationOptions($licence);
-
-        $form->get('application_details')
-            ->get('legislationTypes')
-            ->setValueOptions($legislationList);
-
-        $formVenues = $this->getVenueList($licence);
-
-        $form->get('hearing')
-            ->get('piVenue')
-            ->setValueOptions($formVenues);
 
         $view = $this->getView(
             [
@@ -194,8 +180,6 @@ class CaseImpoundingController extends CaseController implements CrudInterface
         $caseId = $this->fromRoute('case');
         $impoundingId = $this->fromRoute('id');
 
-        $licence = $this->getLicenceTrafficAreaData($licenceId);
-
         $bundle = $this->getFormBundle();
 
         $details = $this->makeRestCall(
@@ -226,17 +210,6 @@ class CaseImpoundingController extends CaseController implements CrudInterface
             $data
         );
 
-        $legislationList = $this->getLegislationOptions($licence);
-        $form->get('application_details')
-            ->get('legislationTypes')
-            ->setValueOptions($legislationList);
-
-        $formVenues = $this->getVenueList($licence);
-
-        $form->get('hearing')
-            ->get('piVenue')
-            ->setValueOptions($formVenues);
-
         $view = $this->getView(
             [
                 'params' => [
@@ -254,13 +227,58 @@ class CaseImpoundingController extends CaseController implements CrudInterface
     }
 
     /**
+     * Generate a form with data
+     *
+     * @param string $name
+     * @param callable $callback
+     * @param mixed $data
+     * @param boolean $tables
+     * @return object
+     */
+    public function generateFormWithData($name, $callback, $data = null, $tables = false)
+    {
+        $licenceId = $this->fromRoute('licence');
+
+        $licence = $this->getLicenceTrafficAreaData($licenceId);
+
+        $form = parent::generateFormWithData($name, $callback, $data, $tables);
+
+        $legislationList = $this->getLegislationOptions($licence);
+        $form->get('application_details')
+             ->get('impoundingLegislationTypes')
+             ->setValueOptions($legislationList);
+
+        $formVenues = $this->getVenueList($licence);
+        $form->get('hearing')
+            ->get('piVenue')
+            ->setValueOptions($formVenues);
+
+        $form->get('outcome')
+             ->get('presidingTc')
+             ->setValueOptions($this->getPresidingTcArray());
+
+        return $form;
+    }
+
+    public function getPresidingTcArray()
+    {
+        $tc = [];
+        $piReasons = $this->makeRestCall('PresidingTc', 'GET', []);
+        foreach ($piReasons['Results'] as $result) {
+            $tc[$result['id']] = $result['name'];
+        }
+
+        return $tc;
+    }
+
+    /**
      *
      * Formats data for use in a table
      *
      * @param array $data
      * @return array
      */
-    private function formatForSave ($data)
+    private function formatForSave($data)
     {
         $formatted = array_merge(array(), $data['outcome'], $data['application_details']);
 
@@ -270,45 +288,12 @@ class CaseImpoundingController extends CaseController implements CrudInterface
             $data['hearing']['hearingDate'],
             $data['hearing']['hearingTime']
         );
-        $formatted['presidingTc'] = str_replace('presiding_tc.', '', $formatted['presidingTc']);
+        $formatted['presidingTc'] = $formatted['presidingTc'];
         $formatted['id'] = $data['id'];
         $formatted['case'] = $data['case'];
         $formatted['version'] = $data['version'];
 
         return $formatted;
-    }
-
-    /**
-     *
-     * Formats data for use in a table
-     *
-     * @param array $results
-     * @return array $results
-     */
-    private function formatForTable($results)
-    {
-        $config = $this->getServiceLocator()->get('Config');
-        $static = $config['static-list-data'];
-
-        if (!empty($results)) {
-            foreach ($results as $key => $result) {
-                if (isset($result['presidingTc']['name'])) {
-                    $results[$key]['name'] = $result['presidingTc']['name'];
-                }
-
-                if (isset($result['outcome']['id'])
-                    && isset($static['impounding_outcome'][$result['outcome']['id']])) {
-                    $results[$key]['outcome'] = $static['impounding_outcome'][$result['outcome']['id']];
-                }
-
-                if (isset($result['impoundingType']['id'])
-                    && isset($static['impounding_type'][$result['impoundingType']['id']])) {
-                    $results[$key]['impoundingType'] = $static['impounding_type'][$result['impoundingType']['id']];
-                }
-            }
-        }
-
-        return $results;
     }
 
     /**
@@ -320,6 +305,8 @@ class CaseImpoundingController extends CaseController implements CrudInterface
     private function formatDataForForm($results)
     {
         $formatted = array();
+
+        //echo('<pre>' . print_r($results, 1));
 
         //hearing date fieldset
         if (!empty($results['hearingDate'])) {
@@ -338,12 +325,13 @@ class CaseImpoundingController extends CaseController implements CrudInterface
         $formatted['application_details'] = array(
             'impoundingType' => $results['impoundingType']['id'],
             'applicationReceiptDate' => $results['applicationReceiptDate'],
-            'legislationTypes' => $results['legislationTypes'],
+            //'legislationTypes' => $results['legislationTypes'],
             'vrm' => $results['vrm']
         );
-        if (!empty($results['legislationTypes'])) {
-            foreach ($results['legislationTypes'] as $legislationType) {
-                $formatted['application_details']['legislationTypes'][] =
+
+        if (!empty($results['impoundingLegislationTypes'])) {
+            foreach ($results['impoundingLegislationTypes'] as $legislationType) {
+                $formatted['application_details']['impoundingLegislationTypes'][] =
                     $legislationType['id'];
             }
         }
@@ -354,7 +342,7 @@ class CaseImpoundingController extends CaseController implements CrudInterface
         );
 
         if (isset($results['presidingTc']['id'])) {
-            $formatted['outcome']['presidingTc'] = 'presiding_tc.' . $results['presidingTc']['id'];
+            $formatted['outcome']['presidingTc'] = $results['presidingTc']['id'];
         }
 
         if (isset($results['outcome']['id'])) {
@@ -364,6 +352,8 @@ class CaseImpoundingController extends CaseController implements CrudInterface
         $formatted['id'] = $results['id'];
         $formatted['case'] = $results['case']['id'];
         $formatted['version'] = $results['version'];
+
+        //echo('<pre>' . print_r($formatted, 1));
 
         return $formatted;
     }
@@ -429,13 +419,25 @@ class CaseImpoundingController extends CaseController implements CrudInterface
     {
         $matchedVenues = array();
 
+        $bundle = array(
+            'properties' => 'ALL',
+            'children' => array(
+                'trafficArea' => array(
+                    'properties' => 'ALL'
+                )
+            )
+        );
+
         $venues = $this->makeRestCall(
             'PiVenue',
             'GET',
             array(
                 'limit' => 'all'
-            )
+            ),
+            $bundle
         );
+
+        //die('<pre>' . print_r($venues, 1));
 
         foreach ($venues['Results'] as $venue) {
             if ($licence['trafficArea']['areaCode'] == $venue['trafficArea']) {
@@ -477,6 +479,11 @@ class CaseImpoundingController extends CaseController implements CrudInterface
                         'id'
                     ),
                 ),
+                'impoundingLegislationTypes' => array(
+                    'properties' => array(
+                        'id'
+                    ),
+                ),
             )
         );
     }
@@ -496,7 +503,6 @@ class CaseImpoundingController extends CaseController implements CrudInterface
                 'hearingDate',
                 'piVenueOther',
                 'vrm',
-                'legislationTypes',
                 'notes',
                 'version'
             ),
@@ -513,7 +519,8 @@ class CaseImpoundingController extends CaseController implements CrudInterface
                 ),
                 'presidingTc' => array(
                     'properties' => array(
-                        'id'
+                        'id',
+                        'name'
                     ),
                 ),
                 'case' => array(
@@ -531,7 +538,7 @@ class CaseImpoundingController extends CaseController implements CrudInterface
                         'id'
                     ),
                 ),
-                'legislationTypes' => array(
+                'impoundingLegislationTypes' => array(
                     'properties' => array(
                         'id'
                     ),
