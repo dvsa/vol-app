@@ -328,6 +328,7 @@ class CaseImpoundingController extends CaseController implements CrudInterface
             //'legislationTypes' => $results['legislationTypes'],
             'vrm' => $results['vrm']
         );
+
         if (!empty($results['impoundingLegislationTypes'])) {
             foreach ($results['impoundingLegislationTypes'] as $legislationType) {
                 $formatted['application_details']['impoundingLegislationTypes'][] =
@@ -529,7 +530,7 @@ class CaseImpoundingController extends CaseController implements CrudInterface
                 ),
                 'hearingLocation' => array(
                     'properties' => array(
-                        'handle'
+                        'id'
                     ),
                 ),
                 'outcome' => array(

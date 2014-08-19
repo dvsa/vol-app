@@ -65,8 +65,8 @@ return array(
         ),
         array(
             'title' => 'Type',
-            'formatter' => function ($data, $config, $sm) {
-                return $sm->get('translator')->translate($data['prohibitionType']['id']);
+            'formatter' => function ($data) {
+                return $data['prohibitionType']['description'];
             }
         )
     )

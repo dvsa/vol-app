@@ -47,30 +47,26 @@ class CaseRevokeController extends CaseController implements CrudInterface
 
     public function getRevokes($caseId)
     {
-        $bundle = array(
-            'children' => array(
-                'piReasons' => array(
-                    'properties' => 'ALL'
-                ),
-                'presidingTc' => array(
-                    'properties' => 'ALL'
-                ),
-                'case' => array(
-                    'properties' => 'ALL'
-                )
-            )
-        );
-
-        $revokes = $this->makeRestCall('Revoke', 'GET', array('case' => $caseId), $bundle);
-
-        return $revokes;
+        return $this->getRevokeBy('case', $caseId);
     }
 
     public function getRevoke($revokeId)
     {
+        return $this->getRevokeBy('id', $revokeId);
+    }
+
+    /**
+     * Abstracted away the rest call
+     *
+     * @param string $by
+     * @param mixed $value
+     * @return array
+     */
+    private function getRevokeBy($by, $value)
+    {
         $bundle = array(
             'children' => array(
-                'piReasons' => array(
+                'reasons' => array(
                     'properties' => 'ALL'
                 ),
                 'presidingTc' => array(
@@ -82,9 +78,7 @@ class CaseRevokeController extends CaseController implements CrudInterface
             )
         );
 
-        $revoke = $this->makeRestCall('Revoke', 'GET', array('id' => $revokeId), $bundle);
-
-        return $revoke;
+        return $this->makeRestCall('ProposeToRevoke', 'GET', array($by => $value), $bundle);
     }
 
     /**
@@ -94,7 +88,6 @@ class CaseRevokeController extends CaseController implements CrudInterface
      */
     public function addAction()
     {
-        $this->checkCancel();
         $this->setBreadcrumbRevoke();
 
         $routeParams = $this->getParams(['action', 'licence', 'case', 'id']);
@@ -105,11 +98,12 @@ class CaseRevokeController extends CaseController implements CrudInterface
         $revoke = array();
 
         if ($routeParams['action'] == 'edit') {
-            $revoke = $this->getRevoke($routeParams['id']);
-            $revoke = $this->formatDataForForm($revoke);
+            $revoke = $this->formatDataForForm(
+                $this->getRevoke($routeParams['id'])
+            );
         }
 
-        $data['main'] = $revoke + $data['main'];
+        $data['main'] = array_merge($revoke, $data['main']);
 
         $form = $this->generateFormWithData('revoke', 'processRevoke', $data);
 
@@ -122,20 +116,10 @@ class CaseRevokeController extends CaseController implements CrudInterface
                 )
             )
         );
+
         $view->setTemplate('revoke/form');
+
         return $view;
-    }
-
-    public function checkCancel()
-    {
-        $routeParams = $this->getParams(['action', 'licence', 'case', 'id']);
-
-        if (isset($_POST['cancel-revoke'])) {
-            return $this->redirect()->toRoute(
-                'case_revoke',
-                array('case' => $routeParams['case'], 'licence' => $routeParams['licence'], 'action' => 'index')
-            );
-        }
     }
 
     public function setBreadcrumbRevoke()
@@ -199,59 +183,75 @@ class CaseRevokeController extends CaseController implements CrudInterface
 
         $licenceId = $this->fromRoute('licence');
 
+        $bundle = array(
+            'children' => array(
+                'goodsOrPsv' => array(
+                    'properties' => array(
+                        'id'
+                    )
+                )
+            )
+        );
+
         $licence = $this->makeRestCall(
             'Licence',
             'GET',
-            ['id' => $licenceId]
+            ['id' => $licenceId],
+            $bundle
         );
 
         $form = $this->getForm($name);
 
-        $form->get('main')->get('piReasons')->setValueOptions($this->getPiReasonsNvpArray($licence['goodsOrPsv'], $licence['niFlag']));
-        $form->get('main')->get('presidingTc')->setValueOptions($this->getPresidingTcArray());
+        $form->get('main')->get('reasons')->setValueOptions(
+            $this->getPiReasonsNvpArray(
+                $licence['goodsOrPsv']['id'],
+                $licence['niFlag']
+            )
+        );
+
+        $form->get('main')->get('presidingTc')->setValueOptions(
+            $this->getPresidingTcArray()
+        );
 
         return $this->formPost($form, $callback);
     }
 
-    public function getPiReasonsNvpArray($licenceType, $niFlag)
+    public function getPiReasonsNvpArray($goodsOrPsv, $niFlag)
     {
-        $reasons = [];
-        $goodsOrPsv = '';
-
-        //licence type should really be a lookup table in
-        //both Licence and PiReason entities!
-        switch (strtolower($licenceType)) {
-            case 'goods':
+        switch (strtolower($goodsOrPsv)) {
+            case 'lcat_gv':
                 $goodsOrPsv = 'GV';
                 break;
-            case 'psv':
+            case 'lcat_psv':
                 $goodsOrPsv = 'PSV';
                 break;
         }
 
-        $piReasons = $this->makeRestCall(
+        $reasons = $this->makeRestCall(
             'Reason',
             'GET',
             [
-                'isProposeToRevoke' => '1',
+                'isProposeToRevoke' => 1,
                 'goodsOrPsv' => $goodsOrPsv,
-                'isNi' => $niFlag,
+                'isNi' => (int)$niFlag,
                 'limit' => 'all'
             ]
         );
 
-        foreach ($piReasons['Results'] as $result) {
-            $reasons[$result['id']] = mb_substr($result['sectionCode'] . ' - ' . $result['description'], 0, 150);
+        $piReasons = [];
+
+        foreach ($reasons['Results'] as $result) {
+            $piReasons[$result['id']] = mb_substr($result['sectionCode'] . ' - ' . $result['description'], 0, 150);
         }
 
-        return $reasons;
+        return $piReasons;
     }
 
     public function getPresidingTcArray()
     {
         $tc = [];
-        $piReasons = $this->makeRestCall('PresidingTc', 'GET', []);
-        foreach ($piReasons['Results'] as $result) {
+        $reasons = $this->makeRestCall('PresidingTc', 'GET', []);
+        foreach ($reasons['Results'] as $result) {
             $tc[$result['id']] = $result['name'];
         }
 
@@ -262,7 +262,7 @@ class CaseRevokeController extends CaseController implements CrudInterface
     {
         $routeParams = $this->getParams(array('action', 'licence', 'case', 'id'));
 
-        $this->makeRestCall('Revoke', 'DELETE', array('id' => $routeParams['id']));
+        $this->makeRestCall('ProposeToRevoke', 'DELETE', array('id' => $routeParams['id']));
 
         return $this->redirect()->toRoute(
             'case_revoke',
@@ -289,9 +289,9 @@ class CaseRevokeController extends CaseController implements CrudInterface
         $routeParams = $this->getParams(array('action', 'licence', 'case'));
 
         if ($data['id'] != '') {
-            $result = $this->processEdit($data, 'Revoke');
+            $result = $this->processEdit($data, 'ProposeToRevoke');
         } else {
-            $result = $this->processAdd($data, 'Revoke');
+            $result = $this->processAdd($data, 'ProposeToRevoke');
         }
 
         return $this->redirect()->toRoute(
