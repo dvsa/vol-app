@@ -44,7 +44,6 @@ class IndexController extends FormActionController
             )
         );
 
-
         $form = $this->getForm('tasks-home');
 
         // grab all the relevant backend data needed to populate the
