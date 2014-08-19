@@ -24,6 +24,10 @@ class LicenceController extends AbstractFormActionController
     {
         $licence = $this->getLicence($this->getFromRoute('licence'));
 
+        if ($licence['goodsOrPsv'] == 'Goods') {
+            $this->getServiceLocator()->get('Navigation')->findOneBy('id', 'licence_bus')->setVisible(0);
+        }
+
         $view = $this->getView(['licence' => $licence]);
 
         $this->title = $view->licence['licenceNumber'];
@@ -74,6 +78,14 @@ class LicenceController extends AbstractFormActionController
     }
 
     public function feesAction()
+    {
+        $view = $this->getViewWithLicence();
+        $view->setTemplate('licence/index');
+
+        return $this->renderView($view, $this->title, $this->subTitle);
+    }
+
+    public function busAction()
     {
         $view = $this->getViewWithLicence();
         $view->setTemplate('licence/index');
