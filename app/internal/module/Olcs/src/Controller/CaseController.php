@@ -472,6 +472,10 @@ class CaseController extends AbstractController
 
         $licenceData = $this->getLicence($licence);
 
+        if ($licenceData['goodsOrPsv'] == 'Goods') {
+            $this->getServiceLocator()->get('Navigation')->findOneBy('id', 'licence_bus')->setVisible(0);
+        }
+
         $view = $this->getView(
             array(
                 'licence' => $licence,
