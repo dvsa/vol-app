@@ -52,6 +52,12 @@ return array(
                             'label' => 'Fees',
                             'route' => 'licence/fees',
                             'use_route_match' => true
+                        ),
+                        array(
+                            'id' => 'licence_bus',
+                            'label' => 'Bus reg',
+                            'route' => 'licence/bus',
+                            'use_route_match' => true
                         )
                     )
                 ),
