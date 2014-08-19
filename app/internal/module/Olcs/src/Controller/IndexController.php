@@ -9,6 +9,7 @@
 namespace Olcs\Controller;
 
 use Common\Controller\FormActionController;
+use Olcs\Controller\AbstractController;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
 
@@ -18,7 +19,7 @@ use Zend\View\Model\JsonModel;
  * @author Mike Cooper <michael.cooper@valtech.co.uk>
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class IndexController extends FormActionController
+class IndexController extends AbstractController
 {
     const MAX_LIMIT = 100;
 
@@ -169,26 +170,5 @@ class IndexController extends FormActionController
                 return !empty($v);
             }
         );
-    }
-
-    /**
-     * Retrieve some data from the backend and convert it for use in
-     * a select. Optionally provide some search data to filter the
-     * returned data too.
-     */
-    protected function getListData($entity, $data = array(), $titleKey = 'name', $primaryKey = 'id')
-    {
-        $data['limit'] = self::MAX_LIMIT;
-        $data['sort'] = $titleKey;  // AC says always sort alphabetically
-        $response = $this->makeRestCall($entity, 'GET', $data);
-
-        $final = array('' => 'All');
-        foreach ($response['Results'] as $result) {
-            $key = $result[$primaryKey];
-            $value = $result[$titleKey];
-
-            $final[$key] = $value;
-        }
-        return $final;
     }
 }

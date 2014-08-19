@@ -28,44 +28,23 @@ class CaseImpoundingController extends CaseController implements CrudInterface
         $licenceId = $this->fromRoute('licence');
         $caseId = $this->fromRoute('case');
 
-        if (!$caseId || !$licenceId) {
-            return $this->notFoundAction();
-        }
-
-        $action = $this->fromPost('action');
-        $id = $this->fromPost('id');
-
-        if ($action) {
-            $action = strtolower($action);
-
-            if ($action == 'add') {
-                return $this->redirectToCrud($action, null);
-            } elseif ($id) {
-                return $this->redirectToCrud($action, $id);
-            }
-        }
-
-        $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licenceId)));
-
-        $bundle = $this->getIndexBundle();
+        $this->checkForCrudAction('case_impounding', array('case' => $caseId, 'licence' => $licenceId), 'id');
 
         $results = $this->makeRestCall(
             'Impounding',
             'GET',
             array(
                 'case' => $caseId,
-                'bundle' => json_encode($bundle),
                 'sort' => 'applicationReceiptDate',
                 'order' => 'DESC'
-            )
+            ),
+            $this->getIndexBundle()
         );
-
-        //die('<pre>' . print_r($results, 1));
 
         $variables = array(
             'tab' => 'impounding',
             'inlineScript' => $this->getServiceLocator()->get('Script')->loadFiles(['impounding']),
-            'table' => $this->buildTable('impounding', $results['Results'], array())
+            'table' => $this->buildTable('impounding', $results['Results'])
         );
 
         $caseVariables = $this->getCaseVariables($caseId, $variables);
@@ -82,15 +61,7 @@ class CaseImpoundingController extends CaseController implements CrudInterface
      */
     public function addAction()
     {
-        $licenceId = $this->fromRoute('licence');
         $caseId = $this->fromRoute('case');
-
-        $this->setBreadcrumb(
-            array(
-                'licence_case_list/pagination' => array('licence' => $licenceId),
-                'case_impounding' => array('licence' => $licenceId, 'case' => $caseId)
-            )
-        );
 
         $form = $this->generateFormWithData(
             'impounding',
@@ -123,16 +94,12 @@ class CaseImpoundingController extends CaseController implements CrudInterface
      */
     public function processAddImpounding ($data)
     {
-        unset($data['form-actions']['cancel']);
+        $formattedData = $this->formatForSave($data);
 
-        if ($data['form-actions']['submit'] === '') {
-            $formattedData = $this->formatForSave($data);
+        $result = $this->processAdd($formattedData, 'Impounding');
 
-            $result = $this->processAdd($formattedData, 'Impounding');
-
-            if (isset($result['id'])) {
-                return $this->redirectToAction();
-            }
+        if (isset($result['id'])) {
+            return $this->redirectToAction();
         }
 
         return $this->redirectToAction('add');
@@ -144,26 +111,14 @@ class CaseImpoundingController extends CaseController implements CrudInterface
      * @param array $data
      * @return \Zend\Http\Response
      */
-    public function processEditImpounding ($data)
+    public function processEditImpounding($data)
     {
-        unset($data['form-actions']['cancel']);
+        $formattedData = $this->formatForSave($data);
 
-        if ($data['form-actions']['submit'] === '') {
-            $formattedData = $this->formatForSave($data);
+        $result = $this->processEdit($formattedData, 'Impounding');
 
-            $result = $this->processEdit($formattedData, 'Impounding');
-
-            if (empty($result)) {
-                return $this->redirect()->toRoute(
-                    'case_impounding',
-                    array(
-                        'action' => null,
-                        'id' => null
-                    ),
-                    array(),
-                    true
-                );
-            }
+        if (empty($result)) {
+            return $this->redirect()->toRoute('case_impounding', ['action' => null, 'id' => null], [], true);
         }
 
         return $this->redirectToAction('edit');
@@ -196,13 +151,6 @@ class CaseImpoundingController extends CaseController implements CrudInterface
         }
 
         $data = $this->formatDataForForm($details);
-
-        $this->setBreadcrumb(
-            array(
-                'licence_case_list/pagination' => array('licence' => $licenceId),
-                'case_impounding' => array('licence' => $licenceId, 'case' => $caseId)
-            )
-        );
 
         $form = $this->generateFormWithData(
             'impounding',
@@ -239,11 +187,12 @@ class CaseImpoundingController extends CaseController implements CrudInterface
     {
         $licenceId = $this->fromRoute('licence');
 
-        $licence = $this->getLicenceTrafficAreaData($licenceId);
-
         $form = parent::generateFormWithData($name, $callback, $data, $tables);
 
+        $licence = $this->getLicenceTrafficAreaData($licenceId);
+
         $legislationList = $this->getLegislationOptions($licence);
+
         $form->get('application_details')
              ->get('impoundingLegislationTypes')
              ->setValueOptions($legislationList);
@@ -255,20 +204,9 @@ class CaseImpoundingController extends CaseController implements CrudInterface
 
         $form->get('outcome')
              ->get('presidingTc')
-             ->setValueOptions($this->getPresidingTcArray());
+             ->setValueOptions($this->getListData('PresidingTc', [], 'name', 'id'));
 
         return $form;
-    }
-
-    public function getPresidingTcArray()
-    {
-        $tc = [];
-        $piReasons = $this->makeRestCall('PresidingTc', 'GET', []);
-        foreach ($piReasons['Results'] as $result) {
-            $tc[$result['id']] = $result['name'];
-        }
-
-        return $tc;
     }
 
     /**
@@ -288,7 +226,7 @@ class CaseImpoundingController extends CaseController implements CrudInterface
             $data['hearing']['hearingDate'],
             $data['hearing']['hearingTime']
         );
-        $formatted['presidingTc'] = $formatted['presidingTc'];
+        //$formatted['presidingTc'] = $formatted['presidingTc'];
         $formatted['id'] = $data['id'];
         $formatted['case'] = $data['case'];
         $formatted['version'] = $data['version'];
@@ -305,8 +243,6 @@ class CaseImpoundingController extends CaseController implements CrudInterface
     private function formatDataForForm($results)
     {
         $formatted = array();
-
-        //echo('<pre>' . print_r($results, 1));
 
         //hearing date fieldset
         if (!empty($results['hearingDate'])) {
@@ -352,8 +288,6 @@ class CaseImpoundingController extends CaseController implements CrudInterface
         $formatted['id'] = $results['id'];
         $formatted['case'] = $results['case']['id'];
         $formatted['version'] = $results['version'];
-
-        //echo('<pre>' . print_r($formatted, 1));
 
         return $formatted;
     }
@@ -436,8 +370,6 @@ class CaseImpoundingController extends CaseController implements CrudInterface
             ),
             $bundle
         );
-
-        //die('<pre>' . print_r($venues, 1));
 
         foreach ($venues['Results'] as $venue) {
             if ($licence['trafficArea']['areaCode'] == $venue['trafficArea']) {
@@ -575,18 +507,16 @@ class CaseImpoundingController extends CaseController implements CrudInterface
      */
     private function getLegislationOptions($licence)
     {
-        $config = $this->getServiceLocator()->get('Config');
-
         if ($licence['niFlag']) {
-            return isset($config['static-list-data']['legislation_type.goods.ni']) ?
-                $config['static-list-data']['legislation_type.goods.ni'] : array();
+            return $this->getListData(
+                'RefData', ['refDataCategory' => 'impound_legislation_goods_ni'], 'id', 'id', false);
         } else {
             if ($licence['goodsOrPsv'] == 'Goods') {
-                return isset($config['static-list-data']['legislation_type.goods.gb']) ?
-                    $config['static-list-data']['legislation_type.goods.gb'] : array();
+                return $this->getListData(
+                    'RefData', ['refDataCategory' => 'impound_legislation_goods_gb'], 'id', 'id', false);
             } else {
-                return isset($config['static-list-data']['legislation_type.psv.gb']) ?
-                    $config['static-list-data']['legislation_type.psv.gb'] : array();
+                return $this->getListData(
+                    'RefData', ['refDataCategory' => 'impound_legislation_psv_gb'], 'id', 'id', false);
             }
         }
     }
