@@ -448,6 +448,10 @@ class CaseController extends FormActionController
 
         $licenceData = $this->makeRestCall('Licence', 'GET', array('id' => $licence));
 
+        if ($licenceData['goodsOrPsv'] == 'Goods') {
+            $this->getServiceLocator()->get('Navigation')->findOneBy('id', 'licence_bus')->setVisible(0);
+        }
+
         $view = $this->getView(
             array(
                 'licence' => $licence, 'licenceData' => $licenceData,
