@@ -24,18 +24,22 @@ class AbstractController extends FormActionController
     public function getLicence($id)
     {
         $bundle = array(
+            'properties' => 'ALL',
             'children' => array(
+                'status' => array(
+                    'properties' => array('id')
+                ),
                 'goodsOrPsv' => array(
                     'properties' => array('id')
                 ),
-                'status' => array(
-                    'properties' => 'ALL',
+                'licenceType' => array(
+                    'properties' => array('id')
+                ),
+                'trafficArea' => array(
+                    'properties' => 'ALL'
                 ),
                 'organisation' => array(
-                    'properties' => 'ALL',
-                ),
-                'licenceType' => array(
-                    'properties' => 'ALL',
+                    'properties' => 'ALL'
                 )
             )
         );

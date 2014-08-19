@@ -95,7 +95,6 @@ class LicenceController extends AbstractController
         return $this->redirect()->toRoute('licence/overview', [], [], true);
     }
 
-
     /**
      * @codeCoverageIgnore
      *
@@ -105,39 +104,5 @@ class LicenceController extends AbstractController
     public function getView(array $params = null)
     {
         return new ViewModel($params);
-    }
-
-    /**
-     * Gets the licence by ID.
-     *
-     * @param integer $id
-     * @return array
-     */
-    public function getLicence($id)
-    {
-        $bundle = array(
-            'properties' => 'ALL',
-            'children' => array(
-                'status' => array(
-                    'properties' => array('id')
-                ),
-                'goodsOrPsv' => array(
-                    'properties' => array('id')
-                ),
-                'licenceType' => array(
-                    'properties' => array('id')
-                ),
-                'trafficArea' => array(
-                    'properties' => 'ALL'
-                ),
-                'organisation' => array(
-                    'properties' => 'ALL'
-                )
-            )
-        );
-
-        $licence = $this->makeRestCall('Licence', 'GET', array('id' => $id), $bundle);
-
-        return $licence;
     }
 }
