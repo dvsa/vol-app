@@ -855,6 +855,9 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
                     'caseId' => 24,
                     'operatingCentre' => array(
                         'address' => 'Some Address'
+                    ),
+                    'attachedTo' => array(
+                        'properties' => 'ALL'
                     )
                 )
             )
@@ -866,6 +869,9 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
                 'operatingCentreAddress' => 'Some Address',
                 'operatingCentre' => array(
                     'address' => 'Some Address'
+                ),
+                'attachedTo' => array(
+                    'properties' => 'ALL'
                 )
             )
         );
@@ -1011,6 +1017,10 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
                                     )
                                 )
                             )
+                        ),
+
+                        'attachedTo' => array(
+                            'properties' => 'ALL'
                         )
                     )
                 )

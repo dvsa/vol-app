@@ -52,7 +52,9 @@ return array(
         ),
         array(
             'title' => 'Attached to',
-            'name' => 'attachedTo'
+            'formatter' => function ($data, $column, $sm) {
+                return $sm->get('translator')->translate($data['attachedTo']['id']);
+            }
         ),
         array(
             'title' => 'S4',
