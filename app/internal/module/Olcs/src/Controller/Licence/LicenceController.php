@@ -18,9 +18,6 @@ use Olcs\Controller\AbstractController;
  */
 class LicenceController extends AbstractController
 {
-    protected $title;
-    protected $subtitle;
-
     public function getViewWithLicence()
     {
         $licence = $this->getLicence($this->getFromRoute('licence'));
@@ -31,8 +28,8 @@ class LicenceController extends AbstractController
 
         $view = $this->getView(['licence' => $licence]);
 
-        $this->title = $view->licence['licNo'];
-        $this->subTitle = $view->licence['goodsOrPsv']['id'] . ', ' . $view->licence['licenceType']['id']
+        $this->pageTitle = $view->licence['licNo'];
+        $this->pageSubTitle = $view->licence['goodsOrPsv']['id'] . ', ' . $view->licence['licenceType']['id']
             . ', ' . $view->licence['status']['id'];
 
         return $view;
@@ -43,7 +40,7 @@ class LicenceController extends AbstractController
         $view = $this->getViewWithLicence();
         $view->setTemplate('licence/index');
 
-        return $this->renderView($view, $this->title, $this->subTitle);
+        return $this->renderView($view);
     }
 
     public function editAction()
@@ -51,7 +48,7 @@ class LicenceController extends AbstractController
         $view = $this->getViewWithLicence();
         $view->setTemplate('licence/index');
 
-        return $this->renderView($view, $this->title, $this->subTitle);
+        return $this->renderView($view);
     }
 
     public function casesAction()
@@ -59,7 +56,7 @@ class LicenceController extends AbstractController
         $view = $this->getViewWithLicence();
         $view->setTemplate('licence/index');
 
-        return $this->renderView($view, $this->title, $this->subTitle);
+        return $this->renderView($view);
     }
 
     public function documentsAction()
@@ -67,7 +64,7 @@ class LicenceController extends AbstractController
         $view = $this->getViewWithLicence();
         $view->setTemplate('licence/index');
 
-        return $this->renderView($view, $this->title, $this->subTitle);
+        return $this->renderView($view);
     }
 
     public function processingAction()
@@ -75,7 +72,7 @@ class LicenceController extends AbstractController
         $view = $this->getViewWithLicence();
         $view->setTemplate('licence/index');
 
-        return $this->renderView($view, $this->title, $this->subTitle);
+        return $this->renderView($view);
     }
 
     public function feesAction()
@@ -83,7 +80,7 @@ class LicenceController extends AbstractController
         $view = $this->getViewWithLicence();
         $view->setTemplate('licence/index');
 
-        return $this->renderView($view, $this->title, $this->subTitle);
+        return $this->renderView($view);
     }
 
     public function busAction()
@@ -91,7 +88,7 @@ class LicenceController extends AbstractController
         $view = $this->getViewWithLicence();
         $view->setTemplate('licence/index');
 
-        return $this->renderView($view, $this->title, $this->subTitle);
+        return $this->renderView($view);
     }
 
     /**
