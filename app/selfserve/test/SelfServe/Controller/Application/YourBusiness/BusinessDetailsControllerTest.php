@@ -467,7 +467,10 @@ class BusinessDetailsControllerTest extends AbstractApplicationControllerTestCas
                                         )
                                     ),
                                     'tradingNames' => array(
-                                        'properties' => array()
+                                        'properties' => array(
+                                            'id',
+                                            'name'
+                                        )
                                     )
                                 )
                             )
