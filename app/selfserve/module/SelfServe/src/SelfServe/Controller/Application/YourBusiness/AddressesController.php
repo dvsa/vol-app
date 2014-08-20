@@ -55,6 +55,11 @@ class AddressesController extends YourBusinessController
 
     protected $dataMap = null;
 
+    protected $phoneTypes = Array(
+        'business' => 'phone_t_tel',
+        'home' => 'phone_t_home',
+        'mobile' => 'phone_t_mobile'
+    );
 
     /**
      * Render the section form
@@ -142,13 +147,8 @@ class AddressesController extends YourBusinessController
 
         //process phones
         $service = 'PhoneContact';
-        $phoneTypes = Array(
-            'business' => 'phone_t_tel',
-            'home' => 'phone_t_home',
-            'mobile' => 'phone_t_mobile'
-        );
 
-        foreach ($phoneTypes as $phoneType => $phoneRefName) {
+        foreach ($this->phoneTypes as $phoneType => $phoneRefName) {
 
             $phone = [
                 'id'        => $data['contact']['phone_'.$phoneType.'_id'],
