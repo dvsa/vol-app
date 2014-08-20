@@ -4,6 +4,7 @@
  * Authorisation Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 
 namespace SelfServe\Controller\Application\OperatingCentres;
@@ -239,33 +240,6 @@ class AuthorisationController extends OperatingCentresController
     }
 
     /**
-     * Remove trailer related columns for PSV
-     *
-     * @param object $table
-     * @return object
-     */
-    protected function alterTable($table)
-    {
-        if ($this->isPsv()) {
-            $cols = $table->getColumns();
-
-            unset($cols['trailersCol']);
-
-            $table->setColumns($cols);
-
-            $footer = $table->getFooter();
-
-            $footer['total']['content'] .= '-psv';
-
-            unset($footer['trailersCol']);
-
-            $table->setFooter($footer);
-        }
-
-        return $table;
-    }
-
-    /**
      * Remove trailer elements for PSV and set up Traffic Area section
      *
      * @param object $form
@@ -298,6 +272,17 @@ class AuthorisationController extends OperatingCentresController
             $form->get('data')->remove('totAuthMediumVehicles');
             $form->get('data')->remove('totAuthLargeVehicles');
             $form->get('data')->remove('totCommunityLicences');
+        }
+
+        if ($this->isPsv()) {
+            $table = $form->get('table')->get('table')->getTable();
+            $cols = $table->getColumns();
+            unset($cols['trailersCol']);
+            $table->setColumns($cols);
+            $footer = $table->getFooter();
+            $footer['total']['content'] .= '-psv';
+            unset($footer['trailersCol']);
+            $table->setFooter($footer);
         }
 
         // set up Traffic Area section
@@ -512,10 +497,9 @@ class AuthorisationController extends OperatingCentresController
         }
 
         $data['data']['application'] = $this->getIdentifier();
-        if (array_key_exists('application', $oldData) && array_key_exists('licence', $oldData['application']) &&
-            array_key_exists('trafficArea', $oldData['application']['licence']) &&
-            array_key_exists('id', $oldData['application']['licence']['trafficArea'])) {
-            $data['trafficArea']['id'] = $oldData['application']['licence']['trafficArea']['id'];
+        $trafficArea = $this->getTrafficArea();
+        if (is_array($trafficArea) && array_key_exists('id', $trafficArea)) {
+            $data['trafficArea']['id'] = $trafficArea['id'];
         }
 
         return $data;
@@ -550,7 +534,9 @@ class AuthorisationController extends OperatingCentresController
             $data['data']['maxTrailerAuth'] += (int) $row['numberOfTrailers'];
         }
 
-        if (array_key_exists('licence', $oldData) && array_key_exists('trafficArea', $oldData['licence']) &&
+        if (is_array($oldData) && array_key_exists('licence', $oldData) &&
+            array_key_exists('trafficArea', $oldData['licence']) &&
+            is_array($oldData['licence']['trafficArea']) &&
             array_key_exists('id', $oldData['licence']['trafficArea'])) {
             $data['dataTrafficArea']['hiddenId'] = $oldData['licence']['trafficArea']['id'];
         }
@@ -612,10 +598,9 @@ class AuthorisationController extends OperatingCentresController
                 ),
                 $bundle
             );
-            if (array_key_exists('licence', $application) && count($application['licence']) &&
-                array_key_exists('trafficArea', $application['licence']) &&
-                count($application['licence']['trafficArea'])
-                ) {
+            if (is_array($application) && array_key_exists('licence', $application) &&
+                is_array($application['licence']) &&
+                array_key_exists('trafficArea', $application['licence'])) {
                 $this->trafficArea = $application['licence']['trafficArea'];
             }
         }
@@ -775,6 +760,11 @@ class AuthorisationController extends OperatingCentresController
         return $this->redirect()->toRoute($route, $params, [], true);
     }
 
+    /**
+     * Get data for table
+     * 
+     * @param string $id
+     */
     public function getFormTableData($applicationId)
     {
         if (is_null($this->tableData)) {

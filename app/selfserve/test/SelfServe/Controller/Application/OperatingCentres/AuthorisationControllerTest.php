@@ -4,6 +4,7 @@
  * Authorisation Controller Test
  *
  * @author Rob Caiger <rob@clocal.co.uk>
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk> 
  */
 
 namespace SelfServe\Test\Controller\Application\OperatingCentres;
@@ -15,6 +16,7 @@ use SelfServe\Controller\Application\ApplicationController;
  * Authorisation Controller Test
  *
  * @author Rob Caiger <rob@clocal.co.uk>
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk> 
  */
 class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
 {
@@ -35,6 +37,21 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
     );
 
     private $goodsOrPsv;
+
+    /**
+     * Show if application has any operating centres
+     */
+    private $hasOperatingCentres = true;
+
+    /**
+     * Show if application has trafficarea defined
+     */
+    private $hasTrafficAreaDefined = true;
+
+    /**
+     * Norther Ireland type of licence
+     */
+    private $niFlag = false;
 
     protected $mockedMethods = array('getUploader', 'getFileSizeValidator');
 
@@ -89,8 +106,8 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $navigation);
 
         // We are not psv, so should have trailer related content
-        $tableHtml = $main->getVariable('table');
         $form = $main->getVariable('form');
+        $tableHtml = $form->get('table')->get('table')->getTable()->render();
 
         $this->assertEquals($hasTrailers, (boolean) strstr($tableHtml, 'trailer'));
         //$this->assertEquals($hasTrailers, $form->get('data')->has('totAuthTrailers'));
@@ -152,8 +169,8 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $navigation);
 
         // We are not psv, so should have trailer related content
-        $tableHtml = $main->getVariable('table');
         $form = $main->getVariable('form');
+        $tableHtml = $form->get('table')->get('table')->getTable()->render();
 
         $this->assertEquals(false, $form->get('data')->has('totCommunityLicences'));
         $this->assertEquals(false, $form->get('data')->has('totAuthLargeVehicles'));
@@ -217,8 +234,8 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $navigation);
 
         // We are not psv, so should have trailer related content
-        $tableHtml = $main->getVariable('table');
         $form = $main->getVariable('form');
+        $tableHtml = $form->get('table')->get('table')->getTable()->render();
 
         $this->assertEquals(false, $form->get('data')->has('totCommunityLicences'));
         $this->assertEquals(false, $form->get('data')->has('totAuthLargeVehicles'));
@@ -282,8 +299,8 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $navigation);
 
         // We are not psv, so should have trailer related content
-        $tableHtml = $main->getVariable('table');
         $form = $main->getVariable('form');
+        $tableHtml = $form->get('table')->get('table')->getTable()->render();
 
         $this->assertEquals(false, $form->get('data')->has('totCommunityLicences'));
         $this->assertEquals(false, $form->get('data')->has('totAuthLargeVehicles'));
@@ -347,8 +364,8 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $navigation);
 
         // We are not psv, so should have trailer related content
-        $tableHtml = $main->getVariable('table');
         $form = $main->getVariable('form');
+        $tableHtml = $form->get('table')->get('table')->getTable()->render();
 
         $this->assertEquals(false, $form->get('data')->has('totCommunityLicences'));
         $this->assertEquals(true, $form->get('data')->has('totAuthLargeVehicles'));
@@ -412,8 +429,8 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $navigation);
 
         // We are not psv, so should have trailer related content
-        $tableHtml = $main->getVariable('table');
         $form = $main->getVariable('form');
+        $tableHtml = $form->get('table')->get('table')->getTable()->render();
 
         $this->assertEquals(true, $form->get('data')->has('totCommunityLicences'));
         $this->assertEquals(true, $form->get('data')->has('totAuthLargeVehicles'));
@@ -477,8 +494,8 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $navigation);
 
         // We are not psv, so should have trailer related content
-        $tableHtml = $main->getVariable('table');
         $form = $main->getVariable('form');
+        $tableHtml = $form->get('table')->get('table')->getTable()->render();
 
         $this->assertEquals(true, $form->get('data')->has('totCommunityLicences'));
         $this->assertEquals(false, $form->get('data')->has('totAuthLargeVehicles'));
@@ -493,7 +510,7 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
      */
     public function testIndexActionWithCrudAction()
     {
-        $this->setUpAction('index', null, array('action' => 'Add'));
+        $this->setUpAction('index', null, array('table' => array('action' => 'Add')));
 
         $this->goodsOrPsv = 'goods';
 
@@ -639,10 +656,11 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
     /**
      * Test addAction with submit
      *
-     * @dataProvider psvProvider
+     * @dataProvider psvTrafficAreaProvider
      */
-    public function testAddActionWithSubmit($goodsOrPsv, $hasTrailers)
+    public function testAddActionWithSubmit($goodsOrPsv, $hasTrailers, $niFlag)
     {
+        $this->niFlag = $niFlag;
         $post = array(
             'address' => array(
                 'id' => '',
@@ -668,6 +686,9 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                         )
                     )
                 )
+            ),
+            'trafficAreaData' => array(
+                'id' => 'B'
             )
         );
 
@@ -888,6 +909,7 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
         $this->setUpAction('add', null, $post, $files);
 
         $this->goodsOrPsv = 'goods';
+        $this->niFlag = true;
 
         $this->setRestResponse(
             'ApplicationOperatingCentre', 'POST', ''
@@ -1017,6 +1039,297 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
     }
 
     /**
+     * Test indexAction with no operating centres
+     */
+    public function testIndexActionNoOperatingCentres()
+    {
+        $this->setUpAction('index');
+
+        $this->goodsOrPsv = 'goods';
+        $this->hasOperatingCentres = false;
+
+        $response = $this->controller->indexAction();
+
+        // Make sure we get a view not a response
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+
+        // We should have 2 children (Navigation and Main)
+        $children = $response->getChildren();
+        $this->assertEquals(2, count($children));
+
+        $main = null;
+        $navigation = null;
+
+        foreach ($children as $child) {
+            if ($child->captureTo() == 'navigation') {
+                $navigation = $child;
+                continue;
+            }
+
+            if ($child->captureTo() == 'main') {
+                $main = $child;
+            }
+        }
+
+        // Assert that we have Main and Navigation views
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $main);
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $navigation);
+
+        $form = $main->getVariable('form');
+        // We don't have any operating centres so traffic area section shouldn't be present
+        $this->assertEquals($form->has('dataTrafficArea'), false);
+
+    }
+
+    /**
+     * Test addAction with no operating centres
+     * 
+     * @dataProvider psvTrafficAreaProvider
+     */
+    public function testAddActionNoOperatingCentres($goodsOrPsv, $hasTrailers, $niFlag)
+    {
+        $this->setUpAction('add');
+
+        $this->goodsOrPsv = $goodsOrPsv;
+        $this->hasOperatingCentres = true;
+        $this->hasTrafficAreaDefined = false;
+        $this->niFlag = $niFlag;
+
+        $response = $this->controller->addAction();
+
+        // Make sure we get a view not a response
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+
+        // We should have 2 children (Navigation and Main)
+        $children = $response->getChildren();
+        $this->assertEquals(2, count($children));
+
+        $main = null;
+        $navigation = null;
+
+        foreach ($children as $child) {
+            if ($child->captureTo() == 'navigation') {
+                $navigation = $child;
+                continue;
+            }
+
+            if ($child->captureTo() == 'main') {
+                $main = $child;
+            }
+        }
+
+        // Assert that we have Main and Navigation views
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $main);
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $navigation);
+
+        $form = $main->getVariable('form');
+
+        // No "Add another" button needed if no traffic area defined and no operating centres added yet
+        // and not NI application
+        $this->assertEquals($form->get('form-actions')->has('addAnother'), $this->niFlag);
+    }
+
+    /**
+     * Test addAction with submit and setting traffic area
+     *
+     * @dataProvider psvTrafficAreaProvider
+     */
+    public function testAddActionWithSubmitAndTrafficArea($goodsOrPsv, $hasTrailers, $niFlag)
+    {
+        $this->niFlag = $niFlag;
+        $post = array(
+            'address' => array(
+                'id' => '',
+                'version' => '',
+                'addressLine1' => 'Some street',
+                'city' => 'City',
+                'postcode' => $this->niFlag ? 'BT1 4EE' : 'LS1 4ES',
+                'country' => 'country.GB'
+            ),
+            'data' => array(
+                'numberOfVehicles' => 10,
+                'numberOfTrailers' => 10,
+                'sufficientParking' => '1',
+                'permission' => '1'
+            ),
+            'advertisements' => array(
+                'adPlaced' => 'N',
+                'file' => array(
+                    'list' => array(
+                        'file-1' => array(
+                            'id' => 1,
+                            'version' => 1
+                        )
+                    )
+                )
+            ),
+            'trafficAreaData' => array(
+                'id' => ''
+            )
+        );
+
+        $files = array(
+            'advertisements' => array(
+                'file' => array(
+
+                )
+            )
+        );
+
+        $this->setUpAction('add', null, $post, $files);
+        $this->goodsOrPsv = $goodsOrPsv;
+        $this->controller->setEnabledCsrf(false);
+
+        $response = $this->controller->addAction();
+
+        $this->assertInstanceOf('\Zend\Http\Response', $response);
+    }
+
+    /**
+     * Test indexActionSubmit with no traffic area defined
+     *
+     * @dataProvider psvProvider
+     */
+    public function testIndexActionSubmitNoTrafficArea($goodsOrPsv, $hasTrailers)
+    {
+        $this->hasTrafficAreaDefined = false;
+        $this->setUpAction(
+            'index', null, array(
+                'data' => array(
+                    'id' => 1,
+                    'version' => 6,
+                    'totAuthVehicles' => 10,
+                    'noOfOperatingCentres' => 1,
+                    'minVehicleAuth' => 10,
+                    'maxVehicleAuth' => 10,
+                    'minTrailerAuth' => 10,
+                    'maxTrailerAuth' => 10,
+                ),
+                'dataTrafficArea' => array(
+                    'trafficArea' => 'B'
+                )
+            )
+        );
+
+        $this->goodsOrPsv = $goodsOrPsv;
+
+        $this->controller->setEnabledCsrf(false);
+
+        $response = $this->controller->indexAction();
+
+        $this->assertInstanceOf('\Zend\Http\Response', $response);
+    }
+
+    /**
+     * Test indexActionSubmit with no traffic area defined
+     *
+     */
+    public function testAddActionWithNoTrafficArea()
+    {
+        $this->hasTrafficAreaDefined = false;
+
+        $this->setUpAction('index', null, array('table' => array('action' => 'Add')));
+
+        $this->goodsOrPsv = 'goods';
+
+        $response = $this->controller->indexAction();
+
+        $this->assertInstanceOf('\Zend\Http\Response', $response);
+
+    }
+
+    /**
+     * Test indexActionSubmit with traffic area in POST
+     *
+     */
+    public function testAddActionWithTrafficAreaInPost()
+    {
+        $this->hasTrafficAreaDefined = false;
+
+        $this->setUpAction(
+            'index',
+            null,
+            array('table' => array('action' => 'Add'), 'dataTrafficArea' => array('trafficArea' => 'B'))
+        );
+
+        $this->goodsOrPsv = 'goods';
+
+        $response = $this->controller->indexAction();
+
+        $this->assertInstanceOf('\Zend\Http\Response', $response);
+
+    }
+
+    /**
+     * Test indexAction calling edit action without id
+     *
+     */
+    public function testIndexActionCallingCrudEditWithoutId()
+    {
+        $this->hasTrafficAreaDefined = false;
+
+        $this->setUpAction('index', null, array('table' => array('action' => 'Edit')));
+
+        $this->goodsOrPsv = 'goods';
+
+        $response = $this->controller->indexAction();
+
+        $this->assertInstanceOf('\Zend\Http\Response', $response);
+
+    }
+
+    /**
+     * Test indexAction calling edit action with id
+     *
+     */
+    public function testIndexActionCallingCrudEditWithId()
+    {
+        $this->hasTrafficAreaDefined = false;
+
+        $this->setUpAction('index', null, array('table' => array('action' => 'Edit'), 'id' => 1));
+
+        $this->goodsOrPsv = 'goods';
+
+        $response = $this->controller->indexAction();
+
+        $this->assertInstanceOf('\Zend\Http\Response', $response);
+
+    }
+
+    /**
+     * Test indexAction calling crud with no action
+     *
+     */
+    public function testAddActionCallingCrudWithNoAction()
+    {
+        $this->hasTrafficAreaDefined = false;
+
+        $this->setUpAction('index', null, array());
+
+        $this->goodsOrPsv = 'goods';
+
+        $response = $this->controller->indexAction();
+
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+
+    }
+
+    /**
+     * Provider for addAction with traffic area
+     *
+     * @return array
+     */
+    public function psvTrafficAreaProvider()
+    {
+        return array(
+            array('psv', false, false),
+            array('goods', true, false),
+            array('psv', false, true),
+            array('goods', true, true)
+        );
+    }
+
+    /**
      * Mock the rest call
      *
      * @param string $service
@@ -1033,7 +1346,7 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                     'id' => 10,
                     'version' => 1,
                     'goodsOrPsv' => $this->goodsOrPsv,
-                    'niFlag' => 0,
+                    'niFlag' => $this->niFlag,
                     'licenceType' => 'standard-national',
                     'organisation' => array(
                         'organisationType' => 'org_type.lc'
@@ -1132,6 +1445,21 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                             )
                         )
                     )
+                ),
+                'application' => array(
+                    'properties' => null,
+                    'children' => array(
+                        'licence' => array(
+                            'properties' => null,
+                            'children' => array(
+                                'trafficArea' => array(
+                                    'properties' => array(
+                                        'id'
+                                    )
+                                )
+                            )
+                        )
+                    )
                 )
             )
         );
@@ -1178,30 +1506,37 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
         }
 
         if ($service == 'ApplicationOperatingCentre' && $method == 'GET') {
-            return array(
-                'Count' => 1,
-                'Results' => array(
-                    array(
-                        'id' => 1,
-                        'adPlaced' => 1,
-                        'permission' => 1,
-                        'numberOfVehicles' => 10,
-                        'numberOfTrailers' => 10,
-                        'operatingCentre' => array(
-                            'address' => array(
-                                'id' => 1,
-                                'addressLine1' => '123 Street',
-                                'addressLine2' => 'Address 2',
-                                'addressLine3' => 'Address 3',
-                                'addressLine4' => 'Address 4',
-                                'city' => 'City',
-                                'country' => 'GB',
-                                'postcode' => 'AB1 1AB'
+            if ($this->hasOperatingCentres) {
+                return array(
+                    'Count' => 1,
+                    'Results' => array(
+                        array(
+                            'id' => 1,
+                            'adPlaced' => 1,
+                            'permission' => 1,
+                            'numberOfVehicles' => 10,
+                            'numberOfTrailers' => 10,
+                            'operatingCentre' => array(
+                                'address' => array(
+                                    'id' => 1,
+                                    'addressLine1' => '123 Street',
+                                    'addressLine2' => 'Address 2',
+                                    'addressLine3' => 'Address 3',
+                                    'addressLine4' => 'Address 4',
+                                    'city' => 'City',
+                                    'country' => 'GB',
+                                    'postcode' => 'AB1 1AB'
+                                )
                             )
                         )
                     )
-                )
-            );
+                );
+            } else {
+                return array(
+                    'Count' => 0,
+                    'Results' => array()
+                );
+            }
         }
 
         $controllerDataBundle = array(
@@ -1214,15 +1549,141 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                 'totCommunityLicences',
                 'totAuthVehicles',
                 'totAuthTrailers'
+            ),
+            'children' => array(
+                'licence' => array(
+                    'properties' => array(
+                        'id'
+                    ),
+                    'children' => array(
+                        'trafficArea' => array(
+                            'properties' => array(
+                                'id',
+                                'name'
+                            )
+                        )
+                    )
+                )
             )
         );
 
         if ($service == 'Application' && $method == 'GET' && $bundle == $controllerDataBundle) {
+            if ($this->hasTrafficAreaDefined) {
+                return array(
+                    'id' => 1,
+                    'version' => 1,
+                    'totAuthVehicles' => 10,
+                    'totAuthTrailers' => 10,
+                    'licence' => array(
+                        'id' => 1,
+                        'trafficArea' => array(
+                            'id' => 'B',
+                            'name' => 'North East of England'
+                        )
+                    )
+                );
+            } else {
+                return array(
+                    'id' => 1,
+                    'version' => 1,
+                    'totAuthVehicles' => 10,
+                    'totAuthTrailers' => 10,
+                    'licence' => array(
+                        'id' => 1,
+                        'trafficArea' => null
+                    )
+                );
+            }
+        }
+
+        $appWithTrafficAreaBundle = array(
+            'properties' => array(
+                'id',
+                'version',
+            ),
+            'children' => array(
+                'licence' => array(
+                    'properties' => array(
+                        'id'
+                    ),
+                    'children' => array(
+                        'trafficArea' => array(
+                            'properties' => array(
+                                'id',
+                                'name'
+                            )
+                        )
+                    )
+                )
+            )
+        );
+        if ($service == 'Application' && $method == 'GET' && $bundle == $appWithTrafficAreaBundle) {
+            if ($this->hasTrafficAreaDefined) {
+                return array(
+                    'id' => 1,
+                    'version' => 1,
+                    'licence' => array(
+                        'id' => 1,
+                        'trafficArea' => array(
+                            'id' => 'B',
+                            'name' => 'North East of England'
+                        )
+                    )
+                );
+            } else {
+                return array(
+                    'id' => 1,
+                    'version' => 1,
+                    'licence' => array(
+                        'id' => 1,
+                        'trafficArea' => null
+                    )
+                );
+            }
+        }
+        $trafficAreaBundle = array(
+            'properties' => array(
+                'id',
+                'name',
+            ),
+        );
+        if ($service == 'TrafficArea' && $method == 'GET' && $bundle == $trafficAreaBundle) {
+            return array(
+                'Count' => 2,
+                'Results' => array(
+                    array(
+                        'id' => 'B',
+                        'name' => 'North East of England'
+                    ),
+                    array(
+                        'id' => 'K',
+                        'name' => 'London and the South East of England'
+                    ),
+                )
+            );
+        }
+        $licenceBundle = array(
+            'properties' => array(
+                'id',
+                'version'
+            ),
+            'children' => array(
+                'licence' => array(
+                    'properties' => array(
+                        'id',
+                        'version'
+                    )
+                )
+            )
+        );
+        if ($service == 'Application' && $method == 'GET' && $bundle == $licenceBundle) {
             return array(
                 'id' => 1,
                 'version' => 1,
-                'totAuthVehicles' => 10,
-                'totAuthTrailers' => 10
+                'licence' => array(
+                    'id' => 1,
+                    'version' => 1
+                )
             );
         }
     }
