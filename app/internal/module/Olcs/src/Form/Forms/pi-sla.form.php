@@ -24,7 +24,7 @@ return [
                 'label' => 'Date of decision',
                  'class' => 'long'
             ],
-            'vosaCase' => [
+            'case' => [
                 'type' => 'hidden'
             ],
             'id' => [

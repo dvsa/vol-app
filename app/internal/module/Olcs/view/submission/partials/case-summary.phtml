@@ -4,10 +4,10 @@
 <div class="case-summary">
     <div class="case-summary__header">
         <h5><?php echo $this->translate('case-summary'); ?></h5>
-    </div>        
+    </div>
     <ul class="case-summary__list">
         <li class="summary__item">
-            <b><?php echo $this->translate('licence-number-full') ?></b><?php echo $this->escapeHtml($this->sectionData['licenceNumber']); ?>
+            <b><?php echo $this->translate('licence-number-full') ?></b><?php echo $this->escapeHtml($this->sectionData['licNo']); ?>
         </li>
         <li class="summary__item">
             <b><?php echo $this->translate('operator-name') ?></b><?php echo $this->escapeHtml($this->sectionData['name']); ?>
@@ -17,10 +17,10 @@
         </li>
         <li class="summary__item">
             <b><?php echo $this->translate('business-type') ?></b>
-                <?php echo !empty($this->sectionData['sicCode']) ? $this->translate('sic_code.'.$this->escapeHtml($this->sectionData['sicCode'])) : ''; ?>
+                <?php echo !empty($this->sectionData['sicCode']) ? $this->translate('sic_code.'.$this->escapeHtml($this->sectionData['sicCode']['id'])) : ''; ?>
         </li>
         <li class="summary__item">
-            <b><?php echo $this->translate('licence-type') ?></b><?php echo $this->escapeHtml($this->sectionData['licenceType']); ?>
+            <b><?php echo $this->translate('licence-type') ?></b><?php echo $this->escapeHtml($this->sectionData['licenceType']['id']); ?>
         </li>
         <li class="summary__item">
             <b><?php echo $this->translate('v-auth-t-auth') ?></b>
@@ -40,10 +40,10 @@
             <b><?php echo $this->translate('vehicles-in-posession') ?></b>TBD
         </li>
         <li class="summary__item">
-            <b><?php echo $this->translate('entity-type') ?></b><?php echo $this->escapeHtml($this->sectionData['organisationType']); ?>
+            <b><?php echo $this->translate('entity-type') ?></b><?php echo $this->escapeHtml($this->sectionData['type']['id']); ?>
         </li>
         <li class="summary__item">
-            <b><?php echo $this->translate('ecms') ?></b><?php echo $this->escapeHtml($this->sectionData['ecms']); ?>
+            <b><?php echo $this->translate('ecmsNo') ?></b><?php echo $this->escapeHtml($this->sectionData['ecmsNo']); ?>
         </li>
         <li class="summary__item">
             <b><?php echo $this->translate('case-summary') ?></b><?php echo $this->escapeHtml($this->sectionData['description']); ?>

@@ -52,7 +52,9 @@ return array(
         ),
         array(
             'title' => 'Attached to',
-            'name' => 'attachedTo'
+            'formatter' => function ($data, $column, $sm) {
+                return $sm->get('translator')->translate($data['attachedTo']['id']);
+            },
         ),
         array(
             'title' => 'S4',
@@ -63,39 +65,8 @@ return array(
         array(
             'title' => 'OC Address',
             'width' => '350px',
-            'formatter' => function ($data, $column) {
-                // TODO remove this once address entity has been finalised
-                if (isset($data['operatingCentre']['address'])) {
-                    $data['operatingCentre']['address']['paon_desc'] =
-                            isset($data['operatingCentre']['address']['paon_desc']) ?
-                            $data['operatingCentre']['address']['paon_desc'] :
-                            $data['operatingCentre']['address']['addressLine2'];
-                    $data['operatingCentre']['address']['street'] =
-                            isset($data['operatingCentre']['address']['street']) ?
-                            $data['operatingCentre']['address']['street'] :
-                            $data['operatingCentre']['address']['addressLine3'];
-                    $data['operatingCentre']['address']['locality'] =
-                            isset($data['operatingCentre']['address']['locality']) ?
-                            $data['operatingCentre']['address']['locality'] :
-                            $data['operatingCentre']['address']['addressLine4'];
-                    $data['operatingCentre']['address']['postcode'] =
-                            isset($data['operatingCentre']['address']['postcode']) ?
-                            $data['operatingCentre']['address']['postcode'] :
-                            'postcode';
-                    $data['operatingCentre']['address']['country'] =
-                            isset($data['operatingCentre']['address']['country']) ?
-                            $data['operatingCentre']['address']['country'] :
-                            'country';
-
-                    return $data['operatingCentre']['address']['paon_desc'] . ', ' .
-                            $data['operatingCentre']['address']['street'] . ', ' .
-                            $data['operatingCentre']['address']['locality'] . ', ' .
-                            $data['operatingCentre']['address']['postcode'] . ', ' .
-                            $data['operatingCentre']['address']['country'];
-                } else {
-                    return '';
-                }
-            }
-        ),
+            'formatter' => 'Address',
+            'name' => 'operatingCentreAddress',
+        )
     )
 );

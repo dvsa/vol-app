@@ -9,8 +9,10 @@
 namespace Olcs\Controller;
 
 use Common\Controller\FormActionController;
+use Olcs\Controller\AbstractController;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
+use Olcs\Controller\Traits\TaskSearchTrait;
 
 /**
  * IndexController
@@ -18,8 +20,10 @@ use Zend\View\Model\JsonModel;
  * @author Mike Cooper <michael.cooper@valtech.co.uk>
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class IndexController extends FormActionController
+class IndexController extends AbstractController
 {
+    use TaskSearchTrait;
+
     const MAX_LIMIT = 100;
 
     protected $pageTitle = 'Home';
@@ -27,50 +31,12 @@ class IndexController extends FormActionController
 
     public function indexAction()
     {
-        $filters = $this->mapRequest();
-
-        $tasks = $this->makeRestCall(
-            'TaskSearchView',
-            'GET',
-            $filters
-        );
-
-        $table = $this->buildTable(
-            'tasks',
-            $tasks,
-            array_merge(
-                $filters,
-                array('query' => $this->getRequest()->getQuery())
-            )
-        );
-
-
-        $form = $this->getForm('tasks-home');
-
-        // grab all the relevant backend data needed to populate the
-        // various dropdowns on the filter form
-        $selects = array(
-            'team' => $this->getListData('Team'),
-            'owner' => $this->getListData('User', $filters),
-            'category' => $this->getListData('Category', [], 'description'),
-            'subCategory' => $this->getListData('TaskSubCategory', $filters)
-        );
-
-        // bang the relevant data into the corresponding form inputs
-        foreach ($selects as $name => $options) {
-            $form->get($name)
-                ->setValueOptions($options);
-        }
-
-        // setting $this->enableCsrf = false won't sort this; we never POST
-        $form->remove('csrf');
-
-        $form->setData($filters);
+        $filters = $this->mapTaskFilters();
 
         $view = new ViewModel(
             array(
-                'table' => $table,
-                'form'  => $form,
+                'table' => $this->getTaskTable($filters),
+                'form'  => $this->getTaskForm($filters),
                 'inlineScript' => $this->loadScripts(['tasks'])
             )
         );
@@ -128,68 +94,5 @@ class IndexController extends FormActionController
         }
 
         return new JsonModel($viewResults);
-    }
-
-
-    /**
-     * Inspect the request to see if we have any filters set, and
-     * if necessary, filter them down to a valid subset
-     *
-     * @return array
-     */
-    protected function mapRequest()
-    {
-        $defaults = array(
-            'owner'  => $this->getLoggedInUser(),
-            'team'   => 2,  // we've no stub for this, but it matches the logged in user's team
-            'date'   => 'today',
-            'status' => 'open',
-            'sort'   => 'actionDate',
-            'order'  => 'ASC',
-            'page'   => 1,
-            'limit'  => 10
-        );
-
-        $filters = array_merge(
-            $defaults,
-            $this->getRequest()->getQuery()->toArray()
-        );
-
-        // form => backend mappings
-        $filters['isClosed'] = $filters['status'] === 'closed';
-        $filters['isUrgent'] = isset($filters['urgent']);
-
-        if (isset($filters['date']) && $filters['date'] === 'today') {
-            $filters['actionDate'] = '<= ' . date('Y-m-d');
-        }
-
-        // nuke any empty values too
-        return array_filter(
-            $filters,
-            function ($v) {
-                return !empty($v);
-            }
-        );
-    }
-
-    /**
-     * Retrieve some data from the backend and convert it for use in
-     * a select. Optionally provide some search data to filter the
-     * returned data too.
-     */
-    protected function getListData($entity, $data = array(), $titleKey = 'name', $primaryKey = 'id')
-    {
-        $data['limit'] = self::MAX_LIMIT;
-        $data['sort'] = $titleKey;  // AC says always sort alphabetically
-        $response = $this->makeRestCall($entity, 'GET', $data);
-
-        $final = array('' => 'All');
-        foreach ($response['Results'] as $result) {
-            $key = $result[$primaryKey];
-            $value = $result[$titleKey];
-
-            $final[$key] = $value;
-        }
-        return $final;
     }
 }

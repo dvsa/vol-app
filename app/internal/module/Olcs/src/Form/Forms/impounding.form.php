@@ -32,7 +32,7 @@ return [
                         'class' => 'medium',
                         'filters' => '\Common\Form\Elements\InputFilters\VrmOptional',
                     ],
-                    'legislationTypes' => [
+                    'impoundingLegislationTypes' => [
                         'type' => 'multiselect',
                         'filters' => '\Common\Form\Elements\InputFilters\SelectEmpty',
                         'label' => 'Select legislation',

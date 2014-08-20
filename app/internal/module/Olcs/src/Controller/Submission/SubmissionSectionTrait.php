@@ -6,7 +6,7 @@ use Zend\Filter\Word\DashToCamelCase;
 
 /**
  * Trait for building submission section data
- * @author Mike Cooper
+ * @author Mike Cooper <michael.cooper@valtech.co.uk>
  */
 trait SubmissionSectionTrait
 {
@@ -42,7 +42,26 @@ trait SubmissionSectionTrait
         if (!isset($config['exclude'])) {
             return true;
         }
-        if (in_array(strtolower($licenceData[$config['exclude']['column']]), $config['exclude']['values'])) {
+
+        // If the column contains a slash, then we are trying to dig deeper into the array
+        if (!strstr($config['exclude']['column'], '/')) {
+            $key = $licenceData[$config['exclude']['column']];
+        } else {
+            $parts = explode('/', $config['exclude']['column']);
+
+            $key = $licenceData;
+
+            foreach ($parts as $part) {
+                if (isset($key[$part])) {
+                    $key = &$key[$part];
+                } else {
+                    $key = '';
+                    break;
+                }
+            }
+        }
+
+        if (in_array(strtolower($key), $config['exclude']['values'])) {
             return true;
         }
         return false;
@@ -91,18 +110,18 @@ trait SubmissionSectionTrait
     public function caseSummaryInfo(array $data = array())
     {
         return array(
-            'caseNumber' => $data['caseNumber'],
-            'licenceNumber' => $data['licence']['licenceNumber'],
+            'id' => $data['id'],
+            'licNo' => $data['licence']['licNo'],
             'name' => $data['licence']['organisation']['name'],
             'licenceType' => $data['licence']['licenceType'],
-            'ecms' => $data['ecms'],
+            'ecmsNo' => $data['ecmsNo'],
             'description' => $data['description'],
-            'organisationType' => $data['licence']['organisation']['organisationType'],
+            'type' => $data['licence']['organisation']['type'],
             'sicCode' => $data['licence']['organisation']['sicCode'],
             'isMlh' => $data['licence']['organisation']['isMlh'],
-            'startDate' => $data['licence']['startDate'],
-            'authorisedVehicles' => $data['licence']['authorisedVehicles'],
-            'authorisedTrailers' => $data['licence']['authorisedTrailers'],
+            'startDate' => $data['licence']['inForceDate'],
+            'authorisedVehicles' => $data['licence']['totAuthVehicles'],
+            'authorisedTrailers' => $data['licence']['totAuthTrailers'],
         );
     }
 
@@ -134,9 +153,9 @@ trait SubmissionSectionTrait
             }
 
             $thisConviction['dateOfOffence'] = $conviction['dateOfOffence'];
-            $thisConviction['dateOfConviction'] = $conviction['dateOfConviction'];
+            $thisConviction['convictionDate'] = $conviction['convictionDate'];
 
-            $thisConviction['courtFpm'] = $conviction['courtFpm'];
+            $thisConviction['court'] = $conviction['court'];
             $thisConviction['penalty'] = $conviction['penalty'];
             $thisConviction['si'] = $conviction['si'];
             $thisConviction['decToTc'] = $conviction['decToTc'];
@@ -154,11 +173,11 @@ trait SubmissionSectionTrait
     {
         $dataToReturnArray = array();
 
-        foreach ($data['licence']['organisation']['organisationOwners'] as $organisationOwner) {
+        foreach ($data['licence']['organisation']['organisationPersons'] as $organisationOwner) {
 
-            $thisOrganisationOwner['lastName'] = $organisationOwner['person']['surname'];
-            $thisOrganisationOwner['firstName'] = $organisationOwner['person']['firstName'];
-            $thisOrganisationOwner['dob'] = $organisationOwner['person']['dateOfBirth'];
+            $thisOrganisationOwner['familyName'] = $organisationOwner['person']['familyName'];
+            $thisOrganisationOwner['forename'] = $organisationOwner['person']['forename'];
+            $thisOrganisationOwner['birthDate'] = $organisationOwner['person']['birthDate'];
             $dataToReturnArray[] = $thisOrganisationOwner;
 
         }
@@ -175,8 +194,8 @@ trait SubmissionSectionTrait
 
         foreach ($data['licence']['transportManagerLicences'] as $TmLicence) {
 
-            $thisTmLicence['lastName'] = $TmLicence['transportManager']['contactDetails']['person']['surname'];
-            $thisTmLicence['firstName'] = $TmLicence['transportManager']['contactDetails']['person']['firstName'];
+            $thisTmLicence['familyName'] = $TmLicence['transportManager']['contactDetails']['person']['familyName'];
+            $thisTmLicence['forename'] = $TmLicence['transportManager']['contactDetails']['person']['forename'];
             $thisTmLicence['tmType'] = $TmLicence['transportManager']['tmType'];
             $thisTmLicence['qualifications'] = '';
 
@@ -184,7 +203,7 @@ trait SubmissionSectionTrait
                 $thisTmLicence['qualifications'] .= $qualification['qualificationType'].' ';
             }
 
-            $thisTmLicence['dob'] = $TmLicence['transportManager']['contactDetails']['person']['dateOfBirth'];
+            $thisTmLicence['birthDate'] = $TmLicence['transportManager']['contactDetails']['person']['birthDate'];
             $dataToReturnArray[] = $thisTmLicence;
         }
 

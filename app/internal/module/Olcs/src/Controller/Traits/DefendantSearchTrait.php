@@ -153,7 +153,7 @@ trait DefendantSearchTrait
     {
 
         switch($type) {
-            case "defendant_type.operator":
+            case "def_t_op":
                 $fieldset = new \Common\Form\Elements\Types\OperatorSearch($name, $options);
                 $fieldset->setAttributes(
                     array(
@@ -195,7 +195,7 @@ trait DefendantSearchTrait
             $search->remove('select');
             $search->remove('personFirstname');
             $search->remove('personLastname');
-            $search->remove('dateOfBirth');
+            $search->remove('birthDate');
         }
         return $search;
     }
@@ -208,12 +208,12 @@ trait DefendantSearchTrait
      */
     private function getEntityType($post)
     {
-        if (isset($post['defendant-details']['defType'])) {
-            return $post['defendant-details']['defType'];
+        if (isset($post['defendant-details']['defendantType'])) {
+            return $post['defendant-details']['defendantType'];
         } else {
             // check entity data
             $entityData = $this->getEntityData();
-            return $entityData['defType'];
+            return $entityData['defendantType'];
         }
 
     }
@@ -240,7 +240,7 @@ trait DefendantSearchTrait
             $search = $this->processPersonLookup($search, $name);
             $search->remove('personFirstname');
             $search->remove('personLastname');
-            $search->remove('dateOfBirth');
+            $search->remove('birthDate');
         }
 
         return $search;
@@ -416,11 +416,11 @@ trait DefendantSearchTrait
         $result = [];
         if (is_array($personList)) {
             foreach ($personList as $person) {
-                $dob = new \DateTime($person['date_of_birth']);
+                $birthDate = new \DateTime($person['date_of_birth']);
                 $result[$person['id']] = trim(
-                    $person['surname'] .
-                    ',  ' . $person['first_name'] .
-                    '     (b. ' . $dob->format('d-M-Y')
+                    $person['familyName'] .
+                    ',  ' . $person['forename'] .
+                    '     (b. ' . $birthDate->format('d-M-Y')
                 ) . ')';
             }
         }
@@ -459,10 +459,10 @@ trait DefendantSearchTrait
      */
     private function formatPerson($personDetails)
     {
-        $result['personFirstname'] = $personDetails['firstName'];
-        $result['personLastname'] = $personDetails['surname'];
+        $result['personFirstname'] = $personDetails['forename'];
+        $result['personLastname'] = $personDetails['familyName'];
 
-        $result['dateOfBirth'] = $personDetails['dateOfBirth'];
+        $result['birthDate'] = $personDetails['birthDate'];
 
         return $result;
     }

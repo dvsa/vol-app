@@ -24,6 +24,7 @@ return array(
         array(
             'title' => 'Link',
             'formatter' => 'TaskIdentifier',
+            'name' => 'link',
         ),
         array(
             'title' => 'Category',

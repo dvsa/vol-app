@@ -43,7 +43,7 @@ return [
                 'label' => 'Comments',
                 'class' => 'extra-long'
             ],
-            'vosaCase' => [
+            'case' => [
                 'type' => 'hidden'
             ],
             'id' => [

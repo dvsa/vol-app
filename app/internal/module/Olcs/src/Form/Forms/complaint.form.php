@@ -20,13 +20,13 @@ return [
                     'version' => [
                         'type' => 'hidden'
                     ],
-                    'firstName' => [
+                    'forename' => [
                         'type' => 'personName',
                         'label' => 'Complainant first name',
                         'class' => 'medium',
                         'filters' => '\Common\Form\Elements\InputFilters\NameRequired'
                     ],
-                    'surname' => [
+                    'familyName' => [
                         'type' => 'personName',
                         'label' => 'Complainant last name',
                         'class' => 'medium',
@@ -51,7 +51,7 @@ return [
                          'label' => 'Complaint date',
                          'filters' => '\Common\Form\Elements\InputFilters\DateNotInFuture'
                      ],
-                    'typeOfComplaint' => [
+                    'complaintType' => [
                         'type' => 'select',
                         'label' => 'Complaint type',
                         'value_options' => 'complaint_types',
@@ -110,12 +110,12 @@ return [
                     'version' => [
                         'type' => 'hidden'
                     ],
-                    'firstName' => [
+                    'forename' => [
                         'type' => 'personName',
                         'label' => 'Driver first name',
                         'class' => 'medium',
                     ],
-                    'surname' => [
+                    'familyName' => [
                         'type' => 'personName',
                         'label' => 'Driver last name',
                         'class' => 'medium',
@@ -147,7 +147,7 @@ return [
             )
         ],
         'elements' => [
-            'vosaCase' => [
+            'case' => [
                 'type' => 'hidden'
             ],
             'id' => [

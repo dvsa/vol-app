@@ -14,7 +14,7 @@ return [
                     'label' => 'Convictions'
                 ],
                 'elements' => [
-                    'convictionData' => [
+                    'convictionNote' => [
                         'type'  => 'textarea',
                         'label' => 'Convictions from PLS',
                         'class' => 'extra-long'

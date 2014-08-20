@@ -48,8 +48,8 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $this->controller->routeParams = array();
         $this->licenceData = array(
             'id' => 7,
-            'licenceType' => 'Standard National',
-            'goodsOrPsv' => 'Psv'
+            'licenceType' => array('id' => 'ltyp_sn'),
+            'goodsOrPsv' => array('id' => 'lcat_psv')
         );
 
         parent::setUp();
@@ -104,7 +104,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $data = array(
             'createdBy' => 1,
             'text' => '{"submission":{}}',
-            'vosaCase' => 54);
+            'case' => 54);
 
         $this->controller->expects($this->once())
             ->method('getLoggedInUser')
@@ -262,10 +262,10 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
                 'submissionActions' => array(
                     'properties' => 'ALL',
                     'children' => array(
-                        'userSender' => array(
+                        'senderUser' => array(
                             'properties' => 'ALL'
                         ),
-                        'userRecipient' => array(
+                        'recipientUser' => array(
                             'properties' => 'ALL'
                         ),
                         'piReasons' => array(
@@ -502,7 +502,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->once())
             ->method('getFormWithListData')
-            ->with('decision', array('submission' => 8, 'userSender' => 1))
+            ->with('decision', array('submission' => 8, 'senderUser' => 1))
             ->will($this->returnValue('form'));
 
         $this->controller->expects($this->once())
@@ -644,8 +644,8 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
     {
         return
         [
-            [7, 1, 'goods'],
-            [7, 0, 'psv']
+            [7, 1, 'lcat_gv'],
+            [7, 0, 'lcat_psv']
         ];
     }
 
@@ -779,7 +779,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
             'sections' => array(
                 'case-summary-info' => array(
                     'view' => 'submission/partials/case-summary',
-                    'dataPath' => 'VosaCase',
+                    'dataPath' => 'Cases',
                     'bundle' => array(
                         'children' => array(
                             'categories' => array(
@@ -893,7 +893,9 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
     {
         return [
             'niFlag' => $niFlag,
-            'goodsOrPsv' => $goodsOrPsv
+            'goodsOrPsv' => array(
+                'id' => $goodsOrPsv
+            )
         ];
     }
 

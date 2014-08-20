@@ -28,44 +28,22 @@ class CaseImpoundingController extends CaseController implements CrudInterface
         $licenceId = $this->fromRoute('licence');
         $caseId = $this->fromRoute('case');
 
-        if (!$caseId || !$licenceId) {
-            return $this->notFoundAction();
-        }
-
-        $action = $this->fromPost('action');
-        $id = $this->fromPost('id');
-
-        if ($action) {
-            $action = strtolower($action);
-
-            if ($action == 'add') {
-                return $this->redirectToCrud($action, null);
-            } elseif ($id) {
-                return $this->redirectToCrud($action, $id);
-            }
-        }
-
-        $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licenceId)));
-
-        $bundle = $this->getIndexBundle();
+        $this->checkForCrudAction('case_impounding', array('case' => $caseId, 'licence' => $licenceId), 'id');
 
         $results = $this->makeRestCall(
             'Impounding',
             'GET',
             array(
                 'case' => $caseId,
-                'bundle' => json_encode($bundle),
                 'sort' => 'applicationReceiptDate',
                 'order' => 'DESC'
-            )
+            ),
+            $this->getIndexBundle()
         );
-
-        $impoundings = $this->formatForTable($results['Results']);
 
         $variables = array(
             'tab' => 'impounding',
-            'inlineScript' => $this->getServiceLocator()->get('Script')->loadFiles(['impounding']),
-            'table' => $this->buildTable('impounding', $impoundings, array())
+            'table' => $this->buildTable('impounding', $results['Results'])
         );
 
         $caseVariables = $this->getCaseVariables($caseId, $variables);
@@ -82,17 +60,7 @@ class CaseImpoundingController extends CaseController implements CrudInterface
      */
     public function addAction()
     {
-        $licenceId = $this->fromRoute('licence');
         $caseId = $this->fromRoute('case');
-
-        $licence = $this->getLicenceTrafficAreaData($licenceId);
-
-        $this->setBreadcrumb(
-            array(
-                'licence_case_list/pagination' => array('licence' => $licenceId),
-                'case_impounding' => array('licence' => $licenceId, 'case' => $caseId)
-            )
-        );
 
         $form = $this->generateFormWithData(
             'impounding',
@@ -102,18 +70,6 @@ class CaseImpoundingController extends CaseController implements CrudInterface
             )
         );
 
-        $legislationList = $this->getLegislationOptions($licence);
-
-        $form->get('application_details')
-            ->get('legislationTypes')
-            ->setValueOptions($legislationList);
-
-        $formVenues = $this->getVenueList($licence);
-
-        $form->get('hearing')
-            ->get('piVenue')
-            ->setValueOptions($formVenues);
-
         $view = $this->getView(
             [
                 'params' => [
@@ -121,7 +77,7 @@ class CaseImpoundingController extends CaseController implements CrudInterface
                     'pageSubTitle' => ''
                 ],
                 'form' => $form,
-                'inlineScript' => $this->getServiceLocator()->get('Script')->loadFiles(['impounding']),
+                'inlineScript' => $this->loadScripts(['impounding']),
             ]
         );
 
@@ -137,16 +93,12 @@ class CaseImpoundingController extends CaseController implements CrudInterface
      */
     public function processAddImpounding ($data)
     {
-        unset($data['form-actions']['cancel']);
+        $formattedData = $this->formatForSave($data);
 
-        if ($data['form-actions']['submit'] === '') {
-            $formattedData = $this->formatForSave($data);
+        $result = $this->processAdd($formattedData, 'Impounding');
 
-            $result = $this->processAdd($formattedData, 'Impounding');
-
-            if (isset($result['id'])) {
-                return $this->redirectToAction();
-            }
+        if (isset($result['id'])) {
+            return $this->redirectToAction();
         }
 
         return $this->redirectToAction('add');
@@ -158,26 +110,14 @@ class CaseImpoundingController extends CaseController implements CrudInterface
      * @param array $data
      * @return \Zend\Http\Response
      */
-    public function processEditImpounding ($data)
+    public function processEditImpounding($data)
     {
-        unset($data['form-actions']['cancel']);
+        $formattedData = $this->formatForSave($data);
 
-        if ($data['form-actions']['submit'] === '') {
-            $formattedData = $this->formatForSave($data);
+        $result = $this->processEdit($formattedData, 'Impounding');
 
-            $result = $this->processEdit($formattedData, 'Impounding');
-
-            if (empty($result)) {
-                return $this->redirect()->toRoute(
-                    'case_impounding',
-                    array(
-                        'action' => null,
-                        'id' => null
-                    ),
-                    array(),
-                    true
-                );
-            }
+        if (empty($result)) {
+            return $this->redirect()->toRoute('case_impounding', ['action' => null, 'id' => null], [], true);
         }
 
         return $this->redirectToAction('edit');
@@ -193,8 +133,6 @@ class CaseImpoundingController extends CaseController implements CrudInterface
         $licenceId = $this->fromRoute('licence');
         $caseId = $this->fromRoute('case');
         $impoundingId = $this->fromRoute('id');
-
-        $licence = $this->getLicenceTrafficAreaData($licenceId);
 
         $bundle = $this->getFormBundle();
 
@@ -213,29 +151,11 @@ class CaseImpoundingController extends CaseController implements CrudInterface
 
         $data = $this->formatDataForForm($details);
 
-        $this->setBreadcrumb(
-            array(
-                'licence_case_list/pagination' => array('licence' => $licenceId),
-                'case_impounding' => array('licence' => $licenceId, 'case' => $caseId)
-            )
-        );
-
         $form = $this->generateFormWithData(
             'impounding',
             'processEditImpounding',
             $data
         );
-
-        $legislationList = $this->getLegislationOptions($licence);
-        $form->get('application_details')
-            ->get('legislationTypes')
-            ->setValueOptions($legislationList);
-
-        $formVenues = $this->getVenueList($licence);
-
-        $form->get('hearing')
-            ->get('piVenue')
-            ->setValueOptions($formVenues);
 
         $view = $this->getView(
             [
@@ -244,7 +164,7 @@ class CaseImpoundingController extends CaseController implements CrudInterface
                     'pageSubTitle' => ''
                 ],
                 'form' => $form,
-                'inlineScript' => $this->getServiceLocator()->get('Script')->loadFiles(['conviction']),
+                'inlineScript' => $this->loadScripts(['impounding']),
             ]
         );
 
@@ -254,13 +174,48 @@ class CaseImpoundingController extends CaseController implements CrudInterface
     }
 
     /**
+     * Generate a form with data
+     *
+     * @param string $name
+     * @param callable $callback
+     * @param mixed $data
+     * @param boolean $tables
+     * @return object
+     */
+    public function generateFormWithData($name, $callback, $data = null, $tables = false)
+    {
+        $licenceId = $this->fromRoute('licence');
+
+        $form = parent::generateFormWithData($name, $callback, $data, $tables);
+
+        $licence = $this->getLicenceTrafficAreaData($licenceId);
+
+        $legislationList = $this->getLegislationOptions($licence);
+
+        $form->get('application_details')
+             ->get('impoundingLegislationTypes')
+             ->setValueOptions($legislationList);
+
+        $formVenues = $this->getVenueList($licence);
+        $form->get('hearing')
+            ->get('piVenue')
+            ->setValueOptions($formVenues);
+
+        $form->get('outcome')
+             ->get('presidingTc')
+             ->setValueOptions($this->getListData('PresidingTc', [], 'name', 'id'));
+
+        return $form;
+    }
+
+    /**
      *
      * Formats data for use in a table
      *
      * @param array $data
      * @return array
      */
-    private function formatForSave ($data)
+    private function formatForSave($data)
     {
         $formatted = array_merge(array(), $data['outcome'], $data['application_details']);
 
@@ -270,45 +225,12 @@ class CaseImpoundingController extends CaseController implements CrudInterface
             $data['hearing']['hearingDate'],
             $data['hearing']['hearingTime']
         );
-        $formatted['presidingTc'] = str_replace('presiding_tc.', '', $formatted['presidingTc']);
+        //$formatted['presidingTc'] = $formatted['presidingTc'];
         $formatted['id'] = $data['id'];
         $formatted['case'] = $data['case'];
         $formatted['version'] = $data['version'];
 
         return $formatted;
-    }
-
-    /**
-     *
-     * Formats data for use in a table
-     *
-     * @param array $results
-     * @return array $results
-     */
-    private function formatForTable($results)
-    {
-        $config = $this->getServiceLocator()->get('Config');
-        $static = $config['static-list-data'];
-
-        if (!empty($results)) {
-            foreach ($results as $key => $result) {
-                if (isset($result['presidingTc']['name'])) {
-                    $results[$key]['name'] = $result['presidingTc']['name'];
-                }
-
-                if (isset($result['outcome']['id'])
-                    && isset($static['impounding_outcome'][$result['outcome']['id']])) {
-                    $results[$key]['outcome'] = $static['impounding_outcome'][$result['outcome']['id']];
-                }
-
-                if (isset($result['impoundingType']['id'])
-                    && isset($static['impounding_type'][$result['impoundingType']['id']])) {
-                    $results[$key]['impoundingType'] = $static['impounding_type'][$result['impoundingType']['id']];
-                }
-            }
-        }
-
-        return $results;
     }
 
     /**
@@ -338,12 +260,13 @@ class CaseImpoundingController extends CaseController implements CrudInterface
         $formatted['application_details'] = array(
             'impoundingType' => $results['impoundingType']['id'],
             'applicationReceiptDate' => $results['applicationReceiptDate'],
-            'legislationTypes' => $results['legislationTypes'],
+            //'legislationTypes' => $results['legislationTypes'],
             'vrm' => $results['vrm']
         );
-        if (!empty($results['legislationTypes'])) {
-            foreach ($results['legislationTypes'] as $legislationType) {
-                $formatted['application_details']['legislationTypes'][] =
+
+        if (!empty($results['impoundingLegislationTypes'])) {
+            foreach ($results['impoundingLegislationTypes'] as $legislationType) {
+                $formatted['application_details']['impoundingLegislationTypes'][] =
                     $legislationType['id'];
             }
         }
@@ -354,7 +277,7 @@ class CaseImpoundingController extends CaseController implements CrudInterface
         );
 
         if (isset($results['presidingTc']['id'])) {
-            $formatted['outcome']['presidingTc'] = 'presiding_tc.' . $results['presidingTc']['id'];
+            $formatted['outcome']['presidingTc'] = $results['presidingTc']['id'];
         }
 
         if (isset($results['outcome']['id'])) {
@@ -429,12 +352,22 @@ class CaseImpoundingController extends CaseController implements CrudInterface
     {
         $matchedVenues = array();
 
+        $bundle = array(
+            'properties' => 'ALL',
+            'children' => array(
+                'trafficArea' => array(
+                    'properties' => 'ALL'
+                )
+            )
+        );
+
         $venues = $this->makeRestCall(
             'PiVenue',
             'GET',
             array(
                 'limit' => 'all'
-            )
+            ),
+            $bundle
         );
 
         foreach ($venues['Results'] as $venue) {
@@ -477,6 +410,11 @@ class CaseImpoundingController extends CaseController implements CrudInterface
                         'id'
                     ),
                 ),
+                'impoundingLegislationTypes' => array(
+                    'properties' => array(
+                        'id'
+                    ),
+                ),
             )
         );
     }
@@ -496,7 +434,6 @@ class CaseImpoundingController extends CaseController implements CrudInterface
                 'hearingDate',
                 'piVenueOther',
                 'vrm',
-                'legislationTypes',
                 'notes',
                 'version'
             ),
@@ -513,7 +450,8 @@ class CaseImpoundingController extends CaseController implements CrudInterface
                 ),
                 'presidingTc' => array(
                     'properties' => array(
-                        'id'
+                        'id',
+                        'name'
                     ),
                 ),
                 'case' => array(
@@ -531,7 +469,7 @@ class CaseImpoundingController extends CaseController implements CrudInterface
                         'id'
                     ),
                 ),
-                'legislationTypes' => array(
+                'impoundingLegislationTypes' => array(
                     'properties' => array(
                         'id'
                     ),
@@ -568,18 +506,16 @@ class CaseImpoundingController extends CaseController implements CrudInterface
      */
     private function getLegislationOptions($licence)
     {
-        $config = $this->getServiceLocator()->get('Config');
-
         if ($licence['niFlag']) {
-            return isset($config['static-list-data']['legislation_type.goods.ni']) ?
-                $config['static-list-data']['legislation_type.goods.ni'] : array();
+            return $this->getListData(
+                'RefData', ['refDataCategory' => 'impound_legislation_goods_ni'], 'id', 'id', false);
         } else {
             if ($licence['goodsOrPsv'] == 'Goods') {
-                return isset($config['static-list-data']['legislation_type.goods.gb']) ?
-                    $config['static-list-data']['legislation_type.goods.gb'] : array();
+                return $this->getListData(
+                    'RefData', ['refDataCategory' => 'impound_legislation_goods_gb'], 'id', 'id', false);
             } else {
-                return isset($config['static-list-data']['legislation_type.psv.gb']) ?
-                    $config['static-list-data']['legislation_type.psv.gb'] : array();
+                return $this->getListData(
+                    'RefData', ['refDataCategory' => 'impound_legislation_psv_gb'], 'id', 'id', false);
             }
         }
     }

@@ -157,7 +157,7 @@ class CaseStayController extends CaseController implements CrudInterface
             [
                 'form' => $form,
                 'data' => $pageData,
-                'inlineScript' => $this->getServiceLocator()->get('Script')->loadFiles(['withdrawn'])
+                'inlineScript' => $this->loadScripts(['withdrawn'])
             ]
         );
 
@@ -234,7 +234,7 @@ class CaseStayController extends CaseController implements CrudInterface
             [
                 'form' => $form,
                 'data' => $pageData,
-                'inlineScript' => $this->getServiceLocator()->get('Script')->loadFiles(['withdrawn'])
+                'inlineScript' => $this->loadScripts(['withdrawn'])
             ]
         );
 
@@ -349,8 +349,8 @@ class CaseStayController extends CaseController implements CrudInterface
                     'appealDate',
                     'hearingDate',
                     'decisionDate',
-                    'papersDue',
-                    'papersSent',
+                    'papersDueDate',
+                    'papersSentDate',
                     'withdrawnDate'
                 )
             );

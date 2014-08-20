@@ -20,7 +20,7 @@ use Zend\View\Model\ViewModel;
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 class SearchController extends FormActionController
-{ 
+{
 
     /**
      * Search form action
@@ -48,9 +48,9 @@ class SearchController extends FormActionController
     {
         $data = array_merge($data['search'], $data['search-advanced']);
         $personSearch = array(
-            'firstName',
-            'lastName',
-            'dateOfBirth',
+            'forename',
+            'familyName',
+            'birthDate',
             'transportManagerId'
         );
 
@@ -70,25 +70,6 @@ class SearchController extends FormActionController
     }
 
     /**
-     * Person search results: NOT IMPLEMENTED YET
-     *
-     * @todo Implement person search results
-     *
-     * @return ViewModel
-     */
-    /*public function personAction()
-    {
-        die('Person search is out of scope');
-        $data = $this->params()->fromQuery();
-
-        $results = $this->makeRestCall('PersonSearch', 'GET', $data);
-
-        $view = new ViewModel(['results' => $results]);
-        $view->setTemplate('results');
-        return $view;
-    }*/
-
-    /**
      * Operator search results
      *
      * @return ViewModel
@@ -104,6 +85,7 @@ class SearchController extends FormActionController
         foreach ($results['Results'] as $key => $result) {
 
             $orgType = $result['organisation_type'];
+
             if (isset($static['business_types'][$orgType])) {
                 $results['Results'][$key]['organisation_type'] = $static['business_types'][$orgType];
             }

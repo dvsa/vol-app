@@ -34,35 +34,38 @@ return array(
 
                 $url = $this->generateUrl(['action' => 'edit', 'id' => $data['id']], 'conviction', true);
 
-                if ($data['dateOfConviction'] == null) {
+                if ($data['convictionDate'] == null) {
                     return '<a href="' . $url . '">N/A</a>';
                 }
 
                 $column['formatter'] = 'Date';
                 return '<a href="' . $url . '">' . $this->callFormatter($column, $data) . '</a>';
             },
-            'name' => 'dateOfConviction'
+            'name' => 'convictionDate'
         ),
         array(
             'title' => 'Date of offence',
             'formatter' => 'Date',
-            'name' => 'dateOfOffence'
+            'name' => 'offenceDate'
         ),
         array(
             'title' => 'Name / defendant type',
             'formatter' => function ($data) {
-                $person = $data['personFirstname'] . ' ' . $data['personLastname'];
+                $person = $data['convictedName'];
                 $organisationName = $data['operatorName'];
-                return ($organisationName == '' ? $person : $organisationName) . ' / ' . $data['defType'];
+                return ($organisationName == '' ? $person : $organisationName) . ' <br /> ' . $data['defendantType'];
             }
         ),
         array(
             'title' => 'Description',
-            'name' => 'categoryText'
+            'formatter' => function ($row) {
+                $append = strlen($row['categoryText']) > 60 ? '...' : '';
+                return substr($row['categoryText'], 0, 60) . $append;
+            }
         ),
         array(
             'title' => 'Court/FPN',
-            'name' => 'courtFpm'
+            'name' => 'court'
         ),
         array(
             'title' => 'Penalty',
@@ -70,15 +73,15 @@ return array(
         ),
         array(
             'title' => 'SI',
-            'name' => 'si'
+            'name' => 'msi'
         ),
         array(
             'title' => 'Declared',
-            'name' => 'decToTc'
+            'name' => 'isDeclared'
         ),
         array(
             'title' => 'Dealt with',
-            'name' => 'dealtWith'
+            'name' => 'isDealtWith'
         )
     )
 );

@@ -14,7 +14,7 @@ return [
                     0
                 ],
                 'elements' => [
-                    'licenceNumber' => [
+                    'licNo' => [
                         'type' => 'text',
                         'label' => 'Licence number',
                         'class' => 'medium',
@@ -29,17 +29,17 @@ return [
                         'label' => 'Postcode',
                         'class' => 'short',
                     ],
-                    'firstName' => [
+                    'forename' => [
                         'type' => 'personName',
                         'label' => 'First name',
                         'class' => 'long',
                     ],
-                    'lastName' => [
+                    'familyName' => [
                         'type' => 'personName',
                         'label' => 'Last name',
                         'class' => 'long',
                     ],
-                    'dateOfBirth' => [
+                    'birthDate' => [
                         'type' => 'dateSelectWithEmpty',
                         'label' => 'Date of birth',
                         'filters' => '\Common\Form\Elements\InputFilters\DateNotRequiredNotInFuture'
