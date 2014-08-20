@@ -47,7 +47,7 @@ class VehiclePsvControllerTest extends AbstractApplicationControllerTestCase
         // Make sure we get a view not a response
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
 
-        $form = $this->getFormFromResponse($response);
+        $form = $this->getFormFromView($response);
 
         $this->assertTrue($form->has('large'));
     }
@@ -66,7 +66,7 @@ class VehiclePsvControllerTest extends AbstractApplicationControllerTestCase
         // Make sure we get a view not a response
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
 
-        $form = $this->getFormFromResponse($response);
+        $form = $this->getFormFromView($response);
 
         $this->assertFalse($form->has('large'));
     }
@@ -112,7 +112,7 @@ class VehiclePsvControllerTest extends AbstractApplicationControllerTestCase
      */
     public function testIndexActionWithSubmit()
     {
-        $this->setUpAction('index', null, array('data' => array('enterReg' => 'N')));
+        $this->setUpAction('index', null, array('data' => array('hasEnteredReg' => 'N')));
 
         $this->controller->setEnabledCsrf(false);
         $response = $this->controller->indexAction();
@@ -129,7 +129,7 @@ class VehiclePsvControllerTest extends AbstractApplicationControllerTestCase
             'index',
             null,
             array(
-                'data' => array('enterReg' => 'Y'),
+                'data' => array('hasEnteredReg' => 'Y'),
                 'large' => array('rows' => 0)
             )
         );
@@ -149,7 +149,7 @@ class VehiclePsvControllerTest extends AbstractApplicationControllerTestCase
             'index',
             null,
             array(
-                'data' => array('enterReg' => 'Y'),
+                'data' => array('hasEnteredReg' => 'Y'),
                 'large' => array('rows' => 1),
                 'medium' => array('rows' => 2),
                 'small' => array('rows' => 5)
@@ -734,59 +734,12 @@ class VehiclePsvControllerTest extends AbstractApplicationControllerTestCase
     {
         if ($service == 'Application' && $method == 'GET' && $bundle == ApplicationController::$licenceDataBundle) {
 
-            return array(
-                'licence' => array(
-                    'id' => 10,
-                    'version' => 1,
-                    'goodsOrPsv' => 'psv',
-                    'niFlag' => 0,
-                    'licenceType' => 'standard-national',
-                    'organisation' => array(
-                        'organisationType' => 'org_type.lc'
-                    )
-                )
-            );
+            return $this->getLicenceData('psv');
         }
 
         if ($service == 'ApplicationCompletion' && $method == 'GET') {
 
-            return array(
-                'Count' => 1,
-                'Results' => array(
-                    array(
-                        'id' => 1,
-                        'version' => 1,
-                        'application' => '1',
-                        'sectionTypeOfLicenceStatus' => 2,
-                        'sectionTypeOfLicenceOperatorLocationStatus' => 2,
-                        'sectionTypeOfLicenceOperatorTypeStatus' => 2,
-                        'sectionTypeOfLicenceLicenceTypeStatus' => 2,
-                        'sectionYourBusinessStatus' => 2,
-                        'sectionYourBusinessBusinessTypeStatus' => 2,
-                        'sectionYourBusinessBusinessDetailsStatus' => 2,
-                        'sectionYourBusinessAddressesStatus' => 2,
-                        'sectionYourBusinessPeopleStatus' => 2,
-                        'sectionTaxiPhvStatus' => 2,
-                        'sectionOperatingCentresStatus' => 2,
-                        'sectionOperatingCentresAuthorisationStatus' => 2,
-                        'sectionOperatingCentresFinancialEvidenceStatus' => 2,
-                        'sectionTransportManagersStatus' => 2,
-                        'sectionVehicleSafetyStatus' => 2,
-                        'sectionVehicleSafetyVehicleStatus' => 2,
-                        'sectionVehicleSafetyVehiclePsvStatus' => 2,
-                        'sectionVehicleSafetySafetyStatus' => 2,
-                        'sectionPreviousHistoryStatus' => 2,
-                        'sectionPreviousHistoryFinancialHistoryStatus' => 2,
-                        'sectionPreviousHistoryLicenceHistoryStatus' => 2,
-                        'sectionPreviousHistoryConvictionPenaltiesStatus' => 2,
-                        'sectionReviewDeclarationsStatus' => 2,
-                        'sectionPaymentSubmissionStatus' => 2,
-                        'sectionPaymentSubmissionPaymentStatus' => 0,
-                        'sectionPaymentSubmissionSummaryStatus' => 0,
-                        'lastSection' => ''
-                    )
-                )
-            );
+            return $this->getApplicationCompletionData();
         }
 
         if ($service == 'Vehicle' && $method == 'POST') {
@@ -814,7 +767,7 @@ class VehiclePsvControllerTest extends AbstractApplicationControllerTestCase
                 'totAuthSmallVehicles',
                 'totAuthMediumVehicles',
                 'totAuthLargeVehicles',
-                'enterReg'
+                'hasEnteredReg'
             ),
             'children' => array(
                 'licence' => array(
@@ -828,8 +781,12 @@ class VehiclePsvControllerTest extends AbstractApplicationControllerTestCase
                                         'id',
                                         'vrm',
                                         'makeModel',
-                                        'psvType',
                                         'isNovelty'
+                                    ),
+                                    'children' => array(
+                                        'psvType' => array(
+                                            'properties' => array('id')
+                                        )
                                     )
                                 )
                             )
@@ -846,7 +803,7 @@ class VehiclePsvControllerTest extends AbstractApplicationControllerTestCase
                 'totAuthSmallVehicles' => 10,
                 'totAuthMediumVehicles' => 10,
                 'totAuthLargeVehicles' => $this->largeVehicles,
-                'enterReg' => 'Y',
+                'hasEnteredReg' => 'Y',
                 'licence' => array(
                     'licenceVehicles' => array(
                         array(
@@ -855,7 +812,9 @@ class VehiclePsvControllerTest extends AbstractApplicationControllerTestCase
                                 'vrm' => 'AB12 ABC',
                                 'isNovelty' => 'Y',
                                 'makeModel' => 'German whip',
-                                'psvType' => 'small'
+                                'psvType' => array(
+                                    'id' => 'vhl_t_a'
+                                )
                             )
                         ),
                         array(
@@ -864,7 +823,9 @@ class VehiclePsvControllerTest extends AbstractApplicationControllerTestCase
                                 'vrm' => 'AB13 ABC',
                                 'isNovelty' => null,
                                 'makeModel' => null,
-                                'psvType' => 'medium'
+                                'psvType' => array(
+                                    'id' => 'vhl_t_b'
+                                )
                             )
                         ),
                         array(
@@ -873,7 +834,9 @@ class VehiclePsvControllerTest extends AbstractApplicationControllerTestCase
                                 'vrm' => 'AB11 ABC',
                                 'isNovelty' => null,
                                 'makeModel' => null,
-                                'psvType' => 'large'
+                                'psvType' => array(
+                                    'id' => 'vhl_t_c'
+                                )
                             )
                         )
                     )

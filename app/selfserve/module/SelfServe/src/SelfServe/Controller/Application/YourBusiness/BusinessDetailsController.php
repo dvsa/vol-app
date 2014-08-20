@@ -16,19 +16,45 @@ namespace SelfServe\Controller\Application\YourBusiness;
  */
 class BusinessDetailsController extends YourBusinessController
 {
-
+    /**
+     * Section service
+     *
+     * @var string
+     */
     protected $service = 'Application';
 
-    protected $dataBundle = [
-        'children' => [
-            'licence' => [
-                'children' => [
-                    'organisation',
-                    'tradingNames',
-                ]
-            ],
-        ],
-    ];
+    /**
+     * Section data bundle
+     *
+     * @var array
+     */
+    protected $dataBundle = array(
+        'children' => array(
+            'licence' => array(
+                'children' => array(
+                    'organisation' => array(
+                        'children' => array(
+                            'type' => array(
+                                'properties' => array(
+                                    'id'
+                                )
+                            ),
+                            'tradingNames' => array(
+                                'properties' => array()
+                            )
+                        )
+                    )
+                )
+            )
+        )
+    );
+
+    /**
+     * Holds the sub action service
+     *
+     * @var string
+     */
+    protected $actionService = 'CompanySubsidiary';
 
     /**
      * Holds the actionDataBundle
@@ -40,8 +66,8 @@ class BusinessDetailsController extends YourBusinessController
             'id',
             'version',
             'name',
-            'companyNo',
-        ),
+            'companyNo'
+        )
     );
 
     /**
@@ -52,13 +78,6 @@ class BusinessDetailsController extends YourBusinessController
     protected $formTables = array(
         'table' => 'application_your-business_business_details-subsidiaries'
     );
-
-    /**
-     * Holds the sub action service
-     *
-     * @var string
-     */
-    protected $actionService = 'CompanySubsidiary';
 
     /**
      * Render the section form
@@ -78,12 +97,12 @@ class BusinessDetailsController extends YourBusinessController
      */
     protected function save($data, $service = null)
     {
-        unset($data['organisationType']);
+        unset($data['type']);
 
         if (isset($data['companyNumber'])) {
             // unfortunately the company number field is a complex one so can't
             // be mapped directly
-            $data['registeredCompanyNumber'] = $data['companyNumber']['company_number'];
+            $data['companyOrLlpNo'] = $data['companyNumber']['company_number'];
         }
 
         if (isset($data['tradingNames'])) {
@@ -95,7 +114,7 @@ class BusinessDetailsController extends YourBusinessController
 
                 if (trim($tradingName['text']) !== '') {
                     $tradingNames[] = [
-                        'tradingName' => $tradingName['text']
+                        'name' => $tradingName['text']
                     ];
                 }
             }
@@ -116,44 +135,69 @@ class BusinessDetailsController extends YourBusinessController
         return parent::save($data, 'Organisation');
     }
 
+    /**
+     * Conditionally alter the form
+     *
+     * @param Form $form
+     * @return Form
+     */
     protected function alterForm($form)
     {
-        $organisation = $this->getOrganisationData(['organisationType']);
+        $organisationBundle = array(
+            'children' => array(
+                'type' => array(
+                    'properties' => array(
+                        'id'
+                    )
+                )
+            )
+        );
+
+        $organisation = $this->getOrganisationData($organisationBundle);
 
         $fieldset = $form->get('data');
 
-        switch ($organisation['organisationType']) {
-            case 'org_type.lc':
-            case 'org_type.llp':
+        switch ($organisation['type']['id']) {
+            case self::ORG_TYPE_REGISTERED_COMPANY:
+            case self::ORG_TYPE_LLP:
                 // no-op; the full form is fine
                 break;
-            case 'org_type.st':
+            case self::ORG_TYPE_SOLE_TRADER:
                 $fieldset->remove('name')->remove('companyNumber');
                 $form->remove('table');
                 break;
-            case 'org_type.p':
+            case self::ORG_TYPE_PARTNERSHIP:
                 $fieldset->remove('companyNumber');
                 $fieldset->get('name')->setLabel($fieldset->get('name')->getLabel() . '.partnership');
                 $form->remove('table');
                 break;
-            case 'org_type.o':
+            case self::ORG_TYPE_OTHER:
                 $fieldset->remove('companyNumber')->remove('tradingNames');
                 $fieldset->get('name')->setLabel($fieldset->get('name')->getLabel() . '.other');
                 $form->remove('table');
                 break;
         }
+
         return $form;
     }
 
+    /**
+     * Process load data for form
+     *
+     * @param array $data
+     * @return array
+     */
     protected function processLoad($data)
     {
         $licence = $data['licence'];
         $organisation = $licence['organisation'];
 
         $tradingNames = [];
-        foreach ($licence['tradingNames'] as $tradingName) {
-            $tradingNames[] = ['text' => $tradingName['tradingName']];
+
+        foreach ($licence['organisation']['tradingNames'] as $tradingName) {
+            $tradingNames[] = ['text' => $tradingName['name']];
         }
+
         $tradingNames[] = ['text' => ''];
 
         $map = [
@@ -161,33 +205,52 @@ class BusinessDetailsController extends YourBusinessController
                 'trading_name' => $tradingNames,
             ],
             'companyNumber' => [
-                'company_number' => $organisation['registeredCompanyNumber']
+                'company_number' => $organisation['companyOrLlpNo']
             ]
         ];
 
-        return [
+        $data = [
             'data' => array_merge($organisation, $map)
         ];
+
+        if (isset($data['data']['type']['id'])) {
+            $data['data']['type'] = $data['data']['type']['id'];
+        }
+
+        return $data;
     }
 
+    /**
+     * Override getForm
+     *
+     * @param string $type
+     * @return Form
+     */
     protected function getForm($type)
     {
-        $form = parent::getForm($type);
-
-        $form = $this->processLookupCompany($form);
-
-        return $form;
+        return $this->processLookupCompany(parent::getForm($type));
     }
 
+    /**
+     * Generate form with data
+     *
+     * @todo Should this really be public?
+     *
+     * @param string $name
+     * @param callable $callback
+     * @param array $data
+     * @param array $tables
+     * @return Form
+     */
     public function generateFormWithData($name, $callback, $data = null, $tables = false)
     {
         $request = $this->getRequest();
 
         $post = (array)$request->getPost();
+
         if (isset($post['data']['tradingNames']['submit_add_trading_name'])) {
 
             $this->setPersist(false);
-
         }
 
         $form = parent::generateFormWithData($name, $callback, $data, $tables);
@@ -197,6 +260,12 @@ class BusinessDetailsController extends YourBusinessController
         return $form;
     }
 
+    /**
+     * Process add trading name
+     *
+     * @param Form $form
+     * @return Form
+     */
     protected function processAddTradingName($form)
     {
         $request = $this->getRequest();
@@ -206,11 +275,13 @@ class BusinessDetailsController extends YourBusinessController
         }
 
         $post = (array)$request->getPost()['data'];
+
         if (isset($post['tradingNames']['submit_add_trading_name'])) {
 
             $form->setValidationGroup(array('data' => ['tradingNames']));
 
             $form->setData($request->getPost());
+
             if ($form->isValid()) {
 
                 $tradingNames = $form->getData()['data']['tradingNames']['trading_name'];
@@ -223,24 +294,31 @@ class BusinessDetailsController extends YourBusinessController
                         unset($tradingNames[$key]);
                     }
                 }
+
                 $tradingNames[] = array('text' => '');
 
                 //reset keys
-                $tradingNames = array_merge($tradingNames);
+                $tradingNames = array_values($tradingNames);
 
-                $data = array('data' => array(
-                    'tradingNames' => array('trading_name' => $tradingNames)
-                ));
+                $data = array(
+                    'data' => array(
+                        'tradingNames' => array('trading_name' => $tradingNames)
+                    )
+                );
 
                 $form->setData($data);
             }
-
         }
 
         return $form;
-
     }
 
+    /**
+     * Process lookup company
+     *
+     * @param \Zend\Form\Form $form
+     * @return \Zend\Form\Form
+     */
     protected function processLookupCompany(\Zend\Form\Form $form)
     {
         $request = $this->getRequest();
@@ -256,6 +334,7 @@ class BusinessDetailsController extends YourBusinessController
             $this->setPersist(false);
 
             if (strlen(trim($post['companyNumber']['company_number'])) != 8) {
+
                 $form->get('data')->get('companyNumber')->setMessages(
                     array(
                         'company_number' => array(
@@ -263,7 +342,9 @@ class BusinessDetailsController extends YourBusinessController
                         )
                     )
                 );
+
             } else {
+
                 $result = $this->makeRestCall(
                     'CompaniesHouse',
                     'GET',
@@ -274,14 +355,20 @@ class BusinessDetailsController extends YourBusinessController
                 );
 
                 if ($result['Count'] == 1) {
+
                     $companyName = $result['Results'][0]['CompanyName'];
                     $post['name'] = $companyName;
                     $this->setFieldValue('data', $post);
+
                 } else {
+
                     $form->get('data')->get('companyNumber')->setMessages(
-                        array('company_number' => array(
-                            'Sorry, we couldn\'t find any matching companies, '
-                            . 'please try again or enter your details manually below'))
+                        array(
+                            'company_number' => array(
+                                'Sorry, we couldn\'t find any matching companies, please try again or enter your '
+                                . 'details manually below'
+                            )
+                        )
                     );
                 }
             }
@@ -324,7 +411,7 @@ class BusinessDetailsController extends YourBusinessController
      */
     protected function actionSave($data, $service = null)
     {
-        $organisation = $this->getOrganisationData(['organisationType', 'id']);
+        $organisation = $this->getOrganisationData(['type', 'id']);
         $data['organisation'] = $organisation['id'];
         parent::actionSave($data, 'CompanySubsidiary');
     }

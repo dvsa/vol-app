@@ -15,8 +15,8 @@ return array(
         array(
             'title' => 'Lic/App number',
             'formatter' => function ($row, $col, $sm) {
-                if (!empty($row['licenceNumber'])) {
-                    return $row['licenceNumber'];
+                if (!empty($row['licNo'])) {
+                    return $row['licNo'];
                 }
                 return $sm->get('translator')->translate('Not issued yet');
             }

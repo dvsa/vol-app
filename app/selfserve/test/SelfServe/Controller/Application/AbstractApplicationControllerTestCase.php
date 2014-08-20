@@ -15,6 +15,8 @@ use Zend\Http\Response;
 use Zend\Mvc\MvcEvent;
 use Zend\Mvc\Router\RouteMatch;
 use PHPUnit_Framework_TestCase;
+use SelfServe\Controller\Application\ApplicationController;
+use Zend\View\Model\ViewModel;
 
 /**
  * AbstractApplicationControllerTestCase
@@ -156,29 +158,33 @@ abstract class AbstractApplicationControllerTestCase extends PHPUnit_Framework_T
     /**
      * Get form from response
      *
-     * @param Response $response
+     * @param \Zend\View\Model\ViewModel $view
      */
-    protected function getFormFromResponse($response)
+    protected function getFormFromView($view)
     {
-        // We should have 2 children (Navigation and Main)
-        $children = $response->getChildren();
-        $this->assertEquals(2, count($children));
+        if ($view instanceof ViewModel) {
+            // We should have 2 children (Navigation and Main)
+            $children = $view->getChildren();
+            $this->assertEquals(2, count($children));
 
-        $main = null;
-        $navigation = null;
+            $main = null;
+            $navigation = null;
 
-        foreach ($children as $child) {
-            if ($child->captureTo() == 'navigation') {
-                $navigation = $child;
-                continue;
+            foreach ($children as $child) {
+                if ($child->captureTo() == 'navigation') {
+                    $navigation = $child;
+                    continue;
+                }
+
+                if ($child->captureTo() == 'main') {
+                    $main = $child;
+                }
             }
 
-            if ($child->captureTo() == 'main') {
-                $main = $child;
-            }
+            return $main->getVariable('form');
         }
 
-        return $main->getVariable('form');
+        $this->fail('Trying to get form of a Response object instead of a ViewModel');
     }
 
     /**
@@ -190,4 +196,71 @@ abstract class AbstractApplicationControllerTestCase extends PHPUnit_Framework_T
      * @param array $bundle
      */
     abstract protected function mockRestCalls($service, $method, $data, $bundle);
+
+    /**
+     * Get licence data
+     *
+     * @param string $goodsOrPsv
+     * @return array
+     */
+    protected function getLicenceData($goodsOrPsv = 'goods', $licenceType = 'ltyp_sn', $niFlag = 0)
+    {
+        return array(
+            'licence' => array(
+                'id' => 10,
+                'version' => 1,
+                'goodsOrPsv' => array(
+                    'id' => ($goodsOrPsv == 'goods' ? 'lcat_gv' : 'lcat_psv')
+                ),
+                'niFlag' => $niFlag,
+                'licenceType' => array(
+                    'id' => $licenceType
+                ),
+                'organisation' => array(
+                    'type' => array(
+                        'id' => ApplicationController::ORG_TYPE_REGISTERED_COMPANY
+                    )
+                )
+            )
+        );
+    }
+
+    /**
+     * Get application completion data
+     *
+     * @return type
+     */
+    protected function getApplicationCompletionData($lastSection = '')
+    {
+        return array(
+            'id' => '1',
+            'version' => 1,
+            'sectionTypeOfLicenceStatus' => 2,
+            'sectionTypeOfLicenceOperatorLocationStatus' => 2,
+            'sectionTypeOfLicenceOperatorTypeStatus' => 2,
+            'sectionTypeOfLicenceLicenceTypeStatus' => 2,
+            'sectionYourBusinessStatus' => 2,
+            'sectionYourBusinessBusinessTypeStatus' => 2,
+            'sectionYourBusinessBusinessDetailsStatus' => 2,
+            'sectionYourBusinessAddressesStatus' => 2,
+            'sectionYourBusinessPeopleStatus' => 2,
+            'sectionTaxiPhvStatus' => 2,
+            'sectionOperatingCentresStatus' => 2,
+            'sectionOperatingCentresAuthorisationStatus' => 2,
+            'sectionOperatingCentresFinancialEvidenceStatus' => 2,
+            'sectionTransportManagersStatus' => 2,
+            'sectionVehicleSafetyStatus' => 2,
+            'sectionVehicleSafetyVehicleStatus' => 2,
+            'sectionVehicleSafetySafetyStatus' => 2,
+            'sectionPreviousHistoryStatus' => 2,
+            'sectionPreviousHistoryFinancialHistoryStatus' => 2,
+            'sectionPreviousHistoryLicenceHistoryStatus' => 2,
+            'sectionPreviousHistoryConvictionPenaltiesStatus' => 2,
+            'sectionReviewDeclarationsStatus' => 2,
+            'sectionPaymentSubmissionStatus' => 0,
+            'sectionPaymentSubmissionPaymentStatus' => 0,
+            'sectionPaymentSubmissionSummaryStatus' => 0,
+            'lastSection' => $lastSection
+        );
+    }
 }

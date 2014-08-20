@@ -19,8 +19,8 @@ return array(
                     'version' => array(
                         'type' => 'hidden'
                     ),
-                    'enterReg' => array(
-                        'label' => $translationPrefix . '.enterReg',
+                    'hasEnteredReg' => array(
+                        'label' => $translationPrefix . '.hasEnteredReg',
                         'type' => 'yesNoRadio'
                     )
                 )

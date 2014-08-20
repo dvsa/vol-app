@@ -7,6 +7,8 @@
  */
 namespace SelfServe\Controller\Application\PreviousHistory;
 
+use Common\Form\Elements\Validators\PreviousHistoryPenaltiesConvictionsPrevConvictionValidator;
+
 /**
  * ConvictionsPenalties Controller
  *
@@ -25,6 +27,20 @@ class ConvictionsPenaltiesController extends PreviousHistoryController
     );
 
     /**
+     * Data bundle
+     *
+     * @var array
+     */
+    protected $dataBundle = array(
+        'properties' => array(
+            'id',
+            'version',
+            'prevConviction',
+            'convictionsConfirmation',
+        )
+    );
+
+    /**
      * Data map
      *
      * @var array
@@ -37,6 +53,13 @@ class ConvictionsPenaltiesController extends PreviousHistoryController
             ),
         )
     );
+
+    /**
+     * Holds the action service
+     *
+     * @var string
+     */
+    protected $actionService = 'PreviousConviction';
 
     /**
      * Action data map
@@ -52,25 +75,24 @@ class ConvictionsPenaltiesController extends PreviousHistoryController
     );
 
     /**
-     * Data bundle
+     * Hold the action data bundle
      *
      * @var array
      */
-    protected $dataBundle = array(
+    protected $actionDataBundle = array(
         'properties' => array(
             'id',
             'version',
-            'prevConviction',
-            'convictionsConfirmation',
+            'convictionDate',
+            'notes',
+            'courtFpn',
+            'categoryText',
+            'penalty',
+            'title',
+            'forename',
+            'familyName'
         )
     );
-
-    /**
-     * Holds the action service
-     *
-     * @var string
-     */
-    protected $actionService = 'Conviction';
 
     /**
      * Render the section form
@@ -83,32 +105,18 @@ class ConvictionsPenaltiesController extends PreviousHistoryController
     }
 
     /**
-     * Save method
-     *
-     * @param array $data
-     * @parem string $service
-     */
-    protected function save($validData, $service = null)
-    {
-        $validData['id'] = $this->getIdentifier();
-        $validData['prevConviction'] = ($validData['prevConviction'] == 'Y') ?
-            true : (($validData['prevConviction'] == 'N') ? false : null);
-        $validData['convictionsConfirmation'] = $validData['convictionsConfirmation'][0];
-        parent::save($validData, 'Application');
-    }
-
-    /**
      * Action save
+     *
+     * @todo Not sure whether we should be created a new person for each conviction, as these could be the same people
      *
      * @param array $data
      * @param string $service
      */
     protected function actionSave($data, $service = null)
     {
-        $applicationId = $this->getIdentifier();
-        $data['application'] = $applicationId;
-        parent::actionSave($data, 'Conviction');
+        $data['application'] = $this->getIdentifier();
 
+        parent::actionSave($data);
     }
 
     /**
@@ -121,18 +129,20 @@ class ConvictionsPenaltiesController extends PreviousHistoryController
         $bundle = array(
             'properties' => array(
                 'id',
-                'personTitle',
-                'personFirstname',
-                'personLastname',
-                'dateOfConviction',
-                'convictionNotes',
-                'courtFpm',
-                'penalty'
-            ),
+                'convictionDate',
+                'convictionCategory',
+                'notes',
+                'courtFpn',
+                'categoryText',
+                'penalty',
+                'title',
+                'forename',
+                'familyName'
+            )
         );
 
         $data = $context->makeRestCall(
-            'Conviction',
+            'PreviousConviction',
             'GET',
             array('application' => $applicationId),
             $bundle
@@ -140,14 +150,12 @@ class ConvictionsPenaltiesController extends PreviousHistoryController
 
         $finalData = array();
         foreach ($data['Results'] as $result) {
-            $finalData[] = $result;
-            $lastElemntIndex = count($finalData) - 1;
-            $finalData[$lastElemntIndex]['name'] = $finalData[$lastElemntIndex]['personTitle'] . ' ' .
-                $finalData[$lastElemntIndex]['personFirstname'] . ' ' .
-                $finalData[$lastElemntIndex]['personLastname'];
-            unset($finalData[$lastElemntIndex]['personTitle']);
-            unset($finalData[$lastElemntIndex]['personFirtName']);
-            unset($finalData[$lastElemntIndex]['personLastName']);
+
+            $row = $result;
+
+            $row['name'] = $row['title'] . ' ' . $row['forename'] . ' ' . $row['familyName'];
+
+            $finalData[] = $row;
         }
 
         return $finalData;
@@ -173,14 +181,16 @@ class ConvictionsPenaltiesController extends PreviousHistoryController
     protected function alterForm($form)
     {
         $post = (array)$this->getRequest()->getPost();
+
         if (!(array_key_exists('table', $post) && array_key_exists('action', $post['table']))) {
+
             $rows = $form->get('table')->get('rows')->getValue();
-            $prevConvictionValidator =
-                new \Common\Form\Elements\Validators\PreviousHistoryPenaltiesConvictionsPrevConvictionValidator();
+            $prevConvictionValidator = new PreviousHistoryPenaltiesConvictionsPrevConvictionValidator();
             $prevConvictionValidator->setRows($rows);
             $prevConviction = $form->getInputFilter()->get('data')->get('prevConviction')->getValidatorChain();
             $prevConviction->attach($prevConvictionValidator);
         }
+
         return $form;
     }
 
@@ -192,10 +202,11 @@ class ConvictionsPenaltiesController extends PreviousHistoryController
      */
     protected function processActionLoad($data)
     {
-        $data = parent::processActionLoad($data);
-        $returnData = ($this->getActionName() != 'add') ? array('data' => $data) : $data;
+        if ($this->getActionName() == 'add') {
+            return array();
+        }
 
-        return $returnData;
+        return array('data' => $data);
     }
 
     /**
@@ -222,19 +233,16 @@ class ConvictionsPenaltiesController extends PreviousHistoryController
      */
     protected function processLoad($data)
     {
-        $returnData['data'] = array(
-            'id' => $data['id'],
-            'version' => $data['version'],
+        return array(
+            'data' => array(
+                'id' => $data['id'],
+                'version' => $data['version'],
+                'prevConviction' => $data['prevConviction']
+            ),
+            'convictionsConfirmation' => array(
+                'convictionsConfirmation' => $data['convictionsConfirmation']
+            )
         );
-        if ($data['prevConviction'] === true) {
-            $returnData['data']['prevConviction'] = 'Y';
-        } elseif ($data['prevConviction'] === false) {
-            $returnData['data']['prevConviction'] = 'N';
-        } else {
-            $returnData['data']['prevConviction'] = '';
-        }
-        $returnData['convictionsConfirmation'] = array('convictionsConfirmation' => $data['convictionsConfirmation']);
-        return $returnData;
     }
 
     /**

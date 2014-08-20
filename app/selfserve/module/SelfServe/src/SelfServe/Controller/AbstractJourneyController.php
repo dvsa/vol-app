@@ -515,12 +515,13 @@ abstract class AbstractJourneyController extends AbstractController
             $foreignKey = $this->getJourneyConfig()['completionStatusJourneyIdColumn'];
 
             $completionStatus = $this->makeRestCall(
-                $this->getJourneyConfig()['completionService'], 'GET', array($foreignKey => $id)
+                $this->getJourneyConfig()['completionService'], 'GET', array('id' => $id)
             );
 
-            $this->sectionCompletion = ($completionStatus['Count'] > 0 ? $completionStatus['Results'][0] : array());
+            $this->sectionCompletion = $completionStatus;
 
             $this->sectionCompletion[$foreignKey] = $id;
+            $this->sectionCompletion['id'] = $id;
         }
 
         return $this->sectionCompletion;
@@ -1467,7 +1468,6 @@ abstract class AbstractJourneyController extends AbstractController
      */
     protected function completeSubSections(array $subSections)
     {
-
         $sectionCompletion = $this->getSectionCompletion();
         $sectionName = $this->getSectionName();
         $completeKey = array_search('complete', $this->getJourneyConfig()['completionStatusMap']);
@@ -1498,7 +1498,7 @@ abstract class AbstractJourneyController extends AbstractController
 
         $this->makeRestCall($this->getJourneyConfig()['completionService'], 'PUT', $sectionCompletion);
 
-        $sectionCompletion['version'] ++;
+        $sectionCompletion['version']++;
 
         $this->setSectionCompletion($sectionCompletion);
     }

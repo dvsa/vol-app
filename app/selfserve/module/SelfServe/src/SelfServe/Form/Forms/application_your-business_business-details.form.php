@@ -20,8 +20,8 @@ return array(
                     'version' => array(
                         'type' => 'hidden'
                     ),
-                    'organisationType' => [
-                        'label' => $translationPrefix . '_business-type.data.organisationType',
+                    'type' => [
+                        'label' => $translationPrefix . '_business-type.data.type',
                         'type' => 'selectDisabled',
                         'value_options' => 'business_types',
                         'class' => 'inline'

@@ -56,7 +56,7 @@ class SoleTraderControllerTest extends AbstractApplicationControllerTestCase
             'index', null, array(
             'form-actions' => array('submit' => ''),
             'data' => array(
-                'dateOfBirth' => array(
+                'birthDate' => array(
                     'month' => '02',
                     'day'   => '23',
                     'year' => '2014'
@@ -64,9 +64,9 @@ class SoleTraderControllerTest extends AbstractApplicationControllerTestCase
                 'id' => 79,
                 'version' => 4,
                 'title' => 'Mrs',
-                'firstName' => 'A',
-                'surname' => 'P12',
-                'otherNames' => 'other12'
+                'forename' => 'A',
+                'familyName' => 'P12',
+                'otherName' => 'other12'
             )
             )
         );
@@ -105,26 +105,39 @@ class SoleTraderControllerTest extends AbstractApplicationControllerTestCase
     protected function mockRestCalls($service, $method, $data = array(), $bundle = array())
     {
         if ($service == 'Application' && $method == 'GET') {
-            $licenceBundle = array(
+            $licenceDataBundle = array(
                 'children' => array(
                     'licence' => array(
                         'properties' => array(
                             'id',
                             'version',
-                            'goodsOrPsv',
-                            'niFlag',
-                            'licenceType'
+                            'niFlag'
                         ),
                         'children' => array(
-                            'organisation' => array(
+                            'goodsOrPsv' => array(
                                 'properties' => array(
-                                    'organisationType'
+                                    'id'
+                                )
+                            ),
+                            'licenceType' => array(
+                                'properties' => array(
+                                    'id'
+                                )
+                            ),
+                            'organisation' => array(
+                                'children' => array(
+                                    'type' => array(
+                                        'properties' => array(
+                                            'id'
+                                        )
+                                    )
                                 )
                             )
                         )
                     )
                 )
             );
+
             $orgTypeBundle = array(
                 'children' => array(
                     'licence' => array(
@@ -132,8 +145,12 @@ class SoleTraderControllerTest extends AbstractApplicationControllerTestCase
                             'organisation' => array(
                                 'properties' => array(
                                     'id',
-                                    'version',
-                                    'organisationType',
+                                    'version'
+                                ),
+                                'children' => array(
+                                    'type' => array(
+                                        'properties' => array('id')
+                                    )
                                 )
                             )
                         )
@@ -144,20 +161,28 @@ class SoleTraderControllerTest extends AbstractApplicationControllerTestCase
                 return array(
                     'licence' => array(
                         'organisation' => array(
-                            'organisationType' => $this->organisation,
+                            'type' => array(
+                                'id' => $this->organisation
+                            ),
                         )
                     )
                 );
-            } elseif ($bundle == $licenceBundle) {
+            } elseif ($bundle == $licenceDataBundle) {
                 return array(
                     'licence' => array(
                         'id' => 10,
                         'version' => 1,
-                        'goodsOrPsv' => 'goods',
                         'niFlag' => 0,
-                        'licenceType' => 'standard-national',
+                        'goodsOrPsv' => array(
+                            'id' => ApplicationController::GOODS_OR_PSV_GOODS_VEHICLE
+                        ),
+                        'licenceType' => array(
+                            'id' => ApplicationController::LICENCE_TYPE_STANDARD_NATIONAL
+                        ),
                         'organisation' => array(
-                            'organisationType' => 'org_type.st'
+                            'type' => array(
+                                'id' => ApplicationController::ORG_TYPE_SOLE_TRADER
+                            )
                         )
                     )
                 );
@@ -168,44 +193,10 @@ class SoleTraderControllerTest extends AbstractApplicationControllerTestCase
                 );
             }
         }
+
         if ($service == 'ApplicationCompletion' && $method == 'GET') {
 
-            return array(
-                'Count' => 1,
-                'Results' => array(
-                    array(
-                        'id' => 1,
-                        'version' => 1,
-                        'application' => '1',
-                        'sectionTypeOfLicenceStatus' => 2,
-                        'sectionTypeOfLicenceOperatorLocationStatus' => 2,
-                        'sectionTypeOfLicenceOperatorTypeStatus' => 2,
-                        'sectionTypeOfLicenceLicenceTypeStatus' => 2,
-                        'sectionYourBusinessStatus' => 2,
-                        'sectionYourBusinessBusinessTypeStatus' => 2,
-                        'sectionYourBusinessBusinessDetailsStatus' => 2,
-                        'sectionYourBusinessAddressesStatus' => 2,
-                        'sectionYourBusinessPeopleStatus' => 2,
-                        'sectionTaxiPhvStatus' => 2,
-                        'sectionOperatingCentresStatus' => 2,
-                        'sectionOperatingCentresAuthorisationStatus' => 2,
-                        'sectionOperatingCentresFinancialEvidenceStatus' => 2,
-                        'sectionTransportManagersStatus' => 2,
-                        'sectionVehicleSafetyStatus' => 2,
-                        'sectionVehicleSafetyVehicleStatus' => 2,
-                        'sectionVehicleSafetySafetyStatus' => 2,
-                        'sectionPreviousHistoryStatus' => 2,
-                        'sectionPreviousHistoryFinancialHistoryStatus' => 2,
-                        'sectionPreviousHistoryLicenceHistoryStatus' => 2,
-                        'sectionPreviousHistoryConvictionPenaltiesStatus' => 2,
-                        'sectionReviewDeclarationsStatus' => 2,
-                        'sectionPaymentSubmissionStatus' => 2,
-                        'sectionPaymentSubmissionPaymentStatus' => 0,
-                        'sectionPaymentSubmissionSummaryStatus' => 0,
-                        'lastSection' => ''
-                    )
-                )
-            );
+            return $this->getApplicationCompletionData();
         }
 
         $personDataBundle = array(
@@ -213,12 +204,13 @@ class SoleTraderControllerTest extends AbstractApplicationControllerTestCase
                 'id',
                 'version',
                 'title',
-                'firstName',
-                'surname',
-                'dateOfBirth',
-                'otherNames'
+                'forename',
+                'familyName',
+                'birthDate',
+                'otherName'
             ),
         );
+
         if ($service == 'Person' && $method = 'GET' && $bundle == $personDataBundle) {
             return array(
                 'Count'  => 1,
@@ -227,14 +219,13 @@ class SoleTraderControllerTest extends AbstractApplicationControllerTestCase
                         'id' => 1,
                         'version' => 1,
                         'title' => 'Mr',
-                        'firstName' => 'A',
-                        'surname' => 'P',
-                        'dateOfBirth' => '2014-01-01',
-                        'otherNames' => 'other names'
+                        'forename' => 'A',
+                        'familyName' => 'P',
+                        'birthDate' => '2014-01-01',
+                        'otherName' => 'other names'
                     )
                 )
             );
         }
-
     }
 }

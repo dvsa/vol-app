@@ -19,8 +19,8 @@ return array(
                     'version' => array(
                         'type' => 'hidden'
                     ),
-                    'organisationType' => array(
-                        'label' => 'application_your-business_business-type.data.organisationType',
+                    'type' => array(
+                        'label' => 'application_your-business_business-type.data.type',
                         'type' => 'select',
                         'value_options' => 'business_types',
                     )

@@ -60,7 +60,7 @@ return array(
                 'options' => array(0),
                 'elements' => array(
                     'safetyConfirmation' => array(
-                        'type' => 'singlecheckbox',
+                        'type' => 'yesnocheckbox',
                         'label' => $translationPrefix . '.application.safetyConfirmation'
                     ),
                     'id' => array(

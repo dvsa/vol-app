@@ -51,30 +51,38 @@ class SafetyController extends VehicleSafetyController
                     'safetyInsVehicles',
                     'safetyInsTrailers',
                     'safetyInsVaries',
-                    'tachographIns',
                     'tachographInsName'
-                )
-            ),
-            'workshops' => array(
-                'properties' => array(
-                    'id',
-                    'isExternal'
                 ),
                 'children' => array(
-                    'contactDetails' => array(
+                    'tachographIns' => array(
+                        'properties' => array('id')
+                    ),
+                    'workshops' => array(
                         'properties' => array(
-                            'fao'
+                            'id',
+                            'isExternal'
                         ),
                         'children' => array(
-                            'address' => array(
+                            'contactDetails' => array(
                                 'properties' => array(
-                                    'addressLine1',
-                                    'addressLine2',
-                                    'addressLine3',
-                                    'addressLine4',
-                                    'city',
-                                    'country',
-                                    'postcode'
+                                    'fao'
+                                ),
+                                'children' => array(
+                                    'address' => array(
+                                        'properties' => array(
+                                            'addressLine1',
+                                            'addressLine2',
+                                            'addressLine3',
+                                            'addressLine4',
+                                            'town',
+                                            'postcode'
+                                        ),
+                                        'children' => array(
+                                            'countryCode' => array(
+                                                'properties' => array('id')
+                                            )
+                                        )
+                                    )
                                 )
                             )
                         )
@@ -118,9 +126,13 @@ class SafetyController extends VehicleSafetyController
                             'addressLine2',
                             'addressLine3',
                             'addressLine4',
-                            'city',
-                            'country',
+                            'town',
                             'postcode'
+                        ),
+                        'children' => array(
+                            'countryCode' => array(
+                                'properties' => array('id')
+                            )
                         )
                     )
                 )
@@ -206,7 +218,7 @@ class SafetyController extends VehicleSafetyController
      */
     protected function actionSave($data, $service = null)
     {
-        $data['contactDetails']['contactDetailsType'] = 'contact_type.work';
+        $data['contactDetails']['contactType'] = 'ct_work';
         $saved = parent::actionSave($data['contactDetails'], 'ContactDetails');
 
         if ($this->getActionName() == 'add') {
@@ -239,7 +251,7 @@ class SafetyController extends VehicleSafetyController
             );
 
             $data['address'] = $data['contactDetails']['address'];
-            $data['address']['country'] = 'country.' . $data['address']['country'];
+            $data['address']['countryCode'] = $data['address']['countryCode']['id'];
 
             unset($data['id']);
             unset($data['version']);
@@ -247,7 +259,9 @@ class SafetyController extends VehicleSafetyController
             unset($data['contactDetails']['address']);
         }
 
-        $data['data']['application'] = $this->getIdentifier();
+        $licence = $this->getLicenceData();
+
+        $data['data']['licence'] = $licence['id'];
 
         return $data;
     }
@@ -264,7 +278,7 @@ class SafetyController extends VehicleSafetyController
 
         $this->load($id);
 
-        $data = $this->data['workshops'];
+        $data = $this->data['licence']['workshops'];
 
         $tableData = array();
 
@@ -335,8 +349,6 @@ class SafetyController extends VehicleSafetyController
 
         $data['licence']['safetyInsVehicles'] = 'inspection_interval_vehicle.' . $data['licence']['safetyInsVehicles'];
 
-        $data['licence']['tachographIns'] = 'tachograph_analyser.' . $data['licence']['tachographIns'];
-
         $data['licence']['safetyInsTrailers'] = 'inspection_interval_trailer.' . $data['licence']['safetyInsTrailers'];
 
         return $data;
@@ -352,10 +364,6 @@ class SafetyController extends VehicleSafetyController
     {
         $data['licence']['safetyInsVehicles'] = str_replace(
             'inspection_interval_vehicle.', '', $data['licence']['safetyInsVehicles']
-        );
-
-        $data['licence']['tachographIns'] = str_replace(
-            'tachograph_analyser.', '', $data['licence']['tachographIns']
         );
 
         if (isset($data['licence']['safetyInsTrailers'])) {
@@ -381,6 +389,10 @@ class SafetyController extends VehicleSafetyController
             $data = parent::load($id);
 
             $this->data = $data;
+        }
+
+        if (isset($this->data['licence']['tachographIns']['id'])) {
+            $this->data['licence']['tachographIns'] = $this->data['licence']['tachographIns']['id'];
         }
 
         return $this->data;

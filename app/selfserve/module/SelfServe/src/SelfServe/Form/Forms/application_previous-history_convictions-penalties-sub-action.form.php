@@ -18,40 +18,46 @@ return array(
                     'version' => array(
                         'type' => 'hidden',
                     ),
-                    'personTitle' => array(
+                    'title' => array(
                         'type' => 'select',
                         'label' => $translationPrefix . '-formTitle',
-                        'value_options' => [
+                        // @todo Not sure these should be hard coded in here
+                        'value_options' => array(
                             'Mr' => $translationPrefix . '-formTitleValueMr',
                             'Mrs' => $translationPrefix . '-formTitleValueMrs',
                             'Miss' => $translationPrefix . '-formTitleValueMiss',
                             'Ms' => $translationPrefix . '-formTitleValueMs'
-                        ],
+                        ),
                         'required' => true
                     ),
-                    'personFirstname' => array(
+                    'forename' => array(
                         'type' => 'text',
                         'filters' => '\Common\Form\Elements\InputFilters\TextRequired',
                         'label' => $translationPrefix . '-formFirstName',
                         'class' => 'long'
                     ),
-                    'personLastname' => array(
+                    'familyName' => array(
                         'type' => 'text',
                         'filters' => '\Common\Form\Elements\InputFilters\TextRequired',
                         'label' => $translationPrefix . '-formLastName',
                         'class' => 'long'
                     ),
-                    'dateOfConviction' => [
+                    'convictionDate' => array(
                         'type' => 'dateSelectWithEmpty',
                         'label' => $translationPrefix . '-formDateOfConviction'
-                    ],
-                    'convictionNotes' => array(
+                    ),
+                    'categoryText' => array(
+                        'label' => $translationPrefix . '-formOffence',
+                        'type' => 'text',
+                        'class' => 'long'
+                    ),
+                    'notes' => array(
                         'label' => $translationPrefix . '-formOffenceDetails',
                         'type' => 'convictionTextarea',
                         'class' => 'long',
                         'hint' => $translationPrefix . '-formOffenceDetaisHelpBlock'
                     ),
-                    'courtFpm' => array(
+                    'courtFpn' => array(
                         'label' => $translationPrefix . '-formNameOfCourt',
                         'type' => 'text',
                         'filters' => '\Common\Form\Elements\InputFilters\TextRequired',
