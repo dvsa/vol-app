@@ -76,8 +76,9 @@ class LicenceController extends AbstractController
     {
         $this->pageLayout = 'licence';
 
-        $filters = $this->mapTaskFilters();
-        $filters['licenceId'] = $this->getFromRoute('licence');
+        $filters = $this->mapTaskFilters(
+            array('licenceId' => $this->getFromRoute('licence'))
+        );
 
         $table = $this->getTaskTable($filters, false);
 
@@ -86,13 +87,18 @@ class LicenceController extends AbstractController
         $table->removeColumn('name');
         $table->removeColumn('link');
 
-        $view = $this->getViewWithLicence(array(
-            'table' => $table->render(),
-            'form'  => $this->getTaskForm($filters),
-            'inlineScript' => $this->loadScripts(['tasks'])
-        ));
+        $view = $this->getViewWithLicence(
+            array(
+                'table' => $table->render(),
+                'form'  => $this->getTaskForm($filters),
+                'inlineScript' => $this->loadScripts(['tasks'])
+            )
+        );
 
         $view->setTemplate('licence/processing');
+        $view->setTerminal(
+            $this->getRequest()->isXmlHttpRequest()
+        );
 
         return $this->renderView($view);
     }

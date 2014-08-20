@@ -15,7 +15,7 @@ trait TaskSearchTrait
      *
      * @return array
      */
-    protected function mapTaskFilters()
+    protected function mapTaskFilters($extra = array())
     {
         $defaults = array(
             'owner'  => $this->getLoggedInUser(),
@@ -30,6 +30,7 @@ trait TaskSearchTrait
 
         $filters = array_merge(
             $defaults,
+            $extra,
             $this->getRequest()->getQuery()->toArray()
         );
 
