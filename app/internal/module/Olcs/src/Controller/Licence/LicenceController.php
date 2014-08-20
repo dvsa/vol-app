@@ -74,6 +74,8 @@ class LicenceController extends AbstractController
 
     public function processingAction()
     {
+        $this->pageLayout = 'licence';
+
         $filters = $this->mapTaskFilters();
         $filters['licenceId'] = $this->getFromRoute('licence');
 
