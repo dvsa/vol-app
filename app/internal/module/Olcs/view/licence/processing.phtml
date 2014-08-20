@@ -1,0 +1,25 @@
+<div class="four-fifths--left">
+    <?php
+        echo $this->navigation('navigation')
+                  ->menu($this->navigation()->findOneBy('id', 'licence'))
+                  ->setUlClass('horizontal-navigation')
+                  ->setAddClassToListItem(true)
+                  ->setPartial('licence/partials/tabs');
+    ?>
+    <div class="content">
+        <div class="one-fifth--left">
+            <div class="filters">
+                <?php echo $this->form($form) ?>
+            </div>
+        </div>
+        <div class="three-fifths">
+            <?php echo $this->table ?>
+        </div>
+    </div>
+</div>
+<div class="one-fifth--right">
+</div>
+
+<?php foreach ($this->inlineScript as $script): ?>
+    <?php $this->inlineScript()->appendScript($script) ?>
+<?php endforeach; ?>

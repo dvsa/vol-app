@@ -26,7 +26,7 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
             array(
                 'makeRestCall',
                 'getLoggedInUser',
-                'buildTable',
+                'getTable',
                 'getRequest',
                 'getForm',
                 'loadScripts',
@@ -74,8 +74,9 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
             ->with('TaskSearchView', 'GET', $expectedParams)
             ->will($this->returnValue([]));
 
+        $tableMock = $this->getMock('\stdClass', ['render']);
         $this->controller->expects($this->once())
-            ->method('buildTable')
+            ->method('getTable')
             ->with(
                 'tasks',
                 [],
@@ -83,7 +84,11 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
                     $expectedParams,
                     array('query' => $this->query)
                 )
-            );
+            )
+            ->will($this->returnValue($tableMock));
+
+        $tableMock->expects($this->once())
+            ->method('render');
 
         $form = $this->getMock('\stdClass', ['get', 'setValueOptions', 'remove', 'setData']);
 
@@ -173,6 +178,11 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
         $form->expects($this->any())
             ->method('get')
             ->will($this->returnSelf());
+
+        $tableMock = $this->getMock('\stdClass', ['render']);
+        $this->controller->expects($this->once())
+            ->method('getTable')
+            ->will($this->returnValue($tableMock));
 
         $this->controller->expects($this->once())
             ->method('getForm')

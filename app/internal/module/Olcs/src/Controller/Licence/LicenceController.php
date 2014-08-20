@@ -10,6 +10,7 @@ namespace Olcs\Controller\Licence;
 use Common\Controller\FormActionController as AbstractFormActionController;
 use Zend\View\Model\ViewModel;
 use Olcs\Controller\AbstractController;
+use Olcs\Controller\Traits\TaskSearchTrait;
 
 /**
  * Licence Controller
@@ -18,7 +19,9 @@ use Olcs\Controller\AbstractController;
  */
 class LicenceController extends AbstractController
 {
-    public function getViewWithLicence()
+    use TaskSearchTrait;
+
+    public function getViewWithLicence($variables = array())
     {
         $licence = $this->getLicence($this->getFromRoute('licence'));
 
@@ -26,7 +29,9 @@ class LicenceController extends AbstractController
             $this->getServiceLocator()->get('Navigation')->findOneBy('id', 'licence_bus')->setVisible(0);
         }
 
-        $view = $this->getView(['licence' => $licence]);
+        $variables['licence'] = $licence;
+
+        $view = $this->getView($variables);
 
         $this->pageTitle = $view->licence['licNo'];
         $this->pageSubTitle = $view->licence['goodsOrPsv']['id'] . ', ' . $view->licence['licenceType']['id']
@@ -69,8 +74,23 @@ class LicenceController extends AbstractController
 
     public function processingAction()
     {
-        $view = $this->getViewWithLicence();
-        $view->setTemplate('licence/index');
+        $filters = $this->mapTaskFilters();
+        $filters['licenceId'] = $this->getFromRoute('licence');
+
+        $table = $this->getTaskTable($filters, false);
+
+        // the table's nearly all good except we don't want
+        // a couple of columns
+        $table->removeColumn('name');
+        $table->removeColumn('link');
+
+        $view = $this->getViewWithLicence(array(
+            'table' => $table->render(),
+            'form'  => $this->getTaskForm($filters),
+            'inlineScript' => $this->loadScripts(['tasks'])
+        ));
+
+        $view->setTemplate('licence/processing');
 
         return $this->renderView($view);
     }
