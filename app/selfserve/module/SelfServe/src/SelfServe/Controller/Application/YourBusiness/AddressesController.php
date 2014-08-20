@@ -142,9 +142,13 @@ class AddressesController extends YourBusinessController
 
         //process phones
         $service = 'PhoneContact';
-        $phoneTypes = ['business', 'home', 'mobile'];
+        $phoneTypes = Array(
+            'business' => 'phone_t_tel',
+            'home' => 'phone_t_home',
+            'mobile' => 'phone_t_mobile'
+        );
 
-        foreach ($phoneTypes as $phoneType) {
+        foreach ($phoneTypes as $phoneType => $phoneRefName) {
 
             $phone = [
                 'id'        => $data['contact']['phone_'.$phoneType.'_id'],
@@ -153,9 +157,9 @@ class AddressesController extends YourBusinessController
 
             if (!empty($data['contact']['phone_'.$phoneType])) {
 
-                $phone['number']            = $data['contact']['phone_'.$phoneType];
-                $phone['type']              = $phoneType;
-                $phone['contactDetails']    = $correspondenceId;
+                $phone['phoneNumber']           = $data['contact']['phone_'.$phoneType];
+                $phone['phoneContactType']      = $phoneRefName;
+                $phone['contactDetails']        = $correspondenceId;
 
                 parent::save($phone, $service);
 
