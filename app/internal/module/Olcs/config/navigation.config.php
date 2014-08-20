@@ -24,9 +24,9 @@ return array(
                             'use_route_match' => true
                         ),
                         array(
-                            'id' => 'licence_edit',
+                            'id' => 'licence_details_overview',
                             'label' => 'Details',
-                            'route' => 'licence/edit',
+                            'route' => 'licence/details/overview',
                             'use_route_match' => true
                         ),
                         array(

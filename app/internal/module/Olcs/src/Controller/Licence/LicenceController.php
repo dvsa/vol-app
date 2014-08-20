@@ -41,7 +41,7 @@ class LicenceController extends AbstractFormActionController
         return $this->renderView($view, $this->title, $this->subTitle);
     }
 
-    public function editAction()
+    public function detailsAction()
     {
         $view = $this->getViewWithLicence();
         $view->setTemplate('licence/index');

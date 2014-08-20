@@ -80,15 +80,26 @@ return [
                 ],
                 'may_terminate' => true,
             ],
-            'edit' => [
+            'details' => [
                 'type' => 'literal',
                 'options' => [
-                    'route' => '/edit',
+                    'route' => '/details',
                     'defaults' => [
-                        'action' => 'edit',
+                        'action' => 'details',
                     ]
                 ],
-                'may_terminate' => true,
+                'may_terminate' => false,
+                'child_routes' => [
+                    'overview' => [
+                        'type' => 'literal',
+                        'options' => [
+                            'route' => '/overview',
+                            'defaults' => [
+                                'action' => 'index',
+                            ]
+                        ]
+                    ]
+                ]
             ],
             'bus' => [
                 'type' => 'literal',
