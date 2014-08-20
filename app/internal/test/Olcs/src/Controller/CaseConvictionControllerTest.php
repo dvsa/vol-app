@@ -63,6 +63,19 @@ class CaseConvictionControllerTest extends AbstractHttpControllerTestCase
             ->method('fromPost')
             ->will($this->returnValue(array('action' => 'add', 'table' => 'case_convictions', 'id' => 8)));
 
+        $mockTranslator = $this->getMock('\stdClass', array('translate'));
+
+        $mockServiceLocator = $this->getMock('\stdClass', array('get'));
+
+        $mockServiceLocator->expects($this->any())
+            ->method('get')
+            ->with('translator')
+            ->will($this->returnValue($mockTranslator));
+
+        $this->controller->expects($this->any())
+            ->method('getServiceLocator')
+            ->will($this->returnValue($mockServiceLocator));
+
         $this->controller->expects($this->exactly(2))
             ->method('params')
             ->will($this->returnValue($params));
@@ -84,12 +97,10 @@ class CaseConvictionControllerTest extends AbstractHttpControllerTestCase
         $viewModel = $this->getMock('\stdClass', array('toRoute'));
 
         $this->controller->indexAction();
-
     }
 
     public function testIndexAction()
     {
-
         $params = $this->getMock('\stdClass', array('fromPost', 'fromRoute'));
 
         $params->expects($this->once())
@@ -142,9 +153,26 @@ class CaseConvictionControllerTest extends AbstractHttpControllerTestCase
             ->method('url')
             ->will($this->returnValue(array()));
 
+        $mockTranslator = $this->getMock('\stdClass', array('translate'));
+
+        $mockTranslator->expects($this->any())
+            ->method('translate')
+            ->will(
+                $this->returnCallback(
+                    function ($input) {
+                        return $input;
+                    }
+                )
+            );
+
         $configServiceLocator = $this->getMock('\stdClass', array('get'));
 
-        $configServiceLocator->expects($this->once())
+        $configServiceLocator->expects($this->at(0))
+            ->method('get')
+            ->with('translator')
+            ->will($this->returnValue($mockTranslator));
+
+        $configServiceLocator->expects($this->at(1))
             ->method('get')
             ->with('Config')
             ->will($this->returnValue($this->getStaticDefTypes()));
@@ -157,10 +185,11 @@ class CaseConvictionControllerTest extends AbstractHttpControllerTestCase
             ->with('Table')
             ->will($this->returnValue($tableBuilder));
 
-        $this->controller->expects($this->exactly(2))
+        $this->controller->expects($this->exactly(3))
             ->method('getServiceLocator')
             ->will(
                 $this->onConsecutiveCalls(
+                    $configServiceLocator,
                     $configServiceLocator,
                     $serviceLocator
                 )
@@ -201,10 +230,14 @@ class CaseConvictionControllerTest extends AbstractHttpControllerTestCase
             )
         );
 
-        $data = array('id' => 8, 'convictionData' => array(), 'version' => 1);
+        $data = array(
+            'id' => 8,
+            'version' => 1
+        );
+
         $this->controller->expects($this->once())
             ->method('processEdit')
-            ->with($data, 'VosaCase');
+            ->with($data, 'Cases');
 
         $toRoute = $this->getMock('\stdClass', array('toRoute'));
 
@@ -229,10 +262,10 @@ class CaseConvictionControllerTest extends AbstractHttpControllerTestCase
                 0 => array
                 (
                     'id' => 25,
-                    'dateOfConviction' => '2012-06-15T00:00:00+0100',
+                    'convictionDate' => '2012-06-15T00:00:00+0100',
                     'categoryText' => 'Category text',
-                    'defType' => 'defendant_type.operator',
-                    'category' => array(
+                    'defendantType' => array('id' => 'def_t_op'),
+                    'convictionCategory' => array(
                         'id' => 48,
                         'description' => 'Category description'
                     )
@@ -463,7 +496,7 @@ class CaseConvictionControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->once())
             ->method('makeRestCall')
-            ->with('VosaCase', 'GET', array('id' => 54))
+            ->with('Cases', 'GET', array('id' => 54))
             ->will($this->returnValue(''));
 
         $this->controller->addAction();
@@ -699,10 +732,10 @@ class CaseConvictionControllerTest extends AbstractHttpControllerTestCase
         (
             'id' => 32,
             'categoryText' => '',
-            'dateOfBirth' => '',
+            'birthDate' => '',
             'dateOfOffence' => '2014-01-01T00:00:00+0000',
-            'dateOfConviction' => '2014-01-02T00:00:00+0000',
-            'courtFpm' => 'dfdsfdsfsfds',
+            'convictionDate' => '2014-01-02T00:00:00+0000',
+            'court' => 'dfdsfdsfsfds',
             'penalty' => 'dfsdfsdfds',
             'costs' => 'sfsdfsdfsd',
             'si' => 'Y',
@@ -710,8 +743,8 @@ class CaseConvictionControllerTest extends AbstractHttpControllerTestCase
             'personFirstname' => '',
             'personLastname' => '',
             'operatorName' => 'dsfdsfdsfdsfdsf',
-            'defType' => 'defendant_type.operator',
-            'convictionNotes' => 'sdfsdfdsfsdf',
+            'defendantType' => array('id' => 'def_t_op'),
+            'notes' => 'sdfsdfdsfsdf',
             'takenIntoConsideration' => 'dsfdsfsdfdsf',
             'person' => '',
             'dealtWith' => 'N',
@@ -728,7 +761,7 @@ class CaseConvictionControllerTest extends AbstractHttpControllerTestCase
                 )
 
             ),
-            'vosaCase' => array
+            'case' => array
             (
                 'id' => 24
             )

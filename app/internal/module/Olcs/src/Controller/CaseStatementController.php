@@ -69,7 +69,9 @@ class CaseStatementController extends CaseController implements CrudInterface
         );
 
         $form = $this->generateFormWithData(
-            'statement', 'processAddStatement', array('case' => $caseId)
+            'statement',
+            'processAddStatement',
+            array('case' => $caseId)
         );
 
         $view = $this->getView(
@@ -107,7 +109,17 @@ class CaseStatementController extends CaseController implements CrudInterface
 
         $bundle = array(
             'children' => array(
-                'requestorsAddress'
+                'contactType' => array(
+                    'properties' => array('id')
+                ),
+                'requestorsAddress' => array(
+                    'properties' => 'ALL',
+                    'children' => array(
+                        'countryCode' => array(
+                            'properties' => array('id')
+                        )
+                    )
+                )
             )
         );
 
@@ -120,13 +132,9 @@ class CaseStatementController extends CaseController implements CrudInterface
         $data = $this->formatDataForEditForm($details);
         $data['case'] = $caseId;
 
-        $data['requestorsAddress']['country'] = 'country.' . $data['requestorsAddress']['country'];
+        $data['requestorsAddress']['countryCode'] = $data['requestorsAddress']['countryCode']['id'];
 
-        $form = $this->generateFormWithData(
-            'statement',
-            'processEditStatement',
-            $data
-        );
+        $form = $this->generateFormWithData('statement', 'processEditStatement', $data);
 
         $view = $this->getView(
             [
@@ -154,7 +162,7 @@ class CaseStatementController extends CaseController implements CrudInterface
         $data['details'] = $data;
 
         $data['details']['statementType'] = 'statement_type.' . $data['details']['statementType'];
-        $data['details']['contactType'] = 'contact_type.' . $data['details']['contactType'];
+        $data['details']['contactType'] = $data['details']['contactType']['id'];
 
         return $data;
     }
@@ -172,7 +180,7 @@ class CaseStatementController extends CaseController implements CrudInterface
 
         $this->redirect()->toRoute(
             'case_statement',
-            ['case'=>$this->fromRoute('case'), 'licence'=>$this->fromRoute('licence')],
+            ['case' => $this->fromRoute('case'), 'licence' => $this->fromRoute('licence')],
             [],
             false
         );
@@ -216,13 +224,13 @@ class CaseStatementController extends CaseController implements CrudInterface
             $data['addresses']['requestorsAddress']['addressLine2'] . " \line " .
             $data['addresses']['requestorsAddress']['addressLine3'] . " \line " .
             $data['addresses']['requestorsAddress']['addressLine4'] . " \line" .
-            $data['addresses']['requestorsAddress']['city'] . " \line" .
+            $data['addresses']['requestorsAddress']['town'] . " \line" .
             $data['addresses']['requestorsAddress']['postcode'] . " \line" .
-            $data['addresses']['requestorsAddress']['country'];
-        $bookmarks['Ref'] = '184130/' . $bookmarkData['licence']['licenceNumber'];
+            $data['addresses']['requestorsAddress']['countryCode'];
+        $bookmarks['Ref'] = '184130/' . $bookmarkData['licence']['licNo'];
         $bookmarks['Name'] = $data['requestorsForename'] . ' ' . $data['requestorsFamilyName'];
         $bookmarks['RequestMode'] = 'letter';
-        $bookmarks['RequestDate'] = $data['dateRequested'];
+        $bookmarks['RequestDate'] = $data['requestedDate'];
         $bookmarks['UserKnownAs'] = '<user\'s name>';
         $bookmarks['AuthorisorTeam'] = 'Authoriser Team';
         $bookmarks['AuthorisorName2'] = '<user\'s name> <olcs job role>';
@@ -245,7 +253,7 @@ class CaseStatementController extends CaseController implements CrudInterface
         $bundle = $this->getBookmarkBundle();
 
         $bookmarkData = $this->makeRestCall(
-            'VosaCase',
+            'Cases',
             'GET',
             ['id' => $data['case'], 'bundle' => json_encode($bundle)]
         );
@@ -270,7 +278,7 @@ class CaseStatementController extends CaseController implements CrudInterface
                 'licence' => array(
                     'properties' => array(
                         'id',
-                        'licenceNumber',
+                        'licNo',
                         'trafficArea',
                     ),
                     'children' => array(

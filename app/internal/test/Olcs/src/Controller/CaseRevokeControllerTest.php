@@ -88,10 +88,9 @@ class CaseRevokeControllerTest extends AbstractHttpControllerTestCase
         $form->expects($this->atLeastOnce())->method('setData');
 
         $controller = $this->getController(
-            ['checkCancel', 'setBreadcrumbRevoke', 'getParams', 'getRevoke', 'formatDataForForm', 'generateForm']
+            ['setBreadcrumbRevoke', 'getParams', 'getRevoke', 'formatDataForForm', 'generateForm']
         );
 
-        $controller->expects($this->once())->method('checkCancel')->will($this->returnValue(null));
         $controller->expects($this->once())->method('setBreadcrumbRevoke')->will($this->returnValue(null));
         $controller->expects($this->once())
                    ->method('getParams')
@@ -105,22 +104,6 @@ class CaseRevokeControllerTest extends AbstractHttpControllerTestCase
                    ->will($this->returnValue($form));
 
         $this->assertInstanceOf('\Zend\View\Model\ViewModel', $controller->addAction());
-    }
-
-    public function testCheckCancel()
-    {
-        global $_POST;
-        $_POST['cancel-revoke'] = 'yep';
-
-        $params = array('action' => 'edit', 'licence' => 'b', 'case' => 'c', 'id' => 123);
-
-        $controller = $this->getController(['getParams']);
-        $controller->expects($this->once())
-                   ->method('getParams')
-                   ->with($this->equalTo(['action', 'licence', 'case', 'id']))
-                   ->will($this->returnValue($params));
-
-        $controller->checkCancel();
     }
 
     public function testSetBreadcrumbRevoke()
@@ -173,7 +156,7 @@ class CaseRevokeControllerTest extends AbstractHttpControllerTestCase
     /**
      * @dataProvider licenceTypeDataProvider
      */
-    public function testGenerateForm($licenceType, $niFlag)
+    public function testGenerateForm($goodsOrPsv, $shortGoodsOrPsv, $niFlag)
     {
         $formName = 'form';
         $callback = 'myCallback';
@@ -194,7 +177,7 @@ class CaseRevokeControllerTest extends AbstractHttpControllerTestCase
         $form = $this->getMock('\stdClass', ['get']);
         $form->expects($this->at(0))->method('get')->with('main')
              ->will($this->returnSelf());
-        $form->expects($this->at(1))->method('get')->with('piReasons')
+        $form->expects($this->at(1))->method('get')->with('reasons')
              ->will($this->returnValue($formGetPlugin));
         $form->expects($this->at(2))->method('get')->with('main')
              ->will($this->returnSelf());
@@ -213,7 +196,7 @@ class CaseRevokeControllerTest extends AbstractHttpControllerTestCase
                    ->will(
                        $this->returnValue(
                            [
-                               'goodsOrPsv' => $licenceType,
+                               'goodsOrPsv' => array('id' => $goodsOrPsv),
                                'niFlag' => $niFlag
                            ]
                        )
@@ -224,7 +207,7 @@ class CaseRevokeControllerTest extends AbstractHttpControllerTestCase
                    ->will($this->returnValue($form));
         $controller->expects($this->once())
                    ->method('getPiReasonsNvpArray')
-                ->with($licenceType)
+                ->with($goodsOrPsv)
                    ->will($this->returnValue($getPiReasonsNvpArray));
         $controller->expects($this->once())
                    ->method('getPresidingTcArray')
@@ -240,16 +223,16 @@ class CaseRevokeControllerTest extends AbstractHttpControllerTestCase
     public function licenceTypeDataProvider ()
     {
         return [
-            array('goods', 'GV', 1),
-            array('psv', 'PSV', 1),
-            array('goods', 'GV', 0)
+            array('lcat_gv', 'GV', 1),
+            array('lcat_psv', 'PSV', 1),
+            array('lcat_gv', 'GV', 0)
         ];
     }
 
     /**
      * @dataProvider licenceTypeDataProvider
      */
-    public function testGetPiReasonsNvpArray($licenceType, $shortLicenceType, $niFlag)
+    public function testGetPiReasonsNvpArray($goodsOrPsv, $shortGoodsOrPsv, $niFlag)
     {
         $pi = array(
             'Results' => array(
@@ -271,12 +254,12 @@ class CaseRevokeControllerTest extends AbstractHttpControllerTestCase
         $controller->expects($this->once())
                    ->method('makeRestCall')
                    ->with(
-                       $this->equalTo('PiReason'),
+                       $this->equalTo('Reason'),
                        $this->equalTo('GET'),
                        $this->equalTo(
                            [
-                                'isProposeToRevoke' => '1',
-                                'goodsOrPsv' => $shortLicenceType,
+                                'isProposeToRevoke' => 1,
+                                'goodsOrPsv' => $shortGoodsOrPsv,
                                 'isNi' => $niFlag,
                                 'limit' => 'all'
                            ]
@@ -284,7 +267,7 @@ class CaseRevokeControllerTest extends AbstractHttpControllerTestCase
                    )
                    ->will($this->returnValue($pi));
 
-        $this->assertEquals($return, $controller->getPiReasonsNvpArray($licenceType, $niFlag));
+        $this->assertEquals($return, $controller->getPiReasonsNvpArray($goodsOrPsv, $niFlag));
     }
 
     /**
@@ -333,7 +316,7 @@ class CaseRevokeControllerTest extends AbstractHttpControllerTestCase
 
         $controller->expects($this->once())
                    ->method('makeRestCall')
-                   ->with($this->equalTo('Revoke'), $this->equalTo('DELETE'), $this->equalTo(['id'=>123]))
+                   ->with($this->equalTo('ProposeToRevoke'), $this->equalTo('DELETE'), $this->equalTo(['id'=>123]))
                    ->will($this->returnValue(null));
 
         $this->assertNull($controller->deleteAction());
@@ -356,7 +339,7 @@ class CaseRevokeControllerTest extends AbstractHttpControllerTestCase
 
         $controller->expects($this->once())
                    ->method('processAdd')
-                   ->with($this->equalTo($data), $this->equalTo('Revoke'))
+                   ->with($this->equalTo($data), $this->equalTo('ProposeToRevoke'))
                    ->will($this->returnValue(null));
 
         $this->assertNull($controller->processRevoke($data));
@@ -381,7 +364,7 @@ class CaseRevokeControllerTest extends AbstractHttpControllerTestCase
 
         $controller->expects($this->once())
                    ->method('processEdit')
-                   ->with($this->equalTo($processData), $this->equalTo('Revoke'))
+                   ->with($this->equalTo($processData), $this->equalTo('ProposeToRevoke'))
                    ->will($this->returnValue(null));
 
         $this->assertNull($controller->processRevoke($data));

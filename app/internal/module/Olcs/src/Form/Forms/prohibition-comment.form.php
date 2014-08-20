@@ -14,20 +14,17 @@ return [
                     'label' => 'Prohibitions'
                 ],
                 'elements' => [
-                    'notes' => [
-                        'type'  => 'textarea',
-                        'label' => 'Enter prohibitions',
-                        'class' => 'extra-long'
-                    ],
                     'id' => [
-                        'type' => 'hidden'
-                    ],
-                    'case' => [
                         'type' => 'hidden'
                     ],
                     'version' => [
                         'type' => 'hidden'
-                    ]
+                    ],
+                    'prohibitionNote' => [
+                        'type'  => 'textarea',
+                        'label' => 'Enter prohibitions',
+                        'class' => 'extra-long'
+                    ],
                 ]
             ],
             [

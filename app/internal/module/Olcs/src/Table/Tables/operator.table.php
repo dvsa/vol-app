@@ -16,13 +16,12 @@ return array(
     'columns' => array(
         array(
             'title' => 'Lic no/status',
-            //'format' => '<a href="#">{{licenceNumber}}</a><br/>{{status}}',
-            'sort' => 'licenceNumber',
+            'sort' => 'licNo',
             'formatter' => function ($row) {
                 return '<a href="' . $this->generateUrl(
                     array('licence' => $row['licenceId']),
                     'licence'
-                ) . '">' . $row['licenceNumber'] . '</a><br/>' . $row['status'];
+                ) . '">' . $row['licNo'] . '</a><br/>' . $row['status'];
             },
         ),
         array(
@@ -33,7 +32,7 @@ return array(
         array(
             'title' => 'Op/trading name',
             'formatter' => function ($data) {
-                return $data['trading_as'] ? : $data['name'];
+                return /*$data['trading_as'] ? : */$data['name'];
             },
             'sort' => 'operatorName'
         ),

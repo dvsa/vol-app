@@ -28,7 +28,7 @@ return [
                          'label' => 'Act/si',
                          'class' => 'extra-long'
                     ],
-                    'category' => [
+                    'convictionCategory' => [
                          'type' => 'selectAjax',
                          'label' => 'Conviction description',
                          'class' => 'extra-long'
@@ -39,22 +39,22 @@ return [
                          'label' => 'Conviction description detail',
                         'class' => 'extra-long'
                     ],
-                    'dateOfOffence' => [
+                    'offenceDate' => [
                          'type' => 'dateSelectWithEmpty',
                          'label' => 'Offence date',
                          'filters' => '\Common\Form\Elements\InputFilters\OffenceDateBeforeConvictionDate'
                      ],
-                    'dateOfConviction' => [
+                    'convictionDate' => [
                          'type' => 'dateSelectWithEmpty',
                          'label' => 'Conviction date',
                          'filters' => '\Common\Form\Elements\InputFilters\DateNotInFuture'
                      ],
-                    'si' => [
+                    'msi' => [
                         'type' => 'select',
                         'label' => 'SI',
                         'value_options' => 'yes_no'
                     ],
-                    'courtFpm' => [
+                    'court' => [
                         'type' => 'text',
                         'filters' => '\Common\Form\Elements\InputFilters\TextMax70',
                         'label' => 'Court/FPN',
@@ -72,7 +72,7 @@ return [
                         'class' => 'medium',
                         'filters' => '\Common\Form\Elements\InputFilters\TextMax255',
                     ],
-                    'convictionNotes' => [
+                    'notes' => [
                         'type' => 'textarea',
                         'filters' => '\Common\Form\Elements\InputFilters\TextMax4000',
                         'label' => 'Conviction notes',
@@ -84,12 +84,12 @@ return [
                         'label' => 'Taken into consideration',
                         'class' => 'extra-long'
                     ],
-                    'decToTc' => [
+                    'isDeclared' => [
                         'type' => 'select',
                         'label' => 'Declared to TC/TR',
                         'value_options' => 'yes_no'
                     ],
-                    'dealtWith' => [
+                    'isDealtWith' => [
                         'type' => 'checkbox-yn',
                         'label' => 'Dealt with',
                     ]
@@ -97,7 +97,7 @@ return [
             ]
         ],
         'elements' => [
-            'vosaCase' => [
+            'case' => [
                 'type' => 'hidden'
             ],
             'id' => [

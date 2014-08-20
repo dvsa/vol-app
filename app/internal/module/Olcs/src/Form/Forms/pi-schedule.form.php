@@ -72,7 +72,7 @@ return [
                 'label' => 'Details to be published',
                 'class' => 'extra-long'
             ],
-            'vosaCase' => [
+            'case' => [
                 'type' => 'hidden'
             ],
             'id' => [

@@ -55,7 +55,7 @@ return array(
         array(
             'title' => 'Date closed',
             'formatter' => function ($row) {
-                return $row['dateClosed']!='' ? date('d/m/Y', strtotime($row['dateClosed'])) : '-';
+                return $row['closedDate'] != '' ? date('d/m/Y', strtotime($row['closedDate'])) : '-';
             }
         ),
         array(

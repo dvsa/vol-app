@@ -47,22 +47,17 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
 
     public function testAddConditionAction()
     {
-        $caseId = 24;
-        $licenceId = 7;
-        $operatingCentreId = 21;
-
-        $type = 'condition';
-        $routeParams = ['case' => $caseId, 'licence' => $licenceId, 'type' => $type];
+        $routeParams = ['case' => 24, 'licence' => 7, 'type' => 'condition'];
 
         $this->controller->expects($this->once())
             ->method('getParams')
             ->with(array('case', 'licence', 'type'))
-            ->will($this->returnValue(array('case' => $caseId, 'licence' => $licenceId, 'type' => $type)));
+            ->will($this->returnValue($routeParams));
 
         $this->controller->expects($this->at(1))
             ->method('makeRestCall')
-            ->with('VosaCase', 'GET', array('id' => $caseId))
-            ->will($this->returnValue(array('id' => $caseId)));
+            ->with('Cases', 'GET', array('id' => $routeParams['case']))
+            ->will($this->returnValue(array('id' => $routeParams['case'])));
 
         $mockParams = $this->getMock('\stdClass', array('fromPost'));
 
@@ -79,33 +74,15 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
 
         $data['condition-undertaking'] = array(
             'addedVia' => 'Case',
-            'conditionType' => $routeParams['type'],
+            'conditionType' => 'cdt_con',
             'isDraft' => 0,
-            'vosaCase' => $routeParams['case'],
+            'case' => $routeParams['case'],
             'licence' => $routeParams['licence']
         );
         $this->controller->expects($this->once())
             ->method('generateFormWithData')
             ->with('condition-undertaking-form', 'processConditionUndertaking', $data)
             ->will($this->returnValue($form));
-
-        $mockOcAddressResults = [
-            'Count' => 1,
-            'Results' => [
-                0 => [
-                    'id' => 16,
-                    'address' => [
-                        'id' => 8,
-                        'addressLine1' => 'Unit 5',
-                        'addressLine2' => '12 Albert Street',
-                        'addressLine3' => 'Westpoint',
-                        'addressLine4' => '',
-                        'postcode' => 'LS9 6NA',
-                        'country' => 'UK',
-                    ]
-                ]
-            ]
-        ];
 
         $this->controller->expects($this->once())
             ->method('configureFormForConditionType')
@@ -121,7 +98,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
         $licenceId = 7;
         $operatingCentreId = 21;
 
-        $type = 'condition';
+        $type = 'cdt_con';
         $routeParams = ['case' => $caseId, 'licence' => $licenceId, 'type' => $type];
 
         $this->controller->expects($this->once())
@@ -131,7 +108,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
 
         $this->controller->expects($this->at(1))
             ->method('makeRestCall')
-            ->with('VosaCase', 'GET', array('id' => $caseId))
+            ->with('Cases', 'GET', array('id' => $caseId))
             ->will($this->returnValue(null));
 
         $this->controller->addAction();
@@ -144,7 +121,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
         $licenceId = 7;
         $operatingCentreId = 21;
 
-        $type = 'condition';
+        $type = 'cdt_con';
         $routeParams = ['case' => $caseId, 'licence' => $licenceId, 'type' => $type];
 
         $this->controller->expects($this->once())
@@ -154,7 +131,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
 
         $this->controller->expects($this->at(1))
             ->method('makeRestCall')
-            ->with('VosaCase', 'GET', array('id' => $caseId))
+            ->with('Cases', 'GET', array('id' => $caseId))
             ->will($this->returnValue(array('id' => $caseId)));
 
         $mockParams = $this->getMock('\stdClass', array('fromPost'));
@@ -184,12 +161,10 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
             ->will($this->returnValue($mockRedirect));
 
         $this->controller->addAction();
-
     }
 
     public function testEditAction()
     {
-
         $caseId = 24;
         $licenceId = 7;
         $operatingCentreId = 21;
@@ -205,7 +180,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
 
         $this->controller->expects($this->at(1))
             ->method('makeRestCall')
-            ->with('VosaCase', 'GET', array('id' => $caseId))
+            ->with('Cases', 'GET', array('id' => $caseId))
             ->will($this->returnValue(array('id' => $caseId)));
 
         $mockParams = $this->getMock('\stdClass', array('fromPost'));
@@ -220,9 +195,11 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
             ->will($this->returnValue($mockParams));
 
         $mockResults = [
-            'addedVia' => 'Case',
-            'conditionType' => $routeParams['type'],
-            'vosaCase' => ['id' => $caseId],
+            'addedVia' => array(
+                'id' => 'Case'
+            ),
+            'conditionType' => array('id' => 'cdt_con'),
+            'case' => ['id' => $caseId],
             'licence' => ['id' => $licenceId],
             'isDraft' => 1,
             'attachedTo' => 21,
@@ -236,7 +213,8 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
             ->with(
                 $this->equalTo('ConditionUndertaking'),
                 $this->equalTo('GET'),
-                $this->equalTo(array('id' => $conditionId, 'bundle' => json_encode($bundle)))
+                $this->equalTo(array('id' => $conditionId)),
+                $bundle
             )
             ->will($this->returnValue($mockResults));
 
@@ -244,9 +222,9 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
 
         $data['condition-undertaking'] = array(
             'addedVia' => 'Case',
-            'conditionType' => $routeParams['type'],
+            'conditionType' => 'cdt_con',
             'isDraft' => 1,
-            'vosaCase' => $routeParams['case'],
+            'case' => $routeParams['case'],
             'licence' => $routeParams['licence'],
             'attachedTo' => 21,
             'operatingCentre' => ['id' => 21]
@@ -269,7 +247,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
                         'addressLine3' => 'Westpoint',
                         'addressLine4' => '',
                         'postcode' => 'LS9 6NA',
-                        'country' => 'UK',
+                        'countryCode' => 'UK',
                     ]
                 ]
             ]
@@ -285,13 +263,12 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
 
     public function testEditActionInvalidOperatingCentre()
     {
-
         $caseId = 24;
         $licenceId = 7;
         $operatingCentreId = 21;
         $conditionId = 1;
 
-        $type = 'condition';
+        $type = 'cdt_con';
         $routeParams = ['case' => $caseId, 'licence' => $licenceId, 'type' => $type, 'id' => $conditionId];
 
         $this->controller->expects($this->at(0))
@@ -301,7 +278,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
 
         $this->controller->expects($this->at(1))
             ->method('makeRestCall')
-            ->with('VosaCase', 'GET', array('id' => $caseId))
+            ->with('Cases', 'GET', array('id' => $caseId))
             ->will($this->returnValue(array('id' => $caseId)));
 
         $mockParams = $this->getMock('\stdClass', array('fromPost'));
@@ -316,9 +293,11 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
             ->will($this->returnValue($mockParams));
 
         $mockResults = [
-            'addedVia' => 'Case',
-            'conditionType' => $routeParams['type'],
-            'vosaCase' => ['id' => $caseId],
+            'addedVia' => array('id' => 'Case'),
+            'conditionType' => array(
+                'id' => $routeParams['type']
+            ),
+            'case' => ['id' => $caseId],
             'licence' => ['id' => $licenceId],
             'isDraft' => 1,
             'attachedTo' => 21,
@@ -332,7 +311,8 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
             ->with(
                 $this->equalTo('ConditionUndertaking'),
                 $this->equalTo('GET'),
-                $this->equalTo(array('id' => $conditionId, 'bundle' => json_encode($bundle)))
+                $this->equalTo(array('id' => $conditionId)),
+                $bundle
             )
             ->will($this->returnValue($mockResults));
 
@@ -342,7 +322,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
             'addedVia' => 'Case',
             'conditionType' => $routeParams['type'],
             'isDraft' => 1,
-            'vosaCase' => $routeParams['case'],
+            'case' => $routeParams['case'],
             'licence' => $routeParams['licence'],
             'attachedTo' => '',
             'operatingCentre' => ['iddoesntexist' => 21]
@@ -365,7 +345,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
                         'addressLine3' => 'Westpoint',
                         'addressLine4' => '',
                         'postcode' => 'LS9 6NA',
-                        'country' => 'UK',
+                        'countryCode' => 'UK',
                     ]
                 ]
             ]
@@ -386,7 +366,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
         $operatingCentreId = 21;
         $conditionId = 1;
 
-        $type = 'condition';
+        $type = 'cdt_con';
         $routeParams = ['case' => $caseId, 'licence' => $licenceId, 'type' => $type, 'id' => $conditionId];
 
         $this->controller->expects($this->at(0))
@@ -396,7 +376,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
 
         $this->controller->expects($this->at(1))
             ->method('makeRestCall')
-            ->with('VosaCase', 'GET', array('id' => $caseId))
+            ->with('Cases', 'GET', array('id' => $caseId))
             ->will($this->returnValue(null));
 
         $this->controller->editAction();
@@ -410,7 +390,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
         $operatingCentreId = 21;
         $conditionId = 1;
 
-        $type = 'condition';
+        $type = 'cdt_con';
         $routeParams = ['case' => $caseId, 'licence' => $licenceId, 'type' => $type, 'id' => $conditionId];
 
         $this->controller->expects($this->at(0))
@@ -420,7 +400,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
 
         $this->controller->expects($this->at(1))
             ->method('makeRestCall')
-            ->with('VosaCase', 'GET', array('id' => $caseId))
+            ->with('Cases', 'GET', array('id' => $caseId))
             ->will($this->returnValue(array('id' => $caseId)));
 
         $mockParams = $this->getMock('\stdClass', array('fromPost'));
@@ -471,7 +451,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
                         'addressLine3' => 'Westpoint',
                         'addressLine4' => '',
                         'postcode' => 'LS9 6NA',
-                        'country' => 'UK',
+                        'countryCode' => 'UK',
                     ]
                 ]
             ]
@@ -482,10 +462,12 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
         $this->controller->expects($this->once())
             ->method('makeRestCall')
             ->with(
-                'OperatingCentre', 'GET', array(
-                    'licence' => $licenceId,
-                    'bundle' => json_encode($operatingCentreAddressBundle)
-                )
+                'OperatingCentre',
+                'GET',
+                array(
+                    'licence' => $licenceId
+                ),
+                $operatingCentreAddressBundle
             )
             ->will($this->returnValue($mockOcAddressResults));
 
@@ -514,7 +496,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
         );
 
         $licenceId = 7;
-        $type = 'condition';
+        $type = 'cdt_con';
 
         $mockOcAddressResults = [
             'Count' => 1,
@@ -528,7 +510,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
                         'addressLine3' => 'Westpoint',
                         'addressLine4' => '',
                         'postcode' => 'LS9 6NA',
-                        'country' => 'UK',
+                        'countryCode' => 'UK',
                     ]
                 ]
             ]
@@ -866,48 +848,52 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
 
         $table = '<table></table>';
 
-        $bundle = $this->getBundle('condition');
-        $restResults = array('conditionUndertakings' => array(array('caseId' => '24')));
+        $bundle = $this->getBundle('cdt_con');
+        $restResults = array(
+            'conditionUndertakings' => array(
+                array(
+                    'caseId' => 24,
+                    'operatingCentre' => array(
+                        'address' => 'Some Address'
+                    )
+                )
+            )
+        );
 
-        $urlMock = $this->getMock('\stdClass');
-
-        $mockPluginManager = $this->getMock('\stdClass', array('get'));
-        $mockPluginManager->expects($this->once())
-                ->method('get')
-                ->with('url')
-                ->willReturn($urlMock);
-
-        $data = ['url' => $urlMock];
+        $expectedTableData = array(
+            array(
+                'caseId' => 24,
+                'operatingCentreAddress' => 'Some Address',
+                'operatingCentre' => array(
+                    'address' => 'Some Address'
+                )
+            )
+        );
 
         $controller->expects($this->any())
             ->method('getConditionUndertakingBundle')
-            ->with($this->equalTo('condition'))
+            ->with($this->equalTo('cdt_con'))
             ->willReturn($bundle);
 
         $controller->expects($this->once())
             ->method('makeRestCall')
             ->with(
-                $this->equalTo('VosaCase'),
+                $this->equalTo('Cases'),
                 $this->equalTo('GET'),
                 $this->equalTo(
                     array(
-                        'id' => $caseId,
-                        'bundle' => json_encode($bundle)
+                        'id' => $caseId
                     )
-                )
+                ),
+                $bundle
             )
             ->willReturn($restResults);
-
-        $controller->expects($this->once())
-            ->method('getPluginManager')
-            ->will($this->returnValue($mockPluginManager));
 
         $controller->expects($this->once())
                 ->method('buildTable')
                 ->with(
                     $this->equalTo('conditions'),
-                    $this->equalTo($restResults['conditionUndertakings']),
-                    $this->equalTo($data)
+                    $this->equalTo($expectedTableData)
                 )
                 ->will($this->returnValue($table));
 
@@ -932,48 +918,52 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
 
         $table = '<table></table>';
 
-        $bundle = $this->getBundle('undertaking');
-        $restResults = array('conditionUndertakings' => array(array('caseId' => '24')));
+        $bundle = $this->getBundle('cdt_und');
+        $restResults = array(
+            'conditionUndertakings' => array(
+                array(
+                    'caseId' => 24,
+                    'operatingCentre' => array(
+                        'address' => 'Some Address'
+                    )
+                )
+            )
+        );
 
-        $urlMock = $this->getMock('\stdClass');
-
-        $mockPluginManager = $this->getMock('\stdClass', array('get'));
-        $mockPluginManager->expects($this->once())
-                ->method('get')
-                ->with('url')
-                ->willReturn($urlMock);
-
-        $data = ['url' => $urlMock];
+        $expectedTableData = array(
+            array(
+                'caseId' => 24,
+                'operatingCentreAddress' => 'Some Address',
+                'operatingCentre' => array(
+                    'address' => 'Some Address'
+                )
+            )
+        );
 
         $controller->expects($this->any())
             ->method('getConditionUndertakingBundle')
-            ->with($this->equalTo('undertaking'))
+            ->with($this->equalTo('cdt_und'))
             ->willReturn($bundle);
 
         $controller->expects($this->once())
             ->method('makeRestCall')
             ->with(
-                $this->equalTo('VosaCase'),
+                $this->equalTo('Cases'),
                 $this->equalTo('GET'),
                 $this->equalTo(
                     array(
-                        'id' => $caseId,
-                        'bundle' => json_encode($bundle)
+                        'id' => $caseId
                     )
-                )
+                ),
+                $bundle
             )
             ->willReturn($restResults);
-
-        $controller->expects($this->once())
-            ->method('getPluginManager')
-            ->will($this->returnValue($mockPluginManager));
 
         $controller->expects($this->once())
                 ->method('buildTable')
                 ->with(
                     $this->equalTo('undertakings'),
-                    $this->equalTo($restResults['conditionUndertakings']),
-                    $this->equalTo($data)
+                    $this->equalTo($expectedTableData)
                 )
                 ->will($this->returnValue($table));
 
@@ -1011,18 +1001,18 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
                                         'addressLine2',
                                         'addressLine3',
                                         'addressLine4',
-                                        'paon_desc',
-                                        'saon_desc',
-                                        'street',
-                                        'locality',
-                                        'postcode',
-                                        'country'
+                                        'town',
+                                        'postcode'
+                                    ),
+                                    'children' => array(
+                                        'countryCode' => array(
+                                            'properties' => array('id')
+                                        )
                                     )
                                 )
                             )
                         )
                     )
-
                 )
             )
         );

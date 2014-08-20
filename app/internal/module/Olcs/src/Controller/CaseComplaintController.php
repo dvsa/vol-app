@@ -19,16 +19,17 @@ use Zend\View\Model\ViewModel;
  */
 class CaseComplaintController extends CaseController implements CrudInterface
 {
-    use DeleteActionTrait;
-
     /**
-     * Should return the name of the service to call for deleting the item
-     *
-     * @return string
+     * Performs a delete action and redirects to the index
      */
-    public function getDeleteServiceName()
+    public function deleteAction()
     {
-        return 'Complaint';
+        $id = $this->params()->fromRoute('id');
+
+        // Now implemented deleting a list, so we don't meed the id of the entity to remove it
+        $this->makeRestCall('ComplaintCase', 'DELETE', array('complaint' => $id));
+
+        $this->redirectToIndex();
     }
 
     /**
@@ -58,23 +59,23 @@ class CaseComplaintController extends CaseController implements CrudInterface
 
         $bundle = $this->getComplaintBundle();
 
-        $results = $this->makeRestCall(
-            'VosaCase', 'GET', array(
-            'id' => $caseId, 'bundle' => json_encode($bundle))
-        );
+        $results = $this->makeRestCall('Cases', 'GET', array('id' => $caseId), $bundle);
 
-        $data = [];
-        $data['url'] = $this->getPluginManager()->get('url');
+        $complaints = array();
 
-        $table = $this->buildTable('complaints', $results['complaints'], $data);
+        foreach ($results['complaintCases'] as $row) {
+            $complaints[] = $row['complaint'];
+        }
+
+        $table = $this->buildTable('complaints', $complaints);
 
         $view->setVariables(
             [
-            'case' => $case,
-            'tabs' => $tabs,
-            'tab' => $action,
-            'summary' => $summary,
-            'table' => $table,
+                'case' => $case,
+                'tabs' => $tabs,
+                'tab' => $action,
+                'summary' => $summary,
+                'table' => $table,
             ]
         );
 
@@ -110,10 +111,10 @@ class CaseComplaintController extends CaseController implements CrudInterface
             )
         );
 
-        $data = array('vosaCase' => $routeParams['case']);
+        $data = array('case' => $routeParams['case']);
 
         // todo hardcoded organisation id for now
-        $results = $this->makeRestCall('VosaCase', 'GET', array('id' => $routeParams['case']));
+        $results = $this->makeRestCall('Cases', 'GET', array('id' => $routeParams['case']));
 
         // todo hardcoded organisation id for now
         $data['organisation-details']['id'] = 7;
@@ -168,14 +169,10 @@ class CaseComplaintController extends CaseController implements CrudInterface
 
         $bundle = $this->getComplaintBundleForUpdates();
 
-        $data = $this->makeRestCall(
-            'Complaint',
-            'GET',
-            array('id' => $routeParams['id'], 'bundle' => json_encode($bundle))
-        );
+        $data = $this->makeRestCall('Complaint', 'GET', array('id' => $routeParams['id']), $bundle);
 
         if (isset($data['id'])) {
-            $data['vosaCase'] = $data['id'];
+            $data['case'] = $data['id'];
         }
 
         if (empty($routeParams['case']) || empty($routeParams['licence']) || empty($data)) {
@@ -184,12 +181,13 @@ class CaseComplaintController extends CaseController implements CrudInterface
 
         $data['organisation-details'] = $data['organisation'];
         $data['complaint-details'] = $data;
-        $data['complainant-details'] = $data['complainant']['person'];
+        $data['complainant-details'] = $data['complainantContactDetails']['person'];
         $data['driver-details'] = $data['driver']['contactDetails']['person'];
 
-        $form = $this->generateFormWithData(
-            'complaint', 'processComplaint', $data
-        );
+        $data['complaint-details']['status'] = $data['complaint-details']['status']['id'];
+        $data['complaint-details']['complaintType'] = $data['complaint-details']['complaintType']['id'];
+
+        $form = $this->generateFormWithData('complaint', 'processComplaint', $data);
 
         $view = new ViewModel(
             array(
@@ -220,24 +218,27 @@ class CaseComplaintController extends CaseController implements CrudInterface
             unset($data['complaint-details']['version']);
             unset($data['organisation-details']['version']);
 
-            $newData = $data['complaint-details'];
-            $newData['vosaCases'][] = $data['vosaCase'];
-            $newData['value'] = '';
-            $newData['vehicle_id'] = 1;
-            $newData['organisation'] = 1;
+            $complaintCaseData = array(
+                'complaint' => $data['complaint-details'],
+                'case' => $data['case']
+            );
 
-            $newData['driver']['contactDetails']['contactDetailsType'] = 'Driver';
-            $newData['driver']['contactDetails']['is_deleted'] = 0;
-            $newData['driver']['contactDetails']['person'] = $data['driver-details'];
-            unset($newData['driver']['contactDetails']['person']['version']);
+            $complaintCaseData['complaint']['value'] = '';
+            // @todo change these from hard coded values
+            $complaintCaseData['complaint']['vehicle_id'] = 1;
+            $complaintCaseData['complaint']['organisation'] = 1;
 
-            $newData['complainant']['contactDetailsType'] = 'Complainant';
-            $newData['complainant']['is_deleted'] = 0;
-            $newData['complainant']['person'] = $data['complainant-details'];
-            unset($newData['complainant']['person']['version']);
+            $complaintCaseData['complaint']['driver']['contactDetails']['contactType'] = 'ct_driver';
+            $complaintCaseData['complaint']['driver']['contactDetails']['is_deleted'] = 0;
+            $complaintCaseData['complaint']['driver']['contactDetails']['person'] = $data['driver-details'];
+            unset($complaintCaseData['complaint']['driver']['contactDetails']['person']['version']);
 
-            $result = $this->processAdd($newData, 'Complaint');
+            $complaintCaseData['complaint']['complainantContactDetails']['contactType'] = 'ct_complainant';
+            $complaintCaseData['complaint']['complainantContactDetails']['is_deleted'] = 0;
+            $complaintCaseData['complaint']['complainantContactDetails']['person'] = $data['complainant-details'];
+            unset($complaintCaseData['complaint']['complainantContactDetails']['person']['version']);
 
+            $result = $this->processAdd($complaintCaseData, 'ComplaintCase');
         }
 
         return $this->redirect()->toRoute(
@@ -261,6 +262,12 @@ class CaseComplaintController extends CaseController implements CrudInterface
                 'properties' => array('ALL'),
             ),
             'children' => array(
+                'status' => array(
+                    'properties' => array('id')
+                ),
+                'complaintType' => array(
+                    'properties' => array('id')
+                ),
                 'driver' => array(
                     'properties' => array('id', 'version'),
                     'children' => array(
@@ -271,25 +278,22 @@ class CaseComplaintController extends CaseController implements CrudInterface
                                     'properties' => array(
                                         'id',
                                         'version',
-                                        'firstName',
-                                        'middleName',
-                                        'surname',
+                                        'forename',
+                                        'familyName',
                                     )
                                 )
                             )
                         )
                     )
                 ),
-                'complainant' => array(
-                    'properties' => array('person'),
+                'complainantContactDetails' => array(
                     'children' => array(
                         'person' => array(
                             'properties' => array(
                                 'id',
                                 'version',
-                                'firstName',
-                                'middleName',
-                                'surname',
+                                'forename',
+                                'familyName',
                             )
                         )
                     )
@@ -313,28 +317,29 @@ class CaseComplaintController extends CaseController implements CrudInterface
                 'id'
             ),
             'children' => array(
-                'complaints' => array(
-                    'properties' => array(
-                        'id',
-                        'complaintDate',
-                        'description',
-                        'complainant'
-                    ),
+                'complaintCases' => array(
                     'children' => array(
-                        'complainant' => array(
+                        'complaint' => array(
                             'properties' => array(
                                 'id',
-                                'person'
+                                'complaintDate',
+                                'description'
                             ),
-                           'children' => array(
-                               'person' => array(
-                                   'properties' => array(
-                                       'firstName',
-                                       'middleName',
-                                       'surname',
-                                   )
-                               )
-                           )
+                            'children' => array(
+                                'complainantContactDetails' => array(
+                                    'properties' => array(
+                                        'id',
+                                    ),
+                                   'children' => array(
+                                       'person' => array(
+                                           'properties' => array(
+                                               'forename',
+                                               'familyName'
+                                            )
+                                        )
+                                    )
+                                )
+                            )
                         )
                     )
                 )

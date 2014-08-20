@@ -9,13 +9,14 @@ namespace Olcs\Controller\Licence;
 
 use Common\Controller\FormActionController as AbstractFormActionController;
 use Zend\View\Model\ViewModel;
+use Olcs\Controller\AbstractController;
 
 /**
  * Licence Controller
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class LicenceController extends AbstractFormActionController
+class LicenceController extends AbstractController
 {
     protected $title;
     protected $subtitle;
@@ -30,9 +31,9 @@ class LicenceController extends AbstractFormActionController
 
         $view = $this->getView(['licence' => $licence]);
 
-        $this->title = $view->licence['licenceNumber'];
-        $this->subTitle = $view->licence['goodsOrPsv'] . ', ' . $view->licence['licenceType']
-            . ', ' . $view->licence['licenceStatus'];
+        $this->title = $view->licence['licNo'];
+        $this->subTitle = $view->licence['goodsOrPsv']['id'] . ', ' . $view->licence['licenceType']['id']
+            . ', ' . $view->licence['status']['id'];
 
         return $view;
     }
@@ -105,7 +106,6 @@ class LicenceController extends AbstractFormActionController
     {
         return $this->redirect()->toRoute('licence/overview', [], [], true);
     }
-
 
     /**
      * @codeCoverageIgnore

@@ -37,12 +37,12 @@ return [
                         'filters' => '\Common\Form\Elements\InputFilters\TextMax40Required',
                         'label' => 'Requestor body'
                     ],
-                    'dateStopped' => [
+                    'stoppedDate' => [
                         'type' => 'dateSelectWithEmpty',
                         'label' => 'Date stopped',
                         'filters' => '\Common\Form\Elements\InputFilters\StopDateBeforeRequestDate'
                     ],
-                    'dateRequested' => [
+                    'requestedDate' => [
                         'type' => 'dateSelectWithEmpty',
                         'label' => 'Date requested',
                         'filters' => '\Common\Form\Elements\InputFilters\DateNotInFuture'
@@ -50,7 +50,7 @@ return [
                     'contactType' => [
                         'type' => 'select',
                         'label' => 'Request mode',
-                        'value_options' => 'contact_type',
+                        'value_options' => 'contact_method',
                         'required' => true
                     ],
                     'authorisersDecision' => [
@@ -88,10 +88,10 @@ return [
                             'value' => 'S43_Letter'
                          ]
                      ],
-                     'country' => [
+                     'countryCode' => [
                          'type' => 'hidden',
                          'attributes' => [
-                            'value' => 'en_GB'
+                            'value' => 'GB'
                          ]
                      ],
                      'format' => [

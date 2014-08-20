@@ -28,7 +28,7 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
             'sections' => array(
                 'case-summary-info' => array(
                     'view' => 'submission/partials/case-summary',
-                    'dataPath' => 'VosaCase',
+                    'dataPath' => 'Cases',
                     'bundle' => array(
                         'children' => array(
                             'categories' => array(
@@ -57,7 +57,7 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
                                     'organisation' => array(
                                         'properties' => 'ALL',
                                         'children' => array(
-                                            'organisationOwners' => array(
+                                            'organisationPersons' => array(
                                                 'properties' => 'ALL',
                                                 'children' => array(
                                                     'person' => array(
@@ -99,7 +99,7 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
                 'transport-managers' => array(
                     'view' => 'submission/partials/transport-managers',
                     'exclude' => array(
-                        'column' => 'licenceType',
+                        'column' => 'licenceType/id',
                         'values' => array(
                             'standard national',
                             'standard international'
@@ -122,7 +122,7 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
                 ),
                 'bus-services-registered' => array(
                     'exclude' => array(
-                        'column' => 'goodsOrPsv',
+                        'column' => 'goodsOrPsv/id',
                         'values' => array(
                             'psv',
                         )
@@ -130,7 +130,7 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
                 ),
                 'bus-compliance-issues' => array(
                     'exclude' => array(
-                        'column' => 'goodsOrPsv',
+                        'column' => 'goodsOrPsv/id',
                         'values' => array(
                             'psv',
                         )
@@ -167,7 +167,7 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
             'sections' => array(
                 'case-summary-info' => array(
                     'view' => 'submission/partials/case-summary',
-                    'dataPath' => 'VosaCase',
+                    'dataPath' => 'Cases',
                     'bundle' => array(
                         'children' => array(
                             'categories' => array(
@@ -227,13 +227,13 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
 
          $submissionSectionTrait->expects($this->once())
             ->method('makeRestCall')
-            ->with('VosaCase', 'GET', array('id' => 54))
+            ->with('Cases', 'GET', array('id' => 54))
             ->will($this->returnValue(array('id' => 7)));
 
          $submissionSectionTrait->expects($this->once())
             ->method('getFilteredSectionData')
             ->with('CaseSummaryInfo', array('id' => 7))
-            ->will($this->returnValue(array('caseNumber' => 'x1234567')));
+            ->will($this->returnValue(array('id' => 'x1234567')));
 
         $result = $submissionSectionTrait->createSubmissionSection(
             'case-summary-info',
@@ -253,17 +253,17 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
             array()
         );
         $data = array(
-            'caseNumber' => 54,
-            'ecms' => 123123,
+            'id' => 54,
+            'ecmsNo' => 123123,
             'description' => 'Case 1',
             'licence' => array(
-                'licenceNumber' => 7,
-                'startDate' => '2014-01-01',
-                'authorisedVehicles' => 12,
-                'authorisedTrailers' => 4,
+                'licNo' => 7,
+                'inForceDate' => '2014-01-01',
+                'totAuthVehicles' => 12,
+                'totAuthTrailers' => 4,
                 'organisation' => array(
                     'name' => 'Fred SMith',
-                    'organisationType' => 'Bus company',
+                    'type' => 'Bus company',
                     'sicCode' => 123345,
                     'isMlh' => 'Y'
                 ),
@@ -272,7 +272,7 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
         );
         $result = $submissionSectionTrait->caseSummaryInfo($data);
         $this->assertContains('Case 1', $result);
-        $this->assertArrayHasKey('ecms', $result);
+        $this->assertArrayHasKey('ecmsNo', $result);
     }
 
     /**
@@ -309,11 +309,11 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
         $thisConviction['categoryText'] = 'category text';
         $thisConviction['defType'] = 'defendant_type.operator';
         $thisConviction['operatorName'] = $operatorName;
-        $thisConviction['dateOfConviction'] = '2014-01-01';
+        $thisConviction['convictionDate'] = '2014-01-01';
         $thisConviction['personFirstname'] = 'Fred';
         $thisConviction['personLastname'] = 'Smith';
         $thisConviction['description'] = 'Done for speeding';
-        $thisConviction['courtFpm'] = 'Court 12';
+        $thisConviction['court'] = 'Court 12';
         $thisConviction['penalty'] = 'A monkey';
         $thisConviction['si'] = 'Y';
         $thisConviction['decToTc'] = 'Y';
@@ -326,7 +326,7 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
 
         $result = $submissionSectionTrait->convictionHistory($data);
         $this->assertContains('Court 12', $result[0]);
-        $this->assertArrayHasKey('dateOfConviction', $result[0]);
+        $this->assertArrayHasKey('convictionDate', $result[0]);
     }
 
     /**
@@ -350,12 +350,12 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
         $data = array(
             'licence' => array(
                 'organisation' => array(
-                    'organisationOwners' => array(
+                    'organisationPersons' => array(
                         array(
                             'person' => array(
-                                'surname' => 'Smith',
-                                'firstName' => 'Fred',
-                                'dateOfBirth' => '1975-03-15T00:00:00+0000'
+                                'familyName' => 'Smith',
+                                'forename' => 'Fred',
+                                'birthDate' => '1975-03-15T00:00:00+0000'
                             )
                         )
                     )
@@ -365,7 +365,7 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
 
         $result = $submissionSectionTrait->persons($data);
         $this->assertContains('Fred', $result[0]);
-        $this->assertArrayHasKey('firstName', $result[0]);
+        $this->assertArrayHasKey('forename', $result[0]);
     }
 
     public function testTransportManagers()
@@ -386,9 +386,9 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
                             ),
                             'contactDetails' => array(
                                 'person' => array(
-                                    'surname' => 'Smith',
-                                    'firstName' => 'Fred',
-                                    'dateOfBirth' => '1975-03-15T00:00:00+0000'
+                                    'familyName' => 'Smith',
+                                    'forename' => 'Fred',
+                                    'birthDate' => '1975-03-15T00:00:00+0000'
                                 )
                             )
                         )
@@ -399,7 +399,7 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
 
         $result = $submissionSectionTrait->transportManagers($data);
         $this->assertContains('Fred', $result[0]);
-        $this->assertArrayHasKey('firstName', $result[0]);
+        $this->assertArrayHasKey('forename', $result[0]);
     }
 
     public function testGetFilteredSectionData()
@@ -409,17 +409,17 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
         );
 
         $data = array(
-            'caseNumber' => 54,
-            'ecms' => 123123,
+            'id' => 54,
+            'ecmsNo' => 123123,
             'description' => 'Case 1',
             'licence' => array(
-                'licenceNumber' => 7,
-                'startDate' => '2014-01-01',
-                'authorisedVehicles' => 12,
-                'authorisedTrailers' => 4,
+                'licNo' => 7,
+                'inForceDate' => '2014-01-01',
+                'totAuthVehicles' => 12,
+                'totAuthTrailers' => 4,
                 'organisation' => array(
                     'name' => 'Fred SMith',
-                    'organisationType' => 'Bus company',
+                    'type' => 'Bus company',
                     'sicCode' => 123345,
                     'isMlh' => 'Y'
                 ),
@@ -428,7 +428,7 @@ class SubmissionSectionTraitTest extends AbstractHttpControllerTestCase
         );
 
         $result = $submissionSectionTrait->getFilteredSectionData('caseSummaryInfo', $data);
-        $this->assertArrayHasKey('ecms', $result);
+        $this->assertArrayHasKey('ecmsNo', $result);
     }
 
     private function getStaticDefTypes()

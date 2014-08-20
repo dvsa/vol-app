@@ -2,9 +2,9 @@
     echo $this->render(
         '/partials/page-header.phtml',
         array(
-            'pageTitle' => 'Licence: ' . $this->licenceData['licenceNumber'],
-            'pageSubTitle'=> $this->licenceData['goodsOrPsv'] . ', ' . $this->licenceData['licenceType']
-            . ', ' . $this->licenceData['licenceStatus']
+            'pageTitle' => 'Licence: ' . $this->licenceData['licNo'],
+            'pageSubTitle'=> $this->licenceData['goodsOrPsv']['id'] . ', ' . $this->licenceData['licenceType']['id']
+            . ', ' . $this->licenceData['status']['id']
         )
     );
 ?>

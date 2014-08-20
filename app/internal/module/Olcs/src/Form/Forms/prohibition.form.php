@@ -39,7 +39,7 @@ return [
                         'type' => 'text',
                         'label' => 'Location prohibition issued',
                         'filters' => '\Common\Form\Elements\InputFilters\TextMax255',
-                    ],
+                    ]
                 ]
             ],
             array(
