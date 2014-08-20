@@ -97,8 +97,6 @@ class BusinessDetailsController extends YourBusinessController
      */
     protected function save($data, $service = null)
     {
-        unset($data['type']);
-
         if (isset($data['companyNumber'])) {
             // unfortunately the company number field is a complex one so can't
             // be mapped directly
@@ -119,15 +117,23 @@ class BusinessDetailsController extends YourBusinessController
                 }
             }
 
-            $data['tradingNames'] = $tradingNames;
+            if (!empty($tradingNames)) {
+                $data['tradingNames'] = $tradingNames;
 
-            $tradingNameData = array(
-                'licence' => $licence['id'],
-                'tradingNames' => $tradingNames
-            );
+                $tradingNameData = array(
+                    'organisation' => $data['id'],
+                    'licence' => $licence['id'],
+                    'tradingNames' => $tradingNames
+                );
 
-            $this->makeRestCall('TradingNames', 'POST', $tradingNameData);
+                $this->makeRestCall('TradingNames', 'POST', $tradingNameData);
+            }
         }
+
+        unset($data['type']);
+        unset($data['edit_business_type']);
+        unset($data['companyNumber']);
+        unset($data['tradingNames']);
 
         // we shouldn't really need to do this; it's only
         // because our $service property is set to Application
@@ -189,6 +195,10 @@ class BusinessDetailsController extends YourBusinessController
      */
     protected function processLoad($data)
     {
+        print '<pre>';
+        print_r($data);
+        exit;
+        
         $licence = $data['licence'];
         $organisation = $licence['organisation'];
 
