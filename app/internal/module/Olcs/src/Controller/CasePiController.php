@@ -15,7 +15,6 @@ use Zend\View\Model\ViewModel;
  */
 class CasePiController extends CaseController
 {
-
     public function onDispatch(\Zend\Mvc\MvcEvent $e)
     {
         $licenceId = $this->fromRoute('licence');
@@ -37,12 +36,9 @@ class CasePiController extends CaseController
      */
     public function indexAction()
     {
-        $licenceId = $this->fromRoute('licence');
         $caseId = $this->fromRoute('case');
 
         $pi = $this->getPiInfo($caseId);
-        /* echo '<pre>';
-        die(print_r($pi, 1)); */
 
         $table = $this->buildPiHearingsTable($pi);
 
@@ -70,43 +66,37 @@ class CasePiController extends CaseController
 
     public function getPiInfo($caseId)
     {
-        $pis = $this->makeRestCall('Pi', 'GET', array('case' => $caseId));
-        if (isset($pis['Results']['0'])) {
-            $bundle = [
-                'children' => [
-                    'presidingTc' => [
-                        'properties' => 'ALL',
-                    ],
-                    'piReasons' => [
-                        'properties' => 'ALL',
-                    ],
-                    'piHearings' => array(
-                        'properties' => 'ALL',
-                        'children' => [
-                            'presidingTc' => [
-                                'properties' => 'ALL',
-                            ],
+        $bundle = [
+            'children' => [
+                'presidingTc' => [
+                    'properties' => 'ALL',
+                ],
+                'piReasons' => [
+                    'properties' => 'ALL',
+                ],
+                'piHearings' => array(
+                    'properties' => 'ALL',
+                    'children' => [
+                        'presidingTc' => [
+                            'properties' => 'ALL',
                         ],
-                    ),
-                    'decisionPresidingTc' => array(
-                        'properties' => 'ALL'
-                    ),
-                    'decisionReasons' => array(
-                        'properties' => 'ALL'
-                    ),
-                    'user' => array(
-                        'properties' => 'ALL'
-                    )
-                ]
-            ];
-            $pi = $this->makeRestCall('Pi', 'GET', array('id' => $pis['Results']['0']), $bundle);
-        }
+                    ],
+                ),
+                'decisionPresidingTc' => array(
+                    'properties' => 'ALL'
+                ),
+                'decisionReasons' => array(
+                    'properties' => 'ALL'
+                ),
+                'user' => array(
+                    'properties' => 'ALL'
+                )
+            ]
+        ];
 
-        if ($pi) {
-            return $pi;
-        }
+        $pis = $this->makeRestCall('Pi', 'GET', array('case' => $caseId, 'limit' => 1), $bundle);
 
-        return null;
+        return current($pis['Results']);
     }
 
     public function addAction()

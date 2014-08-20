@@ -540,8 +540,8 @@ class CaseStayControllerTest extends AbstractHttpControllerTestCase
                     'appealDate' => '',
                     'hearingDate' => '',
                     'decisionDate' => '',
-                    'papersDue' => '',
-                    'papersSent' => ''
+                    'papersDueDate' => '',
+                    'papersSentDate' => ''
                 )
             )
         );

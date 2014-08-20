@@ -83,7 +83,7 @@ class CaseAnnualTestHistoryController extends CaseController
         }
 
         if (!empty($data['id'])) {
-            $this->processEdit($data, 'VosaCase');
+            $this->processEdit($data, 'Cases');
         }
 
         return $this->redirect()->toRoute('case_annual_test_history', array(), array(), true);

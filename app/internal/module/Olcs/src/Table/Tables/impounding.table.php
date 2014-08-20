@@ -39,15 +39,21 @@ return array(
         ),
         array(
             'title' => 'Type',
-            'format' => '{{impoundingType}}'
+            'formatter' => function ($data, $column, $sm) {
+                return $sm->get('translator')->translate($data['impoundingType']['id']);
+            }
         ),
         array(
             'title' => 'Presiding TC/DTC',
-            'format' => '{{name}}'
+            'formatter' => function ($data) {
+                return $data['presidingTc']['name'];
+            }
         ),
         array(
             'title' => 'Outcome',
-            'name' => 'outcome'
+            'formatter' => function ($data, $column, $sm) {
+                return $sm->get('translator')->translate($data['outcome']['id']);
+            }
         ),
         array(
             'title' => 'Outcome sent',

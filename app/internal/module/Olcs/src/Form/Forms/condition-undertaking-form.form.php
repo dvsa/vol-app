@@ -17,7 +17,7 @@ return [
                     'version' => [
                         'type' => 'hidden'
                     ],
-                    'vosaCase' => [
+                    'case' => [
                         'type' => 'hidden'
                     ],
                     'licence' => [
@@ -41,7 +41,7 @@ return [
 
                     ],
                     'isFulfilled' => [
-                        'type' => 'checkbox-boolean',
+                        'type' => 'yesnocheckbox',
                         'label' => 'Fulfilled',
                     ],
                     'attachedTo' => [

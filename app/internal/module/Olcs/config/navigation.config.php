@@ -66,13 +66,27 @@ return array(
                     'route' => 'operators',
                     'use_route_match' => true,
                     'pages' => array(
+
                         array(
+                            'label' => 'Add Case',
+                            'route' => 'licence_case_action',
+                            'action' => 'add',
+                            'use_route_match' => true
+                        ),
+                        array(
+                            'label' => 'Edit Case',
+                            'route' => 'licence_case_action',
+                            'action' => 'edit',
+                            'use_route_match' => true
+                        ),
+                        array(
+                            'id' => 'licence_cases',
                             'label' => 'Case list',
                             'route' => 'licence/cases',
                             'use_route_match' => true,
                             'pages' => array(
                                 array(
-                                    'label' => 'Case Summary',
+                                    'label' => 'Overview',
                                     'route' => 'case_manage',
                                     'use_route_match' => true,
                                     'pages' => array(
@@ -84,24 +98,29 @@ return array(
                                                 array(
                                                     'label' => 'Decision',
                                                     'route' => 'submission',
-                                                    'action' => 'decision'
+                                                    'action' => 'decision',
+                                                    'use_route_match' => true,
                                                 ),
                                                 array(
                                                     'label' => 'Recommendation',
                                                     'route' => 'submission',
-                                                    'action' => 'recommendation'
+                                                    'action' => 'recommendation',
+                                                    'use_route_match' => true,
                                                 ),
                                                 array(
                                                     'label' => 'Add note',
                                                     'route' => 'note',
-                                                    'action' => 'add'
+                                                    'action' => 'add',
+                                                    'use_route_match' => true,
                                                 )
-                                            )
+                                            ),
+                                            'use_route_match' => true,
                                         ),
                                         array(
-                                        'label' => 'Edit Submission',
-                                        'route' => 'submission',
-                                        'action' => 'edit',
+                                            'label' => 'Edit Submission',
+                                            'route' => 'submission',
+                                            'action' => 'edit',
+                                            'use_route_match' => true,
                                             'pages' => array(
                                                 array(
                                                     'label' => 'Decision',
@@ -123,101 +142,85 @@ return array(
                                     )
                                 ),
                                 array(
-                                    'label' => 'Case Convictions',
+                                    'label' => 'Convictions',
                                     'route' => 'case_convictions',
                                     'use_route_match' => true,
                                     'pages' => array(
                                         array(
                                             'label' => 'Add Conviction',
                                             'route' => 'conviction',
-                                            'action' => 'add'
+                                            'action' => 'add',
+                                            'use_route_match' => true
                                         ),
                                         array(
                                             'label' => 'Edit Conviction',
                                             'route' => 'conviction',
-                                            'action' => 'edit'
+                                            'action' => 'edit',
+                                            'use_route_match' => true
                                         )
                                     )
                                 ),
                                 array(
-                                    'label' => 'Case',
-                                    'route' => 'licence_case_action',
-                                    'action' => 'add'
+                                    'label' => 'Prohibitions',
+                                    'route' => 'case_prohibition',
+                                    'action' => 'index',
+                                    'use_route_match' => true,
+                                    'pages' => array(
+                                        array(
+                                            'label' => 'Add Prohibition',
+                                            'route' => 'case_prohibition',
+                                            'action' => 'add',
+                                            'use_route_match' => true
+                                        ),
+                                        array(
+                                            'label' => 'Edit Prohibition',
+                                            'route' => 'case_prohibition',
+                                            'action' => 'edit',
+                                            'use_route_match' => true
+                                        )
+                                    )
                                 ),
                                 array(
-                                    'label' => 'Add Case',
-                                    'route' => 'licence_case_action',
-                                    'action' => 'add'
+                                    'label' => 'Annual Test History',
+                                    'route' => 'case_annual_test_history',
+                                    'action' => 'index',
+                                    'use_route_match' => true
                                 ),
                                 array(
-                                    'label' => 'Edit Case',
-                                    'route' => 'licence_case_action',
-                                    'action' => 'edit'
+                                    'label' => 'Penalties',
+                                    'route' => 'case_penalty',
+                                    'action' => 'index',
+                                    'use_route_match' => true
                                 ),
                                 array(
-                                    'label' => 'Case Statements',
+                                    'label' => 'ERRU Penalties',
+                                    'route' => 'case_manage',
+                                    'action' => 'manage',
+                                    'tab' => 'erru',
+                                    'use_route_match' => true
+                                ),
+                                array(
+                                    'label' => 'Statements',
                                     'route' => 'case_statement',
                                     'action' => 'index',
+                                    'use_route_match' => true,
                                     'pages' => array(
                                         array(
                                             'label' => 'Add Statement',
                                             'route' => 'case_statement',
-                                            'action' => 'add'
+                                            'action' => 'add',
+                                            'use_route_match' => true
                                         ),
                                         array(
                                             'label' => 'Edit Statement',
                                             'route' => 'case_statement',
-                                            'action' => 'edit'
+                                            'action' => 'edit',
+                                            'use_route_match' => true
                                         )
                                     )
                                 ),
                                 array(
-                                    'label' => 'Appeal & Stays',
-                                    'route' => 'case_stay_action',
-                                    'action' => 'index',
-                                    'pages' => array(
-                                        array(
-                                            'label' => 'Add Stay',
-                                            'route' => 'case_stay_action',
-                                            'action' => 'add'
-                                        ),
-                                        array(
-                                            'label' => 'Edit Stay',
-                                            'route' => 'case_stay_action',
-                                            'action' => 'edit'
-                                        )
-                                        ,
-                                        array(
-                                            'label' => 'Add Appeal',
-                                            'route' => 'case_appeal',
-                                            'action' => 'add'
-                                        ),
-                                        array(
-                                            'label' => 'Edit Appeal',
-                                            'route' => 'case_appeal',
-                                            'action' => 'edit'
-                                        )
-                                    )
-                                ),
-                                array(
-                                    'label' => 'In-Office revocation',
-                                    'route' => 'case_revoke',
-                                    'action' => 'index',
-                                    'pages' => array(
-                                        array(
-                                            'label' => 'Add In-Office revocation',
-                                            'route' => 'case_revoke',
-                                            'action' => 'add'
-                                        ),
-                                        array(
-                                            'label' => 'Edit In-Office revocation',
-                                            'route' => 'case_revoke',
-                                            'action' => 'edit'
-                                        )
-                                    )
-                                ),
-                                array(
-                                    'label' => 'Case Complaints',
+                                    'label' => 'Complaints',
                                     'route' => 'case_complaints',
                                     'action' => 'index',
                                     'use_route_match' => true,
@@ -225,43 +228,70 @@ return array(
                                         array(
                                             'label' => 'Add Complaint',
                                             'route' => 'complaint',
-                                            'action' => 'add'
+                                            'action' => 'add',
+                                            'use_route_match' => true
                                         ),
                                         array(
                                             'label' => 'Edit Complaint',
                                             'route' => 'complaint',
+                                            'action' => 'edit',
+                                            'use_route_match' => true
                                         )
                                     ),
                                 ),
                                 array(
-                                    'label' => 'Case Penalties',
-                                    'route' => 'case_penalty',
-                                    'action' => 'index',
+                                    'label' => 'Serious infringement',
+                                    'route' => 'case_manage',
+                                    'action' => 'si',
+                                    'use_route_match' => true
                                 ),
                                 array(
-                                    'label' => 'Case Prohibitions',
-                                    'route' => 'case_prohibition',
+                                    'label' => 'Appeal & Stays',
+                                    'route' => 'case_stay_action',
                                     'action' => 'index',
+                                    'use_route_match' => true,
                                     'pages' => array(
                                         array(
-                                            'label' => 'Add Prohibition',
-                                            'route' => 'case_prohibition',
-                                            'action' => 'add'
+                                            'label' => 'Add Stay',
+                                            'route' => 'case_stay_action',
+                                            'action' => 'add',
+                                            'use_route_match' => true
                                         ),
                                         array(
-                                            'label' => 'Edit Prohibition',
-                                            'route' => 'case_prohibition',
-                                            'action' => 'edit'
+                                            'label' => 'Edit Stay',
+                                            'route' => 'case_stay_action',
+                                            'action' => 'edit',
+                                            'use_route_match' => true
+                                        )
+                                        ,
+                                        array(
+                                            'label' => 'Add Appeal',
+                                            'route' => 'case_appeal',
+                                            'action' => 'add',
+                                            'use_route_match' => true
+                                        ),
+                                        array(
+                                            'label' => 'Edit Appeal',
+                                            'route' => 'case_appeal',
+                                            'action' => 'edit',
+                                            'use_route_match' => true
                                         )
                                     )
                                 ),
                                 array(
-                                    'label' => 'Case Annual Test History',
-                                    'route' => 'case_annual_test_history',
-                                    'action' => 'index'
+                                    'label' => 'Documents',
+                                    'route' => 'case_manage',
+                                    'action' => 'documents',
+                                    'use_route_match' => true
                                 ),
                                 array(
-                                    'label' => 'Conditions &amp; Undertakings',
+                                    'label' => 'Notes',
+                                    'route' => 'case_manage',
+                                    'action' => 'notes',
+                                    'use_route_match' => true
+                                ),
+                                array(
+                                    'label' => 'Conditions & Undertakings',
                                     'route' => 'case_conditions_undertakings',
                                     'action' => 'index',
                                     'use_route_match' => true,
@@ -269,20 +299,26 @@ return array(
                                         array(
                                             'label' => 'Add Condition',
                                             'route' => 'conditions',
-                                            'action' => 'add'
+                                            'action' => 'add',
+                                            'use_route_match' => true
                                         ),
                                         array(
                                             'label' => 'Edit Condition',
                                             'route' => 'conditions',
+                                            'action' => 'edit',
+                                            'use_route_match' => true
                                         ),
                                         array(
                                             'label' => 'Add Undertaking',
                                             'route' => 'undertakings',
-                                            'action' => 'add'
+                                            'action' => 'add',
+                                            'use_route_match' => true
                                         ),
                                         array(
                                             'label' => 'Edit Undertaking',
                                             'route' => 'undertakings',
+                                            'action' => 'edit',
+                                            'use_route_match' => true
                                         )
                                     ),
                                 ),
@@ -300,6 +336,26 @@ return array(
                                             'label' => 'Edit Impounding',
                                             'route' => 'case_impounding',
                                             'action' => 'edit'
+                                        )
+                                    )
+                                ),
+                                array(
+                                    'label' => 'In-Office revocation',
+                                    'route' => 'case_revoke',
+                                    'action' => 'index',
+                                    'use_route_match' => true,
+                                    'pages' => array(
+                                        array(
+                                            'label' => 'Add In-Office revocation',
+                                            'route' => 'case_revoke',
+                                            'action' => 'add',
+                                            'use_route_match' => true
+                                        ),
+                                        array(
+                                            'label' => 'Edit In-Office revocation',
+                                            'route' => 'case_revoke',
+                                            'action' => 'edit',
+                                            'use_route_match' => true
                                         )
                                     )
                                 ),

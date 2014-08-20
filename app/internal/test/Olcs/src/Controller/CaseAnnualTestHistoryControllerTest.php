@@ -49,7 +49,7 @@ class CaseAnnualTestHistoryControllerTest extends \PHPUnit_Framework_TestCase
 
         $sut->setPluginManager($mockPluginManager);
 
-        $sut->expects($this->once())->method('processEdit')->with($this->equalTo($dataTwo), $this->equalTo('VosaCase'));
+        $sut->expects($this->once())->method('processEdit')->with($this->equalTo($dataTwo), $this->equalTo('Cases'));
 
         $sut->saveAnnualTestHistoryForm($dataOne);
     }

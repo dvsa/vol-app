@@ -15,7 +15,7 @@ return [
                 ),
                 'options' => array(0),
                 'elements' => [
-                    'piReasons' => [
+                    'reasons' => [
                         'type' => 'multiselect',
                         'label' => 'Select legislation',
                         'help-block' => 'Use CTRL to select multiple'
@@ -29,7 +29,7 @@ return [
                         'label' => 'PTR agreed date',
                         'filters' => '\Common\Form\Elements\InputFilters\DateRequired',
                     ],
-                    'dateClosed' => [
+                    'closedDate' => [
                         'type' => 'dateSelectWithEmpty',
                         'label' => 'Closed date',
                     ],

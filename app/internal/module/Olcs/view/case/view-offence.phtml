@@ -3,7 +3,7 @@ echo $this->render(
     'partials/page-header.phtml',
     array(
         'pageTitle' => 'Case',
-        'pageSubTitle' => $case['licence']['organisation']['name'] . ' ' . '#' . $case['licence']['licenceNumber'],
+        'pageSubTitle' => $case['licence']['organisation']['name'] . ' ' . '#' . $case['licence']['licNo'],
         'caseId' => $case['id']
     )
 );

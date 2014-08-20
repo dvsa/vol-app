@@ -15,9 +15,9 @@
             foreach ($this->sectionData as $transportManagerLicence) :
         ?>
             <tr>
-                <td><?php echo $this->escapeHtml($transportManagerLicence['lastName']); ?></td>
-                <td><?php echo $this->escapeHtml($transportManagerLicence['firstName']); ?></td>
-                <td><?php echo date('d/m/Y', strtotime($transportManagerLicence['dob']));  ?></td>
+                <td><?php echo $this->escapeHtml($transportManagerLicence['familyName']); ?></td>
+                <td><?php echo $this->escapeHtml($transportManagerLicence['forename']); ?></td>
+                <td><?php echo date('d/m/Y', strtotime($transportManagerLicence['birthDate']));  ?></td>
                 <td><?php echo $this->escapeHtml($transportManagerLicence['qualifications']); ?></td>
                 <td>-<?php //echo $this->escapeHtml($transportManagerLicence['qualification']); ?></td>
                 <td><?php echo $this->escapeHtml($transportManagerLicence['tmType']); ?></td>

@@ -438,7 +438,7 @@ return [
     'case_impounding' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/licence/[:licence]/case/[:case]/action/manage/impounding[/:action][/:id]',
+            'route' => '/licence/[:licence]/case/[:case]/task/impounding[/:action][/:id]',
             'constraints' => [
                 'licence' => '[0-9]+',
                 'case' => '[0-9]+',
@@ -453,7 +453,7 @@ return [
     'case_revoke' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/licence/:licence/case/:case/revoke/:action[/:id]',
+            'route' => '/licence/:licence/case/:case/task/revoke[/:action][/:id]',
             'constraints' => [
                 'licence' => '[0-9]+',
                 'case' => '[0-9]+',
@@ -467,7 +467,7 @@ return [
     'case_pi' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/licence/[:licence]/case/[:case]/action/manage/pi[/:action][/:type][/:id]',
+            'route' => '/licence/[:licence]/case/[:case]/task/pi[/:action][/:type][/:id]',
             'constraints' => [
                 'licence' => '[0-9]+',
                 'case' => '[0-9]+',
