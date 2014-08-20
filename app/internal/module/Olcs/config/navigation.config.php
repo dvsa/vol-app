@@ -30,6 +30,12 @@ return array(
                             'use_route_match' => true
                         ),
                         array(
+                            'id' => 'licence_bus',
+                            'label' => 'Bus reg',
+                            'route' => 'licence/bus',
+                            'use_route_match' => true
+                        ),
+                        array(
                             'id' => 'licence_caselist',
                             'label' => 'Cases',
                             'route' => 'licence/cases',
@@ -51,12 +57,6 @@ return array(
                             'id' => 'licence_fees',
                             'label' => 'Fees',
                             'route' => 'licence/fees',
-                            'use_route_match' => true
-                        ),
-                        array(
-                            'id' => 'licence_bus',
-                            'label' => 'Bus reg',
-                            'route' => 'licence/bus',
                             'use_route_match' => true
                         )
                     )

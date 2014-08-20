@@ -46,7 +46,8 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
                 'processAdd',
                 'processEdit',
                 'getTitles',
-                'renderView'
+                'renderView',
+                'getLicence'
             ]
         );
 
@@ -232,7 +233,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
         $action = '';
 
         $this->beginIndexAction($licenceId, $action);
-        $this->controller->expects($this->exactly(3))
+        $this->controller->expects($this->any())
             ->method('makeRestCall')
             ->will(
                 $this->onConsecutiveCalls(
@@ -248,9 +249,21 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
             ->method('getPluginManager')
             ->will($this->returnValue($this->getPluginManagerUrl()));
 
-        $this->controller->expects($this->once())
+        $this->controller->expects($this->exactly(2))
             ->method('getServiceLocator')
-            ->will($this->returnValue($this->getServiceLocatorGetTable()));
+            ->will(
+                $this->onConsecutiveCalls(
+                    $this->returnValue(
+                        $this->getServiceLocatorGetTable()
+                    ), $this->returnValue(
+                        $this->getServiceLocatorGetNavigation()
+                    )
+                )
+            );
+
+        $this->controller->expects($this->once())
+            ->method('getLicence')
+            ->will($this->returnValue(['goodsOrPsv' => ['id' => 'lcat_gv']]));
 
         $this->controller->expects($this->once())
             ->method('getView')
@@ -261,8 +274,6 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
             ->with($this->equalTo('case/list'));
 
         $this->assertSame($this->view, $this->controller->indexAction());
-
-        $this->controller->indexAction();
     }
 
     /**
@@ -941,6 +952,44 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
             ->method('get')
             ->with('Table')
             ->will($this->returnValue($tableMock));
+
+        return $serviceMock;
+    }
+
+    /**
+     * Gets a mock plugin manager url call
+     */
+    private function getServiceLocatorGetNavigation()
+    {
+        $serviceMock = $this->getMock(
+            'stdClass', [
+                'get'
+            ]
+        );
+
+        $navMock = $this->getMock(
+            'stdClass', [
+                'findOneBy'
+            ]
+        );
+
+        $setVisibleMock = $this->getMock(
+            'stdClass', [
+                'setVisible'
+            ]
+        );
+
+        $setVisibleMock->expects($this->any())
+            ->method('setVisible');
+
+        $navMock->expects($this->any())
+            ->method('findOneBy')
+            ->will($this->returnValue($setVisibleMock));
+
+        $serviceMock->expects($this->any())
+            ->method('get')
+            ->with('Navigation')
+            ->will($this->returnValue($navMock));
 
         return $serviceMock;
     }
