@@ -31,12 +31,9 @@ return array(
                 'name' => 'convictionsConfirmation',
                 'elements' => array(
                     'convictionsConfirmation' => array(
-                        'type' => 'multicheckbox',
-                        'label' => 'Confirm',
-                        'value_options' => array(
-                            '1' => 'selfserve-app-subSection-previous-history-criminal-conviction-labelConfirm'
-                        ),
-                    ),
+                        'type' => 'yesnocheckbox',
+                        'label' => 'selfserve-app-subSection-previous-history-criminal-conviction-labelConfirm'
+                    )
                 )
             ),
             array(

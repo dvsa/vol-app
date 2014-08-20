@@ -56,7 +56,7 @@ class LicenceTypeController extends TypeOfLicenceController
 
             $options = $licenceTypeElement->getValueOptions();
 
-            unset($options['special-restricted']);
+            unset($options[self::LICENCE_TYPE_SPECIAL_RESTRICTED]);
 
             $licenceTypeElement->setValueOptions($options);
         }

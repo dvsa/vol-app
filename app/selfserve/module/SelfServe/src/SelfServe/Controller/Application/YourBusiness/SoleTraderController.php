@@ -36,13 +36,13 @@ class SoleTraderController extends YourBusinessController
      */
     protected $dataBundle = array(
         'properties' => array(
-                'id',
-                'version',
-                'title',
-                'firstName',
-                'surname',
-                'dateOfBirth',
-                'otherNames',
+            'id',
+            'version',
+            'title',
+            'forename',
+            'familyName',
+            'birthDate',
+            'otherName',
         )
     );
 

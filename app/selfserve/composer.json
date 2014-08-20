@@ -16,7 +16,7 @@
     "require": {
         "php": ">=5.4",
         "phpunit/phpunit": "4.0.*",
-        "zendframework/zendframework": "~2.3.0",
+        "zendframework/zendframework": "2.3.*",
         "doctrine/doctrine-orm-module": "0.*",
         "olcs/OlcsCommon": "dev-develop"
     },

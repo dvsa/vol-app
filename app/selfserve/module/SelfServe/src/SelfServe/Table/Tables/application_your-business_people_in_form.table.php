@@ -32,19 +32,19 @@ return array(
                         'action' => 'edit'
                     ),
                     'Application/YourBusiness/People'
-                ) . '">' . $row['title'] . ' ' . $row['firstName'] . ' ' . $row['surname'] . '</a>';
+                ) . '">' . $row['title'] . ' ' . $row['forename'] . ' ' . $row['familyName'] . '</a>';
             },
         ),
         array(
             'title' => 'selfserve-app-subSection-your-business-people-columnHasOtherNames',
-            'name' => 'otherNames',
+            'name' => 'otherName',
             'formatter' => function ($row) {
-                return ($row['otherNames'] ? 'Yes' : 'No');
+                return ($row['otherName'] ? 'Yes' : 'No');
             }
         ),
         array(
             'title' => 'selfserve-app-subSection-your-business-people-columnDate',
-            'name' => 'dateOfBirth',
+            'name' => 'birthDate',
             'formatter' => 'Date',
         ),
         array(

@@ -17,6 +17,20 @@ use SelfServe\Controller\AbstractJourneyController;
  */
 class ApplicationController extends AbstractJourneyController
 {
+    const GOODS_OR_PSV_GOODS_VEHICLE = 'lcat_gv';
+    const GOODS_OR_PSV_PSV = 'lcat_psv';
+
+    const LICENCE_TYPE_RESTRICTED = 'ltyp_r';
+    const LICENCE_TYPE_STANDARD_INTERNATIONAL = 'ltyp_si';
+    const LICENCE_TYPE_STANDARD_NATIONAL = 'ltyp_sn';
+    const LICENCE_TYPE_SPECIAL_RESTRICTED = 'ltyp_sr';
+
+    const ORG_TYPE_PARTNERSHIP = 'org_t_p';
+    const ORG_TYPE_OTHER = 'org_t_pa';
+    const ORG_TYPE_REGISTERED_COMPANY = 'org_t_rc';
+    const ORG_TYPE_LLP = 'org_t_llp';
+    const ORG_TYPE_SOLE_TRADER = 'org_t_st';
+
     /**
      * Holds the licenceDataBundle
      *
@@ -28,14 +42,26 @@ class ApplicationController extends AbstractJourneyController
                 'properties' => array(
                     'id',
                     'version',
-                    'goodsOrPsv',
-                    'niFlag',
-                    'licenceType',
+                    'niFlag'
                 ),
                 'children' => array(
-                    'organisation' => array(
+                    'goodsOrPsv' => array(
                         'properties' => array(
-                            'organisationType'
+                            'id'
+                        )
+                    ),
+                    'licenceType' => array(
+                        'properties' => array(
+                            'id'
+                        )
+                    ),
+                    'organisation' => array(
+                        'children' => array(
+                            'type' => array(
+                                'properties' => array(
+                                    'id'
+                                )
+                            )
                         )
                     )
                 )
@@ -122,6 +148,8 @@ class ApplicationController extends AbstractJourneyController
         // We use the full section completion as it gets cached and will be used again
         $completion = $this->getSectionCompletion();
 
+        $foreignKey = $this->getJourneyConfig()['completionStatusJourneyIdColumn'];
+
         $data = array(
             'id' => $completion['id'],
             'version' => $completion['version'],
@@ -130,7 +158,7 @@ class ApplicationController extends AbstractJourneyController
 
         $this->makeRestCall('ApplicationCompletion', 'PUT', $data);
 
-        $completion['version'] ++;
+        $completion['version']++;
 
         $this->setSectionCompletion($completion);
     }
@@ -157,7 +185,9 @@ class ApplicationController extends AbstractJourneyController
         if (empty($this->licenceType)) {
             $licenceData = $this->getLicenceData();
 
-            $this->licenceType = $licenceData['licenceType'];
+            if (isset($licenceData['licenceType']['id'])) {
+                $this->licenceType = $licenceData['licenceType']['id'];
+            }
         }
 
         return $this->licenceType;
@@ -181,7 +211,10 @@ class ApplicationController extends AbstractJourneyController
                 return parent::getAccessKeys($force);
             }
 
-            if (strtolower($licence['goodsOrPsv']) == 'psv') {
+            $goodsOrPsv = $this->getGoodsOrPsvFromLicenceData($licence);
+            $type = $this->getLicenceTypeFromLicenceData($licence);
+
+            if ($goodsOrPsv == 'psv') {
                 $this->isPsv = true;
                 $this->accessKeys[] = 'psv';
             } else {
@@ -189,13 +222,7 @@ class ApplicationController extends AbstractJourneyController
                 $this->accessKeys[] = 'goods';
             }
 
-            $type = str_replace(' ', '-', strtolower($licence['licenceType']));
-
-            if (strstr($type, 'standard')) {
-                $type = 'standard';
-            }
-
-            $this->accessKeys[] = trim(strtolower($licence['goodsOrPsv']) . '-' . $type, '-');
+            $this->accessKeys[] = trim($goodsOrPsv . '-' . $type, '-');
 
             if (isset($licence['niFlag']) && !is_null($licence['niFlag']) && $licence['niFlag'] !== '') {
                 $this->accessKeys[] = ($licence['niFlag'] == 1 ? 'ni' : 'gb');
@@ -211,11 +238,63 @@ class ApplicationController extends AbstractJourneyController
                 $this->accessKeys[] = 'unpaid';
             }
 
-            $this->accessKeys[] = $licence['organisation']['organisationType'];
-
+            $this->accessKeys[] = $licence['organisation']['type']['id'];
         }
 
         return $this->accessKeys;
+    }
+
+    /**
+     * Get Goods Or Psv From Licence Data
+     *
+     * @param array $licence
+     * @return string|null
+     */
+    private function getGoodsOrPsvFromLicenceData($licence)
+    {
+        if (!isset($licence['goodsOrPsv']['id'])) {
+            return null;
+        }
+
+        if ($licence['goodsOrPsv']['id'] == self::GOODS_OR_PSV_PSV) {
+            return 'psv';
+        }
+
+        return 'goods';
+    }
+
+    /**
+     * Get Licence Type From Licence Data
+     *
+     * @param array $licence
+     * @return string|null
+     */
+    private function getLicenceTypeFromLicenceData($licence)
+    {
+        if (!isset($licence['licenceType']['id'])) {
+            return null;
+        }
+
+        if (
+            in_array(
+                $licence['licenceType']['id'],
+                [self::LICENCE_TYPE_STANDARD_INTERNATIONAL, self::LICENCE_TYPE_STANDARD_NATIONAL]
+            )
+        ) {
+            return 'standard';
+        }
+
+        switch ($licence['licenceType']['id']) {
+            case self::LICENCE_TYPE_STANDARD_INTERNATIONAL:
+            case self::LICENCE_TYPE_STANDARD_NATIONAL:
+                return 'standard';
+            case self::LICENCE_TYPE_RESTRICTED:
+                return 'restricted';
+            case self::LICENCE_TYPE_SPECIAL_RESTRICTED:
+                return 'special-restricted';
+        }
+
+        return null;
     }
 
     /**
@@ -258,7 +337,7 @@ class ApplicationController extends AbstractJourneyController
 
         $licence = $this->getLicenceData();
 
-        $fileData['fileName'] = $fileData['name'];
+        $fileData['filename'] = $fileData['name'];
         $fileData['application'] = $this->getIdentifier();
         $fileData['licence'] = $licence['id'];
 

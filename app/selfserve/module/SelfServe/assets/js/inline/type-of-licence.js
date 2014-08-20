@@ -35,8 +35,8 @@ $(function() {
         },
 
         // this rule relates to an element within the fieldset
-        "licenceType=special-restricted": function() {
-          return operatorType.filter(":checked").val() === "psv";
+        "licenceType=ltyp_sr": function() {
+          return operatorType.filter(":checked").val() === "lcat_psv";
         }
       }
     },

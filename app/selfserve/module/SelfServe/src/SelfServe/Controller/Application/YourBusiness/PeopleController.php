@@ -4,13 +4,15 @@
  * People Controller
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
+ * @author Rob Caiger <rob@clocal.co.uk>
  */
 namespace SelfServe\Controller\Application\YourBusiness;
 
 /**
  * People Controller
  *
- * @author Alex Peshkov <alex.peshkov@clocal.co.uk>
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
+ * @author Rob Caiger <rob@clocal.co.uk>
  */
 class PeopleController extends YourBusinessController
 {
@@ -52,6 +54,7 @@ class PeopleController extends YourBusinessController
     public function indexAction()
     {
         $this->populatePeople();
+
         return $this->renderSection();
     }
 
@@ -62,28 +65,39 @@ class PeopleController extends YourBusinessController
      */
     protected function getFormTableData()
     {
-        $applicationId = $this->params()->fromRoute('applicationId');
+        $org = $this->getOrganisationData();
 
         $bundle = array(
-            'properties' => array(
-                'id',
-                'title',
-                'firstName',
-                'surname',
-                'dateOfBirth',
-                'otherNames',
-                'position'
-            ),
+            'properties' => null,
+            'children' => array(
+                'person' => array(
+                    'properties' => array(
+                        'id',
+                        'title',
+                        'forename',
+                        'familyName',
+                        'birthDate',
+                        'otherName',
+                        'position'
+                    )
+                )
+            )
         );
 
         $data = $this->makeRestCall(
-            'Person',
+            'OrganisationPerson',
             'GET',
-            array('application' => $applicationId),
+            array('organisation' => $org['id']),
             $bundle
         );
 
-        return array_key_exists('Results', $data) ? $data['Results'] : array();
+        $tableData = array();
+
+        foreach ($data['Results'] as $result) {
+            $tableData[] = $result['person'];
+        }
+
+        return $tableData;
     }
 
     /**
@@ -95,33 +109,44 @@ class PeopleController extends YourBusinessController
     protected function alterForm($form)
     {
         $table = $form->get('table')->get('table')->getTable();
-        $orgType = $this->getOrganisationData(array('organisationType'));
+
+        $bundle = array(
+            'children' => array(
+                'type' => array(
+                    'properties' => array('id')
+                )
+            )
+        );
+
+        $org = $this->getOrganisationData($bundle);
+
+
         $translate = $this->getServiceLocator()->get('viewhelpermanager')->get('translate');
         $guidance = $form->get('guidance')->get('guidance');
 
-        switch ($orgType['organisationType']) {
-            case 'org_type.lc':
+        switch ($org['type']['id']) {
+            case self::ORG_TYPE_REGISTERED_COMPANY:
                 $table->setVariable(
                     'title',
                     $translate('selfserve-app-subSection-your-business-people-tableHeaderDirectors')
                 );
                 $guidance->setValue($translate('selfserve-app-subSection-your-business-people-guidanceLC'));
                 break;
-            case 'org_type.llp':
+            case self::ORG_TYPE_LLP:
                 $table->setVariable(
                     'title',
                     $translate('selfserve-app-subSection-your-business-people-tableHeaderPartners')
                 );
                 $guidance->setValue($translate('selfserve-app-subSection-your-business-people-guidanceLLP'));
                 break;
-            case 'org_type.p':
+            case self::ORG_TYPE_PARTNERSHIP:
                 $table->setVariable(
                     'title',
                     $translate('selfserve-app-subSection-your-business-people-tableHeaderPartners')
                 );
                 $guidance->setValue($translate('selfserve-app-subSection-your-business-people-guidanceP'));
                 break;
-            case 'org_type.o':
+            case self::ORG_TYPE_OTHER:
                 $table->setVariable(
                     'title',
                     $translate('selfserve-app-subSection-your-business-people-tableHeaderPeople')
@@ -132,7 +157,7 @@ class PeopleController extends YourBusinessController
                 break;
         }
 
-        if ($orgType['organisationType'] != 'org_type.o') {
+        if ($org['type']['id'] != self::ORG_TYPE_OTHER) {
             $table->removeColumn('position');
         }
 
@@ -146,8 +171,17 @@ class PeopleController extends YourBusinessController
      */
     protected function alterActionForm($form)
     {
-        $orgType = $this->getOrganisationData(array('organisationType'));
-        if ($orgType['organisationType'] != 'org_type.o') {
+        $bundle = array(
+            'children' => array(
+                'type' => array(
+                    'properties' => 'id'
+                )
+            )
+        );
+
+        $orgType = $this->getOrganisationData($bundle);
+
+        if ($orgType['type']['id'] != self::ORG_TYPE_OTHER) {
             $form->get('data')->remove('position');
         }
         return $form;
@@ -176,6 +210,19 @@ class PeopleController extends YourBusinessController
      */
     public function deleteAction()
     {
+        $id = $this->getActionId();
+
+        $results = $this->makeRestCall(
+            'OrganisationPerson',
+            'GET',
+            array('person' => $id),
+            array('properties' => array('id'))
+        );
+
+        if (isset($results['Count']) && $results['Count'] == 1) {
+            $this->makeRestCall('OrganisationPerson', 'DELETE', array('id' => $results['Results'][0]['id']));
+        }
+
         return $this->delete();
     }
 
@@ -187,10 +234,7 @@ class PeopleController extends YourBusinessController
      */
     protected function processActionLoad($data)
     {
-        $data = parent::processActionLoad($data);
-        $returnData = ($this->getActionName() != 'add') ? array('data' => $data) : $data;
-
-        return $returnData;
+        return array('data' => parent::processActionLoad($data));
     }
 
     /**
@@ -211,9 +255,20 @@ class PeopleController extends YourBusinessController
      */
     protected function actionSave($data, $service = null)
     {
-        $applicationId = $this->getIdentifier();
-        $data['application'] = $applicationId;
-        parent::actionSave($data, 'Person');
+        $person = parent::actionSave($data, 'Person');
+
+        // If we are creating a person, we need to link them to the organisation
+        if ($this->getActionName() == 'add') {
+
+            $org = $this->getOrganisationData();
+
+            $orgPersonData = array(
+                'organisation' => $org['id'],
+                'person' => $person['id']
+            );
+
+            parent::actionSave($orgPersonData, 'OrganisationPerson');
+        }
     }
 
     /**
@@ -233,28 +288,55 @@ class PeopleController extends YourBusinessController
      */
     protected function populatePeople()
     {
-        $org = $this->getOrganisationData(array('organisationType', 'registeredCompanyNumber'));
-        // company is LLP or Limited
-        if ($org['organisationType'] == 'org_type.llp' || $org['organisationType'] == 'org_type.lc') {
-            // no people added
-            if (!$this->peopleAdded()) {
-                // valid company number added
-                $pattern = '/^[A-Z0-9]{8}$/';
-                if (preg_match($pattern, $org['registeredCompanyNumber'])) {
-                    $result = $this->makeRestCall(
-                        'CompaniesHouse',
-                        'GET',
-                        [
-                            'type' => 'currentCompanyOfficers',
-                            'value' => $org['registeredCompanyNumber']
-                        ]
+        $bundle = array(
+            'properties' => array('companyOrLlpNo'),
+            'children' => array(
+                'type' => array(
+                    'properties' => array('id')
+                )
+            )
+        );
+
+        $org = $this->getOrganisationData($bundle);
+
+        $orgTypesOnCompaniesHouse = array(
+            self::ORG_TYPE_LLP,
+            self::ORG_TYPE_REGISTERED_COMPANY
+        );
+
+        // If we are not a limited company or LLP just bail
+        // OR if we have already added people
+        // OR if we don't have a company number
+        if (!in_array($org['type']['id'], $orgTypesOnCompaniesHouse)
+            || $this->peopleAdded()
+            || !preg_match('/^[A-Z0-9]{8}$/', $org['companyOrLlpNo'])) {
+            return;
+        }
+
+        $searchData = array(
+            'type' => 'currentCompanyOfficers',
+            'value' => $org['companyOrLlpNo']
+        );
+
+        $result = $this->makeRestCall('CompaniesHouse', 'GET', $searchData);
+
+        if (is_array($result) && array_key_exists('Results', $result) && count($result['Results'])) {
+
+            // @todo We need a better way to handle this, far too many rest calls could happen
+            foreach ($result['Results'] as $person) {
+
+                // Create a person
+                $person = $this->makeRestCall('Person', 'POST', $person);
+
+                // If we have a person id
+                if (isset($person['id'])) {
+
+                    $organisationPersonData = array(
+                        'organisation' => $org['id'],
+                        'person' => $person['id']
                     );
-                    if (is_array($result) && array_key_exists('Results', $result) && count($result['Results'])) {
-                        foreach ($result['Results'] as $person) {
-                            $person['application'] = $this->getIdentifier();
-                            $this->makeRestCall('Person', 'POST', $person);
-                        }
-                    }
+
+                    $this->makeRestCall('OrganisationPerson', 'POST', $organisationPersonData);
                 }
             }
         }
@@ -267,19 +349,11 @@ class PeopleController extends YourBusinessController
      */
     protected function peopleAdded()
     {
-        $applicationId = $this->getIdentifier();
-        $bundle = array(
-            'properties' => array(
-                'id',
-            ),
-        );
+        $org = $this->getOrganisationData();
 
-        $data = $this->makeRestCall(
-            'Person',
-            'GET',
-            array('application' => $applicationId),
-            $bundle
-        );
+        $bundle = array('properties' => array('id'));
+
+        $data = $this->makeRestCall('OrganisationPerson', 'GET', array('organisation' => $org['id']), $bundle);
 
         return (array_key_exists('Count', $data) && $data['Count'] > 0);
     }

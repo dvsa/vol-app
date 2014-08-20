@@ -11,8 +11,6 @@ namespace SelfServe\Controller\Dashboard;
 
 use SelfServe\Controller\AbstractController;
 use Zend\View\Model\ViewModel;
-use Zend\Session\Container;
-use Common\Exception\ResourceNotFoundException;
 use Zend\Http\Response;
 
 /**
@@ -32,20 +30,31 @@ class IndexController extends AbstractController
     private $applicationsBundle = array(
         'properties' => array(),
         'children' => array(
-            'organisation' => array(
-                'properties' => array(),
+            'organisationUsers' => array(
+                'properties' => null,
                 'children' => array(
-                    'licences' => array(
-                        'properties' => array(
-                            'licenceNumber'
-                        ),
+                    'organisation' => array(
+                        'properties' => array(),
                         'children' => array(
-                            'applications' => array(
+                            'licences' => array(
                                 'properties' => array(
-                                    'id',
-                                    'createdOn',
-                                    'receivedDate',
-                                    'status'
+                                    'licNo'
+                                ),
+                                'children' => array(
+                                    'applications' => array(
+                                        'properties' => array(
+                                            'id',
+                                            'createdOn',
+                                            'receivedDate'
+                                        ),
+                                        'children' => array(
+                                            'status' => array(
+                                                'properties' => array(
+                                                    'id'
+                                                )
+                                            )
+                                        )
+                                    )
                                 )
                             )
                         )
@@ -60,7 +69,7 @@ class IndexController extends AbstractController
      *
      * @var array
      */
-    private $organisationIdBundle = array(
+    private $organisationUserBundle = array(
         'properties' => array(
 
         ),
@@ -84,12 +93,15 @@ class IndexController extends AbstractController
 
         $applications = array();
 
-        if (isset($data['organisation']['licences'])) {
-            foreach ($data['organisation']['licences'] as $licence) {
-                foreach ($licence['applications'] as $application) {
-                    $newRow = $application;
-                    $newRow['licenceNumber'] = $licence['licenceNumber'];
-                    $applications[$newRow['id']] = $newRow;
+        if (isset($data['organisationUsers'])) {
+            foreach ($data['organisationUsers'] as $orgUser) {
+                foreach ($orgUser['organisation']['licences'] as $licence) {
+                    foreach ($licence['applications'] as $application) {
+                        $newRow = $application;
+                        $newRow['licNo'] = $licence['licNo'];
+                        $newRow['status'] = $application['status']['id'];
+                        $applications[$newRow['id']] = $newRow;
+                    }
                 }
             }
         }
@@ -117,11 +129,10 @@ class IndexController extends AbstractController
         $user = $this->getUser();
 
         $data = [
-            'version'       => 1,
-            'licenceNumber' => '',
-            'licenceType'   => '',
-            'licenceStatus' => 'lic_status.new',
-            'organisation'  => $this->getOrganisationId($user['id']),
+            'version' => 1,
+            'licNo' => '',
+            'status' => 'lsts_new',
+            'organisation' => $this->getOrganisationId($user['id']),
         ];
 
         $licenceResult = $this->makeRestCall('Licence', 'POST', $data);
@@ -129,15 +140,15 @@ class IndexController extends AbstractController
 
         $data = [
             'licence' => $licenceId,
-            'createdOn'   => date('Y-m-d h:i:s'),
-            'status' => 'app_status.new'
+            'createdOn' => date('Y-m-d h:i:s'),
+            'status' => 'apsts_new'
         ];
 
         $applicationResult = $this->makeRestCall('Application', 'POST', $data);
         $applicationId = $applicationResult['id'];
 
         $data = [
-            'application' => $applicationId,
+            'id' => $applicationId,
         ];
 
         $this->makeRestCall('ApplicationCompletion', 'POST', $data);
@@ -147,15 +158,22 @@ class IndexController extends AbstractController
 
     /**
      * Get organisation Id based on current user
+     * @IMPORTANT User's can now be linked to more than 1 organisation, in the future there will be a dropdown for these
+     * users to select which organisation they are dealing with, which will be stored in session so we will need @todo
+     * some changes at that stage, for now we just grab the first organisation
      *
      * @throws \Exception
      * @return int
      */
     private function getOrganisationId($userId)
     {
-        $user = $this->makeRestCall('User', 'GET', ['id' => $userId], $this->organisationIdBundle);
+        $organisation = $this->makeRestCall('OrganisationUser', 'GET', ['user' => $userId], $this->organisationUserBundle);
 
-        return $user['organisation']['id'];
+        if ($organisation['Count'] < 1) {
+            return null;
+        }
+
+        return $organisation['Results'][0]['organisation']['id'];
     }
 
     /**

@@ -32,11 +32,13 @@ class BusinessDetailsControllerTest extends AbstractApplicationControllerTestCas
     protected $mockLicenceData = [
         'licence' => [
             'organisation' => [
-                'organisationType' => 'org_type.lc',
-                'registeredCompanyNumber' => 12345678,
-                'name' => 'A Co Ltd'
-            ],
-            'tradingNames' => []
+                'type' => [
+                    'id' => ApplicationController::ORG_TYPE_REGISTERED_COMPANY
+                ],
+                'companyOrLlpNo' => 12345678,
+                'name' => 'A Co Ltd',
+                'tradingNames' => []
+            ]
         ]
     ];
 
@@ -63,54 +65,88 @@ class BusinessDetailsControllerTest extends AbstractApplicationControllerTestCas
         $this->assertInstanceOf('Zend\Http\Response', $response);
     }
 
-    public function testIndexActionWithLimitedCompanyShowsFullForm()
+    /**
+     * Refactored index action tests using a provider
+     *
+     * @dataProvider indexActionProvider
+     */
+    public function testIndexActionFromProvider($type, $present = array(), $missing = array())
     {
-        $this->assertFormElements('lc', ['name', 'companyNumber', 'tradingNames']);
+        $this->setUpAction('index');
+
+        $this->setOrganisationType($type);
+
+        $response = $this->controller->indexAction();
+
+        $fieldset = $this->getFormFromView($response)->get('data');
+
+        foreach ($present as $element) {
+            $this->assertTrue($fieldset->has($element));
+        }
+
+        foreach ($missing as $element) {
+            $this->assertFalse($fieldset->has($element));
+        }
     }
 
-
-    public function testIndexActionWithLlpShowsFullForm()
+    /**
+     * Provider for the index action test
+     *
+     * @return array
+     */
+    public function indexActionProvider()
     {
-        $this->assertFormElements('llp', ['name', 'companyNumber', 'tradingNames']);
-    }
-
-    public function testIndexActionWithSoleTraderShowsLimitedForm()
-    {
-        $this->assertFormElements('st', ['tradingNames'], ['name', 'companyNumber']);
-    }
-
-    public function testIndexActionWithPartnershipShowsLimitedForm()
-    {
-        $this->assertFormElements('p', ['name', 'tradingNames'], ['companyNumber']);
-    }
-
-    public function testIndexActionWithOtherShowsLimitedForm()
-    {
-        $this->assertFormElements('o', ['name'], ['companyNumber', 'tradingNames']);
+        return array(
+            array(
+                'rc',
+                array('name', 'companyNumber', 'tradingNames')
+            ),
+            array(
+                'llp',
+                array('name', 'companyNumber', 'tradingNames')
+            ),
+            array(
+                'st',
+                array('tradingNames'),
+                array('name', 'companyNumber')
+            ),
+            array(
+                'p',
+                array('name', 'tradingNames'),
+                array('companyNumber')
+            ),
+            array(
+                'pa',
+                array('name'),
+                array('companyNumber', 'tradingNames')
+            )
+        );
     }
 
     public function testIndexActionWithMultipleTradingNamesPresent()
     {
         $this->setUpAction('index');
-        $this->setOrganisationType('lc');
+        $this->setOrganisationType('rc');
 
         $this->mockLicenceData = [
             'licence' => [
                 'organisation' => [
-                    'organisationType' => 'org_type.lc',
-                    'registeredCompanyNumber' => 12345678,
-                    'name' => 'A Co Ltd'
-                ],
-                'tradingNames' => [
-                    ['tradingName' => 'foo'],
-                    ['tradingName' => 'bar'],
+                    'type' => [
+                        'id' => ApplicationController::ORG_TYPE_REGISTERED_COMPANY
+                    ],
+                    'companyOrLlpNo' => 12345678,
+                    'name' => 'A Co Ltd',
+                    'tradingNames' => [
+                        ['name' => 'foo'],
+                        ['name' => 'bar'],
+                    ]
                 ]
             ]
         ];
 
-        $tradingNames = $this->getFormFromResponse(
-            $this->controller->indexAction()
-        )->get('data')->get('tradingNames')->get('trading_name');
+        $response = $this->controller->indexAction();
+
+        $tradingNames = $this->getFormFromView($response)->get('data')->get('tradingNames')->get('trading_name');
 
         // always one extra, a blank placeholder
         $this->assertCount(3, $tradingNames->getFieldsets());
@@ -118,10 +154,10 @@ class BusinessDetailsControllerTest extends AbstractApplicationControllerTestCas
 
     public function testFullSubmitForLimitedCompany()
     {
-        $this->setOrganisationType('lc');
+        $this->setOrganisationType('rc');
         $post = [
             'data' => [
-                'organisationType' => null,
+                'type' => null,
                 'companyNumber' => [
                     'company_number' => '12345678',
                 ],
@@ -150,7 +186,7 @@ class BusinessDetailsControllerTest extends AbstractApplicationControllerTestCas
                 ['CompanyName' => 'A TEST CO LTD']
             ]
         ];
-        $this->setOrganisationType('lc');
+        $this->setOrganisationType('rc');
         $post = [
             'data' => [
                 'companyNumber' => [
@@ -164,9 +200,9 @@ class BusinessDetailsControllerTest extends AbstractApplicationControllerTestCas
         $this->controller->setEnabledCsrf(false);
         $this->controller->indexAction();
 
-        $companyName = $this->getFormFromResponse(
-            $this->controller->indexAction()
-        )->get('data')->get('name');
+        $response = $this->controller->indexAction();
+
+        $companyName = $this->getFormFromView($response)->get('data')->get('name');
 
         $this->assertEquals('A TEST CO LTD', $companyName->getValue());
     }
@@ -176,7 +212,7 @@ class BusinessDetailsControllerTest extends AbstractApplicationControllerTestCas
         $this->mockCompaniesHouseData = [
             'Count' => 0
         ];
-        $this->setOrganisationType('lc');
+        $this->setOrganisationType('rc');
         $post = [
             'data' => [
                 'companyNumber' => [
@@ -189,9 +225,9 @@ class BusinessDetailsControllerTest extends AbstractApplicationControllerTestCas
 
         $this->controller->setEnabledCsrf(false);
 
-        $fieldset = $this->getFormFromResponse(
-            $this->controller->indexAction()
-        )->get('data');
+        $response = $this->controller->indexAction();
+
+        $fieldset = $this->getFormFromView($response)->get('data');
 
         $companyNumber = $fieldset->get('companyNumber');
         $companyName = $fieldset->get('name');
@@ -205,7 +241,7 @@ class BusinessDetailsControllerTest extends AbstractApplicationControllerTestCas
         $this->mockCompaniesHouseData = [
             'Count' => 0
         ];
-        $this->setOrganisationType('lc');
+        $this->setOrganisationType('rc');
         $post = [
             'data' => [
                 'companyNumber' => [
@@ -218,9 +254,9 @@ class BusinessDetailsControllerTest extends AbstractApplicationControllerTestCas
 
         $this->controller->setEnabledCsrf(false);
 
-        $fieldset = $this->getFormFromResponse(
-            $this->controller->indexAction()
-        )->get('data');
+        $response = $this->controller->indexAction();
+
+        $fieldset = $this->getFormFromView($response)->get('data');
 
         $companyNumber = $fieldset->get('companyNumber');
         $companyName = $fieldset->get('name');
@@ -234,7 +270,7 @@ class BusinessDetailsControllerTest extends AbstractApplicationControllerTestCas
      */
     public function testAddAnotherTradingName()
     {
-        $this->setOrganisationType('lc');
+        $this->setOrganisationType('rc');
 
         $testTradingNames = [
             ['text' => 'string one'],
@@ -261,170 +297,25 @@ class BusinessDetailsControllerTest extends AbstractApplicationControllerTestCas
         $this->controller->setEnabledCsrf(false);
         $response = $this->controller->indexAction();
 
-        $isValid = $this->getFormFromResponse($response)->isValid($post);
+        $isValid = $this->getFormFromView($response)->isValid($post);
 
         $this->assertTrue($isValid);
-        $data = $this->getFormFromResponse($response)->getData()['data']['tradingNames']['trading_name'];
+        $data = $this->getFormFromView($response)->getData()['data']['tradingNames']['trading_name'];
 
         $this->assertEquals($expectedTradingNames, $data);
     }
 
-
-    /**
-     * Mock the rest call
-     *
-     * @param string $service
-     * @param string $method
-     * @param array $data
-     * @param array $bundle
-     */
-    protected function mockRestCalls($service, $method, $data = array(), $bundle = array())
-    {
-        if ($service == 'Application' && $method == 'GET') {
-
-            $fullBundle = [
-                'children' => [
-                    'licence' => [
-                        'children' => [
-                            'organisation',
-                            'tradingNames',
-                        ]
-                    ],
-                ],
-            ];
-            $orgBundle = [
-                'children' => [
-                    'licence' => [
-                        'children' => [
-                            'organisation' => [
-                                'properties' => ['id', 'version', 'organisationType']
-                            ]
-                        ]
-                    ]
-                ]
-            ];
-
-            if ($bundle == ApplicationController::$licenceDataBundle) {
-
-                return array(
-                    'licence' => array(
-                        'id' => 10,
-                        'version' => 1,
-                        'goodsOrPsv' => 'goods',
-                        'niFlag' => 0,
-                        'licenceType' => 'standard-national',
-                        'organisation' => array(
-                            'organisationType' => 'org_type.lc'
-                        )
-                    )
-                );
-            }
-
-            if ($bundle == $fullBundle) {
-
-                return $this->mockLicenceData;
-            }
-
-            if ($bundle == $orgBundle) {
-
-                return $this->mockOrganisationData;
-            }
-        }
-
-        if ($service === 'CompaniesHouse') {
-
-            return $this->mockCompaniesHouseData;
-        }
-
-        if ($service == 'ApplicationCompletion' && $method == 'GET') {
-
-            return array(
-                'Count' => 1,
-                'Results' => array(
-                    array(
-                        'id' => 1,
-                        'version' => 1,
-                        'application' => '1',
-                        'sectionTypeOfLicenceStatus' => 2,
-                        'sectionTypeOfLicenceOperatorLocationStatus' => 2,
-                        'sectionTypeOfLicenceOperatorTypeStatus' => 2,
-                        'sectionTypeOfLicenceLicenceTypeStatus' => 2,
-                        'sectionYourBusinessStatus' => 2,
-                        'sectionYourBusinessBusinessTypeStatus' => 2,
-                        'sectionYourBusinessBusinessDetailsStatus' => 2,
-                        'sectionYourBusinessAddressesStatus' => 2,
-                        'sectionYourBusinessPeopleStatus' => 2,
-                        'sectionTaxiPhvStatus' => 2,
-                        'sectionOperatingCentresStatus' => 2,
-                        'sectionOperatingCentresAuthorisationStatus' => 2,
-                        'sectionOperatingCentresFinancialEvidenceStatus' => 2,
-                        'sectionTransportManagersStatus' => 2,
-                        'sectionVehicleSafetyStatus' => 2,
-                        'sectionVehicleSafetyVehicleStatus' => 2,
-                        'sectionVehicleSafetySafetyStatus' => 2,
-                        'sectionPreviousHistoryStatus' => 2,
-                        'sectionPreviousHistoryFinancialHistoryStatus' => 2,
-                        'sectionPreviousHistoryLicenceHistoryStatus' => 2,
-                        'sectionPreviousHistoryConvictionPenaltiesStatus' => 2,
-                        'sectionReviewDeclarationsStatus' => 2,
-                        'sectionPaymentSubmissionStatus' => 2,
-                        'sectionPaymentSubmissionPaymentStatus' => 0,
-                        'sectionPaymentSubmissionSummaryStatus' => 0,
-                        'lastSection' => ''
-                    )
-                )
-            );
-        }
-
-        if ($service == 'CompanySubsidiary' && $method == 'GET') {
-            $companySubsidiariesBundle = [
-                'properties' => [
-                    'id',
-                    'version',
-                    'name',
-                    'companyNo'
-                ]
-            ];
-
-            if ($bundle == $companySubsidiariesBundle) {
-                return array(
-                    'id' => 1,
-                    'version' => 1,
-                    'name' => 'name',
-                    'companyNo' => '12345678'
-                );
-            }
-        }
-
-    }
-
     protected function setOrganisationType($type)
     {
-        $this->mockOrganisationData = [
-            'licence' => [
-                'organisation' => [
-                    'organisationType' => 'org_type.' . $type
-                ]
-            ]
-        ];
-    }
-
-    protected function assertFormElements($type, $present = array(), $missing = array())
-    {
-        $this->setUpAction('index');
-        $this->setOrganisationType($type);
-
-        $fieldset = $this->getFormFromResponse(
-            $this->controller->indexAction()
-        )->get('data');
-
-        foreach ($present as $element) {
-            $this->assertTrue($fieldset->has($element));
-        }
-
-        foreach ($missing as $element) {
-            $this->assertFalse($fieldset->has($element));
-        }
+        $this->mockOrganisationData = array(
+            'licence' => array(
+                'organisation' => array(
+                    'type' => array(
+                        'id' => 'org_t_' . $type
+                    )
+                )
+            )
+        );
     }
 
     /**
@@ -550,5 +441,110 @@ class BusinessDetailsControllerTest extends AbstractApplicationControllerTestCas
         $response = $this->controller->addAction();
 
         $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
+     * Mock the rest call
+     *
+     * @param string $service
+     * @param string $method
+     * @param array $data
+     * @param array $bundle
+     */
+    protected function mockRestCalls($service, $method, $data = array(), $bundle = array())
+    {
+        if ($service == 'Application' && $method == 'GET') {
+
+            $fullBundle = array(
+                'children' => array(
+                    'licence' => array(
+                        'children' => array(
+                            'organisation' => array(
+                                'children' => array(
+                                    'type' => array(
+                                        'properties' => array(
+                                            'id'
+                                        )
+                                    ),
+                                    'tradingNames' => array(
+                                        'properties' => array(
+                                            'id',
+                                            'name'
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            );
+
+            $orgBundle = [
+                'children' => [
+                    'licence' => [
+                        'children' => [
+                            'organisation' => [
+                                'properties' => [
+                                    'id',
+                                    'version'
+                                ],
+                                'children' => array(
+                                    'type' => array(
+                                        'properties' => array(
+                                            'id'
+                                        )
+                                    )
+                                )
+                            ]
+                        ]
+                    ]
+                ]
+            ];
+
+            if ($bundle == ApplicationController::$licenceDataBundle) {
+
+                return $this->getLicenceData('goods');
+            }
+
+            if ($bundle == $fullBundle) {
+
+                return $this->mockLicenceData;
+            }
+
+            if ($bundle == $orgBundle) {
+
+                return $this->mockOrganisationData;
+            }
+        }
+
+        if ($service === 'CompaniesHouse') {
+
+            return $this->mockCompaniesHouseData;
+        }
+
+        if ($service == 'ApplicationCompletion' && $method == 'GET') {
+
+            return $this->getApplicationCompletionData();
+        }
+
+        if ($service == 'CompanySubsidiary' && $method == 'GET') {
+            $companySubsidiariesBundle = [
+                'properties' => [
+                    'id',
+                    'version',
+                    'name',
+                    'companyNo'
+                ]
+            ];
+
+            if ($bundle == $companySubsidiariesBundle) {
+                return array(
+                    'id' => 1,
+                    'version' => 1,
+                    'name' => 'name',
+                    'companyNo' => '12345678'
+                );
+            }
+        }
     }
 }

@@ -26,43 +26,43 @@ class LicenceHistoryControllerTest extends AbstractApplicationControllerTestCase
         'dataLicencesCurrent' => array(
             'id' => '',
             'version' => '2',
-            'currentLicence' => 'Y'
+            'prevHasLicence' => 'Y'
         ),
         'table-licences-current' => array(
             'rows' => 1
         ),
         'dataLicencesApplied' => array(
-            'appliedForLicence' => 'N'
+            'prevHadLicence' => 'N'
         ),
         'table-licences-applied' => array(
             'rows' => 0
         ),
         'dataLicencesRevoked' => array(
-            'revokedLicence' => 'N'
+            'prevBeenRevoked' => 'N'
         ),
         'table-licences-revoked' => array(
             'rows' => 0
         ),
         'dataLicencesRefused' => array(
-            'refusedLicence' => 'N',
+            'prevBeenRefused' => 'N',
         ),
         'table-licences-refused' => array(
             'rows' => 0
         ),
         'dataLicencesDisqualified' => array(
-            'disqualifiedLicence' => 'N',
+            'prevBeenDisqualifiedTc' => 'N',
         ),
         'table-licences-disqualified' => array(
             'rows' => 0
         ),
         'dataLicencesPublicInquiry' => array(
-            'publicInquiryLicence' => 'N'
+            'prevBeenAtPi' => 'N'
         ),
         'table-licences-public-inquiry' => array(
             'rows' => 0
         ),
         'dataLicencesHeld' => array(
-            'heldLicence' => 'N'
+            'prevPurchasedAssets' => 'N'
         ),
         'table-licences-held' => array(
             'rows' => 0
@@ -1087,58 +1087,12 @@ class LicenceHistoryControllerTest extends AbstractApplicationControllerTestCase
     {
         if ($service == 'Application' && $method == 'GET' && $bundle == ApplicationController::$licenceDataBundle) {
 
-            return array(
-                'licence' => array(
-                    'id' => 10,
-                    'version' => 1,
-                    'goodsOrPsv' => 'goods',
-                    'niFlag' => 0,
-                    'licenceType' => 'standard-national',
-                    'organisation' => array(
-                        'organisationType' => 'org_type.lc'
-                    )
-                )
-            );
+            return $this->getLicenceData('goods');
         }
 
         if ($service == 'ApplicationCompletion' && $method == 'GET') {
 
-            return array(
-                'Count' => 1,
-                'Results' => array(
-                    array(
-                        'id' => 1,
-                        'version' => 1,
-                        'application' => '1',
-                        'sectionTypeOfLicenceStatus' => 2,
-                        'sectionTypeOfLicenceOperatorLocationStatus' => 2,
-                        'sectionTypeOfLicenceOperatorTypeStatus' => 2,
-                        'sectionTypeOfLicenceLicenceTypeStatus' => 2,
-                        'sectionYourBusinessStatus' => 2,
-                        'sectionYourBusinessBusinessTypeStatus' => 2,
-                        'sectionYourBusinessBusinessDetailsStatus' => 2,
-                        'sectionYourBusinessAddressesStatus' => 2,
-                        'sectionYourBusinessPeopleStatus' => 2,
-                        'sectionTaxiPhvStatus' => 2,
-                        'sectionOperatingCentresStatus' => 2,
-                        'sectionOperatingCentresAuthorisationStatus' => 2,
-                        'sectionOperatingCentresFinancialEvidenceStatus' => 2,
-                        'sectionTransportManagersStatus' => 2,
-                        'sectionVehicleSafetyStatus' => 2,
-                        'sectionVehicleSafetyVehicleStatus' => 2,
-                        'sectionVehicleSafetySafetyStatus' => 2,
-                        'sectionPreviousHistoryStatus' => 2,
-                        'sectionPreviousHistoryFinancialHistoryStatus' => 2,
-                        'sectionPreviousHistoryLicenceHistoryStatus' => 2,
-                        'sectionPreviousHistoryConvictionPenaltiesStatus' => 2,
-                        'sectionReviewDeclarationsStatus' => 2,
-                        'sectionPaymentSubmissionStatus' => 2,
-                        'sectionPaymentSubmissionPaymentStatus' => 0,
-                        'sectionPaymentSubmissionSummaryStatus' => 0,
-                        'lastSection' => ''
-                    )
-                )
-            );
+            return $this->getApplicationCompletionData();
         }
         $previousLicenceBundle = array(
             'properties' => array(
@@ -1188,13 +1142,13 @@ class LicenceHistoryControllerTest extends AbstractApplicationControllerTestCase
             return array(
                 'id' => 1,
                 'version' => 1,
-                'currentLicence' => 'Y',
-                'appliedForLicence' => 'N',
-                'revokedLicence' => 'N',
-                'refusedLicence' => 'N',
-                'disqualifiedLicence' => 'N',
-                'publicInquiryLicence' => 'N',
-                'heldLicence' => ''
+                'prevHasLicence' => 'Y',
+                'prevHadLicence' => 'N',
+                'prevBeenRevoked' => 'N',
+                'prevBeenRefused' => 'N',
+                'prevBeenDisqualifiedTc' => 'N',
+                'prevBeenAtPi' => 'N',
+                'prevPurchasedAssets' => ''
             );
         }
 

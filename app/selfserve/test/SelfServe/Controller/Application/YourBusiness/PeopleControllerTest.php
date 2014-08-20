@@ -10,6 +10,7 @@ namespace SelfServe\Test\Controller\Application\YourBusiness;
 
 use SelfServe\Test\Controller\Application\AbstractApplicationControllerTestCase;
 use SelfServe\Controller\Application\ApplicationController;
+use SelfServe\Controller\Application\YourBusiness\PeopleController;
 
 /**
  * People Controller Test
@@ -21,7 +22,7 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
 
     protected $controllerName = '\SelfServe\Controller\Application\YourBusiness\PeopleController';
     protected $defaultRestResponse = array();
-    protected $organisation = 'org_type.lc';
+    protected $organisation = PeopleController::ORG_TYPE_REGISTERED_COMPANY;
 
     /**
      * Test back button
@@ -54,7 +55,7 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
     public function testIndexActionOrgTypeLlp()
     {
         $this->setUpAction('index');
-        $this->organisation = 'org_type.llp';
+        $this->organisation = PeopleController::ORG_TYPE_LLP;
         $response = $this->controller->indexAction();
 
         // Make sure we get a view not a response
@@ -67,7 +68,7 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
     public function testIndexActionOrgTypePartners()
     {
         $this->setUpAction('index');
-        $this->organisation = 'org_type.p';
+        $this->organisation = PeopleController::ORG_TYPE_PARTNERSHIP;
         $response = $this->controller->indexAction();
 
         // Make sure we get a view not a response
@@ -93,7 +94,7 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
     public function testIndexActionOrgTypeOther()
     {
         $this->setUpAction('index');
-        $this->organisation = 'org_type.o';
+        $this->organisation = PeopleController::ORG_TYPE_OTHER;
         $response = $this->controller->indexAction();
 
         // Make sure we get a view not a response
@@ -123,10 +124,10 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
                 'data' => array(
                     'id' => 1,
                     'title' => 'Mr',
-                    'firstName' => 'A',
-                    'surname' => 'B',
-                    'dateOfBirth' => '2014-01-',
-                    'otherNames' => 'other',
+                    'forename' => 'A',
+                    'familyName' => 'B',
+                    'birthDate' => '2014-01-',
+                    'otherName' => 'other',
                     'position' => 'position'
                 ),
                 'table' => array(
@@ -151,10 +152,10 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
                 'data' => array(
                     'id' => 1,
                     'title' => 'Mr',
-                    'firstName' => 'A',
-                    'surname' => 'B',
-                    'dateOfBirth' => '2014-01-',
-                    'otherNames' => 'other',
+                    'forename' => 'A',
+                    'familyName' => 'B',
+                    'birthDate' => '2014-01-',
+                    'otherName' => 'other',
                     'position' => 'position'
                 ),
                 'table' => array(
@@ -181,10 +182,10 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
                 'data' => array(
                     'id' => 1,
                     'title' => 'Mr',
-                    'firstName' => 'A',
-                    'surname' => 'B',
-                    'dateOfBirth' => '2014-01-',
-                    'otherNames' => 'other',
+                    'forename' => 'A',
+                    'familyName' => 'B',
+                    'birthDate' => '2014-01-',
+                    'otherName' => 'other',
                     'position' => 'position'
                 ),
                 'table' => array(
@@ -212,10 +213,10 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
                 'data' => array(
                     'id' => 1,
                     'title' => 'Mr',
-                    'firstName' => 'A',
-                    'surname' => 'B',
-                    'dateOfBirth' => '2014-01-01',
-                    'otherNames' => 'other',
+                    'forename' => 'A',
+                    'familyName' => 'B',
+                    'birthDate' => '2014-01-01',
+                    'otherName' => 'other',
                     'position' => 'position'
                 ),
                 'table' => array(
@@ -255,11 +256,11 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
                 'data' => array(
                     'id' => 1,
                     'title' => 'Mr',
-                    'firstName' => 'A',
-                    'surname' => 'B',
-                    'otherNames' => 'other',
+                    'forename' => 'A',
+                    'familyName' => 'B',
+                    'otherName' => 'other',
                     'position' => 'position',
-                    'dateOfBirth' => array(
+                    'birthDate' => array(
                         'month' => 1,
                         'day'   => 1,
                         'year'  => 2014
@@ -359,11 +360,11 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
                 'data' => array(
                     'id' => 1,
                     'title' => 'Mr',
-                    'firstName' => 'A',
-                    'surname' => 'B',
-                    'otherNames' => 'other',
+                    'forename' => 'A',
+                    'familyName' => 'B',
+                    'otherName' => 'other',
                     'position' => 'position',
-                    'dateOfBirth' => array(
+                    'birthDate' => array(
                         'month' => 1,
                         'day'   => 1,
                         'year'  => 2014
@@ -387,11 +388,11 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
                 'data' => array(
                     'id' => 1,
                     'title' => 'Mr',
-                    'firstName' => 'A',
-                    'surname' => 'B',
-                    'otherNames' => 'other',
+                    'forename' => 'A',
+                    'familyName' => 'B',
+                    'otherName' => 'other',
                     'position' => 'position',
-                    'dateOfBirth' => array(
+                    'birthDate' => array(
                         'month' => 1,
                         'day'   => 1,
                         'year'  => 2014
@@ -421,87 +422,50 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
     {
         if ($service == 'Application' && $method == 'GET' && $bundle == ApplicationController::$licenceDataBundle) {
 
-            return array(
-                'licence' => array(
-                    'id' => 10,
-                    'version' => 1,
-                    'goodsOrPsv' => 'goods',
-                    'niFlag' => 0,
-                    'licenceType' => 'standard-national',
-                    'organisation' => array(
-                        'organisationType' => 'org_type.lc'
-                    )
-                )
-            );
+            return $this->getLicenceData('goods');
         }
 
         if ($service == 'ApplicationCompletion' && $method == 'GET') {
 
+            return $this->getApplicationCompletionData();
+        }
+
+        $personDataBundle = array(
+            'properties' => null,
+            'children' => array(
+                'person' => array(
+                    'properties' => array(
+                        'id',
+                        'title',
+                        'forename',
+                        'familyName',
+                        'birthDate',
+                        'otherName',
+                        'position'
+                    )
+                )
+            )
+        );
+
+        if ($service == 'OrganisationPerson' && $method == 'GET' && $bundle == $personDataBundle) {
             return array(
-                'Count' => 1,
+                'Count'  => 1,
                 'Results' => array(
                     array(
-                        'id' => 1,
-                        'version' => 1,
-                        'application' => '1',
-                        'sectionTypeOfLicenceStatus' => 2,
-                        'sectionTypeOfLicenceOperatorLocationStatus' => 2,
-                        'sectionTypeOfLicenceOperatorTypeStatus' => 2,
-                        'sectionTypeOfLicenceLicenceTypeStatus' => 2,
-                        'sectionYourBusinessStatus' => 2,
-                        'sectionYourBusinessBusinessTypeStatus' => 2,
-                        'sectionYourBusinessBusinessDetailsStatus' => 2,
-                        'sectionYourBusinessAddressesStatus' => 2,
-                        'sectionYourBusinessPeopleStatus' => 2,
-                        'sectionTaxiPhvStatus' => 2,
-                        'sectionOperatingCentresStatus' => 2,
-                        'sectionOperatingCentresAuthorisationStatus' => 2,
-                        'sectionOperatingCentresFinancialEvidenceStatus' => 2,
-                        'sectionTransportManagersStatus' => 2,
-                        'sectionVehicleSafetyStatus' => 2,
-                        'sectionVehicleSafetyVehicleStatus' => 2,
-                        'sectionVehicleSafetySafetyStatus' => 2,
-                        'sectionPreviousHistoryStatus' => 2,
-                        'sectionPreviousHistoryFinancialHistoryStatus' => 2,
-                        'sectionPreviousHistoryLicenceHistoryStatus' => 2,
-                        'sectionPreviousHistoryConvictionPenaltiesStatus' => 2,
-                        'sectionReviewDeclarationsStatus' => 2,
-                        'sectionPaymentSubmissionStatus' => 2,
-                        'sectionPaymentSubmissionPaymentStatus' => 0,
-                        'sectionPaymentSubmissionSummaryStatus' => 0,
-                        'lastSection' => ''
+                        'person' => array(
+                            'id' => 1,
+                            'title' => 'Mr',
+                            'forename' => 'A',
+                            'familyName' => 'P',
+                            'birthDate' => '2014-01-01',
+                            'otherName' => 'other names',
+                            'position' => 'position'
+                        )
                     )
                 )
             );
         }
 
-        $personDataBundle = array(
-            'properties' => array(
-                'id',
-                'title',
-                'firstName',
-                'surname',
-                'dateOfBirth',
-                'otherNames',
-                'position'
-            ),
-        );
-        if ($service == 'Person' && $method == 'GET' && $bundle == $personDataBundle) {
-            return array(
-                'Count'  => 1,
-                'Results' => array(
-                    array(
-                        'id' => 1,
-                        'title' => 'Mr',
-                        'firstName' => 'A',
-                        'surname' => 'P',
-                        'dateOfBirth' => '2014-01-01',
-                        'otherNames' => 'other names',
-                        'position' => 'position'
-                    )
-                )
-            );
-        }
         $organisationTypeBundle = array(
             'children' => array(
                 'licence' => array(
@@ -510,8 +474,8 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
                             'properties' => array(
                                 'id',
                                 'version',
-                                'organisationType',
-                                'registeredCompanyNumber'
+                                'type',
+                                'companyOrLlpNo'
                             )
                         )
                     )
@@ -521,14 +485,13 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
         if ($service == 'Application' && $method == 'GET' && $bundle == $organisationTypeBundle) {
             return array(
                 'licence' => array(
-                    'id' => 10,
-                    'version' => 1,
-                    'goodsOrPsv' => 'goods',
-                    'niFlag' => 0,
-                    'licenceType' => 'standard-national',
                     'organisation' => array(
-                        'organisationType' => 'org_type.lc',
-                        'registeredCompanyNumber' => '12345678'
+                        'id' => 1,
+                        'version' => 1,
+                        'type' => array(
+                            'id' => PeopleController::ORG_TYPE_REGISTERED_COMPANY
+                        ),
+                        'companyOrLlpNo' => '12345678'
                     )
                 )
             );
@@ -554,9 +517,9 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
                 'Results' => array(
                     array(
                         'title'       => 'Title',
-                        'firstName'   => 'Firstname',
-                        'surname'     => 'Surname',
-                        'dateOfBirth' => 'DOB'
+                        'forename'   => 'Firstname',
+                        'familyName'     => 'Surname',
+                        'birthDate' => 'DOB'
                     )
                 )
             );
@@ -569,7 +532,7 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
                             'properties' => array(
                                 'id',
                                 'version',
-                                'organisationType',
+                                'type',
                             )
                         )
                     )
@@ -580,7 +543,7 @@ class PeopleControllerTest extends AbstractApplicationControllerTestCase
             return array(
                 'licence' => array(
                     'organisation' => array(
-                        'organisationType' => $this->organisation
+                        'type' => $this->organisation
                     )
                 )
             );

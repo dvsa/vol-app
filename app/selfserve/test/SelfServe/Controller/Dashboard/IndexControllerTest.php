@@ -124,7 +124,7 @@ class IndexControllerTest extends PHPUnit_Framework_TestCase
                     'children' => array(
                         'licences' => array(
                             'properties' => array(
-                                'licenceNumber'
+                                'licNo'
                             ),
                             'children' => array(
                                 'applications' => array(
@@ -147,7 +147,7 @@ class IndexControllerTest extends PHPUnit_Framework_TestCase
                 'organisation' => array(
                     'licences' => array(
                         array(
-                            'licenceNumber' => 123,
+                            'licNo' => 123,
                             'applications' => array(
                                 array(
                                     'id' => 1,
