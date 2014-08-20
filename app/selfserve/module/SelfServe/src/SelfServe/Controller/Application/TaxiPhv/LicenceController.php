@@ -22,22 +22,6 @@ class LicenceController extends TaxiPhvController
     protected $actionService = 'PrivateHireLicence';
 
     /**
-     * Holds the table data
-     *
-     * @var array
-     */
-    protected $tableData;
-
-    /**
-     * Form tables
-     *
-     * @var array
-     */
-    protected $formTables = array(
-        'table' => 'application_taxi-phv_licence-form'
-    );
-
-    /**
      * Action data map
      *
      * @var array
@@ -78,7 +62,7 @@ class LicenceController extends TaxiPhvController
         'properties' => array(
             'id',
             'version',
-            'privateHireLicenceNumber',
+            'privateHireLicenceNo',
         ),
         'children' => array(
             'contactDetails' => array(
@@ -97,14 +81,35 @@ class LicenceController extends TaxiPhvController
                             'addressLine3',
                             'addressLine4',
                             'postcode',
-                            'county',
-                            'city',
-                            'country'
+                            'town'
+                        ),
+                        'children' => array(
+                            'countryCode' => array(
+                                'properties' => array(
+                                    'id'
+                                )
+                            )
                         )
                     )
                 )
             )
         )
+    );
+
+    /**
+     * Holds the table data
+     *
+     * @var array
+     */
+    protected $tableData;
+
+    /**
+     * Form tables
+     *
+     * @var array
+     */
+    protected $formTables = array(
+        'table' => 'application_taxi-phv_licence-form'
     );
 
     /**
@@ -167,7 +172,7 @@ class LicenceController extends TaxiPhvController
 
                 $newRow = array(
                     'id' => $row['id'],
-                    'privateHireLicenceNumber' => $row['privateHireLicenceNumber'],
+                    'privateHireLicenceNo' => $row['privateHireLicenceNo'],
                     'councilName' => $row['contactDetails']['description']
                 );
 
@@ -196,7 +201,7 @@ class LicenceController extends TaxiPhvController
 
             $data['contactDetails'] = $oldData['contactDetails'];
             $data['address'] = $oldData['contactDetails']['address'];
-            $data['address']['country'] = 'country.' . $data['address']['country'];
+            $data['address']['countryCode'] = $data['address']['countryCode']['id'];
         }
 
         $licenceData = $this->getLicenceData();
@@ -215,7 +220,7 @@ class LicenceController extends TaxiPhvController
      */
     protected function actionSave($data, $service = null)
     {
-        $data['contactDetails']['contactDetailsType'] = 'Council';
+        $data['contactDetails']['contactType'] = 'ct_councilh';
 
         $results = parent::actionSave($data['contactDetails'], 'ContactDetails');
 

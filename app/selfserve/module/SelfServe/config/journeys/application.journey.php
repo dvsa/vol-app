@@ -79,10 +79,10 @@ return array(
                             'YourBusiness/BusinessType'
                         ),
                         'restriction' => array(
-                            'org_type.lc',
-                            'org_type.llp',
-                            'org_type.p',
-                            'org_type.o'
+                            'org_t_rc',
+                            'org_t_llp',
+                            'org_t_p',
+                            'org_t_pa'
                         ),
                     ),
                     'SoleTrader' => array(
@@ -90,7 +90,7 @@ return array(
                             'YourBusiness/BusinessType'
                         ),
                         'restriction' => array(
-                            'org_type.st'
+                            'org_t_st'
                         ),
                     )
                 )

@@ -17,9 +17,9 @@ return array(
                     'version' => array(
                         'type' => 'hidden'
                     ),
-                    'currentLicence' => array(
+                    'prevHasLicence' => array(
                         'type' => 'yesNoRadio',
-                        'label' => $prefix . '_currentLicence',
+                        'label' => $prefix . '_prevHasLicence',
                         'filters' => '\Common\Form\Elements\InputFilters\PreviousHistoryLicenceHistoryNeedLicence'
                     ),
                 ),
@@ -39,9 +39,9 @@ return array(
                         'type' => 'plainText',
                         'label' => $prefix . '_personsInformation'
                     ),
-                    'appliedForLicence' => array(
+                    'prevHadLicence' => array(
                         'type' => 'yesNoRadio',
-                        'label' => $prefix . '_appliedForLicence',
+                        'label' => $prefix . '_prevHadLicence',
                         'filters' => '\Common\Form\Elements\InputFilters\PreviousHistoryLicenceHistoryNeedLicence'
                     ),
                 ),
@@ -54,9 +54,9 @@ return array(
             array(
                 'name' => 'dataLicencesRefused',
                 'elements' => array(
-                    'refusedLicence' => array(
+                    'prevBeenRefused' => array(
                         'type' => 'yesNoRadio',
-                        'label' => $prefix . '_refusedLicence',
+                        'label' => $prefix . '_prevBeenRefused',
                         'filters' => '\Common\Form\Elements\InputFilters\PreviousHistoryLicenceHistoryNeedLicence'
                     ),
                 ),
@@ -69,9 +69,9 @@ return array(
             array(
                 'name' => 'dataLicencesRevoked',
                 'elements' => array(
-                    'revokedLicence' => array(
+                    'prevBeenRevoked' => array(
                         'type' => 'yesNoRadio',
-                        'label' => $prefix . '_revokedLicence',
+                        'label' => $prefix . '_prevBeenRevoked',
                         'filters' => '\Common\Form\Elements\InputFilters\PreviousHistoryLicenceHistoryNeedLicence'
                     ),
                 ),
@@ -84,9 +84,9 @@ return array(
             array(
                 'name' => 'dataLicencesPublicInquiry',
                 'elements' => array(
-                    'publicInquiryLicence' => array(
+                    'prevBeenAtPi' => array(
                         'type' => 'yesNoRadio',
-                        'label' => $prefix . '_publicInquiryLicence',
+                        'label' => $prefix . '_prevBeenAtPi',
                         'filters' => '\Common\Form\Elements\InputFilters\PreviousHistoryLicenceHistoryNeedLicence'
                     ),
                 ),
@@ -99,9 +99,9 @@ return array(
             array(
                 'name' => 'dataLicencesDisqualified',
                 'elements' => array(
-                    'disqualifiedLicence' => array(
+                    'prevBeenDisqualifiedTc' => array(
                         'type' => 'yesNoRadio',
-                        'label' => $prefix . '_disqualifiedLicence',
+                        'label' => $prefix . '_prevBeenDisqualifiedTc',
                         'filters' => '\Common\Form\Elements\InputFilters\PreviousHistoryLicenceHistoryNeedLicence'
                     ),
                 ),
@@ -114,9 +114,9 @@ return array(
             array(
                 'name' => 'dataLicencesHeld',
                 'elements' => array(
-                    'heldLicence' => array(
+                    'prevPurchasedAssets' => array(
                         'type' => 'yesNoRadio',
-                        'label' => $prefix . '_heldLicence',
+                        'label' => $prefix . '_prevPurchasedAssets',
                         'filters' => '\Common\Form\Elements\InputFilters\PreviousHistoryLicenceHistoryNeedLicence'
                     ),
                 )

@@ -31,7 +31,10 @@ class AddressesController extends YourBusinessController
                         'children' => [
                             'contactDetails' => [
                                 'children' => [
-                                    'address'
+                                    'address',
+                                    'contactType' => array(
+                                        'properties' => 'id'
+                                    )
                                 ]
                             ],
                         ]
@@ -40,6 +43,9 @@ class AddressesController extends YourBusinessController
                         'children' => [
                             'phoneContacts',
                             'address',
+                            'contactType' => array(
+                                'properties' => 'id'
+                            )
                         ]
                     ],
                 ]
@@ -63,31 +69,41 @@ class AddressesController extends YourBusinessController
 
     protected function alterForm($form)
     {
-        $bundle = [
-            'properties' => [],
+        $bundle = array(
+            'properties' => array(),
             'children' => array(
                 'licence' => array(
-                    'properties' => ['licenceType'],
                     'children' => array(
+                        'licenceType' => array(
+                            'properties' => array(
+                                'id'
+                            )
+                        ),
                         'organisation' => array(
-                            'properties' => ['organisationType']
+                            'children' => array(
+                                'type' => array(
+                                    'properties' => array(
+                                        'id'
+                                    )
+                                )
+                            )
                         )
                     )
                 )
             )
-        ];
+        );
 
-        $allowedLicTypes = ['standard-national', 'standard-international'];
-        $allowedOrgTypes = ['org_type.lc', 'org_type.llp'];
+        $allowedLicTypes = [self::LICENCE_TYPE_STANDARD_NATIONAL, self::LICENCE_TYPE_STANDARD_INTERNATIONAL];
+        $allowedOrgTypes = [self::ORG_TYPE_REGISTERED_COMPANY, self::ORG_TYPE_LLP];
 
         $data = $this->makeRestCall('Application', 'GET', ['id' => $this->getIdentifier()], $bundle);
 
-        if (array_search($data['licence']['licenceType'], $allowedLicTypes) === false) {
+        if (!in_array($data['licence']['licenceType']['id'], $allowedLicTypes)) {
             $form->remove('establishment');
             $form->remove('establishment_address');
         }
 
-        if (array_search($data['licence']['organisation']['organisationType'], $allowedOrgTypes) === false) {
+        if (!in_array($data['licence']['organisation']['type']['id'], $allowedOrgTypes)) {
             $form->remove('registered_office');
             $form->remove('registered_office_address');
         }
@@ -109,7 +125,7 @@ class AddressesController extends YourBusinessController
         $correspondence = [
             'id'                    => $data['correspondence']['id'],
             'version'               => $data['correspondence']['version'],
-            'contactDetailsType'    => 'correspondence',
+            'contactType'    => 'ct_corr',
             'licence'               => $licence['id'],
             'emailAddress'          => $data['contact']['email'],
             'addresses'             => [
@@ -153,7 +169,7 @@ class AddressesController extends YourBusinessController
             $establishment = [
                 'id'                    => $data['establishment']['id'],
                 'version'               => $data['establishment']['version'],
-                'contactDetailsType'    => 'establishment',
+                'contactType'    => 'ct_est',
                 'licence'               => $licence['id'],
                 'addresses'             => [
                     'address' => $data['establishment_address'],
@@ -170,7 +186,7 @@ class AddressesController extends YourBusinessController
             $registeredOffice = [
                 'id'                    => $data['registered_office']['id'],
                 'version'               => $data['registered_office']['version'],
-                'contactDetailsType'    => 'registered_office',
+                'contactType'    => 'ct_reg',
                 'organisation'          => $organisation['id'],
                 'addresses'             => [
                     'address' => $data['registered_office_address'],
@@ -208,7 +224,11 @@ class AddressesController extends YourBusinessController
 
         foreach ($contactDetailsMerge as $contactDetails) {
 
-            $type = $contactDetails['contactDetailsType'];
+            if (!isset($contactDetails['contactType']['id'])) {
+                continue;
+            }
+
+            $type = $contactDetails['contactType']['id'];
 
             $data[$type] = [
                 'id' => $contactDetails['id'],

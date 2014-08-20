@@ -36,6 +36,8 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
 
     private $goodsOrPsv;
 
+    private $licenceType = 'ltyp_sn';
+
     protected $mockedMethods = array('getUploader', 'getFileSizeValidator');
 
     /**
@@ -57,9 +59,9 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
      */
     public function testIndexAction($goodsOrPsv, $hasTrailers)
     {
-        $this->setUpAction('index');
-
         $this->goodsOrPsv = $goodsOrPsv;
+
+        $this->setUpAction('index');
 
         $response = $this->controller->indexAction();
 
@@ -103,26 +105,9 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
      */
     public function testIndexActionStandardNational()
     {
-        $this->setUpAction('index');
-
         $this->goodsOrPsv = 'goods';
 
-        $this->setRestResponse(
-            'Application',
-            'GET',
-            array(
-                'licence' => array(
-                    'id' => 10,
-                    'version' => 1,
-                    'goodsOrPsv' => $this->goodsOrPsv,
-                    'niFlag' => 0,
-                    'licenceType' => 'standard-national',
-                    'organisation' => array(
-                        'organisationType' => 'org_type.lc'
-                    )
-                )
-            )
-        );
+        $this->setUpAction('index');
 
         $response = $this->controller->indexAction();
 
@@ -168,26 +153,10 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
      */
     public function testIndexActionStandardInternational()
     {
-        $this->setUpAction('index');
-
         $this->goodsOrPsv = 'goods';
+        $this->licenceType = 'ltyp_si';
 
-        $this->setRestResponse(
-            'Application',
-            'GET',
-            array(
-                'licence' => array(
-                    'id' => 10,
-                    'version' => 1,
-                    'goodsOrPsv' => $this->goodsOrPsv,
-                    'niFlag' => 0,
-                    'licenceType' => 'standard-international',
-                    'organisation' => array(
-                        'organisationType' => 'org_type.lc'
-                    )
-                )
-            )
-        );
+        $this->setUpAction('index');
 
         $response = $this->controller->indexAction();
 
@@ -233,26 +202,10 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
      */
     public function testIndexActionRestricted()
     {
-        $this->setUpAction('index');
-
         $this->goodsOrPsv = 'goods';
+        $this->licenceType = 'ltyp_r';
 
-        $this->setRestResponse(
-            'Application',
-            'GET',
-            array(
-                'licence' => array(
-                    'id' => 10,
-                    'version' => 1,
-                    'goodsOrPsv' => $this->goodsOrPsv,
-                    'niFlag' => 0,
-                    'licenceType' => 'restricted',
-                    'organisation' => array(
-                        'organisationType' => 'org_type.lc'
-                    )
-                )
-            )
-        );
+        $this->setUpAction('index');
 
         $response = $this->controller->indexAction();
 
@@ -298,26 +251,9 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
      */
     public function testIndexActionStandardNationalPsv()
     {
-        $this->setUpAction('index');
-
         $this->goodsOrPsv = 'psv';
 
-        $this->setRestResponse(
-            'Application',
-            'GET',
-            array(
-                'licence' => array(
-                    'id' => 10,
-                    'version' => 1,
-                    'goodsOrPsv' => $this->goodsOrPsv,
-                    'niFlag' => 0,
-                    'licenceType' => 'standard-national',
-                    'organisation' => array(
-                        'organisationType' => 'org_type.lc'
-                    )
-                )
-            )
-        );
+        $this->setUpAction('index');
 
         $response = $this->controller->indexAction();
 
@@ -363,26 +299,10 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
      */
     public function testIndexActionStandardInternationalPsv()
     {
-        $this->setUpAction('index');
-
         $this->goodsOrPsv = 'psv';
+        $this->licenceType = 'ltyp_si';
 
-        $this->setRestResponse(
-            'Application',
-            'GET',
-            array(
-                'licence' => array(
-                    'id' => 10,
-                    'version' => 1,
-                    'goodsOrPsv' => $this->goodsOrPsv,
-                    'niFlag' => 0,
-                    'licenceType' => 'standard-international',
-                    'organisation' => array(
-                        'organisationType' => 'org_type.lc'
-                    )
-                )
-            )
-        );
+        $this->setUpAction('index');
 
         $response = $this->controller->indexAction();
 
@@ -428,26 +348,10 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
      */
     public function testIndexActionRestrictedPsv()
     {
-        $this->setUpAction('index');
-
         $this->goodsOrPsv = 'psv';
+        $this->licenceType = 'ltyp_r';
 
-        $this->setRestResponse(
-            'Application',
-            'GET',
-            array(
-                'licence' => array(
-                    'id' => 10,
-                    'version' => 1,
-                    'goodsOrPsv' => $this->goodsOrPsv,
-                    'niFlag' => 0,
-                    'licenceType' => 'restricted',
-                    'organisation' => array(
-                        'organisationType' => 'org_type.lc'
-                    )
-                )
-            )
-        );
+        $this->setUpAction('index');
 
         $response = $this->controller->indexAction();
 
@@ -493,9 +397,9 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
      */
     public function testIndexActionWithCrudAction()
     {
-        $this->setUpAction('index', null, array('action' => 'Add'));
-
         $this->goodsOrPsv = 'goods';
+
+        $this->setUpAction('index', null, array('action' => 'Add'));
 
         $response = $this->controller->indexAction();
 
@@ -509,6 +413,8 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
      */
     public function testIndexActionSubmit($goodsOrPsv, $hasTrailers)
     {
+        $this->goodsOrPsv = $goodsOrPsv;
+
         $this->setUpAction(
             'index', null, array(
                 'data' => array(
@@ -524,8 +430,6 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
             )
         );
 
-        $this->goodsOrPsv = $goodsOrPsv;
-
         $this->controller->setEnabledCsrf(false);
 
         $response = $this->controller->indexAction();
@@ -540,9 +444,9 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
      */
     public function testAddAction($goodsOrPsv, $hasTrailers)
     {
-        $this->setUpAction('add');
-
         $this->goodsOrPsv = $goodsOrPsv;
+
+        $this->setUpAction('add');
 
         $response = $this->controller->addAction();
 
@@ -573,7 +477,7 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
 
         // We are not psv, so should have trailer related content
         $form = $main->getVariable('form');
-        $this->assertEquals($hasTrailers, $form->get('data')->has('numberOfTrailers'));
+        $this->assertEquals($hasTrailers, $form->get('data')->has('noOfTrailersPossessed'));
     }
 
     /**
@@ -608,9 +512,9 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
             )
         );
 
-        $this->setUpAction('add', null, $post, $files);
-
         $this->goodsOrPsv = 'goods';
+
+        $this->setUpAction('add', null, $post, $files);
 
         $mockUploader = $this->getMock('\Common\Service\File\DiskStoreFileUploader', array('upload'));
 
@@ -648,15 +552,15 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                 'id' => '',
                 'version' => '',
                 'addressLine1' => 'Some street',
-                'city' => 'City',
+                'town' => 'City',
                 'postcode' => 'AN1 1ND',
-                'country' => 'country.GB'
+                'countryCode' => 'GB'
             ),
             'data' => array(
-                'numberOfVehicles' => 10,
-                'numberOfTrailers' => 10,
-                'sufficientParking' => '1',
-                'permission' => '1'
+                'noOfVehiclesPossessed' => 10,
+                'noOfTrailersPossessed' => 10,
+                'sufficientParking' => 'Y',
+                'permission' => 'Y'
             ),
             'advertisements' => array(
                 'adPlaced' => 'N',
@@ -679,9 +583,9 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
             )
         );
 
-        $this->setUpAction('add', null, $post, $files);
-
         $this->goodsOrPsv = $goodsOrPsv;
+
+        $this->setUpAction('add', null, $post, $files);
 
         $this->controller->setEnabledCsrf(false);
         $response = $this->controller->addAction();
@@ -700,9 +604,9 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
             )
         );
 
-        $this->setUpAction('add', null, $post);
-
         $this->goodsOrPsv = 'goods';
+
+        $this->setUpAction('add', null, $post);
 
         $this->controller->setEnabledCsrf(false);
         $response = $this->controller->addAction();
@@ -721,9 +625,9 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
             )
         );
 
-        $this->setUpAction('edit', 1, $post);
-
         $this->goodsOrPsv = 'goods';
+
+        $this->setUpAction('edit', 1, $post);
 
         $this->controller->setEnabledCsrf(false);
         $response = $this->controller->editAction();
@@ -743,15 +647,15 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                 'id' => '',
                 'version' => '',
                 'addressLine1' => 'Some street',
-                'city' => 'City',
+                'town' => 'City',
                 'postcode' => 'AN1 1ND',
-                'country' => 'country.GB'
+                'countryCode' => 'GB'
             ),
             'data' => array(
-                'numberOfVehicles' => 10,
-                'numberOfTrailers' => 10,
-                'sufficientParking' => '1',
-                'permission' => '1'
+                'noOfVehiclesPossessed' => 10,
+                'noOfTrailersPossessed' => 10,
+                'sufficientParking' => 'Y',
+                'permission' => 'Y'
             ),
             'form-actions' => array(
                 'addAnother' => 'Add another'
@@ -777,9 +681,9 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
             )
         );
 
-        $this->setUpAction('add', null, $post, $files);
-
         $this->goodsOrPsv = $goodsOrPsv;
+
+        $this->setUpAction('add', null, $post, $files);
 
         $this->controller->setEnabledCsrf(false);
         $response = $this->controller->addAction();
@@ -799,15 +703,15 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                 'id' => '',
                 'version' => '',
                 'addressLine1' => 'Some street',
-                'city' => 'City',
+                'town' => 'City',
                 'postcode' => 'AN1 1ND',
-                'country' => 'country.GB'
+                'countryCode' => 'GB'
             ),
             'data' => array(
-                'numberOfVehicles' => 10,
-                'numberOfTrailers' => 10,
-                'sufficientParking' => '1',
-                'permission' => '1'
+                'noOfVehiclesPossessed' => 10,
+                'noOfTrailersPossessed' => 10,
+                'sufficientParking' => 'Y',
+                'permission' => 'Y'
             ),
             'advertisements' => array(
                 'adPlaced' => 'N',
@@ -830,9 +734,9 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
             )
         );
 
-        $this->setUpAction('add', null, $post, $files);
-
         $this->goodsOrPsv = 'goods';
+
+        $this->setUpAction('add', null, $post, $files);
 
         $this->setRestResponse(
             'OperatingCentre', 'POST', ''
@@ -854,15 +758,15 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                 'id' => '',
                 'version' => '',
                 'addressLine1' => 'Some street',
-                'city' => 'City',
+                'town' => 'City',
                 'postcode' => 'AN1 1ND',
-                'country' => 'country.GB'
+                'countryCode' => 'GB'
             ),
             'data' => array(
-                'numberOfVehicles' => 10,
-                'numberOfTrailers' => 10,
-                'sufficientParking' => '1',
-                'permission' => '1'
+                'noOfVehiclesPossessed' => 10,
+                'noOfTrailersPossessed' => 10,
+                'sufficientParking' => 'Y',
+                'permission' => 'Y'
             ),
             'advertisements' => array(
                 'adPlaced' => 'N',
@@ -885,9 +789,9 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
             )
         );
 
-        $this->setUpAction('add', null, $post, $files);
-
         $this->goodsOrPsv = 'goods';
+
+        $this->setUpAction('add', null, $post, $files);
 
         $this->setRestResponse(
             'ApplicationOperatingCentre', 'POST', ''
@@ -904,9 +808,9 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
      */
     public function testEditAction($goodsOrPsv, $hasTrailers)
     {
-        $this->setUpAction('edit', 3);
-
         $this->goodsOrPsv = $goodsOrPsv;
+
+        $this->setUpAction('edit', 3);
 
         $response = $this->controller->editAction();
 
@@ -937,7 +841,7 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
 
         // We are not psv, so should have trailer related content
         $form = $main->getVariable('form');
-        $this->assertEquals($hasTrailers, $form->get('data')->has('numberOfTrailers'));
+        $this->assertEquals($hasTrailers, $form->get('data')->has('noOfTrailersPossessed'));
     }
 
     /**
@@ -950,15 +854,15 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                 'id' => 3,
                 'version' => 1,
                 'addressLine1' => 'Some street',
-                'city' => 'City',
+                'town' => 'City',
                 'postcode' => 'AN1 1ND',
-                'country' => 'country.GB'
+                'countryCode' => 'GB'
             ),
             'data' => array(
-                'numberOfVehicles' => 10,
-                'numberOfTrailers' => 10,
-                'sufficientParking' => '1',
-                'permission' => '1'
+                'noOfVehiclesPossessed' => 10,
+                'noOfTrailersPossessed' => 10,
+                'sufficientParking' => 'Y',
+                'permission' => 'Y'
             ),
             'advertisements' => array(
                 'adPlaced' => 'N',
@@ -980,9 +884,9 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
             )
         );
 
-        $this->setUpAction('edit', 3, $post, $files);
-
         $this->goodsOrPsv = 'goods';
+
+        $this->setUpAction('edit', 3, $post, $files);
 
         $this->controller->setEnabledCsrf(false);
         $response = $this->controller->editAction();
@@ -1028,58 +932,12 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
     {
         if ($service == 'Application' && $method == 'GET' && $bundle == ApplicationController::$licenceDataBundle) {
 
-            return array(
-                'licence' => array(
-                    'id' => 10,
-                    'version' => 1,
-                    'goodsOrPsv' => $this->goodsOrPsv,
-                    'niFlag' => 0,
-                    'licenceType' => 'standard-national',
-                    'organisation' => array(
-                        'organisationType' => 'org_type.lc'
-                    )
-                )
-            );
+            return $this->getLicenceData($this->goodsOrPsv, $this->licenceType);
         }
 
         if ($service == 'ApplicationCompletion' && $method == 'GET') {
 
-            return array(
-                'Count' => 1,
-                'Results' => array(
-                    array(
-                        'id' => 1,
-                        'version' => 1,
-                        'application' => '1',
-                        'sectionTypeOfLicenceStatus' => 2,
-                        'sectionTypeOfLicenceOperatorLocationStatus' => 2,
-                        'sectionTypeOfLicenceOperatorTypeStatus' => 2,
-                        'sectionTypeOfLicenceLicenceTypeStatus' => 2,
-                        'sectionYourBusinessStatus' => 2,
-                        'sectionYourBusinessBusinessTypeStatus' => 2,
-                        'sectionYourBusinessBusinessDetailsStatus' => 2,
-                        'sectionYourBusinessAddressesStatus' => 2,
-                        'sectionYourBusinessPeopleStatus' => 2,
-                        'sectionTaxiPhvStatus' => 2,
-                        'sectionOperatingCentresStatus' => 2,
-                        'sectionOperatingCentresAuthorisationStatus' => 2,
-                        'sectionOperatingCentresFinancialEvidenceStatus' => 2,
-                        'sectionTransportManagersStatus' => 2,
-                        'sectionVehicleSafetyStatus' => 2,
-                        'sectionVehicleSafetyVehicleStatus' => 2,
-                        'sectionVehicleSafetySafetyStatus' => 2,
-                        'sectionPreviousHistoryStatus' => 2,
-                        'sectionPreviousHistoryFinancialHistoryStatus' => 2,
-                        'sectionPreviousHistoryLicenceHistoryStatus' => 2,
-                        'sectionPreviousHistoryConvictionPenaltiesStatus' => 2,
-                        'sectionReviewDeclarationsStatus' => 2,
-                        'sectionPaymentSubmissionStatus' => 2,
-                        'sectionPaymentSubmissionPaymentStatus' => 0,
-                        'sectionPaymentSubmissionSummaryStatus' => 0,
-                        'lastSection' => ''
-                    )
-                )
-            );
+            return $this->getApplicationCompletionData();
         }
 
         if ($service == 'Document' && $method == 'GET') {
@@ -1093,13 +951,13 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
             'properties' => array(
                 'id',
                 'version',
-                'numberOfTrailers',
-                'numberOfVehicles',
+                'noOfTrailersPossessed',
+                'noOfVehiclesPossessed',
                 'sufficientParking',
                 'permission',
                 'adPlaced',
                 'adPlacedIn',
-                'dateAdPlaced'
+                'adPlacedDate'
             ),
             'children' => array(
                 'operatingCentre' => array(
@@ -1117,16 +975,19 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                                 'addressLine3',
                                 'addressLine4',
                                 'postcode',
-                                'county',
-                                'city',
-                                'country'
+                                'town'
+                            ),
+                            'children' => array(
+                                'countryCode' => array(
+                                    'properties' => array('id')
+                                )
                             )
                         ),
                         'adDocuments' => array(
                             'properties' => array(
                                 'id',
                                 'version',
-                                'fileName',
+                                'filename',
                                 'identifier',
                                 'size'
                             )
@@ -1143,13 +1004,13 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
             return array(
                 'id' => 1,
                 'version' => 2,
-                'numberOfTrailers' => 10,
-                'numberOfVehicles' => 10,
+                'noOfTrailersPossessed' => 10,
+                'noOfVehiclesPossessed' => 10,
                 'sufficientParking' => 1,
                 'permission' => 1,
                 'adPlaced' => 0,
                 'adPlacedIn' => null,
-                'dateAdPlaced' => null,
+                'adPlacedDate' => null,
                 'operatingCentre' => array(
                     'id' => 3,
                     'version' => 1,
@@ -1161,15 +1022,17 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                         'addressLine3' => 'Some street 3',
                         'addressLine4' => 'Some street 4',
                         'postcode' => 'AB1 1AB',
-                        'city' => 'City',
-                        'country' => 'GB'
+                        'town' => 'City',
+                        'countryCode' => array(
+                            'id' => 'GB'
+                        )
                     ),
                     'adDocuments' => array(
                         array(
                             'id' => 1,
                             'identifier' => 'adfasdadsag',
                             'version' => 1,
-                            'fileName' => 'nfjosjnfos',
+                            'filename' => 'nfjosjnfos',
                             'size' => 10
                         )
                     )
@@ -1185,8 +1048,8 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                         'id' => 1,
                         'adPlaced' => 1,
                         'permission' => 1,
-                        'numberOfVehicles' => 10,
-                        'numberOfTrailers' => 10,
+                        'noOfVehiclesPossessed' => 10,
+                        'noOfTrailersPossessed' => 10,
                         'operatingCentre' => array(
                             'address' => array(
                                 'id' => 1,
@@ -1194,8 +1057,10 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                                 'addressLine2' => 'Address 2',
                                 'addressLine3' => 'Address 3',
                                 'addressLine4' => 'Address 4',
-                                'city' => 'City',
-                                'country' => 'GB',
+                                'town' => 'City',
+                                'countryCode' => array(
+                                    'id' => 'GB'
+                                ),
                                 'postcode' => 'AB1 1AB'
                             )
                         )

@@ -36,25 +36,25 @@ class YourBusinessController extends ApplicationController
     /**
      * Get organisation data
      *
-     * @param array $properties
+     * @param array $organisationBundle
      * @return array
      */
-    protected function getOrganisationData($properties = array())
+    protected function getOrganisationData($organisationBundle = array())
     {
-        if (is_array($properties)) {
-            $properties = array_merge(
-                array('id', 'version'),
-                $properties
-            );
+        if (!isset($organisationBundle['properties'])) {
+            $organisationBundle['properties'] = array();
         }
+
+        $organisationBundle['properties'] = array_merge(
+            array('id', 'version'),
+            $organisationBundle['properties']
+        );
 
         $bundle = array(
             'children' => array(
                 'licence' => array(
                     'children' => array(
-                        'organisation' => array(
-                            'properties' => $properties
-                        )
+                        'organisation' => $organisationBundle
                     )
                 )
             )

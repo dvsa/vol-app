@@ -24,11 +24,23 @@ class LicenceHistoryController extends ApplicationController
     protected $service = 'Application';
 
     /**
-     * Set the action service
+     * Data bundle
      *
-     * @var string
+     * @var array
      */
-    protected $actionService = 'PreviousLicence';
+    protected $dataBundle = array(
+        'properties' => array(
+            'id',
+            'version',
+            'prevHasLicence',
+            'prevHadLicence',
+            'prevBeenRefused',
+            'prevBeenRevoked',
+            'prevBeenDisqualifiedTc',
+            'prevBeenAtPi',
+            'prevPurchasedAssets'
+        )
+    );
 
     /**
      * Data map
@@ -38,31 +50,23 @@ class LicenceHistoryController extends ApplicationController
     protected $dataMap = array(
         'main' => array(
             'mapFrom' => array(
-                'dataLicencesCurrent', 'dataLicencesApplied', 'dataLicencesRevoked',
-                'dataLicencesRefused', 'dataLicencesDisqualified', 'dataLicencesPublicInquiry',
+                'dataLicencesCurrent',
+                'dataLicencesApplied',
+                'dataLicencesRevoked',
+                'dataLicencesRefused',
+                'dataLicencesDisqualified',
+                'dataLicencesPublicInquiry',
                 'dataLicencesHeld'
             ),
         )
     );
 
     /**
-     * Data bundle
+     * Set the action service
      *
-     * @var array
+     * @var string
      */
-    protected $dataBundle = array(
-        'properties' => array(
-            'id',
-            'version',
-            'currentLicence',
-            'appliedForLicence',
-            'refusedLicence',
-            'revokedLicence',
-            'disqualifiedLicence',
-            'publicInquiryLicence',
-            'heldLicence'
-        )
-    );
+    protected $actionService = 'PreviousLicence';
 
     /**
      * Holds the actionDataBundle
@@ -84,6 +88,41 @@ class LicenceHistoryController extends ApplicationController
     );
 
     /**
+     * Licence type - current
+     */
+    const PREV_LICENCE_TYPE_HAS_LICENCE = 'prev_has_licence';
+
+    /**
+     * Licence type - applied
+     */
+    const PREV_LICENCE_TYPE_HAD_LICENCE = 'prev_had_licence';
+
+    /**
+     * Licence type - refused
+     */
+    const PREV_LICENCE_TYPE_BEEN_REFUSED = 'prev_been_refused';
+
+    /**
+     * Licence type - revoked
+     */
+    const PREV_LICENCE_TYPE_BEEN_REVOKED = 'prev_been_revoked';
+
+    /**
+     * Licence type - public inquiry
+     */
+    const PREV_LICENCE_TYPE_BEEN_AT_PI = 'prev_been_at_pi';
+
+    /**
+     * Licence type - disqualified
+     */
+    const PREV_LICENCE_TYPE_BEEN_DISQUALIFIED = 'prev_been_disqualified_tc';
+
+    /**
+     * Licence type - held
+     */
+    const PREV_LICENCE_TYPE_HAS_PURCHASED_ASSETS = 'prev_has_purchased_assets';
+
+    /**
      * Form tables name
      *
      * @var string
@@ -99,39 +138,19 @@ class LicenceHistoryController extends ApplicationController
     );
 
     /**
-     * Licence type - current
+     * Map a table to it's type
+     *
+     * @var array
      */
-    const LICENCE_TYPE_CURRENT = 'CURRENT';
-
-    /**
-     * Licence type - applied
-     */
-    const LICENCE_TYPE_APPLIED = 'APPPLIED';
-
-    /**
-     * Licence type - refused
-     */
-    const LICENCE_TYPE_REFUSED = 'REFUSED';
-
-    /**
-     * Licence type - revoked
-     */
-    const LICENCE_TYPE_REVOKED = 'REVOKED';
-
-    /**
-     * Licence type - public inquiry
-     */
-    const LICENCE_TYPE_PUBLIC_INQUIRY = 'PUBLIC_INQUIRY';
-
-    /**
-     * Licence type - disqualified
-     */
-    const LICENCE_TYPE_DISQUALIFIED = 'DISQUALIFIED';
-
-    /**
-     * Licence type - held
-     */
-    const LICENCE_TYPE_HELD = 'HELD';
+    private $mapTableToType = array(
+        'table-licences-current' => self::PREV_LICENCE_TYPE_HAS_LICENCE,
+        'table-licences-applied' => self::PREV_LICENCE_TYPE_HAD_LICENCE,
+        'table-licences-refused' => self::PREV_LICENCE_TYPE_BEEN_REFUSED,
+        'table-licences-revoked' => self::PREV_LICENCE_TYPE_BEEN_REVOKED,
+        'table-licences-public-inquiry' => self::PREV_LICENCE_TYPE_BEEN_AT_PI,
+        'table-licences-disqualified' => self::PREV_LICENCE_TYPE_BEEN_DISQUALIFIED,
+        'table-licences-held' => self::PREV_LICENCE_TYPE_HAS_PURCHASED_ASSETS
+    );
 
     /**
      * Render the section form
@@ -178,29 +197,7 @@ class LicenceHistoryController extends ApplicationController
             ),
         );
 
-        switch ($tableName) {
-            case 'table-licences-current':
-                $previousLicenceType = self::LICENCE_TYPE_CURRENT;
-                break;
-            case 'table-licences-applied':
-                $previousLicenceType = self::LICENCE_TYPE_APPLIED;
-                break;
-            case 'table-licences-refused':
-                $previousLicenceType = self::LICENCE_TYPE_REFUSED;
-                break;
-            case 'table-licences-revoked':
-                $previousLicenceType = self::LICENCE_TYPE_REVOKED;
-                break;
-            case 'table-licences-public-inquiry':
-                $previousLicenceType = self::LICENCE_TYPE_PUBLIC_INQUIRY;
-                break;
-            case 'table-licences-disqualified':
-                $previousLicenceType = self::LICENCE_TYPE_DISQUALIFIED;
-                break;
-            case 'table-licences-held':
-                $previousLicenceType = self::LICENCE_TYPE_HELD;
-                break;
-        }
+        $previousLicenceType = isset($this->mapTableToType[$tableName]) ? $this->mapTableToType[$tableName] : null;
 
         $data = $this->makeRestCall(
             'PreviousLicence',
@@ -208,6 +205,7 @@ class LicenceHistoryController extends ApplicationController
             array('application' => $applicationId, 'previousLicenceType' => $previousLicenceType),
             $bundle
         );
+
         return $data;
     }
 
@@ -232,9 +230,9 @@ class LicenceHistoryController extends ApplicationController
             'dataLicencesHeld'
         ];
         $fields = [
-            'currentLicence', 'appliedForLicence', 'refusedLicence',
-            'revokedLicence', 'publicInquiryLicence', 'disqualifiedLicence',
-            'heldLicence'
+            'prevHasLicence', 'prevHadLicence', 'prevBeenRefused',
+            'prevBeenRevoked', 'prevBeenAtPi', 'prevBeenDisqualifiedTc',
+            'prevPurchasedAssets'
         ];
         $shouldAddValidators = true;
         for ($i = 0; $i < count($tables); $i++) {
@@ -250,8 +248,8 @@ class LicenceHistoryController extends ApplicationController
                 $licenceValidator =
                     new \Common\Form\Elements\Validators\PreviousHistoryLicenceHistoryLicenceValidator();
                 $licenceValidator->setRows($rows);
-                $currentLicence = $form->getInputFilter()->get($fieldsets[$i])->get($fields[$i])->getValidatorChain();
-                $currentLicence->attach($licenceValidator);
+                $prevHasLicence = $form->getInputFilter()->get($fieldsets[$i])->get($fields[$i])->getValidatorChain();
+                $prevHasLicence->attach($licenceValidator);
             }
         }
         return $form;
@@ -276,37 +274,17 @@ class LicenceHistoryController extends ApplicationController
 
     /**
      * Process action load
-     * 
+     *
      * @param $data
      */
     protected function processActionLoad($data)
     {
         $data = parent::processActionLoad($data);
 
-        switch ($this->getActionName()) {
-            case 'table-licences-current-add':
-                $data['previousLicenceType'] = self::LICENCE_TYPE_CURRENT;
-                break;
-            case 'table-licences-applied-add':
-                $data['previousLicenceType'] = self::LICENCE_TYPE_APPLIED;
-                break;
-            case 'table-licences-refused-add':
-                $data['previousLicenceType'] = self::LICENCE_TYPE_REFUSED;
-                break;
-            case 'table-licences-revoked-add':
-                $data['previousLicenceType'] = self::LICENCE_TYPE_REVOKED;
-                break;
-            case 'table-licences-public-inquiry-add':
-                $data['previousLicenceType'] = self::LICENCE_TYPE_PUBLIC_INQUIRY;
-                break;
-            case 'table-licences-disqualified-add':
-                $data['previousLicenceType'] = self::LICENCE_TYPE_DISQUALIFIED;
-                break;
-            case 'table-licences-held-add':
-                $data['previousLicenceType'] = self::LICENCE_TYPE_HELD;
-                break;
-            default:
-                break;
+        $tableName = str_replace('-add', '', $this->getActionName());
+
+        if (isset($this->mapTableToType[$tableName])) {
+            $data['previousLicenceType'] = $this->mapTableToType[$tableName];
         }
 
         if (array_key_exists('willSurrender', $data)) {
@@ -374,8 +352,8 @@ class LicenceHistoryController extends ApplicationController
         );
         $fieldsets = ['dataLicencesCurrent', 'dataLicencesApplied', 'dataLicencesRevoked', 'dataLicencesRefused',
             'dataLicencesPublicInquiry', 'dataLicencesDisqualified', 'dataLicencesHeld'];
-        $fields = ['currentLicence', 'appliedForLicence', 'revokedLicence', 'refusedLicence',
-            'publicInquiryLicence', 'disqualifiedLicence', 'heldLicence'];
+        $fields = ['prevHasLicence', 'prevHadLicence', 'prevBeenRevoked', 'prevBeenRefused',
+            'prevBeenAtPi', 'prevBeenDisqualifiedTc', 'prevPurchasedAssets'];
 
         for ($i = 0; $i < count($fieldsets); $i++) {
             if ($data[$fields[$i]] == 'Y') {

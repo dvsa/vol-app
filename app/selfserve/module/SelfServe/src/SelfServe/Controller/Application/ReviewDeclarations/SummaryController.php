@@ -31,7 +31,16 @@ class SummaryController extends ReviewDeclarationsController
     protected $dataBundle = array(
         'properties' => 'ALL',
         'children' => array(
-            'licence' => array(),
+            'licence' => array(
+                'children' => array(
+                    'goodsOrPsv' => array(
+                        'properties' => array('id')
+                    ),
+                    'licenceType' => array(
+                        'properties' => array('id')
+                    )
+                )
+            ),
             'documents' => array()
         )
     );
@@ -166,10 +175,10 @@ class SummaryController extends ReviewDeclarationsController
                 'niFlag' => ($loadData['licence']['niFlag'] == 1 ? '1' : '0')
             ),
             'application_type-of-licence_operator-type-1' => array(
-                'goodsOrPsv' => $loadData['licence']['goodsOrPsv']
+                'goodsOrPsv' => $loadData['licence']['goodsOrPsv']['id']
             ),
             'application_type-of-licence_licence-type-1' => array(
-                'licenceType' => $loadData['licence']['licenceType']
+                'licenceType' => $loadData['licence']['licenceType']['id']
             ),
 
             /**
@@ -190,7 +199,7 @@ class SummaryController extends ReviewDeclarationsController
             // @NOTE licence history section not yet implemented so no data to map
             'application_previous-history_licence-history-1' => array(),
             'application_previous-history_convictions-penalties-1' => array(
-                'prevConviction' => $loadData['prevConviction'] ? 'Y' : 'N'
+                'prevConviction' => $loadData['prevConviction']
             ),
             // @NOTE application_previous-history_convictions-penalties-2 is table data
             'application_previous-history_convictions-penalties-3' => $this->mapApplicationVariables(

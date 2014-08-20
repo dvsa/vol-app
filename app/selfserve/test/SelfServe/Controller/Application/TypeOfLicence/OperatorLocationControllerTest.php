@@ -60,40 +60,34 @@ class OperatorLocationControllerTest extends AbstractApplicationControllerTestCa
         $this->setUpAction('index');
 
         $completion = array(
-            'Count' => 1,
-            'Results' => array(
-                array(
-                    'id' => 1,
-                    'version' => 1,
-                    'application' => '1',
-                    'sectionTypeOfLicenceStatus' => 1,
-                    'sectionTypeOfLicenceOperatorLocationStatus' => 2,
-                    'sectionTypeOfLicenceOperatorTypeStatus' => 2,
-                    'sectionTypeOfLicenceOperatorLocationStatus' => 0,
-                    'sectionYourBusinessStatus' => 0,
-                    'sectionYourBusinessBusinessTypeStatus' => 0,
-                    'sectionYourBusinessBusinessDetailsStatus' => 0,
-                    'sectionYourBusinessAddressesStatus' => 0,
-                    'sectionYourBusinessPeopleStatus' => 0,
-                    'sectionTaxiPhvStatus' => 0,
-                    'sectionOperatingCentresStatus' => 0,
-                    'sectionOperatingCentresAuthorisationStatus' => 0,
-                    'sectionOperatingCentresFinancialEvidenceStatus' => 0,
-                    'sectionTransportManagersStatus' => 0,
-                    'sectionVehicleSafetyStatus' => 0,
-                    'sectionVehicleSafetyVehicleStatus' => 0,
-                    'sectionVehicleSafetySafetyStatus' => 0,
-                    'sectionPreviousHistoryStatus' => 0,
-                    'sectionPreviousHistoryFinancialHistoryStatus' => 0,
-                    'sectionPreviousHistoryLicenceHistoryStatus' => 0,
-                    'sectionPreviousHistoryConvictionPenaltiesStatus' => 0,
-                    'sectionReviewDeclarationsStatus' => 0,
-                    'sectionPaymentSubmissionStatus' => 0,
-                    'sectionPaymentSubmissionPaymentStatus' => 0,
-                    'sectionPaymentSubmissionSummaryStatus' => 0,
-                    'lastSection' => ''
-                )
-            )
+            'version' => 1,
+            'id' => '1',
+            'sectionTypeOfLicenceStatus' => 1,
+            'sectionTypeOfLicenceOperatorLocationStatus' => 2,
+            'sectionTypeOfLicenceOperatorTypeStatus' => 2,
+            'sectionTypeOfLicenceOperatorLocationStatus' => 0,
+            'sectionYourBusinessStatus' => 0,
+            'sectionYourBusinessBusinessTypeStatus' => 0,
+            'sectionYourBusinessBusinessDetailsStatus' => 0,
+            'sectionYourBusinessAddressesStatus' => 0,
+            'sectionYourBusinessPeopleStatus' => 0,
+            'sectionTaxiPhvStatus' => 0,
+            'sectionOperatingCentresStatus' => 0,
+            'sectionOperatingCentresAuthorisationStatus' => 0,
+            'sectionOperatingCentresFinancialEvidenceStatus' => 0,
+            'sectionTransportManagersStatus' => 0,
+            'sectionVehicleSafetyStatus' => 0,
+            'sectionVehicleSafetyVehicleStatus' => 0,
+            'sectionVehicleSafetySafetyStatus' => 0,
+            'sectionPreviousHistoryStatus' => 0,
+            'sectionPreviousHistoryFinancialHistoryStatus' => 0,
+            'sectionPreviousHistoryLicenceHistoryStatus' => 0,
+            'sectionPreviousHistoryConvictionPenaltiesStatus' => 0,
+            'sectionReviewDeclarationsStatus' => 0,
+            'sectionPaymentSubmissionStatus' => 0,
+            'sectionPaymentSubmissionPaymentStatus' => 0,
+            'sectionPaymentSubmissionSummaryStatus' => 0,
+            'lastSection' => ''
         );
 
         $this->setRestResponse('ApplicationCompletion', 'GET', $completion);
@@ -179,10 +173,10 @@ class OperatorLocationControllerTest extends AbstractApplicationControllerTestCa
                     'niFlag' => 1
                 ),
                 'operator-type' => array(
-                    'goodsOrPsv' => 'goods'
+                    'goodsOrPsv' => ApplicationController::GOODS_OR_PSV_GOODS_VEHICLE
                 ),
                 'licence-type' => array(
-                    'licenceType' => 'standard-international'
+                    'licenceType' => ApplicationController::LICENCE_TYPE_STANDARD_INTERNATIONAL
                 ),
                 'js-submit' => true,
             )
@@ -236,58 +230,12 @@ class OperatorLocationControllerTest extends AbstractApplicationControllerTestCa
     {
         if ($service == 'Application' && $method == 'GET' && $bundle == ApplicationController::$licenceDataBundle) {
 
-            return array(
-                'licence' => array(
-                    'id' => 10,
-                    'version' => 1,
-                    'goodsOrPsv' => 'goods',
-                    'niFlag' => 0,
-                    'licenceType' => 'standard-national',
-                    'organisation' => array(
-                        'organisationType' => 'org_type.lc'
-                    )
-                )
-            );
+            return $this->getLicenceData('goods');
         }
 
         if ($service == 'ApplicationCompletion' && $method == 'GET') {
 
-            return array(
-                'Count' => 1,
-                'Results' => array(
-                    array(
-                        'id' => 1,
-                        'version' => 1,
-                        'application' => '1',
-                        'sectionTypeOfLicenceStatus' => 2,
-                        'sectionTypeOfLicenceOperatorLocationStatus' => 2,
-                        'sectionTypeOfLicenceOperatorTypeStatus' => 2,
-                        'sectionTypeOfLicenceOperatorLocationStatus' => 2,
-                        'sectionYourBusinessStatus' => 2,
-                        'sectionYourBusinessBusinessTypeStatus' => 2,
-                        'sectionYourBusinessBusinessDetailsStatus' => 2,
-                        'sectionYourBusinessAddressesStatus' => 2,
-                        'sectionYourBusinessPeopleStatus' => 2,
-                        'sectionTaxiPhvStatus' => 2,
-                        'sectionOperatingCentresStatus' => 2,
-                        'sectionOperatingCentresAuthorisationStatus' => 2,
-                        'sectionOperatingCentresFinancialEvidenceStatus' => 2,
-                        'sectionTransportManagersStatus' => 2,
-                        'sectionVehicleSafetyStatus' => 2,
-                        'sectionVehicleSafetyVehicleStatus' => 2,
-                        'sectionVehicleSafetySafetyStatus' => 2,
-                        'sectionPreviousHistoryStatus' => 2,
-                        'sectionPreviousHistoryFinancialHistoryStatus' => 2,
-                        'sectionPreviousHistoryLicenceHistoryStatus' => 2,
-                        'sectionPreviousHistoryConvictionPenaltiesStatus' => 2,
-                        'sectionReviewDeclarationsStatus' => 2,
-                        'sectionPaymentSubmissionStatus' => 2,
-                        'sectionPaymentSubmissionPaymentStatus' => 0,
-                        'sectionPaymentSubmissionSummaryStatus' => 0,
-                        'lastSection' => ''
-                    )
-                )
-            );
+            return $this->getApplicationCompletionData();
         }
     }
 }

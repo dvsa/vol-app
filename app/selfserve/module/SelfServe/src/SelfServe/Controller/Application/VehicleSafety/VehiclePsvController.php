@@ -18,6 +18,13 @@ use Common\Form\Elements\Validators\TableRequiredValidator;
 class VehiclePsvController extends VehicleSafetyController
 {
     /**
+     * Action service
+     *
+     * @var string
+     */
+    protected $actionService = 'Vehicle';
+
+    /**
      * Holds the action data bundle
      *
      * @var array
@@ -34,6 +41,19 @@ class VehiclePsvController extends VehicleSafetyController
     );
 
     /**
+     * Action data map
+     *
+     * @var array
+     */
+    protected $actionDataMap = array(
+        'main' => array(
+            'mapFrom' => array(
+                'data'
+            )
+        )
+    );
+
+    /**
      * Holds the data bundle
      *
      * @var array
@@ -45,7 +65,7 @@ class VehiclePsvController extends VehicleSafetyController
             'totAuthSmallVehicles',
             'totAuthMediumVehicles',
             'totAuthLargeVehicles',
-            'enterReg'
+            'hasEnteredReg'
         ),
         'children' => array(
             'licence' => array(
@@ -59,33 +79,17 @@ class VehiclePsvController extends VehicleSafetyController
                                     'id',
                                     'vrm',
                                     'makeModel',
-                                    'psvType',
                                     'isNovelty'
+                                ),
+                                'children' => array(
+                                    'psvType' => array(
+                                        'properties' => array('id')
+                                    )
                                 )
                             )
                         )
                     )
                 )
-            )
-        )
-    );
-
-    /**
-     * Action service
-     *
-     * @var string
-     */
-    protected $actionService = 'Vehicle';
-
-    /**
-     * Action data map
-     *
-     * @var array
-     */
-    protected $actionDataMap = array(
-        'main' => array(
-            'mapFrom' => array(
-                'data'
             )
         )
     );
@@ -246,7 +250,7 @@ class VehiclePsvController extends VehicleSafetyController
 
             } elseif (
                 !$isCrudPressed && $isPost
-                && isset($post['data']['enterReg']) && $post['data']['enterReg'] == 'Y'
+                && isset($post['data']['hasEnteredReg']) && $post['data']['hasEnteredReg'] == 'Y'
             ) {
                 $input = $form->getInputFilter()->get($table)->get('table');
                 $input->setRequired(true)->setAllowEmpty(false)->setContinueIfEmpty(true);
@@ -270,8 +274,11 @@ class VehiclePsvController extends VehicleSafetyController
 
         $rows = array();
 
+        $type = $this->getPsvTypeFromType($table);
+
         foreach ($data['licence']['licenceVehicles'] as $vehicle) {
-            if ($vehicle['vehicle']['psvType'] != $table) {
+            if (!isset($vehicle['vehicle']['psvType']['id'])
+                || $vehicle['vehicle']['psvType']['id'] != $type) {
                 continue;
             }
 
@@ -289,9 +296,9 @@ class VehiclePsvController extends VehicleSafetyController
      */
     protected function actionSave($data, $service = null)
     {
-        list($type, $action) = explode('-', $this->getActionName());
+        $parts = explode('-', $this->getActionName());
 
-        unset($type);
+        $action = array_pop($parts);
 
         $this->saveVehicle($data, $action);
     }
@@ -315,12 +322,52 @@ class VehiclePsvController extends VehicleSafetyController
      */
     protected function processActionLoad($data)
     {
-        list($type, $action) = explode('-', $this->getActionName());
+        $parts = explode('-', $this->getActionName());
 
-        unset($action);
+        $type = array_shift($parts);
 
-        $data['psvType'] = $type;
+        $data['psvType'] = $this->getPsvTypeFromType($type);
 
         return array('data' => $data);
+    }
+
+    /**
+     * Get a PSV type from type
+     *
+     * @param string $type
+     * @return string|null
+     */
+    private function getPsvTypeFromType($type)
+    {
+        switch ($type) {
+            case 'large':
+                return 'vhl_t_c'; // @todo Not sure if this is the right ref data key
+            case 'medium':
+                return 'vhl_t_b';
+            case 'small':
+                return 'vhl_t_a';
+        }
+
+        return null;
+    }
+
+    /**
+     * Get a type from PSV type
+     *
+     * @param string $type
+     * @return string|null
+     */
+    private function getTypeFromPsvType($type)
+    {
+        switch ($type) {
+            case 'vhl_t_c':
+                return 'large'; // @todo Not sure if this is the right ref data key
+            case 'vhl_t_b':
+                return 'medium';
+            case 'vhl_t_a':
+                return 'small';
+        }
+
+        return null;
     }
 }
