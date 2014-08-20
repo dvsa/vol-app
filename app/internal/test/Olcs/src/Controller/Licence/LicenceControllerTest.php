@@ -1,35 +1,37 @@
 <?php
 
 /**
- * Description of OlcsIndexControllerTest
+ * Licence controller tests
  *
- * @author adminmwc
+ * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-
-namespace OlcsTest\Controller;
+namespace OlcsTest\Controller\Licence;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
 /**
- * Class OlcsIndexControllerTest
- * @package OlcsTest\Controller
+ * Licence controller tests
+ *
+ * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
+class LicenceControllerTest extends AbstractHttpControllerTestCase
 {
     public function setUp()
     {
         $this->setApplicationConfig(
-            include __DIR__.'/../../../../' . 'config/application.config.php'
+            include __DIR__.'/../../../../../config/application.config.php'
         );
         $this->controller = $this->getMock(
-            '\Olcs\Controller\IndexController',
+            '\Olcs\Controller\Licence\LicenceController',
             array(
                 'makeRestCall',
                 'getLoggedInUser',
                 'getTable',
+                'getLicence',
                 'getRequest',
                 'getForm',
                 'loadScripts',
+                'getFromRoute',
                 'params'
             )
         );
@@ -50,11 +52,34 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
         parent::setUp();
     }
 
-    public function testIndexActionWithNoQueryUsesDefaultParams()
+    public function testProcessingActionWithNoQueryUsesDefaultParams()
     {
+        $licenceData = array(
+            'licNo' => 'TEST1234',
+            'goodsOrPsv' => array(
+                'id' => 'PSV'
+            ),
+            'licenceType' => array(
+                'id' => 'L1'
+            ),
+            'status' => array(
+                'id' => 'S1'
+            )
+        );
+
+        $this->controller->expects($this->any())
+            ->method('getLicence')
+            ->with(1234)
+            ->will($this->returnValue($licenceData));
+
         $this->controller->expects($this->any())
             ->method('getLoggedInUser')
             ->will($this->returnValue(1));
+
+        $this->controller->expects($this->any())
+            ->method('getFromRoute')
+            ->with('licence')
+            ->will($this->returnValue(1234));
 
         $expectedParams = array(
             'owner' => 1,
@@ -67,14 +92,15 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
             'limit' => 10,
             // @NOTE: I don't like the date variable here, maybe use
             // DateTime and a mock instead
-            'actionDate' => '<= ' . date('Y-m-d')
+            'actionDate' => '<= ' . date('Y-m-d'),
+            'licenceId' => 1234
         );
-        $this->controller->expects($this->at(2))
+        $this->controller->expects($this->at(3))
             ->method('makeRestCall')
             ->with('TaskSearchView', 'GET', $expectedParams)
             ->will($this->returnValue([]));
 
-        $tableMock = $this->getMock('\stdClass', ['render']);
+        $tableMock = $this->getMock('\stdClass', ['render', 'removeColumn']);
         $this->controller->expects($this->once())
             ->method('getTable')
             ->with(
@@ -89,6 +115,14 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
 
         $tableMock->expects($this->once())
             ->method('render');
+
+        $tableMock->expects($this->at(0))
+            ->method('removeColumn')
+            ->with('name');
+
+        $tableMock->expects($this->at(1))
+            ->method('removeColumn')
+            ->with('link');
 
         $form = $this->getMock('\stdClass', ['get', 'setValueOptions', 'remove', 'setData']);
 
@@ -137,39 +171,41 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
             'order' => 'ASC',
             'page' => 1,
             'limit' => 100,
-            'actionDate' => '<= ' . date('Y-m-d')
+            'actionDate' => '<= ' . date('Y-m-d'),
+            'licenceId' => 1234
         ];
 
-        $this->controller->expects($this->at(6))
+        $this->controller->expects($this->at(7))
             ->method('makeRestCall')
             ->with('Team', 'GET', $standardListData)
             ->will($this->returnValue($response));
 
-        $this->controller->expects($this->at(7))
+        $this->controller->expects($this->at(8))
             ->method('makeRestCall')
             ->with('User', 'GET', $extendedListData)
             ->will($this->returnValue($response));
 
-        $this->controller->expects($this->at(8))
+        $this->controller->expects($this->at(9))
             ->method('makeRestCall')
             ->with('Category', 'GET', $altListData)
             ->will($this->returnValue($altResponse));
 
-        $this->controller->expects($this->at(9))
+        $this->controller->expects($this->at(10))
             ->method('makeRestCall')
             ->with('TaskSubCategory', 'GET', $extendedListData)
             ->will($this->returnValue($response));
 
-        $view = $this->controller->indexAction();
+        $view = $this->controller->processingAction();
         list($header, $content) = $view->getChildren();
 
-        $this->assertEquals('Home', $header->getVariable('pageTitle'));
-        $this->assertEquals('Subtitle', $header->getVariable('pageSubTitle'));
+        $this->assertEquals('TEST1234', $header->getVariable('pageTitle'));
+        $this->assertEquals('PSV, L1, S1', $header->getVariable('pageSubTitle'));
     }
 
-    public function testIndexActionAjax()
+    public function testProcessingActionAjax()
     {
-        $this->controller->expects($this->at(2))
+
+        $this->controller->expects($this->at(3))
             ->method('makeRestCall')
             ->will($this->returnValue([]));
 
@@ -179,7 +215,14 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
             ->method('get')
             ->will($this->returnSelf());
 
-        $tableMock = $this->getMock('\stdClass', ['render']);
+        $tableMock = $this->getMock('\stdClass', ['render', 'removeColumn']);
+
+        $tableMock->expects($this->at(0))
+            ->method('removeColumn');
+
+        $tableMock->expects($this->at(1))
+            ->method('removeColumn');
+
         $this->controller->expects($this->once())
             ->method('getTable')
             ->will($this->returnValue($tableMock));
@@ -206,19 +249,19 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
             ]
         ];
 
-        $this->controller->expects($this->at(6))
-            ->method('makeRestCall')
-            ->will($this->returnValue($response));
-
         $this->controller->expects($this->at(7))
             ->method('makeRestCall')
             ->will($this->returnValue($response));
 
         $this->controller->expects($this->at(8))
             ->method('makeRestCall')
-            ->will($this->returnValue($altResponse));
+            ->will($this->returnValue($response));
 
         $this->controller->expects($this->at(9))
+            ->method('makeRestCall')
+            ->will($this->returnValue($altResponse));
+
+        $this->controller->expects($this->at(10))
             ->method('makeRestCall')
             ->will($this->returnValue($response));
 
@@ -226,89 +269,8 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
             ->method('isXmlHttpRequest')
             ->will($this->returnValue(true));
 
-        $view = $this->controller->indexAction();
+        $view = $this->controller->processingAction();
 
         $this->assertTrue($view->terminate());
-    }
-
-    public function testTaskFilterActionInvalidType()
-    {
-        $params = $this->getMock('\stdClass', ['fromRoute']);
-
-        $this->controller->expects($this->any())
-            ->method('params')
-            ->will($this->returnValue($params));
-
-        $params->expects($this->at(0))
-            ->method('fromRoute')
-            ->with('type')
-            ->will($this->returnValue('invalid'));
-
-        try {
-            $this->controller->taskFilterAction();
-        } catch (\Exception $e) {
-            $this->assertEquals('Invalid task filter key: invalid', $e->getMessage());
-            return;
-        }
-
-        $this->fail('Expected exception not raised');
-    }
-
-    public function testTaskFilterActionValidType()
-    {
-        $params = $this->getMock('\stdClass', ['fromRoute']);
-
-        $this->controller->expects($this->any())
-            ->method('params')
-            ->will($this->returnValue($params));
-
-        $params->expects($this->at(0))
-            ->method('fromRoute')
-            ->with('type')
-            ->will($this->returnValue('users'));
-
-        $params->expects($this->at(1))
-            ->method('fromRoute')
-            ->with('value')
-            ->will($this->returnValue('123'));
-
-        $params = [
-            'team' => '123',
-            'limit' => 100,
-            'sort' => 'name'
-        ];
-
-        $response = [
-            'Results' => [
-                [
-                    'id' => 123,
-                    'name' => 'foo'
-                ],
-                [
-                    'id' => 456,
-                    'name' => 'bar'
-                ]
-            ]
-        ];
-        $this->controller->expects($this->at(2))
-            ->method('makeRestCall')
-            ->with('User', 'GET', $params)
-            ->will($this->returnValue($response));
-
-        $expectedData = [
-            [
-                'value' => '',
-                'label' => 'All'
-            ], [
-                'value' => 123,
-                'label' => 'foo'
-            ], [
-                'value' => 456,
-                'label' => 'bar'
-            ]
-        ];
-
-        $json = $this->controller->taskFilterAction();
-        $this->assertEquals($expectedData, $json->getVariables());
     }
 }
