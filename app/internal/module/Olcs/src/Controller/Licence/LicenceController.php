@@ -25,7 +25,7 @@ class LicenceController extends AbstractController
     {
         $licence = $this->getLicence($this->getFromRoute('licence'));
 
-        if ($licence['goodsOrPsv'] == 'Goods') {
+        if ($licence['goodsOrPsv']['id'] == 'lcat_gv') {
             $this->getServiceLocator()->get('Navigation')->findOneBy('id', 'licence_bus')->setVisible(0);
         }
 
