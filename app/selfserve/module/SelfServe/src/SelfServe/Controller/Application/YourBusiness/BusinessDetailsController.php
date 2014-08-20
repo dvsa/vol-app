@@ -40,7 +40,10 @@ class BusinessDetailsController extends YourBusinessController
                                 )
                             ),
                             'tradingNames' => array(
-                                'properties' => array()
+                                'properties' => array(
+                                    'id',
+                                    'name'
+                                )
                             )
                         )
                     )
@@ -188,6 +191,17 @@ class BusinessDetailsController extends YourBusinessController
     }
 
     /**
+     * Post set form data method
+     *
+     * @param Form $form
+     * @return Form
+     */
+    protected function postSetFormData($form)
+    {
+        return $this->processAddTradingName($form);
+    }
+
+    /**
      * Process load data for form
      *
      * @param array $data
@@ -195,10 +209,6 @@ class BusinessDetailsController extends YourBusinessController
      */
     protected function processLoad($data)
     {
-        print '<pre>';
-        print_r($data);
-        exit;
-        
         $licence = $data['licence'];
         $organisation = $licence['organisation'];
 
@@ -265,8 +275,6 @@ class BusinessDetailsController extends YourBusinessController
 
         $form = parent::generateFormWithData($name, $callback, $data, $tables);
 
-        $form = $this->processAddTradingName($form);
-
         return $form;
     }
 
@@ -284,13 +292,13 @@ class BusinessDetailsController extends YourBusinessController
             return $form;
         }
 
-        $post = (array)$request->getPost()['data'];
+        $post = (array)$request->getPost();
 
-        if (isset($post['tradingNames']['submit_add_trading_name'])) {
+        if (isset($post['data']['tradingNames']['submit_add_trading_name'])) {
 
             $form->setValidationGroup(array('data' => ['tradingNames']));
 
-            $form->setData($request->getPost());
+            $form->setData($post);
 
             if ($form->isValid()) {
 
@@ -298,25 +306,14 @@ class BusinessDetailsController extends YourBusinessController
 
                 //remove existing entries from collection and check for empty entries
                 foreach ($tradingNames as $key => $val) {
-                    $form->get('data')->get('tradingNames')->get('trading_name')->remove($key);
-
                     if (strlen(trim($val['text'])) == 0) {
                         unset($tradingNames[$key]);
                     }
                 }
 
-                $tradingNames[] = array('text' => '');
+                $tradingNames[] = ['text' => ''];
 
-                //reset keys
-                $tradingNames = array_values($tradingNames);
-
-                $data = array(
-                    'data' => array(
-                        'tradingNames' => array('trading_name' => $tradingNames)
-                    )
-                );
-
-                $form->setData($data);
+                $form->get('data')->get('tradingNames')->get('trading_name')->populateValues($tradingNames);
             }
         }
 
