@@ -28,14 +28,12 @@ return array(
         array(
             'title' => 'Defect type',
             'formatter' => function ($data, $column) {
-                    $column['formatter'] = 'Date';
                     return '<a href="' . $this->generateUrl(
-                        array('action' => 'edit', 'id' => $data['id']),
-                        'case_prohibition',
+                        array('action' => 'edit', 'id' => $data['prohibition'], 'defect' => $data['id']),
+                        'case_prohibition/defect',
                         true
-                    ) . '">' . $this->callFormatter($column, $data) . '</a>';
-                },
-            'name' => 'defectType'
+                    ) . '">' . $data['defectType'] . '</a>';
+                }
         ),
         array(
             'title' => 'Notes',

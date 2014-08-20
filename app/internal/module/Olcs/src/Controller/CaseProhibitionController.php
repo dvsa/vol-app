@@ -1,22 +1,22 @@
 <?php
 
-/**
- * Case Prohibition Controller
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- */
+    /**
+     * Case Prohibition Controller
+     *
+     * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+     */
 
 namespace Olcs\Controller;
 
-use Olcs\Controller\Traits\DeleteActionTrait;
+    use Olcs\Controller\Traits\DeleteActionTrait;
 
-use Common\Controller\CrudInterface;
+    use Common\Controller\CrudInterface;
 
-/**
- * Case Prohibition Controller
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- */
+    /**
+     * Case Prohibition Controller
+     *
+     * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+     */
 class CaseProhibitionController extends CaseController implements CrudInterface
 {
     use DeleteActionTrait;
@@ -110,6 +110,13 @@ class CaseProhibitionController extends CaseController implements CrudInterface
         $licenceId = $this->fromRoute('licence');
         $caseId = $this->fromRoute('case');
         $prohibitionId = $this->fromRoute('id');
+
+        //check if the add button has been pressed on the defect table
+        $post = $this->getRequest()->getPost();
+
+        if (isset($post['action']) && $post['action'] == 'Add') {
+            return $this->redirectToRoute('case_prohibition/defect', ['action' => 'add'], [], true);
+        }
 
         $this->setBreadcrumb(
             array(
@@ -238,10 +245,24 @@ class CaseProhibitionController extends CaseController implements CrudInterface
      */
     private function generateProhibitionDefectTable($prohibitionId)
     {
+        $bundle = [
+            'children' => [
+                'prohibition' => [
+                    'properties' => [
+                        'id'
+                    ]
+                ]
+
+            ]
+        ];
+
         $results = $this->makeRestCall(
             'ProhibitionDefect',
             'GET',
-            array('prohibition' => $prohibitionId)
+            array(
+                'prohibition' => $prohibitionId,
+                'bundle' => json_encode($bundle)
+            )
         );
 
         if ($results['Count']) {
