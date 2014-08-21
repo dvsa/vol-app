@@ -394,7 +394,7 @@ class AuthorisationController extends OperatingCentresController
 
         $form->getInputFilter()->get('address')->get('postcode')->setRequired(false);
 
-        if (!$licenceData['niFlag'] && !$this->getTrafficArea()) {
+        if ($licenceData['niFlag'] == 'N' && !$this->getTrafficArea()) {
             $form->get('form-actions')->remove('addAnother');
         }
 
@@ -447,10 +447,10 @@ class AuthorisationController extends OperatingCentresController
         // set default Traffic Area if we don't have one
         if (!array_key_exists('trafficArea', $data) || !$data['trafficArea']['id']) {
             $licenceData = $this->getLicenceData();
-            if ($licenceData['niFlag']) {
+            if ($licenceData['niFlag'] == 'Y') {
                 $this->setTrafficArea(self::NORTHERN_IRELAND_TRAFFIC_AREA_CODE);
             }
-            if (!$licenceData['niFlag'] && $data['operatingCentre']['addresses']['address']['postcode']) {
+            if ($licenceData['niFlag'] == 'N' && $data['operatingCentre']['addresses']['address']['postcode']) {
                 $ocCount = $this->getOperatingCentresCount();
 
                 // first Operating Centre was just added or we are editing the first one
@@ -739,9 +739,7 @@ class AuthorisationController extends OperatingCentresController
      */
     public function checkForCrudAction($route = null, $params = array(), $itemIdParam = 'id')
     {
-        $table = $this->params()->fromPost('table');
-        $action = is_array($table) && isset($table['action']) ? strtolower($table['action']) : '';
-
+        $action = strtolower($this->params()->fromPost('action'));
         if (empty($action)) {
             return false;
         }

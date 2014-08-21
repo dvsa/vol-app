@@ -51,7 +51,7 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
     /**
      * Norther Ireland type of licence
      */
-    private $niFlag = false;
+    private $niFlag = 'N';
 
     private $licenceType = 'ltyp_sn';
 
@@ -415,7 +415,7 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
      */
     public function testIndexActionWithCrudAction()
     {
-        $this->setUpAction('index', null, array('table' => array('action' => 'Add')));
+        $this->setUpAction('index', null, array('action' => 'Add'));
 
         $this->goodsOrPsv = 'goods';
 
@@ -814,7 +814,7 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
         );
 
         $this->goodsOrPsv = 'goods';
-        $this->niFlag = true;
+        $this->niFlag = 'Y';
 
         $this->setUpAction('add', null, $post, $files);
 
@@ -990,7 +990,6 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
 
     /**
      * Test addAction with no operating centres
-     * 
      * @dataProvider psvTrafficAreaProvider
      */
     public function testAddActionNoOperatingCentres($goodsOrPsv, $hasTrailers, $niFlag)
@@ -1033,7 +1032,7 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
 
         // No "Add another" button needed if no traffic area defined and no operating centres added yet
         // and not NI application
-        $this->assertEquals($form->get('form-actions')->has('addAnother'), $this->niFlag);
+        $this->assertEquals($form->get('form-actions')->has('addAnother'), $this->niFlag == 'Y' ? true : false);
     }
 
     /**
@@ -1049,15 +1048,15 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
                 'id' => '',
                 'version' => '',
                 'addressLine1' => 'Some street',
-                'city' => 'City',
-                'postcode' => $this->niFlag ? 'BT1 4EE' : 'LS1 4ES',
-                'country' => 'country.GB'
+                'town' => 'City',
+                'postcode' => $this->niFlag == 'Y' ? 'BT1 4EE' : 'LS1 4ES',
+                'countryCode' => 'GB'
             ),
             'data' => array(
-                'numberOfVehicles' => 10,
-                'numberOfTrailers' => 10,
-                'sufficientParking' => '1',
-                'permission' => '1'
+                'noOfVehiclesPossessed' => 10,
+                'noOfTrailersPossessed' => 10,
+                'sufficientParking' => 'Y',
+                'permission' => 'Y'
             ),
             'advertisements' => array(
                 'adPlaced' => 'N',
@@ -1135,7 +1134,7 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
     {
         $this->hasTrafficAreaDefined = false;
 
-        $this->setUpAction('index', null, array('table' => array('action' => 'Add')));
+        $this->setUpAction('index', null, array('action' => 'Add'));
 
         $this->goodsOrPsv = 'goods';
 
@@ -1156,7 +1155,7 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
         $this->setUpAction(
             'index',
             null,
-            array('table' => array('action' => 'Add'), 'dataTrafficArea' => array('trafficArea' => 'B'))
+            array('action' => 'Add', 'dataTrafficArea' => array('trafficArea' => 'B'))
         );
 
         $this->goodsOrPsv = 'goods';
@@ -1169,31 +1168,31 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
 
     /**
      * Test indexAction calling edit action without id
-     *
+     * 
      */
     public function testIndexActionCallingCrudEditWithoutId()
     {
         $this->hasTrafficAreaDefined = false;
 
-        $this->setUpAction('index', null, array('table' => array('action' => 'Edit')));
+        $this->setUpAction('index', null, array('action' => 'Edit'));
 
         $this->goodsOrPsv = 'goods';
 
         $response = $this->controller->indexAction();
 
-        $this->assertInstanceOf('\Zend\Http\Response', $response);
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
 
     }
 
     /**
      * Test indexAction calling edit action with id
-     *
+     * 
      */
     public function testIndexActionCallingCrudEditWithId()
     {
         $this->hasTrafficAreaDefined = false;
 
-        $this->setUpAction('index', null, array('table' => array('action' => 'Edit'), 'id' => 1));
+        $this->setUpAction('index', null, array('action' => 'Edit', 'id' => 1));
 
         $this->goodsOrPsv = 'goods';
 
@@ -1229,10 +1228,10 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
     public function psvTrafficAreaProvider()
     {
         return array(
-            array('psv', false, false),
-            array('goods', true, false),
-            array('psv', false, true),
-            array('goods', true, true)
+            array('psv', false, 'N'),
+            array('goods', true, 'N'),
+            array('psv', false, 'Y'),
+            array('goods', true, 'Y')
         );
     }
 
