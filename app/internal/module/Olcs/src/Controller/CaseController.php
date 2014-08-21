@@ -8,7 +8,6 @@
 
 namespace Olcs\Controller;
 
-use Common\Controller\FormActionController;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -18,6 +17,8 @@ use Zend\View\Model\ViewModel;
  */
 class CaseController extends AbstractController
 {
+    use Traits\LicenceController;
+
     protected $title;
     protected $subTitle;
 

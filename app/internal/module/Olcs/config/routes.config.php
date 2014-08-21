@@ -83,10 +83,7 @@ return [
             'details' => [
                 'type' => 'literal',
                 'options' => [
-                    'route' => '/details',
-                    'defaults' => [
-                        'action' => 'details',
-                    ]
+                    'route' => '/details'
                 ],
                 'may_terminate' => false,
                 'child_routes' => [
@@ -95,6 +92,107 @@ return [
                         'options' => [
                             'route' => '/overview',
                             'defaults' => [
+                                'controller' => 'LicenceDetailsOverviewController',
+                                'action' => 'index',
+                            ]
+                        ]
+                    ],
+                    'type_of_licence' => [
+                        'type' => 'literal',
+                        'options' => [
+                            'route' => '/type_of_licence',
+                            'defaults' => [
+                                'controller' => 'LicenceDetailsTypeOfLicenceController',
+                                'action' => 'index',
+                            ]
+                        ]
+                    ],
+                    'business_details' => [
+                        'type' => 'literal',
+                        'options' => [
+                            'route' => '/business_details',
+                            'defaults' => [
+                                'controller' => 'LicenceDetailsBusinessDetailsController',
+                                'action' => 'index',
+                            ]
+                        ]
+                    ],
+                    'address' => [
+                        'type' => 'literal',
+                        'options' => [
+                            'route' => '/addresses',
+                            'defaults' => [
+                                'controller' => 'LicenceDetailsAddressController',
+                                'action' => 'index',
+                            ]
+                        ]
+                    ],
+                    'people' => [
+                        'type' => 'literal',
+                        'options' => [
+                            'route' => '/people',
+                            'defaults' => [
+                                'controller' => 'LicenceDetailsPeopleController',
+                                'action' => 'index',
+                            ]
+                        ]
+                    ],
+                    'operating_centre' => [
+                        'type' => 'literal',
+                        'options' => [
+                            'route' => '/operating_centres',
+                            'defaults' => [
+                                'controller' => 'LicenceDetailsOperatingCentreController',
+                                'action' => 'index',
+                            ]
+                        ]
+                    ],
+                    'transport_manager' => [
+                        'type' => 'literal',
+                        'options' => [
+                            'route' => '/transport_managers',
+                            'defaults' => [
+                                'controller' => 'LicenceDetailsTransportManagerController',
+                                'action' => 'index',
+                            ]
+                        ]
+                    ],
+                    'vehicle' => [
+                        'type' => 'literal',
+                        'options' => [
+                            'route' => '/vehicles',
+                            'defaults' => [
+                                'controller' => 'LicenceDetailsVehicleController',
+                                'action' => 'index',
+                            ]
+                        ]
+                    ],
+                    'safety' => [
+                        'type' => 'literal',
+                        'options' => [
+                            'route' => '/safety',
+                            'defaults' => [
+                                'controller' => 'LicenceDetailsSafetyController',
+                                'action' => 'index',
+                            ]
+                        ]
+                    ],
+                    'condition_undertaking' => [
+                        'type' => 'literal',
+                        'options' => [
+                            'route' => '/condition_undertaking',
+                            'defaults' => [
+                                'controller' => 'LicenceDetailsConditionUndertakingController',
+                                'action' => 'index',
+                            ]
+                        ]
+                    ],
+                    'taxi_phv' => [
+                        'type' => 'literal',
+                        'options' => [
+                            'route' => '/taxi_phv',
+                            'defaults' => [
+                                'controller' => 'LicenceDetailsTaxiPhvController',
                                 'action' => 'index',
                             ]
                         ]
