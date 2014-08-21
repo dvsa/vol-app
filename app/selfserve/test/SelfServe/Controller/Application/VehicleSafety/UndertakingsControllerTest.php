@@ -43,7 +43,9 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
         $this->taDataResponse=array(
                 'id' => 1,
                 'version' => 1,
-                'status' => 'test.status',
+                'status' => array(
+                    'id' => 'test.status'
+                ),
                 'psvOperateSmallVhl' => null,
                 'psvSmallVhlNotes' => "",
                 'psvSmallVhlConfirmation' => null,
@@ -58,14 +60,16 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
                     'niFlag' => 0,
                     'licenceType' => 'standard-national',
                     'organisation' => array(
-                        'organisationType' => 'org_type.lc'
+                        'type' => array(
+                            'id' => ApplicationController::ORG_TYPE_REGISTERED_COMPANY
+                        )
                     )
                 ),
                 'trafficArea' => array(
                     'id' => 5,
-                    'applyScottishRules' => false
+                    'isScottishRules' => false
                 ),
-                'totAuthSmallVhl' => 1,
+                'totAuthSmallVehicles' => 1,
                 'totAuthMediumVehicles' => 1,
                 'totAuthLargeVehicles' => 0
             );
@@ -77,7 +81,7 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
         // Make sure we get a view not a response
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
 
-        $form = $this->getFormFromResponse($response);
+        $form = $this->getFormFromView($response);
     }
 
     /**
@@ -88,7 +92,9 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
         $taDataResponse=array(
                 'id' => 1,
                 'version' => 1,
-                'status' => 'test.status',
+                'status' => array(
+                    'id' => 'test.status'
+                ),
                 'psvOperateSmallVhl' => null,
                 'psvSmallVhlNotes' => "",
                 'psvSmallVhlConfirmation' => null,
@@ -103,15 +109,16 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
                     'niFlag' => 0,
                     'licenceType' => 'standard-national',
                     'organisation' => array(
-                        'organisationType' => 'org_type.lc'
+                        'type' => array(
+                            'id' => ApplicationController::ORG_TYPE_REGISTERED_COMPANY
+                        )
                     )
                 ),
                 'trafficArea' => array(
                     'id' => 5,
-                    'applyScottishRules' => false
+                    'isScottishRules' => false
                 ),
-                'totAuthVehicles' => 1,
-                'totAuthSmallVhl' => 1,
+                'totAuthSmallVehicles' => 1,
                 'totAuthMediumVehicles' => 0,
                 'totAuthLargeVehicles' => 0
             );
@@ -148,7 +155,9 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
         $taDataResponse=array(
                 'id' => 1,
                 'version' => 1,
-                'status' => 'test.status',
+                'status' => array(
+                    'id' => 'test.status'
+                ),
                 'psvOperateSmallVhl' => null,
                 'psvSmallVhlNotes' => "",
                 'psvSmallVhlConfirmation' => null,
@@ -163,15 +172,16 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
                     'niFlag' => 0,
                     'licenceType' => 'standard-national',
                     'organisation' => array(
-                        'organisationType' => 'org_type.lc'
+                        'type' => array(
+                            'id' => ApplicationController::ORG_TYPE_REGISTERED_COMPANY
+                        )
                     )
                 ),
                 'trafficArea' => array(
                     'id' => 8,
-                    'applyScottishRules' => true
+                    'isScottishRules' => true
                 ),
-                'totAuthVehicles' => 1,
-                'totAuthSmallVhl' => 1,
+                'totAuthSmallVehicles' => 1,
                 'totAuthMediumVehicles' => 0,
                 'totAuthLargeVehicles' => 0
             );
@@ -210,7 +220,9 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
         $taDataResponse=array(
                 'id' => 1,
                 'version' => 1,
-                'status' => 'test.status',
+                'status' => array(
+                    'id' => 'test.status'
+                ),
                 'psvOperateSmallVhl' => null,
                 'psvSmallVhlNotes' => "",
                 'psvSmallVhlConfirmation' => null,
@@ -225,14 +237,16 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
                     'niFlag' => 0,
                     'licenceType' => 'standard-national',
                     'organisation' => array(
-                        'organisationType' => 'org_type.lc'
+                        'type' => array(
+                            'id' => ApplicationController::ORG_TYPE_REGISTERED_COMPANY
+                        )
                     )
                 ),
                 'trafficArea' => array(
                     'id' => 5,
-                    'applyScottishRules' => false
+                    'isScottishRules' => false
                 ),
-                'totAuthSmallVhl' => 0,
+                'totAuthSmallVehicles' => 0,
                 'totAuthMediumVehicles' => 1,
                 'totAuthLargeVehicles' => 0
             );
@@ -270,7 +284,9 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
         $taDataResponse=array(
                 'id' => 1,
                 'version' => 1,
-                'status' => 'test.status',
+                'status' => array(
+                    'id' => 'test.status'
+                ),
                 'psvOperateSmallVhl' => null,
                 'psvSmallVhlNotes' => "",
                 'psvSmallVhlConfirmation' => null,
@@ -285,14 +301,16 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
                     'niFlag' => 0,
                     'licenceType' => 'standard-national',
                     'organisation' => array(
-                        'organisationType' => 'org_type.lc'
+                        'type' => array(
+                            'id' => ApplicationController::ORG_TYPE_REGISTERED_COMPANY
+                        )
                     )
                 ),
                 'trafficArea' => array(
                     'id' => 5,
-                    'applyScottishRules' => null
+                    'isScottishRules' => null
                 ),
-                'totAuthSmallVhl' => null,
+                'totAuthSmallVehicles' => null,
                 'totAuthMediumVehicles' => 1,
                 'totAuthLargeVehicles' => null
             );
@@ -329,7 +347,9 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
         $taDataResponse=array(
                 'id' => 1,
                 'version' => 1,
-                'status' => 'test.status',
+                'status' => array(
+                    'id' => 'test.status'
+                ),
                 'psvOperateSmallVhl' => null,
                 'psvSmallVhlNotes' => "",
                 'psvSmallVhlConfirmation' => null,
@@ -344,14 +364,16 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
                     'niFlag' => 0,
                     'licenceType' => 'standard-national',
                     'organisation' => array(
-                        'organisationType' => 'org_type.lc'
+                        'type' => array(
+                            'id' => ApplicationController::ORG_TYPE_REGISTERED_COMPANY
+                        )
                     )
                 ),
                 'trafficArea' => array(
                     'id' => 5,
-                    'applyScottishRules' => false
+                    'isScottishRules' => false
                 ),
-                'totAuthSmallVhl' => 1,
+                'totAuthSmallVehicles' => 1,
                 'totAuthMediumVehicles' => 1,
                 'totAuthLargeVehicles' => 1
             );
@@ -405,14 +427,16 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
                     'niFlag' => 0,
                     'licenceType' => 'standard-national',
                     'organisation' => array(
-                        'organisationType' => 'org_type.lc'
+                        'type' => array(
+                            'id' => ApplicationController::ORG_TYPE_REGISTERED_COMPANY
+                        )
                     )
                 ),
                 'trafficArea' => array(
                     'id' => 5,
-                    'applyScottishRules' => true
+                    'isScottishRules' => true
                 ),
-                'totAuthSmallVhl' => 1,
+                'totAuthSmallVehicles' => 1,
                 'totAuthMediumVehicles' => 1,
                 'totAuthLargeVehicles' => 1
             );
@@ -453,20 +477,20 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
 
         foreach ($present as $fieldsetName => $fieldsetElements) {
-            $fieldset = $this->getFormFromResponse($response)->get($fieldsetName);
+            $fieldset = $this->getFormFromView($response)->get($fieldsetName);
             foreach ($fieldsetElements as $element) {
-                $this->assertTrue($fieldset->has($element));
+                $this->assertTrue($fieldset->has($element),$element.' not present');
             }
         }
 
         foreach ($missing as $fieldsetName => $fieldsetElements) {
-            if ( $this->getFormFromResponse($response)->has($fieldsetName) ) {
-                $fieldset = $this->getFormFromResponse($response)->get($fieldsetName);
+            if ( $this->getFormFromView($response)->has($fieldsetName) ) {
+                $fieldset = $this->getFormFromView($response)->get($fieldsetName);
                 foreach ($fieldsetElements as $element) {
-                    $this->assertFalse($fieldset->has($element));
+                    $this->assertFalse($fieldset->has($element),$element.' should not be present');
                 }
             } else {
-                $this->assertFalse($this->getFormFromResponse($response)->has($fieldsetName));
+                $this->assertFalse($this->getFormFromView($response)->has($fieldsetName));
             }
         }
     }
@@ -482,20 +506,7 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
     protected function mockRestCalls($service, $method, $data = array(), $bundle = array())
     {
         if ($service == 'Application' && $method == 'GET' && $bundle == ApplicationController::$licenceDataBundle) {
-            return array(
-                'licence' => array(
-                    'id' => 10,
-                    'version' => 1,
-                    'goodsOrPsv' => 'psv',
-                    'niFlag' => 0,
-                    'licenceType' => 'restricted',
-                    'organisation' => array(
-                        'type' => array(
-                            'id' => ApplicationController::ORG_TYPE_REGISTERED_COMPANY
-                        )
-                    ),
-                )
-            );
+            return $this->getLicenceData('psv');
         }
 
         if ($service == 'ApplicationCompletion' && $method == 'GET') {
