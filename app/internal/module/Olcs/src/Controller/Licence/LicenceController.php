@@ -10,6 +10,7 @@ namespace Olcs\Controller\Licence;
 use Common\Controller\FormActionController as AbstractFormActionController;
 use Zend\View\Model\ViewModel;
 use Olcs\Controller\AbstractController;
+use Olcs\Controller\Traits\TaskSearchTrait;
 
 /**
  * Licence Controller
@@ -18,24 +19,32 @@ use Olcs\Controller\AbstractController;
  */
 class LicenceController extends AbstractController
 {
-    protected $title;
-    protected $subtitle;
+    use TaskSearchTrait;
 
-    public function getViewWithLicence()
+    public function getViewWithLicence($variables = array())
     {
+
         $licence = $this->getLicence($this->getFromRoute('licence'));
 
         if ($licence['goodsOrPsv']['id'] == 'lcat_gv') {
             $this->getServiceLocator()->get('Navigation')->findOneBy('id', 'licence_bus')->setVisible(0);
         }
 
-        $view = $this->getView(['licence' => $licence]);
+        $variables['licence'] = $licence;
 
-        $this->title = $view->licence['licNo'];
-        $this->subTitle = $view->licence['goodsOrPsv']['id'] . ', ' . $view->licence['licenceType']['id']
-            . ', ' . $view->licence['status']['id'];
+        $view = $this->getView($variables);
+
+        $this->pageTitle = $view->licence['licNo'];
+        $this->pageSubTitle = $this->getTranslator()->translate($view->licence['goodsOrPsv']['id']) . ', ' .
+            $this->getTranslator()->translate($view->licence['licenceType']['id'])
+            . ', ' . $this->getTranslator()->translate($view->licence['status']['id']);
 
         return $view;
+    }
+
+    public function getTranslator()
+    {
+        return $this->getServiceLocator()->get('translator');
     }
 
     public function indexAction()
@@ -43,7 +52,7 @@ class LicenceController extends AbstractController
         $view = $this->getViewWithLicence();
         $view->setTemplate('licence/index');
 
-        return $this->renderView($view, $this->title, $this->subTitle);
+        return $this->renderView($view);
     }
 
     public function editAction()
@@ -51,7 +60,7 @@ class LicenceController extends AbstractController
         $view = $this->getViewWithLicence();
         $view->setTemplate('licence/index');
 
-        return $this->renderView($view, $this->title, $this->subTitle);
+        return $this->renderView($view);
     }
 
     public function casesAction()
@@ -59,7 +68,7 @@ class LicenceController extends AbstractController
         $view = $this->getViewWithLicence();
         $view->setTemplate('licence/index');
 
-        return $this->renderView($view, $this->title, $this->subTitle);
+        return $this->renderView($view);
     }
 
     public function documentsAction()
@@ -67,15 +76,38 @@ class LicenceController extends AbstractController
         $view = $this->getViewWithLicence();
         $view->setTemplate('licence/index');
 
-        return $this->renderView($view, $this->title, $this->subTitle);
+        return $this->renderView($view);
     }
 
     public function processingAction()
     {
-        $view = $this->getViewWithLicence();
-        $view->setTemplate('licence/index');
+        $this->pageLayout = 'licence';
 
-        return $this->renderView($view, $this->title, $this->subTitle);
+        $filters = $this->mapTaskFilters(
+            array('licenceId' => $this->getFromRoute('licence'))
+        );
+
+        $table = $this->getTaskTable($filters, false);
+
+        // the table's nearly all good except we don't want
+        // a couple of columns
+        $table->removeColumn('name');
+        $table->removeColumn('link');
+
+        $view = $this->getViewWithLicence(
+            array(
+                'table' => $table->render(),
+                'form'  => $this->getTaskForm($filters),
+                'inlineScript' => $this->loadScripts(['tasks'])
+            )
+        );
+
+        $view->setTemplate('licence/processing');
+        $view->setTerminal(
+            $this->getRequest()->isXmlHttpRequest()
+        );
+
+        return $this->renderView($view);
     }
 
     public function feesAction()
@@ -83,7 +115,7 @@ class LicenceController extends AbstractController
         $view = $this->getViewWithLicence();
         $view->setTemplate('licence/index');
 
-        return $this->renderView($view, $this->title, $this->subTitle);
+        return $this->renderView($view);
     }
 
     public function busAction()
@@ -91,7 +123,7 @@ class LicenceController extends AbstractController
         $view = $this->getViewWithLicence();
         $view->setTemplate('licence/index');
 
-        return $this->renderView($view, $this->title, $this->subTitle);
+        return $this->renderView($view);
     }
 
     /**

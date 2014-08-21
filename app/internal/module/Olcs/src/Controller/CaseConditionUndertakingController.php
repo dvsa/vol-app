@@ -276,8 +276,10 @@ class CaseConditionUndertakingController extends CaseController
 
         foreach ($conditionUndertakings as &$result) {
             $result['caseId'] = $caseId;
-            $result['operatingCentreAddress'] = isset($result['operatingCentre']['address']) ? $result['operatingCentre']['address'] : null;
+            $result['operatingCentreAddress'] =
+                isset($result['operatingCentre']['address']) ? $result['operatingCentre']['address'] : null;
         }
+
 
         return $this->buildTable($this->tables[$which], $conditionUndertakings);
     }
@@ -577,6 +579,10 @@ class CaseConditionUndertakingController extends CaseController
                                     )
                                 )
                             )
+                        ),
+
+                        'attachedTo' => array(
+                            'properties' => 'ALL'
                         )
                     )
                 )

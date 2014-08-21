@@ -52,7 +52,9 @@ return array(
         ),
         array(
             'title' => 'Attached to',
-            'name' => 'attachedTo'
+            'formatter' => function ($data, $column, $sm) {
+                return $sm->get('translator')->translate($data['attachedTo']['id']);
+            },
         ),
         array(
             'title' => 'S4',
@@ -64,7 +66,7 @@ return array(
             'title' => 'OC Address',
             'width' => '350px',
             'formatter' => 'Address',
-            'name' => 'operatingCentreAddress'
+            'name' => 'operatingCentreAddress',
         )
     )
 );

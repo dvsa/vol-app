@@ -1,14 +1,21 @@
 <div class="four-fiths--left">
-  <div class="content">
-    <?php echo $this->content ?>
-  </div>
+    <?php
+        echo $this->navigation('navigation')
+                  ->menu($this->navigation()->findOneBy('id', 'licence'))
+                  ->setUlClass('horizontal-navigation')
+                  ->setAddClassToListItem(true)
+                  ->setPartial('licence/partials/tabs');
+    ?>
+    <div class="content">
+      <?php echo $this->content ?>
+    </div>
 </div>
 
 <div class="one-fifth--right">
   <div class="record-actions">
-    <h5><?php echo $this->actionTitle ?></h5>
+    <h5>Quick actions</h5>
     <ul class="record-actions__group">
-      <li class="record-actions__item actions--secondary"><a href=""></a></li>
+      <li class="record-actions__item actions--secondary"><a href="">Create case</a></li>
     </ul>
   </div>
 </div>
