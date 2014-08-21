@@ -42,6 +42,7 @@ return array(
                 'otherName' => array(
                     'type' => 'text',
                     'label' => 'application_your-business_people-sub-action-formOtherNames',
+                    'hint' => 'application_your-business_people-sub-action-formOtherNames-hint',
                     'class' => 'long'
                 ),
                 'birthDate' => [
