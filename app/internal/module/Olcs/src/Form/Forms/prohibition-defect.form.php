@@ -17,24 +17,15 @@ return [
                     'defectType' => [
                         'type'  => 'text',
                         'label' => 'Defect type',
-                        'filters' => '\Common\Form\Elements\InputFilters\TextMax255',
+                        'filters' => '\Common\Form\Elements\InputFilters\TextMax255Required',
                         'class' => 'extra-long'
                     ],
                     'notes' => [
                         'type'  => 'text',
                         'label' => 'Definition',
-                        'filters' => '\Common\Form\Elements\InputFilters\TextMax1024',
+                        'filters' => '\Common\Form\Elements\InputFilters\TextMax1024Required',
                         'class' => 'extra-long'
                     ],
-                    'id' => [
-                        'type' => 'hidden'
-                    ],
-                    'case' => [
-                        'type' => 'hidden'
-                    ],
-                    'version' => [
-                        'type' => 'hidden'
-                    ]
                 ]
             ],
             [
@@ -52,7 +43,7 @@ return [
                     ],
                     'cancel' => [
                         'enable' => true,
-                        'type' => 'reset',
+                        'type' => 'submit',
                         'filters' => '\Common\Form\Elements\InputFilters\ActionButton',
                         'label' => 'Cancel',
                         'class' => 'action--secondary large',
@@ -61,6 +52,17 @@ return [
                         ]
                     ]
                 ]
+            ]
+        ],
+        'elements' => [
+            'id' => [
+                'type' => 'hidden'
+            ],
+            'prohibition' => [
+                'type' => 'hidden'
+            ],
+            'version' => [
+                'type' => 'hidden'
             ]
         ]
     ]
