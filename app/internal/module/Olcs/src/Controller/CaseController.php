@@ -17,7 +17,7 @@ use Zend\View\Model\ViewModel;
  */
 class CaseController extends AbstractController
 {
-    use Traits\LicenceController;
+    use Traits\LicenceControllerTrait;
 
     protected $title;
     protected $subTitle;

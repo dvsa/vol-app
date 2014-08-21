@@ -7,7 +7,7 @@ namespace Olcs\Controller\Licence\Details;
 
 use Olcs\Controller\AbstractController;
 use Olcs\Helper\LicenceDetailsHelper;
-use Olcs\Controller\Traits\LicenceController;
+use Olcs\Controller\Traits\LicenceControllerTrait;
 use Zend\Navigation\Navigation;
 
 /**
@@ -17,7 +17,7 @@ use Zend\Navigation\Navigation;
  */
 abstract class AbstractLicenceDetailsController extends AbstractController
 {
-    use LicenceController;
+    use LicenceControllerTrait;
 
     /**
      * Holds the current section

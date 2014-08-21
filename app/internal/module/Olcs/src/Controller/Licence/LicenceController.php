@@ -17,7 +17,7 @@ use Olcs\Controller\Traits;
  */
 class LicenceController extends AbstractController
 {
-    use Traits\LicenceController,
+    use Traits\LicenceControllerTrait,
         Traits\TaskSearchTrait;
 
     public function indexAction()

@@ -14,7 +14,7 @@ use Olcs\Helper\LicenceDetailsHelper;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-trait LicenceController
+trait LicenceControllerTrait
 {
     protected $licences = array();
 
@@ -36,8 +36,8 @@ trait LicenceController
 
         $view = $this->getView($variables);
 
-        $this->title = $view->licence['licNo'];
-        $this->subTitle = $this->getTranslator()->translate($view->licence['goodsOrPsv']['id']) . ', ' .
+        $this->pageTitle = $view->licence['licNo'];
+        $this->pageSubTitle = $this->getTranslator()->translate($view->licence['goodsOrPsv']['id']) . ', ' .
             $this->getTranslator()->translate($view->licence['licenceType']['id'])
             . ', ' . $this->getTranslator()->translate($view->licence['status']['id']);
 
