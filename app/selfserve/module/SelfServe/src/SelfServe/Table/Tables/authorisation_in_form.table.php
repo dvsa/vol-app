@@ -2,7 +2,8 @@
 
 return array(
     'variables' => array(
-        'title' => 'application_operating-centres_authorisation.table.title'
+        'title' => 'application_operating-centres_authorisation.table.title',
+        'within_form' => true,
     ),
     'settings' => array(
         'crud' => array(

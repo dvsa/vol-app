@@ -203,7 +203,7 @@ abstract class AbstractApplicationControllerTestCase extends PHPUnit_Framework_T
      * @param string $goodsOrPsv
      * @return array
      */
-    protected function getLicenceData($goodsOrPsv = 'goods', $licenceType = 'ltyp_sn', $niFlag = 0)
+    protected function getLicenceData($goodsOrPsv = 'goods', $licenceType = 'ltyp_sn', $niFlag = 'N')
     {
         return array(
             'licence' => array(
