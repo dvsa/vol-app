@@ -111,11 +111,27 @@ class CaseProhibitionController extends CaseController implements CrudInterface
         $caseId = $this->fromRoute('case');
         $prohibitionId = $this->fromRoute('id');
 
-        //check if the add button has been pressed on the defect table
-        $post = $this->getRequest()->getPost();
+        //check if the add/edit button has been pressed on the defect table, redirect if necessary
+        $action = $this->fromPost('action');
+        $defect = $this->fromPost('id');
 
-        if (isset($post['action']) && $post['action'] == 'Add') {
-            return $this->redirectToRoute('case_prohibition/defect', ['action' => 'add'], [], true);
+        switch ($action) {
+            case 'Add':
+                return $this->redirectToRoute('case_prohibition/defect', ['action' => 'add'], [], true);
+            case 'Edit':
+                return $this->redirectToRoute(
+                    'case_prohibition/defect',
+                    ['action' => 'edit', 'defect' => $defect],
+                    [],
+                    true
+                );
+            case 'Delete':
+                return $this->redirectToRoute(
+                    'case_prohibition/defect',
+                    ['action' => 'delete', 'defect' => $defect],
+                    [],
+                    true
+                );
         }
 
         $this->setBreadcrumb(
@@ -230,7 +246,6 @@ class CaseProhibitionController extends CaseController implements CrudInterface
         );
 
         if ($results['Count']) {
-            $results = $this->formatForTable($results);
             return $this->buildTable('prohibitionDefect', $results);
         }
 
