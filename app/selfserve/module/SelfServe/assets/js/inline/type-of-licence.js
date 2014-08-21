@@ -19,7 +19,7 @@ $(function() {
       // operator type only shown when location has been completed
       // and value is great britain
       "operator-type": function() {
-        return niFlag.filter(":checked").val() === "0";
+        return niFlag.filter(":checked").val() === "N";
       },
 
       // licence type is nested; the first rule defines when to show the fieldset
@@ -28,7 +28,7 @@ $(function() {
         "*": function() {
           return (
             // NI...
-            niFlag.filter(":checked").val() === "1" ||
+            niFlag.filter(":checked").val() === "Y" ||
             // ... any location checked and any operator type checked
             niFlag.filter(":checked").length && operatorType.filter(":checked").length
           );
