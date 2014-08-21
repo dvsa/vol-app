@@ -373,7 +373,8 @@ class CaseController extends AbstractController
             ],
             'licence_type' => [
                 'label' => 'Licence type',
-                'value' => $case['licence']['licenceType']['id'],
+                'value' => $this->getServiceLocator()->get('translator')
+                    ->translate($case['licence']['licenceType']['id']),
                 'url' => ''
             ],
             'entity_type' => [
@@ -393,7 +394,8 @@ class CaseController extends AbstractController
             ],
             'licence_status' => [
                 'label' => 'Licence status',
-                'value' => $case['licence']['status']['id'],
+                'value' => $this->getServiceLocator()->get('translator')
+                    ->translate($case['licence']['status']['id']),
                 'url' => ''
             ],
             'ecmsNo' => [

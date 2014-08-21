@@ -23,6 +23,7 @@ class LicenceController extends AbstractController
 
     public function getViewWithLicence()
     {
+
         $licence = $this->getLicence($this->getFromRoute('licence'));
 
         if ($licence['goodsOrPsv']['id'] == 'lcat_gv') {
@@ -32,10 +33,16 @@ class LicenceController extends AbstractController
         $view = $this->getView(['licence' => $licence]);
 
         $this->title = $view->licence['licNo'];
-        $this->subTitle = $view->licence['goodsOrPsv']['id'] . ', ' . $view->licence['licenceType']['id']
-            . ', ' . $view->licence['status']['id'];
+        $this->subTitle = $this->getTranslator()->translate($view->licence['goodsOrPsv']['id']) . ', ' .
+            $this->getTranslator()->translate($view->licence['licenceType']['id'])
+            . ', ' . $this->getTranslator()->translate($view->licence['status']['id']);
 
         return $view;
+    }
+
+    public function getTranslator()
+    {
+        return $this->getServiceLocator()->get('translator');
     }
 
     public function indexAction()

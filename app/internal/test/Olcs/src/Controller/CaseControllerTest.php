@@ -162,12 +162,16 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
             ->with($this->equalTo($caseId))
             ->will($this->returnValue($caseObject));
 
-        $this->controller->expects($this->exactly(3))
+        $this->controller->expects($this->exactly(5))
             ->method('getServiceLocator')
             ->will(
                 $this->onConsecutiveCalls(
                     $this->returnValue(
                         $this->getServiceLocatorStaticData('getSampleOrganisationTypeArray')
+                    ), $this->returnValue(
+                        $this->getServiceLocatorTranslator()
+                    ), $this->returnValue(
+                        $this->getServiceLocatorTranslator()
                     ), $this->returnValue(
                         $this->getServiceLocatorStaticData()
                     ), $this->returnValue(
@@ -594,9 +598,28 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
         $variables = array();
         $caseObject = $this->getSampleCaseArray($caseId, $licenceId);
 
-        $this->controller->expects($this->once())
+        /* $this->controller->expects($this->exactly(2))
             ->method('getServiceLocator')
-            ->will($this->returnValue($this->getServiceLocatorStaticData('getSampleOrganisationTypeArray')));
+            ->will($this->returnValue($this->getServiceLocatorStaticData('getSampleOrganisationTypeArray'))); */
+
+        /* $this->controller->expects($this->exactly(1))
+             ->method('getServiceLocator')
+             ->will($this->returnValue($this->getServiceLocatorTranslator())); */
+
+        $this->controller->expects($this->exactly(3))
+        ->method('getServiceLocator')
+        ->will(
+            $this->onConsecutiveCalls(
+                $this->returnValue(
+                    $this->getServiceLocatorStaticData('getSampleOrganisationTypeArray')
+                ), $this->returnValue(
+                    $this->getServiceLocatorTranslator()
+                ), $this->returnValue(
+                    $this->getServiceLocatorTranslator()
+                )
+            )
+        );
+
 
         $this->controller->expects($this->once())
             ->method('getCase')
@@ -881,6 +904,28 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue('the url'));
 
         return $pm;
+    }
+
+    /**
+     * Gets a mock version of static-list-data
+     *
+     * @param $function
+     */
+    private function getServiceLocatorTranslator()
+    {
+        $translatorMock = $this->getMock('\stdClass', array('translate'));
+        $translatorMock->expects($this->any())
+                       ->method('translate')
+                       ->will($this->returnArgument(0));
+
+        $serviceMock = $this->getMock('\stdClass', array('get'));
+
+        $serviceMock->expects($this->any())
+            ->method('get')
+            ->with($this->equalTo('translator'))
+            ->will($this->returnValue($translatorMock));
+
+        return $serviceMock;
     }
 
     /**
