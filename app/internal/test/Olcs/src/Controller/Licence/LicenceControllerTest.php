@@ -93,7 +93,6 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->any())
             ->method('getLicence')
-            ->with(1234)
             ->will($this->returnValue($licenceData));
 
         $this->controller->expects($this->any())
