@@ -7,8 +7,6 @@
  */
 namespace Olcs\Controller\Licence;
 
-use Common\Controller\FormActionController as AbstractFormActionController;
-use Zend\View\Model\ViewModel;
 use Olcs\Controller\AbstractController;
 use Olcs\Controller\Traits;
 
@@ -112,16 +110,5 @@ class LicenceController extends AbstractController
     public function indexJumpAction()
     {
         return $this->redirect()->toRoute('licence/overview', [], [], true);
-    }
-
-    /**
-     * @codeCoverageIgnore
-     *
-     * @param array $params
-     * @return \Zend\View\Model\ViewModel
-     */
-    public function getView(array $params = null)
-    {
-        return new ViewModel($params);
     }
 }

@@ -7,6 +7,8 @@
  */
 namespace Olcs\Controller\Traits;
 
+use Olcs\Helper\LicenceDetailsHelper;
+
 /**
  * Licence Controller Trait
  *
@@ -26,7 +28,7 @@ trait LicenceController
     {
         $licence = $this->getLicence();
 
-        if ($licence['goodsOrPsv']['id'] == 'lcat_gv') {
+        if ($licence['goodsOrPsv']['id'] == LicenceDetailsHelper::GOODS_OR_PSV_GOODS) {
             $this->getServiceLocator()->get('Navigation')->findOneBy('id', 'licence_bus')->setVisible(0);
         }
 
@@ -34,11 +36,17 @@ trait LicenceController
 
         $view = $this->getView($variables);
 
-        $this->pageTitle = $licence['licNo'];
-        $this->pageSubTitle = $licence['goodsOrPsv']['id'] . ', ' . $licence['licenceType']['id']
-            . ', ' . $licence['status']['id'];
+        $this->title = $view->licence['licNo'];
+        $this->subTitle = $this->getTranslator()->translate($view->licence['goodsOrPsv']['id']) . ', ' .
+            $this->getTranslator()->translate($view->licence['licenceType']['id'])
+            . ', ' . $this->getTranslator()->translate($view->licence['status']['id']);
 
         return $view;
+    }
+
+    public function getTranslator()
+    {
+        return $this->getServiceLocator()->get('translator');
     }
 
     /**
