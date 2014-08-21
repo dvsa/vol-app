@@ -31,6 +31,7 @@ class CaseProhibitionControllerTest extends AbstractHttpControllerTestCase
                 'makeRestCall',
                 'generateForm',
                 'fromRoute',
+                'fromPost',
                 'setBreadcrumb',
                 'processEdit',
                 'processAdd',
@@ -71,18 +72,23 @@ class CaseProhibitionControllerTest extends AbstractHttpControllerTestCase
         $this->getFromRoute(1, 'licence', $licenceId);
 
         $this->controller->expects($this->once())
-            ->method('setBreadcrumb');
+            ->method('setBreadcrumb')
+            ->with(
+                $this->equalTo(
+                    array('licence_case_list/pagination' => array('licence' => $licenceId))
+                )
+            );
 
         $this->controller->expects($this->once())
             ->method('getTabInformationArray');
 
         $this->controller->expects($this->once())
             ->method('getCase')
-            ->will($this->returnValue(array()));
+            ->with($this->equalTo($caseId))
+            ->will($this->returnValue([]));
 
         $this->controller->expects($this->once())
-            ->method('getCaseSummaryArray')
-            ->with($this->equalTo(array()));
+            ->method('getCaseSummaryArray');
 
         $this->controller->expects($this->any())
             ->method('makeRestCall')->
@@ -92,10 +98,6 @@ class CaseProhibitionControllerTest extends AbstractHttpControllerTestCase
                     $this->returnValue($results)
                 )
             );
-
-        $this->controller->expects($this->any())
-            ->method('getServiceLocator')
-            ->will($this->returnValue($this->getServiceLocatorStaticData()));
 
         $this->controller->expects($this->once())
             ->method('buildTable');
@@ -147,46 +149,39 @@ class CaseProhibitionControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
-     * Tests the add action
+     * Returns a licence ID and case ID
+     *
+     * @return array
      */
-    public function testAddAction()
+    public function licenceAndCaseIdProvider()
     {
-        $this->getFromRoute(0, 'licence', 7);
-        $this->getFromRoute(1, 'case', 28);
-
-        $this->controller->expects($this->once())
-            ->method('setBreadcrumb');
-
-        $this->controller->expects($this->once())
-            ->method('generateFormWithData');
-
-        $this->controller->expects($this->once())
-            ->method('getView')
-            ->will($this->returnValue($this->view));
-
-        $this->view->expects($this->once())
-            ->method('setTemplate')
-            ->with('prohibition/form');
-
-        $this->controller->addAction();
+        return [
+            [7, 28]
+        ];
     }
 
     /**
-     * Tests the edit action
+     * Tests the add action
+     *
+     * @dataProvider licenceAndCaseIdProvider
+     *
+     * @param int $licenceId
+     * @param int $caseId
      */
-    public function testEditAction()
+    public function testAddAction($licenceId, $caseId)
     {
-        $this->getFromRoute(0, 'licence', 7);
-        $this->getFromRoute(1, 'case', 28);
-        $this->getFromRoute(2, 'id', 1);
+        $this->getFromRoute(0, 'licence', $licenceId);
+        $this->getFromRoute(1, 'case', $caseId);
 
         $this->controller->expects($this->once())
-            ->method('setBreadcrumb');
-
-        $this->controller->expects($this->once())
-            ->method('makeRestCall')
-            ->will(
-                $this->returnValue($this->getSingleProhibitionResult())
+            ->method('setBreadcrumb')
+            ->with(
+                $this->equalTo(
+                    array(
+                        'licence_case_list/pagination' => array('licence' => $licenceId),
+                        'case_prohibition' => array('licence' => $licenceId, 'case' => $caseId)
+                    )
+                )
             );
 
         $this->controller->expects($this->once())
@@ -200,7 +195,142 @@ class CaseProhibitionControllerTest extends AbstractHttpControllerTestCase
             ->method('setTemplate')
             ->with('prohibition/form');
 
+        $this->assertEquals($this->view, $this->controller->addAction());
+    }
+
+    /**
+     * Returns a licence ID, case ID, prohibition ID and result count
+     *
+     * @return array
+     */
+    public function editActionProvider()
+    {
+        return [
+            [7, 28, 1, 1],
+            [7, 28, 1, 0]
+        ];
+    }
+
+    /**
+     * Tests the edit action
+     *
+     * @dataProvider editActionProvider
+     *
+     * @param int $licenceId
+     * @param int $caseId
+     * @param int $prohibitionId
+     * @param int $resultCount
+     */
+    public function testEditAction($licenceId, $caseId, $prohibitionId, $resultCount)
+    {
+        $this->getFromRoute(0, 'licence', $licenceId);
+        $this->getFromRoute(1, 'case', $caseId);
+        $this->getFromRoute(2, 'id', $prohibitionId);
+
+        $this->getFromPost(3, 'action', null);
+
+        $this->controller->expects($this->once())
+            ->method('setBreadcrumb')
+            ->with(
+                $this->equalTo(
+                    array(
+                        'licence_case_list/pagination' => array('licence' => $licenceId),
+                        'case_prohibition' => array('licence' => $licenceId, 'case' => $caseId)
+                    )
+                )
+            );
+
+        $this->controller->expects($this->exactly(2))
+            ->method('makeRestCall')
+            ->will(
+                $this->onConsecutiveCalls(
+                    $this->returnValue($this->getSingleProhibitionResult()),
+                    $this->returnValue(array('Count' => $resultCount))
+                )
+            );
+
+        $this->controller->expects($this->once())
+            ->method('generateFormWithData');
+
+        $this->controller->expects($this->once())
+            ->method('buildTable');
+
+        $this->controller->expects($this->once())
+            ->method('getView')
+            ->will($this->returnValue($this->view));
+
+        $this->view->expects($this->once())
+            ->method('setTemplate')
+            ->with('prohibition/form');
+
+        $this->assertEquals($this->view, $this->controller->editAction());
+    }
+
+    /**
+     * Tests the edit action correctly redirects to the add defect action
+     */
+    public function testEditActionAddDefectRedirect()
+    {
+        $this->getEditActionRouteParams('Add');
+
+        $this->controller->expects($this->once())
+            ->method('redirectToRoute')
+            ->with(
+                $this->equalTo('case_prohibition/defect'),
+                $this->equalTo(['action' => 'add']),
+                $this->equalTo([]),
+                $this->equalTo(true)
+            );
+
         $this->controller->editAction();
+    }
+
+    /**
+     * Tests the edit action correctly redirects to the edit defect action
+     */
+    public function testEditActionEditDefectRedirect()
+    {
+        $this->getEditActionRouteParams('Edit');
+
+        $this->controller->expects($this->once())
+            ->method('redirectToRoute')
+            ->with(
+                $this->equalTo('case_prohibition/defect'),
+                $this->equalTo(['action' => 'edit', 'defect' => 1]),
+                $this->equalTo([]),
+                $this->equalTo(true)
+            );
+
+        $this->controller->editAction();
+    }
+
+    /**
+     * Tests the edit action correctly redirects to the delete defect action
+     */
+    public function testEditActionDeleteDefectRedirect()
+    {
+        $this->getEditActionRouteParams('Delete');
+
+        $this->controller->expects($this->once())
+            ->method('redirectToRoute')
+            ->with(
+                $this->equalTo('case_prohibition/defect'),
+                $this->equalTo(['action' => 'delete', 'defect' => 1]),
+                $this->equalTo([]),
+                $this->equalTo(true)
+            );
+
+        $this->controller->editAction();
+    }
+
+    public function getEditActionRouteParams($defectAction)
+    {
+        $this->getFromRoute(0, 'licence', 7);
+        $this->getFromRoute(1, 'case', 28);
+        $this->getFromRoute(2, 'id', 1);
+
+        $this->getFromPost(3, 'action', $defectAction);
+        $this->getFromPost(4, 'id', 1);
     }
 
     /**
@@ -393,6 +523,27 @@ class CaseProhibitionControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
+     * Generate a fromPost function call
+     *
+     * @param int $at
+     * @param mixed $with
+     * @param mixed $will
+     */
+    private function getFromPost($at, $with, $will = false)
+    {
+        if ($will) {
+            $this->controller->expects($this->at($at))
+                ->method('fromPost')
+                ->with($this->equalTo($with))
+                ->will($this->returnValue($will));
+        } else {
+            $this->controller->expects($this->at($at))
+                ->method('fromPost')
+                ->with($this->equalTo($with));
+        }
+    }
+
+    /**
      * Generate a fromRoute function call
      *
      * @param int $at
@@ -429,55 +580,10 @@ class CaseProhibitionControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
-     * Sample static data
-     *
-     * @return array
-     */
-    private function getSampleStaticData()
-    {
-        return array(
-            'prohibition_type' => [
-                'pro_t_si' => 'Immediate (S)',
-                'pro_t_sd' => 'Delayed (S)',
-                'pro_t_sv' => 'Variation (S)',
-                'pro_t_i' => 'Immediate',
-                'pro_t_d' => 'Delayed',
-                'pro_t_v' => 'Variation',
-                'pro_t_ro' => 'Refusals Only',
-                'pro_t_vr' => 'Variation & Refusals Only',
-            ]
-        );
-    }
-
-    /**
-     * Gets a mock version of static-list-data
-     */
-    private function getServiceLocatorStaticData ()
-    {
-        $serviceMock = $this->getMock('\stdClass', array('get'));
-
-        $scriptMock = $this->getMock('\stdClass', ['loadFiles']);
-        $scriptMock->expects($this->any())
-            ->method('loadFiles')
-            ->will($this->returnValue([]));
-
-        $serviceMock->expects($this->any())
-            ->method('get')
-            ->will(
-                $this->onConsecutiveCalls(
-                    array('static-list-data' => $this->getSampleStaticData()),
-                    $scriptMock
-                )
-            );
-
-        return $serviceMock;
-    }
-
-    /**
      * Returns a sample result of a prohibition rest call
      * Accepts a result count (used to test code path in index action)
      *
-     * @param $count
+     * @param int $count
      * @return array
      */
     private function getSampleProhibitionResult($count)

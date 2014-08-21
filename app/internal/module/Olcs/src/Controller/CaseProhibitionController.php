@@ -1,22 +1,22 @@
 <?php
 
-/**
- * Case Prohibition Controller
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- */
+    /**
+     * Case Prohibition Controller
+     *
+     * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+     */
 
 namespace Olcs\Controller;
 
-use Olcs\Controller\Traits\DeleteActionTrait;
+    use Olcs\Controller\Traits\DeleteActionTrait;
 
-use Common\Controller\CrudInterface;
+    use Common\Controller\CrudInterface;
 
-/**
- * Case Prohibition Controller
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- */
+    /**
+     * Case Prohibition Controller
+     *
+     * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+     */
 class CaseProhibitionController extends CaseController implements CrudInterface
 {
     use DeleteActionTrait;
@@ -111,6 +111,29 @@ class CaseProhibitionController extends CaseController implements CrudInterface
         $caseId = $this->fromRoute('case');
         $prohibitionId = $this->fromRoute('id');
 
+        //check if the add/edit button has been pressed on the defect table, redirect if necessary
+        $action = $this->fromPost('action');
+        $defect = $this->fromPost('id');
+
+        switch ($action) {
+            case 'Add':
+                return $this->redirectToRoute('case_prohibition/defect', ['action' => 'add'], [], true);
+            case 'Edit':
+                return $this->redirectToRoute(
+                    'case_prohibition/defect',
+                    ['action' => 'edit', 'defect' => $defect],
+                    [],
+                    true
+                );
+            case 'Delete':
+                return $this->redirectToRoute(
+                    'case_prohibition/defect',
+                    ['action' => 'delete', 'defect' => $defect],
+                    [],
+                    true
+                );
+        }
+
         $this->setBreadcrumb(
             array(
                 'licence_case_list/pagination' => array('licence' => $licenceId),
@@ -148,6 +171,7 @@ class CaseProhibitionController extends CaseController implements CrudInterface
                     'pageSubTitle' => ''
                 ],
                 'form' => $form,
+                'table' => $this->generateProhibitionDefectTable($prohibitionId)
             ]
         );
 
@@ -191,6 +215,41 @@ class CaseProhibitionController extends CaseController implements CrudInterface
         $results = $this->makeRestCall('Prohibition', 'GET', array('case' => $caseId), $this->getBundle());
 
         return $this->buildTable('prohibition', $results);
+    }
+
+    /**
+     * Gets a table of defects for the prohibition
+     *
+     * @param int $prohibitionId
+     * @return string
+     */
+    private function generateProhibitionDefectTable($prohibitionId)
+    {
+        $bundle = [
+            'children' => [
+                'prohibition' => [
+                    'properties' => [
+                        'id'
+                    ]
+                ]
+
+            ]
+        ];
+
+        $results = $this->makeRestCall(
+            'ProhibitionDefect',
+            'GET',
+            array(
+                'prohibition' => $prohibitionId,
+                'bundle' => json_encode($bundle)
+            )
+        );
+
+        if ($results['Count']) {
+            return $this->buildTable('prohibitionDefect', $results);
+        }
+
+        return $this->buildTable('prohibitionDefect', []);
     }
 
     /**
