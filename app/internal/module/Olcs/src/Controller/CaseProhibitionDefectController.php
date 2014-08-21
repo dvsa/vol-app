@@ -19,7 +19,15 @@ use Common\Controller\CrudInterface;
  */
 class CaseProhibitionDefectController extends CaseController implements CrudInterface
 {
+    //identifier for delete trait
+    public $identifierName = 'defect';
+
     use DeleteActionTrait;
+
+    public function redirectToIndex()
+    {
+        return $this->redirectToRoute('case_prohibition', ['action' => 'edit'], [], true);
+    }
 
     public function addAction()
     {
@@ -38,7 +46,6 @@ class CaseProhibitionDefectController extends CaseController implements CrudInte
             'prohibition-defect',
             'processAddProhibitionDefect',
             array(
-                'case_id' => $caseId,
                 'prohibition' => $prohibitionId
             )
         );
@@ -68,16 +75,23 @@ class CaseProhibitionDefectController extends CaseController implements CrudInte
         $this->setBreadcrumb(
             array(
                 'licence_case_list/pagination' => array('licence' => $licenceId),
-                'case_prohibition/defect' => array('licence' => $licenceId, 'case' => $caseId, 'id' => $prohibitionId, 'defect' => $defectId)
+                'case_prohibition/defect' => array(
+                    'licence' => $licenceId,
+                    'case' => $caseId,
+                    'id' => $prohibitionId,
+                    'defect' => $defectId
+                )
             )
         );
+
+        $bundle = $this->getBundle();
 
         $details = $this->makeRestCall(
             'ProhibitionDefect',
             'GET',
             array(
                 'id' => $defectId,
-                'bundle' => json_encode($this->getBundle())
+                'bundle' => json_encode($bundle)
             )
         );
 
@@ -114,15 +128,13 @@ class CaseProhibitionDefectController extends CaseController implements CrudInte
      */
     public function processAddProhibitionDefect($data)
     {
-
-
-        $result = $this->processAdd($data['main'], 'ProhibitionDefect');
+        $result = $this->processAdd($this->formatForSave($data), 'ProhibitionDefect');
 
         if (isset($result['id'])) {
             return $this->redirectToIndex();
         }
 
-        return $this->redirectToRoute('case_prohibition', ['action' => 'edit'], [], true);
+        return $this->redirectToRoute('case_prohibition/defect', [], [], true);
     }
 
     /**
@@ -131,13 +143,25 @@ class CaseProhibitionDefectController extends CaseController implements CrudInte
      */
     public function processEditProhibitionDefect($data)
     {
-        $result = $this->processEdit($data, 'ProhibitionDefect');
+        $saveData = $this->formatForSave($data);
+
+        $result = $this->processEdit($saveData, 'ProhibitionDefect');
 
         if (empty($result)) {
             return $this->redirectToIndex();
         }
 
-        return $this->redirectToRoute('case_prohibition', ['action' => 'edit'], [], true);
+        return $this->redirectToRoute('case_prohibition/defect', [], [], true);
+    }
+
+    private function formatForSave($data)
+    {
+        $formatted = $data['main'];
+        $formatted['id'] = $data['id'];
+        $formatted['prohibition'] = $data['prohibition'];
+        $formatted['version'] = $data['version'];
+
+        return $formatted;
     }
 
     /**
@@ -154,7 +178,6 @@ class CaseProhibitionDefectController extends CaseController implements CrudInte
         $formatted['main']['notes'] = $results['notes'];
 
         $formatted['id'] = $results['id'];
-        $formatted['case_id'] = $results['prohibition']['case']['id'];
         $formatted['prohibition'] = $results['prohibition']['id'];
         $formatted['version'] = $results['version'];
 
