@@ -13,7 +13,8 @@ trait DeleteActionTrait
      */
     public function deleteAction()
     {
-        $id = $this->params()->fromRoute('id');
+        $identifierName = $this->getIdentifierName();
+        $id = $this->params()->fromRoute($identifierName);
         $this->makeRestCall($this->getDeleteServiceName(), 'DELETE', ['id' => $id]);
         $this->redirectToIndex();
     }
@@ -24,4 +25,18 @@ trait DeleteActionTrait
      * @return string
      */
     abstract public function getDeleteServiceName();
+
+    /**
+     * Retrieve the route match/query parameter name containing the identifier
+     *
+     * @return string
+     */
+    public function getIdentifierName()
+    {
+        if (property_exists($this, 'identifierName')) {
+            return $this->identifierName;
+        }
+
+        return 'id';
+    }
 }
