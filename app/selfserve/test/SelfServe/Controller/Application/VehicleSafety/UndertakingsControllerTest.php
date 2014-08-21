@@ -44,10 +44,10 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
                 'id' => 1,
                 'version' => 1,
                 'status' => 'test.status',
-                'psvOperateSmallVehicles' => null,
-                'psvSmallVehicleNotes' => "",
-                'psvSmallVehicleConfirmation' => null,
-                'psvNoSmallVehiclesConfirmation' => null,
+                'psvOperateSmallVhl' => null,
+                'psvSmallVhlNotes' => "",
+                'psvSmallVhlConfirmation' => null,
+                'psvNoSmallVhlConfirmation' => null,
                 'psvLimousines' => null,
                 'psvNoLimousineConfirmation' => null,
                 'psvOnlyLimousinesConfirmation' => null,
@@ -65,7 +65,7 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
                     'id' => 5,
                     'applyScottishRules' => false
                 ),
-                'totAuthSmallVehicles' => 1,
+                'totAuthSmallVhl' => 1,
                 'totAuthMediumVehicles' => 1,
                 'totAuthLargeVehicles' => 0
             );
@@ -89,10 +89,10 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
                 'id' => 1,
                 'version' => 1,
                 'status' => 'test.status',
-                'psvOperateSmallVehicles' => null,
-                'psvSmallVehicleNotes' => "",
-                'psvSmallVehicleConfirmation' => null,
-                'psvNoSmallVehiclesConfirmation' => null,
+                'psvOperateSmallVhl' => null,
+                'psvSmallVhlNotes' => "",
+                'psvSmallVhlConfirmation' => null,
+                'psvNoSmallVhlConfirmation' => null,
                 'psvLimousines' => null,
                 'psvNoLimousineConfirmation' => null,
                 'psvOnlyLimousinesConfirmation' => null,
@@ -111,16 +111,16 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
                     'applyScottishRules' => false
                 ),
                 'totAuthVehicles' => 1,
-                'totAuthSmallVehicles' => 1,
+                'totAuthSmallVhl' => 1,
                 'totAuthMediumVehicles' => 0,
                 'totAuthLargeVehicles' => 0
             );
 
         $presentFields=array(
             'smallVehiclesIntention' => Array(
-                'psvOperateSmallVehicles',              // 15b[i]
-                'psvSmallVehicleNotes',                 // 15b[ii]
-                'psvSmallVehicleConfirmation'           // 15cd
+                'psvOperateSmallVhl',              // 15b[i]
+                'psvSmallVhlNotes',                 // 15b[ii]
+                'psvSmallVhlConfirmation'           // 15cd
             ),
             'limousinesNoveltyVehicles' => Array(
                 'psvLimousines',                        // 15f[i]
@@ -130,7 +130,7 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
 
         $missingFields=array(
             'nineOrMore' => Array(
-                'psvNoSmallVehiclesConfirmation'        // 15e
+                'psvNoSmallVhlConfirmation'        // 15e
             ),
             'limousinesNoveltyVehicles' => Array(
                 'psvOnlyLimousinesConfirmation',        // 15g
@@ -149,10 +149,10 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
                 'id' => 1,
                 'version' => 1,
                 'status' => 'test.status',
-                'psvOperateSmallVehicles' => null,
-                'psvSmallVehicleNotes' => "",
-                'psvSmallVehicleConfirmation' => null,
-                'psvNoSmallVehiclesConfirmation' => null,
+                'psvOperateSmallVhl' => null,
+                'psvSmallVhlNotes' => "",
+                'psvSmallVhlConfirmation' => null,
+                'psvNoSmallVhlConfirmation' => null,
                 'psvLimousines' => null,
                 'psvNoLimousineConfirmation' => null,
                 'psvOnlyLimousinesConfirmation' => null,
@@ -171,14 +171,14 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
                     'applyScottishRules' => true
                 ),
                 'totAuthVehicles' => 1,
-                'totAuthSmallVehicles' => 1,
+                'totAuthSmallVhl' => 1,
                 'totAuthMediumVehicles' => 0,
                 'totAuthLargeVehicles' => 0
             );
 
         $presentFields=array(
             'smallVehiclesIntention' => Array(          // 15c/d
-                'psvSmallVehicleConfirmation'
+                'psvSmallVhlConfirmation'
             ),
             'limousinesNoveltyVehicles' => Array(
                 'psvLimousines',                        // 15f[i]
@@ -188,11 +188,11 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
 
         $missingFields=array(
             'smallVehiclesIntention' => Array(
-                'psvOperateSmallVehicles',              // 15b[i]
-                'psvSmallVehicleNotes'                  // 15b[ii]
+                'psvOperateSmallVhl',              // 15b[i]
+                'psvSmallVhlNotes'                  // 15b[ii]
             ),
             'nineOrMore' => Array(                      // 15e
-                'psvNoSmallVehiclesConfirmation'
+                'psvNoSmallVhlConfirmation'
             ),
             'limousinesNoveltyVehicles' => Array(
                 'psvOnlyLimousinesConfirmation',        // 15g
@@ -211,10 +211,10 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
                 'id' => 1,
                 'version' => 1,
                 'status' => 'test.status',
-                'psvOperateSmallVehicles' => null,
-                'psvSmallVehicleNotes' => "",
-                'psvSmallVehicleConfirmation' => null,
-                'psvNoSmallVehiclesConfirmation' => null,
+                'psvOperateSmallVhl' => null,
+                'psvSmallVhlNotes' => "",
+                'psvSmallVhlConfirmation' => null,
+                'psvNoSmallVhlConfirmation' => null,
                 'psvLimousines' => null,
                 'psvNoLimousineConfirmation' => null,
                 'psvOnlyLimousinesConfirmation' => null,
@@ -232,14 +232,14 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
                     'id' => 5,
                     'applyScottishRules' => false
                 ),
-                'totAuthSmallVehicles' => 0,
+                'totAuthSmallVhl' => 0,
                 'totAuthMediumVehicles' => 1,
                 'totAuthLargeVehicles' => 0
             );
 
         $presentFields=array(
             'nineOrMore' => Array(                      // 15e
-                'psvNoSmallVehiclesConfirmation'
+                'psvNoSmallVhlConfirmation'
             ),
             'limousinesNoveltyVehicles' => Array(
                 'psvLimousines',                        // 15f[i]
@@ -252,9 +252,9 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
 
         $missingFields=array(
             'smallVehiclesIntention' => Array(
-                'psvOperateSmallVehicles',              // 15b[i]
-                'psvSmallVehicleNotes',                 // 15b[ii]
-                'psvSmallVehicleConfirmation'           // 15cd
+                'psvOperateSmallVhl',              // 15b[i]
+                'psvSmallVhlNotes',                 // 15b[ii]
+                'psvSmallVhlConfirmation'           // 15cd
             ),
         );
 
@@ -271,10 +271,10 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
                 'id' => 1,
                 'version' => 1,
                 'status' => 'test.status',
-                'psvOperateSmallVehicles' => null,
-                'psvSmallVehicleNotes' => "",
-                'psvSmallVehicleConfirmation' => null,
-                'psvNoSmallVehiclesConfirmation' => null,
+                'psvOperateSmallVhl' => null,
+                'psvSmallVhlNotes' => "",
+                'psvSmallVhlConfirmation' => null,
+                'psvNoSmallVhlConfirmation' => null,
                 'psvLimousines' => null,
                 'psvNoLimousineConfirmation' => null,
                 'psvOnlyLimousinesConfirmation' => null,
@@ -292,14 +292,14 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
                     'id' => 5,
                     'applyScottishRules' => null
                 ),
-                'totAuthSmallVehicles' => null,
+                'totAuthSmallVhl' => null,
                 'totAuthMediumVehicles' => 1,
                 'totAuthLargeVehicles' => null
             );
 
         $presentFields=array(
             'nineOrMore' => Array(                      // 15e
-                'psvNoSmallVehiclesConfirmation'
+                'psvNoSmallVhlConfirmation'
             ),
             'limousinesNoveltyVehicles' => Array(
                 'psvLimousines',                        // 15f[i]
@@ -312,9 +312,9 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
 
         $missingFields=array(
             'smallVehiclesIntention' => Array(
-                'psvOperateSmallVehicles',              // 15b[i]
-                'psvSmallVehicleNotes',                 // 15b[ii]
-                'psvSmallVehicleConfirmation'           // 15cd
+                'psvOperateSmallVhl',              // 15b[i]
+                'psvSmallVhlNotes',                 // 15b[ii]
+                'psvSmallVhlConfirmation'           // 15cd
             ),
         );
 
@@ -330,10 +330,10 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
                 'id' => 1,
                 'version' => 1,
                 'status' => 'test.status',
-                'psvOperateSmallVehicles' => null,
-                'psvSmallVehicleNotes' => "",
-                'psvSmallVehicleConfirmation' => null,
-                'psvNoSmallVehiclesConfirmation' => null,
+                'psvOperateSmallVhl' => null,
+                'psvSmallVhlNotes' => "",
+                'psvSmallVhlConfirmation' => null,
+                'psvNoSmallVhlConfirmation' => null,
                 'psvLimousines' => null,
                 'psvNoLimousineConfirmation' => null,
                 'psvOnlyLimousinesConfirmation' => null,
@@ -351,16 +351,16 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
                     'id' => 5,
                     'applyScottishRules' => false
                 ),
-                'totAuthSmallVehicles' => 1,
+                'totAuthSmallVhl' => 1,
                 'totAuthMediumVehicles' => 1,
                 'totAuthLargeVehicles' => 1
             );
 
         $presentFields=array(
             'smallVehiclesIntention' => Array(
-                'psvOperateSmallVehicles',              // 15b[i]
-                'psvSmallVehicleNotes',                 // 15b[ii]
-                'psvSmallVehicleConfirmation'
+                'psvOperateSmallVhl',              // 15b[i]
+                'psvSmallVhlNotes',                 // 15b[ii]
+                'psvSmallVhlConfirmation'
             ),
             'limousinesNoveltyVehicles' => Array(
                 'psvLimousines',                        // 15f[i]
@@ -373,7 +373,7 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
 
         $missingFields=array(
             'nineOrMore' => Array(                      // 15e
-                'psvNoSmallVehiclesConfirmation'
+                'psvNoSmallVhlConfirmation'
             ),
         );
 
@@ -388,11 +388,13 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
         $taDataResponse=array(
                 'id' => 1,
                 'version' => 1,
-                'status' => 'test.status',
-                'psvOperateSmallVehicles' => null,
-                'psvSmallVehicleNotes' => "",
-                'psvSmallVehicleConfirmation' => null,
-                'psvNoSmallVehiclesConfirmation' => null,
+                'status' => array(
+                    'id' => 'test.status'
+                ),
+                'psvOperateSmallVhl' => null,
+                'psvSmallVhlNotes' => "",
+                'psvSmallVhlConfirmation' => null,
+                'psvNoSmallVhlConfirmation' => null,
                 'psvLimousines' => null,
                 'psvNoLimousineConfirmation' => null,
                 'psvOnlyLimousinesConfirmation' => null,
@@ -410,14 +412,14 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
                     'id' => 5,
                     'applyScottishRules' => true
                 ),
-                'totAuthSmallVehicles' => 1,
+                'totAuthSmallVhl' => 1,
                 'totAuthMediumVehicles' => 1,
                 'totAuthLargeVehicles' => 1
             );
 
         $presentFields=array(
             'smallVehiclesIntention' => Array(          // 15c/d
-                'psvSmallVehicleConfirmation'
+                'psvSmallVhlConfirmation'
             ),
             'limousinesNoveltyVehicles' => Array(
                 'psvLimousines',                        // 15f[i]
@@ -430,11 +432,11 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
 
         $missingFields=array(
             'smallVehiclesIntention' => Array(
-                'psvOperateSmallVehicles',              // 15b[i]
-                'psvSmallVehicleNotes'                  // 15b[ii]
+                'psvOperateSmallVhl',              // 15b[i]
+                'psvSmallVhlNotes'                  // 15b[ii]
             ),
             'nineOrMore' => Array(                      // 15e
-                'psvNoSmallVehiclesConfirmation'
+                'psvNoSmallVhlConfirmation'
             ),
         );
 
@@ -479,7 +481,6 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
      */
     protected function mockRestCalls($service, $method, $data = array(), $bundle = array())
     {
-
         if ($service == 'Application' && $method == 'GET' && $bundle == ApplicationController::$licenceDataBundle) {
             return array(
                 'licence' => array(
@@ -489,74 +490,44 @@ class UndertakingsControllerTest extends AbstractApplicationControllerTestCase
                     'niFlag' => 0,
                     'licenceType' => 'restricted',
                     'organisation' => array(
-                        'organisationType' => 'org_type.lc'
+                        'type' => array(
+                            'id' => ApplicationController::ORG_TYPE_REGISTERED_COMPANY
+                        )
                     ),
                 )
             );
         }
 
         if ($service == 'ApplicationCompletion' && $method == 'GET') {
-
-            return array(
-                'Count' => 1,
-                'Results' => array(
-                    array(
-                        'id' => 1,
-                        'version' => 1,
-                        'application' => '1',
-                        'sectionTypeOfLicenceStatus' => 2,
-                        'sectionTypeOfLicenceOperatorLocationStatus' => 2,
-                        'sectionTypeOfLicenceOperatorTypeStatus' => 2,
-                        'sectionTypeOfLicenceLicenceTypeStatus' => 2,
-                        'sectionYourBusinessStatus' => 2,
-                        'sectionYourBusinessBusinessTypeStatus' => 2,
-                        'sectionYourBusinessBusinessDetailsStatus' => 2,
-                        'sectionYourBusinessAddressesStatus' => 2,
-                        'sectionYourBusinessPeopleStatus' => 2,
-                        'sectionTaxiPhvStatus' => 2,
-                        'sectionOperatingCentresStatus' => 2,
-                        'sectionOperatingCentresAuthorisationStatus' => 2,
-                        'sectionOperatingCentresFinancialEvidenceStatus' => 2,
-                        'sectionTransportManagersStatus' => 2,
-                        'sectionVehicleSafetyStatus' => 2,
-                        'sectionVehicleSafetyVehicleStatus' => 2,
-                        'sectionVehicleSafetySafetyStatus' => 2,
-                        'sectionPreviousHistoryStatus' => 2,
-                        'sectionPreviousHistoryFinancialHistoryStatus' => 2,
-                        'sectionPreviousHistoryLicenceHistoryStatus' => 2,
-                        'sectionPreviousHistoryConvictionPenaltiesStatus' => 2,
-                        'sectionReviewDeclarationsStatus' => 2,
-                        'sectionPaymentSubmissionStatus' => 2,
-                        'sectionPaymentSubmissionPaymentStatus' => 0,
-                        'sectionPaymentSubmissionSummaryStatus' => 0,
-                        'lastSection' => ''
-                    )
-                )
-            );
+            return $this->getApplicationCompletionData();
         }
 
         $taDataBundle = array(
             'properties' => array(
                 'id',
                 'version',
-                'status',
                 'totAuthSmallVehicles',
                 'totAuthMediumVehicles',
                 'totAuthLargeVehicles',
-                'psvOperateSmallVehicles',
-                'psvSmallVehicleNotes',
-                'psvSmallVehicleConfirmation',
-                'psvNoSmallVehicleConfirmation',
+                'psvOperateSmallVhl',
+                'psvSmallVhlNotes',
+                'psvSmallVhlConfirmation',
+                'psvNoSmallVhlConfirmation',
                 'psvLimousines',
                 'psvNoLimousineConfirmation',
-                'psvOnlyLimousineConfirmation',
+                'psvOnlyLimousinesConfirmation',
             ),
             'children' => array(
                 'trafficArea' => array(
                     'properties' => array(
                         'id',
-                        'applyScottishRules',
+                        'isScottishRules',
                     ),
+                ),
+                'status' => array(
+                    'properties' => array(
+                        'id'
+                    )
                 )
             )
         );

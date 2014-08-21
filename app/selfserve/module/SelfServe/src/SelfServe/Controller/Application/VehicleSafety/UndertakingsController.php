@@ -26,7 +26,6 @@ class UndertakingsController extends VehicleSafetyController
             'mapFrom' => array(
                 'application',
                 'smallVehiclesIntention',
-                'smallVehiclesUndertakings',
                 'nineOrMore',
                 'limousinesNoveltyVehicles'
             )
@@ -42,24 +41,28 @@ class UndertakingsController extends VehicleSafetyController
         'properties' => array(
             'id',
             'version',
-            'status',
             'totAuthSmallVehicles',
             'totAuthMediumVehicles',
             'totAuthLargeVehicles',
-            'psvOperateSmallVehicles',
-            'psvSmallVehicleNotes',
-            'psvSmallVehicleConfirmation',
-            'psvNoSmallVehicleConfirmation',
+            'psvOperateSmallVhl',
+            'psvSmallVhlNotes',
+            'psvSmallVhlConfirmation',
+            'psvNoSmallVhlConfirmation',
             'psvLimousines',
             'psvNoLimousineConfirmation',
-            'psvOnlyLimousineConfirmation',
+            'psvOnlyLimousinesConfirmation',
         ),
         'children' => array(
             'trafficArea' => array(
                 'properties' => array(
                     'id',
-                    'applyScottishRules',
+                    'isScottishRules',
                 ),
+            ),
+            'status' => array(
+                'properties' => array(
+                    'id'
+                )
             )
         )
     );
@@ -88,34 +91,34 @@ class UndertakingsController extends VehicleSafetyController
         $data['application'] = array(
             'id' => $data['id'],
             'version' => $data['version'],
-            'status' => $data['status']
+            'status' => $data['status']['id']
         );
 
         // Load up the data in a format which can be understood by the fieldsets
         $data['smallVehiclesIntention'] = array(
-            'psvOperateSmallVehicles' => (isset($data['psvOperateSmallVehicles'])?
-                                                    $data['psvOperateSmallVehicles']:false),
-            'psvSmallVehicleNotes' => (isset($data['psvSmallVehicleNotes'])?
-                                                    $data['psvSmallVehicleNotes']:""),
-            'psvSmallVehicleUndertakings' =>
+            'psvOperateSmallVhl' => ($data['psvOperateSmallVhl']!=null?
+                                                    $data['psvOperateSmallVhl']:false),
+            'psvSmallVhlNotes' => ($data['psvSmallVhlNotes']!=null?
+                                                    $data['psvSmallVhlNotes']:""),
+            'psvSmallVhlUndertakings' =>
                 $translate('application_vehicle-safety_undertakings.smallVehiclesUndertakings.text'),
-            'psvSmallVehicleScotland' =>
+            'psvSmallVhlScotland' =>
                 $translate('application_vehicle-safety_undertakings.smallVehiclesUndertakingsScotland.text'),
-            'psvSmallVehicleConfirmation' => (isset($data['psvSmallVehicleConfirmation'])?
-                                                    $data['psvSmallVehicleConfirmation']:false)
+            'psvSmallVhlConfirmation' => ($data['psvSmallVhlConfirmation']!=null?
+                                                    $data['psvSmallVhlConfirmation']:false)
         );
 
         $data['nineOrMore'] = array(
-            'psvNoSmallVehiclesConfirmation' => (isset($data['psvNoSmallVehiclesConfirmation'])?
-                                                $data['psvNoSmallVehiclesConfirmation']:false)
+            'psvNoSmallVhlConfirmation' => ($data['psvNoSmallVhlConfirmation']!=null?
+                                                $data['psvNoSmallVhlConfirmation']:false)
         );
 
         $data['limousinesNoveltyVehicles'] = array(
-            'psvLimousines' => (isset($data['psvLimousines'])?
+            'psvLimousines' => ($data['psvLimousines']!=null?
                                                     $data['psvLimousines']:false),
-            'psvNoLimousineConfirmation' => (isset($data['psvNoLimousineConfirmation'])?
+            'psvNoLimousineConfirmation' => ($data['psvNoLimousineConfirmation']!=null?
                                                     $data['psvNoLimousineConfirmation']:false),
-            'psvOnlyLimousinesConfirmation' => (isset($data['psvOnlyLimousinesConfirmation'])?
+            'psvOnlyLimousinesConfirmation' => ($data['psvOnlyLimousinesConfirmation']!=null?
                                                     $data['psvOnlyLimousinesConfirmation']:false)
         );
 
@@ -134,11 +137,11 @@ class UndertakingsController extends VehicleSafetyController
         $data = $this->load($this->getIdentifier());
 
         // If this traffic area has no Scottish Rules flag, set it to false.
-        if ( !isset($data['trafficArea']['applyScottishRules']) ) {
-            $data['trafficArea']['applyScottishRules']=false;
+        if ( !isset($data['trafficArea']['isScottishRules']) ) {
+            $data['trafficArea']['isScottishRules']=false;
         }
 
-        // In some cases, totAuthSmallVehicles etc. can be set NULL, and we
+        // In some cases, totAuthSmallVhl etc. can be set NULL, and we
         // need to evaluate as zero, so fix that here.
         $arrayCheck=array('totAuthSmallVehicles','totAuthMediumVehicles','totAuthLargeVehicles');
         foreach ($arrayCheck as $attribute) {
@@ -156,10 +159,10 @@ class UndertakingsController extends VehicleSafetyController
             if ( ( $data['totAuthMediumVehicles'] == 0 )
                     && ( $data['totAuthLargeVehicles'] == 0 ) ) {
                 // Small only, cases 1, 2
-                if ( $data['trafficArea']['applyScottishRules'] ) {
+                if ( $data['trafficArea']['isScottishRules'] ) {
                     // Case 2 - Scottish small only
-                    $form->get('smallVehiclesIntention')->remove('psvOperateSmallVehicles');
-                    $form->get('smallVehiclesIntention')->remove('psvSmallVehicleNotes');
+                    $form->get('smallVehiclesIntention')->remove('psvOperateSmallVhl');
+                    $form->get('smallVehiclesIntention')->remove('psvSmallVhlNotes');
                     $form->remove('nineOrMore');
                     $form->get('limousinesNoveltyVehicles')->remove('psvOnlyLimousinesConfirmationLabel');
                     $form->get('limousinesNoveltyVehicles')->remove('psvOnlyLimousinesConfirmation');
@@ -171,10 +174,10 @@ class UndertakingsController extends VehicleSafetyController
                 }
             } else {
                 // cases 4, 5
-                if ( $data['trafficArea']['applyScottishRules'] ) {
+                if ( $data['trafficArea']['isScottishRules'] ) {
                     // Case 5 Mix Scotland
-                    $form->get('smallVehiclesIntention')->remove('psvOperateSmallVehicles');
-                    $form->get('smallVehiclesIntention')->remove('psvSmallVehicleNotes');
+                    $form->get('smallVehiclesIntention')->remove('psvOperateSmallVhl');
+                    $form->get('smallVehiclesIntention')->remove('psvSmallVhlNotes');
                     $form->remove('nineOrMore');
                 } else {
                     // Case 4 Mix England/Wales

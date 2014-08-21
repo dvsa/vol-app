@@ -30,30 +30,30 @@ return array(
                 ),
                 'elements' => array(
                     // 15b[i]
-                    'psvOperateSmallVehicles' => array(
+                    'psvOperateSmallVhl' => array(
                         'type' => 'yesNoRadio',
                         'label' => $translationPrefix . '.smallVehiclesIntention.yesNo'
                     ),
                     // 15b[ii]
-                    'psvSmallVehicleNotes' => array(
+                    'psvSmallVhlNotes' => array(
                         'label' => $translationPrefix . '.smallVehiclesIntentionDetails.title',
                         'type' => 'textarea',
                         'class' => 'long',
                         'filters' => '\Common\Form\Elements\InputFilters\VehicleUndertakingsOperateSmallVehicles',
                     ),
                     // Notes to go along with 15c/d
-                    'psvSmallVehicleScotland' => array(
+                    'psvSmallVhlScotland' => array(
                         'label' => $translationPrefix . '.smallVehiclesUndertakingsScotland.title',
                         'class' => 'long',
                         'type' => 'textarea'
                     ),
-                    'psvSmallVehicleUndertakings' => array(
+                    'psvSmallVhlUndertakings' => array(
                         'label' => $translationPrefix . '.smallVehiclesUndertakings.title',
                         'class' => 'long',
                         'type' => 'textarea'
                     ),
                     // 15c/d
-                    'psvSmallVehicleConfirmation' => array(
+                    'psvSmallVhlConfirmation' => array(
                         'type' => 'singlecheckbox',
                         'label' => $translationPrefix . '.smallVehiclesConfirmation',
                         'filters' =>
@@ -65,11 +65,11 @@ return array(
                 'name' => 'nineOrMore',
                 // 15e
                 'elements' => array(
-                    'psvNoSmallVehiclesConfirmationLabel' => array(
+                    'psvNoSmallVhlConfirmationLabel' => array(
                         'type' => 'html',
                         'label' => $translationPrefix . '.nineOrMore.label'
                     ),
-                    'psvNoSmallVehiclesConfirmation' => array(
+                    'psvNoSmallVhlConfirmation' => array(
                         'type' => 'singlecheckbox',
                         'label' => $translationPrefix . '.nineOrMore.details'
                     )
