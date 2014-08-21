@@ -124,7 +124,7 @@ class OperatorLocationControllerTest extends AbstractApplicationControllerTestCa
             null,
             array(
                 'operator-location' => array(
-                    'niFlag' => 1
+                    'niFlag' => 'Y'
                 )
             )
         );
@@ -170,7 +170,7 @@ class OperatorLocationControllerTest extends AbstractApplicationControllerTestCa
             null,
             array(
                 'operator-location' => array(
-                    'niFlag' => 1
+                    'niFlag' => 'Y'
                 ),
                 'operator-type' => array(
                     'goodsOrPsv' => ApplicationController::GOODS_OR_PSV_GOODS_VEHICLE
