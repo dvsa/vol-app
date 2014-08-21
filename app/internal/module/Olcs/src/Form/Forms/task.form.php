@@ -13,13 +13,16 @@ return [
                     'label' => 'tasks.details'
                 ],
                 'elements' => [
-                    /*
-                     * link =>
-                     *
-                     * status =>
-                     */
+                    'link' => [
+                        'type' => 'html',
+                        'label' => 'tasks.data.link',
+                    ],
+                    'status' => [
+                        'type' => 'html',
+                        'label' => 'tasks.data.status',
+                    ],
                     'actionDate' => [
-                        'type' => 'dateSelect',
+                        'type' => 'dateSelectWithEmpty',
                         'label' => 'tasks.data.actionDate',
                     ],
                     'urgent' => [

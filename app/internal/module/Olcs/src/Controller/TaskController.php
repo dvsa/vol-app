@@ -9,6 +9,7 @@
 namespace Olcs\Controller;
 
 use Zend\View\Model\ViewModel;
+use Olcs\Controller\Traits;
 
 /**
  * Task Controller
@@ -17,6 +18,8 @@ use Zend\View\Model\ViewModel;
  */
 class TaskController extends AbstractController
 {
+    use Traits\LicenceControllerTrait;
+
     /**
      * Add a new task
      *
@@ -24,6 +27,8 @@ class TaskController extends AbstractController
      */
     public function addAction()
     {
+        $licence = $this->getLicence();
+
         $form = $this->getForm('task');
 
         $selects = array(
@@ -33,7 +38,7 @@ class TaskController extends AbstractController
             ),
             'assignment' => array(
                 'assignedToTeam' => $this->getListData('Team'),
-                'assignedToUser' => $this->getListData('User'),
+                'assignedToUser' => $this->getListData('User', [], 'name', 'id', 'Unassigned'),
             )
         );
 
@@ -44,6 +49,21 @@ class TaskController extends AbstractController
                     ->setValueOptions($options);
             }
         }
+
+        $url = sprintf(
+            '<a href="%s">%s</a>',
+            $this->url()->fromRoute(
+                'licence',
+                array(
+                    'licence' => $this->getFromRoute('licence')
+                )
+            ),
+            $licence['licNo']
+        );
+        $form->get('details')->get('link')->setValue($url);
+
+        // really not sure about this...
+        $form->get('details')->get('status')->setValue('<b>Open</b>');
 
         $this->formPost($form, 'processAddTask');
 
@@ -57,7 +77,7 @@ class TaskController extends AbstractController
         return $this->renderView($view, 'Add task');
     }
 
-    protected function getListData($entity, $data = array(), $titleKey = 'name', $primaryKey = 'id', $showAll = 'Unassigned')
+    protected function getListData($entity, $data = array(), $titleKey = 'name', $primaryKey = 'id', $showAll = 'Please select')
     {
         return parent::getListData($entity, $data, $titleKey, $primaryKey, $showAll);
     }
