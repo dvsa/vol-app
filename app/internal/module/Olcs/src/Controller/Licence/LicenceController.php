@@ -7,10 +7,8 @@
  */
 namespace Olcs\Controller\Licence;
 
-use Common\Controller\FormActionController as AbstractFormActionController;
-use Zend\View\Model\ViewModel;
 use Olcs\Controller\AbstractController;
-use Olcs\Controller\Traits\TaskSearchTrait;
+use Olcs\Controller\Traits;
 
 /**
  * Licence Controller
@@ -19,33 +17,8 @@ use Olcs\Controller\Traits\TaskSearchTrait;
  */
 class LicenceController extends AbstractController
 {
-    use TaskSearchTrait;
-
-    public function getViewWithLicence($variables = array())
-    {
-
-        $licence = $this->getLicence($this->getFromRoute('licence'));
-
-        if ($licence['goodsOrPsv']['id'] == 'lcat_gv') {
-            $this->getServiceLocator()->get('Navigation')->findOneBy('id', 'licence_bus')->setVisible(0);
-        }
-
-        $variables['licence'] = $licence;
-
-        $view = $this->getView($variables);
-
-        $this->pageTitle = $view->licence['licNo'];
-        $this->pageSubTitle = $this->getTranslator()->translate($view->licence['goodsOrPsv']['id']) . ', ' .
-            $this->getTranslator()->translate($view->licence['licenceType']['id'])
-            . ', ' . $this->getTranslator()->translate($view->licence['status']['id']);
-
-        return $view;
-    }
-
-    public function getTranslator()
-    {
-        return $this->getServiceLocator()->get('translator');
-    }
+    use Traits\LicenceControllerTrait,
+        Traits\TaskSearchTrait;
 
     public function indexAction()
     {
@@ -55,7 +28,7 @@ class LicenceController extends AbstractController
         return $this->renderView($view);
     }
 
-    public function editAction()
+    public function detailsAction()
     {
         $view = $this->getViewWithLicence();
         $view->setTemplate('licence/index');
@@ -150,16 +123,5 @@ class LicenceController extends AbstractController
     public function indexJumpAction()
     {
         return $this->redirect()->toRoute('licence/overview', [], [], true);
-    }
-
-    /**
-     * @codeCoverageIgnore
-     *
-     * @param array $params
-     * @return \Zend\View\Model\ViewModel
-     */
-    public function getView(array $params = null)
-    {
-        return new ViewModel($params);
     }
 }

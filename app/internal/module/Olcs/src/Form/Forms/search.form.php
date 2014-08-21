@@ -31,7 +31,7 @@ return [
                     ],
                     'forename' => [
                         'type' => 'personName',
-                        'label' => 'First name',
+                        'label' => 'First name(s)',
                         'class' => 'long',
                     ],
                     'familyName' => [
