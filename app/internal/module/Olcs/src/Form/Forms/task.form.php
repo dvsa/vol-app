@@ -34,6 +34,10 @@ return [
                         'type' => 'select-noempty',
                         'label' => 'tasks.data.sub_category',
                     ],
+                    'description' => [
+                        'type' => 'text',
+                        'label' => 'tasks.data.description',
+                    ],
 
                 ]
             ],

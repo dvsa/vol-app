@@ -73,6 +73,8 @@ class TaskController extends AbstractController
 
         $data['licence'] = $licence;
 
+        $data['urgent'] = isset($data['urgent']) ? 'Y' : 'N';
+
         $result = $this->processAdd($data, 'Task');
 
         if (isset($result['id'])) {
