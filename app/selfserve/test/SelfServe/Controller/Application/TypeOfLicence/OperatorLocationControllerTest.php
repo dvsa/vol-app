@@ -147,7 +147,7 @@ class OperatorLocationControllerTest extends AbstractApplicationControllerTestCa
             null,
             array(
                 'operator-location' => array(
-                    'niFlag' => 1
+                    'niFlag' => 'Y'
                 ),
                 'js-submit' => true
             )
