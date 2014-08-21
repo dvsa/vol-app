@@ -32,18 +32,12 @@ class LicenceController extends AbstractController
 
         $variables['licence'] = $licence;
 
-<<<<<<< HEAD
+        $view = $this->getView($variables);
+
         $this->title = $view->licence['licNo'];
         $this->subTitle = $this->getTranslator()->translate($view->licence['goodsOrPsv']['id']) . ', ' .
             $this->getTranslator()->translate($view->licence['licenceType']['id'])
             . ', ' . $this->getTranslator()->translate($view->licence['status']['id']);
-=======
-        $view = $this->getView($variables);
-
-        $this->pageTitle = $view->licence['licNo'];
-        $this->pageSubTitle = $view->licence['goodsOrPsv']['id'] . ', ' . $view->licence['licenceType']['id']
-            . ', ' . $view->licence['status']['id'];
->>>>>>> bb43fad17f702dfb13817de02a6bf40159d730f3
 
         return $view;
     }
