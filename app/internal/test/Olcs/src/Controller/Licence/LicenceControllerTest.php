@@ -32,7 +32,8 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
                 'getForm',
                 'loadScripts',
                 'getFromRoute',
-                'params'
+                'params',
+                'getServiceLocator'
             )
         );
 
@@ -49,7 +50,30 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             ->method('getRequest')
             ->will($this->returnValue($request));
 
+        $this->controller->expects($this->any())
+             ->method('getServiceLocator')
+             ->will($this->returnValue($this->getServiceLocatorTranslator()));
+
         parent::setUp();
+    }
+
+    /**
+     * Gets a mock version of translator
+     */
+    private function getServiceLocatorTranslator()
+    {
+        $translatorMock = $this->getMock('\stdClass', array('translate'));
+        $translatorMock->expects($this->any())
+                       ->method('translate')
+                       ->will($this->returnArgument(0));
+
+        $serviceMock = $this->getMock('\stdClass', array('get'));
+        $serviceMock->expects($this->any())
+            ->method('get')
+            ->with($this->equalTo('translator'))
+            ->will($this->returnValue($translatorMock));
+
+        return $serviceMock;
     }
 
     public function testProcessingActionWithNoQueryUsesDefaultParams()
