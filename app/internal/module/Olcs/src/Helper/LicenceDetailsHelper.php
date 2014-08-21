@@ -155,7 +155,7 @@ class LicenceDetailsHelper
 
         $navigation = array();
 
-        foreach ($sections as $section => $details) {
+        foreach (array_keys($sections) as $section) {
             $navigation[] = array(
                 'label' => 'internal-licence-details-' . $section . '-label',
                 'title' => 'internal-licence-details-' . $section . '-title',
