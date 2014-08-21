@@ -28,12 +28,12 @@ return array(
         array(
             'title' => 'Defect type',
             'formatter' => function ($data, $column) {
-                    return '<a href="' . $this->generateUrl(
-                        array('action' => 'edit', 'id' => $data['prohibition'], 'defect' => $data['id']),
-                        'case_prohibition/defect',
-                        true
-                    ) . '">' . $data['defectType'] . '</a>';
-                }
+                return '<a href="' . $this->generateUrl(
+                    array('action' => 'edit', 'id' => $data['prohibition']['id'], 'defect' => $data['id']),
+                    'case_prohibition/defect',
+                    true
+                ) . '">' . $data['defectType'] . '</a>';
+            }
         ),
         array(
             'title' => 'Notes',
