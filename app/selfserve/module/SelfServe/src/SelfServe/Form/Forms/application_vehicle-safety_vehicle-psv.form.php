@@ -26,7 +26,7 @@ return array(
                 )
             ),
             array(
-                'name' => 'large',
+                'name' => 'small',
                 'options' => array(0),
                 'type' => 'table'
             ),
@@ -36,7 +36,7 @@ return array(
                 'type' => 'table'
             ),
             array(
-                'name' => 'small',
+                'name' => 'large',
                 'options' => array(0),
                 'type' => 'table'
             ),

@@ -100,9 +100,9 @@ class VehiclePsvController extends VehicleSafetyController
      * @var array
      */
     protected $formTables = array(
-        'large' => 'application_vehicle-safety_vehicle-psv-large',
+        'small' => 'application_vehicle-safety_vehicle-psv-small',
         'medium' => 'application_vehicle-safety_vehicle-psv-medium',
-        'small' => 'application_vehicle-safety_vehicle-psv-small'
+        'large' => 'application_vehicle-safety_vehicle-psv-large'
     );
 
     /**
@@ -258,6 +258,11 @@ class VehiclePsvController extends VehicleSafetyController
                 $validatorChain = $input->getValidatorChain();
                 $validatorChain->attach(new TableRequiredValidator(array('label' => $table . ' vehicle')));
             }
+        }
+
+        if ($this->getLicenceType() == self::LICENCE_TYPE_RESTRICTED && $form->has('large')) {
+
+            $form->remove('large');
         }
 
         return $form;
