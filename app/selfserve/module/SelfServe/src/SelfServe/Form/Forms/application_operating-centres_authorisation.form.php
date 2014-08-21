@@ -29,7 +29,7 @@ return array(
                         'type' => 'htmlTranslated',
                         'attributes' => array(
                             'value' => $translationPrefixTrafficArea . '.label.exists'
-                        )    
+                        )
                     ),
                     'trafficAreaInfoNameExists' => array(
                         'type' => 'html',
@@ -41,7 +41,7 @@ return array(
                         'type' => 'htmlTranslated',
                         'attributes' => array(
                             'value' => $translationPrefixTrafficArea . '.labelasahint.exists'
-                        )    
+                        )
                     ),
                     'hiddenId' => array(
                         'type' => 'hidden'
