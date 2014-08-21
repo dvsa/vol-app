@@ -43,7 +43,6 @@ class CaseImpoundingController extends CaseController implements CrudInterface
 
         $variables = array(
             'tab' => 'impounding',
-            'inlineScript' => $this->getServiceLocator()->get('Script')->loadFiles(['impounding']),
             'table' => $this->buildTable('impounding', $results['Results'])
         );
 
@@ -78,7 +77,7 @@ class CaseImpoundingController extends CaseController implements CrudInterface
                     'pageSubTitle' => ''
                 ],
                 'form' => $form,
-                'inlineScript' => $this->getServiceLocator()->get('Script')->loadFiles(['impounding']),
+                'inlineScript' => $this->loadScripts(['impounding']),
             ]
         );
 
@@ -165,7 +164,7 @@ class CaseImpoundingController extends CaseController implements CrudInterface
                     'pageSubTitle' => ''
                 ],
                 'form' => $form,
-                'inlineScript' => $this->getServiceLocator()->get('Script')->loadFiles(['conviction']),
+                'inlineScript' => $this->loadScripts(['impounding']),
             ]
         );
 

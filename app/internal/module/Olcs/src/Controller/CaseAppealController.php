@@ -81,7 +81,7 @@ class CaseAppealController extends CaseController implements CrudInterface
                     'pageSubTitle' => ''
                 ],
                 'form' => $form,
-                'inlineScript' => $this->getServiceLocator()->get('Script')->loadFiles(['withdrawn'])
+                'inlineScript' => $this->loadScripts(['withdrawn'])
             ]
         );
 
@@ -138,7 +138,7 @@ class CaseAppealController extends CaseController implements CrudInterface
                     'pageSubTitle' => ''
                 ],
                 'form' => $form,
-                'inlineScript' => $this->getServiceLocator()->get('Script')->loadFiles(['withdrawn'])
+                'inlineScript' => $this->loadScripts(['withdrawn'])
             ]
         );
 
