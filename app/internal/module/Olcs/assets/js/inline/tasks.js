@@ -12,8 +12,8 @@ $(function() {
   });
 
   OLCS.cascadeInput({
-    source: "#team",
-    dest: "#owner",
+    source: "#assignedToTeam",
+    dest: "#assignedToUser",
     process: function(value, done) {
       $.get("/tasks/users/" + value, done);
     }
@@ -21,7 +21,7 @@ $(function() {
 
   OLCS.cascadeInput({
     source: "#category",
-    dest: "#subCategory",
+    dest: "#taskSubCategory",
     url: "/tasks/sub-categories"
   });
 

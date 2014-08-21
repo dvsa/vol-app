@@ -135,6 +135,20 @@ return [
                 ],
                 'may_terminate' => true,
             ],
+            'task_action' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/task[/:action][/:task]',
+                    'constraints' => [
+                        'task' => '[0-9]+'
+                    ],
+                    'defaults' => [
+                        'type'       => 'licence',
+                        'controller' => 'TaskController'
+                    ]
+                ],
+                'may_terminate' => true,
+            ],
             'fees' => [
                 'type' => 'literal',
                 'options' => [

@@ -31,7 +31,8 @@ return array(
             'CasePiController' => 'Olcs\Controller\CasePiController',
             'DocumentController' => 'Olcs\Controller\DocumentController',
             'DefendantSearchController' => 'Olcs\DefendantSearchController',
-            'LicenceController' => 'Olcs\Controller\Licence\LicenceController'
+            'LicenceController' => 'Olcs\Controller\Licence\LicenceController',
+            'TaskController' => 'Olcs\Controller\TaskController'
         )
     ),
     'view_manager' => array(

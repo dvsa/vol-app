@@ -58,10 +58,10 @@ trait TaskSearchTrait
         // grab all the relevant backend data needed to populate the
         // various dropdowns on the filter form
         $selects = array(
-            'team' => $this->getListData('Team'),
-            'owner' => $this->getListData('User', $filters),
+            'assignedToTeam' => $this->getListData('Team'),
+            'assignedToUser' => $this->getListData('User', $filters),
             'category' => $this->getListData('Category', [], 'description'),
-            'subCategory' => $this->getListData('TaskSubCategory', $filters)
+            'taskSubCategory' => $this->getListData('TaskSubCategory', $filters)
         );
 
         // bang the relevant data into the corresponding form inputs

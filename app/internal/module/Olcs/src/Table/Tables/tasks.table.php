@@ -7,9 +7,8 @@ return array(
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                'add' => array('class' => 'primary'),
-                'edit' => array('requireRows' => true),
-                'delete' => array('class' => 'warning', 'requireRows' => true)
+                'create task' => array('class' => 'primary'),
+                'edit' => array('requireRows' => true)
             )
         ),
         'paginate' => array(
@@ -32,7 +31,7 @@ return array(
         ),
         array(
             'title' => 'Sub category',
-            'name' => 'subCategoryName',
+            'name' => 'taskSubCategoryName',
         ),
         array(
             'title' => 'Description',

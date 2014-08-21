@@ -81,6 +81,19 @@ class LicenceController extends AbstractController
 
     public function processingAction()
     {
+        if ($this->getRequest()->isPost()) {
+            $action = strtolower($this->params()->fromPost('action'));
+            if ($action === 'create task') {
+                $params = array(
+                    'licence' => $this->getFromRoute('licence'),
+                    'action' => 'add'
+                );
+                return $this->redirect()->toRoute(
+                    'licence/task_action',
+                    $params
+                );
+            }
+        }
         $this->pageLayout = 'licence';
 
         $filters = $this->mapTaskFilters(

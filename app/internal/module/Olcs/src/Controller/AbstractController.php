@@ -63,7 +63,7 @@ class AbstractController extends FormActionController
         $response = $this->makeRestCall($entity, 'GET', $data);
 
         if ($showAll !== false) {
-            $final = array('' => 'All');
+            $final = array('' => $showAll);
         } else {
             $final = array();
         }
