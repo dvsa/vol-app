@@ -3,7 +3,11 @@
 return array(
     'service_api_mapping' => array(
         array(
-            'endpoint' => 'http://olcspayment.dev/api/',
+            'endpoints' => array(
+                'payments' => 'http://olcspayment.dev/api/',
+                'backend' => 'http://olcs-backend',
+                'postcode' => 'http://sc-address.scdv-ap01.sc.npm/'
+            ),
             'apis' => array(
                 'Vosa\Payment\Token' => 'token',
                 'Vosa\Payment\Db' => 'paymentdb',

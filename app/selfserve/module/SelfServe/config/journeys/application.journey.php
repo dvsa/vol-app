@@ -151,6 +151,11 @@ return array(
                         )
 
                     ),
+                    'Undertakings' => array(
+                        'restriction' => array(
+                            'psv'
+                        )
+                    ),
                     'Safety' => array(
 
                     )
