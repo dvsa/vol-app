@@ -1,16 +1,16 @@
 $(function() {
+  var form = "form[name=task]";
+
   OLCS.cascadeInput({
-    source: "#assignedToTeam",
-    dest: "#assignedToUser",
-    process: function(value, done) {
-      $.get("/tasks/users/" + value, done);
-    },
+    source: form + " #assignedToTeam",
+    dest: form + " #assignedToUser",
+    url: "/tasks/users",
     emptyLabel: "Unassigned"
   });
 
   OLCS.cascadeInput({
-    source: "#category",
-    dest: "#taskSubCategory",
+    source: form + " #category",
+    dest: form + " #taskSubCategory",
     url: "/tasks/sub-categories",
     emptyLabel: "Please select"
   });

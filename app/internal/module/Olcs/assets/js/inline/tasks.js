@@ -14,16 +14,16 @@ $(function() {
   });
 
   OLCS.cascadeInput({
-    source: form + " [name=assignedToTeam]",
-    dest: form + " [name=assignedToUser]",
+    source: form + " #assignedToTeam",
+    dest: form + " #assignedToUser",
     process: function(value, done) {
       $.get("/tasks/users/" + value, done);
     }
   });
 
   OLCS.cascadeInput({
-    source: form + " [name=category]",
-    dest: form + " [name=taskSubCategory]",
+    source: form + " #category",
+    dest: form + " #taskSubCategory",
     url: "/tasks/sub-categories"
   });
 

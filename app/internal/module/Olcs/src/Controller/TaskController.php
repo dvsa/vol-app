@@ -80,6 +80,7 @@ class TaskController extends AbstractController
             ]
         );
         $view->setTemplate('task/add');
+        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
         return $this->renderView($view, 'Add task');
     }
 
