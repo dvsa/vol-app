@@ -31,14 +31,24 @@ class TaskController extends AbstractController
 
         $form = $this->getForm('task');
 
+        $data = $this->flattenData($this->getRequest()->getPost()->toArray());
+        $filters = [];
+
+        if (isset($data['assignedToTeam'])) {
+            $filters['team'] = $data['assignedToTeam'];
+        }
+        if (isset($data['category'])) {
+            $filters['category'] = $data['category'];
+        }
+
         $selects = array(
             'details' => array(
                 'category' => $this->getListData('Category', [], 'description'),
-                'taskSubCategory' => $this->getListData('TaskSubCategory')
+                'taskSubCategory' => $this->getListData('TaskSubCategory', $filters)
             ),
             'assignment' => array(
-                'assignedToTeam' => $this->getListData('Team'),
-                'assignedToUser' => $this->getListData('User', [], 'name', 'id', 'Unassigned'),
+                'assignedToTeam' => $this->getListData('Team', []),
+                'assignedToUser' => $this->getListData('User', $filters, 'name', 'id', 'Unassigned')
             )
         );
 
@@ -60,8 +70,8 @@ class TaskController extends AbstractController
             ),
             $licence['licNo']
         );
-        $form->get('details')->get('link')->setValue($url);
 
+        $form->get('details')->get('link')->setValue($url);
         // really not sure about this...
         $form->get('details')->get('status')->setValue('<b>Open</b>');
 
@@ -70,7 +80,7 @@ class TaskController extends AbstractController
         $view = new ViewModel(
             [
                 'form' => $form,
-                'inlineScript' => $this->loadScripts(['tasks'])
+                'inlineScript' => $this->loadScripts(['task-form'])
             ]
         );
         $view->setTemplate('task/add');
@@ -86,10 +96,7 @@ class TaskController extends AbstractController
     {
         $licence = $this->getFromRoute('licence');
 
-        $data = array_merge(
-            $data['details'],
-            $data['assignment']
-        );
+        $data = $this->flattenData($data);
 
         $data['licence'] = $licence;
 
@@ -103,5 +110,17 @@ class TaskController extends AbstractController
                 array('licence' => $licence)
             );
         }
+    }
+
+    private function flattenData($data)
+    {
+        if (empty($data)) {
+            return $data;
+        }
+
+        return array_merge(
+            $data['details'],
+            $data['assignment']
+        );
     }
 }
