@@ -30,6 +30,17 @@ class DeleteActionTraitTest extends \PHPUnit_Framework_TestCase
         $sut->expects($this->once())->method('redirectToIndex');
 
         $sut->deleteAction();
+    }
 
+    public function testGetIdentifier()
+    {
+        $mockBuilder = $this->getMockBuilder('Olcs\Controller\Traits\DeleteActionTrait');
+        $mockBuilder->setMethods(['params', 'makeRestCall', 'redirectToIndex', 'getDeleteServiceName']);
+        $mockBuilder->setMockClassName(uniqid('mock_DeleteActionTrait_'));
+        $sut = $mockBuilder->getMockForTrait();
+
+        $sut->identifierName = 'identifierName';
+
+        $this->assertEquals('identifierName', $sut->getIdentifierName());
     }
 }
