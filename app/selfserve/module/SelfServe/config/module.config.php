@@ -44,6 +44,7 @@ return array(
             'error/index'             => __DIR__ . '/../view/self-serve/error/index.phtml'
         ),
         'template_path_stack' => array(
+            __DIR__ . '/../../../vendor/olcs/OlcsCommon/Common/view',
             __DIR__ . '/../view',
             __DIR__ . '/../view/self-serve'
         )

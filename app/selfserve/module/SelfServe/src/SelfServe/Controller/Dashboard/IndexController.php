@@ -9,7 +9,7 @@
 
 namespace SelfServe\Controller\Dashboard;
 
-use SelfServe\Controller\AbstractController;
+use Common\Controller\AbstractController;
 use Zend\View\Model\ViewModel;
 use Zend\Http\Response;
 
@@ -99,7 +99,7 @@ class IndexController extends AbstractController
                     foreach ($licence['applications'] as $application) {
                         $newRow = $application;
                         $newRow['licNo'] = $licence['licNo'];
-                        $newRow['status'] = $application['status']['id'];
+                        $newRow['status'] = (string)$application['status']['id'];
                         $applications[$newRow['id']] = $newRow;
                     }
                 }
@@ -130,7 +130,6 @@ class IndexController extends AbstractController
 
         $data = [
             'version' => 1,
-            'licNo' => '',
             'status' => 'lsts_new',
             'organisation' => $this->getOrganisationId($user['id']),
         ];

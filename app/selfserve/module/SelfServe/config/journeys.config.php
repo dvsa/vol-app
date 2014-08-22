@@ -1,5 +1,7 @@
 <?php
 
+$journeysDirectory = __DIR__ . '/../../../vendor/olcs/OlcsCommon/Common/config/journeys/*.journey.php';
+
 $routes = [];
 
 $routeArray = array_map(
@@ -27,7 +29,7 @@ $journeyArray = array_map(
     function ($file) {
         return include $file;
     },
-    glob(__DIR__ . '/journeys/*.journey.php')
+    glob($journeysDirectory)
 );
 
 function camelToHyphen($string)
@@ -44,7 +46,7 @@ foreach ($journeyArray as $journey) {
 
         $journeys[$name] = $details;
 
-        $journeyNamespace = 'SelfServe\Controller\\' . $name;
+        $journeyNamespace = $details['namespace'];
 
         $controller = $journeyNamespace . '\\' . $name . 'Controller';
         $controllers[$controller] = $controller;
