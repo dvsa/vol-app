@@ -9,7 +9,7 @@
 
 namespace SelfServe\Controller\Dashboard;
 
-use SelfServe\Controller\AbstractController;
+use Common\Controller\AbstractController;
 use Zend\View\Model\ViewModel;
 use Zend\Http\Response;
 
@@ -99,7 +99,7 @@ class IndexController extends AbstractController
                     foreach ($licence['applications'] as $application) {
                         $newRow = $application;
                         $newRow['licNo'] = $licence['licNo'];
-                        $newRow['status'] = $application['status']['id'];
+                        $newRow['status'] = (string)$application['status']['id'];
                         $applications[$newRow['id']] = $newRow;
                     }
                 }
@@ -169,7 +169,7 @@ class IndexController extends AbstractController
         $organisation = $this->makeRestCall('OrganisationUser', 'GET', ['user' => $userId], $this->organisationUserBundle);
 
         if ($organisation['Count'] < 1) {
-            return null;
+            throw new \Exception('Organisation not found');
         }
 
         return $organisation['Results'][0]['organisation']['id'];
