@@ -11,7 +11,6 @@ use Zend\Form\Annotation as Form;
  */
 class Hearing
 {
-
     /**
      * @Form\Attributes({"id":"dob"})
      * @Form\Options({
@@ -55,7 +54,4 @@ class Hearing
      * @Form\Type("Text")
      */
     public $piVenueOther = null;
-
-
 }
-

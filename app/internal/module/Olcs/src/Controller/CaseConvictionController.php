@@ -508,7 +508,7 @@ class CaseConvictionController extends CaseController
         $data['main'] = $case;
 
         $form = $this->generateForm(
-            'conviction-comment',
+            'ConvictionComment',
             'saveCommentForm'
         );
         $form->setData($data);

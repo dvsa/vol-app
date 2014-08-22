@@ -11,7 +11,6 @@ use Zend\Form\Annotation as Form;
  */
 class Recommend
 {
-
     /**
      * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
@@ -46,10 +45,7 @@ class Recommend
     /**
      * @Form\Name("form-actions")
      * @Form\Attributes({"class":"actions-container"})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\RecommendFormActions")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\CancelFormActions")
      */
     public $formActions = null;
-
-
 }
-

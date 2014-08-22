@@ -12,7 +12,6 @@ use Zend\Form\Annotation as Form;
  */
 class PenaltyComment
 {
-
     /**
      * @Form\Name("main")
      * @Form\Options({"label":"Penalties"})
@@ -23,10 +22,7 @@ class PenaltyComment
     /**
      * @Form\Name("form-actions")
      * @Form\Attributes({"class":"actions-container"})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\FormActions")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\ResetFormActions")
      */
     public $formActions = null;
-
-
 }
-

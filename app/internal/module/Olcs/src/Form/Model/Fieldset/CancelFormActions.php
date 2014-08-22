@@ -9,9 +9,8 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("form-actions")
  * @Form\Attributes({"class":"actions-container"})
  */
-class ComplaintFormActions
+class CancelFormActions
 {
-
     /**
      * @Form\Attributes({"type":"submit","class":"action--primary large"})
      * @Form\Options({
@@ -37,7 +36,4 @@ class ComplaintFormActions
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
     public $cancel = null;
-
-
 }
-

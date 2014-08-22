@@ -11,7 +11,6 @@ use Zend\Form\Annotation as Form;
  */
 class OrganisationDetails
 {
-
     /**
      * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
@@ -31,7 +30,4 @@ class OrganisationDetails
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      */
     public $name = null;
-
-
 }
-

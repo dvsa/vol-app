@@ -10,7 +10,6 @@ use Zend\Form\Annotation as Form;
  */
 class ConditionUndertaking
 {
-
     /**
      * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
@@ -95,7 +94,4 @@ class ConditionUndertaking
      * @Form\Type("\Zend\Form\Element\Select")
      */
     public $attachedTo = null;
-
-
 }
-

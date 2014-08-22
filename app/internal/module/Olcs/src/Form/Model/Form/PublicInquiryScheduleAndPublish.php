@@ -12,7 +12,6 @@ use Zend\Form\Annotation as Form;
  */
 class PublicInquiryScheduleAndPublish
 {
-
     /**
      * @Form\Attributes({"class":"","id":""})
      * @Form\Options({"label":"PI number"})
@@ -229,7 +228,4 @@ class PublicInquiryScheduleAndPublish
      * @Form\Type("\Zend\Form\Element\Button")
      */
     public $cancel = null;
-
-
 }
-

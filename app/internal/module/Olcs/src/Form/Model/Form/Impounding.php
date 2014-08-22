@@ -12,7 +12,6 @@ use Zend\Form\Annotation as Form;
  */
 class Impounding
 {
-
     /**
      * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
@@ -55,10 +54,7 @@ class Impounding
     /**
      * @Form\Name("form-actions")
      * @Form\Attributes({"class":"actions-container"})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\ImpoundingFormActions")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\CancelFormActions")
      */
     public $formActions = null;
-
-
 }
-

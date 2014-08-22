@@ -12,7 +12,6 @@ use Zend\Form\Annotation as Form;
  */
 class RequestorsAddress
 {
-
     /**
      * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
@@ -95,7 +94,4 @@ class RequestorsAddress
      * @Form\Type("DynamicSelect")
      */
     public $countryCode = null;
-
-
 }
-

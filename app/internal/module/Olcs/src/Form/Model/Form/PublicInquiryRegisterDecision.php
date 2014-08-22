@@ -12,7 +12,6 @@ use Zend\Form\Annotation as Form;
  */
 class PublicInquiryRegisterDecision
 {
-
     /**
      * @Form\Attributes({"class":"","id":""})
      * @Form\Options({"label":"PI number"})
@@ -234,7 +233,4 @@ class PublicInquiryRegisterDecision
      * @Form\Type("\Zend\Form\Element\Button")
      */
     public $cancel = null;
-
-
 }
-

@@ -11,7 +11,6 @@ use Zend\Form\Annotation as Form;
  */
 class Main
 {
-
     /**
      * @Form\Attributes({"id":"","class":"extra-long"})
      * @Form\Options({
@@ -40,7 +39,4 @@ class Main
      * @Form\Type("Hidden")
      */
     public $version = null;
-
-
 }
-

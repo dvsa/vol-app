@@ -11,7 +11,6 @@ use Zend\Form\Annotation as Form;
  */
 class StatementDetails
 {
-
     /**
      * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
@@ -19,7 +18,7 @@ class StatementDetails
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a category",
-     *     "category": "statement_types"
+     *     "category": "statement_type"
      * })
      * @Form\Type("DynamicSelect")
      */
@@ -121,7 +120,4 @@ class StatementDetails
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5,"max":4000}})
      */
     public $authorisersDecision = null;
-
-
 }
-

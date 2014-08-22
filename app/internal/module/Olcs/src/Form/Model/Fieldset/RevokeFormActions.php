@@ -11,7 +11,6 @@ use Zend\Form\Annotation as Form;
  */
 class RevokeFormActions
 {
-
     /**
      * @Form\Attributes({"type":"submit","class":"action--primary large"})
      * @Form\Options({
@@ -37,7 +36,4 @@ class RevokeFormActions
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
     public $cancel = null;
-
-
 }
-

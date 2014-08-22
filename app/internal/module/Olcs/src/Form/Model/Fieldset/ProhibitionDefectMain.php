@@ -11,7 +11,6 @@ use Zend\Form\Annotation as Form;
  */
 class ProhibitionDefectMain
 {
-
     /**
      * @Form\Attributes({"class":"extra-long","id":""})
      * @Form\Options({"label":"Defect type"})
@@ -29,7 +28,4 @@ class ProhibitionDefectMain
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5,"max":1024}})
      */
     public $notes = null;
-
-
 }
-

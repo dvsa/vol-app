@@ -12,7 +12,6 @@ use Zend\Form\Annotation as Form;
  */
 class Search
 {
-
     /**
      * @Form\Attributes({"type":"submit","class":"action--primary large"})
      * @Form\Options({
@@ -38,7 +37,4 @@ class Search
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\SearchAdvanced")
      */
     public $searchAdvanced = null;
-
-
 }
-

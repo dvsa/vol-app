@@ -11,7 +11,6 @@ use Zend\Form\Annotation as Form;
  */
 class Offence
 {
-
     /**
      * @Form\Attributes({"id":"","placeholder":"","class":"extra-long"})
      * @Form\Options({
@@ -88,11 +87,11 @@ class Offence
      * @Form\Options({
      *     "label": "SI",
      *     "empty_option": "Please Select",
+     *     "value_options": {"Y": "Yes", "N": "No"},
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category",
-     *     "category": "yes_no"
+     *     "help-block": "Please select a category"
      * })
-     * @Form\Type("DynamicSelect")
+     * @Form\Type("Select")
      */
     public $msi = null;
 
@@ -168,9 +167,9 @@ class Offence
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a category",
-     *     "category": "yes_no"
+     *     "value_options": {"Y": "Yes", "N": "No"},
      * })
-     * @Form\Type("DynamicSelect")
+     * @Form\Type("Select")
      */
     public $isDeclared = null;
 
@@ -179,7 +178,4 @@ class Offence
      * @Form\Type("checkbox")
      */
     public $isDealtWith = null;
-
-
 }
-

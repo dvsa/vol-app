@@ -10,7 +10,6 @@ use Zend\Form\Annotation as Form;
  */
 class ProhibitionFields
 {
-
     /**
      * @Form\Attributes({"id":"dob"})
      * @Form\Options({
@@ -83,7 +82,4 @@ class ProhibitionFields
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":255}})
      */
     public $imposedAt = null;
-
-
 }
-

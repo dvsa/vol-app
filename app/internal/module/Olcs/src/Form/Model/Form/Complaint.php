@@ -11,7 +11,6 @@ use Zend\Form\Annotation as Form;
  */
 class Complaint
 {
-
     /**
      * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
@@ -61,10 +60,7 @@ class Complaint
     /**
      * @Form\Name("form-actions")
      * @Form\Attributes({"class":"actions-container"})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\ComplaintFormActions")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\CancelFormActions")
      */
     public $formActions = null;
-
-
 }
-

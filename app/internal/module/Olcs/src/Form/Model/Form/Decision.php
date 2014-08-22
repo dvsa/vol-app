@@ -12,7 +12,6 @@ use Zend\Form\Annotation as Form;
  */
 class Decision
 {
-
     /**
      * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
@@ -47,10 +46,7 @@ class Decision
     /**
      * @Form\Name("form-actions")
      * @Form\Attributes({"class":"actions-container"})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\DecisionFormActions")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\CancelFormActions")
      */
     public $formActions = null;
-
-
 }
-

@@ -11,7 +11,6 @@ use Zend\Form\Annotation as Form;
  */
 class ComplaintDetails
 {
-
     /**
      * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
@@ -43,7 +42,7 @@ class ComplaintDetails
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a category",
-     *     "category": "complaint_types"
+     *     "category": "complaint_type"
      * })
      * @Form\Type("DynamicSelect")
      */
@@ -56,7 +55,7 @@ class ComplaintDetails
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a category",
-     *     "category": "complaint_status_types"
+     *     "category": "complaint_status"
      * })
      * @Form\Type("DynamicSelect")
      */
@@ -104,7 +103,4 @@ class ComplaintDetails
      * @Form\Validator({"name":"Zend\I18n\Validator\Alnum"})
      */
     public $vrm = null;
-
-
 }
-

@@ -11,7 +11,6 @@ use Zend\Form\Annotation as Form;
  */
 class RevokeMain
 {
-
     /**
      * @Form\Attributes({"id":"","placeholder":"","multiple":"multiple"})
      * @Form\Options({
@@ -99,7 +98,4 @@ class RevokeMain
      * @Form\Type("Hidden")
      */
     public $version = null;
-
-
 }
-

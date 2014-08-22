@@ -11,7 +11,6 @@ use Zend\Form\Annotation as Form;
  */
 class RecommendMain
 {
-
     /**
      * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
@@ -64,7 +63,4 @@ class RecommendMain
      * @Form\Type("checkbox")
      */
     public $urgent = null;
-
-
 }
-

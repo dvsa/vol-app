@@ -12,7 +12,6 @@ use Zend\Form\Annotation as Form;
  */
 class PublicInquirySLA
 {
-
     /**
      * @Form\Attributes({"id":"dob"})
      * @Form\Options({
@@ -90,7 +89,4 @@ class PublicInquirySLA
      * @Form\Type("\Zend\Form\Element\Button")
      */
     public $cancelConviction = null;
-
-
 }
-

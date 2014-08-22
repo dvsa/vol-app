@@ -11,7 +11,6 @@ use Zend\Form\Annotation as Form;
  */
 class NoteMain
 {
-
     /**
      * @Form\Attributes({"class":"extra-long","id":""})
      * @Form\Options({"label":"Note"})
@@ -21,7 +20,4 @@ class NoteMain
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5,"max":4000}})
      */
     public $note = null;
-
-
 }
-

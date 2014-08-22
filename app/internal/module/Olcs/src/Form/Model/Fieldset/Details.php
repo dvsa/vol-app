@@ -11,7 +11,6 @@ use Zend\Form\Annotation as Form;
  */
 class Details
 {
-
     /**
      * @Form\Attributes({"id":"dob"})
      * @Form\Options({
@@ -54,7 +53,7 @@ class Details
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a category",
-     *     "category": "appeal_reasons"
+     *     "category": "appeal_reason"
      * })
      * @Form\Type("DynamicSelect")
      */
@@ -125,7 +124,7 @@ class Details
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a category",
-     *     "category": "appeal_outcomes"
+     *     "category": "appeal_outcome"
      * })
      * @Form\Type("DynamicSelect")
      */
@@ -159,7 +158,4 @@ class Details
      * @Form\Type("\Common\Form\Elements\InputFilters\WithdrawnDate")
      */
     public $withdrawnDate = null;
-
-
 }
-

@@ -11,7 +11,6 @@ use Zend\Form\Annotation as Form;
  */
 class ComplainantDetails
 {
-
     /**
      * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
@@ -41,7 +40,4 @@ class ComplainantDetails
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":35}})
      */
     public $familyName = null;
-
-
 }
-

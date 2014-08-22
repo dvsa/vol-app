@@ -11,7 +11,6 @@ use Zend\Form\Annotation as Form;
  */
 class ConditionUndertakingForm
 {
-
     /**
      * @Form\Name("condition-undertaking")
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\ConditionUndertaking")
@@ -21,10 +20,7 @@ class ConditionUndertakingForm
     /**
      * @Form\Name("form-actions")
      * @Form\Attributes({"class":"actions-container"})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\ConditionUndertakingFormFormActions")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\CancelFormActions")
      */
     public $formActions = null;
-
-
 }
-

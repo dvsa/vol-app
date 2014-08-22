@@ -10,7 +10,6 @@ use Zend\Form\Annotation as Form;
  */
 class Fields
 {
-
     /**
      * @Form\Attributes({"id":"dob","class":"extra-long"})
      * @Form\Options({
@@ -30,7 +29,7 @@ class Fields
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a category",
-     *     "category": "case_stay_outcome"
+     *     "category": "stay_status"
      * })
      * @Form\Type("DynamicSelect")
      */
@@ -71,7 +70,4 @@ class Fields
      * @Form\Type("\Common\Form\Elements\InputFilters\WithdrawnDate")
      */
     public $withdrawnDate = null;
-
-
 }
-

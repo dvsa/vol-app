@@ -11,7 +11,6 @@ use Zend\Form\Annotation as Form;
  */
 class ApplicationDetails
 {
-
     /**
      * @Form\Attributes({"id":"","placeholder":"","class":"medium"})
      * @Form\Options({
@@ -19,7 +18,7 @@ class ApplicationDetails
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a category",
-     *     "category": "impounding_type"
+     *     "category": "impound_type"
      * })
      * @Form\Type("DynamicSelect")
      */
@@ -74,7 +73,4 @@ class ApplicationDetails
      * @Form\Type("DynamicSelect")
      */
     public $impoundingLegislationTypes = null;
-
-
 }
-

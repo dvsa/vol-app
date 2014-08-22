@@ -11,7 +11,6 @@ use Zend\Form\Annotation as Form;
  */
 class SearchAdvanced
 {
-
     /**
      * @Form\Attributes({"id":"","class":"extra-long"})
      * @Form\Options({
@@ -92,7 +91,4 @@ class SearchAdvanced
      * @Form\Type("Text")
      */
     public $companyNo = null;
-
-
 }
-

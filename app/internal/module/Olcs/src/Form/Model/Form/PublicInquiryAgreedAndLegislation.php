@@ -12,7 +12,6 @@ use Zend\Form\Annotation as Form;
  */
 class PublicInquiryAgreedAndLegislation
 {
-
     /**
      * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
@@ -159,7 +158,4 @@ class PublicInquiryAgreedAndLegislation
      * @Form\Type("\Zend\Form\Element\Button")
      */
     public $cancel = null;
-
-
 }
-

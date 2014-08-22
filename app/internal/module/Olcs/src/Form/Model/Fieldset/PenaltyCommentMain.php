@@ -11,7 +11,6 @@ use Zend\Form\Annotation as Form;
  */
 class PenaltyCommentMain
 {
-
     /**
      * @Form\Attributes({"id":"","class":"extra-long"})
      * @Form\Options({
@@ -46,7 +45,4 @@ class PenaltyCommentMain
      * @Form\Type("Hidden")
      */
     public $version = null;
-
-
 }
-

@@ -11,7 +11,6 @@ use Zend\Form\Annotation as Form;
  */
 class ProhibitionCommentMain
 {
-
     /**
      * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
@@ -40,7 +39,4 @@ class ProhibitionCommentMain
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":10,"max":100}})
      */
     public $prohibitionNote = null;
-
-
 }
-

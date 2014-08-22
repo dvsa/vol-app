@@ -12,7 +12,6 @@ use Zend\Form\Annotation as Form;
  */
 class Revoke
 {
-
     /**
      * @Form\Name("main")
      * @Form\Attributes({"class":"actions-container"})
@@ -23,10 +22,7 @@ class Revoke
     /**
      * @Form\Name("form-actions")
      * @Form\Attributes({"class":"actions-container"})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\RevokeFormActions")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\CancelFormActions")
      */
     public $formActions = null;
-
-
 }
-

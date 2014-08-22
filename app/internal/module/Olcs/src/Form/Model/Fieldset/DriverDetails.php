@@ -11,7 +11,6 @@ use Zend\Form\Annotation as Form;
  */
 class DriverDetails
 {
-
     /**
      * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
@@ -43,7 +42,4 @@ class DriverDetails
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":35}})
      */
     public $familyName = null;
-
-
 }
-

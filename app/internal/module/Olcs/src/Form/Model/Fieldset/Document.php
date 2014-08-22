@@ -10,7 +10,6 @@ use Zend\Form\Annotation as Form;
  */
 class Document
 {
-
     /**
      * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
@@ -45,7 +44,4 @@ class Document
      * @Form\Type("Hidden")
      */
     public $format = null;
-
-
 }
-

@@ -12,7 +12,6 @@ use Zend\Form\Annotation as Form;
  */
 class AnnualTestHistoryComment
 {
-
     /**
      * @Form\Name("main")
      * @Form\Options({"label":"Annual test history"})
@@ -23,10 +22,7 @@ class AnnualTestHistoryComment
     /**
      * @Form\Name("form-actions")
      * @Form\Attributes({"class":"actions-container"})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\FormActions")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\ResetFormActions")
      */
     public $formActions = null;
-
-
 }
-

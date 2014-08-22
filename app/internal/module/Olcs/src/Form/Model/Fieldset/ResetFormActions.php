@@ -9,9 +9,8 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("form-actions")
  * @Form\Attributes({"class":"actions-container"})
  */
-class RecommendFormActions
+class ResetFormActions
 {
-
     /**
      * @Form\Attributes({"type":"submit","class":"action--primary large"})
      * @Form\Options({
@@ -26,7 +25,7 @@ class RecommendFormActions
     public $submit = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary large"})
+     * @Form\Attributes({"type":"reset","class":"action--secondary large"})
      * @Form\Options({
      *     "label": "Cancel",
      *     "label_attributes": {
@@ -37,7 +36,4 @@ class RecommendFormActions
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
     public $cancel = null;
-
-
 }
-

@@ -11,7 +11,6 @@ use Zend\Form\Annotation as Form;
  */
 class Outcome
 {
-
     /**
      * @Form\Attributes({"id":"","placeholder":"","class":"medium"})
      * @Form\Options({
@@ -32,7 +31,7 @@ class Outcome
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a category",
-     *     "category": "impounding_outcome"
+     *     "category": "impound_outcome"
      * })
      * @Form\Type("DynamicSelect")
      */
@@ -59,7 +58,4 @@ class Outcome
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5,"max":4000}})
      */
     public $notes = null;
-
-
 }
-

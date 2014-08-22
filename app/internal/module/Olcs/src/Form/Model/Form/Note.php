@@ -11,7 +11,6 @@ use Zend\Form\Annotation as Form;
  */
 class Note
 {
-
     /**
      * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
@@ -56,7 +55,4 @@ class Note
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\NoteMain")
      */
     public $main = null;
-
-
 }
-

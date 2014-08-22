@@ -10,7 +10,6 @@ use Zend\Form\Annotation as Form;
  */
 class Search
 {
-
     /**
      * @Form\Attributes({"class":"medium","id":""})
      * @Form\Options({"label":"Licence number"})
@@ -79,7 +78,4 @@ class Search
      * @Form\Type("\Zend\Form\Element\Button")
      */
     public $search = null;
-
-
 }
-

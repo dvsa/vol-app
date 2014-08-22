@@ -12,7 +12,6 @@ use Zend\Form\Annotation as Form;
  */
 class ConvictionComment
 {
-
     /**
      * @Form\Name("main")
      * @Form\Options({"label":"Convictions"})
@@ -23,10 +22,7 @@ class ConvictionComment
     /**
      * @Form\Name("form-actions")
      * @Form\Attributes({"class":"actions-container"})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\FormActions")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\ResetFormActions")
      */
     public $formActions = null;
-
-
 }
-

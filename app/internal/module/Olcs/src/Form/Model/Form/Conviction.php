@@ -12,7 +12,6 @@ use Zend\Form\Annotation as Form;
  */
 class Conviction
 {
-
     /**
      * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
@@ -70,7 +69,4 @@ class Conviction
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\Offence")
      */
     public $offence = null;
-
-
 }
-

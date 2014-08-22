@@ -11,7 +11,6 @@ use Zend\Form\Annotation as Form;
  */
 class TasksHome
 {
-
     /**
      * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
@@ -130,7 +129,4 @@ class TasksHome
      * @Form\Type("Hidden")
      */
     public $limit = null;
-
-
 }
-

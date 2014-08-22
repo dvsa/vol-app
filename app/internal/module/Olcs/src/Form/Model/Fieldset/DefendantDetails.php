@@ -12,7 +12,6 @@ use Zend\Form\Annotation as Form;
  */
 class DefendantDetails
 {
-
     /**
      * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
@@ -20,7 +19,7 @@ class DefendantDetails
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a category",
-     *     "category": "defendant_types"
+     *     "category": "def_type"
      * })
      * @Form\Type("DynamicSelect")
      */
@@ -38,7 +37,4 @@ class DefendantDetails
      * @Form\Type("\Zend\Form\Element\Button")
      */
     public $lookupTypeSubmit = null;
-
-
 }
-

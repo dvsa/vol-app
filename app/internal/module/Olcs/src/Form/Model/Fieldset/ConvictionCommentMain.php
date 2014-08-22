@@ -11,7 +11,6 @@ use Zend\Form\Annotation as Form;
  */
 class ConvictionCommentMain
 {
-
     /**
      * @Form\Attributes({"id":"","class":"extra-long"})
      * @Form\Options({
@@ -40,7 +39,4 @@ class ConvictionCommentMain
      * @Form\Type("Hidden")
      */
     public $version = null;
-
-
 }
-
