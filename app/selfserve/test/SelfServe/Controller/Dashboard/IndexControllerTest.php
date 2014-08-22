@@ -23,6 +23,8 @@ use PHPUnit_Framework_TestCase;
  */
 class IndexControllerTest extends PHPUnit_Framework_TestCase
 {
+    private $organisationUserResponse;
+
     /**
      * SetUp the controller
      */
@@ -84,6 +86,22 @@ class IndexControllerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test createAction without organisation
+     *
+     * @expectedException \Exception
+     */
+    public function testCreateActionWithoutOrganisation()
+    {
+        $this->organisationUserResponse = array('Count' => 0);
+
+        $this->setUpAction('create');
+
+        $response = $this->controller->createAction();
+
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
      * Mock rest calls
      *
      * @param string $service
@@ -108,31 +126,52 @@ class IndexControllerTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        if ($service == 'User' && $method == 'GET' && $bundle == $organisationIdBundle) {
-            return array(
-                'organisation' => array(
-                    'id' => 1
-                )
-            );
+        if ($service == 'OrganisationUser' && $method == 'GET' && $bundle == $organisationIdBundle) {
+
+            if (empty($this->organisationUserResponse)) {
+                return array(
+                    'Count' => 1,
+                    'Results' => array(
+                        array(
+                            'organisation' => array(
+                                'id' => 1
+                            )
+                        )
+                    )
+                );
+            } else {
+                return $this->organisationUserResponse;
+            }
         }
 
         $applicationsBundle = array(
             'properties' => array(),
             'children' => array(
-                'organisation' => array(
-                    'properties' => array(),
+                'organisationUsers' => array(
+                    'properties' => null,
                     'children' => array(
-                        'licences' => array(
-                            'properties' => array(
-                                'licNo'
-                            ),
+                        'organisation' => array(
+                            'properties' => array(),
                             'children' => array(
-                                'applications' => array(
+                                'licences' => array(
                                     'properties' => array(
-                                        'id',
-                                        'createdOn',
-                                        'receivedDate',
-                                        'status'
+                                        'licNo'
+                                    ),
+                                    'children' => array(
+                                        'applications' => array(
+                                            'properties' => array(
+                                                'id',
+                                                'createdOn',
+                                                'receivedDate'
+                                            ),
+                                            'children' => array(
+                                                'status' => array(
+                                                    'properties' => array(
+                                                        'id'
+                                                    )
+                                                )
+                                            )
+                                        )
                                     )
                                 )
                             )
@@ -144,16 +183,22 @@ class IndexControllerTest extends PHPUnit_Framework_TestCase
 
         if ($service == 'User' && $method == 'GET' && $bundle == $applicationsBundle) {
             return array(
-                'organisation' => array(
-                    'licences' => array(
-                        array(
-                            'licNo' => 123,
-                            'applications' => array(
+                'organisationUsers' => array(
+                    array(
+                        'organisation' => array(
+                            'licences' => array(
                                 array(
-                                    'id' => 1,
-                                    'createdOn' => '2014-01-01 00:00:00',
-                                    'receivedDate' => '2014-01-01 00:00:00',
-                                    'status' => 'app_status.new'
+                                    'licNo' => 123,
+                                    'applications' => array(
+                                        array(
+                                            'id' => 1,
+                                            'createdOn' => '2014-01-01 00:00:00',
+                                            'receivedDate' => '2014-01-01 00:00:00',
+                                            'status' => array(
+                                                'id' => 'apsts_new'
+                                            )
+                                        )
+                                    )
                                 )
                             )
                         )

@@ -169,7 +169,7 @@ class IndexController extends AbstractController
         $organisation = $this->makeRestCall('OrganisationUser', 'GET', ['user' => $userId], $this->organisationUserBundle);
 
         if ($organisation['Count'] < 1) {
-            return null;
+            throw new \Exception('Organisation not found');
         }
 
         return $organisation['Results'][0]['organisation']['id'];
