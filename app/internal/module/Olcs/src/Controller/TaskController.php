@@ -27,19 +27,10 @@ class TaskController extends AbstractController
      */
     public function addAction()
     {
-        $licence = $this->getLicence();
+        $data = $this->mapDefaultData();
+        $filters = $this->mapFilters($data);
 
         $form = $this->getForm('task');
-
-        $data = $this->flattenData($this->getRequest()->getPost()->toArray());
-        $filters = [];
-
-        if (isset($data['assignedToTeam'])) {
-            $filters['team'] = $data['assignedToTeam'];
-        }
-        if (isset($data['category'])) {
-            $filters['category'] = $data['category'];
-        }
 
         $selects = array(
             'details' => array(
@@ -47,18 +38,20 @@ class TaskController extends AbstractController
                 'taskSubCategory' => $this->getListData('TaskSubCategory', $filters)
             ),
             'assignment' => array(
-                'assignedToTeam' => $this->getListData('Team', []),
+                'assignedToTeam' => $this->getListData('Team'),
                 'assignedToUser' => $this->getListData('User', $filters, 'name', 'id', 'Unassigned')
             )
         );
 
-        foreach ($selects as $fieldset => $data) {
-            foreach ($data as $name => $options) {
+        foreach ($selects as $fieldset => $inputs) {
+            foreach ($inputs as $name => $options) {
                 $form->get($fieldset)
                     ->get($name)
                     ->setValueOptions($options);
             }
         }
+
+        $licence = $this->getLicence();
 
         $url = sprintf(
             '<a href="%s">%s</a>',
@@ -71,9 +64,12 @@ class TaskController extends AbstractController
             $licence['licNo']
         );
 
-        $form->get('details')->get('link')->setValue($url);
-        // really not sure about this...
-        $form->get('details')->get('status')->setValue('<b>Open</b>');
+        $details = $form->get('details');
+
+        $details->get('link')->setValue($url);
+        $details->get('status')->setValue('<b>Open</b>');
+
+        $form->setData(['assignment' => $data]);
 
         $this->formPost($form, 'processAddTask');
 
@@ -87,11 +83,18 @@ class TaskController extends AbstractController
         return $this->renderView($view, 'Add task');
     }
 
+    /**
+     * Override the parent getListData method simply to save us constantly having to
+     * supply the $showAll parameter as 'Please select'
+     */
     protected function getListData($entity, $data = array(), $titleKey = 'name', $primaryKey = 'id', $showAll = 'Please select')
     {
         return parent::getListData($entity, $data, $titleKey, $primaryKey, $showAll);
     }
 
+    /**
+     * Callback invoked when the form is valid
+     */
     public function processAddTask($data)
     {
         $licence = $this->getFromRoute('licence');
@@ -100,7 +103,7 @@ class TaskController extends AbstractController
 
         $data['licence'] = $licence;
 
-        $data['urgent'] = isset($data['urgent']) ? 'Y' : 'N';
+        $data['urgent'] = $data['urgent'] == '1' ? 'Y' : 'N';
 
         $result = $this->processAdd($data, 'Task');
 
@@ -112,15 +115,46 @@ class TaskController extends AbstractController
         }
     }
 
-    private function flattenData($data)
+    /**
+     * Merge some sensible default dropdown values
+     * with any POST data we may have
+     */
+    private function mapDefaultData()
     {
-        if (empty($data)) {
-            return $data;
+        $defaults = [
+            'assignedToUser' => $this->getLoggedInUser(),
+            'assignedToTeam' => 2
+        ];
+
+        $data = $this->getRequest()->getPost()->toArray();
+        if (!empty($data)) {
+            $data = array_merge(
+                $data['details'],
+                $data['assignment']
+            );
         }
 
         return array_merge(
-            $data['details'],
-            $data['assignment']
+            $defaults,
+            $data
         );
+    }
+
+    /**
+     * Map some flattened data into relevant dropdown
+     * filters
+     */
+    private function mapFilters($data)
+    {
+        $filters = [];
+
+        if (!empty($data['assignedToTeam'])) {
+            $filters['team'] = $data['assignedToTeam'];
+        }
+        if (!empty($data['category'])) {
+            $filters['category'] = $data['category'];
+        }
+
+        return $filters;
     }
 }

@@ -36,7 +36,7 @@ return [
                     ],
                     'taskSubCategory' => [
                         'type' => 'select-noempty',
-                        'label' => 'tasks.data.sub_category',
+                        'label' => 'tasks.data.sub_category'
                     ],
                     'description' => [
                         'type' => 'text',
@@ -59,6 +59,7 @@ return [
                     'assignedToUser' => [
                         'type' => 'select-noempty',
                         'label' => 'tasks.data.owner',
+                        'filters' => '\Common\Form\Elements\InputFilters\SelectEmpty'
                     ],
                 ]
             ],

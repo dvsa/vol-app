@@ -18,14 +18,14 @@ trait TaskSearchTrait
     protected function mapTaskFilters($extra = array())
     {
         $defaults = array(
-            'owner'  => $this->getLoggedInUser(),
-            'team'   => 2,  // we've no stub for this, but it matches the logged in user's team
-            'date'   => 'today',
-            'status' => 'open',
-            'sort'   => 'actionDate',
-            'order'  => 'ASC',
-            'page'   => 1,
-            'limit'  => 10
+            'assignedToUser' => $this->getLoggedInUser(),
+            'assignedToTeam' => 2,  // we've no stub for this, but it matches the logged in user's team
+            'date'           => 'today',
+            'status'         => 'open',
+            'sort'           => 'actionDate',
+            'order'          => 'ASC',
+            'page'           => 1,
+            'limit'          => 10
         );
 
         $filters = array_merge(
