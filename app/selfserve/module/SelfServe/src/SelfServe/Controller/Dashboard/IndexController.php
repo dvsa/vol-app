@@ -130,7 +130,6 @@ class IndexController extends AbstractController
 
         $data = [
             'version' => 1,
-            'licNo' => '',
             'status' => 'lsts_new',
             'organisation' => $this->getOrganisationId($user['id']),
         ];
