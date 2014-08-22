@@ -21,8 +21,9 @@ return [
                         'type' => 'html',
                         'label' => 'tasks.data.status',
                     ],
+
                     'actionDate' => [
-                        'type' => 'dateSelectWithEmpty',
+                        'type' => 'dateSelectAllowFuture',
                         'label' => 'tasks.data.actionDate',
                     ],
                     'urgent' => [
@@ -40,6 +41,7 @@ return [
                     'description' => [
                         'type' => 'text',
                         'label' => 'tasks.data.description',
+                        'filters' => '\Common\Form\Elements\InputFilters\TextMax255Required',
                     ],
 
                 ]
