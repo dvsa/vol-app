@@ -1082,7 +1082,49 @@ class AuthorisationControllerTest extends AbstractApplicationControllerTestCase
             )
         );
 
+        $this->mockedMethods = array_merge(
+            $this->mockedMethods, 
+            array('getPostcodeService', 'getPostcodeTrafficAreaValidator', 'getPostcodeValidatorsChain')
+        );
         $this->setUpAction('add', null, $post, $files);
+
+        $mockPostcodeValidatorsChain = $this->getMock('\StdClass', array('attach'));
+        $mockPostcodeValidatorsChain->expects($this->any())
+            ->method('attach')
+            ->will($this->returnValue(true));
+        
+        $this->controller->expects($this->any())
+            ->method('getPostcodeValidatorsChain')
+            ->will($this->returnValue($mockPostcodeValidatorsChain));
+        
+        $mockPostcodeValidator = $this->getMock(
+            '\Common\Form\Elements\Validators\OperatingCentresTrafficAreaValidator',
+            array('isValid', 'setNiFlag', 'setOperatingCentresCount', 'setTrafficArea')
+        );
+
+        $mockPostcodeValidator->expects($this->any())
+            ->method('isValid')
+            ->will($this->returnValue(true));
+
+        $this->controller->expects($this->any())
+            ->method('getPostcodeTrafficAreaValidator')
+            ->will($this->returnValue($mockPostcodeValidator));
+
+        $mockPostcodeService = $this->getMock('\StdClass', array('getTrafficAreaByPostcode'));
+       
+        $mockPostcodeService->expects($this->any())
+            ->method('getTrafficAreaByPostcode')
+            ->will($this->returnValueMap(
+                    array(
+                        array('LS1 4ES', array('B', 'North East of England')),
+                        array('BT1 4EE', array('N', 'Northern Ireland')),
+                    )));
+       
+        
+        $this->controller->expects($this->any())
+            ->method('getPostcodeService')
+            ->will($this->returnValue($mockPostcodeService));
+       
         $this->goodsOrPsv = $goodsOrPsv;
         $this->controller->setEnabledCsrf(false);
 

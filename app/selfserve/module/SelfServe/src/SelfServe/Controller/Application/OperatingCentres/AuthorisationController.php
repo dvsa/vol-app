@@ -384,13 +384,13 @@ class AuthorisationController extends OperatingCentresController
         // add traffic area validator
         $licenceData = $this->getLicenceData();
 
-        $trafficAreaValidator = $this->getServiceLocator()->get('postcodeTrafficAreaValidator');
+        $trafficAreaValidator = $this->getPostcodeTrafficAreaValidator();
         $trafficAreaValidator->setNiFlag($licenceData['niFlag']);
         $trafficAreaValidator->setOperatingCentresCount($this->getOperatingCentresCount());
         $trafficAreaValidator->setTrafficArea($this->getTrafficArea());
 
-        $postcodeValidators = $form->getInputFilter()->get('address')->get('postcode')->getValidatorChain();
-        $postcodeValidators->attach($trafficAreaValidator);
+        $postcodeValidatorChain = $this->getPostcodeValidatorsChain($form);
+        $postcodeValidatorChain->attach($trafficAreaValidator);
 
         $form->getInputFilter()->get('address')->get('postcode')->setRequired(false);
 
@@ -455,7 +455,7 @@ class AuthorisationController extends OperatingCentresController
 
                 // first Operating Centre was just added or we are editing the first one
                 if ($ocCount == 1) {
-                    $postcodeService = $this->getServiceLocator()->get('postcode');
+                    $postcodeService = $this->getPostcodeService();
                     list($trafficAreaId, $trafficAreaName) =
                         $postcodeService->getTrafficAreaByPostcode(
                             $data['operatingCentre']['addresses']['address']['postcode']
@@ -811,5 +811,35 @@ class AuthorisationController extends OperatingCentresController
 
         return $this->tableData;
 
+    }
+
+    /**
+     * Get postcode service
+     *
+     * @return Common\Service\Postcode\Postcode
+     */
+    public function getPostcodeService()
+    {
+        return $this->getServiceLocator()->get('postcode');
+    }
+    
+    /**
+     * Get postcode traffic area validator
+     *
+     * @return Common\Form\Elements\Validator\OperatingCentreTrafficAreaValidator
+     */
+    public function getPostcodeTrafficAreaValidator()
+    {
+        return $this->getServiceLocator()->get('postcodeTrafficAreaValidator');
+    }
+    
+    /**
+     * Get postcode validators chain
+     *
+     * @return Zend\Validator\ValidatorChain
+     */
+    public function getPostcodeValidatorsChain($form)
+    {
+        return $form->getInputFilter()->get('address')->get('postcode')->getValidatorChain();
     }
 }
