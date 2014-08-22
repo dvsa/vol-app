@@ -739,7 +739,8 @@ class AuthorisationController extends OperatingCentresController
      */
     public function checkForCrudAction($route = null, $params = array(), $itemIdParam = 'id')
     {
-        $action = strtolower($this->params()->fromPost('action'));
+        $table = $this->params()->fromPost('table');
+        $action = isset($table['action']) ? strtolower($table['action']) : strtolower($this->params()->fromPost('action'));
         if (empty($action)) {
             return false;
         }
