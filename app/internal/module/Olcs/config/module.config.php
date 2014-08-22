@@ -23,6 +23,7 @@ return array(
             'CaseStayController' => 'Olcs\Controller\CaseStayController',
             'CasePenaltyController' => 'Olcs\Controller\CasePenaltyController',
             'CaseProhibitionController' => 'Olcs\Controller\CaseProhibitionController',
+            'CaseProhibitionDefectController' => 'Olcs\Controller\CaseProhibitionDefectController',
             'CaseAnnualTestHistoryController' => 'Olcs\Controller\CaseAnnualTestHistoryController',
             'SubmissionNoteController' => 'Olcs\Controller\Submission\SubmissionNoteController',
             'CaseImpoundingController' => 'Olcs\Controller\CaseImpoundingController',
@@ -31,7 +32,19 @@ return array(
             'CasePiController' => 'Olcs\Controller\CasePiController',
             'DocumentController' => 'Olcs\Controller\DocumentController',
             'DefendantSearchController' => 'Olcs\DefendantSearchController',
-            'LicenceController' => 'Olcs\Controller\Licence\LicenceController'
+            'LicenceController' => 'Olcs\Controller\Licence\LicenceController',
+            'LicenceDetailsOverviewController' => 'Olcs\Controller\Licence\Details\OverviewController',
+            'LicenceDetailsTypeOfLicenceController' => 'Olcs\Controller\Licence\Details\TypeOfLicenceController',
+            'LicenceDetailsBusinessDetailsController' => 'Olcs\Controller\Licence\Details\BusinessDetailsController',
+            'LicenceDetailsAddressController' => 'Olcs\Controller\Licence\Details\AddressController',
+            'LicenceDetailsPeopleController' => 'Olcs\Controller\Licence\Details\PeopleController',
+            'LicenceDetailsOperatingCentreController' => 'Olcs\Controller\Licence\Details\OperatingCentreController',
+            'LicenceDetailsTransportManagerController' => 'Olcs\Controller\Licence\Details\TransportManagerController',
+            'LicenceDetailsVehicleController' => 'Olcs\Controller\Licence\Details\VehicleController',
+            'LicenceDetailsSafetyController' => 'Olcs\Controller\Licence\Details\SafetyController',
+            'LicenceDetailsConditionUndertakingController' =>
+                'Olcs\Controller\Licence\Details\ConditionUndertakingController',
+            'LicenceDetailsTaxiPhvController' => 'Olcs\Controller\Licence\Details\TaxiPhvController',
         )
     ),
     'view_manager' => array(
