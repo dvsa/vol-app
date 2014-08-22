@@ -1,7 +1,9 @@
 $(function() {
+  var form = "[name=tasks-home]";
+
   OLCS.formHandler({
     // the form to bind to
-    form: "#tasks-home_form",
+    form: form,
     // make sure the primary submit button is hidden
     hideSubmit: true,
     // where we'll render any response data to
@@ -12,16 +14,16 @@ $(function() {
   });
 
   OLCS.cascadeInput({
-    source: "#assignedToTeam",
-    dest: "#assignedToUser",
+    source: form + " [name=assignedToTeam]",
+    dest: form + " [name=assignedToUser]",
     process: function(value, done) {
       $.get("/tasks/users/" + value, done);
     }
   });
 
   OLCS.cascadeInput({
-    source: "#category",
-    dest: "#taskSubCategory",
+    source: form + " [name=category]",
+    dest: form + " [name=taskSubCategory]",
     url: "/tasks/sub-categories"
   });
 
