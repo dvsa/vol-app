@@ -1,23 +1,29 @@
 <?php
 
-list($allRoutes, $controllers, $journeys) = include(__DIR__ . '/journeys.config.php');
 
-$invokeables = array_merge(
-    $controllers, array(
-    'SelfServe\Dashboard\Index' => 'SelfServe\Controller\Dashboard\IndexController',
-    )
+$routes = [];
+
+$routeArray = array_map(
+    function ($file) {
+        return include $file;
+    },
+    glob(__DIR__ . '/routes/*.routes.php')
 );
 
+foreach ($routeArray as $rs) {
+    $routes += $rs;
+}
+
 return array(
-    'journeys' => $journeys,
     'router' => array(
-        'routes' => $allRoutes
+        'routes' => $routes
     ),
     'controllers' => array(
-        'invokables' => $invokeables
+        'invokables' => array(
+            'SelfServe\Dashboard\Index' => 'SelfServe\Controller\Dashboard\IndexController',
+        )
     ),
     'local_forms_path' => __DIR__ . '/../src/SelfServe/Form/Forms/',
-    'local_scripts_path' => [__DIR__ . '/../assets/js/inline/'],
     'tables' => array(
         'config' => array(
             __DIR__ . '/../src/SelfServe/Table/Tables/'

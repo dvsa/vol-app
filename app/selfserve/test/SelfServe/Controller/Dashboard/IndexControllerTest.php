@@ -43,7 +43,7 @@ class IndexControllerTest extends PHPUnit_Framework_TestCase
         $this->response = new Response();
         $this->routeMatch = new RouteMatch(array('action' => $action));
 
-        $this->routeMatch->setMatchedRouteName('home/dashboard');
+        $this->routeMatch->setMatchedRouteName('application_start');
 
         $this->event = new MvcEvent();
         $config = $serviceManager->get('Config');
