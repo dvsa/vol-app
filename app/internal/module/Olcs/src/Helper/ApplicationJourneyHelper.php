@@ -92,10 +92,10 @@ class ApplicationJourneyHelper implements ServiceManager\ServiceLocatorAwareInte
         $licenceNo = isset($results['licence']['licNo']) ? $results['licence']['licNo'] : '';
 
         if (!empty($licenceNo)) {
-            $url = $this->getServiceLocator()->get('viewhelpermanager')->get('url');
+            /*$url = $this->getServiceLocator()->get('viewhelpermanager')->get('url');
             $licenceUrl = $url('licence', array('licence' => $results['licence']['id']));
 
-            $licenceNo = '<a href="' . $licenceUrl . '">' . $licenceNo . '</a>';
+            $licenceNo = '<a href="' . $licenceUrl . '">' . $licenceNo . '</a>';*/
         }
 
         $pageTitle = $licenceNo;
