@@ -1,10 +1,7 @@
 <div class="four-fiths--left">
     <?php
-        echo $this->navigation('navigation')
-                  ->menu($this->navigation()->findOneBy('id', 'licence'))
-                  ->setUlClass('horizontal-navigation')
-                  ->setAddClassToListItem(true)
-                  ->setPartial('layout/partials/tabs');
+    echo $this->navigation('navigation')->menu($this->navigation()->findOneBy('id', 'application'))
+            ->setPartial('layout/partials/tabs');
     ?>
     <div class="content">
       <?php echo $this->content ?>

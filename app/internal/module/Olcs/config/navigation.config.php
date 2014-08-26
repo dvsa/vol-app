@@ -434,6 +434,12 @@ return array(
                     )
                 )
             )
+        ),
+        array(
+            'id' => 'application',
+            'label' => 'Application',
+            'route' => 'Application',
+            'use_route_match' => true
         )
     )
 );
