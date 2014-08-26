@@ -98,8 +98,8 @@ class TaskController extends AbstractController
                 'inlineScript' => $this->loadScripts(['task-form'])
             ]
         );
+
         $view->setTemplate('task/add');
-        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
         return $this->renderView($view, $type . ' task');
     }
 
