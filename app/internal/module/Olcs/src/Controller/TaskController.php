@@ -127,13 +127,9 @@ class TaskController extends AbstractController
             'assignedToTeam' => 2
         ];
 
-        $data = $this->getRequest()->getPost()->toArray();
-        if (!empty($data)) {
-            $data = array_merge(
-                $data['details'],
-                $data['assignment']
-            );
-        }
+        $data = $this->flattenData(
+            $this->getRequest()->getPost()->toArray()
+        );
 
         return array_merge(
             $defaults,
@@ -157,5 +153,20 @@ class TaskController extends AbstractController
         }
 
         return $filters;
+    }
+
+    /**
+     * Flatten nested fieldset data into a collapsed
+     * array
+     */
+    private function flattenData($data)
+    {
+        if (empty($data)) {
+            return [];
+        }
+        return array_merge(
+            $data['details'],
+            $data['assignment']
+        );
     }
 }
