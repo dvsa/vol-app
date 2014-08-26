@@ -396,6 +396,21 @@ return [
                 'controller' => 'CaseProhibitionController',
                 'action' => 'index'
             ]
+        ],
+        'may_terminate' => true,
+        'child_routes' => [
+            'defect' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/defect[/:defect]',
+                    'constraints' => [
+                        'defect' => '[0-9]+'
+                    ],
+                    'defaults' => [
+                        'controller' => 'CaseProhibitionDefectController'
+                    ]
+                ]
+            ]
         ]
     ],
     'conviction' => [
