@@ -9,6 +9,7 @@
 namespace Olcs\Controller;
 
 use Zend\View\Model\ViewModel;
+use Zend\Json\Json;
 use Olcs\Controller\Traits;
 
 /**
@@ -73,6 +74,13 @@ class TaskController extends AbstractController
 
         $this->formPost($form, 'processAddTask');
 
+        // we have to allow for the fact that our process callback has
+        // already set some response data. If so, respect it and
+        // bail out early
+        if ($this->getResponse()->getContent() !== "") {
+            return $this->getResponse();
+        }
+
         $view = new ViewModel(
             [
                 'form' => $form,
@@ -109,10 +117,24 @@ class TaskController extends AbstractController
         $result = $this->processAdd($data, 'Task');
 
         if (isset($result['id'])) {
-            $this->redirect()->toRoute(
-                'licence/processing',
-                array('licence' => $licence)
-            );
+            $route = 'licence/processing';
+            $params = ['licence' => $licence];
+
+            if ($this->getRequest()->isXmlHttpRequest()) {
+                $data = [
+                    'status' => 302,
+                    'location' => $this->url()->fromRoute($route, $params)
+                ];
+
+                $this->getResponse()->getHeaders()->addHeaders(
+                    ['Content-Type' => 'application/json']
+                );
+                $this->getResponse()->setContent(Json::encode($data));
+                return;
+            }
+
+            // bog standard redirect
+            $this->redirect()->toRoute($route, $params);
         }
     }
 
