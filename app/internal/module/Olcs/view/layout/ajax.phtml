@@ -1,0 +1,20 @@
+<div class="js-response">
+  <div class="js-title">
+    <?php echo (isset($this->pageTitle) ? $this->translate($this->pageTitle) : ''); ?>
+  </div>
+  <div class="js-body">
+    <div class="js-content">
+      <?php echo $this->content; ?>
+    </div>
+
+    <?php if (isset($this->inlineScript) && is_array($this->inlineScript)): ?>
+      <?php foreach ($this->inlineScript as $script): ?>
+        <?php $this->inlineScript()->appendScript($script) ?>
+      <?php endforeach; ?>
+    <?php endif; ?>
+
+    <div class="js-script">
+      <?php echo $this->inlineScript() ?>
+    </div>
+  </div>
+</div>
