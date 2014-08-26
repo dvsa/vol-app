@@ -28,7 +28,18 @@ class TaskController extends AbstractController
      */
     public function addAction()
     {
+        return $this->formAction('Add');
+    }
+
+    public function editAction()
+    {
+        return $this->formAction('Edit');
+    }
+
+    private function formAction($type)
+    {
         $data = $this->mapDefaultData();
+
         $filters = $this->mapFilters($data);
 
         $form = $this->getForm('task');
@@ -70,9 +81,9 @@ class TaskController extends AbstractController
         $details->get('link')->setValue($url);
         $details->get('status')->setValue('<b>Open</b>');
 
-        $form->setData(['assignment' => $data]);
+        $form->setData($this->expandData($data));
 
-        $this->formPost($form, 'processAddTask');
+        $this->formPost($form, 'process' . $type . 'Task');
 
         // we have to allow for the fact that our process callback has
         // already set some response data. If so, respect it and
@@ -89,7 +100,7 @@ class TaskController extends AbstractController
         );
         $view->setTemplate('task/add');
         $view->setTerminal($this->getRequest()->isXmlHttpRequest());
-        return $this->renderView($view, 'Add task');
+        return $this->renderView($view, $type . ' task');
     }
 
     /**
@@ -106,17 +117,25 @@ class TaskController extends AbstractController
      */
     public function processAddTask($data)
     {
+        return $this->processForm($data, 'Add');
+    }
+
+    public function processEditTask($data)
+    {
+        return $this->processForm($data, 'Edit');
+    }
+
+    private function processForm($data, $type)
+    {
         $licence = $this->getFromRoute('licence');
 
         $data = $this->flattenData($data);
 
-        $data['licence'] = $licence;
+        $method = 'process' . $type;
 
-        $data['urgent'] = $data['urgent'] == '1' ? 'Y' : 'N';
+        $result = $this->$method($data, 'Task');
 
-        $result = $this->processAdd($data, 'Task');
-
-        if (isset($result['id'])) {
+        if ($type === 'Edit' || isset($result['id'])) {
             $route = 'licence/processing';
             $params = ['licence' => $licence];
 
@@ -149,12 +168,43 @@ class TaskController extends AbstractController
             'assignedToTeam' => 2
         ];
 
+        if ($this->params()->fromRoute('task')) {
+            $childProperties = [
+                'category', 'taskSubCategory',
+                'assignedToTeam', 'assignedToUser'
+            ];
+            $bundle = [
+                'children' => []
+            ];
+            foreach ($childProperties as $child) {
+                $bundle['children'][$child] = [
+                    'properties' => ['id']
+                ];
+            }
+
+            $resource = $this->makeRestCall(
+                'Task',
+                'GET',
+                ['id' => $this->params()->fromRoute('task')],
+                $bundle
+            );
+
+            foreach ($childProperties as $child) {
+                if (isset($resource[$child]['id'])) {
+                    $resource[$child] = $resource[$child]['id'];
+                }
+            }
+        } else {
+            $resource = [];
+        }
+
         $data = $this->flattenData(
             $this->getRequest()->getPost()->toArray()
         );
 
         return array_merge(
             $defaults,
+            $resource,
             $data
         );
     }
@@ -183,12 +233,34 @@ class TaskController extends AbstractController
      */
     private function flattenData($data)
     {
-        if (empty($data)) {
-            return [];
+        if (isset($data['details']) && isset($data['assignment'])) {
+            $data = array_merge(
+                $data['details'],
+                $data['assignment'],
+                [
+                    'id' => $data['id'],
+                    'version' => $data['version']
+                ]
+            );
         }
-        return array_merge(
-            $data['details'],
-            $data['assignment']
-        );
+
+        $data['licence'] = $this->getFromRoute('licence');
+        $data['urgent'] = isset($data['urgent']) && $data['urgent'] == '1' ? 'Y' : 'N';
+
+        return $data;
+    }
+
+    private function expandData($data)
+    {
+        if (isset($data['urgent'])) {
+            $data['urgent'] = $data['urgent'] === 'Y' ? 1 : 0;
+        }
+
+        return [
+            'details' => $data,
+            'assignment' => $data,
+            'id' => isset($data['id']) ? $data['id'] : '',
+            'version' => isset($data['version']) ? $data['version'] : ''
+        ];
     }
 }
