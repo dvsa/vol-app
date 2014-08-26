@@ -1,5 +1,8 @@
 <?php
 
+list($allRoutes, $controllers, $journeys) = include(
+    __DIR__ . '/../../../vendor/olcs/OlcsCommon/Common/config/journeys.config.php'
+);
 
 $routes = [];
 
@@ -13,6 +16,8 @@ $routeArray = array_map(
 foreach ($routeArray as $rs) {
     $routes += $rs;
 }
+
+$routes = array_merge($allRoutes, $routes);
 
 return array(
     'router' => array(
@@ -55,5 +60,13 @@ return array(
             __DIR__ . '/../view/self-serve'
         )
     ),
-    'asset_path' => '//dvsa-static.olcsdv-ap01.olcs.npm'
+    'asset_path' => '//dvsa-static.olcsdv-ap01.olcs.npm',
+    'application_journey' => array(
+        'templates' => array(
+            'not-found' => 'self-serve/journey/not-found',
+            'navigation' => 'self-serve/journey/application/navigation',
+            'main' => 'self-serve/journey/application/main',
+            'layout' => 'self-serve/journey/application/layout'
+        )
+    )
 );
