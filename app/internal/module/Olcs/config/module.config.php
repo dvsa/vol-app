@@ -85,6 +85,9 @@ return array(
     ),
     'asset_path' => '//dvsa-static.olcsdv-ap01.olcs.npm',
     'application_journey' => array(
+        'access_keys' => array(
+            'internal'
+        ),
         'templates' => array(
             'not-found' => 'journey/not-found',
             'navigation' => 'journey/application/navigation',
@@ -95,10 +98,6 @@ return array(
             'pre-render' => array(
                 new Olcs\Helper\ApplicationJourneyHelper(),
                 'render'
-            ),
-            'navigation' => array(
-                new Olcs\Helper\ApplicationJourneyHelper(),
-                'renderNavigation'
             )
         )
     )

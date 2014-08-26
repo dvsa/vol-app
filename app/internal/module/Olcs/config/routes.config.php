@@ -4,6 +4,64 @@ list($allRoutes, $controllers, $journeys) = include(
     __DIR__ . '/../../../vendor/olcs/OlcsCommon/Common/config/journeys.config.php'
 );
 
+// @NOTE unfortunately because the application routes are generated automagically, we need to add the other child routes
+// here
+$allRoutes['Application']['child_routes'] = array_merge(
+    $allRoutes['Application']['child_routes'],
+    array(
+        'case' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'case/',
+                'defaults' => array(
+                    'controller' => 'ApplicationController',
+                    'action' => 'case'
+                )
+            )
+        ),
+        'environmental' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'environmental/',
+                'defaults' => array(
+                    'controller' => 'ApplicationController',
+                    'action' => 'environmental'
+                )
+            )
+        ),
+        'document' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'document/',
+                'defaults' => array(
+                    'controller' => 'ApplicationController',
+                    'action' => 'document'
+                )
+            )
+        ),
+        'processing' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'processing/',
+                'defaults' => array(
+                    'controller' => 'ApplicationController',
+                    'action' => 'processing'
+                )
+            )
+        ),
+        'fee' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'fee/',
+                'defaults' => array(
+                    'controller' => 'ApplicationController',
+                    'action' => 'fee'
+                )
+            )
+        )
+    )
+);
+
 return array_merge(
     $allRoutes,
     [

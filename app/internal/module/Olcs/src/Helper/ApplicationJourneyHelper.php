@@ -16,19 +16,31 @@ use Zend\View\Model\ViewModel;
  */
 class ApplicationJourneyHelper
 {
-    public function render($layout)
+    /**
+     * Setup the layouts and then render
+     *
+     * @param ViewModel $content
+     * @return ViewModel
+     */
+    public function render($content)
     {
-        $header = $this->getPageHeader();
+        $header = $this->renderPageHeader();
 
-        return $this->getBaseLayout($header, $layout);
+        $layout = new ViewModel();
+        $layout->setTemplate('layout/application');
+        $layout->addChild($content, 'content');
+
+        return $this->renderBaseLayout($header, $layout);
     }
 
-    public function renderNavigation()
-    {
-        
-    }
-
-    protected function getBaseLayout($header, $layout)
+    /**
+     * Render the base layout
+     *
+     * @param ViewModel $header
+     * @param ViewModel $layout
+     * @return ViewModel
+     */
+    protected function renderBaseLayout($header, $layout)
     {
         $base = new ViewModel();
         $base->setTemplate('layout/base')
@@ -40,7 +52,12 @@ class ApplicationJourneyHelper
         return $base;
     }
 
-    protected function getPageHeader()
+    /**
+     * Render the page header
+     *
+     * @return ViewModel
+     */
+    protected function renderPageHeader()
     {
         $header = new ViewModel(
             array(

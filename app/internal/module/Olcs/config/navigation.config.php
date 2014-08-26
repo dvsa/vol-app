@@ -469,7 +469,37 @@ return array(
                     'route' => 'Application',
                     'use_route_match' => true,
                     'pages' => $navItems
-                )
+                ),
+                array(
+                    'id' => 'application_case',
+                    'label' => 'Cases',
+                    'route' => 'Application/case',
+                    'use_route_match' => true
+                ),
+                array(
+                    'id' => 'application_environmental',
+                    'label' => 'Environmental',
+                    'route' => 'Application/environmental',
+                    'use_route_match' => true
+                ),
+                array(
+                    'id' => 'application_document',
+                    'label' => 'Docs & attachments',
+                    'route' => 'Application/document',
+                    'use_route_match' => true
+                ),
+                array(
+                    'id' => 'application_processing',
+                    'label' => 'Processing',
+                    'route' => 'Application/processing',
+                    'use_route_match' => true
+                ),
+                array(
+                    'id' => 'application_fee',
+                    'label' => 'Fees',
+                    'route' => 'Application/fee',
+                    'use_route_match' => true
+                ),
             )
         )
     )

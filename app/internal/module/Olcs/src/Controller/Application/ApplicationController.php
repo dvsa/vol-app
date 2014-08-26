@@ -8,7 +8,8 @@
 namespace Olcs\Controller\Application;
 
 use Olcs\Controller\AbstractController;
-use Olcs\Controller\Traits;
+use Zend\View\Model\ViewModel;
+use Olcs\Helper\ApplicationJourneyHelper;
 
 /**
  * Application Controller
@@ -17,15 +18,78 @@ use Olcs\Controller\Traits;
  */
 class ApplicationController extends AbstractController
 {
-    use Traits\LicenceControllerTrait;
-
-    public function indexAction()
+    /**
+     * Placeholder stub
+     *
+     * @return ViewModel
+     */
+    public function caseAction()
     {
-        $this->pageLayout = 'application';
-
-        $view = $this->getViewWithLicence();
+        $view = new ViewModel();
         $view->setTemplate('application/index');
 
-        return $this->renderView($view);
+        $applicationJourneyHelper = new ApplicationJourneyHelper();
+
+        return $applicationJourneyHelper->render($view);
+    }
+
+    /**
+     * Placeholder stub
+     *
+     * @return ViewModel
+     */
+    public function environmentalAction()
+    {
+        $view = new ViewModel();
+        $view->setTemplate('application/index');
+
+        $applicationJourneyHelper = new ApplicationJourneyHelper();
+
+        return $applicationJourneyHelper->render($view);
+    }
+
+    /**
+     * Placeholder stub
+     *
+     * @return ViewModel
+     */
+    public function documentAction()
+    {
+        $view = new ViewModel();
+        $view->setTemplate('application/index');
+
+        $applicationJourneyHelper = new ApplicationJourneyHelper();
+
+        return $applicationJourneyHelper->render($view);
+    }
+
+    /**
+     * Placeholder stub
+     *
+     * @return ViewModel
+     */
+    public function processingAction()
+    {
+        $view = new ViewModel();
+        $view->setTemplate('application/index');
+
+        $applicationJourneyHelper = new ApplicationJourneyHelper();
+
+        return $applicationJourneyHelper->render($view);
+    }
+
+    /**
+     * Placeholder stub
+     *
+     * @return ViewModel
+     */
+    public function feeAction()
+    {
+        $view = new ViewModel();
+        $view->setTemplate('application/index');
+
+        $applicationJourneyHelper = new ApplicationJourneyHelper();
+
+        return $applicationJourneyHelper->render($view);
     }
 }
