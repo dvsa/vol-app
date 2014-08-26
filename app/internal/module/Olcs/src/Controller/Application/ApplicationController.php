@@ -9,7 +9,6 @@ namespace Olcs\Controller\Application;
 
 use Olcs\Controller\AbstractController;
 use Zend\View\Model\ViewModel;
-use Olcs\Helper\ApplicationJourneyHelper;
 
 /**
  * Application Controller
@@ -28,9 +27,11 @@ class ApplicationController extends AbstractController
         $view = new ViewModel();
         $view->setTemplate('application/index');
 
-        $applicationJourneyHelper = new ApplicationJourneyHelper();
+        $applicationJourneyHelper = $this->getServiceLocator()->get('ApplicationJourneyHelper');
 
-        return $applicationJourneyHelper->render($view);
+        $applicationId = $this->params()->fromRoute('applicationId');
+
+        return $applicationJourneyHelper->render($view, $applicationId);
     }
 
     /**
@@ -43,9 +44,11 @@ class ApplicationController extends AbstractController
         $view = new ViewModel();
         $view->setTemplate('application/index');
 
-        $applicationJourneyHelper = new ApplicationJourneyHelper();
+        $applicationJourneyHelper = $this->getServiceLocator()->get('ApplicationJourneyHelper');
 
-        return $applicationJourneyHelper->render($view);
+        $applicationId = $this->params()->fromRoute('applicationId');
+
+        return $applicationJourneyHelper->render($view, $applicationId);
     }
 
     /**
@@ -58,9 +61,11 @@ class ApplicationController extends AbstractController
         $view = new ViewModel();
         $view->setTemplate('application/index');
 
-        $applicationJourneyHelper = new ApplicationJourneyHelper();
+        $applicationJourneyHelper = $this->getServiceLocator()->get('ApplicationJourneyHelper');
 
-        return $applicationJourneyHelper->render($view);
+        $applicationId = $this->params()->fromRoute('applicationId');
+
+        return $applicationJourneyHelper->render($view, $applicationId);
     }
 
     /**
@@ -73,9 +78,11 @@ class ApplicationController extends AbstractController
         $view = new ViewModel();
         $view->setTemplate('application/index');
 
-        $applicationJourneyHelper = new ApplicationJourneyHelper();
+        $applicationJourneyHelper = $this->getServiceLocator()->get('ApplicationJourneyHelper');
 
-        return $applicationJourneyHelper->render($view);
+        $applicationId = $this->params()->fromRoute('applicationId');
+
+        return $applicationJourneyHelper->render($view, $applicationId);
     }
 
     /**
@@ -88,8 +95,10 @@ class ApplicationController extends AbstractController
         $view = new ViewModel();
         $view->setTemplate('application/index');
 
-        $applicationJourneyHelper = new ApplicationJourneyHelper();
+        $applicationJourneyHelper = $this->getServiceLocator()->get('ApplicationJourneyHelper');
 
-        return $applicationJourneyHelper->render($view);
+        $applicationId = $this->params()->fromRoute('applicationId');
+
+        return $applicationJourneyHelper->render($view, $applicationId);
     }
 }

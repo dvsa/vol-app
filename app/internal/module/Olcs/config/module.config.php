@@ -84,6 +84,15 @@ return array(
         __DIR__ . '/../assets/js/inline/'
     ),
     'asset_path' => '//dvsa-static.olcsdv-ap01.olcs.npm',
+    'service_manager' => array(
+        'factories' => array(
+            'ApplicationJourneyHelper' => function ($sm) {
+                $helper = new \Olcs\Helper\ApplicationJourneyHelper();
+                $helper->setServiceLocator($sm);
+                return $helper;
+            }
+        )
+    ),
     'application_journey' => array(
         'access_keys' => array(
             'internal'
@@ -96,8 +105,8 @@ return array(
         ),
         'render' => array(
             'pre-render' => array(
-                new Olcs\Helper\ApplicationJourneyHelper(),
-                'render'
+                'service' => 'ApplicationJourneyHelper',
+                'method' => 'render'
             )
         )
     )
