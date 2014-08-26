@@ -83,5 +83,23 @@ return array(
     'local_scripts_path' => array(
         __DIR__ . '/../assets/js/inline/'
     ),
-    'asset_path' => '//dvsa-static.olcsdv-ap01.olcs.npm'
+    'asset_path' => '//dvsa-static.olcsdv-ap01.olcs.npm',
+    'application_journey' => array(
+        'templates' => array(
+            'not-found' => 'journey/not-found',
+            'navigation' => 'journey/application/navigation',
+            'main' => 'journey/application/main',
+            'layout' => 'journey/application/layout'
+        ),
+        'render' => array(
+            'pre-render' => array(
+                new Olcs\Helper\ApplicationJourneyHelper(),
+                'render'
+            ),
+            'navigation' => array(
+                new Olcs\Helper\ApplicationJourneyHelper(),
+                'renderNavigation'
+            )
+        )
+    )
 );
