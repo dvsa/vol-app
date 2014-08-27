@@ -66,7 +66,11 @@ class LicenceController extends AbstractController
             ];
 
             if ($action !== 'add') {
-                $params['task'] = $this->params()->fromPost('id');
+                $id = $this->params()->fromPost('id');
+                if (!is_array($id) || count($id) > 1) {
+                    throw new \Exception('Please select a single task to edit');
+                }
+                $params['task'] = $id[0];
             }
 
             return $this->redirect()->toRoute(

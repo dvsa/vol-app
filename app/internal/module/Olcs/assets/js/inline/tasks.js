@@ -1,6 +1,12 @@
 $(function() {
   var form = "[name=tasks-home]";
 
+  OLCS.tableHandler({
+    table: ".table__form",
+    container: ".table__form",
+    filter: ".table__form"
+  });
+
   OLCS.formHandler({
     // the form to bind to
     form: form,
@@ -25,12 +31,6 @@ $(function() {
     source: form + " #category",
     dest: form + " #taskSubCategory",
     url: "/tasks/sub-categories"
-  });
-
-  OLCS.tableHandler({
-    table: ".table__form",
-    container: ".table__form",
-    filter: ".table__form"
   });
 
   /**
