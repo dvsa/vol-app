@@ -4,10 +4,28 @@
         <?php
         foreach($sections as $section) {
 
+            $classes = array();
+
+            if (!$section['enabled']) {
+                $classes[] = 'disabled';
+            }
+
+            if ($section['current']) {
+                $classes[] = 'current';
+            }
+
+            if ($section['status'] !== null) {
+                $classes[] = $section['status'];
+            } else {
+                $classes[] = 'no-background';
+            }
+
+            $classes[] = $section['class'];
+
             ?>
-        <li class="app-navigation__item <?php echo $section['status'] . ($section['enabled'] ? '' : ' disabled'); ?>">
+        <li class="app-navigation__item <?php echo implode(' ', $classes); ?>">
             <?php
-            if ($section['status'] != 'current' && $section['enabled']) {
+            if (!$section['current'] && $section['enabled']) {
                 ?>
                 <a href="<?php echo $this->url($section['route'], array(), array(), true); ?>">
                 <?php
@@ -15,7 +33,7 @@
             ?>
             <span><?php echo $this->translate($section['title']); ?></span>
             <?php
-            if ($section['status'] != "current" && $section['enabled']) {
+            if (!$section['current'] && $section['enabled']) {
                 ?>
                 </a>
                 <?php
