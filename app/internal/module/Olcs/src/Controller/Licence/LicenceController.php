@@ -92,7 +92,7 @@ class LicenceController extends AbstractController
             array(
                 'table' => $table->render(),
                 'form'  => $this->getTaskForm($filters),
-                'inlineScript' => $this->loadScripts(['tasks', 'table-modal'])
+                'inlineScript' => $this->loadScripts(['tasks'])
             )
         );
 
