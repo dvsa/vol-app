@@ -15,19 +15,32 @@ use Zend\View\Model\ViewModel;
  */
 class CasePiController extends CaseController
 {
-    public function onDispatch(\Zend\Mvc\MvcEvent $e)
-    {
-        $licenceId = $this->fromRoute('licence');
-        $caseId = $this->fromRoute('case');
+    /**
+     * Holds the Data Bundle
+     *
+     * @var array
+     */
+    protected $dataBundle = null;
 
-        if (!$caseId || !$licenceId) {
-            return $this->notFoundAction();
-        }
+    /**
+     * Holds the service name
+     *
+     * @var string
+     */
+    protected $service = 'Pi';
 
-        $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licenceId)));
-
-        return parent::onDispatch($e);
-    }
+    /**
+     * Data map
+     *
+     * @var array
+     */
+    protected $dataMap = array(
+        'main' => array(
+            'mapFrom' => array(
+                'data'
+            )
+        )
+    );
 
     /**
      * Gets public inquiry data
@@ -39,6 +52,8 @@ class CasePiController extends CaseController
         $caseId = $this->fromRoute('case');
 
         $pi = $this->getPiInfo($caseId);
+
+        //die('<pre>' . print_r($pi, 1));
 
         $table = $this->buildPiHearingsTable($pi);
 
@@ -68,11 +83,22 @@ class CasePiController extends CaseController
     {
         $bundle = [
             'children' => [
+                'piStatus' => [
+                    'properties' => 'ALL',
+                ],
+                'piTypes' => [
+                    'properties' => 'ALL',
+                ],
                 'presidingTc' => [
                     'properties' => 'ALL',
                 ],
-                'piReasons' => [
+                'reasons' => [
                     'properties' => 'ALL',
+                    'children' => [
+                        'reason' => [
+                            'properties' => 'ALL',
+                        ]
+                    ],
                 ],
                 'piHearings' => array(
                     'properties' => 'ALL',
@@ -80,15 +106,18 @@ class CasePiController extends CaseController
                         'presidingTc' => [
                             'properties' => 'ALL',
                         ],
+                        'presidedByRole' => [
+                            'properties' => 'ALL',
+                        ],
                     ],
                 ),
                 'decisionPresidingTc' => array(
                     'properties' => 'ALL'
                 ),
-                'decisionReasons' => array(
+                'decisions' => array(
                     'properties' => 'ALL'
                 ),
-                'user' => array(
+                'assignedTo' => array(
                     'properties' => 'ALL'
                 )
             ]
@@ -112,17 +141,7 @@ class CasePiController extends CaseController
             )
         );
 
-        switch($type){
-            case 'sla':
-                return $this->addSlaAction($caseId);
-            case 'agreed':
-                return $this->addAgreedAction($caseId);
-            case 'schedule':
-                return $this->addScheduleAction($caseId);
-            case 'decision':
-                return $this->addDecisionAction($caseId);
-        }
-
+        return call_user_func(array($this, strtolower($type)), $caseId);
     }
 
     /**
@@ -130,11 +149,13 @@ class CasePiController extends CaseController
      *
      * @return ViewModel
      */
-    public function addSlaAction($caseId)
+    public function sla()
     {
+        $caseId = $this->fromRoute('case');
+
         $form = $this->generateFormWithData(
             'pi-sla',
-            'processSla',
+            'processSave',
             array(
                 'case' => $caseId
             ),
@@ -162,11 +183,13 @@ class CasePiController extends CaseController
      *
      * @return ViewModel
      */
-    public function addAgreedAction($caseId)
+    public function agreed()
     {
+        $caseId = $this->fromRoute('case');
+
         $form = $this->generateFormWithData(
             'pi-agreed',
-            'processAgreed',
+            'processPi',
             array(
                 'case' => $caseId
             ),
@@ -180,7 +203,7 @@ class CasePiController extends CaseController
                     'pageSubTitle' => ''
                 ],
                 'form' => $form,
-                'headScript' => array('/static/js/impounding.js')
+                //'headScript' => array('/static/js/impounding.js')
             ]
         );
 
@@ -194,11 +217,13 @@ class CasePiController extends CaseController
      *
      * @return ViewModel
      */
-    public function addScheduleAction($caseId)
+    public function schedule()
     {
+        $caseId = $this->fromRoute('case');
+
         $form = $this->generateFormWithData(
             'pi-schedule',
-            'processSchedule',
+            'processPi',
             array(
                 'case' => $caseId
             ),
@@ -212,7 +237,7 @@ class CasePiController extends CaseController
                     'pageSubTitle' => ''
                 ],
                 'form' => $form,
-                'headScript' => array('/static/js/impounding.js')
+                //'headScript' => array('/static/js/impounding.js')
             ]
         );
 
@@ -226,11 +251,14 @@ class CasePiController extends CaseController
      *
      * @return ViewModel
      */
-    public function addDecisionAction($caseId)
+    public function headring()
     {
+        $caseId = $this->fromRoute('case');
+        $piId = $this->fromRoute('pi');
+
         $form = $this->generateFormWithData(
-            'pi-decision',
-            'processDecision',
+            'pi-hearing',
+            'saveHearing',
             array(
                 'case' => $caseId
             ),
@@ -244,7 +272,7 @@ class CasePiController extends CaseController
                     'pageSubTitle' => ''
                 ],
                 'form' => $form,
-                'headScript' => array('/static/js/impounding.js')
+                //'headScript' => array('/static/js/impounding.js')
             ]
         );
 
@@ -254,11 +282,62 @@ class CasePiController extends CaseController
     }
 
     /**
+     * Add Public Inquiry decision data for a case
+     *
+     * @return ViewModel
+     */
+    public function decision()
+    {
+        $caseId = $this->fromRoute('case');
+
+        $form = $this->generateFormWithData(
+            'pi-decision',
+            'processPi',
+            array(
+                'case' => $caseId
+            ),
+            true
+        );
+
+        $view = $this->getView(
+            [
+                'params' => [
+                    'pageTitle' => 'Add Register Decision',
+                    'pageSubTitle' => ''
+                ],
+                'form' => $form,
+                //'headScript' => array('/static/js/impounding.js')
+            ]
+        );
+
+        $view->setTemplate('/form');
+
+        return $view;
+    }
+
+    /**
+     * Saves a Pi hearing record.
+     *
+     * @param array $data
+     * @return mixed
+     */
+    public function saveHearing($data)
+    {
+        $fieldsetName = 'main';
+        $data = array_merge($data, $data[$fieldsetName]);
+        unset($data[$fieldsetName]);
+
+        return $this->save($data, 'PiHearing');
+    }
+
+    /**
      * Processes an SLA form
      */
-    public function processSla()
+    public function processPi($data)
     {
+        $this->processSave($data);
 
+        return $this->redirect('case_pi', ['action' => 'index'], [], true);
     }
 
     /**
@@ -268,6 +347,6 @@ class CasePiController extends CaseController
      */
     public function editAction()
     {
-
+        return $this->addAction();
     }
 }
