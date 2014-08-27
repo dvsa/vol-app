@@ -332,13 +332,14 @@ return array_merge(
                                         'noteType' => '[A-Za-z]+',
                                     ],
                                     'controller' => 'LicenceProcessingNoteController',
+                                    'action' => 'add'
                                 ]
                             ]
                         ],
-                        'change-note' => [
+                        'modify-note' => [
                             'type' => 'segment',
                             'options' => [
-                                'route' => '/notes/:action/:id',
+                                'route' => '/notes/:action[/:id]',
                                 'defaults' => [
                                     'constraints' => [
                                         'id' => '[0-9]+',
