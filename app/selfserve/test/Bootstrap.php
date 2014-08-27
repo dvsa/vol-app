@@ -1,6 +1,6 @@
 <?php
 
-namespace SelfServe\Test;
+namespace OlcsTest;
 
 use Zend\Mvc\Service\ServiceManagerConfig;
 use Zend\ServiceManager\ServiceManager;
@@ -22,7 +22,8 @@ class Bootstrap
     {
         // Setup the autloader
         $loader = static::initAutoloader();
-        $loader->addPsr4('SelfServe\Test\\', __dir__ . '/SelfServe');
+        $loader->addPsr4('OlcsTest\\', __DIR__ . '/SelfServe');
+        $loader->addPsr4('CommonTest\\', __DIR__ . '/../vendor/olcs/OlcsCommon/application_test/Common/src/Common/');
 
         // Grab the application config
         $config = include dirname(__DIR__) . '/config/application.config.php';

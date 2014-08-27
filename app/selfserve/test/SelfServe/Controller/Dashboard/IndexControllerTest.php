@@ -6,9 +6,9 @@
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
-namespace SelfServe\Test\Controller\Dashboard;
+namespace OlcsTest\Controller\Dashboard;
 
-use SelfServe\Test\Bootstrap;
+use OlcsTest\Bootstrap;
 use Zend\Mvc\Router\Http\TreeRouteStack as HttpRouter;
 use Zend\Http\Request;
 use Zend\Http\Response;
