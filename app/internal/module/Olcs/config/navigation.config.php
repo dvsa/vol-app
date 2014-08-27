@@ -141,7 +141,21 @@ return array(
                                     'id' => 'licence_processing_notes',
                                     'label' => 'internal-licence-processing-notes',
                                     'route' => 'licence/processing/notes',
-                                    'use_route_match' => true
+                                    'use_route_match' => true,
+                                    'pages' => array(
+                                        array(
+                                            'id' => 'licence_processing_notes_add',
+                                            'label' => 'internal-licence-processing-notes-add',
+                                            'route' => 'licence/processing/add-note',
+                                            'use_route_match' => true
+                                        ),
+                                        array(
+                                            'id' => 'licence_processing_notes_modify',
+                                            'label' => 'internal-licence-processing-notes-modify',
+                                            'route' => 'licence/processing/modify-note',
+                                            'use_route_match' => true
+                                        )
+                                    )
                                 )
                             )
                         ),
