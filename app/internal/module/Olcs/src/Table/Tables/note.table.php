@@ -7,7 +7,7 @@ return array(
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                'add' => array('class' => 'primary', 'value' => 'Create note'),
+                'add' => array('class' => 'primary'),
                 'edit' => array('requireRows' => true),
                 'delete' => array('class' => 'warning', 'requireRows' => true)
             )
@@ -29,8 +29,8 @@ return array(
             'title' => 'Created',
             'formatter' => function ($data) {
                 return '<a href="' . $this->generateUrl(
-                    array('case' => $data['id'], 'tab' => 'overview'),
-                    'case_manage',
+                    array('action' => 'edit', 'id' => $data['id']),
+                    'licence/processing/modify-note',
                     true
                 ) . '">' . (new \DateTime($data['createdOn']))->format('d/m/Y') . '</a>';
             },
