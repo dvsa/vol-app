@@ -62,6 +62,9 @@ return array(
     ),
     'asset_path' => '//dvsa-static.olcsdv-ap01.olcs.npm',
     'application_journey' => array(
+        'access_keys' => array(
+            'selfserve'
+        ),
         'templates' => array(
             'not-found' => 'self-serve/journey/not-found',
             'navigation' => 'self-serve/journey/application/navigation',
