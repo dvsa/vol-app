@@ -1,0 +1,32 @@
+<ol class="vertical-navigation">
+    <?php
+    foreach($sections as $section) {
+
+        if ($section['display']) {
+            $section['subSections'][] = $section;
+        }
+
+        foreach ($section['subSections'] as $subSection) {
+            ?>
+            <li class="vertical-navigation__item <?php echo $subSection['status'] . ($subSection['enabled'] ? '' : ' disabled'); ?> <?php echo $subSection['class']; ?>">
+                <?php
+                if ($subSection['status'] != 'current' && $subSection['enabled']) {
+                    ?>
+                    <a href="<?php echo $this->url($subSection['route'], array(), array(), true); ?>">
+                    <?php
+                    }
+                ?>
+                <span><?php echo $this->translate($subSection['title']); ?></span>
+                <?php
+                if ($subSection['status'] != "current" && $subSection['enabled']) {
+                    ?>
+                    </a>
+                    <?php
+                }
+                ?>
+            </li>
+        <?php
+        }
+    }
+    ?>
+</ol>
