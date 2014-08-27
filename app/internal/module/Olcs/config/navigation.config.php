@@ -113,7 +113,15 @@ return array(
                             'id' => 'licence_processing',
                             'label' => 'Processing',
                             'route' => 'licence/processing',
-                            'use_route_match' => true
+                            'use_route_match' => true,
+                            'pages' => array(
+                                array(
+                                    'id' => 'licence_processing_notes',
+                                    'label' => 'internal-licence-processing-notes',
+                                    'route' => 'licence/processing/notes',
+                                    'use_route_match' => true
+                                )
+                            )
                         ),
                         array(
                             'id' => 'licence_fees',

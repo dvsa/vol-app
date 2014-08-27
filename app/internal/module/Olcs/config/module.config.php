@@ -45,6 +45,7 @@ return array(
             'LicenceDetailsConditionUndertakingController' =>
                 'Olcs\Controller\Licence\Details\ConditionUndertakingController',
             'LicenceDetailsTaxiPhvController' => 'Olcs\Controller\Licence\Details\TaxiPhvController',
+            'LicenceProcessingNoteController' => 'Olcs\Controller\Licence\Processing\LicenceProcessingNoteController',
         )
     ),
     'view_manager' => array(
