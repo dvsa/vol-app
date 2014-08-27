@@ -1,5 +1,27 @@
 <?php
 
+// @todo Find a nicer way to re-use this config file
+$applicationJourney = include(
+    __DIR__ . '/../../../vendor/olcs/OlcsCommon/Common/config/journeys/application.journey.php'
+);
+
+$navItems = array();
+
+$filter = new \Zend\Filter\Word\CamelCaseToDash();
+
+foreach ($applicationJourney['Application']['sections'] as $sectionName => $section) {
+
+    foreach ($section['subSections'] as $subSectionName => $subSection) {
+        $label = strtolower('application.' . $filter->filter($sectionName) . '.' . $filter->filter($subSectionName));
+        $navItems[] = array(
+            'id' => 'application_details_' . $sectionName . '_' . $subSectionName,
+            'label' => $label,
+            'route' => 'Application/' . $sectionName . '/' . $subSectionName,
+            'use_route_match' => true
+        );
+    }
+}
+
 return array(
     'label' => 'Home',
     'route' => 'dashboard',
@@ -16,13 +38,6 @@ return array(
                     'route' => 'licence',
                     'use_route_match' => true,
                     'pages' => array(
-                        array(
-                            'id' => 'licence_overview',
-                            'class' => 'horizontal-navigation__item',
-                            'label' => 'Overview',
-                            'route' => 'licence/overview',
-                            'use_route_match' => true
-                        ),
                         array(
                             'id' => 'licence_details_overview',
                             'label' => 'internal-licence-details-breadcrumb',
@@ -104,8 +119,14 @@ return array(
                             'use_route_match' => true
                         ),
                         array(
+                            'id' => 'licence_opposition',
+                            'label' => 'Opposition',
+                            'route' => 'licence/opposition',
+                            'use_route_match' => true
+                        ),
+                        array(
                             'id' => 'licence_documents',
-                            'label' => 'Documents',
+                            'label' => 'Docs & attachments',
                             'route' => 'licence/documents',
                             'use_route_match' => true
                         ),
@@ -433,6 +454,51 @@ return array(
                         )
                     )
                 )
+            )
+        ),
+        array(
+            'id' => 'application',
+            'label' => 'Application',
+            'route' => 'Application',
+            'use_route_match' => true,
+            'pages' => array(
+                array(
+                    'id' => 'application_details',
+                    'label' => 'Application details',
+                    'route' => 'Application',
+                    'use_route_match' => true,
+                    'pages' => $navItems
+                ),
+                array(
+                    'id' => 'application_case',
+                    'label' => 'Cases',
+                    'route' => 'Application/case',
+                    'use_route_match' => true
+                ),
+                array(
+                    'id' => 'application_environmental',
+                    'label' => 'Environmental',
+                    'route' => 'Application/environmental',
+                    'use_route_match' => true
+                ),
+                array(
+                    'id' => 'application_document',
+                    'label' => 'Docs & attachments',
+                    'route' => 'Application/document',
+                    'use_route_match' => true
+                ),
+                array(
+                    'id' => 'application_processing',
+                    'label' => 'Processing',
+                    'route' => 'Application/processing',
+                    'use_route_match' => true
+                ),
+                array(
+                    'id' => 'application_fee',
+                    'label' => 'Fees',
+                    'route' => 'Application/fee',
+                    'use_route_match' => true
+                ),
             )
         )
     )
