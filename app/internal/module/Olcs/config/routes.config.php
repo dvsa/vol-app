@@ -135,16 +135,6 @@ return array_merge(
             ],
             'may_terminate' => true,
             'child_routes' => [
-                'overview' => [
-                    'type' => 'literal',
-                    'options' => [
-                        'route' => '/overview',
-                        'defaults' => [
-                            'action' => 'index',
-                        ]
-                    ],
-                    'may_terminate' => true,
-                ],
                 'details' => [
                     'type' => 'literal',
                     'options' => [
@@ -285,6 +275,16 @@ return array_merge(
                             'limit' => 10,
                             'sort' => 'createdOn',
                             'order' => 'ASC'
+                        ]
+                    ],
+                    'may_terminate' => true,
+                ],
+                'opposition' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => '/opposition',
+                        'defaults' => [
+                            'action' => 'opposition',
                         ]
                     ],
                     'may_terminate' => true,
