@@ -39,13 +39,6 @@ return array(
                     'use_route_match' => true,
                     'pages' => array(
                         array(
-                            'id' => 'licence_overview',
-                            'class' => 'horizontal-navigation__item',
-                            'label' => 'Overview',
-                            'route' => 'licence/overview',
-                            'use_route_match' => true
-                        ),
-                        array(
                             'id' => 'licence_details_overview',
                             'label' => 'internal-licence-details-breadcrumb',
                             'route' => 'licence/details/overview',
@@ -126,8 +119,14 @@ return array(
                             'use_route_match' => true
                         ),
                         array(
+                            'id' => 'licence_opposition',
+                            'label' => 'Opposition',
+                            'route' => 'licence/opposition',
+                            'use_route_match' => true
+                        ),
+                        array(
                             'id' => 'licence_documents',
-                            'label' => 'Documents',
+                            'label' => 'Docs & attachments',
                             'route' => 'licence/documents',
                             'use_route_match' => true
                         ),
