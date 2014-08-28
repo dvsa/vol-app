@@ -65,13 +65,19 @@ class LicenceController extends AbstractController
                 'action'  => $action
             ];
 
-            if ($action !== 'add') {
-                $id = $this->params()->fromPost('id');
+            $id = $this->params()->fromPost('id');
+
+            // @NOTE: edit doesn't allow multi IDs, but other
+            // actions (like reassign) might, hence why we have
+            // an explicit check here
+            if ($action === 'edit') {
                 if (!is_array($id) || count($id) > 1) {
                     throw new \Exception('Please select a single task to edit');
                 }
-                $params['task'] = $id[0];
+                $id = $id[0];
             }
+
+            $params['task'] = $id;
 
             return $this->redirect()->toRoute(
                 'licence/task_action',
