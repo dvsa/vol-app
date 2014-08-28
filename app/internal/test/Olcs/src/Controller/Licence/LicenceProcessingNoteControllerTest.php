@@ -99,13 +99,45 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue($this->view));
 
         $this->view->expects($this->once())
-            ->method('setTemplate');
+            ->method('setTemplate')
+            ->with('licence/processing/notes/form');
 
         $this->controller->expects($this->once())
             ->method('renderView')
             ->with($this->equalTo($this->view));
 
         $this->controller->addAction();
+    }
+
+    public function testEditAction()
+    {
+        $id = 1;
+        $note = [
+            'comment' => 'comment',
+            'id' => $id,
+            'priority' => 'Y',
+            'version' => 1
+        ];
+
+
+        $this->getFromRoute(0, 'id', $id);
+
+        $this->controller->expects()
+            ->method('makeRestCall')
+        ->will($this->returnValue($note));
+
+        $this->controller->expects($this->once())
+            ->method('getView')
+            ->will($this->returnValue($this->view));
+
+        $this->view->expects($this->once())
+            ->method('setTemplate');
+
+        $this->controller->expects($this->once())
+            ->method('renderView')
+            ->with($this->equalTo($this->view));
+
+        $this->controller->editAction();
     }
 
     /**
