@@ -63,8 +63,8 @@ class LicenceController extends AbstractController
         $view = $this->getViewWithLicence(
             array(
                 'table' => $table->render(),
-                'form'  => $this->getTaskForm($filters),
-                'inlineScript' => $this->loadScripts(['tasks'])
+                'form'  => $this->getDocumentForm($filters),
+                // 'inlineScript' => $this->loadScripts(['documents'])
             )
         );
 

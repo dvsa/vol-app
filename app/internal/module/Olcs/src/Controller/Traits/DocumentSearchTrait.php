@@ -39,6 +39,18 @@ trait DocumentSearchTrait
         );
     }
 
+    protected function getDocumentForm($filters = array())
+    {
+        $form = $this->getForm('documents-home');
+
+        // setting $this->enableCsrf = false won't sort this; we never POST
+        $form->remove('csrf');
+
+        $form->setData($filters);
+
+        return $form;
+    }
+
     protected function getDocumentsTable($filters = array(), $render = true)
     {
         $documents = $this->makeRestCall(
