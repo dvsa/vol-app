@@ -38,7 +38,7 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
         );
 
         $query = new \Zend\Stdlib\Parameters();
-        $request = $this->getMock('\stdClass', ['getQuery', 'isXmlHttpRequest']);
+        $request = $this->getMock('\stdClass', ['getQuery', 'isXmlHttpRequest', 'isPost']);
         $request->expects($this->any())
             ->method('getQuery')
             ->will($this->returnValue($query));
