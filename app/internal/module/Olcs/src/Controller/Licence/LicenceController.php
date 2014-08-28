@@ -71,7 +71,7 @@ class LicenceController extends AbstractController
             // actions (like reassign) might, hence why we have
             // an explicit check here
             if ($action === 'edit') {
-                if (!is_array($id) || count($id) > 1) {
+                if (!is_array($id) || count($id) !== 1) {
                     throw new \Exception('Please select a single task to edit');
                 }
                 $id = $id[0];

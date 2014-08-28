@@ -139,6 +139,10 @@ class TaskController extends AbstractController
             $route = 'licence/processing';
             $params = ['licence' => $licence];
 
+            // @NOTE: at some point we'll probably want to abstract this behind a
+            // redirect helper, such that *all* redirects either set a location
+            // header or return JSON based on the request type. That way it can
+            // be totally transparent in concrete controllers like this one.
             if ($this->getRequest()->isXmlHttpRequest()) {
                 $data = [
                     'status' => 302,
@@ -165,10 +169,11 @@ class TaskController extends AbstractController
     {
         $defaults = [
             'assignedToUser' => $this->getLoggedInUser(),
-            'assignedToTeam' => 2
+            'assignedToTeam' => 2 // @NOTE: not stubbed yet
         ];
 
-        if ($this->params()->fromRoute('task')) {
+        $taskId = $this->params()->fromRoute('task');
+        if ($taskId) {
             $childProperties = [
                 'category', 'taskSubCategory',
                 'assignedToTeam', 'assignedToUser'
@@ -185,7 +190,7 @@ class TaskController extends AbstractController
             $resource = $this->makeRestCall(
                 'Task',
                 'GET',
-                ['id' => $this->params()->fromRoute('task')],
+                ['id' => $taskId],
                 $bundle
             );
 
@@ -193,6 +198,7 @@ class TaskController extends AbstractController
                 if (isset($resource[$child]['id'])) {
                     $resource[$child] = $resource[$child]['id'];
                 }
+
             }
         } else {
             $resource = [];
@@ -250,6 +256,9 @@ class TaskController extends AbstractController
         return $data;
     }
 
+    /**
+     * Expand a flattened array of data into form fieldsets
+     */
     private function expandData($data)
     {
         if (isset($data['urgent'])) {
