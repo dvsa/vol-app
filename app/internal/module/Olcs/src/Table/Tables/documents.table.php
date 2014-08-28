@@ -26,25 +26,29 @@ return array(
             'name' => 'description',
             'formatter' => function ($row) {
                 return '<a href=#>' . $row['description'] . '</a>';
-            }
+            },
+            'sort' => 'description'
         ),
         array(
             'title' => 'Category',
             'name' => 'categoryName',
+            'sort' => 'category'
         ),
         array(
             'title' => 'Sub category',
             'name' => 'subCategoryName',
+            'sort' => 'documentSubCategory'
         ),
         array(
-            'title' => 'Description',
-            'name' => 'subCategoryName',
+            'title' => 'Format',
+            'name' => 'format',
+            'sort' => 'format'
         ),
         array(
             'title' => 'Date',
             'name' => 'date',
             'formatter' => 'Date',
-            'sort' => 'date',
+            'sort' => 'issuedDate',
         ),
         array(
             'title' => '',
