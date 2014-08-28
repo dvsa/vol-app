@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Documents Controller
  *
@@ -14,14 +13,14 @@ use Zend\View\Model\ViewModel;
  *
  * @author Jessica Rowbottom <jess.rowbottom@valtech.co.uk>
  */
-class OverviewController extends AbstractLicenceDetailsController
+class DocumentsController extends AbstractLicenceDetailsController
 {
-    protected $section = 'overview';
+    protected $section = 'documents';
 
     public function indexAction()
     {
         $view = new ViewModel();
-        $view->setTemplate('licence/details/placeholder');
+        $view->setTemplate('licence/documents/placeholder');
 
         return $this->renderView($view);
     }
