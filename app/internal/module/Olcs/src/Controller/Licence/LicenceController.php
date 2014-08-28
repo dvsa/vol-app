@@ -20,14 +20,6 @@ class LicenceController extends AbstractController
     use Traits\LicenceControllerTrait,
         Traits\TaskSearchTrait;
 
-    public function indexAction()
-    {
-        $view = $this->getViewWithLicence();
-        $view->setTemplate('licence/index');
-
-        return $this->renderView($view);
-    }
-
     public function detailsAction()
     {
         $view = $this->getViewWithLicence();
@@ -37,6 +29,14 @@ class LicenceController extends AbstractController
     }
 
     public function casesAction()
+    {
+        $view = $this->getViewWithLicence();
+        $view->setTemplate('licence/index');
+
+        return $this->renderView($view);
+    }
+
+    public function oppositionAction()
     {
         $view = $this->getViewWithLicence();
         $view->setTemplate('licence/index');

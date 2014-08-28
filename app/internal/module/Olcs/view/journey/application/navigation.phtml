@@ -1,4 +1,4 @@
-<ol class="vertical-navigation">
+<ul class="app-navigation" role="menubar">
     <?php
     foreach($sections as $section) {
 
@@ -7,10 +7,29 @@
         }
 
         foreach ($section['subSections'] as $subSection) {
+
+            $classes = array();
+
+            if (!$subSection['enabled']) {
+                $classes[] = 'disabled';
+            }
+
+            if ($subSection['current']) {
+                $classes[] = 'current';
+            }
+
+            if ($subSection['status'] !== null) {
+                $classes[] = $subSection['status'];
+            } else {
+                $classes[] = 'no-background';
+            }
+
+            $classes[] = $subSection['class'];
+
             ?>
-            <li class="vertical-navigation__item <?php echo $subSection['status'] . ($subSection['enabled'] ? '' : ' disabled'); ?> <?php echo $subSection['class']; ?>">
+            <li class="app-navigation__item <?php echo implode(' ', $classes); ?>">
                 <?php
-                if ($subSection['status'] != 'current' && $subSection['enabled']) {
+                if (!$subSection['current'] && $subSection['enabled']) {
                     ?>
                     <a href="<?php echo $this->url($subSection['route'], array(), array(), true); ?>">
                     <?php
@@ -18,7 +37,7 @@
                 ?>
                 <span><?php echo $this->translate($subSection['title']); ?></span>
                 <?php
-                if ($subSection['status'] != "current" && $subSection['enabled']) {
+                if (!$subSection['current'] && $subSection['enabled']) {
                     ?>
                     </a>
                     <?php
@@ -29,4 +48,4 @@
         }
     }
     ?>
-</ol>
+</ul>
