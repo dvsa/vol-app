@@ -126,10 +126,9 @@ class LicenceProcessingNoteController extends AbstractLicenceProcessingControlle
 
         $form = $this->generateFormWithData(
             'licence-notes',
-            'processEditNotes'
+            'processEditNotes',
+            $data
         );
-
-        $form->setData($data);
 
         $view = $this->getView(['form' => $form]);
         $view->setTemplate('licence/processing/notes/form');
