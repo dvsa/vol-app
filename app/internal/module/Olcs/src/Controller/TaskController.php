@@ -99,7 +99,7 @@ class TaskController extends AbstractController
             ]
         );
 
-        $view->setTemplate('task/add');
+        $view->setTemplate('task/add-or-edit');
         return $this->renderView($view, $type . ' task');
     }
 
@@ -197,8 +197,9 @@ class TaskController extends AbstractController
             foreach ($childProperties as $child) {
                 if (isset($resource[$child]['id'])) {
                     $resource[$child] = $resource[$child]['id'];
+                } else {
+                    $resource[$child] = null;
                 }
-
             }
         } else {
             $resource = [];

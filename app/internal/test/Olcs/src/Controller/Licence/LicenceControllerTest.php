@@ -310,18 +310,13 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             ->method('fromPost')
             ->will($this->returnValue('create task'));
 
-        $params->expects($this->at(1))
-            ->method('fromPost')
-            ->will($this->returnValue(123));
-
         $this->controller->expects($this->any())
             ->method('params')
             ->will($this->returnValue($params));
 
         $params = [
             'action' => 'add',
-            'licence' => null,        // we don't mock it
-            'task'  => 123
+            'licence' => null,
         ];
         $mockRoute = $this->getMock('\stdClass', ['toRoute']);
         $mockRoute->expects($this->once())
