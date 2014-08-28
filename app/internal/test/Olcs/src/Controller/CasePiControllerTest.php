@@ -8,6 +8,7 @@
 namespace OlcsTest\Controller;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
+use Zend\Mvc\Controller\Plugin\Redirect as Redirect;
 
 /**
  * Public Inquiry Controller tests
@@ -29,22 +30,28 @@ class CasePiControllerTest extends AbstractHttpControllerTestCase
             )
         );
 
-        $this->view = $this->getMock(
+        $view = $this->getMock(
             'Zend\View\Model\ViewModel',
             [
                 'setVariables',
                 'setTemplate'
             ]
         );
+
+        $mockRedirect = $this->getMock(get_class(new Redirect()), ['toRoute', 'toUrl']);
+
         $this->controller->expects($this->any())
                          ->method('getView')
-                         ->will($this->returnValue($this->view));
+                         ->will($this->returnValue($view));
         $this->controller->expects($this->any())
                          ->method('redirect')
-                         ->will($this->returnValue($this->getMockRedirect()));
+                         ->will($this->returnValue($mockRedirect));
 
         parent::setUp();
     }
 
-    //
+    public function testIndexAction()
+    {
+        $this->markTestSkipped();
+    }
 }

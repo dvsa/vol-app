@@ -641,7 +641,21 @@ return array_merge(
         'case_pi' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/licence/[:licence]/case/[:case]/task/pi[/:action][/:type][/:id]',
+                'route' => '/licence/:licence/case/:case/task/pi',
+                'constraints' => [
+                    'licence' => '[0-9]+',
+                    'case' => '[0-9]+'
+                ],
+                'defaults' => [
+                    'controller' => 'CasePiController',
+                    'action' => 'index'
+                ]
+            ]
+        ],
+        'case_pi_action' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/licence/:licence/case/:case/task/pi/:action/:id/:section',
                 'constraints' => [
                     'licence' => '[0-9]+',
                     'case' => '[0-9]+',

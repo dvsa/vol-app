@@ -20,7 +20,47 @@ class CasePiController extends CaseController
      *
      * @var array
      */
-    protected $dataBundle = null;
+    protected $dataBundle = [
+        'children' => [
+            'piStatus' => [
+                'properties' => 'ALL',
+            ],
+            'piTypes' => [
+                'properties' => 'ALL',
+            ],
+            'presidingTc' => [
+                'properties' => 'ALL',
+            ],
+            'reasons' => [
+                'properties' => 'ALL',
+                'children' => [
+                    'reason' => [
+                        'properties' => 'ALL',
+                    ]
+                ],
+            ],
+            'piHearings' => array(
+                'properties' => 'ALL',
+                'children' => [
+                    'presidingTc' => [
+                        'properties' => 'ALL',
+                    ],
+                    'presidedByRole' => [
+                        'properties' => 'ALL',
+                    ],
+                ],
+            ),
+            'decisionPresidingTc' => array(
+                'properties' => 'ALL'
+            ),
+            'decisions' => array(
+                'properties' => 'ALL'
+            ),
+            'assignedTo' => array(
+                'properties' => 'ALL'
+            )
+        ]
+    ];
 
     /**
      * Holds the service name
@@ -81,67 +121,69 @@ class CasePiController extends CaseController
 
     public function getPiInfo($caseId)
     {
-        $bundle = [
-            'children' => [
-                'piStatus' => [
-                    'properties' => 'ALL',
-                ],
-                'piTypes' => [
-                    'properties' => 'ALL',
-                ],
-                'presidingTc' => [
-                    'properties' => 'ALL',
-                ],
-                'reasons' => [
-                    'properties' => 'ALL',
-                    'children' => [
-                        'reason' => [
-                            'properties' => 'ALL',
-                        ]
-                    ],
-                ],
-                'piHearings' => array(
-                    'properties' => 'ALL',
-                    'children' => [
-                        'presidingTc' => [
-                            'properties' => 'ALL',
-                        ],
-                        'presidedByRole' => [
-                            'properties' => 'ALL',
-                        ],
-                    ],
-                ),
-                'decisionPresidingTc' => array(
-                    'properties' => 'ALL'
-                ),
-                'decisions' => array(
-                    'properties' => 'ALL'
-                ),
-                'assignedTo' => array(
-                    'properties' => 'ALL'
-                )
-            ]
-        ];
+        $bundle = $this->getDataBundle();
 
         $pis = $this->makeRestCall('Pi', 'GET', array('case' => $caseId, 'limit' => 1), $bundle);
 
         return current($pis['Results']);
     }
 
-    public function addAction()
+    public function addEditAction()
     {
-        $type = $this->fromRoute('type');
-        $licenceId = $this->fromRoute('licence');
-        $caseId = $this->fromRoute('case');
+        $section = $this->fromRoute('section');
 
-        $this->setBreadcrumb(
-            array(
-                'licence_case_list/pagination' => array('licence' => $licenceId),
-                'case_pi' => array('licence' => $licenceId, 'case' => $caseId)
-            )
-        );
+        return call_user_func(array($this, strtolower($section)));
+    }
 
-        return call_user_func(array($this, strtolower($type)), $caseId);
+    /**
+     * Generate a form with data
+     *
+     * @param string $name
+     * @param callable $callback
+     * @param mixed $data
+     * @param boolean $tables
+     * @return object
+     */
+    public function generateFormWithData($name, $callback, $data = null, $tables = false)
+    {
+        $form = $this->generateForm($name, $callback, $tables);
+
+        if (!$this->getRequest()->isPost() && is_array($data)) {
+            $form->setData($data);
+        } else {
+            if ($id = $this->fromRoute('id') && null != ($loadedData = $this->load($id))) {
+                $form->setData($loadedData);
+            }
+        }
+        return $form;
+    }
+
+    /**
+     * Load data for the form
+     *
+     * This method should be overridden
+     *
+     * @param int $id
+     * @return array
+     */
+    protected function load($id)
+    {
+        $loadedData = parent::load($id);
+
+        $loadedData = $this->processLoad($loadedData)
+
+        return $loadedData;
+    }
+
+    /**
+     * Map the data on load
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function processLoad($data)
+    {
+        return $data;
     }
 
     /**
@@ -165,7 +207,7 @@ class CasePiController extends CaseController
         $view = $this->getView(
             [
                 'params' => [
-                    'pageTitle' => 'Add SLA',
+                    'pageTitle' => 'SLA',
                     'pageSubTitle' => ''
                 ],
                 'form' => $form,
@@ -199,7 +241,7 @@ class CasePiController extends CaseController
         $view = $this->getView(
             [
                 'params' => [
-                    'pageTitle' => 'Add Agreed and Legislation',
+                    'pageTitle' => 'Agreed and Legislation',
                     'pageSubTitle' => ''
                 ],
                 'form' => $form,
@@ -233,7 +275,7 @@ class CasePiController extends CaseController
         $view = $this->getView(
             [
                 'params' => [
-                    'pageTitle' => 'Add Schedule and Publish',
+                    'pageTitle' => 'Schedule and Publish',
                     'pageSubTitle' => ''
                 ],
                 'form' => $form,
@@ -268,7 +310,7 @@ class CasePiController extends CaseController
         $view = $this->getView(
             [
                 'params' => [
-                    'pageTitle' => 'Add Register Decision',
+                    'pageTitle' => 'Hearing',
                     'pageSubTitle' => ''
                 ],
                 'form' => $form,
@@ -302,7 +344,7 @@ class CasePiController extends CaseController
         $view = $this->getView(
             [
                 'params' => [
-                    'pageTitle' => 'Add Register Decision',
+                    'pageTitle' => 'Register Decision',
                     'pageSubTitle' => ''
                 ],
                 'form' => $form,
@@ -337,7 +379,17 @@ class CasePiController extends CaseController
     {
         $this->processSave($data);
 
-        return $this->redirect('case_pi', ['action' => 'index'], [], true);
+        return $this->redirect()->toRoute('case_pi', ['action' => 'index'], [], true);
+    }
+
+    /**
+     * Edit Public Inquiry data for a case
+     *
+     * @return ViewModel
+     */
+    public function addAction()
+    {
+        return $this->addEditAction();
     }
 
     /**
