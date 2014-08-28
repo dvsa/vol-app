@@ -25,14 +25,11 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
             array(
                 'makeRestCall',
                 'getLoggedInUser',
-                'getTable',
-                'getLicence',
-                'getRequest',
-                'getForm',
+                'buildTable',
+                'getFormWithData',
                 'getFromRoute',
                 'getFromPost',
-                'params',
-                'getServiceLocator',
+                'getView',
                 'url',
                 'renderView'
             )
@@ -82,8 +79,33 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->once())
             ->method('renderView');
-        //$this->controller->indexAction();
-        $this->assertEquals($this->view, $this->controller->indexAction());
+
+        $this->controller->indexAction();
+    }
+
+    public function testAddAction()
+    {
+        $licenceId = 7;
+        $noteType = 'note_t_lic';
+
+        $this->getFromRoute(0, 'licence', $licenceId);
+        $this->getFromRoute(1, 'noteType', $noteType);
+
+        $this->controller->expects()
+            ->method('generateFormWithData');
+
+        $this->controller->expects($this->once())
+            ->method('getView')
+            ->will($this->returnValue($this->view));
+
+        $this->view->expects($this->once())
+            ->method('setTemplate');
+
+        $this->controller->expects($this->once())
+            ->method('renderView')
+            ->with($this->equalTo($this->view));
+
+        $this->controller->addAction();
     }
 
     /**
@@ -97,12 +119,12 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
     {
         if ($will) {
             $this->controller->expects($this->at($at))
-                ->method('fromRoute')
+                ->method('getFromRoute')
                 ->with($this->equalTo($with))
                 ->will($this->returnValue($will));
         } else {
             $this->controller->expects($this->at($at))
-                ->method('fromRoute')
+                ->method('getFromRoute')
                 ->with($this->equalTo($with));
         }
     }
@@ -119,7 +141,7 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
     {
         if ($will) {
             $this->controller->expects($this->at($at))
-                ->method('fromRoute')
+                ->method('getFromRoute')
                 ->with(
                     $this->equalTo($with),
                     $this->equalTo($default)
@@ -127,7 +149,7 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
                 ->will($this->returnValue($will));
         } else {
             $this->controller->expects($this->at($at))
-                ->method('fromRoute')
+                ->method('getFromRoute')
                 ->with(
                     $this->equalTo($with),
                     $this->equalTo($default)
@@ -146,12 +168,12 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
     {
         if ($will) {
             $this->controller->expects($this->at($at))
-                ->method('fromPost')
+                ->method('getFromPost')
                 ->with($this->equalTo($with))
                 ->will($this->returnValue($will));
         } else {
             $this->controller->expects($this->at($at))
-                ->method('fromPost')
+                ->method('getFromPost')
                 ->with($this->equalTo($with));
         }
     }
