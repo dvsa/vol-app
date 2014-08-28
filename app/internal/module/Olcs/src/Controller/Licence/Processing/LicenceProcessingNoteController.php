@@ -10,7 +10,6 @@ namespace Olcs\Controller\Licence\Processing;
 
 use Common\Controller\CrudInterface;
 use Olcs\Controller\Traits\DeleteActionTrait;
-use Zend\View\Model\ViewModel;
 
 /**
  * Note controller
@@ -24,32 +23,67 @@ class LicenceProcessingNoteController extends AbstractLicenceProcessingControlle
 
     protected $section = 'notes';
 
+    public function redirectToIndex()
+    {
+        $this->redirectToRoute('licence/processing/notes', [], [], true);
+    }
+
+    /**
+     * Brings back a list of notes based on the search
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
     public function indexAction()
     {
         $licenceId = $this->getFromRoute('licence');
 
-        $this->checkForCrudAction('licence/processing/notes', array('licence' => $licenceId), 'id');
+        //unable to use checkForCrudAction() as add and edit/delete require different routes
+        $action = $this->getFromPost('action');
+        $id = $this->getFromPost('id');
 
-        $bundle = $this->getBundle();
+        switch ($action) {
+            case 'Add':
+                return $this->redirectToRoute(
+                    'licence/processing/add-note',
+                    ['action' => $action, 'licence' => $licenceId, 'noteType' => 'note_t_lic'],
+                    [],
+                    true
+                );
+            case 'Edit':
+            case 'Delete':
+                return $this->redirectToRoute(
+                    'licence/processing/modify-note',
+                    ['action' => $action, 'id' => $id],
+                    [],
+                    true
+                );
+        }
 
         $searchData = [];
-        $searchData['url'] = $this->url();
         $searchData['licence'] = $licenceId;
         $searchData['page'] = $this->getFromRoute('page', 1);
         $searchData['sort'] = $this->getFromRoute('sort', 'priority');
         $searchData['order'] = $this->getFromRoute('order', 'desc');
         $searchData['limit'] = $this->getFromRoute('limit', 10);
+        $searchData['url'] = $this->url();
+
+        $bundle = $this->getBundle();
 
         $resultData = $this->makeRestCall('Note', 'GET', $searchData, $bundle);
 
         $table = $this->buildTable('note', $resultData, $searchData);
 
-        $view = new ViewModel(['table' => $table]);
+        $view = $this->getView(['table' => $table]);
         $view->setTemplate('licence/processing/notes/index');
 
         return $this->renderView($view);
     }
 
+    /**
+     * Adds a note
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
     public function addAction()
     {
         $licenceId = $this->getFromRoute('licence');
@@ -64,43 +98,63 @@ class LicenceProcessingNoteController extends AbstractLicenceProcessingControlle
             )
         );
 
-        $view = new ViewModel(['form' => $form]);
+        $view = $this->getView(['form' => $form]);
         $view->setTemplate('licence/processing/notes/form');
 
         return $this->renderView($view);
     }
 
+    /**
+     * Edits a note
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
     public function editAction()
     {
-        $licenceId = $this->getFromRoute('licence');
+        $id = $this->getFromRoute('id');
+        $bundle = $this->getBundle();
+        $note = $this->makeRestCall('Note', 'GET', array('id' => $id), $bundle);
+
+        $data = [
+            'main' => [
+                'comment' => $note['comment'],
+                'priority' => $note['priority']
+            ],
+            'id' => $note['id'],
+            'version' => $note['version']
+        ];
 
         $form = $this->generateFormWithData(
             'licence-notes',
-            'processEditNotes',
-            array(
-                'licence' => $licenceId,
-            )
+            'processEditNotes'
         );
 
-        $view = new ViewModel(['form' => $form]);
+        $form->setData($data);
+
+        $view = $this->getView(['form' => $form]);
         $view->setTemplate('licence/processing/notes/form');
 
         return $this->renderView($view);
     }
 
+    /**
+     * Processes the add note form
+     *
+     * @param array $data
+     * @return \Zend\Http\Response
+     */
     public function processAddNotes($data)
     {
         $data = array_merge($data, $data['main']);
         $data['createdBy'] = $this->getLoggedInUser();
         $data['lastModifiedBy'] = $this->getLoggedInUser();
 
+        //checks which field to add in the linked id to
         $field = $this->getIdField($data['noteType']);
 
         if ($field) {
             $data[$field] = $data['linkedId'];
         }
-
-        unset($data['linkedId'])
 
         $result = $this->processAdd($data, 'Note');
 
@@ -111,9 +165,19 @@ class LicenceProcessingNoteController extends AbstractLicenceProcessingControlle
         return $this->redirectToRoute('licence/processing/note', ['action' => 'add'], [], true);
     }
 
+    /**
+     * Processes the edit note form
+     *
+     * @param array $data
+     * @return \Zend\Http\Response
+     */
     public function processEditNotes($data)
     {
         $data = array_merge($data, $data['main']);
+
+        //don't allow licence, note type to be changed
+        unset($data['licence'], $data['noteType']);
+
         $data['lastModifiedBy'] = $this->getLoggedInUser();
 
         $result = $this->processEdit($data, 'Note');
@@ -125,6 +189,11 @@ class LicenceProcessingNoteController extends AbstractLicenceProcessingControlle
         return $this->redirectToRoute('licence/processing/note', ['action' => 'edit'], [], true);
     }
 
+    /**
+     * Gets a bundle for the notes search
+     *
+     * @return array
+     */
     public function getBundle()
     {
         return [
@@ -136,7 +205,13 @@ class LicenceProcessingNoteController extends AbstractLicenceProcessingControlle
                 ],
                 'noteType' => [
                     'properties' => [
+                        'id',
                         'description'
+                    ]
+                ],
+                'licence' => [
+                    'properties' => [
+                        'id'
                     ]
                 ]
             ]
@@ -174,10 +249,13 @@ class LicenceProcessingNoteController extends AbstractLicenceProcessingControlle
         return $field;
     }
 
+    /**
+     * Returns the name of the service used to perform a delete
+     *
+     * @return string
+     */
     public function getDeleteServiceName()
     {
         return 'Note';
     }
-
-
 }

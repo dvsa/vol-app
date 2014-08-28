@@ -44,10 +44,7 @@ return [
                         'type' => 'submit',
                         'filters' => '\Common\Form\Elements\InputFilters\ActionButton',
                         'label' => 'Cancel',
-                        'class' => 'action--secondary large',
-                        'attributes' => [
-                            'type' => 'reset',
-                        ]
+                        'class' => 'action--secondary large'
                     ]
                 ]
             ]
