@@ -304,7 +304,8 @@ return array_merge(
                     'options' => [
                         'route' => '/processing',
                         'defaults' => [
-                            'action' => 'processing',
+                            'controller' => 'LicenceProcessingOverviewController',
+                            'action' => 'index',
                         ]
                     ],
                     'may_terminate' => true,
@@ -326,10 +327,11 @@ return array_merge(
                         'add-note' => [
                             'type' => 'segment',
                             'options' => [
-                                'route' => '/notes/:action/:noteType',
+                                'route' => '/notes/:action/:noteType[/:linkedId]',
                                 'defaults' => [
                                     'constraints' => [
                                         'noteType' => '[A-Za-z]+',
+                                        'linkedId' => '[0-9]+',
                                     ],
                                     'controller' => 'LicenceProcessingNoteController',
                                     'action' => 'add'
