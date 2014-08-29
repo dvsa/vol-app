@@ -304,10 +304,53 @@ return array_merge(
                     'options' => [
                         'route' => '/processing',
                         'defaults' => [
-                            'action' => 'processing',
+                            'controller' => 'LicenceProcessingOverviewController',
+                            'action' => 'index',
                         ]
                     ],
                     'may_terminate' => true,
+                    'child_routes' => [
+                        'notes' => [
+                            'type' => 'segment',
+                            'options' => [
+                                'route' => '/notes/page/:page/limit/:limit/sort/:sort/order/:order',
+                                'defaults' => [
+                                    'controller' => 'LicenceProcessingNoteController',
+                                    'action' => 'index',
+                                    'page' => 1,
+                                    'limit' => 10,
+                                    'sort' => 'priority',
+                                    'order' => 'DESC'
+                                ]
+                            ],
+                        ],
+                        'add-note' => [
+                            'type' => 'segment',
+                            'options' => [
+                                'route' => '/notes/:action/:noteType[/:linkedId]',
+                                'defaults' => [
+                                    'constraints' => [
+                                        'noteType' => '[A-Za-z]+',
+                                        'linkedId' => '[0-9]+',
+                                    ],
+                                    'controller' => 'LicenceProcessingNoteController',
+                                    'action' => 'add'
+                                ]
+                            ]
+                        ],
+                        'modify-note' => [
+                            'type' => 'segment',
+                            'options' => [
+                                'route' => '/notes/:action[/:id]',
+                                'defaults' => [
+                                    'constraints' => [
+                                        'id' => '[0-9]+',
+                                    ],
+                                    'controller' => 'LicenceProcessingNoteController',
+                                ]
+                            ]
+                        ]
+                    ]
                 ],
                 'fees' => [
                     'type' => 'literal',

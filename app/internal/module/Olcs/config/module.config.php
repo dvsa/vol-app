@@ -45,6 +45,9 @@ return array(
             'LicenceDetailsConditionUndertakingController' =>
                 'Olcs\Controller\Licence\Details\ConditionUndertakingController',
             'LicenceDetailsTaxiPhvController' => 'Olcs\Controller\Licence\Details\TaxiPhvController',
+            'LicenceProcessingOverviewController' =>
+                'Olcs\Controller\Licence\Processing\LicenceProcessingOverviewController',
+            'LicenceProcessingNoteController' => 'Olcs\Controller\Licence\Processing\LicenceProcessingNoteController',
             'ApplicationController' => 'Olcs\Controller\Application\ApplicationController'
         )
     ),
@@ -83,31 +86,5 @@ return array(
     'local_scripts_path' => array(
         __DIR__ . '/../assets/js/inline/'
     ),
-    'asset_path' => '//dvsa-static.olcsdv-ap01.olcs.npm',
-    'service_manager' => array(
-        'factories' => array(
-            'ApplicationJourneyHelper' => function ($sm) {
-                $helper = new \Olcs\Helper\ApplicationJourneyHelper();
-                $helper->setServiceLocator($sm);
-                return $helper;
-            }
-        )
-    ),
-    'application_journey' => array(
-        'access_keys' => array(
-            'internal'
-        ),
-        'templates' => array(
-            'not-found' => 'journey/not-found',
-            'navigation' => 'journey/application/navigation',
-            'main' => 'journey/application/main',
-            'layout' => 'journey/application/layout'
-        ),
-        'render' => array(
-            'pre-render' => array(
-                'service' => 'ApplicationJourneyHelper',
-                'method' => 'render'
-            )
-        )
-    )
+    'asset_path' => '//dvsa-static.olcsdv-ap01.olcs.npm'
 );
