@@ -259,7 +259,9 @@ class TaskController extends AbstractController
         }
 
         $data['licence'] = $this->getFromRoute('licence');
-        $data['urgent'] = isset($data['urgent']) && $data['urgent'] == '1' ? 'Y' : 'N';
+        if (isset($data['urgent'])) {
+            $data['urgent'] = $data['urgent'] == '1' ? 'Y' : 'N';
+        }
 
         return $data;
     }
