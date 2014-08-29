@@ -35,8 +35,16 @@ trait TaskSearchTrait
         );
 
         // form => backend mappings
-        $filters['isClosed'] = $filters['status'] === 'closed';
-        $filters['isUrgent'] = isset($filters['urgent']);
+
+        // we need an if / else if here because there is a third input
+        // state, "all", which shouldn't apply either filter
+        if ($filters['status'] === 'closed') {
+            $filters['isClosed'] = true;
+        } else if ($filters['status'] === 'open') {
+            // @NOTE we currently have an unrelated bug OLCS-3792 which
+            // prevents this actually restricting to open only
+            $filters['isClosed'] = false;
+        }
 
         if (isset($filters['date']) && $filters['date'] === 'today') {
             $filters['actionDate'] = '<= ' . date('Y-m-d');
