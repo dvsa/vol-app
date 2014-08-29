@@ -104,7 +104,13 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
             ->method('redirectToRoute')
             ->with(
                 $this->equalTo($route),
-                $this->equalTo(['action' => strtolower($action), 'licence' => $licenceId, 'noteType' => 'note_t_lic']),
+                $this->equalTo(
+                    [
+                        'action' => strtolower($action),
+                        'licence' => $licenceId,
+                        'noteType' => 'note_t_lic',
+                        'linkedId' => $licenceId]
+                ),
                 $this->equalTo([]),
                 $this->equalTo(true)
             );
