@@ -8,7 +8,6 @@
 namespace Olcs\Controller\Journey\Application\VehicleSafety;
 
 use Common\Controller\Application\VehicleSafety\SafetyController as ParentController;
-use Zend\InputFilter\InputFilter;
 
 /**
  * Safety Controller
@@ -24,14 +23,7 @@ class SafetyController extends ParentController
      *
      * @var boolean
      */
-    protected $hideInternalFormElements = true;
-
-    /**
-     * Whether or not the fields are required
-     *
-     * @var boolean
-     */
-    protected $requiredFields = false;
+    protected $hideInternalFormElements = false;
 
     /**
      * Remove the trailer fields for PSV
@@ -43,32 +35,9 @@ class SafetyController extends ParentController
     {
         $form = parent::alterForm($form);
 
-        if (!$this->requiredFields) {
-            $this->setFieldsAsNotRequired($form->getInputFilter());
-        }
+        $this->setFieldsAsNotRequired($form->getInputFilter());
 
         return $form;
-    }
-
-    /**
-     * Set fields as not required
-     *
-     * @param \Zend\InputFilter\InputFilter $inputFilter
-     */
-    protected function setFieldsAsNotRequired($inputFilter)
-    {
-        $inputs = $inputFilter->getInputs();
-
-        foreach ($inputs as $input) {
-            if ($input instanceof InputFilter) {
-                $input = $this->setFieldsAsNotRequired($input);
-            } else {
-                $input->setRequired(false);
-                $input->setAllowEmpty(true);
-            }
-        }
-
-        return $inputs;
     }
 
     /**

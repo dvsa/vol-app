@@ -223,9 +223,12 @@ return array_merge(
                             ]
                         ],
                         'safety' => [
-                            'type' => 'literal',
+                            'type' => 'segment',
                             'options' => [
-                                'route' => '/safety',
+                                'route' => '/safety[/:action][/:id]',
+                                'contraints' => [
+                                    'id' => '[0-9]+'
+                                ],
                                 'defaults' => [
                                     'controller' => 'LicenceDetailsSafetyController',
                                     'action' => 'index',

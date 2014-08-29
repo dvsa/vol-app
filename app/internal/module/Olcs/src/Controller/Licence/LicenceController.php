@@ -109,6 +109,6 @@ class LicenceController extends AbstractController
      */
     public function indexJumpAction()
     {
-        return $this->redirect()->toRoute('licence/overview', [], [], true);
+        return $this->redirect()->toRoute('licence/details/overview', [], [], true);
     }
 }
