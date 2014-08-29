@@ -15,19 +15,18 @@ return [
                     'label' => ''
                 ],
                 'elements' => [
-                    'piType' => [
-                        'type' => 'select',
+                    'piTypes' => [
+                        'type' => 'multiselect',
                         'label' => 'Type of PI'
                     ],
-                    'caseworker' => [
+                    'assignedTo' => [
                         'type' => 'select',
-                        'label' => 'Caseworker assigned to',
-                         'class' => 'medium'
+                        'label' => 'Caseworker assigned to'
                     ],
-                    'legislation' => [
-                        'type' => 'select',
+                    'reasons' => [
+                        'type' => 'multiselect',
                         'label' => 'Legislation',
-                         'class' => 'medium'
+                        'class' => 'medium'
                     ],
                     'agreedDate' => [
                         'type' => 'dateSelect',
@@ -36,14 +35,13 @@ return [
                     'presidingTc' => [
                         'type' => 'select',
                         'label' => 'Agreed by',
-                         'class' => 'medium'
+                        'class' => 'medium'
                     ],
-                    'role' => [
+                    'presidedByRole' => [
                         'type' => 'select',
-                        'label' => 'Agreed by role',
-                         'class' => 'medium'
+                        'label' => 'Agreed by role'
                     ],
-                    'comments' => [
+                    'comment' => [
                         'type' => 'textarea',
                         'filters' => '\Common\Form\Elements\InputFilters\TextMax4000',
                         'label' => 'Comments',
@@ -73,16 +71,13 @@ return [
                         'label' => 'Save',
                         'class' => 'action--primary large'
                     ],
-                    'cancel' => [
+                    'cancel' => array(
                         'enable' => true,
-                        'type' => 'reset',
+                        'type' => 'submit',
                         'filters' => '\Common\Form\Elements\InputFilters\ActionButton',
                         'label' => 'Cancel',
-                        'class' => 'action--secondary large',
-                        'attributes' => [
-                            'type' => 'reset',
-                        ]
-                    ]
+                        'class' => 'action--secondary large'
+                    )
                 ]
             ]
         ]

@@ -9,11 +9,12 @@
 namespace Olcs\Controller;
 
 use Zend\View\Model\ViewModel;
+use Common\Controller\CrudInterface;
 
 /**
  * Class to manage Public Inquiry
  */
-class CasePiController extends CaseController
+class CasePiController extends CaseController implements CrudInterface
 {
     /**
      * Holds the Data Bundle
@@ -58,7 +59,16 @@ class CasePiController extends CaseController
             ),
             'assignedTo' => array(
                 'properties' => 'ALL'
-            )
+            ),
+            'case' => array(
+                'properties' => ['id']
+            ),
+            'presidedByRole' => array(
+                'properties' => ['id']
+            ),
+            'presidingTc' => array(
+                'properties' => ['id']
+            ),
         ]
     ];
 
@@ -77,7 +87,7 @@ class CasePiController extends CaseController
     protected $dataMap = array(
         'main' => array(
             'mapFrom' => array(
-                'data'
+                'main'
             )
         )
     );
@@ -91,7 +101,7 @@ class CasePiController extends CaseController
     {
         $caseId = $this->fromRoute('case');
 
-        $pi = $this->getPiInfo($caseId);
+        $pi = $this->getPiInfoByCaseId($caseId);
 
         //die('<pre>' . print_r($pi, 1));
 
@@ -119,7 +129,7 @@ class CasePiController extends CaseController
         return $this->buildTable('hearings', $pi['piHearings'], array());
     }
 
-    public function getPiInfo($caseId)
+    public function getPiInfoByCaseId($caseId)
     {
         $bundle = $this->getDataBundle();
 
@@ -135,6 +145,56 @@ class CasePiController extends CaseController
         return call_user_func(array($this, strtolower($section)));
     }
 
+    protected function alterFormBeforeValidation($form)
+    {
+        if ($form->get('main')->has('piTypes')) {
+            $form->get('main')->get('piTypes')
+                 ->setValueOptions(
+                     $this->getListData('RefData',
+                     ['refDataCategoryId' => 'pi_type'],
+                     'id', 'id', false)
+                 );
+        }
+
+        if ($form->get('main')->has('piTypes')) {
+            $form->get('main')->get('assignedTo')
+                 ->setValueOptions(
+                     $this->getListData('User',
+                     [],
+                     'name', 'id', false)
+                 );
+        }
+
+        if ($form->get('main')->has('reasons')) {
+            $form->get('main')->get('reasons')
+                 ->setValueOptions(
+                     $this->getListData('Reason',
+                     [],
+                     'sectionCode', 'id', false)
+                 );
+        }
+
+        if ($form->get('main')->has('presidingTc')) {
+            $form->get('main')->get('presidingTc')
+                 ->setValueOptions(
+                     $this->getListData('PresidingTc',
+                     [],
+                     'name', 'id', false)
+                 );
+        }
+
+        if ($form->get('main')->has('presidedByRole')) {
+            $form->get('main')->get('presidedByRole')
+                 ->setValueOptions(
+                     $this->getListData('RefData',
+                     ['refDataCategoryId' => 'tc_role'],
+                     'id', 'id', false)
+                 );
+        }
+
+        return $form;
+    }
+
     /**
      * Generate a form with data
      *
@@ -142,47 +202,85 @@ class CasePiController extends CaseController
      * @param callable $callback
      * @param mixed $data
      * @param boolean $tables
-     * @return object
+     *
+     * @return \Zend\Form\Form
      */
     public function generateFormWithData($name, $callback, $data = null, $tables = false)
     {
-        $form = $this->generateForm($name, $callback, $tables);
+        $formData = [];
+
+        $id = $this->params()->fromRoute('id');
+
+        if ((null !== $id) && null != ($loadedData = $this->load($id))) {
+
+            $loadedData = $this->processLoad($loadedData);
+            $formData = array_merge($formData, $loadedData);
+        }
 
         if (!$this->getRequest()->isPost() && is_array($data)) {
-            $form->setData($data);
-        } else {
-            if ($id = $this->fromRoute('id') && null != ($loadedData = $this->load($id))) {
-                $form->setData($loadedData);
-            }
+            $formData = array_merge($formData, $data);
         }
+
+        $form = $this->generateForm($name, $callback, $tables);
+
+        $form->setData($formData);
+
         return $form;
     }
 
     /**
-     * Load data for the form
-     *
-     * This method should be overridden
-     *
-     * @param int $id
-     * @return array
-     */
-    protected function load($id)
-    {
-        $loadedData = parent::load($id);
-
-        $loadedData = $this->processLoad($loadedData)
-
-        return $loadedData;
-    }
-
-    /**
-     * Map the data on load
+     * Map the data on load, we need to copy the data into the
+     * main fieldset.
      *
      * @param array $data
      * @return array
      */
     protected function processLoad($data)
     {
+        $data = $this->structureLoadDataForForm($data);
+
+        $data['main'] = $data;
+
+        return $data;
+    }
+
+    /**
+     * Here we need to restructure the data to properly work
+     * with the forms as they require IDs.
+     *
+     * @param unknown $data
+     * @return unknown
+     */
+    public function structureLoadDataForForm($data)
+    {
+        $single = [
+            'assignedTo', 'piStatus', 'case', 'presidingTc', 'presidedByRole'
+        ];
+
+        foreach ($single as $key) {
+            if (isset($data[$key]) && is_array($data[$key]) && isset($data[$key]['id'])) {
+                $data[$key] = $data[$key]['id'];
+            } else if (is_array($data[$key]) && count($data[$key]) == 0) {
+                $data[$key] = null;
+            }
+        }
+
+        unset($single, $key);
+
+        $multiple = [
+            'piTypes', 'decisions', 'reasons', 'piHearings'
+        ];
+
+        foreach ($multiple as $key) {
+            if (isset($data[$key]) && is_array($data[$key])) {
+                for($i=0; $i<count($data[$key]); $i++) {
+                    $data[$key][$i] = $data[$key][$i]['id'];
+                }
+            }
+        }
+
+        unset($multiple, $key);
+
         return $data;
     }
 
@@ -200,8 +298,7 @@ class CasePiController extends CaseController
             'processSave',
             array(
                 'case' => $caseId
-            ),
-            true
+            )
         );
 
         $view = $this->getView(
@@ -211,7 +308,7 @@ class CasePiController extends CaseController
                     'pageSubTitle' => ''
                 ],
                 'form' => $form,
-                'headScript' => array('/static/js/impounding.js')
+                //'headScript' => array('/static/js/impounding.js')
             ]
         );
 
@@ -234,8 +331,7 @@ class CasePiController extends CaseController
             'processPi',
             array(
                 'case' => $caseId
-            ),
-            true
+            )
         );
 
         $view = $this->getView(
@@ -268,8 +364,7 @@ class CasePiController extends CaseController
             'processPi',
             array(
                 'case' => $caseId
-            ),
-            true
+            )
         );
 
         $view = $this->getView(
@@ -293,18 +388,16 @@ class CasePiController extends CaseController
      *
      * @return ViewModel
      */
-    public function headring()
+    public function hearing()
     {
         $caseId = $this->fromRoute('case');
-        $piId = $this->fromRoute('pi');
 
         $form = $this->generateFormWithData(
             'pi-hearing',
             'saveHearing',
             array(
                 'case' => $caseId
-            ),
-            true
+            )
         );
 
         $view = $this->getView(
@@ -337,8 +430,7 @@ class CasePiController extends CaseController
             'processPi',
             array(
                 'case' => $caseId
-            ),
-            true
+            )
         );
 
         $view = $this->getView(
@@ -377,6 +469,8 @@ class CasePiController extends CaseController
      */
     public function processPi($data)
     {
+        //die('<div>' . print_r($data, 1));
+
         $this->processSave($data);
 
         return $this->redirect()->toRoute('case_pi', ['action' => 'index'], [], true);

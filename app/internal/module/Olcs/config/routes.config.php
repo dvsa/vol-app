@@ -655,7 +655,7 @@ return array_merge(
         'case_pi_action' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/licence/:licence/case/:case/task/pi/:action/:id/:section',
+                'route' => '/licence/:licence/case/:case/task/pi/:action/:section[/:id]',
                 'constraints' => [
                     'licence' => '[0-9]+',
                     'case' => '[0-9]+',
