@@ -4,7 +4,7 @@
 if (!empty($appealRecord)) {
     echo  $this->render('partials/case/appeal.phtml', array('record' => $appealRecord));
 
-    if ($appealRecord['isWithdrawn'] != 'Y') {
+    if ($appealRecord['withdrawnDate'] != null) {
         foreach ($stayTypes as $id => $type) {
             if (isset($stayRecords[$id])) {
                 echo $this->render('partials/case/stay.phtml', array('stay' => $stayRecords[$id], 'stayType' => $type));
