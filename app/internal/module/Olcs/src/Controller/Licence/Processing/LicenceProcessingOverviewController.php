@@ -8,19 +8,17 @@ namespace Olcs\Controller\Licence\Processing;
 use Zend\View\Model\ViewModel;
 
 /**
- * Overview Controller
+ * Licence Processing Overview Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class OverviewController extends AbstractLicenceProcessingController
+class LicenceProcessingOverviewController extends AbstractLicenceProcessingController
 {
     protected $section = 'overview';
 
     public function indexAction()
     {
-        $view = new ViewModel();
-        $view->setTemplate('licence/processing/placeholder');
-
-        return $this->renderView($view);
+        //this is just a placeholder, links to only page in processing for now, which is notes
+        $this->redirectToRoute('licence/processing/notes', [], [], true);
     }
 }
