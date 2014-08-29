@@ -41,7 +41,10 @@ return array(
         array(
             'title' => 'Sub category',
             'name' => 'documentSubCategoryName',
-            'sort' => 'documentSubCategoryName'
+            'sort' => 'documentSubCategoryName',
+            'formatter' => function ($data, $column) {
+                return $data['documentSubCategoryName'] . ($data['isDigital'] == 1?' (digital)':"");
+            },
         ),
         array(
             'title' => 'Format',
