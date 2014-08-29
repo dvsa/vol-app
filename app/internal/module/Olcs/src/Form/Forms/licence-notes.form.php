@@ -10,9 +10,6 @@ return [
         'fieldsets' => [
             [
                 'name' => 'main',
-                'options' => [
-                    'label' => 'Add a note'
-                ],
                 'elements' => [
                     'comment' => [
                         'type'  => 'text',
@@ -57,6 +54,9 @@ return [
                 'type' => 'hidden'
             ],
             'noteType' => [
+                'type' => 'hidden'
+            ],
+            'linkedId' => [
                 'type' => 'hidden'
             ],
             'version' => [
