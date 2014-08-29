@@ -68,7 +68,7 @@ class TaskController extends AbstractController
         $url = sprintf(
             '<a href="%s">%s</a>',
             $this->url()->fromRoute(
-                'licence',
+                'licence/details/overview',
                 array(
                     'licence' => $this->getFromRoute('licence')
                 )
@@ -76,10 +76,17 @@ class TaskController extends AbstractController
             $licence['licNo']
         );
 
+        if (isset($data['isClosed']) && $data['isClosed'] === 'Y') {
+            $this->disableFormElements($form);
+            $textStatus = 'Closed';
+        } else {
+            $textStatus = 'Open';
+        }
+
         $details = $form->get('details');
 
         $details->get('link')->setValue($url);
-        $details->get('status')->setValue('<b>Open</b>');
+        $details->get('status')->setValue('<b>' . $textStatus . '</b>');
 
         $form->setData($this->expandData($data));
 
@@ -272,5 +279,25 @@ class TaskController extends AbstractController
             'id' => isset($data['id']) ? $data['id'] : '',
             'version' => isset($data['version']) ? $data['version'] : ''
         ];
+    }
+
+    private function disableFormElements($element) {
+        if ($element instanceof \Zend\Form\Fieldset) {
+            foreach ($element->getFieldsets() as $child) {
+                $this->disableFormElements($child);
+            }
+
+            foreach ($element->getElements() as $child) {
+                $this->disableFormElements($child);
+            }
+        }
+
+        if ($element instanceof \Zend\Form\Element\DateSelect) {
+            $this->disableFormElements($element->getDayElement());
+            $this->disableFormElements($element->getMonthElement());
+            $this->disableFormElements($element->getYearElement());
+        }
+
+        $element->setAttribute('disabled', 'disabled');
     }
 }
