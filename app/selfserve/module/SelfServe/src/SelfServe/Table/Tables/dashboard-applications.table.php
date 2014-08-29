@@ -18,7 +18,7 @@ return array(
                 if (!empty($row['licNo'])) {
                     return $row['licNo'];
                 }
-                return $sm->get('translator')->translate('Not issued yet');
+                return $sm->get('translator')->translate('Not yet allocated');
             }
         ),
         array(
