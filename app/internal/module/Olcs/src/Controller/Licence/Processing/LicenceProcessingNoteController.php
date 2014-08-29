@@ -9,6 +9,7 @@
 namespace Olcs\Controller\Licence\Processing;
 
 use Common\Controller\CrudInterface;
+use Common\Exception\BadRequestException;
 use Olcs\Controller\Traits\DeleteActionTrait;
 
 /**
@@ -88,13 +89,15 @@ class LicenceProcessingNoteController extends AbstractLicenceProcessingControlle
     {
         $licenceId = $this->getFromRoute('licence');
         $noteType = $this->getFromRoute('noteType');
+        $linkedId = $this->getFromRoute('linkedId');
 
         $form = $this->generateFormWithData(
             'licence-notes',
             'processAddNotes',
             array(
                 'licence' => $licenceId,
-                'noteType' => $noteType
+                'noteType' => $noteType,
+                'linkedId' => $linkedId
             )
         );
 
@@ -140,18 +143,26 @@ class LicenceProcessingNoteController extends AbstractLicenceProcessingControlle
      * Processes the add note form
      *
      * @param array $data
+     * @throws \Common\Exception\BadRequestException
      * @return \Zend\Http\Response
      */
     public function processAddNotes($data)
     {
+        $user = $this->getLoggedInUser();
+
         $data = array_merge($data, $data['main']);
-        $data['createdBy'] = $this->getLoggedInUser();
-        $data['lastModifiedBy'] = $this->getLoggedInUser();
+        $data['createdBy'] = $user;
+        $data['lastModifiedBy'] = $user;
 
         //checks which field to add in the linked id to
         $field = $this->getIdField($data['noteType']);
 
+        //if this is a licence note this isn't needed, for other types of note it is expected
         if ($field) {
+            if (!(int)$data['linkedId']) {
+                throw new BadRequestException('Unable to link your note to the correct record');
+            }
+
             $data[$field] = $data['linkedId'];
         }
 
@@ -161,7 +172,7 @@ class LicenceProcessingNoteController extends AbstractLicenceProcessingControlle
             return $this->redirectToIndex();
         }
 
-        return $this->redirectToRoute('licence/processing/note', ['action' => 'add'], [], true);
+        return $this->redirectToRoute('licence/processing/add-note', ['action' => 'Add'], [], true);
     }
 
     /**
@@ -174,8 +185,8 @@ class LicenceProcessingNoteController extends AbstractLicenceProcessingControlle
     {
         $data = array_merge($data, $data['main']);
 
-        //don't allow licence, note type to be changed
-        unset($data['licence'], $data['noteType']);
+        //don't allow licence, note type or linkedId to be changed
+        unset($data['licence'], $data['noteType'], $data['linkedId']);
 
         $data['lastModifiedBy'] = $this->getLoggedInUser();
 
@@ -185,7 +196,7 @@ class LicenceProcessingNoteController extends AbstractLicenceProcessingControlle
             return $this->redirectToIndex();
         }
 
-        return $this->redirectToRoute('licence/processing/note', ['action' => 'edit'], [], true);
+        return $this->redirectToRoute('licence/processing/modify-note', ['action' => 'Edit'], [], true);
     }
 
     /**
@@ -223,7 +234,7 @@ class LicenceProcessingNoteController extends AbstractLicenceProcessingControlle
      * @param $noteType
      * @return string
      */
-    private function getIdField($noteType)
+    public function getIdField($noteType)
     {
         $field = '';
 
