@@ -55,16 +55,10 @@ class LicenceController extends AbstractController
 
         $table = $this->getDocumentsTable($filters, false);
 
-        // the table's nearly all good except we don't want
-        // a couple of columns
-//        $table->removeColumn('name');
-//        $table->removeColumn('link');
-
         $view = $this->getViewWithLicence(
             array(
                 'table' => $table->render(),
-                'form'  => $this->getDocumentForm($filters),
-                // 'inlineScript' => $this->loadScripts(['documents'])
+                'form'  => $this->getDocumentForm($filters)
             )
         );
 

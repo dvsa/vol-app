@@ -4,8 +4,9 @@
  *
  * @author Jessica Rowbottom <jess.rowbottom@valtech.co.uk>
  */
-namespace Olcs\Controller\Licence\Details;
+namespace Olcs\Controller\Licence;
 
+use Olcs\Controller\AbstractController;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -13,7 +14,7 @@ use Zend\View\Model\ViewModel;
  *
  * @author Jessica Rowbottom <jess.rowbottom@valtech.co.uk>
  */
-class DocumentsController extends AbstractLicenceDetailsController
+class DocumentsController extends AbstractController
 {
     protected $section = 'documents';
 
