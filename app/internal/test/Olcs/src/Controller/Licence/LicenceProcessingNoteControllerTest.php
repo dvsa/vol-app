@@ -293,7 +293,7 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
 
     public function testProcessEditNotes()
     {
-        $data = $this->getTestFormPost('', 1 , 1);
+        $data = $this->getTestFormPost('', 1, 1);
 
         $this->controller->expects($this->once())
             ->method('getLoggedInUser')
@@ -310,7 +310,7 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
 
     public function testProcessEditNotesFail()
     {
-        $data = $this->getTestFormPost('', 1 , 1);
+        $data = $this->getTestFormPost('', 1, 1);
 
         $this->controller->expects($this->once())
             ->method('getLoggedInUser')
