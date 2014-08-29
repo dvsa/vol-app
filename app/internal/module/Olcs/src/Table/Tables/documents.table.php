@@ -30,7 +30,7 @@ return array(
                     array('action' => 'filename', 'filename' => $data['filename']),
                     'document_retrieve',
                     true
-                ) . '">' . $data['description'] . '</a>';
+                ) . '" target=\'_new\'>' . $data['description'] . '</a>';
             },
         ),
         array(
