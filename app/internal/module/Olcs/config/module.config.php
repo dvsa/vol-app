@@ -46,6 +46,9 @@ return array(
                 'Olcs\Controller\Licence\Details\ConditionUndertakingController',
             'LicenceDetailsTaxiPhvController' => 'Olcs\Controller\Licence\Details\TaxiPhvController',
             'ApplicationController' => 'Olcs\Controller\Application\ApplicationController',
+            'LicenceProcessingOverviewController' =>
+                'Olcs\Controller\Licence\Processing\LicenceProcessingOverviewController',
+            'LicenceProcessingNoteController' => 'Olcs\Controller\Licence\Processing\LicenceProcessingNoteController',
         )
     ),
     'view_manager' => array(
@@ -87,10 +90,10 @@ return array(
     'service_manager' => array(
         'factories' => array(
             'ApplicationJourneyHelper' => function ($sm) {
-                $helper = new \Olcs\Helper\ApplicationJourneyHelper();
-                $helper->setServiceLocator($sm);
-                return $helper;
-            }
+                    $helper = new \Olcs\Helper\ApplicationJourneyHelper();
+                    $helper->setServiceLocator($sm);
+                    return $helper;
+                }
         )
     ),
     'application_journey' => array(
