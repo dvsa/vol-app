@@ -26,12 +26,15 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
                 'makeRestCall',
                 'getLoggedInUser',
                 'buildTable',
-                'getFormWithData',
+                'generateFormWithData',
                 'getFromRoute',
                 'getFromPost',
                 'getView',
                 'url',
-                'renderView'
+                'renderView',
+                'redirectToRoute',
+                'processAdd',
+                'processEdit'
             )
         );
 
@@ -83,15 +86,79 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
         $this->controller->indexAction();
     }
 
+    /**
+     * Tests for a crud add redirect from index action
+     */
+    public function testIndexActionAddRedirect()
+    {
+        $licenceId = 7;
+        $action = 'Add';
+        $id = null;
+        $route = 'licence/processing/add-note';
+
+        $this->getFromRoute(0, 'licence', $licenceId);
+        $this->getFromPost(1, 'action', $action);
+        $this->getFromPost(2, 'id', $id);
+
+        $this->controller->expects($this->once())
+            ->method('redirectToRoute')
+            ->with(
+                $this->equalTo($route),
+                $this->equalTo(['action' => $action, 'licence' => $licenceId, 'noteType' => 'note_t_lic']),
+                $this->equalTo([]),
+                $this->equalTo(true)
+            );
+
+        $this->controller->indexAction();
+    }
+
+    /**
+     * Tests for a crud edit/delete redirect from index action
+     *
+     * @dataProvider indexActionModifyRedirectProvider
+     *
+     * @param string $action
+     */
+    public function testIndexActionModifyRedirect($action)
+    {
+        $licenceId = 7;
+        $id = 1;
+        $route = 'licence/processing/modify-note';
+
+        $this->getFromRoute(0, 'licence', $licenceId);
+        $this->getFromPost(1, 'action', $action);
+        $this->getFromPost(2, 'id', $id);
+
+        $this->controller->expects($this->once())
+            ->method('redirectToRoute')
+            ->with(
+                $this->equalTo($route),
+                $this->equalTo(['action' => $action, 'id' => $id]),
+                $this->equalTo([]),
+                $this->equalTo(true)
+            );
+
+        $this->controller->indexAction();
+    }
+
+    public function indexActionModifyRedirectProvider()
+    {
+        return [
+            ['Edit', 'Delete']
+        ];
+    }
+
     public function testAddAction()
     {
         $licenceId = 7;
         $noteType = 'note_t_lic';
+        $linkedId = 1;
 
         $this->getFromRoute(0, 'licence', $licenceId);
         $this->getFromRoute(1, 'noteType', $noteType);
+        $this->getFromRoute(2, 'linkedId', $linkedId);
 
-        $this->controller->expects()
+        $this->controller->expects($this->once())
             ->method('generateFormWithData');
 
         $this->controller->expects($this->once())
@@ -119,12 +186,14 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
             'version' => 1
         ];
 
-
         $this->getFromRoute(0, 'id', $id);
 
-        $this->controller->expects()
+        $this->controller->expects($this->once())
             ->method('makeRestCall')
         ->will($this->returnValue($note));
+
+        $this->controller->expects($this->once())
+            ->method('generateFormWithData');
 
         $this->controller->expects($this->once())
             ->method('getView')
@@ -138,6 +207,190 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
             ->with($this->equalTo($this->view));
 
         $this->controller->editAction();
+    }
+
+    /**
+     * Tests the process add notes function
+     *
+     * @dataProvider testProcessAddNotesProvider
+     *
+     * @param array $data
+     */
+    public function testProcessAddNotes($data)
+    {
+        $this->controller->expects($this->once())
+            ->method('getLoggedInUser')
+            ->will($this->returnValue(1));
+
+        $this->controller->expects($this->once())
+            ->method('processAdd')
+            ->will($this->returnValue(['id' => 1]));
+
+        $this->getRedirectToIndex();
+
+        $this->controller->processAddNotes($data);
+    }
+
+    /**
+     * Tests the process add notes function redirects properly on failure
+     *
+     * @dataProvider testProcessAddNotesProvider
+     *
+     * @param array $data
+     */
+    public function testProcessAddNotesFail($data)
+    {
+        $this->controller->expects($this->once())
+            ->method('getLoggedInUser')
+            ->will($this->returnValue(1));
+
+        $this->controller->expects($this->once())
+            ->method('processAdd')
+            ->will($this->returnValue([]));
+
+        $this->controller->expects($this->once())
+            ->method('redirectToRoute')
+            ->with(
+                $this->equalTo('licence/processing/add-note'),
+                $this->equalTo(['action' => 'Add']),
+                $this->equalTo([]),
+                $this->equalTo(true)
+            );
+
+        $this->controller->processAddNotes($data);
+    }
+
+    /**
+     * Tests the process add notes function throws a bad request
+     * exception when the linkedId is missing
+     *
+     * @expectedException \Common\Exception\BadRequestException
+     */
+    public function testProcessAddNotesMissingLinkException()
+    {
+        $data = $this->getTestFormPost('note_t_app', null, null, null);
+
+        $this->controller->expects($this->once())
+            ->method('getLoggedInUser')
+            ->will($this->returnValue(1));
+
+        $this->controller->processAddNotes($data);
+    }
+
+    /**
+     * Data provider for process add notes
+     */
+    public function testProcessAddNotesProvider()
+    {
+        return [
+            [$this->getTestFormPost('note_t_app'), 'application'],
+            [$this->getTestFormPost('note_t_irfo_gv'), 'irfoGvPermit'],
+            [$this->getTestFormPost('note_t_irfo_psv'), 'irfoPsvAuth'],
+            [$this->getTestFormPost('note_t_case'), 'case'],
+            [$this->getTestFormPost('note_t_bus'), 'busReg']
+        ];
+    }
+
+    public function testProcessEditNotes()
+    {
+        $data = $this->getTestFormPost('', 1 , 1);
+
+        $this->controller->expects($this->once())
+            ->method('getLoggedInUser')
+            ->will($this->returnValue(1));
+
+        $this->controller->expects($this->once())
+            ->method('processEdit')
+            ->will($this->returnValue([]));
+
+        $this->getRedirectToIndex();
+
+        $this->controller->processEditNotes($data);
+    }
+
+    public function testProcessEditNotesFail()
+    {
+        $data = $this->getTestFormPost('', 1 , 1);
+
+        $this->controller->expects($this->once())
+            ->method('getLoggedInUser')
+            ->will($this->returnValue(1));
+
+        $this->controller->expects($this->once())
+            ->method('processEdit')
+            ->will($this->returnValue(['failed']));
+
+        $this->controller->expects($this->once())
+            ->method('redirectToRoute')
+            ->with(
+                $this->equalTo('licence/processing/modify-note'),
+                $this->equalTo(['action' => 'Edit']),
+                $this->equalTo([]),
+                $this->equalTo(true)
+            );
+
+        $this->controller->processEditNotes($data);
+    }
+
+    /**
+     * Tests the output of getIdField()
+     *
+     * @dataProvider getIdFieldProvider
+     *
+     * @param $refDataKey
+     * @param $expectedOutput
+     */
+    public function testGetIdField($refDataKey, $expectedOutput)
+    {
+        $this->assertEquals($this->controller->getIdField($refDataKey), $expectedOutput);
+    }
+
+    /**
+     * Data provider got testGetIdField
+     *
+     * @return array
+     */
+    public function getIdFieldProvider()
+    {
+        return [
+            ['note_t_app', 'application'],
+            ['note_t_irfo_gv', 'irfoGvPermit'],
+            ['note_t_irfo_psv', 'irfoPsvAuth'],
+            ['note_t_case', 'case'],
+            ['note_t_bus', 'busReg']
+        ];
+    }
+
+    public function testDeleteServiceName()
+    {
+        $this->assertEquals('Note', $this->controller->getDeleteServiceName());
+    }
+
+    public function getRedirectToIndex()
+    {
+        $this->controller->expects($this->once())
+            ->method('redirectToRoute')
+            ->with(
+                $this->equalTo('licence/processing/notes'),
+                $this->equalTo([]),
+                $this->equalTo([]),
+                $this->equalTo(true)
+            );
+    }
+
+    public function getTestFormPost($refDataNoteType, $id = null, $version = null, $linkedId = 1)
+    {
+        return [
+            'main' => [
+                'comment' => 'the comment',
+                'priority' => 'Y'
+            ],
+            'id' => $id,
+            'licence' => 7,
+            'noteType' => $refDataNoteType,
+            'linkedId' => $linkedId,
+            'version' => $version
+        ];
     }
 
     /**
