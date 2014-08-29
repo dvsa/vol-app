@@ -2,7 +2,7 @@
 
 return array(
     'variables' => array(
-        'title' => 'Documents'
+        'title' => 'Documents & Attachments'
     ),
     'settings' => array(
         'crud' => array(

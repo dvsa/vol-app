@@ -18,8 +18,8 @@ trait DocumentSearchTrait
     protected function mapDocumentFilters($extra = array())
     {
         $defaults = array(
-            'sort'   => 'id',
-            'order'  => 'ASC',
+            'sort'   => 'issuedDate',
+            'order'  => 'DESC',
             'page'   => 1,
             'limit'  => 10
         );
