@@ -54,7 +54,7 @@ trait DocumentSearchTrait
     protected function getDocumentsTable($filters = array(), $render = true)
     {
         $documents = $this->makeRestCall(
-            'Document',
+            'DocumentSearchView',
             'GET',
             $filters
         );

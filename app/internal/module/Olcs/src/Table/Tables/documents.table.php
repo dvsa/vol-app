@@ -24,29 +24,33 @@ return array(
         array(
             'title' => 'Description',
             'name' => 'description',
-            'formatter' => function ($row) {
-                return '<a href=#>' . $row['description'] . '</a>';
+            'sort' => 'description',
+            'formatter' => function ($data, $column) {
+                return '<a href="' . $this->generateUrl(
+                    array('action' => 'filename', 'filename' => $data['filename']),
+                    'document_retrieve',
+                    true
+                ) . '">' . $data['description'] . '</a>';
             },
-            'sort' => 'description'
         ),
         array(
             'title' => 'Category',
             'name' => 'categoryName',
-            'sort' => 'category'
+            'sort' => 'categoryName'
         ),
         array(
             'title' => 'Sub category',
-            'name' => 'subCategoryName',
-            'sort' => 'documentSubCategory'
+            'name' => 'documentSubCategoryName',
+            'sort' => 'documentSubCategoryName'
         ),
         array(
             'title' => 'Format',
-            'name' => 'format',
-            'sort' => 'format'
+            'name' => 'fileExtension',
+            'sort' => 'fileExtension'
         ),
         array(
             'title' => 'Date',
-            'name' => 'date',
+            'name' => 'issuedDate',
             'formatter' => 'Date',
             'sort' => 'issuedDate',
         ),
