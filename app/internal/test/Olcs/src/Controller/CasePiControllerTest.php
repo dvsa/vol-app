@@ -34,7 +34,7 @@ class CasePiControllerTest extends AbstractHttpControllerTestCase
     public function testGenerateFormWithData()
     {
         return $this->markTestSkipped();
-
+        /*
         $id = 1;
         $formname = 'formName';
         $callback = 'callbackMethodName';
@@ -89,6 +89,7 @@ class CasePiControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue($entityData));
 
         $this->assertSame($form, $sut->generateFormWithData($formname, $callback, $inputData, false));
+        */
     }
 
     /**
