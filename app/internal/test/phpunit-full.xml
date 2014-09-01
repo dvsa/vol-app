@@ -12,6 +12,7 @@
             <directory suffix=".php">../module/Olcs/src</directory>
             <directory suffix=".php">../module/Admin/src</directory>
             <directory suffix=".php">../../olcs-common/Common/src</directory>
+            <directory suffix=".php">../module/Admin/src</directory>
             <exclude>
                 <directory>../module/Olcs/src/Form/</directory>
                 <directory>../module/Olcs/src/Table/</directory>
