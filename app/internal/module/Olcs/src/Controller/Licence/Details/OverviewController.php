@@ -1,16 +1,18 @@
 <?php
 
 /**
- * Overview Controller
+ * Documents Controller
+ *
+ * @author Jessica Rowbottom <jess.rowbottom@valtech.co.uk>
  */
 namespace Olcs\Controller\Licence\Details;
 
 use Zend\View\Model\ViewModel;
 
 /**
- * Overview Controller
+ * Documents Controller
  *
- * @author Rob Caiger <rob@clocal.co.uk>
+ * @author Jessica Rowbottom <jess.rowbottom@valtech.co.uk>
  */
 class OverviewController extends AbstractLicenceDetailsController
 {
