@@ -304,8 +304,8 @@ return array_merge(
                     'options' => [
                         'route' => '/processing',
                         'defaults' => [
-                            'controller' => 'LicenceProcessingOverviewController',
-                            'action' => 'index',
+                            'controller' => 'LicenceController',
+                            'action' => 'processing',
                         ]
                     ],
                     'may_terminate' => true,
