@@ -161,8 +161,6 @@ class LicenceProcessingNoteController extends AbstractLicenceProcessingControlle
             ->get('comment')
             ->setAttribute('disabled', 'disabled');
 
-
-
         $view = $this->getView(['form' => $form]);
         $view->setTemplate('licence/processing/notes/form');
 
@@ -294,6 +292,9 @@ class LicenceProcessingNoteController extends AbstractLicenceProcessingControlle
         $field = '';
 
         switch ($noteType) {
+            case 'note_t_lic':
+                $field = 'licence';
+                break;
             case 'note_t_app':
                 $field = 'application';
                 break;

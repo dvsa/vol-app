@@ -14,7 +14,7 @@ use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class LicenceControllerTest extends AbstractHttpControllerTestCase
+class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCase
 {
     public function setUp()
     {
@@ -22,7 +22,7 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             include __DIR__.'/../../../../../config/application.config.php'
         );
         $this->controller = $this->getMock(
-            '\Olcs\Controller\Licence\LicenceController',
+            '\Olcs\Controller\Licence\Processing\LicenceProcessingTasksController',
             array(
                 'makeRestCall',
                 'getLoggedInUser',
@@ -33,7 +33,8 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
                 'loadScripts',
                 'getFromRoute',
                 'params',
-                'getServiceLocator'
+                'getServiceLocator',
+                'getSubNavigation'
             )
         );
 
@@ -51,8 +52,8 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue($request));
 
         $this->controller->expects($this->any())
-             ->method('getServiceLocator')
-             ->will($this->returnValue($this->getServiceLocatorTranslator()));
+            ->method('getServiceLocator')
+            ->will($this->returnValue($this->getServiceLocatorTranslator()));
 
         parent::setUp();
     }
@@ -64,8 +65,8 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
     {
         $translatorMock = $this->getMock('\stdClass', array('translate'));
         $translatorMock->expects($this->any())
-                       ->method('translate')
-                       ->will($this->returnArgument(0));
+            ->method('translate')
+            ->will($this->returnArgument(0));
 
         $serviceMock = $this->getMock('\stdClass', array('get'));
         $serviceMock->expects($this->any())
@@ -76,7 +77,7 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
         return $serviceMock;
     }
 
-    public function testProcessingActionWithNoQueryUsesDefaultParams()
+    public function testIndexActionWithNoQueryUsesDefaultParams()
     {
         $licenceData = array(
             'licNo' => 'TEST1234',
@@ -218,14 +219,14 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             ->with('TaskSubCategory', 'GET', $extendedListData)
             ->will($this->returnValue($response));
 
-        $view = $this->controller->processingAction();
+        $view = $this->controller->indexAction();
         list($header, $content) = $view->getChildren();
 
         $this->assertEquals('TEST1234', $header->getVariable('pageTitle'));
         $this->assertEquals('PSV, L1, S1', $header->getVariable('pageSubTitle'));
     }
 
-    public function testProcessingActionAjax()
+    public function testIndexActionAjax()
     {
 
         $this->controller->expects($this->at(3))
@@ -292,7 +293,7 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             ->method('isXmlHttpRequest')
             ->will($this->returnValue(true));
 
-        $view = $this->controller->processingAction();
+        $view = $this->controller->indexAction();
 
         $this->assertTrue($view->terminate());
     }

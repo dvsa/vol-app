@@ -35,7 +35,7 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
                 'redirectToRoute',
                 'processAdd',
                 'processEdit',
-                'appendLinkedId'
+
             )
         );
 
@@ -69,10 +69,11 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
             ->method('url');
 
         $this->controller->expects($this->once())
-            ->method('makeRestCall');
+            ->method('makeRestCall')
+            ->will($this->returnValue($this->getSampleResult()));
 
-        $this->controller->expects($this->once())
-            ->method('appendLinkedId');
+        //$this->controller->expects($this->once())
+          //  ->method('appendLinkedId');
 
         $this->controller->expects($this->once())
             ->method('buildTable');
@@ -203,7 +204,8 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
         ->will($this->returnValue($note));
 
         $this->controller->expects($this->once())
-            ->method('generateFormWithData');
+            ->method('generateFormWithData')
+        ->will($this->returnValue($this->getEditForm()));
 
         $this->controller->expects($this->once())
             ->method('getView')
@@ -293,6 +295,7 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
     public function testProcessAddNotesProvider()
     {
         return [
+            [$this->getTestFormPost('note_t_lic'), 'licence'],
             [$this->getTestFormPost('note_t_app'), 'application'],
             [$this->getTestFormPost('note_t_irfo_gv'), 'irfoGvPermit'],
             [$this->getTestFormPost('note_t_irfo_psv'), 'irfoPsvAuth'],
@@ -363,6 +366,7 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
     public function getIdFieldProvider()
     {
         return [
+            ['note_t_lic', 'licence'],
             ['note_t_app', 'application'],
             ['note_t_irfo_gv', 'irfoGvPermit'],
             ['note_t_irfo_psv', 'irfoPsvAuth'],
@@ -401,6 +405,42 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
             'linkedId' => $linkedId,
             'version' => $version
         ];
+    }
+
+    private function getSampleResult()
+    {
+        return [
+            'Results' => [
+                0 => [
+                    'noteType' => [
+                        'id' => 'note_t_lic',
+                        'description' => 'Licence'
+                    ]
+                ]
+            ]
+        ];
+    }
+
+    private function getEditForm()
+    {
+        $formMock = $this->getMock('stdClass', ['get']);
+        $getElementMock = $this->getMock('stdClass', ['get']);
+        $setAttributeMock = $this->getMock('stdClass', ['setAttribute']);
+
+        $setAttributeMock->expects($this->once())
+            ->method('setAttribute');
+
+        $getElementMock->expects($this->once())
+            ->method('get')
+            ->with('comment')
+            ->will($this->returnValue($setAttributeMock));
+
+        $formMock->expects($this->once())
+            ->method('get')
+            ->with('main')
+            ->will($this->returnValue($getElementMock));
+
+        return $formMock;
     }
 
     /**
