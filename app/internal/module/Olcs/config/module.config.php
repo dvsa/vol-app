@@ -92,10 +92,10 @@ return array(
     'service_manager' => array(
         'factories' => array(
             'ApplicationJourneyHelper' => function ($sm) {
-                    $helper = new \Olcs\Helper\ApplicationJourneyHelper();
-                    $helper->setServiceLocator($sm);
-                    return $helper;
-                }
+                $helper = new \Olcs\Helper\ApplicationJourneyHelper();
+                $helper->setServiceLocator($sm);
+                return $helper;
+            }
         )
     ),
     'application_journey' => array(

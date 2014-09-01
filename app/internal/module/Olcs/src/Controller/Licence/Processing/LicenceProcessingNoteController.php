@@ -91,7 +91,7 @@ class LicenceProcessingNoteController extends AbstractLicenceProcessingControlle
     {
         $formatted = [];
 
-        foreach ($resultData['Results'] as $key => $result){
+        foreach ($resultData['Results'] as $key => $result) {
             $field = $this->getIdField($result['noteType']['id']);
 
             $formatted[$key] = $result;
