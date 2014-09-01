@@ -26,6 +26,13 @@ class SafetyController extends ParentController
     protected $hideInternalFormElements = false;
 
     /**
+     * Whether the fields are required or not
+     *
+     * @var boolean
+     */
+    protected $requiredFields = false;
+
+    /**
      * Remove the trailer fields for PSV
      *
      * @param \Zend\Form\Fieldset $form
@@ -35,7 +42,9 @@ class SafetyController extends ParentController
     {
         $form = parent::alterForm($form);
 
-        $this->setFieldsAsNotRequired($form->getInputFilter());
+        if (!$this->requiredFields) {
+            $this->setFieldsAsNotRequired($form->getInputFilter());
+        }
 
         return $form;
     }
@@ -54,9 +63,11 @@ class SafetyController extends ParentController
 
         // Get a new form without the removed validation
         $this->requiredFields = true;
+        $this->persist = false;
         $form = $this->getNewForm();
         $form->remove('csrf');
 
+        $valid = $form->isValid();
         $formData = $form->getData();
 
         $flatFormData = $this->getFlatData($formData);
@@ -70,7 +81,7 @@ class SafetyController extends ParentController
         }
 
         // Check if the form would be valid
-        $completion[$sectionIndex] = $form->isValid() ? self::COMPLETION_STATUS_COMPLETE : $incompleteStatus;
+        $completion[$sectionIndex] = $valid ? self::COMPLETION_STATUS_COMPLETE : $incompleteStatus;
 
         return $completion;
     }
