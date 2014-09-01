@@ -137,6 +137,12 @@ return array(
                             'use_route_match' => true,
                             'pages' => array(
                                 array(
+                                    'id' => 'licence_processing_tasks',
+                                    'label' => 'internal-licence-processing-tasks',
+                                    'route' => 'licence/processing/tasks',
+                                    'use_route_match' => true,
+                                ),
+                                array(
                                     'id' => 'licence_processing_notes',
                                     'label' => 'internal-licence-processing-notes',
                                     'route' => 'licence/processing/notes',
