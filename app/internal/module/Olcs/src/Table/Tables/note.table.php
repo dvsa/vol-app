@@ -40,8 +40,7 @@ return array(
             'title' => 'Author',
             'formatter' => function ($data) {
                 return $data['createdBy']['name'];
-            },
-            'sort' => 'createdBy'
+            }
         ),
         array(
             'title' => 'Note',
@@ -49,7 +48,7 @@ return array(
             'sort' => 'comment'
         ),
         array(
-            'title' => 'Type',
+            'title' => 'Note Type',
             'formatter' => function ($data) {
                 return $data['noteType']['description'];
             },
