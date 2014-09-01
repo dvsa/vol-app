@@ -7,6 +7,7 @@ namespace Olcs\Controller\Licence\Details;
 
 use Common\Controller\Traits\SafetySection;
 use Olcs\Controller\Licence\Details\AbstractLicenceDetailsController;
+
 /**
  * Safety Controller
  *
@@ -153,9 +154,9 @@ class SafetyController extends AbstractLicenceDetailsController
      * Get the form table data
      *
      * @param int $id
-     * @param string $name
+     * @param string $table
      */
-    protected function getFormTableData($id, $name)
+    protected function getFormTableData($id, $table)
     {
         $data = $this->load($id)['workshops'];
 
