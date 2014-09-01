@@ -273,7 +273,7 @@ class CasePiController extends CaseController implements CrudInterface
         foreach ($single as $key) {
             if (isset($data[$key]) && is_array($data[$key]) && isset($data[$key]['id'])) {
                 $data[$key] = $data[$key]['id'];
-            } else if (is_array($data[$key]) && count($data[$key]) == 0) {
+            } else if (isset($data[$key]) && is_array($data[$key]) && count($data[$key]) == 0) {
                 $data[$key] = null;
             }
         }
