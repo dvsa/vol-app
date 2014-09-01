@@ -133,10 +133,16 @@ class LicenceProcessingNoteController extends AbstractLicenceProcessingControlle
         ];
 
         $form = $this->generateFormWithData(
-            'licence-notes',
+            'licence-edit-notes',
             'processEditNotes',
             $data
         );
+
+        $form->get('main')
+            ->get('comment')
+            ->setAttribute('disabled', 'disabled');
+
+
 
         $view = $this->getView(['form' => $form]);
         $view->setTemplate('licence/processing/notes/form');
@@ -190,8 +196,8 @@ class LicenceProcessingNoteController extends AbstractLicenceProcessingControlle
     {
         $data = array_merge($data, $data['main']);
 
-        //don't allow licence, note type or linkedId to be changed
-        unset($data['licence'], $data['noteType'], $data['linkedId']);
+        //don't allow licence, note type or linkedId or comment to be changed
+        unset($data['licence'], $data['noteType'], $data['linkedId'], $data['comment']);
 
         $data['lastModifiedBy'] = $this->getLoggedInUser();
 

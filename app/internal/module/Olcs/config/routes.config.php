@@ -304,12 +304,22 @@ return array_merge(
                     'options' => [
                         'route' => '/processing',
                         'defaults' => [
-                            'controller' => 'LicenceController',
-                            'action' => 'processing',
+                            'controller' => 'LicenceProcessingOverviewController',
+                            'action' => 'index',
                         ]
                     ],
                     'may_terminate' => true,
                     'child_routes' => [
+                        'tasks' => [
+                            'type' => 'segment',
+                            'options' => [
+                                'route' => '/tasks',
+                                'defaults' => [
+                                    'controller' => 'LicenceProcessingTasksController',
+                                    'action' => 'index'
+                                ]
+                            ]
+                        ],
                         'notes' => [
                             'type' => 'segment',
                             'options' => [

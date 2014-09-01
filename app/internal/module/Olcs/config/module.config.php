@@ -47,6 +47,7 @@ return array(
             'LicenceDetailsTaxiPhvController' => 'Olcs\Controller\Licence\Details\TaxiPhvController',
             'LicenceProcessingOverviewController' =>
                 'Olcs\Controller\Licence\Processing\LicenceProcessingOverviewController',
+            'LicenceProcessingTasksController' => 'Olcs\Controller\Licence\Processing\LicenceProcessingTasksController',
             'LicenceProcessingNoteController' => 'Olcs\Controller\Licence\Processing\LicenceProcessingNoteController',
             'ApplicationController' => 'Olcs\Controller\Application\ApplicationController'
         )

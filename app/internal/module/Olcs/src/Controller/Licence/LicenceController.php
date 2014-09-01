@@ -17,8 +17,7 @@ use Olcs\Controller\Traits;
  */
 class LicenceController extends AbstractController
 {
-    use Traits\LicenceControllerTrait,
-        Traits\TaskSearchTrait;
+    use Traits\LicenceControllerTrait;
 
     public function detailsAction()
     {
@@ -54,31 +53,8 @@ class LicenceController extends AbstractController
 
     public function processingAction()
     {
-        $this->pageLayout = 'licence';
-
-        $filters = $this->mapTaskFilters(
-            array('licenceId' => $this->getFromRoute('licence'))
-        );
-
-        $table = $this->getTaskTable($filters, false);
-
-        // the table's nearly all good except we don't want
-        // a couple of columns
-        $table->removeColumn('name');
-        $table->removeColumn('link');
-
-        $view = $this->getViewWithLicence(
-            array(
-                'table' => $table->render(),
-                'form'  => $this->getTaskForm($filters),
-                'inlineScript' => $this->loadScripts(['tasks'])
-            )
-        );
-
-        $view->setTemplate('licence/processing');
-        $view->setTerminal(
-            $this->getRequest()->isXmlHttpRequest()
-        );
+        $view = $this->getViewWithLicence();
+        $view->setTemplate('licence/index');
 
         return $this->renderView($view);
     }
