@@ -708,7 +708,21 @@ return array_merge(
         'case_pi' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/licence/[:licence]/case/[:case]/task/pi[/:action][/:type][/:id]',
+                'route' => '/licence/:licence/case/:case/task/pi',
+                'constraints' => [
+                    'licence' => '[0-9]+',
+                    'case' => '[0-9]+'
+                ],
+                'defaults' => [
+                    'controller' => 'CasePiController',
+                    'action' => 'index'
+                ]
+            ]
+        ],
+        'case_pi_action' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/licence/:licence/case/:case/task/pi/:action/:section[/:id]',
                 'constraints' => [
                     'licence' => '[0-9]+',
                     'case' => '[0-9]+',
@@ -716,6 +730,22 @@ return array_merge(
                 ],
                 'defaults' => [
                     'controller' => 'CasePiController',
+                    'action' => 'index'
+                ]
+            ]
+        ],
+        'case_pi_hearing' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/licence/:licence/case/:case/pi/:piId/hearing[/:hearingId]',
+                'constraints' => [
+                    'licence' => '[0-9]+',
+                    'case' => '[0-9]+',
+                    'piId' => '[0-9]+',
+                    'hearingId' => '[0-9]+'
+                ],
+                'defaults' => [
+                    'controller' => 'CasePiHearingController',
                     'action' => 'index'
                 ]
             ]

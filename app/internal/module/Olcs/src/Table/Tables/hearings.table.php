@@ -8,8 +8,8 @@ return array(
         'crud' => array(
             'formName' => 'conviction',
             'actions' => array(
-                'add' => array('class' => 'primary'),
-                'edit' => array('requireRows' => true)
+                'addHearing' => array('class' => 'primary', 'value' => 'Add Hearing'),
+                'editHearing' => array('requireRows' => true, 'value' => 'Edit Hearing')
             )
         ),
         'paginate' => array(
@@ -34,7 +34,7 @@ return array(
                 $url = $this->generateUrl(['action' => 'edit', 'id' => $data['id']], 'case_pi', true);
 
                 $column['formatter'] = 'Date';
-                return '<a href="' . $url . '">' . date('d/m/Y', strtotime($data['dateOfHearing'])) . '</a>';
+                return '<a href="' . $url . '">' . date('d/m/Y', strtotime($data['hearingDate'])) . '</a>';
             },
             'name' => 'id'
         ),
