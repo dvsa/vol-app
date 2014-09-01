@@ -18,7 +18,8 @@ use Olcs\Controller\Traits;
 class LicenceController extends AbstractController
 {
     use Traits\LicenceControllerTrait,
-        Traits\TaskSearchTrait;
+        Traits\TaskSearchTrait,
+        Traits\DocumentSearchTrait;
 
     public function detailsAction()
     {
@@ -46,8 +47,25 @@ class LicenceController extends AbstractController
 
     public function documentsAction()
     {
-        $view = $this->getViewWithLicence();
-        $view->setTemplate('licence/index');
+        $this->pageLayout = 'licence';
+
+        $filters = $this->mapDocumentFilters(
+            array('licenceId' => $this->getFromRoute('licence'))
+        );
+
+        $table = $this->getDocumentsTable($filters, false);
+
+        $view = $this->getViewWithLicence(
+            array(
+                'table' => $table->render(),
+                'form'  => $this->getDocumentForm($filters)
+            )
+        );
+
+        $view->setTemplate('licence/documents');
+        $view->setTerminal(
+            $this->getRequest()->isXmlHttpRequest()
+        );
 
         return $this->renderView($view);
     }
@@ -142,6 +160,6 @@ class LicenceController extends AbstractController
      */
     public function indexJumpAction()
     {
-        return $this->redirect()->toRoute('licence/overview', [], [], true);
+        return $this->redirect()->toRoute('licence/details/overview', [], [], true);
     }
 }
