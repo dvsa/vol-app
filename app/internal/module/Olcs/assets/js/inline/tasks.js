@@ -1,7 +1,15 @@
 $(function() {
+  var form = "[name=tasks-home]";
+
+  OLCS.tableHandler({
+    table: ".table__form",
+    container: ".table__form",
+    filter: ".table__form"
+  });
+
   OLCS.formHandler({
     // the form to bind to
-    form: "#tasks-home_form",
+    form: form,
     // make sure the primary submit button is hidden
     hideSubmit: true,
     // where we'll render any response data to
@@ -12,23 +20,17 @@ $(function() {
   });
 
   OLCS.cascadeInput({
-    source: "#team",
-    dest: "#owner",
+    source: form + " #assignedToTeam",
+    dest: form + " #assignedToUser",
     process: function(value, done) {
       $.get("/tasks/users/" + value, done);
     }
   });
 
   OLCS.cascadeInput({
-    source: "#category",
-    dest: "#subCategory",
+    source: form + " #category",
+    dest: form + " #taskSubCategory",
     url: "/tasks/sub-categories"
-  });
-
-  OLCS.tableHandler({
-    table: ".table__form",
-    container: ".table__form",
-    filter: ".table__form"
   });
 
   /**
