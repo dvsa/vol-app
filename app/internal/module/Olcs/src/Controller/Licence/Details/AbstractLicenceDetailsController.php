@@ -11,6 +11,7 @@ use Zend\Navigation\Navigation;
 use Common\Controller\AbstractSectionController;
 use Common\Form\Fieldsets\Custom\SectionButtons;
 use Zend\View\Model\ViewModel;
+use Zend\Http\Response;
 
 /**
  * Abstract LicenceDetails Controller
@@ -134,6 +135,7 @@ abstract class AbstractLicenceDetailsController extends AbstractSectionControlle
         $redirect = $this->checkForRedirect();
 
         if ($redirect instanceof Response || $redirect instanceof ViewModel) {
+
             return $redirect;
         }
 

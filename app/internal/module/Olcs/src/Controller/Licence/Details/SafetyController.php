@@ -101,20 +101,11 @@ class SafetyController extends AbstractLicenceDetailsController
      */
     protected function save($data, $service = null)
     {
-        if ($this->isButtonPressed('cancel')) {
+        $this->saveCrud($data);
 
-            $this->addInfoMessage('Your changes have been discarded');
+        $this->addSuccessMessage('Your changes have been saved successfully');
 
-            return $this->redirect()->toRoute(null, array(), array(), true);
-
-        } else {
-
-            $this->saveCrud($data);
-
-            $this->addSuccessMessage('Your changes have been saved successfully');
-
-            return $this->redirect()->toRoute(null, array(), array(), true);
-        }
+        return $this->goBackToSection();
     }
 
     /**
