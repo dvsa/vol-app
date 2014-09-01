@@ -47,18 +47,33 @@ class LicenceController extends AbstractController
 
     public function documentsAction()
     {
+        // @NOTE only supported action thus far is to
+        // generate a document, so no need to check anything
+        // other than post as there's no other action to take
+        if ($this->getRequest()->isPost()) {
+            $action = strtolower($this->params()->fromPost('action'));
+
+            $params = [
+                'licence' => $this->getFromRoute('licence')
+            ];
+
+            return $this->redirect()->toRoute(
+                'licence/documents/generate',
+                $params
+            );
+        }
+
         $this->pageLayout = 'licence';
 
         $filters = $this->mapDocumentFilters(
             array('licenceId' => $this->getFromRoute('licence'))
         );
 
-        $table = $this->getDocumentsTable($filters, false);
-
         $view = $this->getViewWithLicence(
             array(
-                'table' => $table->render(),
-                'form'  => $this->getDocumentForm($filters)
+                'table' => $this->getDocumentsTable($filters),
+                'form'  => $this->getDocumentForm($filters),
+                'inlineScript' => $this->loadScripts(['table-actions'])
             )
         );
 
@@ -122,7 +137,7 @@ class LicenceController extends AbstractController
             array(
                 'table' => $table->render(),
                 'form'  => $this->getTaskForm($filters),
-                'inlineScript' => $this->loadScripts(['tasks'])
+                'inlineScript' => $this->loadScripts(['table-actions', 'tasks'])
             )
         );
 

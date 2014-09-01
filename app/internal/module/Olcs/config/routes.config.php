@@ -298,6 +298,23 @@ return array_merge(
                         ]
                     ],
                     'may_terminate' => true,
+                    'child_routes' => [
+                        'generate' => [
+                            'type' => 'segment',
+                            'options' => [
+                                'route' => '/generate',
+                                'constraints' => [
+                                    'task' => '[0-9]+'
+                                ],
+                                'defaults' => [
+                                    'type'       => 'licence',
+                                    'controller' => 'DocumentController',
+                                    'action'     => 'generate'
+                                ]
+                            ],
+                            'may_terminate' => true,
+                        ],
+                    ],
                 ],
                 'processing' => [
                     'type' => 'literal',
@@ -710,13 +727,13 @@ return array_merge(
                 ]
             ]
         ],
-        'tasks' => [
+        'entity_lists' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/tasks/[:type]/[:value]',
+                'route' => '/list/[:type]/[:value]',
                 'defaults' => [
                     'controller' => 'IndexController',
-                    'action' => 'taskFilter'
+                    'action' => 'entityList'
                 ]
             ]
         ]

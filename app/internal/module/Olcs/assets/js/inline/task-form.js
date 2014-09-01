@@ -4,14 +4,14 @@ $(function() {
   OLCS.cascadeInput({
     source: form + " #assignedToTeam",
     dest: form + " #assignedToUser",
-    url: "/tasks/users",
+    url: "/list/users",
     emptyLabel: "Unassigned"
   });
 
   OLCS.cascadeInput({
     source: form + " #category",
     dest: form + " #taskSubCategory",
-    url: "/tasks/sub-categories",
+    url: "/list/task-sub-categories",
     emptyLabel: "Please select"
   });
 });

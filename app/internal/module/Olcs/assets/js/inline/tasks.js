@@ -1,12 +1,6 @@
 $(function() {
   var form = "[name=tasks-home]";
 
-  OLCS.tableHandler({
-    table: ".table__form",
-    container: ".table__form",
-    filter: ".table__form"
-  });
-
   OLCS.formHandler({
     // the form to bind to
     form: form,
@@ -23,14 +17,14 @@ $(function() {
     source: form + " #assignedToTeam",
     dest: form + " #assignedToUser",
     process: function(value, done) {
-      $.get("/tasks/users/" + value, done);
+      $.get("/list/users/" + value, done);
     }
   });
 
   OLCS.cascadeInput({
     source: form + " #category",
     dest: form + " #taskSubCategory",
-    url: "/tasks/sub-categories"
+    url: "/list/task-sub-categories"
   });
 
   /**

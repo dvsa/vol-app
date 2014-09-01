@@ -7,7 +7,6 @@
  */
 namespace Olcs\Controller;
 
-use Common\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
 
@@ -16,9 +15,8 @@ use Zend\View\Model\JsonModel;
  *
  * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class DocumentController extends AbstractActionController
+class DocumentController extends AbstractController
 {
-
     public $messages = null;
 
     /*
@@ -95,5 +93,37 @@ class DocumentController extends AbstractActionController
 
         $response->setContent($documentData['documentData']);
         return $response;
+    }
+
+    public function generateAction()
+    {
+        $form = $this->getForm('generate-document');
+
+        $filters = [];
+
+        $selects = array(
+            'details' => array(
+                'category' => $this->getListData('Category', ['isDocCategory' => true], 'description'),
+                'documentSubCategory' => $this->getListData('DocumentSubCategory', $filters, 'description')
+            )
+        );
+
+        foreach ($selects as $fieldset => $inputs) {
+            foreach ($inputs as $name => $options) {
+                $form->get($fieldset)
+                    ->get($name)
+                    ->setValueOptions($options);
+            }
+        }
+
+        $view = new ViewModel(
+            [
+                'form' => $form,
+                'inlineScript' => $this->loadScripts(['generate-document'])
+            ]
+        );
+
+        $view->setTemplate('task/add-or-edit');
+        return $this->renderView($view, 'Generate letter');
     }
 }
