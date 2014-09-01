@@ -33,6 +33,7 @@ return array(
             'DocumentController' => 'Olcs\Controller\DocumentController',
             'DefendantSearchController' => 'Olcs\DefendantSearchController',
             'LicenceController' => 'Olcs\Controller\Licence\LicenceController',
+            'TaskController' => 'Olcs\Controller\TaskController',
             'LicenceDetailsOverviewController' => 'Olcs\Controller\Licence\Details\OverviewController',
             'LicenceDetailsTypeOfLicenceController' => 'Olcs\Controller\Licence\Details\TypeOfLicenceController',
             'LicenceDetailsBusinessDetailsController' => 'Olcs\Controller\Licence\Details\BusinessDetailsController',
