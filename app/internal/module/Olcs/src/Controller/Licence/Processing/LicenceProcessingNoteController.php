@@ -46,7 +46,12 @@ class LicenceProcessingNoteController extends AbstractLicenceProcessingControlle
             case 'Add':
                 return $this->redirectToRoute(
                     'licence/processing/add-note',
-                    ['action' => strtolower($action), 'licence' => $licenceId, 'noteType' => 'note_t_lic'],
+                    [
+                        'action' => strtolower($action),
+                        'licence' => $licenceId,
+                        'noteType' => 'note_t_lic',
+                        'linkedId' => $licenceId
+                    ],
                     [],
                     true
                 );
