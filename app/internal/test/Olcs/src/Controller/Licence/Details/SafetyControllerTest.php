@@ -67,8 +67,8 @@ class SafetyControllerTest extends AbstractLicenceDetailsControllerTestCase
             null,
             array(
                 'licence' => array(
-                    'safetyInsVehicles' => 'inspection_interval_vehicle.1',
-                    'safetyInsTrailers' => 'inspection_interval_trailer.1',
+                    'safetyInsVehicles' => '',
+                    'safetyInsTrailers' => '',
                     'safetyInsVaries' => 'Y',
                     'tachographIns' => 'tach_internal',
                     'tachographInsName' => 'Foo',
