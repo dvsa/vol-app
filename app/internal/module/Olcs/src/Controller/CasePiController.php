@@ -147,6 +147,15 @@ class CasePiController extends CaseController implements CrudInterface
 
     protected function alterFormBeforeValidation($form)
     {
+        if ($form->get('main')->has('piStatus')) {
+            $form->get('main')->get('piStatus')
+            ->setValueOptions(
+                $this->getListData('RefData',
+                    ['refDataCategoryId' => 'pi_status'],
+                    'id', 'id', false)
+            );
+        }
+
         if ($form->get('main')->has('piTypes')) {
             $form->get('main')->get('piTypes')
                  ->setValueOptions(
@@ -214,12 +223,16 @@ class CasePiController extends CaseController implements CrudInterface
         if ((null !== $id) && null != ($loadedData = $this->load($id))) {
 
             $loadedData = $this->processLoad($loadedData);
-            $formData = array_merge($formData, $loadedData);
+            //$formData = array_merge($formData, $loadedData);
+            $formData += $loadedData;
+            //die('<pre>DB Data: ' . print_r($formData, true));
         }
 
-        if (!$this->getRequest()->isPost() && is_array($data)) {
-            $formData = array_merge($formData, $data);
+        if (!$this->getRequest()->isPost() /* && is_array($data) */) {
+            //$formData = array_merge_recursive($formData, $data);
+            $formData += $data;
         }
+        //die('<pre>' . print_r($formData, true));
 
         $form = $this->generateForm($name, $callback, $tables);
 
@@ -297,7 +310,7 @@ class CasePiController extends CaseController implements CrudInterface
             'pi-sla',
             'processSave',
             array(
-                'case' => $caseId
+                'main' => array('case' => $caseId)
             )
         );
 
@@ -330,7 +343,7 @@ class CasePiController extends CaseController implements CrudInterface
             'pi-agreed',
             'processPi',
             array(
-                'case' => $caseId
+                'main' => array('case' => $caseId)
             )
         );
 
@@ -355,65 +368,13 @@ class CasePiController extends CaseController implements CrudInterface
      *
      * @return ViewModel
      */
-    public function schedule()
-    {
-        $caseId = $this->fromRoute('case');
-
-        $form = $this->generateFormWithData(
-            'pi-schedule',
-            'processPi',
-            array(
-                'case' => $caseId
-            )
-        );
-
-        $view = $this->getView(
-            [
-                'params' => [
-                    'pageTitle' => 'Schedule and Publish',
-                    'pageSubTitle' => ''
-                ],
-                'form' => $form,
-                //'headScript' => array('/static/js/impounding.js')
-            ]
-        );
-
-        $view->setTemplate('/form');
-
-        return $view;
-    }
-
-    /**
-     * Add Public Inquiry decision data for a case
-     *
-     * @return ViewModel
-     */
     public function hearing()
     {
         $caseId = $this->fromRoute('case');
 
-        $form = $this->generateFormWithData(
-            'pi-hearing',
-            'saveHearing',
-            array(
-                'case' => $caseId
-            )
-        );
+        $pi = $this->getPiInfoByCaseId($caseId);
 
-        $view = $this->getView(
-            [
-                'params' => [
-                    'pageTitle' => 'Hearing',
-                    'pageSubTitle' => ''
-                ],
-                'form' => $form,
-                //'headScript' => array('/static/js/impounding.js')
-            ]
-        );
-
-        $view->setTemplate('/form');
-
-        return $view;
+        return $this->redirect()->toRoute('case_pi_hearing', ['piId' => $pi['id']], [], true);
     }
 
     /**
@@ -429,7 +390,7 @@ class CasePiController extends CaseController implements CrudInterface
             'pi-decision',
             'processPi',
             array(
-                'case' => $caseId
+                'main' => array('case' => $caseId)
             )
         );
 
@@ -447,21 +408,6 @@ class CasePiController extends CaseController implements CrudInterface
         $view->setTemplate('/form');
 
         return $view;
-    }
-
-    /**
-     * Saves a Pi hearing record.
-     *
-     * @param array $data
-     * @return mixed
-     */
-    public function saveHearing($data)
-    {
-        $fieldsetName = 'main';
-        $data = array_merge($data, $data[$fieldsetName]);
-        unset($data[$fieldsetName]);
-
-        return $this->save($data, 'PiHearing');
     }
 
     /**
@@ -493,6 +439,6 @@ class CasePiController extends CaseController implements CrudInterface
      */
     public function editAction()
     {
-        return $this->addAction();
+        return $this->addEditAction();
     }
 }

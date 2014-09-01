@@ -667,6 +667,22 @@ return array_merge(
                 ]
             ]
         ],
+        'case_pi_hearing' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/licence/:licence/case/:case/pi/:piId/hearing[/:hearingId]',
+                'constraints' => [
+                    'licence' => '[0-9]+',
+                    'case' => '[0-9]+',
+                    'piId' => '[0-9]+',
+                    'hearingId' => '[0-9]+'
+                ],
+                'defaults' => [
+                    'controller' => 'CasePiHearingController',
+                    'action' => 'index'
+                ]
+            ]
+        ],
         'tasks' => [
             'type' => 'segment',
             'options' => [

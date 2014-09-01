@@ -30,6 +30,7 @@ return array(
             'CaseConditionUndertakingController' => 'Olcs\Controller\CaseConditionUndertakingController',
             'CaseRevokeController' => 'Olcs\Controller\CaseRevokeController',
             'CasePiController' => 'Olcs\Controller\CasePiController',
+            'CasePiHearingController' => 'Olcs\Controller\Cases\Pi\HearingController',
             'DocumentController' => 'Olcs\Controller\DocumentController',
             'DefendantSearchController' => 'Olcs\DefendantSearchController',
             'LicenceController' => 'Olcs\Controller\Licence\LicenceController',

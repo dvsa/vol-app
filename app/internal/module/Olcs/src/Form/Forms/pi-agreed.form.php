@@ -15,6 +15,10 @@ return [
                     'label' => ''
                 ],
                 'elements' => [
+                    'piStatus' => [
+                        'type' => 'select',
+                        'label' => 'PI Status'
+                    ],
                     'piTypes' => [
                         'type' => 'multiselect',
                         'label' => 'Type of PI'
