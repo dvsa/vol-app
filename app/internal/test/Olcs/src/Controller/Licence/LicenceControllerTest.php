@@ -33,12 +33,13 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
                 'loadScripts',
                 'getFromRoute',
                 'params',
+                'redirect',
                 'getServiceLocator'
             )
         );
 
         $query = new \Zend\Stdlib\Parameters();
-        $request = $this->getMock('\stdClass', ['getQuery', 'isXmlHttpRequest']);
+        $request = $this->getMock('\stdClass', ['getQuery', 'isXmlHttpRequest', 'isPost']);
         $request->expects($this->any())
             ->method('getQuery')
             ->will($this->returnValue($query));
@@ -105,8 +106,8 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue(1234));
 
         $expectedParams = array(
-            'owner' => 1,
-            'team'  => 2,
+            'assignedToUser' => 1,
+            'assignedToTeam'  => 2,
             'date'  => 'today',
             'status' => 'open',
             'sort' => 'actionDate',
@@ -118,7 +119,7 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             'actionDate' => '<= ' . date('Y-m-d'),
             'licenceId' => 1234
         );
-        $this->controller->expects($this->at(3))
+        $this->controller->expects($this->at(4))
             ->method('makeRestCall')
             ->with('TaskSearchView', 'GET', $expectedParams)
             ->will($this->returnValue([]));
@@ -186,8 +187,8 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
         ];
 
         $extendedListData = [
-            'owner' => 1,
-            'team'  => 2,
+            'assignedToUser' => 1,
+            'assignedToTeam'  => 2,
             'date'  => 'today',
             'status' => 'open',
             'sort' => 'name',
@@ -198,22 +199,22 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             'licenceId' => 1234
         ];
 
-        $this->controller->expects($this->at(7))
+        $this->controller->expects($this->at(8))
             ->method('makeRestCall')
             ->with('Team', 'GET', $standardListData)
             ->will($this->returnValue($response));
 
-        $this->controller->expects($this->at(8))
+        $this->controller->expects($this->at(9))
             ->method('makeRestCall')
             ->with('User', 'GET', $extendedListData)
             ->will($this->returnValue($response));
 
-        $this->controller->expects($this->at(9))
+        $this->controller->expects($this->at(10))
             ->method('makeRestCall')
             ->with('Category', 'GET', $altListData)
             ->will($this->returnValue($altResponse));
 
-        $this->controller->expects($this->at(10))
+        $this->controller->expects($this->at(11))
             ->method('makeRestCall')
             ->with('TaskSubCategory', 'GET', $extendedListData)
             ->will($this->returnValue($response));
@@ -228,7 +229,7 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
     public function testProcessingActionAjax()
     {
 
-        $this->controller->expects($this->at(3))
+        $this->controller->expects($this->at(4))
             ->method('makeRestCall')
             ->will($this->returnValue([]));
 
@@ -245,6 +246,145 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
 
         $tableMock->expects($this->at(1))
             ->method('removeColumn');
+
+        $this->controller->expects($this->once())
+            ->method('getTable')
+            ->will($this->returnValue($tableMock));
+
+        $this->controller->expects($this->once())
+            ->method('getForm')
+            ->will($this->returnValue($form));
+
+        $response = [
+            'Results' => [
+                [
+                    'id' => 123,
+                    'name' => 'foo'
+                ]
+            ]
+        ];
+
+        $altResponse = [
+            'Results' => [
+                [
+                    'id' => 123,
+                    'description' => 'foo'
+                ]
+            ]
+        ];
+
+        $this->controller->expects($this->at(8))
+            ->method('makeRestCall')
+            ->will($this->returnValue($response));
+
+        $this->controller->expects($this->at(9))
+            ->method('makeRestCall')
+            ->will($this->returnValue($response));
+
+        $this->controller->expects($this->at(10))
+            ->method('makeRestCall')
+            ->will($this->returnValue($altResponse));
+
+        $this->controller->expects($this->at(11))
+            ->method('makeRestCall')
+            ->will($this->returnValue($response));
+
+        $this->request->expects($this->once())
+            ->method('isXmlHttpRequest')
+            ->will($this->returnValue(true));
+
+        $view = $this->controller->processingAction();
+
+        $this->assertTrue($view->terminate());
+    }
+
+    public function testDocumentsActionWithNoQueryUsesDefaultParams()
+    {
+        $licenceData = array(
+            'licNo' => 'TEST1234',
+            'goodsOrPsv' => array(
+                'id' => 'PSV'
+            ),
+            'licenceType' => array(
+                'id' => 'L1'
+            ),
+            'status' => array(
+                'id' => 'S1'
+            )
+        );
+
+        $this->controller->expects($this->any())
+            ->method('getLicence')
+            ->will($this->returnValue($licenceData));
+
+        $this->controller->expects($this->any())
+            ->method('getLoggedInUser')
+            ->will($this->returnValue(1));
+
+        $this->controller->expects($this->any())
+            ->method('getFromRoute')
+            ->with('licence')
+            ->will($this->returnValue(1234));
+
+        $expectedParams = array(
+            'sort'   => 'issuedDate',
+            'order'  => 'DESC',
+            'page'   => 1,
+            'limit'  => 10,
+            'licenceId' => 1234
+        );
+
+        $this->controller->expects($this->any())
+            ->method('makeRestCall')
+            ->with('DocumentSearchView', 'GET', $expectedParams)
+            ->will($this->returnValue([]));
+
+        $tableMock = $this->getMock('\stdClass', ['render']);
+        $this->controller->expects($this->once())
+            ->method('getTable')
+            ->with(
+                'documents',
+                [],
+                array_merge(
+                    $expectedParams,
+                    array('query' => $this->query)
+                )
+            )
+            ->will($this->returnValue($tableMock));
+
+        $tableMock->expects($this->once())
+            ->method('render');
+
+        $form = $this->getMock('\stdClass', ['get', 'setValueOptions', 'remove', 'setData']);
+
+        $form->expects($this->any())
+            ->method('get')
+            ->will($this->returnSelf());
+
+        $this->controller->expects($this->once())
+            ->method('getForm')
+            ->will($this->returnValue($form));
+
+        $view = $this->controller->documentsAction();
+
+        $this->assertTrue($view->terminate());
+
+    }
+
+    public function testDocumentsActionAjax()
+    {
+
+        $this->controller->expects($this->at(3))
+            ->method('makeRestCall')
+            ->will($this->returnValue([]));
+
+        $form = $this->getMock('\stdClass', ['get', 'setValueOptions', 'remove', 'setData']);
+
+        $form->expects($this->any())
+            ->method('get')
+            ->will($this->returnSelf());
+
+        $tableMock = $this->getMock('\stdClass', ['render', 'removeColumn']);
 
         $this->controller->expects($this->once())
             ->method('getTable')
@@ -292,8 +432,141 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             ->method('isXmlHttpRequest')
             ->will($this->returnValue(true));
 
-        $view = $this->controller->processingAction();
+        $view = $this->controller->documentsAction();
 
         $this->assertTrue($view->terminate());
+    }
+
+    public function testProcessingActionWithAddActionSubmitted()
+    {
+        $this->request->expects($this->once())
+            ->method('isPost')
+            ->will($this->returnValue(true));
+
+        $params = $this->getMock('\stdClass', ['fromPost']);
+
+        $params->expects($this->at(0))
+            ->method('fromPost')
+            ->will($this->returnValue('create task'));
+
+        $this->controller->expects($this->any())
+            ->method('params')
+            ->will($this->returnValue($params));
+
+        $params = [
+            'action' => 'add',
+            'licence' => null,
+        ];
+        $mockRoute = $this->getMock('\stdClass', ['toRoute']);
+        $mockRoute->expects($this->once())
+            ->method('toRoute')
+            ->with('licence/task_action', $params)
+            ->will($this->returnValue('mockResponse'));
+
+        $this->controller->expects($this->any())
+            ->method('redirect')
+            ->will($this->returnValue($mockRoute));
+
+        $response = $this->controller->processingAction();
+
+        $this->assertEquals('mockResponse', $response);
+    }
+
+    public function testProcessingActionWithMultiEditSubmitted()
+    {
+        $this->request->expects($this->once())
+            ->method('isPost')
+            ->will($this->returnValue(true));
+
+        $params = $this->getMock('\stdClass', ['fromPost']);
+
+        $params->expects($this->at(0))
+            ->method('fromPost')
+            ->will($this->returnValue('edit'));
+
+        $params->expects($this->at(1))
+            ->method('fromPost')
+            ->will($this->returnValue([123, 456]));
+
+        $this->controller->expects($this->any())
+            ->method('params')
+            ->will($this->returnValue($params));
+        try {
+            $this->controller->processingAction();
+        } catch (\Exception $e) {
+            $this->assertEquals('Please select a single task to edit', $e->getMessage());
+            return;
+        }
+
+        $this->fail('Expected exception not raised');
+    }
+
+    public function testProcessingActionWithNoEditSubmitted()
+    {
+        $this->request->expects($this->once())
+            ->method('isPost')
+            ->will($this->returnValue(true));
+
+        $params = $this->getMock('\stdClass', ['fromPost']);
+
+        $params->expects($this->at(0))
+            ->method('fromPost')
+            ->will($this->returnValue('edit'));
+
+        $params->expects($this->at(1))
+            ->method('fromPost')
+            ->will($this->returnValue([]));
+
+        $this->controller->expects($this->any())
+            ->method('params')
+            ->will($this->returnValue($params));
+        try {
+            $this->controller->processingAction();
+        } catch (\Exception $e) {
+            $this->assertEquals('Please select a single task to edit', $e->getMessage());
+            return;
+        }
+
+        $this->fail('Expected exception not raised');
+    }
+
+    public function testProcessingActionWithSingleEditSubmitted()
+    {
+        $this->request->expects($this->once())
+            ->method('isPost')
+            ->will($this->returnValue(true));
+
+        $params = $this->getMock('\stdClass', ['fromPost']);
+
+        $params->expects($this->at(0))
+            ->method('fromPost')
+            ->will($this->returnValue('edit'));
+
+        $params->expects($this->at(1))
+            ->method('fromPost')
+            ->will($this->returnValue([321]));
+
+        $this->controller->expects($this->any())
+            ->method('params')
+            ->will($this->returnValue($params));
+
+        $params = [
+            'action' => 'edit',
+            'licence' => null,        // we don't mock it
+            'task'  => 321
+        ];
+        $mockRoute = $this->getMock('\stdClass', ['toRoute']);
+        $mockRoute->expects($this->once())
+            ->method('toRoute')
+            ->with('licence/task_action', $params)
+            ->will($this->returnValue('mockResponse'));
+
+        $this->controller->expects($this->any())
+            ->method('redirect')
+            ->will($this->returnValue($mockRoute));
+
+        $response = $this->controller->processingAction();
+
+        $this->assertEquals('mockResponse', $response);
     }
 }

@@ -34,6 +34,7 @@ return array(
             'DocumentController' => 'Olcs\Controller\DocumentController',
             'DefendantSearchController' => 'Olcs\DefendantSearchController',
             'LicenceController' => 'Olcs\Controller\Licence\LicenceController',
+            'TaskController' => 'Olcs\Controller\TaskController',
             'LicenceDetailsOverviewController' => 'Olcs\Controller\Licence\Details\OverviewController',
             'LicenceDetailsTypeOfLicenceController' => 'Olcs\Controller\Licence\Details\TypeOfLicenceController',
             'LicenceDetailsBusinessDetailsController' => 'Olcs\Controller\Licence\Details\BusinessDetailsController',
@@ -46,6 +47,9 @@ return array(
             'LicenceDetailsConditionUndertakingController' =>
                 'Olcs\Controller\Licence\Details\ConditionUndertakingController',
             'LicenceDetailsTaxiPhvController' => 'Olcs\Controller\Licence\Details\TaxiPhvController',
+            'LicenceProcessingOverviewController' =>
+                'Olcs\Controller\Licence\Processing\LicenceProcessingOverviewController',
+            'LicenceProcessingNoteController' => 'Olcs\Controller\Licence\Processing\LicenceProcessingNoteController',
             'ApplicationController' => 'Olcs\Controller\Application\ApplicationController'
         )
     ),
@@ -88,10 +92,10 @@ return array(
     'service_manager' => array(
         'factories' => array(
             'ApplicationJourneyHelper' => function ($sm) {
-                $helper = new \Olcs\Helper\ApplicationJourneyHelper();
-                $helper->setServiceLocator($sm);
-                return $helper;
-            }
+                    $helper = new \Olcs\Helper\ApplicationJourneyHelper();
+                    $helper->setServiceLocator($sm);
+                    return $helper;
+                }
         )
     ),
     'application_journey' => array(

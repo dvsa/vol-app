@@ -304,10 +304,53 @@ return array_merge(
                     'options' => [
                         'route' => '/processing',
                         'defaults' => [
+                            'controller' => 'LicenceController',
                             'action' => 'processing',
                         ]
                     ],
                     'may_terminate' => true,
+                    'child_routes' => [
+                        'notes' => [
+                            'type' => 'segment',
+                            'options' => [
+                                'route' => '/notes/page/:page/limit/:limit/sort/:sort/order/:order',
+                                'defaults' => [
+                                    'controller' => 'LicenceProcessingNoteController',
+                                    'action' => 'index',
+                                    'page' => 1,
+                                    'limit' => 10,
+                                    'sort' => 'priority',
+                                    'order' => 'DESC'
+                                ]
+                            ],
+                        ],
+                        'add-note' => [
+                            'type' => 'segment',
+                            'options' => [
+                                'route' => '/notes/:action/:noteType[/:linkedId]',
+                                'defaults' => [
+                                    'constraints' => [
+                                        'noteType' => '[A-Za-z]+',
+                                        'linkedId' => '[0-9]+',
+                                    ],
+                                    'controller' => 'LicenceProcessingNoteController',
+                                    'action' => 'add'
+                                ]
+                            ]
+                        ],
+                        'modify-note' => [
+                            'type' => 'segment',
+                            'options' => [
+                                'route' => '/notes/:action[/:id]',
+                                'defaults' => [
+                                    'constraints' => [
+                                        'id' => '[0-9]+',
+                                    ],
+                                    'controller' => 'LicenceProcessingNoteController',
+                                ]
+                            ]
+                        ]
+                    ]
                 ],
                 'fees' => [
                     'type' => 'literal',
@@ -318,7 +361,21 @@ return array_merge(
                         ]
                     ],
                     'may_terminate' => true,
-                ]
+                ],
+                'task_action' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => '/task[/:action][/:task]',
+                        'constraints' => [
+                            'task' => '[0-9]+'
+                        ],
+                        'defaults' => [
+                            'type'       => 'licence',
+                            'controller' => 'TaskController'
+                        ]
+                    ],
+                    'may_terminate' => true,
+                ],
             ]
         ],
 
