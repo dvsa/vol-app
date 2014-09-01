@@ -34,7 +34,8 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
                 'renderView',
                 'redirectToRoute',
                 'processAdd',
-                'processEdit'
+                'processEdit',
+                'appendLinkedId'
             )
         );
 
@@ -69,6 +70,9 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->once())
             ->method('makeRestCall');
+
+        $this->controller->expects($this->once())
+            ->method('appendLinkedId');
 
         $this->controller->expects($this->once())
             ->method('buildTable');

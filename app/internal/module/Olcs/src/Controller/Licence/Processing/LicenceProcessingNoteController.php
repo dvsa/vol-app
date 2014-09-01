@@ -77,12 +77,31 @@ class LicenceProcessingNoteController extends AbstractLicenceProcessingControlle
 
         $resultData = $this->makeRestCall('Note', 'GET', $searchData, $bundle);
 
-        $table = $this->buildTable('note', $resultData, $searchData);
+        $formattedResult = $this->appendLinkedId($resultData);
+
+        $table = $this->buildTable('note', $formattedResult, $searchData);
 
         $view = $this->getView(['table' => $table]);
         $view->setTemplate('licence/processing/notes/index');
 
         return $this->renderView($view);
+    }
+
+    public function appendLinkedId($resultData)
+    {
+        $formatted = [];
+
+        foreach ($resultData['Results'] as $key => $result){
+            $field = $this->getIdField($result['noteType']['id']);
+
+            $formatted[$key] = $result;
+            $formatted[$key]['noteType']['description'] =
+                $result['noteType']['description'] . ' ' . (isset($result[$field]['id']) ? $result[$field]['id'] : '');
+        }
+
+        $resultData['Results'] = $formatted;
+
+        return $resultData;
     }
 
     /**
@@ -225,6 +244,31 @@ class LicenceProcessingNoteController extends AbstractLicenceProcessingControlle
                     ]
                 ],
                 'licence' => [
+                    'properties' => [
+                        'id'
+                    ]
+                ],
+                'application' => [
+                    'properties' => [
+                        'id'
+                    ]
+                ],
+                'irfoGvPermit' => [
+                    'properties' => [
+                        'id'
+                    ]
+                ],
+                'irfoPsvAuth' => [
+                    'properties' => [
+                        'id'
+                    ]
+                ],
+                'case' => [
+                    'properties' => [
+                        'id'
+                    ]
+                ],
+                'busReg' => [
                     'properties' => [
                         'id'
                     ]
