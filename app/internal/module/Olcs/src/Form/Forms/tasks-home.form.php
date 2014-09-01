@@ -7,39 +7,39 @@ return array(
             'method' => 'get',
         ),
         'elements' => array(
-            'team' => array(
+            'assignedToTeam' => array(
                 'type' => 'select-noempty',
-                'label' => 'tasks-home.data.team',
+                'label' => 'tasks.data.team',
             ),
-            'owner' => array(
+            'assignedToUser' => array(
                 'type' => 'select-noempty',
-                'label' => 'tasks-home.data.owner',
+                'label' => 'tasks.data.owner',
             ),
             'category' => array(
                 'type' => 'select-noempty',
-                'label' => 'tasks-home.data.category',
+                'label' => 'tasks.data.category',
             ),
-            'subCategory' => array(
+            'taskSubCategory' => array(
                 'type' => 'select-noempty',
-                'label' => 'tasks-home.data.sub_category',
+                'label' => 'tasks.data.sub_category',
             ),
             'date' => array(
                 'type' => 'select-noempty',
-                'label' => 'tasks-home.data.date',
+                'label' => 'tasks.data.date',
                 'value_options' => 'task-date-types'
             ),
             'status' => array(
                 'type' => 'select-noempty',
-                'label' => 'tasks-home.data.status',
+                'label' => 'tasks.data.status',
                 'value_options' => 'task-status-types'
             ),
             'urgent' => array(
                 'type' => 'checkbox',
-                'label' => 'tasks-home.data.urgent',
+                'label' => 'tasks.data.urgentOnly',
             ),
             'filter' => array(
                 'type' => 'submit',
-                'label' => 'tasks-home.submit.filter'
+                'label' => 'tasks.submit.filter'
             ),
             'sort' => array(
                 'type' => 'hidden',
