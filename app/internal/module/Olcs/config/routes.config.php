@@ -223,9 +223,12 @@ return array_merge(
                             ]
                         ],
                         'safety' => [
-                            'type' => 'literal',
+                            'type' => 'segment',
                             'options' => [
-                                'route' => '/safety',
+                                'route' => '/safety[/:action][/:id]',
+                                'contraints' => [
+                                    'id' => '[0-9]+'
+                                ],
                                 'defaults' => [
                                     'controller' => 'LicenceDetailsSafetyController',
                                     'action' => 'index',
@@ -318,12 +321,22 @@ return array_merge(
                     'options' => [
                         'route' => '/processing',
                         'defaults' => [
-                            'controller' => 'LicenceController',
-                            'action' => 'processing',
+                            'controller' => 'LicenceProcessingOverviewController',
+                            'action' => 'index',
                         ]
                     ],
                     'may_terminate' => true,
                     'child_routes' => [
+                        'tasks' => [
+                            'type' => 'segment',
+                            'options' => [
+                                'route' => '/tasks',
+                                'defaults' => [
+                                    'controller' => 'LicenceProcessingTasksController',
+                                    'action' => 'index'
+                                ]
+                            ]
+                        ],
                         'notes' => [
                             'type' => 'segment',
                             'options' => [
@@ -712,7 +725,21 @@ return array_merge(
         'case_pi' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/licence/[:licence]/case/[:case]/task/pi[/:action][/:type][/:id]',
+                'route' => '/licence/:licence/case/:case/task/pi',
+                'constraints' => [
+                    'licence' => '[0-9]+',
+                    'case' => '[0-9]+'
+                ],
+                'defaults' => [
+                    'controller' => 'CasePiController',
+                    'action' => 'index'
+                ]
+            ]
+        ],
+        'case_pi_action' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/licence/:licence/case/:case/task/pi/:action/:section[/:id]',
                 'constraints' => [
                     'licence' => '[0-9]+',
                     'case' => '[0-9]+',
@@ -720,6 +747,22 @@ return array_merge(
                 ],
                 'defaults' => [
                     'controller' => 'CasePiController',
+                    'action' => 'index'
+                ]
+            ]
+        ],
+        'case_pi_hearing' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/licence/:licence/case/:case/pi/:piId/hearing[/:hearingId]',
+                'constraints' => [
+                    'licence' => '[0-9]+',
+                    'case' => '[0-9]+',
+                    'piId' => '[0-9]+',
+                    'hearingId' => '[0-9]+'
+                ],
+                'defaults' => [
+                    'controller' => 'CasePiHearingController',
                     'action' => 'index'
                 ]
             ]

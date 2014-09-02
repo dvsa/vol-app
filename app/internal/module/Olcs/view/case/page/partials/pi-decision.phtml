@@ -2,25 +2,28 @@
 
     <h3>Decision</h3>
     <div class="actions-container">
-        <a href="<?php echo $this->url($this->route, ['action' => 'edit', 'id' => $pi['id']], [], true); ?>" class="action--secondary" />Edit</a>
+        <a href="<?php //echo $this->url($this->route, ['action' => 'edit', 'id' => $pi['id'], 'section' => 'decision'], [], true); ?>" class="action--secondary" />Edit</a>
     </div>
 
     <div style="clear: both"></div>
 
     <?php
 
+    // Latest hearing.
+    $hearing = end($pi['piHearings']);
+
     $summary = [
         'decisionPresidingTc' => [
             'label' => 'Presiding commissioner / regulator',
-            'value' => $pi['decisionPresidingTc']['name']
+            'value' => $hearing['presidingTc']['name']
         ],
-        'decisionPresidingTcRole' => [
+        'presidedByRole' => [
             'label' => 'Presiding commissioner / regulator role',
-            'value' => $pi['decisionPresidingTcRole']
+            'value' => $this->translate($hearing['presidedByRole']['id'])
         ],
         'decisionType' => [
             'label' => 'Decision',
-            'value' => $pi['decisionType']
+            'value' => is_array($pi['decisions']) ? implode(', ', array_map(function($item){return $item['sectionCode'];}, $pi['decisions'])) : 'None selected',
         ],
         'whitnesses' => [
             'label' => 'Witnesses',

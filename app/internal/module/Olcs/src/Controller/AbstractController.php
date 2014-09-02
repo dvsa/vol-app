@@ -8,12 +8,12 @@
 
 namespace Olcs\Controller;
 
-use Common\Controller\FormActionController;
+use Common\Controller\AbstractController as CommonAbstractController;
 
 /**
  * Abstract Controller
  */
-class AbstractController extends FormActionController
+class AbstractController extends CommonAbstractController
 {
     const MAX_LIST_DATA_LIMIT = 100;
 
@@ -33,6 +33,7 @@ class AbstractController extends FormActionController
         } else {
             $final = array();
         }
+
         foreach ($response['Results'] as $result) {
             $key = $result[$primaryKey];
             $value = $result[$titleKey];

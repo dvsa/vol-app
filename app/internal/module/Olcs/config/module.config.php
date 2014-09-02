@@ -30,6 +30,7 @@ return array(
             'CaseConditionUndertakingController' => 'Olcs\Controller\CaseConditionUndertakingController',
             'CaseRevokeController' => 'Olcs\Controller\CaseRevokeController',
             'CasePiController' => 'Olcs\Controller\CasePiController',
+            'CasePiHearingController' => 'Olcs\Controller\Cases\Pi\HearingController',
             'DocumentController' => 'Olcs\Controller\DocumentController',
             'DefendantSearchController' => 'Olcs\DefendantSearchController',
             'LicenceController' => 'Olcs\Controller\Licence\LicenceController',
@@ -46,10 +47,11 @@ return array(
             'LicenceDetailsConditionUndertakingController' =>
                 'Olcs\Controller\Licence\Details\ConditionUndertakingController',
             'LicenceDetailsTaxiPhvController' => 'Olcs\Controller\Licence\Details\TaxiPhvController',
+            'ApplicationController' => 'Olcs\Controller\Application\ApplicationController',
             'LicenceProcessingOverviewController' =>
                 'Olcs\Controller\Licence\Processing\LicenceProcessingOverviewController',
+            'LicenceProcessingTasksController' => 'Olcs\Controller\Licence\Processing\LicenceProcessingTasksController',
             'LicenceProcessingNoteController' => 'Olcs\Controller\Licence\Processing\LicenceProcessingNoteController',
-            'ApplicationController' => 'Olcs\Controller\Application\ApplicationController'
         )
     ),
     'view_manager' => array(
@@ -91,10 +93,10 @@ return array(
     'service_manager' => array(
         'factories' => array(
             'ApplicationJourneyHelper' => function ($sm) {
-                    $helper = new \Olcs\Helper\ApplicationJourneyHelper();
-                    $helper->setServiceLocator($sm);
-                    return $helper;
-                }
+                $helper = new \Olcs\Helper\ApplicationJourneyHelper();
+                $helper->setServiceLocator($sm);
+                return $helper;
+            }
         )
     ),
     'application_journey' => array(

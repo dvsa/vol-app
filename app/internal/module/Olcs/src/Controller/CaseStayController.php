@@ -338,7 +338,32 @@ class CaseStayController extends CaseController implements CrudInterface
      */
     private function getAppealData($caseId)
     {
-        $appealResult = $this->makeRestCall('Appeal', 'GET', array('case' => $caseId));
+        $bundle = [
+            'children' => [
+                'reason' => [
+                    'properties' => [
+                        'id',
+                        'description'
+                    ]
+                ],
+                'outcome' => [
+                    'properties' => [
+                        'id',
+                        'description'
+                    ]
+                ]
+            ],
+        ];
+
+        $appealResult = $this->makeRestCall(
+            'Appeal',
+            'GET',
+            array(
+                'case' => $caseId,
+                'bundle' => json_encode($bundle)
+            )
+        );
+
         $appeal = array();
 
         if (!empty($appealResult['Results'][0])) {
