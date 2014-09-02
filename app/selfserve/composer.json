@@ -1,1 +1,31 @@
-{"name":"olcs/olcs-selfserve","description":"OLCS Self Service Web Site","repositories":[{"type":"package","package":{"name":"olcs/OlcsCommon","version":"0.4","source":{"url":"git@gitlab.clb.npm:/olcs/olcs-common.git","type":"git","reference":"0.4"}}}],"require":{"php":">=5.4","phpunit/phpunit":"4.0.*","zendframework/zendframework":"2.3.*","doctrine/doctrine-orm-module":"0.*","olcs/OlcsCommon":"0.4"},"autoload":{"psr-4":{"Common\\":"vendor/olcs/OlcsCommon/Common/src/Common"}},"config":{"github-oauth.github.com":"ab01b01b13c9454d4e5cbbec3bd14b5f7712e568"}}
+{
+    "name": "olcs/olcs-selfserve",
+    "description": "OLCS Self Service Web Site",
+    "repositories": [{
+            "type": "package",
+            "package": {
+                "name": "olcs/OlcsCommon",
+                "version": "dev-develop",
+                "source": {
+                    "url": "git@gitlab.clb.npm:/olcs/olcs-common.git",
+                    "type": "git",
+                    "reference": "origin/develop"
+                }
+            }
+        }],
+    "require": {
+        "php": ">=5.4",
+        "phpunit/phpunit": "4.0.*",
+        "zendframework/zendframework": "2.3.*",
+        "doctrine/doctrine-orm-module": "0.*",
+        "olcs/OlcsCommon": "dev-develop"
+    },
+    "autoload": {
+        "psr-4": {
+            "Common\\": "vendor/olcs/OlcsCommon/Common/src/Common"
+        }
+    },
+    "config": {
+        "github-oauth.github.com": "ab01b01b13c9454d4e5cbbec3bd14b5f7712e568"
+    }
+}
