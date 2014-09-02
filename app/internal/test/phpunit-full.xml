@@ -10,6 +10,7 @@
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="false">
             <directory suffix=".php">../module/Olcs/src</directory>
+            <directory suffix=".php">../module/Admin/src</directory>
             <directory suffix=".php">../../olcs-common/Common/src</directory>
             <directory suffix=".php">../module/Admin/src</directory>
             <exclude>

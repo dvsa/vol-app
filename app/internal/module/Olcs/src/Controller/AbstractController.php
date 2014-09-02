@@ -33,6 +33,7 @@ class AbstractController extends CommonAbstractController
         } else {
             $final = array();
         }
+
         foreach ($response['Results'] as $result) {
             $key = $result[$primaryKey];
             $value = $result[$titleKey];
