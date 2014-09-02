@@ -7,10 +7,3 @@
     <?php echo $this->flashMessengerAll(); ?>
     <?php echo $this->content; ?>
 </div>
-<?php
-
-if (isset($scripts)) {
-    foreach ($scripts as $script) {
-        $this->inlineScript()->appendScript($script);
-    }
-}

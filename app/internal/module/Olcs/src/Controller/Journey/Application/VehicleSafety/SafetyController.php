@@ -94,25 +94,21 @@ class SafetyController extends ParentController
      */
     protected function hasSectionBeenStarted($data)
     {
-        // Loop through the data
         foreach ($data as $key => $value) {
-            // Check if we have any non-default values
-            switch ($key) {
-                case 'rows':
-                    if ($value > 0) {
-                        return true;
-                    }
-                    break;
-                case 'safetyConfirmation':
-                    if ($value != 'N') {
-                        return true;
-                    }
-                    break;
-                default:
-                    if (!empty($value)) {
-                        return true;
-                    }
-                    break;
+
+            // If we have rows in the table
+            if ($key === 'rows' && $value > 0) {
+                return true;
+            }
+
+            // If we have checked the safetyConfirmation
+            if ($key === 'safetyConfirmation' && $value != 'N') {
+                return true;
+            }
+
+            // If we have any other entered values
+            if (!empty($value)) {
+                return true;
             }
         }
 
@@ -120,7 +116,7 @@ class SafetyController extends ParentController
     }
 
     /**
-     * Flattern the data
+     * Flatten the data
      *
      * @param array $data
      * @return array
