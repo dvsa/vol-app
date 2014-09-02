@@ -5,9 +5,8 @@
  */
 namespace Olcs\Controller\Licence\Processing;
 
-use Olcs\Controller\AbstractController;
+use Olcs\Controller\Licence\LicenceController;
 use Olcs\Helper\LicenceProcessingHelper;
-use Olcs\Controller\Traits\LicenceControllerTrait;
 use Zend\Navigation\Navigation;
 
 /**
@@ -15,9 +14,8 @@ use Zend\Navigation\Navigation;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-abstract class AbstractLicenceProcessingController extends AbstractController
+abstract class AbstractLicenceProcessingController extends LicenceController
 {
-    use LicenceControllerTrait;
 
     /**
      * Holds the current section

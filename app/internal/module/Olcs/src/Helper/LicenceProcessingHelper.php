@@ -23,6 +23,9 @@ class LicenceProcessingHelper
         'notes' => array(
 
         ),
+        'tasks' => array(
+
+        ),
     );
 
     /**
