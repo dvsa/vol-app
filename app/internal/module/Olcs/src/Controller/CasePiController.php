@@ -150,77 +150,54 @@ class CasePiController extends CaseController implements CrudInterface
         if ($form->get('main')->has('piStatus')) {
             $form->get('main')->get('piStatus')
             ->setValueOptions(
-                $this->getListData(
-                    'RefData',
+                $this->getListData('RefData',
                     ['refDataCategoryId' => 'pi_status'],
-                    'id',
-                    'id', false
-                )
+                    'id', 'id', false)
             );
         }
 
         if ($form->get('main')->has('piTypes')) {
             $form->get('main')->get('piTypes')
                  ->setValueOptions(
-                     $this->getListData(
-                         'RefData',
-                         ['refDataCategoryId' => 'pi_type'],
-                         'id',
-                         'id',
-                         false
-                     )
+                     $this->getListData('RefData',
+                     ['refDataCategoryId' => 'pi_type'],
+                     'id', 'id', false)
                  );
         }
 
         if ($form->get('main')->has('piTypes')) {
             $form->get('main')->get('assignedTo')
                  ->setValueOptions(
-                     $this->getListData(
-                         'User',
-                         [],
-                         'name',
-                         'id',
-                         false
-                     )
+                     $this->getListData('User',
+                     [],
+                     'name', 'id', false)
                  );
         }
 
         if ($form->get('main')->has('reasons')) {
             $form->get('main')->get('reasons')
                  ->setValueOptions(
-                     $this->getListData(
-                         'Reason',
-                         [],
-                         'sectionCode',
-                         'id',
-                         false
-                     )
+                     $this->getListData('Reason',
+                     [],
+                     'sectionCode', 'id', false)
                  );
         }
 
         if ($form->get('main')->has('presidingTc')) {
             $form->get('main')->get('presidingTc')
                  ->setValueOptions(
-                     $this->getListData(
-                         'PresidingTc',
-                         [],
-                         'name',
-                         'id',
-                         false
-                     )
+                     $this->getListData('PresidingTc',
+                     [],
+                     'name', 'id', false)
                  );
         }
 
         if ($form->get('main')->has('presidedByRole')) {
             $form->get('main')->get('presidedByRole')
                  ->setValueOptions(
-                     $this->getListData(
-                         'RefData',
-                         ['refDataCategoryId' => 'tc_role'],
-                         'id',
-                         'id',
-                         false
-                     )
+                     $this->getListData('RefData',
+                     ['refDataCategoryId' => 'tc_role'],
+                     'id', 'id', false)
                  );
         }
 
@@ -296,7 +273,7 @@ class CasePiController extends CaseController implements CrudInterface
         foreach ($single as $key) {
             if (isset($data[$key]) && is_array($data[$key]) && isset($data[$key]['id'])) {
                 $data[$key] = $data[$key]['id'];
-            } elseif (isset($data[$key]) && is_array($data[$key]) && count($data[$key]) == 0) {
+            } else if (isset($data[$key]) && is_array($data[$key]) && count($data[$key]) == 0) {
                 $data[$key] = null;
             }
         }
@@ -309,7 +286,7 @@ class CasePiController extends CaseController implements CrudInterface
 
         foreach ($multiple as $key) {
             if (isset($data[$key]) && is_array($data[$key])) {
-                for ($i=0; $i<count($data[$key]); $i++) {
+                for($i=0; $i<count($data[$key]); $i++) {
                     $data[$key][$i] = $data[$key][$i]['id'];
                 }
             }
