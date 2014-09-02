@@ -56,9 +56,9 @@ class LicenceProcessingTasksController extends AbstractLicenceProcessingControll
         $this->pageLayout = 'licence';
 
         $filters = $this->mapTaskFilters(
-            array('licenceId' => $this->getFromRoute('licence'))
+            array('linkId' => $this->getFromRoute('licence'), 'linkType' => 'Licence')
         );
-
+        
         $table = $this->getTaskTable($filters, false);
 
         $view = $this->getViewWithLicence(
