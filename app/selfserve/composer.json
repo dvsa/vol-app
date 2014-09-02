@@ -2,17 +2,17 @@
     "name": "olcs/olcs-selfserve",
     "description": "OLCS Self Service Web Site",
     "repositories": [{
-        "type": "package",
-        "package": {
-            "name": "olcs/OlcsCommon",
-            "version": "dev-develop",
-            "source": {
-                "url": "git@gitlab.clb.npm:/olcs/olcs-common.git",
-                "type": "git",
-                "reference": "origin/develop"
+            "type": "package",
+            "package": {
+                "name": "olcs/OlcsCommon",
+                "version": "dev-develop",
+                "source": {
+                    "url": "git@gitlab.clb.npm:/olcs/olcs-common.git",
+                    "type": "git",
+                    "reference": "origin/develop"
+                }
             }
-        }
-    }],
+        }],
     "require": {
         "php": ">=5.4",
         "phpunit/phpunit": "4.0.*",
@@ -20,7 +20,7 @@
         "doctrine/doctrine-orm-module": "0.*",
         "olcs/OlcsCommon": "dev-develop"
     },
-    "autoload" : {
+    "autoload": {
         "psr-4": {
             "Common\\": "vendor/olcs/OlcsCommon/Common/src/Common"
         }
