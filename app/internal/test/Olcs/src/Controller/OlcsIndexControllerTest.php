@@ -131,6 +131,7 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
         $extendedListData = [
             'assignedToUser' => 1,
             'assignedToTeam'  => 2,
+            'team'  => 2,
             'date'  => 'today',
             'status' => 'open',
             'sort' => 'name',
