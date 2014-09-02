@@ -95,7 +95,7 @@ return array(
                     $helper = new \Olcs\Helper\ApplicationJourneyHelper();
                     $helper->setServiceLocator($sm);
                     return $helper;
-                }
+            }
         )
     ),
     'application_journey' => array(
