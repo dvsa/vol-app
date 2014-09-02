@@ -32,7 +32,15 @@ return [
                 'options' => [
                     'label' => 'documents.bookmarks'
                 ],
-                'elements' => []
+                'elements' => [
+                    /**
+                     * We can't populate our bookmarks statically
+                     * from config. They're one to many with the
+                     * template the user chooses, and each bookmark
+                     * has many child paragraphs. As such we have to
+                     * build them up in the controller
+                     */
+                ]
             ],
             [
                 'name' => 'form-actions',

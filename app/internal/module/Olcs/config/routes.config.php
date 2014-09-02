@@ -303,9 +303,6 @@ return array_merge(
                             'type' => 'segment',
                             'options' => [
                                 'route' => '/generate',
-                                'constraints' => [
-                                    'task' => '[0-9]+'
-                                ],
                                 'defaults' => [
                                     'type'       => 'licence',
                                     'controller' => 'DocumentController',
@@ -734,6 +731,20 @@ return array_merge(
                 'defaults' => [
                     'controller' => 'IndexController',
                     'action' => 'entityList'
+                ]
+            ]
+        ],
+        'template_lists' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/list-template-bookmarks/:id',
+                'constraints' => [
+                    'id' => '[0-9]+'
+                ],
+                'defaults' => [
+                    'type'       => 'licence',
+                    'controller' => 'DocumentController',
+                    'action'     => 'listTemplateBookmarks'
                 ]
             ]
         ]
