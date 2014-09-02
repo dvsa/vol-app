@@ -99,24 +99,28 @@ class CaseAppealControllerTest extends \PHPUnit_Framework_TestCase
         $caseId = 24;
 
         $appealDetails = array(
-            'reason' => '5',
-            'outcome' => '9',
+            'reason' => array('id' => 'appeal_r_app'),
+            'outcome' => array('id' => 'appeal_o_dis'),
             'case' => array(
                 'id' => $caseId
-            )
+            ),
+            'withdrawnDate' => '2014-01-01'
         );
 
         $form = '<form></form>';
 
         $expectedData = array(
-            'reason' => '5',
-            'outcome' => '9',
+            'reason' => array('id' => 'appeal_r_app'),
+            'outcome' => array('id' => 'appeal_o_dis'),
+            'case' => $caseId,
+            'withdrawnDate' => '2014-01-01',
             'details' => array(
-                'reason' => 'appeal_reason.5',
-                'outcome' => 'appeal_outcome.9',
-                'case' => $caseId
-            ),
-            'case' => $caseId
+                'reason' => 'appeal_r_app',
+                'outcome' => 'appeal_o_dis',
+                'case' => $caseId,
+                'withdrawnDate' => '2014-01-01',
+                'isWithdrawn' => 'Y',
+            )
         );
 
         $viewMock = $this->getMock('\stdClass', array('setTemplate'));
