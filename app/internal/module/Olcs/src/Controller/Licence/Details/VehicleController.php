@@ -5,14 +5,14 @@
  */
 namespace Olcs\Controller\Licence\Details;
 
-use Common\Controller\Traits\VehicleSection;
+use Common\Controller\Traits;
 
 /**
  * Vehicle Controller
  */
 class VehicleController extends AbstractLicenceDetailsController
 {
-    use VehicleSection;
+    use Traits\VehicleSection;
 
     /**
      * Set the form name
@@ -34,4 +34,19 @@ class VehicleController extends AbstractLicenceDetailsController
      * @var string
      */
     protected $section = 'vehicle';
+
+    /**
+     * We only want to show active vehicles
+     *
+     * @param array $vehicle
+     * @return boolean
+     */
+    protected function showVehicle($vehicle)
+    {
+        if (empty($vehicle['specifiedDate'])) {
+            return false;
+        }
+
+        return true;
+    }
 }
