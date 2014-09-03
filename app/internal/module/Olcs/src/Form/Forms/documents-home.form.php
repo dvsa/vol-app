@@ -15,7 +15,7 @@ return array(
                 'type' => 'select-noempty',
                 'label' => 'documents-home.data.sub_category',
             ),
-            'format' => array(
+            'documentType' => array(
                 'type' => 'select-noempty',
                 'label' => 'documents-home.data.format',
             ),

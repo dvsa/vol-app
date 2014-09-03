@@ -43,6 +43,24 @@ trait DocumentSearchTrait
     {
         $form = $this->getForm('documents-home');
 
+        // grab all the relevant backend data needed to populate the
+        // various dropdowns on the filter form
+        $selects = array(
+            'category' => $this->getListData('Category', [], 'description'),
+            'subCategory' => $this->getListData('DocumentSubCategory', $filters, 'description'),
+            'documentType' => $this->getListData(
+                    'RefData',
+                    ['refDataCategoryId' => 'document_type'],
+                    'description', 'id'
+                )
+        );
+
+        // bang the relevant data into the corresponding form inputs
+        foreach ($selects as $name => $options) {
+            $form->get($name)
+                ->setValueOptions($options);
+        }
+
         // setting $this->enableCsrf = false won't sort this; we never POST
         $form->remove('csrf');
 
