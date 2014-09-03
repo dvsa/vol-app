@@ -36,10 +36,10 @@ class DocumentFinaliseController extends AbstractDocumentController
 
     public function processUpload($data)
     {
-        var_dump($data);
-        var_dump($this->getRequest()->getFiles());
-        die();
-        // later...
+        // @TODO fetch the document's meta
+        // @TODO delete the tmp file
+        // @TODO create the proper file in JR
+        // @TODO persist the actual document
         /*
         $this->makeRestCall(
             'Document',
