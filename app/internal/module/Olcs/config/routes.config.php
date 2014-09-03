@@ -213,11 +213,27 @@ return array_merge(
                             ]
                         ],
                         'vehicle' => [
-                            'type' => 'literal',
+                            'type' => 'segment',
                             'options' => [
-                                'route' => '/vehicles',
+                                'route' => '/vehicles[/:action][/:id]',
+                                'contraints' => [
+                                    'id' => '[0-9]+'
+                                ],
                                 'defaults' => [
                                     'controller' => 'LicenceDetailsVehicleController',
+                                    'action' => 'index',
+                                ]
+                            ]
+                        ],
+                        'vehicle_psv' => [
+                            'type' => 'segment',
+                            'options' => [
+                                'route' => '/vehicles_psv[/:action][/:id]',
+                                'contraints' => [
+                                    'id' => '[0-9]+'
+                                ],
+                                'defaults' => [
+                                    'controller' => 'LicenceDetailsVehiclePsvController',
                                     'action' => 'index',
                                 ]
                             ]

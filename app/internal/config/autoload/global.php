@@ -21,12 +21,19 @@ return array(
     'application-name' => 'internal',
     /**
      * @todo Not sure if there is a better place to do this, but I essentially need to override the common controller
-     * namespace to extend the behaviour
+     * namespace to extend the behaviour. And need to override the common service manager factories
      */
     'controllers' => array(
         'invokables' => array(
             'Common\Controller\Application\VehicleSafety\SafetyController' =>
                 'Olcs\Controller\Journey\Application\VehicleSafety\SafetyController',
+        )
+    ),
+    'service_manager' => array(
+        'factories' => array(
+            'section.vehicle-safety.vehicle.formatter.vrm' => function ($serviceManager) {
+                return new \Olcs\Service\Section\VehicleSafety\Vehicle\Formatter\Vrm();
+            }
         )
     )
 );
