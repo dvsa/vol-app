@@ -10,6 +10,8 @@ namespace Olcs\Controller;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
 
+use Dvsa\Jackrabbit\Data\Object\File;
+
 /**
  * Test document services.
  *
@@ -17,6 +19,8 @@ use Zend\View\Model\JsonModel;
  */
 class DocumentController extends AbstractController
 {
+    const TMP_STORAGE_PATH = 'tmp/documents';
+
     public $messages = null;
 
     /*
@@ -95,16 +99,24 @@ class DocumentController extends AbstractController
         return $response;
     }
 
-    public function generateAction()
+    protected function alterFormBeforeValidation($form)
     {
-        $form = $this->getForm('generate-document');
-
+        $data = (array)$this->getRequest()->getPost();
         $filters = [];
+
+        if (isset($data['category'])) {
+            $filters['category'] = $data['category'];
+        }
+
+        if (isset($data['category'])) {
+            $filters['documentSubCategory'] = $data['category'];
+        }
 
         $selects = array(
             'details' => array(
                 'category' => $this->getListData('Category', ['isDocCategory' => true], 'description'),
-                'documentSubCategory' => $this->getListData('DocumentSubCategory', $filters, 'description')
+                'documentSubCategory' => $this->getListData('DocumentSubCategory', $filters, 'description'),
+                'documentTemplate' => $this->getListData('DocTemplate', $filters, 'description')
             )
         );
 
@@ -116,6 +128,14 @@ class DocumentController extends AbstractController
             }
         }
 
+        return $form;
+    }
+
+    public function generateAction()
+    {
+        $form = $this->generateForm('generate-document', 'processGenerate');
+
+        $form = $this->alterFormBeforeValidation($form);
         $view = new ViewModel(
             [
                 'form' => $form,
@@ -123,15 +143,124 @@ class DocumentController extends AbstractController
             ]
         );
 
+        // @TODO obviously, don't re-use this template; make a generic one if appropriate
         $view->setTemplate('task/add-or-edit');
         return $this->renderView($view, 'Generate letter');
     }
 
+    public function processGenerate($data)
+    {
+        $templateId = $data['details']['documentTemplate'];
+        $template = $this->makeRestCall(
+            'DocTemplate',
+            'GET',
+            ['id' => $templateId],
+            [
+                'properties' => ['document'],
+                'children' => [
+                    'document' => [
+                        'properties' => ['identifier']
+                    ]
+                ]
+            ]
+        );
+
+        // @TODO obviously this is hideously inefficient but is
+        // simply to prove the concept for now. Will tidy up
+        // before finishing the story; we'll probably end up
+        // creating a custom endpoint to fetch all paragraphs
+        // by ID in one rest call
+        $bookmarks = [];
+        foreach ($data['bookmarks'] as $key => $ids) {
+            $paragraph = '';
+            foreach ($ids as $id) {
+                $result = $this->makeRestCall(
+                    'DocParagraph',
+                    'GET',
+                    ['id' => $id],
+                    ['properties' => ['paraText']]
+                );
+                $paragraph .= $result['paraText'];
+            }
+            $bookmarks[$key] = $paragraph;
+        }
+
+        // we've now got our concatenated 'static' bookmarks we can
+        // dump into the template. Let's fetch the actual raw template
+        // data and do that
+        $contentStore = $this->getServiceLocator()->get('ContentStore');
+        $template = $contentStore->read($template['document']['identifier']);
+
+        // we've now got our raw content and our bookmarks, so can hand off
+        // to our template service / doc gen service to generate the doc
+        // pretend for now...
+        $generator = $this->getServiceLocator()
+            ->get('Document')
+            // @NOTE: I really want to make the getGenerator just take a File
+            // object, but then it would have to know about the Jackrabbit module...
+            // One to ponder
+            ->getGenerator($template->getMimeType());
+
+        $contents = $generator->generate($template->getContent(), $bookmarks);
+
+        // write the file to a tmp store
+
+        $tmp = new File();
+        $tmp->setContent($contents);
+        $tmp->setMimeType($template->getMimeType());
+
+        $response = $contentStore->write(self::TMP_STORAGE_PATH . '/foo', $tmp);
+
+        return $this->redirect()->toRoute(
+            'licence/documents/finalise',
+            [
+                'licence' => $this->params()->fromRoute('licence'),
+                'tmpId'   => 'foo'
+            ]
+        );
+    }
+
     public function finaliseAction()
     {
-        // @TODO render a form with a link to the generated
-        // document and handle a file upload POST to then update
-        // the document we've stored in jack rabbit
+        $contentStore = $this->getServiceLocator()->get('ContentStore');
+        $doc = $contentStore->read(self::TMP_STORAGE_PATH . $this->params()->fromRoute('tmpId'));
+
+        $data = [
+            'category' => 'A Category',
+            'link' => '<a href=/fooo>Foo</a>'
+        ];
+        $form = $this->generateFormWithData(
+            'finalise-document',
+            'processUpload',
+            $data
+        );
+        $view = new ViewModel(
+            [
+                'form' => $form
+            ]
+        );
+        // @TODO obviously, don't re-use this template; make a generic one if appropriate
+        $view->setTemplate('task/add-or-edit');
+        return $this->renderView($view, 'Generate letter');
+    }
+
+    public function downloadAction()
+    {
+        $contentStore = $this->getServiceLocator()->get('ContentStore');
+        $doc = $contentStore->read($this->params()->fromRoute('path'));
+        // @TODO render file response
+    }
+
+    public function processUpload($data)
+    {
+        var_dump($data); die();
+        // later...
+        /*
+        $this->makeRestCall(
+            'Document',
+            'POST'
+        );
+        */
     }
 
     public function listTemplateBookmarksAction()
@@ -143,7 +272,7 @@ class DocumentController extends AbstractController
                     'properties' => ['docBookmark'],
                     'children' => [
                         'docBookmark' => [
-                            'properties' => ['name'],
+                            'properties' => ['name', 'description'],
                             'children' => [
                                 'docParagraphBookmarks' => [
                                     'properties' => ['docParagraph'],
@@ -182,7 +311,7 @@ class DocumentController extends AbstractController
             $bookmark = $bookmark['docBookmark'];
 
             $element = new \Zend\Form\Element\MultiCheckbox();
-            $element->setLabel($bookmark['name']);
+            $element->setLabel($bookmark['description']);
             $element->setName($bookmark['name']);
 
             $options = [];

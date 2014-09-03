@@ -303,7 +303,7 @@ return array_merge(
                     'may_terminate' => true,
                     'child_routes' => [
                         'generate' => [
-                            'type' => 'segment',
+                            'type' => 'literal',
                             'options' => [
                                 'route' => '/generate',
                                 'defaults' => [
@@ -312,7 +312,17 @@ return array_merge(
                                     'action'     => 'generate'
                                 ]
                             ],
-                            'may_terminate' => true,
+                        ],
+                        'finalise' => [
+                            'type' => 'segment',
+                            'options' => [
+                                'route' => '/finalise/:tmpId',
+                                'defaults' => [
+                                    'type'       => 'licence',
+                                    'controller' => 'DocumentController',
+                                    'action'     => 'finalise'
+                                ]
+                            ],
                         ],
                     ],
                 ],
@@ -788,6 +798,16 @@ return array_merge(
                     'type'       => 'licence',
                     'controller' => 'DocumentController',
                     'action'     => 'listTemplateBookmarks'
+                ]
+            ]
+        ],
+        'fetch_document' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/documents/:path',
+                'defaults' => [
+                    'controller' => 'DocumentController',
+                    'action'     => 'download'
                 ]
             ]
         ]
