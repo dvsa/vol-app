@@ -18,5 +18,15 @@ return array(
             )
         )
     ),
-    'application-name' => 'internal'
+    'application-name' => 'internal',
+    /**
+     * @todo Not sure if there is a better place to do this, but I essentially need to override the common controller
+     * namespace to extend the behaviour
+     */
+    'controllers' => array(
+        'invokables' => array(
+            'Common\Controller\Application\VehicleSafety\SafetyController' =>
+                'Olcs\Controller\Journey\Application\VehicleSafety\SafetyController',
+        )
+    )
 );

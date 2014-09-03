@@ -106,7 +106,17 @@ class CaseAppealController extends CaseController implements CrudInterface
                     'properties' => array(
                         'id'
                     )
-                )
+                ),
+                'reason' => array(
+                    'properties' => array(
+                        'id'
+                    )
+                ),
+                'outcome' => array(
+                    'properties' => array(
+                        'id'
+                    )
+                ),
             )
         );
 
@@ -158,8 +168,17 @@ class CaseAppealController extends CaseController implements CrudInterface
         $data['case'] = $data['case']['id'];
         $data['details'] = $data;
 
-        $data['details']['reason'] = 'appeal_reason.' . $data['details']['reason'];
-        $data['details']['outcome'] = 'appeal_outcome.' . $data['details']['outcome'];
+        $data['details']['reason'] = $data['details']['reason']['id'];
+
+        if (!empty($data['details']['outcome'])) {
+            $data['details']['outcome'] = $data['details']['outcome']['id'];
+        } else {
+            $data['details']['outcome'] = '';
+        }
+
+        if ($data['withdrawnDate']) {
+            $data['details']['isWithdrawn'] = 'Y';
+        }
 
         return $data;
     }
@@ -205,9 +224,6 @@ class CaseAppealController extends CaseController implements CrudInterface
         $data = array_merge($data, $data['details']);
 
         unset($data['details']);
-
-        $data['reason'] = str_replace('appeal_reason.', '', $data['reason']);
-        $data['outcome'] = str_replace('appeal_outcome.', '', $data['outcome']);
 
         //if the withdrawn checkbox is 'N' then make sure withdrawn date is null
         if ($data['isWithdrawn'] == 'N') {

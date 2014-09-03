@@ -62,7 +62,7 @@ abstract class AbstractLicenceProcessingController extends LicenceController
             'section' => $this->section
         );
 
-        $layout = $this->getViewWithLicence($variables);
+        $layout = $this->getViewWithLicence(array_merge($variables, (array)$view->getVariables()));
         $layout->setTemplate('licence/processing/layout');
 
         $layout->addChild($view, 'content');

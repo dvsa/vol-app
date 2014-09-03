@@ -310,26 +310,6 @@ class CaseImpoundingController extends CaseController implements CrudInterface
     }
 
     /**
-     * Redirects to the add or edit action
-     *
-     * @param string $action
-     * @param int $id
-     * @return \Zend\Http\Response
-     */
-    private function redirectToCrud($action, $id = null)
-    {
-        return $this->redirect()->toRoute(
-            'case_impounding',
-            array(
-                'action' => $action,
-                'id' => $id,
-            ),
-            array(),
-            true
-        );
-    }
-
-    /**
      * Hearing date and time are separate fields on the form but are one field in the database
      *
      * @param string $hearingDate
@@ -508,14 +488,29 @@ class CaseImpoundingController extends CaseController implements CrudInterface
     {
         if ($licence['niFlag']) {
             return $this->getListData(
-                'RefData', ['refDataCategory' => 'impound_legislation_goods_ni'], 'id', 'id', false);
+                'RefData',
+                ['refDataCategory' => 'impound_legislation_goods_ni'],
+                'id',
+                'id',
+                false
+            );
         } else {
             if ($licence['goodsOrPsv'] == 'Goods') {
                 return $this->getListData(
-                    'RefData', ['refDataCategory' => 'impound_legislation_goods_gb'], 'id', 'id', false);
+                    'RefData',
+                    ['refDataCategory' => 'impound_legislation_goods_gb'],
+                    'id',
+                    'id',
+                    false
+                );
             } else {
                 return $this->getListData(
-                    'RefData', ['refDataCategory' => 'impound_legislation_psv_gb'], 'id', 'id', false);
+                    'RefData',
+                    ['refDataCategory' => 'impound_legislation_psv_gb'],
+                    'id',
+                    'id',
+                    false
+                );
             }
         }
     }

@@ -63,6 +63,12 @@ trait TaskSearchTrait
     {
         $form = $this->getForm('tasks-home');
 
+        // the filters generally double up perfectly as form
+        // and filter data, but team just needs a little bump...
+        if (isset($filters['assignedToTeam'])) {
+            $filters['team'] = $filters['assignedToTeam'];
+        }
+
         // grab all the relevant backend data needed to populate the
         // various dropdowns on the filter form
         $selects = array(

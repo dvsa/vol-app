@@ -14,7 +14,7 @@ return [
                     'comment' => [
                         'type'  => 'text',
                         'label' => 'Enter note',
-                        'filters' => '\Common\Form\Elements\InputFilters\TextMax1024Required',
+                        'filters' => '\Common\Form\Elements\InputFilters\TextMax4000Required',
                         'class' => 'extra-long'
                     ],
                     'priority' => [
