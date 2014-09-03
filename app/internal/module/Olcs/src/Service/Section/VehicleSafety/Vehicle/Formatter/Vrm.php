@@ -16,5 +16,21 @@ use Common\Service\Section\VehicleSafety\Vehicle\Formatter\Vrm as ParentFormatte
  */
 class Vrm extends ParentFormatter
 {
+    /**
+     * Holds the route
+     *
+     * @var string
+     */
     protected static $route = 'licence/details/vehicle';
+
+    /**
+     * Return the route for the column
+     *
+     * @param array $column
+     * @return string
+     */
+    protected static function getRouteForColumn($column)
+    {
+        return static::$route . (isset($column['psv']) && $column['psv'] ? '_psv' : '');
+    }
 }

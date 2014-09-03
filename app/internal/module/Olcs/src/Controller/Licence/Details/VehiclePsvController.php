@@ -41,7 +41,10 @@ class VehiclePsvController extends AbstractLicenceDetailsController
      * @var array
      */
     protected $dataBundle = array(
-        'properties' => null,
+        'properties' => array(
+            'id',
+            'version'
+        ),
         'children' => array(
             'licenceVehicles' => array(
                 'properties' => null,
@@ -65,17 +68,24 @@ class VehiclePsvController extends AbstractLicenceDetailsController
     );
 
     /**
+     * Remove the trailer fields for PSV
+     *
+     * @param \Zend\Form\Fieldset $form
+     * @return \Zend\Form\Fieldset
+     */
+    protected function alterForm($form)
+    {
+        return $this->doAlterForm(parent::alterForm($form));
+    }
+
+    /**
      * Return the form table data
      *
      * @return array
      */
     protected function getFormTableData($id, $table)
     {
-        $data = $this->load($id);
-
-        $data = array(
-            'licence' => $data
-        );
+        $data = array('licence' => $this->load($id));
 
         return $this->formatTableData($data, $table);
     }
