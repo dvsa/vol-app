@@ -96,7 +96,8 @@ return array(
                 $helper = new \Olcs\Helper\ApplicationJourneyHelper();
                 $helper->setServiceLocator($sm);
                 return $helper;
-            }
+            },
+            'ContentStore' => 'Dvsa\Jackrabbit\Service\ClientFactory'
         )
     ),
     'application_journey' => array(
