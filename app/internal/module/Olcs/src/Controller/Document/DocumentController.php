@@ -5,7 +5,7 @@
  *
  * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
-namespace Olcs\Controller;
+namespace Olcs\Controller\Document;
 
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
@@ -17,87 +17,9 @@ use Dvsa\Jackrabbit\Data\Object\File;
  *
  * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class DocumentController extends AbstractController
+class DocumentController extends AbstractDocumentController
 {
     const TMP_STORAGE_PATH = 'tmp/documents';
-
-    public $messages = null;
-
-    /*
-     * Generates a case list using the DataListPlugin
-     */
-    public function indexAction()
-    {
-
-        $allTemplates = $this->service('Olcs\Template')->get('list');
-
-        $view = new ViewModel(['allTemplates' => $allTemplates]);
-        $view->setTemplate('olcs/document/test-templates');
-        return $view;
-    }
-
-    /**
-     * Method to extract and return a template bookmarks
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
-    public function getTemplateBookmarksAction()
-    {
-
-        $country = $this->params('country');
-        $format = $this->params('format');
-        $templateId = $this->params('template');
-        $template_bookmarks = $this->service('Olcs\Template')
-            ->get('bookmarks/' . $templateId . '/' . $format . '/' . $country);
-
-        return new JsonModel($template_bookmarks);
-    }
-
-    public function generateDocumentAction()
-    {
-        $country = $this->params('country');
-        $templateId = $this->params('templateId');
-        $bookmarks = $_POST;
-        $documentData = $this->sendPost(
-            'Olcs\Document\Generate', array(
-                'bookmarks' => $bookmarks,
-                'country' => $country,
-                'templateId' => $templateId
-            )
-        );
-
-        return new JsonModel($documentData);
-    }
-
-    public function retrieveDocumentAction()
-    {
-        $filename = $this->params('filename');
-        $country = $this->params('country');
-        $format = $this->params('format');
-
-        //$serviceData = $this->service('Olcs\Document\Retrieve')->get('retrieve/'.$filename.'/'.$format.'/'.$country);
-        $documentData = $this->sendGet(
-            'Olcs\Document\Retrieve',
-            array(
-                'filename' => $filename,
-                'format' => $format,
-                'country' => $country
-            )
-        );
-
-        $filename = $documentData['filename'];
-        $response = $this->getResponse();
-        $response->setStatusCode(200);
-        $response->getHeaders()->addHeaders(
-            array(
-                "Content-type" => "application/rtf",
-                "Content-Disposition: attachment; filename=" . $filename . ".rtf"
-            )
-        );
-
-        $response->setContent($documentData['documentData']);
-        return $response;
-    }
 
     protected function alterFormBeforeValidation($form)
     {
@@ -135,7 +57,12 @@ class DocumentController extends AbstractController
     {
         $form = $this->generateForm('generate-document', 'processGenerate');
 
+        // @NOTE: yes, this will be called automagically when POSTing the
+        // form, but we also need it when rendering via a GET too because
+        // it actually populates our default category / sub cat / template
+        // values as well
         $form = $this->alterFormBeforeValidation($form);
+
         $view = new ViewModel(
             [
                 'form' => $form,
@@ -188,17 +115,16 @@ class DocumentController extends AbstractController
         // we've now got our concatenated 'static' bookmarks we can
         // dump into the template. Let's fetch the actual raw template
         // data and do that
-        $contentStore = $this->getServiceLocator()->get('ContentStore');
+        $contentStore = $this->getContentStore();
         $template = $contentStore->read($template['document']['identifier']);
 
         // we've now got our raw content and our bookmarks, so can hand off
         // to our template service / doc gen service to generate the doc
         // pretend for now...
-        $generator = $this->getServiceLocator()
-            ->get('Document')
+        $generator = $this->getDocumentService()
             // @NOTE: I really want to make the getGenerator just take a File
             // object, but then it would have to know about the Jackrabbit module...
-            // One to ponder
+            // One to ponder; perhaps push it into common anyway?
             ->getGenerator($template->getMimeType());
 
         $contents = $generator->generate($template->getContent(), $bookmarks);
@@ -219,48 +145,22 @@ class DocumentController extends AbstractController
             ]
         );
     }
-
-    public function finaliseAction()
-    {
-        $contentStore = $this->getServiceLocator()->get('ContentStore');
-        $doc = $contentStore->read(self::TMP_STORAGE_PATH . $this->params()->fromRoute('tmpId'));
-
-        $data = [
-            'category' => 'A Category',
-            'link' => '<a href=/fooo>Foo</a>'
-        ];
-        $form = $this->generateFormWithData(
-            'finalise-document',
-            'processUpload',
-            $data
-        );
-        $view = new ViewModel(
-            [
-                'form' => $form
-            ]
-        );
-        // @TODO obviously, don't re-use this template; make a generic one if appropriate
-        $view->setTemplate('task/add-or-edit');
-        return $this->renderView($view, 'Generate letter');
-    }
-
     public function downloadAction()
     {
         $contentStore = $this->getServiceLocator()->get('ContentStore');
         $doc = $contentStore->read($this->params()->fromRoute('path'));
         // @TODO render file response
-    }
-
-    public function processUpload($data)
-    {
-        var_dump($data); die();
-        // later...
-        /*
-        $this->makeRestCall(
-            'Document',
-            'POST'
+        $response = $this->getResponse();
+        $response->setStatusCode(200);
+        $response->getHeaders()->addHeaders(
+            array(
+                "Content-type" => "application/rtf",
+                "Content-Disposition: attachment; filename=" . $filename . ".rtf"
+            )
         );
-        */
+
+        $response->setContent($documentData['documentData']);
+        return $response;
     }
 
     public function listTemplateBookmarksAction()

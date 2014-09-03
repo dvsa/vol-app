@@ -319,7 +319,7 @@ return array_merge(
                                 'route' => '/finalise/:tmpId',
                                 'defaults' => [
                                     'type'       => 'licence',
-                                    'controller' => 'DocumentController',
+                                    'controller' => 'DocumentFinaliseController',
                                     'action'     => 'finalise'
                                 ]
                             ],
@@ -680,26 +680,6 @@ return array_merge(
                 'defaults' => [
                     'controller' => 'CaseConditionUndertakingController',
                     'type' => 'undertaking'
-                ]
-            ]
-        ],
-        'document_generate' => [
-            'type' => 'segment',
-            'options' => [
-                'route' => '/document/generate/:template[/:format][/:country]',
-                'defaults' => [
-                    'controller' => 'DocumentController',
-                    'action' => 'generateDocument'
-                ]
-            ],
-        ],
-        'document_retrieve' => [
-            'type' => 'segment',
-            'options' => [
-                'route' => '/document/retrieve/:filename[/:format][/:country]',
-                'defaults' => [
-                    'controller' => 'DocumentController',
-                    'action' => 'retrieveDocument'
                 ]
             ]
         ],
