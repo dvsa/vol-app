@@ -30,7 +30,7 @@ trait DocumentSearchTrait
             $this->getRequest()->getQuery()->toArray()
         );
 
-        // nuke any empty values too
+        // nuke any empty values
         return array_filter(
             $filters,
             function ($v) {
@@ -48,13 +48,13 @@ trait DocumentSearchTrait
         $selects = array(
             'category' => $this->getListData('Category', [], 'description'),
             'subCategory' => $this->getListData('DocumentSubCategory', $filters, 'description'),
-            'documentType' => $this->getListData(
+            'fileExtension' => $this->getListData(
                     'RefData',
                     ['refDataCategoryId' => 'document_type'],
                     'description', 'id'
                 )
         );
-
+        
         // bang the relevant data into the corresponding form inputs
         foreach ($selects as $name => $options) {
             $form->get($name)
@@ -77,13 +77,16 @@ trait DocumentSearchTrait
             $filters
         );
 
+        $filters = array_merge(
+            $filters,
+            array('query' => $this->getRequest()->getQuery())
+        );
+
+        //var_dump($filters);exit(0);
         $table = $this->getTable(
             'documents',
             $documents,
-            array_merge(
-                $filters,
-                array('query' => $this->getRequest()->getQuery())
-            )
+            $filters
         );
 
         if ($render) {

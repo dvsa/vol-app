@@ -15,11 +15,11 @@ return array(
                 'type' => 'select-noempty',
                 'label' => 'documents-home.data.sub_category',
             ),
-            'documentType' => array(
+            'fileExtension' => array(
                 'type' => 'select-noempty',
                 'label' => 'documents-home.data.format',
             ),
-            'digitalOnly' => array(
+            'isDigital' => array(
                 'type' => 'checkbox',
                 'label' => 'documents-home.data.digitalonly',
             )
