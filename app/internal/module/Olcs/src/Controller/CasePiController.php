@@ -104,9 +104,6 @@ class CasePiController extends CaseController implements CrudInterface
 
         $pi = $this->getPiInfoByCaseId($caseId);
 
-        //die('<pre>' . print_r($pi, 1));
-
-
         $table = $this->buildPiHearingsTable($pi);
 
         $variables = array(
