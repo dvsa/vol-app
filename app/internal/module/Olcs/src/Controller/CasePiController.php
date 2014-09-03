@@ -30,7 +30,11 @@ class CasePiController extends CaseController implements CrudInterface
                 'properties' => 'ALL',
             ],
             'presidingTc' => [
-                'properties' => 'ALL',
+                'properties' =>
+                [
+                    'id',
+                    'name'
+                ]
             ],
             'reasons' => [
                 'properties' => 'ALL',
@@ -65,10 +69,7 @@ class CasePiController extends CaseController implements CrudInterface
             ),
             'presidedByRole' => array(
                 'properties' => ['id']
-            ),
-            'presidingTc' => array(
-                'properties' => ['id']
-            ),
+            )
         ]
     ];
 
@@ -104,6 +105,7 @@ class CasePiController extends CaseController implements CrudInterface
         $pi = $this->getPiInfoByCaseId($caseId);
 
         //die('<pre>' . print_r($pi, 1));
+
 
         $table = $this->buildPiHearingsTable($pi);
 
@@ -230,6 +232,8 @@ class CasePiController extends CaseController implements CrudInterface
     {
         $formData = [];
 
+        $form = $this->generateForm($name, $callback, $tables);
+
         $id = $this->params()->fromRoute('id');
 
         if ((null !== $id) && null != ($loadedData = $this->load($id))) {
@@ -243,11 +247,9 @@ class CasePiController extends CaseController implements CrudInterface
         if (!$this->getRequest()->isPost() /* && is_array($data) */) {
             //$formData = array_merge_recursive($formData, $data);
             $formData += $data;
+
+            $form->setData($formData);
         }
-
-        $form = $this->generateForm($name, $callback, $tables);
-
-        $form->setData($formData);
 
         return $form;
     }
