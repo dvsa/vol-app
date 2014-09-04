@@ -92,6 +92,64 @@ class SubmissionController extends FormActionController implements CrudInterface
         return $this->renderView($view, $this->title, $this->subTitle);
     }
 
+
+    /**
+     * Gives us a list of submissions for the case.
+     *
+     * @param unknown $caseId
+     * @return NULL
+     */
+    public function getSubmissions($caseId)
+    {
+        $bundle = array(
+            'children' => array(
+                'submissionActions' => array(
+                    'properties' => 'ALL',
+                    'children' => array(
+                        'senderUser' => array(
+                            'properties' => 'ALL'
+                        ),
+                        'recipientUser' => array(
+                            'properties' => 'ALL'
+                        ),
+                    )
+                )
+            )
+        );
+
+        $config = $this->getServiceLocator()->get('Config');
+        $submissionActions = $config['static-list-data'];
+        $results = $this->makeRestCall('Submission', 'GET', array('case' => $caseId), $bundle);
+
+        foreach ($results['Results'] as $k => &$result) {
+
+            $result['status'] = 'Draft';
+
+            foreach ($result['submissionActions'] as $action) {
+
+                $result['urgent'] = $action['urgent'];
+
+                if (isset($action['recipientUser']['name'])) {
+                    $result['currentlyWith'] = $action['recipientUser']['name'];
+                }
+
+                $actions = isset($submissionActions['submission_'.$action['submissionActionType']])
+                ? $submissionActions['submission_'.$action['submissionActionType']] : '';
+
+                $result['status'] = isset($actions[$action['submissionActionStatus']])
+                ? $actions[$action['submissionActionStatus']] : '';
+
+                $result['type'] = ucfirst($action['submissionActionType']);
+
+                //We only need the data from the top action - which is the latest.
+                break;
+            }
+        }
+
+        return $results;
+    }
+
+
     /**
      * Gets a variable from the route
      *

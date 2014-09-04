@@ -25,8 +25,126 @@ foreach ($applicationJourney['Application']['sections'] as $sectionName => $sect
 return array(
     'label' => 'Home',
     'route' => 'dashboard',
-    'use_route_match' => true,
+    'use_route_match' => false,
     'pages' => array(
+        array(
+            'id' => 'case',
+            'label' => 'Case',
+            'route' => 'case',
+            'action' => 'redirect',
+            'use_route_match' => true,
+            'pages' => array(
+                array(
+                    'id' => 'case_details',
+                    'label' => 'Case details',
+                    'route' => 'case',
+                    'action' => 'redirect',
+                    'use_route_match' => true,
+                    'pages' => array(
+                        array(
+                            'id' => 'case_details_overview',
+                            'label' => 'Overview',
+                            'route' => 'case',
+                            'action' => 'overview',
+                            'use_route_match' => true,
+                        ),
+                        array(
+                            'id' => 'case_details_convictions',
+                            'label' => 'Convictions',
+                            'route' => 'case',
+                            'action' => 'convictions',
+                            'use_route_match' => true,
+                        ),
+                        array(
+                            'id' => 'case_details_prohibitions',
+                            'label' => 'Prohibitions',
+                            'route' => 'case',
+                            'action' => 'prohibitions',
+                            'use_route_match' => true,
+                        ),
+                        array(
+                            'id' => 'case_details_penalties',
+                            'label' => 'Penalties',
+                            'route' => 'case',
+                            'action' => 'penalties',
+                            'use_route_match' => true,
+                        ),
+                        array(
+                            'id' => 'case_details_statements',
+                            'label' => 'Statements',
+                            'route' => 'case',
+                            'action' => 'statements',
+                            'use_route_match' => true,
+                        ),
+                        array(
+                            'id' => 'case_details_complaints',
+                            'label' => 'Complaints',
+                            'route' => 'case',
+                            'action' => 'complaints',
+                            'use_route_match' => true,
+                        ),
+                        array(
+                            'id' => 'case_details_complaints',
+                            'label' => 'Complaints',
+                            'route' => 'case',
+                            'action' => 'complaints',
+                            'use_route_match' => true,
+                        ),
+                        array(
+                            'id' => 'case_details_infringements',
+                            'label' => 'Serious Infringements',
+                            'route' => 'case',
+                            'action' => 'infringements',
+                            'use_route_match' => true,
+                        ),
+                        array(
+                            'id' => 'case_details_conditions',
+                            'label' => 'Conditions & Undertakings',
+                            'route' => 'case',
+                            'action' => 'conditions',
+                            'use_route_match' => true,
+                        ),
+                        array(
+                            'id' => 'case_details_impoundings',
+                            'label' => 'Impoundings',
+                            'route' => 'case',
+                            'action' => 'impoundings',
+                            'use_route_match' => true,
+                        ),
+                    )
+                ),
+                array(
+                    'id' => 'case_submissions',
+                    'label' => 'Submissions',
+                    'route' => 'submission',
+                    'action' => 'redirect',
+                    'use_route_match' => true,
+                    'pages' => array(
+                        array(
+                            'id' => 'case_submission_list',
+                            'label' => 'Submissions',
+                            'route' => 'submission',
+                            'action' => 'index',
+                            'use_route_match' => true,
+                        ),
+                    )
+                )
+            ),
+        ),
+        array(
+            'id' => 'case_add',
+            'label' => 'Add Case',
+            'route' => 'case',
+            'action' => 'add',
+            'use_route_match' => true
+        ),
+        array(
+            'id' => 'case_edit',
+            'label' => 'Edit Case',
+            'route' => 'case',
+            'action' => 'edit',
+            'use_route_match' => true
+        ),
         array(
             'label' => 'Search',
             'route' => 'search',
@@ -116,29 +234,8 @@ return array(
                             'id' => 'licence/cases',
                             'label' => 'Cases',
                             'route' => 'licence/cases',
-                            'use_route_match' => true,
-                            'pages' => array(
-                                array(
-                                    'id' => 'licence/cases/overview',
-                                    'label' => 'Case Overview',
-                                    'route' => 'case',
-                                    'use_route_match' => true,
-                                ),
-                                array(
-                                    'id' => 'licence/cases/add',
-                                    'label' => 'Add Case',
-                                    'route' => 'case',
-                                    'action' => 'add',
-                                    'use_route_match' => true
-                                ),
-                                array(
-                                    'id' => 'licence/cases/add',
-                                    'label' => 'Edit Case',
-                                    'route' => 'case',
-                                    'action' => 'edit',
-                                    'use_route_match' => true
-                                )
-                            )
+                            'action' => 'cases',
+                            'use_route_match' => true
                         ),
                         array(
                             'id' => 'licence_opposition',

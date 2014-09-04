@@ -397,15 +397,28 @@ return array_merge(
         'case' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/licence/:licence/case/manage[/:action][/:id]',
+                'route' => '/case/:action[/:case][/licence/:licence]',
                 'constraints' => [
-                    'licence' => '[0-9]+',
-                    'id' => '[0-9]+',
-                    'action' => '[a-z]+'
+                    'case' => '[0-9]+',
+                    'action' => '[a-z]+',
+                    'licence' => '[0-9]+'
                 ],
                 'defaults' => [
                     'controller' => 'CaseController',
                     'action'     => 'overview'
+                ]
+            ]
+        ],
+        'case_add_licence' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/licence/case/add/:licence',
+                'constraints' => [
+                    'licence' => '[0-9]+'
+                ],
+                'defaults' => [
+                    'controller' => 'CaseController',
+                    'action'     => 'add'
                 ]
             ]
         ],
@@ -563,7 +576,7 @@ return array_merge(
         'case_complaints' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/licence/[:licence]/case/:case/complaints',
+                'route' => '/case/:case/complaints',
                 'constraints' => [
                     'case' => '[0-9]+',
                 ],
@@ -590,9 +603,14 @@ return array_merge(
         'submission' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/licence/[:licence]/case/[:case]/submission[/:action][/][:id]',
+                'route' => '/case/:case/submission/:action[/:id]',
+                'constraints' => [
+                    'case' => '[0-9]+',
+                    'id' => '[0-9]+',
+                ],
                 'defaults' => [
                     'controller' => 'SubmissionController',
+                    'action' => 'index'
                 ]
             ]
         ],

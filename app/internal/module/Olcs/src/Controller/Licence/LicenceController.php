@@ -31,7 +31,7 @@ class LicenceController extends AbstractController
 
     public function casesAction()
     {
-        $this->checkForCrudAction('case');
+        $this->checkForCrudAction('case', [], 'case');
 
         $view = $this->getViewWithLicence();
 

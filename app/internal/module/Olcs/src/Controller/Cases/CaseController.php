@@ -6,19 +6,18 @@
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
-namespace Olcs\Controller;
+namespace Olcs\Controller\Cases;
 
 use Zend\View\Model\ViewModel;
+use Olcs\Controller\Cases\AbstractController as AbstractCasesController;
 
 /**
  * Case Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CaseController extends AbstractController
+class CaseController extends AbstractCasesController
 {
-    use Traits\LicenceControllerTrait;
-
     protected $title;
     protected $subTitle;
 
@@ -77,98 +76,53 @@ class CaseController extends AbstractController
     );
 
     /**
-     * @param $caseId
-     *
-     * Quick method to generate titles - needs to be done properly at some stage
-     */
-    public function getTitles($caseId)
-    {
-        $case = $this->getCase($caseId);
-
-        $this->title = 'Case ' . $caseId;
-
-        $this->subTitle = $case['licence']['organisation']['name'] . ' ' . '#' . $case['licence']['licNo'];
-    }
-
-    /**
      * This action is the case overview page.
      */
     public function overviewAction()
     {
-        $view = $this->getViewWithLicence();
+        $view = $this->getViewWithCase();
 
-        $view->{'case'} = $this->getCase($this->fromRoute('id'));
+        if ($licenceId = $this->fromRoute('licence')) {
+
+            $licence = $this->makeRestCall('Licence', 'GET', array('id' => $licenceId));
+            $licenceUrl = $this->url()->fromRoute('licence/details/overview', ['licence' => $licenceId]);
+
+            $this->getViewHelperManager()
+                 ->get('pageTitle')->setAutoEscape(false)
+                 ->prepend('<a href="' . $licenceUrl . '">' . $licence['licNo'] . '</a>');
+        }
+
+        $view->{'case'} = $this->loadCurrent();
 
         $view->setTemplate('case/overview');
 
         return $this->renderView($view, $this->title, $this->subTitle);
     }
 
-    /**
-     * Gives us a list of submissions for the case.
-     *
-     * @param unknown $caseId
-     * @return NULL
-     */
-    public function getSubmissions($caseId)
+    public function redirectAction()
     {
-        $bundle = array(
-            'children' => array(
-                'submissionActions' => array(
-                    'properties' => 'ALL',
-                    'children' => array(
-                        'senderUser' => array(
-                            'properties' => 'ALL'
-                        ),
-                        'recipientUser' => array(
-                            'properties' => 'ALL'
-                        ),
-                    )
-                )
-            )
-        );
-
-        $config = $this->getServiceLocator()->get('Config');
-        $submissionActions = $config['static-list-data'];
-        $results = $this->makeRestCall('Submission', 'GET', array('case' => $caseId), $bundle);
-
-        foreach ($results['Results'] as $k => &$result) {
-
-            $result['status'] = 'Draft';
-
-            foreach ($result['submissionActions'] as $action) {
-
-                $result['urgent'] = $action['urgent'];
-
-                if (isset($action['recipientUser']['name'])) {
-                    $result['currentlyWith'] = $action['recipientUser']['name'];
-                }
-
-                $actions = isset($submissionActions['submission_'.$action['submissionActionType']])
-                    ? $submissionActions['submission_'.$action['submissionActionType']] : '';
-
-                $result['status'] = isset($actions[$action['submissionActionStatus']])
-                    ? $actions[$action['submissionActionStatus']] : '';
-
-                $result['type'] = ucfirst($action['submissionActionType']);
-
-                //We only need the data from the top action - which is the latest.
-                break;
-            }
-        }
-
-        return $results;
+        return $this->redirect()->toRoute('case', ['action' => 'overview'], [], true);
     }
+
+    public function convictionsAction()
+    {
+        return $this->overviewAction();
+    }
+
 
     /**
      * Gets the case by ID.
      *
-     * @param integer $caseId
+     * @param integer $id
      * @return array
      */
-    public function getCase($caseId)
+    public function getCase($id = null)
     {
-        return $this->load($caseId);
+        if (is_null($id)) {
+            $id = $this->getIdentifier();
+        }
+
+        return $this->load($id);
     }
 
     /**
@@ -190,7 +144,7 @@ class CaseController extends AbstractController
     {
         $licence = $this->fromRoute('licence');
 
-        $view = $this->getViewWithLicence();
+        $view = $this->getView();
         $form = $this->generateFormWithData('case', 'processAddCase', array('licence' => $licence));
         $view->{'form'} = $form;
         $view->setTemplate('/form');
@@ -206,7 +160,7 @@ class CaseController extends AbstractController
     public function editAction()
     {
         $licence = $this->fromRoute('licence');
-        $case = $this->fromRoute('id');
+        $case = $this->fromRoute('case');
 
         $bundle = array(
             'children' => array(
@@ -255,38 +209,6 @@ class CaseController extends AbstractController
         $view = $this->getView(['form' => $form, 'data' => $pageData]);
         $view->setTemplate('case/edit');
         return $view;
-    }
-
-    /**
-     * Get page data from licence id
-     *
-     * @param int $licence
-     */
-    private function getPageData($licence)
-    {
-        $bundle = [
-            'children' => [
-                'status' => array(
-                    'properties' => array('id')
-                ),
-                'licenceType' => array(
-                    'properties' => array('id')
-                ),
-                'goodsOrPsv' => array(
-                    'properties' => array('id')
-                ),
-                'organisation' => [
-                    'properties' => 'ALL'
-                ]
-            ]
-        ];
-
-        $licenceData = $this->makeRestCall('Licence', 'GET', array('id' => $licence), $bundle);
-
-        return array(
-            'organisation' => $licenceData['organisation']['name'],
-            'licence' => $licenceData['licNo']
-        );
     }
 
     /**
