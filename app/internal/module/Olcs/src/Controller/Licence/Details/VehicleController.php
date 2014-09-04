@@ -38,15 +38,34 @@ class VehicleController extends AbstractLicenceDetailsController
     /**
      * We only want to show active vehicles
      *
-     * @param array $vehicle
+     * @param array $licenceVehicle
      * @return boolean
      */
-    protected function showVehicle($vehicle)
+    protected function showVehicle($licenceVehicle)
     {
-        if (empty($vehicle['specifiedDate'])) {
+        if (empty($licenceVehicle['specifiedDate'])) {
             return false;
         }
 
         return true;
+    }
+
+    /**
+     * Save the vehicle
+     *
+     * @todo might be able to combine these 2 methods now
+     *
+     * @param array $data
+     * @param string $service
+     */
+    protected function actionSave($data, $service = null)
+    {
+        $action = $this->getActionName();
+
+        if ($action == 'add') {
+            $data['licence-vehicle']['specifiedDate'] = date('Y-m-d');
+        }
+
+        return $this->doActionSave($data, $action);
     }
 }

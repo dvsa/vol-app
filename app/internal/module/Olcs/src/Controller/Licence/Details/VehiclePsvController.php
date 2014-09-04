@@ -47,16 +47,18 @@ class VehiclePsvController extends AbstractLicenceDetailsController
         ),
         'children' => array(
             'licenceVehicles' => array(
-                'properties' => null,
+                'properties' => array(
+                    'id',
+                    'receivedDate',
+                    'specifiedDate',
+                    'deletedDate'
+                ),
                 'children' => array(
                     'vehicle' => array(
                         'properties' => array(
-                            'id',
                             'vrm',
                             'makeModel',
                             'isNovelty',
-                            'specifiedDate',
-                            'deletedDate'
                         ),
                         'children' => array(
                             'psvType' => array(
@@ -95,15 +97,34 @@ class VehiclePsvController extends AbstractLicenceDetailsController
     /**
      * We only want to show active vehicles
      *
-     * @param array $vehicle
+     * @param array $licenceVehicle
      * @return boolean
      */
-    protected function showVehicle($vehicle)
+    protected function showVehicle($licenceVehicle)
     {
-        if (empty($vehicle['specifiedDate'])) {
+        if (empty($licenceVehicle['specifiedDate'])) {
             return false;
         }
 
         return true;
+    }
+
+    /**
+     * Save the vehicle
+     *
+     * @param array $data
+     * @param string $service
+     */
+    protected function actionSave($data, $service = null)
+    {
+        $parts = explode('-', $this->getActionName());
+
+        $action = array_pop($parts);
+
+        if ($action == 'add') {
+            $data['licence-vehicle']['specifiedDate'] = date('Y-m-d');
+        }
+
+        return $this->doActionSave($data, $action);
     }
 }
