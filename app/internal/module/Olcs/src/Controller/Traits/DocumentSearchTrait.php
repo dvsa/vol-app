@@ -49,13 +49,13 @@ trait DocumentSearchTrait
             'category' => $this->getListData('Category', [], 'description'),
             'subCategory' => $this->getListData('DocumentSubCategory', $filters, 'description'),
             'fileExtension' => $this->getListData(
-                    'RefData',
-                    ['refDataCategoryId' => 'document_type'],
-                    'description', 'id'
-                )
+                'RefData',
+                ['refDataCategoryId' => 'document_type'],
+                'description', 'id'
+            )
         );
-        
-        // bang the relevant data into the corresponding form inputs
+
+        // insert relevant data into the corresponding form inputs
         foreach ($selects as $name => $options) {
             $form->get($name)
                 ->setValueOptions($options);
