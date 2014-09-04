@@ -30,6 +30,16 @@ trait DocumentSearchTrait
             $this->getRequest()->getQuery()->toArray()
         );
 
+        if ($filters['isDigital'] === 'digital') {
+            $filters['isDigital']=1;
+        } elseif ($filters['isDigital'] === 'nondigital') {
+            // @NOTE we currently have an unrelated bug OLCS-3792 which
+            // prevents this actually restricting to open only
+            $filters['isDigital']=0;
+        } else {
+            unset($filters['isDigital']);
+        }
+
         // nuke any empty values
         return array_filter(
             $filters,

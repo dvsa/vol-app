@@ -20,8 +20,9 @@ return array(
                 'label' => 'documents-home.data.format',
             ),
             'isDigital' => array(
-                'type' => 'checkbox',
+                'type' => 'select-noempty',
                 'label' => 'documents-home.data.digitalonly',
+                'value_options' => 'document_types'
             )
         )
     )
