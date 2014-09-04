@@ -200,13 +200,13 @@ class CaseController extends AbstractController
                     'properties' => 'ALL',
                     'children' => array(
                         'status' => array(
-                            'properties' => array('id', 'description')
+                            'properties' => array('id')
                         ),
                         'licenceType' => array(
-                            'properties' => array('id', 'description')
+                            'properties' => array('id')
                         ),
                         'goodsOrPsv' => array(
-                            'properties' => array('id', 'description')
+                            'properties' => array('id')
                         ),
                         'trafficArea' => array(
                             'properties' => 'ALL'
@@ -215,7 +215,7 @@ class CaseController extends AbstractController
                             'properties' => 'ALL',
                             'children' => array(
                                 'type' => array(
-                                    'properties' => array('id', 'description')
+                                    'properties' => array('id')
                                 )
                             )
                         )
@@ -374,7 +374,8 @@ class CaseController extends AbstractController
             ],
             'licence_type' => [
                 'label' => 'Licence type',
-                'value' => $case['licence']['licenceType']['description'],
+                'value' => $this->getServiceLocator()->get('translator')
+                    ->translate($case['licence']['licenceType']['id']),
                 'url' => ''
             ],
             'entity_type' => [
@@ -394,7 +395,8 @@ class CaseController extends AbstractController
             ],
             'licence_status' => [
                 'label' => 'Licence status',
-                'value' => $case['licence']['status']['description'],
+                'value' => $this->getServiceLocator()->get('translator')
+                    ->translate($case['licence']['status']['id']),
                 'url' => ''
             ],
             'ecmsNo' => [
@@ -589,13 +591,13 @@ class CaseController extends AbstractController
         $bundle = [
             'children' => [
                 'status' => array(
-                    'properties' => array('id', 'description')
+                    'properties' => array('id')
                 ),
                 'licenceType' => array(
-                    'properties' => array('id', 'description')
+                    'properties' => array('id')
                 ),
                 'goodsOrPsv' => array(
-                    'properties' => array('id', 'description')
+                    'properties' => array('id')
                 ),
                 'organisation' => [
                     'properties' => 'ALL'
