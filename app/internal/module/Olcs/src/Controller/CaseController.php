@@ -23,6 +23,60 @@ class CaseController extends AbstractController
     protected $subTitle;
 
     /**
+     * Holds the service name
+     *
+     * @var string
+     */
+    protected $service = 'Cases';
+
+    /**
+     * Holds the Data Bundle
+     *
+     * @var array
+     */
+    protected $dataBundle = array(
+        'children' => array(
+            'submissionSections' => array(
+                'properties' => array(
+                    'id',
+                    'description'
+                )
+            ),
+            'legacyOffences' => array(
+                'properties' => 'ALL',
+            ),
+            'caseType' => array(
+                'properties' => 'id',
+            ),
+            'licence' => array(
+                'properties' => 'ALL',
+                'children' => array(
+                    'status' => array(
+                        'properties' => array('id')
+                    ),
+                    'licenceType' => array(
+                        'properties' => array('id')
+                    ),
+                    'goodsOrPsv' => array(
+                        'properties' => array('id')
+                    ),
+                    'trafficArea' => array(
+                        'properties' => 'ALL'
+                    ),
+                    'organisation' => array(
+                        'properties' => 'ALL',
+                        'children' => array(
+                            'type' => array(
+                                'properties' => array('id')
+                            )
+                        )
+                    )
+                )
+            )
+        )
+    );
+
+    /**
      * @param $caseId
      *
      * Quick method to generate titles - needs to be done properly at some stage
@@ -37,67 +91,25 @@ class CaseController extends AbstractController
     }
 
     /**
-     * Manage action.
+     * This action is the case overview page.
      */
-    public function manageAction()
+    public function overviewAction()
     {
-        $caseId = $this->fromRoute('case');
-        $licence = $this->fromRoute('licence');
-        $action = $this->fromRoute('tab');
-        $this->getTitles($caseId);
+        $view = $this->getViewWithLicence();
 
-        $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licence)));
-        $params = $this->params()->fromPost();
-        $params = array_merge($params, array('case' => $caseId, 'licence' => $licence));
+        $view->{'case'} = $this->getCase($this->fromRoute('id'));
 
-        if (isset($params['action'])) {
-            return $this->forward()->dispatch(
-                'SubmissionController',
-                $params
-            );
-        }
-
-        $tabs = $this->getTabInformationArray();
-
-        if (!array_key_exists($action, $tabs)) {
-            return $this->notFoundAction();
-        }
-
-        $view = $this->getView();
-
-        $case = $this->getCase($caseId);
-
-        $summary = $this->getCaseSummaryArray($case);
-
-        // -- submissions
-
-        $submissionsResults = $this->getSubmissions($caseId);
-        $submissionsData = [];
-        $submissionsData['url'] = $this->getPluginManager()->get('url');
-
-        $submissionsTable = $this->getServiceLocator()->get('Table')->buildTable(
-            'submission',
-            $submissionsResults,
-            $submissionsData
-        );
-
-        // -- submissions
-
-        $view->setVariables(
-            array(
-                'case' => $case,
-                'tabs' => $tabs,
-                'tab' => $action,
-                'summary' => $summary,
-                'submissions' => $submissionsTable
-            )
-        );
-
-        $view->setTemplate('case/manage');
+        $view->setTemplate('case/overview');
 
         return $this->renderView($view, $this->title, $this->subTitle);
     }
 
+    /**
+     * Gives us a list of submissions for the case.
+     *
+     * @param unknown $caseId
+     * @return NULL
+     */
     public function getSubmissions($caseId)
     {
         $bundle = array(
@@ -148,348 +160,25 @@ class CaseController extends AbstractController
         return $results;
     }
 
-    public function getView(array $params = null)
-    {
-        return new ViewModel($params);
-    }
-
     /**
-     * Gets a variable from the route
-     *
-     * @param string $param
-     * @param mixed $default
-     * @return type
-     */
-    public function fromRoute($param, $default = null)
-    {
-        return $this->params()->fromRoute($param, $default);
-    }
-
-    /**
-     * Gets a variable from postdata
-     *
-     * @param string $param
-     * @param mixed $default
-     * @return type
-     */
-    public function fromPost($param, $default = null)
-    {
-        return $this->params()->fromPost($param, $default);
-    }
-
-    /**
-     * Gets the case ID.
+     * Gets the case by ID.
      *
      * @param integer $caseId
      * @return array
      */
     public function getCase($caseId)
     {
-        $bundle = array(
-            'children' => array(
-                'submissionSections' => array(
-                    'properties' => array(
-                        'id',
-                        'description'
-                    )
-                ),
-                'legacyOffences' => array(
-
-                ),
-                'licence' => array(
-                    'properties' => 'ALL',
-                    'children' => array(
-                        'status' => array(
-                            'properties' => array('id')
-                        ),
-                        'licenceType' => array(
-                            'properties' => array('id')
-                        ),
-                        'goodsOrPsv' => array(
-                            'properties' => array('id')
-                        ),
-                        'trafficArea' => array(
-                            'properties' => 'ALL'
-                        ),
-                        'organisation' => array(
-                            'properties' => 'ALL',
-                            'children' => array(
-                                'type' => array(
-                                    'properties' => array('id')
-                                )
-                            )
-                        )
-                    )
-                )
-            )
-        );
-
-        $case = $this->makeRestCall('Cases', 'GET', array('id' => $caseId), $bundle);
-
-        return $case;
+        return $this->load($caseId);
     }
 
     /**
-     * Returns tab information as an array.
+     * List of cases. Moved to Licence controller's cases method.
      *
-     * @return array
-     */
-    public function getTabInformationArray()
-    {
-        $pm = $this->getPluginManager();
-
-        $tabs = [
-            'overview' => [
-                'key' => 'overview',
-                'label' => 'Overview',
-                'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'overview'], [], true),
-            ],
-            'convictions' => [
-                'key' => 'convictions',
-                'label' => 'Convictions',
-                'url' => $pm->get('url')->fromRoute('case_convictions', ['tab' => 'convictions'], [], true),
-            ],
-            'prohibitions' => [
-                'key' => 'prohibitions',
-                'label' => 'Prohibitions',
-                'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'prohibitions'], [], true),
-            ],
-            'annual_test_history' => [
-                'key' => 'annual_test_history',
-                'label' => 'Annual test history',
-                'url' => $pm->get('url')->fromRoute(
-                    'case_annual_test_history',
-                    ['tab' => 'annual_test_history'],
-                    [],
-                    true
-                ),
-            ],
-            'penalties' => [
-                'key' => 'penalties',
-                'label' => 'Penalties',
-                'url' => $pm->get('url')->fromRoute('case_penalty', ['tab' => 'penalties', 'action' => null], [], true),
-            ],
-            'erru' => [
-                'key' => 'erru',
-                'label' => 'ERRU Penalties',
-                'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'erru'], [], true),
-            ],
-            'statements' => [
-                'key' => 'statements',
-                'label' => 'Statements',
-                'url' => $pm->get('url')->fromRoute('case_statement', ['action' => null], [], true),
-            ],
-            'complaints' => [
-                'key' => 'complaints',
-                'label' => 'Complaints',
-                'url' => $pm->get('url')->fromRoute('case_complaints', ['tab' => 'complaints'], [], true),
-            ],
-            'si' => [
-                'key' => 'si',
-                'label' => 'Serious infringement',
-                'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'si'], [], true),
-            ],
-            'stays' => [
-                'key' => 'stays',
-                'label' => 'Appeal & Stays',
-                'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'stays'], [], true),
-            ],
-            'documents' => [
-                'key' => 'documents',
-                'label' => 'Documents',
-                'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'documents'], [], true),
-            ],
-            'notes' => [
-                'key' => 'notes',
-                'label' => 'Notes',
-                'url' => $pm->get('url')->fromRoute('case_manage', ['tab' => 'notes'], [], true),
-            ],
-            'conditions-undertakings' => [
-                'key' => 'conditions-undertakings',
-                'label' => 'Conditions &amp; Undertakings',
-                'url' => $pm->get('url')->fromRoute(
-                    'case_conditions_undertakings',
-                    ['tab' => 'conditions-undertakings'],
-                    [],
-                    true
-                ),
-            ],
-            'impounding' => [
-                'key' => 'impounding',
-                'label' => 'Impounding',
-                'url' => $pm->get('url')->fromRoute(
-                    'case_impounding',
-                    ['tab' => 'impounding', 'action' => null],
-                    [],
-                    true
-                ),
-            ],
-            'revoke' => [
-                'key' => 'revoke',
-                'label' => 'In-Office revocation',
-                'url' => $pm->get('url')->fromRoute('case_revoke', ['tab' => 'revoke', 'action' => 'index'], [], true),
-            ],
-            'pi' => [
-                'key' => 'pi',
-                'label' => 'Public inquiry',
-                'url' => $pm->get('url')->fromRoute('case_pi', ['tab' => 'pi', 'action' => 'index'], [], true),
-            ],
-        ];
-
-        return $tabs;
-    }
-
-    public function getCaseSummaryArray(array $case)
-    {
-        $categoryNames = array();
-
-        $config = $this->getServiceLocator()->get('Config');
-        $static = $config['static-list-data'];
-
-        $entityType = '';
-
-        if (isset($static['business_types'][$case['licence']['organisation']['type']['id']])) {
-            $entityType = $static['business_types'][$case['licence']['organisation']['type']['id']];
-        }
-
-        if (isset($case['submissionSections']) && !empty($case['submissionSections'])) {
-
-            foreach ($case['submissionSections'] as $category) {
-                $categoryNames[] = $category['description'];
-            }
-        }
-
-        $openDate = date('d/m/Y', strtotime($case['openDate']));
-
-        $summary = [
-            'description' => [
-                'label' => 'Description',
-                'value' => $case['description'],
-                'url' => ''
-            ],
-            'open_date' => [
-                'label' => 'Open date',
-                'value' => $openDate,
-                'url' => ''
-            ],
-            'licence_type' => [
-                'label' => 'Licence type',
-                'value' => $this->getServiceLocator()->get('translator')
-                    ->translate($case['licence']['licenceType']['id']),
-                'url' => ''
-            ],
-            'entity_type' => [
-                'label' => 'Entity type',
-                'value' => $entityType,
-                'url' => ''
-            ],
-            'submissionSections' => [
-                'label' => 'Categories',
-                'value' => implode(', ', $categoryNames),
-                'url' => ''
-            ],
-            'status' => [
-                'label' => 'Status',
-                'value' => ($case['closeDate'] == null ? 'Open' : 'Closed'),
-                'url' => ''
-            ],
-            'licence_status' => [
-                'label' => 'Licence status',
-                'value' => $this->getServiceLocator()->get('translator')
-                    ->translate($case['licence']['status']['id']),
-                'url' => ''
-            ],
-            'ecmsNo' => [
-                'label' => 'ECMS',
-                'value' => $case['ecmsNo'],
-                'url' => ''
-            ],
-        ];
-
-        return $summary;
-    }
-
-    /**
-     * List of cases if we have a licence
+     * @return void
      */
     public function indexAction()
     {
-        $licence = $this->fromRoute('licence');
-
-        if (empty($licence)) {
-
-            return $this->notFoundAction();
-        }
-
-        $action = $this->fromPost('action');
-
-        if (!empty($action)) {
-
-            $action = strtolower($action);
-
-            if ($action !== 'add') {
-
-                $id = $this->fromPost('id');
-
-                if (empty($id)) {
-                    return $this->crudActionMissingId();
-                }
-
-                return $this->redirect()->toRoute(
-                    'licence_case_action',
-                    array(
-                        'action' => $action,
-                        'case' => $id,
-                        'licence' => $licence
-                    )
-                );
-            } else {
-                return $this->redirect()->toRoute(
-                    'licence_case_action',
-                    array('action' => $action, 'licence' => $licence)
-                );
-            }
-        }
-
-        $pageData = $this->getPageData($licence);
-
-        $pagination = [];
-        $pagination['url'] = $this->url();
-        $pagination['licence'] = $this->fromRoute('licence');
-        $pagination['page'] = $this->fromRoute('page', 1);
-        $pagination['sort'] = $this->fromRoute('sort', 'id');
-        $pagination['order'] = $this->fromRoute('order', 'desc');
-        $pagination['limit'] = $this->fromRoute('limit', 10);
-
-        $bundle = array(
-            'children' => array(
-                'caseType' => array(
-                    'properties' => 'ALL'
-                )
-            )
-        );
-
-        $results = $this->makeRestCall('Cases', 'GET', $pagination, $bundle);
-
-        $table = $this->getServiceLocator()->get('Table')->buildTable('case', $results, $pagination);
-
-        $licenceData = $this->getLicence($licence);
-
-        if ($licenceData['goodsOrPsv']['id'] == 'lcat_gv') {
-            $this->getServiceLocator()->get('Navigation')->findOneBy('id', 'licence_bus')->setVisible(0);
-        }
-
-        $view = $this->getView(
-            array(
-                'licence' => $licence,
-                'licenceData' => $licenceData,
-                'table' => $table,
-                'data' => $pageData
-            )
-        );
-        $view->setTemplate('case/list');
-
-        return $view;
+        return $this->redirect()->toRoute('licence/cases', [], [], true);
     }
 
     /**
@@ -500,24 +189,12 @@ class CaseController extends AbstractController
     public function addAction()
     {
         $licence = $this->fromRoute('licence');
-        $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licence)));
 
-        if (empty($licence)) {
-            return $this->notFoundAction();
-        }
-
-        $results = $this->makeRestCall('Licence', 'GET', array('id' => $licence));
-
-        if (empty($results)) {
-            return $this->notFoundAction();
-        }
-
+        $view = $this->getViewWithLicence();
         $form = $this->generateFormWithData('case', 'processAddCase', array('licence' => $licence));
+        $view->{'form'} = $form;
+        $view->setTemplate('/form');
 
-        $pageData = $this->getPageData($licence);
-
-        $view = $this->getView(['form' => $form, 'data' => $pageData]);
-        $view->setTemplate('case/add');
         return $view;
     }
 
@@ -529,8 +206,7 @@ class CaseController extends AbstractController
     public function editAction()
     {
         $licence = $this->fromRoute('licence');
-        $case = $this->fromRoute('case');
-        $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licence)));
+        $case = $this->fromRoute('id');
 
         $bundle = array(
             'children' => array(
@@ -611,22 +287,6 @@ class CaseController extends AbstractController
             'organisation' => $licenceData['organisation']['name'],
             'licence' => $licenceData['licNo']
         );
-    }
-
-    public function deleteAction()
-    {
-        $licence = $this->fromRoute('licence');
-        $case = $this->fromRoute('case');
-
-        $result = $this->makeRestCall('Cases', 'GET', array('id' => $case, 'licence' => $licence));
-
-        if (empty($result)) {
-            return $this->notFoundAction();
-        }
-
-        $this->makeRestCall('Cases', 'DELETE', array('id' => $case));
-
-        $this->redirect()->toRoute('licence/cases', array('licence' => $licence));
     }
 
     /**
@@ -729,26 +389,6 @@ class CaseController extends AbstractController
         }
 
         return $formattedCategories;
-    }
-
-    /**
-     * Extend and retrieve the required case variables
-     *
-     * @param int $caseId
-     * @param array $variables
-     * @return array
-     */
-    public function getCaseVariables($caseId, $variables = array())
-    {
-        $case = $this->getCase($caseId);
-
-        $defaults = array(
-            'case' => $case,
-            'tabs' => $this->getTabInformationArray(),
-            'summary' => $this->getCaseSummaryArray($case)
-        );
-
-        return array_merge($defaults, $variables);
     }
 
     /**

@@ -31,8 +31,31 @@ class LicenceController extends AbstractController
 
     public function casesAction()
     {
+        $this->checkForCrudAction('case');
+
         $view = $this->getViewWithLicence();
-        $view->setTemplate('licence/index');
+
+        $params = [
+            'licence' => $this->params()->fromRoute('licence'),
+            'page'    => $this->params()->fromRoute('page', 1),
+            'sort'    => $this->params()->fromRoute('sort', 'id'),
+            'order'   => $this->params()->fromRoute('order', 'desc'),
+            'limit'   => $this->params()->fromRoute('limit', 10),
+        ];
+
+        $bundle = array(
+            'children' => array(
+                'caseType' => array(
+                    'properties' => 'ALL'
+                )
+            )
+        );
+
+        $results = $this->makeRestCall('Cases', 'GET', $params, $bundle);
+
+        $view->{'table'} = $this->buildTable('case', $results, $params);
+
+        $view->setTemplate('licence/cases');
 
         return $this->renderView($view);
     }

@@ -66,6 +66,32 @@ class SubmissionController extends FormActionController implements CrudInterface
         );
     }
 
+    public function indexAction()
+    {
+
+        $caseId = $this->fromRoute('id');
+
+        // -- submissions
+
+        $submissionsResults = $this->getSubmissions($caseId);
+        $submissionsData = [];
+        $submissionsData['url'] = $this->getPluginManager()->get('url');
+
+        $submissionsTable = $this->getServiceLocator()->get('Table')->buildTable(
+            'submission',
+            $submissionsResults,
+            $submissionsData
+        );
+
+        // -- submissions
+
+        $view->{'submissions'} = $submissionsTable;
+
+        $view->setTemplate('case/manage');
+
+        return $this->renderView($view, $this->title, $this->subTitle);
+    }
+
     /**
      * Gets a variable from the route
      *

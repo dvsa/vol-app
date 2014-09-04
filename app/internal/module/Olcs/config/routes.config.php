@@ -272,8 +272,8 @@ return array_merge(
                     'options' => [
                         'route' => '/cases/page/:page/limit/:limit/sort/:sort/order/:order',
                         'defaults' => [
-                            'controller' => 'CaseController',
-                            'action' => 'index',
+                            'controller' => 'LicenceController',
+                            'action' => 'cases',
                             'page' => 1,
                             'limit' => 10,
                             'sort' => 'createdOn',
@@ -394,30 +394,18 @@ return array_merge(
 
         // These routes are for the licence page
 
-        'licence_case_action' => [
+        'case' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/licence/:licence/case[/:action][/:case]',
+                'route' => '/licence/:licence/case/manage[/:action][/:id]',
                 'constraints' => [
                     'licence' => '[0-9]+',
-                    'case' => '[0-9]+'
-                ],
-                'defaults' => [
-                    'controller' => 'CaseController'
-                ]
-            ]
-        ],
-        'case_manage' => [
-            'type' => 'segment',
-            'options' => [
-                'route' => '/licence/[:licence]/case/:case/action/manage/:tab',
-                'constraints' => [
-                    'case' => '[0-9]+'
+                    'id' => '[0-9]+',
+                    'action' => '[a-z]+'
                 ],
                 'defaults' => [
                     'controller' => 'CaseController',
-                    'action' => 'manage',
-                    'tab' => 'overview'
+                    'action'     => 'overview'
                 ]
             ]
         ],

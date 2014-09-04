@@ -73,7 +73,10 @@ return array(
         )
     ),
     'view_helpers' => array(
-        'invokables' => array()
+        'invokables' => array(
+            'pageTitle' => 'Olcs\View\Helper\PageTitle',
+            'pageSubtitle' => 'Olcs\View\Helper\PageSubtitle',
+        )
     ),
     'local_forms_path' => array(
         __DIR__ . '/../src/Form/Forms/'

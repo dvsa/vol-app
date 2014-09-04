@@ -24,7 +24,14 @@ trait DeleteActionTrait
      *
      * @return string
      */
-    abstract public function getDeleteServiceName();
+    public function getDeleteServiceName()
+    {
+        if (method_exists($this, 'getService')) {
+            return $this->getService();
+        }
+
+        throw \LogicExcpetion('getDeleteServiceName or getService methods were not implemented.');
+    }
 
     /**
      * Retrieve the route match/query parameter name containing the identifier
