@@ -3,11 +3,10 @@
 namespace Olcs\Controller\Document;
 
 use Zend\View\Model\ViewModel;
-use Zend\View\Model\JsonModel;
 
 use Dvsa\Jackrabbit\Data\Object\File;
 
-class DocumentFinaliseController extends AbstractDocumentController
+class DocumentUploadController extends DocumentController
 {
     public function finaliseAction()
     {

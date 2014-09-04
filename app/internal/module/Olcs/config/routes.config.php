@@ -308,7 +308,7 @@ return array_merge(
                                 'route' => '/generate',
                                 'defaults' => [
                                     'type'       => 'licence',
-                                    'controller' => 'DocumentController',
+                                    'controller' => 'DocumentGenerationController',
                                     'action'     => 'generate'
                                 ]
                             ],
@@ -319,7 +319,7 @@ return array_merge(
                                 'route' => '/finalise/:tmpId',
                                 'defaults' => [
                                     'type'       => 'licence',
-                                    'controller' => 'DocumentFinaliseController',
+                                    'controller' => 'DocumentUploadController',
                                     'action'     => 'finalise'
                                 ]
                             ],
