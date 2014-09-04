@@ -4,9 +4,9 @@ namespace Olcs\Form\Element;
 
 use Common\Form\Element\DynamicSelect;
 
-class PublicInquiryDefinition extends DynamicSelect
+class PublicInquiryReason extends DynamicSelect
 {
-    protected $serviceName = 'PublicInquiryDefinition';
+    protected $serviceName = 'Olcs\Service\Data\PublicInquiryReason';
 
     /**
      * @var \Olcs\Service\Data\Licence
@@ -42,19 +42,9 @@ class PublicInquiryDefinition extends DynamicSelect
         $licence = $this->getLicenceService()->fetchLicenceData();
 
         return [
-            'ni' => $licence['niFlag'],
-            'goods_or_psv' => ($licence['goodsOrPsv']['id'] == 'lcat_gv') ? 'goods': 'psv'
+            'isNi' => $licence['niFlag'],
+            'goodsOrPsv' => $licence['goodsOrPsv']['id']
         ];
-    }
-
-    public function getValueOptions()
-    {
-        if (empty($this->valueOptions)) {
-            $refDataService = $this->getDataService();
-            $this->valueOptions = $refDataService->fetchListOptions($this->getContext(), $this->useGroups());
-        }
-
-        return $this->valueOptions;
     }
 
 }

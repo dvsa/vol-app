@@ -41,14 +41,12 @@ class PublicInquiryAgreedAndLegislationMain
      * @Form\Attributes({"id":"","placeholder":"","class":"medium"})
      * @Form\Options({
      *     "label": "Caseworker assigned to",
-     *     "value_options": {
-     *
-     *     },
+     *     "service_name": "Olcs\Service\Data\User",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a category"
      * })
-     * @Form\Type("\Zend\Form\Element\Select")
+     * @Form\Type("DynamicSelect")
      */
     public $assignedTo = null;
 
@@ -63,7 +61,7 @@ class PublicInquiryAgreedAndLegislationMain
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a category",
      * })
-     * @Form\Type("\Zend\Form\Element\Select")
+     * @Form\Type("PublicInquiryReason")
      */
     public $reasons = null;
 
@@ -82,13 +80,10 @@ class PublicInquiryAgreedAndLegislationMain
      * @Form\Attributes({"id":"","placeholder":"","class":"medium"})
      * @Form\Options({
      *     "label": "Agreed by",
-     *     "value_options": {
-     *
-     *     },
+     *     "service_name": "Olcs\Service\Data\PresidingTc",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a category",
-     *     "category": "presiding_tc"
      * })
      * @Form\Type("DynamicSelect")
      */
@@ -122,7 +117,7 @@ class PublicInquiryAgreedAndLegislationMain
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5,"max":4000}})
      */
-    public $comments = null;
+    public $comment = null;
 
     /**
      * @Form\Attributes({"value":""})

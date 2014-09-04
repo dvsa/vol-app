@@ -5,9 +5,9 @@ namespace Olcs\Service\Data;
 use Common\Service\Data\AbstractData;
 use Common\Service\Data\ListDataInterface;
 
-class PublicInquiryDefinition extends AbstractData implements ListDataInterface
+class PublicInquiryReason extends AbstractData implements ListDataInterface
 {
-    protected $serviceName = 'PublicInquiryDefinition';
+    protected $serviceName = 'Reason';
 
     /**
      * Fetch back a set of options for a drop down list, context passed is parameters which may need to be passed to the
@@ -21,29 +21,30 @@ class PublicInquiryDefinition extends AbstractData implements ListDataInterface
      */
     public function fetchListOptions($context, $useGroups = false)
     {
-        $bundle = [
-            'properties' => 'ALL',
-            'conditions' => []
-        ];
+        $context['bundle'] = json_encode(['properties' => 'ALL']);
+        $data = $this->fetchPublicInquiryReasonData($context);
+        $ret = [];
 
-        //fetch + format data
-    }
-
-    public function fetchPublicInquiryDefinitionData($bundle = null)
-    {
-        if (is_null($this->getData('pid'))) {
-
-            $bundle = is_null($bundle)? $this->getBundle() : $bundle;
-            $data = $this->getRestClient()->get('/', ['bundle' => json_encode($bundle)]);
-            $this->setData('pid', $data);
+        if (!is_array($data) || !isset($data['Results']) || !is_array($data['Results'])) {
+            return [];
         }
 
-        return $this->getData('pid');
+        foreach ($data['Results'] as $datum) {
+            $ret[$datum['id']] = $datum['sectionCode'];
+        }
 
+        return $ret;
     }
 
-    public function getBundle()
+    public function fetchPublicInquiryReasonData($params)
     {
+        if (is_null($this->getData('pir'))) {
+
+            $data = $this->getRestClient()->get('', $params);
+            $this->setData('pir', $data);
+        }
+
+        return $this->getData('pir');
 
     }
 }

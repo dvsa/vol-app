@@ -140,46 +140,8 @@ class CasePiController extends CaseController implements CrudInterface
     public function addEditAction()
     {
         $section = $this->fromRoute('section');
-
+        $this->getServiceLocator()->get('Olcs\Service\Data\Licence')->setId($this->fromRoute('licence'));
         return call_user_func(array($this, strtolower($section)));
-    }
-
-    protected function alterFormBeforeValidation($form)
-    {
-        if ($form->get('main')->has('piTypes')) {
-            $form->get('main')->get('assignedTo')
-                 ->setValueOptions(
-                     $this->getListData(
-                         'User',
-                         [],
-                         'name', 'id', false
-                     )
-                 );
-        }
-
-        if ($form->get('main')->has('reasons')) {
-            $form->get('main')->get('reasons')
-                 ->setValueOptions(
-                     $this->getListData(
-                         'Reason',
-                         [],
-                         'sectionCode', 'id', false
-                     )
-                 );
-        }
-
-        if ($form->get('main')->has('presidingTc')) {
-            $form->get('main')->get('presidingTc')
-                 ->setValueOptions(
-                     $this->getListData(
-                         'PresidingTc',
-                         [],
-                         'name', 'id', false
-                     )
-                 );
-        }
-
-        return $form;
     }
 
     /**
