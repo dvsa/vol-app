@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'licence-notes' => [
+    'licence-edit-notes' => [
         'name' => 'licence-notes',
         'attributes' => [
             'method' => 'post',
@@ -13,8 +13,7 @@ return [
                 'elements' => [
                     'comment' => [
                         'type'  => 'text',
-                        'label' => 'Enter note',
-                        'filters' => '\Common\Form\Elements\InputFilters\TextMax4000Required',
+                        'label' => 'Note',
                         'class' => 'extra-long'
                     ],
                     'priority' => [
@@ -48,15 +47,6 @@ return [
         ],
         'elements' => [
             'id' => [
-                'type' => 'hidden'
-            ],
-            'licence' => [
-                'type' => 'hidden'
-            ],
-            'noteType' => [
-                'type' => 'hidden'
-            ],
-            'linkedId' => [
                 'type' => 'hidden'
             ],
             'version' => [
