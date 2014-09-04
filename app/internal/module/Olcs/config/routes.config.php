@@ -787,6 +787,18 @@ return array_merge(
                 'route' => '/documents/:path',
                 'defaults' => [
                     'controller' => 'DocumentController',
+                    'type'       => 'final',
+                    'action'     => 'download'
+                ]
+            ]
+        ],
+        'fetch_tmp_document' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/documents/tmp/:path',
+                'defaults' => [
+                    'controller' => 'DocumentController',
+                    'type'       => 'tmp',
                     'action'     => 'download'
                 ]
             ]

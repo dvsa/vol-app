@@ -15,7 +15,8 @@ use Olcs\Controller\AbstractController;
  */
 class DocumentController extends AbstractController
 {
-    const TMP_STORAGE_PATH = 'tmp/documents';
+    const TMP_STORAGE_PATH  = 'tmp/documents';
+    const FULL_STORAGE_PATH = 'documents';
 
     public function getContentStore()
     {
@@ -27,25 +28,47 @@ class DocumentController extends AbstractController
         return $this->getServiceLocator()->get('Document');
     }
 
+    public function getUploader()
+    {
+        return $this->getServiceLocator()
+            ->get('FileUploader')
+            ->getUploader('ContentStore');
+    }
+
     public function downloadAction()
     {
-        $contentStore = $this->getContentStore();
-        $doc = $contentStore->read($this->params()->fromRoute('path'));
-        // @TODO render file response
-        $response = $this->getResponse();
-        $response->setStatusCode(200);
-        $response->getHeaders()->addHeaders(
-            array(
-                "Content-type" => "application/rtf",
-                "Content-Disposition: attachment; filename=" . $filename . ".rtf"
-            )
-        );
+        $isTmp    = $this->params()->fromRoute('type') === 'tmp';
+        $filePath = $this->params()->fromRoute('path');
+        $basePath = $isTmp ? self::TMP_STORAGE_PATH : self::FULL_STORAGE_PATH;
+        $fullPath = $basePath . '/' . $filePath;
 
-        $response->setContent($documentData['documentData']);
-        return $response;
+        return $this->getUploader()
+            ->download($fullPath, $filePath);
     }
 
     public function listTemplateBookmarksAction()
+    {
+        $form = new \Zend\Form\Form();
+
+        $fieldset = new \Zend\Form\Fieldset();
+        $fieldset->setLabel('documents.bookmarks');
+        $fieldset->setName('bookmarks');
+
+        $form->add($fieldset);
+
+        $this->addTemplateBookmarks(
+            $this->params()->fromRoute('id'),
+            $fieldset
+        );
+
+        $view = new ViewModel(['form' => $form]);
+        $view->setTemplate('form-simple');
+        $view->setTerminal(true);
+
+        return $view;
+    }
+
+    protected function addTemplateBookmarks($id, $fieldset)
     {
         $bundle = [
             'properties' => ['docTemplateBookmarks'],
@@ -74,19 +97,11 @@ class DocumentController extends AbstractController
         $result = $this->makeRestCall(
             'DocTemplate',
             'GET',
-            ['id' => $this->params()->fromRoute('id')],
+            ['id' => $id],
             $bundle
         );
 
         $bookmarks = $result['docTemplateBookmarks'];
-
-        $form = new \Zend\Form\Form();
-
-        $fieldset = new \Zend\Form\Fieldset();
-        $fieldset->setLabel('documents.bookmarks');
-        $fieldset->setName('bookmarks');
-
-        $form->add($fieldset);
 
         foreach ($bookmarks as $bookmark) {
 
@@ -106,11 +121,5 @@ class DocumentController extends AbstractController
 
             $fieldset->add($element);
         }
-
-        $view = new ViewModel(['form' => $form]);
-        $view->setTemplate('form-simple');
-        $view->setTerminal(true);
-
-        return $view;
     }
 }

@@ -8,7 +8,6 @@
 namespace Olcs\Controller\Document;
 
 use Zend\View\Model\ViewModel;
-use Zend\View\Model\JsonModel;
 
 use Dvsa\Jackrabbit\Data\Object\File;
 
@@ -19,11 +18,10 @@ use Dvsa\Jackrabbit\Data\Object\File;
  */
 class DocumentGenerationController extends DocumentController
 {
-    const TMP_STORAGE_PATH = 'tmp/documents';
-
     protected function alterFormBeforeValidation($form)
     {
         $data = (array)$this->getRequest()->getPost();
+
         $filters = [];
 
         if (isset($data['category'])) {
@@ -48,6 +46,13 @@ class DocumentGenerationController extends DocumentController
                     ->get($name)
                     ->setValueOptions($options);
             }
+        }
+
+        if (isset($data['details']['documentTemplate'])) {
+            $this->addTemplateBookmarks(
+                $data['details']['documentTemplate'],
+                $form->get('bookmarks')
+            );
         }
 
         return $form;
@@ -131,17 +136,28 @@ class DocumentGenerationController extends DocumentController
 
         // write the file to a tmp store
 
+        $details = json_encode(
+            [
+                'details' => $data['details'],
+                'bookmarks' => $data['bookmarks']
+            ]
+        );
         $tmp = new File();
         $tmp->setContent($contents);
         $tmp->setMimeType($template->getMimeType());
+        $tmp->setMetaData(new \ArrayObject(['data' => $details]));
 
-        $response = $contentStore->write(self::TMP_STORAGE_PATH . '/foo', $tmp);
+        $filename = uniqid('doc_');
+
+        $path = self::TMP_STORAGE_PATH . '/' . $filename;
+
+        $response = $contentStore->write($path, $tmp);
 
         return $this->redirect()->toRoute(
             'licence/documents/finalise',
             [
                 'licence' => $this->params()->fromRoute('licence'),
-                'tmpId'   => 'foo'
+                'tmpId'   => $filename
             ]
         );
     }

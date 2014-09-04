@@ -28,10 +28,10 @@ return array(
             'sort' => 'description',
             'formatter' => function ($data, $column) {
                 return '<a href="' . $this->generateUrl(
-                    array('action' => 'filename', 'filename' => $data['filename']),
-                    'document_retrieve',
+                    array('path' => $data['identifier']),
+                    'fetch_document',
                     true
-                ) . '" target=\'_new\'>' . $data['description'] . '</a>';
+                ) . '>' . $data['description'] . '</a>';
             },
         ),
         array(
@@ -44,7 +44,7 @@ return array(
             'name' => 'documentSubCategoryName',
             'sort' => 'documentSubCategoryName',
             'formatter' => function ($data, $column) {
-                return $data['documentSubCategoryName'] . ($data['isDigital'] == 1?' (digital)':"");
+                return $data['documentSubCategoryName'] . ($data['isDigital'] == 1 ? ' (digital)' : '');
             },
         ),
         array(
