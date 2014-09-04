@@ -47,7 +47,7 @@ trait DocumentSearchTrait
         // various dropdowns on the filter form
         $selects = array(
             'category' => $this->getListData('Category', [], 'description'),
-            'subCategory' => $this->getListData('DocumentSubCategory', $filters, 'description'),
+            'documentSubCategory' => $this->getListData('DocumentSubCategory', $filters, 'description'),
             'fileExtension' => $this->getListData(
                 'RefData',
                 ['refDataCategoryId' => 'document_type'],
