@@ -4,6 +4,7 @@
  * Task Controller
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 
 namespace Olcs\Controller;
@@ -11,15 +12,25 @@ namespace Olcs\Controller;
 use Zend\View\Model\ViewModel;
 use Zend\Json\Json;
 use Olcs\Controller\Traits;
+use Olcs\Controller\Traits\TaskSearchTrait;
 
 /**
  * Task Controller
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 class TaskController extends AbstractController
 {
-    use Traits\LicenceControllerTrait;
+    /**
+     * Need to get some base task type details
+     */
+    use TaskSearchTrait;
+
+    /**
+     * Place to cache task type details
+     */
+    private $taskTypeDetails = null;
 
     /**
      * Add a new task
@@ -31,11 +42,117 @@ class TaskController extends AbstractController
         return $this->formAction('Add');
     }
 
+    /**
+     * Edit a task
+     *
+     * @return ViewModel
+     */
     public function editAction()
     {
         return $this->formAction('Edit');
     }
 
+    /**
+     * Re-assign one or several tasks to a different team/user
+     *
+     * @return ViewModel
+     */
+    public function reassignAction()
+    {
+        $data = $this->mapDefaultData();
+        $filters = $this->mapFilters($data);
+
+        $form = $this->getForm('task');
+        $form->remove('details');
+        $inputs = array(
+            'assignedToTeam' => $this->getListData('Team'),
+            'assignedToUser' => $this->getListData('User', $filters, 'name', 'id', 'Unassigned')
+        );
+        foreach ($inputs as $name => $options) {
+            $form->get('assignment')
+                ->get($name)
+                ->setValueOptions($options);
+        }
+        $form->setData($this->expandData($data));
+
+        $this->formPost($form, 'processAssignTask');
+
+        if ($this->getResponse()->getContent() !== "") {
+            return $this->getResponse();
+        }
+
+        $view = new ViewModel(
+            [
+                'form' => $form,
+                'inlineScript' => $this->loadScripts(['task-form'])
+            ]
+        );
+
+        $view->setTemplate('task/add-or-edit');
+        $tasks = $this->getFromRoute('task');
+        $tasksCount = count(explode('-', $tasks));
+        $formTitle = ($tasksCount == 1) ? 'Re-assign task' : "Re-assign ($tasksCount) tasks";
+        return $this->renderView($view, $formTitle);
+    }
+
+    /**
+     * Callback invoked when the form is valid
+     * 
+     * @param array $data
+     */
+    public function processAssignTask($data)
+    {
+        if (isset($data['assignment'])) {
+            $assignment = $data['assignment'];
+            $user = $assignment['assignedToUser'];
+            $team = $assignment['assignedToTeam'];
+            $ids = explode('-', $this->getFromRoute('task'));
+            foreach ($ids as $id) {
+                $version = ($id == $data['id']) ? $data['version'] : $this->getTaskVersion($id);
+                $this->makeRestCall(
+                    'Task',
+                    'PUT',
+                    array(
+                        'id' => $id,
+                        'version' => $version,
+                        'assignedToUser' => $user,
+                        'assignedToTeam' => $team
+                    )
+                );
+            }
+        }
+        $this->redirectToList();
+    }
+
+    /**
+     * Get task version
+     * 
+     * @param int $id
+     * @return int
+     */
+    private function getTaskVersion($id)
+    {
+        $version = 0;
+        if ($id) {
+            $task = $this->makeRestCall(
+                'Task',
+                'GET',
+                array('id' => $id),
+                array('properties' => array('version'))
+            );
+            if (isset($task['version'])) {
+                $version = $task['version'];
+            }
+        }
+        return $version;
+    }
+
+    /**
+     * Set up and post form
+     * 
+     * @param string $type
+     * @return View
+     */
     private function formAction($type)
     {
         $data = $this->mapDefaultData();
@@ -63,19 +180,6 @@ class TaskController extends AbstractController
             }
         }
 
-        $licence = $this->getLicence();
-
-        $url = sprintf(
-            '<a href="%s">%s</a>',
-            $this->url()->fromRoute(
-                'licence/details/overview',
-                array(
-                    'licence' => $this->getFromRoute('licence')
-                )
-            ),
-            $licence['licNo']
-        );
-
         if (isset($data['isClosed']) && $data['isClosed'] === 'Y') {
             $this->disableFormElements($form);
             $textStatus = 'Closed';
@@ -85,11 +189,11 @@ class TaskController extends AbstractController
 
         $details = $form->get('details');
 
+        $url = $this->getLinkForTaskForm();
         $details->get('link')->setValue($url);
         $details->get('status')->setValue('<b>' . $textStatus . '</b>');
 
         $form->setData($this->expandData($data));
-
         $this->formPost($form, 'process' . $type . 'Task');
 
         // we have to allow for the fact that our process callback has
@@ -111,31 +215,85 @@ class TaskController extends AbstractController
     }
 
     /**
+     * Get link to display in add / edit form
+     * 
+     * @return string
+     */
+    protected function getLinkForTaskForm()
+    {
+        $taskTypeDetails = $this->getTaskTypeDetails();
+        $taskType = $taskTypeDetails['taskType'];
+        $taskTypeId = $taskTypeDetails['taskTypeId'];
+        $linkDisplay = $taskTypeDetails['linkDisplay'];
+
+        switch ($taskType) {
+            case 'licence':
+                if (!$linkDisplay) {
+                    $licence = $this->getLicence($taskTypeId);
+                }
+                $url = sprintf(
+                    '<a href="%s">%s</a>',
+                    $this->url()->fromRoute(
+                        'licence/details/overview',
+                        array(
+                            'licence' => $taskTypeId
+                        )
+                    ),
+                    $linkDisplay ? $linkDisplay : $licence['licNo']
+                );
+                break;
+
+            default:
+                $url='';
+        }
+        return $url;
+    }
+
+    /**
      * Override the parent getListData method simply to save us constantly having to
      * supply the $showAll parameter as 'Please select'
      */
-    protected function getListData($entity, $data = array(), $titleKey = 'name', $primaryKey = 'id', $showAll = 'Please select')
-    {
+    protected function getListData(
+        $entity,
+        $data = array(),
+        $titleKey = 'name',
+        $primaryKey = 'id',
+        $showAll = 'Please select'
+    ) {
         return parent::getListData($entity, $data, $titleKey, $primaryKey, $showAll);
     }
 
     /**
      * Callback invoked when the form is valid
+     * 
+     * @param array $data
+     * @return void|redirect
      */
     public function processAddTask($data)
     {
         return $this->processForm($data, 'Add');
     }
 
+    /**
+     * Callback invoked when the form is valid
+     * 
+     * @param array $data
+     * @return void|redirect
+     */
     public function processEditTask($data)
     {
         return $this->processForm($data, 'Edit');
     }
 
+    /**
+     * Process form and redirect back to list
+     * 
+     * @param array $data
+     * @param string $type
+     * @return voide|redirect
+     */
     private function processForm($data, $type)
     {
-        $licence = $this->getFromRoute('licence');
-
         $data = $this->flattenData($data);
 
         $method = 'process' . $type;
@@ -143,34 +301,56 @@ class TaskController extends AbstractController
         $result = $this->$method($data, 'Task');
 
         if ($type === 'Edit' || isset($result['id'])) {
-            $route = 'licence/processing';
-            $params = ['licence' => $licence];
-
-            // @NOTE: at some point we'll probably want to abstract this behind a
-            // redirect helper, such that *all* redirects either set a location
-            // header or return JSON based on the request type. That way it can
-            // be totally transparent in concrete controllers like this one.
-            if ($this->getRequest()->isXmlHttpRequest()) {
-                $data = [
-                    'status' => 302,
-                    'location' => $this->url()->fromRoute($route, $params)
-                ];
-
-                $this->getResponse()->getHeaders()->addHeaders(
-                    ['Content-Type' => 'application/json']
-                );
-                $this->getResponse()->setContent(Json::encode($data));
-                return;
-            }
-
-            // bog standard redirect
-            $this->redirect()->toRoute($route, $params);
+            $this->redirectToList();
         }
     }
 
     /**
-     * Merge some sensible default dropdown values
-     * with any POST data we may have
+     * Redirect back to list of tasks
+     * 
+     * @return redirect
+     */
+    public function redirectToList()
+    {
+        $taskType = $this->getFromRoute('type');
+        $taskTypeId = $this->getFromRoute('typeId');
+        switch ($taskType) {
+            case 'licence':
+                $route = 'licence/processing';
+                $params = ['licence' => $taskTypeId];
+                break;
+            default:
+                // no type - call from the home page, need to redirect back after action
+                $route = 'dashboard';
+                $params = [];
+                break;
+        }
+
+        // @NOTE: at some point we'll probably want to abstract this behind a
+        // redirect helper, such that *all* redirects either set a location
+        // header or return JSON based on the request type. That way it can
+        // be totally transparent in concrete controllers like this one.
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $data = [
+                'status' => 302,
+                'location' => $this->url()->fromRoute($route, $params)
+            ];
+
+            $this->getResponse()->getHeaders()->addHeaders(
+                ['Content-Type' => 'application/json']
+            );
+            $this->getResponse()->setContent(Json::encode($data));
+            return;
+        }
+
+        // bog standard redirect
+        $this->redirect()->toRoute($route, $params);
+    }
+
+    /**
+     * Merge some sensible default dropdown values with any POST data we may have
+     * 
+     * @return array
      */
     private function mapDefaultData()
     {
@@ -224,8 +404,10 @@ class TaskController extends AbstractController
     }
 
     /**
-     * Map some flattened data into relevant dropdown
-     * filters
+     * Map some flattened data into relevant dropdown filters
+     * 
+     * @param $data array
+     * @return array
      */
     private function mapFilters($data)
     {
@@ -242,8 +424,10 @@ class TaskController extends AbstractController
     }
 
     /**
-     * Flatten nested fieldset data into a collapsed
-     * array
+     * Flatten nested fieldset data into a collapsed array
+     * 
+     * @param array $data
+     * @return array
      */
     private function flattenData($data)
     {
@@ -257,8 +441,16 @@ class TaskController extends AbstractController
                 ]
             );
         }
-
-        $data['licence'] = $this->getFromRoute('licence');
+        $taskTypeDetails = $this->getTaskTypeDetails();
+        $taskType = $taskTypeDetails['taskType'];
+        $taskTypeId = $taskTypeDetails['taskTypeId'];
+        switch ($taskType) {
+            case 'licence':
+                $data['licence'] = $taskTypeId;
+                break;
+            default:
+                break;
+        }
         if (isset($data['urgent'])) {
             $data['urgent'] = $data['urgent'] == '1' ? 'Y' : 'N';
         }
@@ -268,6 +460,9 @@ class TaskController extends AbstractController
 
     /**
      * Expand a flattened array of data into form fieldsets
+     * 
+     * @param array $data
+     * @return array
      */
     private function expandData($data)
     {
@@ -283,7 +478,13 @@ class TaskController extends AbstractController
         ];
     }
 
-    private function disableFormElements($element) {
+    /**
+     * Disable form elements
+     * 
+     * @param Zend\Form\Element
+     */
+    private function disableFormElements($element)
+    {
         if ($element instanceof \Zend\Form\Fieldset) {
             foreach ($element->getFieldsets() as $child) {
                 $this->disableFormElements($child);
@@ -301,5 +502,39 @@ class TaskController extends AbstractController
         }
 
         $element->setAttribute('disabled', 'disabled');
+    }
+
+    /**
+     * Get task type details
+     * 
+     * @return array
+     */
+    public function getTaskTypeDetails()
+    {
+        if (!$this->taskTypeDetails) {
+            $taskType = $this->getFromRoute('type');
+            $taskTypeId = $this->getFromRoute('typeId');
+            $linkDisplay = null;
+            /* if call was from home page we don't have a task type yet,
+             * need to get it and all details for url generation as well
+             */
+            if (!$taskType) {
+                $taskId = $this->getFromRoute('task');
+                if (!$taskId) {
+                    throw new Exception('No task id provided');
+                }
+
+                $taskDetails = $this->getTaskDetails($taskId);
+                $taskType = strtolower($taskDetails['linkType']);
+                $taskTypeId = $taskDetails['linkId'];
+                $linkDisplay = $taskDetails['linkDisplay'];
+            }
+            $this->taskTypeDetails = [
+                'taskType' => $taskType,
+                'taskTypeId' => $taskTypeId,
+                'linkDisplay' => $linkDisplay,
+            ];
+        }
+        return $this->taskTypeDetails;
     }
 }

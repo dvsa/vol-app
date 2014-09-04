@@ -33,6 +33,14 @@ $(function() {
     url: "/tasks/sub-categories"
   });
 
+  OLCS.conditionalButton({
+      form: ".table__form",
+      label: "Re-assign Task",
+      predicate: function(length, callback) {
+        callback(length < 1);
+      }
+  });
+
   /**
    * Non component logic; bridge the table controls to the form
    */
