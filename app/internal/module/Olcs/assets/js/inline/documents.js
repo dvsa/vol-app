@@ -21,8 +21,8 @@ $(function() {
 
   OLCS.cascadeInput({
     source: form + " #category",
-    dest: form + " #documentSubCategory",
-    url: "/documents/sub-categories"
+    dest: form + " #subCategory",
+    url: "/list/document-sub-categories"
   });
 
   /**
