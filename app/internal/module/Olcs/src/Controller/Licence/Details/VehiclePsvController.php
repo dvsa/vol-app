@@ -65,7 +65,6 @@ class VehiclePsvController extends AbstractLicenceDetailsController
                     'vehicle' => array(
                         'properties' => array(
                             'vrm',
-                            'makeModel',
                             'isNovelty',
                         ),
                         'children' => array(
