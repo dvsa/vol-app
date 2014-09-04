@@ -22,7 +22,10 @@ class DocumentUploadController extends DocumentController
             $meta = $this->getContentStore()
                 ->readMeta($path);
 
-            $this->tmpData = json_decode($meta['metadataProperties']['meta:data'], true);
+            $this->tmpData = json_decode(
+                $meta['metadataProperties']['meta:data'],
+                true
+            );
         }
         return $this->tmpData;
     }
@@ -39,10 +42,30 @@ class DocumentUploadController extends DocumentController
             )
         );
 
+        // @TODO collapse into a loop?
+        $category = $this->makeRestCall(
+            'Category',
+            'GET',
+            ['id' => $data['details']['category']],
+            ['properties' => ['description']]
+        );
+        $subCategory = $this->makeRestCall(
+            'DocumentSubCategory',
+            'GET',
+            ['id' => $data['details']['documentSubCategory']],
+            ['properties' => ['description']]
+        );
+        $template = $this->makeRestCall(
+            'DocTemplate',
+            'GET',
+            ['id' => $data['details']['documentTemplate']],
+            ['properties' => ['description']]
+        );
+
         $data = [
-            'category'    => $data['details']['category'],
-            'subCategory' => $data['details']['documentSubCategory'],
-            'template'    => $data['details']['documentTemplate'],
+            'category'    => $category['description'],
+            'subCategory' => $subCategory['description'],
+            'template'    => $template['description'],
             'link'        => $url
         ];
         $form = $this->generateFormWithData(
@@ -71,16 +94,28 @@ class DocumentUploadController extends DocumentController
         $uploader->setFile($files['file']);
         $filename = $uploader->upload(self::FULL_STORAGE_PATH);
 
-        $templateName = 'a-template'; // @TODO from template...
+        // @TODO DRY up with previous method
+        $template = $this->makeRestCall(
+            'DocTemplate',
+            'GET',
+            ['id' => $data['details']['documentTemplate']],
+            ['properties' => ['description']]
+        );
+
+        $templateName = $template['description'];
         $fileExt = 'rtf';
-        $fileName = date('YmdHi') . '_' . $templateName . '.' . $fileExt;
+        $fileName = str_replace(
+            ' ',
+            '_',
+            date('YmdHi') . '_' . $templateName . '.' . $fileExt
+        );
 
         $data = [
             'identifier'          => $filename,
             'description'         => $templateName,
             'licence'             => $this->params()->fromRoute('licence'),
             'filename'            => $fileName,
-            'fileExtension'       => $fileExt,
+            'fileExtension'       => strtoupper($fileExt),
             'category'            => $data['details']['category'],
             'documentSubCategory' => $data['details']['documentSubCategory']
         ];

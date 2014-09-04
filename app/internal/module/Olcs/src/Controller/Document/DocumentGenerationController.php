@@ -134,6 +134,9 @@ class DocumentGenerationController extends DocumentController
                 'bookmarks' => $data['bookmarks']
             ]
         );
+
+        // @TODO make the 'data' key here a const in the abstract?
+        // we rely on it in the other child controller...
         $file->setMetaData(new \ArrayObject(['data' => $details]));
 
         $uploader = $this->getUploader();

@@ -40,7 +40,7 @@ class DocumentController extends AbstractController
         $filePath = $this->params()->fromRoute('path');
         $fullPath = self::TMP_STORAGE_PATH . '/' . $filePath;
 
-        return $this->getUploader()->download($fullPath, $filePath);
+        return $this->getUploader()->download($fullPath, $filePath . '.rtf'); // @TODO address this, inside the uploader I guess?
     }
 
     public function downloadAction()
