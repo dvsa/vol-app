@@ -51,6 +51,20 @@ class VehicleController extends AbstractLicenceDetailsController
     {
         $action = $this->getActionName();
 
-        return $this->internalActionSave($data, $action);
+        $licenceVehicleSaved = $this->internalActionSave($data, $action);
+
+        if ($action == 'add' && isset($licenceVehicleSaved['id'])) {
+            $this->requestDisc($licenceVehicleSaved['id']);
+        }
+    }
+
+    /**
+     * Request disc
+     *
+     * @param int $licenceVehicleId
+     */
+    protected function requestDisc($licenceVehicleId)
+    {
+        $this->makeRestCall('GoodsDisc', 'POST', array('licenceVehicle' => $licenceVehicleId));
     }
 }
