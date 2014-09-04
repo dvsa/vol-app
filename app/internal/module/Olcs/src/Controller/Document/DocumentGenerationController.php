@@ -30,13 +30,13 @@ class DocumentGenerationController extends DocumentController
             $filters['documentSubCategory'] = $data['category'];
         }
 
-        $selects = array(
-            'details' => array(
+        $selects = [
+            'details' => [
                 'category' => $this->getListData('Category', ['isDocCategory' => true], 'description'),
                 'documentSubCategory' => $this->getListData('DocumentSubCategory', $filters, 'description'),
                 'documentTemplate' => $this->getListData('DocTemplate', $filters, 'description')
-            )
-        );
+            ]
+        ];
 
         foreach ($selects as $fieldset => $inputs) {
             foreach ($inputs as $name => $options) {

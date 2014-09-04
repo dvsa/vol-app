@@ -8,13 +8,23 @@ use Dvsa\Jackrabbit\Data\Object\File;
 
 class DocumentUploadController extends DocumentController
 {
+    private $tmpData = [];
+
+    private function getTmpPath()
+    {
+        return self::TMP_STORAGE_PATH . '/' . $this->params()->fromRoute('tmpId');
+    }
+
     private function fetchTmpData()
     {
-        $path = self::TMP_STORAGE_PATH . '/' . $this->params()->fromRoute('tmpId');
-        $meta = $this->getContentStore()
-            ->readMeta($path);
+        if (empty($this->tmpData)) {
+            $path = $this->getTmpPath();
+            $meta = $this->getContentStore()
+                ->readMeta($path);
 
-        return json_decode($meta['metadataProperties']['meta:data'], true);
+            $this->tmpData = json_decode($meta['metadataProperties']['meta:data'], true);
+        }
+        return $this->tmpData;
     }
 
     public function finaliseAction()
@@ -30,21 +40,18 @@ class DocumentUploadController extends DocumentController
         );
 
         $data = [
-            'category' => $data['details']['category'],
+            'category'    => $data['details']['category'],
             'subCategory' => $data['details']['documentSubCategory'],
-            'template' => $data['details']['documentTemplate'],
-            'link' => $url
+            'template'    => $data['details']['documentTemplate'],
+            'link'        => $url
         ];
         $form = $this->generateFormWithData(
             'finalise-document',
             'processUpload',
             $data
         );
-        $view = new ViewModel(
-            [
-                'form' => $form
-            ]
-        );
+
+        $view = new ViewModel(['form' => $form]);
         // @TODO obviously, don't re-use this template; make a generic one if appropriate
         $view->setTemplate('task/add-or-edit');
         return $this->renderView($view, 'Amend letter');
@@ -55,18 +62,21 @@ class DocumentUploadController extends DocumentController
     {
         $data = $this->fetchTmpData();
 
-        // @TODO wrap this in more abstract methods if poss
+        // @TODO wrap this in more abstract methods if poss. Also need
+        // to sort out proper validation; look at FormActionController
+        // and see if we can modify that
         $files = $this->getRequest()->getFiles()->toArray();
+
         $uploader = $this->getUploader();
         $uploader->setFile($files['file']);
-        $key = $uploader->upload(self::FULL_STORAGE_PATH);
+        $filename = $uploader->upload(self::FULL_STORAGE_PATH);
 
         $templateName = 'a-template'; // @TODO from template...
         $fileExt = 'rtf';
         $fileName = date('YmdHi') . '_' . $templateName . '.' . $fileExt;
 
         $data = [
-            'identifier'          => $key,
+            'identifier'          => $filename,
             'description'         => $templateName,
             'licence'             => $this->params()->fromRoute('licence'),
             'filename'            => $fileName,
@@ -75,12 +85,13 @@ class DocumentUploadController extends DocumentController
             'documentSubCategory' => $data['details']['documentSubCategory']
         ];
 
-        // @TODO delete the tmp file
         $this->makeRestCall(
             'Document',
             'POST',
             $data
         );
+
+        $uploader->remove($this->getTmpPath());
 
         // @TODO hardcoding the return URL isn't appropriate here; we may well
         // generate docs from a non licencing section (do we? Need to check)
