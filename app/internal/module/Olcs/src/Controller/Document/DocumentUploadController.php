@@ -59,14 +59,18 @@ class DocumentUploadController extends DocumentController
         $files = $this->getRequest()->getFiles()->toArray();
         $uploader = $this->getUploader();
         $uploader->setFile($files['file']);
-        $key = $uploader->upload();
+        $key = $uploader->upload(self::FULL_STORAGE_PATH);
+
+        $templateName = 'a-template'; // @TODO from template...
+        $fileExt = 'rtf';
+        $fileName = date('YmdHi') . '_' . $templateName . '.' . $fileExt;
 
         $data = [
             'identifier'          => $key,
-            'description'         => '', // @TODO not sure?
+            'description'         => $templateName,
             'licence'             => $this->params()->fromRoute('licence'),
-            'filename'            => 'friendly_name.rtf', // @TODO see AC
-            'fileExtension'       => 'rtf', // @TODO un hardcode
+            'filename'            => $fileName,
+            'fileExtension'       => $fileExt,
             'category'            => $data['details']['category'],
             'documentSubCategory' => $data['details']['documentSubCategory']
         ];

@@ -21,17 +21,18 @@ return array(
     ),
     'attributes' => array(
     ),
+
     'columns' => array(
         array(
             'title' => 'Description',
             'name' => 'description',
             'sort' => 'description',
             'formatter' => function ($data, $column) {
-                return '<a href="' . $this->generateUrl(
-                    array('path' => $data['identifier']),
-                    'fetch_document',
-                    true
-                ) . '>' . $data['description'] . '</a>';
+                $url = $this->generateUrl(
+                    array('path' => $data['documentStoreIdentifier']),
+                    'fetch_document'
+                );
+                return '<a href="' . $url . '">' . $data['description'] . '</a>';
             },
         ),
         array(
