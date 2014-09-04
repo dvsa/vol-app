@@ -350,7 +350,7 @@ class CasePiController extends CaseController implements CrudInterface
         $caseId = $this->fromRoute('case');
 
         $form = $this->generateFormWithData(
-            'pi-agreed',
+            'PublicInquiryAgreedAndLegislation',
             'processPi',
             array(
                 'main' => array('case' => $caseId)
