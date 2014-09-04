@@ -27,6 +27,8 @@ return array(
         'invokables' => array(
             'Common\Controller\Application\VehicleSafety\SafetyController' =>
                 'Olcs\Controller\Journey\Application\VehicleSafety\SafetyController',
+            'Common\Controller\Application\VehicleSafety\VehicleController' =>
+                'Olcs\Controller\Journey\Application\VehicleSafety\VehicleController',
         )
     )
 );

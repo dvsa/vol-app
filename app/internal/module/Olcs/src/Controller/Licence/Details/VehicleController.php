@@ -2,17 +2,21 @@
 
 /**
  * Vehicle Controller
+ *
+ * Internal - Licence - Vehicle section
  */
 namespace Olcs\Controller\Licence\Details;
 
-use Common\Controller\Traits;
+use Common\Controller\Traits\VehicleSafety as VehicleSafetyTraits;
 
 /**
  * Vehicle Controller
  */
 class VehicleController extends AbstractLicenceDetailsController
 {
-    use Traits\VehicleSection;
+    use VehicleSafetyTraits\VehicleSection,
+        VehicleSafetyTraits\InternalGenericVehicleSection,
+        VehicleSafetyTraits\LicenceGenericVehicleSection;
 
     /**
      * Set the form name
@@ -36,21 +40,6 @@ class VehicleController extends AbstractLicenceDetailsController
     protected $section = 'vehicle';
 
     /**
-     * We only want to show active vehicles
-     *
-     * @param array $licenceVehicle
-     * @return boolean
-     */
-    protected function showVehicle($licenceVehicle)
-    {
-        if (empty($licenceVehicle['specifiedDate'])) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
      * Save the vehicle
      *
      * @todo might be able to combine these 2 methods now
@@ -62,10 +51,6 @@ class VehicleController extends AbstractLicenceDetailsController
     {
         $action = $this->getActionName();
 
-        if ($action == 'add') {
-            $data['licence-vehicle']['specifiedDate'] = date('Y-m-d');
-        }
-
-        return $this->doActionSave($data, $action);
+        return $this->internalActionSave($data, $action);
     }
 }

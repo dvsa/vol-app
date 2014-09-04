@@ -1,18 +1,26 @@
 <?php
 
 /**
- * VehiclePsv Controller
+ * Vehicle Psv Controller
+ *
+ * Internal - Licence - Vehicle PSV section
+ *
+ * @author Rob Caiger <rob@clocal.co.uk>
  */
 namespace Olcs\Controller\Licence\Details;
 
-use Common\Controller\Traits;
+use Common\Controller\Traits\VehicleSafety as VehicleSafetyTraits;
 
 /**
- * VehiclePsv Controller
+ * Vehicle Psv Controller
+ *
+ * @author Rob Caiger <rob@clocal.co.uk>
  */
 class VehiclePsvController extends AbstractLicenceDetailsController
 {
-    use Traits\VehiclePsvSection;
+    use VehicleSafetyTraits\VehiclePsvSection,
+        VehicleSafetyTraits\InternalGenericVehicleSection,
+        VehicleSafetyTraits\LicenceGenericVehicleSection;
 
     /**
      * Set the form name
@@ -95,21 +103,6 @@ class VehiclePsvController extends AbstractLicenceDetailsController
     }
 
     /**
-     * We only want to show active vehicles
-     *
-     * @param array $licenceVehicle
-     * @return boolean
-     */
-    protected function showVehicle($licenceVehicle)
-    {
-        if (empty($licenceVehicle['specifiedDate'])) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
      * Save the vehicle
      *
      * @param array $data
@@ -121,10 +114,6 @@ class VehiclePsvController extends AbstractLicenceDetailsController
 
         $action = array_pop($parts);
 
-        if ($action == 'add') {
-            $data['licence-vehicle']['specifiedDate'] = date('Y-m-d');
-        }
-
-        return $this->doActionSave($data, $action);
+        return $this->internalActionSave($data, $action);
     }
 }
