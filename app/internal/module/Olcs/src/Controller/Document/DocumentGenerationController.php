@@ -9,8 +9,6 @@ namespace Olcs\Controller\Document;
 
 use Zend\View\Model\ViewModel;
 
-use Dvsa\Jackrabbit\Data\Object\File;
-
 /**
  * Test document services.
  *
@@ -120,21 +118,15 @@ class DocumentGenerationController extends DocumentController
         // we've now got our concatenated 'static' bookmarks we can
         // dump into the template. Let's fetch the actual raw template
         // data and do that
-        $contentStore = $this->getContentStore();
-        $template = $contentStore->read($template['document']['identifier']);
 
         // we've now got our raw content and our bookmarks, so can hand off
         // to our template service / doc gen service to generate the doc
         // pretend for now...
-        $generator = $this->getDocumentService()
-            // @NOTE: I really want to make the getGenerator just take a File
-            // object, but then it would have to know about the Jackrabbit module...
-            // One to ponder; perhaps push it into common anyway?
-            ->getGenerator($template->getMimeType());
-
-        $contents = $generator->generate($template->getContent(), $bookmarks);
-
-        // write the file to a tmp store
+        $file = $this->getDocumentService()
+            ->generateFromTemplate(
+                $template['document']['identifier'],
+                $bookmarks
+            );
 
         $details = json_encode(
             [
@@ -142,16 +134,11 @@ class DocumentGenerationController extends DocumentController
                 'bookmarks' => $data['bookmarks']
             ]
         );
-        $tmp = new File();
-        $tmp->setContent($contents);
-        $tmp->setMimeType($template->getMimeType());
-        $tmp->setMetaData(new \ArrayObject(['data' => $details]));
+        $file->setMetaData(new \ArrayObject(['data' => $details]));
 
-        $filename = uniqid('doc_');
-
-        $path = self::TMP_STORAGE_PATH . '/' . $filename;
-
-        $response = $contentStore->write($path, $tmp);
+        $uploader = $this->getUploader();
+        $uploader->setFile($file);
+        $filename = $uploader->upload(self::TMP_STORAGE_PATH);
 
         return $this->redirect()->toRoute(
             'licence/documents/finalise',

@@ -82,11 +82,11 @@ class DocumentUploadController extends DocumentController
             $data
         );
 
+        // @TODO hardcoding the return URL isn't appropriate here; we may well
+        // generate docs from a non licencing section (do we? Need to check)
         return $this->redirect()->toRoute(
             'licence/details/overview',
-            [
-                'licence' => $this->params()->fromRoute('licence')
-            ]
+            ['licence' => $this->params()->fromRoute('licence')]
         );
     }
 }

@@ -29,7 +29,10 @@ return array(
             'sort' => 'description',
             'formatter' => function ($data, $column) {
                 $url = $this->generateUrl(
-                    array('path' => $data['documentStoreIdentifier']),
+                    array(
+                        'id' => $data['document'],
+                        'filename' => $data['filename']
+                    ),
                     'fetch_document'
                 );
                 return '<a href="' . $url . '">' . $data['description'] . '</a>';
