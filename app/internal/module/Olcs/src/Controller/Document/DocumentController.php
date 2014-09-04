@@ -35,15 +35,33 @@ class DocumentController extends AbstractController
             ->getUploader('ContentStore');
     }
 
+    public function downloadTmpAction()
+    {
+        $filePath = $this->params()->fromRoute('path');
+        $fullPath = self::TMP_STORAGE_PATH . '/' . $filePath;
+
+        return $this->getUploader()->download($fullPath, $filePath);
+    }
+
     public function downloadAction()
     {
-        $isTmp    = $this->params()->fromRoute('type') === 'tmp';
-        $filePath = $this->params()->fromRoute('path');
-        $basePath = $isTmp ? self::TMP_STORAGE_PATH : self::FULL_STORAGE_PATH;
-        $fullPath = $basePath . '/' . $filePath;
+        $fileName = $this->params()->fromRoute('filename');
+        $result = $this->makeRestCall(
+            'Document',
+            'GET',
+            ['id' => $this->params()->fromRoute('id')],
+            [
+                'properties' => ['identifier', 'filename']
+            ]
+        );
 
-        return $this->getUploader()
-            ->download($fullPath, $filePath);
+        if ($fileName !== $result['filename']) {
+            throw new \Exception('handle properly'); // @TODO
+        }
+
+        $fullPath = self::FULL_STORAGE_PATH . '/' . $result['identifier'];
+
+        return $this->getUploader()->download($fullPath, $fileName);
     }
 
     public function listTemplateBookmarksAction()
