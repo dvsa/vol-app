@@ -165,7 +165,7 @@ class CasePiController extends CaseController
     public function addAgreedAction($caseId)
     {
         $form = $this->generateFormWithData(
-            'pi-agreed',
+            'PublicInquiryAgreedAndLegislation',
             'processAgreed',
             array(
                 'case' => $caseId

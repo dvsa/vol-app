@@ -68,7 +68,8 @@ class ApplicationDetails
      *     "label": "Select legislation",
      *     "disable_inarray_validator": false,
      *     "help-block": "Use CTRL to select multiple",
-     *     "category": "impounding_legislation"
+     *     "category": "impounding_legislation",
+     *     "use_groups": "true"
      * })
      * @Form\Type("DynamicSelect")
      */

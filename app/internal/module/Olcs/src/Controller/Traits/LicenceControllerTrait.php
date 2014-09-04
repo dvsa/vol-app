@@ -16,8 +16,6 @@ use Olcs\Helper\LicenceDetailsHelper;
  */
 trait LicenceControllerTrait
 {
-    protected $licences = array();
-
     /**
      * Get view with licence
      *
@@ -37,9 +35,9 @@ trait LicenceControllerTrait
         $view = $this->getView($variables);
 
         $this->pageTitle = $view->licence['licNo'];
-        $this->pageSubTitle = $this->getTranslator()->translate($view->licence['goodsOrPsv']['id']) . ', ' .
-            $this->getTranslator()->translate($view->licence['licenceType']['id'])
-            . ', ' . $this->getTranslator()->translate($view->licence['status']['id']);
+        $this->pageSubTitle = $view->licence['goodsOrPsv']['description'] . ', ' .
+            $view->licence['licenceType']['description']
+            . ', ' . $view->licence['status']['description'];
 
         return $view;
     }
@@ -61,31 +59,8 @@ trait LicenceControllerTrait
             $id = $this->getFromRoute('licence');
         }
 
-        if (!isset($this->licences[$id])) {
-            $bundle = array(
-                'properties' => 'ALL',
-                'children' => array(
-                    'status' => array(
-                        'properties' => array('id')
-                    ),
-                    'goodsOrPsv' => array(
-                        'properties' => array('id')
-                    ),
-                    'licenceType' => array(
-                        'properties' => array('id')
-                    ),
-                    'trafficArea' => array(
-                        'properties' => 'ALL'
-                    ),
-                    'organisation' => array(
-                        'properties' => 'ALL'
-                    )
-                )
-            );
-
-            $this->licences[$id] = $this->makeRestCall('Licence', 'GET', array('id' => $id), $bundle);
-        }
-
-        return $this->licences[$id];
+        /** @var \Olcs\Service\Data\Licence $dataService */
+        $dataService = $this->getServiceLocator()->get('Olcs\Service\Data\Licence');
+        return $dataService->fetchLicenceData($id);
     }
 }

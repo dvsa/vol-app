@@ -43,7 +43,7 @@ class PublicInquiryAgreedAndLegislation
     public $caseworker = null;
 
     /**
-     * @Form\Attributes({"id":"","placeholder":"","class":"medium"})
+     * @Form\Attributes({"id":"","placeholder":"","class":"medium", "multiple" : true})
      * @Form\Options({
      *     "label": "Legislation",
      *     "value_options": {
@@ -77,9 +77,10 @@ class PublicInquiryAgreedAndLegislation
      *     },
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category"
+     *     "help-block": "Please select a category",
+     *     "category": "presiding_tc"
      * })
-     * @Form\Type("\Zend\Form\Element\Select")
+     * @Form\Type("DynamicSelect")
      */
     public $presidingTc = null;
 
