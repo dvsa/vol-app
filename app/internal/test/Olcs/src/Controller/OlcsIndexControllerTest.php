@@ -57,8 +57,8 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue(1));
 
         $expectedParams = array(
-            'owner' => 1,
-            'team'  => 2,
+            'assignedToUser' => 1,
+            'assignedToTeam'  => 2,
             'date'  => 'today',
             'status' => 'open',
             'sort' => 'actionDate',
@@ -129,7 +129,8 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
         ];
 
         $extendedListData = [
-            'owner' => 1,
+            'assignedToUser' => 1,
+            'assignedToTeam'  => 2,
             'team'  => 2,
             'date'  => 'today',
             'status' => 'open',

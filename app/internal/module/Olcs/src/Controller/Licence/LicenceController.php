@@ -18,15 +18,8 @@ use Olcs\Controller\Traits;
 class LicenceController extends AbstractController
 {
     use Traits\LicenceControllerTrait,
-        Traits\TaskSearchTrait;
-
-    public function indexAction()
-    {
-        $view = $this->getViewWithLicence();
-        $view->setTemplate('licence/index');
-
-        return $this->renderView($view);
-    }
+        Traits\TaskSearchTrait,
+        Traits\DocumentSearchTrait;
 
     public function detailsAction()
     {
@@ -44,7 +37,7 @@ class LicenceController extends AbstractController
         return $this->renderView($view);
     }
 
-    public function documentsAction()
+    public function oppositionAction()
     {
         $view = $this->getViewWithLicence();
         $view->setTemplate('licence/index');
@@ -52,8 +45,66 @@ class LicenceController extends AbstractController
         return $this->renderView($view);
     }
 
+    public function documentsAction()
+    {
+        $this->pageLayout = 'licence';
+
+        $filters = $this->mapDocumentFilters(
+            array('licenceId' => $this->getFromRoute('licence'))
+        );
+
+        $table = $this->getDocumentsTable($filters, false);
+
+        $view = $this->getViewWithLicence(
+            array(
+                'table' => $table->render(),
+                'form'  => $this->getDocumentForm($filters)
+            )
+        );
+
+        $view->setTemplate('licence/documents');
+        $view->setTerminal(
+            $this->getRequest()->isXmlHttpRequest()
+        );
+
+        return $this->renderView($view);
+    }
+
     public function processingAction()
     {
+        if ($this->getRequest()->isPost()) {
+            $action = strtolower($this->params()->fromPost('action'));
+            if ($action === 'create task') {
+                $action = 'add';
+            }
+
+            $params = [
+                'licence' => $this->getFromRoute('licence'),
+                'action'  => $action
+            ];
+
+            if ($action !== 'add') {
+                $id = $this->params()->fromPost('id');
+
+                // @NOTE: edit doesn't allow multi IDs, but other
+                // actions (like reassign) might, hence why we have
+                // an explicit check here
+                if ($action === 'edit') {
+                    if (!is_array($id) || count($id) !== 1) {
+                        throw new \Exception('Please select a single task to edit');
+                    }
+                    $id = $id[0];
+                }
+
+                $params['task'] = $id;
+            }
+
+            return $this->redirect()->toRoute(
+                'licence/task_action',
+                $params
+            );
+        }
+
         $this->pageLayout = 'licence';
 
         $filters = $this->mapTaskFilters(
@@ -109,6 +160,6 @@ class LicenceController extends AbstractController
      */
     public function indexJumpAction()
     {
-        return $this->redirect()->toRoute('licence/overview', [], [], true);
+        return $this->redirect()->toRoute('licence/details/overview', [], [], true);
     }
 }

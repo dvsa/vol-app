@@ -18,14 +18,14 @@ trait TaskSearchTrait
     protected function mapTaskFilters($extra = array())
     {
         $defaults = array(
-            'owner'  => $this->getLoggedInUser(),
-            'team'   => 2,  // we've no stub for this, but it matches the logged in user's team
-            'date'   => 'today',
-            'status' => 'open',
-            'sort'   => 'actionDate',
-            'order'  => 'ASC',
-            'page'   => 1,
-            'limit'  => 10
+            'assignedToUser' => $this->getLoggedInUser(),
+            'assignedToTeam' => 2,  // we've no stub for this, but it matches the logged in user's team
+            'date'           => 'today',
+            'status'         => 'open',
+            'sort'           => 'actionDate',
+            'order'          => 'ASC',
+            'page'           => 1,
+            'limit'          => 10
         );
 
         $filters = array_merge(
@@ -35,8 +35,16 @@ trait TaskSearchTrait
         );
 
         // form => backend mappings
-        $filters['isClosed'] = $filters['status'] === 'closed';
-        $filters['isUrgent'] = isset($filters['urgent']);
+
+        // we need an if / else if here because there is a third input
+        // state, "all", which shouldn't apply either filter
+        if ($filters['status'] === 'closed') {
+            $filters['isClosed'] = true;
+        } else if ($filters['status'] === 'open') {
+            // @NOTE we currently have an unrelated bug OLCS-3792 which
+            // prevents this actually restricting to open only
+            $filters['isClosed'] = false;
+        }
 
         if (isset($filters['date']) && $filters['date'] === 'today') {
             $filters['actionDate'] = '<= ' . date('Y-m-d');
@@ -55,13 +63,19 @@ trait TaskSearchTrait
     {
         $form = $this->getForm('tasks-home');
 
+        // the filters generally double up perfectly as form
+        // and filter data, but team just needs a little bump...
+        if (isset($filters['assignedToTeam'])) {
+            $filters['team'] = $filters['assignedToTeam'];
+        }
+
         // grab all the relevant backend data needed to populate the
         // various dropdowns on the filter form
         $selects = array(
-            'team' => $this->getListData('Team'),
-            'owner' => $this->getListData('User', $filters),
+            'assignedToTeam' => $this->getListData('Team'),
+            'assignedToUser' => $this->getListData('User', $filters),
             'category' => $this->getListData('Category', [], 'description'),
-            'subCategory' => $this->getListData('TaskSubCategory', $filters)
+            'taskSubCategory' => $this->getListData('TaskSubCategory', $filters)
         );
 
         // bang the relevant data into the corresponding form inputs

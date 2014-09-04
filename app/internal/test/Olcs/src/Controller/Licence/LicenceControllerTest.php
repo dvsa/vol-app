@@ -33,12 +33,13 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
                 'loadScripts',
                 'getFromRoute',
                 'params',
+                'redirect',
                 'getServiceLocator'
             )
         );
 
         $query = new \Zend\Stdlib\Parameters();
-        $request = $this->getMock('\stdClass', ['getQuery', 'isXmlHttpRequest']);
+        $request = $this->getMock('\stdClass', ['getQuery', 'isXmlHttpRequest', 'isPost']);
         $request->expects($this->any())
             ->method('getQuery')
             ->will($this->returnValue($query));
@@ -76,7 +77,7 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
         return $serviceMock;
     }
 
-    public function testProcessingActionWithNoQueryUsesDefaultParams()
+    public function testDocumentsActionWithNoQueryUsesDefaultParams()
     {
         $licenceData = array(
             'licNo' => 'TEST1234',
@@ -105,29 +106,23 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue(1234));
 
         $expectedParams = array(
-            'owner' => 1,
-            'team'  => 2,
-            'date'  => 'today',
-            'status' => 'open',
-            'sort' => 'actionDate',
-            'order' => 'ASC',
-            'page' => 1,
-            'limit' => 10,
-            // @NOTE: I don't like the date variable here, maybe use
-            // DateTime and a mock instead
-            'actionDate' => '<= ' . date('Y-m-d'),
+            'sort'   => 'issuedDate',
+            'order'  => 'DESC',
+            'page'   => 1,
+            'limit'  => 10,
             'licenceId' => 1234
         );
-        $this->controller->expects($this->at(3))
+
+        $this->controller->expects($this->any())
             ->method('makeRestCall')
-            ->with('TaskSearchView', 'GET', $expectedParams)
+            ->with('DocumentSearchView', 'GET', $expectedParams)
             ->will($this->returnValue([]));
 
-        $tableMock = $this->getMock('\stdClass', ['render', 'removeColumn']);
+        $tableMock = $this->getMock('\stdClass', ['render']);
         $this->controller->expects($this->once())
             ->method('getTable')
             ->with(
-                'tasks',
+                'documents',
                 [],
                 array_merge(
                     $expectedParams,
@@ -139,14 +134,6 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
         $tableMock->expects($this->once())
             ->method('render');
 
-        $tableMock->expects($this->at(0))
-            ->method('removeColumn')
-            ->with('name');
-
-        $tableMock->expects($this->at(1))
-            ->method('removeColumn')
-            ->with('link');
-
         $form = $this->getMock('\stdClass', ['get', 'setValueOptions', 'remove', 'setData']);
 
         $form->expects($this->any())
@@ -157,75 +144,13 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             ->method('getForm')
             ->will($this->returnValue($form));
 
-        $response = [
-            'Results' => [
-                [
-                    'id' => 123,
-                    'name' => 'foo'
-                ]
-            ]
-        ];
+        $view = $this->controller->documentsAction();
 
-        $altResponse = [
-            'Results' => [
-                [
-                    'id' => 123,
-                    'description' => 'foo'
-                ]
-            ]
-        ];
+        $this->assertTrue($view->terminate());
 
-        $standardListData = [
-            'limit' => 100,
-            'sort' => 'name'
-        ];
-
-        $altListData = [
-            'limit' => 100,
-            'sort' => 'description'
-        ];
-
-        $extendedListData = [
-            'owner' => 1,
-            'team'  => 2,
-            'date'  => 'today',
-            'status' => 'open',
-            'sort' => 'name',
-            'order' => 'ASC',
-            'page' => 1,
-            'limit' => 100,
-            'actionDate' => '<= ' . date('Y-m-d'),
-            'licenceId' => 1234
-        ];
-
-        $this->controller->expects($this->at(7))
-            ->method('makeRestCall')
-            ->with('Team', 'GET', $standardListData)
-            ->will($this->returnValue($response));
-
-        $this->controller->expects($this->at(8))
-            ->method('makeRestCall')
-            ->with('User', 'GET', $extendedListData)
-            ->will($this->returnValue($response));
-
-        $this->controller->expects($this->at(9))
-            ->method('makeRestCall')
-            ->with('Category', 'GET', $altListData)
-            ->will($this->returnValue($altResponse));
-
-        $this->controller->expects($this->at(10))
-            ->method('makeRestCall')
-            ->with('TaskSubCategory', 'GET', $extendedListData)
-            ->will($this->returnValue($response));
-
-        $view = $this->controller->processingAction();
-        list($header, $content) = $view->getChildren();
-
-        $this->assertEquals('TEST1234', $header->getVariable('pageTitle'));
-        $this->assertEquals('PSV, L1, S1', $header->getVariable('pageSubTitle'));
     }
 
-    public function testProcessingActionAjax()
+    public function testDocumentsActionAjax()
     {
 
         $this->controller->expects($this->at(3))
@@ -239,12 +164,6 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnSelf());
 
         $tableMock = $this->getMock('\stdClass', ['render', 'removeColumn']);
-
-        $tableMock->expects($this->at(0))
-            ->method('removeColumn');
-
-        $tableMock->expects($this->at(1))
-            ->method('removeColumn');
 
         $this->controller->expects($this->once())
             ->method('getTable')
@@ -292,7 +211,7 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             ->method('isXmlHttpRequest')
             ->will($this->returnValue(true));
 
-        $view = $this->controller->processingAction();
+        $view = $this->controller->documentsAction();
 
         $this->assertTrue($view->terminate());
     }

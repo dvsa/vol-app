@@ -2,7 +2,7 @@
 
     <h3>Agreed and legislation</h3>
     <div class="actions-container">
-        <a href="<?php echo $this->url($this->route, ['action' => 'edit', 'id' => $pi['id']], [], true); ?>" class="action--secondary" />Edit</a>
+        <a href="<?php echo $this->url('case_pi_action', ['action' => 'edit', 'section' => 'agreed', 'id' => $pi['id']], [], true); ?>" class="action--secondary" />Edit</a>
     </div>
 
     <div style="clear: both"></div>
@@ -12,54 +12,44 @@
     $summary = [
         'agreedDate' => [
             'label' => 'Agreed date',
-            'value' => isset($pi['dateAgreed']) ? date('m/d/Y', strtotime($pi['dateAgreed'])) : 'dd-mm-yyyy',
-        ],
-        'agreedBy' => [
-            'label' => 'Agreed By',
-            'value' => $pi['presidingTc']['name']
-        ],
-        'agreedByRole' => [
-            'label' => 'Agreed By Role',
-            'value' => $pi['presidingTcRole']
+            'value' => isset($pi['agreedDate']) ? date('m/d/Y', strtotime($pi['agreedDate'])) : 'dd-mm-yyyy',
         ]
     ];
 
-    $typeKeys = [
-        'typeAppNew' => 'Application - New',
-        'typeAppVar' => 'Application - Variation',
-        'typeAppDisciplinary' => 'Application - Disciplinary',
-        'typeAppNewDisciplinary' => 'Application - New - Disiplinary',
-        'typeAppVarDisciplinary' => 'Application - Variation - Disiplinary',
-        'typeEnvNew' => 'Environmental - New',
-        'typeEnvVar' => 'Environmental - Variation',
-        'typeOcReview' => 'O/C Review',
-        'typeImpounding' => 'Impounding'
-    ];
-
     $types = [];
-    foreach ($typeKeys as $key => $value) {
-        if ($pi[$key] == 'Y') {
-            $types[] = $value;
-        }
+    foreach ($pi['piTypes'] as $value) {
+        $types[] = $value['description'];
     }
     if (is_array($types)) {
         $summary += [
             'piType' => [
-                'label' => 'Public Inquiry Type',
+                'label' => 'Type of public inquiry',
                 'value' => implode(', ', $types),
             ],
         ];
     }
 
     $summary += [
+        'presidingTc' => [
+            'label' => 'Agreed by',
+            'value' => $pi['presidingTc']['name'],
+        ],
+        'agreedByRole' => [
+            'label' => 'Agreed by role',
+            'value' => $this->translate($pi['presidedByRole']['id']),
+        ]/* ,
         'assignedTo' => [
             'label' => 'Assigned To',
-            'value' => $pi['user']['name'],
-        ],
+            'value' => $pi['assignedTo']['name'],
+        ] */,
         'legislation' => [
             'label' => 'Legislation',
-            'value' => is_array($pi['piReasons']) ? implode(', ', array_map(function($item){return $item['sectionCode'];}, $pi['piReasons'])) : 'None selected',
+            'value' => is_array($pi['reasons']) ? implode(', ', array_map(function($item){return $item['sectionCode'];}, $pi['reasons'])) : 'None selected',
         ],
+        'comments' => [
+            'label' => 'Comments',
+            'value' => $pi['comment']
+        ]
     ];
 
     echo $this->render('partials/summary/summary__list', ['items' => $summary, 'title' => 'Agreement and legislation']); ?>

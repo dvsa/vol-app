@@ -14,7 +14,7 @@ class TasksHome
     /**
      * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
-     *     "label": "tasks-home.data.team",
+     *     "label": "tasks.data.team",
      *     "value_options": {
      *
      *     },
@@ -22,12 +22,12 @@ class TasksHome
      * })
      * @Form\Type("\Zend\Form\Element\Select")
      */
-    public $team = null;
+    public $assignedToTeam = null;
 
     /**
      * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
-     *     "label": "tasks-home.data.owner",
+     *     "label": "tasks.data.owner",
      *     "value_options": {
      *
      *     },
@@ -35,12 +35,12 @@ class TasksHome
      * })
      * @Form\Type("\Zend\Form\Element\Select")
      */
-    public $owner = null;
+    public $assignedToUser = null;
 
     /**
      * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
-     *     "label": "tasks-home.data.category",
+     *     "label": "tasks.data.category",
      *     "value_options": {
      *
      *     },
@@ -53,7 +53,7 @@ class TasksHome
     /**
      * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
-     *     "label": "tasks-home.data.sub_category",
+     *     "label": "tasks.data.sub_category",
      *     "value_options": {
      *
      *     },
@@ -66,7 +66,7 @@ class TasksHome
     /**
      * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
-     *     "label": "tasks-home.data.date",
+     *     "label": "tasks.data.date",
      *     "disable_inarray_validator": false,
      *     "category": "task-date-types"
      * })
@@ -77,7 +77,7 @@ class TasksHome
     /**
      * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
-     *     "label": "tasks-home.data.status",
+     *     "label": "tasks.data.status",
      *     "disable_inarray_validator": false,
      *     "category": "task-status-types"
      * })
@@ -88,7 +88,7 @@ class TasksHome
     /**
      * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
-     *     "label": "tasks-home.data.urgent",
+     *     "label": "tasks.data.urgent",
      *     "value_options": {
      *
      *     },
@@ -102,7 +102,7 @@ class TasksHome
     /**
      * @Form\Attributes({"type":"submit","class":"action--primary"})
      * @Form\Options({
-     *     "label": "tasks-home.submit.filter",
+     *     "label": "tasks.submit.filter",
      *     "label_attributes": {
      *         "class": "col-sm-2"
      *     },

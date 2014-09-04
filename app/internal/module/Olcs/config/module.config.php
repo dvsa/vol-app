@@ -30,9 +30,11 @@ return array(
             'CaseConditionUndertakingController' => 'Olcs\Controller\CaseConditionUndertakingController',
             'CaseRevokeController' => 'Olcs\Controller\CaseRevokeController',
             'CasePiController' => 'Olcs\Controller\CasePiController',
+            'CasePiHearingController' => 'Olcs\Controller\Cases\Pi\HearingController',
             'DocumentController' => 'Olcs\Controller\DocumentController',
             'DefendantSearchController' => 'Olcs\DefendantSearchController',
             'LicenceController' => 'Olcs\Controller\Licence\LicenceController',
+            'TaskController' => 'Olcs\Controller\TaskController',
             'LicenceDetailsOverviewController' => 'Olcs\Controller\Licence\Details\OverviewController',
             'LicenceDetailsTypeOfLicenceController' => 'Olcs\Controller\Licence\Details\TypeOfLicenceController',
             'LicenceDetailsBusinessDetailsController' => 'Olcs\Controller\Licence\Details\BusinessDetailsController',
@@ -45,6 +47,11 @@ return array(
             'LicenceDetailsConditionUndertakingController' =>
                 'Olcs\Controller\Licence\Details\ConditionUndertakingController',
             'LicenceDetailsTaxiPhvController' => 'Olcs\Controller\Licence\Details\TaxiPhvController',
+            'ApplicationController' => 'Olcs\Controller\Application\ApplicationController',
+            'LicenceProcessingOverviewController' =>
+                'Olcs\Controller\Licence\Processing\LicenceProcessingOverviewController',
+            'LicenceProcessingTasksController' => 'Olcs\Controller\Licence\Processing\LicenceProcessingTasksController',
+            'LicenceProcessingNoteController' => 'Olcs\Controller\Licence\Processing\LicenceProcessingNoteController',
         )
     ),
     'view_manager' => array(
@@ -82,5 +89,31 @@ return array(
     'local_scripts_path' => array(
         __DIR__ . '/../assets/js/inline/'
     ),
-    'asset_path' => '//dvsa-static.olcsdv-ap01.olcs.npm'
+    'asset_path' => '//dvsa-static.olcsdv-ap01.olcs.npm',
+    'service_manager' => array(
+        'factories' => array(
+            'ApplicationJourneyHelper' => function ($sm) {
+                $helper = new \Olcs\Helper\ApplicationJourneyHelper();
+                $helper->setServiceLocator($sm);
+                return $helper;
+            }
+        )
+    ),
+    'application_journey' => array(
+        'access_keys' => array(
+            'internal'
+        ),
+        'templates' => array(
+            'not-found' => 'journey/not-found',
+            'navigation' => 'journey/application/navigation',
+            'main' => 'journey/application/main',
+            'layout' => 'journey/application/layout'
+        ),
+        'render' => array(
+            'pre-render' => array(
+                'service' => 'ApplicationJourneyHelper',
+                'method' => 'render'
+            )
+        )
+    )
 );
