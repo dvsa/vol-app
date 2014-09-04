@@ -146,28 +146,6 @@ class CasePiController extends CaseController implements CrudInterface
 
     protected function alterFormBeforeValidation($form)
     {
-        if ($form->get('main')->has('piStatus')) {
-            $form->get('main')->get('piStatus')
-            ->setValueOptions(
-                $this->getListData(
-                    'RefData',
-                    ['refDataCategoryId' => 'pi_status'],
-                    'id', 'id', false
-                )
-            );
-        }
-
-        if ($form->get('main')->has('piTypes')) {
-            $form->get('main')->get('piTypes')
-                 ->setValueOptions(
-                     $this->getListData(
-                         'RefData',
-                         ['refDataCategoryId' => 'pi_type'],
-                         'id', 'id', false
-                     )
-                 );
-        }
-
         if ($form->get('main')->has('piTypes')) {
             $form->get('main')->get('assignedTo')
                  ->setValueOptions(
@@ -197,17 +175,6 @@ class CasePiController extends CaseController implements CrudInterface
                          'PresidingTc',
                          [],
                          'name', 'id', false
-                     )
-                 );
-        }
-
-        if ($form->get('main')->has('presidedByRole')) {
-            $form->get('main')->get('presidedByRole')
-                 ->setValueOptions(
-                     $this->getListData(
-                         'RefData',
-                         ['refDataCategoryId' => 'tc_role'],
-                         'id', 'id', false
                      )
                  );
         }

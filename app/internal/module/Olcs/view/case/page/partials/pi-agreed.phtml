@@ -32,11 +32,11 @@
     $summary += [
         'presidingTc' => [
             'label' => 'Agreed by',
-            'value' => $pi['presidingTc']['name'],
+            'value' => ''//$pi['presidingTc']['name'], @TO-DO figure out why this isn't pulled back (db issue/testdata probably)
         ],
         'agreedByRole' => [
             'label' => 'Agreed by role',
-            'value' => $this->translate($pi['presidedByRole']['id']),
+            'value' => ''//$this->translate($pi['presidedByRole']['id']), // this should use the description (its ref data so already translated) also not pulling back from backend ???
         ]/* ,
         'assignedTo' => [
             'label' => 'Assigned To',
@@ -48,7 +48,7 @@
         ],
         'comments' => [
             'label' => 'Comments',
-            'value' => $pi['comment']
+            'value' => ''//$pi['comment'] @TO-DO another one not being brought back from the backend ????
         ]
     ];
 

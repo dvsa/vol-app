@@ -15,14 +15,12 @@ class PublicInquiryAgreedAndLegislationMain
      * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
      *     "label": "PI Status",
-     *     "value_options": {
-     *
-     *     },
+     *     "category": "pi_status",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a category"
      * })
-     * @Form\Type("\Zend\Form\Element\Select")
+     * @Form\Type("DynamicSelect")
      */
     public $piStatus = null;
 
@@ -30,14 +28,12 @@ class PublicInquiryAgreedAndLegislationMain
      * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
      *     "label": "Type of PI",
-     *     "value_options": {
-     *
-     *     },
+     *     "category": "pi_type",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a category"
      * })
-     * @Form\Type("\Zend\Form\Element\Select")
+     * @Form\Type("DynamicSelect")
      */
     public $piTypes = null;
 
@@ -102,14 +98,12 @@ class PublicInquiryAgreedAndLegislationMain
      * @Form\Attributes({"id":"","placeholder":"","class":"medium"})
      * @Form\Options({
      *     "label": "Agreed by role",
-     *     "value_options": {
-     *
-     *     },
+     *     "category": "tc_role",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a category"
      * })
-     * @Form\Type("\Zend\Form\Element\Select")
+     * @Form\Type("DynamicSelect")
      */
     public $presidedByRole = null;
 

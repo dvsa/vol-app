@@ -200,13 +200,13 @@ class CaseController extends AbstractController
                     'properties' => 'ALL',
                     'children' => array(
                         'status' => array(
-                            'properties' => array('id')
+                            'properties' => array('id', 'description')
                         ),
                         'licenceType' => array(
-                            'properties' => array('id')
+                            'properties' => array('id', 'description')
                         ),
                         'goodsOrPsv' => array(
-                            'properties' => array('id')
+                            'properties' => array('id', 'description')
                         ),
                         'trafficArea' => array(
                             'properties' => 'ALL'
@@ -215,7 +215,7 @@ class CaseController extends AbstractController
                             'properties' => 'ALL',
                             'children' => array(
                                 'type' => array(
-                                    'properties' => array('id')
+                                    'properties' => array('id', 'description')
                                 )
                             )
                         )
