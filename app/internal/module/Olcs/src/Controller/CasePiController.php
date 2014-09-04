@@ -203,13 +203,10 @@ class CasePiController extends CaseController implements CrudInterface
         if ((null !== $id) && null != ($loadedData = $this->load($id))) {
 
             $loadedData = $this->processLoad($loadedData);
-            //$formData = array_merge($formData, $loadedData);
             $formData += $loadedData;
-            //die('<pre>DB Data: ' . print_r($formData, true));
         }
 
         if (!$this->getRequest()->isPost() /* && is_array($data) */) {
-            //$formData = array_merge_recursive($formData, $data);
             $formData += $data;
 
             $form->setData($formData);
@@ -298,7 +295,6 @@ class CasePiController extends CaseController implements CrudInterface
                     'pageSubTitle' => ''
                 ],
                 'form' => $form,
-                //'headScript' => array('/static/js/impounding.js')
             ]
         );
 
@@ -331,7 +327,6 @@ class CasePiController extends CaseController implements CrudInterface
                     'pageSubTitle' => ''
                 ],
                 'form' => $form,
-                //'headScript' => array('/static/js/impounding.js')
             ]
         );
 
@@ -378,7 +373,6 @@ class CasePiController extends CaseController implements CrudInterface
                     'pageSubTitle' => ''
                 ],
                 'form' => $form,
-                //'headScript' => array('/static/js/impounding.js')
             ]
         );
 
@@ -392,8 +386,6 @@ class CasePiController extends CaseController implements CrudInterface
      */
     public function processPi($data)
     {
-        //die('<div>' . print_r($data, 1));
-
         $this->processSave($data);
 
         return $this->redirect()->toRoute('case_pi', ['action' => 'index'], [], true);

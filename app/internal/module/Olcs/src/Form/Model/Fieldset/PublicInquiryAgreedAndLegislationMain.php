@@ -25,7 +25,7 @@ class PublicInquiryAgreedAndLegislationMain
     public $piStatus = null;
 
     /**
-     * @Form\Attributes({"id":"","placeholder":""})
+     * @Form\Attributes({"id":"","placeholder":"", "multiple":true})
      * @Form\Options({
      *     "label": "Type of PI",
      *     "category": "pi_type",
@@ -61,7 +61,7 @@ class PublicInquiryAgreedAndLegislationMain
      *     },
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category"
+     *     "help-block": "Please select a category",
      * })
      * @Form\Type("\Zend\Form\Element\Select")
      */
@@ -123,4 +123,22 @@ class PublicInquiryAgreedAndLegislationMain
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5,"max":4000}})
      */
     public $comments = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $case = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $id = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $version = null;
 }
