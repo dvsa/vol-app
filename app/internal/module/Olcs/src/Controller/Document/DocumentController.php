@@ -15,8 +15,21 @@ use Olcs\Controller\AbstractController;
  */
 class DocumentController extends AbstractController
 {
+    /**
+     * Where to store any temporarily generated documents
+     */
     const TMP_STORAGE_PATH  = 'tmp/documents';
+
+    /**
+     * Where to store finalised documents
+     */
     const FULL_STORAGE_PATH = 'documents';
+
+    /**
+     * the keyspace where we store our extra metadata about
+     * each document in jackrabbit
+     */
+    const METADATA_KEY      = 'data';
 
     public function getContentStore()
     {

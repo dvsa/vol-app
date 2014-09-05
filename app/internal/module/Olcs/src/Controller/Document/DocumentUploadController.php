@@ -22,8 +22,10 @@ class DocumentUploadController extends DocumentController
             $meta = $this->getContentStore()
                 ->readMeta($path);
 
+            $key = 'meta:' . self::METADATA_KEY;
+
             $this->tmpData = json_decode(
-                $meta['metadataProperties']['meta:data'],
+                $meta['metadataProperties'][$key],
                 true
             );
         }
