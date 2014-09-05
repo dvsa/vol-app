@@ -44,30 +44,27 @@ class DocumentUploadController extends DocumentController
             )
         );
 
-        // @TODO collapse into a loop?
-        $category = $this->makeRestCall(
-            'Category',
-            'GET',
-            ['id' => $data['details']['category']],
-            ['properties' => ['description']]
-        );
-        $subCategory = $this->makeRestCall(
-            'DocumentSubCategory',
-            'GET',
-            ['id' => $data['details']['documentSubCategory']],
-            ['properties' => ['description']]
-        );
-        $template = $this->makeRestCall(
-            'DocTemplate',
-            'GET',
-            ['id' => $data['details']['documentTemplate']],
-            ['properties' => ['description']]
-        );
+        $entities = [
+            'Category' => 'category',
+            'DocumentSubCategory' => 'documentSubCategory',
+            'DocTemplate' => 'documentTemplate'
+        ];
+
+        $lookups = [];
+        foreach ($entities as $model => $key) {
+            $result = $this->makeRestCall(
+                'Category',
+                'GET',
+                ['id' => $data['details'][$key]],
+                ['properties' => ['description']]
+            );
+            $lookups[$key] = $result['description'];
+        }
 
         $data = [
-            'category'    => $category['description'],
-            'subCategory' => $subCategory['description'],
-            'template'    => $template['description'],
+            'category'    => $lookups['category'],
+            'subCategory' => $lookups['documentSubCategory'],
+            'template'    => $lookups['documentTemplate'],
             'link'        => $url
         ];
         $form = $this->generateFormWithData(
