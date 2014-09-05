@@ -61,7 +61,7 @@ class TasksHome
      * })
      * @Form\Type("\Zend\Form\Element\Select")
      */
-    public $subCategory = null;
+    public $taskSubCategory = null;
 
     /**
      * @Form\Attributes({"id":"","placeholder":""})
