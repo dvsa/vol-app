@@ -35,14 +35,14 @@ trait CaseControllerTrait
 
         $this->getViewHelperManager()->get('placeholder')->getContainer('case')->set($case);
 
-        if ($licenceId = $this->fromRoute('licence')) {
+        // Takes care of when a case is connected to a licence.
+        if (array_key_exists('licence', $case) && !empty($case['licence'])) {
 
-            $licence = $this->makeRestCall('Licence', 'GET', array('id' => $licenceId));
-            $licenceUrl = $this->url()->fromRoute('licence/details/overview', ['licence' => $licenceId]);
-
+            $licenceUrl = $this->url()->fromRoute('licence/details/overview', ['licence' => $case['licence']['id']]);
+            $licenceLink = '<a href="' . $licenceUrl . '">' . $case['licence']['licNo'] . '</a>';
             $this->getViewHelperManager()
                 ->get('pageTitle')->setAutoEscape(false)
-                ->prepend('<a href="' . $licenceUrl . '">' . $licence['licNo'] . '</a>');
+                ->prepend($licenceLink);
         }
 
         return true;

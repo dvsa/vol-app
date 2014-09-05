@@ -23,8 +23,9 @@ $case = $this->placeholder('case')->getValue();
     <p><a href="#"><?php echo $case['licence']['organisation']['name']; ?></a></p>
     <p><?php echo $this->translate($case['licence']['organisation']['type']['id']); ?><br/>{Sample Traffic Area}</p>
     <?php endif; ?>
+
     <h3>Licence</h3>
-    <p><a href="<?php $this->url('licence/details/overview', ['licence' => $case['licence']['id']], [], true); ?>"><?php echo $case['licence']['licNo']; ?></a></p>
+    <p><a href="<?php echo $this->url('licence/details/overview', ['licence' => $case['licence']['id']], [], false); ?>"><?php echo $case['licence']['licNo']; ?></a></p>
     <p><?php echo $this->translate($case['licence']['licenceType']['id']); ?><br/><?php echo $this->translate($case['licence']['status']['id']); ?></p>
     <?php endif; ?>
 

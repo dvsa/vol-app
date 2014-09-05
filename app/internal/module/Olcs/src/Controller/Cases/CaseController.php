@@ -26,6 +26,19 @@ class CaseController extends AbstractCasesController
     protected $service = 'Cases';
 
     /**
+     * Data map
+     *
+     * @var array
+     */
+    protected $dataMap = array(
+        'main' => array(
+            'mapFrom' => array(
+                'fields'
+            )
+        )
+    );
+
+    /**
      * Holds the Data Bundle
      *
      * @var array
@@ -127,14 +140,23 @@ class CaseController extends AbstractCasesController
      */
     public function addAction()
     {
+        /* // Data to eventually populate the form.
+        $data = [];
+
+        // A case can belong to many things, not just a licence.
         $licence = $this->fromRoute('licence');
+        if (!empty($licence)) {
+            $data['licence'] = $licence;
+        }
 
         $view = $this->getView();
-        $form = $this->generateFormWithData('case', 'processAddCase', array('licence' => $licence));
+        $form = $this->generateFormWithData('case', 'processAddCase', $data);
         $view->{'form'} = $form;
         $view->setTemplate('/form');
 
-        return $view;
+        return $view; */
+
+        return $this->editAction();
     }
 
     /**
@@ -144,56 +166,44 @@ class CaseController extends AbstractCasesController
      */
     public function editAction()
     {
-        $licence = $this->fromRoute('licence');
-        $case = $this->fromRoute('case');
+        // we don't want the ewrapping view/layout
+        $this->pageLayout = null;
 
-        $bundle = array(
-            'children' => array(
-                'submissionSections' => array(
-                    'properties' => array(
-                        'id'
-                    )
-                ),
-                'licence' => array(
-                    'properties' => array(
-                        'id'
-                    )
-                )
+        $result = $this->loadCurrent();
 
-            )
-        );
+        //die ('<pre>' . print_r($result, 1));
 
-        $result = $this->makeRestCall(
-            'Cases',
-            'GET',
-            array('id' => $case, 'licence' => $licence),
-            $bundle
-        );
+        // Data to eventually populate the form.
+        $data = [];
 
-        if (empty($result)) {
-            return $this->notFoundAction();
+        if ($this->fromRoute('case') && $result) { // edit
+
+            $data += $result;
+            $categories = $data['submissionSections'];
+            unset($result['submissionSections']);
+            $data['submissionSections'] = $this->unFormatCategories($categories);
+            $data['licence'] = $data['licence']['id'];
+
+        } else { // add
+
+            // A case can belong to many things, not just a licence.
+            $licence = $this->fromRoute('licence');
+            if (!empty($licence)) {
+                $data['licence'] = $licence;
+            }
         }
 
-        $categories = $result['submissionSections'];
-        unset($result['submissionSections']);
-
-        $result['fields'] = $result;
-
-        $result['submissionSections'] = $this->unFormatCategories($categories);
-
-        $result['licence'] = $result['licence']['id'];
+        $data['fields'] = $data;
 
         $form = $this->generateFormWithData(
             'case',
-            'processEditCase',
-            $result
+            'processSaveCase',
+            $data
         );
 
-        $pageData = $this->getPageData($licence);
-
-        $view = $this->getView(['form' => $form, 'data' => $pageData]);
-        $view->setTemplate('case/edit');
-        return $view;
+        $view = $this->getView(['form' => $form]);
+        $view->setTemplate('form');
+        return $this->renderView($view);
     }
 
     /**
@@ -235,6 +245,42 @@ class CaseController extends AbstractCasesController
         $this->processEdit($data, 'Cases');
 
         $this->redirect()->toRoute('case', array('case' => $data['id'], 'action' => 'overview'));
+    }
+
+    /**
+     * Process updating the case
+     *
+     * @param type $data
+     */
+    public function processSaveCase($data)
+    {
+        if (empty($data['id'])) { // new
+
+            // @todo sort this out - Additional fields (Mocked for now)
+            $data['fields']['openDate'] = date('Y-m-d H:i:s');
+
+            // This should be the logged in user.
+            $data['fields']['owner'] = 7;
+
+            // This needs looking at - it might not be a case type of licence.
+            $data['fields']['caseType'] = 'case_t_lic';
+        }
+
+        $data['fields']['submissionSections'] = $this->formatCategories($data['submissionSections']);
+
+        // Merge data.
+        //$data = array_merge_recursive($data, $data['fields']);
+
+        $case = $this->processSave($data);
+        //die('<pre>' . print_r($case, 1));
+
+        if (!empty($case)) {
+            $caseId = $case['id'];
+        } else {
+            $caseId = $this->getIdentifier();
+        }
+
+        $this->redirect()->toRoute('case', array('case' => $caseId, 'action' => 'overview'));
     }
 
     /**

@@ -13,7 +13,7 @@ $case = $this->placeholder('case')->getValue();
 </div>
 <div class="three-fifths">
     <h4><?php echo $this->translate($this->navigation('navigation')->findOneBy('active', 1)->getLabel()); ?>
-        <a href="<?php $this->url('case', ['case' => $case['id'], 'action' => 'overview'], [], true); ?>" class="action--secondary right-aligned"><?php echo $this->translate('Edit Case'); ?></a>
+        <a href="<?php echo $this->url('case', ['case' => $case['id'], 'action' => 'edit'], [], false); ?>" class="action--secondary right-aligned"><?php echo $this->translate('Edit Case'); ?></a>
     </h4>
     <?php echo $this->flashMessengerAll(); ?>
     <?php echo $this->content; ?>
