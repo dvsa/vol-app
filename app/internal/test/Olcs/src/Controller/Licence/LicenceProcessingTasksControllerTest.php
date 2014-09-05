@@ -61,6 +61,7 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
 
     /**
      * Gets a mock version of translator
+     * @group task
      */
     private function getServiceLocatorTranslator()
     {
@@ -78,6 +79,10 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
         return $serviceMock;
     }
 
+    /**
+     * Gets a mock version of translator
+     * @group task1
+     */
     public function testIndexActionWithNoQueryUsesDefaultParams()
     {
         $licenceData = array(
@@ -227,6 +232,10 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
         $this->assertEquals('PSV, L1, S1', $header->getVariable('pageSubTitle'));
     }
 
+    /**
+     * Test index action AJAX
+     * @group task
+     */
     public function testIndexActionAjax()
     {
         $this->controller->expects($this->at(4))
@@ -298,6 +307,10 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
         $this->assertTrue($view->terminate());
     }
 
+    /**
+     * Test index action with add action submitted
+     * @group task
+     */
     public function testIndexActionWithAddActionSubmitted()
     {
         $this->request->expects($this->once())
@@ -333,6 +346,10 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
         $this->assertEquals('mockResponse', $response);
     }
 
+    /**
+     * Test index action with multi edit submitted
+     * @group task
+     */
     public function testIndexActionWithMultiEditSubmitted()
     {
         $this->request->expects($this->once())
@@ -362,6 +379,10 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
         $this->fail('Expected exception not raised');
     }
 
+    /**
+     * Test index action with no edit submitted
+     * @group task
+     */
     public function testIndexActionWithNoEditSubmitted()
     {
         $this->request->expects($this->once())
@@ -391,6 +412,10 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
         $this->fail('Expected exception not raised');
     }
 
+    /**
+     * Test index action with single edit submitted
+     * @group task
+     */
     public function testIndexActionWithSingleEditSubmitted()
     {
         $this->request->expects($this->once())
