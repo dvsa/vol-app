@@ -52,6 +52,15 @@ return array(
                 'Olcs\Controller\Licence\Processing\LicenceProcessingOverviewController',
             'LicenceProcessingTasksController' => 'Olcs\Controller\Licence\Processing\LicenceProcessingTasksController',
             'LicenceProcessingNoteController' => 'Olcs\Controller\Licence\Processing\LicenceProcessingNoteController',
+            'BusController' => 'Olcs\Controller\Bus\BusController',
+            'BusDetailsController' => 'Olcs\Controller\Bus\Details\BusDetailsController',
+            'BusShortController' => 'Olcs\Controller\Bus\Short\BusShortController',
+            'BusRouteController' => 'Olcs\Controller\Bus\Route\BusRouteController',
+            'BusTrcController' => 'Olcs\Controller\Bus\Trc\BusTrcController',
+            'BusDocsController' => 'Olcs\Controller\Bus\Docs\BusDocsController',
+            'BusProcessingController' => 'Olcs\Controller\Bus\Processing\BusProcessingController',
+            'BusProcessingNoteController' => 'Olcs\Controller\Bus\Processing\BusProcessingNoteController',
+            'BusFeesController' => 'Olcs\Controller\Bus\Fees\BusFeesController',
         )
     ),
     'view_manager' => array(

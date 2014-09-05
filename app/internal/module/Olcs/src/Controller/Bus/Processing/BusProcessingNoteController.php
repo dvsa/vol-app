@@ -1,24 +1,24 @@
 <?php
 
 /**
- * Note controller
- * Licence note search and display
+ * Bus Processing Note controller
+ * Bus note search and display
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-namespace Olcs\Controller\Licence\Processing;
+namespace Olcs\Controller\Bus\Processing;
 
 use Common\Controller\CrudInterface;
 use Olcs\Controller\Traits\DeleteActionTrait;
 use Olcs\Controller\Traits\LicenceNoteTrait;
 
 /**
- * Note controller
- * Licence note search and display
+ * Bus Processing Note controller
+ * Bus note search and display
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class LicenceProcessingNoteController extends AbstractLicenceProcessingController implements CrudInterface
+class BusProcessingNoteController extends BusProcessingController implements CrudInterface
 {
     use DeleteActionTrait;
     use LicenceNoteTrait;
@@ -27,7 +27,7 @@ class LicenceProcessingNoteController extends AbstractLicenceProcessingControlle
 
     public function __construct()
     {
-        $this->setTemplatePrefix('licence/processing');
+        $this->setTemplatePrefix('licence/bus/processing');
     }
 
     /**
@@ -43,8 +43,10 @@ class LicenceProcessingNoteController extends AbstractLicenceProcessingControlle
         $action = $this->getFromPost('action');
         $id = $this->getFromPost('id');
 
-        $view = $this->getNotesList($licenceId, 'note_t_lic', $action, $id);
+        //$view->setTemplate('licence/bus/index');
 
-        return $this->renderView($view);
+
+        $view = $this->getNotesList($licenceId, 'note_t_bus', $action, $id);
+        return $this->viewVars($view, 'licence_bus_processing');
     }
 }

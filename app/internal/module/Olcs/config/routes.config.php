@@ -262,10 +262,96 @@ return array_merge(
                     'options' => [
                         'route' => '/bus',
                         'defaults' => [
-                            'action' => 'bus',
+                            'controller' => 'BusController',
+                            'action' => 'index',
                         ]
                     ],
                     'may_terminate' => true,
+                    'child_routes' => [
+                        'details' => [
+                            'type' => 'literal',
+                            'options' => [
+                                'route' => '/details',
+                                'defaults' => [
+                                    'controller' => 'BusDetailsController',
+                                    'action' => 'index',
+                                ]
+                            ]
+                        ],
+                        'short' => [
+                            'type' => 'literal',
+                            'options' => [
+                                'route' => '/short',
+                                'defaults' => [
+                                    'controller' => 'BusShortController',
+                                    'action' => 'index',
+                                ]
+                            ]
+                        ],
+                        'route' => [
+                            'type' => 'literal',
+                            'options' => [
+                                'route' => '/route',
+                                'defaults' => [
+                                    'controller' => 'BusRouteController',
+                                    'action' => 'index',
+                                ]
+                            ]
+                        ],
+                        'trc' => [
+                            'type' => 'literal',
+                            'options' => [
+                                'route' => '/trc',
+                                'defaults' => [
+                                    'controller' => 'BusTrcController',
+                                    'action' => 'index',
+                                ]
+                            ]
+                        ],
+                        'docs' => [
+                            'type' => 'literal',
+                            'options' => [
+                                'route' => '/docs',
+                                'defaults' => [
+                                    'controller' => 'BusDocsController',
+                                    'action' => 'index',
+                                ]
+                            ]
+                        ],
+                        'processing' => [
+                            'type' => 'literal',
+                            'options' => [
+                                'route' => '/processing',
+                                'defaults' => [
+                                    'controller' => 'BusProcessingController',
+                                    'action' => 'index',
+                                ]
+                            ],
+                            'may_terminate' => true,
+                            'child_routes' => [
+                                'notes' => [
+                                    'type' => 'literal',
+                                    'options' => [
+                                        'route' => '/notes',
+                                        'defaults' => [
+                                            'controller' => 'BusProcessingNoteController',
+                                            'action' => 'index',
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ],
+                        'fees' => [
+                            'type' => 'literal',
+                            'options' => [
+                                'route' => '/fees',
+                                'defaults' => [
+                                    'controller' => 'BusFeesController',
+                                    'action' => 'index',
+                                ]
+                            ]
+                        ],
+                    ]
                 ],
                 'cases' => [
                     'type' => 'segment',
