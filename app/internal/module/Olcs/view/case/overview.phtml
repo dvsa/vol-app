@@ -1,3 +1,5 @@
+<?php $case = $this->placeholder('case')->getValue(); ?>
+
 <ul>
     <li>Open Date:</li>
     <li><?php /* die('<pre>' . print_r($case, 1)); */ echo $this->dateFormat(\DateTime::createFromFormat(\DateTime::ISO8601, $case['openDate']), \IntlDateFormatter::GREGORIAN); ?></li>

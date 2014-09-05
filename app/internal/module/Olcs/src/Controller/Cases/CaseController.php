@@ -18,9 +18,6 @@ use Olcs\Controller\Cases\AbstractController as AbstractCasesController;
  */
 class CaseController extends AbstractCasesController
 {
-    protected $title;
-    protected $subTitle;
-
     /**
      * Holds the service name
      *
@@ -80,21 +77,7 @@ class CaseController extends AbstractCasesController
      */
     public function overviewAction()
     {
-        $view = $this->getViewWithCase();
-
-        if ($licenceId = $this->fromRoute('licence')) {
-
-            $licence = $this->makeRestCall('Licence', 'GET', array('id' => $licenceId));
-            $licenceUrl = $this->url()->fromRoute('licence/details/overview', ['licence' => $licenceId]);
-
-            $this->getViewHelperManager()
-                 ->get('pageTitle')->setAutoEscape(false)
-                 ->prepend('<a href="' . $licenceUrl . '">' . $licence['licNo'] . '</a>');
-        }
-
-        $view->{'case'} = $this->loadCurrent();
-
-        //die('<pre>' . print_r($view->{'case'}, 1));
+        $view = $this->getView([]);
 
         $view->setTemplate('case/overview');
 
@@ -108,7 +91,7 @@ class CaseController extends AbstractCasesController
 
     public function convictionsAction()
     {
-        return $this->overviewAction();
+        return $this->redirect()->toRoute('case', ['action' => 'overview'], [], true);
     }
 
 

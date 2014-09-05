@@ -7,6 +7,8 @@
  */
 namespace Olcs\Controller\Traits;
 
+use Zend\Mvc\MvcEvent;
+
 /**
  * Case Controller Trait
  *
@@ -16,34 +18,34 @@ trait CaseControllerTrait
 {
     protected $cases = array();
 
-    /**
-     * Get view with case
-     *
-     * @param array $variables
-     * @return \Zend\View\Model\ViewModel
-     */
-    public function getViewWithCase($variables = array())
+    protected function attachDefaultListeners()
+    {
+        parent::attachDefaultListeners();
+
+        $this->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, array($this, 'initialiseData'), 20);
+    }
+
+    public function initialiseData(MvcEvent $event)
     {
         $case = $this->getCase();
 
-        $variables['case'] = $case;
-
-        $view = $this->getView($variables);
-
         $this->getViewHelperManager()->get('headTitle')->prepend('Case ' . $this->getIdentifier());
+        $this->getViewHelperManager()->get('pageTitle')->append('Case ' . $this->getIdentifier());
+        $this->getViewHelperManager()->get('pageSubtitle')->append('Case subtitle');
 
-        $pageTitleHelper = $this->getViewHelperManager()->get('pageTitle');
-        $pageTitleHelper->append('Case ' . $this->getIdentifier());
+        $this->getViewHelperManager()->get('placeholder')->getContainer('case')->set($case);
 
-        $pageSubtitleHelper = $this->getViewHelperManager()->get('pageSubtitle');
-        $pageSubtitleHelper->append('Case subtitle');
+        if ($licenceId = $this->fromRoute('licence')) {
 
-        return $view;
-    }
+            $licence = $this->makeRestCall('Licence', 'GET', array('id' => $licenceId));
+            $licenceUrl = $this->url()->fromRoute('licence/details/overview', ['licence' => $licenceId]);
 
-    public function getTranslator()
-    {
-        return $this->getServiceLocator()->get('translator');
+            $this->getViewHelperManager()
+                ->get('pageTitle')->setAutoEscape(false)
+                ->prepend('<a href="' . $licenceUrl . '">' . $licence['licNo'] . '</a>');
+        }
+
+        return true;
     }
 
     /**

@@ -3,6 +3,8 @@
 $currentSection = $this->navigation('navigation')->findOneBy('active', 1);
 $currentSectionParent = $currentSection->getParent();
 
+$case = $this->placeholder('case')->getValue();
+
 ?>
 
 <div class="one-fifth--left">
