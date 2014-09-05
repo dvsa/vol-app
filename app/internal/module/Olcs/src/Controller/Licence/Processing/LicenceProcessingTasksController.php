@@ -64,10 +64,11 @@ class LicenceProcessingTasksController extends AbstractLicenceProcessingControll
         $table->removeColumn('name');
         $table->removeColumn('link');
 
+        $this->setTableFilters($this->getTaskForm($filters));
+
         $view = new ViewModel(
             array(
                 'table' => $table->render(),
-                'form'  => $this->getTaskForm($filters),
                 'inlineScript' => $this->loadScripts(['tasks'])
             )
         );

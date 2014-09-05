@@ -75,7 +75,11 @@ return array(
         )
     ),
     'view_helpers' => array(
-        'invokables' => array()
+        'invokables' => array(
+
+            'tableFilters' => 'Olcs\View\Helper\TableFilters'
+
+        )
     ),
     'local_forms_path' => array(
         __DIR__ . '/../src/Form/Forms/'
