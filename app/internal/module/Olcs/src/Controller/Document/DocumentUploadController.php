@@ -74,8 +74,7 @@ class DocumentUploadController extends DocumentController
         );
 
         $view = new ViewModel(['form' => $form]);
-        // @TODO obviously, don't re-use this template; make a generic one if appropriate
-        $view->setTemplate('task/add-or-edit');
+        $view->setTemplate('form-simple');
         return $this->renderView($view, 'Amend letter');
     }
 

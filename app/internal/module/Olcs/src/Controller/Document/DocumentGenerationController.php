@@ -32,9 +32,9 @@ class DocumentGenerationController extends DocumentController
 
         $selects = [
             'details' => [
-                'category' => $this->getListData('Category', ['isDocCategory' => true], 'description'),
-                'documentSubCategory' => $this->getListData('DocumentSubCategory', $filters, 'description'),
-                'documentTemplate' => $this->getListData('DocTemplate', $filters, 'description')
+                'category' => $this->getListData('Category', ['isDocCategory' => true], 'description', 'id', 'Please select'),
+                'documentSubCategory' => $this->getListData('DocumentSubCategory', $filters, 'description', 'id', 'Please select'),
+                'documentTemplate' => $this->getListData('DocTemplate', $filters, 'description', 'id', 'Please select')
             ]
         ];
 
@@ -73,8 +73,7 @@ class DocumentGenerationController extends DocumentController
             ]
         );
 
-        // @TODO obviously, don't re-use this template; make a generic one if appropriate
-        $view->setTemplate('task/add-or-edit');
+        $view->setTemplate('form-simple');
         return $this->renderView($view, 'Generate letter');
     }
 
