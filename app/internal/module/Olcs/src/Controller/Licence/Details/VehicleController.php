@@ -67,4 +67,25 @@ class VehicleController extends AbstractLicenceDetailsController
     {
         $this->makeRestCall('GoodsDisc', 'POST', array('licenceVehicle' => $licenceVehicleId));
     }
+
+    /**
+     * Get total number of vehicles
+     *
+     * @return int
+     */
+    protected function getTotalNumberOfVehicles()
+    {
+        $bundle = array(
+            'properties' => array(),
+            'children' => array(
+                'licenceVehicles' => array(
+                    'properties' => array('id')
+                )
+            )
+        );
+
+        $data = $this->makeRestCall('Licence', 'GET', array('id' => $this->getLicenceId()), $bundle);
+
+        return count($data['licenceVehicles']);
+    }
 }
