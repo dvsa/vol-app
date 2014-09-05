@@ -115,7 +115,10 @@ class DocumentUploadController extends DocumentController
             'filename'            => $fileName,
             'fileExtension'       => strtoupper($fileExt),
             'category'            => $data['details']['category'],
-            'documentSubCategory' => $data['details']['documentSubCategory']
+            'documentSubCategory' => $data['details']['documentSubCategory'],
+            'isDigital'           => true,
+            'isReadOnly'          => true,
+            'size'                => 0  // @TODO fetch from $file
         ];
 
         $this->makeRestCall(

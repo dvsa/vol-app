@@ -26,8 +26,8 @@ class DocumentGenerationController extends DocumentController
             $filters['category'] = $data['category'];
         }
 
-        if (isset($data['category'])) {
-            $filters['documentSubCategory'] = $data['category'];
+        if (isset($data['documentSubCategory'])) {
+            $filters['documentSubCategory'] = $data['documentSubCategory'];
         }
 
         $selects = [
