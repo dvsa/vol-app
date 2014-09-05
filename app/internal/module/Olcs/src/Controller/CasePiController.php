@@ -139,8 +139,13 @@ class CasePiController extends CaseController implements CrudInterface
 
     public function addEditAction()
     {
-        $section = $this->fromRoute('section');
-        $this->getServiceLocator()->get('Olcs\Service\Data\Licence')->setId($this->fromRoute('licence'));
+        $section = $this->params()->fromRoute('section');
+        $this->getServiceLocator()->get('Olcs\Service\Data\Licence')->setId($this->params()->fromRoute('licence'));
+
+        if (!in_array($section, ['sla', 'decision', 'agreed'])) {
+            throw new \Exception('Invalid section!');
+        }
+
         return call_user_func(array($this, strtolower($section)));
     }
 
