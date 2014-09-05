@@ -53,8 +53,6 @@ class LicenceProcessingTasksController extends AbstractLicenceProcessingControll
             );
         }
 
-        $this->pageLayout = 'licence';
-
         $filters = $this->mapTaskFilters(
             array('linkId' => $this->getFromRoute('licence'), 'linkType' => 'Licence')
         );
@@ -68,7 +66,7 @@ class LicenceProcessingTasksController extends AbstractLicenceProcessingControll
 
         $this->setTableFilters($this->getTaskForm($filters));
 
-        $view = $this->getViewWithLicence(
+        $view = new ViewModel(
             array(
                 'table' => $table->render(),
                 'inlineScript' => $this->loadScripts(['tasks'])

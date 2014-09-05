@@ -297,7 +297,7 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
             ->method('makeRestCall')
             ->will($this->returnValue($response));
 
-        $this->request->expects($this->exactly(2))
+        $this->request->expects($this->exactly(1))
             ->method('isXmlHttpRequest')
             ->will($this->returnValue(true));
 
