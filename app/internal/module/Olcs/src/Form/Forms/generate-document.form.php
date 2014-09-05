@@ -49,14 +49,12 @@ return [
                 ],
                 'elements' => [
                     'submit' => [
-                        'enable' => true,
                         'type' => 'submit',
                         'filters' => '\Common\Form\Elements\InputFilters\ActionButton',
-                        'label' => 'Save',
+                        'label' => 'Generate',
                         'class' => 'action--primary large'
                     ],
                     'cancel' => [
-                        'enable' => true,
                         'type' => 'submit',
                         'filters' => '\Common\Form\Elements\InputFilters\ActionButton',
                         'label' => 'Cancel',
