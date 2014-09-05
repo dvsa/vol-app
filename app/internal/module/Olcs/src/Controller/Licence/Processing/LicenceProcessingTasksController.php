@@ -34,6 +34,11 @@ class LicenceProcessingTasksController extends AbstractLicenceProcessingControll
 
         $table = $this->getTaskTable($filters, false);
 
+        // the table's nearly all good except we don't want
+        // a couple of columns
+        $table->removeColumn('name');
+        $table->removeColumn('link');
+
         $view = $this->getViewWithLicence(
             array(
                 'table' => $table->render(),

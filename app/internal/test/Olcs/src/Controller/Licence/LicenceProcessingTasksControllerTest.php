@@ -123,7 +123,8 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
             // @NOTE: I don't like the date variable here, maybe use
             // DateTime and a mock instead
             'actionDate' => '<= ' . date('Y-m-d'),
-            'licenceId' => 1234
+            'linkId' => 1234,
+            'linkType' => 'Licence'
         );
         $this->controller->expects($this->at(4))
             ->method('makeRestCall')
@@ -195,6 +196,7 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
         $extendedListData = [
             'assignedToUser' => 1,
             'assignedToTeam'  => 2,
+            'team'  => 2,
             'date'  => 'today',
             'status' => 'open',
             'sort' => 'name',
@@ -202,7 +204,8 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
             'page' => 1,
             'limit' => 100,
             'actionDate' => '<= ' . date('Y-m-d'),
-            'licenceId' => 1234
+            'linkId' => 1234,
+            'linkType' => 'Licence'
         ];
 
         $this->controller->expects($this->at(8))

@@ -23,21 +23,33 @@
     if (is_array($types)) {
         $summary += [
             'piType' => [
-                'label' => 'Public Inquiry Type',
+                'label' => 'Type of public inquiry',
                 'value' => implode(', ', $types),
             ],
         ];
     }
 
     $summary += [
+        'presidingTc' => [
+            'label' => 'Agreed by',
+            'value' => $pi['presidingTc']['name'],
+        ],
+        'agreedByRole' => [
+            'label' => 'Agreed by role',
+            'value' => $this->translate($pi['presidedByRole']['id']),
+        ]/* ,
         'assignedTo' => [
             'label' => 'Assigned To',
             'value' => $pi['assignedTo']['name'],
-        ],
+        ] */,
         'legislation' => [
             'label' => 'Legislation',
             'value' => is_array($pi['reasons']) ? implode(', ', array_map(function($item){return $item['sectionCode'];}, $pi['reasons'])) : 'None selected',
         ],
+        'comments' => [
+            'label' => 'Comments',
+            'value' => $pi['comment']
+        ]
     ];
 
     echo $this->render('partials/summary/summary__list', ['items' => $summary, 'title' => 'Agreement and legislation']); ?>
