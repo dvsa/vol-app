@@ -32,6 +32,14 @@ abstract class AbstractLicenceProcessingController extends LicenceController
     protected $licenceProcessingHelper;
 
     /**
+     * Anything using renderView in this section will
+     * inherit this layout
+     *
+     * @var string
+     */
+    protected $pageLayout = 'licence';
+
+    /**
      * Get the licence processing helper
      *
      * @return \Olcs\Helper\LicenceProcessingHelper
@@ -55,14 +63,23 @@ abstract class AbstractLicenceProcessingController extends LicenceController
      */
     protected function renderView($view, $pageTitle = null, $pageSubTitle = null)
     {
-        $this->pageLayout = 'licence';
+        // @NOTE it's not ideal repeating logic from the parent renderView
+        // method in this one but it's the quickest way out of this method
+        // plus, even though it's not particularly DRY, we know that there's
+        // nothing else we can possibly do to a terminal view so our parent
+        // method couldn't help us out anyway
+        if ($view->terminate()) {
+            return $view;
+        }
 
         $variables = array(
             'navigation' => $this->getSubNavigation(),
             'section' => $this->section
         );
 
-        $layout = $this->getViewWithLicence(array_merge($variables, (array)$view->getVariables()));
+        $layout = $this->getViewWithLicence(
+            array_merge($variables, (array)$view->getVariables())
+        );
         $layout->setTemplate('licence/processing/layout');
 
         $layout->addChild($view, 'content');
