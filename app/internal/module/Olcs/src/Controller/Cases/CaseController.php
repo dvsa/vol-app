@@ -94,9 +94,11 @@ class CaseController extends AbstractCasesController
 
         $view->{'case'} = $this->loadCurrent();
 
+        //die('<pre>' . print_r($view->{'case'}, 1));
+
         $view->setTemplate('case/overview');
 
-        return $this->renderView($view, $this->title, $this->subTitle);
+        return $this->renderView($view);
     }
 
     public function redirectAction()
@@ -220,10 +222,12 @@ class CaseController extends AbstractCasesController
     {
         // @todo sort this out - Additional fields (Mocked for now)
         $data['openDate'] = date('Y-m-d H:i:s');
-        $data['owner'] = 7;
-        $data['caseType'] = 'case_t_lic';
 
-        $licence = $this->fromRoute('licence');
+        // This should be the logged in user.
+        $data['owner'] = 7;
+
+        // This needs looking at - it might not be a case type of licence.
+        $data['caseType'] = 'case_t_lic';
 
         $data['submissionSections'] = $this->formatCategories($data['submissionSections']);
         $data = array_merge($data, $data['fields']);
@@ -231,14 +235,7 @@ class CaseController extends AbstractCasesController
         $result = $this->processAdd($data, 'Cases');
 
         if (isset($result['id'])) {
-            $this->redirect()->toRoute(
-                'case_manage',
-                array(
-                    'licence' => $licence,
-                    'case' => $result['id'],
-                    'tab' => 'overview'
-                )
-            );
+            $this->redirect()->toRoute('case', array('case' => $result['id'], 'action' => 'overview'));
         }
     }
 
@@ -254,7 +251,7 @@ class CaseController extends AbstractCasesController
 
         $this->processEdit($data, 'Cases');
 
-        $this->redirect()->toRoute('licence/cases', array('licence' => $data['licence']));
+        $this->redirect()->toRoute('case', array('case' => $data['id'], 'action' => 'overview'));
     }
 
     /**

@@ -74,7 +74,7 @@ return array(
     ),
     'view_helpers' => array(
         'invokables' => array(
-            'pageTitle' => 'Olcs\View\Helper\PageTitle',
+            'pageTitle'    => 'Olcs\View\Helper\PageTitle',
             'pageSubtitle' => 'Olcs\View\Helper\PageSubtitle',
         )
     ),

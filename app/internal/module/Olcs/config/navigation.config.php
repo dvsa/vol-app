@@ -51,8 +51,8 @@ return array(
                         array(
                             'id' => 'case_details_convictions',
                             'label' => 'Convictions',
-                            'route' => 'case',
-                            'action' => 'convictions',
+                            'route' => 'case_convictions',
+                            'action' => 'index',
                             'use_route_match' => true,
                         ),
                         array(

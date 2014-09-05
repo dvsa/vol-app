@@ -10,10 +10,16 @@
 </div>
 
 <div class="one-fifth--right">
-  <div class="record-actions">
-    <h4>Operator</h4>
-    <ul class="record-actions__group">
-      <li class="record-actions__item actions--secondary"><a href="">List Item</a></li>
-    </ul>
-  </div>
+
+    <?php if ($case['licence']): ?>
+    <?php if ($case['licence']['organisation']): ?>
+    <h3>Operator</h3>
+    <p><a href="#"><?php echo $case['licence']['organisation']['name']; ?></a></p>
+    <p><?php echo $this->translate($case['licence']['organisation']['type']['id']); ?><br/>{Sample Traffic Area}</p>
+    <?php endif; ?>
+    <h3>Licence</h3>
+    <p><a href="<?php $this->url('licence/details/overview', ['licence' => $case['licence']['id']], [], true); ?>"><?php echo $case['licence']['licNo']; ?></a></p>
+    <p><?php echo $this->translate($case['licence']['licenceType']['id']); ?><br/><?php echo $this->translate($case['licence']['status']['id']); ?></p>
+    <?php endif; ?>
+
 </div>
