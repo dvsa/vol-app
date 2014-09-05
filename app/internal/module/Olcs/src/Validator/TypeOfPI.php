@@ -4,6 +4,10 @@ namespace Olcs\Validator;
 
 use Zend\Validator\AbstractValidator;
 
+/**
+ * Class TypeOfPI
+ * @package Olcs\Validator
+ */
 class TypeOfPI extends AbstractValidator
 {
     const TM_ONLY   = 'tmOnly';

@@ -13,7 +13,7 @@ use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 /**
  * Task controller tests
  *
- * @author <nick.payne@valtech.co..uk>
+ * @author Nick Payne <nick.payne@valtech.co.uk>
  */
 class TaskControllerTest extends AbstractHttpControllerTestCase
 {

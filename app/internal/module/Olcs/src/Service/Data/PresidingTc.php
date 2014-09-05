@@ -2,12 +2,14 @@
 
 namespace Olcs\Service\Data;
 
-
 /**
- * Class Licence
- * @package Olcs\Service
+ * Class PresidingTc
+ * @package Olcs\Service\Data
  */
 class PresidingTc extends User
 {
+    /**
+     * @var string
+     */
     protected $serviceName = 'PresidingTc';
 }

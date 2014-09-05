@@ -4,7 +4,10 @@ namespace OlcsTest\Service\Data;
 
 use Olcs\Service\Data\PublicInquiryReason;
 
-
+/**
+ * Class PublicInquiryReasonTest
+ * @package OlcsTest\Service\Data
+ */
 class PublicInquiryReasonTest extends \PHPUnit_Framework_TestCase
 {
     private $reasons = [
@@ -67,4 +70,3 @@ class PublicInquiryReasonTest extends \PHPUnit_Framework_TestCase
 
     }
 }
- 

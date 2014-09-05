@@ -4,8 +4,15 @@ namespace Olcs\Form\Element;
 
 use Common\Form\Element\DynamicSelect;
 
+/**
+ * Class PublicInquiryReason
+ * @package Olcs\Form\Element
+ */
 class PublicInquiryReason extends DynamicSelect
 {
+    /**
+     * @var string
+     */
     protected $serviceName = 'Olcs\Service\Data\PublicInquiryReason';
 
     /**
@@ -46,5 +53,4 @@ class PublicInquiryReason extends DynamicSelect
             'goodsOrPsv' => $licence['goodsOrPsv']['id']
         ];
     }
-
 }

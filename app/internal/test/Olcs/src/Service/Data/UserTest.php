@@ -4,6 +4,10 @@ namespace OlcsTest\Service\Data;
 
 use Olcs\Service\Data\User;
 
+/**
+ * Class UserTest
+ * @package OlcsTest\Service\Data
+ */
 class UserTest extends \PHPUnit_Framework_TestCase
 {
     private $users = [
@@ -71,4 +75,3 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $sut->getBundle());
     }
 }
- 

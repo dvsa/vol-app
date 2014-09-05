@@ -10,10 +10,22 @@ use Common\Service\Data\AbstractData;
  */
 class Licence extends AbstractData
 {
+    /**
+     * @var integer
+     */
     protected $id;
+
+    /**
+     * @var string
+     */
     protected $serviceName = 'Licence';
 
-    public function fetchLicenceData($id = null, $bundle= null)
+    /**
+     * @param integer|null $id
+     * @param array|null $bundle
+     * @return array
+     */
+    public function fetchLicenceData($id = null, $bundle = null)
     {
         $id = is_null($id) ? $this->getId() : $id;
 
@@ -26,6 +38,9 @@ class Licence extends AbstractData
         return $this->getData($id);
     }
 
+    /**
+     * @return array
+     */
     public function getBundle()
     {
         $bundle = array(
@@ -53,7 +68,8 @@ class Licence extends AbstractData
     }
 
     /**
-     * @param mixed $id
+     * @param integer $id
+     * @return $this
      */
     public function setId($id)
     {
@@ -62,7 +78,7 @@ class Licence extends AbstractData
     }
 
     /**
-     * @return mixed
+     * @return integer
      */
     public function getId()
     {

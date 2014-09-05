@@ -4,6 +4,10 @@ namespace OlcsTest\Service\Data;
 
 use Olcs\Service\Data\Licence;
 
+/**
+ * Class LicenceTest
+ * @package OlcsTest\Service\Data
+ */
 class LicenceTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetBundle()
@@ -38,9 +42,8 @@ class LicenceTest extends \PHPUnit_Framework_TestCase
         $sut = new Licence();
         $sut->setRestClient($mockRestClient);
 
-        $this->assertEquals($licence,$sut->fetchLicenceData(78));
+        $this->assertEquals($licence, $sut->fetchLicenceData(78));
         //test data is cached
-        $this->assertEquals($licence,$sut->fetchLicenceData(78));
+        $this->assertEquals($licence, $sut->fetchLicenceData(78));
     }
 }
- 
