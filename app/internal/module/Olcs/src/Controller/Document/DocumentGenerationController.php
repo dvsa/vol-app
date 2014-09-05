@@ -102,6 +102,10 @@ class DocumentGenerationController extends DocumentController
         // by ID in one rest call
         $bookmarks = [];
         foreach ($data['bookmarks'] as $key => $ids) {
+            if ($ids === null) {
+                // all groups of bookmarks are optional
+                continue;
+            }
             $paragraph = '';
             foreach ($ids as $id) {
                 $result = $this->makeRestCall(

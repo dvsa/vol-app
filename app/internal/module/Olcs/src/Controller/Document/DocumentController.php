@@ -88,6 +88,10 @@ class DocumentController extends AbstractController
 
     protected function addTemplateBookmarks($id, $fieldset)
     {
+        if (empty($id)) {
+            return;
+        }
+
         $bundle = [
             'properties' => ['docTemplateBookmarks'],
             'children' => [
@@ -125,9 +129,10 @@ class DocumentController extends AbstractController
 
             $bookmark = $bookmark['docBookmark'];
 
-            $element = new \Zend\Form\Element\MultiCheckbox();
+            $element = new \Common\Form\Elements\InputFilters\MultiCheckboxEmpty;
             $element->setLabel($bookmark['description']);
             $element->setName($bookmark['name']);
+            $element->setOptions(['required' => false]);
 
             $options = [];
             foreach ($bookmark['docParagraphBookmarks'] as $paragraph) {
