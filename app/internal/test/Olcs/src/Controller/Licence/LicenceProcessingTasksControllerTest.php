@@ -84,13 +84,16 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
         $licenceData = array(
             'licNo' => 'TEST1234',
             'goodsOrPsv' => array(
-                'id' => 'PSV'
+                'id' => 'PSV',
+                'description' => 'PSV'
             ),
             'licenceType' => array(
-                'id' => 'L1'
+                'id' => 'L1',
+                'description' => 'L1'
             ),
             'status' => array(
-                'id' => 'S1'
+                'id' => 'S1',
+                'description' => 'S1'
             )
         );
 

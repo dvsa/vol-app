@@ -100,7 +100,11 @@ return array(
                 $helper = new \Olcs\Helper\ApplicationJourneyHelper();
                 $helper->setServiceLocator($sm);
                 return $helper;
-            }
+            },
+            'Olcs\Service\Data\PublicInquiryReason' => 'Olcs\Service\Data\PublicInquiryReason',
+            'Olcs\Service\Data\Licence' => 'Olcs\Service\Data\Licence',
+            'Olcs\Service\Data\User' => 'Olcs\Service\Data\User',
+            'Olcs\Service\Data\PresidingTc' => 'Olcs\Service\Data\PresidingTc'
         )
     ),
     'application_journey' => array(
@@ -119,5 +123,11 @@ return array(
                 'method' => 'render'
             )
         )
-    )
+    ),
+    'form_elements' =>[
+        'factories' => [
+            'PublicInquiryReason' => 'Olcs\Form\Element\PublicInquiryReasonFactory'
+        ]
+    ]
+
 );

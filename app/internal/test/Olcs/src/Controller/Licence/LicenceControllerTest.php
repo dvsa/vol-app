@@ -82,13 +82,16 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
         $licenceData = array(
             'licNo' => 'TEST1234',
             'goodsOrPsv' => array(
-                'id' => 'PSV'
+                'id' => 'PSV',
+                'description' => 'PSV'
             ),
             'licenceType' => array(
-                'id' => 'L1'
+                'id' => 'L1',
+                'description' => 'L1'
             ),
             'status' => array(
-                'id' => 'S1'
+                'id' => 'S1',
+                'description' => 'S1'
             )
         );
 
@@ -182,28 +185,7 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             ]
         ];
 
-        $altResponse = [
-            'Results' => [
-                [
-                    'id' => 123,
-                    'description' => 'foo'
-                ]
-            ]
-        ];
-
         $this->controller->expects($this->at(7))
-            ->method('makeRestCall')
-            ->will($this->returnValue($response));
-
-        $this->controller->expects($this->at(8))
-            ->method('makeRestCall')
-            ->will($this->returnValue($response));
-
-        $this->controller->expects($this->at(9))
-            ->method('makeRestCall')
-            ->will($this->returnValue($altResponse));
-
-        $this->controller->expects($this->at(10))
             ->method('makeRestCall')
             ->will($this->returnValue($response));
 

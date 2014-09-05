@@ -190,11 +190,11 @@ class CaseImpoundingController extends CaseController implements CrudInterface
 
         $licence = $this->getLicenceTrafficAreaData($licenceId);
 
-        $legislationList = $this->getLegislationOptions($licence);
+        $legislationCategory = $this->getLegislationCategory($licence);
 
         $form->get('application_details')
              ->get('impoundingLegislationTypes')
-             ->setValueOptions($legislationList);
+             ->setCategory($legislationCategory);
 
         $formVenues = $this->getVenueList($licence);
         $form->get('hearing')
@@ -303,6 +303,26 @@ class CaseImpoundingController extends CaseController implements CrudInterface
             'case_impounding',
             array(
                 'action' => $action,
+            ),
+            array(),
+            true
+        );
+    }
+
+    /**
+     * Redirects to the add or edit action
+     *
+     * @param string $action
+     * @param int $id
+     * @return \Zend\Http\Response
+     */
+    private function redirectToCrud($action, $id = null)
+    {
+        return $this->redirect()->toRoute(
+            'case_impounding',
+            array(
+                'action' => $action,
+                'id' => $id,
             ),
             array(),
             true
@@ -484,33 +504,15 @@ class CaseImpoundingController extends CaseController implements CrudInterface
      *
      * @return array
      */
-    private function getLegislationOptions($licence)
+    private function getLegislationCategory($licence)
     {
         if ($licence['niFlag']) {
-            return $this->getListData(
-                'RefData',
-                ['refDataCategory' => 'impound_legislation_goods_ni'],
-                'id',
-                'id',
-                false
-            );
+            return 'impound_legislation_goods_ni';
         } else {
             if ($licence['goodsOrPsv'] == 'Goods') {
-                return $this->getListData(
-                    'RefData',
-                    ['refDataCategory' => 'impound_legislation_goods_gb'],
-                    'id',
-                    'id',
-                    false
-                );
+                return 'impound_legislation_goods_gb';
             } else {
-                return $this->getListData(
-                    'RefData',
-                    ['refDataCategory' => 'impound_legislation_psv_gb'],
-                    'id',
-                    'id',
-                    false
-                );
+                return 'impound_legislation_psv_gb';
             }
         }
     }
