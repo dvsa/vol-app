@@ -60,6 +60,7 @@ class DocumentGenerationController extends DocumentController
     {
         $form = $this->generateForm('generate-document', 'processGenerate');
 
+
         // @NOTE: yes, this will be called automagically when POSTing the
         // form, but we also need it when rendering via a GET too because
         // it actually populates our default category / sub cat / template

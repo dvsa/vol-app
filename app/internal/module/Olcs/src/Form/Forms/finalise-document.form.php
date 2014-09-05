@@ -38,12 +38,8 @@ return [
                 'label' => 'documents.data.sub_category'
             ],
             'template' => [
-                'type' => 'plainText',
-                'label' => 'documents.data.template'
-            ],
-            'link' => [
                 'type' => 'html',
-                'label' => 'documents.data.link'
+                'label' => 'documents.data.template'
             ],
             'file' => [
                 'type' => 'file',

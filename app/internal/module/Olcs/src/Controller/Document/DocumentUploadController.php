@@ -36,14 +36,6 @@ class DocumentUploadController extends DocumentController
     {
         $data = $this->fetchTmpData();
 
-        $url = sprintf(
-            '<a href="%s">Download</a>',
-            $this->url()->fromRoute(
-                'fetch_tmp_document',
-                ['path' => $this->params()->fromRoute('tmpId')]
-            )
-        );
-
         $entities = [
             'Category' => 'category',
             'DocumentSubCategory' => 'documentSubCategory',
@@ -51,9 +43,9 @@ class DocumentUploadController extends DocumentController
         ];
 
         $lookups = [];
-        foreach ($entities as $model => $key) {
+        foreach ($entities as $entity => $key) {
             $result = $this->makeRestCall(
-                'Category',
+                $entity,
                 'GET',
                 ['id' => $data['details'][$key]],
                 ['properties' => ['description']]
@@ -61,11 +53,19 @@ class DocumentUploadController extends DocumentController
             $lookups[$key] = $result['description'];
         }
 
+        $url = sprintf(
+            '<a href="%s">%s</a>',
+            $this->url()->fromRoute(
+                'fetch_tmp_document',
+                ['path' => $this->params()->fromRoute('tmpId')]
+            ),
+            $lookups['documentTemplate']
+        );
+
         $data = [
             'category'    => $lookups['category'],
             'subCategory' => $lookups['documentSubCategory'],
-            'template'    => $lookups['documentTemplate'],
-            'link'        => $url
+            'template'    => $url
         ];
         $form = $this->generateFormWithData(
             'finalise-document',
