@@ -25,11 +25,11 @@ class PublicInquiryReason extends AbstractData implements ListDataInterface
         $data = $this->fetchPublicInquiryReasonData($context);
         $ret = [];
 
-        if (!is_array($data) || !isset($data['Results']) || !is_array($data['Results'])) {
+        if (!is_array($data)) {
             return [];
         }
 
-        foreach ($data['Results'] as $datum) {
+        foreach ($data as $datum) {
             $ret[$datum['id']] = $datum['sectionCode'];
         }
 
@@ -41,7 +41,10 @@ class PublicInquiryReason extends AbstractData implements ListDataInterface
         if (is_null($this->getData('pir'))) {
 
             $data = $this->getRestClient()->get('', $params);
-            $this->setData('pir', $data);
+            $this->setData('pir', false);
+            if (isset($data['Results'])) {
+                $this->setData('pir', $data['Results']);
+            }
         }
 
         return $this->getData('pir');

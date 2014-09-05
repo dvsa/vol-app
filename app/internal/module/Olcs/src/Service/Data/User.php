@@ -31,11 +31,11 @@ class User extends AbstractData implements ListDataInterface
         $data = $this->fetchUserListData();
         $ret = [];
 
-        if (!is_array($data) || !isset($data['Results']) || !is_array($data['Results'])) {
+        if (!is_array($data)) {
             return [];
         }
 
-        foreach ($data['Results'] as $datum) {
+        foreach ($data as $datum) {
             $ret[$datum['id']] = $datum['name'];
         }
 
@@ -48,7 +48,10 @@ class User extends AbstractData implements ListDataInterface
         if (is_null($this->getData('userlist'))) {
             $bundle = is_null($bundle) ? $this->getBundle() : $bundle;
             $data =  $this->getRestClient()->get('', ['bundle' => json_encode($bundle)]);
-            $this->setData('userlist', $data);
+            $this->setData('userlist', false);
+            if (isset($data['Results'])) {
+                $this->setData('userlist', $data['Results']);
+            }
         }
 
         return $this->getData('userlist');
