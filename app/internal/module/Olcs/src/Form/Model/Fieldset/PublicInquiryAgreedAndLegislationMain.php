@@ -34,6 +34,7 @@ class PublicInquiryAgreedAndLegislationMain
      *     "help-block": "Please select a category"
      * })
      * @Form\Type("DynamicSelect")
+     * @Form\Validator({"name":"Olcs\Validator\TypeOfPI"})
      */
     public $piTypes = null;
 
