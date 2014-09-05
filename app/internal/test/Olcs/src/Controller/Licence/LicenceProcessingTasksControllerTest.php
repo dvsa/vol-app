@@ -35,7 +35,8 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
                 'params',
                 'redirect',
                 'getServiceLocator',
-                'getSubNavigation'
+                'getSubNavigation',
+                'setTableFilters'
             )
         );
 
@@ -159,6 +160,10 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
         $this->controller->expects($this->once())
             ->method('getForm')
             ->will($this->returnValue($form));
+
+        $this->controller->expects($this->once())
+            ->method('setTableFilters')
+            ->with($form);
 
         $response = [
             'Results' => [
@@ -292,7 +297,7 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
             ->method('makeRestCall')
             ->will($this->returnValue($response));
 
-        $this->request->expects($this->exactly(2))
+        $this->request->expects($this->exactly(1))
             ->method('isXmlHttpRequest')
             ->will($this->returnValue(true));
 
