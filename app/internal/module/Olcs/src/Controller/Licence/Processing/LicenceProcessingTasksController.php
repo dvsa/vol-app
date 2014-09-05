@@ -58,7 +58,7 @@ class LicenceProcessingTasksController extends AbstractLicenceProcessingControll
         $filters = $this->mapTaskFilters(
             array('linkId' => $this->getFromRoute('licence'), 'linkType' => 'Licence')
         );
-        
+
         $table = $this->getTaskTable($filters, false);
 
         // the table's nearly all good except we don't want
@@ -66,10 +66,11 @@ class LicenceProcessingTasksController extends AbstractLicenceProcessingControll
         $table->removeColumn('name');
         $table->removeColumn('link');
 
+        $this->setTableFilters($this->getTaskForm($filters));
+
         $view = $this->getViewWithLicence(
             array(
                 'table' => $table->render(),
-                'form'  => $this->getTaskForm($filters),
                 'inlineScript' => $this->loadScripts(['tasks'])
             )
         );
