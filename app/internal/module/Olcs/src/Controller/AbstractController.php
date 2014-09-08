@@ -8,6 +8,7 @@
 
 namespace Olcs\Controller;
 
+use Common\Controller\Traits;
 use Common\Controller\AbstractController as CommonAbstractController;
 
 /**
@@ -15,6 +16,8 @@ use Common\Controller\AbstractController as CommonAbstractController;
  */
 class AbstractController extends CommonAbstractController
 {
+    use Traits\ViewHelperManagerAware;
+
     const MAX_LIST_DATA_LIMIT = 100;
 
     /**
@@ -65,5 +68,15 @@ class AbstractController extends CommonAbstractController
     public function fromPost($param, $default = null)
     {
         return $this->params()->fromPost($param, $default);
+    }
+
+    /**
+     * Sets the table filters.
+     *
+     * @param mixed $filters
+     */
+    public function setTableFilters($filters)
+    {
+        $this->getViewHelperManager()->get('tableFilters')->set($filters);
     }
 }

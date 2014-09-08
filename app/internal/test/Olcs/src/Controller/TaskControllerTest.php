@@ -13,7 +13,7 @@ use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 /**
  * Task controller tests
  *
- * @author <nick.payne@valtech.co..uk>
+ * @author Nick Payne <nick.payne@valtech.co.uk>
  */
 class TaskControllerTest extends AbstractHttpControllerTestCase
 {
@@ -35,6 +35,7 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
                 'redirect',
                 'processAdd',
                 'processEdit',
+                'getLicence'
             )
         );
 
@@ -516,6 +517,14 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
             ->with('User', 'GET', $extendedListData)
             ->will($this->returnValue($response));
 
+        $this->controller->expects($this->any())->method('getLicence')->willReturn(
+            [
+                'id' => 123,
+                'description' => 'foo',
+                'licNo' => 456
+            ]
+        );
+
         $fromRoute = $this->getMock('\stdClass', ['fromRoute']);
         $fromRoute->expects($this->at(0))
             ->method('fromRoute')
@@ -527,7 +536,7 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
             ->with('licence')
             ->will($this->returnValue(123));
 
-        $fromRoute->expects($this->at(4))
+        $fromRoute->expects($this->at(3))
             ->method('fromRoute')
             ->with('licence')
             ->will($this->returnValue(123));
@@ -681,7 +690,7 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
             ->with('licence')
             ->will($this->returnValue(123));
 
-        $fromRoute->expects($this->at(4))
+        $fromRoute->expects($this->at(3))
             ->method('fromRoute')
             ->with('licence')
             ->will($this->returnValue(123));

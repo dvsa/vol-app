@@ -54,7 +54,7 @@ return array(
         array(
             'title' => 'Date',
             'name' => 'issuedDate',
-            'formatter' => 'Date',
+            'formatter' => 'DateTime',
             'sort' => 'issuedDate',
         ),
         array(
