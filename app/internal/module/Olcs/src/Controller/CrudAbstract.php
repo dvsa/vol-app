@@ -26,6 +26,7 @@ class CrudAbstract extends CommonController\AbstractSectionController implements
         'dataBundle',
         'service',
         'pageLayout',
+        'listVars',
         //'detailsView'
     ];
 
@@ -38,11 +39,45 @@ class CrudAbstract extends CommonController\AbstractSectionController implements
         $this->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, array($this, 'checkRequiredProperties'), 5);
     }
 
+    public function getQueryOrRouteParam($name, $default = null)
+    {
+        if ($queryValue = $this->params()->fromQuery($name, $default)) {
+            return $queryValue;
+        }
+
+        if ($queryValue = $this->params()->fromRoute($name, $default)) {
+            return $queryValue;
+        }
+
+        return $default;
+    }
+
     public function indexAction()
     {
         $view = $this->getView([]);
 
-        $view->setTemplate('placeholder');
+        $this->checkForCrudAction(null, [], $this->getIdentifierName());
+
+        $params = [
+            //'licence' => $this->params()->fromRoute('licence'),
+            'page'    => $this->getQueryOrRouteParam('page', 1),
+            'sort'    => $this->getQueryOrRouteParam('sort', 'id'),
+            'order'   => $this->getQueryOrRouteParam('order', 'DESC'),
+            'limit'   => $this->getQueryOrRouteParam('limit', 10),
+        ];
+
+        for($i=0; $i<count($this->listVars); $i++) {
+            $params[$this->listVars[$i]] = $this->getQueryOrRouteParam($this->listVars[$i]);
+        }
+
+        $results = $this->makeRestCall($this->getService(), 'GET', $params, $this->getDataBundle());
+
+        // CR: This should be improved by makeing the table itself a view helper - which it should be!
+        $this->getViewHelperManager()->get('placeholder')->getContainer('table')->set(
+            $this->buildTable($this->getIdentifierName(), $results, $params)
+        );
+
+        $view->setTemplate('crud/index');
 
         return $this->renderView($view);
     }
@@ -116,7 +151,7 @@ class CrudAbstract extends CommonController\AbstractSectionController implements
 
             $message = 'Missing properties: ' . implode(', ', $missingProperties) . PHP_EOL;
 
-            $message .= 'Set Properties: ' . implode(', ', $classProperties) . PHP_EOL;
+            $message .= 'These properties are set: ' . implode(', ', $classProperties) . PHP_EOL;
 
             throw new \LogicException($message, null, null);
         }

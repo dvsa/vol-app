@@ -53,6 +53,14 @@ class SubmissionController extends OlcsController\CrudAbstract
     protected $service = 'Submission';
 
     /**
+     * Holds an array of variables for the default
+     * index list page.
+     */
+    protected $listVars = [
+        'case',
+    ];
+
+    /**
      * Data map
      *
      * @var array

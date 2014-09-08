@@ -18,7 +18,8 @@ return array(
                 'default' => 10,
                 'options' => array(10, 25, 50)
             )
-        )
+        ),
+        'useQuery' => true
     ),
     'attributes' => array(
     ),
@@ -36,7 +37,8 @@ return array(
                     'submission',
                     true
                 ) . '">' . $row['id'] . '</a>';
-            }
+            },
+            'sort' => 'id'
         ),
         array(
             'title' => 'Type',
@@ -49,8 +51,9 @@ return array(
         array(
             'title' => 'Date created',
             'formatter' => function ($row) {
-                return date('d/m/Y', strtotime($row['createdOn']));
-            }
+                return date('d/m/Y H:i:s', strtotime($row['createdOn']));
+            },
+            'sort' => 'createdOn'
         ),
         array(
             'title' => 'Date closed',

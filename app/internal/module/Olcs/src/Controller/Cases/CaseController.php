@@ -112,6 +112,16 @@ class CaseController extends AbstractCasesController
     protected $detailsView = 'case/overview';
 
     /**
+     * Holds an array of variables for the default
+     * index list page.
+     */
+    protected $listVars = [
+        'licence',
+        'application',
+        'transportManager'
+    ];
+
+    /**
      * This action is the case overview page.
      */
     public function overviewAction()
