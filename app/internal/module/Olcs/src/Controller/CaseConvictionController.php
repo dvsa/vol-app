@@ -508,7 +508,7 @@ class CaseConvictionController extends CaseController
         $data['main'] = $case;
 
         $form = $this->generateForm(
-            'conviction-comment',
+            'ConvictionComment',
             'saveCommentForm'
         );
         $form->setData($data);
@@ -555,7 +555,8 @@ class CaseConvictionController extends CaseController
     public function getLegacyOffencesTable($legacyOffencesResults)
     {
         $data['url'] = $this->url();
-        $legacyOffencesTable = $this->getServiceLocator()->get('Table')->buildTable('legacyOffences', $legacyOffencesResults, $data);
+        $legacyOffencesTable =
+            $this->getServiceLocator()->get('Table')->buildTable('legacyOffences', $legacyOffencesResults, $data);
 
         return $legacyOffencesTable;
     }

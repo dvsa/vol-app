@@ -749,9 +749,16 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
             ->method('getForm')
             ->will($this->returnValue($form));
 
+//<<<<<<< HEAD
         $this->controller->expects($this->once())
             ->method('processEdit')
             ->will($this->returnValue(['id' => 1234]));
+/*=======
+        $fromRoute->expects($this->at(3))
+            ->method('fromRoute')
+            ->with('licence')
+            ->will($this->returnValue(123));
+>>>>>>> develop */
 
         $this->controller->expects($this->any())
             ->method('getFromRoute')
