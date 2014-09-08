@@ -23,14 +23,14 @@ $(function() {
     source: form + " #assignedToTeam",
     dest: form + " #assignedToUser",
     process: function(value, done) {
-      $.get("/tasks/users/" + value, done);
+      $.get("/list/users/" + value, done);
     }
   });
 
   OLCS.cascadeInput({
     source: form + " #category",
     dest: form + " #taskSubCategory",
-    url: "/tasks/sub-categories"
+    url: "/list/task-sub-categories"
   });
 
   /**
