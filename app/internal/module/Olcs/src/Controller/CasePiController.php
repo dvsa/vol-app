@@ -353,8 +353,8 @@ class CasePiController extends CaseController implements CrudInterface
      */
     public function processPi($data)
     {
-        if (!(isset($data['id']) && !empty($data['id']))) {
-            $data['piStatus'] = 'pi_s_reg';
+        if (!(isset($data['main']['id']) && !empty($data['main']['id']))) {
+            $data['main']['piStatus'] = 'pi_s_reg';
         }
 
         $this->processSave($data);
