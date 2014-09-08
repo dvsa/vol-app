@@ -73,7 +73,7 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
         'limit' => 100,
         'sort' => 'name'
     ];
-    
+
     public function setUp()
     {
         $this->setApplicationConfig(
@@ -99,7 +99,7 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
         $request->expects($this->any())
             ->method('getQuery')
             ->will($this->returnValue($query));
-        
+
         $this->query = $query;
         $this->request = $request;
 
@@ -110,7 +110,7 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
         $this->controller->expects($this->any())
             ->method('makeRestCall')
             ->will($this->returnCallback(array($this, 'mockRestCall')));
-        
+
         $this->taskSearchViewExpectedData['actionDate'] = '<= ' . date('Y-m-d');
         $this->extendedListData['actionDate'] = '<= ' . date('Y-m-d');
         $this->extendedListDataVariation1['actionDate'] = '<= ' . date('Y-m-d');
@@ -153,7 +153,7 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
         $this->controller->expects($this->once())
             ->method('getForm')
             ->will($this->returnValue($form));
-        
+
         $this->setUpAction('');
         $view = $this->controller->indexAction();
         list($header, $content) = $view->getChildren();
@@ -184,24 +184,6 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
         $this->controller->expects($this->once())
             ->method('getForm')
             ->will($this->returnValue($form));
-
-        $response = [
-            'Results' => [
-                [
-                    'id' => 123,
-                    'name' => 'foo'
-                ]
-            ]
-        ];
-
-        $altResponse = [
-            'Results' => [
-                [
-                    'id' => 123,
-                    'description' => 'foo'
-                ]
-            ]
-        ];
 
         $this->request->expects($this->once())
             ->method('isXmlHttpRequest')
@@ -287,12 +269,12 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
         $this->request->expects($this->any())
             ->method('isPost')
             ->will($this->returnValue(true));
-        
+
         $this->controller->expects($this->any())
             ->method('getFromRoute')
-            ->with('licence')    
+            ->with('licence')
             ->will($this->returnValue(1));
-        
+
         $params = $this->getMock('\stdClass', ['fromPost']);
 
         $params->expects($this->at(0))
@@ -301,7 +283,7 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
 
         $params->expects($this->at(1))
             ->method('fromPost')
-            ->will($this->returnValue([1,2]));
+            ->will($this->returnValue([1, 2]));
 
         $this->controller->expects($this->any())
             ->method('params')
@@ -325,7 +307,7 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
 
         $this->assertEquals('mockResponse', $response);
     }
-    
+
     /**
      * Mock the rest call
      *
@@ -350,7 +332,7 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
                 ]
             ]
         ];
-        
+
         if ($service == 'TaskSearchView' && $method == 'GET' && $data == $this->taskSearchViewExpectedData) {
             return [];
         }
@@ -378,25 +360,21 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
         if ($service == 'Category' && $method == 'GET' && $data == $this->altListData) {
             return $altResponse;
         }
-        
-        echo 'service: ' . $service . PHP_EOL;
-        echo 'method: ' . $method . PHP_EOL;
-        print_r($data);
+
     }
 
     public function setUpAction($action = '')
     {
         $paramsMock = $this->getMock('\StdClass', array('fromPost'));
-                
+
         $paramsMock->expects($this->any())
                 ->method('fromPost')
                 ->with('action')
                 ->will($this->returnValue($action));
-                
+
         $this->controller->expects($this->any())
             ->method('params')
             ->will($this->returnValue($paramsMock));
-        
+
     }
-    
 }

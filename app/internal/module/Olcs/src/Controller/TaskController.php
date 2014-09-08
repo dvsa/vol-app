@@ -359,7 +359,7 @@ class TaskController extends AbstractController
             'assignedToTeam' => 2 // @NOTE: not stubbed yet
         ];
 
-        $taskId = $this->params()->fromRoute('task');
+        $taskId = $this->getFromRoute('task');
         if ($taskId) {
             $childProperties = [
                 'category', 'taskSubCategory',
@@ -521,7 +521,7 @@ class TaskController extends AbstractController
             if (!$taskType) {
                 $taskId = $this->getFromRoute('task');
                 if (!$taskId) {
-                    throw new Exception('No task id provided');
+                    throw new \Exception('No task id provided');
                 }
 
                 $taskDetails = $this->getTaskDetails($taskId);
