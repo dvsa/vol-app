@@ -74,7 +74,11 @@ return array(
         )
     ),
     'view_helpers' => array(
-        'invokables' => array()
+        'invokables' => array(
+
+            'tableFilters' => 'Olcs\View\Helper\TableFilters'
+
+        )
     ),
     'local_forms_path' => array(
         __DIR__ . '/../src/Form/Forms/'
@@ -97,7 +101,11 @@ return array(
                 $helper = new \Olcs\Helper\ApplicationJourneyHelper();
                 $helper->setServiceLocator($sm);
                 return $helper;
-            }
+            },
+            'Olcs\Service\Data\PublicInquiryReason' => 'Olcs\Service\Data\PublicInquiryReason',
+            'Olcs\Service\Data\Licence' => 'Olcs\Service\Data\Licence',
+            'Olcs\Service\Data\User' => 'Olcs\Service\Data\User',
+            'Olcs\Service\Data\PresidingTc' => 'Olcs\Service\Data\PresidingTc'
         )
     ),
     'application_journey' => array(
@@ -116,5 +124,11 @@ return array(
                 'method' => 'render'
             )
         )
-    )
+    ),
+    'form_elements' =>[
+        'factories' => [
+            'PublicInquiryReason' => 'Olcs\Form\Element\PublicInquiryReasonFactory'
+        ]
+    ]
+
 );

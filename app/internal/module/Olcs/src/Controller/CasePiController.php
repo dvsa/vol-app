@@ -139,80 +139,14 @@ class CasePiController extends CaseController implements CrudInterface
 
     public function addEditAction()
     {
-        $section = $this->fromRoute('section');
+        $section = $this->params()->fromRoute('section');
+        $this->getServiceLocator()->get('Olcs\Service\Data\Licence')->setId($this->params()->fromRoute('licence'));
+
+        if (!in_array($section, ['sla', 'decision', 'agreed'])) {
+            throw new \Exception('Invalid section!');
+        }
 
         return call_user_func(array($this, strtolower($section)));
-    }
-
-    protected function alterFormBeforeValidation($form)
-    {
-        if ($form->get('main')->has('piStatus')) {
-            $form->get('main')->get('piStatus')
-            ->setValueOptions(
-                $this->getListData(
-                    'RefData',
-                    ['refDataCategoryId' => 'pi_status'],
-                    'id', 'id', false
-                )
-            );
-        }
-
-        if ($form->get('main')->has('piTypes')) {
-            $form->get('main')->get('piTypes')
-                 ->setValueOptions(
-                     $this->getListData(
-                         'RefData',
-                         ['refDataCategoryId' => 'pi_type'],
-                         'id', 'id', false
-                     )
-                 );
-        }
-
-        if ($form->get('main')->has('piTypes')) {
-            $form->get('main')->get('assignedTo')
-                 ->setValueOptions(
-                     $this->getListData(
-                         'User',
-                         [],
-                         'name', 'id', false
-                     )
-                 );
-        }
-
-        if ($form->get('main')->has('reasons')) {
-            $form->get('main')->get('reasons')
-                 ->setValueOptions(
-                     $this->getListData(
-                         'Reason',
-                         [],
-                         'sectionCode', 'id', false
-                     )
-                 );
-        }
-
-        if ($form->get('main')->has('presidingTc')) {
-            $form->get('main')->get('presidingTc')
-                 ->setValueOptions(
-                     $this->getListData(
-                         'PresidingTc',
-                         [],
-                         'name', 'id', false
-                     )
-                 );
-        }
-
-        if ($form->get('main')->has('presidedByRole')) {
-            $form->get('main')->get('presidedByRole')
-                 ->setValueOptions(
-                     $this->getListData(
-                         'RefData',
-                         ['refDataCategoryId' => 'tc_role'],
-                         'id', 'id', false
-                     )
-                 );
-        }
-
-        return $form;
     }
 
     /**
@@ -236,13 +170,10 @@ class CasePiController extends CaseController implements CrudInterface
         if ((null !== $id) && null != ($loadedData = $this->load($id))) {
 
             $loadedData = $this->processLoad($loadedData);
-            //$formData = array_merge($formData, $loadedData);
             $formData += $loadedData;
-            //die('<pre>DB Data: ' . print_r($formData, true));
         }
 
         if (!$this->getRequest()->isPost() /* && is_array($data) */) {
-            //$formData = array_merge_recursive($formData, $data);
             $formData += $data;
 
             $form->setData($formData);
@@ -331,7 +262,6 @@ class CasePiController extends CaseController implements CrudInterface
                     'pageSubTitle' => ''
                 ],
                 'form' => $form,
-                //'headScript' => array('/static/js/impounding.js')
             ]
         );
 
@@ -350,7 +280,7 @@ class CasePiController extends CaseController implements CrudInterface
         $caseId = $this->fromRoute('case');
 
         $form = $this->generateFormWithData(
-            'pi-agreed',
+            'PublicInquiryAgreedAndLegislation',
             'processPi',
             array(
                 'main' => array('case' => $caseId)
@@ -364,7 +294,6 @@ class CasePiController extends CaseController implements CrudInterface
                     'pageSubTitle' => ''
                 ],
                 'form' => $form,
-                //'headScript' => array('/static/js/impounding.js')
             ]
         );
 
@@ -411,7 +340,6 @@ class CasePiController extends CaseController implements CrudInterface
                     'pageSubTitle' => ''
                 ],
                 'form' => $form,
-                //'headScript' => array('/static/js/impounding.js')
             ]
         );
 
@@ -425,8 +353,6 @@ class CasePiController extends CaseController implements CrudInterface
      */
     public function processPi($data)
     {
-        //die('<div>' . print_r($data, 1));
-
         $this->processSave($data);
 
         return $this->redirect()->toRoute('case_pi', ['action' => 'index'], [], true);
