@@ -55,14 +55,12 @@ class PublicInquiryAgreedAndLegislationMain
      * @Form\Attributes({"id":"","placeholder":"","class":"medium", "multiple" : true})
      * @Form\Options({
      *     "label": "Legislation",
-     *     "value_options": {
-     *
-     *     },
+     *     "service_name": "Olcs\Service\Data\PublicInquiryReason",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category",
+     *     "help-block": "Please select a category"
      * })
-     * @Form\Type("PublicInquiryReason")
+     * @Form\Type("DynamicSelect")
      */
     public $reasons = null;
 
