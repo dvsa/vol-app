@@ -7,6 +7,8 @@
  */
 namespace OlcsTest\Controller;
 
+use Zend\Http\Request;
+use Zend\Mvc\Router\Http\RouteMatch;
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use Zend\Mvc\Controller\Plugin\Redirect as Redirect;
 
@@ -98,17 +100,26 @@ class CasePiControllerTest extends AbstractHttpControllerTestCase
      */
     public function testAddEditAction()
     {
-        $sut = $this->getControllerToTest(['fromRoute', 'testSectionMethod']);
-        $sut->expects($this->once())
-            ->method('fromRoute')
-            ->with($this->equalTo('section'))
-            ->will($this->returnValue('testSectionMethod'));
+        $mockLicenceData = $this->getMock('\Olcs\Service\Data\Licence');
+        $mockLicenceData->expects($this->once())->method('setId')->with($this->equalTo(7));
+
+        $mockSl = $this->getMock('\Zend\ServiceManager\ServiceLocatorInterface');
+        $mockSl->expects($this->once())
+            ->method('get')
+            ->with($this->equalTo('Olcs\Service\Data\Licence'))
+            ->willReturn($mockLicenceData);
+
+        $routeMatch = new RouteMatch(['section' => 'agreed', 'licence' => 7]);
+
+        $sut = $this->getControllerToTest(['agreed']);
+        $sut->getEvent()->setRouteMatch($routeMatch);
+        $sut->setServiceLocator($mockSl);
 
         $sut->expects($this->once())
-            ->method('testSectionMethod')
-            ->will($this->returnValue('returnSectionMethod'));
+            ->method('agreed')
+            ->will($this->returnValue('agreed'));
 
-        $this->assertSame('returnSectionMethod', $sut->addEditAction());
+        $this->assertSame('agreed', $sut->addEditAction());
     }
 
     /**

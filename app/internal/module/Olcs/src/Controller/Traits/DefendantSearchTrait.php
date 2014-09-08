@@ -29,7 +29,7 @@ trait DefendantSearchTrait
      */
     protected function getForm($type)
     {
-        $form = $this->getServiceLocator()->get('OlcsCustomForm')->createForm($type);
+        $form = $this->getFormClass($type);
 
         $form = $this->processPostcodeLookup($form);
 
