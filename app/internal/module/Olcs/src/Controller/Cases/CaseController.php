@@ -140,22 +140,6 @@ class CaseController extends AbstractCasesController
      */
     public function addAction()
     {
-        /* // Data to eventually populate the form.
-        $data = [];
-
-        // A case can belong to many things, not just a licence.
-        $licence = $this->fromRoute('licence');
-        if (!empty($licence)) {
-            $data['licence'] = $licence;
-        }
-
-        $view = $this->getView();
-        $form = $this->generateFormWithData('case', 'processAddCase', $data);
-        $view->{'form'} = $form;
-        $view->setTemplate('/form');
-
-        return $view; */
-
         return $this->editAction();
     }
 
@@ -207,72 +191,32 @@ class CaseController extends AbstractCasesController
     }
 
     /**
-     * Process adding the case
-     *
-     * @param type $data
-     */
-    public function processAddCase($data)
-    {
-        // @todo sort this out - Additional fields (Mocked for now)
-        $data['openDate'] = date('Y-m-d H:i:s');
-
-        // This should be the logged in user.
-        $data['owner'] = 7;
-
-        // This needs looking at - it might not be a case type of licence.
-        $data['caseType'] = 'case_t_lic';
-
-        $data['submissionSections'] = $this->formatCategories($data['submissionSections']);
-        $data = array_merge($data, $data['fields']);
-
-        $result = $this->processAdd($data, 'Cases');
-
-        if (isset($result['id'])) {
-            $this->redirect()->toRoute('case', array('case' => $result['id'], 'action' => 'overview'));
-        }
-    }
-
-    /**
-     * Process updating the case
-     *
-     * @param type $data
-     */
-    public function processEditCase($data)
-    {
-        $data['submissionSections'] = $this->formatCategories($data['submissionSections']);
-        $data = array_merge($data, $data['fields']);
-
-        $this->processEdit($data, 'Cases');
-
-        $this->redirect()->toRoute('case', array('case' => $data['id'], 'action' => 'overview'));
-    }
-
-    /**
      * Process updating the case
      *
      * @param type $data
      */
     public function processSaveCase($data)
     {
-        if (empty($data['id'])) { // new
 
-            // @todo sort this out - Additional fields (Mocked for now)
+        if (empty($data['fields']['id'])) { // new
+
             $data['fields']['openDate'] = date('Y-m-d H:i:s');
 
             // This should be the logged in user.
-            $data['fields']['owner'] = 7;
+            $data['fields']['owner'] = $this->getLoggedInUser();
 
             // This needs looking at - it might not be a case type of licence.
-            $data['fields']['caseType'] = 'case_t_lic';
+            if (isset($data['fields']['licence']) && !empty($data['fields']['licence'])) {
+                $data['fields']['caseType'] = 'case_t_lic';
+            } else {
+                $data['fields']['caseType'] = 'case_t_app';
+            }
         }
+        //die('<pre>' . print_r($data, 1));
 
         $data['fields']['submissionSections'] = $this->formatCategories($data['submissionSections']);
 
-        // Merge data.
-        //$data = array_merge_recursive($data, $data['fields']);
-
         $case = $this->processSave($data);
-        //die('<pre>' . print_r($case, 1));
 
         if (!empty($case)) {
             $caseId = $case['id'];
