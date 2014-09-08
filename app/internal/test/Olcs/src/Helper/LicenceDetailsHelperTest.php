@@ -94,7 +94,7 @@ class LicenceDetailsHelperTest extends PHPUnit_Framework_TestCase
                     'address',
                     'people',
                     'operating_centre',
-                    'vehicle',
+                    'vehicle_psv',
                     'safety',
                     'condition_undertaking'
                 )
@@ -110,7 +110,7 @@ class LicenceDetailsHelperTest extends PHPUnit_Framework_TestCase
                     'people',
                     'operating_centre',
                     'transport_manager',
-                    'vehicle',
+                    'vehicle_psv',
                     'safety',
                     'condition_undertaking'
                 )
@@ -126,7 +126,7 @@ class LicenceDetailsHelperTest extends PHPUnit_Framework_TestCase
                     'people',
                     'operating_centre',
                     'transport_manager',
-                    'vehicle',
+                    'vehicle_psv',
                     'safety',
                     'condition_undertaking'
                 )
