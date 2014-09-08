@@ -10,32 +10,18 @@ namespace Olcs\Controller\Cases;
 
 use Common\Controller\AbstractSectionController as CommonAbstractSectionController;
 use Olcs\Controller\Traits\CaseControllerTrait as CaseControllerTrait;
+use Olcs\Controller as OlcsController;
 
 /**
  * Abstract Case Controller
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech>
  */
-class AbstractController extends CommonAbstractSectionController
+class AbstractController extends OlcsController\CrudAbstract
 {
     use CaseControllerTrait;
 
     const MAX_LIST_DATA_LIMIT = 100;
-
-    /**
-     * Identifier name
-     *
-     * @var string
-     */
-    protected $identifierName = 'case';
-
-    /**
-     * The current page's extra layout, over and above the
-     * standard base template
-     *
-     * @var string
-     */
-    protected $pageLayout = 'case';
 
     /**
      * Retrieve some data from the backend and convert it for use in
@@ -87,21 +73,4 @@ class AbstractController extends CommonAbstractSectionController
         return $this->params()->fromPost($param, $default);
     }
 
-    /**
-     * Extend the render view method
-     *
-     * @param type $view
-     */
-    protected function renderView($view, $pageTitle = null, $pageSubTitle = null)
-    {
-        $layout = $this->getView($view->getVariables());
-
-        $layout->setTemplate('case/layout');
-
-        $this->maybeAddScripts($layout);
-
-        $layout->addChild($view, 'content');
-
-        return parent::renderView($layout, $pageTitle, $pageSubTitle);
-    }
 }

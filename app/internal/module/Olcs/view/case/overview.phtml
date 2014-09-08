@@ -1,13 +1,15 @@
 <?php $case = $this->placeholder('case')->getValue(); ?>
+<div class="read-only">
+    <div class="read-only__header">
+        <dl>
+            <dt>Open Date:</dt>
+            <dd><?php /* die('<pre>' . print_r($case, 1)); */ echo $this->dateFormat(\DateTime::createFromFormat(\DateTime::ISO8601, $case['openDate']), \IntlDateFormatter::GREGORIAN); ?></dd>
+            <dt>ECMS</dt>
+            <dd><?php echo $case['ecmsNo']; ?></dd>
+            <dt>Description</dt>
+            <dd><?php echo $case['description']; ?></dd>
 
-<ul>
-    <li>Open Date:</li>
-    <li><?php /* die('<pre>' . print_r($case, 1)); */ echo $this->dateFormat(\DateTime::createFromFormat(\DateTime::ISO8601, $case['openDate']), \IntlDateFormatter::GREGORIAN); ?></li>
-    <li>ECMS</li>
-    <li><?php echo $case['ecmsNo']; ?></li>
-    <li>Description</li>
-    <li><?php echo $case['description']; ?></li>
-
-</ul>
-
+        </dl>
+    </div>
+</div>
 <?php echo is_array($case['submissionSections']) ? implode(', ', array_map(function($item){return $item['description'];}, $case['submissionSections'])) : 'None selected'; ?>

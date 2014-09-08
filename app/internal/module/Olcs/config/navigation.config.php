@@ -122,9 +122,23 @@ return array(
                     'pages' => array(
                         array(
                             'id' => 'case_submission_list',
-                            'label' => 'Submissions',
+                            'label' => 'Submission List',
                             'route' => 'submission',
                             'action' => 'index',
+                            'use_route_match' => true,
+                        ),
+                        array(
+                            'id' => 'case_submission_add',
+                            'label' => 'Add Submission',
+                            'route' => 'submission',
+                            'action' => 'add',
+                            'use_route_match' => true,
+                        ),
+                        array(
+                            'id' => 'case_submission_edit',
+                            'label' => 'Edit Submission',
+                            'route' => 'submission',
+                            'action' => 'edit',
                             'use_route_match' => true,
                         ),
                     )

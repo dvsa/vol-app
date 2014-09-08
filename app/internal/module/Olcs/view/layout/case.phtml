@@ -17,7 +17,7 @@ $case = $this->placeholder('case')->getValue();
 
 <div class="one-fifth--right">
 
-    <?php if ($case['licence']): ?>
+    <?php if (isset($case['licence'])): ?>
     <?php if ($case['licence']['organisation']): ?>
     <h3>Operator</h3>
     <p><a href="#"><?php echo $case['licence']['organisation']['name']; ?></a></p>

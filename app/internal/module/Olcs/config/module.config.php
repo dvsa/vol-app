@@ -19,6 +19,7 @@ return array(
             'CaseAppealController' => 'Olcs\Controller\CaseAppealController',
             'CaseComplaintController' => 'Olcs\Controller\CaseComplaintController',
             'CaseConvictionController' => 'Olcs\Controller\CaseConvictionController',
+            'CaseSubmissionController' => 'Olcs\Controller\Cases\Submission\SubmissionController',
             'SubmissionController' => 'Olcs\Controller\Submission\SubmissionController',
             'CaseStayController' => 'Olcs\Controller\CaseStayController',
             'CasePenaltyController' => 'Olcs\Controller\CasePenaltyController',
@@ -66,7 +67,8 @@ return array(
             'error/index'             => __DIR__ . '/../view/error/index.phtml'
         ),
         'template_path_stack' => array(
-            'olcs/view' => dirname(__DIR__) . '/view',
+            'olcs' => dirname(__DIR__) . '/view',
+            //'olcs/view' => dirname(__DIR__) . '/view',
         ),
         'strategies' => array(
             'ViewJsonStrategy'

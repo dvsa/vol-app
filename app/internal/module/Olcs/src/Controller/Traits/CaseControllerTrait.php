@@ -29,8 +29,8 @@ trait CaseControllerTrait
     {
         $case = $this->getCase();
 
-        $this->getViewHelperManager()->get('headTitle')->prepend('Case ' . $this->getIdentifier());
-        $this->getViewHelperManager()->get('pageTitle')->append('Case ' . $this->getIdentifier());
+        $this->getViewHelperManager()->get('headTitle')->prepend('Case ' . $case['id']);
+        $this->getViewHelperManager()->get('pageTitle')->append('Case ' . $case['id']);
         $this->getViewHelperManager()->get('pageSubtitle')->append('Case subtitle');
 
         $this->getViewHelperManager()->get('placeholder')->getContainer('case')->set($case);
@@ -49,18 +49,7 @@ trait CaseControllerTrait
     }
 
     /**
-     * Really useful method that gets us the view helper manager
-     * from the service locator.
-     *
-     * @return ViewHelperManager
-     */
-    public function getViewHelperManager()
-    {
-        return $this->getServiceLocator()->get('viewHelperManager');
-    }
-
-    /**
-     * Gets the licence by ID.
+     * Gets the case by ID.
      *
      * @param integer $id
      * @return array
@@ -68,7 +57,7 @@ trait CaseControllerTrait
     public function getCase($id = null)
     {
         if (is_null($id)) {
-            $id = $this->getIdentifier();
+            $id = $this->params()->fromRoute('case');
         }
 
         if (!isset($this->cases[$id])) {

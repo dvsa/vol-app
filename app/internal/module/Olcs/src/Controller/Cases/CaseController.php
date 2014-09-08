@@ -19,6 +19,30 @@ use Olcs\Controller\Cases\AbstractController as AbstractCasesController;
 class CaseController extends AbstractCasesController
 {
     /**
+     * Identifier name
+     *
+     * @var string
+     */
+    protected $identifierName = 'case';
+
+    /**
+     * Holds the form name
+     *
+     * @var string
+     */
+    protected $formName = 'case';
+
+    /**
+     * The current page's extra layout, over and above the
+     * standard base template
+     *
+     * @var string
+     */
+    protected $pageLayout = 'case';
+
+    protected $pageLayoutInner = 'case/inner-layout';
+
+    /**
      * Holds the service name
      *
      * @var string
@@ -85,11 +109,15 @@ class CaseController extends AbstractCasesController
         )
     );
 
+    protected $detailsView = 'case/overview';
+
     /**
      * This action is the case overview page.
      */
     public function overviewAction()
     {
+        return $this->detailsAction();
+
         $view = $this->getView([]);
 
         $view->setTemplate('case/overview');
@@ -102,11 +130,10 @@ class CaseController extends AbstractCasesController
         return $this->redirect()->toRoute('case', ['action' => 'overview'], [], true);
     }
 
-    public function convictionsAction()
+    /* public function convictionsAction()
     {
         return $this->redirect()->toRoute('case', ['action' => 'overview'], [], true);
-    }
-
+    } */
 
     /**
      * Gets the case by ID.
@@ -290,11 +317,11 @@ class CaseController extends AbstractCasesController
      *
      * @return bool
      */
-    public function isUserDefinedConvictionCategory($categoryId)
+    /* public function isUserDefinedConvictionCategory($categoryId)
     {
         $userDefined = array(168);
         return in_array($categoryId, $userDefined);
-    }
+    } */
 
     /**
      * Returns true or false depending on whether a case has an appeal which hasn't been withdrawn
@@ -302,11 +329,11 @@ class CaseController extends AbstractCasesController
      * @param int $caseId
      * @return bool
      */
-    public function caseHasAppeal($caseId)
+    /* public function caseHasAppeal($caseId)
     {
         $appeal = $this->makeRestCall('Appeal', 'GET', array('case' => $caseId, 'isWithdrawn' => 0));
         return ($appeal['Count'] ? true : false);
-    }
+    } */
 
     /**
      * Checks whether a stay already exists for the given case and stay type (only one should be allowed)
@@ -316,7 +343,7 @@ class CaseController extends AbstractCasesController
 
      * @return boolean
      */
-    public function caseHasStay($caseId, $stayTypeId)
+    /* public function caseHasStay($caseId, $stayTypeId)
     {
         $result = $this->makeRestCall(
             'Stay',
@@ -329,5 +356,5 @@ class CaseController extends AbstractCasesController
         );
 
         return $result['Count'] ? true : false;
-    }
+    } */
 }
