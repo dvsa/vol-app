@@ -130,7 +130,16 @@ class CrudAbstract extends CommonController\AbstractSectionController implements
      */
     public function saveThis()
     {
-        $this->getNewForm();
+        $form = $this->generateFormWithData($this->getFormName(), $this->getFormCallback(), $this->getDataForForm());
+
+        $view = $this->getView();
+
+        // CR: Should be its own view helper - I'll refactor this later.
+        $this->getViewHelperManager()->get('placeholder')->getContainer('form')->set($form);
+
+        $view->setTemplate('crud/form');
+
+        return $this->renderView($view);
     }
 
     public function checkRequiredProperties()

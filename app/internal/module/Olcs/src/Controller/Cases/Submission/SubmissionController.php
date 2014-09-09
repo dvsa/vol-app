@@ -93,4 +93,31 @@ class SubmissionController extends OlcsController\CrudAbstract
             )
         )
     );
+
+    /**
+     * Save data
+     *
+     * @param array $data
+     * @param string $service
+     * @return array
+     */
+    protected function save($data, $service = null)
+    {
+        // Modify $data
+
+        return parent::save($data, $service);
+    }
+
+    /**
+     * Map the data on load
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function processLoad($data)
+    {
+        // modify $data for form population
+
+        return parent::processLoad($data);
+    }
 }
