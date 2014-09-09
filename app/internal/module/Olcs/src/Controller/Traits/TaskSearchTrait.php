@@ -40,7 +40,7 @@ trait TaskSearchTrait
         // state, "all", which shouldn't apply either filter
         if ($filters['status'] === 'closed') {
             $filters['isClosed'] = true;
-        } else if ($filters['status'] === 'open') {
+        } elseif ($filters['status'] === 'open') {
             // @NOTE we currently have an unrelated bug OLCS-3792 which
             // prevents this actually restricting to open only
             $filters['isClosed'] = false;
@@ -113,5 +113,89 @@ trait TaskSearchTrait
             return $table->render();
         }
         return $table;
+    }
+
+    /** 
+     * Hold processing of task actions
+     *
+     * @param string $type
+     * @return bool|redirect
+     */
+    protected function processTasksActions($type = '')
+    {
+        $action = strtolower($this->params()->fromPost('action'));
+        if ($action === 're-assign task') {
+            $action = 'reassign';
+        } elseif ($action === 'create task') {
+            $action = 'add';
+        }
+
+        if ($this->getRequest()->isPost()) {
+            if ($action !== 'add') {
+                $id = $this->params()->fromPost('id');
+
+                // pass multiple ids to re-assign
+                if ($action === 'reassign' && is_array($id)) {
+                    $id = implode('-', $id);
+                }
+
+                // we need only one id to edit
+                if ($action === 'edit') {
+                    if (!is_array($id) || count($id) !== 1) {
+                        throw new \Exception('Please select a single task to edit');
+                    }
+                    $id = $id[0];
+                }
+            }
+
+            if (!$type && $action == 'add') {
+                throw new \Exception('Creating task from home page not implemented yet');
+            }
+
+            switch ($type) {
+                case 'licence':
+                    $params = [
+                        'type' => 'licence',
+                        'typeId' => $this->getFromRoute('licence'),
+                    ];
+                    break;
+                default:
+                    // no type - call from the home page
+                    break;
+            }
+            $params['action'] = $action;
+
+            if ($action !== 'add') {
+                $params['task'] = $id;
+            }
+
+            return $this->redirect()->toRoute(
+                'task_action',
+                $params
+            );
+
+        }
+
+        return false;
+    }
+
+    /** 
+     * Get task details
+     *
+     * @param int $id
+     * @return array
+     */
+    protected function getTaskDetails($id = null)
+    {
+        $taskDetails = array();
+        if ($id) {
+            $taskDetails = $this->makeRestCall(
+                'TaskSearchView',
+                'GET',
+                array('id' => $id),
+                array('properties' => array('linkType', 'linkId', 'linkDisplay'))
+            );
+        }
+        return $taskDetails;
     }
 }

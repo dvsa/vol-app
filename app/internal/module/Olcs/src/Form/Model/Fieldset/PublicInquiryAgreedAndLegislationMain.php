@@ -12,61 +12,6 @@ use Zend\Form\Annotation as Form;
 class PublicInquiryAgreedAndLegislationMain
 {
     /**
-     * @Form\Attributes({"id":"","placeholder":""})
-     * @Form\Options({
-     *     "label": "PI Status",
-     *     "category": "pi_status",
-     *     "empty_option": "Please Select",
-     *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category"
-     * })
-     * @Form\Type("DynamicSelect")
-     */
-    public $piStatus = null;
-
-    /**
-     * @Form\Attributes({"id":"","placeholder":"", "multiple":true})
-     * @Form\Options({
-     *     "label": "Type of PI",
-     *     "category": "pi_type",
-     *     "empty_option": "Please Select",
-     *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category"
-     * })
-     * @Form\Type("DynamicSelect")
-     * @Form\Validator({"name":"Olcs\Validator\TypeOfPI"})
-     */
-    public $piTypes = null;
-
-    /**
-     * @Form\Attributes({"id":"","placeholder":"","class":"medium"})
-     * @Form\Options({
-     *     "label": "Caseworker assigned to",
-     *     "service_name": "Olcs\Service\Data\User",
-     *     "empty_option": "Please Select",
-     *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category"
-     * })
-     * @Form\Type("DynamicSelect")
-     */
-    public $assignedTo = null;
-
-    /**
-     * @Form\Attributes({"id":"","placeholder":"","class":"medium", "multiple" : true})
-     * @Form\Options({
-     *     "label": "Legislation",
-     *     "value_options": {
-     *
-     *     },
-     *     "empty_option": "Please Select",
-     *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category",
-     * })
-     * @Form\Type("PublicInquiryReason")
-     */
-    public $reasons = null;
-
-    /**
      * @Form\Attributes({"id":"dob"})
      * @Form\Options({
      *     "label": "Agreed date",
@@ -74,6 +19,7 @@ class PublicInquiryAgreedAndLegislationMain
      *     "render_delimiters": "d m y"
      * })
      * @Form\Type("Common\Form\Elements\Custom\DateSelect")
+     * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $agreedDate = null;
 
@@ -102,6 +48,30 @@ class PublicInquiryAgreedAndLegislationMain
      * @Form\Type("DynamicSelect")
      */
     public $presidedByRole = null;
+
+    /**
+     * @Form\Attributes({"id":"","placeholder":"", "multiple":true})
+     * @Form\Options({
+     *     "label": "Type of PI",
+     *     "category": "pi_type",
+     *     "disable_inarray_validator": false,
+     *     "help-block": "Please select a category"
+     * })
+     * @Form\Type("DynamicSelect")
+     * @Form\Validator({"name":"Olcs\Validator\TypeOfPI"})
+     */
+    public $piTypes = null;
+
+    /**
+     * @Form\Attributes({"id":"","placeholder":"","class":"medium", "multiple" : true})
+     * @Form\Options({
+     *     "label": "Legislation",
+     *     "disable_inarray_validator": false,
+     *     "help-block": "Please select a category",
+     * })
+     * @Form\Type("PublicInquiryReason")
+     */
+    public $reasons = null;
 
     /**
      * @Form\Attributes({"id":"","class":"extra-long"})

@@ -118,10 +118,53 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             'licenceId' => 1234
         );
 
-        $this->controller->expects($this->any())
+        $this->controller->expects($this->at(2))
             ->method('makeRestCall')
             ->with('DocumentSearchView', 'GET', $expectedParams)
             ->will($this->returnValue([]));
+
+        $altListData = [
+            'limit' => 100,
+            'sort' => 'description'
+        ];
+
+        $altResponse = [
+            'Results' => [
+                [
+                    'id' => 123,
+                    'description' => 'foo'
+                ]
+            ]
+        ];
+
+        $extendedListData = [
+            'limit' => 100,
+            'sort' => 'description',
+            'order' => 'DESC',
+            'page' => 1,
+            'licenceId' => 1234
+        ];
+
+        $refDataList = [
+            'limit' => 100,
+            'sort' => 'description',
+            'refDataCategoryId' => 'document_type'
+        ];
+
+        $this->controller->expects($this->at(6))
+            ->method('makeRestCall')
+            ->with('Category', 'GET', $altListData)
+            ->will($this->returnValue($altResponse));
+
+        $this->controller->expects($this->at(7))
+            ->method('makeRestCall')
+            ->with('DocumentSubCategory', 'GET', $extendedListData)
+            ->will($this->returnValue($altResponse));
+
+        $this->controller->expects($this->at(8))
+            ->method('makeRestCall')
+            ->with('RefData', 'GET', $refDataList)
+            ->will($this->returnValue($altResponse));
 
         $tableMock = $this->getMock('\stdClass', ['render']);
         $this->controller->expects($this->once())
@@ -158,7 +201,7 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
     public function testDocumentsActionAjax()
     {
 
-        $this->controller->expects($this->at(3))
+        $this->controller->expects($this->at(2))
             ->method('makeRestCall')
             ->will($this->returnValue([]));
 
@@ -186,8 +229,49 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
                 ]
             ]
         ];
+        $altListData = [
+            'limit' => 100,
+            'sort' => 'description'
+        ];
+
+        $altResponse = [
+            'Results' => [
+                [
+                    'id' => 123,
+                    'description' => 'foo'
+                ]
+            ]
+        ];
+
+        $extendedListData = [
+            'limit' => 100,
+            'sort' => 'description',
+            'order' => 'DESC',
+            'page' => 1
+        ];
+
+        $refDataList = [
+            'limit' => 100,
+            'sort' => 'description',
+            'refDataCategoryId' => 'document_type'
+        ];
+
+        $this->controller->expects($this->at(6))
+            ->method('makeRestCall')
+            ->with('Category', 'GET', $altListData)
+            ->will($this->returnValue($altResponse));
 
         $this->controller->expects($this->at(7))
+            ->method('makeRestCall')
+            ->with('DocumentSubCategory', 'GET', $extendedListData)
+            ->will($this->returnValue($altResponse));
+
+        $this->controller->expects($this->at(8))
+            ->method('makeRestCall')
+            ->with('RefData', 'GET', $refDataList)
+            ->will($this->returnValue($altResponse));
+
+        $this->controller->expects($this->at(10))
             ->method('makeRestCall')
             ->will($this->returnValue($response));
 

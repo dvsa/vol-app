@@ -283,7 +283,7 @@ class CasePiController extends CaseController implements CrudInterface
             'PublicInquiryAgreedAndLegislation',
             'processPi',
             array(
-                'main' => array('case' => $caseId)
+                'main' => array('case' => $caseId, 'agreedDate' => date('Y-m-d'))
             )
         );
 
@@ -353,6 +353,10 @@ class CasePiController extends CaseController implements CrudInterface
      */
     public function processPi($data)
     {
+        if (!(isset($data['main']['id']) && !empty($data['main']['id']))) {
+            $data['main']['piStatus'] = 'pi_s_reg';
+        }
+
         $this->processSave($data);
 
         return $this->redirect()->toRoute('case_pi', ['action' => 'index'], [], true);
