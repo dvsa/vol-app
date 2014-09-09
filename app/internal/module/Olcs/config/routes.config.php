@@ -754,13 +754,13 @@ return array_merge(
                 ]
             ]
         ],
-        'tasks' => [
+        'entity_lists' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/tasks/[:type]/[:value]',
+                'route' => '/list/[:type]/[:value]',
                 'defaults' => [
                     'controller' => 'IndexController',
-                    'action' => 'taskFilter'
+                    'action' => 'entityList'
                 ]
             ]
         ]

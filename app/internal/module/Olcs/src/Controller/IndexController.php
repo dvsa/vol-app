@@ -61,7 +61,7 @@ class IndexController extends AbstractController
      *
      * @return JSON
      */
-    public function taskFilterAction()
+    public function entityListAction()
     {
         $key = $this->params()->fromRoute('type');
         $value = $this->params()->fromRoute('value');
@@ -70,9 +70,19 @@ class IndexController extends AbstractController
                 'entity' => 'User',
                 'field' => 'team'
             ),
-            'sub-categories' => array(
+            'task-sub-categories' => array(
                 'entity' => 'TaskSubCategory',
                 'field' => 'category'
+            ),
+            'document-sub-categories' => array(
+                'entity' => 'DocumentSubCategory',
+                'field' => 'category',
+                'title' => 'description'
+            ),
+            'document-templates' => array(
+                'entity' => 'DocTemplate',
+                'field' => 'documentSubCategory',
+                'title' => 'description'
             )
         );
 
@@ -88,7 +98,9 @@ class IndexController extends AbstractController
             $lookup['field'] => $value
         );
 
-        $results = $this->getListData($lookup['entity'], $search);
+        $titleKey = isset($lookup['title']) ? $lookup['title'] : 'name';
+
+        $results = $this->getListData($lookup['entity'], $search, $titleKey);
         $viewResults = array();
 
         // iterate over the list data and just convert it to a more
