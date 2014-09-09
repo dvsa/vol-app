@@ -94,6 +94,12 @@ return [
             'version' => [
                 'type' => 'hidden'
             ],
+            'linkType' => [
+                'type' => 'hidden'
+            ],
+            'linkId' => [
+                'type' => 'hidden'
+            ],
         ]
     ]
 ];
