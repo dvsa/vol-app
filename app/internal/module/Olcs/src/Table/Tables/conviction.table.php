@@ -18,7 +18,8 @@ return array(
                 'default' => 10,
                 'options' => array(10, 25, 50)
             )
-        )
+        ),
+        'useQuery' => true
     ),
     'attributes' => array(
     ),
@@ -50,17 +51,31 @@ return array(
         ),
         array(
             'title' => 'Name / defendant type',
-            'formatter' => function ($data) {
+            'formatter' => function ($data, $column, $sm) {
+
+                $translator = $sm->get('translator');
+
                 $person = $data['convictedName'];
                 $organisationName = $data['operatorName'];
-                return ($organisationName == '' ? $person : $organisationName) . ' <br /> ' . $data['defendantType'];
+                $name = ($organisationName == '' ? $person : $organisationName) . ' <br /> '
+                      . $translator->translate($data['defendantType']['id']);
+
+                return $name;
             }
         ),
         array(
             'title' => 'Description',
             'formatter' => function ($row) {
-                $append = strlen($row['categoryText']) > 60 ? '...' : '';
-                return substr($row['categoryText'], 0, 60) . $append;
+
+                if (count($row['convictionCategory']) && $row['convictionCategory']['id'] != 168) {
+                        $row['categoryText'] = $row['convictionCategory']['description'];
+                }
+
+                $categoryText = $row['categoryText'];
+
+
+                $append = strlen($categoryText) > 30 ? '...' : '';
+                return substr($categoryText, 0, 30) . $append;
             }
         ),
         array(

@@ -10,27 +10,98 @@ namespace Olcs\Controller\Cases\Conviction;
 
 use Zend\View\Model\ViewModel;
 use Zend\Json\Json as Json;
-use Olcs\Controller\Traits\DeleteActionTrait;
+//use Olcs\Controller\Traits\DeleteActionTrait;
 use Olcs\Controller\Traits\DefendantSearchTrait;
+// Olcs
+use Olcs\Controller as OlcsController;
+use Olcs\Controller\Traits as ControllerTraits;
 
 /**
  * Case Conviction Controller
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class CaseConvictionController extends CaseController
+class ConvictionController extends OlcsController\CrudAbstract
 {
-    use DeleteActionTrait;
     use DefendantSearchTrait;
+    use ControllerTraits\CaseControllerTrait;
 
-    public function getDeleteServiceName()
-    {
-        return 'Conviction';
-    }
+    /**
+     * Identifier name
+     *
+     * @var string
+     */
+    protected $identifierName = 'conviction';
+
+    /**
+     * Holds the form name
+     *
+     * @var string
+     */
+    protected $formName = 'conviction';
+
+    /**
+     * The current page's extra layout, over and above the
+     * standard base template, a sibling of the base though.
+     *
+     * @var string
+     */
+    protected $pageLayout = 'case';
+
+    protected $pageLayoutInner = 'case/inner-layout';
+
+    /**
+     * Holds the service name
+     *
+     * @var string
+     */
+    protected $service = 'Conviction';
+
+    /**
+     * Holds an array of variables for the default
+     * index list page.
+     */
+    protected $listVars = [
+        'case',
+    ];
+
+    /**
+     * Data map
+     *
+     * @var array
+    */
+    protected $dataMap = array(
+        'main' => array(
+            'mapFrom' => array(
+                'data'
+            )
+        )
+    );
+
+    /**
+     * Holds the Data Bundle
+     *
+     * @var array
+    */
+    protected $dataBundle = array(
+        'children' => array(
+            'convictionCategory' => array(
+                'properties' => array(
+                    'id',
+                    'description'
+                )
+            ),
+            'defendantType' => array(
+                'properties' => 'ALL'
+            )
+        )
+    );
 
     public function indexAction()
     {
-        $translator = $this->getServiceLocator()->get('translator');
+        return parent::indexAction();
+
+        /* $translator = $this->getServiceLocator()->get('translator');
 
         $postParams = $this->params()->fromPost();
         $routeParams = $this->params()->fromRoute();
@@ -58,8 +129,6 @@ class CaseConvictionController extends CaseController
 
         $form = $this->generateCommentForm($case);
 
-        $summary = $this->getCaseSummaryArray($case);
-
         $bundle = $this->getIndexBundle();
 
         $results = $this->makeRestCall(
@@ -81,7 +150,7 @@ class CaseConvictionController extends CaseController
                 $results['Results'][$key]['categoryText'] = $row['convictionCategory']['description'];
             }
 
-            $results['Results'][$key]['defendantType'] = $translator->translate($row['defendantType']['id']);
+            //$results['Results'][$key]['defendantType'] = $translator->translate($row['defendantType']['id']);
         }
 
         $data = [];
@@ -104,7 +173,7 @@ class CaseConvictionController extends CaseController
         );
 
         $view->setTemplate('case/manage');
-        return $view;
+        return $view; */
     }
 
     /**
