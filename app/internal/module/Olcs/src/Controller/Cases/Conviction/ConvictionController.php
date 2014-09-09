@@ -6,7 +6,7 @@
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
 
-namespace Olcs\Controller;
+namespace Olcs\Controller\Cases\Conviction;
 
 use Zend\View\Model\ViewModel;
 use Zend\Json\Json as Json;
