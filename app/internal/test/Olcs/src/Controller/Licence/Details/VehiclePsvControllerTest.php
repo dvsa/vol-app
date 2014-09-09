@@ -1142,7 +1142,7 @@ class VehiclePsvControllerTest extends AbstractLicenceDetailsControllerTestCase
                     array(
                         'id' => 2,
                         'receivedDate' => null,
-                        'specifiedDate' => null,
+                        'specifiedDate' => '2014-01-01',
                         'deletedDate' => null,
                         'vehicle' => array(
                             'vrm' => 'AB13 ABC',
