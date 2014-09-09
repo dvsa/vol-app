@@ -18,47 +18,32 @@ use Olcs\Controller\Traits;
 class BusController extends AbstractController
 {
     use Traits\LicenceControllerTrait;
+    use Traits\BusControllerTrait;
+
+    protected $layoutFile = 'licence/bus/layout';
+    protected $subNavRoute;
+    protected $section;
 
     public function indexAction()
     {
-        //placeholder, forwards to service details page
-        return $this->redirectToRoute('licence/bus/details', [], [], true);
+        //check whether we have a bus reg id or whether we're showing the list
+        return $this->redirectToRoute('licence/bus-details', [], [], true);
     }
 
-    protected function viewVars(
-        $view,
-        $subNavRoute,
-        $layoutFile = 'licence/bus/layout',
-        $pageTitle = null,
-        $pageSubTitle = null
-    ) {
+    public function renderView($view, $pageTitle = null, $pageSubTitle = null)
+    {
         $this->pageLayout = 'bus';
 
         $variables = array(
-            'navigation' => $this->getSubNavigation($subNavRoute),
+            'navigation' => $this->getSubNavigation(),
             'section' => $this->getSection()
         );
 
         $layout = $this->getViewWithLicence(array_merge($variables, (array)$view->getVariables()));
-        $layout->setTemplate($layoutFile);
+        $layout->setTemplate($this->getLayoutFile());
 
         $layout->addChild($view, 'content');
 
-        return $this->renderView($layout, $pageTitle, $pageSubTitle);
-    }
-
-    public function getNavigation()
-    {
-        return $this->getServiceLocator()->get('Navigation');
-    }
-
-    public function getSubNavigation($route)
-    {
-        return $this->getNavigation()->findOneBy('id', $route);
-    }
-
-    public function getSection()
-    {
-        return $this->section;
+        return parent::renderView($layout, $pageTitle, $pageSubTitle);
     }
 }

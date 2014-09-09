@@ -17,9 +17,10 @@ use Common\Exception\BadRequestException;
 trait LicenceNoteTrait
 {
     private $templatePrefix;
+    private $routePrefix;
 
     /**
-     * Used in routes, changes depending on the note type
+     * Allows the template to change based on the controller being used
      *
      * @return string
      */
@@ -29,7 +30,7 @@ trait LicenceNoteTrait
     }
 
     /**
-     * Used in routes, changes depending on the note type
+     * Allows the template to change based on the controller being used
      *
      * @param string $templatePrefix
      */
@@ -39,28 +40,48 @@ trait LicenceNoteTrait
     }
 
     /**
+     * Allows the route to change based on the controller being used
+     *
+     * @return string
+     */
+    public function getRoutePrefix()
+    {
+        return $this->routePrefix;
+    }
+
+    /**
+     * Allows the route to change based on the controller being used
+     *
+     * @param string $routePrefix
+     */
+    public function setRoutePrefix($routePrefix)
+    {
+        $this->routePrefix = $routePrefix;
+    }
+
+    /**
      * Redirects to the index page, dependant on the note type
      *
      * @return \Zend\Http\Response
      */
     public function redirectToIndex()
     {
-        $this->redirectToRoute($this->getTemplatePrefix() . '/notes', [], [], true);
+        $this->redirectToRoute($this->getRoutePrefix() . '/notes', [], [], true);
     }
 
-    public function getNotesList($licenceId, $noteType = 'note_t_lic', $action = null, $id = null)
+    public function getNotesList($licenceId, $linkedId, $noteType = 'note_t_lic', $action = null, $id = null)
     {
-        $templatePrefix  = $this->getTemplatePrefix();
+        $routePrefix  = $this->getRoutePrefix();
 
         switch ($action) {
             case 'Add':
                 return $this->redirectToRoute(
-                    $templatePrefix . '/add-note',
+                    $routePrefix . '/add-note',
                     [
                         'action' => strtolower($action),
                         'licence' => $licenceId,
                         'noteType' => $noteType,
-                        'linkedId' => $licenceId
+                        'linkedId' => $linkedId
                     ],
                     [],
                     true
@@ -68,7 +89,7 @@ trait LicenceNoteTrait
             case 'Edit':
             case 'Delete':
                 return $this->redirectToRoute(
-                    $templatePrefix . '/modify-note',
+                    $routePrefix . '/modify-note',
                     ['action' => strtolower($action), 'id' => $id],
                     [],
                     true
@@ -76,6 +97,10 @@ trait LicenceNoteTrait
         }
 
         $searchData = [];
+
+        if ($noteType != 'note_t_lic') {
+            $searchData['noteType'] = $noteType;
+        }
 
         $searchData['licence'] = $licenceId;
         $searchData['page'] = $this->getFromRoute('page', 1);
@@ -93,7 +118,7 @@ trait LicenceNoteTrait
         $table = $this->buildTable('note', $formattedResult, $searchData);
 
         $view = $this->getView(['table' => $table]);
-        $view->setTemplate($templatePrefix . '/notes/index');
+        $view->setTemplate($this->getTemplatePrefix() . '/notes/index');
 
         return $view;
     }
@@ -151,7 +176,7 @@ trait LicenceNoteTrait
             return $this->redirectToIndex();
         }
 
-        return $this->redirectToRoute($this->getTemplatePrefix() . '/add-note', ['action' => 'Add'], [], true);
+        return $this->redirectToRoute($this->getRoutePrefix() . '/add-note', ['action' => 'Add'], [], true);
     }
 
     /**
@@ -212,7 +237,7 @@ trait LicenceNoteTrait
             return $this->redirectToIndex();
         }
 
-        return $this->redirectToRoute($this->getTemplatePrefix() . '/modify-note', ['action' => 'Edit'], [], true);
+        return $this->redirectToRoute($this->getRoutePrefix() . '/modify-note', ['action' => 'Edit'], [], true);
     }
 
     public function appendLinkedId($resultData)

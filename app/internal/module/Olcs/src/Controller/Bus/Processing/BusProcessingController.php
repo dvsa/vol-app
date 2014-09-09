@@ -17,12 +17,13 @@ use Olcs\Controller\Bus\BusController;
 class BusProcessingController extends BusController
 {
     protected $section = 'processing';
+    protected $subNavRoute = 'licence_bus_processing';
 
     public function indexAction()
     {
         $view = $this->getViewWithLicence();
 
         $view->setTemplate('licence/bus/index');
-        return $this->viewVars($view, 'licence_bus_processing');
+        return $this->renderView($view);
     }
 }

@@ -28,6 +28,7 @@ class LicenceProcessingNoteController extends AbstractLicenceProcessingControlle
     public function __construct()
     {
         $this->setTemplatePrefix('licence/processing');
+        $this->setRoutePrefix('licence/processing');
     }
 
     /**
@@ -43,8 +44,15 @@ class LicenceProcessingNoteController extends AbstractLicenceProcessingControlle
         $action = $this->getFromPost('action');
         $id = $this->getFromPost('id');
 
-        $view = $this->getNotesList($licenceId, 'note_t_lic', $action, $id);
+        $notesResult = $this->getNotesList($licenceId, $licenceId, 'note_t_lic', $action, $id);
 
-        return $this->renderView($view);
+        //if a ViewModel has been returned
+        if ($notesResult instanceof \Zend\View\Model\ViewModel) {
+            //$notesResult->setTemplate('licence/processing/notes/index');
+            return $this->renderView($notesResult);
+        }
+
+        //if a redirect has been returned
+        return $notesResult;
     }
 }

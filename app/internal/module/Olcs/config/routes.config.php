@@ -258,99 +258,131 @@ return array_merge(
                     ]
                 ],
                 'bus' => [
-                    'type' => 'literal',
+                    'type' => 'segment',
                     'options' => [
-                        'route' => '/bus',
+                        'route' => '/bus/page/:page/limit/:limit/sort/:sort/order/:order',
                         'defaults' => [
-                            'controller' => 'BusController',
+                            'controller' => 'LicenceController',
+                            'action' => 'bus',
+                            'page' => 1,
+                            'limit' => 10,
+                            'sort' => 'regNo',
+                            'order' => 'DESC'
+                        ]
+                    ],
+                    'may_terminate' => true,
+                ],
+                'bus-details' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => '/bus/:busRegId/details',
+                        'defaults' => [
+                            'controller' => 'BusDetailsController',
+                            'action' => 'index',
+                        ]
+                    ]
+                ],
+                'bus-short' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => '/bus/:busRegId/short',
+                        'defaults' => [
+                            'controller' => 'BusShortController',
+                            'action' => 'index',
+                        ]
+                    ]
+                ],
+                'bus-route' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => '/bus/:busRegId/route',
+                        'defaults' => [
+                            'controller' => 'BusRouteController',
+                            'action' => 'index',
+                        ]
+                    ]
+                ],
+                'bus-trc' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => '/bus/:busRegId/trc',
+                        'defaults' => [
+                            'controller' => 'BusTrcController',
+                            'action' => 'index',
+                        ]
+                    ]
+                ],
+                'bus-docs' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => '/bus/:busRegId/docs',
+                        'defaults' => [
+                            'controller' => 'BusDocsController',
+                            'action' => 'index',
+                        ]
+                    ]
+                ],
+                'bus-processing' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => '/bus/:busRegId/processing',
+                        'defaults' => [
+                            'controller' => 'BusProcessingController',
                             'action' => 'index',
                         ]
                     ],
                     'may_terminate' => true,
                     'child_routes' => [
-                        'details' => [
-                            'type' => 'literal',
+                        'notes' => [
+                            'type' => 'segment',
                             'options' => [
-                                'route' => '/details',
+                                'route' => '/notes/page/:page/limit/:limit/sort/:sort/order/:order',
                                 'defaults' => [
-                                    'controller' => 'BusDetailsController',
+                                    'controller' => 'BusProcessingNoteController',
                                     'action' => 'index',
-                                ]
-                            ]
-                        ],
-                        'short' => [
-                            'type' => 'literal',
-                            'options' => [
-                                'route' => '/short',
-                                'defaults' => [
-                                    'controller' => 'BusShortController',
-                                    'action' => 'index',
-                                ]
-                            ]
-                        ],
-                        'route' => [
-                            'type' => 'literal',
-                            'options' => [
-                                'route' => '/route',
-                                'defaults' => [
-                                    'controller' => 'BusRouteController',
-                                    'action' => 'index',
-                                ]
-                            ]
-                        ],
-                        'trc' => [
-                            'type' => 'literal',
-                            'options' => [
-                                'route' => '/trc',
-                                'defaults' => [
-                                    'controller' => 'BusTrcController',
-                                    'action' => 'index',
-                                ]
-                            ]
-                        ],
-                        'docs' => [
-                            'type' => 'literal',
-                            'options' => [
-                                'route' => '/docs',
-                                'defaults' => [
-                                    'controller' => 'BusDocsController',
-                                    'action' => 'index',
-                                ]
-                            ]
-                        ],
-                        'processing' => [
-                            'type' => 'literal',
-                            'options' => [
-                                'route' => '/processing',
-                                'defaults' => [
-                                    'controller' => 'BusProcessingController',
-                                    'action' => 'index',
+                                    'page' => 1,
+                                    'limit' => 10,
+                                    'sort' => 'priority',
+                                    'order' => 'DESC'
                                 ]
                             ],
-                            'may_terminate' => true,
-                            'child_routes' => [
-                                'notes' => [
-                                    'type' => 'literal',
-                                    'options' => [
-                                        'route' => '/notes',
-                                        'defaults' => [
-                                            'controller' => 'BusProcessingNoteController',
-                                            'action' => 'index',
-                                        ]
-                                    ]
-                                ]
-                            ]
                         ],
-                        'fees' => [
-                            'type' => 'literal',
+                        'add-note' => [
+                            'type' => 'segment',
                             'options' => [
-                                'route' => '/fees',
+                                'route' => '/notes/:action/:noteType[/:linkedId]',
                                 'defaults' => [
-                                    'controller' => 'BusFeesController',
-                                    'action' => 'index',
+                                    'constraints' => [
+                                        'noteType' => '[A-Za-z]+',
+                                        'linkedId' => '[0-9]+',
+                                    ],
+                                    'controller' => 'BusProcessingNoteController',
+                                    'action' => 'add'
                                 ]
                             ]
                         ],
+                        'modify-note' => [
+                            'type' => 'segment',
+                            'options' => [
+                                'route' => '/notes/:action[/:id]',
+                                'defaults' => [
+                                    'constraints' => [
+                                        'id' => '[0-9]+',
+                                    ],
+                                    'controller' => 'BusProcessingNoteController',
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                'bus-fees' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => '/bus/:busRegId/fees',
+                        'defaults' => [
+                            'controller' => 'BusFeesController',
+                            'action' => 'index',
+                        ]
                     ]
                 ],
                 'cases' => [

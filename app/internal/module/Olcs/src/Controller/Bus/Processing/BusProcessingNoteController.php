@@ -28,6 +28,7 @@ class BusProcessingNoteController extends BusProcessingController implements Cru
     public function __construct()
     {
         $this->setTemplatePrefix('licence/bus/processing');
+        $this->setRoutePrefix('licence/bus-processing');
     }
 
     /**
@@ -38,15 +39,18 @@ class BusProcessingNoteController extends BusProcessingController implements Cru
     public function indexAction()
     {
         $licenceId = $this->getFromRoute('licence');
-
-        //unable to use checkForCrudAction() as add and edit/delete require different routes
+        $busReg = $this->getFromRoute('busRegId');
         $action = $this->getFromPost('action');
         $id = $this->getFromPost('id');
 
-        //$view->setTemplate('licence/bus/index');
+        $notesResult = $this->getNotesList($licenceId, $busReg, 'note_t_bus', $action, $id);
 
+        //if a ViewModel has been returned
+        if ($notesResult instanceof \Zend\View\Model\ViewModel) {
+            return $this->renderView($notesResult);
+        }
 
-        $view = $this->getNotesList($licenceId, 'note_t_bus', $action, $id);
-        return $this->viewVars($view, 'licence_bus_processing');
+        //if a redirect has been returned
+        return $notesResult;
     }
 }
