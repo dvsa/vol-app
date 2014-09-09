@@ -16,6 +16,64 @@ use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
  */
 class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
 {
+    private $taskSearchViewExpectedData = [
+        'assignedToUser'  => 1,
+        'assignedToTeam'  => 2,
+        'date'  => 'today',
+        'status' => 'open',
+        'sort' => 'actionDate',
+        'order' => 'ASC',
+        'page' => 1,
+        'limit' => 10,
+        'actionDate' => ''
+    ];
+    private $taskSearchViewExpectedDataVar1 = [
+        'assignedToTeam'  => 2,
+        'date'  => 'today',
+        'status' => 'open',
+        'sort' => 'actionDate',
+        'order' => 'ASC',
+        'page' => 1,
+        'limit' => 10,
+        'actionDate' => '',
+    ];
+    private $standardListData = [
+        'limit' => 100,
+        'sort' => 'name'
+    ];
+    private $extendedListData = [
+        'assignedToUser' => 1,
+        'assignedToTeam'  => 2,
+        'team'  => 2,
+        'date'  => 'today',
+        'status' => 'open',
+        'sort' => 'name',
+        'order' => 'ASC',
+        'page' => 1,
+        'limit' => 100,
+        'actionDate' => '',
+    ];
+    private $extendedListDataVariation1 = [
+        'assignedToTeam'  => 2,
+        'date'  => 'today',
+        'status' => 'open',
+        'sort' => 'name',
+        'order' => 'ASC',
+        'page' => 1,
+        'limit' => 100,
+        'actionDate' => '',
+        'team'  => 2
+    ];
+    private $altListData = [
+        'limit' => 100,
+        'sort' => 'description'
+    ];
+    private $userList = [
+        'team' => 123,
+        'limit' => 100,
+        'sort' => 'name'
+    ];
+
     public function setUp()
     {
         $this->setApplicationConfig(
@@ -30,12 +88,14 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
                 'getRequest',
                 'getForm',
                 'loadScripts',
-                'params'
+                'params',
+                'getFromRoute',
+                'redirect'
             )
         );
 
         $query = new \Zend\Stdlib\Parameters();
-        $request = $this->getMock('\stdClass', ['getQuery', 'isXmlHttpRequest']);
+        $request = $this->getMock('\stdClass', ['getQuery', 'isXmlHttpRequest', 'isPost']);
         $request->expects($this->any())
             ->method('getQuery')
             ->will($this->returnValue($query));
@@ -47,32 +107,26 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
             ->method('getRequest')
             ->will($this->returnValue($request));
 
+        $this->controller->expects($this->any())
+            ->method('makeRestCall')
+            ->will($this->returnCallback(array($this, 'mockRestCall')));
+
+        $this->taskSearchViewExpectedData['actionDate'] = '<= ' . date('Y-m-d');
+        $this->extendedListData['actionDate'] = '<= ' . date('Y-m-d');
+        $this->extendedListDataVariation1['actionDate'] = '<= ' . date('Y-m-d');
+        $this->taskSearchViewExpectedDataVar1['actionDate'] = '<= ' . date('Y-m-d');
         parent::setUp();
     }
 
+    /**
+     * Test index acton with no query
+     * @group task
+     */
     public function testIndexActionWithNoQueryUsesDefaultParams()
     {
         $this->controller->expects($this->any())
             ->method('getLoggedInUser')
             ->will($this->returnValue(1));
-
-        $expectedParams = array(
-            'assignedToUser' => 1,
-            'assignedToTeam'  => 2,
-            'date'  => 'today',
-            'status' => 'open',
-            'sort' => 'actionDate',
-            'order' => 'ASC',
-            'page' => 1,
-            'limit' => 10,
-            // @NOTE: I don't like the date variable here, maybe use
-            // DateTime and a mock instead
-            'actionDate' => '<= ' . date('Y-m-d')
-        );
-        $this->controller->expects($this->at(2))
-            ->method('makeRestCall')
-            ->with('TaskSearchView', 'GET', $expectedParams)
-            ->will($this->returnValue([]));
 
         $tableMock = $this->getMock('\stdClass', ['render']);
         $this->controller->expects($this->once())
@@ -81,7 +135,7 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
                 'tasks',
                 [],
                 array_merge(
-                    $expectedParams,
+                    $this->taskSearchViewExpectedData,
                     array('query' => $this->query)
                 )
             )
@@ -100,67 +154,7 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
             ->method('getForm')
             ->will($this->returnValue($form));
 
-        $response = [
-            'Results' => [
-                [
-                    'id' => 123,
-                    'name' => 'foo'
-                ]
-            ]
-        ];
-
-        $altResponse = [
-            'Results' => [
-                [
-                    'id' => 123,
-                    'description' => 'foo'
-                ]
-            ]
-        ];
-
-        $standardListData = [
-            'limit' => 100,
-            'sort' => 'name'
-        ];
-
-        $altListData = [
-            'limit' => 100,
-            'sort' => 'description'
-        ];
-
-        $extendedListData = [
-            'assignedToUser' => 1,
-            'assignedToTeam'  => 2,
-            'team'  => 2,
-            'date'  => 'today',
-            'status' => 'open',
-            'sort' => 'name',
-            'order' => 'ASC',
-            'page' => 1,
-            'limit' => 100,
-            'actionDate' => '<= ' . date('Y-m-d')
-        ];
-
-        $this->controller->expects($this->at(6))
-            ->method('makeRestCall')
-            ->with('Team', 'GET', $standardListData)
-            ->will($this->returnValue($response));
-
-        $this->controller->expects($this->at(7))
-            ->method('makeRestCall')
-            ->with('User', 'GET', $extendedListData)
-            ->will($this->returnValue($response));
-
-        $this->controller->expects($this->at(8))
-            ->method('makeRestCall')
-            ->with('Category', 'GET', $altListData)
-            ->will($this->returnValue($altResponse));
-
-        $this->controller->expects($this->at(9))
-            ->method('makeRestCall')
-            ->with('TaskSubCategory', 'GET', $extendedListData)
-            ->will($this->returnValue($response));
-
+        $this->setUpAction('');
         $view = $this->controller->indexAction();
         list($header, $content) = $view->getChildren();
 
@@ -168,11 +162,13 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
         $this->assertEquals('Subtitle', $header->getVariable('pageSubTitle'));
     }
 
+    /**
+     * Test index acton with AJAX
+     * @group task
+     */
     public function testIndexActionAjax()
     {
-        $this->controller->expects($this->at(2))
-            ->method('makeRestCall')
-            ->will($this->returnValue([]));
+        $this->setUpAction('');
 
         $form = $this->getMock('\stdClass', ['get', 'setValueOptions', 'remove', 'setData']);
 
@@ -189,40 +185,6 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
             ->method('getForm')
             ->will($this->returnValue($form));
 
-        $response = [
-            'Results' => [
-                [
-                    'id' => 123,
-                    'name' => 'foo'
-                ]
-            ]
-        ];
-
-        $altResponse = [
-            'Results' => [
-                [
-                    'id' => 123,
-                    'description' => 'foo'
-                ]
-            ]
-        ];
-
-        $this->controller->expects($this->at(6))
-            ->method('makeRestCall')
-            ->will($this->returnValue($response));
-
-        $this->controller->expects($this->at(7))
-            ->method('makeRestCall')
-            ->will($this->returnValue($response));
-
-        $this->controller->expects($this->at(8))
-            ->method('makeRestCall')
-            ->will($this->returnValue($altResponse));
-
-        $this->controller->expects($this->at(9))
-            ->method('makeRestCall')
-            ->will($this->returnValue($response));
-
         $this->request->expects($this->once())
             ->method('isXmlHttpRequest')
             ->will($this->returnValue(true));
@@ -232,7 +194,11 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
         $this->assertTrue($view->terminate());
     }
 
-    public function testEntityListActionInvalidType()
+    /**
+     * Test task filter action invalid type
+     * @group task
+     */
+    public function testTaskFilterActionInvalidType()
     {
         $params = $this->getMock('\stdClass', ['fromRoute']);
 
@@ -248,13 +214,17 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
         try {
             $this->controller->entityListAction();
         } catch (\Exception $e) {
-            $this->assertEquals('Invalid entity filter key: invalid', $e->getMessage());
+            $this->assertEquals('Invalid task filter key: invalid', $e->getMessage());
             return;
         }
 
         $this->fail('Expected exception not raised');
     }
 
+    /**
+     * Test task filter action valid type
+     * @group task
+     */
     public function testTaskEntityListActionValidType()
     {
         $params = $this->getMock('\stdClass', ['fromRoute']);
@@ -273,29 +243,6 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
             ->with('value')
             ->will($this->returnValue('123'));
 
-        $params = [
-            'team' => '123',
-            'limit' => 100,
-            'sort' => 'name'
-        ];
-
-        $response = [
-            'Results' => [
-                [
-                    'id' => 123,
-                    'name' => 'foo'
-                ],
-                [
-                    'id' => 456,
-                    'name' => 'bar'
-                ]
-            ]
-        ];
-        $this->controller->expects($this->at(2))
-            ->method('makeRestCall')
-            ->with('User', 'GET', $params)
-            ->will($this->returnValue($response));
-
         $expectedData = [
             [
                 'value' => '',
@@ -311,5 +258,123 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
 
         $json = $this->controller->entityListAction();
         $this->assertEquals($expectedData, $json->getVariables());
+    }
+
+    /**
+     * Test index action with multiple reassign submitted
+     * @group task
+     */
+    public function testIndexActionWithMultipleReassignSubmitted()
+    {
+        $this->request->expects($this->any())
+            ->method('isPost')
+            ->will($this->returnValue(true));
+
+        $this->controller->expects($this->any())
+            ->method('getFromRoute')
+            ->with('licence')
+            ->will($this->returnValue(1));
+
+        $params = $this->getMock('\stdClass', ['fromPost']);
+
+        $params->expects($this->at(0))
+            ->method('fromPost')
+            ->will($this->returnValue('re-assign task'));
+
+        $params->expects($this->at(1))
+            ->method('fromPost')
+            ->will($this->returnValue([1, 2]));
+
+        $this->controller->expects($this->any())
+            ->method('params')
+            ->will($this->returnValue($params));
+
+        $routeParams = [
+            'action' => 'reassign',
+            'task'  => '1-2'
+        ];
+        $mockRoute = $this->getMock('\stdClass', ['toRoute']);
+        $mockRoute->expects($this->once())
+            ->method('toRoute')
+            ->with('task_action', $routeParams)
+            ->will($this->returnValue('mockResponse'));
+
+        $this->controller->expects($this->any())
+            ->method('redirect')
+            ->will($this->returnValue($mockRoute));
+
+        $response = $this->controller->indexAction();
+
+        $this->assertEquals('mockResponse', $response);
+    }
+
+    /**
+     * Mock the rest call
+     *
+     * @param string $service
+     * @param string $method
+     * @param array $data
+     * @param array $bundle
+     */
+    public function mockRestCall($service, $method, $data = array(), $bundle = array())
+    {
+        $standardResponse = ['Results' => [['id' => 123,'name' => 'foo']]];
+        $altResponse = ['Results' => [['id' => 123,'description' => 'foo']]];
+        $userListResponse = [
+            'Results' => [
+                [
+                    'id' => 123,
+                    'name' => 'foo'
+                ],
+                [
+                    'id' => 456,
+                    'name' => 'bar'
+                ]
+            ]
+        ];
+
+        if ($service == 'TaskSearchView' && $method == 'GET' && $data == $this->taskSearchViewExpectedData) {
+            return [];
+        }
+        if ($service == 'TaskSearchView' && $method == 'GET' && $data == $this->taskSearchViewExpectedDataVar1) {
+            return [];
+        }
+        if ($service == 'Team' && $method == 'GET' && $data == $this->standardListData) {
+            return $standardResponse;
+        }
+        if ($service == 'User' && $method == 'GET' && $data == $this->extendedListData) {
+            return $standardResponse;
+        }
+        if ($service == 'User' && $method == 'GET' && $data == $this->extendedListDataVariation1) {
+            return $standardResponse;
+        }
+        if ($service == 'User' && $method == 'GET' && $data == $this->userList) {
+            return $userListResponse;
+        }
+        if ($service == 'TaskSubCategory' && $method == 'GET' && $data == $this->extendedListData) {
+            return $standardResponse;
+        }
+        if ($service == 'TaskSubCategory' && $method == 'GET' && $data == $this->extendedListDataVariation1) {
+            return $standardResponse;
+        }
+        if ($service == 'Category' && $method == 'GET' && $data == $this->altListData) {
+            return $altResponse;
+        }
+
+    }
+
+    public function setUpAction($action = '')
+    {
+        $paramsMock = $this->getMock('\StdClass', array('fromPost'));
+
+        $paramsMock->expects($this->any())
+                ->method('fromPost')
+                ->with('action')
+                ->will($this->returnValue($action));
+
+        $this->controller->expects($this->any())
+            ->method('params')
+            ->will($this->returnValue($paramsMock));
+
     }
 }
