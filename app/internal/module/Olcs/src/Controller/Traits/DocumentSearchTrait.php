@@ -94,7 +94,6 @@ trait DocumentSearchTrait
             array('query' => $this->getRequest()->getQuery())
         );
 
-        //var_dump($filters);exit(0);
         $table = $this->getTable(
             'documents',
             $documents,
