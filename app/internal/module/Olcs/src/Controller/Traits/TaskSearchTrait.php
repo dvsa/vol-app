@@ -115,7 +115,7 @@ trait TaskSearchTrait
         return $table;
     }
 
-    /** 
+    /**
      * Hold processing of task actions
      *
      * @param string $type
@@ -179,7 +179,7 @@ trait TaskSearchTrait
         return false;
     }
 
-    /** 
+    /**
      * Get task details
      *
      * @param int $id
