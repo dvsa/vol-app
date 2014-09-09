@@ -469,10 +469,10 @@ return array_merge(
                 ]
             ]
         ],
-        'case_convictions' => [
+        /* 'case_convictions' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/licence/[:licence]/case/:case/action/manage/convictions',
+                'route' => '/case/:case/action/manage/convictions',
                 'constraints' => [
                     'case' => '[0-9]+',
                     'statement' => '[0-9]+'
@@ -482,7 +482,7 @@ return array_merge(
                     'action' => 'index'
                 ]
             ]
-        ],
+        ], */
         'conviction_ajax' => [
             'type' => 'Literal',
             'options' => [
@@ -556,9 +556,15 @@ return array_merge(
         'conviction' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/licence/[:licence]/case/[:case]/conviction[/:action][/][:id]',
+                'route' => '/case/:case/conviction/:action[/:conviction]',
+                'constraints' => [
+                    'case' => '[0-9]+',
+                    'action' => '[a-z]+',
+                    'conviction' => '[0-9]+'
+                ],
                 'defaults' => [
                     'controller' => 'CaseConvictionController',
+                    'action' => 'index',
                 ]
             ]
         ],

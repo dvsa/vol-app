@@ -18,7 +18,7 @@ return array(
             'CaseStatementController' => 'Olcs\Controller\CaseStatementController',
             'CaseAppealController' => 'Olcs\Controller\CaseAppealController',
             'CaseComplaintController' => 'Olcs\Controller\CaseComplaintController',
-            'CaseConvictionController' => 'Olcs\Controller\CaseConvictionController',
+            'CaseConvictionController' => 'Olcs\Controller\Cases\Conviction\ConvictionController',
             'CaseSubmissionController' => 'Olcs\Controller\Cases\Submission\SubmissionController',
             'SubmissionController' => 'Olcs\Controller\Submission\SubmissionController',
             'CaseStayController' => 'Olcs\Controller\CaseStayController',
