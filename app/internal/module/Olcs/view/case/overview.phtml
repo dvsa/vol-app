@@ -1,9 +1,14 @@
 <?php $case = $this->placeholder('case')->getValue(); ?>
+
+<h4><?php echo $this->translate($this->navigation('navigation')->findOneBy('active', 1)->getLabel()); ?>
+    <a href="<?php echo $this->url('case', ['case' => $case['id'], 'action' => 'edit'], [], false); ?>" class="action--secondary right-aligned"><?php echo $this->translate('Edit Case'); ?></a>
+</h4>
+
 <div class="read-only">
     <div class="read-only__header">
         <dl>
             <dt>Open Date:</dt>
-            <dd><?php /* die('<pre>' . print_r($case, 1)); */ echo $this->dateFormat(\DateTime::createFromFormat(\DateTime::ISO8601, $case['openDate']), \IntlDateFormatter::GREGORIAN); ?></dd>
+            <dd><?php echo $this->dateFormat(\DateTime::createFromFormat(\DateTime::ISO8601, $case['openDate']), \IntlDateFormatter::GREGORIAN); ?></dd>
             <dt>ECMS</dt>
             <dd><?php echo $case['ecmsNo']; ?></dd>
             <dt>Description</dt>

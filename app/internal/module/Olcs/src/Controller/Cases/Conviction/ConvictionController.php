@@ -10,101 +10,107 @@ namespace Olcs\Controller\Cases\Conviction;
 
 use Zend\View\Model\ViewModel;
 use Zend\Json\Json as Json;
-use Olcs\Controller\Traits\DeleteActionTrait;
+//use Olcs\Controller\Traits\DeleteActionTrait;
 use Olcs\Controller\Traits\DefendantSearchTrait;
+// Olcs
+use Olcs\Controller as OlcsController;
+use Olcs\Controller\Traits as ControllerTraits;
 
 /**
  * Case Conviction Controller
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class CaseConvictionController extends CaseController
+class ConvictionController extends OlcsController\CrudAbstract
 {
-    use DeleteActionTrait;
     use DefendantSearchTrait;
+    use ControllerTraits\CaseControllerTrait;
 
-    public function getDeleteServiceName()
-    {
-        return 'Conviction';
-    }
+    /**
+     * Identifier name
+     *
+     * @var string
+     */
+    protected $identifierName = 'conviction';
+
+    /**
+     * Holds the form name
+     *
+     * @var string
+     */
+    protected $formName = 'conviction';
+
+    /**
+     * The current page's extra layout, over and above the
+     * standard base template, a sibling of the base though.
+     *
+     * @var string
+     */
+    protected $pageLayout = 'case';
+
+    protected $pageLayoutInner = 'case/inner-layout';
+
+    /**
+     * Holds the service name
+     *
+     * @var string
+     */
+    protected $service = 'Conviction';
+
+    /**
+     * Holds an array of variables for the default
+     * index list page.
+     */
+    protected $listVars = [
+        'case',
+    ];
+
+    /**
+     * Data map
+     *
+     * @var array
+    */
+    protected $dataMap = array(
+        'main' => array(
+            'mapFrom' => array(
+                'data'
+            )
+        )
+    );
+
+    /**
+     * Holds the Data Bundle
+     *
+     * @var array
+    */
+    protected $dataBundle = array(
+        'children' => array(
+            'case' => array(
+                'properties' => 'ALL'
+            ),
+            'convictionCategory' => array(
+                'properties' => array(
+                    'id',
+                    'description'
+                ),
+                'children' => array(
+                    'parent' => array(
+                        'properties' => array(
+                            'id',
+                            'description'
+                        )
+                    )
+                )
+            ),
+            'defendantType' => array(
+                'properties' => 'ALL'
+            )
+        )
+    );
 
     public function indexAction()
     {
-        $translator = $this->getServiceLocator()->get('translator');
-
-        $postParams = $this->params()->fromPost();
-        $routeParams = $this->params()->fromRoute();
-
-        if (isset($postParams['action'])) {
-            return $this->redirect()->toRoute(
-                $postParams['table'],
-                array(
-                    'licence' => $routeParams['licence'],
-                    'case' => $routeParams['case'],
-                    'id' => isset($postParams['id']) ? $postParams['id'] : '',
-                    'action' => strtolower(
-                        $postParams['action']
-                    )
-                )
-            );
-        }
-
-        $view = $this->getView();
-        $tabs = $this->getTabInformationArray();
-        $action = 'convictions';
-        $caseId = $routeParams['case'];
-
-        $case = $this->getCase($caseId);
-
-        $form = $this->generateCommentForm($case);
-
-        $summary = $this->getCaseSummaryArray($case);
-
-        $bundle = $this->getIndexBundle();
-
-        $results = $this->makeRestCall(
-            'Conviction',
-            'GET',
-            array(
-                'case' => $caseId,
-                'sort' => 'convictionDate',
-                'order' => 'DESC'
-            ),
-            $bundle
-        );
-
-        $config = $this->getServiceLocator()->get('Config');
-
-        foreach ($results['Results'] as $key => $row) {
-            if (count($row['convictionCategory']) &&
-                !$this->isUserDefinedConvictionCategory($row['convictionCategory']['id'])) {
-                $results['Results'][$key]['categoryText'] = $row['convictionCategory']['description'];
-            }
-
-            $results['Results'][$key]['defendantType'] = $translator->translate($row['defendantType']['id']);
-        }
-
-        $data = [];
-        $data['url'] = $this->url();
-
-        $table = $this->getServiceLocator()->get('Table')->buildTable('convictions', $results, $data);
-
-        $legacyOffencesTable = $this->getLegacyOffencesTable($case['legacyOffences']);
-
-        $view->setVariables(
-            [
-                'case' => $case,
-                'tabs' => $tabs,
-                'tab' => $action,
-                'summary' => $summary,
-                'table' => $table,
-                'commentForm' => $form,
-                'legacyOffencesTable' => $legacyOffencesTable
-            ]
-        );
-
-        $view->setTemplate('case/manage');
-        return $view;
+        return parent::indexAction();
     }
 
     /**
@@ -112,26 +118,14 @@ class CaseConvictionController extends CaseController
      */
     public function dealtAction()
     {
-        $params = $this->getParams(['id', 'case', 'licence']);
+        $conviction = $this->loadCurrent();
 
-        if (!isset($params['id']) || !is_numeric($params['id'])) {
-            return $this->notFoundAction();
-        }
+        $data = array_intersect_key($conviction, array_flip(['id', 'version']));
+        $data['isDealtWith'] = 'Y';
 
-        $case = $this->makeRestCall('Conviction', 'GET', array('id' => $params['id']));
+        $this->save($data);
 
-        $data = array_intersect_key($case, array_flip(['id', 'version']));
-        $data['dealtWith'] = 'Y';
-
-        $this->processEdit($data, 'Conviction');
-
-        return $this->redirect()->toRoute(
-            'case_convictions',
-            [
-                'case' => $params['case'],
-                'licence' => $params['licence']
-            ]
-        );
+        return $this->redirect()->toRoute('conviction', ['action' => 'index', 'conviction' => null], [], true);
     }
 
     /**
@@ -141,7 +135,7 @@ class CaseConvictionController extends CaseController
      */
     public function addAction()
     {
-        $routeParams = $this->getParams(array('case', 'licence', 'id'));
+        $routeParams = $this->getParams(array('case', 'id'));
 
         // @todo We shouldn't be accessing the POST global we should be using the request
         if (isset($_POST['cancel-conviction'])) {
@@ -150,14 +144,6 @@ class CaseConvictionController extends CaseController
                 array('case' => $routeParams['case'], 'licence' => $routeParams['licence'])
             );
         }
-
-        // Below is for setting route params for the breadcrumb
-        $this->setBreadcrumb(
-            array(
-                'licence_case_list/pagination' => array('licence' => $routeParams['licence']),
-                'case_convictions' => array('case' => $routeParams['case'], 'licence' => $routeParams['licence'])
-            )
-        );
 
         $data = array('case' => $routeParams['case']);
         $results = $this->makeRestCall('Cases', 'GET', array('id' => $routeParams['case']));
@@ -223,60 +209,10 @@ class CaseConvictionController extends CaseController
      */
     public function editAction()
     {
-        $routeParams = $this->getParams(
-            array(
-                'case',
-                'licence',
-                'id',
-            )
-        );
-        if (isset($_POST['cancel-conviction'])) {
-            return $this->redirect()->toRoute(
-                'case_convictions',
-                array('case' => $routeParams['case'], 'licence' => $routeParams['licence'])
-            );
-        }
-
-        $this->setBreadcrumb(
-            array(
-                'licence_case_list/pagination' => array('licence' => $routeParams['licence']),
-                'case_convictions' => array('case' => $routeParams['case'], 'licence' => $routeParams['licence'])
-            )
-        );
-
-        $bundle = array(
-            'children' => array(
-                'case' => array(
-                    'properties' => 'ALL'
-                ),
-                'convictionCategory' => array(
-                    'properties' => array(
-                        'id',
-                        'description'
-                    ),
-                    'children' => array(
-                        'parent' => array(
-                            'properties' => array(
-                                'id',
-                                'description'
-                            )
-                        )
-                    )
-                ),
-                'defendantType' => array(
-                    'properties' => 'ALL'
-                )
-            )
-        );
-
-        $data = $this->makeRestCall('Conviction', 'GET', array('id' => $routeParams['id']), $bundle);
+        /* $data = $this->loadCurrent();
 
         if (isset($data['case'])) {
             $data['case'] = $data['case']['id'];
-        }
-
-        if (empty($routeParams['case']) || empty($routeParams['licence']) || empty($data)) {
-            return $this->getResponse()->setStatusCode(404);
         }
 
         if (!empty($data['convictionCategory'])) {
@@ -292,13 +228,14 @@ class CaseConvictionController extends CaseController
 
         $data['defendantType'] = $data['defendantType']['id'];
 
-        $data['id'] = $routeParams['id'];
         $data['defendant-details'] = $data;
         $data['offence'] = $data;
 
         // set entity data to make form builder aware of fieldsets it has to
         // generate
         $this->setEntityData($data);
+
+        //die('<pre>' . print_r($data, 1));
 
         $form = $this->generateFormWithData(
             'conviction',
@@ -349,9 +286,11 @@ class CaseConvictionController extends CaseController
             ->get('convictionCategory')
             ->setValueOptions($formSubCategory);
 
+        $this->getViewHelperManager()->get('placeholder')->getContainer('form')->set($form); */
+        //die(print_r($this->loadScripts(['conviction']), 1));
         $view = new ViewModel(
             array(
-                'form' => $form,
+                //'form' => $form,
                 'inlineScript' => $this->loadScripts(['conviction']),
                 'params' => array(
                     'pageTitle' => 'edit-conviction',
@@ -360,7 +299,7 @@ class CaseConvictionController extends CaseController
             )
         );
 
-        $view->setTemplate('conviction/form');
+        $view->setTemplate('crud/form');
         return $view;
     }
 
@@ -376,13 +315,15 @@ class CaseConvictionController extends CaseController
         //two unsets here keeps line length under 120
         //keeps phpunit happy as it isn't detecting the code has
         //been run when the parameters are on more than one line!
-        unset(
-        $data['defendant-details'], $data['cancel-conviction'], $data['offence'], $data['save']
-        );
-
-        unset(
-        $data['cancel'], $data['conviction'], $data['conviction-operator']
-        );
+        $fieldsToUnset = [
+            'defendant-details', 'cancel-conviction', 'offence',
+            'save', 'cancel', 'conviction','conviction-operator'
+        ];
+        foreach ($fieldsToUnset as $field) {
+            if (isset($data[$field])) {
+                unset($data[$field]);
+            }
+        }
 
         //we only have category text in the conviction table for the user defined type
         if (!$this->isUserDefinedConvictionCategory($data['category'])) {
@@ -393,18 +334,12 @@ class CaseConvictionController extends CaseController
 
         if (strtolower($routeParams['action']) == 'edit' || strtolower($routeParams['action']) == 'dealt') {
             unset($data['case'], $data['parentCategory']);
-            $result = $this->processEdit($data, 'Conviction');
+            $this->processEdit($data, 'Conviction');
         } else {
-            $result = $this->processAdd($data, 'Conviction');
+            $this->processAdd($data, 'Conviction');
         }
 
-        return $this->redirect()->toRoute(
-            'case_convictions',
-            array(
-                'case' => $routeParams['case'],
-                'licence' => $routeParams['licence']
-            )
-        );
+        return $this->redirect()->toRoute('conviction', ['action' => 'index'], [], true);
     }
 
     /**
@@ -598,5 +533,18 @@ class CaseConvictionController extends CaseController
         );
         $view->setTemplate('case/view-offence');
         return $view;
+    }
+
+    /**
+     * Returns true if the category id is a type allowing a user defined description
+     *
+     * @param int $categoryId
+     *
+     * @return bool
+     */
+    public function isUserDefinedConvictionCategory($categoryId)
+    {
+        $userDefined = array(168);
+        return in_array($categoryId, $userDefined);
     }
 }

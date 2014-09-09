@@ -321,19 +321,6 @@ class CaseController extends AbstractCasesController
     }
 
     /**
-     * Returns true if the category id is a type allowing a user defined description
-     *
-     * @param int $categoryId
-     *
-     * @return bool
-     */
-    /* public function isUserDefinedConvictionCategory($categoryId)
-    {
-        $userDefined = array(168);
-        return in_array($categoryId, $userDefined);
-    } */
-
-    /**
      * Returns true or false depending on whether a case has an appeal which hasn't been withdrawn
      *
      * @param int $caseId

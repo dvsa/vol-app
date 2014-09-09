@@ -72,6 +72,8 @@ class CrudAbstract extends CommonController\AbstractSectionController implements
 
         $results = $this->makeRestCall($this->getService(), 'GET', $params, $this->getDataBundle());
 
+        //die('<pre>' . print_r($results, 1));
+
         // CR: This should be improved by makeing the table itself a view helper - which it should be!
         $this->getViewHelperManager()->get('placeholder')->getContainer('table')->set(
             $this->buildTable($this->getIdentifierName(), $results, $params)

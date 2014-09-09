@@ -11,17 +11,18 @@ return array(
                 'type' => 'select-noempty',
                 'label' => 'documents-home.data.category',
             ),
-            'subCategory' => array(
+            'documentSubCategory' => array(
                 'type' => 'select-noempty',
                 'label' => 'documents-home.data.sub_category',
             ),
-            'format' => array(
+            'fileExtension' => array(
                 'type' => 'select-noempty',
                 'label' => 'documents-home.data.format',
             ),
-            'digitalOnly' => array(
-                'type' => 'checkbox',
+            'isDigital' => array(
+                'type' => 'select-noempty',
                 'label' => 'documents-home.data.digitalonly',
+                'value_options' => 'document_types'
             )
         )
     )

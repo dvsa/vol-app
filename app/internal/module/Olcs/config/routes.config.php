@@ -118,6 +118,21 @@ return array_merge(
                 ]
             ]
         ],
+        'task_action' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/task[/:action][/:task][/type/:type/:typeId]',
+                'constraints' => [
+                    'task' => '[0-9-]+',
+                    'type' => '[a-z]+',
+                    'typeId' => '[0-9]+'
+                ],
+                'defaults' => [
+                    'controller' => 'TaskController',
+                ]
+            ],
+            'may_terminate' => true,
+        ],
 
         // These routes are for the licence page
 
@@ -375,20 +390,6 @@ return array_merge(
                     ],
                     'may_terminate' => true,
                 ],
-                'task_action' => [
-                    'type' => 'segment',
-                    'options' => [
-                        'route' => '/task[/:action][/:task]',
-                        'constraints' => [
-                            'task' => '[0-9]+'
-                        ],
-                        'defaults' => [
-                            'type'       => 'licence',
-                            'controller' => 'TaskController'
-                        ]
-                    ],
-                    'may_terminate' => true,
-                ],
             ]
         ],
 
@@ -556,17 +557,16 @@ return array_merge(
         'conviction' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/case/:case/conviction/:action[/:conviction]',
+                'route' => '/case/:case/conviction[/:action][/:conviction]',
                 'constraints' => [
                     'case' => '[0-9]+',
-                    'action' => '[a-z]+',
                     'conviction' => '[0-9]+'
                 ],
                 'defaults' => [
                     'controller' => 'CaseConvictionController',
                     'action' => 'index',
                 ]
-            ]
+            ],
         ],
         'offence' => [
             'type' => 'segment',
@@ -783,13 +783,13 @@ return array_merge(
                 ]
             ]
         ],
-        'tasks' => [
+        'entity_lists' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/tasks/[:type]/[:value]',
+                'route' => '/list/[:type]/[:value]',
                 'defaults' => [
                     'controller' => 'IndexController',
-                    'action' => 'taskFilter'
+                    'action' => 'entityList'
                 ]
             ]
         ]
