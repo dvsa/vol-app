@@ -145,19 +145,6 @@ class VehicleControllerTest extends AbstractLicenceDetailsControllerTestCase
     }
 
     /**
-     * Test indexAction with submit
-     */
-    public function testIndexActionWithSubmit()
-    {
-        $this->setUpAction('index', null, array('foo' => 'bar'));
-
-        $this->controller->setEnabledCsrf(false);
-        $response = $this->controller->indexAction();
-
-        $this->assertInstanceOf('Zend\Http\Response', $response);
-    }
-
-    /**
      * Test addAction
      */
     public function testAddAction()

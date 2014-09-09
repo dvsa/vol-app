@@ -51,7 +51,10 @@ class VehiclePsvController extends AbstractLicenceDetailsController
     protected $dataBundle = array(
         'properties' => array(
             'id',
-            'version'
+            'version',
+            'totAuthSmallVehicles',
+            'totAuthMediumVehicles',
+            'totAuthLargeVehicles'
         ),
         'children' => array(
             'licenceVehicles' => array(
