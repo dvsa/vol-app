@@ -3,7 +3,7 @@
 /**
  * Task controller tests
  *
- * @author <nick.payne@valtech.co..uk>
+ * @author Nick Payne <nick.payne@valtech.co..uk>
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 
@@ -14,7 +14,7 @@ use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 /**
  * Task controller tests
  *
- * @author <nick.payne@valtech.co..uk>
+ * @author Nick Payne <nick.payne@valtech.co..uk>
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 class TaskControllerTest extends AbstractHttpControllerTestCase
@@ -232,7 +232,7 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
                     )
                 )
             );
-        
+
         $toArray = $this->getMock('\stdClass', ['toArray']);
         $toArray->expects($this->any())
             ->method('toArray')
@@ -492,7 +492,7 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
                     )
                 )
             );
-        
+
         $toArray = $this->getMock('\stdClass', ['toArray']);
         $toArray->expects($this->any())
             ->method('toArray')
@@ -749,16 +749,9 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
             ->method('getForm')
             ->will($this->returnValue($form));
 
-//<<<<<<< HEAD
         $this->controller->expects($this->once())
             ->method('processEdit')
             ->will($this->returnValue(['id' => 1234]));
-/*=======
-        $fromRoute->expects($this->at(3))
-            ->method('fromRoute')
-            ->with('licence')
-            ->will($this->returnValue(123));
->>>>>>> develop */
 
         $this->controller->expects($this->any())
             ->method('getFromRoute')
