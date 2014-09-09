@@ -557,17 +557,16 @@ return array_merge(
         'conviction' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/case/:case/conviction/:action[/:conviction]',
+                'route' => '/case/:case/conviction[/:action][/:conviction]',
                 'constraints' => [
                     'case' => '[0-9]+',
-                    'action' => '[a-z]+',
                     'conviction' => '[0-9]+'
                 ],
                 'defaults' => [
                     'controller' => 'CaseConvictionController',
                     'action' => 'index',
                 ]
-            ]
+            ],
         ],
         'offence' => [
             'type' => 'segment',

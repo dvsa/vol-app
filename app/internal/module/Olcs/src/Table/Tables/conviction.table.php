@@ -10,6 +10,7 @@ return array(
             'actions' => array(
                 'add' => array('class' => 'primary'),
                 'edit' => array('requireRows' => true),
+                'dealt' => array('class' => 'warning', 'requireRows' => true, 'value' => 'Mark as Dealt With'),
                 'delete' => array('class' => 'warning', 'requireRows' => true)
             )
         ),
@@ -33,7 +34,7 @@ return array(
             'title' => 'Date of conviction',
             'formatter' => function ($data, $column) {
 
-                $url = $this->generateUrl(['action' => 'edit', 'id' => $data['id']], 'conviction', true);
+                $url = $this->generateUrl(['action' => 'edit', 'conviction' => $data['id']], 'conviction', true);
 
                 if ($data['convictionDate'] == null) {
                     return '<a href="' . $url . '">N/A</a>';
