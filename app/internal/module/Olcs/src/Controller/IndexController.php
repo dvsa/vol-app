@@ -5,6 +5,7 @@
  *
  * @author Mike Cooper <michael.cooper@valtech.co.uk>
  * @author Nick Payne <nick.payne@valtech.co.uk>
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 namespace Olcs\Controller;
 
@@ -19,6 +20,7 @@ use Olcs\Controller\Traits\TaskSearchTrait;
  *
  * @author Mike Cooper <michael.cooper@valtech.co.uk>
  * @author Nick Payne <nick.payne@valtech.co.uk>
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 class IndexController extends AbstractController
 {
@@ -31,6 +33,12 @@ class IndexController extends AbstractController
 
     public function indexAction()
     {
+
+        $redirect = $this->processTasksActions();
+        if ($redirect) {
+            return $redirect;
+        }
+
         $filters = $this->mapTaskFilters();
 
         $view = new ViewModel(
@@ -79,8 +87,8 @@ class IndexController extends AbstractController
         );
 
         if (!isset($map[$key])) {
-            // @TODO handle separately?
-            throw new \Exception("Invalid entity filter key: " . $key);
+            // handle separately?
+            throw new \Exception("Invalid task filter key: " . $key);
         }
 
         $lookup = $map[$key];
