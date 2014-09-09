@@ -88,6 +88,410 @@ class VehiclePsvControllerTest extends AbstractLicenceDetailsControllerTestCase
     }
 
     /**
+     * Test indexAction with crud action
+     */
+    public function testIndexActionWithSmallAddCrudActionWithTooManyVehicles()
+    {
+        $this->setUpAction('index', null, array('action' => 'small-add'));
+
+        $bundle = array(
+            'properties' => array(
+                'totAuthSmallVehicles'
+            )
+        );
+
+        $response = array(
+            'totAuthSmallVehicles' => 1
+        );
+
+        $this->setRestResponse('Licence', 'GET', $response, $bundle);
+
+        $totalNumberOfVehiclesResponse = array(
+            'licenceVehicles' => array(
+                array(
+                    'vehicle' => array(
+                        'id' => 1,
+                        'psvType' => array(
+                            'id' => 'vhl_t_a'
+                        )
+                    )
+                )
+            )
+        );
+
+        $totalNumberOfVehiclesBundle = array(
+            'properties' => array(),
+            'children' => array(
+                'licenceVehicles' => array(
+                    'properties' => array(),
+                    'children' => array(
+                        'vehicle' => array(
+                            'properties' => array(
+                                'id'
+                            ),
+                            'children' => array(
+                                'psvType' => array(
+                                    'properties' => array(
+                                        'id'
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        );
+
+        $this->setRestResponse('Licence', 'GET', $totalNumberOfVehiclesResponse, $totalNumberOfVehiclesBundle);
+
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->indexAction();
+
+        $flashMessenger = $this->controller->plugin('FlashMessenger');
+
+        $this->assertEquals(1, count($flashMessenger->getCurrentMessagesFromNamespace('error')));
+
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
+     * Test indexAction with crud action
+     *
+     * @group here
+     */
+    public function testIndexActionWithSmallAddCrudActionWithNotEnoughVehicles()
+    {
+        $this->setUpAction('index', null, array('action' => 'small-add'));
+
+        $bundle = array(
+            'properties' => array(
+                'totAuthSmallVehicles'
+            )
+        );
+
+        $response = array(
+            'totAuthSmallVehicles' => 10
+        );
+
+        $this->setRestResponse('Licence', 'GET', $response, $bundle);
+
+        $totalNumberOfVehiclesResponse = array(
+            'licenceVehicles' => array(
+                array(
+                    'vehicle' => array(
+                        'id' => 1,
+                        'psvType' => array(
+                            'id' => 'vhl_t_a'
+                        )
+                    )
+                )
+            )
+        );
+
+        $totalNumberOfVehiclesBundle = array(
+            'properties' => array(),
+            'children' => array(
+                'licenceVehicles' => array(
+                    'properties' => array(),
+                    'children' => array(
+                        'vehicle' => array(
+                            'properties' => array(
+                                'id'
+                            ),
+                            'children' => array(
+                                'psvType' => array(
+                                    'properties' => array(
+                                        'id'
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        );
+
+        $this->setRestResponse('Licence', 'GET', $totalNumberOfVehiclesResponse, $totalNumberOfVehiclesBundle);
+
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->indexAction();
+
+        $flashMessenger = $this->controller->plugin('FlashMessenger');
+
+        $this->assertEquals(0, count($flashMessenger->getCurrentMessagesFromNamespace('error')));
+
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
+     * Test indexAction with crud action
+     */
+    public function testIndexActionWithMediumAddCrudActionWithTooManyVehicles()
+    {
+        $this->setUpAction('index', null, array('action' => 'medium-add'));
+
+        $bundle = array(
+            'properties' => array(
+                'totAuthMediumVehicles'
+            )
+        );
+
+        $response = array(
+            'totAuthMediumVehicles' => 1
+        );
+
+        $this->setRestResponse('Licence', 'GET', $response, $bundle);
+
+        $totalNumberOfVehiclesResponse = array(
+            'licenceVehicles' => array(
+                array(
+                    'vehicle' => array(
+                        'id' => 1,
+                        'psvType' => array(
+                            'id' => 'vhl_t_b'
+                        )
+                    )
+                )
+            )
+        );
+
+        $totalNumberOfVehiclesBundle = array(
+            'properties' => array(),
+            'children' => array(
+                'licenceVehicles' => array(
+                    'properties' => array(),
+                    'children' => array(
+                        'vehicle' => array(
+                            'properties' => array(
+                                'id'
+                            ),
+                            'children' => array(
+                                'psvType' => array(
+                                    'properties' => array(
+                                        'id'
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        );
+
+        $this->setRestResponse('Licence', 'GET', $totalNumberOfVehiclesResponse, $totalNumberOfVehiclesBundle);
+
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->indexAction();
+
+        $flashMessenger = $this->controller->plugin('FlashMessenger');
+
+        $this->assertEquals(1, count($flashMessenger->getCurrentMessagesFromNamespace('error')));
+
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
+     * Test indexAction with crud action
+     */
+    public function testIndexActionWithMediumAddCrudActionWithNotEnoughVehicles()
+    {
+        $this->setUpAction('index', null, array('action' => 'medium-add'));
+
+        $bundle = array(
+            'properties' => array(
+                'totAuthMediumVehicles'
+            )
+        );
+
+        $response = array(
+            'totAuthMediumVehicles' => 10
+        );
+
+        $this->setRestResponse('Licence', 'GET', $response, $bundle);
+
+        $totalNumberOfVehiclesResponse = array(
+            'licenceVehicles' => array(
+                array(
+                    'vehicle' => array(
+                        'id' => 1,
+                        'psvType' => array(
+                            'id' => 'vhl_t_b'
+                        )
+                    )
+                )
+            )
+        );
+
+        $totalNumberOfVehiclesBundle = array(
+            'properties' => array(),
+            'children' => array(
+                'licenceVehicles' => array(
+                    'properties' => array(),
+                    'children' => array(
+                        'vehicle' => array(
+                            'properties' => array(
+                                'id'
+                            ),
+                            'children' => array(
+                                'psvType' => array(
+                                    'properties' => array(
+                                        'id'
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        );
+
+        $this->setRestResponse('Licence', 'GET', $totalNumberOfVehiclesResponse, $totalNumberOfVehiclesBundle);
+
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->indexAction();
+
+        $flashMessenger = $this->controller->plugin('FlashMessenger');
+
+        $this->assertEquals(0, count($flashMessenger->getCurrentMessagesFromNamespace('error')));
+
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
+     * Test indexAction with crud action
+     */
+    public function testIndexActionWithLargeAddCrudActionWithTooManyVehicles()
+    {
+        $this->setUpAction('index', null, array('action' => 'large-add'));
+
+        $bundle = array(
+            'properties' => array(
+                'totAuthLargeVehicles'
+            )
+        );
+
+        $response = array(
+            'totAuthLargeVehicles' => 1
+        );
+
+        $this->setRestResponse('Licence', 'GET', $response, $bundle);
+
+        $totalNumberOfVehiclesResponse = array(
+            'licenceVehicles' => array(
+                array(
+                    'vehicle' => array(
+                        'id' => 1,
+                        'psvType' => array(
+                            'id' => 'vhl_t_c'
+                        )
+                    )
+                )
+            )
+        );
+
+        $totalNumberOfVehiclesBundle = array(
+            'properties' => array(),
+            'children' => array(
+                'licenceVehicles' => array(
+                    'properties' => array(),
+                    'children' => array(
+                        'vehicle' => array(
+                            'properties' => array(
+                                'id'
+                            ),
+                            'children' => array(
+                                'psvType' => array(
+                                    'properties' => array(
+                                        'id'
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        );
+
+        $this->setRestResponse('Licence', 'GET', $totalNumberOfVehiclesResponse, $totalNumberOfVehiclesBundle);
+
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->indexAction();
+
+        $flashMessenger = $this->controller->plugin('FlashMessenger');
+
+        $this->assertEquals(1, count($flashMessenger->getCurrentMessagesFromNamespace('error')));
+
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
+     * Test indexAction with crud action
+     */
+    public function testIndexActionWithLargeAddCrudActionWithNotEnoughVehicles()
+    {
+        $this->setUpAction('index', null, array('action' => 'large-add'));
+
+        $bundle = array(
+            'properties' => array(
+                'totAuthLargeVehicles'
+            )
+        );
+
+        $response = array(
+            'totAuthLargeVehicles' => 10
+        );
+
+        $this->setRestResponse('Licence', 'GET', $response, $bundle);
+
+        $totalNumberOfVehiclesResponse = array(
+            'licenceVehicles' => array(
+                array(
+                    'vehicle' => array(
+                        'id' => 1,
+                        'psvType' => array(
+                            'id' => 'vhl_t_c'
+                        )
+                    )
+                )
+            )
+        );
+
+        $totalNumberOfVehiclesBundle = array(
+            'properties' => array(),
+            'children' => array(
+                'licenceVehicles' => array(
+                    'properties' => array(),
+                    'children' => array(
+                        'vehicle' => array(
+                            'properties' => array(
+                                'id'
+                            ),
+                            'children' => array(
+                                'psvType' => array(
+                                    'properties' => array(
+                                        'id'
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        );
+
+        $this->setRestResponse('Licence', 'GET', $totalNumberOfVehiclesResponse, $totalNumberOfVehiclesBundle);
+
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->indexAction();
+
+        $flashMessenger = $this->controller->plugin('FlashMessenger');
+
+        $this->assertEquals(0, count($flashMessenger->getCurrentMessagesFromNamespace('error')));
+
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
      * Test addAction
      */
     public function testLargeAddAction()

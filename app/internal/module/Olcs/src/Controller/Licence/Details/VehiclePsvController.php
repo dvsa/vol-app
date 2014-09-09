@@ -81,6 +81,29 @@ class VehiclePsvController extends AbstractLicenceDetailsController
         )
     );
 
+    protected $totalNumberOfVehiclesBundle = array(
+        'properties' => array(),
+        'children' => array(
+            'licenceVehicles' => array(
+                'properties' => array(),
+                'children' => array(
+                    'vehicle' => array(
+                        'properties' => array(
+                            'id'
+                        ),
+                        'children' => array(
+                            'psvType' => array(
+                                'properties' => array(
+                                    'id'
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        )
+    );
+
     /**
      * Remove the trailer fields for PSV
      *
@@ -128,30 +151,12 @@ class VehiclePsvController extends AbstractLicenceDetailsController
     {
         $psvType = $this->getPsvTypeFromType($type);
 
-        $bundle = array(
-            'properties' => array(),
-            'children' => array(
-                'licenceVehicles' => array(
-                    'properties' => array(),
-                    'children' => array(
-                        'vehicle' => array(
-                            'properties' => array(
-                                'id'
-                            ),
-                            'children' => array(
-                                'psvType' => array(
-                                    'properties' => array(
-                                        'id'
-                                    )
-                                )
-                            )
-                        )
-                    )
-                )
-            )
+        $data = $this->makeRestCall(
+            'Licence',
+            'GET',
+            array('id' => $this->getLicenceId()),
+            $this->totalNumberOfVehiclesBundle
         );
-
-        $data = $this->makeRestCall('Licence', 'GET', array('id' => $this->getLicenceId()), $bundle);
 
         $count = 0;
 
