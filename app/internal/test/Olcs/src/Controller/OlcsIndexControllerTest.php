@@ -232,7 +232,7 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
         $this->assertTrue($view->terminate());
     }
 
-    public function testTaskFilterActionInvalidType()
+    public function testEntityListActionInvalidType()
     {
         $params = $this->getMock('\stdClass', ['fromRoute']);
 
@@ -246,16 +246,16 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue('invalid'));
 
         try {
-            $this->controller->taskFilterAction();
+            $this->controller->entityListAction();
         } catch (\Exception $e) {
-            $this->assertEquals('Invalid task filter key: invalid', $e->getMessage());
+            $this->assertEquals('Invalid entity filter key: invalid', $e->getMessage());
             return;
         }
 
         $this->fail('Expected exception not raised');
     }
 
-    public function testTaskFilterActionValidType()
+    public function testTaskEntityListActionValidType()
     {
         $params = $this->getMock('\stdClass', ['fromRoute']);
 
@@ -309,7 +309,7 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
             ]
         ];
 
-        $json = $this->controller->taskFilterAction();
+        $json = $this->controller->entityListAction();
         $this->assertEquals($expectedData, $json->getVariables());
     }
 }
