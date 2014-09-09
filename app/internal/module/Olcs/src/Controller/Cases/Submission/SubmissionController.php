@@ -120,4 +120,15 @@ class SubmissionController extends OlcsController\CrudAbstract
 
         return parent::processLoad($data);
     }
+
+
+    /**
+     * Get form name. Overridden so as not to create a form called SubAction
+     *
+     * @return string
+     */
+    protected function getFormName()
+    {
+        return $this->formName;
+    }
 }
