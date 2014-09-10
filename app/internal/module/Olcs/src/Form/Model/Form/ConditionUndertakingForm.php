@@ -8,6 +8,7 @@ use Zend\Form\Annotation as Form;
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("condition-undertaking-form")
  * @Form\Attributes({"method":"post"})
+ * @Form\InputFilter("Common\Form\InputFilter")
  */
 class ConditionUndertakingForm
 {
