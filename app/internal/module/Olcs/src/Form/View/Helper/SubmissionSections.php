@@ -3,9 +3,11 @@
 namespace Olcs\Form\View\Helper;
 
 use Zend\View\Helper\AbstractHelper;
+use Zend\Form\ElementInterface;
 use Zend\I18n\Translator\TranslatorInterface as Translator;
 use Zend\I18n\Translator\TranslatorAwareInterface;
 use Zend\Form\Exception;
+use Olcs\Form\Element\SubmissionSections  as SubmissionSectionsElement;
 
 /**
  * View helper to render the submission sections element
@@ -22,25 +24,23 @@ class SubmissionSections extends AbstractHelper
      * @throws Exception\DomainException
      * @return string
      */
-    public function __invoke()
+    public function __invoke(ElementInterface $element)
     {
-        echo 'here';exit;
-        return 'submissionSections helper invoked';
-/*        if (!$element instanceof SubmissionSections) {
+        if (!$element instanceof SubmissionSectionsElement) {
             throw new Exception\InvalidArgumentException(sprintf(
                 '%s requires that the element is of type Olcs\Form\Element\SubmissionSections',
                 __METHOD__
             ));
         }
 
-        $name = $element->getName();
-        if (empty($name) && $name !== 0) {
-            throw new Exception\DomainException(sprintf(
-                '%s requires that the element has an assigned name; none discovered',
-                __METHOD__
-            ));
-        }
-*/
+        $formSelectPlugin = $this->view->plugin('formSelect');
+
+        $multiCheckboxPlugin = $this->view->plugin('formMultiCheckbox');
+
+        return  $formSelectPlugin->render($element->getSubmissionType()) . '<br /><br />' .
+                $multiCheckboxPlugin->render($element->getSubmissionSections());
+
+
     }
 
 }

@@ -79,7 +79,10 @@ return array(
             'pageTitle'    => 'Olcs\View\Helper\PageTitle',
             'pageSubtitle' => 'Olcs\View\Helper\PageSubtitle',
             'tableFilters' => 'Olcs\View\Helper\TableFilters',
-            'submissionSections' => 'Olcs\Form\View\Helper\SubmissionSections'
+            'formSubmissionSections' => 'Olcs\Form\View\Helper\SubmissionSections'
+        ),
+        'delegators' => array(
+            'formElement' => array('Olcs\Form\View\Helper\FormElementDelegatorFactory')
         )
     ),
     'local_forms_path' => array(

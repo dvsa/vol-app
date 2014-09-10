@@ -35,6 +35,8 @@ class SubmissionSectionsFactory implements FactoryInterface
 
         $submissionType->setOptions($options);
 
+        $submissionType->setName('submission_type');
+
         $service->setSubmissionType($submissionType);
 
         /** @var \Common\Form\Element\SubmissionSections $submissionSections */
@@ -48,6 +50,7 @@ class SubmissionSectionsFactory implements FactoryInterface
         ];
 
         $submissionSections->setOptions($submissionSectionsOptions);
+        $submissionSections->setName('submission_sections');
 
         $service->setSubmissionSections($submissionSections);
         return $service;
