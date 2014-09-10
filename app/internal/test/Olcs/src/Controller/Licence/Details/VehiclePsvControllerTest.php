@@ -1258,7 +1258,8 @@ class VehiclePsvControllerTest extends AbstractLicenceDetailsControllerTestCase
                     'platedWeight' => 100
                 ),
                 'licence-vehicle' => array(
-                    'confirm-add' => 'Y'
+                    'confirm-add' => 'Y',
+                    'receivedDate' => array('day' => '01', 'month' => '01', 'year' => '2014')
                 )
             )
         );
@@ -1318,7 +1319,8 @@ class VehiclePsvControllerTest extends AbstractLicenceDetailsControllerTestCase
                     'platedWeight' => 100
                 ),
                 'licence-vehicle' => array(
-                    'confirm-add' => 'Y'
+                    'confirm-add' => 'Y',
+                    'receivedDate' => array('day' => '01', 'month' => '01', 'year' => '2014')
                 )
             )
         );
@@ -1378,7 +1380,8 @@ class VehiclePsvControllerTest extends AbstractLicenceDetailsControllerTestCase
                     'platedWeight' => 100
                 ),
                 'licence-vehicle' => array(
-                    'confirm-add' => 'Y'
+                    'confirm-add' => 'Y',
+                    'receivedDate' => array('day' => '01', 'month' => '01', 'year' => '2014')
                 )
             )
         );
