@@ -274,7 +274,7 @@ class VehicleControllerTest extends AbstractLicenceDetailsControllerTestCase
      *
      * @expectedException \Exception
      */
-    public function testAddActionWithSubmitWithFailuer()
+    public function testAddActionWithSubmitWithFailure()
     {
         $this->setUpAction(
             'add',
