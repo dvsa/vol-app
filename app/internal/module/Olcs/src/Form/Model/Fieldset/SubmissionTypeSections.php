@@ -13,26 +13,7 @@ class SubmissionTypeSections
 {
     /**
      * @Form\Attributes({"id":"","placeholder":""})
-     * @Form\Options({
-     *     "label": "Submission type",
-     *     "category": "submission_type",
-     *     "empty_option": "Please Select",
-     *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a submission type"
-     * })
-     * @Form\Type("DynamicSelect")
-     */
-    public $submission_type = null;
-
-    /**
-     * @Form\Attributes({"id":"","placeholder":""})
-     * @Form\Options({
-     *     "label": "Sections",
-     *     "category": "submission_section",
-     *     "disable_inarray_validator": false,
-     *     "help-block": "Please choose submission sections"
-     * })
-     * @Form\Type("DynamicMultiCheckbox")
+     * @Form\Type("SubmissionSections")
      */
     public $submission_sections = null;
 
