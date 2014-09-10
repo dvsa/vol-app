@@ -1243,6 +1243,186 @@ class VehiclePsvControllerTest extends AbstractLicenceDetailsControllerTestCase
     }
 
     /**
+     * Test addAction with submit
+     */
+    public function testLargeAddActionWithSubmitWithVehicleOnAnotherLicenceWithConfirm()
+    {
+        $this->setUpAction(
+            'large-add',
+            null,
+            array(
+                'data' => array(
+                    'id' => '',
+                    'version' => '',
+                    'vrm' => 'AB12',
+                    'platedWeight' => 100
+                ),
+                'licence-vehicle' => array(
+                    'confirm-add' => 'Y'
+                )
+            )
+        );
+
+        $response = array(
+            'Count' => 2,
+            'Results' => array(
+                array(
+                    'licenceVehicles' => array(
+                        array(
+                            'licence' => array(
+                                'id' => 20,
+                                'licNo' => 'AB123'
+                            )
+                        )
+                    )
+                ),
+                array(
+                    'licenceVehicles' => array(
+                        array(
+                            'licence' => array(
+                                'id' => 21,
+                                'licNo' => '',
+                                'applications' => array(
+                                    array(
+                                        'id' => 123
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        );
+
+        $this->setRestResponse('Vehicle', 'GET', $response, $this->otherLicencesBundle);
+
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->largeAddAction();
+
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
+     * Test addAction with submit
+     */
+    public function testMediumAddActionWithSubmitWithVehicleOnAnotherLicenceWithConfirm()
+    {
+        $this->setUpAction(
+            'medium-add',
+            null,
+            array(
+                'data' => array(
+                    'id' => '',
+                    'version' => '',
+                    'vrm' => 'AB12',
+                    'platedWeight' => 100
+                ),
+                'licence-vehicle' => array(
+                    'confirm-add' => 'Y'
+                )
+            )
+        );
+
+        $response = array(
+            'Count' => 2,
+            'Results' => array(
+                array(
+                    'licenceVehicles' => array(
+                        array(
+                            'licence' => array(
+                                'id' => 20,
+                                'licNo' => 'AB123'
+                            )
+                        )
+                    )
+                ),
+                array(
+                    'licenceVehicles' => array(
+                        array(
+                            'licence' => array(
+                                'id' => 21,
+                                'licNo' => '',
+                                'applications' => array(
+                                    array(
+                                        'id' => 123
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        );
+
+        $this->setRestResponse('Vehicle', 'GET', $response, $this->otherLicencesBundle);
+
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->mediumAddAction();
+
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
+     * Test addAction with submit
+     */
+    public function testSmallAddActionWithSubmitWithVehicleOnAnotherLicenceWithConfirm()
+    {
+        $this->setUpAction(
+            'small-add',
+            null,
+            array(
+                'data' => array(
+                    'id' => '',
+                    'version' => '',
+                    'vrm' => 'AB12',
+                    'platedWeight' => 100
+                ),
+                'licence-vehicle' => array(
+                    'confirm-add' => 'Y'
+                )
+            )
+        );
+
+        $response = array(
+            'Count' => 2,
+            'Results' => array(
+                array(
+                    'licenceVehicles' => array(
+                        array(
+                            'licence' => array(
+                                'id' => 20,
+                                'licNo' => 'AB123'
+                            )
+                        )
+                    )
+                ),
+                array(
+                    'licenceVehicles' => array(
+                        array(
+                            'licence' => array(
+                                'id' => 21,
+                                'licNo' => '',
+                                'applications' => array(
+                                    array(
+                                        'id' => 123
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        );
+
+        $this->setRestResponse('Vehicle', 'GET', $response, $this->otherLicencesBundle);
+
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->smallAddAction();
+
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
      * Mock the rest call
      *
      * @param string $service

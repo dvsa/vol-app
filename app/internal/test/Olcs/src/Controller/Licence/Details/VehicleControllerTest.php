@@ -414,6 +414,66 @@ class VehicleControllerTest extends AbstractLicenceDetailsControllerTestCase
     }
 
     /**
+     * Test addAction with submit
+     */
+    public function testAddActionWithSubmitWithVehicleOnAnotherLicenceWithConfirm()
+    {
+        $this->setUpAction(
+            'add',
+            null,
+            array(
+                'data' => array(
+                    'id' => '',
+                    'version' => '',
+                    'vrm' => 'AB12',
+                    'platedWeight' => 100
+                ),
+                'licence-vehicle' => array(
+                    'confirm-add' => 'y'
+                )
+            )
+        );
+
+        $response = array(
+            'Count' => 2,
+            'Results' => array(
+                array(
+                    'licenceVehicles' => array(
+                        array(
+                            'licence' => array(
+                                'id' => 20,
+                                'licNo' => 'AB123'
+                            )
+                        )
+                    )
+                ),
+                array(
+                    'licenceVehicles' => array(
+                        array(
+                            'licence' => array(
+                                'id' => 21,
+                                'licNo' => '',
+                                'applications' => array(
+                                    array(
+                                        'id' => 123
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        );
+
+        $this->setRestResponse('Vehicle', 'GET', $response, $this->otherLicencesBundle);
+
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->addAction();
+
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
      * Mock the rest call
      *
      * @param string $service
