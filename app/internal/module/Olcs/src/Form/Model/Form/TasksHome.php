@@ -8,6 +8,7 @@ use Zend\Form\Annotation as Form;
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("tasks-home")
  * @Form\Attributes({"method":"get"})
+ * @Form\InputFilter("Common\Form\InputFilter")
  */
 class TasksHome
 {

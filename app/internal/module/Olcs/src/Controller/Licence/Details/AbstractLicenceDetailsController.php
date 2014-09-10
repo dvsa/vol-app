@@ -12,6 +12,7 @@ use Common\Controller\AbstractSectionController;
 use Common\Form\Fieldsets\Custom\SectionButtons;
 use Zend\View\Model\ViewModel;
 use Zend\Http\Response;
+use Common\Controller\Traits\GenericLicenceSection;
 
 /**
  * Abstract LicenceDetails Controller
@@ -20,10 +21,19 @@ use Zend\Http\Response;
  */
 abstract class AbstractLicenceDetailsController extends AbstractSectionController
 {
-    use LicenceControllerTrait;
+    use LicenceControllerTrait,
+        GenericLicenceSection;
 
     const LICENCE_CATEGORY_GOODS_VEHICLE = 'lcat_gv';
     const LICENCE_CATEGORY_PSV = 'lcat_psv';
+
+    /**
+     * Licence types keys
+     */
+    const LICENCE_TYPE_RESTRICTED = 'ltyp_r';
+    const LICENCE_TYPE_STANDARD_INTERNATIONAL = 'ltyp_si';
+    const LICENCE_TYPE_STANDARD_NATIONAL = 'ltyp_sn';
+    const LICENCE_TYPE_SPECIAL_RESTRICTED = 'ltyp_sr';
 
     /**
      * Holds the current section
@@ -45,47 +55,6 @@ abstract class AbstractLicenceDetailsController extends AbstractSectionControlle
      * @var string
      */
     protected $identifierName = 'licence';
-
-    /**
-     * Caches the licence data
-     *
-     * @var array
-     */
-    private $licenceData;
-
-    /**
-     * Holds the licenceDataBundle
-     *
-     * @var array
-     */
-    public static $licenceDataBundle = array(
-        'properties' => array(
-            'id',
-            'version',
-            'niFlag'
-        ),
-        'children' => array(
-            'goodsOrPsv' => array(
-                'properties' => array(
-                    'id'
-                )
-            ),
-            'licenceType' => array(
-                'properties' => array(
-                    'id'
-                )
-            ),
-            'organisation' => array(
-                'children' => array(
-                    'type' => array(
-                        'properties' => array(
-                            'id'
-                        )
-                    )
-                )
-            )
-        )
-    );
 
     /**
      * Get the licence details helper
@@ -148,7 +117,9 @@ abstract class AbstractLicenceDetailsController extends AbstractSectionControlle
         }
 
         $view = new ViewModel(array('form' => $form));
-        $view->setTemplate('partials/form');
+        $view->setTemplate('partials/section');
+
+        $this->maybeAddTable($view);
 
         return $this->renderView($view);
     }
@@ -192,6 +163,7 @@ abstract class AbstractLicenceDetailsController extends AbstractSectionControlle
         return $form;
     }
 
+
     /**
      * Get the licence data
      *
@@ -199,17 +171,7 @@ abstract class AbstractLicenceDetailsController extends AbstractSectionControlle
      */
     protected function getLicenceData()
     {
-        if (empty($this->licenceData)) {
-
-            $this->licenceData = $this->makeRestCall(
-                'Licence',
-                'GET',
-                array('id' => $this->getIdentifier()),
-                self::$licenceDataBundle
-            );
-        }
-
-        return $this->licenceData;
+        return $this->doGetLicenceData();
     }
 
     /**
