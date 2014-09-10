@@ -13,6 +13,30 @@ class VehicleControllerTest extends AbstractLicenceDetailsControllerTestCase
     protected $controllerName = 'Olcs\Controller\Licence\Details\VehicleController';
     protected $routeName = 'licence/details/vehicle';
 
+    protected $otherLicencesBundle = array(
+        'properties' => array(),
+        'children' => array(
+            'licenceVehicles' => array(
+                'properties' => array(),
+                'children' => array(
+                    'licence' => array(
+                        'properties' => array(
+                            'id',
+                            'licNo'
+                        ),
+                        'children' => array(
+                            'applications' => array(
+                                'properties' => array(
+                                    'id'
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        )
+    );
+
     /**
      * Test indexAction
      */
@@ -333,6 +357,63 @@ class VehicleControllerTest extends AbstractLicenceDetailsControllerTestCase
     }
 
     /**
+     * Test addAction with submit
+     */
+    public function testAddActionWithSubmitWithVehicleOnAnotherLicence()
+    {
+        $this->setUpAction(
+            'add',
+            null,
+            array(
+                'data' => array(
+                    'id' => '',
+                    'version' => '',
+                    'vrm' => 'AB12',
+                    'platedWeight' => 100
+                )
+            )
+        );
+
+        $response = array(
+            'Count' => 2,
+            'Results' => array(
+                array(
+                    'licenceVehicles' => array(
+                        array(
+                            'licence' => array(
+                                'id' => 20,
+                                'licNo' => 'AB123'
+                            )
+                        )
+                    )
+                ),
+                array(
+                    'licenceVehicles' => array(
+                        array(
+                            'licence' => array(
+                                'id' => 21,
+                                'licNo' => '',
+                                'applications' => array(
+                                    array(
+                                        'id' => 123
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        );
+
+        $this->setRestResponse('Vehicle', 'GET', $response, $this->otherLicencesBundle);
+
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->addAction();
+
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+    }
+
+    /**
      * Mock the rest call
      *
      * @param string $service
@@ -359,6 +440,14 @@ class VehicleControllerTest extends AbstractLicenceDetailsControllerTestCase
 
         if ($service == 'LicenceVehicle' && $method == 'POST') {
             return array('id' => 1);
+        }
+
+        if ($service == 'Vehicle' && $method == 'GET' && $bundle == $this->otherLicencesBundle) {
+            return array(
+                'Count' => 0,
+                'Results' => array(
+                )
+            );
         }
 
         $tableDataBundle = array(

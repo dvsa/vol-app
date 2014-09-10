@@ -13,7 +13,31 @@ class VehiclePsvControllerTest extends AbstractLicenceDetailsControllerTestCase
     protected $controllerName = 'Olcs\Controller\Licence\Details\VehiclePsvController';
     protected $routeName = 'licence/details/vehicle_psv';
 
-    private $largeVehicles = 5;
+    protected $largeVehicles = 5;
+
+    protected $otherLicencesBundle = array(
+        'properties' => array(),
+        'children' => array(
+            'licenceVehicles' => array(
+                'properties' => array(),
+                'children' => array(
+                    'licence' => array(
+                        'properties' => array(
+                            'id',
+                            'licNo'
+                        ),
+                        'children' => array(
+                            'applications' => array(
+                                'properties' => array(
+                                    'id'
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        )
+    );
 
     /**
      * Test indexAction
@@ -1048,6 +1072,177 @@ class VehiclePsvControllerTest extends AbstractLicenceDetailsControllerTestCase
     }
 
     /**
+     * Test addAction with submit
+     */
+    public function testLargeAddActionWithSubmitWithVehicleOnAnotherLicence()
+    {
+        $this->setUpAction(
+            'large-add',
+            null,
+            array(
+                'data' => array(
+                    'id' => '',
+                    'version' => '',
+                    'vrm' => 'AB12',
+                    'platedWeight' => 100
+                )
+            )
+        );
+
+        $response = array(
+            'Count' => 2,
+            'Results' => array(
+                array(
+                    'licenceVehicles' => array(
+                        array(
+                            'licence' => array(
+                                'id' => 20,
+                                'licNo' => 'AB123'
+                            )
+                        )
+                    )
+                ),
+                array(
+                    'licenceVehicles' => array(
+                        array(
+                            'licence' => array(
+                                'id' => 21,
+                                'licNo' => '',
+                                'applications' => array(
+                                    array(
+                                        'id' => 123
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        );
+
+        $this->setRestResponse('Vehicle', 'GET', $response, $this->otherLicencesBundle);
+
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->largeAddAction();
+
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+    }
+
+    /**
+     * Test addAction with submit
+     */
+    public function testMediumAddActionWithSubmitWithVehicleOnAnotherLicence()
+    {
+        $this->setUpAction(
+            'medium-add',
+            null,
+            array(
+                'data' => array(
+                    'id' => '',
+                    'version' => '',
+                    'vrm' => 'AB12',
+                    'platedWeight' => 100
+                )
+            )
+        );
+
+        $response = array(
+            'Count' => 2,
+            'Results' => array(
+                array(
+                    'licenceVehicles' => array(
+                        array(
+                            'licence' => array(
+                                'id' => 20,
+                                'licNo' => 'AB123'
+                            )
+                        )
+                    )
+                ),
+                array(
+                    'licenceVehicles' => array(
+                        array(
+                            'licence' => array(
+                                'id' => 21,
+                                'licNo' => '',
+                                'applications' => array(
+                                    array(
+                                        'id' => 123
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        );
+
+        $this->setRestResponse('Vehicle', 'GET', $response, $this->otherLicencesBundle);
+
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->mediumAddAction();
+
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+    }
+
+    /**
+     * Test addAction with submit
+     */
+    public function testSmallAddActionWithSubmitWithVehicleOnAnotherLicence()
+    {
+        $this->setUpAction(
+            'small-add',
+            null,
+            array(
+                'data' => array(
+                    'id' => '',
+                    'version' => '',
+                    'vrm' => 'AB12',
+                    'platedWeight' => 100
+                )
+            )
+        );
+
+        $response = array(
+            'Count' => 2,
+            'Results' => array(
+                array(
+                    'licenceVehicles' => array(
+                        array(
+                            'licence' => array(
+                                'id' => 20,
+                                'licNo' => 'AB123'
+                            )
+                        )
+                    )
+                ),
+                array(
+                    'licenceVehicles' => array(
+                        array(
+                            'licence' => array(
+                                'id' => 21,
+                                'licNo' => '',
+                                'applications' => array(
+                                    array(
+                                        'id' => 123
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        );
+
+        $this->setRestResponse('Vehicle', 'GET', $response, $this->otherLicencesBundle);
+
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->smallAddAction();
+
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+    }
+
+    /**
      * Mock the rest call
      *
      * @param string $service
@@ -1074,6 +1269,14 @@ class VehiclePsvControllerTest extends AbstractLicenceDetailsControllerTestCase
 
         if ($service == 'LicenceVehicle' && $method == 'POST') {
             return array('id' => 1);
+        }
+
+        if ($service == 'Vehicle' && $method == 'GET' && $bundle == $this->otherLicencesBundle) {
+            return array(
+                'Count' => 0,
+                'Results' => array(
+                )
+            );
         }
 
         if ($service == 'Vehicle' && $method == 'GET') {
