@@ -69,6 +69,16 @@ trait LicenceNoteTrait
         $this->redirectToRoute($this->getRoutePrefix() . '/notes', [], [], true);
     }
 
+    /**
+     * Gets a list of notes according to the specified criteria
+     *
+     * @param int $licenceId
+     * @param int $linkedId
+     * @param string $noteType
+     * @param string $action
+     * @param int $id
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     */
     public function getNotesList($licenceId, $linkedId, $noteType = 'note_t_lic', $action = null, $id = null)
     {
         $routePrefix  = $this->getRoutePrefix();
@@ -150,6 +160,13 @@ trait LicenceNoteTrait
         return $this->renderView($view);
     }
 
+    /**
+     * Processes the add note form
+     *
+     * @param array $data
+     * @return \Zend\Http\Response
+     * @throws \Common\Exception\BadRequestException
+     */
     public function processAddNotes($data)
     {
         $user = $this->getLoggedInUser();
@@ -240,6 +257,12 @@ trait LicenceNoteTrait
         return $this->redirectToRoute($this->getRoutePrefix() . '/modify-note', ['action' => 'Edit'], [], true);
     }
 
+    /**
+     * Appends a linked ID e.g. licence, case, application id etc.
+     *
+     * @param array $resultData
+     * @return array
+     */
     public function appendLinkedId($resultData)
     {
         $formatted = [];

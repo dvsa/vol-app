@@ -16,6 +16,11 @@ class BusDetailsStopController extends BusDetailsController
 {
     protected $item = 'stop';
 
+    /**
+     * Index action
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
     public function indexAction()
     {
         $view = $this->getViewWithLicence();

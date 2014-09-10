@@ -25,12 +25,25 @@ class BusController extends AbstractController
     protected $section;
     protected $item;
 
+    /**
+     * Index action
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
     public function indexAction()
     {
         //check whether we have a bus reg id or whether we're showing the list
         return $this->redirectToRoute('licence/bus-details', [], [], true);
     }
 
+    /**
+     * Renders the view
+     *
+     * @param string|\Zend\View\Model\ViewModel $view
+     * @param string $pageTitle
+     * @param string $pageSubTitle
+     * @return \Zend\View\Model\ViewModel
+     */
     public function renderView($view, $pageTitle = null, $pageSubTitle = null)
     {
         $this->pageLayout = 'bus';

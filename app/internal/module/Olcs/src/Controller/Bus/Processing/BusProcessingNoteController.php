@@ -25,6 +25,9 @@ class BusProcessingNoteController extends BusProcessingController implements Cru
 
     protected $item = 'notes';
 
+    /**
+     * Constructor - sets template and route prefix for use in LicenceNote trait
+     */
     public function __construct()
     {
         $this->setTemplatePrefix('licence/bus/processing');

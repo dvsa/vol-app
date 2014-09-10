@@ -19,6 +19,11 @@ class BusShortController extends BusController
     protected $section = 'short';
     protected $subNavRoute = 'licence_bus_short';
 
+    /**
+     * Index action
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
     public function indexAction()
     {
         $view = $this->getViewWithLicence();

@@ -19,6 +19,11 @@ class BusTrcController extends BusController
     protected $section = 'trc';
     protected $subNavRoute = 'licence_bus_trc';
 
+    /**
+     * Index action
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
     public function indexAction()
     {
         $view = $this->getViewWithLicence();

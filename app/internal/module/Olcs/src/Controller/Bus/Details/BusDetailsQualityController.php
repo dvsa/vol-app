@@ -16,6 +16,11 @@ class BusDetailsQualityController extends BusDetailsController
 {
     protected $item = 'quality';
 
+    /**
+     * Index action
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
     public function indexAction()
     {
         $view = $this->getViewWithLicence();

@@ -19,6 +19,11 @@ class BusProcessingController extends BusController
     protected $section = 'processing';
     protected $subNavRoute = 'licence_bus_processing';
 
+    /**
+     * Index action
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
     public function indexAction()
     {
         $view = $this->getViewWithLicence();
