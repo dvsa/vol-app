@@ -24,30 +24,11 @@ class Note
     public $version = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--primary large"})
-     * @Form\Options({
-     *     "label": "Save",
-     *     "label_attributes": {
-     *         "class": "col-sm-2"
-     *     },
-     *     "column-size": "sm-10"
-     * })
-     * @Form\Type("\Zend\Form\Element\Button")
+     * @Form\Name("form-actions")
+     * @Form\Attributes({"class":"actions-container"})
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\CancelFormActions")
      */
-    public $submit = null;
-
-    /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary large"})
-     * @Form\Options({
-     *     "label": "Cancel",
-     *     "label_attributes": {
-     *         "class": "col-sm-2"
-     *     },
-     *     "column-size": "sm-10"
-     * })
-     * @Form\Type("\Zend\Form\Element\Button")
-     */
-    public $cancelNote = null;
+    public $formActions = null;
 
     /**
      * @Form\Name("main")

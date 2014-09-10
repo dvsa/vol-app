@@ -1,34 +1,37 @@
 <?php
 
 /**
- * Note controller
- * Licence note search and display
+ * Bus Processing Note controller
+ * Bus note search and display
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-namespace Olcs\Controller\Licence\Processing;
+namespace Olcs\Controller\Bus\Processing;
 
 use Common\Controller\CrudInterface;
 use Olcs\Controller\Traits\DeleteActionTrait;
 use Olcs\Controller\Traits\LicenceNoteTrait;
 
 /**
- * Note controller
- * Licence note search and display
+ * Bus Processing Note controller
+ * Bus note search and display
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class LicenceProcessingNoteController extends AbstractLicenceProcessingController implements CrudInterface
+class BusProcessingNoteController extends BusProcessingController implements CrudInterface
 {
     use DeleteActionTrait;
     use LicenceNoteTrait;
 
-    protected $section = 'notes';
+    protected $item = 'notes';
 
+    /**
+     * Constructor - sets template and route prefix for use in LicenceNote trait
+     */
     public function __construct()
     {
-        $this->setTemplatePrefix('licence/processing');
-        $this->setRoutePrefix('licence/processing');
+        $this->setTemplatePrefix('licence/bus/processing');
+        $this->setRoutePrefix('licence/bus-processing');
     }
 
     /**
@@ -39,16 +42,14 @@ class LicenceProcessingNoteController extends AbstractLicenceProcessingControlle
     public function indexAction()
     {
         $licenceId = $this->getFromRoute('licence');
-
-        //unable to use checkForCrudAction() as add and edit/delete require different routes
+        $busReg = $this->getFromRoute('busRegId');
         $action = $this->getFromPost('action');
         $id = $this->getFromPost('id');
 
-        $notesResult = $this->getNotesList($licenceId, $licenceId, 'note_t_lic', $action, $id);
+        $notesResult = $this->getNotesList($licenceId, $busReg, 'note_t_bus', $action, $id);
 
         //if a ViewModel has been returned
         if ($notesResult instanceof \Zend\View\Model\ViewModel) {
-            //$notesResult->setTemplate('licence/processing/notes/index');
             return $this->renderView($notesResult);
         }
 
