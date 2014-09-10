@@ -1198,6 +1198,7 @@ class VehiclePsvControllerTest extends AbstractLicenceDetailsControllerTestCase
                     'id' => '',
                     'version' => '',
                     'vrm' => 'AB12',
+                    'isNovelty' => 'Y',
                     'platedWeight' => 100
                 )
             )
@@ -1377,6 +1378,7 @@ class VehiclePsvControllerTest extends AbstractLicenceDetailsControllerTestCase
                     'id' => '',
                     'version' => '',
                     'vrm' => 'AB12',
+                    'isNovelty' => 'Y',
                     'platedWeight' => 100
                 ),
                 'licence-vehicle' => array(
