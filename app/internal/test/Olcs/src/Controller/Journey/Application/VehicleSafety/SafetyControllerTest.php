@@ -84,6 +84,9 @@ class SafetyControllerTest extends ParentTestCase
         $this->assertInstanceOf('Zend\Http\Response', $response);
     }
 
+    /**
+     * @group test
+     */
     public function testIndexActionUpdatingStatusWithSafetyConfirmationUnchecked()
     {
         $this->goodsOrPsv = 'goods';
