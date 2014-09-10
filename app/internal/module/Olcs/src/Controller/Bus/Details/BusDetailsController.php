@@ -17,7 +17,7 @@ use Olcs\Controller\Bus\BusController;
 class BusDetailsController extends BusController
 {
     protected $section = 'details';
-    protected $subNavRoute = 'licence_bus_fees';
+    protected $subNavRoute = 'licence_bus_details';
 
     public function indexAction()
     {

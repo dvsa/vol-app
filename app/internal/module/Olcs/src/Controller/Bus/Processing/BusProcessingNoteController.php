@@ -23,7 +23,7 @@ class BusProcessingNoteController extends BusProcessingController implements Cru
     use DeleteActionTrait;
     use LicenceNoteTrait;
 
-    protected $section = 'notes';
+    protected $item = 'notes';
 
     public function __construct()
     {

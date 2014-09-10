@@ -23,6 +23,7 @@ class BusController extends AbstractController
     protected $layoutFile = 'licence/bus/layout';
     protected $subNavRoute;
     protected $section;
+    protected $item;
 
     public function indexAction()
     {
@@ -36,7 +37,8 @@ class BusController extends AbstractController
 
         $variables = array(
             'navigation' => $this->getSubNavigation(),
-            'section' => $this->getSection()
+            'section' => $this->getSection(),
+            'item' => $this->getItem()
         );
 
         $layout = $this->getViewWithLicence(array_merge($variables, (array)$view->getVariables()));

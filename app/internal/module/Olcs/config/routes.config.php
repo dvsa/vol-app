@@ -295,6 +295,49 @@ return array_merge(
                             'controller' => 'BusDetailsController',
                             'action' => 'index',
                         ]
+                    ],
+                    'may_terminate' => true,
+                    'child_routes' => [
+                        'service' => [
+                            'type' => 'literal',
+                            'options' => [
+                                'route' => '/service',
+                                'defaults' => [
+                                    'controller' => 'BusDetailsServiceController',
+                                    'action' => 'index',
+                                ]
+                            ],
+                        ],
+                        'stop' => [
+                            'type' => 'literal',
+                            'options' => [
+                                'route' => '/stop',
+                                'defaults' => [
+                                    'controller' => 'BusDetailsStopController',
+                                    'action' => 'index',
+                                ]
+                            ],
+                        ],
+                        'ta' => [
+                            'type' => 'literal',
+                            'options' => [
+                                'route' => '/ta',
+                                'defaults' => [
+                                    'controller' => 'BusDetailsTaController',
+                                    'action' => 'index',
+                                ]
+                            ],
+                        ],
+                        'quality' => [
+                            'type' => 'literal',
+                            'options' => [
+                                'route' => '/quality',
+                                'defaults' => [
+                                    'controller' => 'BusDetailsQualityController',
+                                    'action' => 'index',
+                                ]
+                            ],
+                        ]
                     ]
                 ],
                 'bus-short' => [
@@ -305,6 +348,19 @@ return array_merge(
                             'controller' => 'BusShortController',
                             'action' => 'index',
                         ]
+                    ],
+                    'may_terminate' => true,
+                    'child_routes' => [
+                        'placeholder' => [
+                            'type' => 'literal',
+                            'options' => [
+                                'route' => '/placeholder',
+                                'defaults' => [
+                                    'controller' => 'BusShortPlaceholderController',
+                                    'action' => 'index',
+                                ]
+                            ],
+                        ],
                     ]
                 ],
                 'bus-route' => [
@@ -315,6 +371,19 @@ return array_merge(
                             'controller' => 'BusRouteController',
                             'action' => 'index',
                         ]
+                    ],
+                    'may_terminate' => true,
+                    'child_routes' => [
+                        'placeholder' => [
+                            'type' => 'literal',
+                            'options' => [
+                                'route' => '/placeholder',
+                                'defaults' => [
+                                    'controller' => 'BusRoutePlaceholderController',
+                                    'action' => 'index',
+                                ]
+                            ],
+                        ],
                     ]
                 ],
                 'bus-trc' => [
@@ -325,6 +394,19 @@ return array_merge(
                             'controller' => 'BusTrcController',
                             'action' => 'index',
                         ]
+                    ],
+                    'may_terminate' => true,
+                    'child_routes' => [
+                        'placeholder' => [
+                            'type' => 'literal',
+                            'options' => [
+                                'route' => '/placeholder',
+                                'defaults' => [
+                                    'controller' => 'BusTrcPlaceholderController',
+                                    'action' => 'index',
+                                ]
+                            ],
+                        ],
                     ]
                 ],
                 'bus-docs' => [
@@ -335,6 +417,19 @@ return array_merge(
                             'controller' => 'BusDocsController',
                             'action' => 'index',
                         ]
+                    ],
+                    'may_terminate' => true,
+                    'child_routes' => [
+                        'placeholder' => [
+                            'type' => 'literal',
+                            'options' => [
+                                'route' => '/placeholder',
+                                'defaults' => [
+                                    'controller' => 'BusDocsPlaceholderController',
+                                    'action' => 'index',
+                                ]
+                            ],
+                        ],
                     ]
                 ],
                 'bus-processing' => [
@@ -347,7 +442,7 @@ return array_merge(
                         ]
                     ],
                     'may_terminate' => true,
-                    'child_routes' => [
+                   'child_routes' => [
                         'notes' => [
                             'type' => 'segment',
                             'options' => [
@@ -398,6 +493,19 @@ return array_merge(
                             'controller' => 'BusFeesController',
                             'action' => 'index',
                         ]
+                    ],
+                    'may_terminate' => true,
+                    'child_routes' => [
+                        'placeholder' => [
+                            'type' => 'literal',
+                            'options' => [
+                                'route' => '/placeholder',
+                                'defaults' => [
+                                    'controller' => 'BusFeesPlaceholderController',
+                                    'action' => 'index',
+                                ]
+                            ],
+                        ],
                     ]
                 ],
                 'cases' => [

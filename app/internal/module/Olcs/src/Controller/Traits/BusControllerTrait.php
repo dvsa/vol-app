@@ -34,6 +34,11 @@ trait BusControllerTrait
         return $this->section;
     }
 
+    public function getItem()
+    {
+        return $this->item;
+    }
+
     public function getLayoutFile()
     {
         return $this->layoutFile;

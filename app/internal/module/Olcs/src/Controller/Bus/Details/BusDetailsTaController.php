@@ -1,23 +1,20 @@
 <?php
 
 /**
- * Bus Short Notice Controller
+ * Bus Details Ta Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-namespace Olcs\Controller\Bus\Short;
-
-use Olcs\Controller\Bus\BusController;
+namespace Olcs\Controller\Bus\Details;
 
 /**
- * Bus Short Notice Controller
+ * Bus Details Ta Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class BusShortController extends BusController
+class BusDetailsTaController extends BusDetailsController
 {
-    protected $section = 'short';
-    protected $subNavRoute = 'licence_bus_short';
+    protected $item = 'ta';
 
     public function indexAction()
     {
