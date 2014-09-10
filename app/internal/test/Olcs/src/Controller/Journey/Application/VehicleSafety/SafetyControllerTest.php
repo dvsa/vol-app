@@ -52,6 +52,41 @@ class SafetyControllerTest extends ParentTestCase
         $this->assertInstanceOf('Zend\Http\Response', $response);
     }
 
+    /**
+     * Test indexAction With submit
+     */
+    public function testIndexActionWithSubmitWithoutSelectedDropDowns()
+    {
+        $this->goodsOrPsv = 'goods';
+
+        $this->setUpAction(
+            'index',
+            null,
+            array(
+                'licence' => array(
+                    'safetyInsVehicles' => '',
+                    'safetyInsTrailers' => '',
+                    'safetyInsVaries' => 'Y',
+                    'tachographIns' => 'tach_external'
+                ),
+                'table' => array(
+                    'rows' => 1
+                ),
+                'application' => array(
+                    'id' => 1,
+                    'version' => 1,
+                    'safetyConfirmation' => 'Y'
+                )
+            )
+        );
+
+        $this->controller->setEnabledCsrf(false);
+
+        $response = $this->controller->indexAction();
+
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
     public function testIndexActionUpdatingStatusWithSafetyConfirmation()
     {
         $this->goodsOrPsv = 'goods';

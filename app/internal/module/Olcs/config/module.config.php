@@ -43,6 +43,7 @@ return array(
             'LicenceDetailsOperatingCentreController' => 'Olcs\Controller\Licence\Details\OperatingCentreController',
             'LicenceDetailsTransportManagerController' => 'Olcs\Controller\Licence\Details\TransportManagerController',
             'LicenceDetailsVehicleController' => 'Olcs\Controller\Licence\Details\VehicleController',
+            'LicenceDetailsVehiclePsvController' => 'Olcs\Controller\Licence\Details\VehiclePsvController',
             'LicenceDetailsSafetyController' => 'Olcs\Controller\Licence\Details\SafetyController',
             'LicenceDetailsConditionUndertakingController' =>
                 'Olcs\Controller\Licence\Details\ConditionUndertakingController',
