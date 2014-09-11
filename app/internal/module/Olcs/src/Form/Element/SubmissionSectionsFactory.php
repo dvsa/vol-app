@@ -24,7 +24,6 @@ class SubmissionSectionsFactory implements FactoryInterface
 
         /** @var \Common\Form\Element\DynamicSelect $submissionType */
         $submissionType = $formElementManager->get('DynamicSelect');
-
         $options = [
             'label' => 'Submission type',
             'category' => 'submission_type',
@@ -32,16 +31,22 @@ class SubmissionSectionsFactory implements FactoryInterface
             'disable_in_array_validator' => false,
             'help-block' => 'Please select a submission type'
         ];
-
         $submissionType->setOptions($options);
-
-        $submissionType->setName('submission_type');
-
         $service->setSubmissionType($submissionType);
+
+        /** @var \Common\Form\Element\Button $submissionTypeSubmit */
+        $submissionTypeSubmit = $formElementManager->get('Button');
+        $options = [
+            'label' => 'Select type',
+            'label_attributes' => array('class' => 'col-sm-2'),
+            'column-size' => 'sm-10',
+        ];
+        $submissionTypeSubmit->setOptions($options);
+
+        $service->setSubmissionTypeSubmit($submissionTypeSubmit);
 
         /** @var \Common\Form\Element\SubmissionSections $submissionSections */
         $submissionSections = $formElementManager->get('DynamicMultiCheckbox');
-
         $submissionSectionsOptions = [
             'label' => 'Sections',
             'category' => 'submission_section',
@@ -50,9 +55,9 @@ class SubmissionSectionsFactory implements FactoryInterface
         ];
 
         $submissionSections->setOptions($submissionSectionsOptions);
-        $submissionSections->setName('submission_sections');
 
         $service->setSubmissionSections($submissionSections);
+
         return $service;
     }
 }

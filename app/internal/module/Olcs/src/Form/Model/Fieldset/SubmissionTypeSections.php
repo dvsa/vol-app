@@ -18,19 +18,6 @@ class SubmissionTypeSections
     public $submission_sections = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary large"})
-     * @Form\Options({
-     *     "label": "Select",
-     *     "label_attributes": {
-     *         "class": "col-sm-2"
-     *     },
-     *     "column-size": "sm-10"
-     * })
-     * @Form\Type("\Zend\Form\Element\Button")
-     */
-    public $submit = null;
-
-    /**
      * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
      */
