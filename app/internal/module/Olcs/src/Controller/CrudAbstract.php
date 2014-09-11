@@ -293,4 +293,23 @@ class CrudAbstract extends CommonController\AbstractSectionController implements
     {
         return $this->params()->fromPost($param, $default);
     }
+
+    /**
+     * Replaces arrays with Ids, just with the value of the ID.
+     *
+     * @param array $array
+     * @param array $ids
+     *
+     * @return array
+     */
+    public function replaceIds(array $array, array $ids)
+    {
+        foreach ($array as $key => $value) {
+            if (in_array($key, $ids)) {
+                $array[$key] = $value['id'];
+            }
+        }
+
+        return $array;
+    }
 }
