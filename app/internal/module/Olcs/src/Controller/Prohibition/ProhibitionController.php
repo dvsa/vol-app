@@ -5,7 +5,7 @@
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-namespace Olcs\Controller;
+namespace Olcs\Controller\Prohibition;
 
 // Olcs
 use Olcs\Controller as OlcsController;
@@ -16,7 +16,7 @@ use Olcs\Controller\Traits as ControllerTraits;
      *
      * @author Ian Lindsay <ian@hemera-business-services.co.uk>
      */
-class CaseProhibitionController extends OlcsController\CrudAbstract
+class ProhibitionController extends OlcsController\CrudAbstract
 {
     use ControllerTraits\CaseControllerTrait;
 
