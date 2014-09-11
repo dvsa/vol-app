@@ -26,6 +26,7 @@ trait DeleteActionTrait
      * Should return the name of the service to call for deleting the item
      *
      * @return string
+     * @throws \LogicException
      */
     public function getDeleteServiceName()
     {
@@ -33,7 +34,7 @@ trait DeleteActionTrait
             return $this->getService();
         }
 
-        throw \LogicExcpetion('getDeleteServiceName or getService methods were not implemented.');
+        throw \LogicException('getDeleteServiceName or getService methods were not implemented.');
     }
 
     /**

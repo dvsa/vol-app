@@ -28,9 +28,20 @@ return array(
         array(
             'title' => 'Created',
             'formatter' => function ($data) {
+                $routeParams = array('action' => 'edit', 'id' => $data['id']);
+
+                switch ($data['noteType']['id']) {
+                    case 'note_t_bus':
+                        $route = 'licence/bus-processing/modify-note';
+                        $routeParams['busRegId'] = $data['busReg']['id'];
+                        break;
+                    default:
+                        $route = 'licence/processing/modify-note';
+                }
+
                 return '<a href="' . $this->generateUrl(
-                    array('action' => 'edit', 'id' => $data['id']),
-                    'licence/processing/modify-note',
+                    $routeParams,
+                    $route,
                     true
                 ) . '">' . (new \DateTime($data['createdOn']))->format('d/m/Y') . '</a>';
             },

@@ -11,7 +11,6 @@ namespace Olcs\Controller;
 
 use Zend\View\Model\ViewModel;
 use Zend\Json\Json;
-use Olcs\Controller\Traits;
 use Olcs\Controller\Traits\TaskSearchTrait;
 
 /**
@@ -97,7 +96,7 @@ class TaskController extends AbstractController
 
     /**
      * Callback invoked when the form is valid
-     * 
+     *
      * @param array $data
      */
     public function processAssignTask($data)
@@ -126,7 +125,7 @@ class TaskController extends AbstractController
 
     /**
      * Get task version
-     * 
+     *
      * @param int $id
      * @return int
      */
@@ -149,7 +148,7 @@ class TaskController extends AbstractController
 
     /**
      * Set up and post form
-     * 
+     *
      * @param string $type
      * @return View
      */
@@ -216,7 +215,7 @@ class TaskController extends AbstractController
 
     /**
      * Get link to display in add / edit form
-     * 
+     *
      * @return string
      */
     protected function getLinkForTaskForm()
@@ -265,7 +264,7 @@ class TaskController extends AbstractController
 
     /**
      * Callback invoked when the form is valid
-     * 
+     *
      * @param array $data
      * @return void|redirect
      */
@@ -276,7 +275,7 @@ class TaskController extends AbstractController
 
     /**
      * Callback invoked when the form is valid
-     * 
+     *
      * @param array $data
      * @return void|redirect
      */
@@ -287,7 +286,7 @@ class TaskController extends AbstractController
 
     /**
      * Process form and redirect back to list
-     * 
+     *
      * @param array $data
      * @param string $type
      * @return voide|redirect
@@ -307,7 +306,7 @@ class TaskController extends AbstractController
 
     /**
      * Redirect back to list of tasks
-     * 
+     *
      * @return redirect
      */
     public function redirectToList()
@@ -349,7 +348,7 @@ class TaskController extends AbstractController
 
     /**
      * Merge some sensible default dropdown values with any POST data we may have
-     * 
+     *
      * @return array
      */
     private function mapDefaultData()
@@ -405,7 +404,7 @@ class TaskController extends AbstractController
 
     /**
      * Map some flattened data into relevant dropdown filters
-     * 
+     *
      * @param $data array
      * @return array
      */
@@ -425,7 +424,7 @@ class TaskController extends AbstractController
 
     /**
      * Flatten nested fieldset data into a collapsed array
-     * 
+     *
      * @param array $data
      * @return array
      */
@@ -460,7 +459,7 @@ class TaskController extends AbstractController
 
     /**
      * Expand a flattened array of data into form fieldsets
-     * 
+     *
      * @param array $data
      * @return array
      */
@@ -480,7 +479,7 @@ class TaskController extends AbstractController
 
     /**
      * Disable form elements
-     * 
+     *
      * @param Zend\Form\Element
      */
     private function disableFormElements($element)
@@ -506,7 +505,7 @@ class TaskController extends AbstractController
 
     /**
      * Get task type details
-     * 
+     *
      * @return array
      */
     public function getTaskTypeDetails()
@@ -536,5 +535,22 @@ class TaskController extends AbstractController
             ];
         }
         return $this->taskTypeDetails;
+    }
+
+    /**
+     * Gets the licence by ID.
+     *
+     * @todo This method was removed from FormActionController (As it was in the wrong place)
+     *  I have put it here, as this is the only place that it is used, however there are lots of these getLicence
+     *  methods floating around, so feel free to remove this and use one of the others
+     *
+     * @param int $id
+     * @return array
+     */
+    protected function getLicence($id)
+    {
+        $licence = $this->makeRestCall('Licence', 'GET', array('id' => $id));
+
+        return $licence;
     }
 }

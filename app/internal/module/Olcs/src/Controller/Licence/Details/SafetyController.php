@@ -5,7 +5,7 @@
  */
 namespace Olcs\Controller\Licence\Details;
 
-use Common\Controller\Traits\SafetySection;
+use Common\Controller\Traits\VehicleSafety\SafetySection;
 use Olcs\Controller\Licence\Details\AbstractLicenceDetailsController;
 
 /**

@@ -34,7 +34,9 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
                 'getFromRoute',
                 'params',
                 'redirect',
-                'getServiceLocator'
+                'getServiceLocator',
+                'buildTable',
+                'url'
             )
         );
 
@@ -280,5 +282,67 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
         $view = $this->controller->documentsAction();
 
         $this->assertTrue($view->terminate());
+    }
+
+    public function testBusAction()
+    {
+        $table = 'table';
+
+        $licenceId = 110;
+        $page = 1;
+        $sort = 'regNo';
+        $order = 'desc';
+        $limit = 10;
+        $url = 'url';
+
+        $searchData['licence'] = $licenceId;
+        $searchData['page'] = $page;
+        $searchData['sort'] = $sort;
+        $searchData['order'] = $order;
+        $searchData['limit'] = $limit;
+        $searchData['url'] = $url;
+
+        $resultData = array();
+
+        $this->controller->expects($this->at(0))
+        ->method('getFromRoute')
+        ->with('licence')
+        ->will($this->returnValue($licenceId));
+
+        $this->controller->expects($this->at(1))
+            ->method('getFromRoute')
+            ->with($this->equalTo('page'), $this->equalTo($page))
+            ->will($this->returnValue($page));
+
+        $this->controller->expects($this->at(2))
+            ->method('getFromRoute')
+            ->with($this->equalTo('sort'), $this->equalTo($sort))
+            ->will($this->returnValue($sort));
+
+        $this->controller->expects($this->at(3))
+            ->method('getFromRoute')
+            ->with($this->equalTo('order'), $this->equalTo($order))
+            ->will($this->returnValue($order));
+
+        $this->controller->expects($this->at(4))
+            ->method('getFromRoute')
+            ->with($this->equalTo('limit'), $this->equalTo($limit))
+            ->will($this->returnValue($limit));
+
+        $this->controller->expects($this->once())
+            ->method('url')
+            ->will($this->returnValue($url));
+
+        $this->controller->expects($this->once())
+            ->method('makeRestCall')
+            ->with($this->equalTo('BusReg'), $this->equalTo('GET'), $this->equalTo($searchData))
+            ->will($this->returnValue($resultData));
+
+        $this->controller->expects($this->once())
+            ->method('buildTable')
+            ->with($this->equalTo('busreg'), $this->equalTo($resultData), $this->equalTo($searchData))
+            ->will($this->returnValue($table));
+
+        $this->controller->busAction();
     }
 }
