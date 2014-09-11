@@ -114,6 +114,22 @@ return array(
                     )
                 ),
                 array(
+                    'id' => 'case_oppositions',
+                    'label' => 'Opposition',
+                    'route' => 'case',
+                    'action' => 'opositions',
+                    'use_route_match' => true,
+                    'pages' => array(
+                        array(
+                            'id' => 'case_submission_list',
+                            'label' => 'Submission List',
+                            'route' => 'submission',
+                            'action' => 'index',
+                            'use_route_match' => true,
+                        ),
+                    )
+                ),
+                array(
                     'id' => 'case_submissions',
                     'label' => 'Submissions',
                     'route' => 'submission',

@@ -31,32 +31,6 @@ class Conviction
     public $version = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--primary large"})
-     * @Form\Options({
-     *     "label": "Save",
-     *     "label_attributes": {
-     *         "class": "col-sm-2"
-     *     },
-     *     "column-size": "sm-10"
-     * })
-     * @Form\Type("\Zend\Form\Element\Button")
-     */
-    public $conviction = null;
-
-    /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary large"})
-     * @Form\Options({
-     *     "label": "Cancel",
-     *     "label_attributes": {
-     *         "class": "col-sm-2"
-     *     },
-     *     "column-size": "sm-10"
-     * })
-     * @Form\Type("\Zend\Form\Element\Button")
-     */
-    public $cancelConviction = null;
-
-    /**
      * @Form\Name("defendant-details")
      * @Form\Options({"label":"Defendant details"})
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\DefendantDetails")
@@ -69,4 +43,11 @@ class Conviction
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\Offence")
      */
     public $offence = null;
+
+    /**
+     * @Form\Name("form-actions")
+     * @Form\Attributes({"class":"actions-container"})
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\CancelFormActions")
+     */
+    public $formActions = null;
 }
