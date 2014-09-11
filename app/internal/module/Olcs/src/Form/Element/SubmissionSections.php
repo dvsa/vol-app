@@ -106,9 +106,19 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
     public function prepareElement(FormInterface $form)
     {
         $name = $this->getName();
-        $this->submissionType->setName($name . '[submission_type]');
-        $this->submissionSections->setName($name . '[submission_sections]');
-        $this->submissionTypeSubmit->setName($name . '[submissionTypeSubmit]');
+        $this->getSubmissionType()->setName($name . '[submission_type]');
+        $this->getSubmissionSections()->setName($name . '[submission_sections]');
+        $this->getSubmissionTypeSubmit()->setName($name . '[submissionTypeSubmit]');
     }
 
+    /**
+     * Set value for element(s)
+     *
+     * @param array $value
+     * @return void|ZendElement
+     */
+    public function setValue($value)
+    {
+        $this->getSubmissionType()->setValue($value['submission_type']);
+    }
 }

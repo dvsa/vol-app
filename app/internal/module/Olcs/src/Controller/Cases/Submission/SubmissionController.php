@@ -102,11 +102,16 @@ class SubmissionController extends OlcsController\CrudAbstract
      * @param string $service
      * @return array
      */
-    protected function save($data, $service = null)
+    public function addAction()
     {
         // Modify $data
-        var_dump($data);exit;
-        return parent::save($data, $service);
+        $formData = $this->getFromPost('fields');
+
+        if (!(isset($formData['submission_sections']['submisson_type'])) ||
+            empty($formData['submission_sections']['submisson_type'])) {
+            $this->setPersist(false);
+        }
+        return parent::addAction();
     }
 
     /**
