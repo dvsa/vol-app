@@ -16,6 +16,9 @@ trait DeleteActionTrait
         $identifierName = $this->getIdentifierName();
         $id = $this->params()->fromRoute($identifierName);
         $this->makeRestCall($this->getDeleteServiceName(), 'DELETE', ['id' => $id]);
+
+        $this->addErrorMessage('Deleted sucessfully');
+
         $this->redirectToIndex();
     }
 
@@ -23,8 +26,16 @@ trait DeleteActionTrait
      * Should return the name of the service to call for deleting the item
      *
      * @return string
+     * @throws \LogicException
      */
-    abstract public function getDeleteServiceName();
+    public function getDeleteServiceName()
+    {
+        if (method_exists($this, 'getService')) {
+            return $this->getService();
+        }
+
+        throw \LogicException('getDeleteServiceName or getService methods were not implemented.');
+    }
 
     /**
      * Retrieve the route match/query parameter name containing the identifier

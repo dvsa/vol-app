@@ -24,6 +24,7 @@ class LicenceProcessingNoteController extends AbstractLicenceProcessingControlle
     use LicenceNoteTrait;
 
     protected $section = 'notes';
+    protected $service = 'Note';
 
     public function __construct()
     {
