@@ -95,7 +95,8 @@ class SubmissionController extends OlcsController\CrudAbstract
     );
 
     /**
-     * Save data
+     * Save data. Also processes the submit submission select type drop down
+     * in order to dictate which checkboxes to manipulate.
      *
      * @param array $data
      * @param string $service
@@ -104,7 +105,7 @@ class SubmissionController extends OlcsController\CrudAbstract
     protected function save($data, $service = null)
     {
         // Modify $data
-
+        var_dump($data);exit;
         return parent::save($data, $service);
     }
 

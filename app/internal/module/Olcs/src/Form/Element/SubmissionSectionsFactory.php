@@ -35,10 +35,10 @@ class SubmissionSectionsFactory implements FactoryInterface
         $service->setSubmissionType($submissionType);
 
         /** @var \Common\Form\Element\Button $submissionTypeSubmit */
-        $submissionTypeSubmit = $formElementManager->get('Button');
+        $submissionTypeSubmit = $formElementManager->get('Submit');
         $options = [
             'label' => 'Select type',
-            'label_attributes' => array('class' => 'col-sm-2'),
+            'label_attributes' => array('type' => 'submit', 'class' => 'col-sm-2'),
             'column-size' => 'sm-10',
         ];
         $submissionTypeSubmit->setOptions($options);
