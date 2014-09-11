@@ -10,6 +10,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Options({"label":"Prohibition"})
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
+ * @Form\InputFilter("Common\Form\InputFilter")
  */
 class Prohibition
 {

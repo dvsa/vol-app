@@ -32,11 +32,9 @@ trait DocumentSearchTrait
 
         if ( isset($filters['isDigital']) ) {
             if ($filters['isDigital'] === 'digital') {
-                $filters['isDigital']=1;
+                $filters['isDigital'] = true;
             } elseif ($filters['isDigital'] === 'nondigital') {
-                // @NOTE we currently have an unrelated bug OLCS-3792 which
-                // prevents this actually restricting to open only
-                $filters['isDigital']=0;
+                $filters['isDigital'] = false;
             } else {
                 unset($filters['isDigital']);
             }
@@ -46,7 +44,7 @@ trait DocumentSearchTrait
         return array_filter(
             $filters,
             function ($v) {
-                return !empty($v);
+                return $v === false || !empty($v);
             }
         );
     }
