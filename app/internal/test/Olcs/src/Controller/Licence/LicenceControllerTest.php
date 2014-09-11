@@ -34,7 +34,9 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
                 'getFromRoute',
                 'params',
                 'redirect',
-                'getServiceLocator'
+                'getServiceLocator',
+                'buildTable',
+                'url'
             )
         );
 
@@ -116,10 +118,53 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             'licenceId' => 1234
         );
 
-        $this->controller->expects($this->any())
+        $this->controller->expects($this->at(2))
             ->method('makeRestCall')
             ->with('DocumentSearchView', 'GET', $expectedParams)
             ->will($this->returnValue([]));
+
+        $altListData = [
+            'limit' => 100,
+            'sort' => 'description'
+        ];
+
+        $altResponse = [
+            'Results' => [
+                [
+                    'id' => 123,
+                    'description' => 'foo'
+                ]
+            ]
+        ];
+
+        $extendedListData = [
+            'limit' => 100,
+            'sort' => 'description',
+            'order' => 'DESC',
+            'page' => 1,
+            'licenceId' => 1234
+        ];
+
+        $refDataList = [
+            'limit' => 100,
+            'sort' => 'description',
+            'refDataCategoryId' => 'document_type'
+        ];
+
+        $this->controller->expects($this->at(6))
+            ->method('makeRestCall')
+            ->with('Category', 'GET', $altListData)
+            ->will($this->returnValue($altResponse));
+
+        $this->controller->expects($this->at(7))
+            ->method('makeRestCall')
+            ->with('DocumentSubCategory', 'GET', $extendedListData)
+            ->will($this->returnValue($altResponse));
+
+        $this->controller->expects($this->at(8))
+            ->method('makeRestCall')
+            ->with('RefData', 'GET', $refDataList)
+            ->will($this->returnValue($altResponse));
 
         $tableMock = $this->getMock('\stdClass', ['render']);
         $this->controller->expects($this->once())
@@ -156,7 +201,7 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
     public function testDocumentsActionAjax()
     {
 
-        $this->controller->expects($this->at(3))
+        $this->controller->expects($this->at(2))
             ->method('makeRestCall')
             ->will($this->returnValue([]));
 
@@ -184,8 +229,49 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
                 ]
             ]
         ];
+        $altListData = [
+            'limit' => 100,
+            'sort' => 'description'
+        ];
+
+        $altResponse = [
+            'Results' => [
+                [
+                    'id' => 123,
+                    'description' => 'foo'
+                ]
+            ]
+        ];
+
+        $extendedListData = [
+            'limit' => 100,
+            'sort' => 'description',
+            'order' => 'DESC',
+            'page' => 1
+        ];
+
+        $refDataList = [
+            'limit' => 100,
+            'sort' => 'description',
+            'refDataCategoryId' => 'document_type'
+        ];
+
+        $this->controller->expects($this->at(6))
+            ->method('makeRestCall')
+            ->with('Category', 'GET', $altListData)
+            ->will($this->returnValue($altResponse));
 
         $this->controller->expects($this->at(7))
+            ->method('makeRestCall')
+            ->with('DocumentSubCategory', 'GET', $extendedListData)
+            ->will($this->returnValue($altResponse));
+
+        $this->controller->expects($this->at(8))
+            ->method('makeRestCall')
+            ->with('RefData', 'GET', $refDataList)
+            ->will($this->returnValue($altResponse));
+
+        $this->controller->expects($this->at(10))
             ->method('makeRestCall')
             ->will($this->returnValue($response));
 
@@ -196,5 +282,67 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
         $view = $this->controller->documentsAction();
 
         $this->assertTrue($view->terminate());
+    }
+
+    public function testBusAction()
+    {
+        $table = 'table';
+
+        $licenceId = 110;
+        $page = 1;
+        $sort = 'regNo';
+        $order = 'desc';
+        $limit = 10;
+        $url = 'url';
+
+        $searchData['licence'] = $licenceId;
+        $searchData['page'] = $page;
+        $searchData['sort'] = $sort;
+        $searchData['order'] = $order;
+        $searchData['limit'] = $limit;
+        $searchData['url'] = $url;
+
+        $resultData = array();
+
+        $this->controller->expects($this->at(0))
+        ->method('getFromRoute')
+        ->with('licence')
+        ->will($this->returnValue($licenceId));
+
+        $this->controller->expects($this->at(1))
+            ->method('getFromRoute')
+            ->with($this->equalTo('page'), $this->equalTo($page))
+            ->will($this->returnValue($page));
+
+        $this->controller->expects($this->at(2))
+            ->method('getFromRoute')
+            ->with($this->equalTo('sort'), $this->equalTo($sort))
+            ->will($this->returnValue($sort));
+
+        $this->controller->expects($this->at(3))
+            ->method('getFromRoute')
+            ->with($this->equalTo('order'), $this->equalTo($order))
+            ->will($this->returnValue($order));
+
+        $this->controller->expects($this->at(4))
+            ->method('getFromRoute')
+            ->with($this->equalTo('limit'), $this->equalTo($limit))
+            ->will($this->returnValue($limit));
+
+        $this->controller->expects($this->once())
+            ->method('url')
+            ->will($this->returnValue($url));
+
+        $this->controller->expects($this->once())
+            ->method('makeRestCall')
+            ->with($this->equalTo('BusReg'), $this->equalTo('GET'), $this->equalTo($searchData))
+            ->will($this->returnValue($resultData));
+
+        $this->controller->expects($this->once())
+            ->method('buildTable')
+            ->with($this->equalTo('busreg'), $this->equalTo($resultData), $this->equalTo($searchData))
+            ->will($this->returnValue($table));
+
+        $this->controller->busAction();
     }
 }

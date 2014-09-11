@@ -110,7 +110,139 @@ return array(
                             'id' => 'licence_bus',
                             'label' => 'Bus reg',
                             'route' => 'licence/bus',
-                            'use_route_match' => true
+                            'use_route_match' => true,
+                            'pages' => array (
+                                array(
+                                    'id' => 'licence_bus_details',
+                                    'label' => 'internal-licence-bus-details',
+                                    'route' => 'licence/bus-details',
+                                    'use_route_match' => true,
+                                    'pages' => array(
+                                        array(
+                                            'id' => 'licence_bus_details-service',
+                                            'label' => 'internal-licence-bus-details-service',
+                                            'route' => 'licence/bus-details/service',
+                                            'use_route_match' => true,
+                                        ),
+                                        array(
+                                            'id' => 'licence_bus_details-stop',
+                                            'label' => 'internal-licence-bus-details-stop',
+                                            'route' => 'licence/bus-details/stop',
+                                            'use_route_match' => true,
+                                        ),
+                                        array(
+                                            'id' => 'licence_bus_details-ta',
+                                            'label' => 'internal-licence-bus-details-ta',
+                                            'route' => 'licence/bus-details/ta',
+                                            'use_route_match' => true,
+                                        ),
+                                        array(
+                                            'id' => 'licence_bus_details-quality',
+                                            'label' => 'internal-licence-bus-details-quality',
+                                            'route' => 'licence/bus-details/quality',
+                                            'use_route_match' => true,
+                                        )
+                                    )
+                                ),
+                                array(
+                                    'id' => 'licence_bus_short',
+                                    'label' => 'internal-licence-bus-short',
+                                    'route' => 'licence/bus-short',
+                                    'use_route_match' => true,
+                                    'pages' => array(
+                                        array(
+                                            'id' => 'licence_bus_short-placeholder',
+                                            'label' => 'internal-licence-bus-short-placeholder',
+                                            'route' => 'licence/bus-short/placeholder',
+                                            'use_route_match' => true,
+                                        ),
+                                    )
+                                ),
+                                array(
+                                    'id' => 'licence_bus_route',
+                                    'label' => 'internal-licence-bus-route',
+                                    'route' => 'licence/bus-route',
+                                    'use_route_match' => true,
+                                    'pages' => array(
+                                        array(
+                                            'id' => 'licence_bus_route-placeholder',
+                                            'label' => 'internal-licence-bus-route-placeholder',
+                                            'route' => 'licence/bus-route/placeholder',
+                                            'use_route_match' => true,
+                                        ),
+                                    )
+                                ),
+                                array(
+                                    'id' => 'licence_bus_trc',
+                                    'label' => 'internal-licence-bus-trc',
+                                    'route' => 'licence/bus-trc',
+                                    'use_route_match' => true,
+                                    'pages' => array(
+                                        array(
+                                            'id' => 'licence_bus_trc-placeholder',
+                                            'label' => 'internal-licence-bus-trc-placeholder',
+                                            'route' => 'licence/bus-trc/placeholder',
+                                            'use_route_match' => true,
+                                        ),
+                                    )
+                                ),
+                                array(
+                                    'id' => 'licence_bus_docs',
+                                    'label' => 'internal-licence-bus-docs',
+                                    'route' => 'licence/bus-docs',
+                                    'use_route_match' => true,
+                                    'pages' => array(
+                                        array(
+                                            'id' => 'licence_bus_docs-placeholder',
+                                            'label' => 'internal-licence-bus-docs-placeholder',
+                                            'route' => 'licence/bus-docs/placeholder',
+                                            'use_route_match' => true,
+                                        ),
+                                    )
+                                ),
+                                array(
+                                    'id' => 'licence_bus_processing',
+                                    'label' => 'internal-licence-bus-processing',
+                                    'route' => 'licence/bus-processing',
+                                    'use_route_match' => true,
+                                    'pages' => array(
+                                        array(
+                                            'id' => 'licence_bus_processing_notes',
+                                            'label' => 'internal-licence-bus-processing-notes',
+                                            'route' => 'licence/bus-processing/notes',
+                                            'use_route_match' => true,
+                                            'pages' => array(
+                                                array(
+                                                    'id' => 'licence_bus_processing_notes_add',
+                                                    'label' => 'internal-licence-bus-processing-notes-add',
+                                                    'route' => 'licence/bus-processing/add-note',
+                                                    'use_route_match' => true
+                                                ),
+                                                array(
+                                                    'id' => 'licence_bus_processing_notes_modify',
+                                                    'label' => 'internal-licence-bus-processing-notes-modify',
+                                                    'route' => 'licence/bus-processing/modify-note',
+                                                    'use_route_match' => true
+                                                )
+                                            )
+                                        )
+                                    )
+                                ),
+                                array(
+                                    'id' => 'licence_bus_fees',
+                                    'label' => 'internal-licence-bus-fees',
+                                    'route' => 'licence/bus-fees',
+                                    'use_route_match' => true,
+                                    'pages' => array(
+                                        array(
+                                            'id' => 'licence_bus_fees-placeholder',
+                                            'label' => 'internal-licence-bus-fees-placeholder',
+                                            'route' => 'licence/bus-fees/placeholder',
+                                            'use_route_match' => true,
+                                        ),
+                                    )
+                                ),
+                            )
                         ),
                         array(
                             'id' => 'licence_caselist',

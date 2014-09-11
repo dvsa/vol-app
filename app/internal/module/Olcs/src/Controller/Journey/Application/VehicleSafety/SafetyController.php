@@ -8,6 +8,7 @@
 namespace Olcs\Controller\Journey\Application\VehicleSafety;
 
 use Common\Controller\Application\VehicleSafety\SafetyController as ParentController;
+use Zend\Validator\ValidatorChain;
 
 /**
  * Safety Controller
@@ -43,7 +44,13 @@ class SafetyController extends ParentController
         $form = parent::alterForm($form);
 
         if (!$this->requiredFields) {
-            $this->setFieldsAsNotRequired($form->getInputFilter());
+
+            $filter = $form->getInputFilter();
+
+            $this->setFieldsAsNotRequired($filter);
+
+            // Need to remove the validation for required confirm box
+            $filter->get('application')->get('safetyConfirmation')->setValidatorChain(new ValidatorChain());
         }
 
         return $form;

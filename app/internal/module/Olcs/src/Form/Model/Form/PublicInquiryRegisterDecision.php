@@ -9,6 +9,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("Public inquiry Register Decision")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
+ * @Form\InputFilter("Common\Form\InputFilter")
  */
 class PublicInquiryRegisterDecision
 {

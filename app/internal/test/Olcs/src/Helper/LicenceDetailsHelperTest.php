@@ -85,7 +85,7 @@ class LicenceDetailsHelperTest extends PHPUnit_Framework_TestCase
                 )
             ),
             array(
-                LicenceDetailsHelper::GOODS_OR_PSV_PSV,
+                LicenceDetailsHelper::LICENCE_CATEGORY_PSV,
                 LicenceDetailsHelper::LICENCE_TYPE_RESTRICTED,
                 array(
                     'overview',
@@ -94,13 +94,13 @@ class LicenceDetailsHelperTest extends PHPUnit_Framework_TestCase
                     'address',
                     'people',
                     'operating_centre',
-                    'vehicle',
+                    'vehicle_psv',
                     'safety',
                     'condition_undertaking'
                 )
             ),
             array(
-                LicenceDetailsHelper::GOODS_OR_PSV_PSV,
+                LicenceDetailsHelper::LICENCE_CATEGORY_PSV,
                 LicenceDetailsHelper::LICENCE_TYPE_STANDARD_INTERNATIONAL,
                 array(
                     'overview',
@@ -110,13 +110,13 @@ class LicenceDetailsHelperTest extends PHPUnit_Framework_TestCase
                     'people',
                     'operating_centre',
                     'transport_manager',
-                    'vehicle',
+                    'vehicle_psv',
                     'safety',
                     'condition_undertaking'
                 )
             ),
             array(
-                LicenceDetailsHelper::GOODS_OR_PSV_PSV,
+                LicenceDetailsHelper::LICENCE_CATEGORY_PSV,
                 LicenceDetailsHelper::LICENCE_TYPE_STANDARD_NATIONAL,
                 array(
                     'overview',
@@ -126,13 +126,13 @@ class LicenceDetailsHelperTest extends PHPUnit_Framework_TestCase
                     'people',
                     'operating_centre',
                     'transport_manager',
-                    'vehicle',
+                    'vehicle_psv',
                     'safety',
                     'condition_undertaking'
                 )
             ),
             array(
-                LicenceDetailsHelper::GOODS_OR_PSV_PSV,
+                LicenceDetailsHelper::LICENCE_CATEGORY_PSV,
                 LicenceDetailsHelper::LICENCE_TYPE_SPECIAL_RESTRICTED,
                 array(
                     'overview',
@@ -187,25 +187,25 @@ class LicenceDetailsHelperTest extends PHPUnit_Framework_TestCase
             ),
             array(
                 'overview',
-                LicenceDetailsHelper::GOODS_OR_PSV_PSV,
+                LicenceDetailsHelper::LICENCE_CATEGORY_PSV,
                 LicenceDetailsHelper::LICENCE_TYPE_RESTRICTED,
                 true
             ),
             array(
                 'overview',
-                LicenceDetailsHelper::GOODS_OR_PSV_PSV,
+                LicenceDetailsHelper::LICENCE_CATEGORY_PSV,
                 LicenceDetailsHelper::LICENCE_TYPE_STANDARD_INTERNATIONAL,
                 true
             ),
             array(
                 'overview',
-                LicenceDetailsHelper::GOODS_OR_PSV_PSV,
+                LicenceDetailsHelper::LICENCE_CATEGORY_PSV,
                 LicenceDetailsHelper::LICENCE_TYPE_STANDARD_NATIONAL,
                 true
             ),
             array(
                 'overview',
-                LicenceDetailsHelper::GOODS_OR_PSV_PSV,
+                LicenceDetailsHelper::LICENCE_CATEGORY_PSV,
                 LicenceDetailsHelper::LICENCE_TYPE_SPECIAL_RESTRICTED,
                 true
             ),
@@ -230,25 +230,25 @@ class LicenceDetailsHelperTest extends PHPUnit_Framework_TestCase
             ),
             array(
                 'taxi_phv',
-                LicenceDetailsHelper::GOODS_OR_PSV_PSV,
+                LicenceDetailsHelper::LICENCE_CATEGORY_PSV,
                 LicenceDetailsHelper::LICENCE_TYPE_RESTRICTED,
                 false
             ),
             array(
                 'taxi_phv',
-                LicenceDetailsHelper::GOODS_OR_PSV_PSV,
+                LicenceDetailsHelper::LICENCE_CATEGORY_PSV,
                 LicenceDetailsHelper::LICENCE_TYPE_STANDARD_INTERNATIONAL,
                 false
             ),
             array(
                 'taxi_phv',
-                LicenceDetailsHelper::GOODS_OR_PSV_PSV,
+                LicenceDetailsHelper::LICENCE_CATEGORY_PSV,
                 LicenceDetailsHelper::LICENCE_TYPE_STANDARD_NATIONAL,
                 false
             ),
             array(
                 'taxi_phv',
-                LicenceDetailsHelper::GOODS_OR_PSV_PSV,
+                LicenceDetailsHelper::LICENCE_CATEGORY_PSV,
                 LicenceDetailsHelper::LICENCE_TYPE_SPECIAL_RESTRICTED,
                 true
             ),
@@ -273,25 +273,25 @@ class LicenceDetailsHelperTest extends PHPUnit_Framework_TestCase
             ),
             array(
                 'transport_manager',
-                LicenceDetailsHelper::GOODS_OR_PSV_PSV,
+                LicenceDetailsHelper::LICENCE_CATEGORY_PSV,
                 LicenceDetailsHelper::LICENCE_TYPE_RESTRICTED,
                 false
             ),
             array(
                 'transport_manager',
-                LicenceDetailsHelper::GOODS_OR_PSV_PSV,
+                LicenceDetailsHelper::LICENCE_CATEGORY_PSV,
                 LicenceDetailsHelper::LICENCE_TYPE_STANDARD_INTERNATIONAL,
                 true
             ),
             array(
                 'transport_manager',
-                LicenceDetailsHelper::GOODS_OR_PSV_PSV,
+                LicenceDetailsHelper::LICENCE_CATEGORY_PSV,
                 LicenceDetailsHelper::LICENCE_TYPE_STANDARD_NATIONAL,
                 true
             ),
             array(
                 'transport_manager',
-                LicenceDetailsHelper::GOODS_OR_PSV_PSV,
+                LicenceDetailsHelper::LICENCE_CATEGORY_PSV,
                 LicenceDetailsHelper::LICENCE_TYPE_SPECIAL_RESTRICTED,
                 false
             )
