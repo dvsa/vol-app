@@ -27,23 +27,39 @@ trait CaseControllerTrait
 
     public function initialiseData(MvcEvent $event)
     {
+        $licence = null;
+
         if (true !== $this->getRequest()->isXmlHttpRequest()) {
-            $case = $this->getCase();
 
-            $this->getViewHelperManager()->get('headTitle')->prepend('Case ' . $case['id']);
-            $this->getViewHelperManager()->get('pageTitle')->append('Case ' . $case['id']);
-            $this->getViewHelperManager()->get('pageSubtitle')->append('Case subtitle');
+            if ($this->params()->fromRoute('case')) {
 
-            $this->getViewHelperManager()->get('placeholder')->getContainer('case')->set($case);
+                $case = $this->getCase();
 
-            // Takes care of when a case is connected to a licence.
-            if (array_key_exists('licence', $case) && !empty($case['licence'])) {
+                $this->getViewHelperManager()->get('headTitle')->prepend('Case ' . $case['id']);
+                $this->getViewHelperManager()->get('pageTitle')->append('Case ' . $case['id']);
+                $this->getViewHelperManager()->get('pageSubtitle')->append('Case subtitle');
 
-                $licenceUrl = $this->url()->fromRoute('licence/details/overview', ['licence' => $case['licence']['id']]);
-                $licenceLink = '<a href="' . $licenceUrl . '">' . $case['licence']['licNo'] . '</a>';
+                $this->getViewHelperManager()->get('placeholder')->getContainer('case')->set($case);
+
+                // Takes care of when a case is connected to a licence.
+                if (array_key_exists('licence', $case) && !empty($case['licence'])) {
+
+                    $licence = $case['licence']['id'];
+                }
+            }
+
+            if ($licence = $this->params()->fromRoute('licence', $licence)) {
+
+                $licence = $this->makeRestCall('Licence', 'GET', array('id' => $licence));
+
+                $licenceUrl = $this->url()->fromRoute(
+                    'licence/cases',
+                    ['licence' => $licence['id']]
+                );
+                $licenceLink = '<a href="' . $licenceUrl . '">' . $licence['licNo'] . '</a>';
                 $this->getViewHelperManager()
-                    ->get('pageTitle')->setAutoEscape(false)
-                    ->prepend($licenceLink);
+                     ->get('pageTitle')->setAutoEscape(false)
+                     ->prepend($licenceLink);
             }
         }
 

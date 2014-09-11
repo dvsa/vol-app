@@ -32,6 +32,13 @@ class CrudAbstract extends CommonController\AbstractSectionController implements
 
     protected $pageLayoutInner = null;
 
+    /**
+     * Holds the isAction
+     *
+     * @var boolean
+     */
+    protected $isAction = false;
+
     protected function attachDefaultListeners()
     {
         parent::attachDefaultListeners();
@@ -63,7 +70,6 @@ class CrudAbstract extends CommonController\AbstractSectionController implements
         $this->checkForCrudAction(null, [], $this->getIdentifierName());
 
         $params = [
-            //'licence' => $this->params()->fromRoute('licence'),
             'page'    => $this->getQueryOrRouteParam('page', 1),
             'sort'    => $this->getQueryOrRouteParam('sort', 'id'),
             'order'   => $this->getQueryOrRouteParam('order', 'DESC'),
@@ -148,6 +154,41 @@ class CrudAbstract extends CommonController\AbstractSectionController implements
         return $this->renderView($view);
     }
 
+    /**
+     * Complete section and save
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function processSave($data)
+    {
+        $result = parent::processSave($data);
+
+        $this->addSuccessMessage('Saved sucessfully');
+
+        if (func_num_args() > 1 && func_get_arg(1) === false /* redirect = false */) {
+            return $result;
+        }
+
+        return $this->redirectToIndex();
+    }
+
+    public function redirectToIndex()
+    {
+        return $this->redirectToRoute(
+            null,
+            ['action'=>'index', $this->getIdentifierName() => null],
+            ['code' => '303'],
+            true
+        );
+    }
+
+    /**
+     * Method checks that the required properties exist.
+     *
+     * @throws \LogicException
+     * @return boolean
+     */
     public function checkRequiredProperties()
     {
         $missingProperties = false;
@@ -194,7 +235,10 @@ class CrudAbstract extends CommonController\AbstractSectionController implements
     {
         if (!is_null($this->pageLayoutInner)) {
 
-            $layout = $this->getView($view->getVariables());
+            //die('<pre>' . print_r((array)$view->getVariables(), 1));
+
+            // This is a zend\view\variables object - cast it to an array.
+            $layout = $this->getView((array)$view->getVariables());
 
             $layout->setTemplate($this->pageLayoutInner);
 

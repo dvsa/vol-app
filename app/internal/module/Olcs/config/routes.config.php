@@ -527,11 +527,10 @@ return array_merge(
         'case_prohibition' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/licence/[:licence]/case/[:case]/action/manage/prohibitions[/:action][/:id]',
+                'route' => '/case/[:case]/prohibition[/:action][/:prohibition]',
                 'constraints' => [
-                    'licence' => '[0-9]+',
                     'case' => '[0-9]+',
-                    'id' => '[0-9]+'
+                    'prohibition' => '[0-9]+'
                 ],
                 'defaults' => [
                     'controller' => 'CaseProhibitionController',

@@ -177,6 +177,9 @@ class CaseController extends AbstractCasesController
      */
     public function addAction()
     {
+        //$this->pageLayout = 'licence';
+        $this->pageLayoutInner = null;
+
         return $this->editAction();
     }
 
@@ -222,8 +225,12 @@ class CaseController extends AbstractCasesController
             $data
         );
 
-        $view = $this->getView(['form' => $form]);
-        $view->setTemplate('form');
+        // CR: Should be its own view helper - I'll refactor this later.
+        $this->getViewHelperManager()->get('placeholder')->getContainer('form')->set($form);
+
+        //$view = $this->getView(['form' => $form]);
+        $view = $this->getView([]);
+        $view->setTemplate('crud/form');
         return $this->renderView($view);
     }
 
@@ -237,12 +244,13 @@ class CaseController extends AbstractCasesController
 
         if (empty($data['fields']['id'])) { // new
 
-            $data['fields']['openDate'] = date('Y-m-d H:i:s');
+            $data['fields']['openDate'] = date('Y-m-d H:i:s'); // now
 
             // This should be the logged in user.
             $data['fields']['owner'] = $this->getLoggedInUser();
 
-            // This needs looking at - it might not be a case type of licence.
+            // This needs looking at - it might not be a case type of licence -
+            // so what should it default to ???
             if (isset($data['fields']['licence']) && !empty($data['fields']['licence'])) {
                 $data['fields']['caseType'] = 'case_t_lic';
             } else {
@@ -253,13 +261,15 @@ class CaseController extends AbstractCasesController
 
         $data['fields']['submissionSections'] = $this->formatCategories($data['submissionSections']);
 
-        $case = $this->processSave($data);
+        $case = $this->processSave($data, false);
 
         if (!empty($case)) {
             $caseId = $case['id'];
         } else {
             $caseId = $this->getIdentifier();
         }
+
+        $this->addSuccessMessage('Saved sucessfully');
 
         $this->redirect()->toRoute('case', array('case' => $caseId, 'action' => 'overview'));
     }

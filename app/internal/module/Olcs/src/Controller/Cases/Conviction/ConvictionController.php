@@ -132,6 +132,8 @@ class ConvictionController extends OlcsController\CrudAbstract
 
         $this->save($data);
 
+        $this->addSuccessMessage('Successfully marked as "Dealt with"');
+
         return $this->redirect()->toRoute('conviction', ['action' => 'index', 'conviction' => null], [], true);
     }
 
@@ -334,6 +336,8 @@ class ConvictionController extends OlcsController\CrudAbstract
         } else {
             $this->processAdd($data, 'Conviction');
         }
+
+        $this->addSuccessMessage('Saved sucessfully');
 
         return $this->redirect()->toRoute('conviction', ['action' => 'index', 'conviction' => null], [], true);
     }
