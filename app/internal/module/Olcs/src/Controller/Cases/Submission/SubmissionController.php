@@ -68,7 +68,7 @@ class SubmissionController extends OlcsController\CrudAbstract
     protected $dataMap = array(
         'main' => array(
             'mapFrom' => array(
-                'data'
+                'fields'
             )
         )
     );
@@ -124,7 +124,8 @@ class SubmissionController extends OlcsController\CrudAbstract
     protected function save($data, $service = null)
     {
         // modify $data
-        var_dump($data);exit;
+
+        $data['text'] = json_encode($data['submission_sections']['submission_sections']);
 
         return parent::save($data, $service);
     }
@@ -138,6 +139,13 @@ class SubmissionController extends OlcsController\CrudAbstract
     protected function processLoad($data)
     {
         // modify $data for form population
+        $routeParams = $this->params()->fromRoute();
+        $caseId = $routeParams['case'];
+        $case = $this->getCase($caseId);
+        $data['fields']['case'] = $case['id'];
+        if (isset($data['submission_sections']['submission_sections'])) {
+            $data['fields']['submission_sections']['submission_sections'] = json_decode($data['submission_sections']['submission_sections']);
+        }
 
         return parent::processLoad($data);
     }
