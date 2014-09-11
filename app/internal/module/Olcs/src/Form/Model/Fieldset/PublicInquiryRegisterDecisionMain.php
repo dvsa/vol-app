@@ -107,6 +107,71 @@ class PublicInquiryRegisterDecisionMain
     public $decisions = null;
 
     /**
+     * @Form\Options({
+     *     "label": "Curtailment date from",
+     *     "create_empty_option": true,
+     *     "render_delimiters": false
+     * })
+     * @Form\Type("Common\Form\Elements\Custom\DateSelect")
+     */
+    public $curtailmentDateFrom = null;
+
+
+    /**
+     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Curtailment indefinite"})
+     * @Form\Type("Checkbox")
+     */
+    public $curtailmentIsIndefinite = null;
+
+    /**
+     * @Form\Attributes({"id":"dob"})
+     * @Form\Options({
+     *     "label": "Curtailment date to",
+     *     "create_empty_option": true,
+     *     "render_delimiters": false
+     * })
+     * @Form\Required(false)
+     * @Form\Type("\Common\Form\Elements\Custom\DateSelect")
+     */
+    public $curtailmentDateTo = null;
+
+    /**
+     * @Form\Attributes({"multiple": true})
+     * @Form\Options({"label": "Vehicle List"})
+     * @Form\Type("Select")
+     */
+    public $vehicleList = null;
+
+    /**
+     * @Form\Options({
+     *     "label": "Suspension date from",
+     *     "create_empty_option": true,
+     *     "render_delimiters": false
+     * })
+     * @Form\Type("Common\Form\Elements\Custom\DateSelect")
+     */
+    public $suspensionDateFrom = null;
+
+
+    /**
+     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Suspension indefinite"})
+     * @Form\Type("Checkbox")
+     */
+    public $suspensionIsIndefinite = null;
+
+    /**
+     * @Form\Attributes({"id":"dob"})
+     * @Form\Options({
+     *     "label": "Suspension date to",
+     *     "create_empty_option": true,
+     *     "render_delimiters": false
+     * })
+     * @Form\Required(false)
+     * @Form\Type("\Common\Form\Elements\Custom\DateSelect")
+     */
+    public $suspensionDateTo = null;
+
+    /**
      * @Form\Attributes({"id":"","placeholder":"","class":"small"})
      * @Form\Options({"label": "Witnesses"})
      * @Form\Type("Text")
