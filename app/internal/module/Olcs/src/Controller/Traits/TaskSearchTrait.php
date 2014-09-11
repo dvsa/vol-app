@@ -38,11 +38,9 @@ trait TaskSearchTrait
 
         // we need an if / else if here because there is a third input
         // state, "all", which shouldn't apply either filter
-        if ($filters['status'] === 'closed') {
+        if ($filters['status'] === 'tst_closed') {
             $filters['isClosed'] = true;
-        } elseif ($filters['status'] === 'open') {
-            // @NOTE we currently have an unrelated bug OLCS-3792 which
-            // prevents this actually restricting to open only
+        } elseif ($filters['status'] === 'tst_open') {
             $filters['isClosed'] = false;
         }
 
@@ -54,7 +52,7 @@ trait TaskSearchTrait
         return array_filter(
             $filters,
             function ($v) {
-                return !empty($v);
+                return $v === false || !empty($v);
             }
         );
     }
