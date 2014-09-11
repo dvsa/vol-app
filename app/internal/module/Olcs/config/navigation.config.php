@@ -58,8 +58,8 @@ return array(
                         array(
                             'id' => 'case_details_prohibitions',
                             'label' => 'Prohibitions',
-                            'route' => 'case',
-                            'action' => 'prohibitions',
+                            'route' => 'case_prohibition',
+                            'action' => 'index',
                             'use_route_match' => true,
                         ),
                         array(

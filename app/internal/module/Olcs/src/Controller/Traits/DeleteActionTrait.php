@@ -16,6 +16,9 @@ trait DeleteActionTrait
         $identifierName = $this->getIdentifierName();
         $id = $this->params()->fromRoute($identifierName);
         $this->makeRestCall($this->getDeleteServiceName(), 'DELETE', ['id' => $id]);
+
+        $this->addErrorMessage('Deleted sucessfully');
+
         $this->redirectToIndex();
     }
 

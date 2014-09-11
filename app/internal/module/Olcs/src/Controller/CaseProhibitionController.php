@@ -1,32 +1,176 @@
 <?php
 
-    /**
-     * Case Prohibition Controller
-     *
-     * @author Ian Lindsay <ian@hemera-business-services.co.uk>
-     */
-
+/**
+ * Case Prohibition Controller
+ *
+ * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ */
 namespace Olcs\Controller;
 
-    use Olcs\Controller\Traits\DeleteActionTrait;
-
-    use Common\Controller\CrudInterface;
+// Olcs
+use Olcs\Controller as OlcsController;
+use Olcs\Controller\Traits as ControllerTraits;
 
     /**
      * Case Prohibition Controller
      *
      * @author Ian Lindsay <ian@hemera-business-services.co.uk>
      */
-class CaseProhibitionController extends CaseController implements CrudInterface
+class CaseProhibitionController extends OlcsController\CrudAbstract
 {
-    use DeleteActionTrait;
+    use ControllerTraits\CaseControllerTrait;
+
+    /**
+     * Identifier name
+     *
+     * @var string
+     */
+    protected $identifierName = 'prohibition';
+
+    /**
+     * Holds the form name
+     *
+     * @var string
+     */
+    protected $formName = 'prohibition';
+
+    /**
+     * The current page's extra layout, over and above the
+     * standard base template, a sibling of the base though.
+     *
+     * @var string
+     */
+    protected $pageLayout = 'case';
+
+    /**
+     * For most case crud controllers, we use the case/inner-layout
+     * layout file. Except submissions.
+     *
+     * @var string
+     */
+    protected $pageLayoutInner = 'case/inner-layout';
+
+    /**
+     * Holds the service name
+     *
+     * @var string
+     */
+    protected $service = 'Prohibition';
+
+    /**
+     * Holds the navigation ID,
+     * required when an entire controller is
+     * represneted by a single navigation id.
+     */
+    protected $navigationId = 'case_details_prohibitions';
+
+    /**
+     * Holds an array of variables for the
+     * default index list page.
+     */
+    protected $listVars = [
+        'case',
+    ];
+
+    /**
+     * Data map
+     *
+     * @var array
+    */
+    protected $dataMap = array(
+        'main' => array(
+            'mapFrom' => array(
+                'fields',
+                'base',
+            )
+        )
+    );
+
+    /**
+     * Holds the isAction
+     *
+     * @var boolean
+     */
+    protected $isAction = false;
+
+    /**
+     * Holds the Data Bundle
+     *
+     * @var array
+    */
+    protected $dataBundle = array(
+        'children' => array(
+            'case' => array(
+                'properties' => array(
+                    'id'
+                )
+            ),
+            'prohibitionType' => array(
+                'properties' => array(
+                    'id',
+                    'description'
+                )
+            )
+        )
+    );
+
+    public function replaceIds(array $array, array $ids)
+    {
+        foreach ($array as $key => $value) {
+            if (in_array($key, $ids)) {
+                $array[$key] = $value['id'];
+            }
+        }
+
+        return $array;
+    }
+
+    /**
+     * Map the data on load
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function processLoad($data)
+    {
+        $data = $this->replaceIds($data, ['prohibitionType', 'case']);
+        $data['fields'] = $data;
+        $data['base'] = $data;
+
+        //die('<pre>' . print_r($data, 1));
+
+        if (empty($data)) {
+
+            $data['base']['case'] = $this->getQueryOrRouteParam('case');
+        }
+
+        return $data;
+    }
+
+    /**
+     * Save data
+     *
+     * @param array $data
+     * @param string $service
+     * @return array
+     */
+    /* protected function save($data, $service = null)
+    {
+        $data['createdBy'] = $this->getLoggedInUser();
+
+        //die('<pre>' . print_r($data, 1));
+
+        parent::save($data, $service);
+
+        return $this->redirect(null, ['action' => 'index', 'conviction' => null], [], true);
+    } */
 
     /**
      * Index action loads the form data
      *
      * @return \Zend\Form\Form
      */
-    public function indexAction()
+    /* public function indexAction()
     {
         $caseId = $this->fromRoute('case');
         $licence = $this->fromRoute('licence');
@@ -37,8 +181,6 @@ class CaseProhibitionController extends CaseController implements CrudInterface
 
         $form = $this->generateProhibitionNoteForm($caseId);
 
-        $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licence)));
-
         $view = $this->getView();
         $tabs = $this->getTabInformationArray();
 
@@ -47,9 +189,6 @@ class CaseProhibitionController extends CaseController implements CrudInterface
 
         $view->setVariables(
             [
-                'case' => $case,
-                'tabs' => $tabs,
-                'tab' => 'prohibitions',
                 'table' => $table,
                 'summary' => $summary,
                 'commentForm' => $form,
@@ -58,31 +197,19 @@ class CaseProhibitionController extends CaseController implements CrudInterface
 
         $view->setTemplate('case/manage');
         return $view;
-    }
+    } */
 
     /**
      * Add action
      *
      * @return void|\Zend\View\Model\ViewModel
      */
-    public function addAction()
+    /* public function addAction()
     {
-        $licenceId = $this->fromRoute('licence');
-        $caseId = $this->fromRoute('case');
-
-        $this->setBreadcrumb(
-            array(
-                'licence_case_list/pagination' => array('licence' => $licenceId),
-                'case_prohibition' => array('licence' => $licenceId, 'case' => $caseId)
-            )
-        );
-
         $form = $this->generateFormWithData(
             'prohibition',
             'processAddProhibition',
-            array(
-                'case_id' => $caseId
-            )
+            ['case' => $this->fromRoute('case')]
         );
 
         $view = $this->getView(
@@ -97,15 +224,15 @@ class CaseProhibitionController extends CaseController implements CrudInterface
 
         $view->setTemplate('prohibition/form');
 
-        return $view;
-    }
+        return $this->renderView($view);
+    } */
 
     /**
      * Edit action
      *
      * @return void|\Zend\View\Model\ViewModel
      */
-    public function editAction()
+    /* public function editAction()
     {
         $licenceId = $this->fromRoute('licence');
         $caseId = $this->fromRoute('case');
@@ -178,7 +305,7 @@ class CaseProhibitionController extends CaseController implements CrudInterface
         $view->setTemplate('prohibition/form');
 
         return $view;
-    }
+    } */
 
     /**
      * Formats data for use in the form
@@ -210,12 +337,12 @@ class CaseProhibitionController extends CaseController implements CrudInterface
      * @param int $caseId
      * @return string
      */
-    private function generateProhibitionTable($caseId)
+    /* private function generateProhibitionTable($caseId)
     {
         $results = $this->makeRestCall('Prohibition', 'GET', array('case' => $caseId), $this->getBundle());
 
         return $this->buildTable('prohibition', $results);
-    }
+    } */
 
     /**
      * Gets a table of defects for the prohibition
@@ -330,7 +457,7 @@ class CaseProhibitionController extends CaseController implements CrudInterface
      * @param array $data
      * @return \Zend\Http\Response
      */
-    public function processEditProhibition ($data)
+    public function processEditProhibition($data)
     {
         $formattedData = $this->formatForSave($data);
 
