@@ -58,6 +58,13 @@ class ConvictionController extends OlcsController\CrudAbstract
     protected $service = 'Conviction';
 
     /**
+     * Holds the navigation ID,
+     * required when an entire controller is
+     * represneted by a single navigation id.
+     */
+    protected $navigationId = 'case_details_convictions';
+
+    /**
      * Holds an array of variables for the default
      * index list page.
      */
@@ -135,27 +142,14 @@ class ConvictionController extends OlcsController\CrudAbstract
      */
     public function addAction()
     {
+        $this->getServiceLocator()->get('Navigation')->findOneBy('id', 'case_details_convictions')->setActive();
+
         $routeParams = $this->getParams(array('case', 'id'));
-
-        // @todo We shouldn't be accessing the POST global we should be using the request
-        if (isset($_POST['cancel-conviction'])) {
-            return $this->redirect()->toRoute(
-                'case_convictions',
-                array('case' => $routeParams['case'], 'licence' => $routeParams['licence'])
-            );
-        }
-
-        $data = array('case' => $routeParams['case']);
-        $results = $this->makeRestCall('Cases', 'GET', array('id' => $routeParams['case']));
-
-        if (empty($routeParams['case']) || empty($routeParams['licence']) || empty($results)) {
-            return $this->getResponse()->setStatusCode(404);
-        }
 
         $form = $this->generateFormWithData(
             'conviction',
             'processConviction',
-            $data
+            ['case' => $this->getQueryOrRouteParam('case')]
         );
 
         $request = $this->getRequest();
@@ -183,14 +177,15 @@ class ConvictionController extends OlcsController\CrudAbstract
             }
 
             $form->get('offence')
-                ->get('category')
+                ->get('convictionCategory')
                 ->setValueOptions($formSubCategory);
         }
 
+        $this->getViewHelperManager()->get('placeholder')->getContainer('form')->set($form);
+        $this->loadScripts(['conviction']);
+
         $view = new ViewModel(
             array(
-                'form' => $form,
-                'inlineScript' => $this->loadScripts(['conviction']),
                 'params' => array(
                     'pageTitle' => 'add-conviction',
                     'pageSubTitle' => 'Please add conviction details'
@@ -198,8 +193,8 @@ class ConvictionController extends OlcsController\CrudAbstract
             )
         );
 
-        $view->setTemplate('conviction/form');
-        return $view;
+        $view->setTemplate('crud/form');
+        return $this->renderView($view);
     }
 
     /**
@@ -209,7 +204,7 @@ class ConvictionController extends OlcsController\CrudAbstract
      */
     public function editAction()
     {
-        /* $data = $this->loadCurrent();
+        $data = $this->loadCurrent();
 
         if (isset($data['case'])) {
             $data['case'] = $data['case']['id'];
@@ -286,12 +281,11 @@ class ConvictionController extends OlcsController\CrudAbstract
             ->get('convictionCategory')
             ->setValueOptions($formSubCategory);
 
-        $this->getViewHelperManager()->get('placeholder')->getContainer('form')->set($form); */
-        //die(print_r($this->loadScripts(['conviction']), 1));
+        $this->getViewHelperManager()->get('placeholder')->getContainer('form')->set($form);
+        $this->loadScripts(['conviction']);
+
         $view = new ViewModel(
             array(
-                //'form' => $form,
-                'inlineScript' => $this->loadScripts(['conviction']),
                 'params' => array(
                     'pageTitle' => 'edit-conviction',
                     'pageSubTitle' => 'Edit the conviction'
@@ -300,7 +294,7 @@ class ConvictionController extends OlcsController\CrudAbstract
         );
 
         $view->setTemplate('crud/form');
-        return $view;
+        return $this->renderView($view);
     }
 
     /**
@@ -310,7 +304,7 @@ class ConvictionController extends OlcsController\CrudAbstract
      */
     public function processConviction($data)
     {
-        $data = array_merge($data, $data['defendant-details'], $data['offence']);
+        $data = array_merge_recursive($data, $data['defendant-details'], $data['offence']);
 
         //two unsets here keeps line length under 120
         //keeps phpunit happy as it isn't detecting the code has
@@ -326,11 +320,13 @@ class ConvictionController extends OlcsController\CrudAbstract
         }
 
         //we only have category text in the conviction table for the user defined type
-        if (!$this->isUserDefinedConvictionCategory($data['category'])) {
+        if (!$this->isUserDefinedConvictionCategory($data['convictionCategory'])) {
             $data['categoryText'] = '';
         }
 
         $routeParams = $this->getParams(array('action', 'licence', 'case'));
+
+        //die('<pre>' . print_r($data, 1));
 
         if (strtolower($routeParams['action']) == 'edit' || strtolower($routeParams['action']) == 'dealt') {
             unset($data['case'], $data['parentCategory']);
@@ -339,7 +335,7 @@ class ConvictionController extends OlcsController\CrudAbstract
             $this->processAdd($data, 'Conviction');
         }
 
-        return $this->redirect()->toRoute('conviction', ['action' => 'index'], [], true);
+        return $this->redirect()->toRoute('conviction', ['action' => 'index', 'conviction' => null], [], true);
     }
 
     /**

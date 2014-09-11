@@ -27,22 +27,24 @@ trait CaseControllerTrait
 
     public function initialiseData(MvcEvent $event)
     {
-        $case = $this->getCase();
+        if (true !== $this->getRequest()->isXmlHttpRequest()) {
+            $case = $this->getCase();
 
-        $this->getViewHelperManager()->get('headTitle')->prepend('Case ' . $case['id']);
-        $this->getViewHelperManager()->get('pageTitle')->append('Case ' . $case['id']);
-        $this->getViewHelperManager()->get('pageSubtitle')->append('Case subtitle');
+            $this->getViewHelperManager()->get('headTitle')->prepend('Case ' . $case['id']);
+            $this->getViewHelperManager()->get('pageTitle')->append('Case ' . $case['id']);
+            $this->getViewHelperManager()->get('pageSubtitle')->append('Case subtitle');
 
-        $this->getViewHelperManager()->get('placeholder')->getContainer('case')->set($case);
+            $this->getViewHelperManager()->get('placeholder')->getContainer('case')->set($case);
 
-        // Takes care of when a case is connected to a licence.
-        if (array_key_exists('licence', $case) && !empty($case['licence'])) {
+            // Takes care of when a case is connected to a licence.
+            if (array_key_exists('licence', $case) && !empty($case['licence'])) {
 
-            $licenceUrl = $this->url()->fromRoute('licence/details/overview', ['licence' => $case['licence']['id']]);
-            $licenceLink = '<a href="' . $licenceUrl . '">' . $case['licence']['licNo'] . '</a>';
-            $this->getViewHelperManager()
-                ->get('pageTitle')->setAutoEscape(false)
-                ->prepend($licenceLink);
+                $licenceUrl = $this->url()->fromRoute('licence/details/overview', ['licence' => $case['licence']['id']]);
+                $licenceLink = '<a href="' . $licenceUrl . '">' . $case['licence']['licNo'] . '</a>';
+                $this->getViewHelperManager()
+                    ->get('pageTitle')->setAutoEscape(false)
+                    ->prepend($licenceLink);
+            }
         }
 
         return true;

@@ -48,29 +48,4 @@ class AbstractController extends OlcsController\CrudAbstract
         }
         return $final;
     }
-
-    /**
-     * Gets a variable from the route
-     *
-     * @param string $param
-     * @param mixed $default
-     * @return type
-     */
-    public function fromRoute($param, $default = null)
-    {
-        return $this->params()->fromRoute($param, $default);
-    }
-
-    /**
-     * Gets a variable from postdata
-     *
-     * @param string $param
-     * @param mixed $default
-     * @return type
-     */
-    public function fromPost($param, $default = null)
-    {
-        return $this->params()->fromPost($param, $default);
-    }
-
 }

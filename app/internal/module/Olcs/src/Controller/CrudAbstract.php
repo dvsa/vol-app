@@ -37,6 +37,10 @@ class CrudAbstract extends CommonController\AbstractSectionController implements
         parent::attachDefaultListeners();
 
         $this->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, array($this, 'checkRequiredProperties'), 5);
+
+        if (method_exists($this, 'setNavigationCurrentLocation')) {
+            $this->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, array($this, 'setNavigationCurrentLocation'), 6);
+        }
     }
 
     public function getQueryOrRouteParam($name, $default = null)
@@ -202,5 +206,47 @@ class CrudAbstract extends CommonController\AbstractSectionController implements
         }
 
         return parent::renderView($view, $pageTitle, $pageSubTitle);
+    }
+
+    /**
+     * Sets the navigation to that secified in the controller. Useful for when a controller is
+     * 100% reresented by a single navigation object.
+     *
+     * @see $this->navigationId
+     *
+     * @return boolean true
+     */
+    public function setNavigationCurrentLocation()
+    {
+        $navigation = $this->getServiceLocator()->get('Navigation');
+        if (!empty($this->navigationId)) {
+            $navigation->findOneBy('id', $this->navigationId)->setActive();
+        }
+
+        return true;
+    }
+
+    /**
+     * Gets a variable from the route
+     *
+     * @param string $param
+     * @param mixed $default
+     * @return type
+     */
+    public function fromRoute($param, $default = null)
+    {
+        return $this->params()->fromRoute($param, $default);
+    }
+
+    /**
+     * Gets a variable from postdata
+     *
+     * @param string $param
+     * @param mixed $default
+     * @return type
+     */
+    public function fromPost($param, $default = null)
+    {
+        return $this->params()->fromPost($param, $default);
     }
 }
