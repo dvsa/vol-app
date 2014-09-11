@@ -108,7 +108,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
         $name = $this->getName();
         $this->getSubmissionType()->setName($name . '[submission_type]');
         $this->getSubmissionSections()->setName($name . '[submission_sections]');
-        $this->getSubmissionTypeSubmit()->setName($name . '[submissionTypeSubmit]');
+        $this->getSubmissionTypeSubmit()->setName($name . '[submission_type_submit]');
     }
 
     /**
@@ -126,6 +126,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
         if (isset($value['submission_sections'])) {
             $sections = array_merge($value['submission_sections'], $sections);
         }
+
         $this->getSubmissionSections()->setValue($sections);
 
     }
@@ -287,6 +288,37 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
             'submission_section_misc',
             'submission_section_annx'
         ];
+    }
+
+
+    /**
+     * Should return an array specification compatible with
+     * {@link Zend\InputFilter\Factory::createInput()}.
+     *
+     * @return array
+     */
+    public function getInputSpecification()
+    {
+        return array(
+            'name' => $this->getName(),
+            'required' => true,
+            'filters' => array(
+                array(
+                    'name'    => 'Callback',
+                    'options' => array(
+                        'callback' => function ($data) {
+                            return array_merge(
+                                $data['submission_sections'],
+                                $this->getMandatorySectionsForType($value['submission_type'])
+                            );
+                        }
+                    )
+                )
+            ),
+            'validators' => array(
+                $this->getValidator(),
+            )
+        );
     }
 
 }

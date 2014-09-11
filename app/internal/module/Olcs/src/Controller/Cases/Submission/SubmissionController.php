@@ -107,11 +107,26 @@ class SubmissionController extends OlcsController\CrudAbstract
         // Modify $data
         $formData = $this->getFromPost('fields');
 
-        if (!(isset($formData['submission_sections']['submisson_type'])) ||
-            empty($formData['submission_sections']['submisson_type'])) {
+        // Intercept Submission type submit button to prevent saving
+        if (isset($formData['submission_sections']['submission_type_submit'])) {
             $this->setPersist(false);
         }
         return parent::addAction();
+    }
+
+    /**
+     * Save data
+     *
+     * @param array $data
+     * @param string $service
+     * @return array
+     */
+    protected function save($data, $service = null)
+    {
+        // modify $data
+        var_dump($data);exit;
+
+        return parent::save($data, $service);
     }
 
     /**
