@@ -126,14 +126,16 @@ trait TaskSearchTrait
             $action = 'reassign';
         } elseif ($action === 'create task') {
             $action = 'add';
+        } elseif ($action === 'close task') {
+            $action = 'close';
         }
 
         if ($this->getRequest()->isPost()) {
             if ($action !== 'add') {
                 $id = $this->params()->fromPost('id');
 
-                // pass multiple ids to re-assign
-                if ($action === 'reassign' && is_array($id)) {
+                // pass multiple ids to re-assign or close
+                if (($action === 'reassign' || $action === 'close') && is_array($id)) {
                     $id = implode('-', $id);
                 }
 
