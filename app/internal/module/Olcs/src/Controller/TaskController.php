@@ -544,7 +544,7 @@ class TaskController extends AbstractController
      *
      * @param Zend\Form\Element
      */
-    private function disableFormElements($element)
+    public function disableFormElements($element)
     {
         if ($element instanceof \Zend\Form\Fieldset) {
             foreach ($element->getFieldsets() as $child) {
