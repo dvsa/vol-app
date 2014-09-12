@@ -90,16 +90,11 @@ class LicenceController extends AbstractController
         $searchData['sort'] = $this->getFromRoute('sort', 'regNo');
         $searchData['order'] = $this->getFromRoute('order', 'desc');
         $searchData['limit'] = $this->getFromRoute('limit', 10);
-        $searchData['url'] = $this->url();
 
         $resultData = $this->makeRestCall('BusReg', 'GET', $searchData);
-        $table = $this->buildTable('busreg', $resultData, $searchData);
+        $table = $this->getTable('busreg', $resultData, $searchData);
 
-        $view = $this->getViewWithLicence(
-            array(
-                'table' => $table
-            )
-        );
+        $view = $this->getViewWithLicence(array('table' => $table));
 
         $view->setTemplate('licence/processing');
 

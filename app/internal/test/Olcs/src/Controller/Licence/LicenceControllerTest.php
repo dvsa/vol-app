@@ -35,7 +35,7 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
                 'params',
                 'redirect',
                 'getServiceLocator',
-                'buildTable',
+                'getTable',
                 'url'
             )
         );
@@ -339,7 +339,7 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue($resultData));
 
         $this->controller->expects($this->once())
-            ->method('buildTable')
+            ->method('getTable')
             ->with($this->equalTo('busreg'), $this->equalTo($resultData), $this->equalTo($searchData))
             ->will($this->returnValue($table));
 

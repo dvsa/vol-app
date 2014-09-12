@@ -985,12 +985,12 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
 
         $tableMock = $this->getMock(
             'stdClass', [
-            'buildTable'
+            'getTable'
             ]
         );
 
         $tableMock->expects($this->any())
-            ->method('buildTable')
+            ->method('getTable')
             ->will($this->returnValue('table'));
 
         $serviceMock->expects($this->any())

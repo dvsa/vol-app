@@ -43,7 +43,7 @@ class CaseImpoundingController extends CaseController implements CrudInterface
 
         $variables = array(
             'tab' => 'impounding',
-            'table' => $this->buildTable('impounding', $results['Results'])
+            'table' => $this->getTable('impounding', $results['Results'])
         );
 
         $caseVariables = $this->getCaseVariables($caseId, $variables);

@@ -178,7 +178,7 @@ class CaseConvictionControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue($this->getStaticDefTypes()));
 
         $serviceLocator = $this->getMock('\stdClass', array('get'));
-        $tableBuilder = $this->getMock('\stdClass', array('buildTable'));
+        $tableBuilder = $this->getMock('\stdClass', array('getTable'));
 
         $serviceLocator->expects($this->once())
             ->method('get')
@@ -951,10 +951,10 @@ class CaseConvictionControllerTest extends AbstractHttpControllerTestCase
 
         $serviceLocator = $this->getMock('\stdClass', array('get'));
 
-        $tableBuilder = $this->getMock('\stdClass', array('buildTable'));
+        $tableBuilder = $this->getMock('\stdClass', array('getTable'));
 
         $tableBuilder->expects($this->once())
-            ->method('buildTable')
+            ->method('getTable')
             ->with($this->equalTo('legacyOffences'), $data, array('url' => $mockUrl))
             ->willReturn('mocktablehtml');
 

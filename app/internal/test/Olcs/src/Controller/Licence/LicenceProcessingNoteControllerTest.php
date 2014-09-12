@@ -25,7 +25,7 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
             array(
                 'makeRestCall',
                 'getLoggedInUser',
-                'buildTable',
+                'getTable',
                 'generateFormWithData',
                 'getFromRoute',
                 'getFromPost',
@@ -76,7 +76,7 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
           //  ->method('appendLinkedId');
 
         $this->controller->expects($this->once())
-            ->method('buildTable');
+            ->method('getTable');
 
         $this->controller->expects($this->once())
             ->method('getView')
@@ -224,7 +224,7 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
     /**
      * Tests the process add notes function
      *
-     * @dataProvider testProcessAddNotesProvider
+     * @dataProvider processAddNotesProvider
      *
      * @param array $data
      */
@@ -246,7 +246,7 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
     /**
      * Tests the process add notes function redirects properly on failure
      *
-     * @dataProvider testProcessAddNotesProvider
+     * @dataProvider processAddNotesProvider
      *
      * @param array $data
      */
@@ -292,7 +292,7 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
     /**
      * Data provider for process add notes
      */
-    public function testProcessAddNotesProvider()
+    public function processAddNotesProvider()
     {
         return [
             [$this->getTestFormPost('note_t_lic'), 'licence'],

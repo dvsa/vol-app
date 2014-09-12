@@ -130,7 +130,7 @@ class OlcsSearchControllerTest extends AbstractHttpControllerTestCase
             ->with('OperatorSearch', 'GET', $data)
             ->will($this->returnValue($results));
 
-        $tableBuilder = $this->getMock('\stdClass', array('buildTable'));
+        $tableBuilder = $this->getMock('\stdClass', array('getTable'));
 
         $data['url'] = '/search/operators';
 
@@ -142,10 +142,10 @@ class OlcsSearchControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue($this->getStaticEntityTypes()));
 
         $serviceLocator = $this->getMock('\stdClass', array('get'));
-        $tableBuilder = $this->getMock('\stdClass', array('buildTable'));
+        $tableBuilder = $this->getMock('\stdClass', array('getTable'));
 
         $tableBuilder->expects($this->once())
-            ->method('buildTable')
+            ->method('getTable')
             ->with('operator', $processedResults, $data)
             ->will($this->returnValue('table'));
 

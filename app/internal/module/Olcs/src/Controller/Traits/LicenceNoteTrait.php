@@ -117,7 +117,6 @@ trait LicenceNoteTrait
         $searchData['sort'] = $this->getFromRoute('sort', 'priority');
         $searchData['order'] = $this->getFromRoute('order', 'desc');
         $searchData['limit'] = $this->getFromRoute('limit', 10);
-        $searchData['url'] = $this->url();
 
         $bundle = $this->getBundle();
 
@@ -125,7 +124,7 @@ trait LicenceNoteTrait
 
         $formattedResult = $this->appendLinkedId($resultData);
 
-        $table = $this->buildTable('note', $formattedResult, $searchData);
+        $table = $this->getTable('note', $formattedResult, $searchData);
 
         $view = $this->getView(['table' => $table]);
         $view->setTemplate($this->getTemplatePrefix() . '/notes/index');

@@ -25,7 +25,7 @@ class BusProcessingNoteControllerTest extends AbstractHttpControllerTestCase
             array(
                 'makeRestCall',
                 'getLoggedInUser',
-                'buildTable',
+                'getTable',
                 'generateFormWithData',
                 'getFromRoute',
                 'getFromPost',
@@ -77,7 +77,7 @@ class BusProcessingNoteControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue($this->getSampleResult()));
 
         $this->controller->expects($this->once())
-            ->method('buildTable');
+            ->method('getTable');
 
         $this->controller->expects($this->once())
             ->method('getView')

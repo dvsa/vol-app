@@ -281,7 +281,7 @@ class CaseConditionUndertakingController extends CaseController
         }
 
 
-        return $this->buildTable($this->tables[$which], $conditionUndertakings);
+        return $this->getTable($this->tables[$which], $conditionUndertakings);
     }
 
     /**
