@@ -66,9 +66,6 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
         $this->getFromRouteWithDefault(6, 'limit', $limit, $limit);
 
         $this->controller->expects($this->once())
-            ->method('url');
-
-        $this->controller->expects($this->once())
             ->method('makeRestCall')
             ->will($this->returnValue($this->getSampleResult()));
 

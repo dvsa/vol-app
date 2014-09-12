@@ -43,7 +43,8 @@ class CaseConvictionControllerTest extends AbstractHttpControllerTestCase
                 'notFoundAction',
                 'fromPost',
                 'getRequest',
-                'getLegacyOffencesTable'
+                'getLegacyOffencesTable',
+                'getTable'
             )
         );
         parent::setUp();
@@ -149,10 +150,6 @@ class CaseConvictionControllerTest extends AbstractHttpControllerTestCase
             ->method('makeRestCall')
             ->will($this->returnValue($this->getSampleResultsArray()));
 
-        $this->controller->expects($this->once())
-            ->method('url')
-            ->will($this->returnValue(array()));
-
         $mockTranslator = $this->getMock('\stdClass', array('translate'));
 
         $mockTranslator->expects($this->any())
@@ -177,23 +174,20 @@ class CaseConvictionControllerTest extends AbstractHttpControllerTestCase
             ->with('Config')
             ->will($this->returnValue($this->getStaticDefTypes()));
 
-        $serviceLocator = $this->getMock('\stdClass', array('get'));
         $tableBuilder = $this->getMock('\stdClass', array('getTable'));
 
-        $serviceLocator->expects($this->once())
-            ->method('get')
-            ->with('Table')
-            ->will($this->returnValue($tableBuilder));
-
-        $this->controller->expects($this->exactly(3))
+        $this->controller->expects($this->exactly(2))
             ->method('getServiceLocator')
             ->will(
                 $this->onConsecutiveCalls(
                     $configServiceLocator,
-                    $configServiceLocator,
-                    $serviceLocator
+                    $configServiceLocator
                 )
             );
+
+        $this->controller->expects($this->once())
+            ->method('getTable')
+            ->will($this->returnValue($tableBuilder));
 
         $this->controller->indexAction();
     }
@@ -937,35 +931,15 @@ class CaseConvictionControllerTest extends AbstractHttpControllerTestCase
         $this->controller = $this->getMock(
             '\Olcs\Controller\CaseConvictionController',
             array(
-                'url',
-                'getServiceLocator'
+                'getTable'
             )
         );
 
-        $mockUrl = 'some_url';
         $data = ['legacyOffences' => []];
 
         $this->controller->expects($this->once())
-            ->method('url')
-            ->willReturn($mockUrl);
-
-        $serviceLocator = $this->getMock('\stdClass', array('get'));
-
-        $tableBuilder = $this->getMock('\stdClass', array('getTable'));
-
-        $tableBuilder->expects($this->once())
             ->method('getTable')
-            ->with($this->equalTo('legacyOffences'), $data, array('url' => $mockUrl))
-            ->willReturn('mocktablehtml');
-
-        $serviceLocator->expects($this->once())
-            ->method('get')
-            ->with('Table')
-            ->will($this->returnValue($tableBuilder));
-
-        $this->controller->expects($this->once())
-            ->method('getServiceLocator')
-            ->willReturn($serviceLocator);
+            ->will($this->returnValue('mocktablehtml'));
 
         $this->controller->getLegacyOffencesTable($data);
 

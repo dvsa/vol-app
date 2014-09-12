@@ -30,25 +30,14 @@ class OlcsSearchControllerTest extends AbstractHttpControllerTestCase
                 'redirect',
                 'params',
                 'makeRestCall',
-                'url'
+                'url',
+                'getTable'
             )
         );
         $this->serviceLocator = $this->getMock('\stdClass', array('get'));
         $this->pluginManager = $this->getMock('\stdClass', array('get'));
         $this->url = $this->getMock('\stdClass', array('fromRoute'));
         parent::setUp();
-    }
-
-    private function setServiceLocator($params, $returnVal)
-    {
-        $this->controller->expects($this->once())
-            ->method('getServiceLocator')
-            ->will($this->returnValue($this->serviceLocator));
-
-        $this->serviceLocator->expects($this->once())
-            ->method('get')
-            ->with($params)
-            ->will($this->returnValue($returnVal));
     }
 
     public function testIndexAction()
@@ -111,15 +100,10 @@ class OlcsSearchControllerTest extends AbstractHttpControllerTestCase
         );
 
         $results = $this->getSampleOperatorResults();
-        $processedResults = $this->getProcessedOperatorResults();
 
         $this->url->expects($this->once())
             ->method('fromRoute')
             ->will($this->returnValue($data));
-
-        $this->controller->expects($this->once())
-             ->method('url')
-             ->will($this->returnValue('/search/operators'));
 
         $this->controller->expects($this->once())
              ->method('params')
@@ -130,10 +114,6 @@ class OlcsSearchControllerTest extends AbstractHttpControllerTestCase
             ->with('OperatorSearch', 'GET', $data)
             ->will($this->returnValue($results));
 
-        $tableBuilder = $this->getMock('\stdClass', array('getTable'));
-
-        $data['url'] = '/search/operators';
-
         $configServiceLocator = $this->getMock('\stdClass', array('get'));
 
         $configServiceLocator->expects($this->once())
@@ -141,27 +121,13 @@ class OlcsSearchControllerTest extends AbstractHttpControllerTestCase
             ->with('Config')
             ->will($this->returnValue($this->getStaticEntityTypes()));
 
-        $serviceLocator = $this->getMock('\stdClass', array('get'));
-        $tableBuilder = $this->getMock('\stdClass', array('getTable'));
-
-        $tableBuilder->expects($this->once())
+        $this->controller->expects($this->once())
             ->method('getTable')
-            ->with('operator', $processedResults, $data)
             ->will($this->returnValue('table'));
 
-        $serviceLocator->expects($this->once())
-            ->method('get')
-            ->with('Table')
-            ->will($this->returnValue($tableBuilder));
-
-        $this->controller->expects($this->exactly(2))
+        $this->controller->expects($this->once())
             ->method('getServiceLocator')
-            ->will(
-                $this->onConsecutiveCalls(
-                    $configServiceLocator,
-                    $serviceLocator
-                )
-            );
+            ->will($this->returnValue($configServiceLocator));
 
         $this->controller->operatorAction();
     }
@@ -184,25 +150,6 @@ class OlcsSearchControllerTest extends AbstractHttpControllerTestCase
 
     private function getSampleOperatorResults()
     {
-        return array(
-            'Results' => array(
-                0 =>
-                [
-                    'organisation_type' => 'org_t_rc'
-                ]
-            )
-        );
-    }
-
-    private function getProcessedOperatorResults()
-    {
-        return array(
-            'Results' => array(
-                0 =>
-                [
-                    'organisation_type' => 'Limited company'
-                ]
-            )
-        );
+        return array('Results' => array(array('organisation_type' => 'org_t_rc')));
     }
 }

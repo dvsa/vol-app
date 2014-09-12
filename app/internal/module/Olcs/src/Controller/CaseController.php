@@ -69,11 +69,7 @@ class CaseController extends AbstractController
 
         $summary = $this->getCaseSummaryArray($case);
 
-        // -- submissions
-
         $submissionsTable = $this->getTable('submission', $this->getSubmissions($caseId));
-
-        // -- submissions
 
         $view->setVariables(
             array(

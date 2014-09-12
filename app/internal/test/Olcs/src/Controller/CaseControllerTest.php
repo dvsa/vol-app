@@ -47,7 +47,8 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
                 'processEdit',
                 'getTitles',
                 'renderView',
-                'getLicence'
+                'getLicence',
+                'getTable'
             ]
         );
 
@@ -162,7 +163,7 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
             ->with($this->equalTo($caseId))
             ->will($this->returnValue($caseObject));
 
-        $this->controller->expects($this->exactly(5))
+        $this->controller->expects($this->exactly(4))
             ->method('getServiceLocator')
             ->will(
                 $this->onConsecutiveCalls(
@@ -174,11 +175,13 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
                         $this->getServiceLocatorTranslator()
                     ), $this->returnValue(
                         $this->getServiceLocatorStaticData()
-                    ), $this->returnValue(
-                        $this->getServiceLocatorGetTable()
                     )
                 )
             );
+
+        $this->controller->expects($this->once())
+            ->method('getTable')
+            ->will($this->returnValue($this->getServiceLocatorGetTable()));
 
         $this->controller->expects($this->exactly(1))
             ->method('makeRestCall')
@@ -191,10 +194,6 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
                     )
                 )
             );
-
-        $this->controller->expects($this->once())
-            ->method('getPluginManager')
-            ->will($this->returnValue($this->getPluginManagerUrl()));
 
         $this->controller->expects($this->once())
             ->method('getView')
@@ -253,17 +252,9 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
             ->method('getPluginManager')
             ->will($this->returnValue($this->getPluginManagerUrl()));
 
-        $this->controller->expects($this->exactly(2))
+        $this->controller->expects($this->once())
             ->method('getServiceLocator')
-            ->will(
-                $this->onConsecutiveCalls(
-                    $this->returnValue(
-                        $this->getServiceLocatorGetTable()
-                    ), $this->returnValue(
-                        $this->getServiceLocatorGetNavigation()
-                    )
-                )
-            );
+            ->will($this->returnValue($this->getServiceLocatorGetNavigation()));
 
         $this->controller->expects($this->once())
             ->method('getLicence')

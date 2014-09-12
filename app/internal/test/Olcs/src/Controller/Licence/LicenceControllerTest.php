@@ -26,7 +26,6 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             array(
                 'makeRestCall',
                 'getLoggedInUser',
-                'getTable',
                 'getLicence',
                 'getRequest',
                 'getForm',
@@ -293,14 +292,12 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
         $sort = 'regNo';
         $order = 'desc';
         $limit = 10;
-        $url = 'url';
 
         $searchData['licence'] = $licenceId;
         $searchData['page'] = $page;
         $searchData['sort'] = $sort;
         $searchData['order'] = $order;
         $searchData['limit'] = $limit;
-        $searchData['url'] = $url;
 
         $resultData = array();
 
@@ -328,10 +325,6 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             ->method('getFromRoute')
             ->with($this->equalTo('limit'), $this->equalTo($limit))
             ->will($this->returnValue($limit));
-
-        $this->controller->expects($this->once())
-            ->method('url')
-            ->will($this->returnValue($url));
 
         $this->controller->expects($this->once())
             ->method('makeRestCall')
