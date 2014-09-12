@@ -315,16 +315,6 @@ trait LicenceNoteTrait
     }
 
     /**
-     * Returns the name of the service used to perform a delete
-     *
-     * @return string
-     */
-    public function getDeleteServiceName()
-    {
-        return 'Note';
-    }
-
-    /**
      * Gets a bundle for the notes search
      *
      * @return array
