@@ -59,16 +59,6 @@ class VehicleController extends AbstractLicenceDetailsController
     }
 
     /**
-     * Request disc
-     *
-     * @param int $licenceVehicleId
-     */
-    protected function requestDisc($licenceVehicleId)
-    {
-        $this->makeRestCall('GoodsDisc', 'POST', array('licenceVehicle' => $licenceVehicleId));
-    }
-
-    /**
      * Get total number of vehicles
      *
      * @return int
