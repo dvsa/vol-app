@@ -79,15 +79,8 @@ return array(
                         array(
                             'id' => 'case_details_complaints',
                             'label' => 'Complaints',
-                            'route' => 'case',
-                            'action' => 'complaints',
-                            'use_route_match' => true,
-                        ),
-                        array(
-                            'id' => 'case_details_complaints',
-                            'label' => 'Complaints',
-                            'route' => 'case',
-                            'action' => 'complaints',
+                            'route' => 'case_complaint',
+                            'action' => 'index',
                             'use_route_match' => true,
                         ),
                         array(

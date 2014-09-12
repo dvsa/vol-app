@@ -69,6 +69,15 @@ class CrudAbstract extends CommonController\AbstractSectionController implements
 
         $this->checkForCrudAction(null, [], $this->getIdentifierName());
 
+        $this->buildTableIntoView();
+
+        $view->setTemplate('crud/index');
+
+        return $this->renderView($view);
+    }
+
+    public function buildTableIntoView()
+    {
         $params = [
             'page'    => $this->getQueryOrRouteParam('page', 1),
             'sort'    => $this->getQueryOrRouteParam('sort', 'id'),
@@ -82,16 +91,24 @@ class CrudAbstract extends CommonController\AbstractSectionController implements
 
         $results = $this->makeRestCall($this->getService(), 'GET', $params, $this->getDataBundle());
 
+        $results = $this->preProcessTableData($results);
+
         //die('<pre>' . print_r($results, 1));
 
-        // CR: This should be improved by makeing the table itself a view helper - which it should be!
         $this->getViewHelperManager()->get('placeholder')->getContainer('table')->set(
             $this->buildTable($this->getIdentifierName(), $results, $params)
         );
+    }
 
-        $view->setTemplate('crud/index');
-
-        return $this->renderView($view);
+    /**
+     * Pre processes the data before it's injected into the table.
+     *
+     * @param array $data
+     * @return array
+     */
+    public function preProcessTableData($data)
+    {
+        return $data;
     }
 
     public function detailsAction()

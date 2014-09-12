@@ -839,12 +839,14 @@ return array_merge(
                 ]
             ]
         ],
-        'case_complaints' => [
+        'case_complaint' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/case/:case/complaints',
+                'route' => '/case/:case/complaint[/:action][/:complaint]',
                 'constraints' => [
                     'case' => '[0-9]+',
+                    'action' => '[a-z]+',
+                    'complaint' => '[0-9]+'
                 ],
                 'defaults' => [
                     'controller' => 'CaseComplaintController',
@@ -852,7 +854,7 @@ return array_merge(
                 ]
             ]
         ],
-        'complaint' => [
+        /* 'complaint' => [
             'type' => 'segment',
             'options' => [
                 'route' => '/licence/:licence/case/:case/complaints/:action[/:id]',
@@ -865,7 +867,7 @@ return array_merge(
                     'controller' => 'CaseComplaintController',
                 ]
             ]
-        ],
+        ], */
         'submission' => [
             'type' => 'segment',
             'options' => [
