@@ -81,27 +81,55 @@ class LicenceController extends AbstractController
 
     public function busAction()
     {
-        //check whether we have a bus reg id or whether we're showing the list
-        $licenceId = $this->getFromRoute('licence');
+        $this->pageLayout = 'bus-list';
 
-        //no registration id, show list
-        $searchData['licence'] = $licenceId;
-        $searchData['page'] = $this->getFromRoute('page', 1);
-        $searchData['sort'] = $this->getFromRoute('sort', 'regNo');
-        $searchData['order'] = $this->getFromRoute('order', 'desc');
-        $searchData['limit'] = $this->getFromRoute('limit', 10);
-        $searchData['url'] = $this->url();
+        $searchData = array(
+            'licence' => $this->getFromRoute('licence'),
+            'page' => 1,
+            'sort' => 'regNo',
+            'order' => 'DESC',
+            'limit' => 10,
+            'url' => $this->url()
+        );
 
-        $resultData = $this->makeRestCall('BusReg', 'GET', $searchData);
-        $table = $this->buildTable('busreg', $resultData, $searchData);
+        $filters = array_merge(
+            $searchData,
+            $this->getRequest()->getQuery()->toArray()
+        );
+
+        //if status is set to all
+        if (isset($filters['status']) && !$filters['status']) {
+            unset($filters['status']);
+        }
+
+        $resultData = $this->makeRestCall('BusReg', 'GET', $filters);
+        $table = $this->buildTable(
+            'busreg',
+            $resultData,
+            array_merge(
+                $filters,
+                array('query' => $this->getRequest()->getQuery())
+            )
+        );
+
+        $form = $this->getForm('busreg-list');
+        $form->remove('csrf'); //we never post
+        $form->setData($filters);
+
+        $this->setTableFilters($form);
 
         $view = $this->getViewWithLicence(
             array(
-                'table' => $table
+                'table' => $table,
+                'inlineScript' => $this->loadScripts(['busreg-list'])
             )
         );
 
         $view->setTemplate('licence/processing');
+
+        $view->setTerminal(
+            $this->getRequest()->isXmlHttpRequest()
+        );
 
         return $this->renderView($view);
     }

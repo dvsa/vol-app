@@ -24,6 +24,7 @@ class BusProcessingNoteController extends BusProcessingController implements Cru
     use LicenceNoteTrait;
 
     protected $item = 'notes';
+    protected $service = 'Note';
 
     /**
      * Constructor - sets template and route prefix for use in LicenceNote trait
