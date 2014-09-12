@@ -117,6 +117,53 @@ class SubmissionController extends OlcsController\CrudAbstract
     }
 
     /**
+     * Save data. Also processes the submit submission select type drop down
+     * in order to dictate which checkboxes to manipulate.
+     *
+     * @param array $data
+     * @param string $service
+     * @return array
+     */
+    public function editAction()
+    {
+        // Modify $data
+        $data = $this->loadCurrent();
+
+        return parent::editAction();
+    }
+
+    /**
+     * Get the form data
+     *
+     * This is not in the method above as it can be overridden independantly
+     *
+     * @return array
+     *
+    protected function getFormData()
+    {
+        if ($this->isAction()) {
+
+            $action = $this->getActionName();
+
+            if (strstr($action, '-')) {
+                $splitted = explode('-', $action);
+                $action = count($splitted) ? $splitted[count($splitted) - 1] : '';
+            }
+
+            if ($action === 'edit') {
+
+                $data = $this->actionLoad($this->getActionId());
+            } else {
+                $data = array();
+            }
+
+            return $this->processActionLoad($data);
+        }
+
+        return $this->processLoad($this->loadCurrent());
+    }*/
+
+    /**
      * Override Save data to allow json encoding of submission sections
      * into submission 'text' field.
      *
@@ -159,13 +206,19 @@ class SubmissionController extends OlcsController\CrudAbstract
      */
     protected function processLoad($data)
     {
+
         // modify $data for form population
         $routeParams = $this->params()->fromRoute();
         $caseId = $routeParams['case'];
         $case = $this->getCase($caseId);
         $data['fields']['case'] = $case['id'];
+
         if (isset($data['submission_sections']['submission_sections'])) {
             $data['fields']['submission_sections']['submission_sections'] = json_decode($data['submission_sections']['submission_sections']);
+        } elseif (isset($data['text'])) {
+            $data['fields']['submission_sections']['submission_type'] = 'submission_type_o_bus_reg';
+            $data['fields']['submission_sections']['submission_sections'] = json_decode($data['text']);
+            $data['case'] = $case['id'];
         }
 
         return parent::processLoad($data);
@@ -182,6 +235,11 @@ class SubmissionController extends OlcsController\CrudAbstract
         return $this->formName;
     }
 
+    /**
+     * Details action - shows each section detail
+     *
+     * @return ViewModel
+     */
     public function detailsAction()
     {
         $submission = $this->loadCurrent();
