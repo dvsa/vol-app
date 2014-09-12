@@ -72,11 +72,11 @@ abstract class AbstractPublicInquiryData extends AbstractData implements ListDat
             return [];
         }
 
-        foreach ($data as $datum) {
-            $ret[$datum['id']] = $datum['sectionCode'];
+        if ($useGroups) {
+            return $this->formatDataForGroups($data);
         }
 
-        return $ret;
+        return $this->formatData($data);
     }
 
     /**
@@ -110,5 +110,25 @@ abstract class AbstractPublicInquiryData extends AbstractData implements ListDat
         $service->setLicenceService($serviceLocator->get('Olcs\Service\Data\Licence'));
 
         return $service;
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    public function formatData(array $data)
+    {
+        $optionData = [];
+
+        foreach ($data as $datum) {
+            $optionData[$datum['id']] = $datum['sectionCode'];
+        }
+
+        return $optionData;
+    }
+
+    public function formatDataForGroups($data)
+    {
+        return $this->formatData($data);
     }
 }

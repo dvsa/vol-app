@@ -98,83 +98,32 @@ class PublicInquiryRegisterDecisionMain
      * @Form\Options({
      *     "label": "Decisions",
      *     "service_name": "Olcs\Service\Data\PublicInquiryDecision",
-     *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a category"
      * })
      * @Form\Type("DynamicSelect")
+     * @Form\Required(true)
+     * @Form\AllowEmpty(true)
+     * @Form\Input("\Common\InputFilter\ContinueIfEmptyInput")
+     * @Form\Validator({
+     *      "name": "ValidateIf",
+     *      "options": {
+     *          "context_field": "decisionDate",
+     *          "contextValues": {null},
+     *          "context_truth": false,
+     *          "validators": {
+     *              {"name": "NotEmpty"}
+     *          }
+     *      }
+     * })
      */
     public $decisions = null;
-
-    /**
-     * @Form\Options({
-     *     "label": "Curtailment date from",
-     *     "create_empty_option": true,
-     *     "render_delimiters": false
-     * })
-     * @Form\Type("Common\Form\Elements\Custom\DateSelect")
-     */
-    public $curtailmentDateFrom = null;
-
-
-    /**
-     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Curtailment indefinite"})
-     * @Form\Type("Checkbox")
-     */
-    public $curtailmentIsIndefinite = null;
-
-    /**
-     * @Form\Attributes({"id":"dob"})
-     * @Form\Options({
-     *     "label": "Curtailment date to",
-     *     "create_empty_option": true,
-     *     "render_delimiters": false
-     * })
-     * @Form\Required(false)
-     * @Form\Type("\Common\Form\Elements\Custom\DateSelect")
-     */
-    public $curtailmentDateTo = null;
-
-    /**
-     * @Form\Attributes({"multiple": true})
-     * @Form\Options({"label": "Vehicle List"})
-     * @Form\Type("Select")
-     */
-    public $vehicleList = null;
-
-    /**
-     * @Form\Options({
-     *     "label": "Suspension date from",
-     *     "create_empty_option": true,
-     *     "render_delimiters": false
-     * })
-     * @Form\Type("Common\Form\Elements\Custom\DateSelect")
-     */
-    public $suspensionDateFrom = null;
-
-
-    /**
-     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Suspension indefinite"})
-     * @Form\Type("Checkbox")
-     */
-    public $suspensionIsIndefinite = null;
-
-    /**
-     * @Form\Attributes({"id":"dob"})
-     * @Form\Options({
-     *     "label": "Suspension date to",
-     *     "create_empty_option": true,
-     *     "render_delimiters": false
-     * })
-     * @Form\Required(false)
-     * @Form\Type("\Common\Form\Elements\Custom\DateSelect")
-     */
-    public $suspensionDateTo = null;
 
     /**
      * @Form\Attributes({"id":"","placeholder":"","class":"small"})
      * @Form\Options({"label": "Witnesses"})
      * @Form\Type("Text")
+     * @Form\Required(false)
      * @Form\Filter({"name":"Digits"})
      * @Form\Validator({"name":"Digits"})
      */
@@ -184,10 +133,13 @@ class PublicInquiryRegisterDecisionMain
      * @Form\Attributes({"id":"dob"})
      * @Form\Options({
      *     "label": "Date of decision",
-     *     "create_empty_option": false,
+     *     "create_empty_option": true,
      *     "render_delimiters": "d m y"
      * })
-     * @Form\Type("Common\Form\Elements\Custom\DateSelect")
+     * @Form\Required(false)
+     * @Form\Type("DateSelect")
+     * @Form\Filter({"name":"DateSelectNullifier"})
+     * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $decisionDate = null;
 
@@ -198,62 +150,23 @@ class PublicInquiryRegisterDecisionMain
      *     "create_empty_option": false,
      *     "render_delimiters": "d m y"
      * })
-     * @Form\Type("Common\Form\Elements\Custom\DateSelect")
+     * @Form\Required(false)
+     * @Form\Type("DateSelect")
+     * @Form\Filter({"name":"DateSelectNullifier"})
+     * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $notificationDate = null;
 
     /**
-     * @Form\Attributes({"id":"","placeholder":""})
-     * @Form\Options({
-     *     "label": "Licence revoked due to public inquiry",
-     *     "value_options": {
-     *
-     *     },
-     *     "help-block": "Please choose",
-     *     "must_be_checked": true
-     * })
-     * @Form\Type("\Common\Form\Elements\InputFilters\Checkbox")
-     */
-    public $licenceRevoked = null;
-
-    /**
-     * @Form\Attributes({"id":"dob"})
-     * @Form\Options({
-     *     "label": "Date licence revoked",
-     *     "create_empty_option": false,
-     *     "render_delimiters": "d m y"
-     * })
-     * @Form\Type("Common\Form\Elements\Custom\DateSelect")
-     */
-    public $revokeDate = null;
-
-    /**
-     * @Form\Attributes({"id":"","placeholder":"","class":"medium"})
-     * @Form\Options({
-     *     "label": "Definition category",
-     *     "value_options": {
-     *
-     *     },
-     *     "empty_option": "Please Select",
-     *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category"
-     * })
-     * @Form\Type("\Zend\Form\Element\Select")
-     */
-    public $definitionCategory = null;
-
-    /**
-     * @Form\Attributes({"id":"","placeholder":"","class":"medium"})
+     * @Form\Attributes({"id":"","placeholder":"","class":"large", "multiple":true})
      * @Form\Options({
      *     "label": "Definition",
-     *     "value_options": {
-     *
-     *     },
-     *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category"
+     *     "help-block": "Please select a category",
+     *     "service_name": "\Olcs\Service\Data\PublicInquiryDefinition",
+     *     "use_groups": true
      * })
-     * @Form\Type("\Zend\Form\Element\Select")
+     * @Form\Type("DynamicSelect")
      */
     public $definition = null;
 
