@@ -129,7 +129,24 @@ class SubmissionController extends OlcsController\CrudAbstract
 
         $data['text'] = json_encode($data['submission_sections']['submission_sections']);
 
-        return parent::save($data, $service);
+        $data = parent::save($data, $service);
+
+        return $data;
+    }
+
+    /**
+     * Complete section and save
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function processSave($data)
+    {
+        // pass false to prevent default redirect back to index action
+        // and return result of the save
+        $result = parent::processSave($data, false);
+
+        return $this->redirect()->toRoute('submission', ['action' => 'details', 'submission' => $result['id']], [], true);
     }
 
     /**
@@ -161,17 +178,5 @@ class SubmissionController extends OlcsController\CrudAbstract
     protected function getFormName()
     {
         return $this->formName;
-    }
-
-    /**
-     * Callback function following save, redirects to
-     * submission details list where each section can be completed.
-     *
-     * @param array $data
-     * @return array
-     */
-    protected function processSave($data)
-    {
-        return $this->redirect()->toRoute('submission', ['action' => 'details', 'submission' => null], [], true);
     }
 }
