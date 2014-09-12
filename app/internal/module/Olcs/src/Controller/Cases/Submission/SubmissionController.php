@@ -43,6 +43,8 @@ class SubmissionController extends OlcsController\CrudAbstract
      */
     protected $pageLayout = 'case';
 
+    protected $detailsView = 'case/submission/overview';
+
     protected $pageLayoutInner = null;
 
     /**
@@ -159,5 +161,17 @@ class SubmissionController extends OlcsController\CrudAbstract
     protected function getFormName()
     {
         return $this->formName;
+    }
+
+    /**
+     * Callback function following save, redirects to
+     * submission details list where each section can be completed.
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function processSave($data)
+    {
+        return $this->redirect()->toRoute('submission', ['action' => 'details', 'submission' => null], [], true);
     }
 }
