@@ -36,7 +36,8 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
                 'redirect',
                 'getServiceLocator',
                 'buildTable',
-                'url'
+                'url',
+                'setTableFilters'
             )
         );
 
@@ -284,6 +285,9 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
         $this->assertTrue($view->terminate());
     }
 
+    /**
+     * Tests the bus action
+     */
     public function testBusAction()
     {
         $table = 'table';
@@ -291,7 +295,7 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
         $licenceId = 110;
         $page = 1;
         $sort = 'regNo';
-        $order = 'desc';
+        $order = 'DESC';
         $limit = 10;
         $url = 'url';
 
@@ -309,26 +313,6 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
         ->with('licence')
         ->will($this->returnValue($licenceId));
 
-        $this->controller->expects($this->at(1))
-            ->method('getFromRoute')
-            ->with($this->equalTo('page'), $this->equalTo($page))
-            ->will($this->returnValue($page));
-
-        $this->controller->expects($this->at(2))
-            ->method('getFromRoute')
-            ->with($this->equalTo('sort'), $this->equalTo($sort))
-            ->will($this->returnValue($sort));
-
-        $this->controller->expects($this->at(3))
-            ->method('getFromRoute')
-            ->with($this->equalTo('order'), $this->equalTo($order))
-            ->will($this->returnValue($order));
-
-        $this->controller->expects($this->at(4))
-            ->method('getFromRoute')
-            ->with($this->equalTo('limit'), $this->equalTo($limit))
-            ->will($this->returnValue($limit));
-
         $this->controller->expects($this->once())
             ->method('url')
             ->will($this->returnValue($url));
@@ -337,6 +321,24 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             ->method('makeRestCall')
             ->with($this->equalTo('BusReg'), $this->equalTo('GET'), $this->equalTo($searchData))
             ->will($this->returnValue($resultData));
+
+        $form = $this->getMock('\stdClass', ['remove', 'setData']);
+
+        $form->expects($this->once())
+            ->method('remove')
+            ->with('csrf');
+
+        $form->expects($this->once())
+            ->method('setData');
+
+        $this->controller->expects($this->once())
+            ->method('setTableFilters')
+            ->with($form);
+
+        $this->controller->expects($this->once())
+            ->method('getForm')
+            ->with('busreg-list')
+            ->will($this->returnValue($form));
 
         $this->controller->expects($this->once())
             ->method('buildTable')
