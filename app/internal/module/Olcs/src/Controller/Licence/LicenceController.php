@@ -103,7 +103,14 @@ class LicenceController extends AbstractController
         }
 
         $resultData = $this->makeRestCall('BusReg', 'GET', $filters);
-        $table = $this->buildTable('busreg', $resultData, $filters);
+        $table = $this->buildTable(
+            'busreg',
+            $resultData,
+            array_merge(
+                $filters,
+                array('query' => $this->getRequest()->getQuery())
+            )
+        );
 
         $form = $this->getForm('busreg-list');
         $form->remove('csrf'); //we never post

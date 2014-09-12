@@ -342,7 +342,16 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->once())
             ->method('buildTable')
-            ->with($this->equalTo('busreg'), $this->equalTo($resultData), $this->equalTo($searchData))
+            ->with(
+                $this->equalTo('busreg'),
+                $this->equalTo($resultData),
+                $this->equalTo(
+                    array_merge(
+                        $searchData,
+                        array('query' => $this->query)
+                    )
+                )
+            )
             ->will($this->returnValue($table));
 
         $this->controller->busAction();
