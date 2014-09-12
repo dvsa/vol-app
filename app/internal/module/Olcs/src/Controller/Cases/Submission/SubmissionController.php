@@ -117,7 +117,8 @@ class SubmissionController extends OlcsController\CrudAbstract
     }
 
     /**
-     * Save data
+     * Override Save data to allow json encoding of submission sections
+     * into submission 'text' field.
      *
      * @param array $data
      * @param string $service
@@ -136,6 +137,7 @@ class SubmissionController extends OlcsController\CrudAbstract
 
     /**
      * Complete section and save
+     * Redirects to details action.
      *
      * @param array $data
      * @return array
@@ -179,4 +181,37 @@ class SubmissionController extends OlcsController\CrudAbstract
     {
         return $this->formName;
     }
+
+    public function detailsAction()
+    {
+        $submission = $this->loadCurrent();
+
+        $view = $this->getView([]);
+
+        $submissionsArray = json_decode($submission['text']);
+
+        $submissionSections = $this->getServiceLocator()->get('Common\Service\Data\RefData')->fetchListData('submission_section');
+
+        $sectionData = [];
+        foreach ($submissionSections as $submissionSection) {
+            if (in_array($submissionSection['id'], $submissionsArray)) {
+                $sectionData[$submissionSection['id']]['description'] = $submissionSection['description'];
+            }
+        }
+
+        $this->getViewHelperManager()
+            ->get('placeholder')
+            ->getContainer('sectionData')
+            ->set($sectionData);
+
+        $this->getViewHelperManager()
+            ->get('placeholder')
+            ->getContainer($this->getIdentifierName())
+            ->set($this->loadCurrent());
+
+        $view->setTemplate($this->detailsView);
+
+        return $this->renderView($view);
+    }
+
 }

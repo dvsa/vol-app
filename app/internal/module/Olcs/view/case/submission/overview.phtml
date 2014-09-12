@@ -1,5 +1,21 @@
-<?php $case = $this->placeholder('case')->getValue(); ?>
+<?php
+
+$case = $this->placeholder('case')->getValue();
+$submission = $this->placeholder('submission')->getValue();
+$sectionData = $this->placeholder('sectionData')->getValue();
+?>
 
 <div class="read-only">
-    Submission details
+    Submission details <?php echo $this->foo;?>
 </div>
+<?php
+foreach ($sectionData as $section) {
+?>
+
+    <div class="read-only">
+        <?php echo $section['description'];?>
+    </div>
+
+<?php
+}
+?>
