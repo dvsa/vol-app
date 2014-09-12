@@ -1,20 +1,20 @@
 <?php
 
 /**
- * Bus Processing Controller Test
+ * Bus Details Stop Controller Test
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-namespace OlcsTest\Controller\Bus\Processing;
+namespace OlcsTest\Controller\Bus\Details;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
 /**
- * Bus Processing Controller Test
+ * Bus Details Stop Controller Test
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class BusProcessingControllerTest extends AbstractHttpControllerTestCase
+class BusDetailsStopControllerTest extends AbstractHttpControllerTestCase
 {
     public function setUp()
     {
@@ -23,7 +23,7 @@ class BusProcessingControllerTest extends AbstractHttpControllerTestCase
         );
 
         $this->controller = $this->getMock(
-            '\Olcs\Controller\Bus\Processing\BusProcessingController',
+            '\Olcs\Controller\Bus\Details\BusDetailsStopController',
             array(
                 'getViewWithBusReg',
                 'renderView'

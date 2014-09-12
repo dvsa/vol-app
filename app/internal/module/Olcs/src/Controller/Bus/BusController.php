@@ -17,7 +17,6 @@ use Olcs\Controller\Traits;
  */
 class BusController extends AbstractController
 {
-    use Traits\LicenceControllerTrait;
     use Traits\BusControllerTrait;
 
     protected $layoutFile = 'licence/bus/layout';
@@ -54,7 +53,7 @@ class BusController extends AbstractController
             'item' => $this->getItem()
         );
 
-        $layout = $this->getViewWithLicence(array_merge($variables, (array)$view->getVariables()));
+        $layout = $this->getViewWithBusReg(array_merge($variables, (array)$view->getVariables()));
         $layout->setTemplate($this->getLayoutFile());
 
         $layout->addChild($view, 'content');
