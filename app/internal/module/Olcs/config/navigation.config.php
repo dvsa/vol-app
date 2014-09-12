@@ -62,18 +62,18 @@ return array(
                             'action' => 'index',
                             'use_route_match' => true,
                         ),
-                        array(
+                        /* array( // Maybe being removed????
                             'id' => 'case_details_penalties',
                             'label' => 'Penalties',
                             'route' => 'case',
                             'action' => 'penalties',
                             'use_route_match' => true,
-                        ),
+                        ), */
                         array(
                             'id' => 'case_details_statements',
                             'label' => 'Statements',
-                            'route' => 'case',
-                            'action' => 'statements',
+                            'route' => 'case_statement',
+                            'action' => 'index',
                             'use_route_match' => true,
                         ),
                         array(

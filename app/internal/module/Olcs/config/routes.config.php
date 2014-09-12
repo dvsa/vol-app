@@ -686,15 +686,16 @@ return array_merge(
         'case_statement' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/licence/:licence/case/:case/statements[/:action][/:id]',
+                'route' => '/case/:case/statement[/:action][/:statement]',
                 'constraints' => [
                     'case' => '[0-9]+',
-                    'licence' => '[0-9]+',
-                    'id' => '[0-9]+'
+                    'action' => '[a-z]+',
+                    'statement' => '[0-9]+'
                 ],
                 'defaults' => [
                     'controller' => 'CaseStatementController',
-                    'action' => 'index'
+                    'action' => 'index',
+
                 ]
             ]
         ],

@@ -178,7 +178,7 @@ class CrudAbstract extends CommonController\AbstractSectionController implements
         return $this->redirectToRoute(
             null,
             ['action'=>'index', $this->getIdentifierName() => null],
-            ['code' => '303'],
+            ['code' => '303'], // Why? No cache is set with a 303 :)
             true
         );
     }

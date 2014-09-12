@@ -8,30 +8,119 @@
 
 namespace Olcs\Controller;
 
-use Olcs\Controller\Traits\DeleteActionTrait;
-
-use Common\Controller\CrudInterface;
+// Olcs
+use Olcs\Controller as OlcsController;
+use Olcs\Controller\Traits as ControllerTraits;
 
 /**
  * Case Statement Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CaseStatementController extends CaseController implements CrudInterface
+class CaseStatementController extends OlcsController\CrudAbstract
 {
-    use DeleteActionTrait;
+    use ControllerTraits\CaseControllerTrait;
 
-    public function getDeleteServiceName()
-    {
-        return 'Statement';
-    }
+    /**
+     * Identifier name
+     *
+     * @var string
+     */
+    protected $identifierName = 'statement';
+
+    /**
+     * Holds the form name
+     *
+     * @var string
+     */
+    protected $formName = 'statement';
+
+    /**
+     * The current page's extra layout, over and above the
+     * standard base template, a sibling of the base though.
+     *
+     * @var string
+     */
+    protected $pageLayout = 'case';
+
+    /**
+     * For most case crud controllers, we use the case/inner-layout
+     * layout file. Except submissions.
+     *
+     * @var string
+     */
+    protected $pageLayoutInner = 'case/inner-layout';
+
+    /**
+     * Holds the service name
+     *
+     * @var string
+     */
+    protected $service = 'Statement';
+
+    /**
+     * Holds the navigation ID,
+     * required when an entire controller is
+     * represneted by a single navigation id.
+     */
+    protected $navigationId = 'case_details_statements';
+
+    /**
+     * Holds an array of variables for the
+     * default index list page.
+     */
+    protected $listVars = [
+        'case',
+    ];
+
+    /**
+     * Data map
+     *
+     * @var array
+    */
+    protected $dataMap = array(
+        'main' => array(
+            'mapFrom' => array(
+                'fields',
+                'base',
+            )
+        )
+    );
+
+    /**
+     * Holds the isAction
+     *
+     * @var boolean
+    */
+    protected $isAction = false;
+
+    /**
+     * Holds the Data Bundle
+     *
+     * @var array
+     */
+    protected $dataBundle = array(
+        'children' => array(
+            'case' => array(
+                'properties' => array(
+                    'id'
+                )
+            ),
+            'prohibitionType' => array(
+                'properties' => array(
+                    'id',
+                    'description'
+                )
+            )
+        )
+    );
 
     /**
      * Show a table of statements for the given case
      *
      * @return object
      */
-    public function indexAction()
+    /* public function indexAction()
     {
         $caseId = $this->fromRoute('case');
         $licenceId = $this->fromRoute('licence');
@@ -49,14 +138,14 @@ class CaseStatementController extends CaseController implements CrudInterface
         $view->setTemplate('case/manage');
 
         return $view;
-    }
+    } */
 
     /**
      * Add statement action
      *
      * @return object
      */
-    public function addAction()
+    /* public function addAction()
     {
         $caseId = $this->fromRoute('case');
         $licenceId = $this->fromRoute('licence');
@@ -87,7 +176,7 @@ class CaseStatementController extends CaseController implements CrudInterface
         $view->setTemplate('form');
 
         return $view;
-    }
+    } */
 
     /**
      * Edit statement action

@@ -5,7 +5,7 @@
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-namespace Olcs\Controller\Prohibition;
+namespace Olcs\Controller\Cases\Prohibition;
 
 // Olcs
 use Olcs\Controller as OlcsController;
