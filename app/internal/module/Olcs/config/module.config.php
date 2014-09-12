@@ -15,7 +15,7 @@ return array(
             'IndexController' => 'Olcs\Controller\IndexController',
             'SearchController' => 'Olcs\Controller\SearchController',
             'CaseController' => 'Olcs\Controller\Cases\CaseController',
-            'CaseStatementController' => 'Olcs\Controller\CaseStatementController',
+            'CaseStatementController' => 'Olcs\Controller\Cases\Statement\StatementController',
             'CaseAppealController' => 'Olcs\Controller\CaseAppealController',
             'CaseComplaintController' => 'Olcs\Controller\CaseComplaintController',
             'CaseConvictionController' => 'Olcs\Controller\Cases\Conviction\ConvictionController',

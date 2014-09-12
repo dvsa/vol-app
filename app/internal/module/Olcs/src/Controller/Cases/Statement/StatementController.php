@@ -6,7 +6,7 @@
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
-namespace Olcs\Controller;
+namespace Olcs\Controller\Cases\Statement;
 
 // Olcs
 use Olcs\Controller as OlcsController;
@@ -17,7 +17,7 @@ use Olcs\Controller\Traits as ControllerTraits;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CaseStatementController extends OlcsController\CrudAbstract
+class StatementController extends OlcsController\CrudAbstract
 {
     use ControllerTraits\CaseControllerTrait;
 
