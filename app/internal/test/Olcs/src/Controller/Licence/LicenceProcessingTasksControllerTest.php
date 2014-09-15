@@ -454,6 +454,51 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
     }
 
     /**
+     * Test index action with multiple close
+     * @group task1
+     */
+    public function testIndexActionWithMultipleCloseSubmitted()
+    {
+        $this->request->expects($this->once())
+            ->method('isPost')
+            ->will($this->returnValue(true));
+
+        $params = $this->getMock('\stdClass', ['fromPost']);
+
+        $params->expects($this->at(0))
+            ->method('fromPost')
+            ->will($this->returnValue('close task'));
+
+        $params->expects($this->at(1))
+            ->method('fromPost')
+            ->will($this->returnValue([1, 2]));
+
+        $this->controller->expects($this->any())
+            ->method('params')
+            ->will($this->returnValue($params));
+
+        $params = [
+            'action' => 'close',
+            'task'  => '1-2',
+            'type' => 'licence',
+            'typeId' => null
+        ];
+        $mockRoute = $this->getMock('\stdClass', ['toRoute']);
+        $mockRoute->expects($this->once())
+            ->method('toRoute')
+            ->with('task_action', $params)
+            ->will($this->returnValue('mockResponse'));
+
+        $this->controller->expects($this->any())
+            ->method('redirect')
+            ->will($this->returnValue($mockRoute));
+
+        $response = $this->controller->indexAction();
+
+        $this->assertEquals('mockResponse', $response);
+    }
+
+    /**
      * Mock the rest call
      *
      * @param string $service
