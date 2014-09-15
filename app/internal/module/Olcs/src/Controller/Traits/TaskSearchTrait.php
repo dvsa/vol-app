@@ -90,7 +90,7 @@ trait TaskSearchTrait
         return $form;
     }
 
-    protected function getTaskTable($filters = array(), $render = true)
+    protected function getTaskTable($filters = array(), $render = true, $noCreate = false)
     {
         $tasks = $this->makeRestCall(
             'TaskSearchView',
@@ -106,6 +106,17 @@ trait TaskSearchTrait
                 array('query' => $this->getRequest()->getQuery())
             )
         );
+
+        if ($noCreate) {
+            $settings = $table->getSettings();
+            if (isset($settings['crud']['actions']['create task'])) {
+                unset($settings['crud']['actions']['create task']);
+                if (isset($settings['crud']['actions']['edit']) && is_array($settings['crud']['actions']['edit'])) {
+                    $settings['crud']['actions']['edit']['class'] = 'primary';
+                }
+                $table->setSettings($settings);
+            }
+        }
 
         if ($render) {
             return $table->render();
@@ -146,10 +157,6 @@ trait TaskSearchTrait
                     }
                     $id = $id[0];
                 }
-            }
-
-            if (!$type && $action == 'add') {
-                throw new \Exception('Creating task from home page not implemented yet');
             }
 
             switch ($type) {
