@@ -86,6 +86,9 @@ class SubmissionController extends OlcsController\CrudAbstract
             'submissionType' => array(
                 'properties' => 'id',
             ),
+            'case' => array(
+                'properties' => 'ALL',
+            ),
             'submissionActions' => array(
                 'properties' => 'ALL',
                 'children' => array(
@@ -179,7 +182,6 @@ class SubmissionController extends OlcsController\CrudAbstract
      */
     protected function processLoad($data)
     {
-
         // modify $data for form population
         $routeParams = $this->params()->fromRoute();
         $caseId = $routeParams['case'];

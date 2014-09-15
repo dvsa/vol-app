@@ -12,24 +12,6 @@ use Zend\Form\Annotation as Form;
 class Submission
 {
     /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $case = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $id = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $version = null;
-
-    /**
      * @Form\Name("fields")
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\SubmissionTypeSections")
      */
