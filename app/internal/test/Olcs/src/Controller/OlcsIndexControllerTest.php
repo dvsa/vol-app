@@ -128,7 +128,20 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
             ->method('getLoggedInUser')
             ->will($this->returnValue(1));
 
-        $tableMock = $this->getMock('\stdClass', ['render']);
+        $tableMock = $this->getMock('\stdClass', ['render', 'getSettings', 'setSettings']);
+        
+        $settings = [
+            'crud' => [
+                'actions' => [
+                    'create task' => [],
+                    'edit' => []
+                ]
+            ]
+        ];
+        $tableMock->expects($this->once())
+                ->method('getSettings')
+                ->will($this->returnValue($settings));
+        
         $this->controller->expects($this->once())
             ->method('getTable')
             ->with(
@@ -176,7 +189,19 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
             ->method('get')
             ->will($this->returnSelf());
 
-        $tableMock = $this->getMock('\stdClass', ['render']);
+        $tableMock = $this->getMock('\stdClass', ['render', 'getSettings', 'setSettings']);
+                $settings = [
+            'crud' => [
+                'actions' => [
+                    'create task' => [],
+                    'edit' => []
+                ]
+            ]
+        ];
+        $tableMock->expects($this->once())
+                ->method('getSettings')
+                ->will($this->returnValue($settings));
+
         $this->controller->expects($this->once())
             ->method('getTable')
             ->will($this->returnValue($tableMock));
