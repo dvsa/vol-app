@@ -2,6 +2,8 @@
 
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
+ini_set('intl.default_locale', 'en_GB');
+date_default_timezone_set('Europe/London');
 
 /**
  * This makes our life easier when dealing with paths. Everything is relative
