@@ -101,7 +101,17 @@ class LicenceController extends AbstractController
             unset($filters['status']);
         }
 
-        $resultData = $this->makeRestCall('BusReg', 'GET', $filters);
+        $bundle = [
+            'children' => [
+                'otherServices' => [
+                    'properties' => [
+                        'serviceNo'
+                    ]
+                ]
+            ]
+        ];
+
+        $resultData = $this->makeRestCall('BusReg', 'GET', $filters, $bundle);
 
         $table = $this->getTable(
             'busreg',
