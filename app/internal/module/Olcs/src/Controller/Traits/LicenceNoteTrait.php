@@ -146,7 +146,8 @@ trait LicenceNoteTrait
             array_merge(
                 $filters,
                 array('query' => $this->getRequest()->getQuery())
-            )
+            ),
+            true
         );
 
         $view = $this->getView(
