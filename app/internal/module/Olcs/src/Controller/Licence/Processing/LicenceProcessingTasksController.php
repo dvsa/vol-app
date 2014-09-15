@@ -6,6 +6,7 @@
 namespace Olcs\Controller\Licence\Processing;
 
 use Zend\View\Model\ViewModel;
+use \Olcs\Controller\Traits\TaskSearchTrait;
 
 /**
  * Licence Processing Tasks Controller
@@ -14,43 +15,15 @@ use Zend\View\Model\ViewModel;
  */
 class LicenceProcessingTasksController extends AbstractLicenceProcessingController
 {
-    use \Olcs\Controller\Traits\TaskSearchTrait;
+    use TaskSearchTrait;
 
     protected $section = 'tasks';
 
     public function indexAction()
     {
-        if ($this->getRequest()->isPost()) {
-            $action = strtolower($this->params()->fromPost('action'));
-            if ($action === 'create task') {
-                $action = 'add';
-            }
-
-            $params = [
-                'licence' => $this->getFromRoute('licence'),
-                'action'  => $action
-            ];
-
-            if ($action !== 'add') {
-                $id = $this->params()->fromPost('id');
-
-                // @NOTE: edit doesn't allow multi IDs, but other
-                // actions (like reassign) might, hence why we have
-                // an explicit check here
-                if ($action === 'edit') {
-                    if (!is_array($id) || count($id) !== 1) {
-                        throw new \Exception('Please select a single task to edit');
-                    }
-                    $id = $id[0];
-                }
-
-                $params['task'] = $id;
-            }
-
-            return $this->redirect()->toRoute(
-                'licence/task_action',
-                $params
-            );
+        $redirect = $this->processTasksActions('licence');
+        if ($redirect) {
+            return $redirect;
         }
 
         $filters = $this->mapTaskFilters(

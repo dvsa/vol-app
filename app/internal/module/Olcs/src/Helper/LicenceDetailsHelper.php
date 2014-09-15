@@ -7,6 +7,8 @@
  */
 namespace Olcs\Helper;
 
+use Common\Helper\RestrictionHelper;
+
 /**
  * Licence Details Helper
  *
@@ -15,7 +17,7 @@ namespace Olcs\Helper;
 class LicenceDetailsHelper
 {
     const GOODS_OR_PSV_GOODS = 'lcat_gv';
-    const GOODS_OR_PSV_PSV = 'lcat_psv';
+    const LICENCE_CATEGORY_PSV = 'lcat_psv';
 
     const LICENCE_TYPE_RESTRICTED = 'ltyp_r';
     const LICENCE_TYPE_STANDARD_INTERNATIONAL = 'ltyp_si';
@@ -59,9 +61,26 @@ class LicenceDetailsHelper
         ),
         'vehicle' => array(
             'restricted' => array(
-                self::LICENCE_TYPE_RESTRICTED,
-                self::LICENCE_TYPE_STANDARD_NATIONAL,
-                self::LICENCE_TYPE_STANDARD_INTERNATIONAL
+                array(
+                    self::GOODS_OR_PSV_GOODS,
+                    array(
+                        self::LICENCE_TYPE_RESTRICTED,
+                        self::LICENCE_TYPE_STANDARD_NATIONAL,
+                        self::LICENCE_TYPE_STANDARD_INTERNATIONAL
+                    )
+                )
+            )
+        ),
+        'vehicle_psv' => array(
+            'restricted' => array(
+                array(
+                    self::LICENCE_CATEGORY_PSV,
+                    array(
+                        self::LICENCE_TYPE_RESTRICTED,
+                        self::LICENCE_TYPE_STANDARD_NATIONAL,
+                        self::LICENCE_TYPE_STANDARD_INTERNATIONAL
+                    )
+                )
             )
         ),
         'safety' => array(
@@ -82,7 +101,7 @@ class LicenceDetailsHelper
             'restricted' => array(
                 // @NOTE The licence must follow ALL of these restrictions
                 array(
-                    self::GOODS_OR_PSV_PSV,
+                    self::LICENCE_CATEGORY_PSV,
                     self::LICENCE_TYPE_SPECIAL_RESTRICTED
                 )
             )
@@ -127,18 +146,11 @@ class LicenceDetailsHelper
         }
 
         $access = array($goodsOrPsv, $licenceType);
+        $restrictions = $sectionDetails['restricted'];
 
-        // Iterate through the restrictions
-        foreach ($sectionDetails['restricted'] as $restriction) {
-            // If we have an sub array of restrictions, then we must match ALL
-            if ((is_array($restriction) && count(array_diff($restriction, $access)) === 0)
-                // If not we just have to match 1 restriction
-                || in_array($restriction, $access)) {
-                return true;
-            }
-        }
+        $restrictionHelper = new RestrictionHelper();
 
-        return false;
+        return $restrictionHelper->isRestrictionSatisfied($restrictions, $access);
     }
 
     /**

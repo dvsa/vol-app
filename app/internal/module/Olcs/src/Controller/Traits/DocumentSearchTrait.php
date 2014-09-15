@@ -30,11 +30,21 @@ trait DocumentSearchTrait
             $this->getRequest()->getQuery()->toArray()
         );
 
-        // nuke any empty values too
+        if ( isset($filters['isDigital']) ) {
+            if ($filters['isDigital'] === 'digital') {
+                $filters['isDigital'] = true;
+            } elseif ($filters['isDigital'] === 'nondigital') {
+                $filters['isDigital'] = false;
+            } else {
+                unset($filters['isDigital']);
+            }
+        }
+
+        // nuke any empty values
         return array_filter(
             $filters,
             function ($v) {
-                return !empty($v);
+                return $v === false || !empty($v);
             }
         );
     }
@@ -42,6 +52,24 @@ trait DocumentSearchTrait
     protected function getDocumentForm($filters = array())
     {
         $form = $this->getForm('documents-home');
+
+        // grab all the relevant backend data needed to populate the
+        // various dropdowns on the filter form
+        $selects = array(
+            'category' => $this->getListData('Category', [], 'description'),
+            'documentSubCategory' => $this->getListData('DocumentSubCategory', $filters, 'description'),
+            'fileExtension' => $this->getListData(
+                'RefData',
+                ['refDataCategoryId' => 'document_type'],
+                'description', 'id'
+            )
+        );
+
+        // insert relevant data into the corresponding form inputs
+        foreach ($selects as $name => $options) {
+            $form->get($name)
+                ->setValueOptions($options);
+        }
 
         // setting $this->enableCsrf = false won't sort this; we never POST
         $form->remove('csrf');
@@ -59,13 +87,15 @@ trait DocumentSearchTrait
             $filters
         );
 
+        $filters = array_merge(
+            $filters,
+            array('query' => $this->getRequest()->getQuery())
+        );
+
         $table = $this->getTable(
             'documents',
             $documents,
-            array_merge(
-                $filters,
-                array('query' => $this->getRequest()->getQuery())
-            )
+            $filters
         );
 
         if ($render) {

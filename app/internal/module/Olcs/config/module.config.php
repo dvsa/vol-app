@@ -45,6 +45,7 @@ return array(
             'LicenceDetailsOperatingCentreController' => 'Olcs\Controller\Licence\Details\OperatingCentreController',
             'LicenceDetailsTransportManagerController' => 'Olcs\Controller\Licence\Details\TransportManagerController',
             'LicenceDetailsVehicleController' => 'Olcs\Controller\Licence\Details\VehicleController',
+            'LicenceDetailsVehiclePsvController' => 'Olcs\Controller\Licence\Details\VehiclePsvController',
             'LicenceDetailsSafetyController' => 'Olcs\Controller\Licence\Details\SafetyController',
             'LicenceDetailsConditionUndertakingController' =>
                 'Olcs\Controller\Licence\Details\ConditionUndertakingController',
@@ -54,6 +55,24 @@ return array(
                 'Olcs\Controller\Licence\Processing\LicenceProcessingOverviewController',
             'LicenceProcessingTasksController' => 'Olcs\Controller\Licence\Processing\LicenceProcessingTasksController',
             'LicenceProcessingNoteController' => 'Olcs\Controller\Licence\Processing\LicenceProcessingNoteController',
+            'BusController' => 'Olcs\Controller\Bus\BusController',
+            'BusDetailsController' => 'Olcs\Controller\Bus\Details\BusDetailsController',
+            'BusDetailsServiceController' => 'Olcs\Controller\Bus\Details\BusDetailsServiceController',
+            'BusDetailsStopController' => 'Olcs\Controller\Bus\Details\BusDetailsStopController',
+            'BusDetailsTaController' => 'Olcs\Controller\Bus\Details\BusDetailsTaController',
+            'BusDetailsQualityController' => 'Olcs\Controller\Bus\Details\BusDetailsQualityController',
+            'BusShortController' => 'Olcs\Controller\Bus\Short\BusShortController',
+            'BusShortPlaceholderController' => 'Olcs\Controller\Bus\Short\BusShortPlaceholderController',
+            'BusRouteController' => 'Olcs\Controller\Bus\Route\BusRouteController',
+            'BusRoutePlaceholderController' => 'Olcs\Controller\Bus\Route\BusRoutePlaceholderController',
+            'BusTrcController' => 'Olcs\Controller\Bus\Trc\BusTrcController',
+            'BusTrcPlaceholderController' => 'Olcs\Controller\Bus\Trc\BusTrcPlaceholderController',
+            'BusDocsController' => 'Olcs\Controller\Bus\Docs\BusDocsController',
+            'BusDocsPlaceholderController' => 'Olcs\Controller\Bus\Docs\BusDocsPlaceholderController',
+            'BusProcessingController' => 'Olcs\Controller\Bus\Processing\BusProcessingController',
+            'BusProcessingNoteController' => 'Olcs\Controller\Bus\Processing\BusProcessingNoteController',
+            'BusFeesController' => 'Olcs\Controller\Bus\Fees\BusFeesController',
+            'BusFeesPlaceholderController' => 'Olcs\Controller\Bus\Fees\BusFeesPlaceholderController',
         )
     ),
     'view_manager' => array(
@@ -102,7 +121,11 @@ return array(
                 $helper = new \Olcs\Helper\ApplicationJourneyHelper();
                 $helper->setServiceLocator($sm);
                 return $helper;
-            }
+            },
+            'Olcs\Service\Data\PublicInquiryReason' => 'Olcs\Service\Data\PublicInquiryReason',
+            'Olcs\Service\Data\Licence' => 'Olcs\Service\Data\Licence',
+            'Olcs\Service\Data\User' => 'Olcs\Service\Data\User',
+            'Olcs\Service\Data\PresidingTc' => 'Olcs\Service\Data\PresidingTc'
         )
     ),
     'application_journey' => array(
@@ -121,5 +144,11 @@ return array(
                 'method' => 'render'
             )
         )
-    )
+    ),
+    'form_elements' =>[
+        'factories' => [
+            'PublicInquiryReason' => 'Olcs\Form\Element\PublicInquiryReasonFactory'
+        ]
+    ]
+
 );

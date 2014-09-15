@@ -210,7 +210,7 @@ class CaseConvictionControllerTest extends AbstractHttpControllerTestCase
         $form = $this->getMock('\stdClass', array('setData'));
         $this->controller->expects($this->once())
             ->method('generateForm')
-            ->with('conviction-comment', 'saveCommentForm')
+            ->with('ConvictionComment', 'saveCommentForm')
             ->will($this->returnValue($form));
 
         $form->expects($this->once())

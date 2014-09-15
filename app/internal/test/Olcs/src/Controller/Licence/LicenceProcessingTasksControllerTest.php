@@ -4,6 +4,7 @@
  * Licence controller tests
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 namespace OlcsTest\Controller\Licence\Processing;
 
@@ -13,9 +14,58 @@ use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
  * Licence controller tests
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCase
 {
+    private $taskSearchViewExpectedData = [
+        'assignedToUser' => 1,
+        'assignedToTeam'  => 2,
+        'date'  => 'today',
+        'status' => 'open',
+        'sort' => 'actionDate',
+        'order' => 'ASC',
+        'page' => 1,
+        'limit' => 10,
+        'actionDate' => '',
+        'linkId' => 1234,
+        'linkType' => 'Licence'
+    ];
+    private $standardListData = [
+        'limit' => 100,
+        'sort' => 'name'
+    ];
+    private $extendedListData = [
+        'assignedToUser' => 1,
+        'assignedToTeam'  => 2,
+        'team'  => 2,
+        'date'  => 'today',
+        'status' => 'open',
+        'sort' => 'name',
+        'order' => 'ASC',
+        'page' => 1,
+        'limit' => 100,
+        'actionDate' => '',
+        'linkId' => 1234,
+        'linkType' => 'Licence'
+    ];
+    private $extendedListDataVariation1 = [
+        'assignedToTeam'  => 2,
+        'date'  => 'today',
+        'status' => 'open',
+        'sort' => 'name',
+        'order' => 'ASC',
+        'page' => 1,
+        'limit' => 100,
+        'linkType' => 'Licence',
+        'actionDate' => '',
+        'team'  => 2
+    ];
+    private $altListData = [
+        'limit' => 100,
+        'sort' => 'description'
+    ];
+
     public function setUp()
     {
         $this->setApplicationConfig(
@@ -57,11 +107,20 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
             ->method('getServiceLocator')
             ->will($this->returnValue($this->getServiceLocatorTranslator()));
 
+        $this->controller->expects($this->any())
+            ->method('makeRestCall')
+            ->will($this->returnCallback(array($this, 'mockRestCall')));
+
+        $this->taskSearchViewExpectedData['actionDate'] = '<= ' . date('Y-m-d');
+        $this->extendedListData['actionDate'] = '<= ' . date('Y-m-d');
+        $this->extendedListDataVariation1['actionDate'] = '<= ' . date('Y-m-d');
+
         parent::setUp();
     }
 
     /**
      * Gets a mock version of translator
+     * @group task
      */
     private function getServiceLocatorTranslator()
     {
@@ -79,18 +138,26 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
         return $serviceMock;
     }
 
+    /**
+     * Test index acton with no query
+     * @group task
+     */
     public function testIndexActionWithNoQueryUsesDefaultParams()
     {
+
         $licenceData = array(
             'licNo' => 'TEST1234',
             'goodsOrPsv' => array(
-                'id' => 'PSV'
+                'id' => 'PSV',
+                'description' => 'PSV'
             ),
             'licenceType' => array(
-                'id' => 'L1'
+                'id' => 'L1',
+                'description' => 'L1'
             ),
             'status' => array(
-                'id' => 'S1'
+                'id' => 'S1',
+                'description' => 'S1'
             )
         );
 
@@ -107,26 +174,6 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
             ->with('licence')
             ->will($this->returnValue(1234));
 
-        $expectedParams = array(
-            'assignedToUser' => 1,
-            'assignedToTeam'  => 2,
-            'date'  => 'today',
-            'status' => 'open',
-            'sort' => 'actionDate',
-            'order' => 'ASC',
-            'page' => 1,
-            'limit' => 10,
-            // @NOTE: I don't like the date variable here, maybe use
-            // DateTime and a mock instead
-            'actionDate' => '<= ' . date('Y-m-d'),
-            'linkId' => 1234,
-            'linkType' => 'Licence'
-        );
-        $this->controller->expects($this->at(4))
-            ->method('makeRestCall')
-            ->with('TaskSearchView', 'GET', $expectedParams)
-            ->will($this->returnValue([]));
-
         $tableMock = $this->getMock('\stdClass', ['render', 'removeColumn']);
         $this->controller->expects($this->once())
             ->method('getTable')
@@ -134,7 +181,7 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
                 'tasks',
                 [],
                 array_merge(
-                    $expectedParams,
+                    $this->taskSearchViewExpectedData,
                     array('query' => $this->query)
                 )
             )
@@ -161,72 +208,7 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
             ->method('getForm')
             ->will($this->returnValue($form));
 
-        $this->controller->expects($this->once())
-            ->method('setTableFilters')
-            ->with($form);
-
-        $response = [
-            'Results' => [
-                [
-                    'id' => 123,
-                    'name' => 'foo'
-                ]
-            ]
-        ];
-
-        $altResponse = [
-            'Results' => [
-                [
-                    'id' => 123,
-                    'description' => 'foo'
-                ]
-            ]
-        ];
-
-        $standardListData = [
-            'limit' => 100,
-            'sort' => 'name'
-        ];
-
-        $altListData = [
-            'limit' => 100,
-            'sort' => 'description'
-        ];
-
-        $extendedListData = [
-            'assignedToUser' => 1,
-            'assignedToTeam'  => 2,
-            'team'  => 2,
-            'date'  => 'today',
-            'status' => 'open',
-            'sort' => 'name',
-            'order' => 'ASC',
-            'page' => 1,
-            'limit' => 100,
-            'actionDate' => '<= ' . date('Y-m-d'),
-            'linkId' => 1234,
-            'linkType' => 'Licence'
-        ];
-
-        $this->controller->expects($this->at(8))
-            ->method('makeRestCall')
-            ->with('Team', 'GET', $standardListData)
-            ->will($this->returnValue($response));
-
-        $this->controller->expects($this->at(9))
-            ->method('makeRestCall')
-            ->with('User', 'GET', $extendedListData)
-            ->will($this->returnValue($response));
-
-        $this->controller->expects($this->at(10))
-            ->method('makeRestCall')
-            ->with('Category', 'GET', $altListData)
-            ->will($this->returnValue($altResponse));
-
-        $this->controller->expects($this->at(11))
-            ->method('makeRestCall')
-            ->with('TaskSubCategory', 'GET', $extendedListData)
-            ->will($this->returnValue($response));
+        $this->setUpAction('');
 
         $view = $this->controller->indexAction();
         list($header, $content) = $view->getChildren();
@@ -235,11 +217,14 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
         $this->assertEquals('PSV, L1, S1', $header->getVariable('pageSubTitle'));
     }
 
+    /**
+     * Test index action AJAX
+     * @group task
+     */
     public function testIndexActionAjax()
     {
-        $this->controller->expects($this->at(4))
-            ->method('makeRestCall')
-            ->will($this->returnValue([]));
+
+        $this->setUpAction('');
 
         $form = $this->getMock('\stdClass', ['get', 'setValueOptions', 'remove', 'setData']);
 
@@ -263,41 +248,7 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
             ->method('getForm')
             ->will($this->returnValue($form));
 
-        $response = [
-            'Results' => [
-                [
-                    'id' => 123,
-                    'name' => 'foo'
-                ]
-            ]
-        ];
-
-        $altResponse = [
-            'Results' => [
-                [
-                    'id' => 123,
-                    'description' => 'foo'
-                ]
-            ]
-        ];
-
-        $this->controller->expects($this->at(8))
-            ->method('makeRestCall')
-            ->will($this->returnValue($response));
-
-        $this->controller->expects($this->at(9))
-            ->method('makeRestCall')
-            ->will($this->returnValue($response));
-
-        $this->controller->expects($this->at(10))
-            ->method('makeRestCall')
-            ->will($this->returnValue($altResponse));
-
-        $this->controller->expects($this->at(11))
-            ->method('makeRestCall')
-            ->will($this->returnValue($response));
-
-        $this->request->expects($this->exactly(1))
+        $this->request->expects($this->any())
             ->method('isXmlHttpRequest')
             ->will($this->returnValue(true));
 
@@ -306,6 +257,10 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
         $this->assertTrue($view->terminate());
     }
 
+    /**
+     * Test index action with add action submitted
+     * @group task
+     */
     public function testIndexActionWithAddActionSubmitted()
     {
         $this->request->expects($this->once())
@@ -324,12 +279,13 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
 
         $params = [
             'action' => 'add',
-            'licence' => null,
+            'type' => 'licence',
+            'typeId' => null
         ];
         $mockRoute = $this->getMock('\stdClass', ['toRoute']);
         $mockRoute->expects($this->once())
             ->method('toRoute')
-            ->with('licence/task_action', $params)
+            ->with('task_action', $params)
             ->will($this->returnValue('mockResponse'));
 
         $this->controller->expects($this->any())
@@ -341,6 +297,10 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
         $this->assertEquals('mockResponse', $response);
     }
 
+    /**
+     * Test index action with multi edit submitted
+     * @group task
+     */
     public function testIndexActionWithMultiEditSubmitted()
     {
         $this->request->expects($this->once())
@@ -370,6 +330,10 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
         $this->fail('Expected exception not raised');
     }
 
+    /**
+     * Test index action with no edit submitted
+     * @group task
+     */
     public function testIndexActionWithNoEditSubmitted()
     {
         $this->request->expects($this->once())
@@ -399,6 +363,10 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
         $this->fail('Expected exception not raised');
     }
 
+    /**
+     * Test index action with single edit submitted
+     * @group task
+     */
     public function testIndexActionWithSingleEditSubmitted()
     {
         $this->request->expects($this->once())
@@ -421,13 +389,14 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
 
         $params = [
             'action' => 'edit',
-            'licence' => null,        // we don't mock it
-            'task'  => 321
+            'task'  => 321,
+            'type' => 'licence',
+            'typeId' => null
         ];
         $mockRoute = $this->getMock('\stdClass', ['toRoute']);
         $mockRoute->expects($this->once())
             ->method('toRoute')
-            ->with('licence/task_action', $params)
+            ->with('task_action', $params)
             ->will($this->returnValue('mockResponse'));
 
         $this->controller->expects($this->any())
@@ -437,5 +406,100 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
         $response = $this->controller->indexAction();
 
         $this->assertEquals('mockResponse', $response);
+    }
+
+    /**
+     * Test index action with multiple reassign submitted
+     * @group task
+     */
+    public function testIndexActionWithMultipleReassignSubmitted()
+    {
+        $this->request->expects($this->once())
+            ->method('isPost')
+            ->will($this->returnValue(true));
+
+        $params = $this->getMock('\stdClass', ['fromPost']);
+
+        $params->expects($this->at(0))
+            ->method('fromPost')
+            ->will($this->returnValue('re-assign task'));
+
+        $params->expects($this->at(1))
+            ->method('fromPost')
+            ->will($this->returnValue([1, 2]));
+
+        $this->controller->expects($this->any())
+            ->method('params')
+            ->will($this->returnValue($params));
+
+        $params = [
+            'action' => 'reassign',
+            'task'  => '1-2',
+            'type' => 'licence',
+            'typeId' => null
+        ];
+        $mockRoute = $this->getMock('\stdClass', ['toRoute']);
+        $mockRoute->expects($this->once())
+            ->method('toRoute')
+            ->with('task_action', $params)
+            ->will($this->returnValue('mockResponse'));
+
+        $this->controller->expects($this->any())
+            ->method('redirect')
+            ->will($this->returnValue($mockRoute));
+
+        $response = $this->controller->indexAction();
+
+        $this->assertEquals('mockResponse', $response);
+    }
+
+    /**
+     * Mock the rest call
+     *
+     * @param string $service
+     * @param string $method
+     * @param array $data
+     * @param array $bundle
+     */
+    public function mockRestCall($service, $method, $data = array(), $bundle = array())
+    {
+        $standardResponse = ['Results' => [['id' => 123,'name' => 'foo']]];
+        $altResponse = ['Results' => [['id' => 123,'description' => 'foo']]];
+
+        if ($service == 'TaskSearchView' && $method == 'GET' && $data == $this->taskSearchViewExpectedData) {
+            return [];
+        }
+        if ($service == 'Team' && $method == 'GET' && $data == $this->standardListData) {
+            return $standardResponse;
+        }
+        if ($service == 'User' && $method == 'GET' && $data == $this->extendedListData) {
+            return $standardResponse;
+        }
+        if ($service == 'User' && $method == 'GET' && $data == $this->extendedListDataVariation1) {
+            return $standardResponse;
+        }
+        if ($service == 'TaskSubCategory' && $method == 'GET' && $data == $this->extendedListData) {
+            return $standardResponse;
+        }
+        if ($service == 'TaskSubCategory' && $method == 'GET' && $data == $this->extendedListDataVariation1) {
+            return $standardResponse;
+        }
+        if ($service == 'Category' && $method == 'GET' && $data == $this->altListData) {
+            return $altResponse;
+        }
+    }
+
+    public function setUpAction($action = '')
+    {
+        $paramsMock = $this->getMock('\StdClass', array('fromPost'));
+
+        $paramsMock->expects($this->any())
+                ->method('fromPost')
+                ->with('action')
+                ->will($this->returnValue($action));
+
+        $this->controller->expects($this->any())
+            ->method('params')
+            ->will($this->returnValue($paramsMock));
     }
 }

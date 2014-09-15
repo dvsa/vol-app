@@ -53,8 +53,8 @@ return array(
         ),
         array(
             'title' => 'Format',
-            'name' => 'fileExtension',
-            'sort' => 'fileExtension'
+            'name' => 'documentType',
+            'sort' => 'documentType'
         ),
         array(
             'title' => 'Date',

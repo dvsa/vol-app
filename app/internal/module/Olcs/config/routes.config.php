@@ -118,6 +118,21 @@ return array_merge(
                 ]
             ]
         ],
+        'task_action' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/task[/:action][/:task][/type/:type/:typeId]',
+                'constraints' => [
+                    'task' => '[0-9-]+',
+                    'type' => '[a-z]+',
+                    'typeId' => '[0-9]+'
+                ],
+                'defaults' => [
+                    'controller' => 'TaskController',
+                ]
+            ],
+            'may_terminate' => true,
+        ],
 
         // These routes are for the licence page
 
@@ -213,11 +228,27 @@ return array_merge(
                             ]
                         ],
                         'vehicle' => [
-                            'type' => 'literal',
+                            'type' => 'segment',
                             'options' => [
-                                'route' => '/vehicles',
+                                'route' => '/vehicles[/:action][/:id]',
+                                'contraints' => [
+                                    'id' => '[0-9]+'
+                                ],
                                 'defaults' => [
                                     'controller' => 'LicenceDetailsVehicleController',
+                                    'action' => 'index',
+                                ]
+                            ]
+                        ],
+                        'vehicle_psv' => [
+                            'type' => 'segment',
+                            'options' => [
+                                'route' => '/vehicles_psv[/:action][/:id]',
+                                'contraints' => [
+                                    'id' => '[0-9]+'
+                                ],
+                                'defaults' => [
+                                    'controller' => 'LicenceDetailsVehiclePsvController',
                                     'action' => 'index',
                                 ]
                             ]
@@ -262,10 +293,232 @@ return array_merge(
                     'options' => [
                         'route' => '/bus',
                         'defaults' => [
+                            'controller' => 'LicenceController',
                             'action' => 'bus',
                         ]
                     ],
                     'may_terminate' => true,
+                ],
+                'bus-details' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => '/bus/:busRegId/details',
+                        'defaults' => [
+                            'controller' => 'BusDetailsController',
+                            'action' => 'index',
+                        ]
+                    ],
+                    'may_terminate' => true,
+                    'child_routes' => [
+                        'service' => [
+                            'type' => 'literal',
+                            'options' => [
+                                'route' => '/service',
+                                'defaults' => [
+                                    'controller' => 'BusDetailsServiceController',
+                                    'action' => 'index',
+                                ]
+                            ],
+                        ],
+                        'stop' => [
+                            'type' => 'literal',
+                            'options' => [
+                                'route' => '/stop',
+                                'defaults' => [
+                                    'controller' => 'BusDetailsStopController',
+                                    'action' => 'index',
+                                ]
+                            ],
+                        ],
+                        'ta' => [
+                            'type' => 'literal',
+                            'options' => [
+                                'route' => '/ta',
+                                'defaults' => [
+                                    'controller' => 'BusDetailsTaController',
+                                    'action' => 'index',
+                                ]
+                            ],
+                        ],
+                        'quality' => [
+                            'type' => 'literal',
+                            'options' => [
+                                'route' => '/quality',
+                                'defaults' => [
+                                    'controller' => 'BusDetailsQualityController',
+                                    'action' => 'index',
+                                ]
+                            ],
+                        ]
+                    ]
+                ],
+                'bus-short' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => '/bus/:busRegId/short',
+                        'defaults' => [
+                            'controller' => 'BusShortController',
+                            'action' => 'index',
+                        ]
+                    ],
+                    'may_terminate' => true,
+                    'child_routes' => [
+                        'placeholder' => [
+                            'type' => 'literal',
+                            'options' => [
+                                'route' => '/placeholder',
+                                'defaults' => [
+                                    'controller' => 'BusShortPlaceholderController',
+                                    'action' => 'index',
+                                ]
+                            ],
+                        ],
+                    ]
+                ],
+                'bus-route' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => '/bus/:busRegId/route',
+                        'defaults' => [
+                            'controller' => 'BusRouteController',
+                            'action' => 'index',
+                        ]
+                    ],
+                    'may_terminate' => true,
+                    'child_routes' => [
+                        'placeholder' => [
+                            'type' => 'literal',
+                            'options' => [
+                                'route' => '/placeholder',
+                                'defaults' => [
+                                    'controller' => 'BusRoutePlaceholderController',
+                                    'action' => 'index',
+                                ]
+                            ],
+                        ],
+                    ]
+                ],
+                'bus-trc' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => '/bus/:busRegId/trc',
+                        'defaults' => [
+                            'controller' => 'BusTrcController',
+                            'action' => 'index',
+                        ]
+                    ],
+                    'may_terminate' => true,
+                    'child_routes' => [
+                        'placeholder' => [
+                            'type' => 'literal',
+                            'options' => [
+                                'route' => '/placeholder',
+                                'defaults' => [
+                                    'controller' => 'BusTrcPlaceholderController',
+                                    'action' => 'index',
+                                ]
+                            ],
+                        ],
+                    ]
+                ],
+                'bus-docs' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => '/bus/:busRegId/docs',
+                        'defaults' => [
+                            'controller' => 'BusDocsController',
+                            'action' => 'index',
+                        ]
+                    ],
+                    'may_terminate' => true,
+                    'child_routes' => [
+                        'placeholder' => [
+                            'type' => 'literal',
+                            'options' => [
+                                'route' => '/placeholder',
+                                'defaults' => [
+                                    'controller' => 'BusDocsPlaceholderController',
+                                    'action' => 'index',
+                                ]
+                            ],
+                        ],
+                    ]
+                ],
+                'bus-processing' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => '/bus/:busRegId/processing',
+                        'defaults' => [
+                            'controller' => 'BusProcessingController',
+                            'action' => 'index',
+                        ]
+                    ],
+                    'may_terminate' => true,
+                   'child_routes' => [
+                        'notes' => [
+                            'type' => 'segment',
+                            'options' => [
+                                'route' => '/notes/page/:page/limit/:limit/sort/:sort/order/:order',
+                                'defaults' => [
+                                    'controller' => 'BusProcessingNoteController',
+                                    'action' => 'index',
+                                    'page' => 1,
+                                    'limit' => 10,
+                                    'sort' => 'priority',
+                                    'order' => 'DESC'
+                                ]
+                            ],
+                        ],
+                        'add-note' => [
+                            'type' => 'segment',
+                            'options' => [
+                                'route' => '/notes/:action/:noteType[/:linkedId]',
+                                'defaults' => [
+                                    'constraints' => [
+                                        'noteType' => '[A-Za-z]+',
+                                        'linkedId' => '[0-9]+',
+                                    ],
+                                    'controller' => 'BusProcessingNoteController',
+                                    'action' => 'add'
+                                ]
+                            ]
+                        ],
+                        'modify-note' => [
+                            'type' => 'segment',
+                            'options' => [
+                                'route' => '/notes/:action[/:id]',
+                                'defaults' => [
+                                    'constraints' => [
+                                        'id' => '[0-9]+',
+                                    ],
+                                    'controller' => 'BusProcessingNoteController',
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                'bus-fees' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => '/bus/:busRegId/fees',
+                        'defaults' => [
+                            'controller' => 'BusFeesController',
+                            'action' => 'index',
+                        ]
+                    ],
+                    'may_terminate' => true,
+                    'child_routes' => [
+                        'placeholder' => [
+                            'type' => 'literal',
+                            'options' => [
+                                'route' => '/placeholder',
+                                'defaults' => [
+                                    'controller' => 'BusFeesPlaceholderController',
+                                    'action' => 'index',
+                                ]
+                            ],
+                        ],
+                    ]
                 ],
                 'cases' => [
                     'type' => 'segment',
@@ -395,20 +648,6 @@ return array_merge(
                         'route' => '/fees',
                         'defaults' => [
                             'action' => 'fees',
-                        ]
-                    ],
-                    'may_terminate' => true,
-                ],
-                'task_action' => [
-                    'type' => 'segment',
-                    'options' => [
-                        'route' => '/task[/:action][/:task]',
-                        'constraints' => [
-                            'task' => '[0-9]+'
-                        ],
-                        'defaults' => [
-                            'type'       => 'licence',
-                            'controller' => 'TaskController'
                         ]
                     ],
                     'may_terminate' => true,

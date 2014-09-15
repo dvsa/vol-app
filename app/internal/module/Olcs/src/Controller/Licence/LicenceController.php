@@ -73,75 +73,11 @@ class LicenceController extends AbstractController
             array(
                 'table' => $this->getDocumentsTable($filters),
                 'form'  => $this->getDocumentForm($filters),
-                'inlineScript' => $this->loadScripts(['table-actions'])
+                'inlineScript' => $this->loadScripts(['documents'])
             )
         );
 
         $view->setTemplate('licence/documents');
-        $view->setTerminal(
-            $this->getRequest()->isXmlHttpRequest()
-        );
-
-        return $this->renderView($view);
-    }
-
-    public function processingAction()
-    {
-        if ($this->getRequest()->isPost()) {
-            $action = strtolower($this->params()->fromPost('action'));
-            if ($action === 'create task') {
-                $action = 'add';
-            }
-
-            $params = [
-                'licence' => $this->getFromRoute('licence'),
-                'action'  => $action
-            ];
-
-            if ($action !== 'add') {
-                $id = $this->params()->fromPost('id');
-
-                // @NOTE: edit doesn't allow multi IDs, but other
-                // actions (like reassign) might, hence why we have
-                // an explicit check here
-                if ($action === 'edit') {
-                    if (!is_array($id) || count($id) !== 1) {
-                        throw new \Exception('Please select a single task to edit');
-                    }
-                    $id = $id[0];
-                }
-
-                $params['task'] = $id;
-            }
-
-            return $this->redirect()->toRoute(
-                'licence/task_action',
-                $params
-            );
-        }
-
-        $this->pageLayout = 'licence';
-
-        $filters = $this->mapTaskFilters(
-            array('licenceId' => $this->getFromRoute('licence'))
-        );
-
-        $table = $this->getTaskTable($filters, false);
-
-        // the table's nearly all good except we don't want
-        // a couple of columns
-        $table->removeColumn('name');
-        $table->removeColumn('link');
-
-        $view = $this->getViewWithLicence(
-            array(
-                'table' => $table->render(),
-                'form'  => $this->getTaskForm($filters),
-                'inlineScript' => $this->loadScripts(['table-actions', 'tasks'])
-            )
-        );
-
-        $view->setTemplate('licence/processing');
         $view->setTerminal(
             $this->getRequest()->isXmlHttpRequest()
         );
@@ -159,8 +95,55 @@ class LicenceController extends AbstractController
 
     public function busAction()
     {
-        $view = $this->getViewWithLicence();
-        $view->setTemplate('licence/index');
+        $this->pageLayout = 'bus-list';
+
+        $searchData = array(
+            'licence' => $this->getFromRoute('licence'),
+            'page' => 1,
+            'sort' => 'regNo',
+            'order' => 'DESC',
+            'limit' => 10,
+            'url' => $this->url()
+        );
+
+        $filters = array_merge(
+            $searchData,
+            $this->getRequest()->getQuery()->toArray()
+        );
+
+        //if status is set to all
+        if (isset($filters['status']) && !$filters['status']) {
+            unset($filters['status']);
+        }
+
+        $resultData = $this->makeRestCall('BusReg', 'GET', $filters);
+        $table = $this->buildTable(
+            'busreg',
+            $resultData,
+            array_merge(
+                $filters,
+                array('query' => $this->getRequest()->getQuery())
+            )
+        );
+
+        $form = $this->getForm('busreg-list');
+        $form->remove('csrf'); //we never post
+        $form->setData($filters);
+
+        $this->setTableFilters($form);
+
+        $view = $this->getViewWithLicence(
+            array(
+                'table' => $table,
+                'inlineScript' => $this->loadScripts(['busreg-list'])
+            )
+        );
+
+        $view->setTemplate('licence/processing');
+
+        $view->setTerminal(
+            $this->getRequest()->isXmlHttpRequest()
+        );
 
         return $this->renderView($view);
     }
