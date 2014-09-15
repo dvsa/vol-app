@@ -35,7 +35,7 @@ class CasePiControllerTest extends AbstractHttpControllerTestCase
      */
     public function testGenerateFormWithData()
     {
-        return $this->markTestSkipped();
+        return $this->markTestIncomplete();
         /*
         $id = 1;
         $formname = 'formName';

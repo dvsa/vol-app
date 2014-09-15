@@ -11,7 +11,6 @@ use Zend\Navigation\Navigation;
 use Common\Controller\AbstractSectionController;
 use Common\Form\Fieldsets\Custom\SectionButtons;
 use Zend\View\Model\ViewModel;
-use Zend\Http\Response;
 use Common\Controller\Traits\GenericLicenceSection;
 
 /**
@@ -57,6 +56,13 @@ abstract class AbstractLicenceDetailsController extends AbstractSectionControlle
     protected $identifierName = 'licence';
 
     /**
+     * Holds the default view template name
+     *
+     * @var string
+     */
+    protected $viewTemplateName = 'partials/section';
+
+    /**
      * Get the licence details helper
      *
      * @return \Olcs\Helper\LicenceDetailsHelper
@@ -95,33 +101,27 @@ abstract class AbstractLicenceDetailsController extends AbstractSectionControlle
     }
 
     /**
-     * Render section
+     * Render the view
      *
-     * @return array
+     * @NOTE the method above could potentially be renamed to render and replace this method, however for backwards
+     *  compat, I will just wrap it
+     *
+     * @param ViewModel $view
+     * @return ViewModel
      */
-    protected function renderSection()
+    protected function render($view)
     {
-        $redirect = $this->checkForRedirect();
-
-        if ($redirect instanceof Response || $redirect instanceof ViewModel) {
-
-            return $redirect;
-        }
-
-        $form = $this->getNewForm();
-
-        $response = $this->getCaughtResponse();
-
-        if ($response !== null) {
-            return $response;
-        }
-
-        $view = new ViewModel(array('form' => $form));
-        $view->setTemplate('partials/section');
-
-        $this->maybeAddTable($view);
-
         return $this->renderView($view);
+    }
+
+    /**
+     * Get view template name
+     *
+     * @return string
+     */
+    protected function getViewTemplateName()
+    {
+        return $this->viewTemplateName;
     }
 
     /**

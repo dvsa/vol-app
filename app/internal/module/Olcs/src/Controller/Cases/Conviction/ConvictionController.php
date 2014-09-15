@@ -487,9 +487,7 @@ class ConvictionController extends OlcsController\CrudAbstract
 
     public function getLegacyOffencesTable($legacyOffencesResults)
     {
-        $data['url'] = $this->url();
-        $legacyOffencesTable =
-            $this->getServiceLocator()->get('Table')->buildTable('legacyOffences', $legacyOffencesResults, $data);
+        $legacyOffencesTable = $this->getTable('legacyOffences', $legacyOffencesResults);
 
         return $legacyOffencesTable;
     }

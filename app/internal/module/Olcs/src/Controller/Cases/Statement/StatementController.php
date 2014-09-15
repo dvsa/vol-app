@@ -131,7 +131,7 @@ class StatementController extends OlcsController\CrudAbstract
 
         $results = $this->makeRestCall('Statement', 'GET', array('caseId' => $caseId));
 
-        $variables = array('tab' => 'statements', 'table' => $this->buildTable('statement', $results));
+        $variables = array('tab' => 'statements', 'table' => $this->getTable('statement', $results));
 
         $view = $this->getView($this->getCaseVariables($caseId, $variables));
 

@@ -25,17 +25,18 @@ class BusProcessingNoteControllerTest extends AbstractHttpControllerTestCase
             array(
                 'makeRestCall',
                 'getLoggedInUser',
-                'buildTable',
+                'getTable',
                 'generateFormWithData',
                 'getFromRoute',
                 'getFromPost',
+                'getForm',
                 'getView',
                 'url',
                 'renderView',
                 'redirectToRoute',
                 'processAdd',
                 'processEdit',
-
+                'setTableFilters'
             )
         );
 
@@ -43,6 +44,14 @@ class BusProcessingNoteControllerTest extends AbstractHttpControllerTestCase
             '\Zend\View\Model\ViewModel',
             array(
                 'setTemplate',
+            )
+        );
+
+        $this->form = $this->getMock(
+            '\Zend\Form\Form',
+            array(
+                'remove',
+                'setData'
             )
         );
 
@@ -55,29 +64,33 @@ class BusProcessingNoteControllerTest extends AbstractHttpControllerTestCase
     public function testIndexAction()
     {
         $licenceId = 110;
-        $page = 1;
-        $sort = 'priority';
-        $order = 'desc';
-        $limit = 10;
 
         $this->getFromRoute(0, 'licence', $licenceId);
         $this->getFromRoute(1, 'busRegId', null);
         $this->getFromPost(2, 'action', null);
         $this->getFromPost(3, 'id', null);
-        $this->getFromRouteWithDefault(4, 'page', $page, $page);
-        $this->getFromRouteWithDefault(5, 'sort', $sort, $sort);
-        $this->getFromRouteWithDefault(6, 'order', $order, $order);
-        $this->getFromRouteWithDefault(7, 'limit', $limit, $limit);
-
-        $this->controller->expects($this->once())
-            ->method('url');
 
         $this->controller->expects($this->once())
             ->method('makeRestCall')
             ->will($this->returnValue($this->getSampleResult()));
 
         $this->controller->expects($this->once())
-            ->method('buildTable');
+            ->method('getForm')
+            ->with('note-filter')
+            ->will($this->returnValue($this->form));
+
+        $this->form->expects($this->once())
+            ->method('remove')
+            ->with('csrf');
+
+        $this->form->expects($this->once())
+            ->method('setData');
+
+        $this->controller->expects($this->once())
+            ->method('setTableFilters');
+
+        $this->controller->expects($this->once())
+            ->method('getTable');
 
         $this->controller->expects($this->once())
             ->method('getView')
@@ -90,6 +103,79 @@ class BusProcessingNoteControllerTest extends AbstractHttpControllerTestCase
             ->method('renderView');
 
         $this->controller->indexAction();
+    }
+
+    /**
+     * Tests for a crud add redirect from index action
+     */
+    public function testIndexActionAddRedirect()
+    {
+        $licenceId = 7;
+        $linkedId = 1;
+        $action = 'Add';
+        $busRegId = 1;
+        $id = null;
+        $route = 'licence/bus-processing/add-note';
+
+        $this->getFromRoute(0, 'licence', $licenceId);
+        $this->getFromRoute(1, 'busRegId', $busRegId);
+        $this->getFromPost(2, 'action', $action);
+        $this->getFromPost(3, 'id', $id);
+
+        $this->controller->expects($this->once())
+            ->method('redirectToRoute')
+            ->with(
+                $this->equalTo($route),
+                $this->equalTo(
+                    [
+                        'action' => strtolower($action),
+                        'licence' => $licenceId,
+                        'noteType' => 'note_t_bus',
+                        'linkedId' => $linkedId]
+                ),
+                $this->equalTo([]),
+                $this->equalTo(true)
+            );
+
+        $this->controller->indexAction();
+    }
+
+    /**
+     * Tests for a crud edit/delete redirect from index action
+     *
+     * @dataProvider indexActionModifyRedirectProvider
+     *
+     * @param string $action
+     */
+    public function testIndexActionModifyRedirect($action)
+    {
+        $licenceId = 7;
+        $id = 1;
+        $busRegId = 1;
+        $route = 'licence/bus-processing/modify-note';
+
+        $this->getFromRoute(0, 'licence', $licenceId);
+        $this->getFromRoute(1, 'busRegId', $busRegId);
+        $this->getFromPost(2, 'action', $action);
+        $this->getFromPost(3, 'id', $id);
+
+        $this->controller->expects($this->once())
+            ->method('redirectToRoute')
+            ->with(
+                $this->equalTo($route),
+                $this->equalTo(['action' => strtolower($action), 'id' => $id]),
+                $this->equalTo([]),
+                $this->equalTo(true)
+            );
+
+        $this->controller->indexAction();
+    }
+
+    public function indexActionModifyRedirectProvider()
+    {
+        return [
+            ['Edit', 'Delete']
+        ];
     }
 
     /**

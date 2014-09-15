@@ -25,7 +25,7 @@ class BusRouteControllerTest extends AbstractHttpControllerTestCase
         $this->controller = $this->getMock(
             '\Olcs\Controller\Bus\Route\BusRouteController',
             array(
-                'getViewWithLicence',
+                'getViewWithBusReg',
                 'renderView'
             )
         );
@@ -46,7 +46,7 @@ class BusRouteControllerTest extends AbstractHttpControllerTestCase
     public function testIndexAction()
     {
         $this->controller->expects($this->once())
-            ->method('getViewWithLicence')
+            ->method('getViewWithBusReg')
             ->will($this->returnValue($this->view));
 
         $this->view->expects($this->once())

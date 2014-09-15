@@ -25,16 +25,18 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
             array(
                 'makeRestCall',
                 'getLoggedInUser',
-                'buildTable',
+                'getTable',
                 'generateFormWithData',
                 'getFromRoute',
                 'getFromPost',
+                'getForm',
                 'getView',
                 'url',
                 'renderView',
                 'redirectToRoute',
                 'processAdd',
                 'processEdit',
+                'setTableFilters'
 
             )
         );
@@ -46,37 +48,46 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
             )
         );
 
+        $this->form = $this->getMock(
+            '\Zend\Form\Form',
+            array(
+                'remove',
+                'setData'
+            )
+        );
+
         parent::setUp();
     }
 
     public function testIndexAction()
     {
         $licenceId = 7;
-        $page = 1;
-        $sort = 'priority';
-        $order = 'desc';
-        $limit = 10;
 
         $this->getFromRoute(0, 'licence', $licenceId);
         $this->getFromPost(1, 'action', null);
         $this->getFromPost(2, 'id', null);
-        $this->getFromRouteWithDefault(3, 'page', $page, $page);
-        $this->getFromRouteWithDefault(4, 'sort', $sort, $sort);
-        $this->getFromRouteWithDefault(5, 'order', $order, $order);
-        $this->getFromRouteWithDefault(6, 'limit', $limit, $limit);
-
-        $this->controller->expects($this->once())
-            ->method('url');
 
         $this->controller->expects($this->once())
             ->method('makeRestCall')
             ->will($this->returnValue($this->getSampleResult()));
 
-        //$this->controller->expects($this->once())
-          //  ->method('appendLinkedId');
+        $this->controller->expects($this->once())
+            ->method('getForm')
+            ->with('note-filter')
+            ->will($this->returnValue($this->form));
+
+        $this->form->expects($this->once())
+            ->method('remove')
+            ->with('csrf');
+
+        $this->form->expects($this->once())
+            ->method('setData');
 
         $this->controller->expects($this->once())
-            ->method('buildTable');
+            ->method('setTableFilters');
+
+        $this->controller->expects($this->once())
+            ->method('getTable');
 
         $this->controller->expects($this->once())
             ->method('getView')
@@ -224,7 +235,7 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
     /**
      * Tests the process add notes function
      *
-     * @dataProvider testProcessAddNotesProvider
+     * @dataProvider processAddNotesProvider
      *
      * @param array $data
      */
@@ -246,7 +257,7 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
     /**
      * Tests the process add notes function redirects properly on failure
      *
-     * @dataProvider testProcessAddNotesProvider
+     * @dataProvider processAddNotesProvider
      *
      * @param array $data
      */
@@ -292,7 +303,7 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
     /**
      * Data provider for process add notes
      */
-    public function testProcessAddNotesProvider()
+    public function processAddNotesProvider()
     {
         return [
             [$this->getTestFormPost('note_t_lic'), 'licence'],

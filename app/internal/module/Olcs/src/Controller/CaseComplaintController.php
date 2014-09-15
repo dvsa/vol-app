@@ -164,7 +164,7 @@ class CaseComplaintController extends OlcsController\CrudAbstract
             $complaints[] = $row['complaint'];
         }
 
-        $table = $this->buildTable('complaints', $complaints);
+        $table = $this->getTable('complaints', $complaints);
 
         $view->setVariables(
             [
