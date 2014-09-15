@@ -54,7 +54,7 @@ class CaseComplaintTest extends AbstractHttpControllerTestCase
                 'getCase',
                 'getCaseSummaryArray',
                 'makeRestCall',
-                'buildTable',
+                'getTable',
                 'getPluginManager',
                 'checkForCrudAction'
             )
@@ -124,7 +124,7 @@ class CaseComplaintTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue($restResults));
 
         $controller->expects($this->once())
-                ->method('buildTable')
+                ->method('getTable')
                 ->with(
                     $this->equalTo('complaints'),
                     $this->equalTo($restResults['complaintCases'])

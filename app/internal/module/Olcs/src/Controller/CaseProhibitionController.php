@@ -214,7 +214,7 @@ class CaseProhibitionController extends CaseController implements CrudInterface
     {
         $results = $this->makeRestCall('Prohibition', 'GET', array('case' => $caseId), $this->getBundle());
 
-        return $this->buildTable('prohibition', $results);
+        return $this->getTable('prohibition', $results);
     }
 
     /**
@@ -245,11 +245,11 @@ class CaseProhibitionController extends CaseController implements CrudInterface
             )
         );
 
-        if ($results['Count']) {
-            return $this->buildTable('prohibitionDefect', $results);
+        if (!$results['Count']) {
+            $results = array();
         }
 
-        return $this->buildTable('prohibitionDefect', []);
+        return $this->getTable('prohibitionDefect', []);
     }
 
     /**
