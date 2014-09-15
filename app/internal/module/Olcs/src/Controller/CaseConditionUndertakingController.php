@@ -280,7 +280,6 @@ class CaseConditionUndertakingController extends CaseController
                 isset($result['operatingCentre']['address']) ? $result['operatingCentre']['address'] : null;
         }
 
-
         return $this->getTable($this->tables[$which], $conditionUndertakings);
     }
 

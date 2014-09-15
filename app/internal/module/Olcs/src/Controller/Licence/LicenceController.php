@@ -124,7 +124,6 @@ class LicenceController extends AbstractController
             )
         );
 
-
         $view->setTemplate('licence/processing');
 
         $view->setTerminal(

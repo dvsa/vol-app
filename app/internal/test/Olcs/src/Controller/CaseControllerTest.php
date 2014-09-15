@@ -611,7 +611,6 @@ class CaseControllerTest extends AbstractHttpControllerTestCase
             )
         );
 
-
         $this->controller->expects($this->once())
             ->method('getCase')
             ->with($caseId)
