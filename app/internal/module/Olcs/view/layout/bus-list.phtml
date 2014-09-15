@@ -1,12 +1,8 @@
 <div class="one-fifth--left">
     <h4><?php echo $this->translate('internal-licence-bus'); ?></h4>
-
-    <hr />
-
-    <h4><?php echo $this->translate('Filters'); ?></h4>
-    <div class="filters">
-        <?php echo $this->tableFilters();  ?>
-    </div>
+    <?php
+        echo $this->tableFilters();
+    ?>
 
 </div>
 <div class="three-fifths">
