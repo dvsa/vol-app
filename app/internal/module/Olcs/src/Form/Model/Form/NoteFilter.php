@@ -15,7 +15,7 @@ class NoteFilter
     /**
      * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
-     *     "label": "internal-licence-processing-note.data.notetype",
+     *     "label": "internal-licence-processing-notes.data.notetype",
      *     "disable_inarray_validator": false,
      *     "category": "note_type",
      *     "empty_option": "All"
