@@ -114,7 +114,7 @@ class SubmissionController extends OlcsController\CrudAbstract
         $formData = $this->getFromPost('fields');
 
         // Intercept Submission type submit button to prevent saving
-        if (isset($formData['submission_sections']['submission_type_submit'])) {
+        if (isset($formData['submissionSections']['submissionTypeSubmit'])) {
             $this->setPersist(false);
         }
         return parent::addAction();
@@ -148,8 +148,8 @@ class SubmissionController extends OlcsController\CrudAbstract
     {
         // modify $data
 
-        $data['text'] = json_encode($data['submission_sections']['submission_sections']);
-        $data['submissionType'] = $data['submission_sections']['submission_type'];
+        $data['text'] = json_encode($data['submissionSections']['sections']);
+        $data['submissionType'] = $data['submissionSections']['submissionType'];
         $data = parent::save($data, $service);
 
         return $data;
@@ -186,11 +186,11 @@ class SubmissionController extends OlcsController\CrudAbstract
         $case = $this->getCase($caseId);
         $data['fields']['case'] = $case['id'];
 
-        if (isset($data['submission_sections']['submission_sections'])) {
-            $data['fields']['submission_sections']['submission_sections'] = json_decode($data['submission_sections']['submission_sections']);
+        if (isset($data['submissionSections']['sections'])) {
+            $data['fields']['submissionSections']['sections'] = json_decode($data['submissionSections']['sections']);
         } elseif (isset($data['text'])) {
-            $data['fields']['submission_sections']['submission_type'] = $data['submissionType']['id'];
-            $data['fields']['submission_sections']['submission_sections'] = json_decode($data['text']);
+            $data['fields']['submissionSections']['submissionType'] = $data['submissionType']['id'];
+            $data['fields']['submissionSections']['sections'] = json_decode($data['text']);
             $data['case'] = $case['id'];
         }
 

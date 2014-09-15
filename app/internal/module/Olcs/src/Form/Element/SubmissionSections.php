@@ -57,25 +57,25 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
      *
      * @var Array
      */
-    protected $submissionSections;
+    protected $sections;
 
     /**
-     * @param Array $submissionSections
+     * @param Array $sections
      *
      * @return $this
      */
-    public function setSubmissionSections($submissionSections)
+    public function setSections($sections)
     {
-        $this->submissionSections = $submissionSections;
+        $this->sections = $sections;
         return $this;
     }
 
     /**
      * @return Array
      */
-    public function getSubmissionSections()
+    public function getSections()
     {
-        return $this->submissionSections;
+        return $this->sections;
     }
 
     /**
@@ -106,9 +106,9 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
     public function prepareElement(FormInterface $form)
     {
         $name = $this->getName();
-        $this->getSubmissionType()->setName($name . '[submission_type]');
-        $this->getSubmissionSections()->setName($name . '[submission_sections]');
-        $this->getSubmissionTypeSubmit()->setName($name . '[submission_type_submit]');
+        $this->getSubmissionType()->setName($name . '[submissionType]');
+        $this->getSections()->setName($name . '[sections]');
+        $this->getSubmissionTypeSubmit()->setName($name . '[submissionTypeSubmit]');
     }
 
     /**
@@ -119,27 +119,27 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
      */
     public function setValue($value)
     {
-        $this->getSubmissionType()->setValue($value['submission_type']);
+        $this->getSubmissionType()->setValue($value['submissionType']);
 
-        $sections = $this->getMandatorySectionsForType($value['submission_type']);
+        $sections = $this->getMandatorySectionsForType($value['submissionType']);
 
-        if (isset($value['submission_sections'])) {
-            $sections = array_merge($value['submission_sections'], $sections);
+        if (isset($value['sections'])) {
+            $sections = array_merge($value['sections'], $sections);
         }
 
-        $this->getSubmissionSections()->setValue($sections);
+        $this->getSections()->setValue($sections);
 
     }
 
     /**
      * Returns the mandatory section keys for a given submission type
      *
-     * @param string $submission_type
+     * @param string $submissionType
      * @return array
      */
-    private function getMandatorySectionsForType($submission_type)
+    private function getMandatorySectionsForType($submissionType)
     {
-        switch($submission_type)
+        switch($submissionType)
         {
             case 'submission_type_o_bus_reg':
                 return array_merge($this->getDefaultSections(), [
@@ -308,8 +308,8 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                     'options' => array(
                         'callback' => function ($data) {
                             return array_merge(
-                                $data['submission_sections'],
-                                $this->getMandatorySectionsForType($value['submission_type'])
+                                $data['submissionSections'],
+                                $this->getMandatorySectionsForType($value['submissionType'])
                             );
                         }
                     )

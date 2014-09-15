@@ -46,7 +46,7 @@ class SubmissionSections extends AbstractHelper
 
         return  $formSelectPlugin->render($element->getSubmissionType()) . '<br /><br />' .
                 $buttonPlugin->render($element->getSubmissionTypeSubmit()) . '<br /><br />' .
-                $multiCheckboxPlugin->render($element->getSubmissionSections());
+                $multiCheckboxPlugin->render($element->getSections());
 
 
     }

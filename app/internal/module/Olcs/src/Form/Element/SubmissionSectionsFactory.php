@@ -46,17 +46,17 @@ class SubmissionSectionsFactory implements FactoryInterface
         $service->setSubmissionTypeSubmit($submissionTypeSubmit);
 
         /** @var \Common\Form\Element\SubmissionSections $submissionSections */
-        $submissionSections = $formElementManager->get('DynamicMultiCheckbox');
-        $submissionSectionsOptions = [
+        $sections = $formElementManager->get('DynamicMultiCheckbox');
+        $sectionOptions = [
             'label' => 'Sections',
             'category' => 'submission_section',
             'disable_in_array_validator' => false,
             'help-block' => 'Please choose your submission sections'
         ];
 
-        $submissionSections->setOptions($submissionSectionsOptions);
+        $sections->setOptions($sectionOptions);
 
-        $service->setSubmissionSections($submissionSections);
+        $service->setSections($sections);
 
         return $service;
     }

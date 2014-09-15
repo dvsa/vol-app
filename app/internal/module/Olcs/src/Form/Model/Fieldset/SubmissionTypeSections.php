@@ -15,7 +15,7 @@ class SubmissionTypeSections
      * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Type("SubmissionSections")
      */
-    public $submission_sections = null;
+    public $submissionSections = null;
 
     /**
      * @Form\Attributes({"value":""})
