@@ -90,6 +90,79 @@ class BusProcessingNoteControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
+     * Tests for a crud add redirect from index action
+     */
+    public function testIndexActionAddRedirect()
+    {
+        $licenceId = 7;
+        $linkedId = 1;
+        $action = 'Add';
+        $busRegId = 1;
+        $id = null;
+        $route = 'licence/bus-processing/add-note';
+
+        $this->getFromRoute(0, 'licence', $licenceId);
+        $this->getFromRoute(1, 'busRegId', $busRegId);
+        $this->getFromPost(2, 'action', $action);
+        $this->getFromPost(3, 'id', $id);
+
+        $this->controller->expects($this->once())
+            ->method('redirectToRoute')
+            ->with(
+                $this->equalTo($route),
+                $this->equalTo(
+                    [
+                        'action' => strtolower($action),
+                        'licence' => $licenceId,
+                        'noteType' => 'note_t_bus',
+                        'linkedId' => $linkedId]
+                ),
+                $this->equalTo([]),
+                $this->equalTo(true)
+            );
+
+        $this->controller->indexAction();
+    }
+
+    /**
+     * Tests for a crud edit/delete redirect from index action
+     *
+     * @dataProvider indexActionModifyRedirectProvider
+     *
+     * @param string $action
+     */
+    public function testIndexActionModifyRedirect($action)
+    {
+        $licenceId = 7;
+        $id = 1;
+        $busRegId = 1;
+        $route = 'licence/bus-processing/modify-note';
+
+        $this->getFromRoute(0, 'licence', $licenceId);
+        $this->getFromRoute(1, 'busRegId', $busRegId);
+        $this->getFromPost(2, 'action', $action);
+        $this->getFromPost(3, 'id', $id);
+
+        $this->controller->expects($this->once())
+            ->method('redirectToRoute')
+            ->with(
+                $this->equalTo($route),
+                $this->equalTo(['action' => strtolower($action), 'id' => $id]),
+                $this->equalTo([]),
+                $this->equalTo(true)
+            );
+
+        $this->controller->indexAction();
+    }
+
+    public function indexActionModifyRedirectProvider()
+    {
+        return [
+            ['Edit', 'Delete']
+        ];
+    }
+
+    /**
      * Generate a fromRoute function call
      *
      * @param int $at

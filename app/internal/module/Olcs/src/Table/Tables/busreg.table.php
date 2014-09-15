@@ -38,13 +38,27 @@ return array(
         ),
         array(
             'title' => 'Var No',
-            'name' => 'routeNo',
-            'sort' => 'routeNo'
+            'name' => 'routeSeq',
+            'sort' => 'routeSeq'
         ),
         array(
             'title' => 'Service No',
             'name' => 'serviceNo',
             'sort' => 'serviceNo'
+        ),
+        array(
+            'title' => 'Date 1st Registered / Date Cancelled',
+
+        ),
+        array(
+            'title' => 'Starting point',
+            'name' => 'startPoint',
+            'sort' => 'startPoint'
+        ),
+        array(
+            'title' => 'Finishing point',
+            'name' => 'finishPoint',
+            'sort' => 'finishPoint'
         )
     )
 );
