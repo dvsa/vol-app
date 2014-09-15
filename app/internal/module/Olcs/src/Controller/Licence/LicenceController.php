@@ -102,13 +102,15 @@ class LicenceController extends AbstractController
         }
 
         $resultData = $this->makeRestCall('BusReg', 'GET', $filters);
+
         $table = $this->getTable(
             'busreg',
             $resultData,
             array_merge(
                 $filters,
                 array('query' => $this->getRequest()->getQuery())
-            )
+            ),
+            true
         );
 
         $form = $this->getForm('busreg-list');
