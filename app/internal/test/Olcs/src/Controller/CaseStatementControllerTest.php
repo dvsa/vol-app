@@ -24,7 +24,7 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
             array(
                 'fromRoute',
                 'makeRestCall',
-                'buildTable',
+                'getTable',
                 'getView',
                 'getCaseVariables',
                 'setBreadcrumb'
@@ -61,7 +61,7 @@ class CaseStatementControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue($restResults));
 
         $controller->expects($this->once())
-            ->method('buildTable')
+            ->method('getTable')
             ->with('statement')
             ->will($this->returnValue('<table></table>'));
 

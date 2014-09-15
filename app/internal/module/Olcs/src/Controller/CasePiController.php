@@ -125,7 +125,7 @@ class CasePiController extends CaseController implements CrudInterface
             return null;
         }
 
-        return $this->buildTable('hearings', $pi['piHearings'], array());
+        return $this->getTable('hearings', $pi['piHearings']);
     }
 
     public function getPiInfoByCaseId($caseId)

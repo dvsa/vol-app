@@ -67,7 +67,7 @@ class CaseComplaintController extends CaseController implements CrudInterface
             $complaints[] = $row['complaint'];
         }
 
-        $table = $this->buildTable('complaints', $complaints);
+        $table = $this->getTable('complaints', $complaints);
 
         $view->setVariables(
             [
