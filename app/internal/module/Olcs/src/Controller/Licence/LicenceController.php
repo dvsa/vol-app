@@ -111,7 +111,7 @@ class LicenceController extends AbstractController
             )
         );
 
-        $form = $this->getForm('busreg-list');
+        $form = $this->getForm('bus-reg-list');
         $form->remove('csrf'); //we never post
         $form->setData($filters);
 
@@ -120,7 +120,7 @@ class LicenceController extends AbstractController
         $view = $this->getViewWithLicence(
             array(
                 'table' => $table,
-                'inlineScript' => $this->loadScripts(['busreg-list'])
+                'inlineScript' => $this->loadScripts(['bus-reg-list'])
             )
         );
 
