@@ -81,7 +81,11 @@ class SubmissionController extends OlcsController\CrudAbstract
      * @var array
      */
     protected $dataBundle = array(
+        'properties' => 'ALL',
         'children' => array(
+            'submissionType' => array(
+                'properties' => 'id',
+            ),
             'submissionActions' => array(
                 'properties' => 'ALL',
                 'children' => array(
@@ -133,37 +137,6 @@ class SubmissionController extends OlcsController\CrudAbstract
     }
 
     /**
-     * Get the form data
-     *
-     * This is not in the method above as it can be overridden independantly
-     *
-     * @return array
-     *
-    protected function getFormData()
-    {
-        if ($this->isAction()) {
-
-            $action = $this->getActionName();
-
-            if (strstr($action, '-')) {
-                $splitted = explode('-', $action);
-                $action = count($splitted) ? $splitted[count($splitted) - 1] : '';
-            }
-
-            if ($action === 'edit') {
-
-                $data = $this->actionLoad($this->getActionId());
-            } else {
-                $data = array();
-            }
-
-            return $this->processActionLoad($data);
-        }
-
-        return $this->processLoad($this->loadCurrent());
-    }*/
-
-    /**
      * Override Save data to allow json encoding of submission sections
      * into submission 'text' field.
      *
@@ -176,7 +149,7 @@ class SubmissionController extends OlcsController\CrudAbstract
         // modify $data
 
         $data['text'] = json_encode($data['submission_sections']['submission_sections']);
-
+        $data['submissionType'] = $data['submission_sections']['submission_type'];
         $data = parent::save($data, $service);
 
         return $data;
@@ -216,7 +189,7 @@ class SubmissionController extends OlcsController\CrudAbstract
         if (isset($data['submission_sections']['submission_sections'])) {
             $data['fields']['submission_sections']['submission_sections'] = json_decode($data['submission_sections']['submission_sections']);
         } elseif (isset($data['text'])) {
-            $data['fields']['submission_sections']['submission_type'] = 'submission_type_o_bus_reg';
+            $data['fields']['submission_sections']['submission_type'] = $data['submissionType']['id'];
             $data['fields']['submission_sections']['submission_sections'] = json_decode($data['text']);
             $data['case'] = $case['id'];
         }
