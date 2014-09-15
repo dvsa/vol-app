@@ -26,7 +26,6 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             array(
                 'makeRestCall',
                 'getLoggedInUser',
-                'getTable',
                 'getLicence',
                 'getRequest',
                 'getForm',
@@ -35,7 +34,7 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
                 'params',
                 'redirect',
                 'getServiceLocator',
-                'buildTable',
+                'getTable',
                 'url',
                 'setTableFilters'
             )
@@ -297,14 +296,12 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
         $sort = 'regNo';
         $order = 'DESC';
         $limit = 10;
-        $url = 'url';
 
         $searchData['licence'] = $licenceId;
         $searchData['page'] = $page;
         $searchData['sort'] = $sort;
         $searchData['order'] = $order;
         $searchData['limit'] = $limit;
-        $searchData['url'] = $url;
 
         $resultData = array();
 
@@ -312,10 +309,6 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
         ->method('getFromRoute')
         ->with('licence')
         ->will($this->returnValue($licenceId));
-
-        $this->controller->expects($this->once())
-            ->method('url')
-            ->will($this->returnValue($url));
 
         $this->controller->expects($this->once())
             ->method('makeRestCall')
@@ -341,7 +334,7 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue($form));
 
         $this->controller->expects($this->once())
-            ->method('buildTable')
+            ->method('getTable')
             ->with(
                 $this->equalTo('busreg'),
                 $this->equalTo($resultData),

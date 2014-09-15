@@ -1437,8 +1437,36 @@ class VehiclePsvControllerTest extends AbstractLicenceDetailsControllerTestCase
      */
     protected function mockRestCalls($service, $method, $data = array(), $bundle = array())
     {
-        if ($service == 'Application' && $method == 'GET'
-            && $bundle == ApplicationController::$applicationLicenceDataBundle) {
+        $licenceDataBundle = array(
+            'properties' => array(
+                'id',
+                'version',
+                'niFlag'
+            ),
+            'children' => array(
+                'goodsOrPsv' => array(
+                    'properties' => array(
+                        'id'
+                    )
+                ),
+                'licenceType' => array(
+                    'properties' => array(
+                        'id'
+                    )
+                ),
+                'organisation' => array(
+                    'children' => array(
+                        'type' => array(
+                            'properties' => array(
+                                'id'
+                            )
+                        )
+                    )
+                )
+            )
+        );
+
+        if ($service == 'Licence' && $method == 'GET' && $bundle == $licenceDataBundle) {
 
             return $this->getLicenceData('psv');
         }

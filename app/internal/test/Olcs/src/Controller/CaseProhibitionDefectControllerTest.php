@@ -127,7 +127,7 @@ class CaseProhibitionDefectControllerTest extends AbstractHttpControllerTestCase
      *
      * @return array
      */
-    public function testEditActionProvider()
+    public function editActionProvider()
     {
         return [
             [7, 24, 1, 2]
@@ -137,7 +137,7 @@ class CaseProhibitionDefectControllerTest extends AbstractHttpControllerTestCase
     /**
      * Tests the edit action
      *
-     * @dataProvider testEditActionProvider
+     * @dataProvider editActionProvider
      *
      * @param int $licenceId
      * @param int $caseId
@@ -175,7 +175,7 @@ class CaseProhibitionDefectControllerTest extends AbstractHttpControllerTestCase
     /**
      * Tests the edit action correctly returns a notFound action
      *
-     * @dataProvider testEditActionProvider
+     * @dataProvider editActionProvider
      *
      * @param int $licenceId
      * @param int $caseId

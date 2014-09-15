@@ -111,8 +111,7 @@ trait LicenceNoteTrait
             'page' => 1,
             'sort' => 'priority',
             'order' => 'DESC',
-            'limit' => 10,
-            'url' => $this->url()
+            'limit' => 10
         );
 
         //if noteType is set to all
@@ -141,7 +140,7 @@ trait LicenceNoteTrait
 
         $formattedResult = $this->appendLinkedId($resultData);
 
-        $table = $this->buildTable(
+        $table = $this->getTable(
             'note',
             $formattedResult,
             array_merge(
