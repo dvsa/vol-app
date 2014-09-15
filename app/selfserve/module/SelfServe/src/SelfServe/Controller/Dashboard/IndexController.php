@@ -108,9 +108,7 @@ class IndexController extends AbstractController
 
         ksort($applications);
 
-        $applications = array_reverse($applications);
-
-        $applicationsTable = $this->buildTable('dashboard-applications', $applications);
+        $applicationsTable = $this->getTable('dashboard-applications', array_reverse($applications));
 
         $view = $this->getViewModel(['applicationsTable' => $applicationsTable]);
         $view->setTemplate('self-serve/dashboard/index');
@@ -166,7 +164,12 @@ class IndexController extends AbstractController
      */
     private function getOrganisationId($userId)
     {
-        $organisation = $this->makeRestCall('OrganisationUser', 'GET', ['user' => $userId], $this->organisationUserBundle);
+        $organisation = $this->makeRestCall(
+            'OrganisationUser',
+            'GET',
+            ['user' => $userId],
+            $this->organisationUserBundle
+        );
 
         if ($organisation['Count'] < 1) {
             throw new \Exception('Organisation not found');
