@@ -164,7 +164,12 @@ class IndexController extends AbstractController
      */
     private function getOrganisationId($userId)
     {
-        $organisation = $this->makeRestCall('OrganisationUser', 'GET', ['user' => $userId], $this->organisationUserBundle);
+        $organisation = $this->makeRestCall(
+            'OrganisationUser',
+            'GET',
+            ['user' => $userId],
+            $this->organisationUserBundle
+        );
 
         if ($organisation['Count'] < 1) {
             throw new \Exception('Organisation not found');
