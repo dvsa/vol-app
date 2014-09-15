@@ -334,11 +334,7 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue($form));
 
         $this->controller->expects($this->once())
-<<<<<<< HEAD
             ->method('getTable')
-            ->with($this->equalTo('busreg'), $this->equalTo($resultData), $this->equalTo($searchData))
-=======
-            ->method('buildTable')
             ->with(
                 $this->equalTo('busreg'),
                 $this->equalTo($resultData),
@@ -349,7 +345,6 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
                     )
                 )
             )
->>>>>>> f98ba88260d697ebff2f18e0ac64287bb6187b30
             ->will($this->returnValue($table));
 
         $this->controller->busAction();

@@ -88,8 +88,7 @@ class LicenceController extends AbstractController
             'page' => 1,
             'sort' => 'regNo',
             'order' => 'DESC',
-            'limit' => 10,
-            'url' => $this->url()
+            'limit' => 10
         );
 
         $filters = array_merge(
