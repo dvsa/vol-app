@@ -128,37 +128,6 @@ class VehicleControllerTest extends AbstractLicenceDetailsControllerTestCase
     {
         $this->setUpAction('index', null, array('action' => 'Add'));
 
-        $bundle = array(
-            'properties' => array(
-                'totAuthVehicles'
-            )
-        );
-
-        $response = array(
-            'totAuthVehicles' => 2
-        );
-
-        $this->setRestResponse('Licence', 'GET', $response, $bundle);
-
-        $totalNumberOfVehiclesResponse = array(
-            'licenceVehicles' => array(
-                array(
-                    'id' => 1
-                )
-            )
-        );
-
-        $totalNumberOfVehiclesBundle = array(
-            'properties' => array(),
-            'children' => array(
-                'licenceVehicles' => array(
-                    'properties' => array('id')
-                )
-            )
-        );
-
-        $this->setRestResponse('Licence', 'GET', $totalNumberOfVehiclesResponse, $totalNumberOfVehiclesBundle);
-
         $response = $this->controller->indexAction();
 
         $flashMessenger = $this->controller->plugin('FlashMessenger');
@@ -507,6 +476,37 @@ class VehicleControllerTest extends AbstractLicenceDetailsControllerTestCase
             return array(
                 'Count' => 0,
                 'Results' => array(
+                )
+            );
+        }
+
+        $licenceTotalAuthBundle = array(
+            'properties' => array(
+                'totAuthVehicles'
+            )
+        );
+
+        if ($service == 'Licence' && $method == 'GET' && $bundle == $licenceTotalAuthBundle) {
+            return array(
+                'totAuthVehicles' => 2
+            );
+        }
+
+        $totalNumberOfVehiclesBundle = array(
+            'properties' => array(),
+            'children' => array(
+                'licenceVehicles' => array(
+                    'properties' => array('id')
+                )
+            )
+        );
+
+        if ($service == 'Licence' && $method == 'GET' && $bundle == $totalNumberOfVehiclesBundle) {
+            return array(
+                'licenceVehicles' => array(
+                    array(
+                        'id' => 1
+                    )
                 )
             );
         }

@@ -91,8 +91,7 @@ class SearchController extends FormActionController
             }
         }
 
-        $data['url'] = $this->url();
-        $table = $this->getServiceLocator()->get('Table')->buildTable('operator', $results, $data);
+        $table = $this->getTable('operator', $results, $data);
 
         $view = new ViewModel(['table' => $table]);
         $view->setTemplate('results-operator');

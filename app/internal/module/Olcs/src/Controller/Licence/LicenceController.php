@@ -102,8 +102,7 @@ class LicenceController extends AbstractController
             'page' => 1,
             'sort' => 'regNo',
             'order' => 'DESC',
-            'limit' => 10,
-            'url' => $this->url()
+            'limit' => 10
         );
 
         $filters = array_merge(
@@ -111,13 +110,13 @@ class LicenceController extends AbstractController
             $this->getRequest()->getQuery()->toArray()
         );
 
-        //if status is set to all
+        // if status is set to all
         if (isset($filters['status']) && !$filters['status']) {
             unset($filters['status']);
         }
 
         $resultData = $this->makeRestCall('BusReg', 'GET', $filters);
-        $table = $this->buildTable(
+        $table = $this->getTable(
             'busreg',
             $resultData,
             array_merge(
