@@ -8,8 +8,10 @@
 
 namespace Olcs\Controller;
 
-use Common\Controller\CrudInterface;
-use Olcs\Controller\Traits\DeleteActionTrait;
+// Olcs
+use Olcs\Controller as OlcsController;
+use Olcs\Controller\Traits as ControllerTraits;
+
 use Zend\View\Model\ViewModel;
 
 /**
@@ -17,20 +19,112 @@ use Zend\View\Model\ViewModel;
  *
  * @author S Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class CaseComplaintController extends CaseController implements CrudInterface
+class CaseComplaintController extends OlcsController\CrudAbstract
 {
+    use ControllerTraits\CaseControllerTrait;
+
     /**
-     * Performs a delete action and redirects to the index
+     * Identifier name
+     *
+     * @var string
      */
-    public function deleteAction()
-    {
-        $id = $this->params()->fromRoute('id');
+    protected $identifierName = 'complaint';
 
-        // Now implemented deleting a list, so we don't meed the id of the entity to remove it
-        $this->makeRestCall('ComplaintCase', 'DELETE', array('complaint' => $id));
+    /**
+     * Holds the form name
+     *
+     * @var string
+     */
+    protected $formName = 'complaint';
 
-        $this->redirectToIndex();
-    }
+    /**
+     * The current page's extra layout, over and above the
+     * standard base template, a sibling of the base though.
+     *
+     * @var string
+     */
+    protected $pageLayout = 'case';
+
+    /**
+     * For most case crud controllers, we use the case/inner-layout
+     * layout file. Except submissions.
+     *
+     * @var string
+     */
+    protected $pageLayoutInner = 'case/inner-layout';
+
+    /**
+     * Holds the service name
+     *
+     * @var string
+     */
+    protected $service = 'ComplaintCase';
+
+    /**
+     * Holds the navigation ID,
+     * required when an entire controller is
+     * represneted by a single navigation id.
+     */
+    protected $navigationId = 'case_details_complaints';
+
+    /**
+     * Holds an array of variables for the
+     * default index list page.
+     */
+    protected $listVars = [
+        'case',
+    ];
+
+    /**
+     * Data map
+     *
+     * @var array
+    */
+    protected $dataMap = array(
+        'main' => array(
+            'mapFrom' => array(
+                'fields',
+                'base',
+            )
+        )
+    );
+
+    /**
+     * Holds the isAction
+     *
+     * @var boolean
+    */
+    protected $isAction = false;
+
+    /**
+     * Holds the Data Bundle
+     *
+     * @var array
+     */
+    protected $dataBundle = array(
+        'children' => array(
+            'complaint' => array(
+                'properties' => array(
+                    'id',
+                    'complaintDate',
+                    'description'
+                ),
+                'children' => array(
+                    'complainantContactDetails' => array(
+                       //'properties' => 'ALL',
+                       'children' => array(
+                           'person' => array(
+                               'properties' => array(
+                                   'forename',
+                                   'familyName'
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        )
+    );
 
     /**
      * Main index action responsible for generating the main landing page for
@@ -38,8 +132,11 @@ class CaseComplaintController extends CaseController implements CrudInterface
      *
      * @return \Zend\View\Model\ViewModel
      */
-    public function indexAction()
+    /* public function indexAction()
     {
+        //die('here');
+        //return parent::indexAction();
+
         $caseId = $this->fromRoute('case');
         $licenceId = $this->fromRoute('licence');
 
@@ -81,6 +178,23 @@ class CaseComplaintController extends CaseController implements CrudInterface
 
         $view->setTemplate('case/manage');
         return $view;
+    } */
+
+    /**
+     * Pre processes the data before it's injected into the table.
+     *
+     * @param array $data
+     * @return array
+     */
+    public function preProcessTableData($data)
+    {
+        $output = [];
+
+        foreach ($data['Results'] as $row) {
+            $output[] = $row['complaint'];
+        }
+
+        return $output;
     }
 
     /**
