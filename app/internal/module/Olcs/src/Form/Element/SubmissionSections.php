@@ -160,12 +160,18 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                     'name'    => 'Callback',
                     'options' => array(
                         'callback' => function ($data) {
+                                $sections = isset($data['sections']) ?
+                                    $data['sections'] : $this->getMandatorySections();
+                                $sectionSections = $this->getPreselectedSectionsForType($data['submissionType']);
+                                $newSections = $sections;
+                                foreach ($sectionSections as $s_section) {
+                                    if (!(in_array($s_section, $sections))) {
+                                        $newSections[] = $s_section;
+                                    }
+                                }
                             return [
                                 'submissionType' => $data['submissionType'],
-                                'sections' => array_merge(
-                                    $data['sections'],
-                                    $this->getMandatorySections()
-                                )
+                                'sections' => $newSections
                             ];
                         }
                     )
