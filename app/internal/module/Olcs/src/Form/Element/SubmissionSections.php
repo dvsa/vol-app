@@ -12,13 +12,14 @@ use Zend\Form\Element as ZendElement;
 use Zend\ModuleManager\Feature\ViewHelperProviderInterface;
 use Zend\Form\ElementPrepareAwareInterface;
 use Zend\Form\FormInterface;
+use Zend\InputFilter\InputProviderInterface;
 
 /**
  * SubmissionSections
  *
  * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class SubmissionSections extends ZendElement implements ElementPrepareAwareInterface
+class SubmissionSections extends ZendElement implements ElementPrepareAwareInterface, InputProviderInterface
 {
 
     /**
@@ -108,6 +109,16 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
         $name = $this->getName();
 
         $this->getSubmissionType()->setName($name . '[submissionType]');
+
+        $sections = $this->getSections()->getValueOptions();
+        $m_sections = $this->getMandatorySections();
+
+        foreach ($m_sections as $m_key) {
+            $sections[$m_key] = ['label' => $sections[$m_key], 'selected' => 'seleected', 'disabled' => true];
+        }
+        $this->getSections()->setValueOptions($sections);
+        $this->getSections()->setOptions(['label_position'=>'append']);
+
         $this->getSections()->setName($name . '[sections]');
         $this->getSubmissionTypeSubmit()->setName($name . '[submissionTypeSubmit]');
     }
@@ -149,16 +160,16 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                     'name'    => 'Callback',
                     'options' => array(
                         'callback' => function ($data) {
-                            return array_merge(
-                                $data['sections'],
-                                $this->getMandatorySections()
-                            );
+                            return [
+                                'submissionType' => $data['submissionType'],
+                                'sections' => array_merge(
+                                    $data['sections'],
+                                    $this->getMandatorySections()
+                                )
+                            ];
                         }
                     )
                 )
-            ),
-            'validators' => array(
-                $this->getValidator(),
             )
         );
     }

@@ -44,10 +44,14 @@ class SubmissionSections extends AbstractHelper
             $buttonPlugin->render($element->getSubmissionTypeSubmit());
         }
 
-        return  $formSelectPlugin->render($element->getSubmissionType()) . '<br /><br />' .
+        $multiCheckboxPlugin->setSeparator('</div><div class="field--two-col">');
+        $markup = $formSelectPlugin->render($element->getSubmissionType()) . '<br /><br />' .
                 $buttonPlugin->render($element->getSubmissionTypeSubmit()) . '<br /><br />' .
-                $multiCheckboxPlugin->render($element->getSections());
-
+                '<div class="field--two-col">' .
+                    $multiCheckboxPlugin->render($element->getSections()) .
+                '</div>';
+        $multiCheckboxPlugin->setSeparator('');
+        return $markup;
 
     }
 
