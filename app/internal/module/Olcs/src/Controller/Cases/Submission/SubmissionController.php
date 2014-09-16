@@ -93,7 +93,9 @@ class SubmissionController extends OlcsController\CrudAbstract
         'properties' => 'ALL',
         'children' => array(
             'submissionType' => array(
-                'properties' => 'id',
+                'properties' => array(
+                    'id'
+                ),
             ),
             'case' => array(
                 'properties' => 'ALL',
@@ -136,16 +138,30 @@ class SubmissionController extends OlcsController\CrudAbstract
         return parent::addAction();
     }
 
-    public function postSetFormData($form)
+    /**
+     * Generate a form with data. Overridden to remove form actions
+     *
+     * @param string $name
+     * @param callable $callback
+     * @param mixed $data
+     * @param boolean $tables
+     * @return object
+     *
+    public function generateFormWithData($name, $callback, $data = null, $tables = false)
     {
-        $formData = $this->getFromPost('fields');
-        // Intercept Submission type submit button to prevent saving
-        if (!(isset($formData['submissionSections']['submissionTypeSubmit']))) {
-            // remove submit button
-            $form->remove('form-actions');
+        $form = $this->generateForm($name, $callback, $tables);
+
+        if (!$this->getRequest()->isPost() && is_array($data)) {
+
+            if (isset($data['submissionSections']['submissionTypeSubmit'])) {
+                var_dump($data);exit;
+                $form->remove('form-actions');
+            }
+            $form->setData($data);
         }
+
         return $form;
-    }
+    }*/
 
     /**
      * Save data. Also processes the submit submission select type drop down
@@ -188,7 +204,7 @@ class SubmissionController extends OlcsController\CrudAbstract
      * @param array $data
      * @return array
      */
-    protected function processSave($data)
+    public function processSave($data)
     {
         // pass false to prevent default redirect back to index action
         // and return result of the save
@@ -204,7 +220,7 @@ class SubmissionController extends OlcsController\CrudAbstract
      * @param array $data
      * @return array
      */
-    protected function processLoad($data)
+    public function processLoad($data)
     {
 
         $case = $this->getCase();
