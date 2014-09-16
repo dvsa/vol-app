@@ -128,6 +128,11 @@ trait LicenceNoteTrait
             $this->getRequest()->getQuery()->toArray()
         );
 
+        // if status is set to all
+        if (isset($filters['noteType']) && !$filters['noteType']) {
+            unset($filters['noteType']);
+        }
+
         $form = $this->getForm('note-filter');
         $form->remove('csrf'); //we never post
         $form->setData($filters);
