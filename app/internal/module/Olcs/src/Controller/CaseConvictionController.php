@@ -142,8 +142,7 @@ class CaseConvictionController extends CaseController
     {
         $routeParams = $this->getParams(array('case', 'licence', 'id'));
 
-        $cancelConviction = $this->params()->fromPost('cancelConviction');
-        if ($cancelConviction !== null) {
+        if (isset($_POST['cancel-conviction'])) {
             return $this->redirect()->toRoute(
                 'case_convictions',
                 array('case' => $routeParams['case'], 'licence' => $routeParams['licence'])
