@@ -38,7 +38,7 @@ class CaseProhibitionControllerTest extends AbstractHttpControllerTestCase
                 'redirect',
                 'getView',
                 'getServiceLocator',
-                'buildTable',
+                'getTable',
                 'generateFormWithData',
                 'redirectToIndex',
                 'redirectToRoute',
@@ -100,7 +100,7 @@ class CaseProhibitionControllerTest extends AbstractHttpControllerTestCase
             );
 
         $this->controller->expects($this->once())
-            ->method('buildTable');
+            ->method('getTable');
 
         $form = $this->getMock('stdClass', ['setData']);
         $form->expects($this->once())
@@ -253,7 +253,7 @@ class CaseProhibitionControllerTest extends AbstractHttpControllerTestCase
             ->method('generateFormWithData');
 
         $this->controller->expects($this->once())
-            ->method('buildTable');
+            ->method('getTable');
 
         $this->controller->expects($this->once())
             ->method('getView')

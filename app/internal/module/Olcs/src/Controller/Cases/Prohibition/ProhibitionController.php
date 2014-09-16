@@ -28,6 +28,13 @@ class ProhibitionController extends OlcsController\CrudAbstract
     protected $identifierName = 'prohibition';
 
     /**
+     * Table name string
+     *
+     * @var string
+     */
+    protected $tableName = 'prohibition';
+
+    /**
      * Holds the form name
      *
      * @var string
@@ -120,7 +127,7 @@ class ProhibitionController extends OlcsController\CrudAbstract
      * @param array $data
      * @return array
      */
-    protected function processLoad($data)
+    /* public function processLoad($data)
     {
         if (isset($data['id'])) {
             $data = $this->replaceIds($data, ['prohibitionType', 'case']);
@@ -133,5 +140,5 @@ class ProhibitionController extends OlcsController\CrudAbstract
         }
 
         return $data;
-    }
+    } */
 }

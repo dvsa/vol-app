@@ -31,7 +31,12 @@
                 <?php
                 if (!$subSection['current'] && $subSection['enabled']) {
                     ?>
-                    <a href="<?php echo $this->url($subSection['route'], array(), array(), true); ?>">
+                    <a href="<?php echo $this->url(
+                        $subSection['route'],
+                        array('action' => 'index', 'id' => null),
+                        array(),
+                        true
+                    ); ?>">
                     <?php
                     }
                 ?>

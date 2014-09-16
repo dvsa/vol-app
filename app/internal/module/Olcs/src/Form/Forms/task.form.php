@@ -76,6 +76,13 @@ return [
                         'label' => 'Save',
                         'class' => 'action--primary large'
                     ],
+                    'close' => [
+                        'enable' => true,
+                        'type' => 'submit',
+                        'filters' => '\Common\Form\Elements\InputFilters\ActionButton',
+                        'label' => 'Close',
+                        'class' => 'action--secondary large'
+                    ],
                     'cancel' => [
                         'enable' => true,
                         'type' => 'submit',

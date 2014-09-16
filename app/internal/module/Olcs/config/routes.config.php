@@ -289,16 +289,12 @@ return array_merge(
                     ]
                 ],
                 'bus' => [
-                    'type' => 'segment',
+                    'type' => 'literal',
                     'options' => [
-                        'route' => '/bus/page/:page/limit/:limit/sort/:sort/order/:order',
+                        'route' => '/bus',
                         'defaults' => [
                             'controller' => 'LicenceController',
                             'action' => 'bus',
-                            'page' => 1,
-                            'limit' => 10,
-                            'sort' => 'regNo',
-                            'order' => 'DESC'
                         ]
                     ],
                     'may_terminate' => true,
@@ -462,7 +458,7 @@ return array_merge(
                         'notes' => [
                             'type' => 'segment',
                             'options' => [
-                                'route' => '/notes/page/:page/limit/:limit/sort/:sort/order/:order',
+                                'route' => '/notes',
                                 'defaults' => [
                                     'controller' => 'BusProcessingNoteController',
                                     'action' => 'index',
@@ -583,14 +579,10 @@ return array_merge(
                         'notes' => [
                             'type' => 'segment',
                             'options' => [
-                                'route' => '/notes/page/:page/limit/:limit/sort/:sort/order/:order',
+                                'route' => '/notes',
                                 'defaults' => [
                                     'controller' => 'LicenceProcessingNoteController',
-                                    'action' => 'index',
-                                    'page' => 1,
-                                    'limit' => 10,
-                                    'sort' => 'priority',
-                                    'order' => 'DESC'
+                                    'action' => 'index'
                                 ]
                             ],
                         ],

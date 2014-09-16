@@ -43,7 +43,7 @@ class IndexController extends AbstractController
 
         $view = new ViewModel(
             array(
-                'table' => $this->getTaskTable($filters),
+                'table' => $this->getTaskTable($filters, true, true),
                 'form'  => $this->getTaskForm($filters),
                 'inlineScript' => $this->loadScripts(['tasks'])
             )

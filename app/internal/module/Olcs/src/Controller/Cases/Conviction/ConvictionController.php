@@ -34,6 +34,13 @@ class ConvictionController extends OlcsController\CrudAbstract
     protected $identifierName = 'conviction';
 
     /**
+     * Table name string
+     *
+     * @var string
+     */
+    protected $tableName = 'conviction';
+
+    /**
      * Holds the form name
      *
      * @var string
@@ -487,9 +494,7 @@ class ConvictionController extends OlcsController\CrudAbstract
 
     public function getLegacyOffencesTable($legacyOffencesResults)
     {
-        $data['url'] = $this->url();
-        $legacyOffencesTable =
-            $this->getServiceLocator()->get('Table')->buildTable('legacyOffences', $legacyOffencesResults, $data);
+        $legacyOffencesTable = $this->getTable('legacyOffences', $legacyOffencesResults);
 
         return $legacyOffencesTable;
     }

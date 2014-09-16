@@ -106,28 +106,61 @@ trait LicenceNoteTrait
                 );
         }
 
-        $searchData = [];
+        $searchData = array(
+            'licence' => $licenceId,
+            'page' => 1,
+            'sort' => 'priority',
+            'order' => 'DESC',
+            'limit' => 10
+        );
 
-        if ($noteType != 'note_t_lic') {
+        //if noteType is set to all
+        if (isset($filters['noteType']) && !$filters['noteType']) {
+            unset($filters['noteType']);
+        }
+        //no filter so fall back to default
+        elseif ($noteType != 'note_t_lic') {
             $searchData['noteType'] = $noteType;
         }
 
-        $searchData['licence'] = $licenceId;
-        $searchData['page'] = $this->getFromRoute('page', 1);
-        $searchData['sort'] = $this->getFromRoute('sort', 'priority');
-        $searchData['order'] = $this->getFromRoute('order', 'desc');
-        $searchData['limit'] = $this->getFromRoute('limit', 10);
-        $searchData['url'] = $this->url();
+        $filters = array_merge(
+            $searchData,
+            $this->getRequest()->getQuery()->toArray()
+        );
+
+        // if status is set to all
+        if (isset($filters['noteType']) && !$filters['noteType']) {
+            unset($filters['noteType']);
+        }
+
+        $form = $this->getForm('note-filter');
+        $form->remove('csrf'); //we never post
+        $form->setData($filters);
+
+        $this->setTableFilters($form);
 
         $bundle = $this->getBundle();
 
-        $resultData = $this->makeRestCall('Note', 'GET', $searchData, $bundle);
+        $resultData = $this->makeRestCall('Note', 'GET', $filters, $bundle);
 
         $formattedResult = $this->appendLinkedId($resultData);
 
-        $table = $this->buildTable('note', $formattedResult, $searchData);
+        $table = $this->getTable(
+            'note',
+            $formattedResult,
+            array_merge(
+                $filters,
+                array('query' => $this->getRequest()->getQuery())
+            ),
+            true
+        );
 
-        $view = $this->getView(['table' => $table]);
+        $view = $this->getView(
+            [
+                'table' => $table,
+                //'inlineScript' => $this->loadScripts(['note-filter'])
+            ]
+        );
         $view->setTemplate($this->getTemplatePrefix() . '/notes/index');
 
         return $view;

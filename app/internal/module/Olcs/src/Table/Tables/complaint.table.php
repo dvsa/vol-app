@@ -9,7 +9,7 @@ return array(
             'actions' => array(
                 'add' => array('class' => 'primary'),
                 'edit' => array('requireRows' => true),
-                'delete' => array('class' => 'warning', 'requireRows' => true)
+                'delete' => array('class' => 'secondary', 'requireRows' => true)
             )
         ),
         'paginate' => array(
@@ -40,8 +40,7 @@ return array(
         array(
             'title' => 'Complainant name',
             'formatter' => function ($data, $column) {
-                return $data['complainantContactDetails']['person']['forename'] . ' ' .
-                    $data['complainantContactDetails']['person']['familyName'];
+                return $data['complainantForename'] . ' ' . $data['complainantFamilyName'];
             }
         ),
         array(

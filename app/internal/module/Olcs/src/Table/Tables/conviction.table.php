@@ -10,8 +10,8 @@ return array(
             'actions' => array(
                 'add' => array('class' => 'primary'),
                 'edit' => array('requireRows' => true),
-                'dealt' => array('class' => 'warning', 'requireRows' => true, 'value' => 'Mark as Dealt With'),
-                'delete' => array('class' => 'warning', 'requireRows' => true)
+                'dealt' => array('class' => 'secondary', 'requireRows' => true, 'value' => 'Mark as Dealt With'),
+                'delete' => array('class' => 'secondary', 'requireRows' => true)
             )
         ),
         'paginate' => array(
