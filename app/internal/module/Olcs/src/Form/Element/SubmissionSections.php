@@ -29,30 +29,6 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
     protected $submissionType;
 
     /**
-     * Select button to submit the submission type, which dictates what
-     * checkboxes are required.
-     *
-     * @var Button
-     */
-    protected $submissionTypeSubmit;
-
-    /**
-     * @param \Olcs\Form\Element\Button $submissionTypeSubmit
-     */
-    public function setSubmissionTypeSubmit($submissionTypeSubmit)
-    {
-        $this->submissionTypeSubmit = $submissionTypeSubmit;
-    }
-
-    /**
-     * @return \Olcs\Form\Element\Button
-     */
-    public function getSubmissionTypeSubmit()
-    {
-        return $this->submissionTypeSubmit;
-    }
-
-    /**
      * Array of checkbox elements suitable for submission type
      *
      * @var Array
@@ -60,23 +36,12 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
     protected $sections;
 
     /**
-     * @param Array $sections
+     * Select button to submit the submission type, which dictates what
+     * checkboxes are required.
      *
-     * @return $this
+     * @var Button
      */
-    public function setSections($sections)
-    {
-        $this->sections = $sections;
-        return $this;
-    }
-
-    /**
-     * @return Array
-     */
-    public function getSections()
-    {
-        return $this->sections;
-    }
+    protected $submissionTypeSubmit;
 
     /**
      * @param \Common\Form\Elements\Custom\Select $submissionType
@@ -98,6 +63,41 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
     }
 
     /**
+     * @param Array $sections
+     *
+     * @return $this
+     */
+    public function setSections($sections)
+    {
+        $this->sections = $sections;
+        return $this;
+    }
+
+    /**
+     * @return Array
+     */
+    public function getSections()
+    {
+        return $this->sections;
+    }
+
+    /**
+     * @param \Olcs\Form\Element\Button $submissionTypeSubmit
+     */
+    public function setSubmissionTypeSubmit($submissionTypeSubmit)
+    {
+        $this->submissionTypeSubmit = $submissionTypeSubmit;
+    }
+
+    /**
+     * @return \Olcs\Form\Element\Button
+     */
+    public function getSubmissionTypeSubmit()
+    {
+        return $this->submissionTypeSubmit;
+    }
+
+    /**
      * Prepare the form element (mostly used for rendering purposes)
      *
      * @param  FormInterface $form
@@ -106,6 +106,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
     public function prepareElement(FormInterface $form)
     {
         $name = $this->getName();
+
         $this->getSubmissionType()->setName($name . '[submissionType]');
         $this->getSections()->setName($name . '[sections]');
         $this->getSubmissionTypeSubmit()->setName($name . '[submissionTypeSubmit]');
@@ -119,30 +120,61 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
      */
     public function setValue($value)
     {
+
         $this->getSubmissionType()->setValue($value['submissionType']);
 
-        $sections = $this->getMandatorySectionsForType($value['submissionType']);
-
+        $sections = $this->getPreselectedSectionsForType($value['submissionType']);
         if (isset($value['sections'])) {
             $sections = array_merge($value['sections'], $sections);
         }
-
+        $sections = array_unique($sections);
         $this->getSections()->setValue($sections);
 
+        return $this;
     }
 
     /**
-     * Returns the mandatory section keys for a given submission type
+     * Should return an array specification compatible with
+     * {@link Zend\InputFilter\Factory::createInput()}.
+     *
+     * @return array
+     */
+    public function getInputSpecification()
+    {
+        return array(
+            'name' => $this->getName(),
+            'required' => true,
+            'filters' => array(
+                array(
+                    'name'    => 'Callback',
+                    'options' => array(
+                        'callback' => function ($data) {
+                            return array_merge(
+                                $data['sections'],
+                                $this->getMandatorySections()
+                            );
+                        }
+                    )
+                )
+            ),
+            'validators' => array(
+                $this->getValidator(),
+            )
+        );
+    }
+
+    /**
+     * Returns the Preselected  section keys for a given submission type
      *
      * @param string $submissionType
      * @return array
      */
-    private function getMandatorySectionsForType($submissionType)
+    private function getPreselectedSectionsForType($submissionType)
     {
         switch($submissionType)
         {
             case 'submission_type_o_bus_reg':
-                return array_merge($this->getDefaultSections(), [
+                return array_merge($this->getMandatorySections(), $this->getDefaultSections(), [
                     'submission_section_opce',
                     'submission_section_auth',
                     'submission_section_trma',
@@ -155,11 +187,11 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                     'submission_section_mtdh'
                 ]);
             case 'submission_type_o_clo_fep':
-                return array_merge($this->getDefaultSections(), [
+                return array_merge($this->getMandatorySections(), $this->getDefaultSections(), [
                     'submission_section_wflf'
                 ]);
             case 'submission_type_o_clo_g':
-                return array_merge($this->getDefaultSections(), [
+                return array_merge($this->getMandatorySections(), $this->getDefaultSections(), [
                     'submission_section_opce',
                     'submission_section_ctud',
                     'submission_section_inuc',
@@ -175,7 +207,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                     'submission_section_fnin'
                 ]);
             case 'submission_type_o_clo_psv':
-                return array_merge($this->getDefaultSections(), [
+                return array_merge($this->getMandatorySections(), $this->getDefaultSections(), [
                     'submission_section_opce',
                     'submission_section_ctud',
                     'submission_section_inuc',
@@ -191,7 +223,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                     'submission_section_fnin'
                 ]);
             case 'submission_type_o_env':
-                return array_merge($this->getDefaultSections(), [
+                return array_merge($this->getMandatorySections(), $this->getDefaultSections(), [
                     'submission_section_opce',
                     'submission_section_ochi',
                     'submission_section_ctud',
@@ -216,14 +248,14 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                     'submission_section_maps'
                 ]);
             case 'submission_type_o_irfo':
-                return array_merge($this->getDefaultSections(), [
+                return array_merge($this->getMandatorySections(), $this->getDefaultSections(), [
                     'submission_section_opce',
                     'submission_section_trma',
                     'submission_section_fire',
                     'submission_section_mtdh'
                 ]);
             case 'submission_type_o_mlh':
-                return array_merge($this->getDefaultSections(), [
+                return array_merge($this->getMandatorySections(), $this->getDefaultSections(), [
                     'submission_section_opce',
                     'submission_section_ctud',
                     'submission_section_inuc',
@@ -242,7 +274,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                     'submission_section_fnin'
                 ]);
             case 'submission_type_o_otc':
-                return array_merge($this->getDefaultSections(), [
+                return array_merge($this->getMandatorySections(), $this->getDefaultSections(), [
                     'submission_section_opce',
                     'submission_section_ctud',
                     'submission_section_ituc',
@@ -261,7 +293,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                     'submission_section_fnin'
                 ]);
             case 'submission_type_o_tm':
-                return array_merge($this->getDefaultSections(), [
+                return array_merge($this->getMandatorySections(), $this->getDefaultSections(), [
                     'submission_section_inuc',
                     'submission_section_trma',
                     'submission_section_cnec',
@@ -271,6 +303,20 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
         }
 
         return $this->getDefaultSections();
+    }
+
+    /**
+     * Returns the mandatory section keys for a given submission type
+     *
+     * @param string $submissionType
+     * @return array
+     */
+    private function getMandatorySections()
+    {
+        return [
+            'submission_section_case',
+            'submission_section_pers',
+        ];
     }
 
     /**
@@ -289,36 +335,4 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
             'submission_section_annx'
         ];
     }
-
-
-    /**
-     * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInput()}.
-     *
-     * @return array
-     */
-    public function getInputSpecification()
-    {
-        return array(
-            'name' => $this->getName(),
-            'required' => true,
-            'filters' => array(
-                array(
-                    'name'    => 'Callback',
-                    'options' => array(
-                        'callback' => function ($data) {
-                            return array_merge(
-                                $data['submissionSections'],
-                                $this->getMandatorySectionsForType($value['submissionType'])
-                            );
-                        }
-                    )
-                )
-            ),
-            'validators' => array(
-                $this->getValidator(),
-            )
-        );
-    }
-
 }

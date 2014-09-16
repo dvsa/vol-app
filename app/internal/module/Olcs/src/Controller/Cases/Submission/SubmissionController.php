@@ -75,6 +75,8 @@ class SubmissionController extends OlcsController\CrudAbstract
         )
     );
 
+    protected $action = false;
+
     /**
      * Holds the Data Bundle
      *
@@ -119,6 +121,9 @@ class SubmissionController extends OlcsController\CrudAbstract
         // Intercept Submission type submit button to prevent saving
         if (isset($formData['submissionSections']['submissionTypeSubmit'])) {
             $this->setPersist(false);
+        } else {
+            // remove form-actions
+
         }
         return parent::addAction();
     }
@@ -134,7 +139,6 @@ class SubmissionController extends OlcsController\CrudAbstract
     public function editAction()
     {
         // Modify $data
-        $data = $this->loadCurrent();
 
         return parent::editAction();
     }
@@ -171,7 +175,8 @@ class SubmissionController extends OlcsController\CrudAbstract
         // and return result of the save
         $result = parent::processSave($data, false);
 
-        return $this->redirect()->toRoute('submission', ['action' => 'details', 'submission' => $result['id']], [], true);
+        $id = isset($result['id']) ? $result['id'] : $data['fields']['id'];
+        return $this->redirect()->toRoute('submission', ['action' => 'details', 'submission' => $id], [], true);
     }
 
     /**
@@ -182,10 +187,9 @@ class SubmissionController extends OlcsController\CrudAbstract
      */
     protected function processLoad($data)
     {
-        // modify $data for form population
-        $routeParams = $this->params()->fromRoute();
-        $caseId = $routeParams['case'];
-        $case = $this->getCase($caseId);
+
+        $case = $this->getCase();
+
         $data['fields']['case'] = $case['id'];
 
         if (isset($data['submissionSections']['sections'])) {
@@ -194,6 +198,10 @@ class SubmissionController extends OlcsController\CrudAbstract
             $data['fields']['submissionSections']['submissionType'] = $data['submissionType']['id'];
             $data['fields']['submissionSections']['sections'] = json_decode($data['text']);
             $data['case'] = $case['id'];
+            $data['fields']['id'] = $data['id'];
+            $data['fields']['version'] = $data['version'];
+
+            //$data['fields'] = $data;
         }
 
         return parent::processLoad($data);
@@ -205,10 +213,10 @@ class SubmissionController extends OlcsController\CrudAbstract
      *
      * @return string
      */
-    protected function getFormName()
+    /*protected function getFormName()
     {
         return $this->formName;
-    }
+    }*/
 
     /**
      * Details action - shows each section detail
@@ -240,7 +248,7 @@ class SubmissionController extends OlcsController\CrudAbstract
         $this->getViewHelperManager()
             ->get('placeholder')
             ->getContainer($this->getIdentifierName())
-            ->set($this->loadCurrent());
+            ->set($submission);
 
         $view->setTemplate($this->detailsView);
 

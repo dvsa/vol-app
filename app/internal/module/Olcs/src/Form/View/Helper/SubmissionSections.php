@@ -36,7 +36,7 @@ class SubmissionSections extends AbstractHelper
         $formSelectPlugin = $this->view->plugin('formSelect');
         $buttonPlugin = $this->view->plugin('formButton');
 
-        $multiCheckboxPlugin = $this->view->plugin('formMultiCheckbox');
+        $multiCheckboxPlugin = $this->view->plugin('formSubmissionSectionsMultiCheckbox');
 
         if (empty($element->getSubmissionType()->getValue())) {
             // dont render sections

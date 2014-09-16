@@ -7,7 +7,7 @@ use Zend\Form\Annotation as Form;
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("submission")
- * @Form\Options({"label":""})
+ * @Form\Options({"label":"Submission"})
  */
 class SubmissionTypeSections
 {
