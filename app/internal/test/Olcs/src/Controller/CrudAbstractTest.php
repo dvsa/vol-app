@@ -13,7 +13,7 @@ use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 /**
  * Tests the case stay controller
  */
-class CrusAbstractTest extends AbstractHttpControllerTestCase
+class CrudAbstractTest extends AbstractHttpControllerTestCase
 {
     protected $traitsRequired = array(
         'Zend\Log\LoggerAwareTrait',
@@ -25,6 +25,63 @@ class CrusAbstractTest extends AbstractHttpControllerTestCase
     );
 
     protected $testClass = '\Olcs\Controller\CrudAbstract';
+
+    /**
+     * Tests that the method returns value from getQuery method.
+     */
+    public function testGetQueryOrRouteParamReturnsQueryParam()
+    {
+        $name = 'name';
+        $value = 'value';
+
+        $params = $this->getMock('\Zend\Mvc\Controller\Plugin\Params', ['fromQuery']);
+        $params->expects($this->any())->method('fromQuery')
+               ->with($name, null)
+               ->will($this->returnValue($value));
+
+        $sut = $this->getSutForIsolatedTest(['params']);
+        $sut->expects($this->any())->method('params')->will($this->returnValue($params));
+
+        $this->assertEquals($value, $sut->getQueryOrRouteParam($name, null));
+    }
+
+    /**
+     * Tests that the method returns value from getRoute method.
+     */
+    public function testGetQueryOrRouteParamReturnsRouteParam()
+    {
+        $name = 'name';
+        $value = 'value';
+
+        $params = $this->getMock('\Zend\Mvc\Controller\Plugin\Params', ['fromQuery', 'fromRoute']);
+        $params->expects($this->any())->method('fromQuery')->will($this->returnValue(null));
+        $params->expects($this->any())->method('fromRoute')
+               ->with($name, null)
+               ->will($this->returnValue($value));
+
+        $sut = $this->getSutForIsolatedTest(['params']);
+        $sut->expects($this->any())->method('params')->will($this->returnValue($params));
+
+        $this->assertEquals($value, $sut->getQueryOrRouteParam($name, null));
+    }
+
+    /**
+     * Tests that the method returns the default value
+     */
+    public function testGetQueryOrRouteParamReturnsDefaultParam()
+    {
+        $name = 'name';
+        $default = 'default';
+
+        $params = $this->getMock('\Zend\Mvc\Controller\Plugin\Params', ['fromQuery', 'fromRoute']);
+        $params->expects($this->any())->method('fromQuery')->will($this->returnValue(null));
+        $params->expects($this->any())->method('fromRoute')->will($this->returnValue(null));
+
+        $sut = $this->getSutForIsolatedTest(['params']);
+        $sut->expects($this->any())->method('params')->will($this->returnValue($params));
+
+        $this->assertEquals($default, $sut->getQueryOrRouteParam($name, $default));
+    }
 
     /**
      * Tests the Index Action. I am confident that the abtsract methds
@@ -59,7 +116,7 @@ class CrusAbstractTest extends AbstractHttpControllerTestCase
 
     /**
      * Get a new SUT. Also tests that all the required abstracts
-     * traits and
+     * traits and interfaces are present.
      *
      * @param array $methods
      * @throws \Exception
