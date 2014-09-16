@@ -9,7 +9,6 @@
 namespace Olcs\Controller;
 
 use Common\Controller\CrudInterface;
-use Olcs\Controller\Traits\DeleteActionTrait;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -113,7 +112,6 @@ class CaseComplaintController extends CaseController implements CrudInterface
 
         $data = array('case' => $routeParams['case']);
 
-        // todo hardcoded organisation id for now
         $results = $this->makeRestCall('Cases', 'GET', array('id' => $routeParams['case']));
 
         // todo hardcoded organisation id for now

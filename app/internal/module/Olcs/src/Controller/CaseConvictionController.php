@@ -142,8 +142,8 @@ class CaseConvictionController extends CaseController
     {
         $routeParams = $this->getParams(array('case', 'licence', 'id'));
 
-        // @todo We shouldn't be accessing the POST global we should be using the request
-        if (isset($_POST['cancel-conviction'])) {
+        $cancelConviction = $this->params()->fromPost('cancelConviction');
+        if ($cancelConviction !== null) {
             return $this->redirect()->toRoute(
                 'case_convictions',
                 array('case' => $routeParams['case'], 'licence' => $routeParams['licence'])

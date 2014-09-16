@@ -218,7 +218,7 @@ class SubmissionNoteControllerTest extends AbstractHttpControllerTestCase
                         'main' => array('note' => 'This is a new note')
                     )
                 )
-        );
+            );
 
         $this->controller->expects($this->atLeastOnce())
             ->method('params')
@@ -272,7 +272,7 @@ class SubmissionNoteControllerTest extends AbstractHttpControllerTestCase
                 $this->returnValue(
                     array('version' => 1)
                 )
-        );
+            );
 
         $this->controller->expects($this->once())
             ->method('params')
@@ -292,7 +292,7 @@ class SubmissionNoteControllerTest extends AbstractHttpControllerTestCase
                         'text' => '{}'
                     )
                 )
-        );
+            );
 
         $this->controller->expects($this->once())
             ->method('createNote')
@@ -302,8 +302,9 @@ class SubmissionNoteControllerTest extends AbstractHttpControllerTestCase
         $this->controller->expects($this->once())
             ->method('processEdit')
             ->with(
-                array('id' => 1, 'version' => 1, 'text' => '[]'), $this->controller->routeParams['type']
-        );
+                array('id' => 1, 'version' => 1, 'text' => '[]'),
+                $this->controller->routeParams['type']
+            );
 
         $redirect = $this->getMock('\stdClass', array('toRoute'));
 

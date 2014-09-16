@@ -8,13 +8,12 @@ namespace OlcsTest\Controller\Traits;
  */
 class DeleteActionTraitTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     *
-     */
     public function testDeleteAction()
     {
         $mockBuilder = $this->getMockBuilder('Olcs\Controller\Traits\DeleteActionTrait');
-        $mockBuilder->setMethods(['params', 'makeRestCall', 'redirectToIndex', 'getDeleteServiceName', 'addErrorMessage']);
+        $mockBuilder->setMethods(
+            ['params', 'makeRestCall', 'redirectToIndex', 'getDeleteServiceName', 'addErrorMessage']
+        );
         $mockBuilder->setMockClassName(uniqid('mock_DeleteActionTrait_'));
         $sut = $mockBuilder->getMockForTrait();
 
