@@ -18,8 +18,6 @@ use Zend\Form\Element\MultiCheckbox as MultiCheckboxElement;
 class SubmissionSectionsMultiCheckbox extends FormMultiCheckbox
 {
 
-    protected $readOnlyElements = ['submission_section_case', 'submission_section_pers'];
-
     /**
      * Prefixing the element with a hidden element for the unset value?
      *
@@ -115,8 +113,6 @@ class SubmissionSectionsMultiCheckbox extends FormMultiCheckbox
             $labelAttributes = $globalLabelAttributes;
             $selected        = isset($inputAttributes['selected']) && $inputAttributes['type'] != 'radio' && $inputAttributes['selected'] != false ? true : false;
             $disabled        = isset($inputAttributes['disabled']) && $inputAttributes['disabled'] != false ? true : false;
-
-            $disabled = in_array($key, $this->readOnlyElements) ? true : false;
 
             if (is_scalar($optionSpec)) {
                 $optionSpec = array(
