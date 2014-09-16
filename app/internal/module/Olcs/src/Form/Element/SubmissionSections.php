@@ -133,11 +133,18 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
     {
 
         $this->getSubmissionType()->setValue($value['submissionType']);
+        $sections = [];
+        $optionalSections = [];
 
-        $sections = $this->getPreselectedSectionsForType($value['submissionType']);
-        if (isset($value['sections'])) {
-            $sections = array_merge($value['sections'], $sections);
+        if (isset($value['submissionType'])) {
+
+            if (!(isset($value['sections']))) {
+                $sections = $this->getPreselectedSectionsForType($value['submissionType']);
+            } else {
+                $sections = $value['sections'];
+            }
         }
+
         $sections = array_unique($sections);
         $this->getSections()->setValue($sections);
 
@@ -160,18 +167,13 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                     'name'    => 'Callback',
                     'options' => array(
                         'callback' => function ($data) {
-                                $sections = isset($data['sections']) ?
-                                    $data['sections'] : $this->getMandatorySections();
-                                $sectionSections = $this->getPreselectedSectionsForType($data['submissionType']);
-                                $newSections = $sections;
-                                foreach ($sectionSections as $s_section) {
-                                    if (!(in_array($s_section, $sections))) {
-                                        $newSections[] = $s_section;
-                                    }
-                                }
+                                $sections = array_merge(
+                                    $data['sections'],
+                                    $this->getMandatorySections()
+                                );
                             return [
                                 'submissionType' => $data['submissionType'],
-                                'sections' => $newSections
+                                'sections' => $sections
                             ];
                         }
                     )
