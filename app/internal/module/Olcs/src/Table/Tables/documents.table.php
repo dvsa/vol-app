@@ -9,7 +9,7 @@ return array(
             'actions' => array(
                 'upload' => array('class' => 'primary'),
                 'edit' => array('requireRows' => true),
-                'delete' => array('class' => 'warning', 'requireRows' => true)
+                'delete' => array('class' => 'secondary', 'requireRows' => true)
             )
         ),
         'paginate' => array(
