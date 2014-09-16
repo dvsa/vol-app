@@ -158,14 +158,14 @@ class CaseController extends AbstractCasesController
      * @param integer $id
      * @return array
      */
-    public function getCase($id = null)
+    /* public function getCase($id = null)
     {
         if (is_null($id)) {
             $id = $this->getIdentifier();
         }
 
         return $this->load($id);
-    }
+    } */
 
     /**
      * List of cases. Moved to Licence controller's cases method.
@@ -275,8 +275,6 @@ class CaseController extends AbstractCasesController
         } else {
             $caseId = $this->getIdentifier();
         }
-
-        $this->addSuccessMessage('Saved sucessfully');
 
         $this->redirect()->toRoute('case', array('case' => $caseId, 'action' => 'overview'));
     }

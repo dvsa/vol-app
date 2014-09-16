@@ -6,7 +6,7 @@
  * @author S Lizzio <shaun.lizzio@valtech.co.uk>
  */
 
-namespace Olcs\Controller;
+namespace Olcs\Controller\Cases\Complaint;
 
 // Olcs
 use Olcs\Controller as OlcsController;
@@ -19,7 +19,7 @@ use Zend\View\Model\ViewModel;
  *
  * @author S Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class CaseComplaintController extends OlcsController\CrudAbstract
+class ComplaintController extends OlcsController\CrudAbstract
 {
     use ControllerTraits\CaseControllerTrait;
 
@@ -115,23 +115,4 @@ class CaseComplaintController extends OlcsController\CrudAbstract
             'status' => [],
         )
     );
-
-    /**
-     * Map the data on load
-     *
-     * @param array $data
-     * @return array
-     */
-    public function processLoad($data)
-    {
-        if (isset($data['id'])) {
-            $data = $this->replaceIds($data, ['status', 'case', 'complaintType']);
-            $data['fields'] = $data;
-        } else {
-            $data = [];
-            $data['fields']['case'] = $this->getQueryOrRouteParam('case');
-        }
-
-        return $data;
-    }
 }

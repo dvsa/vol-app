@@ -193,6 +193,48 @@ class CrudAbstract extends CommonController\AbstractSectionController implements
         return $this->redirectToIndex();
     }
 
+    /* public function processDataMapForLoad($oldData, $map = array(), $section = 'main')
+    {
+        if (empty($map)) {
+            return $oldData;
+        }
+
+        if (isset($map['_addresses'])) {
+
+            foreach ($map['_addresses'] as $address) {
+                $oldData = $this->processAddressData($oldData, $address);
+            }
+        }
+
+        if (isset($map[$section]['mapFrom'])) {
+
+            $data = array();
+
+            foreach ($map[$section]['mapFrom'] as $key) {
+
+                if (isset($oldData[$key])) {
+                    $data = array_merge($data, $oldData[$key]);
+                }
+            }
+
+        } else {
+            $data = array();
+        }
+
+        if (isset($map[$section]['children'])) {
+
+            foreach ($map[$section]['children'] as $child => $options) {
+                $data[$child] = $this->processDataMapForSave($oldData, array($child => $options), $child);
+            }
+        }
+
+        if (isset($map[$section]['values'])) {
+            $data = array_merge($data, $map[$section]['values']);
+        }
+
+        return $data;
+    } */
+
     public function redirectToIndex()
     {
         return $this->redirectToRoute(
@@ -331,5 +373,30 @@ class CrudAbstract extends CommonController\AbstractSectionController implements
         }
 
         return $array;
+    }
+
+    /**
+     * Map the data on load
+     *
+     * @param array $data
+     * @return array
+     */
+    public function processLoad($data)
+    {
+        if (isset($data['id'])) {
+            if (isset($this->getDataBundle()['children'])) {
+
+                $fields = array_keys($this->getDataBundle()['children']);
+                $data = $this->replaceIds($data, $fields);
+            }
+            $data['fields'] = $data;
+        } else {
+            $data = [];
+            $data['case'] = $this->getQueryOrRouteParam('case');
+            $data['fields']['case'] = $this->getQueryOrRouteParam('case');
+            $data['base']['case'] = $this->getQueryOrRouteParam('case');
+        }
+
+        return $data;
     }
 }
