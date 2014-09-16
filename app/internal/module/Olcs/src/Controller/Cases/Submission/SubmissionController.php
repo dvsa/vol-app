@@ -29,6 +29,13 @@ class SubmissionController extends OlcsController\CrudAbstract
     protected $identifierName = 'submission';
 
     /**
+     * Table name string
+     *
+     * @var string
+     */
+    protected $tableName = 'submission';
+
+    /**
      * Holds the form name
      *
      * @var string

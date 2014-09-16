@@ -29,6 +29,13 @@ class StatementController extends OlcsController\CrudAbstract
     protected $identifierName = 'statement';
 
     /**
+     * Table name string
+     *
+     * @var string
+     */
+    protected $tableName = 'statement';
+
+    /**
      * Holds the form name
      *
      * @var string

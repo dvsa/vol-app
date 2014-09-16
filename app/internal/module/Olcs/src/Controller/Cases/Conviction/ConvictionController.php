@@ -34,6 +34,13 @@ class ConvictionController extends OlcsController\CrudAbstract
     protected $identifierName = 'conviction';
 
     /**
+     * Table name string
+     *
+     * @var string
+     */
+    protected $tableName = 'conviction';
+
+    /**
      * Holds the form name
      *
      * @var string

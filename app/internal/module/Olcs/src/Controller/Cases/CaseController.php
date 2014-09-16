@@ -26,6 +26,13 @@ class CaseController extends AbstractCasesController
     protected $identifierName = 'case';
 
     /**
+     * Table name string
+     *
+     * @var string
+     */
+    protected $tableName = 'case';
+
+    /**
      * Holds the form name
      *
      * @var string

@@ -28,6 +28,13 @@ class ProhibitionController extends OlcsController\CrudAbstract
     protected $identifierName = 'prohibition';
 
     /**
+     * Table name string
+     *
+     * @var string
+     */
+    protected $tableName = 'prohibition';
+
+    /**
      * Holds the form name
      *
      * @var string

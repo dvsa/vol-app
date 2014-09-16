@@ -22,6 +22,7 @@ class CrudAbstract extends CommonController\AbstractSectionController implements
     protected $requiredProperties = [
         'formName',
         'identifierName',
+        'tableName',
         'dataMap',
         'dataBundle',
         'service',
@@ -76,6 +77,11 @@ class CrudAbstract extends CommonController\AbstractSectionController implements
         return $this->renderView($view);
     }
 
+    /**
+     * Builds table into its placeholder.
+     *
+     * @return void
+     */
     public function buildTableIntoView()
     {
         $params = [
@@ -93,10 +99,8 @@ class CrudAbstract extends CommonController\AbstractSectionController implements
 
         $results = $this->preProcessTableData($results);
 
-        //die('<pre>' . print_r($results, 1));
-
         $this->getViewHelperManager()->get('placeholder')->getContainer('table')->set(
-            $this->buildTable($this->getIdentifierName(), $results, $params)
+            $this->alterTable($this->getTable($this->getTableName(), $results, $params))
         );
     }
 
@@ -163,7 +167,6 @@ class CrudAbstract extends CommonController\AbstractSectionController implements
 
         $view = $this->getView();
 
-        // CR: Should be its own view helper - I'll refactor this later.
         $this->getViewHelperManager()->get('placeholder')->getContainer('form')->set($form);
 
         $view->setTemplate('crud/form');
@@ -177,7 +180,7 @@ class CrudAbstract extends CommonController\AbstractSectionController implements
      * @param array $data
      * @return array
      */
-    protected function processSave($data)
+    public function processSave($data)
     {
         $result = parent::processSave($data);
 

@@ -53,7 +53,7 @@ class LicenceController extends AbstractController
 
         $results = $this->makeRestCall('Cases', 'GET', $params, $bundle);
 
-        $view->{'table'} = $this->buildTable('case', $results, $params);
+        $view->{'table'} = $this->getTable('case', $results, $params);
 
         $view->setTemplate('licence/cases');
 
