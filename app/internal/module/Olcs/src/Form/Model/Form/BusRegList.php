@@ -6,7 +6,7 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
- * @Form\Name("busreg-list")
+ * @Form\Name("bus-reg-list")
  * @Form\Attributes({"method":"get"})
  * @Form\InputFilter("Common\Form\InputFilter")
  */

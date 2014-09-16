@@ -330,7 +330,7 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->once())
             ->method('getForm')
-            ->with('busreg-list')
+            ->with('bus-reg-list')
             ->will($this->returnValue($form));
 
         $this->controller->expects($this->once())

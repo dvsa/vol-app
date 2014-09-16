@@ -1,5 +1,5 @@
 $(function() {
-    var form = "[name=busreg-list]";
+    var form = "[name=bus-reg-list]";
 
     OLCS.tableHandler({
         table: ".table__form",

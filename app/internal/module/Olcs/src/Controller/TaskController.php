@@ -95,6 +95,63 @@ class TaskController extends AbstractController
     }
 
     /**
+     * Close one or several tasks to a different team/user
+     *
+     * @return ViewModel
+     */
+    public function closeAction()
+    {
+        $data = $this->mapDefaultData();
+        $this->mapFilters($data);
+
+        $form = $this->getForm('task-close');
+        $this->formPost($form, 'processCloseTask');
+
+        if ($this->getResponse()->getContent() !== "") {
+            return $this->getResponse();
+        }
+
+        $tasks = $this->getFromRoute('task');
+        $tasksCount = count(explode('-', $tasks));
+        if ($tasksCount > 1) {
+            $form->get('details')->setLabel('tasks.close.multiple');
+        }
+        $view = new ViewModel(
+            [
+                'form' => $form,
+                'inlineScript' => $this->loadScripts(['task-form'])
+            ]
+        );
+
+        $view->setTemplate('task/add-or-edit');
+        $formTitle = ($tasksCount == 1) ? 'Close task' : "Close ($tasksCount) tasks";
+        return $this->renderView($view, $formTitle);
+    }
+
+    /**
+     * Callback invoked when the form is valid
+     * 
+     * @param array $data
+     */
+    public function processCloseTask($data)
+    {
+        $ids = explode('-', $this->getFromRoute('task'));
+        foreach ($ids as $id) {
+            $version = ($id == $data['id']) ? $data['version'] : $this->getTaskVersion($id);
+            $this->makeRestCall(
+                'Task',
+                'PUT',
+                array(
+                    'id' => $id,
+                    'version' => $version,
+                    'isClosed' => 'Y'
+                )
+            );
+        }
+        $this->redirectToList();
+    }
+
+    /**
      * Callback invoked when the form is valid
      *
      * @param array $data
@@ -192,6 +249,10 @@ class TaskController extends AbstractController
         $details->get('link')->setValue($url);
         $details->get('status')->setValue('<b>' . $textStatus . '</b>');
 
+        if (isset($data['buttonClicked']) && $data['buttonClicked'] == 'form-actions[close]') {
+            unset($data['buttonClicked']);
+            $type = 'Close';
+        }
         $form->setData($this->expandData($data));
         $this->formPost($form, 'process' . $type . 'Task');
 
@@ -436,7 +497,8 @@ class TaskController extends AbstractController
                 $data['assignment'],
                 [
                     'id' => $data['id'],
-                    'version' => $data['version']
+                    'version' => $data['version'],
+                    'buttonClicked' => isset($data['buttonClicked']) ? $data['buttonClicked'] : ''
                 ]
             );
         }
@@ -482,7 +544,7 @@ class TaskController extends AbstractController
      *
      * @param Zend\Form\Element
      */
-    private function disableFormElements($element)
+    public function disableFormElements($element)
     {
         if ($element instanceof \Zend\Form\Fieldset) {
             foreach ($element->getFieldsets() as $child) {
