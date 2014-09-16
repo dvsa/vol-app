@@ -123,9 +123,21 @@ class SubmissionController extends OlcsController\CrudAbstract
             $this->setPersist(false);
         } else {
             // remove form-actions
-
+            $form = $this->getForm($this->getFormName());
+            $form->remove('formActions[submit]');
         }
         return parent::addAction();
+    }
+
+    public function postSetFormData($form)
+    {
+        $formData = $this->getFromPost('fields');
+        // Intercept Submission type submit button to prevent saving
+        if (!(isset($formData['submissionSections']['submissionTypeSubmit']))) {
+            // remove submit button
+            $form->remove('form-actions');
+        }
+        return $form;
     }
 
     /**
@@ -200,8 +212,6 @@ class SubmissionController extends OlcsController\CrudAbstract
             $data['case'] = $case['id'];
             $data['fields']['id'] = $data['id'];
             $data['fields']['version'] = $data['version'];
-
-            //$data['fields'] = $data;
         }
 
         return parent::processLoad($data);
