@@ -556,9 +556,9 @@ return array_merge(
                     'may_terminate' => true,
                     'child_routes' => [
                         'generate' => [
-                            'type' => 'literal',
+                            'type' => 'segment',
                             'options' => [
-                                'route' => '/generate',
+                                'route' => '/generate[/:tmpId]',
                                 'defaults' => [
                                     'type'       => 'licence',
                                     'controller' => 'DocumentGenerationController',

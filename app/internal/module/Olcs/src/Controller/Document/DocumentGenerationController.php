@@ -20,12 +20,19 @@ class DocumentGenerationController extends DocumentController
 
     protected function alterFormBeforeValidation($form)
     {
-        $data = (array)$this->getRequest()->getPost();
-        $details = isset($data['details']) ? $data['details'] : [];
-
+        $data = [];
         $filters = [];
         $subCategories = ['' => self::EMPTY_LABEL];
         $docTemplates = ['' => self::EMPTY_LABEL];
+
+        if ($this->getRequest()->isPost()) {
+            $data = (array)$this->getRequest()->getPost();
+        } else if ($this->params('tmpId')) {
+            $data = $this->fetchTmpData();
+            $this->getUploader()->remove($this->getTmpPath());
+        }
+
+        $details = isset($data['details']) ? $data['details'] : [];
 
         if (isset($details['category'])) {
             $filters['category'] = $details['category'];
@@ -68,6 +75,7 @@ class DocumentGenerationController extends DocumentController
                 $form->get('bookmarks')
             );
         }
+        $form->setData($data);
 
         return $form;
     }
@@ -80,7 +88,9 @@ class DocumentGenerationController extends DocumentController
         // form, but we also need it when rendering via a GET too because
         // it actually populates our default category / sub cat / template
         // values as well
+        /*
         $form = $this->alterFormBeforeValidation($form);
+         */
 
         $view = new ViewModel(
             [
@@ -160,8 +170,9 @@ class DocumentGenerationController extends DocumentController
         $filename = $uploader->upload(self::TMP_STORAGE_PATH);
 
         return $this->redirect()->toRoute(
-            'licence/documents/finalise',
+            $this->params('type') . '/documents/finalise',
             [
+                // @TODO remove hard coded reference
                 'licence' => $this->params()->fromRoute('licence'),
                 'tmpId'   => $filename
             ]

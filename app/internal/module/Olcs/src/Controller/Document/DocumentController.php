@@ -31,6 +31,8 @@ class DocumentController extends AbstractController
      */
     const METADATA_KEY      = 'data';
 
+    protected $tmpData = [];
+
     public function getContentStore()
     {
         return $this->getServiceLocator()->get('ContentStore');
@@ -158,4 +160,29 @@ class DocumentController extends AbstractController
             $fieldset->add($element);
         }
     }
+
+    protected function getTmpPath()
+    {
+        return self::TMP_STORAGE_PATH . '/' . $this->params('tmpId');
+    }
+
+    protected function fetchTmpData()
+    {
+        if (empty($this->tmpData)) {
+            $path = $this->getTmpPath();
+            $meta = $this->getContentStore()
+                ->readMeta($path);
+
+            if ($meta['exists'] === true) {
+                $key = 'meta:' . self::METADATA_KEY;
+
+                $this->tmpData = json_decode(
+                    $meta['metadataProperties'][$key],
+                    true
+                );
+            }
+        }
+        return $this->tmpData;
+    }
+
 }

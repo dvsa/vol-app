@@ -2,7 +2,9 @@ $(function() {
   var form = "form[name=generate-document]";
   var F = OLCS.formHelper;
 
-  F("bookmarks").hide();
+  if (F("bookmarks").find(":input").length === 0) {
+    F("bookmarks").hide();
+  }
 
   OLCS.cascadeInput({
     source: form + " #category",

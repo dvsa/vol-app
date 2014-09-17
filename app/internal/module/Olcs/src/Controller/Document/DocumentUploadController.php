@@ -8,33 +8,9 @@ use Dvsa\Jackrabbit\Data\Object\File;
 
 class DocumentUploadController extends DocumentController
 {
-    private $tmpData = [];
-
-    private function getTmpPath()
-    {
-        return self::TMP_STORAGE_PATH . '/' . $this->params()->fromRoute('tmpId');
-    }
-
-    private function fetchTmpData()
-    {
-        if (empty($this->tmpData)) {
-            $path = $this->getTmpPath();
-            $meta = $this->getContentStore()
-                ->readMeta($path);
-
-            $key = 'meta:' . self::METADATA_KEY;
-
-            $this->tmpData = json_decode(
-                $meta['metadataProperties'][$key],
-                true
-            );
-        }
-        return $this->tmpData;
-    }
-
     public function finaliseAction()
     {
-        if ($this->isButtonPressed('cancel')) {
+        if ($this->isButtonPressed('back')) {
             return $this->redirect()->toRoute(
                 $this->params('type').'/documents/generate',
                 $this->params()->fromRoute()
@@ -136,7 +112,7 @@ class DocumentUploadController extends DocumentController
         $uploader->remove($this->getTmpPath());
 
         return $this->redirect()->toRoute(
-            $this->params()->fromRoute('type').'/documents',
+            $this->params('type') . '/documents',
             $this->params()->toArray()
         );
     }

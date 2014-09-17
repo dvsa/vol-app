@@ -19,10 +19,10 @@ return [
                         'label' => 'Upload',
                         'class' => 'action--primary large'
                     ],
-                    'cancel' => [
+                    'back' => [
                         'type' => 'submit',
                         'filters' => '\Common\Form\Elements\InputFilters\ActionButton',
-                        'label' => 'Cancel',
+                        'label' => 'Back',
                         'class' => 'action--secondary large'
                     ]
                 ]
