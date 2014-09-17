@@ -15,7 +15,7 @@ use Zend\Mvc\MvcEvent as MvcEvent;
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech>
  */
-class CrudAbstract extends CommonController\AbstractSectionController implements CommonController\CrudInterface
+abstract class CrudAbstract extends CommonController\AbstractSectionController implements CommonController\CrudInterface
 {
     use Traits\DeleteActionTrait;
 
