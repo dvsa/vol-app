@@ -115,17 +115,29 @@ class LicenceController extends AbstractController
             unset($filters['status']);
         }
 
-        $resultData = $this->makeRestCall('BusReg', 'GET', $filters);
+        $bundle = [
+            'children' => [
+                'otherServices' => [
+                    'properties' => [
+                        'serviceNo'
+                    ]
+                ]
+            ]
+        ];
+
+        $resultData = $this->makeRestCall('BusReg', 'GET', $filters, $bundle);
+
         $table = $this->getTable(
             'busreg',
             $resultData,
             array_merge(
                 $filters,
                 array('query' => $this->getRequest()->getQuery())
-            )
+            ),
+            true
         );
 
-        $form = $this->getForm('busreg-list');
+        $form = $this->getForm('bus-reg-list');
         $form->remove('csrf'); //we never post
         $form->setData($filters);
 
@@ -134,7 +146,7 @@ class LicenceController extends AbstractController
         $view = $this->getViewWithLicence(
             array(
                 'table' => $table,
-                'inlineScript' => $this->loadScripts(['busreg-list'])
+                'inlineScript' => $this->loadScripts(['bus-reg-list'])
             )
         );
 

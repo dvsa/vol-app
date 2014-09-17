@@ -9,7 +9,8 @@ return array(
             'actions' => array(
                 'create task' => array('class' => 'primary'),
                 'edit' => array('requireRows' => true),
-                're-assign task' => array('requireRows' => true)
+                're-assign task' => array('requireRows' => true),
+                'close task' => array('requireRows' => true)
             )
         ),
         'paginate' => array(

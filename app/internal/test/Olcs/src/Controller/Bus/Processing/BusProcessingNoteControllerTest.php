@@ -29,13 +29,14 @@ class BusProcessingNoteControllerTest extends AbstractHttpControllerTestCase
                 'generateFormWithData',
                 'getFromRoute',
                 'getFromPost',
+                'getForm',
                 'getView',
                 'url',
                 'renderView',
                 'redirectToRoute',
                 'processAdd',
                 'processEdit',
-
+                'setTableFilters'
             )
         );
 
@@ -43,6 +44,14 @@ class BusProcessingNoteControllerTest extends AbstractHttpControllerTestCase
             '\Zend\View\Model\ViewModel',
             array(
                 'setTemplate',
+            )
+        );
+
+        $this->form = $this->getMock(
+            '\Zend\Form\Form',
+            array(
+                'remove',
+                'setData'
             )
         );
 
@@ -55,23 +64,30 @@ class BusProcessingNoteControllerTest extends AbstractHttpControllerTestCase
     public function testIndexAction()
     {
         $licenceId = 110;
-        $page = 1;
-        $sort = 'priority';
-        $order = 'desc';
-        $limit = 10;
 
         $this->getFromRoute(0, 'licence', $licenceId);
         $this->getFromRoute(1, 'busRegId', null);
         $this->getFromPost(2, 'action', null);
         $this->getFromPost(3, 'id', null);
-        $this->getFromRouteWithDefault(4, 'page', $page, $page);
-        $this->getFromRouteWithDefault(5, 'sort', $sort, $sort);
-        $this->getFromRouteWithDefault(6, 'order', $order, $order);
-        $this->getFromRouteWithDefault(7, 'limit', $limit, $limit);
 
         $this->controller->expects($this->once())
             ->method('makeRestCall')
             ->will($this->returnValue($this->getSampleResult()));
+
+        $this->controller->expects($this->once())
+            ->method('getForm')
+            ->with('note-filter')
+            ->will($this->returnValue($this->form));
+
+        $this->form->expects($this->once())
+            ->method('remove')
+            ->with('csrf');
+
+        $this->form->expects($this->once())
+            ->method('setData');
+
+        $this->controller->expects($this->once())
+            ->method('setTableFilters');
 
         $this->controller->expects($this->once())
             ->method('getTable');

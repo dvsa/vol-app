@@ -3,18 +3,20 @@
 /**
  * Task controller tests
  *
- * @author Nick Payne <nick.payne@valtech.co..uk>
+ * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 
 namespace OlcsTest\Controller;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
+use Zend\Form\Fieldset;
+use Zend\Form\Element\DateSelect;
 
 /**
  * Task controller tests
  *
- * @author Nick Payne <nick.payne@valtech.co..uk>
+ * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 class TaskControllerTest extends AbstractHttpControllerTestCase
@@ -68,6 +70,8 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
 
     private $isClosed = 'N';
 
+    private $testClickedButton = false;
+
     public function setUp()
     {
         $this->setApplicationConfig(
@@ -119,7 +123,6 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
 
     /**
      * Test add action
-     * @group task
      */
     public function testAddAction()
     {
@@ -163,7 +166,6 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
 
     /**
      * Test edit action
-     * @group task
      */
     public function testEditAction()
     {
@@ -207,7 +209,6 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
 
     /**
      * Test edit action from dashboard
-     * @group task
      */
     public function testEditFromDashboardAction()
     {
@@ -252,7 +253,6 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
     /**
      * Test edit action from dashboard with no task type id
      * @expectedException \Exception
-     * @group task
      */
     public function testEditFromDashboardActionNoTaskTypeId()
     {
@@ -283,7 +283,6 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
 
     /**
      * Test edit action closed task
-     * @group task
      */
     public function testEditActionClosedTask()
     {
@@ -357,7 +356,6 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
 
     /**
      * Test edit action post
-     * @group task
      */
     public function testEditActionPost()
     {
@@ -441,7 +439,6 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
 
     /**
      * Test add action post
-     * @group task
      */
     public function testAddActionPost()
     {
@@ -523,7 +520,6 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
 
     /**
      * Test reassign action
-     * @group task
      */
     public function testReassignAction()
     {
@@ -567,7 +563,6 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
 
     /**
      * Test reassign action post
-     * @group task
      */
     public function testReassignActionPost()
     {
@@ -644,7 +639,6 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
 
     /**
      * Test reassign action post from dashboard with redirect back
-     * @group task
      */
     public function testReassignActionPostFromDashboard()
     {
@@ -711,7 +705,6 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
 
     /**
      * Test edit action post from dashboard with redirect back
-     * @group task
      */
     public function testEditActionPostFromDashboard()
     {
@@ -784,6 +777,299 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
+     * Test close action
+     * @dataProvider closeTaskProvider
+     */
+    public function testCloseAction($taskId, $titleExpected)
+    {
+        $form = $this->getMock('\stdClass', ['get', 'setValue', 'setValueOptions', 'remove', 'setData', 'setLabel']);
+
+        $form->expects($this->any())
+            ->method('get')
+            ->will($this->returnSelf());
+
+        $this->controller->expects($this->once())
+            ->method('getForm')
+            ->will($this->returnValue($form));
+
+        $this->controller->expects($this->any())
+            ->method('getFromRoute')
+            ->will(
+                $this->returnValueMap(
+                    array(
+                        array('type', 'licence'),
+                        array('typeId', 123),
+                        array('task', $taskId),
+                    )
+                )
+            );
+
+        $toArray = $this->getMock('\stdClass', ['toArray']);
+        $toArray->expects($this->any())
+            ->method('toArray')
+            ->will($this->returnValue([]));
+
+        $this->request->expects($this->any())
+            ->method('getPost')
+            ->will($this->returnValue($toArray));
+
+        $view = $this->controller->closeAction();
+
+        list($header, $content) = $view->getChildren();
+
+        $this->assertEquals($titleExpected, $header->getVariable('pageTitle'));
+    }
+
+    /**
+     * Data provider for testCloseAction
+     */
+    public function closeTaskProvider()
+    {
+        return array(
+            array('456', 'Close task'),
+            array('456-789', 'Close (2) tasks')
+        );
+    }
+
+    /**
+     * Test close action post
+     */
+    public function testCloseActionPost()
+    {
+        $form = $this->getMock(
+            '\stdClass',
+            [
+                'get', 'setValue', 'setValueOptions',
+                'remove', 'setData', 'isValid',
+                'getData'
+            ]
+        );
+
+        $form->expects($this->any())
+            ->method('get')
+            ->will($this->returnSelf());
+
+        $form->expects($this->any())
+            ->method('isValid')
+            ->will($this->returnValue(true));
+
+        $formData = [
+            'assignment' => ['assignedToTeam' => 1, 'assignedToUser' => 1],
+            'id' => 100,
+            'version' => 200,
+            'buttonClicked' => 'form-actions[close]'
+        ];
+
+        $form->expects($this->any())
+            ->method('getData')
+            ->will($this->returnValue($formData));
+
+        $this->controller->expects($this->once())
+            ->method('getForm')
+            ->will($this->returnValue($form));
+
+        $this->controller->expects($this->any())
+            ->method('getFromRoute')
+            ->will(
+                $this->returnValueMap(
+                    array(
+                        array('type', 'licence'),
+                        array('typeId', 123),
+                        array('task', 456),
+                    )
+                )
+            );
+
+        $toArray = $this->getMock('\stdClass', ['toArray']);
+        $toArray->expects($this->any())
+            ->method('toArray')
+            ->will($this->returnValue([]));
+
+        $this->request->expects($this->any())
+            ->method('getPost')
+            ->will($this->returnValue($toArray));
+
+        $this->request->expects($this->any())
+            ->method('isPost')
+            ->will($this->returnValue(true));
+
+        $params = ['licence' => 123];
+
+        $mockRoute = $this->getMock('\stdClass', ['toRoute']);
+        $mockRoute->expects($this->once())
+            ->method('toRoute')
+            ->with('licence/processing', $params)
+            ->will($this->returnValue('mockResponse'));
+
+        $this->controller->expects($this->any())
+            ->method('redirect')
+            ->will($this->returnValue($mockRoute));
+
+        $this->controller->closeAction();
+    }
+
+    /**
+     * Test close action post from dashboard with redirect back
+     */
+    public function testCloseActionPostFromDashboard()
+    {
+        $form = $this->getMock(
+            '\stdClass',
+            [
+                'get', 'setValue', 'setValueOptions',
+                'remove', 'setData', 'isValid',
+                'getData'
+            ]
+        );
+
+        $form->expects($this->any())
+            ->method('get')
+            ->will($this->returnSelf());
+
+        $form->expects($this->any())
+            ->method('isValid')
+            ->will($this->returnValue(true));
+
+        $formData = [
+            'details' => [
+                'urgent' => 1
+            ],
+            'assignment' => [],
+            'id' => 100,
+            'version' => 200
+        ];
+
+        $form->expects($this->any())
+            ->method('getData')
+            ->will($this->returnValue($formData));
+
+        $this->controller->expects($this->once())
+            ->method('getForm')
+            ->will($this->returnValue($form));
+
+        $this->controller->expects($this->any())
+            ->method('getFromRoute')
+            ->will(
+                $this->returnValueMap(
+                    array(
+                        array('task', 456),
+                    )
+                )
+            );
+
+        $toArray = $this->getMock('\stdClass', ['toArray']);
+        $toArray->expects($this->any())
+            ->method('toArray')
+            ->will($this->returnValue([]));
+
+        $this->request->expects($this->any())
+            ->method('getPost')
+            ->will($this->returnValue($toArray));
+
+        $this->request->expects($this->any())
+            ->method('isPost')
+            ->will($this->returnValue(true));
+
+        $this->request->expects($this->any())
+            ->method('isXmlHttpRequest')
+            ->will($this->returnValue(true));
+
+        $this->controller->closeAction();
+    }
+
+    /**
+     * Test close action post from modal
+     */
+    public function testCloseActionPostFromModal()
+    {
+        $form = $this->getMock(
+            '\stdClass',
+            [
+                'get', 'setValue', 'setValueOptions',
+                'remove', 'setData', 'isValid',
+                'getData'
+            ]
+        );
+        $this->testClickedButton = true;
+        $form->expects($this->any())
+            ->method('get')
+            ->will($this->returnSelf());
+
+        $form->expects($this->any())
+            ->method('isValid')
+            ->will($this->returnValue(true));
+
+        $formData = [
+            'details' => [
+                'urgent' => 1
+            ],
+            'assignment' => [],
+            'id' => 100,
+            'version' => 200
+        ];
+
+        $form->expects($this->any())
+            ->method('getData')
+            ->will($this->returnValue($formData));
+
+        $this->controller->expects($this->once())
+            ->method('getForm')
+            ->will($this->returnValue($form));
+
+        $this->controller->expects($this->any())
+            ->method('getFromRoute')
+            ->will(
+                $this->returnValueMap(
+                    array(
+                        array('type', 'licence'),
+                        array('typeId', 123),
+                        array('task', 456),
+                    )
+                )
+            );
+
+        $toArray = $this->getMock('\stdClass', ['toArray']);
+        $toArray->expects($this->any())
+            ->method('toArray')
+            ->will($this->returnValue([]));
+
+        $this->request->expects($this->any())
+            ->method('getPost')
+            ->will($this->returnValue($toArray));
+
+        $this->request->expects($this->any())
+            ->method('isPost')
+            ->will($this->returnValue(true));
+
+        $params = ['licence' => 123];
+
+        $mockRoute = $this->getMock('\stdClass', ['toRoute']);
+        $mockRoute->expects($this->once())
+            ->method('toRoute')
+            ->with('licence/processing', $params)
+            ->will($this->returnValue('mockResponse'));
+
+        $this->controller->expects($this->any())
+            ->method('redirect')
+            ->will($this->returnValue($mockRoute));
+
+        $this->controller->editAction();
+    }
+
+    /**
+     * Test disable form elements
+     */
+    public function testDisableFormElements()
+    {
+        $fieldset = new Fieldset();
+        $dateSelect = new DateSelect();
+        $dateSelect->setName('dateSelect');
+        $fieldset->add($dateSelect);
+        $this->controller->disableFormElements($fieldset);
+        $this->assertEquals($fieldset->get('dateSelect')->getAttribute('disabled'), 'disabled');
+    }
+
+    /**
      * Mock the rest call
      *
      * @param string $service
@@ -835,16 +1121,23 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
         if ($service == 'Category' && $method == 'GET' && $data == $this->altListData) {
             return $altResponse;
         }
-        if ($service == 'Task' && $method == 'GET' && $data == ['id' => 456]) {
-            return [
+        if ($service == 'Task' &&
+            $method == 'GET' &&
+            ($data == ['id' => 456] || $data == ['id' => 789] || $data == ['id' => 123])
+            ) {
+            $retv = [
                 'urgent' => 'Y',
                 'version' => 1,
                 'isClosed' => $this->isClosed,
                 'category' => ['id' => 100],
                 'taskSubCategory' => ['id' => 1],
                 'assignedToTeam' => ['id' => 10],
-                'assignedToUser' => ['id' => 1],
+                'assignedToUser' => [],
             ];
+            if ($this->testClickedButton) {
+                $retv['buttonClicked'] = 'form-actions[close]';
+            }
+            return $retv;
         }
     }
 }

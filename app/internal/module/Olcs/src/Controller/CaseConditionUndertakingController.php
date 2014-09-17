@@ -531,12 +531,10 @@ class CaseConditionUndertakingController extends CaseController
      * Method to return the bundle required for conditionundertakings
      * by conditionType
      *
-     * @todo remove address lines when address entity finalised
      * @return array
      */
     private function getConditionUndertakingBundle($conditionType)
     {
-
         return array(
             'properties' => array(
                 'id'

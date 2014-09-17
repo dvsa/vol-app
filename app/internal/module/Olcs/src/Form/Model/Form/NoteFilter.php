@@ -6,23 +6,23 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
- * @Form\Name("bus-reg-list")
+ * @Form\Name("note-filter")
  * @Form\Attributes({"method":"get"})
  * @Form\InputFilter("Common\Form\InputFilter")
  */
-class BusRegList
+class NoteFilter
 {
     /**
      * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
-     *     "label": "internal-licence-bus.data.status",
+     *     "label": "internal-licence-processing-notes.data.notetype",
      *     "disable_inarray_validator": false,
-     *     "category": "bus_reg_status",
+     *     "category": "note_type",
      *     "empty_option": "All"
      * })
      * @Form\Type("DynamicSelect")
      */
-    public $status = null;
+    public $noteType = null;
 
     /**
      * @Form\Attributes({"type":"submit","class":"action--primary"})

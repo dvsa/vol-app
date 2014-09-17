@@ -10,7 +10,7 @@ return array(
                 'upload' => array('class' => 'primary'),
                 'New letter' => array(),
                 'edit' => array('requireRows' => true),
-                'delete' => array('class' => 'warning', 'requireRows' => true)
+                'delete' => array('class' => 'secondary', 'requireRows' => true)
             )
         ),
         'paginate' => array(
