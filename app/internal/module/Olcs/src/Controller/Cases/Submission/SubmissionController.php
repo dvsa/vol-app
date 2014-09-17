@@ -97,17 +97,6 @@ class SubmissionController extends OlcsController\CrudAbstract
             ),
             'case' => array(
                 'properties' => 'ALL',
-            ),
-            'submissionActions' => array(
-                'properties' => 'ALL',
-                'children' => array(
-                    'senderUser' => array(
-                        'properties' => 'ALL'
-                    ),
-                    'recipientUser' => array(
-                        'properties' => 'ALL'
-                    ),
-                )
             )
         )
     );
@@ -220,22 +209,22 @@ class SubmissionController extends OlcsController\CrudAbstract
      */
     public function processLoad($data)
     {
+        $data = parent::processLoad($data);
 
         $case = $this->getCase();
-
         $data['fields']['case'] = $case['id'];
 
         if (isset($data['submissionSections']['sections'])) {
             $data['fields']['submissionSections']['sections'] = json_decode($data['submissionSections']['sections']);
         } elseif (isset($data['text'])) {
-            $data['fields']['submissionSections']['submissionType'] = $data['submissionType']['id'];
+            $data['fields']['submissionSections']['submissionType'] = $data['submissionType'];
             $data['fields']['submissionSections']['sections'] = json_decode($data['text']);
             $data['case'] = $case['id'];
             $data['fields']['id'] = $data['id'];
             $data['fields']['version'] = $data['version'];
         }
 
-        return parent::processLoad($data);
+        return $data;
     }
 
 
