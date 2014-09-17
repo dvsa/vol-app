@@ -16,25 +16,40 @@ use Zend\View\Model\ViewModel;
  */
 class DocumentGenerationController extends DocumentController
 {
+    const EMPTY_LABEL = 'Please select';
+
     protected function alterFormBeforeValidation($form)
     {
         $data = (array)$this->getRequest()->getPost();
 
         $filters = [];
+        $subCategories = ['' => self::EMPTY_LABEL];
+        $docTemplates = ['' => self::EMPTY_LABEL];
 
         if (isset($data['category'])) {
             $filters['category'] = $data['category'];
+            $subCategories = $this->getListData(
+                'DocumentSubCategory',
+                $filters
+            );
         }
 
         if (isset($data['documentSubCategory'])) {
             $filters['documentSubCategory'] = $data['documentSubCategory'];
+            $docTemplates = $this->getListData(
+                'DocTemplate',
+                $filters
+            );
         }
 
         $selects = [
             'details' => [
-                'category' => $this->getListData('Category', ['isDocCategory' => true], 'description', 'id', 'Please select'),
-                'documentSubCategory' => $this->getListData('DocumentSubCategory', $filters, 'description', 'id', 'Please select'),
-                'documentTemplate' => $this->getListData('DocTemplate', $filters, 'description', 'id', 'Please select')
+                'category' => $this->getListData(
+                    'Category',
+                    ['isDocCategory' => true]
+                ),
+                'documentSubCategory' => $subCategories,
+                'documentTemplate' => $docTemplates
             ]
         ];
 
@@ -59,7 +74,6 @@ class DocumentGenerationController extends DocumentController
     public function generateAction()
     {
         $form = $this->generateForm('generate-document', 'processGenerate');
-
 
         // @NOTE: yes, this will be called automagically when POSTing the
         // form, but we also need it when rendering via a GET too because
@@ -152,5 +166,10 @@ class DocumentGenerationController extends DocumentController
                 'tmpId'   => $filename
             ]
         );
+    }
+
+    protected function getListData($entity, $filters = array(), $titleField = '', $keyField = '', $showAll = '')
+    {
+        return parent::getListData($entity, $filters, 'description', 'id', self::EMPTY_LABEL);
     }
 }
