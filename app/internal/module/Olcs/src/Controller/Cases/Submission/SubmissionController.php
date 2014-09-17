@@ -93,9 +93,7 @@ class SubmissionController extends OlcsController\CrudAbstract
         'properties' => 'ALL',
         'children' => array(
             'submissionType' => array(
-                'properties' => array(
-                    'id'
-                ),
+                'properties' => 'ALL',
             ),
             'case' => array(
                 'properties' => 'ALL',
