@@ -85,6 +85,13 @@ return array(
                         ),
                         array(
                             'id' => 'case_details_infringements',
+                            'label' => 'Public inquiry',
+                            'route' => 'case',
+                            'action' => 'infringements',
+                            'use_route_match' => true,
+                        ),
+                        array(
+                            'id' => 'case_details_infringements',
                             'label' => 'Serious Infringements',
                             'route' => 'case',
                             'action' => 'infringements',
