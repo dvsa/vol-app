@@ -21,21 +21,22 @@ class DocumentGenerationController extends DocumentController
     protected function alterFormBeforeValidation($form)
     {
         $data = (array)$this->getRequest()->getPost();
+        $details = isset($data['details']) ? $data['details'] : [];
 
         $filters = [];
         $subCategories = ['' => self::EMPTY_LABEL];
         $docTemplates = ['' => self::EMPTY_LABEL];
 
-        if (isset($data['category'])) {
-            $filters['category'] = $data['category'];
+        if (isset($details['category'])) {
+            $filters['category'] = $details['category'];
             $subCategories = $this->getListData(
                 'DocumentSubCategory',
                 $filters
             );
         }
 
-        if (isset($data['documentSubCategory'])) {
-            $filters['documentSubCategory'] = $data['documentSubCategory'];
+        if (isset($details['documentSubCategory'])) {
+            $filters['documentSubCategory'] = $details['documentSubCategory'];
             $docTemplates = $this->getListData(
                 'DocTemplate',
                 $filters
@@ -61,9 +62,9 @@ class DocumentGenerationController extends DocumentController
             }
         }
 
-        if (isset($data['details']['documentTemplate'])) {
+        if (isset($details['documentTemplate'])) {
             $this->addTemplateBookmarks(
-                $data['details']['documentTemplate'],
+                $details['documentTemplate'],
                 $form->get('bookmarks')
             );
         }
@@ -139,7 +140,6 @@ class DocumentGenerationController extends DocumentController
 
         // we've now got our raw content and our bookmarks, so can hand off
         // to our template service / doc gen service to generate the doc
-        // pretend for now...
         $file = $this->getDocumentService()
             ->generateFromTemplate(
                 $template['document']['identifier'],

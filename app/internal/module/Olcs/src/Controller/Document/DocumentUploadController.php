@@ -34,6 +34,12 @@ class DocumentUploadController extends DocumentController
 
     public function finaliseAction()
     {
+        if ($this->isButtonPressed('cancel')) {
+            return $this->redirect()->toRoute(
+                $this->params('type').'/documents/generate',
+                $this->params()->fromRoute()
+            );
+        }
         $data = $this->fetchTmpData();
 
         $entities = [
@@ -129,11 +135,9 @@ class DocumentUploadController extends DocumentController
 
         $uploader->remove($this->getTmpPath());
 
-        // @TODO hardcoding the return URL isn't appropriate here; we may well
-        // generate docs from a non licencing section (do we? Need to check)
         return $this->redirect()->toRoute(
-            'licence/documents',
-            ['licence' => $this->params()->fromRoute('licence')]
+            $this->params()->fromRoute('type').'/documents',
+            $this->params()->toArray()
         );
     }
 }
