@@ -122,33 +122,17 @@ class SubmissionController extends OlcsController\CrudAbstract
             $form = $this->getForm($this->getFormName());
             $form->remove('formActions[submit]');
         }
-        return parent::addAction();
+
+        $form = $this->generateFormWithData($this->getFormName(), $this->getFormCallback(), $this->getDataForForm());
+
+        $view = $this->getView();
+
+        $this->getViewHelperManager()->get('placeholder')->getContainer('form')->set($form);
+
+        $view->setTemplate('crud/form');
+
+        return $this->renderView($view);
     }
-
-    /**
-     * Generate a form with data. Overridden to remove form actions
-     *
-     * @param string $name
-     * @param callable $callback
-     * @param mixed $data
-     * @param boolean $tables
-     * @return object
-     *
-    public function generateFormWithData($name, $callback, $data = null, $tables = false)
-    {
-        $form = $this->generateForm($name, $callback, $tables);
-
-        if (!$this->getRequest()->isPost() && is_array($data)) {
-
-            if (isset($data['submissionSections']['submissionTypeSubmit'])) {
-                var_dump($data);exit;
-                $form->remove('form-actions');
-            }
-            $form->setData($data);
-        }
-
-        return $form;
-    }*/
 
     /**
      * Save data. Also processes the submit submission select type drop down
@@ -212,6 +196,7 @@ class SubmissionController extends OlcsController\CrudAbstract
         $data = parent::processLoad($data);
 
         $case = $this->getCase();
+
         $data['fields']['case'] = $case['id'];
 
         if (isset($data['submissionSections']['sections'])) {
