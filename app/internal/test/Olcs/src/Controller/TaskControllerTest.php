@@ -3,7 +3,7 @@
 /**
  * Task controller tests
  *
- * @author Nick Payne <nick.payne@valtech.co..uk>
+ * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 
@@ -16,7 +16,7 @@ use Zend\Form\Element\DateSelect;
 /**
  * Task controller tests
  *
- * @author Nick Payne <nick.payne@valtech.co..uk>
+ * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 class TaskControllerTest extends AbstractHttpControllerTestCase
