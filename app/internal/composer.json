@@ -32,5 +32,11 @@
         "psr-4": {
             "Common\\": "vendor/olcs/OlcsCommon/Common/src/Common"
         }
+    },
+    "config": {
+      "preferred-install": "dist",
+        "github-oauth": {
+          "github.com": "5cdf40f8d81a7675fdaa5fc92e9381526ef4db7f"
+      }
     }
 }
