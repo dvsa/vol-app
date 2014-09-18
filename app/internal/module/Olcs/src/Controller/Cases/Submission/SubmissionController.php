@@ -135,6 +135,39 @@ class SubmissionController extends OlcsController\CrudAbstract
     }
 
     /**
+     * Save data. Also processes the submit submission select type drop down
+     * in order to dictate which checkboxes to manipulate.
+     *
+     * @param array $data
+     * @param string $service
+     * @return array
+     */
+    public function editAction()
+    {
+        // Modify $data
+        $formData = $this->getFromPost('fields');
+
+        // Intercept Submission type submit button to prevent saving
+        if (isset($formData['submissionSections']['submissionTypeSubmit'])) {
+            $this->setPersist(false);
+        } else {
+            // remove form-actions
+            $form = $this->getForm($this->getFormName());
+            $form->remove('formActions[submit]');
+        }
+
+        $form = $this->generateFormWithData($this->getFormName(), $this->getFormCallback(), $this->getDataForForm());
+
+        $view = $this->getView();
+
+        $this->getViewHelperManager()->get('placeholder')->getContainer('form')->set($form);
+
+        $view->setTemplate('crud/form');
+
+        return $this->renderView($view);
+    }
+
+    /**
      * Override Save data to allow json encoding of submission sections
      * into submission 'text' field.
      *
@@ -208,17 +241,6 @@ class SubmissionController extends OlcsController\CrudAbstract
         return $data;
     }
 
-
-    /**
-     * Get form name. Overridden so as not to create a form called SubAction
-     *
-     * @return string
-     */
-    /*protected function getFormName()
-    {
-        return $this->formName;
-    }*/
-
     /**
      * Details action - shows each section detail
      *
@@ -233,6 +255,7 @@ class SubmissionController extends OlcsController\CrudAbstract
         $submissionsArray = json_decode($submission['text']);
 
         $submissionSections = $this->getServiceLocator()->get('Common\Service\Data\RefData')->fetchListData('submission_section');
+        $submission['submissionTypeTitle'] = $this->getSubmissionTypeTitle($submission['submissionType']['id']);
 
         $sectionData = [];
         foreach ($submissionSections as $submissionSection) {
@@ -256,4 +279,21 @@ class SubmissionController extends OlcsController\CrudAbstract
         return $this->renderView($view);
     }
 
+    /**
+     * Extracts the title from ref_data based on a given submission type.
+     *
+     * @param string $submissionType
+     * @return string
+     */
+    private function getSubmissionTypeTitle($submissionType)
+    {
+        $submissionTitles = $this->getServiceLocator()->get('Common\Service\Data\RefData')->fetchListData('submission_type_title');
+
+        foreach ($submissionTitles as $title) {
+            if ($title['id'] == str_replace('_o_','_t_', $submissionType)) {
+                return $title['description'];
+            }
+        }
+        return '';
+    }
 }

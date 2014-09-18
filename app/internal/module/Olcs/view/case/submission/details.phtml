@@ -2,11 +2,12 @@
 
 $case = $this->placeholder('case')->getValue();
 $submission = $this->placeholder('submission')->getValue();
+$submissionTitle = $this->placeholder('submissionTitle')->getValue();
 $sectionData = $this->placeholder('sectionData')->getValue();
 ?>
 
 <div class="read-only">
-    Submission <?php echo $submission['id']; ?>
+    <?php echo $submission['submissionTypeTitle']; ?>
     <a href="<?php echo $this->url('submission', ['case' => $case['id'], 'action' => 'edit', 'submission' => $submission['id']]);?>">Edit submission</a>
 </div>
 <?php
