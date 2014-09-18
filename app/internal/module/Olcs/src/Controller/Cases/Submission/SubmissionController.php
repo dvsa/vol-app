@@ -162,12 +162,23 @@ class SubmissionController extends OlcsController\CrudAbstract
      */
     public function processSave($data)
     {
-        // pass false to prevent default redirect back to index action
-        // and return result of the save
-        $result = parent::processSave($data, false);
+        $result = $this->callParentProcessSave($data);
 
         $id = isset($result['id']) ? $result['id'] : $data['fields']['id'];
         return $this->redirect()->toRoute('submission', ['action' => 'details', 'submission' => $id], [], true);
+    }
+
+    /**
+     * Call parent process save and return result. Public method to allow unit testing
+     *
+     * @param array $data
+     * @return array
+     */
+    public function callParentProcessSave($data)
+    {
+        // pass false to prevent default redirect back to index action
+        // and return result of the save
+        return parent::processSave($data, false);
     }
 
     /**

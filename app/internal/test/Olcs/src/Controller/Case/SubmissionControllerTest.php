@@ -9,6 +9,7 @@ namespace OlcsTest\Controller\Submission;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use OlcsTest\Bootstrap;
+use Mockery as m;
 
 /**
  * Search controller form post tests
@@ -31,6 +32,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
                 'getForm',
                 'generateFormWithData',
                 'getDataForForm',
+                'callParentProcessSave'
             )
         );
         $serviceManager = Bootstrap::getServiceManager();
@@ -80,6 +82,9 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
     }
 
 
+    /**
+     * Tests the addAction once a submissionType has been set.
+     */
     public function testAddActionSubmissionTypeSet()
     {
 
@@ -107,5 +112,58 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $response = $this->controller->addAction();
 
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+    }
+
+    /**
+     * Test save of new submissions
+     *
+     * @param $dataToSave
+     * @param $expectedResult
+     *
+     * @dataProvider getSubmissionSectionsToSaveProvider
+     */
+    public function testSaveAddNew($dataToSave, $expectedResult)
+    {
+        $this->controller->expects($this->once())
+            ->method('callParentProcessSave')
+            ->with($dataToSave)
+            ->will($this->returnValue($expectedResult));
+
+        $mockResponse = m::mock('\Zend\Http\Response');
+
+        $mockRedirectPlugin = m::mock('\Zend\Controller\Plugin\Redirect');
+        $mockRedirectPlugin->shouldReceive('toRoute')->with(
+            'submission',
+            ['action' => 'details', 'submission' => $expectedResult['id']],
+            [],
+            true
+        )->andReturn($mockResponse);
+
+        $mockControllerPluginManager = m::mock('\Zend\Mvc\Controller\PluginManager');
+        $mockControllerPluginManager->shouldReceive('setController')->withAnyArgs();
+        $mockControllerPluginManager->shouldReceive('get')->with('redirect', '')->andReturn($mockRedirectPlugin);
+
+        $this->controller->setPluginManager($mockControllerPluginManager);
+
+        $this->controller->processSave($dataToSave);
+    }
+
+    public function getSubmissionSectionsToSaveProvider()
+    {
+        return array(
+            array(
+                array(
+                    'fields' =>
+                        array(
+                            'submissionSections[submissionType]' => 'sub type 1',
+                            'submissionSections[sections]' => ['section1', 'section2']
+                        )
+                ),
+                array(
+                    'id' => 1
+                )
+            )
+        );
+
     }
 }
