@@ -52,6 +52,10 @@ class DocumentController extends AbstractController
 
     public function downloadTmpAction()
     {
+        // @TODO this effectively maps straight to the content store filename
+        // this isn't ideal because it means we don't know what filename to
+        // give the temporary document, and we don't really want to be
+        // exposing underlying identifiers
         $filePath = $this->params()->fromRoute('path');
         $fullPath = self::TMP_STORAGE_PATH . '/' . $filePath;
 
@@ -185,4 +189,8 @@ class DocumentController extends AbstractController
         return $this->tmpData;
     }
 
+    protected function formatFilename($input)
+    {
+        return str_replace(' ', '_', $input);
+    }
 }

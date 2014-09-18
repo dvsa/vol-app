@@ -83,23 +83,19 @@ class DocumentUploadController extends DocumentController
         );
 
         $templateName = $template['description'];
-        $fileExt = 'rtf';
-        $fileName = str_replace(
-            ' ',
-            '_',
-            date('YmdHi') . '_' . $templateName . '.' . $fileExt
-        );
+        $fileName = date('YmdHi') . '_' . $this->formatFilename($templateName) . '.rtf';
 
         $data = [
             'identifier'          => $filename,
             'description'         => $templateName,
-            'licence'             => $this->params()->fromRoute('licence'),
+            'licence'             => $this->params('licence'),
             'filename'            => $fileName,
-            'fileExtension'       => strtoupper($fileExt),
+            'fileExtension'       => 'doc_rtf',
             'category'            => $data['details']['category'],
             'documentSubCategory' => $data['details']['documentSubCategory'],
             'isDigital'           => true,
             'isReadOnly'          => true,
+            'issuedDate'          => date('Y-m-d H:i:s'),
             'size'                => 0  // @TODO fetch from $file
         ];
 
@@ -113,7 +109,7 @@ class DocumentUploadController extends DocumentController
 
         return $this->redirect()->toRoute(
             $this->params('type') . '/documents',
-            $this->params()->toArray()
+            $this->params()->fromRoute()
         );
     }
 }

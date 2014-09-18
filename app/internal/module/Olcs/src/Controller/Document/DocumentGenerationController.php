@@ -84,14 +84,6 @@ class DocumentGenerationController extends DocumentController
     {
         $form = $this->generateForm('generate-document', 'processGenerate');
 
-        // @NOTE: yes, this will be called automagically when POSTing the
-        // form, but we also need it when rendering via a GET too because
-        // it actually populates our default category / sub cat / template
-        // values as well
-        /*
-        $form = $this->alterFormBeforeValidation($form);
-         */
-
         $view = new ViewModel(
             [
                 'form' => $form,
@@ -169,13 +161,12 @@ class DocumentGenerationController extends DocumentController
         $uploader->setFile($file);
         $filename = $uploader->upload(self::TMP_STORAGE_PATH);
 
+        $redirectParams = $this->params()->fromRoute();
+        $redirectParams['tmpId'] = $filename;
+
         return $this->redirect()->toRoute(
             $this->params('type') . '/documents/finalise',
-            [
-                // @TODO remove hard coded reference
-                'licence' => $this->params()->fromRoute('licence'),
-                'tmpId'   => $filename
-            ]
+            $redirectParams
         );
     }
 
