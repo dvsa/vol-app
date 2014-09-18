@@ -11,8 +11,8 @@ use Olcs\Service\Data\PublicInquiryReason;
 class PublicInquiryReasonTest extends \PHPUnit_Framework_TestCase
 {
     private $reasons = [
-        ['id' => 12, 'sectionCode' => 'Section A'],
-        ['id' => 15, 'sectionCode' => 'Section C'],
+        ['id' => 12, 'sectionCode' => 'Section A', 'description' => 'Description 1'],
+        ['id' => 15, 'sectionCode' => 'Section C', 'description' => 'Description 2'],
     ];
 
     public function testFetchPublicInquiryReasonData()
@@ -64,7 +64,32 @@ class PublicInquiryReasonTest extends \PHPUnit_Framework_TestCase
         $sut->setLicenceService($mockLicenceService);
         $sut->setData('pid', $this->reasons);
 
-        $this->assertEquals([12 => 'Section A', 15 => 'Section C'], $sut->fetchListOptions([]));
+        $this->assertEquals([12 => 'Description 1', 15 => 'Description 2'], $sut->fetchListOptions([]));
+    }
+
+    public function testFetchListOptionsWoithGroups()
+    {
+        $mockLicenceService = $this->getMock('\Olcs\Service\Data\Licence');
+        $mockLicenceService->expects($this->once())
+            ->method('fetchLicenceData')
+            ->willReturn(['niFlag'=> true, 'goodsOrPsv' => ['id'=>'lcat_gv']]);
+
+        $sut = new PublicInquiryReason();
+        $sut->setLicenceService($mockLicenceService);
+        $sut->setData('pid', $this->reasons);
+
+        $expected = [
+            'Section A' => [
+                'label' => 'Section A',
+                'options' => [12 => 'Description 1']
+            ],
+            'Section C' => [
+                'label' => 'Section C',
+                'options'=>[15 => 'Description 2']
+            ]
+        ];
+
+        $this->assertEquals($expected, $sut->fetchListOptions([], true));
     }
 
     public function testFetchListOptionsEmpty()
