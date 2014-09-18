@@ -16,16 +16,44 @@ class BusDetailsStopController extends BusDetailsController
 {
     protected $item = 'stop';
 
-    /**
-     * Index action
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
-    public function indexAction()
-    {
-        $view = $this->getViewWithBusReg();
+    /* properties required by CrudAbstract */
+    protected $formName = 'bus-reg-stop';
 
-        $view->setTemplate('licence/bus/index');
-        return $this->renderView($view);
+    /**
+     * Data map
+     *
+     * @var array
+     */
+    protected $dataMap = array(
+        'main' => array(
+            'mapFrom' => array(
+                'fields',
+            )
+        )
+    );
+
+    /**
+     * Holds the Data Bundle
+     *
+     * @var array
+     */
+    protected $dataBundle = array(
+        'children' => array(
+            'subsidised' => array(
+                'id'
+            )
+        )
+    );
+
+
+
+    public function redirectToIndex()
+    {
+        return $this->redirectToRoute(
+            null,
+            ['action'=>'edit'],
+            ['code' => '303'], // Why? No cache is set with a 303 :)
+            true
+        );
     }
 }

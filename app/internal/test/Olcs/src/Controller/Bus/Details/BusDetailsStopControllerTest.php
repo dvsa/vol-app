@@ -19,44 +19,30 @@ class BusDetailsStopControllerTest extends AbstractHttpControllerTestCase
     public function setUp()
     {
         $this->setApplicationConfig(
-            include __DIR__.'/../../../../../../config/application.config.php'
+            include __DIR__ . '/../../../../../../config/application.config.php'
         );
 
         $this->controller = $this->getMock(
             '\Olcs\Controller\Bus\Details\BusDetailsStopController',
             array(
-                'getViewWithBusReg',
-                'renderView'
-            )
-        );
-
-        $this->view = $this->getMock(
-            '\Zend\View\Model\ViewModel',
-            array(
-                'setTemplate'
+                'redirectToRoute'
             )
         );
 
         parent::setUp();
     }
 
-    /**
-     * Placeholder unit test for index action
-     */
-    public function testIndexAction()
+    public function testRedirectToIndex()
     {
         $this->controller->expects($this->once())
-            ->method('getViewWithBusReg')
-            ->will($this->returnValue($this->view));
+            ->method('redirectToRoute')
+            ->with(
+                $this->equalTo(null),
+                $this->equalTo(['action'=>'edit']),
+                $this->equalTo(['code' => '303']),
+                $this->equalTo(true)
+            );
 
-        $this->view->expects($this->once())
-            ->method('setTemplate')
-            ->with('licence/bus/index');
-
-        $this->controller->expects($this->once())
-            ->method('renderView')
-            ->with($this->view);
-
-        $this->controller->indexAction();
+        $this->controller->redirectToIndex();
     }
 }
