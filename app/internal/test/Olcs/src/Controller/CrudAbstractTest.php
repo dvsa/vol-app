@@ -225,6 +225,99 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
     }
 
     /**
+     * Isolatied test for the add action method calls the saveThis method.
+     */
+    public function testAddEditAction()
+    {
+        $sut = $this->getSutForIsolatedTest(['saveThis']);
+        $sut->expects($this->exactly(2))
+            ->method('saveThis')
+            ->will($this->returnValue('saveThis'));
+
+        $this->assertEquals('saveThis', $sut->addAction());
+        $this->assertEquals('saveThis', $sut->editAction());
+    }
+
+    /**
+     * Isolated test for the redirect action method.
+     */
+    public function redirectAction()
+    {
+        $redirect = $this->getMock('stdClass', 'toRoute');
+        $redirect->expects($this->once())
+                 ->method('toRoute')
+                 ->will($this->returnValue('toRoute'));
+
+        $sut = $this->getSutForIsolatedTest(['redirect']);
+        $sut->expects($this->once())
+            ->method('redirect')
+            ->will($this->returnValue($redirect));
+
+        $this->assertEquals('toRoute', $sut->redirectAction());
+    }
+
+    /**
+     * Isolated test for replaceIds method.
+     */
+    public function testReplaceIds()
+    {
+        $sut = $this->getSutForIsolatedTest(null);
+
+        $idsToConvert = ['case'];
+
+        $data = [
+            'case' => [
+                'id' => '1',
+                'name' => 'hello'
+            ],
+            'licence' => [
+                'id' => '2',
+                'name' => 'hello licence'
+            ],
+            'id' => '2',
+            'name' => 'top'
+        ];
+
+        $expected = array(
+            'case' => '1',
+            'licence' => [
+                'id' => '2',
+                'name' => 'hello licence'
+            ],
+            'id' => '2',
+            'name' => 'top'
+        );
+
+        $this->assertEquals($expected, $sut->replaceIds($data, $idsToConvert));
+    }
+
+    /**
+     * Isolated test for Set Navigation to Current Location functionality.
+     */
+    public function testSetNavigationCurrentLocation()
+    {
+        $page = new \Zend\Navigation\Page\Uri();
+        $page->setUri('/url-test');
+        $page->setId('nav-id-test');
+
+        $sut = $this->getSutForIsolatedTest(null);
+
+        $nav = new \Zend\Navigation\Navigation();
+        $nav->addPage($page);
+
+        $sl = new \Zend\ServiceManager\ServiceManager();
+        $sl->setService('Navigation', $nav);
+
+        $sut->setServiceLocator($sl);
+
+        $sut->setNavigationId('nav-id-test');
+
+        $this->assertTrue($sut->setNavigationCurrentLocation());
+
+        $this->assertEquals('nav-id-test', $sut->getServiceLocator()->get('Navigation')->findOneBy('active', 1)->getId());
+    }
+
+    /**
      * Get a new SUT. Also tests that all the required abstracts
      * traits and interfaces are present.
      *

@@ -353,6 +353,19 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     }
 
     /**
+     * Sets the navigation Id. Usually, this would be set as the default
+     * value in a child controller, however, we need to re set it in places.
+     *
+     * @param unknown $navigationId
+     * @return \Olcs\Controller\CrudAbstract
+     */
+    public function setNavigationId($navigationId)
+    {
+        $this->navigationId = $navigationId;
+        return $this;
+    }
+
+    /**
      * Gets a variable from the route
      *
      * @param string $param
