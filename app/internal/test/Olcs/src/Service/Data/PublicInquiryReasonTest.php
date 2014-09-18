@@ -11,8 +11,8 @@ use Olcs\Service\Data\PublicInquiryReason;
 class PublicInquiryReasonTest extends \PHPUnit_Framework_TestCase
 {
     private $reasons = [
-        ['id' => 12, 'sectionCode' => 'Section A'],
-        ['id' => 15, 'sectionCode' => 'Section C'],
+        ['id' => 12, 'sectionCode' => 'Section A', 'description' => 'Description 1'],
+        ['id' => 15, 'sectionCode' => 'Section C', 'description' => 'Description 2'],
     ];
 
     public function testFetchPublicInquiryReasonData()
@@ -30,9 +30,9 @@ class PublicInquiryReasonTest extends \PHPUnit_Framework_TestCase
         $sut = new PublicInquiryReason();
         $sut->setRestClient($mockRestClient);
 
-        $this->assertEquals($this->reasons, $sut->fetchPublicInquiryReasonData([]));
+        $this->assertEquals($this->reasons, $sut->fetchPublicInquiryData([]));
         //test data is cached
-        $this->assertEquals($this->reasons, $sut->fetchPublicInquiryReasonData([]));
+        $this->assertEquals($this->reasons, $sut->fetchPublicInquiryData([]));
     }
 
     public function testFetchPublicInquiryReasonDataFailure()
@@ -48,25 +48,96 @@ class PublicInquiryReasonTest extends \PHPUnit_Framework_TestCase
         $sut = new PublicInquiryReason();
         $sut->setRestClient($mockRestClient);
 
-        $this->assertEquals(false, $sut->fetchPublicInquiryReasonData([]));
+        $this->assertEquals(false, $sut->fetchPublicInquiryData([]));
         //test failure isn't retried
-        $this->assertEquals(false, $sut->fetchPublicInquiryReasonData([]));
+        $this->assertEquals(false, $sut->fetchPublicInquiryData([]));
     }
 
     public function testFetchListOptions()
     {
-        $sut = new PublicInquiryReason();
-        $sut->setData('pir', $this->reasons);
+        $mockLicenceService = $this->getMock('\Olcs\Service\Data\Licence');
+        $mockLicenceService->expects($this->once())
+            ->method('fetchLicenceData')
+            ->willReturn(['niFlag'=> true, 'goodsOrPsv' => ['id'=>'lcat_gv']]);
 
-        $this->assertEquals([12 => 'Section A', 15 => 'Section C'], $sut->fetchListOptions([]));
+        $sut = new PublicInquiryReason();
+        $sut->setLicenceService($mockLicenceService);
+        $sut->setData('pid', $this->reasons);
+
+        $this->assertEquals([12 => 'Description 1', 15 => 'Description 2'], $sut->fetchListOptions([]));
+    }
+
+    public function testFetchListOptionsWoithGroups()
+    {
+        $mockLicenceService = $this->getMock('\Olcs\Service\Data\Licence');
+        $mockLicenceService->expects($this->once())
+            ->method('fetchLicenceData')
+            ->willReturn(['niFlag'=> true, 'goodsOrPsv' => ['id'=>'lcat_gv']]);
+
+        $sut = new PublicInquiryReason();
+        $sut->setLicenceService($mockLicenceService);
+        $sut->setData('pid', $this->reasons);
+
+        $expected = [
+            'Section A' => [
+                'label' => 'Section A',
+                'options' => [12 => 'Description 1']
+            ],
+            'Section C' => [
+                'label' => 'Section C',
+                'options'=>[15 => 'Description 2']
+            ]
+        ];
+
+        $this->assertEquals($expected, $sut->fetchListOptions([], true));
     }
 
     public function testFetchListOptionsEmpty()
     {
+        $mockLicenceService = $this->getMock('\Olcs\Service\Data\Licence');
+        $mockLicenceService->expects($this->once())
+            ->method('fetchLicenceData')
+            ->willReturn(['niFlag'=> true, 'goodsOrPsv' => ['id'=>'lcat_gv']]);
+
         $sut = new PublicInquiryReason();
-        $sut->setData('pir', false);
+        $sut->setLicenceService($mockLicenceService);
+        $sut->setData('pid', false);
 
         $this->assertEquals([], $sut->fetchListOptions([]));
+    }
 
+    public function testCreateService()
+    {
+        $mockLicenceService = $this->getMock('\Olcs\Service\Data\Licence');
+        $mockTranslator = $this->getMock('stdClass', ['getLocale']);
+        $mockTranslator->expects($this->once())->method('getLocale')->willReturn('en_GB');
+
+        $mockRestClient = $this->getMock('\Common\Util\RestClient', [], [], '', 0);
+        $mockRestClient->expects($this->once())->method('setLanguage')->with($this->equalTo('en_GB'));
+
+        $mockApiResolver = $this->getMock('stdClass', ['getClient']);
+        $mockApiResolver
+            ->expects($this->once())
+            ->method('getClient')
+            ->with($this->equalTo('Reason'))
+            ->willReturn($mockRestClient);
+
+        $mockSl = $this->getMock('\Zend\ServiceManager\ServiceManager');
+        $mockSl->expects($this->any())
+            ->method('get')
+            ->willReturnMap(
+                [
+                    ['translator', true, $mockTranslator],
+                    ['ServiceApiResolver', true, $mockApiResolver],
+                    ['Olcs\Service\Data\Licence', true, $mockLicenceService]
+                ]
+            );
+
+        $sut = new PublicInquiryReason();
+        $service = $sut->createService($mockSl);
+
+        $this->assertInstanceOf('\Olcs\Service\Data\PublicInquiryReason', $service);
+        $this->assertSame($mockRestClient, $service->getRestClient());
+        $this->assertSame($mockLicenceService, $service->getLicenceService());
     }
 }
