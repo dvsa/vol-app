@@ -18,8 +18,23 @@ class DocumentGenerationController extends DocumentController
 {
     const EMPTY_LABEL = 'Please select';
 
+    const DEFAULT_CATEGORY = 'Licensing';   // @TODO not related to this controller
+
     protected function alterFormBeforeValidation($form)
     {
+        $categories = $this->getListData(
+            'Category',
+            ['isDocCategory' => true],
+            'description',
+            'id',
+            false
+        );
+
+        $defaultData = [
+            'details' => [
+                'category' => array_search(self::DEFAULT_CATEGORY, $categories)
+            ]
+        ];
         $data = [];
         $filters = [];
         $subCategories = ['' => self::EMPTY_LABEL];
@@ -32,15 +47,16 @@ class DocumentGenerationController extends DocumentController
             $this->getUploader()->remove($this->getTmpPath());
         }
 
+        $data = array_merge($defaultData, $data);
+
         $details = isset($data['details']) ? $data['details'] : [];
 
-        if (isset($details['category'])) {
-            $filters['category'] = $details['category'];
-            $subCategories = $this->getListData(
-                'DocumentSubCategory',
-                $filters
-            );
-        }
+        $filters['category'] = $details['category'];
+
+        $subCategories = $this->getListData(
+            'DocumentSubCategory',
+            $filters
+        );
 
         if (isset($details['documentSubCategory'])) {
             $filters['documentSubCategory'] = $details['documentSubCategory'];
@@ -52,10 +68,7 @@ class DocumentGenerationController extends DocumentController
 
         $selects = [
             'details' => [
-                'category' => $this->getListData(
-                    'Category',
-                    ['isDocCategory' => true]
-                ),
+                'category' => $categories,
                 'documentSubCategory' => $subCategories,
                 'documentTemplate' => $docTemplates
             ]
@@ -170,8 +183,8 @@ class DocumentGenerationController extends DocumentController
         );
     }
 
-    protected function getListData($entity, $filters = array(), $titleField = '', $keyField = '', $showAll = '')
+    protected function getListData($entity, $filters = array(), $titleField = '', $keyField = '', $showAll = self::EMPTY_LABEL)
     {
-        return parent::getListData($entity, $filters, 'description', 'id', self::EMPTY_LABEL);
+        return parent::getListData($entity, $filters, 'description', 'id', $showAll);
     }
 }
