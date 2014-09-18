@@ -24,16 +24,28 @@ class CaseAnnualTestHistoryController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $identifierName = 'case';
+    protected $identifierName = 'void';
 
     /**
-     * This property identifies the field in the database for the comments box
-     * to save to. A comments box is automatically added to the index page. If
-     * this property is null or blank then no comments box is rendered.
+     * Table name string
      *
-     * @var unknown
+     * @var string
      */
-    protected $commentBoxDbFieldName = 'athComments';
+    protected $tableName = '';
+
+    /**
+     * Name of comment box field.
+     *
+     * @var string
+     */
+    protected $commentBoxName = 'annualTestHistory';
+
+    /**
+     * Holds the form name
+     *
+     * @var string
+     */
+    protected $formName = 'void';
 
     /**
      * The current page's extra layout, over and above the
@@ -52,16 +64,65 @@ class CaseAnnualTestHistoryController extends OlcsController\CrudAbstract
     protected $pageLayoutInner = 'case/inner-layout';
 
     /**
+     * Holds the service name
+     *
+     * @var string
+     */
+    protected $service = 'Void';
+
+    /**
+     * Holds the navigation ID,
+     * required when an entire controller is
+     * represneted by a single navigation id.
+     */
+    protected $navigationId = 'case_details_annual_test_history';
+
+    /**
+     * Holds an array of variables for the
+     * default index list page.
+     */
+    protected $listVars = [
+        'case',
+    ];
+
+    /**
+     * Data map
+     *
+     * @var array
+    */
+    protected $dataMap = array(
+        'main' => array(
+            'mapFrom' => array(
+                'fields',
+            )
+        )
+    );
+
+    /**
      * Holds the isAction
      *
      * @var boolean
      */
     protected $isAction = false;
 
-    public function buildCommentsBoxIntoView()
-    {
-
-        $commentsBoxForm;
-        $this->setPlaceholder('commentsForm', $commentsBoxForm);
-    }
+    /**
+     * Holds the Data Bundle
+     *
+     * @var array
+    */
+    protected $dataBundle = array(
+        'children' => array(
+            'case' => array(
+                'properties' => array(
+                    'id'
+                )
+            ),
+            'prohibitionType' => array(
+                'properties' => array(
+                    'id',
+                    'description'
+                )
+            )
+        )
+    );
 }

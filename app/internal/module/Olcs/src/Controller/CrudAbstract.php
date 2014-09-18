@@ -19,6 +19,13 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
 {
     use Traits\DeleteActionTrait;
 
+    /**
+     * Name of comment box field.
+     *
+     * @var string
+     */
+    protected $commentBoxName = '';
+
     protected $requiredProperties = [
         'formName',
         'identifierName',
@@ -112,15 +119,18 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
      */
     public function buildTableIntoView()
     {
-        $params = $this->getTableParams();
+        if ($tableName = $this->getTableName()) {
 
-        $data = $this->loadListData($params);
+            $params = $this->getTableParams();
 
-        $data = $this->preProcessTableData($data);
+            $data = $this->loadListData($params);
 
-        $this->getViewHelperManager()->get('placeholder')->getContainer('table')->set(
-            $this->alterTable($this->getTable($this->getTableName(), $data, $params))
-        );
+            $data = $this->preProcessTableData($data);
+
+            $this->getViewHelperManager()->get('placeholder')->getContainer('table')->set(
+                $this->alterTable($this->getTable($tableName, $data, $params))
+            );
+        }
     }
 
     public function loadListData(array $params)
@@ -183,11 +193,6 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     {
         $this->getViewHelperManager()->get('placeholder')
              ->getContainer($namespace)->set($content);
-    }
-
-    public function buildCommentsBoxIntoView()
-    {
-        return null;
     }
 
     /**
@@ -286,7 +291,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
 
         foreach ($this->requiredProperties as $requiredProperty) {
 
-            if (!in_array($requiredProperty, $classProperties) || empty($this->{$requiredProperty})) {
+            if (!in_array($requiredProperty, $classProperties) /* || empty($this->{$requiredProperty}) */) {
 
                 $missingProperties[] = $requiredProperty;
             }
@@ -439,5 +444,52 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
         }
 
         return $data;
+    }
+
+
+    /**
+     * Comments box
+     */
+    public function buildCommentsBoxIntoView()
+    {
+        if ($this->commentBoxName) {
+            $form = $this->generateForm(
+                'comment',
+                'processCommentForm'
+            );
+
+            $case = $this->getCase();
+            $data = [];
+            $data['fields']['id'] = $case['id'];
+            $data['fields']['version'] = $case['version'];
+            $data['fields']['comment'] = $case[$this->commentBoxName];
+
+            $form->setData($form);
+
+            $this->setPlaceholder('comments', $form);
+        }
+    }
+
+    /**
+     * Setter for field name for comment box.
+     *
+     * @param string $commentBoxName
+     *
+     * @return \Olcs\Controller\CrudAbstract
+     */
+    public function setCommentBoxName($commentBoxName)
+    {
+        $this->commentBoxName = $commentBoxName;
+        return $this;
+    }
+
+    public function processCommentForm($data)
+    {
+        $update = [];
+        $update['id'] = $data['fields']['id'];
+        $update['version'] = $data['fields']['version'];
+        $update[$this->commentBoxName] = $data['fields']['comment'];
+
+        $this->save($update, 'Case');
     }
 }

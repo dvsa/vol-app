@@ -35,6 +35,13 @@ class ProhibitionController extends OlcsController\CrudAbstract
     protected $tableName = 'prohibition';
 
     /**
+     * Name of comment box field.
+     *
+     * @var string
+     */
+    protected $commentBoxName = 'prohibitionNote';
+
+    /**
      * Holds the form name
      *
      * @var string
