@@ -326,7 +326,7 @@ return array_merge(
                                 'route' => '/stop',
                                 'defaults' => [
                                     'controller' => 'BusDetailsStopController',
-                                    'action' => 'index',
+                                    'action' => 'edit',
                                 ]
                             ],
                         ],
