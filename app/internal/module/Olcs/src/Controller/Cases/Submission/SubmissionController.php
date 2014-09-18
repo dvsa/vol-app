@@ -135,21 +135,6 @@ class SubmissionController extends OlcsController\CrudAbstract
     }
 
     /**
-     * Save data. Also processes the submit submission select type drop down
-     * in order to dictate which checkboxes to manipulate.
-     *
-     * @param array $data
-     * @param string $service
-     * @return array
-     */
-    public function editAction()
-    {
-        // Modify $data
-
-        return parent::editAction();
-    }
-
-    /**
      * Override Save data to allow json encoding of submission sections
      * into submission 'text' field.
      *
