@@ -208,9 +208,12 @@ return array_merge(
                             ]
                         ],
                         'operating_centre' => [
-                            'type' => 'literal',
+                            'type' => 'segment',
                             'options' => [
-                                'route' => '/operating_centres',
+                                'route' => '/operating_centres[/:action][/:id]',
+                                'contraints' => [
+                                    'id' => '[0-9]+'
+                                ],
                                 'defaults' => [
                                     'controller' => 'LicenceDetailsOperatingCentreController',
                                     'action' => 'index',

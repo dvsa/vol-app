@@ -17,6 +17,11 @@ class OperatingCentreController extends AbstractLicenceDetailsController
     use Traits\OperatingCentre\GenericLicenceAuthorisationSection;
 
     /**
+     * Northern Ireland Traffic Area Code
+     */
+    const NORTHERN_IRELAND_TRAFFIC_AREA_CODE = 'N';
+
+    /**
      * Set the form name
      *
      * @var string
@@ -28,5 +33,5 @@ class OperatingCentreController extends AbstractLicenceDetailsController
      *
      * @var string
      */
-    protected $section = 'operating_centres';
+    protected $section = 'operating_centre';
 }
