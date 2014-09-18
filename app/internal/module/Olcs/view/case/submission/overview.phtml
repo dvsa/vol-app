@@ -6,9 +6,11 @@ $sectionData = $this->placeholder('sectionData')->getValue();
 ?>
 
 <div class="read-only">
-    Submission details <?php echo $this->foo;?>
+    Submission <?php echo $submission['id']; ?>
+    <a href="<?php echo $this->url('submission', ['case' => $case['id'], 'action' => 'edit', 'submission' => $submission['id']]);?>">Edit submission</a>
 </div>
 <?php
+
 foreach ($sectionData as $section) {
 ?>
 
