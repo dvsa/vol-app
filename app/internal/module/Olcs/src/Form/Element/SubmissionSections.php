@@ -114,7 +114,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
         $m_sections = $this->getMandatorySections();
 
         foreach ($m_sections as $m_key) {
-            $sections[$m_key] = ['label' => $sections[$m_key], 'selected' => 'selected', 'disabled' => true];
+            $sections[$m_key] = ['label' => $sections[$m_key], 'selected' => 'seleected', 'disabled' => true];
         }
         $this->getSections()->setValueOptions($sections);
         $this->getSections()->setOptions(['label_position'=>'append']);
@@ -138,10 +138,21 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
 
         if (isset($value['submissionType'])) {
 
-            if (!(isset($value['sections']))) {
-                $sections = $this->getPreselectedSectionsForType($value['submissionType']);
+            if (isset($value['submissionTypeSubmit'])) {
+                if (!(isset($value['sections']))) {
+                    // no sections set so just add preselected
+                    $sections = $this->getPreselectedSectionsForType($value['submissionType']);
+                } else {
+                    // merge preselected with those already selected
+                    $sections = array_merge($value['sections'], $this->getPreselectedSectionsForType($value['submissionType']));
+                }
             } else {
-                $sections = $value['sections'];
+                // type not submitted
+                if (!(isset($value['sections']))) {
+                    $sections = $this->getPreselectedSectionsForType($value['submissionType']);
+                } else {
+                    $sections = $value['sections'];
+                }
             }
         }
 
