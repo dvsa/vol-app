@@ -23,15 +23,14 @@ class PublicInquiryDefinition extends AbstractPublicInquiryData
         $optionData = [];
 
         foreach ($data as $datum) {
-            if (isset($datum['category'])) {
-                $groups[$datum['category']][] = $datum;
-            } else {
-                $optionData[$datum['id']] = ['label' => $datum['sectionCode'], 'options' => []];
+            if (isset($datum['piDefinitionCategory'])) {
+                $groups[$datum['piDefinitionCategory']][] = $datum;
             }
         }
 
         foreach ($groups as $parent => $groupData) {
             $optionData[$parent]['options'] = $this->formatData($groupData);
+            $optionData[$parent]['label'] = $parent;
         }
         return $optionData;
     }

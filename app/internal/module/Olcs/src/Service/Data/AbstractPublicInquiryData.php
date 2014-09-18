@@ -64,6 +64,8 @@ abstract class AbstractPublicInquiryData extends AbstractData implements ListDat
     {
         $context = empty($context)? $this->getLicenceContext() : $context;
         $context['bundle'] = json_encode(['properties' => 'ALL']);
+        $context['limit'] = 1000;
+        $context['order'] = 'sectionCode';
 
         $data = $this->fetchPublicInquiryData($context);
         $ret = [];
@@ -121,14 +123,31 @@ abstract class AbstractPublicInquiryData extends AbstractData implements ListDat
         $optionData = [];
 
         foreach ($data as $datum) {
-            $optionData[$datum['id']] = $datum['sectionCode'];
+            $optionData[$datum['id']] = $datum['description'];
         }
 
         return $optionData;
     }
 
+    /**
+     * @param $data
+     * @return array
+     */
     public function formatDataForGroups($data)
     {
-        return $this->formatData($data);
+        $groups = [];
+        $optionData = [];
+
+        foreach ($data as $datum) {
+            if (isset($datum['sectionCode'])) {
+                $groups[$datum['sectionCode']][] = $datum;
+            }
+        }
+
+        foreach ($groups as $parent => $groupData) {
+            $optionData[$parent]['options'] = $this->formatData($groupData);
+            $optionData[$parent]['label'] = $parent;
+        }
+        return $optionData;
     }
 }

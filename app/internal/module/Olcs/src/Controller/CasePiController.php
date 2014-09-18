@@ -55,7 +55,16 @@ class CasePiController extends CaseController implements CrudInterface
                     ],
                 ],
             ),
-            'decisionPresidingTc' => array(
+            'decidedByTc' => array(
+                'properties' => 'ALL'
+            ),
+            'agreedByTc' => array(
+                'properties' => 'ALL'
+            ),
+            'decidedByTcRole' => array(
+                'properties' => 'ALL'
+            ),
+            'agreedByTcRole' => array(
                 'properties' => 'ALL'
             ),
             'decisions' => array(
@@ -67,9 +76,7 @@ class CasePiController extends CaseController implements CrudInterface
             'case' => array(
                 'properties' => ['id']
             ),
-            'presidedByRole' => array(
-                'properties' => ['id']
-            )
+
         ]
     ];
 

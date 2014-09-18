@@ -9,17 +9,14 @@
 
     <?php
 
-    // Latest hearing.
-    $hearing = end($pi['piHearings']);
-
     $summary = [
         'decisionPresidingTc' => [
             'label' => 'Presiding commissioner / regulator',
-            'value' => $hearing['presidingTc']['name']
+            'value' => $pi['decidedByTc']['name']
         ],
         'presidedByRole' => [
             'label' => 'Presiding commissioner / regulator role',
-            'value' => $this->translate($hearing['presidedByRole']['id'])
+            'value' => $pi['decidedByTcRole']['description']
         ],
         'decisionType' => [
             'label' => 'Decision',

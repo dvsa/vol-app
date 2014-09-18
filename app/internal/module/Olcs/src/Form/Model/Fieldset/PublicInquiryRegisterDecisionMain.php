@@ -12,7 +12,7 @@ use Zend\Form\Annotation as Form;
 class PublicInquiryRegisterDecisionMain
 {
     /**
-     * @Form\Attributes({"class":"","id":"", "readonly":true})
+     * @Form\Attributes({"class":"","id":"", "disabled":true})
      * @Form\Options({"label":"PI number"})
      * @Form\Required(false)
      * @Form\Type("Text")
@@ -20,7 +20,7 @@ class PublicInquiryRegisterDecisionMain
     public $piNumber = null;
 
     /**
-     * @Form\Attributes({"id":"","placeholder":"","class":"medium", "readonly":true})
+     * @Form\Attributes({"id":"","placeholder":"","class":"medium", "disabled":true})
      * @Form\Options({
      *     "label": "Venue",
      *     "value_options": {
@@ -30,12 +30,13 @@ class PublicInquiryRegisterDecisionMain
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a category"
      * })
+     * @Form\Required(false)
      * @Form\Type("\Zend\Form\Element\Select")
      */
     public $venue = null;
 
     /**
-     * @Form\Attributes({"class":"long","id":"", "readonly":true})
+     * @Form\Attributes({"class":"long","id":"", "disabled":true})
      * @Form\Options({"label":"Other venue"})
      * @Form\Required(false)
      * @Form\Type("Text")
@@ -43,13 +44,14 @@ class PublicInquiryRegisterDecisionMain
     public $otherVenue = null;
 
     /**
-     * @Form\Attributes({"id":"dob","class":"long", "readonly":true})
+     * @Form\Attributes({"id":"dob","class":"long", "disabled":true})
      * @Form\Options({
      *     "label": "Date of PI",
      *     "create_empty_option": false,
      *     "render_delimiters": "d m y"
      * })
      * @Form\Type("Common\Form\Elements\Custom\DateSelect")
+     * @Form\Required(false)
      */
     public $piDate = null;
 
@@ -64,7 +66,7 @@ class PublicInquiryRegisterDecisionMain
      * })
      * @Form\Type("DynamicSelect")
      */
-    public $presidingTc = null;
+    public $decidedByTc = null;
 
     /**
      * @Form\Attributes({"id":"","placeholder":"","class":"medium"})
@@ -77,32 +79,32 @@ class PublicInquiryRegisterDecisionMain
      * })
      * @Form\Type("DynamicSelect")
      */
-    public $presidingRole = null;
+    public $decidedByTcRole = null;
 
     /**
-     * @Form\Attributes({"class":"medium","id":"", "readonly":true, "multiple" : true})
+     * @Form\Attributes({"class":"long tall", "id":"", "disabled":true, "multiple" : true})
      * @Form\Required(false)
      * @Form\Options({
      *     "label":"Reason for PI",
      *     "service_name": "Olcs\Service\Data\PublicInquiryReason",
-     *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category"
+     *     "help-block": "Please select a category",
+     *     "use_groups":true
      * })
      * @Form\Type("DynamicSelect")
      */
     public $reasons = null;
 
     /**
-     * @Form\Attributes({"id":"","placeholder":"","class":"medium", "multiple" : true})
+     * @Form\Attributes({"id":"","placeholder":"","class":"long tall",  "multiple" : true})
      * @Form\Options({
      *     "label": "Decisions",
      *     "service_name": "Olcs\Service\Data\PublicInquiryDecision",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category"
+     *     "help-block": "Please select a category",
+     *     "use_groups":true
      * })
      * @Form\Type("DynamicSelect")
-     * @Form\Required(true)
      * @Form\AllowEmpty(true)
      * @Form\Input("\Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Validator({
@@ -147,7 +149,7 @@ class PublicInquiryRegisterDecisionMain
      * @Form\Attributes({"id":"dob"})
      * @Form\Options({
      *     "label": "Date of notification",
-     *     "create_empty_option": false,
+     *     "create_empty_option": true,
      *     "render_delimiters": "d m y"
      * })
      * @Form\Required(false)
@@ -158,7 +160,7 @@ class PublicInquiryRegisterDecisionMain
     public $notificationDate = null;
 
     /**
-     * @Form\Attributes({"id":"","placeholder":"","class":"large", "multiple":true})
+     * @Form\Attributes({"id":"","placeholder":"","class":"long tall", "multiple":true})
      * @Form\Options({
      *     "label": "Definition",
      *     "disable_inarray_validator": false,
@@ -167,6 +169,7 @@ class PublicInquiryRegisterDecisionMain
      *     "use_groups": true
      * })
      * @Form\Type("DynamicSelect")
+     * @Form\Required(false)
      */
     public $definition = null;
 
@@ -185,7 +188,7 @@ class PublicInquiryRegisterDecisionMain
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5,"max":4000}})
      */
-    public $detailsToBePublished = null;
+    public $decisionNotes = null;
 
     /**
      * @Form\Attributes({"value":""})

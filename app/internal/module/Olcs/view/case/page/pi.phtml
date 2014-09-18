@@ -10,19 +10,19 @@
             if (isset($pi['piHearings']) && !empty($pi['piHearings'])):
                 echo $this->render('case/page/partials/pi-hearings.phtml', array('pi' => $pi, 'table' => $piTable));
             else:
-                echo $this->render('case/page/partials/pi-empty.phtml', array('heading' => 'Hearing', 'route' => 'case_pi_action', 'section' => 'hearing'));
+                echo $this->render('case/page/partials/pi-empty.phtml', array('heading' => 'Hearing', 'route' => 'case_pi_action', 'section' => 'hearing', 'id'=>$pi['id']));
             endif;
 
             if (isset($pi['decisionDate']) && !empty($pi['decisionDate'])):
                 echo $this->render('case/page/partials/pi-decision.phtml', array('pi' => $pi));
             else:
-                echo $this->render('case/page/partials/pi-empty.phtml', array('heading' => 'Decision', 'route' => 'case_pi_action', 'section' => 'decision'));
+                echo $this->render('case/page/partials/pi-empty.phtml', array('heading' => 'Decision', 'route' => 'case_pi_action', 'section' => 'decision', 'id'=>$pi['id']));
             endif;
 
             if (false):
                 echo $this->render('case/page/partials/pi-sla.phtml', array('pi' => $pi));
             else:
-                echo $this->render('case/page/partials/pi-empty.phtml', array('heading' => 'Service level agreement', 'route' => 'case_pi_action', 'section' => 'sla'));
+                echo $this->render('case/page/partials/pi-empty.phtml', array('heading' => 'Service level agreement', 'route' => 'case_pi_action', 'section' => 'sla', 'id'=>$pi['id']));
             endif;
 
         else:
