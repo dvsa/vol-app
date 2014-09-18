@@ -18,7 +18,8 @@ class PublicInquiryAgreedAndLegislationMain
      *     "create_empty_option": false,
      *     "render_delimiters": "d m y"
      * })
-     * @Form\Type("Common\Form\Elements\Custom\DateSelect")
+     * @Form\Type("DateSelect")
+     * @Form\Filter({"name": "DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $agreedDate = null;
