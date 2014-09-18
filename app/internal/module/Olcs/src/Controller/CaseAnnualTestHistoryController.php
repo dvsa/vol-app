@@ -8,84 +8,60 @@
 
 namespace Olcs\Controller;
 
+// Olcs
+use Olcs\Controller as OlcsController;
+use Olcs\Controller\Traits as ControllerTraits;
+
 /**
  * Case Prohibition Controller
  */
-class CaseAnnualTestHistoryController extends CaseController
+class CaseAnnualTestHistoryController extends OlcsController\CrudAbstract
 {
-    protected $case;
+    use ControllerTraits\CaseControllerTrait;
 
     /**
-     * Index action loads the form data
+     * Identifier name
      *
-     * @return \Zend\View
+     * @var string
      */
-    public function indexAction()
-    {
-        $caseId = $this->fromRoute('case');
-        $licence = $this->fromRoute('licence');
-
-        $case = $this->getCase($caseId);
-
-        $form = $this->generateAnnualTestHistoryForm($case);
-
-        $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licence)));
-
-        $view = $this->getView();
-        $tabs = $this->getTabInformationArray();
-
-        $summary = $this->getCaseSummaryArray($case);
-
-        $view->setVariables(
-            [
-                'case' => $case,
-                'tabs' => $tabs,
-                'tab' => 'annual_test_history',
-                'summary' => $summary,
-                'commentForm' => $form,
-            ]
-        );
-
-        $view->setTemplate('case/manage');
-        return $view;
-    }
+    protected $identifierName = 'case';
 
     /**
-     * Creates and returns the prohibition form.
+     * This property identifies the field in the database for the comments box
+     * to save to. A comments box is automatically added to the index page. If
+     * this property is null or blank then no comments box is rendered.
      *
-     * @param array $prohibition
-     * @return \Zend\Form
+     * @var unknown
      */
-    protected function generateAnnualTestHistoryForm($case)
-    {
-        $data = [];
-        $data['main'] = $case;
-
-        $form = $this->generateForm(
-            'annual-test-history-comment',
-            'saveAnnualTestHistoryForm'
-        );
-        $form->setData($data);
-
-        return $form;
-    }
+    protected $commentBoxDbFieldName = 'athComments';
 
     /**
-     * Saves the penalty form.
+     * The current page's extra layout, over and above the
+     * standard base template, a sibling of the base though.
      *
-     * @param array $data
+     * @var string
      */
-    public function saveAnnualTestHistoryForm($data)
+    protected $pageLayout = 'case';
+
+    /**
+     * For most case crud controllers, we use the case/inner-layout
+     * layout file. Except submissions.
+     *
+     * @var string
+     */
+    protected $pageLayoutInner = 'case/inner-layout';
+
+    /**
+     * Holds the isAction
+     *
+     * @var boolean
+     */
+    protected $isAction = false;
+
+    public function buildCommentsBoxIntoView()
     {
-        if (isset($data['main'])) {
-            $data = $data + $data['main'];
-            unset($data['main']);
-        }
 
-        if (!empty($data['id'])) {
-            $this->processEdit($data, 'Cases');
-        }
-
-        return $this->redirect()->toRoute('case_annual_test_history', array(), array(), true);
+        $commentsBoxForm;
+        $this->setPlaceholder('commentsForm', $commentsBoxForm);
     }
 }

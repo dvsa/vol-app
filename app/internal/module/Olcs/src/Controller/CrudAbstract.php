@@ -88,6 +88,8 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
 
         $this->buildTableIntoView();
 
+        $this->buildCommentsBoxIntoView();
+
         $view->setTemplate('crud/index');
 
         return $this->renderView($view);
@@ -181,6 +183,11 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     {
         $this->getViewHelperManager()->get('placeholder')
              ->getContainer($namespace)->set($content);
+    }
+
+    public function buildCommentsBoxIntoView()
+    {
+        return null;
     }
 
     /**
@@ -374,7 +381,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
      */
     public function fromRoute($param, $default = null)
     {
-        return $this->params()->fromRoute($param, $default);
+        return $this->getFromRoute($param, $default);
     }
 
     /**
@@ -386,7 +393,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
      */
     public function fromPost($param, $default = null)
     {
-        return $this->params()->fromPost($param, $default);
+        return $this->getFromPost($param, $default);
     }
 
     /**

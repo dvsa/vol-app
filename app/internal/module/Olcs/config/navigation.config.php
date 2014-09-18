@@ -56,6 +56,13 @@ return array(
                             'use_route_match' => true,
                         ),
                         array(
+                            'id' => 'case_details_annual_test_history',
+                            'label' => 'Annual test history',
+                            'route' => 'case_annual_test_history',
+                            'action' => 'index',
+                            'use_route_match' => true,
+                        ),
+                        array(
                             'id' => 'case_details_prohibitions',
                             'label' => 'Prohibitions',
                             'route' => 'case_prohibition',
@@ -155,22 +162,22 @@ return array(
                 array(
                     'id' => 'case_hearings_appeals',
                     'label' => 'Hearings & appeals',
-                    'route' => 'case',
-                    'action' => 'hearings',
+                    'route' => 'case_hearing_appeal',
+                    'action' => 'index',
                     'use_route_match' => true,
                     'pages' => array(
                         array(
                             'id' => 'case_hearings_appeals_stays',
                             'label' => 'Appeals and stays',
-                            'route' => 'submission',
-                            'action' => 'stays',
+                            'route' => 'case_hearing_appeal',
+                            'action' => 'details',
                             'use_route_match' => true,
                         ),
                         array(
                             'id' => 'case_hearings_appeals_public_inquiry',
                             'label' => 'Public inquiry',
-                            'route' => 'p',
-                            'action' => 'pi',
+                            'route' => 'case_public_inquiry',
+                            'action' => 'details',
                             'use_route_match' => true,
                         ),
                     )
