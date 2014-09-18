@@ -50,7 +50,7 @@ class SubmissionController extends OlcsController\CrudAbstract
      */
     protected $pageLayout = 'case';
 
-    protected $detailsView = 'case/submission/overview';
+    protected $detailsView = 'case/submission/details';
 
     protected $pageLayoutInner = null;
 
