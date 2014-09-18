@@ -34,6 +34,12 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     protected $pageLayoutInner = null;
 
     /**
+     * Holds an array of variables for the
+     * default index list page.
+     */
+    protected $listVars = [];
+
+    /**
      * Holds the isAction
      *
      * @var boolean
@@ -51,6 +57,13 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
         }
     }
 
+    /**
+     * Proxies to the get query or get param.
+     *
+     * @param mixed $name
+     * @param mixed $default
+     * @return mixed
+     */
     public function getQueryOrRouteParam($name, $default = null)
     {
         if ($queryValue = $this->params()->fromQuery($name, $default)) {
@@ -64,6 +77,9 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
         return $default;
     }
 
+    /**
+     * Index Action.
+     */
     public function indexAction()
     {
         $view = $this->getView([]);
@@ -78,11 +94,39 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     }
 
     /**
+     * Returns the listVars property.
+     *
+     * @return array
+     */
+    public function getListVars()
+    {
+        return $this->listVars;
+    }
+
+    /**
      * Builds table into its placeholder.
      *
      * @return void
      */
     public function buildTableIntoView()
+    {
+        $params = $this->getTableParams();
+
+        $data = $this->loadListData($params);
+
+        $data = $this->preProcessTableData($data);
+
+        $this->getViewHelperManager()->get('placeholder')->getContainer('table')->set(
+            $this->alterTable($this->getTable($this->getTableName(), $data, $params))
+        );
+    }
+
+    public function loadListData(array $params)
+    {
+        return $this->makeRestCall($this->getService(), 'GET', $params, $this->getDataBundle());
+    }
+
+    public function getTableParams()
     {
         $params = [
             'page'    => $this->getQueryOrRouteParam('page', 1),
@@ -91,17 +135,12 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
             'limit'   => $this->getQueryOrRouteParam('limit', 10),
         ];
 
-        for($i=0; $i<count($this->listVars); $i++) {
-            $params[$this->listVars[$i]] = $this->getQueryOrRouteParam($this->listVars[$i]);
+        $listVars = $this->getListVars();
+        for($i=0; $i<count($listVars); $i++) {
+            $params[$listVars[$i]] = $this->getQueryOrRouteParam($listVars[$i], null);
         }
 
-        $results = $this->makeRestCall($this->getService(), 'GET', $params, $this->getDataBundle());
-
-        $results = $this->preProcessTableData($results);
-
-        $this->getViewHelperManager()->get('placeholder')->getContainer('table')->set(
-            $this->alterTable($this->getTable($this->getTableName(), $results, $params))
-        );
+        return $params;
     }
 
     /**
@@ -115,6 +154,9 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
         return $data;
     }
 
+    /**
+     * Master details option.
+     */
     public function detailsAction()
     {
         $view = $this->getView([]);
@@ -127,6 +169,18 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
         $view->setTemplate($this->detailsView);
 
         return $this->renderView($view);
+    }
+
+    /**
+     * Sets the view helper placeholder namespaced value.
+     *
+     * @param string $namespace
+     * @param mixed $content
+     */
+    public function setPlaceholder($namespace, $content)
+    {
+        $this->getViewHelperManager()->get('placeholder')
+             ->getContainer($namespace)->set($content);
     }
 
     /**
@@ -149,6 +203,11 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
         return $this->saveThis();
     }
 
+    /**
+     * Simple redirect to details action.
+     *
+     * @return \Zend\Http\Response
+     */
     public function redirectAction()
     {
         return $this->redirect()->toRoute(
@@ -167,7 +226,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
 
         $view = $this->getView();
 
-        $this->getViewHelperManager()->get('placeholder')->getContainer('form')->set($form);
+        $this->setPlaceholder('form', $form);
 
         $view->setTemplate('crud/form');
 
@@ -193,48 +252,9 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
         return $this->redirectToIndex();
     }
 
-    /* public function processDataMapForLoad($oldData, $map = array(), $section = 'main')
-    {
-        if (empty($map)) {
-            return $oldData;
-        }
-
-        if (isset($map['_addresses'])) {
-
-            foreach ($map['_addresses'] as $address) {
-                $oldData = $this->processAddressData($oldData, $address);
-            }
-        }
-
-        if (isset($map[$section]['mapFrom'])) {
-
-            $data = array();
-
-            foreach ($map[$section]['mapFrom'] as $key) {
-
-                if (isset($oldData[$key])) {
-                    $data = array_merge($data, $oldData[$key]);
-                }
-            }
-
-        } else {
-            $data = array();
-        }
-
-        if (isset($map[$section]['children'])) {
-
-            foreach ($map[$section]['children'] as $child => $options) {
-                $data[$child] = $this->processDataMapForSave($oldData, array($child => $options), $child);
-            }
-        }
-
-        if (isset($map[$section]['values'])) {
-            $data = array_merge($data, $map[$section]['values']);
-        }
-
-        return $data;
-    } */
-
+    /**
+     * Simple redirect to index.
+     */
     public function redirectToIndex()
     {
         return $this->redirectToRoute(
@@ -333,6 +353,19 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     }
 
     /**
+     * Sets the navigation Id. Usually, this would be set as the default
+     * value in a child controller, however, we need to re set it in places.
+     *
+     * @param unknown $navigationId
+     * @return \Olcs\Controller\CrudAbstract
+     */
+    public function setNavigationId($navigationId)
+    {
+        $this->navigationId = $navigationId;
+        return $this;
+    }
+
+    /**
      * Gets a variable from the route
      *
      * @param string $param
@@ -390,6 +423,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
                 $data = $this->replaceIds($data, $fields);
             }
             $data['fields'] = $data;
+            $data['base'] = $data;
         } else {
             $data = [];
             $data['case'] = $this->getQueryOrRouteParam('case');

@@ -147,26 +147,6 @@ class CaseController extends AbstractCasesController
         return $this->redirect()->toRoute('case', ['action' => 'overview'], [], true);
     }
 
-    /* public function convictionsAction()
-    {
-        return $this->redirect()->toRoute('case', ['action' => 'overview'], [], true);
-    } */
-
-    /**
-     * Gets the case by ID.
-     *
-     * @param integer $id
-     * @return array
-     */
-    /* public function getCase($id = null)
-    {
-        if (is_null($id)) {
-            $id = $this->getIdentifier();
-        }
-
-        return $this->load($id);
-    } */
-
     /**
      * List of cases. Moved to Licence controller's cases method.
      *
