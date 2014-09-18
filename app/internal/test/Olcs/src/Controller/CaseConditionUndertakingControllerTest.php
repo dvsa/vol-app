@@ -840,7 +840,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
             array(
                 'makeRestCall',
                 'getPluginManager',
-                'buildTable'
+                'getTable'
             )
         );
 
@@ -896,7 +896,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
             ->willReturn($restResults);
 
         $controller->expects($this->once())
-                ->method('buildTable')
+                ->method('getTable')
                 ->with(
                     $this->equalTo('conditions'),
                     $this->equalTo($expectedTableData)
@@ -916,7 +916,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
             array(
                 'makeRestCall',
                 'getPluginManager',
-                'buildTable'
+                'getTable'
             )
         );
 
@@ -966,7 +966,7 @@ class CaseConditionUndertakingControllerTest extends AbstractHttpControllerTestC
             ->willReturn($restResults);
 
         $controller->expects($this->once())
-                ->method('buildTable')
+                ->method('getTable')
                 ->with(
                     $this->equalTo('undertakings'),
                     $this->equalTo($expectedTableData)

@@ -993,6 +993,8 @@ class VehiclePsvControllerTest extends AbstractLicenceDetailsControllerTestCase
         $this->assertInstanceOf('Zend\Http\Response', $response);
     }
 
+
+
     /**
      * Test deleteAction
      */
@@ -1000,6 +1002,25 @@ class VehiclePsvControllerTest extends AbstractLicenceDetailsControllerTestCase
     {
         $this->setUpAction('large-delete', 1);
 
+        $response = $this->controller->largeDeleteAction();
+
+        $form = $this->getFormFromView($response);
+        $this->assertEquals(
+            'vehicle-remove-confirm-label',
+            $form->get('data')->get('id')->getLabel('vehicle-remove-confirm-label')
+        );
+
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+    }
+
+    /**
+     * Test deleteAction
+     */
+    public function testLargeDeleteActionWithSubmit()
+    {
+        $this->setUpAction('large-delete', 1, array('data' => array('id' => 1)));
+
+        $this->controller->setEnabledCsrf(false);
         $response = $this->controller->largeDeleteAction();
 
         $this->assertInstanceOf('Zend\Http\Response', $response);
@@ -1014,6 +1035,25 @@ class VehiclePsvControllerTest extends AbstractLicenceDetailsControllerTestCase
 
         $response = $this->controller->mediumDeleteAction();
 
+        $form = $this->getFormFromView($response);
+        $this->assertEquals(
+            'vehicle-remove-confirm-label',
+            $form->get('data')->get('id')->getLabel('vehicle-remove-confirm-label')
+        );
+
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+    }
+
+    /**
+     * Test deleteAction
+     */
+    public function testMediumDeleteActionWithSubmit()
+    {
+        $this->setUpAction('medium-delete', 1, array('data' => array('id' => 1)));
+
+        $this->controller->setEnabledCsrf(false);
+        $response = $this->controller->mediumDeleteAction();
+
         $this->assertInstanceOf('Zend\Http\Response', $response);
     }
 
@@ -1024,6 +1064,25 @@ class VehiclePsvControllerTest extends AbstractLicenceDetailsControllerTestCase
     {
         $this->setUpAction('small-delete', 1);
 
+        $response = $this->controller->smallDeleteAction();
+
+        $form = $this->getFormFromView($response);
+        $this->assertEquals(
+            'vehicle-remove-confirm-label',
+            $form->get('data')->get('id')->getLabel('vehicle-remove-confirm-label')
+        );
+
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+    }
+
+    /**
+     * Test deleteAction
+     */
+    public function testSmallDeleteActionWithSubmit()
+    {
+        $this->setUpAction('small-delete', 1, array('data' => array('id' => 1)));
+
+        $this->controller->setEnabledCsrf(false);
         $response = $this->controller->smallDeleteAction();
 
         $this->assertInstanceOf('Zend\Http\Response', $response);
@@ -1437,8 +1496,36 @@ class VehiclePsvControllerTest extends AbstractLicenceDetailsControllerTestCase
      */
     protected function mockRestCalls($service, $method, $data = array(), $bundle = array())
     {
-        if ($service == 'Application' && $method == 'GET'
-            && $bundle == ApplicationController::$applicationLicenceDataBundle) {
+        $licenceDataBundle = array(
+            'properties' => array(
+                'id',
+                'version',
+                'niFlag'
+            ),
+            'children' => array(
+                'goodsOrPsv' => array(
+                    'properties' => array(
+                        'id'
+                    )
+                ),
+                'licenceType' => array(
+                    'properties' => array(
+                        'id'
+                    )
+                ),
+                'organisation' => array(
+                    'children' => array(
+                        'type' => array(
+                            'properties' => array(
+                                'id'
+                            )
+                        )
+                    )
+                )
+            )
+        );
+
+        if ($service == 'Licence' && $method == 'GET' && $bundle == $licenceDataBundle) {
 
             return $this->getLicenceData('psv');
         }

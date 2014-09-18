@@ -26,7 +26,7 @@ class BusDocsController extends BusController
      */
     public function indexAction()
     {
-        $view = $this->getViewWithLicence();
+        $view = $this->getViewWithBusReg();
 
         $view->setTemplate('licence/bus/index');
         return $this->renderView($view);

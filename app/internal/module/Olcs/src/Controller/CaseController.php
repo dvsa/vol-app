@@ -69,19 +69,7 @@ class CaseController extends AbstractController
 
         $summary = $this->getCaseSummaryArray($case);
 
-        // -- submissions
-
-        $submissionsResults = $this->getSubmissions($caseId);
-        $submissionsData = [];
-        $submissionsData['url'] = $this->getPluginManager()->get('url');
-
-        $submissionsTable = $this->getServiceLocator()->get('Table')->buildTable(
-            'submission',
-            $submissionsResults,
-            $submissionsData
-        );
-
-        // -- submissions
+        $submissionsTable = $this->getTable('submission', $this->getSubmissions($caseId));
 
         $view->setVariables(
             array(
@@ -471,7 +459,7 @@ class CaseController extends AbstractController
 
         $results = $this->makeRestCall('Cases', 'GET', $pagination, $bundle);
 
-        $table = $this->getServiceLocator()->get('Table')->buildTable('case', $results, $pagination);
+        $table = $this->getTable('case', $results, $pagination);
 
         $licenceData = $this->getLicence($licence);
 

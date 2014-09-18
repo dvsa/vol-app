@@ -13,7 +13,11 @@ class TableFilters extends AbstractWidget
         $form = $this->getContainer()->getValue();
 
         if ($form instanceof \Zend\Form\Form) {
-            return $vh->render($form);
+            return '<hr />
+            <h4>' . $this->view->translate('Filters') . '</h4>
+            <div class="filters">' .
+                $vh->render($form) .
+            '</div>';
         }
 
         return '';

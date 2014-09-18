@@ -280,8 +280,7 @@ class CaseConditionUndertakingController extends CaseController
                 isset($result['operatingCentre']['address']) ? $result['operatingCentre']['address'] : null;
         }
 
-
-        return $this->buildTable($this->tables[$which], $conditionUndertakings);
+        return $this->getTable($this->tables[$which], $conditionUndertakings);
     }
 
     /**
@@ -532,12 +531,10 @@ class CaseConditionUndertakingController extends CaseController
      * Method to return the bundle required for conditionundertakings
      * by conditionType
      *
-     * @todo remove address lines when address entity finalised
      * @return array
      */
     private function getConditionUndertakingBundle($conditionType)
     {
-
         return array(
             'properties' => array(
                 'id'

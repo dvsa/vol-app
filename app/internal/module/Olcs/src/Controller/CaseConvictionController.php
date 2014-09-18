@@ -86,10 +86,7 @@ class CaseConvictionController extends CaseController
             $results['Results'][$key]['defendantType'] = $translator->translate($row['defendantType']['id']);
         }
 
-        $data = [];
-        $data['url'] = $this->url();
-
-        $table = $this->getServiceLocator()->get('Table')->buildTable('convictions', $results, $data);
+        $table = $this->getTable('convictions', $results);
 
         $legacyOffencesTable = $this->getLegacyOffencesTable($case['legacyOffences']);
 
@@ -145,7 +142,6 @@ class CaseConvictionController extends CaseController
     {
         $routeParams = $this->getParams(array('case', 'licence', 'id'));
 
-        // @todo We shouldn't be accessing the POST global we should be using the request
         if (isset($_POST['cancel-conviction'])) {
             return $this->redirect()->toRoute(
                 'case_convictions',
@@ -554,9 +550,7 @@ class CaseConvictionController extends CaseController
 
     public function getLegacyOffencesTable($legacyOffencesResults)
     {
-        $data['url'] = $this->url();
-        $legacyOffencesTable =
-            $this->getServiceLocator()->get('Table')->buildTable('legacyOffences', $legacyOffencesResults, $data);
+        $legacyOffencesTable = $this->getTable('legacyOffences', $legacyOffencesResults);
 
         return $legacyOffencesTable;
     }

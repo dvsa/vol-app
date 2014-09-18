@@ -24,6 +24,7 @@ class LicenceProcessingNoteController extends AbstractLicenceProcessingControlle
     use LicenceNoteTrait;
 
     protected $section = 'notes';
+    protected $service = 'Note';
 
     public function __construct()
     {
@@ -48,7 +49,6 @@ class LicenceProcessingNoteController extends AbstractLicenceProcessingControlle
 
         //if a ViewModel has been returned
         if ($notesResult instanceof \Zend\View\Model\ViewModel) {
-            //$notesResult->setTemplate('licence/processing/notes/index');
             return $this->renderView($notesResult);
         }
 

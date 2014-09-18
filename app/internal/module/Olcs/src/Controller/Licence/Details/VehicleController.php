@@ -42,8 +42,6 @@ class VehicleController extends AbstractLicenceDetailsController
     /**
      * Save the vehicle
      *
-     * @todo might be able to combine these 2 methods now
-     *
      * @param array $data
      * @param string $service
      */
@@ -56,16 +54,6 @@ class VehicleController extends AbstractLicenceDetailsController
         if ($action == 'add' && isset($licenceVehicleSaved['id'])) {
             $this->requestDisc($licenceVehicleSaved['id']);
         }
-    }
-
-    /**
-     * Request disc
-     *
-     * @param int $licenceVehicleId
-     */
-    protected function requestDisc($licenceVehicleId)
-    {
-        $this->makeRestCall('GoodsDisc', 'POST', array('licenceVehicle' => $licenceVehicleId));
     }
 
     /**
