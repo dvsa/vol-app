@@ -346,7 +346,7 @@ return array_merge(
                                 'route' => '/quality',
                                 'defaults' => [
                                     'controller' => 'BusDetailsQualityController',
-                                    'action' => 'index',
+                                    'action' => 'edit',
                                 ]
                             ],
                         ]
