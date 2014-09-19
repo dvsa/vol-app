@@ -729,7 +729,7 @@ return array_merge(
                 ]
             ]
         ],
-        'case_stay_action' => [
+        /*'case_stay_action' => [
             'type' => 'segment',
             'options' => [
                 'route' => '/licence/[:licence]/case/[:case]/action/manage/stays[/:action][/:stayType][/:id]',
@@ -744,7 +744,7 @@ return array_merge(
                     'action' => 'index'
                 ]
             ]
-        ],
+        ],*/
         'case_hearing_appeal' => [
             'type' => 'segment',
             'options' => [
@@ -768,6 +768,20 @@ return array_merge(
                 ],
                 'defaults' => [
                     'controller' => 'CaseAppealController',
+                    'action' => 'index'
+                ]
+            ]
+        ],
+        'case_stay' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/case/:case/stay[/:action][/:stayType][/:stay]',
+                'constraints' => [
+                    'case' => '[0-9]+',
+                    'appeal' => '[0-9]+'
+                ],
+                'defaults' => [
+                    'controller' => 'CaseStayController',
                     'action' => 'index'
                 ]
             ]

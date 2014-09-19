@@ -1,0 +1,27 @@
+<div class="read-only">
+    <dl>
+        <dt><?php echo $this->translate('Stay type');?></dt>
+        <dd><?php echo $stay['stayType']['description']; ?></dd>
+
+        <dt><?php echo $this->translate('Outcome');?></dt>
+        <dd><?php echo $stay['outcome']['description']; ?></dd>
+
+        <dt><?php echo $this->translate('Requested date');
+            ?></dt>
+        <dd><?php echo $stay['requestedDate']; ?></dd>
+
+        <dt><?php echo $this->translate('Decision date');?></dt>
+        <dd><?php echo $stay['decisionDate']; ?></dd>
+        <dt><?php echo $this->translate('Is withdrawn');?></dt>
+        <dd><?php echo $this->translate(empty($stay['withdrawnDate']) ?
+                'N' : 'Y'); ?></dd>
+        <dt><?php echo $this->translate('Withdrawn date');?></dt>
+        <dd><?php echo $stay['withdrawnDate']; ?></dd>
+    </dl>
+    <dl>
+        <dt><?php echo $this->translate('Notes');?></dt>
+        <dd class="three-quarters"><?php echo
+            $stay['notes'];
+            ?></dd>
+    </dl>
+</div>

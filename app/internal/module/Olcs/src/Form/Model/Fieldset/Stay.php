@@ -8,8 +8,14 @@ use Zend\Form\Annotation as Form;
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("fields")
  */
-class Fields
+class Stay extends CaseBase
 {
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $stayType = null;
+
     /**
      * @Form\Attributes({"id":"dob","class":"extra-long"})
      * @Form\Options({

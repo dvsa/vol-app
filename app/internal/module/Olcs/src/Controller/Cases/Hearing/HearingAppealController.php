@@ -126,16 +126,31 @@ class HearingAppealController extends OlcsController\CrudAbstract
      */
     protected $detailsView = '/case/hearing-appeal/details';
 
+    /**
+     * Ensure index action redirects to details action
+     *
+     * @return array|mixed|\Zend\Http\Response|\Zend\View\Model\ViewModel
+     */
     public function indexAction()
     {
         return $this->redirectToIndex();
     }
 
+    /**
+     * Override to redirect to details page
+     *
+     * @return mixed|\Zend\Http\Response
+     */
     public function redirectToIndex()
     {
         return $this->redirectToRoute(null, ['action' => 'details'], [], true);
     }
 
+    /**
+     * Details action. Shows appeals and stays (if appeal exists)
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
     public function detailsAction()
     {
         $caseId = $this->getCase()['id'];
@@ -151,6 +166,7 @@ class HearingAppealController extends OlcsController\CrudAbstract
 
         $view->setTemplate($this->detailsView);
         $view->setVariable('case', $this->getCase());
+        $view->setVariable('stayRecords', $stayRecords);
 
         return $this->renderView($view);
     }
