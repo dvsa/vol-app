@@ -41,6 +41,13 @@ class ConvictionController extends OlcsController\CrudAbstract
     protected $tableName = 'conviction';
 
     /**
+     * Name of comment box field.
+     *
+     * @var string
+     */
+    protected $commentBoxName = 'convictionNote';
+
+    /**
      * Holds the form name
      *
      * @var string
@@ -490,7 +497,6 @@ class ConvictionController extends OlcsController\CrudAbstract
             )
         );
     }
-
 
     public function getLegacyOffencesTable($legacyOffencesResults)
     {

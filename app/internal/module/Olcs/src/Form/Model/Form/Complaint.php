@@ -7,7 +7,8 @@ use Zend\Form\Annotation as Form;
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("Complaint")
- * @Form\Options({"label":"Complaint"})
+ * @Form\Type("Common\Form\Form")
+ * @Form\Options({"prefer_form_input_filter": true, "label":"Complaint"})
  * @Form\Attributes({"method":"post"})
  */
 class Complaint
