@@ -68,7 +68,6 @@ class PublicInquiryAgreedAndLegislationMain
      * @Form\Options({
      *     "label": "Legislation",
      *     "service_name": "Olcs\Service\Data\PublicInquiryReason",
-     *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a category",
      *     "use_groups":true
