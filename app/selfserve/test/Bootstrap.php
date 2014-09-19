@@ -22,7 +22,7 @@ class Bootstrap
     {
         // Setup the autloader
         $loader = static::initAutoloader();
-        $loader->addPsr4('OlcsTest\\', __DIR__ . '/SelfServe');
+        $loader->addPsr4('OlcsTest\\', __DIR__ . '/Olcs');
         $loader->addPsr4('CommonTest\\', __DIR__ . '/../vendor/olcs/OlcsCommon/application_test/Common/src/Common/');
 
         // Grab the application config

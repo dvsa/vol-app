@@ -7,7 +7,7 @@
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
-namespace SelfServe\Controller\Dashboard;
+namespace Olcs\Controller\Dashboard;
 
 use Common\Controller\AbstractController;
 use Zend\View\Model\ViewModel;
