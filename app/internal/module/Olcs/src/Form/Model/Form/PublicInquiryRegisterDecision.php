@@ -10,7 +10,6 @@ use Zend\Form\Annotation as Form;
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
  * @Form\Options({"prefer_form_input_filter": true})
- * Form\InputFilter("Common\Form\InputFilter")
  */
 class PublicInquiryRegisterDecision
 {
