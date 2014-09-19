@@ -45,15 +45,18 @@ class BusDetailsStopController extends BusDetailsController
         )
     );
 
-
-
-    public function redirectToIndex()
-    {
-        return $this->redirectToRoute(
-            null,
-            ['action'=>'edit'],
-            ['code' => '303'], // Why? No cache is set with a 303 :)
-            true
-        );
-    }
+    /**
+     * Array of form fields to disable if this is EBSR
+     */
+    protected $disableFormFields = array(
+        'useAllStops',
+        'hasManoeuvre',
+        'manoeuvreDetail',
+        'needNewStop',
+        'newStopDetail',
+        'hasNotFixedStop',
+        'notFixedStopDetail',
+        'subsidised',
+        'subsidyDetail'
+    );
 }
