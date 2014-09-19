@@ -1,27 +1,5 @@
 <?php
 
-// @todo Find a nicer way to re-use this config file
-$applicationJourney = include(
-    __DIR__ . '/../../../vendor/olcs/OlcsCommon/Common/config/journeys/application.journey.php'
-);
-
-$navItems = array();
-
-$filter = new \Zend\Filter\Word\CamelCaseToDash();
-
-foreach ($applicationJourney['Application']['sections'] as $sectionName => $section) {
-
-    foreach ($section['subSections'] as $subSectionName => $subSection) {
-        $label = strtolower('application.' . $filter->filter($sectionName) . '.' . $filter->filter($subSectionName));
-        $navItems[] = array(
-            'id' => 'application_details_' . $sectionName . '_' . $subSectionName,
-            'label' => $label,
-            'route' => 'Application/' . $sectionName . '/' . $subSectionName,
-            'use_route_match' => true
-        );
-    }
-}
-
 return array(
     'label' => 'Home',
     'route' => 'dashboard',
