@@ -6,10 +6,10 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
- * @Form\Name("details")
+ * @Form\Name("fields")
  * @Form\Options({"label":"Appeal Details"})
  */
-class Details
+class Appeal extends CaseBase
 {
     /**
      * @Form\Attributes({"id":"dob"})
@@ -158,4 +158,5 @@ class Details
      * @Form\Type("\Common\Form\Elements\InputFilters\WithdrawnDate")
      */
     public $withdrawnDate = null;
+
 }

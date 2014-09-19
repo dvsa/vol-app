@@ -176,7 +176,7 @@ return array(
                         array(
                             'id' => 'case_hearings_appeals_public_inquiry',
                             'label' => 'Public inquiry',
-                            'route' => 'case_public_inquiry',
+                            'route' => 'case_hearing_appeal',
                             'action' => 'details',
                             'use_route_match' => true,
                         ),
