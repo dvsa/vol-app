@@ -18,7 +18,15 @@ class DocumentGenerationController extends DocumentController
 {
     const EMPTY_LABEL = 'Please select';
 
-    const DEFAULT_CATEGORY = 'Licensing';   // @TODO not related to this controller
+    private $categoryMap = [
+        'licence' => 'Licensing'
+    ];
+
+    private function getDefaultCategory($categories)
+    {
+        $name = $this->categoryMap[$this->params('type')];
+        return array_search($name, $categories);
+    }
 
     protected function alterFormBeforeValidation($form)
     {
@@ -32,7 +40,7 @@ class DocumentGenerationController extends DocumentController
 
         $defaultData = [
             'details' => [
-                'category' => array_search(self::DEFAULT_CATEGORY, $categories)
+                'category' => $this->getDefaultCategory($categories)
             ]
         ];
         $data = [];
@@ -88,6 +96,7 @@ class DocumentGenerationController extends DocumentController
                 $form->get('bookmarks')
             );
         }
+
         $form->setData($data);
 
         return $form;
