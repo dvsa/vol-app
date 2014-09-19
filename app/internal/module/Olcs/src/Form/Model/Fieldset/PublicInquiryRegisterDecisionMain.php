@@ -11,15 +11,15 @@ use Zend\Form\Annotation as Form;
  */
 class PublicInquiryRegisterDecisionMain
 {
-    /**
+    /*
      * @Form\Attributes({"class":"","id":"", "disabled":true})
      * @Form\Options({"label":"PI number"})
      * @Form\Required(false)
      * @Form\Type("Text")
      */
-    public $piNumber = null;
+    //public $piNumber = null;
 
-    /**
+    /*
      * @Form\Attributes({"id":"","placeholder":"","class":"medium", "disabled":true})
      * @Form\Options({
      *     "label": "Venue",
@@ -33,17 +33,17 @@ class PublicInquiryRegisterDecisionMain
      * @Form\Required(false)
      * @Form\Type("\Zend\Form\Element\Select")
      */
-    public $venue = null;
+    //public $venue = null;
 
-    /**
+    /*
      * @Form\Attributes({"class":"long","id":"", "disabled":true})
      * @Form\Options({"label":"Other venue"})
      * @Form\Required(false)
      * @Form\Type("Text")
      */
-    public $otherVenue = null;
+    //public $otherVenue = null;
 
-    /**
+    /*
      * @Form\Attributes({"id":"dob","class":"long", "disabled":true})
      * @Form\Options({
      *     "label": "Date of PI",
@@ -56,7 +56,7 @@ class PublicInquiryRegisterDecisionMain
      * @Form\Type("Common\Form\Elements\Custom\DateSelect")
      * @Form\Required(false)
      */
-    public $piDate = null;
+    //public $piDate = null;
 
     /**
      * @Form\Attributes({"id":"","placeholder":"","class":"medium"})
@@ -84,7 +84,7 @@ class PublicInquiryRegisterDecisionMain
      */
     public $decidedByTcRole = null;
 
-    /**
+    /*
      * @Form\Attributes({"class":"long tall", "id":"", "disabled":true, "multiple" : true})
      * @Form\Required(false)
      * @Form\Options({
@@ -96,7 +96,7 @@ class PublicInquiryRegisterDecisionMain
      * })
      * @Form\Type("DynamicSelect")
      */
-    public $reasons = null;
+    //public $reasons = null;
 
     /**
      * @Form\Attributes({"id":"","placeholder":"","class":"long tall",  "multiple" : true})
@@ -129,7 +129,6 @@ class PublicInquiryRegisterDecisionMain
      * @Form\Options({"label": "Witnesses"})
      * @Form\Type("Text")
      * @Form\Required(false)
-     * @Form\Filter({"name":"Digits"})
      * @Form\Validator({"name":"Digits"})
      */
     public $witnesses = null;

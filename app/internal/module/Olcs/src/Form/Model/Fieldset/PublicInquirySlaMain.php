@@ -13,7 +13,7 @@ class PublicInquirySlaMain
 {
     //MLH
 
-    /**
+    /*
      * @Form\Attributes({"id":"dob"})
      * @Form\Options({
      *     "label": "Agreed date",
@@ -28,9 +28,9 @@ class PublicInquirySlaMain
      * @Form\Filter({"name": "DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
-    public $agreedDate = null;
+    //public $agreedDate = null;
 
-    /**
+    /*
      * @Form\Attributes({"id":"","placeholder":"", "class":"long tall", "multiple":true, "disabled":true})
      * @Form\Options({
      *     "label": "Type of PI",
@@ -42,11 +42,11 @@ class PublicInquirySlaMain
      * @Form\Type("DynamicSelect")
      * @Form\Validator({"name":"Olcs\Validator\TypeOfPI"})
      */
-    public $piTypes = null;
+    //public $piTypes = null;
 
     //date of PI
 
-    /**
+    /*
      * @Form\Attributes({"id":"dob"})
      * @Form\Options({
      *     "label": "Date of decision",
@@ -61,9 +61,9 @@ class PublicInquirySlaMain
      * @Form\Filter({"name":"DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
-    public $decisionDate = null;
+    //public $decisionDate = null;
 
-    /**
+    /*
      * @Form\Attributes({"id":"","class":"extra-long", "disabled":true})
      * @Form\Options({
      *     "label": "Details to be published",
@@ -78,7 +78,7 @@ class PublicInquirySlaMain
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5,"max":4000}})
      */
-    public $decisionNotes = null;
+    //public $decisionNotes = null;
 
     /**
      * @Form\Options({
@@ -91,7 +91,7 @@ class PublicInquirySlaMain
      * @Form\Filter({"name":"DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
-    public $callUpLetterIssued = null;
+    public $callUpLetterDate = null;
 
     /**
      * @Form\Options({
@@ -104,13 +104,13 @@ class PublicInquirySlaMain
      * @Form\Filter({"name":"DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
-    public $briefToTc = null;
+    public $briefToTcDate = null;
 
     /**
      * @Form\Attributes({"id":"","placeholder":"","class":"medium"})
      * @Form\Options({
      *     "label": "Written outcome",
-     *     "category": "written_outcome",
+     *     "category": "pi_written_outcome",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a category"
@@ -135,7 +135,7 @@ class PublicInquirySlaMain
      *      "name": "ValidateIf",
      *      "options": {
      *          "context_field": "writtenOutcome",
-     *          "context_values": {"blagle"},
+     *          "context_values": {"piwo_reason"},
      *          "allow_empty": true,
      *          "validators": {
      *              {"name": "Date", "options": {"format": "Y-m-d"}},
@@ -144,7 +144,7 @@ class PublicInquirySlaMain
      *      }
      * })
      */
-    public $dateOfWrittenReason = null;
+    public $writtenReasonDate = null;
 
     /**
      * @Form\Options({
@@ -161,7 +161,7 @@ class PublicInquirySlaMain
      *      "name": "ValidateIf",
      *      "options": {
      *          "context_field": "writtenOutcome",
-     *          "context_values": {"blagle"},
+     *          "context_values": {"piwo_decision"},
      *          "allow_empty": true,
      *          "validators": {
      *              {"name": "Date", "options": {"format": "Y-m-d"}},
@@ -170,7 +170,7 @@ class PublicInquirySlaMain
      *      }
      * })
      */
-    public $decisionLetterSend = null;
+    public $decisionLetterSentDate = null;
 
     /**
      * @Form\Options({
@@ -187,7 +187,7 @@ class PublicInquirySlaMain
      *      "name": "ValidateIf",
      *      "options": {
      *          "context_field": "writtenOutcome",
-     *          "context_values": {"blagle"},
+     *          "context_values": {"piwo_decision"},
      *          "allow_empty": true,
      *          "validators": {
      *              {"name": "Date", "options": {"format": "Y-m-d"}},
@@ -196,7 +196,7 @@ class PublicInquirySlaMain
      *      }
      * })
      */
-    public $dateOfTcWrittenDecision = null;
+    public $tcWrittenDecisionDate = null;
 
     /**
      * @Form\Options({
@@ -213,7 +213,7 @@ class PublicInquirySlaMain
      *      "name": "ValidateIf",
      *      "options": {
      *          "context_field": "writtenOutcome",
-     *          "context_values": {"blagle"},
+     *          "context_values": {"piwo_reason"},
      *          "allow_empty": true,
      *          "validators": {
      *              {"name": "Date", "options": {"format": "Y-m-d"}},
@@ -222,7 +222,7 @@ class PublicInquirySlaMain
      *      }
      * })
      */
-    public $dateOfTcWrittenReason = null;
+    public $tcWrittenReasonDate = null;
 
     /**
      * @Form\Options({
@@ -239,7 +239,7 @@ class PublicInquirySlaMain
      *      "name": "ValidateIf",
      *      "options": {
      *          "context_field": "writtenOutcome",
-     *          "context_values": {"blagle"},
+     *          "context_values": {"piwo_reason"},
      *          "allow_empty": true,
      *          "validators": {
      *              {"name": "Date", "options": {"format": "Y-m-d"}},
@@ -248,7 +248,7 @@ class PublicInquirySlaMain
      *      }
      * })
      */
-    public $writtenReasonLetterSent = null;
+    public $writtenReasonLetterDate = null;
 
     /**
      * @Form\Options({
@@ -262,13 +262,6 @@ class PublicInquirySlaMain
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $decisionLetterSentAfterWrittenDecisionDate = null;
-
-
-
-
-
-
-
 
     /**
      * @Form\Attributes({"value":""})

@@ -55,6 +55,9 @@ class CasePiController extends CaseController implements CrudInterface
                     ],
                 ],
             ),
+            'writtenOutcome' => array(
+                'properties' => 'ALL'
+            ),
             'decidedByTc' => array(
                 'properties' => 'ALL'
             ),
@@ -256,7 +259,7 @@ class CasePiController extends CaseController implements CrudInterface
 
         $form = $this->generateFormWithData(
             'PublicInquirySla',
-            'processSave',
+            'processPi',
             array(
                 'main' => array('case' => $caseId)
             )
