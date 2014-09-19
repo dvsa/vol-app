@@ -255,6 +255,8 @@ class CasePiController extends CaseController implements CrudInterface
      */
     public function sla()
     {
+        $this->loadScripts(['pi-sla']);
+
         $caseId = $this->fromRoute('case');
 
         $form = $this->generateFormWithData(
