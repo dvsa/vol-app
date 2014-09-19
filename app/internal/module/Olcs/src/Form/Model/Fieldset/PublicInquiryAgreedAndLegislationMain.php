@@ -18,7 +18,8 @@ class PublicInquiryAgreedAndLegislationMain
      *     "create_empty_option": false,
      *     "render_delimiters": "d m y"
      * })
-     * @Form\Type("Common\Form\Elements\Custom\DateSelect")
+     * @Form\Type("DateSelect")
+     * @Form\Filter({"name": "DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $agreedDate = null;
@@ -34,7 +35,7 @@ class PublicInquiryAgreedAndLegislationMain
      * })
      * @Form\Type("DynamicSelect")
      */
-    public $presidingTc = null;
+    public $agreedByTc = null;
 
     /**
      * @Form\Attributes({"id":"","placeholder":"","class":"medium"})
@@ -47,10 +48,10 @@ class PublicInquiryAgreedAndLegislationMain
      * })
      * @Form\Type("DynamicSelect")
      */
-    public $presidedByRole = null;
+    public $agreedByTcRole = null;
 
     /**
-     * @Form\Attributes({"id":"","placeholder":"", "multiple":true})
+     * @Form\Attributes({"id":"","placeholder":"", "class":"long tall", "multiple":true})
      * @Form\Options({
      *     "label": "Type of PI",
      *     "category": "pi_type",
@@ -63,13 +64,15 @@ class PublicInquiryAgreedAndLegislationMain
     public $piTypes = null;
 
     /**
-     * @Form\Attributes({"id":"","placeholder":"","class":"medium", "multiple" : true})
+     * @Form\Attributes({"id":"","placeholder":"","class":"long tall", "multiple" : true})
      * @Form\Options({
      *     "label": "Legislation",
+     *     "service_name": "Olcs\Service\Data\PublicInquiryReason",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a category",
+     *     "use_groups":true
      * })
-     * @Form\Type("PublicInquiryReason")
+     * @Form\Type("DynamicSelect")
      */
     public $reasons = null;
 
