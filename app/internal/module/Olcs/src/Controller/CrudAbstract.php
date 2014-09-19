@@ -446,9 +446,9 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
         return $data;
     }
 
-
     /**
-     * Comments box
+     * Comments box. We know there's a record here, so
+     * there's no need to check for add / edit.
      */
     public function buildCommentsBoxIntoView()
     {
@@ -464,7 +464,9 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
             $data['fields']['version'] = $case['version'];
             $data['fields']['comment'] = $case[$this->commentBoxName];
 
-            $form->setData($form);
+            //die('<pre>' . print_r($data, 1));
+
+            $form->setData($data);
 
             $this->setPlaceholder('comments', $form);
         }
@@ -483,6 +485,12 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
         return $this;
     }
 
+    /**
+     * Proceses the comment box. We know there's a record here, so
+     * there's no need to check for add / edit.
+     *
+     * @param array $data
+     */
     public function processCommentForm($data)
     {
         $update = [];
@@ -490,6 +498,8 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
         $update['version'] = $data['fields']['version'];
         $update[$this->commentBoxName] = $data['fields']['comment'];
 
-        $this->save($update, 'Case');
+        //die('<pre>' . print_r($update, 1));
+
+        $this->save($update, 'Cases');
     }
 }
