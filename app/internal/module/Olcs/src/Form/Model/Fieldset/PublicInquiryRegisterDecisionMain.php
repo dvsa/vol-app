@@ -48,7 +48,10 @@ class PublicInquiryRegisterDecisionMain
      * @Form\Options({
      *     "label": "Date of PI",
      *     "create_empty_option": false,
-     *     "render_delimiters": "d m y"
+     *     "render_delimiters": "d m y",
+     *     "day_attributes": {"disabled":true},
+     *     "month_attributes": {"disabled":true},
+     *     "year_attributes": {"disabled":true}
      * })
      * @Form\Type("Common\Form\Elements\Custom\DateSelect")
      * @Form\Required(false)
