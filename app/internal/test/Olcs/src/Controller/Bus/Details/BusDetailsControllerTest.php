@@ -26,7 +26,8 @@ class BusDetailsControllerTest extends AbstractHttpControllerTestCase
             '\Olcs\Controller\Bus\Details\BusDetailsController',
             array(
                 'getViewWithBusReg',
-                'renderView'
+                'renderView',
+                'redirectToRoute'
             )
         );
 
@@ -58,5 +59,19 @@ class BusDetailsControllerTest extends AbstractHttpControllerTestCase
             ->with($this->view);
 
         $this->controller->indexAction();
+    }
+
+    public function testRedirectToIndex()
+    {
+        $this->controller->expects($this->once())
+            ->method('redirectToRoute')
+            ->with(
+                $this->equalTo(null),
+                $this->equalTo(['action'=>'edit']),
+                $this->equalTo(['code' => '303']),
+                $this->equalTo(true)
+            );
+
+        $this->controller->redirectToIndex();
     }
 }
