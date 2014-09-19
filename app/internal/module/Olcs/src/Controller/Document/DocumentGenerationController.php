@@ -136,7 +136,13 @@ class DocumentGenerationController extends DocumentController
 
         $identifier = $template['document']['identifier'];
 
-        $data['user'] = $this->getLoggedInUser();
+        $queryData = array_merge(
+            $data,
+            $this->params()->fromRoute(),
+            [
+                'user' => $this->getLoggedInUser()
+            ]
+        );
 
         /**
          * 1) read the template from the content store
@@ -148,7 +154,8 @@ class DocumentGenerationController extends DocumentController
          *    bookmarks out of the file data and return an array of queries
          *    we need to answer in order to populate those bookmarks
          */
-        $query = $this->getDocumentService()->getBookmarkQueries($file, $data);
+        $query = $this->getDocumentService()->getBookmarkQueries($file, $queryData);
+
 
         /**
          * 3) Pass those queries into a custom backend endpoint which knows how to
