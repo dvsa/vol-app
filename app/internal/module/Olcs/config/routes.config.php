@@ -691,7 +691,7 @@ return array_merge(
                 ]
             ]
         ],
-        'case_appeal' => [
+        /*'case_appeal' => [
             'type' => 'segment',
             'options' => [
                 'route' => '/licence/:licence/case/:case/appeals[/:action][/:id]',
@@ -705,7 +705,7 @@ return array_merge(
                 ]
             ]
         ],
-        /* 'case_convictions' => [
+         'case_convictions' => [
             'type' => 'segment',
             'options' => [
                 'route' => '/case/:case/action/manage/convictions',
@@ -754,6 +754,20 @@ return array_merge(
                 ],
                 'defaults' => [
                     'controller' => 'CaseHearingAppealController',
+                    'action' => 'index'
+                ]
+            ]
+        ],
+        'case_appeal' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/case/:case/appeal[/:action][/:appeal]',
+                'constraints' => [
+                    'case' => '[0-9]+',
+                    'appeal' => '[0-9]+'
+                ],
+                'defaults' => [
+                    'controller' => 'CaseAppealController',
                     'action' => 'index'
                 ]
             ]

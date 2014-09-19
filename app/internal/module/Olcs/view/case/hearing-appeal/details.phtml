@@ -6,7 +6,7 @@ $appeal = $this->placeholder('appeal')->getValue(); ?>
     if (empty($appeal)){
     ?>
     <a href="<?php echo $this->url(
-        'case_hearing_appeal',
+        'case_appeal',
         [
             'case' => $case['id'],
             'action' => 'add'
@@ -18,7 +18,7 @@ $appeal = $this->placeholder('appeal')->getValue(); ?>
 } else {
     ?>
     <a href="<?php echo $this->url(
-        'case_hearing_appeal',
+        'case_appeal',
         [
             'case' => $case['id'],
             'appeal' => $appeal['id'],
