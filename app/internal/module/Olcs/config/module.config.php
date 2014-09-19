@@ -23,7 +23,7 @@ return array(
             'CaseSubmissionController' => 'Olcs\Controller\Cases\Submission\SubmissionController',
             'SubmissionController' => 'Olcs\Controller\Submission\SubmissionController',
             'CaseStayController' => 'Olcs\Controller\CaseStayController',
-            'CasePenaltyController' => 'Olcs\Controller\CasePenaltyController',
+            'CasePenaltyController' => 'Olcs\Controller\Cases\Penalty\PenaltyController',
             'CaseProhibitionController' => 'Olcs\Controller\Cases\Prohibition\ProhibitionController',
             'CaseProhibitionDefectController' => 'Olcs\Controller\CaseProhibitionDefectController',
             'CaseAnnualTestHistoryController' => 'Olcs\Controller\Cases\AnnualTestHistory\AnnualTestHistoryController',

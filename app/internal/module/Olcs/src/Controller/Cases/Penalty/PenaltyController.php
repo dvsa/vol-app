@@ -6,7 +6,7 @@
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
 
-namespace Olcs\Controller;
+namespace Olcs\Controller\Cases\Penalty;
 
 // Olcs
 use Olcs\Controller as OlcsController;
@@ -17,7 +17,7 @@ use Olcs\Controller\Traits as ControllerTraits;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class CasePenaltyController extends OlcsController\CrudAbstract
+class PenaltyController extends OlcsController\CrudAbstract
 {
     use ControllerTraits\CaseControllerTrait;
 
