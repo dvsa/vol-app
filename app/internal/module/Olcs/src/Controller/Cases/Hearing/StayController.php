@@ -121,6 +121,53 @@ class StayController extends OlcsController\CrudAbstract
         )
     );
 
+    /**
+     * Holds the Stay Data Bundle
+     *
+     * @var array
+     */
+    protected $stayDataBundle = array(
+        'children' => array(
+            'stayType' => array(
+                'properties' => array(
+                    'id',
+                    'description'
+                )
+            ),
+            'outcome' => array(
+                'properties' => array(
+                    'id',
+                    'description'
+                )
+            ),
+            'case' => array(
+                'properties' => array(
+                    'id'
+                )
+            )
+        )
+    );
+
+    /**
+     * Add action. First checks if stay type already exists
+     *
+     * @return \Zend\View\Model\ViewModel
+     * @throws BadRequestException
+     */
+    public function addAction()
+    {
+        $stayType = $this->params()->fromRoute('stayType');
+        $caseId = $this->getCase()['id'];
+
+        $stayRecords = $this->getStayData($caseId);
+        if (empty($stayRecords[$stayType])) {
+            return parent::addAction();
+        } else {
+            throw new BadRequestException('Stay already exists');
+        }
+    }
+
+
     public function indexAction()
     {
         return $this->redirectToIndex();
@@ -137,5 +184,27 @@ class StayController extends OlcsController\CrudAbstract
         $data = parent::processLoad($data);
         $data['fields']['stayType'] = $this->params()->fromRoute('stayType');
         return $data;
+    }
+
+
+    /**
+     * Gets stay data for use on the index page
+     *
+     * @param int $caseId
+     * @return array
+     */
+    private function getStayData($caseId)
+    {
+        $stayRecords = array();
+
+        $stayResult = $this->makeRestCall('Stay', 'GET',
+            array('case' => $caseId), $this->stayDataBundle);
+
+        //need a better way to do this...
+        foreach ($stayResult['Results'] as $stay) {
+            $stayRecords[$stay['stayType']['id']][] = $stay;
+        }
+
+        return $stayRecords;
     }
 }

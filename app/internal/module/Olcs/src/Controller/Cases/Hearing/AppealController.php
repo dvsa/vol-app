@@ -128,6 +128,16 @@ class AppealController extends OlcsController\CrudAbstract
         )
     );
 
+    public function addAction()
+    {
+        $appeal = $this->getAppealData($caseId);
+        if (empty($appeal)) {
+            return parent::addAction();
+        } else {
+            throw new BadRequestException('Case already has an appeal');
+        }
+    }
+
     public function indexAction()
     {
         return $this->redirectToIndex();
