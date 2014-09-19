@@ -41,11 +41,12 @@ class IndexController extends AbstractController
 
         $filters = $this->mapTaskFilters();
 
+        $this->loadScripts(['tasks']);
+
         $view = new ViewModel(
             array(
                 'table' => $this->getTaskTable($filters, true, true),
                 'form'  => $this->getTaskForm($filters),
-                'inlineScript' => $this->loadScripts(['tasks'])
             )
         );
         $view->setTemplate('index/home');
