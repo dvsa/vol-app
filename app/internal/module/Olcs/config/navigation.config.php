@@ -70,6 +70,13 @@ return array(
                             'use_route_match' => true,
                         ),
                         array(
+                            'id' => 'case_details_penalties',
+                            'label' => 'Penalties',
+                            'route' => 'case_penalty',
+                            'action' => 'index',
+                            'use_route_match' => true,
+                        ),
+                        array(
                             'id' => 'case_details_statements',
                             'label' => 'Statements',
                             'route' => 'case_statement',

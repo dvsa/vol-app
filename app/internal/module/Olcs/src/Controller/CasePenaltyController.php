@@ -8,106 +8,111 @@
 
 namespace Olcs\Controller;
 
+// Olcs
+use Olcs\Controller as OlcsController;
+use Olcs\Controller\Traits as ControllerTraits;
+
 /**
  * Case Penalty Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class CasePenaltyController extends CaseController
+class CasePenaltyController extends OlcsController\CrudAbstract
 {
-    /* *
-     * Index action loads form data
-     *
-     * @return \Zend\Form
-     */
-    public function indexAction()
-    {
-        $caseId = $this->fromRoute('case');
-        $licence = $this->fromRoute('licence');
-
-        $penalties = array();
-
-        $bundle = array(
-            'children' => array(
-                'case' => array(
-                    'properties' => array(
-                        'id'
-                    )
-                )
-            )
-        );
-
-        $result = $this->makeRestCall('Penalty', 'GET', array('case' => $caseId, 'bundle' => json_encode($bundle)));
-
-        if ($result['Count']) {
-            $penalties = $result['Results'][0];
-            $penalties['case'] = $penalties['case']['id'];
-        } else {
-            $penalties['case'] = $caseId;
-        }
-
-        $form = $this->generatePenaltyForm($penalties);
-
-        $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $licence)));
-
-        $view = $this->getView();
-        $tabs = $this->getTabInformationArray();
-
-        $case = $this->getCase($caseId);
-        $summary = $this->getCaseSummaryArray($case);
-
-        $view->setVariables(
-            array(
-                'case' => $case,
-                'tabs' => $tabs,
-                'tab' => 'penalties',
-                'summary' => $summary,
-                'commentForm' => $form,
-            )
-        );
-
-        $view->setTemplate('case/manage');
-        return $view;
-    }
+    use ControllerTraits\CaseControllerTrait;
 
     /**
-     * Creates and returns the penalty form.
+     * Identifier name
      *
-     * @param array $case
-     * @return \Zend\Form
+     * @var string
      */
-    private function generatePenaltyForm($penalty)
-    {
-        $data = [];
-        $data['main'] = $penalty;
-
-        $form = $this->generateForm(
-            'penalty-comment',
-            'savePenaltyForm'
-        );
-        $form->setData($data);
-
-        return $form;
-    }
+    protected $identifierName = 'void';
 
     /**
-     * Saves the penalty form.
+     * Table name string
      *
-     * @param array $data
+     * @var string
      */
-    public function savePenaltyForm($data)
-    {
-        if (isset($data['main'])) {
-            $data = $data + $data['main'];
-            unset($data['main']);
-        }
+    protected $tableName = '';
 
-        if (!empty($data['id'])) {
-            $this->processEdit($data, 'Penalty');
-        } else {
-            $this->processAdd($data, 'Penalty');
-        }
+    /**
+     * Name of comment box field.
+     *
+     * @var string
+     */
+    protected $commentBoxName = 'annualTestHistory';
 
-        return $this->redirect()->toRoute('case_penalty', array(), array(), true);
-    }
+    /**
+     * Holds the form name
+     *
+     * @var string
+     */
+    protected $formName = 'void';
+
+    /**
+     * The current page's extra layout, over and above the
+     * standard base template, a sibling of the base though.
+     *
+     * @var string
+     */
+    protected $pageLayout = 'case';
+
+    /**
+     * For most case crud controllers, we use the case/inner-layout
+     * layout file. Except submissions.
+     *
+     * @var string
+     */
+    protected $pageLayoutInner = 'case/inner-layout';
+
+    /**
+     * Holds the service name
+     *
+     * @var string
+     */
+    protected $service = 'Void';
+
+    /**
+     * Holds the navigation ID,
+     * required when an entire controller is
+     * represneted by a single navigation id.
+     */
+    protected $navigationId = 'case_details_penalties';
+
+    /**
+     * Holds an array of variables for the
+     * default index list page.
+     */
+    protected $listVars = [
+        'case',
+    ];
+
+    /**
+     * Data map
+     *
+     * @var array
+    */
+    protected $dataMap = array(
+        'main' => array(
+            'mapFrom' => array(
+                'fields',
+            )
+        )
+    );
+
+    /**
+     * Holds the isAction
+     *
+     * @var boolean
+     */
+    protected $isAction = false;
+
+    /**
+     * Holds the Data Bundle
+     *
+     * @var array
+    */
+    protected $dataBundle = array('properties' => 'ALL');
+
+
 }
