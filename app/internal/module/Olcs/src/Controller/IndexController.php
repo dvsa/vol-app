@@ -41,7 +41,7 @@ class IndexController extends AbstractController
 
         $filters = $this->mapTaskFilters();
 
-        $this->loadScripts(['tasks']);
+        $this->loadScripts(['tasks', 'table-actions']);
 
         $view = new ViewModel(
             array(
