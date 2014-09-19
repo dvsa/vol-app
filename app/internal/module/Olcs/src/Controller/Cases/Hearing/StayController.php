@@ -87,7 +87,6 @@ class StayController extends OlcsController\CrudAbstract
     protected $dataMap = array(
         'main' => array(
             'mapFrom' => array(
-                'details',
                 'fields',
                 'base',
             )
@@ -131,5 +130,12 @@ class StayController extends OlcsController\CrudAbstract
     {
         return $this->redirectToRoute('case_hearing_appeal',
             ['action' => 'details'], [], true);
+    }
+
+    public function processLoad($data)
+    {
+        $data = parent::processLoad($data);
+        $data['fields']['stayType'] = $this->params()->fromRoute('stayType');
+        return $data;
     }
 }

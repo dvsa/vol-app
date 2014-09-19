@@ -1,27 +1,27 @@
 <div class="read-only">
     <dl>
         <dt><?php echo $this->translate('Stay type');?></dt>
-        <dd><?php echo $stay['stayType']['description']; ?></dd>
+        <dd><?php echo $stayType['description']; ?></dd>
 
         <dt><?php echo $this->translate('Outcome');?></dt>
-        <dd><?php echo $stay['outcome']['description']; ?></dd>
+        <dd><?php echo $outcome['description']; ?></dd>
 
         <dt><?php echo $this->translate('Requested date');
             ?></dt>
-        <dd><?php echo $stay['requestedDate']; ?></dd>
+        <dd><?php echo isset($requestedDate) ? $requestedDate : ''; ?></dd>
 
         <dt><?php echo $this->translate('Decision date');?></dt>
-        <dd><?php echo $stay['decisionDate']; ?></dd>
+        <dd><?php echo $decisionDate; ?></dd>
         <dt><?php echo $this->translate('Is withdrawn');?></dt>
-        <dd><?php echo $this->translate(empty($stay['withdrawnDate']) ?
+        <dd><?php echo $this->translate(empty($withdrawnDate) ?
                 'N' : 'Y'); ?></dd>
         <dt><?php echo $this->translate('Withdrawn date');?></dt>
-        <dd><?php echo $stay['withdrawnDate']; ?></dd>
+        <dd><?php echo $withdrawnDate; ?></dd>
     </dl>
     <dl>
         <dt><?php echo $this->translate('Notes');?></dt>
         <dd class="three-quarters"><?php echo
-            $stay['notes'];
+            $notes;
             ?></dd>
     </dl>
 </div>

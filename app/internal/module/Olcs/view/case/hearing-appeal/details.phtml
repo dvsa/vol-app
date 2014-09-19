@@ -95,7 +95,8 @@ $appeal = $this->placeholder('appeal')->getValue(); ?>
     {
         foreach ($stayRecords['stay_t_tc'] as $stay)
         {
-            echo $this->partial('stay-details.phtml', $stay);
+            echo $this->partial('case/hearing-appeal/stay-details.phtml',
+                $stay);
         }
     }
     ?>

@@ -120,6 +120,33 @@ class HearingAppealController extends OlcsController\CrudAbstract
     );
 
     /**
+     * Holds the Stay Data Bundle
+     *
+     * @var array
+     */
+    protected $stayDataBundle = array(
+        'children' => array(
+            'stayType' => array(
+                'properties' => array(
+                    'id',
+                    'description'
+                )
+            ),
+            'outcome' => array(
+                'properties' => array(
+                    'id',
+                    'description'
+                )
+            ),
+            'case' => array(
+                'properties' => array(
+                    'id'
+                )
+            )
+        )
+    );
+
+    /**
      * Holds the details view
      *
      * @return array|\Zend\Http\Response|\Zend\View\Model\ViewModel
@@ -181,21 +208,12 @@ class HearingAppealController extends OlcsController\CrudAbstract
     {
         $stayRecords = array();
 
-        $stayResult = $this->makeRestCall('Stay', 'GET', array('case' => $caseId));
+        $stayResult = $this->makeRestCall('Stay', 'GET',
+            array('case' => $caseId), $this->stayDataBundle);
 
         //need a better way to do this...
         foreach ($stayResult['Results'] as $stay) {
-            if (isset($this->stayTypes[$stay['stayType']])) {
-                $stay = $this->formatDates(
-                    $stay,
-                    array(
-                        'requestDate',
-                        'withdrawnDate'
-                    )
-                );
-
-                $stayRecords[$stay['stayType']] = $stay;
-            }
+            $stayRecords[$stay['stayType']['id']][] = $stay;
         }
 
         return $stayRecords;
