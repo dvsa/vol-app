@@ -501,5 +501,9 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
         //die('<pre>' . print_r($update, 1));
 
         $this->save($update, 'Cases');
+
+        $this->addSuccessMessage('Comments updated successfully');
+
+        $this->redirectToIndex();
     }
 }
