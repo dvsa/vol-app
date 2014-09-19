@@ -7,14 +7,15 @@
  */
 namespace Olcs\Controller\Licence\Details;
 
-use Common\Controller\Traits;
+use Common\Controller\Traits\OperatingCentre;
 
 /**
  * Operating Centre Controller
  */
 class OperatingCentreController extends AbstractLicenceDetailsController
 {
-    use Traits\OperatingCentre\GenericLicenceAuthorisationSection;
+    use OperatingCentre\GenericLicenceAuthorisationSection,
+        OperatingCentre\InternalLicenceAuthorisationSection;
 
     /**
      * Northern Ireland Traffic Area Code
