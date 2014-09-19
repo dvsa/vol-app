@@ -134,42 +134,39 @@ class DocumentGenerationController extends DocumentController
             ]
         );
 
-        // @TODO obviously this is hideously inefficient but is
-        // simply to prove the concept for now. Will tidy up
-        // before finishing the story; we'll probably end up
-        // creating a custom endpoint to fetch all paragraphs
-        // by ID in one rest call
-        $bookmarks = [];
-        foreach ($data['bookmarks'] as $key => $ids) {
-            if ($ids === null) {
-                // all groups of bookmarks are optional
-                continue;
-            }
-            $paragraph = '';
-            foreach ($ids as $id) {
-                $result = $this->makeRestCall(
-                    'DocParagraph',
-                    'GET',
-                    ['id' => $id],
-                    ['properties' => ['paraText']]
-                );
-                $paragraph .= $result['paraText'];
-            }
-            $bookmarks[$key] = $paragraph;
-        }
+        $identifier = $template['document']['identifier'];
 
-        // we've now got our concatenated 'static' bookmarks we can
-        // dump into the template. Let's fetch the actual raw template
-        // data and do that
+        $data['user'] = $this->getLoggedInUser();
 
-        // we've now got our raw content and our bookmarks, so can hand off
-        // to our template service / doc gen service to generate the doc
-        $file = $this->getDocumentService()
-            ->generateFromTemplate(
-                $template['document']['identifier'],
-                $bookmarks
-            );
+        /**
+         * 1) read the template from the content store
+         */
+        $file = $this->getContentStore()->read($identifier);
 
+        /**
+         * 2) Pass the file into the doc service to extract the relevant
+         *    bookmarks out of the file data and return an array of queries
+         *    we need to answer in order to populate those bookmarks
+         */
+        $query = $this->getDocumentService()->getBookmarkQueries($file, $data);
+
+        /**
+         * 3) Pass those queries into a custom backend endpoint which knows how to
+         *    fetch data for multiple different entities at once and respects the
+         *    keys to which they relate (e.g. doesn't trash the bookmark keys)
+         */
+        $result = $this->makeRestCall('BookmarkSearch', 'GET', [], $query);
+
+        /**
+         * 4) We've now got all our dynamic data which we can feedback into
+         *    our bookmarks to actually replace tokens with data. This will
+         *    give us back a modified file object which we can then save
+         */
+        $file = $this->getDocumentService()->populateBookmarks($file, $result);
+
+        /**
+         * 5) All done; we can now persist our generated document
+         */
         $details = json_encode(
             [
                 'details' => $data['details'],
