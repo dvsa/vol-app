@@ -6,20 +6,18 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
- * @Form\Name("Public inquiry Register Decision")
+ * @Form\Name("Comment")
+ * @Form\Options({"label":"Comment"})
  * @Form\Attributes({"method":"post"})
- * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true})
- * Form\InputFilter("Common\Form\InputFilter")
  */
-class PublicInquiryRegisterDecision
+class Comment
 {
     /**
-     * @Form\Name("main")
-     * @Form\Options({"label":""})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\PublicInquiryRegisterDecisionMain")
+     * @Form\Name("fields")
+     * @Form\Options({"label":"","class":""})
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\Comment")
      */
-    public $main;
+    public $fields = null;
 
     /**
      * @Form\Name("form-actions")

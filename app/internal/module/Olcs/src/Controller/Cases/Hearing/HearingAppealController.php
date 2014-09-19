@@ -5,17 +5,18 @@
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-
-namespace Olcs\Controller;
+namespace Olcs\Controller\Cases\Hearing;
 
 // Olcs
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
 
-/**
- * Case Prohibition Controller
- */
-class CaseAnnualTestHistoryController extends OlcsController\CrudAbstract
+    /**
+     * Case Prohibition Controller
+     *
+     * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+     */
+class HearingAppealController extends OlcsController\CrudAbstract
 {
     use ControllerTraits\CaseControllerTrait;
 
@@ -24,28 +25,21 @@ class CaseAnnualTestHistoryController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $identifierName = 'void';
+    protected $identifierName = 'prohibition';
 
     /**
      * Table name string
      *
      * @var string
      */
-    protected $tableName = '';
-
-    /**
-     * Name of comment box field.
-     *
-     * @var string
-     */
-    protected $commentBoxName = 'annualTestHistory';
+    protected $tableName = 'prohibition';
 
     /**
      * Holds the form name
      *
      * @var string
      */
-    protected $formName = 'void';
+    protected $formName = 'prohibition';
 
     /**
      * The current page's extra layout, over and above the
@@ -68,14 +62,14 @@ class CaseAnnualTestHistoryController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $service = 'Void';
+    protected $service = 'Prohibition';
 
     /**
      * Holds the navigation ID,
      * required when an entire controller is
      * represneted by a single navigation id.
      */
-    protected $navigationId = 'case_details_annual_test_history';
+    protected $navigationId = 'case_details_prohibitions';
 
     /**
      * Holds an array of variables for the
@@ -94,6 +88,7 @@ class CaseAnnualTestHistoryController extends OlcsController\CrudAbstract
         'main' => array(
             'mapFrom' => array(
                 'fields',
+                'base',
             )
         )
     );
@@ -125,4 +120,19 @@ class CaseAnnualTestHistoryController extends OlcsController\CrudAbstract
             )
         )
     );
+
+    public function indexAction()
+    {
+        return $this->redirectToIndex();
+    }
+
+    public function redirectToIndex()
+    {
+        return $this->redirectToRoute(null, ['action' => 'details'], [], true);
+    }
+
+    public function detailsAction()
+    {
+        die('details');
+    }
 }

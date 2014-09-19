@@ -15,9 +15,16 @@ use Zend\Mvc\MvcEvent as MvcEvent;
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech>
  */
-class CrudAbstract extends CommonController\AbstractSectionController implements CommonController\CrudInterface
+abstract class CrudAbstract extends CommonController\AbstractSectionController implements CommonController\CrudInterface
 {
     use Traits\DeleteActionTrait;
+
+    /**
+     * Name of comment box field.
+     *
+     * @var string
+     */
+    protected $commentBoxName = '';
 
     protected $requiredProperties = [
         'formName',
@@ -32,6 +39,12 @@ class CrudAbstract extends CommonController\AbstractSectionController implements
     ];
 
     protected $pageLayoutInner = null;
+
+    /**
+     * Holds an array of variables for the
+     * default index list page.
+     */
+    protected $listVars = [];
 
     /**
      * Holds the isAction
@@ -51,6 +64,13 @@ class CrudAbstract extends CommonController\AbstractSectionController implements
         }
     }
 
+    /**
+     * Proxies to the get query or get param.
+     *
+     * @param mixed $name
+     * @param mixed $default
+     * @return mixed
+     */
     public function getQueryOrRouteParam($name, $default = null)
     {
         if ($queryValue = $this->params()->fromQuery($name, $default)) {
@@ -64,6 +84,9 @@ class CrudAbstract extends CommonController\AbstractSectionController implements
         return $default;
     }
 
+    /**
+     * Index Action.
+     */
     public function indexAction()
     {
         $view = $this->getView([]);
@@ -72,9 +95,21 @@ class CrudAbstract extends CommonController\AbstractSectionController implements
 
         $this->buildTableIntoView();
 
+        $this->buildCommentsBoxIntoView();
+
         $view->setTemplate('crud/index');
 
         return $this->renderView($view);
+    }
+
+    /**
+     * Returns the listVars property.
+     *
+     * @return array
+     */
+    public function getListVars()
+    {
+        return $this->listVars;
     }
 
     /**
@@ -84,6 +119,27 @@ class CrudAbstract extends CommonController\AbstractSectionController implements
      */
     public function buildTableIntoView()
     {
+        if ($tableName = $this->getTableName()) {
+
+            $params = $this->getTableParams();
+
+            $data = $this->loadListData($params);
+
+            $data = $this->preProcessTableData($data);
+
+            $this->getViewHelperManager()->get('placeholder')->getContainer('table')->set(
+                $this->alterTable($this->getTable($tableName, $data, $params))
+            );
+        }
+    }
+
+    public function loadListData(array $params)
+    {
+        return $this->makeRestCall($this->getService(), 'GET', $params, $this->getDataBundle());
+    }
+
+    public function getTableParams()
+    {
         $params = [
             'page'    => $this->getQueryOrRouteParam('page', 1),
             'sort'    => $this->getQueryOrRouteParam('sort', 'id'),
@@ -91,17 +147,12 @@ class CrudAbstract extends CommonController\AbstractSectionController implements
             'limit'   => $this->getQueryOrRouteParam('limit', 10),
         ];
 
-        for($i=0; $i<count($this->listVars); $i++) {
-            $params[$this->listVars[$i]] = $this->getQueryOrRouteParam($this->listVars[$i]);
+        $listVars = $this->getListVars();
+        for($i=0; $i<count($listVars); $i++) {
+            $params[$listVars[$i]] = $this->getQueryOrRouteParam($listVars[$i], null);
         }
 
-        $results = $this->makeRestCall($this->getService(), 'GET', $params, $this->getDataBundle());
-
-        $results = $this->preProcessTableData($results);
-
-        $this->getViewHelperManager()->get('placeholder')->getContainer('table')->set(
-            $this->alterTable($this->getTable($this->getTableName(), $results, $params))
-        );
+        return $params;
     }
 
     /**
@@ -115,6 +166,9 @@ class CrudAbstract extends CommonController\AbstractSectionController implements
         return $data;
     }
 
+    /**
+     * Master details option.
+     */
     public function detailsAction()
     {
         $view = $this->getView([]);
@@ -127,6 +181,18 @@ class CrudAbstract extends CommonController\AbstractSectionController implements
         $view->setTemplate($this->detailsView);
 
         return $this->renderView($view);
+    }
+
+    /**
+     * Sets the view helper placeholder namespaced value.
+     *
+     * @param string $namespace
+     * @param mixed $content
+     */
+    public function setPlaceholder($namespace, $content)
+    {
+        $this->getViewHelperManager()->get('placeholder')
+             ->getContainer($namespace)->set($content);
     }
 
     /**
@@ -149,6 +215,11 @@ class CrudAbstract extends CommonController\AbstractSectionController implements
         return $this->saveThis();
     }
 
+    /**
+     * Simple redirect to details action.
+     *
+     * @return \Zend\Http\Response
+     */
     public function redirectAction()
     {
         return $this->redirect()->toRoute(
@@ -167,7 +238,7 @@ class CrudAbstract extends CommonController\AbstractSectionController implements
 
         $view = $this->getView();
 
-        $this->getViewHelperManager()->get('placeholder')->getContainer('form')->set($form);
+        $this->setPlaceholder('form', $form);
 
         $view->setTemplate('crud/form');
 
@@ -193,48 +264,9 @@ class CrudAbstract extends CommonController\AbstractSectionController implements
         return $this->redirectToIndex();
     }
 
-    /* public function processDataMapForLoad($oldData, $map = array(), $section = 'main')
-    {
-        if (empty($map)) {
-            return $oldData;
-        }
-
-        if (isset($map['_addresses'])) {
-
-            foreach ($map['_addresses'] as $address) {
-                $oldData = $this->processAddressData($oldData, $address);
-            }
-        }
-
-        if (isset($map[$section]['mapFrom'])) {
-
-            $data = array();
-
-            foreach ($map[$section]['mapFrom'] as $key) {
-
-                if (isset($oldData[$key])) {
-                    $data = array_merge($data, $oldData[$key]);
-                }
-            }
-
-        } else {
-            $data = array();
-        }
-
-        if (isset($map[$section]['children'])) {
-
-            foreach ($map[$section]['children'] as $child => $options) {
-                $data[$child] = $this->processDataMapForSave($oldData, array($child => $options), $child);
-            }
-        }
-
-        if (isset($map[$section]['values'])) {
-            $data = array_merge($data, $map[$section]['values']);
-        }
-
-        return $data;
-    } */
-
+    /**
+     * Simple redirect to index.
+     */
     public function redirectToIndex()
     {
         return $this->redirectToRoute(
@@ -259,7 +291,7 @@ class CrudAbstract extends CommonController\AbstractSectionController implements
 
         foreach ($this->requiredProperties as $requiredProperty) {
 
-            if (!in_array($requiredProperty, $classProperties) || empty($this->{$requiredProperty})) {
+            if (!in_array($requiredProperty, $classProperties) /* || empty($this->{$requiredProperty}) */) {
 
                 $missingProperties[] = $requiredProperty;
             }
@@ -333,6 +365,19 @@ class CrudAbstract extends CommonController\AbstractSectionController implements
     }
 
     /**
+     * Sets the navigation Id. Usually, this would be set as the default
+     * value in a child controller, however, we need to re set it in places.
+     *
+     * @param unknown $navigationId
+     * @return \Olcs\Controller\CrudAbstract
+     */
+    public function setNavigationId($navigationId)
+    {
+        $this->navigationId = $navigationId;
+        return $this;
+    }
+
+    /**
      * Gets a variable from the route
      *
      * @param string $param
@@ -341,7 +386,7 @@ class CrudAbstract extends CommonController\AbstractSectionController implements
      */
     public function fromRoute($param, $default = null)
     {
-        return $this->params()->fromRoute($param, $default);
+        return $this->getFromRoute($param, $default);
     }
 
     /**
@@ -353,7 +398,7 @@ class CrudAbstract extends CommonController\AbstractSectionController implements
      */
     public function fromPost($param, $default = null)
     {
-        return $this->params()->fromPost($param, $default);
+        return $this->getFromPost($param, $default);
     }
 
     /**
@@ -390,6 +435,7 @@ class CrudAbstract extends CommonController\AbstractSectionController implements
                 $data = $this->replaceIds($data, $fields);
             }
             $data['fields'] = $data;
+            $data['base'] = $data;
         } else {
             $data = [];
             $data['case'] = $this->getQueryOrRouteParam('case');
@@ -398,5 +444,52 @@ class CrudAbstract extends CommonController\AbstractSectionController implements
         }
 
         return $data;
+    }
+
+
+    /**
+     * Comments box
+     */
+    public function buildCommentsBoxIntoView()
+    {
+        if ($this->commentBoxName) {
+            $form = $this->generateForm(
+                'comment',
+                'processCommentForm'
+            );
+
+            $case = $this->getCase();
+            $data = [];
+            $data['fields']['id'] = $case['id'];
+            $data['fields']['version'] = $case['version'];
+            $data['fields']['comment'] = $case[$this->commentBoxName];
+
+            $form->setData($form);
+
+            $this->setPlaceholder('comments', $form);
+        }
+    }
+
+    /**
+     * Setter for field name for comment box.
+     *
+     * @param string $commentBoxName
+     *
+     * @return \Olcs\Controller\CrudAbstract
+     */
+    public function setCommentBoxName($commentBoxName)
+    {
+        $this->commentBoxName = $commentBoxName;
+        return $this;
+    }
+
+    public function processCommentForm($data)
+    {
+        $update = [];
+        $update['id'] = $data['fields']['id'];
+        $update['version'] = $data['fields']['version'];
+        $update[$this->commentBoxName] = $data['fields']['comment'];
+
+        $this->save($update, 'Case');
     }
 }

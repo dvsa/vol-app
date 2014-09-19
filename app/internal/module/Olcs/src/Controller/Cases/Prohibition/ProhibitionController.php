@@ -35,6 +35,13 @@ class ProhibitionController extends OlcsController\CrudAbstract
     protected $tableName = 'prohibition';
 
     /**
+     * Name of comment box field.
+     *
+     * @var string
+     */
+    protected $commentBoxName = 'prohibitionNote';
+
+    /**
      * Holds the form name
      *
      * @var string
@@ -120,25 +127,4 @@ class ProhibitionController extends OlcsController\CrudAbstract
             )
         )
     );
-
-    /**
-     * Map the data on load
-     *
-     * @param array $data
-     * @return array
-     */
-    /* public function processLoad($data)
-    {
-        if (isset($data['id'])) {
-            $data = $this->replaceIds($data, ['prohibitionType', 'case']);
-            $data['fields'] = $data;
-            $data['base'] = $data;
-        } else {
-            $data = [];
-            $data['case'] = $this->getQueryOrRouteParam('case');
-            $data['base']['case'] = $this->getQueryOrRouteParam('case');
-        }
-
-        return $data;
-    } */
 }

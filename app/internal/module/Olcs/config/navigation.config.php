@@ -56,19 +56,19 @@ return array(
                             'use_route_match' => true,
                         ),
                         array(
+                            'id' => 'case_details_annual_test_history',
+                            'label' => 'Annual test history',
+                            'route' => 'case_annual_test_history',
+                            'action' => 'index',
+                            'use_route_match' => true,
+                        ),
+                        array(
                             'id' => 'case_details_prohibitions',
                             'label' => 'Prohibitions',
                             'route' => 'case_prohibition',
                             'action' => 'index',
                             'use_route_match' => true,
                         ),
-                        /* array( // Maybe being removed????
-                            'id' => 'case_details_penalties',
-                            'label' => 'Penalties',
-                            'route' => 'case',
-                            'action' => 'penalties',
-                            'use_route_match' => true,
-                        ), */
                         array(
                             'id' => 'case_details_statements',
                             'label' => 'Statements',
@@ -81,6 +81,13 @@ return array(
                             'label' => 'Complaints',
                             'route' => 'case_complaint',
                             'action' => 'index',
+                            'use_route_match' => true,
+                        ),
+                        array(
+                            'id' => 'case_details_infringements',
+                            'label' => 'Public inquiry',
+                            'route' => 'case',
+                            'action' => 'infringements',
                             'use_route_match' => true,
                         ),
                         array(
@@ -148,6 +155,89 @@ return array(
                             'label' => 'Edit Submission',
                             'route' => 'submission',
                             'action' => 'edit',
+                            'use_route_match' => true,
+                        ),
+                    )
+                ),
+                array(
+                    'id' => 'case_hearings_appeals',
+                    'label' => 'Hearings & appeals',
+                    'route' => 'case_hearing_appeal',
+                    'action' => 'index',
+                    'use_route_match' => true,
+                    'pages' => array(
+                        array(
+                            'id' => 'case_hearings_appeals_stays',
+                            'label' => 'Appeals and stays',
+                            'route' => 'case_hearing_appeal',
+                            'action' => 'details',
+                            'use_route_match' => true,
+                        ),
+                        array(
+                            'id' => 'case_hearings_appeals_public_inquiry',
+                            'label' => 'Public inquiry',
+                            'route' => 'case_public_inquiry',
+                            'action' => 'details',
+                            'use_route_match' => true,
+                        ),
+                    )
+                ),
+                array(
+                    'id' => 'case_docs_attachments',
+                    'label' => 'Docs & attachments',
+                    'route' => 'case',
+                    'action' => 'docs',
+                    'use_route_match' => true,
+                    'pages' => array(
+                        array(
+                            'id' => 'case_docs_attachments_documents',
+                            'label' => 'Docs',
+                            'route' => 'case',
+                            'action' => 'docs',
+                            'use_route_match' => true,
+                        ),
+                    )
+                ),
+                array(
+                    'id' => 'case_processing',
+                    'label' => 'Processing',
+                    'route' => 'case',
+                    'action' => 'index',
+                    'use_route_match' => true,
+                    'pages' => array(
+                        array(
+                            'id' => 'case_processing_decisions',
+                            'label' => 'Decisions',
+                            'route' => 'case',
+                            'action' => 'redirect',
+                            'use_route_match' => true,
+                        ),
+                        array(
+                            'id' => 'case_processing_revocation',
+                            'label' => 'In office revokaction',
+                            'route' => 'case',
+                            'action' => 'redirect',
+                            'use_route_match' => true,
+                        ),
+                        array(
+                            'id' => 'case_processing_history',
+                            'label' => 'History',
+                            'route' => 'case',
+                            'action' => 'redirect',
+                            'use_route_match' => true,
+                        ),
+                        array(
+                            'id' => 'case_processing_tasks',
+                            'label' => 'Tasks',
+                            'route' => 'case',
+                            'action' => 'redirect',
+                            'use_route_match' => true,
+                        ),
+                        array(
+                            'id' => 'case_processing_notes',
+                            'label' => 'Notes',
+                            'route' => 'case',
+                            'action' => 'redirect',
                             'use_route_match' => true,
                         ),
                     )

@@ -745,12 +745,24 @@ return array_merge(
                 ]
             ]
         ],
+        'case_hearing_appeal' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/case/:case/hearing-appeal[/:action]',
+                'constraints' => [
+                    'case' => '[0-9]+'
+                ],
+                'defaults' => [
+                    'controller' => 'CaseHearingAppealController',
+                    'action' => 'index'
+                ]
+            ]
+        ],
         'case_annual_test_history' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/licence/[:licence]/case/[:case]/action/manage/annual-test-history',
+                'route' => '/case/:case/annual-test-history',
                 'constraints' => [
-                    'licence' => '[0-9]+',
                     'case' => '[0-9]+',
                 ],
                 'defaults' => [
@@ -762,7 +774,7 @@ return array_merge(
         'case_prohibition' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/case/[:case]/prohibition[/:action][/:prohibition]',
+                'route' => '/case/:case/prohibition[/:action][/:prohibition]',
                 'constraints' => [
                     'case' => '[0-9]+',
                     'prohibition' => '[0-9]+'
