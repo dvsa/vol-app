@@ -2,6 +2,10 @@
 
 namespace Olcs\Controller\Cases\PublicInquiry;
 
+/**
+ * Class RegisterDecisionController
+ * @package Olcs\Controller\Cases\PublicInquiry
+ */
 class RegisterDecisionController extends PublicInquiryController
 {
     /**

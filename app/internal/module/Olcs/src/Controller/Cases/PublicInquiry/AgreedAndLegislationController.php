@@ -2,17 +2,9 @@
 
 namespace Olcs\Controller\Cases\PublicInquiry;
 
-// Olcs
-use Common\Controller\type;
-use Olcs\Controller as OlcsController;
-use Olcs\Controller\Traits as ControllerTraits;
-
-use Zend\View\Model\ViewModel;
-
 /**
- * Case Complaint Controller
- *
- * @author S Lizzio <shaun.lizzio@valtech.co.uk>
+ * Class AgreedAndLegislationController
+ * @package Olcs\Controller\Cases\PublicInquiry
  */
 class AgreedAndLegislationController extends PublicInquiryController
 {
@@ -39,6 +31,9 @@ class AgreedAndLegislationController extends PublicInquiryController
         )
     );
 
+    /**
+     * @return array
+     */
     public function getFormDefaults()
     {
         return ['agreedDate' => date('Y-m-d')];

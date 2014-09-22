@@ -2,6 +2,10 @@
 
 namespace Olcs\Controller\Cases\PublicInquiry;
 
+/**
+ * Class SlaController
+ * @package Olcs\Controller\Cases\PublicInquiry
+ */
 class SlaController extends PublicInquiryController
 {
     /**
@@ -11,5 +15,8 @@ class SlaController extends PublicInquiryController
      */
     protected $formName = 'PublicInquirySla';
 
+    /**
+     * @var array
+     */
     protected $inlineScripts = ['pi-sla'];
 }
