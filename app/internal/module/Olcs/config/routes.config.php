@@ -860,10 +860,10 @@ return array_merge(
         'case_penalty' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/licence/[:licence]/case/[:case]/action/manage/penalties',
+                'route' => '/case/:case/penalty[/:action][/:penalty]',
                 'constraints' => [
-                    'licence' => '[0-9]+',
                     'case' => '[0-9]+',
+                    'penalty' => '[0-9]+',
                 ],
                 'defaults' => [
                     'controller' => 'CasePenaltyController',
