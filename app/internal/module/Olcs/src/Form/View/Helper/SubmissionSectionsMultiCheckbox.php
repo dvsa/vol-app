@@ -36,20 +36,24 @@ class SubmissionSectionsMultiCheckbox extends FormMultiCheckbox
     public function render(ElementInterface $element)
     {
         if (!$element instanceof MultiCheckboxElement) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                '%s requires that the element is of type Zend\Form\Element\MultiCheckbox',
-                __METHOD__
-            ));
+            throw new Exception\InvalidArgumentException(
+                sprintf(
+                    '%s requires that the element is of type Zend\Form\Element\MultiCheckbox',
+                    __METHOD__
+                )
+            );
         }
 
         $name = static::getName($element);
 
         $options = $element->getValueOptions();
         if (empty($options)) {
-            throw new Exception\DomainException(sprintf(
-                '%s requires that the element has "value_options"; none found',
-                __METHOD__
-            ));
+            throw new Exception\DomainException(
+                sprintf(
+                    '%s requires that the element has "value_options"; none found',
+                    __METHOD__
+                )
+            );
         }
 
         $attributes         = $element->getAttributes();
@@ -80,9 +84,12 @@ class SubmissionSectionsMultiCheckbox extends FormMultiCheckbox
      * @param  array                $attributes
      * @return string
      */
-    protected function renderOptions(MultiCheckboxElement $element, array $options, array $selectedOptions,
-                                     array $attributes)
-    {
+    protected function renderOptions(
+        MultiCheckboxElement $element,
+        array $options,
+        array $selectedOptions,
+        array $attributes
+    ) {
         $escapeHtmlHelper = $this->getEscapeHtmlHelper();
         $labelHelper      = $this->getLabelHelper();
         $labelClose       = $labelHelper->closeTag();
@@ -107,12 +114,14 @@ class SubmissionSectionsMultiCheckbox extends FormMultiCheckbox
                 unset($attributes['id']);
             }
 
-            $value           = '';
-            $label           = '';
+            $value = '';
+            $label = '';
             $inputAttributes = $attributes;
             $labelAttributes = $globalLabelAttributes;
-            $selected        = isset($inputAttributes['selected']) && $inputAttributes['type'] != 'radio' && $inputAttributes['selected'] != false ? true : false;
-            $disabled        = isset($inputAttributes['disabled']) && $inputAttributes['disabled'] != false ? true : false;
+            $selected = isset($inputAttributes['selected']) &&
+                $inputAttributes['type'] != 'radio' &&
+                $inputAttributes['selected'] != false ? true : false;
+            $disabled = isset($inputAttributes['disabled']) && $inputAttributes['disabled'] != false ? true : false;
 
             if (is_scalar($optionSpec)) {
                 $optionSpec = array(
@@ -183,6 +192,4 @@ class SubmissionSectionsMultiCheckbox extends FormMultiCheckbox
 
         return implode($this->getSeparator(), $combinedMarkup);
     }
-
-
 }

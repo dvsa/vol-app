@@ -23,5 +23,4 @@ class Submission
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\CancelFormActions")
      */
     public $formActions = null;
-
 }

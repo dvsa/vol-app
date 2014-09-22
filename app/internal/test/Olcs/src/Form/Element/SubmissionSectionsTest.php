@@ -14,7 +14,7 @@ use Mockery as m;
 /**
  * SubmissionSections Element Tests
  *
- * @author shaun.lizzio@valtech.co.uk>
+ * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
 class SubmissionSectionsTest extends PHPUnit_Framework_TestCase
 {
@@ -65,7 +65,9 @@ class SubmissionSectionsTest extends PHPUnit_Framework_TestCase
         $sut->setSubmissionType($mockSelect);
 
         $mockMultiCheckbox = m::mock('Zend\Form\Element\MultiCheckbox');
-        $mockMultiCheckbox->shouldReceive('getValueOptions')->andReturn(['submission_section_pers' => 'Persons','submission_section_case' => 'Cases']);
+        $mockMultiCheckbox->shouldReceive(
+            'getValueOptions'
+        )->andReturn(['submission_section_pers' => 'Persons','submission_section_case' => 'Cases']);
         $mockMultiCheckbox->shouldReceive('setValueOptions');
         $mockMultiCheckbox->shouldReceive('setOptions')->with(['label_position'=>'append']);
         $mockMultiCheckbox->shouldReceive('setName')->with($name . '[sections]');

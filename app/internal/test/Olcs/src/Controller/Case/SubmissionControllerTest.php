@@ -60,7 +60,6 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
             ->method('getDataForForm')
             ->will($this->returnValue($formData));
 
-
         $mockForm = $this->getMock('\stdClass', ['remove']);
 
         $mockForm->expects($this->once())

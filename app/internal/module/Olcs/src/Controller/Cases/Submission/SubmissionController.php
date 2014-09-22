@@ -254,7 +254,9 @@ class SubmissionController extends OlcsController\CrudAbstract
 
         $submissionsArray = json_decode($submission['text']);
 
-        $submissionSections = $this->getServiceLocator()->get('Common\Service\Data\RefData')->fetchListData('submission_section');
+        $submissionSections = $this->getServiceLocator()->get(
+            'Common\Service\Data\RefData'
+        )->fetchListData('submission_section');
         $submission['submissionTypeTitle'] = $this->getSubmissionTypeTitle($submission['submissionType']['id']);
 
         $sectionData = [];
@@ -287,10 +289,11 @@ class SubmissionController extends OlcsController\CrudAbstract
      */
     private function getSubmissionTypeTitle($submissionType)
     {
-        $submissionTitles = $this->getServiceLocator()->get('Common\Service\Data\RefData')->fetchListData('submission_type_title');
+        $submissionTitles = $this->getServiceLocator()
+            ->get('Common\Service\Data\RefData')->fetchListData('submission_type_title');
 
         foreach ($submissionTitles as $title) {
-            if ($title['id'] == str_replace('_o_','_t_', $submissionType)) {
+            if ($title['id'] == str_replace('_o_', '_t_', $submissionType)) {
                 return $title['description'];
             }
         }

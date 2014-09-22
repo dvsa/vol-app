@@ -27,10 +27,12 @@ class SubmissionSections extends AbstractHelper
     public function __invoke(ElementInterface $element)
     {
         if (!$element instanceof SubmissionSectionsElement) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                '%s requires that the element is of type Olcs\Form\Element\SubmissionSections',
-                __METHOD__
-            ));
+            throw new Exception\InvalidArgumentException(
+                sprintf(
+                    '%s requires that the element is of type Olcs\Form\Element\SubmissionSections',
+                    __METHOD__
+                )
+            );
         }
 
         $formSelectPlugin = $this->view->plugin('formSelect');
@@ -54,5 +56,4 @@ class SubmissionSections extends AbstractHelper
         return $markup;
 
     }
-
 }
