@@ -9,7 +9,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("details")
  * @Form\Options({"label":"Statement Details"})
  */
-class StatementDetails
+class StatementDetails extends CaseBase
 {
     /**
      * @Form\Attributes({"id":"","placeholder":""})
