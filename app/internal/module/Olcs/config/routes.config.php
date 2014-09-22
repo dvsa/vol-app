@@ -886,6 +886,20 @@ return array_merge(
                 ]
             ]
         ],
+        'case_pi_decision' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/case/:case/pi/decision[/:action]',
+                'constraints' => [
+                    'case' => '[0-9]+',
+                    'action' => '[a-z]+',
+                ],
+                'defaults' => [
+                    'controller' => 'PublicInquiry\RegisterDecisionController',
+                    'action' => 'index'
+                ]
+            ]
+        ],
         'case_pi_sla' => [
             'type' => 'segment',
             'options' => [

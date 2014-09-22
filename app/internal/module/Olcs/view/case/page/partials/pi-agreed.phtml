@@ -44,7 +44,7 @@
         ] */,
         'legislation' => [
             'label' => 'Legislation',
-            'value' => is_array($pi['reasons']) ? implode(', ', array_map(function($item){return $item['sectionCode'];}, $pi['reasons'])) : 'None selected',
+            'value' => is_array($pi['reasons']) ? implode(', ', array_map(function($item){return $item['sectionCode']. ' ' . $item['description'];}, $pi['reasons'])) : 'None selected',
         ],
         'comments' => [
             'label' => 'Comments',

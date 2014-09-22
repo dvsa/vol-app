@@ -38,4 +38,9 @@ class AgreedAndLegislationController extends PublicInquiryController
             )
         )
     );
+
+    public function getFormDefaults()
+    {
+        return ['agreedDate' => date('Y-m-d')];
+    }
 }
