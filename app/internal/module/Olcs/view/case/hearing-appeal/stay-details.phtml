@@ -31,15 +31,15 @@ if (!empty($id))
 
             <dt><?php echo $this->translate('Requested date');
                 ?></dt>
-            <dd><?php echo isset($requestedDate) ? $requestedDate : ''; ?></dd>
+            <dd><?php echo isset($requestDate) ? $requestDate : ''; ?></dd>
 
             <dt><?php echo $this->translate('Decision date');?></dt>
-            <dd><?php echo $decisionDate; ?></dd>
+            <dd><?php echo isset($decisionDate) ? $decisionDate : ''; ?></dd>
             <dt><?php echo $this->translate('Is withdrawn');?></dt>
             <dd><?php echo $this->translate(empty($withdrawnDate) ?
                     'N' : 'Y'); ?></dd>
             <dt><?php echo $this->translate('Withdrawn date');?></dt>
-            <dd><?php echo $withdrawnDate; ?></dd>
+            <dd><?php echo isset($withdrawnDate) ? $withdrawnDate : ''; ?></dd>
         </dl>
         <dl>
             <dt><?php echo $this->translate('Notes');?></dt>

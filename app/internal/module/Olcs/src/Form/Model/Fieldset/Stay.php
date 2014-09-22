@@ -29,6 +29,18 @@ class Stay extends CaseBase
     public $requestDate = null;
 
     /**
+     * @Form\Attributes({"id":"dob"})
+     * @Form\Options({
+     *     "label": "Date of decision",
+     *     "create_empty_option": true,
+     *     "render_delimiters": false
+     * })
+     * @Form\Required(false)
+     * @Form\Type("\Common\Form\Elements\InputFilters\DecisionDateBeforeRequestDate")
+     */
+    public $decisionDate = null;
+
+    /**
      * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
      *     "label": "Outcome",
