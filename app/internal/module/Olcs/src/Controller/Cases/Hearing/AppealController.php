@@ -10,6 +10,7 @@ namespace Olcs\Controller\Cases\Hearing;
 // Olcs
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
+use Common\Exception\BadRequestException;
 
 /**
  * Case Appeal Controller
@@ -130,6 +131,7 @@ class AppealController extends OlcsController\CrudAbstract
 
     public function addAction()
     {
+        $caseId = $this->getCase()['id'];
         $appeal = $this->getAppealData($caseId);
         if (empty($appeal)) {
             return parent::addAction();

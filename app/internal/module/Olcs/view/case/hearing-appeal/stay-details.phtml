@@ -1,27 +1,54 @@
-<div class="read-only">
-    <dl>
-        <dt><?php echo $this->translate('Stay type');?></dt>
-        <dd><?php echo $stayType['description']; ?></dd>
+<?php
+if (!empty($id))
+{
+    $action = 'Edit';
+} else {
+    $action = 'Add';
+}
+?>
+<h4><?php echo $this->translate(
+        $stayType['description']
+    ); ?>
+    <a href="<?php echo $this->url(
+        'case_stay',
+        [
+            'case' => $case['id'],
+            'action' => strtolower($action),
+            'stayType' => $stayType['id'],
+        ], [], false); ?>" class="action--secondary
+        right-aligned"><?php echo $this->translate($action);
+        ?></a>
+</h4>
 
-        <dt><?php echo $this->translate('Outcome');?></dt>
-        <dd><?php echo $outcome['description']; ?></dd>
+<?php if ($action == 'Edit') { ?>
+    <div class="read-only">
+        <dl>
+            <dt><?php echo $this->translate('Stay type');?></dt>
+            <dd><?php echo $stayType['description']; ?></dd>
 
-        <dt><?php echo $this->translate('Requested date');
-            ?></dt>
-        <dd><?php echo isset($requestedDate) ? $requestedDate : ''; ?></dd>
+            <dt><?php echo $this->translate('Outcome');?></dt>
+            <dd><?php echo $outcome['description']; ?></dd>
 
-        <dt><?php echo $this->translate('Decision date');?></dt>
-        <dd><?php echo $decisionDate; ?></dd>
-        <dt><?php echo $this->translate('Is withdrawn');?></dt>
-        <dd><?php echo $this->translate(empty($withdrawnDate) ?
-                'N' : 'Y'); ?></dd>
-        <dt><?php echo $this->translate('Withdrawn date');?></dt>
-        <dd><?php echo $withdrawnDate; ?></dd>
-    </dl>
-    <dl>
-        <dt><?php echo $this->translate('Notes');?></dt>
-        <dd class="three-quarters"><?php echo
-            $notes;
-            ?></dd>
-    </dl>
-</div>
+            <dt><?php echo $this->translate('Requested date');
+                ?></dt>
+            <dd><?php echo isset($requestedDate) ? $requestedDate : ''; ?></dd>
+
+            <dt><?php echo $this->translate('Decision date');?></dt>
+            <dd><?php echo $decisionDate; ?></dd>
+            <dt><?php echo $this->translate('Is withdrawn');?></dt>
+            <dd><?php echo $this->translate(empty($withdrawnDate) ?
+                    'N' : 'Y'); ?></dd>
+            <dt><?php echo $this->translate('Withdrawn date');?></dt>
+            <dd><?php echo $withdrawnDate; ?></dd>
+        </dl>
+        <dl>
+            <dt><?php echo $this->translate('Notes');?></dt>
+            <dd class="three-quarters"><?php echo
+                $notes;
+                ?></dd>
+        </dl>
+    </div>
+
+<?php
+}
+?>

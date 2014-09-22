@@ -10,6 +10,7 @@ namespace Olcs\Controller\Cases\Hearing;
 // Olcs
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
+use Common\Exception\BadRequestException;
 
 /**
  * Case Stay Controller
@@ -113,6 +114,12 @@ class StayController extends OlcsController\CrudAbstract
                     'description'
                 )
             ),
+            'outcome' => array(
+                'properties' => array(
+                    'id',
+                    'description'
+                )
+            ),
             'case' => array(
                 'properties' => array(
                     'id'
@@ -167,7 +174,6 @@ class StayController extends OlcsController\CrudAbstract
         }
     }
 
-
     public function indexAction()
     {
         return $this->redirectToIndex();
@@ -181,8 +187,17 @@ class StayController extends OlcsController\CrudAbstract
 
     public function processLoad($data)
     {
+        $stayType = $this->params()->fromRoute('stayType');
+        $caseId = $this->getCase()['id'];
+
+        $stayRecords = $this->getStayData($caseId);
+        if (!(empty($stayRecords[$stayType]))) {
+            $data = $stayRecords[$stayType][0];
+        }
+
         $data = parent::processLoad($data);
-        $data['fields']['stayType'] = $this->params()->fromRoute('stayType');
+        $data['fields']['stayType'] = $stayType;
+        //var_dump($data);
         return $data;
     }
 
