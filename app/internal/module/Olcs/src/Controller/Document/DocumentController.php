@@ -18,7 +18,7 @@ class DocumentController extends AbstractController
     /**
      * Where to store any temporarily generated documents
      */
-    const TMP_STORAGE_PATH  = 'tmp/documents';
+    const TMP_STORAGE_PATH = 'tmp/documents';
 
     /**
      * Where to store finalised documents
@@ -29,7 +29,7 @@ class DocumentController extends AbstractController
      * the keyspace where we store our extra metadata about
      * each document in jackrabbit
      */
-    const METADATA_KEY      = 'data';
+    const METADATA_KEY = 'data';
 
     protected $tmpData = [];
 
@@ -59,7 +59,7 @@ class DocumentController extends AbstractController
         $filePath = $this->params()->fromRoute('path');
         $fullPath = self::TMP_STORAGE_PATH . '/' . $filePath;
 
-        return $this->getUploader()->download($fullPath, $filePath . '.rtf'); // @TODO address this, inside the uploader I guess?
+        return $this->getUploader()->download($fullPath, $filePath . '.rtf');
     }
 
     public function downloadAction()
@@ -181,7 +181,7 @@ class DocumentController extends AbstractController
                 $key = 'meta:' . self::METADATA_KEY;
 
                 $this->tmpData = json_decode(
-                    $meta['metadataProperties'][$key],
+                    $meta['metadata'][$key],
                     true
                 );
             }

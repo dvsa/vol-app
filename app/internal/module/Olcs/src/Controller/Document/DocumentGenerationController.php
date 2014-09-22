@@ -19,6 +19,7 @@ class DocumentGenerationController extends DocumentController
     const EMPTY_LABEL = 'Please select';
 
     private $categoryMap = [
+        // type (as set by the route) => default category name
         'licence' => 'Licensing'
     ];
 
