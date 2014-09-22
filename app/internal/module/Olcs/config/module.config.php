@@ -33,6 +33,7 @@ return array(
             'CaseRevokeController' => 'Olcs\Controller\CaseRevokeController',
             'CasePiController' => 'Olcs\Controller\CasePiController',
             'CasePublicInquiryController' => 'Olcs\Controller\Cases\PublicInquiry\PublicInquiryController',
+            'PublicInquiry\SlaController' => 'Olcs\Controller\Cases\PublicInquiry\SlaController',
             'PublicInquiry\AgreedAndLegislationController' => 'Olcs\Controller\Cases\PublicInquiry\AgreedAndLegislationController',
             'CasePiHearingController' => 'Olcs\Controller\Cases\Pi\HearingController',
             'DocumentController' => 'Olcs\Controller\DocumentController',

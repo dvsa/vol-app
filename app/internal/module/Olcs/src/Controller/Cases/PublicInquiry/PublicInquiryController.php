@@ -174,6 +174,15 @@ class PublicInquiryController extends OlcsController\CrudAbstract
         );
     }
 
+    public function processDataMapForSave($oldData, $map = array(), $section = 'main')
+    {
+        $data = parent::processDataMapForSave($oldData, $map, $section);
+        if (!isset($data['case']) || empty($data['case'])) {
+            $data['case'] = $this->params()->fromRoute('case');
+        }
+        return $data;
+    }
+
     /**
      * Load data for the form
      *

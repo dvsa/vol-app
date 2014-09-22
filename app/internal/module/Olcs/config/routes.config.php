@@ -886,6 +886,20 @@ return array_merge(
                 ]
             ]
         ],
+        'case_pi_sla' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/case/:case/pi/sla[/:action]',
+                'constraints' => [
+                    'case' => '[0-9]+',
+                    'action' => '[a-z]+',
+                ],
+                'defaults' => [
+                    'controller' => 'PublicInquiry\SlaController',
+                    'action' => 'index'
+                ]
+            ]
+        ],
         /* 'complaint' => [
             'type' => 'segment',
             'options' => [
