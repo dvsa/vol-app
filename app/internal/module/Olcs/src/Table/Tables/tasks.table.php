@@ -38,7 +38,15 @@ return array(
         array(
             'title' => 'Description',
             'formatter' => function ($row) {
-                return '<a href=#>' . $row['description'] . '</a>';
+                $url = $this->generateUrl(
+                    array('task' => $row['id'], 'action' => 'edit'),
+                    'task_action'
+                );
+                return '<a href="'
+                    . $url
+                    . '" class=js-modal-ajax>'
+                    . $row['description']
+                    . '</a>';
             }
         ),
         array(

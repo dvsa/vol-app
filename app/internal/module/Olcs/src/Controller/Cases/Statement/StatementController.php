@@ -108,15 +108,15 @@ class StatementController extends OlcsController\CrudAbstract
      */
     protected $dataBundle = array(
         'children' => array(
-            'case' => array(
-                'properties' => array(
-                    'id'
-                )
+            'contactType' => array(
+                'properties' => 'ALL'
             ),
-            'prohibitionType' => array(
-                'properties' => array(
-                    'id',
-                    'description'
+            'requestorsAddress' => array(
+                'properties' => 'ALL',
+                'children' => array(
+                    'countryCode' => array(
+                        'properties' => array('id')
+                    )
                 )
             )
         )
@@ -308,7 +308,7 @@ class StatementController extends OlcsController\CrudAbstract
      * @param array $data
      * @return array of bookmark mappings
      */
-    public function mapDocumentData($data)
+    /* public function mapDocumentData($data)
     {
         $bookmarkData = $this->getBookmarkData($data);
         $bookmarks = [];
@@ -336,7 +336,7 @@ class StatementController extends OlcsController\CrudAbstract
         $bookmarks['AuthorisorName3'] = '<user\'s name> <olcs job role>';
 
         return $bookmarks;
-    }
+    } */
 
     /**
      * Gets bookmark data for the document tempate
@@ -344,7 +344,7 @@ class StatementController extends OlcsController\CrudAbstract
      * @param array $data
      * @return array
      */
-    public function getBookmarkData($data)
+    /* public function getBookmarkData($data)
     {
         $bundle = $this->getBookmarkBundle();
 
@@ -356,14 +356,14 @@ class StatementController extends OlcsController\CrudAbstract
 
         return $bookmarkData;
 
-    }
+    } */
 
     /**
      * Gets the bookmark bundle
      *
      * @return array
      */
-    public function getBookmarkBundle()
+    /* public function getBookmarkBundle()
     {
          return array(
             'properties' => array(
@@ -388,7 +388,7 @@ class StatementController extends OlcsController\CrudAbstract
                 )
             )
         );
-    }
+    } */
 
     /**
      * Pre-persist data processing

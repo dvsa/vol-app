@@ -6,17 +6,17 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
- * @Form\Name("Public inquiry Register Decision")
+ * @Form\Name("Public inquiry SLA")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
  * @Form\Options({"prefer_form_input_filter": true})
  */
-class PublicInquiryRegisterDecision
+class PublicInquirySla
 {
     /**
      * @Form\Name("fields")
      * @Form\Options({"label":""})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\PublicInquiryRegisterDecisionMain")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\PublicInquirySlaMain")
      */
     public $fields;
 

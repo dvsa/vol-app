@@ -32,6 +32,10 @@ return array(
             'CaseConditionUndertakingController' => 'Olcs\Controller\CaseConditionUndertakingController',
             'CaseRevokeController' => 'Olcs\Controller\CaseRevokeController',
             'CasePiController' => 'Olcs\Controller\CasePiController',
+            'CasePublicInquiryController' => 'Olcs\Controller\Cases\PublicInquiry\PublicInquiryController',
+            'PublicInquiry\SlaController' => 'Olcs\Controller\Cases\PublicInquiry\SlaController',
+            'PublicInquiry\AgreedAndLegislationController' => 'Olcs\Controller\Cases\PublicInquiry\AgreedAndLegislationController',
+            'PublicInquiry\RegisterDecisionController' => 'Olcs\Controller\Cases\PublicInquiry\RegisterDecisionController',
             'CasePiHearingController' => 'Olcs\Controller\Cases\Pi\HearingController',
             'DocumentController' => 'Olcs\Controller\DocumentController',
             'DefendantSearchController' => 'Olcs\DefendantSearchController',
@@ -98,7 +102,13 @@ return array(
         'invokables' => array(
             'pageTitle'    => 'Olcs\View\Helper\PageTitle',
             'pageSubtitle' => 'Olcs\View\Helper\PageSubtitle',
-            'tableFilters' => 'Olcs\View\Helper\TableFilters'
+            'tableFilters' => 'Olcs\View\Helper\TableFilters',
+            'piListData'   => 'Olcs\View\Helper\PiListData',
+            'formSubmissionSections' => 'Olcs\Form\View\Helper\SubmissionSections',
+            'formSubmissionSectionsMultiCheckbox' => 'Olcs\Form\View\Helper\SubmissionSectionsMultiCheckbox'
+        ),
+        'delegators' => array(
+            'formElement' => array('Olcs\Form\View\Helper\FormElementDelegatorFactory')
         )
     ),
     'local_forms_path' => array(
@@ -150,7 +160,8 @@ return array(
     ),
     'form_elements' =>[
         'factories' => [
-            'PublicInquiryReason' => 'Olcs\Form\Element\PublicInquiryReasonFactory'
+            'PublicInquiryReason' => 'Olcs\Form\Element\PublicInquiryReasonFactory',
+            'SubmissionSections' => 'Olcs\Form\Element\SubmissionSectionsFactory'
         ]
     ]
 

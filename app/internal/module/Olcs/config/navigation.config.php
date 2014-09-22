@@ -92,9 +92,9 @@ return array(
                         ),
                         array(
                             'id' => 'case_details_public_inquiry',
-                            'label' => 'X Public inquiry',
-                            'route' => 'case',
-                            'action' => 'pi',
+                            'label' => 'Public inquiry',
+                            'route' => 'case_pi',
+                            'action' => 'index',
                             'use_route_match' => true,
                         ),
                         array(

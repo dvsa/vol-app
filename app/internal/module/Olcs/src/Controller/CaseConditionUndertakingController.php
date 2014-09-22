@@ -8,6 +8,10 @@
 
 namespace Olcs\Controller;
 
+// Olcs
+use Olcs\Controller as OlcsController;
+use Olcs\Controller\Traits as ControllerTraits;
+
 use Olcs\Controller\Traits\DeleteActionTrait;
 use Zend\View\Model\ViewModel;
 use Common\Service\Table\Formatter\Address;
@@ -17,9 +21,117 @@ use Common\Service\Table\Formatter\Address;
  *
  * @author S Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class CaseConditionUndertakingController extends CaseController
+class CaseConditionUndertakingController extends OlcsController\CrudAbstract
 {
-    use DeleteActionTrait;
+    use ControllerTraits\CaseControllerTrait;
+
+    /**
+     * Identifier name
+     *
+     * @var string
+     */
+    protected $identifierName = 'prohibition';
+
+    /**
+     * Table name string
+     *
+     * @var string
+     */
+    protected $tableName = 'prohibition';
+
+    /**
+     * Name of comment box field.
+     *
+     * @var string
+     */
+    protected $commentBoxName = 'prohibitionNote';
+
+    /**
+     * Holds the form name
+     *
+     * @var string
+     */
+    protected $formName = 'prohibition';
+
+    /**
+     * The current page's extra layout, over and above the
+     * standard base template, a sibling of the base though.
+     *
+     * @var string
+     */
+    protected $pageLayout = 'case';
+
+    /**
+     * For most case crud controllers, we use the case/inner-layout
+     * layout file. Except submissions.
+     *
+     * @var string
+     */
+    protected $pageLayoutInner = 'case/inner-layout';
+
+    /**
+     * Holds the service name
+     *
+     * @var string
+     */
+    protected $service = 'Prohibition';
+
+    /**
+     * Holds the navigation ID,
+     * required when an entire controller is
+     * represneted by a single navigation id.
+     */
+    protected $navigationId = 'case_details_prohibitions';
+
+    /**
+     * Holds an array of variables for the
+     * default index list page.
+     */
+    protected $listVars = [
+        'case',
+    ];
+
+    /**
+     * Data map
+     *
+     * @var array
+    */
+    protected $dataMap = array(
+        'main' => array(
+            'mapFrom' => array(
+                'fields',
+                'base',
+            )
+        )
+    );
+
+    /**
+     * Holds the isAction
+     *
+     * @var boolean
+     */
+    protected $isAction = false;
+
+    /**
+     * Holds the Data Bundle
+     *
+     * @var array
+    */
+    protected $dataBundle = array(
+        'children' => array(
+            'case' => array(
+                'properties' => array(
+                    'id'
+                )
+            ),
+            'prohibitionType' => array(
+                'properties' => array(
+                    'id',
+                    'description'
+                )
+            )
+        )
+    );
 
     const CONDITION_TYPE_CONDITION = 'cdt_con';
     const CONDITION_TYPE_UNDERTAKING = 'cdt_und';

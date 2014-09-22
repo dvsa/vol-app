@@ -857,6 +857,62 @@ return array_merge(
                 ]
             ]
         ],
+        'case_pi' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/case/:case/pi',
+                'constraints' => [
+                    'case' => '[0-9]+',
+                    'action' => '[a-z]+',
+                ],
+                'defaults' => [
+                    'controller' => 'CasePublicInquiryController',
+                    'action' => 'details'
+                ]
+            ]
+        ],
+        'case_pi_agreed' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/case/:case/pi/agreed[/:action]',
+                'constraints' => [
+                    'case' => '[0-9]+',
+                    'action' => '[a-z]+',
+                ],
+                'defaults' => [
+                    'controller' => 'PublicInquiry\AgreedAndLegislationController',
+                    'action' => 'index'
+                ]
+            ]
+        ],
+        'case_pi_decision' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/case/:case/pi/decision[/:action]',
+                'constraints' => [
+                    'case' => '[0-9]+',
+                    'action' => '[a-z]+',
+                ],
+                'defaults' => [
+                    'controller' => 'PublicInquiry\RegisterDecisionController',
+                    'action' => 'index'
+                ]
+            ]
+        ],
+        'case_pi_sla' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/case/:case/pi/sla[/:action]',
+                'constraints' => [
+                    'case' => '[0-9]+',
+                    'action' => '[a-z]+',
+                ],
+                'defaults' => [
+                    'controller' => 'PublicInquiry\SlaController',
+                    'action' => 'index'
+                ]
+            ]
+        ],
         /* 'complaint' => [
             'type' => 'segment',
             'options' => [
@@ -985,7 +1041,7 @@ return array_merge(
                 ]
             ]
         ],
-        'case_pi' => [
+        /*'case_pi' => [
             'type' => 'segment',
             'options' => [
                 'route' => '/licence/:licence/case/:case/task/pi',
@@ -998,7 +1054,7 @@ return array_merge(
                     'action' => 'index'
                 ]
             ]
-        ],
+        ],*/
         'case_pi_action' => [
             'type' => 'segment',
             'options' => [
@@ -1010,11 +1066,12 @@ return array_merge(
                 ],
                 'defaults' => [
                     'controller' => 'CasePiController',
-                    'action' => 'index'
+                    'action' => 'index',
+                    'licence' => 7
                 ]
             ]
         ],
-        'case_pi_hearing' => [
+        /*'case_pi_hearing' => [
             'type' => 'segment',
             'options' => [
                 'route' => '/licence/:licence/case/:case/pi/:piId/hearing[/:hearingId]',
@@ -1029,7 +1086,7 @@ return array_merge(
                     'action' => 'index'
                 ]
             ]
-        ],
+        ],*/
         'entity_lists' => [
             'type' => 'segment',
             'options' => [
