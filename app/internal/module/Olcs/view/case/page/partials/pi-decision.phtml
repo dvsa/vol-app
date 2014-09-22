@@ -28,7 +28,7 @@
         ],
         'decisionDate' => [
             'label' => 'Date of decision',
-            'value' => isset($pi['decisionDate']) ? date('m/d/Y', strtotime($pi['decisionDate'])) : 'dd-mm-yyyy',
+            'value' => isset($pi['decisionDate']) ? date('d/m/Y', strtotime($pi['decisionDate'])) : 'dd/mm/yyyy',
         ]/* ,
         'legislation' => [
             'label' => 'Decision Definition',
