@@ -174,17 +174,36 @@ class StayController extends OlcsController\CrudAbstract
         }
     }
 
+    /**
+     * Override to ensure any form submit redirects to alternative controller
+     * details action.
+     *
+     * @return mixed|\Zend\Http\Response
+     */
     public function indexAction()
     {
         return $this->redirectToIndex();
     }
 
+    /**
+     * Override to ensure any form submit redirects to alternative controller
+     * details action.
+     *
+     * @return mixed|\Zend\Http\Response
+     */
     public function redirectToIndex()
     {
         return $this->redirectToRoute('case_hearing_appeal',
             ['action' => 'details'], [], true);
     }
 
+    /**
+     * Override processLoad to extract stay data and use as $data for a
+     * given stay type
+     *
+     * @param array $data
+     * @return array
+     */
     public function processLoad($data)
     {
         $stayType = $this->params()->fromRoute('stayType');
@@ -197,7 +216,7 @@ class StayController extends OlcsController\CrudAbstract
 
         $data = parent::processLoad($data);
         $data['fields']['stayType'] = $stayType;
-        //var_dump($data);
+
         return $data;
     }
 
@@ -208,7 +227,7 @@ class StayController extends OlcsController\CrudAbstract
      * @param int $caseId
      * @return array
      */
-    private function getStayData($caseId)
+    public function getStayData($caseId)
     {
         $stayRecords = array();
 

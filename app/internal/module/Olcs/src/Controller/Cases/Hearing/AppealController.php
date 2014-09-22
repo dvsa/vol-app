@@ -140,45 +140,27 @@ class AppealController extends OlcsController\CrudAbstract
         }
     }
 
+    /**
+     * Override to ensure any form submit redirects to alternative controller
+     * details action.
+     *
+     * @return mixed|\Zend\Http\Response
+     */
     public function indexAction()
     {
         return $this->redirectToIndex();
     }
 
+    /**
+     * Override to ensure any form submit redirects to alternative controller
+     * details action.
+     *
+     * @return mixed|\Zend\Http\Response
+     */
     public function redirectToIndex()
     {
         return $this->redirectToRoute('case_hearing_appeal',
             ['action' => 'details'], [], true);
-    }
-
-    /**
-     * Gets stay data for use on the index page
-     *
-     * @param int $caseId
-     * @return array
-     */
-    private function getStayData($caseId)
-    {
-        $stayRecords = array();
-
-        $stayResult = $this->makeRestCall('Stay', 'GET', array('case' => $caseId));
-
-        //need a better way to do this...
-        foreach ($stayResult['Results'] as $stay) {
-            if (isset($this->stayTypes[$stay['stayType']])) {
-                $stay = $this->formatDates(
-                    $stay,
-                    array(
-                        'requestDate',
-                        'withdrawnDate'
-                    )
-                );
-
-                $stayRecords[$stay['stayType']] = $stay;
-            }
-        }
-
-        return $stayRecords;
     }
 
     /**
@@ -187,7 +169,7 @@ class AppealController extends OlcsController\CrudAbstract
      * @param int $caseId
      * @return array
      */
-    private function getAppealData($caseId)
+    public function getAppealData($caseId)
     {
         $bundle = [
             'children' => [
