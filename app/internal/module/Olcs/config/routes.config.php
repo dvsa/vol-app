@@ -1000,6 +1000,15 @@ return array_merge(
                     'action' => 'entityList'
                 ]
             ]
-        ]
+        ],
+        // @todo replace this with the real varitation route
+        'application-variation' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => '/variation',
+                'defaults' => array(
+                )
+            )
+        )
     ]
 );
