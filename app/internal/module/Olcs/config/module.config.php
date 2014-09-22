@@ -98,7 +98,12 @@ return array(
         'invokables' => array(
             'pageTitle'    => 'Olcs\View\Helper\PageTitle',
             'pageSubtitle' => 'Olcs\View\Helper\PageSubtitle',
-            'tableFilters' => 'Olcs\View\Helper\TableFilters'
+            'tableFilters' => 'Olcs\View\Helper\TableFilters',
+            'formSubmissionSections' => 'Olcs\Form\View\Helper\SubmissionSections',
+            'formSubmissionSectionsMultiCheckbox' => 'Olcs\Form\View\Helper\SubmissionSectionsMultiCheckbox'
+        ),
+        'delegators' => array(
+            'formElement' => array('Olcs\Form\View\Helper\FormElementDelegatorFactory')
         )
     ),
     'local_forms_path' => array(
@@ -150,7 +155,8 @@ return array(
     ),
     'form_elements' =>[
         'factories' => [
-            'PublicInquiryReason' => 'Olcs\Form\Element\PublicInquiryReasonFactory'
+            'PublicInquiryReason' => 'Olcs\Form\Element\PublicInquiryReasonFactory',
+            'SubmissionSections' => 'Olcs\Form\Element\SubmissionSectionsFactory'
         ]
     ]
 

@@ -6,19 +6,16 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
- * @Form\Name("Public inquiry SLA")
+ * @Form\Name("submission")
  * @Form\Attributes({"method":"post"})
- * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true})
  */
-class PublicInquirySla
+class Submission
 {
     /**
-     * @Form\Name("main")
-     * @Form\Options({"label":""})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\PublicInquirySlaMain")
+     * @Form\Name("fields")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\SubmissionTypeSections")
      */
-    public $main;
+    public $fields = null;
 
     /**
      * @Form\Name("form-actions")
