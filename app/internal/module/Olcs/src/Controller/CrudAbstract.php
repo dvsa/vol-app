@@ -413,7 +413,9 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     {
         foreach ($array as $key => $value) {
             if (in_array($key, $ids)) {
-                $array[$key] = $value['id'];
+                if (array_key_exists('id', $value)) {
+                    $array[$key] = $value['id'];
+                }
             }
         }
 

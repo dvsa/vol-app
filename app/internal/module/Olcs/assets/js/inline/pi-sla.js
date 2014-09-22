@@ -57,32 +57,32 @@ $(function() {
     };
 
     OLCS.showHideInput({
-        'source': 'select[name="main[writtenOutcome]"]',
-        'dest': 'label[for="main[writtenReasonDate]"]',
+        'source': 'select[name="fields[writtenOutcome]"]',
+        'dest': 'label[for="fields[writtenReasonDate]"]',
         'predicate': isReason
     });
 
     OLCS.showHideInput({
-        'source': 'select[name="main[writtenOutcome]"]',
-        'dest': 'label[for="main[tcWrittenReasonDate]"]',
+        'source': 'select[name="fields[writtenOutcome]"]',
+        'dest': 'label[for="fields[tcWrittenReasonDate]"]',
         'predicate': isReason
     });
 
     OLCS.showHideInput({
-        'source': 'select[name="main[writtenOutcome]"]',
-        'dest': 'label[for="main[writtenReasonLetterDate]"]',
+        'source': 'select[name="fields[writtenOutcome]"]',
+        'dest': 'label[for="fields[writtenReasonLetterDate]"]',
         'predicate': isReason
     });
 
     OLCS.showHideInput({
-        'source': 'select[name="main[writtenOutcome]"]',
-        'dest': 'label[for="main[tcWrittenDecisionDate]"]',
+        'source': 'select[name="fields[writtenOutcome]"]',
+        'dest': 'label[for="fields[tcWrittenDecisionDate]"]',
         'predicate': isDecision
     });
 
     OLCS.showHideInput({
-        'source': 'select[name="main[writtenOutcome]"]',
-        'dest': 'label[for="main[decisionLetterSentDate]"]',
+        'source': 'select[name="fields[writtenOutcome]"]',
+        'dest': 'label[for="fields[decisionLetterSentDate]"]',
         'predicate': isDecision
     });
 });
