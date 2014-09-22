@@ -6,24 +6,19 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
- * @Form\Name("note")
+ * @Form\Name("Public inquiry SLA")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
  * @Form\Options({"prefer_form_input_filter": true})
  */
-class Note
+class PublicInquirySla
 {
     /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
+     * @Form\Name("main")
+     * @Form\Options({"label":""})
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\PublicInquirySlaMain")
      */
-    public $id = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $version = null;
+    public $main;
 
     /**
      * @Form\Name("form-actions")
@@ -31,11 +26,4 @@ class Note
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\CancelFormActions")
      */
     public $formActions = null;
-
-    /**
-     * @Form\Name("main")
-     * @Form\Options({"label":"Add note"})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\NoteMain")
-     */
-    public $main = null;
 }
