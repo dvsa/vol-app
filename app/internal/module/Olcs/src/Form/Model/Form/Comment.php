@@ -6,17 +6,16 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
- * @Form\Name("Complaint")
- * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true, "label":"Complaint"})
+ * @Form\Name("Comments")
+ * @Form\Options({"label":"Comments"})
  * @Form\Attributes({"method":"post"})
  */
-class Complaint
+class Comment
 {
     /**
      * @Form\Name("fields")
      * @Form\Options({"label":"","class":""})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\Complaint")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\Comment")
      */
     public $fields = null;
 

@@ -5,7 +5,7 @@
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-namespace Olcs\Controller\Cases\Prohibition;
+namespace Olcs\Controller\Cases\Hearing;
 
 // Olcs
 use Olcs\Controller as OlcsController;
@@ -16,7 +16,7 @@ use Olcs\Controller\Traits as ControllerTraits;
      *
      * @author Ian Lindsay <ian@hemera-business-services.co.uk>
      */
-class ProhibitionController extends OlcsController\CrudAbstract
+class HearingAppealController extends OlcsController\CrudAbstract
 {
     use ControllerTraits\CaseControllerTrait;
 
@@ -33,13 +33,6 @@ class ProhibitionController extends OlcsController\CrudAbstract
      * @var string
      */
     protected $tableName = 'prohibition';
-
-    /**
-     * Name of comment box field.
-     *
-     * @var string
-     */
-    protected $commentBoxName = 'prohibitionNote';
 
     /**
      * Holds the form name
@@ -127,4 +120,19 @@ class ProhibitionController extends OlcsController\CrudAbstract
             )
         )
     );
+
+    public function indexAction()
+    {
+        return $this->redirectToIndex();
+    }
+
+    public function redirectToIndex()
+    {
+        return $this->redirectToRoute(null, ['action' => 'details'], [], true);
+    }
+
+    public function detailsAction()
+    {
+        die('details');
+    }
 }

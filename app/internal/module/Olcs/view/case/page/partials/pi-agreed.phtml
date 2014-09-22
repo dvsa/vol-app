@@ -12,7 +12,7 @@
     $summary = [
         'agreedDate' => [
             'label' => 'Agreed date',
-            'value' => isset($pi['agreedDate']) ? date('m/d/Y', strtotime($pi['agreedDate'])) : 'dd-mm-yyyy',
+            'value' => isset($pi['agreedDate']) ? date('d/m/Y', strtotime($pi['agreedDate'])) : 'dd-mm-yyyy',
         ]
     ];
 
@@ -32,11 +32,11 @@
     $summary += [
         'presidingTc' => [
             'label' => 'Agreed by',
-            'value' => $pi['presidingTc']['name'],
+            'value' => $pi['agreedByTc']['name'],
         ],
         'agreedByRole' => [
             'label' => 'Agreed by role',
-            'value' => $this->translate($pi['presidedByRole']['id']),
+            'value' => $pi['agreedByTcRole']['description'],
         ]/* ,
         'assignedTo' => [
             'label' => 'Assigned To',

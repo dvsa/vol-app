@@ -1,22 +1,23 @@
 <?php
 
 /**
- * Case Prohibition Controller
+ * Case Penalty Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-namespace Olcs\Controller\Cases\Prohibition;
+
+namespace Olcs\Controller\Cases\Penalty;
 
 // Olcs
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
 
-    /**
-     * Case Prohibition Controller
-     *
-     * @author Ian Lindsay <ian@hemera-business-services.co.uk>
-     */
-class ProhibitionController extends OlcsController\CrudAbstract
+/**
+ * Case Penalty Controller
+ *
+ * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ */
+class PenaltyController extends OlcsController\CrudAbstract
 {
     use ControllerTraits\CaseControllerTrait;
 
@@ -25,28 +26,28 @@ class ProhibitionController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $identifierName = 'prohibition';
+    protected $identifierName = 'void';
 
     /**
      * Table name string
      *
      * @var string
      */
-    protected $tableName = 'prohibition';
+    protected $tableName = '';
 
     /**
      * Name of comment box field.
      *
      * @var string
      */
-    protected $commentBoxName = 'prohibitionNote';
+    protected $commentBoxName = 'annualTestHistory';
 
     /**
      * Holds the form name
      *
      * @var string
      */
-    protected $formName = 'prohibition';
+    protected $formName = 'void';
 
     /**
      * The current page's extra layout, over and above the
@@ -69,14 +70,14 @@ class ProhibitionController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $service = 'Prohibition';
+    protected $service = 'Void';
 
     /**
      * Holds the navigation ID,
      * required when an entire controller is
      * represneted by a single navigation id.
      */
-    protected $navigationId = 'case_details_prohibitions';
+    protected $navigationId = 'case_details_penalties';
 
     /**
      * Holds an array of variables for the
@@ -95,7 +96,6 @@ class ProhibitionController extends OlcsController\CrudAbstract
         'main' => array(
             'mapFrom' => array(
                 'fields',
-                'base',
             )
         )
     );
@@ -112,19 +112,7 @@ class ProhibitionController extends OlcsController\CrudAbstract
      *
      * @var array
     */
-    protected $dataBundle = array(
-        'children' => array(
-            'case' => array(
-                'properties' => array(
-                    'id'
-                )
-            ),
-            'prohibitionType' => array(
-                'properties' => array(
-                    'id',
-                    'description'
-                )
-            )
-        )
-    );
+    protected $dataBundle = array('properties' => 'ALL');
+
+
 }
