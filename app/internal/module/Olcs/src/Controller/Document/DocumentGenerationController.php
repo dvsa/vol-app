@@ -155,7 +155,11 @@ class DocumentGenerationController extends DocumentController
          *    bookmarks out of the file data and return an array of queries
          *    we need to answer in order to populate those bookmarks
          */
-        $query = $this->getDocumentService()->getBookmarkQueries($file, $queryData);
+        $query = $this->getDocumentService()->getBookmarkQueries(
+            $file->getMimeType(),
+            $file->getContent(),
+            $queryData
+        );
 
 
         /**
@@ -170,7 +174,13 @@ class DocumentGenerationController extends DocumentController
          *    our bookmarks to actually replace tokens with data. This will
          *    give us back a modified file object which we can then save
          */
-        $file = $this->getDocumentService()->populateBookmarks($file, $result);
+        $content = $this->getDocumentService()->populateBookmarks(
+            $file->getMimeType(),
+            $file->getContent(),
+            $result
+        );
+
+        $file->setContent($content);
 
         /**
          * 5) All done; we can now persist our generated document
