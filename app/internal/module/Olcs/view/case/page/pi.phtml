@@ -1,7 +1,7 @@
 <div class="full-width">
     <div class="four-fifths">
         <?php
-        //die(print_r((array)$this->vars()['complete'], 1));
+        $pi = current($this->placeholder('pi')->getArrayCopy());
 
         if (isset($pi['agreedDate'])):
             echo $this->render('case/page/partials/pi-agreed.phtml', array('pi' => $pi));
@@ -22,7 +22,7 @@
             echo $this->render('case/page/partials/pi-sla.phtml', array('pi' => $pi));
 
         else:
-            echo $this->render('case/page/partials/pi-empty.phtml', array('heading' => 'Agreed and legislation', 'route' => 'case_pi_action', 'section' => 'agreed'));
+            echo $this->render('case/page/partials/pi-empty.phtml', array('heading' => 'Agreed and legislation', 'route' => 'case_pi_agreed'));
         endif;
         ?>
     </div><!-- end .full-width -->
