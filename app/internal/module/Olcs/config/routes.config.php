@@ -784,19 +784,18 @@ return array_merge(
                     'action' => 'index'
                 ]
             ],
-            'may_terminate' => true,
-            'child_routes' => [
-                'defect' => [
-                    'type' => 'segment',
-                    'options' => [
-                        'route' => '/defect[/:defect]',
-                        'constraints' => [
-                            'defect' => '[0-9]+'
-                        ],
-                        'defaults' => [
-                            'controller' => 'CaseProhibitionDefectController'
-                        ]
-                    ]
+            'may_terminate' => true
+        ],
+        'case_prohibition_defect' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/case/:case/prohibition[/:prohibition]/defect[/:action][/:id]',
+                'constraints' => [
+                    'defect' => '[0-9]+'
+                ],
+                'defaults' => [
+                    'controller' => 'CaseProhibitionDefectController',
+                    'action' => 'index'
                 ]
             ]
         ],

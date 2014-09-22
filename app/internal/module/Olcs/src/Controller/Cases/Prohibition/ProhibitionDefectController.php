@@ -1,0 +1,166 @@
+<?php
+
+/**
+ * Case Prohibition Defect Controller
+ *
+ * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ */
+namespace Olcs\Controller\Cases\Prohibition;
+
+// Olcs
+use Olcs\Controller as OlcsController;
+use Olcs\Controller\Traits as ControllerTraits;
+
+/**
+ * Case Prohibition Defect Controller
+ *
+ * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ */
+class ProhibitionDefectController extends OlcsController\CrudAbstract
+{
+    use ControllerTraits\CaseControllerTrait;
+
+    /**
+     * Identifier name
+     *
+     * @var string
+     */
+    protected $identifierName = 'id';
+
+    /**
+     * Table name string
+     *
+     * @var string
+     */
+    protected $tableName = 'prohibitionDefect';
+
+    /**
+     * Holds the form name
+     *
+     * @var string
+     */
+    protected $formName = 'prohibition-defect';
+
+    /**
+     * The current page's extra layout, over and above the
+     * standard base template, a sibling of the base though.
+     *
+     * @var string
+     */
+    protected $pageLayout = 'case';
+
+    /**
+     * For most case crud controllers, we use the case/inner-layout
+     * layout file. Except submissions.
+     *
+     * @var string
+     */
+    protected $pageLayoutInner = 'case/inner-layout';
+
+    /**
+     * Holds the service name
+     *
+     * @var string
+     */
+    protected $service = 'ProhibitionDefect';
+
+    /**
+     * Holds the navigation ID,
+     * required when an entire controller is
+     * represented by a single navigation id.
+     */
+    protected $navigationId = 'case_details_prohibitions';
+
+    /**
+     * Holds an array of variables for the
+     * default index list page.
+     */
+    protected $listVars = [
+        'case',
+        'prohibition'
+    ];
+
+    /**
+     * Data map
+     *
+     * @var array
+     */
+    protected $dataMap = array(
+        'main' => array(
+            'mapFrom' => array(
+                'fields',
+                'base',
+            )
+        )
+    );
+
+    /**
+     * Holds the isAction
+     *
+     * @var boolean
+     */
+    protected $isAction = false;
+
+    /**
+     * Holds the Data Bundle
+     *
+     * @var array
+     */
+    protected $dataBundle = array(
+        'children' => array(
+            'prohibition' => array(
+                'id'
+            )
+        )
+    );
+
+    public function redirectToIndex()
+    {
+        return $this->redirectToRoute(
+            'case_prohibition',
+            ['action'=>'index', 'prohibition' => $this->getFromRoute('prohibition')],
+            ['code' => '303'], // Why? No cache is set with a 303 :)
+            true
+        );
+    }
+
+    public function indexAction()
+    {
+        $this->forward()->dispatch(
+             'CaseProhibitionController',
+             array_merge(
+                 array(
+                     'action' => 'details',
+                     'case' => $this->getFromRoute('case'),
+                     'prohibition' => $this->getFromRoute('prohibition')
+                 )
+             )
+         );
+
+         $view = $this->getView([]);
+
+         $this->checkForCrudAction(null, [], $this->getIdentifierName());
+
+         $this->buildTableIntoView();
+
+         $view->setTemplate('prohibition/defect');
+
+         return $this->renderView($view);
+
+
+
+
+        /*$view = $this->getView([]);
+
+        $this->checkForCrudAction(null, [], $this->getIdentifierName());
+
+        $this->buildTableIntoView();
+
+        $this->buildCommentsBoxIntoView();
+
+        $view->setTemplate('crud/index');
+
+        return $this->renderView($view);*/
+
+     }
+}

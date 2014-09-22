@@ -1,0 +1,23 @@
+<?php
+    $prohibition = $this->placeholder('prohibition')->getValue();
+?>
+<div class="read-only">
+    <h4>
+Prohibition Detail
+<a href="<?php echo $this->url('case_prohibition', ['action' => 'edit'], [], true); ?>" class="action--secondary right-aligned"><?php echo $this->translate('Edit Prohibition'); ?></a>
+</h4>
+<dl>
+    <dt>Prohibition date</dt>
+    <dd><?php echo $prohibition['prohibitionDate']; ?></dd>
+    <dt>Vehicle registration mark</dt>
+    <dd><?php echo $this->escapeHtml($prohibition['vrm']); ?></dd>
+    <dt>Trailer</dt>
+    <dd><?php echo ($prohibition['isTrailer'] == 'Y' ? 'Yes' : 'No'); ?></dd>
+    <dt>Prohibition type</dt>
+    <dd><?php echo $prohibition['prohibitionType']['description']; ?></dd>
+    <dt>Date cleared</dt>
+    <dd><?php echo $prohibition['clearedDate']; ?></dd>
+    <dt>Location prohibition issued</dt>
+    <dd><?php echo $this->escapeHtml($prohibition['imposedAt']); ?></dd>
+</dl>
+</div>
