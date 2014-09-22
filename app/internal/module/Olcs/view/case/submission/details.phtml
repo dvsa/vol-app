@@ -5,20 +5,28 @@ $submission = $this->placeholder('submission')->getValue();
 $submissionTitle = $this->placeholder('submissionTitle')->getValue();
 $sectionData = $this->placeholder('sectionData')->getValue();
 ?>
-
-<div class="read-only">
-    <?php echo $submission['submissionTypeTitle']; ?>
-    <a href="<?php echo $this->url('submission', ['case' => $case['id'], 'action' => 'edit', 'submission' => $submission['id']]);?>">Edit submission</a>
-</div>
+<h4><?php echo $submission['submissionTypeTitle']; ?>
+    <a href="<?php echo $this->url(
+        'submission', [
+            'case' => $case['id'],
+            'action' => 'edit',
+            'submission' => $submission['id']
+        ]
+        );?>" class="action--secondary right-aligned">
+        <?php echo
+        $this->translate('Edit submission');
+        ?></a>
+</h4>
 <?php
 
 foreach ($sectionData as $section) {
 ?>
-
-    <div class="read-only">
-        <?php echo $section['description'];?>
-    </div>
-
+<div class="read-only">
+    <dl>
+        <dt><?php echo $this->translate($section['description']);?></dt>
+        <dd class="three-quarters"></dd>
+    </dl>
+</div>
 <?php
 }
 ?>
