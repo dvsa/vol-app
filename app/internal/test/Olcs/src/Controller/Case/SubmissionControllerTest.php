@@ -14,7 +14,7 @@ use Mockery as m;
 /**
  * Search controller form post tests
  *
- * @author adminmwc <michael.cooper@valtech.co.uk>
+ * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
 class SubmissionControllerTest extends AbstractHttpControllerTestCase
 {
