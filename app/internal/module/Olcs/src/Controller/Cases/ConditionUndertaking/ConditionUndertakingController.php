@@ -6,7 +6,7 @@
  * @author S Lizzio <shaun.lizzio@valtech.co.uk>
  */
 
-namespace Olcs\Controller;
+namespace Olcs\Controller\Cases\ConditionUndertaking;
 
 // Olcs
 use Olcs\Controller as OlcsController;
@@ -17,11 +17,11 @@ use Zend\View\Model\ViewModel;
 use Common\Service\Table\Formatter\Address;
 
 /**
- * CaseConditionUndertaking Controller
+ * ConditionUndertaking Controller
  *
  * @author S Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class CaseConditionUndertakingController extends OlcsController\CrudAbstract
+class ConditionUndertakingController extends OlcsController\CrudAbstract
 {
     use ControllerTraits\CaseControllerTrait;
 

@@ -101,7 +101,7 @@ return array(
                             'id' => 'case_details_conditions_undertakings',
                             'label' => 'Conditions & Undertakings',
                             'route' => 'case_conditions_undertakings',
-                            'action' => 'conditions',
+                            'action' => 'index',
                             'use_route_match' => true,
                         ),
                         array(
