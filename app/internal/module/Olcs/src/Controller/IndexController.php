@@ -33,7 +33,6 @@ class IndexController extends AbstractController
 
     public function indexAction()
     {
-
         $redirect = $this->processTasksActions();
         if ($redirect) {
             return $redirect;

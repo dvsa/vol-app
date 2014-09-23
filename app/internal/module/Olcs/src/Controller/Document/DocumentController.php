@@ -33,16 +33,20 @@ class DocumentController extends AbstractController
 
     protected $tmpData = [];
 
-    public function getContentStore()
+    protected function getContentStore()
     {
         return $this->getServiceLocator()->get('ContentStore');
     }
 
-    public function getDocumentService()
+    protected function getDocumentService()
     {
         return $this->getServiceLocator()->get('Document');
     }
 
+    /**
+     * @NOTE: declared public in abstract controller, can't reduce
+     * visibility
+     */
     public function getUploader()
     {
         return $this->getServiceLocator()
@@ -56,7 +60,7 @@ class DocumentController extends AbstractController
         // this isn't ideal because it means we don't know what filename to
         // give the temporary document, and we don't really want to be
         // exposing underlying identifiers
-        $filePath = $this->params()->fromRoute('path');
+        $filePath = $this->params('path');
         $fullPath = self::TMP_STORAGE_PATH . '/' . $filePath;
 
         return $this->getUploader()->download($fullPath, $filePath . '.rtf');
@@ -64,18 +68,18 @@ class DocumentController extends AbstractController
 
     public function downloadAction()
     {
-        $fileName = $this->params()->fromRoute('filename');
+        $fileName = $this->params('filename');
         $result = $this->makeRestCall(
             'Document',
             'GET',
-            ['id' => $this->params()->fromRoute('id')],
+            ['id' => $this->params('id')],
             [
                 'properties' => ['identifier', 'filename']
             ]
         );
 
-        if ($fileName !== $result['filename']) {
-            throw new \Exception('handle properly'); // @TODO
+        if (!$result || $fileName !== $result['filename']) {
+            return $this->notFoundAction();
         }
 
         $fullPath = self::FULL_STORAGE_PATH . '/' . $result['identifier'];
@@ -94,7 +98,7 @@ class DocumentController extends AbstractController
         $form->add($fieldset);
 
         $this->addTemplateBookmarks(
-            $this->params()->fromRoute('id'),
+            $this->params('id'),
             $fieldset
         );
 
@@ -111,6 +115,15 @@ class DocumentController extends AbstractController
             return;
         }
 
+        /**
+         * Not the prettiest bundle, but what we ultimately want
+         * are the all the DB paragraphs availabe for a given template,
+         * grouped into bookmarks
+         *
+         * The relationships here involve two many-to-many relationships
+         * to keep bookmarks and paragraphs decoupled from templates, which
+         * translates into a fairly nested bundle query
+         */
         $bundle = [
             'properties' => ['docTemplateBookmarks'],
             'children' => [
@@ -151,6 +164,7 @@ class DocumentController extends AbstractController
             $element = new \Common\Form\Elements\InputFilters\MultiCheckboxEmpty;
             $element->setLabel($bookmark['description']);
             $element->setName($bookmark['name']);
+            // user-supplied bookmarks are *all* optional
             $element->setOptions(['required' => false]);
 
             $options = [];

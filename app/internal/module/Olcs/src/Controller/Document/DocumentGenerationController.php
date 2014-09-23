@@ -1,18 +1,20 @@
 <?php
 
 /**
- * Test document services.
+ * Document Generation Controller
  *
  * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
+ * @author Nick Payne <nick.payne@valtech.co.uk>
  */
 namespace Olcs\Controller\Document;
 
 use Zend\View\Model\ViewModel;
 
 /**
- * Test document services.
+ * Document Generation Controller
  *
  * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
+ * @author Nick Payne <nick.payne@valtech.co.uk>
  */
 class DocumentGenerationController extends DocumentController
 {
@@ -107,12 +109,9 @@ class DocumentGenerationController extends DocumentController
     {
         $form = $this->generateForm('generate-document', 'processGenerate');
 
-        $view = new ViewModel(
-            [
-                'form' => $form,
-                'inlineScript' => $this->loadScripts(['generate-document'])
-            ]
-        );
+        $this->loadScripts(['generate-document']);
+
+        $view = new ViewModel(['form' => $form]);
 
         $view->setTemplate('form-simple');
         return $this->renderView($view, 'Generate letter');
@@ -137,9 +136,11 @@ class DocumentGenerationController extends DocumentController
 
         $identifier = $template['document']['identifier'];
 
+        $routeParams = $this->params()->fromRoute();
+
         $queryData = array_merge(
             $data,
-            $this->params()->fromRoute(),
+            $routeParams,
             [
                 'user' => $this->getLoggedInUser()
             ]
@@ -184,6 +185,8 @@ class DocumentGenerationController extends DocumentController
 
         /**
          * 5) All done; we can now persist our generated document
+         *    to a temporary store. We also want to save some metadata
+         *    so we can re-populate this form should we come back to it
          */
         $details = json_encode(
             [
@@ -198,12 +201,16 @@ class DocumentGenerationController extends DocumentController
         $uploader->setFile($file);
         $filename = $uploader->upload(self::TMP_STORAGE_PATH);
 
+        /*
         $redirectParams = $this->params()->fromRoute();
         $redirectParams['tmpId'] = $filename;
+         */
 
         return $this->redirect()->toRoute(
-            $this->params('type') . '/documents/finalise',
-            $redirectParams
+            $routeParams['type'] . '/documents/finalise',
+            [
+                'tmpId' => $filename
+            ]
         );
     }
 
