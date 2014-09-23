@@ -98,9 +98,9 @@ return array(
                             'use_route_match' => true,
                         ),
                         array(
-                            'id' => 'case_details_conditions',
-                            'label' => 'X Conditions & Undertakings',
-                            'route' => 'case',
+                            'id' => 'case_details_conditions_undertakings',
+                            'label' => 'Conditions & Undertakings',
+                            'route' => 'case_conditions_undertakings',
                             'action' => 'conditions',
                             'use_route_match' => true,
                         ),

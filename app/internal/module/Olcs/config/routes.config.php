@@ -954,9 +954,11 @@ return array_merge(
         'case_conditions_undertakings' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/licence/[:licence]/case/:case/conditions-undertakings',
+                'route' => '/case/:case/conditions-undertakings[/:action[/:id]]',
                 'constraints' => [
-                    'case' => '[0-9]+',
+                    'case'   => '[0-9]+',
+                    'action' => '[a-z]+',
+                    'id'     => '[0-9]+',
                 ],
                 'defaults' => [
                     'controller' => 'CaseConditionUndertakingController',
@@ -964,7 +966,7 @@ return array_merge(
                 ]
             ]
         ],
-        'conditions' => [
+        /* 'conditions' => [
             'type' => 'segment',
             'options' => [
                 'route' => '/licence/:licence/case/:case/conditions/:action[/:id]',
@@ -992,7 +994,7 @@ return array_merge(
                     'type' => 'undertaking'
                 ]
             ]
-        ],
+        ], */
         'document_generate' => [
             'type' => 'segment',
             'options' => [
