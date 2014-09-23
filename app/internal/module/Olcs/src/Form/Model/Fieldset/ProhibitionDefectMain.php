@@ -33,6 +33,7 @@ class ProhibitionDefectMain
 
     /**
      * @Form\Name("prohibition")
+     * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
      */
     public $prohibition = null;
