@@ -67,7 +67,7 @@ return array(
         array(
             'title' => 'S4',
             'formatter' => function ($data, $column) {
-                return 'ToDo'; // todo S4 clarification
+                return 'ToDo';
             }
         ),
         array(

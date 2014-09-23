@@ -269,7 +269,7 @@ class ConditionUndertakingController extends OlcsController\CrudAbstract
 
         //die('<pre>' . print_r($data, 1));
 
-       return $data;
+        return $data;
     }
 
     /**

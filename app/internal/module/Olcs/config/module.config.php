@@ -29,13 +29,16 @@ return array(
             'CaseAnnualTestHistoryController' => 'Olcs\Controller\Cases\AnnualTestHistory\AnnualTestHistoryController',
             'SubmissionNoteController' => 'Olcs\Controller\Submission\SubmissionNoteController',
             'CaseImpoundingController' => 'Olcs\Controller\CaseImpoundingController',
-            'CaseConditionUndertakingController' => 'Olcs\Controller\Cases\ConditionUndertaking\ConditionUndertakingController',
+            'CaseConditionUndertakingController'
+                => 'Olcs\Controller\Cases\ConditionUndertaking\ConditionUndertakingController',
             'CaseRevokeController' => 'Olcs\Controller\CaseRevokeController',
             'CasePiController' => 'Olcs\Controller\CasePiController',
             'CasePublicInquiryController' => 'Olcs\Controller\Cases\PublicInquiry\PublicInquiryController',
             'PublicInquiry\SlaController' => 'Olcs\Controller\Cases\PublicInquiry\SlaController',
-            'PublicInquiry\AgreedAndLegislationController' => 'Olcs\Controller\Cases\PublicInquiry\AgreedAndLegislationController',
-            'PublicInquiry\RegisterDecisionController' => 'Olcs\Controller\Cases\PublicInquiry\RegisterDecisionController',
+            'PublicInquiry\AgreedAndLegislationController'
+                => 'Olcs\Controller\Cases\PublicInquiry\AgreedAndLegislationController',
+            'PublicInquiry\RegisterDecisionController'
+                => 'Olcs\Controller\Cases\PublicInquiry\RegisterDecisionController',
             'CasePiHearingController' => 'Olcs\Controller\Cases\Pi\HearingController',
             'DocumentController' => 'Olcs\Controller\DocumentController',
             'DefendantSearchController' => 'Olcs\DefendantSearchController',

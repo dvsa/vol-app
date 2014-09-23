@@ -135,11 +135,11 @@ class CaseController extends AbstractCasesController
     {
         return $this->detailsAction();
 
-        $view = $this->getView([]);
+        /* $view = $this->getView([]);
 
         $view->setTemplate('case/overview');
 
-        return $this->renderView($view);
+        return $this->renderView($view); */
     }
 
     public function redirectAction()
@@ -187,16 +187,16 @@ class CaseController extends AbstractCasesController
         // Data to eventually populate the form.
         $data = [];
 
-        if ($this->fromRoute('case') && $result) { // edit
-
+        if ($this->fromRoute('case') && $result) {
+            // edit
             $data += $result;
             $categories = $data['submissionSections'];
             unset($result['submissionSections']);
             $data['submissionSections'] = $this->unFormatCategories($categories);
             $data['licence'] = $data['licence']['id'];
 
-        } else { // add
-
+        } else {
+            // add
             // A case can belong to many things, not just a licence.
             $licence = $this->fromRoute('licence');
             if (!empty($licence)) {
@@ -229,8 +229,8 @@ class CaseController extends AbstractCasesController
     public function processSaveCase($data)
     {
 
-        if (empty($data['fields']['id'])) { // new
-
+        if (empty($data['fields']['id'])) {
+            // new
             $data['fields']['openDate'] = date('Y-m-d H:i:s'); // now
 
             // This should be the logged in user.

@@ -1,6 +1,5 @@
 <?php
 
-// @todo Find a nicer way to re-use this config file
 $applicationJourney = include(
     __DIR__ . '/../../../vendor/olcs/OlcsCommon/Common/config/journeys/application.journey.php'
 );

@@ -3,7 +3,7 @@
 /**
  * Abstract Case Controller
  *
- * @author Craig Reasbeck <craig.reasbeck@valtech>
+ * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
 
 namespace Olcs\Controller\Cases;
@@ -15,7 +15,7 @@ use Olcs\Controller as OlcsController;
 /**
  * Abstract Case Controller
  *
- * @author Craig Reasbeck <craig.reasbeck@valtech>
+ * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
 class AbstractController extends OlcsController\CrudAbstract
 {

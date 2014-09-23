@@ -114,5 +114,4 @@ class PenaltyController extends OlcsController\CrudAbstract
     */
     protected $dataBundle = array('properties' => 'ALL');
 
-
 }
