@@ -20,6 +20,7 @@ use Common\Exception\BadRequestException;
 class AppealController extends OlcsController\CrudAbstract
 {
     use ControllerTraits\CaseControllerTrait;
+    use ControllerTraits\HearingAppealControllerTrait;
 
     /**
      * Identifier name
@@ -161,78 +162,5 @@ class AppealController extends OlcsController\CrudAbstract
     {
         return $this->redirectToRoute('case_hearing_appeal',
             ['action' => 'details'], [], true);
-    }
-
-    /**
-     * Retrieves appeal data
-     *
-     * @param int $caseId
-     * @return array
-     */
-    public function getAppealData($caseId)
-    {
-        $bundle = [
-            'children' => [
-                'reason' => [
-                    'properties' => [
-                        'id',
-                        'description'
-                    ]
-                ],
-                'outcome' => [
-                    'properties' => [
-                        'id',
-                        'description'
-                    ]
-                ]
-            ],
-        ];
-
-        $appealResult = $this->makeRestCall(
-            'Appeal',
-            'GET',
-            array(
-                'case' => $caseId,
-                'bundle' => json_encode($bundle)
-            )
-        );
-
-        $appeal = array();
-
-        if (!empty($appealResult['Results'][0])) {
-            $appeal = $this->formatDates(
-                $appealResult['Results'][0],
-                array(
-                    'deadlineDate',
-                    'appealDate',
-                    'hearingDate',
-                    'decisionDate',
-                    'papersDueDate',
-                    'papersSentDate',
-                    'withdrawnDate'
-                )
-            );
-        }
-
-        return $appeal;
-    }
-
-    /**
-     * Formats the specified fields in the supplied array with the correct date format
-     * Expect to replace this with a view helper later
-     *
-     * @param array $data
-     * @param array $fields
-     * @return array
-     */
-    private function formatDates($data, $fields)
-    {
-        foreach ($fields as $field) {
-            if (isset($data[$field])) {
-                $data[$field] = date('d/m/Y', strtotime($data[$field]));
-            }
-        }
-
-        return $data;
     }
 }

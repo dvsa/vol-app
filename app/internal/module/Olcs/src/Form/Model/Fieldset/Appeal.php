@@ -141,8 +141,7 @@ class Appeal extends CaseBase
     public $comment = null;
 
     /**
-     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Is
-     * withdrawn?"})
+     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Withdrawn?"})
      * @Form\Type("checkbox")
      */
     public $isWithdrawn = null;
@@ -152,7 +151,8 @@ class Appeal extends CaseBase
      * @Form\Options({
      *     "label": "Withdrawn date",
      *     "create_empty_option": true,
-     *     "render_delimiters": false
+     *     "render_delimiters": false,
+     *     "hint": "Please note, all associated stay information on this case will also be withdrawn",
      * })
      * @Form\Required(false)
      * @Form\Type("\Common\Form\Elements\InputFilters\WithdrawnDate")

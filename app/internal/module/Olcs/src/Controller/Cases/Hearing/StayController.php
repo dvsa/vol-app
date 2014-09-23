@@ -20,6 +20,7 @@ use Common\Exception\BadRequestException;
 class StayController extends OlcsController\CrudAbstract
 {
     use ControllerTraits\CaseControllerTrait;
+    use ControllerTraits\HearingAppealControllerTrait;
 
     /**
      * Identifier name
@@ -129,33 +130,6 @@ class StayController extends OlcsController\CrudAbstract
     );
 
     /**
-     * Holds the Stay Data Bundle
-     *
-     * @var array
-     */
-    protected $stayDataBundle = array(
-        'children' => array(
-            'stayType' => array(
-                'properties' => array(
-                    'id',
-                    'description'
-                )
-            ),
-            'outcome' => array(
-                'properties' => array(
-                    'id',
-                    'description'
-                )
-            ),
-            'case' => array(
-                'properties' => array(
-                    'id'
-                )
-            )
-        )
-    );
-
-    /**
      * Add action. First checks if stay type already exists
      *
      * @return \Zend\View\Model\ViewModel
@@ -209,6 +183,12 @@ class StayController extends OlcsController\CrudAbstract
         $stayType = $this->params()->fromRoute('stayType');
         $caseId = $this->getCase()['id'];
 
+        // check an appeal exists
+        $appeal = $this->getAppealData($caseId);
+        if (empty($appeal)) {
+            throw new BadRequestException('Case has no appeal');
+        }
+
         $stayRecords = $this->getStayData($caseId);
         if (!(empty($stayRecords[$stayType]))) {
             $data = $stayRecords[$stayType][0];
@@ -218,27 +198,5 @@ class StayController extends OlcsController\CrudAbstract
         $data['fields']['stayType'] = $stayType;
 
         return $data;
-    }
-
-
-    /**
-     * Gets stay data for use on the index page
-     *
-     * @param int $caseId
-     * @return array
-     */
-    public function getStayData($caseId)
-    {
-        $stayRecords = array();
-
-        $stayResult = $this->makeRestCall('Stay', 'GET',
-            array('case' => $caseId), $this->stayDataBundle);
-
-        //need a better way to do this...
-        foreach ($stayResult['Results'] as $stay) {
-            $stayRecords[$stay['stayType']['id']][] = $stay;
-        }
-
-        return $stayRecords;
     }
 }
