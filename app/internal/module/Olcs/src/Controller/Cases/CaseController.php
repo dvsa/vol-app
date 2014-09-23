@@ -9,15 +9,19 @@
 namespace Olcs\Controller\Cases;
 
 use Zend\View\Model\ViewModel;
-use Olcs\Controller\Cases\AbstractController as AbstractCasesController;
+// Olcs
+use Olcs\Controller as OlcsController;
+use Olcs\Controller\Traits as ControllerTraits;
 
 /**
  * Case Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CaseController extends AbstractCasesController
+class CaseController extends OlcsController\CrudAbstract
 {
+    use ControllerTraits\CaseControllerTrait;
+
     /**
      * Identifier name
      *
