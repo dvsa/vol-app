@@ -211,7 +211,7 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
         );
 
         $params = array_map(
-            function($element) {
+            function ($element) {
                 return $element[2];
             },
             $valueMap
