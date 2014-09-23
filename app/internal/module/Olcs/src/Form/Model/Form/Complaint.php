@@ -7,57 +7,18 @@ use Zend\Form\Annotation as Form;
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("Complaint")
- * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true})
+ * @Form\Options({"prefer_form_input_filter": true, "label":"Complaint"})
+ * @Form\Attributes({"method":"post"})
  */
 class Complaint
 {
     /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
+     * @Form\Name("fields")
+     * @Form\Options({"label":"","class":""})
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\Complaint")
      */
-    public $case = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $id = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $version = null;
-
-    /**
-     * @Form\Name("complainant-details")
-     * @Form\Options({"label":"Complainant details"})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\ComplainantDetails")
-     */
-    public $complainantDetails = null;
-
-    /**
-     * @Form\Name("complaint-details")
-     * @Form\Options({"label":"Complaint details"})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\ComplaintDetails")
-     */
-    public $complaintDetails = null;
-
-    /**
-     * @Form\Name("organisation-details")
-     * @Form\Options({"label":"Operator details","class":"extra-long"})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\OrganisationDetails")
-     */
-    public $organisationDetails = null;
-
-    /**
-     * @Form\Name("driver-details")
-     * @Form\Options({"label":"Driver details","class":"extra-long"})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\DriverDetails")
-     */
-    public $driverDetails = null;
+    public $fields = null;
 
     /**
      * @Form\Name("form-actions")

@@ -23,6 +23,17 @@ class Module
         $eventManager = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
+
+        $viewHelperManager = $e->getApplication()->getServiceManager()->get('viewHelperManager');
+        $pageTitleHelper = $viewHelperManager->get('pageTitle');
+        $pageTitleHelper->setSeparator(' / ');
+
+        $pageTitleHelper = $viewHelperManager->get('pageSubtitle');
+        $pageTitleHelper->setSeparator(' / ');
+
+        $headTitleHelper = $viewHelperManager->get('headTitle');
+        $headTitleHelper->setSeparator(' - ');
+        $headTitleHelper->append('Olcs');
     }
 
     public function getConfig()

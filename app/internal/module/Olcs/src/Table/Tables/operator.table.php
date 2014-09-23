@@ -72,7 +72,7 @@ return array(
                 } else {
                     return '<a href="' . $this->generateUrl(
                         array('licence' => $data['licenceId'], 'action' => 'add'),
-                        'licence_case_action'
+                        'case'
                     ) . '">[Add Case]</a>';
                 }
             }

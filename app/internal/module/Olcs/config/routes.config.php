@@ -525,8 +525,8 @@ return array_merge(
                     'options' => [
                         'route' => '/cases/page/:page/limit/:limit/sort/:sort/order/:order',
                         'defaults' => [
-                            'controller' => 'CaseController',
-                            'action' => 'index',
+                            'controller' => 'LicenceController',
+                            'action' => 'cases',
                             'page' => 1,
                             'limit' => 10,
                             'sort' => 'createdOn',
@@ -629,45 +629,48 @@ return array_merge(
 
         // These routes are for the licence page
 
-        'licence_case_action' => [
+        'case' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/licence/:licence/case[/:action][/:case]',
+                'route' => '/case/:action[/:case][/licence/:licence]',
                 'constraints' => [
-                    'licence' => '[0-9]+',
-                    'case' => '[0-9]+'
-                ],
-                'defaults' => [
-                    'controller' => 'CaseController'
-                ]
-            ]
-        ],
-        'case_manage' => [
-            'type' => 'segment',
-            'options' => [
-                'route' => '/licence/[:licence]/case/:case/action/manage/:tab',
-                'constraints' => [
-                    'case' => '[0-9]+'
+                    'case' => '[0-9]+',
+                    'action' => '[a-z]+',
+                    'licence' => '[0-9]+'
                 ],
                 'defaults' => [
                     'controller' => 'CaseController',
-                    'action' => 'manage',
-                    'tab' => 'overview'
+                    'action'     => 'overview'
+                ],
+            ],
+            'may_terminate' => true
+        ],
+        'case_add_licence' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/licence/case/add/:licence',
+                'constraints' => [
+                    'licence' => '[0-9]+'
+                ],
+                'defaults' => [
+                    'controller' => 'CaseController',
+                    'action'     => 'add'
                 ]
             ]
         ],
         'case_statement' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/licence/:licence/case/:case/statements[/:action][/:id]',
+                'route' => '/case/:case/statement[/:action][/:statement]',
                 'constraints' => [
                     'case' => '[0-9]+',
-                    'licence' => '[0-9]+',
-                    'id' => '[0-9]+'
+                    'action' => '[a-z]+',
+                    'statement' => '[0-9]+'
                 ],
                 'defaults' => [
                     'controller' => 'CaseStatementController',
-                    'action' => 'index'
+                    'action' => 'index',
+
                 ]
             ]
         ],
@@ -681,20 +684,6 @@ return array_merge(
                 ],
                 'defaults' => [
                     'controller' => 'CaseAppealController',
-                    'action' => 'index'
-                ]
-            ]
-        ],
-        'case_convictions' => [
-            'type' => 'segment',
-            'options' => [
-                'route' => '/licence/[:licence]/case/:case/action/manage/convictions',
-                'constraints' => [
-                    'case' => '[0-9]+',
-                    'statement' => '[0-9]+'
-                ],
-                'defaults' => [
-                    'controller' => 'CaseConvictionController',
                     'action' => 'index'
                 ]
             ]
@@ -725,12 +714,24 @@ return array_merge(
                 ]
             ]
         ],
+        'case_hearing_appeal' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/case/:case/hearing-appeal[/:action]',
+                'constraints' => [
+                    'case' => '[0-9]+'
+                ],
+                'defaults' => [
+                    'controller' => 'CaseHearingAppealController',
+                    'action' => 'index'
+                ]
+            ]
+        ],
         'case_annual_test_history' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/licence/[:licence]/case/[:case]/action/manage/annual-test-history',
+                'route' => '/case/:case/annual-test-history',
                 'constraints' => [
-                    'licence' => '[0-9]+',
                     'case' => '[0-9]+',
                 ],
                 'defaults' => [
@@ -742,11 +743,10 @@ return array_merge(
         'case_prohibition' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/licence/[:licence]/case/[:case]/action/manage/prohibitions[/:action][/:id]',
+                'route' => '/case/:case/prohibition[/:action][/:prohibition]',
                 'constraints' => [
-                    'licence' => '[0-9]+',
                     'case' => '[0-9]+',
-                    'id' => '[0-9]+'
+                    'prohibition' => '[0-9]+'
                 ],
                 'defaults' => [
                     'controller' => 'CaseProhibitionController',
@@ -772,11 +772,16 @@ return array_merge(
         'conviction' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/licence/[:licence]/case/[:case]/conviction[/:action][/][:id]',
+                'route' => '/case/:case/conviction[/:action][/:conviction]',
+                'constraints' => [
+                    'case' => '[0-9]+',
+                    'conviction' => '[0-9]+'
+                ],
                 'defaults' => [
                     'controller' => 'CaseConvictionController',
+                    'action' => 'index',
                 ]
-            ]
+            ],
         ],
         'offence' => [
             'type' => 'segment',
@@ -796,10 +801,10 @@ return array_merge(
         'case_penalty' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/licence/[:licence]/case/[:case]/action/manage/penalties',
+                'route' => '/case/:case/penalty[/:action][/:penalty]',
                 'constraints' => [
-                    'licence' => '[0-9]+',
                     'case' => '[0-9]+',
+                    'penalty' => '[0-9]+',
                 ],
                 'defaults' => [
                     'controller' => 'CasePenaltyController',
@@ -807,12 +812,14 @@ return array_merge(
                 ]
             ]
         ],
-        'case_complaints' => [
+        'case_complaint' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/licence/[:licence]/case/:case/complaints',
+                'route' => '/case/:case/complaint[/:action][/:complaint]',
                 'constraints' => [
                     'case' => '[0-9]+',
+                    'action' => '[a-z]+',
+                    'complaint' => '[0-9]+'
                 ],
                 'defaults' => [
                     'controller' => 'CaseComplaintController',
@@ -820,26 +827,73 @@ return array_merge(
                 ]
             ]
         ],
-        'complaint' => [
+        'case_pi' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/licence/:licence/case/:case/complaints/:action[/:id]',
+                'route' => '/case/:case/pi',
                 'constraints' => [
                     'case' => '[0-9]+',
-                    'licence' => '[0-9]+',
-                    'id' => '[0-9]+'
+                    'action' => '[a-z]+',
                 ],
                 'defaults' => [
-                    'controller' => 'CaseComplaintController',
+                    'controller' => 'CasePublicInquiryController',
+                    'action' => 'details'
+                ]
+            ]
+        ],
+        'case_pi_agreed' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/case/:case/pi/agreed[/:action]',
+                'constraints' => [
+                    'case' => '[0-9]+',
+                    'action' => '[a-z]+',
+                ],
+                'defaults' => [
+                    'controller' => 'PublicInquiry\AgreedAndLegislationController',
+                    'action' => 'index'
+                ]
+            ]
+        ],
+        'case_pi_decision' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/case/:case/pi/decision[/:action]',
+                'constraints' => [
+                    'case' => '[0-9]+',
+                    'action' => '[a-z]+',
+                ],
+                'defaults' => [
+                    'controller' => 'PublicInquiry\RegisterDecisionController',
+                    'action' => 'index'
+                ]
+            ]
+        ],
+        'case_pi_sla' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/case/:case/pi/sla[/:action]',
+                'constraints' => [
+                    'case' => '[0-9]+',
+                    'action' => '[a-z]+',
+                ],
+                'defaults' => [
+                    'controller' => 'PublicInquiry\SlaController',
+                    'action' => 'index'
                 ]
             ]
         ],
         'submission' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/licence/[:licence]/case/[:case]/submission[/:action][/][:id]',
+                'route' => '/case/:case/submission/:action[/:submission]',
+                'constraints' => [
+                    'case' => '[0-9]+',
+                    'submission' => '[0-9]+',
+                ],
                 'defaults' => [
-                    'controller' => 'SubmissionController',
+                    'controller' => 'CaseSubmissionController',
+                    'action' => 'index'
                 ]
             ]
         ],
@@ -855,42 +909,15 @@ return array_merge(
         'case_conditions_undertakings' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/licence/[:licence]/case/:case/conditions-undertakings',
+                'route' => '/case/:case/conditions-undertakings[/:action[/:id]]',
                 'constraints' => [
-                    'case' => '[0-9]+',
+                    'case'   => '[0-9]+',
+                    'action' => '[a-z]+',
+                    'id'     => '[0-9]+',
                 ],
                 'defaults' => [
                     'controller' => 'CaseConditionUndertakingController',
                     'action' => 'index'
-                ]
-            ]
-        ],
-        'conditions' => [
-            'type' => 'segment',
-            'options' => [
-                'route' => '/licence/:licence/case/:case/conditions/:action[/:id]',
-                'constraints' => [
-                    'case' => '[0-9]+',
-                    'id' => '[0-9]+'
-                ],
-                'defaults' => [
-                    'controller' => 'CaseConditionUndertakingController',
-                    'type' => 'condition'
-                ]
-            ]
-        ],
-        'undertakings' => [
-            'type' => 'segment',
-            'options' => [
-                'route' => '/licence/:licence/case/:case/undertaking/:action[/:id]',
-                'constraints' => [
-                    'licence' => '[0-9]+',
-                    'case' => '[0-9]+',
-                    'id' => '[0-9]+'
-                ],
-                'defaults' => [
-                    'controller' => 'CaseConditionUndertakingController',
-                    'type' => 'undertaking'
                 ]
             ]
         ],
@@ -943,7 +970,7 @@ return array_merge(
                 ]
             ]
         ],
-        'case_pi' => [
+        /*'case_pi' => [
             'type' => 'segment',
             'options' => [
                 'route' => '/licence/:licence/case/:case/task/pi',
@@ -956,7 +983,7 @@ return array_merge(
                     'action' => 'index'
                 ]
             ]
-        ],
+        ],*/
         'case_pi_action' => [
             'type' => 'segment',
             'options' => [
@@ -968,11 +995,12 @@ return array_merge(
                 ],
                 'defaults' => [
                     'controller' => 'CasePiController',
-                    'action' => 'index'
+                    'action' => 'index',
+                    'licence' => 7
                 ]
             ]
         ],
-        'case_pi_hearing' => [
+        /*'case_pi_hearing' => [
             'type' => 'segment',
             'options' => [
                 'route' => '/licence/:licence/case/:case/pi/:piId/hearing[/:hearingId]',
@@ -987,7 +1015,7 @@ return array_merge(
                     'action' => 'index'
                 ]
             ]
-        ],
+        ],*/
         'entity_lists' => [
             'type' => 'segment',
             'options' => [

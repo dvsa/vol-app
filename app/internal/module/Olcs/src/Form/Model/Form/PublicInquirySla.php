@@ -14,11 +14,11 @@ use Zend\Form\Annotation as Form;
 class PublicInquirySla
 {
     /**
-     * @Form\Name("main")
+     * @Form\Name("fields")
      * @Form\Options({"label":""})
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\PublicInquirySlaMain")
      */
-    public $main;
+    public $fields;
 
     /**
      * @Form\Name("form-actions")

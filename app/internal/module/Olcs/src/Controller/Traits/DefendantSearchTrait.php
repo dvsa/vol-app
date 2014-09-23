@@ -110,6 +110,7 @@ trait DefendantSearchTrait
             // add the search fieldset to ensure the relevant person/operator
             // form elements are present based on defType
             $searchFieldset = $this->processGetPreparedForm($post);
+            //die(var_export($this->persist, 1));
         }
 
         return $searchFieldset;
@@ -416,9 +417,9 @@ trait DefendantSearchTrait
         $result = [];
         if (is_array($personList)) {
             foreach ($personList as $person) {
-                $birthDate = new \DateTime($person['date_of_birth']);
+                $birthDate = new \DateTime($person['birth_date']);
                 $result[$person['id']] = trim(
-                    $person['familyName'] .
+                    $person['family_name'] .
                     ',  ' . $person['forename'] .
                     '     (b. ' . $birthDate->format('d-M-Y')
                 ) . ')';
@@ -451,11 +452,10 @@ trait DefendantSearchTrait
 
     /**
      * Method to format a person details from db result into form field array
-     * structure
+     * structure, in future: get date of birth to prepopulate form
      *
      * @param array $personDetails
      * @return array
-     * @todo get date of birth to prepopulate form
      */
     private function formatPerson($personDetails)
     {
