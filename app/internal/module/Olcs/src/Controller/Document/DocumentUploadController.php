@@ -10,10 +10,11 @@ class DocumentUploadController extends DocumentController
 {
     public function finaliseAction()
     {
+        $routeParams = $this->params()->fromRoute();
         if ($this->isButtonPressed('back')) {
             return $this->redirect()->toRoute(
-                $this->params('type').'/documents/generate',
-                $this->params()->fromRoute()
+                $routeParams['type'] . '/documents/generate',
+                $routeParams
             );
         }
         $data = $this->fetchTmpData();
@@ -39,7 +40,7 @@ class DocumentUploadController extends DocumentController
             '<a href="%s">%s</a>',
             $this->url()->fromRoute(
                 'fetch_tmp_document',
-                ['path' => $this->params()->fromRoute('tmpId')]
+                ['path' => $routeParams['tmpId']]
             ),
             $lookups['documentTemplate']
         );
@@ -63,6 +64,9 @@ class DocumentUploadController extends DocumentController
 
     public function processUpload($data)
     {
+        $routeParams = $this->params()->fromRoute();
+        $type = $routeParams['type'];
+
         $data = $this->fetchTmpData();
 
         // @TODO wrap this in more abstract methods if poss. Also need
@@ -74,7 +78,6 @@ class DocumentUploadController extends DocumentController
         $uploader->setFile($files['file']);
         $filename = $uploader->upload(self::FULL_STORAGE_PATH);
 
-        // @TODO DRY up with previous method
         $template = $this->makeRestCall(
             'DocTemplate',
             'GET',
@@ -88,7 +91,6 @@ class DocumentUploadController extends DocumentController
         $data = [
             'identifier'          => $filename,
             'description'         => $templateName,
-            'licence'             => $this->params('licence'),
             'filename'            => $fileName,
             'fileExtension'       => 'doc_rtf',
             'category'            => $data['details']['category'],
@@ -99,6 +101,8 @@ class DocumentUploadController extends DocumentController
             'size'                => 0  // @TODO fetch from $file
         ];
 
+        $data[$type] = $routeParams[$type];
+
         $this->makeRestCall(
             'Document',
             'POST',
@@ -108,8 +112,8 @@ class DocumentUploadController extends DocumentController
         $uploader->remove($this->getTmpPath());
 
         return $this->redirect()->toRoute(
-            $this->params('type') . '/documents',
-            $this->params()->fromRoute()
+            $type . '/documents',
+            $routeParams
         );
     }
 }
