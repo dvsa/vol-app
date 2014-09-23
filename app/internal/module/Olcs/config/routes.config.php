@@ -791,7 +791,8 @@ return array_merge(
             'options' => [
                 'route' => '/case/:case/prohibition[/:prohibition]/defect[/:action][/:id]',
                 'constraints' => [
-                    'defect' => '[0-9]+'
+                    'id' => '[0-9]+',
+                    'prohibition' => '[0-9]+'
                 ],
                 'defaults' => [
                     'controller' => 'CaseProhibitionDefectController',
