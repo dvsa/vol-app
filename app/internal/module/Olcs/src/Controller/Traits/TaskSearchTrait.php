@@ -20,8 +20,8 @@ trait TaskSearchTrait
         $defaults = array(
             'assignedToUser' => $this->getLoggedInUser(),
             'assignedToTeam' => 2,  // we've no stub for this, but it matches the logged in user's team
-            'date'           => 'today',
-            'status'         => 'open',
+            'date'           => 'tdt_today',
+            'status'         => 'tst_open',
             'sort'           => 'actionDate',
             'order'          => 'ASC',
             'page'           => 1,
@@ -40,11 +40,11 @@ trait TaskSearchTrait
         // state, "all", which shouldn't apply either filter
         if ($filters['status'] === 'tst_closed') {
             $filters['isClosed'] = true;
-        } elseif ($filters['status'] === 'tst_open') {
+        } else if ($filters['status'] === 'tst_open') {
             $filters['isClosed'] = false;
         }
 
-        if (isset($filters['date']) && $filters['date'] === 'today') {
+        if (isset($filters['date']) && $filters['date'] === 'tdt_today') {
             $filters['actionDate'] = '<= ' . date('Y-m-d');
         }
 

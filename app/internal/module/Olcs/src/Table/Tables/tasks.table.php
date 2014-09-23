@@ -26,14 +26,17 @@ return array(
             'title' => 'Link',
             'formatter' => 'TaskIdentifier',
             'name' => 'link',
+            'sort' => 'linkDisplay',
         ),
         array(
             'title' => 'Category',
             'name' => 'categoryName',
+            'sort' => 'categoryName',
         ),
         array(
             'title' => 'Sub category',
             'name' => 'taskSubCategoryName',
+            'sort' => 'taskSubCategoryName',
         ),
         array(
             'title' => 'Description',
@@ -47,7 +50,8 @@ return array(
                     . '" class=js-modal-ajax>'
                     . $row['description']
                     . '</a>';
-            }
+            },
+            'sort' => 'description',
         ),
         array(
             'title' => 'Date',
@@ -62,11 +66,13 @@ return array(
                     return 'Unassigned';
                 }
                 return $row['ownerName'];
-            }
+            },
+            'sort' => 'ownerName',
         ),
         array(
             'title' => 'Name',
             'name' => 'name',
+            'sort' => 'name',
         ),
         array(
             'title' => '',
