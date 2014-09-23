@@ -53,7 +53,7 @@ class DocumentGenerationController extends DocumentController
 
         if ($this->getRequest()->isPost()) {
             $data = (array)$this->getRequest()->getPost();
-        } else if ($this->params('tmpId')) {
+        } elseif ($this->params('tmpId')) {
             $data = $this->fetchTmpData();
             $this->getUploader()->remove($this->getTmpPath());
         }
@@ -162,7 +162,6 @@ class DocumentGenerationController extends DocumentController
             $queryData
         );
 
-
         /**
          * 3) Pass those queries into a custom backend endpoint which knows how to
          *    fetch data for multiple different entities at once and respects the
@@ -214,8 +213,13 @@ class DocumentGenerationController extends DocumentController
         );
     }
 
-    protected function getListData($entity, $filters = array(), $titleField = '', $keyField = '', $showAll = self::EMPTY_LABEL)
-    {
+    protected function getListData(
+        $entity,
+        $filters = array(),
+        $titleField = '',
+        $keyField = '',
+        $showAll = self::EMPTY_LABEL
+    ) {
         return parent::getListData($entity, $filters, 'description', 'id', $showAll);
     }
 }

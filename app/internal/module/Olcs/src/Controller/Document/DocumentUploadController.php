@@ -1,11 +1,21 @@
 <?php
 
+/**
+ * Document Upload Controller
+ *
+ * @author Nick Payne <nick.payne@valtech.co.uk>
+ */
 namespace Olcs\Controller\Document;
 
 use Zend\View\Model\ViewModel;
 
 use Dvsa\Jackrabbit\Data\Object\File;
 
+/**
+ * Document Upload Controller
+ *
+ * @author Nick Payne <nick.payne@valtech.co.uk>
+ */
 class DocumentUploadController extends DocumentController
 {
     public function finaliseAction()

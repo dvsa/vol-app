@@ -169,12 +169,12 @@ class DocumentControllerTest extends AbstractHttpControllerTestCase
     public function mockRestCall($service, $method, $data = array(), $bundle = array())
     {
         switch ($service) {
-        case 'DocTemplate':
-            return $this->mockDocTemplate($data);
-        case 'Document':
-            return $this->mockDocument($data);
-        default:
-            throw new \Exception("Service call " . $service . " not mocked");
+            case 'DocTemplate':
+                return $this->mockDocTemplate($data);
+            case 'Document':
+                return $this->mockDocument($data);
+            default:
+                throw new \Exception("Service call " . $service . " not mocked");
         }
     }
 
@@ -186,65 +186,65 @@ class DocumentControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue($this->contentStoreMock));
 
         switch ($service) {
-        case 'FileUploader':
-            return $fileUploaderMock;
+            case 'FileUploader':
+                return $fileUploaderMock;
         }
     }
 
     private function mockDocTemplate($data)
     {
         switch ($data['id']) {
-        case 123:
-            return [
-                'docTemplateBookmarks' => [
-                    [
-                        'docBookmark' => [
-                            'description' => 'A sample bookmark',
-                            'name' => 'sample_bookmark',
-                            'docParagraphBookmarks' => [
-                                [
-                                    'docParagraph' => [
-                                        'id' => 1,
-                                        'paraTitle' => 'A paragraph'
-                                    ]
-                                ], [
-                                    'docParagraph' => [
-                                        'id' => 2,
-                                        'paraTitle' => 'Another paragraph'
+            case 123:
+                return [
+                    'docTemplateBookmarks' => [
+                        [
+                            'docBookmark' => [
+                                'description' => 'A sample bookmark',
+                                'name' => 'sample_bookmark',
+                                'docParagraphBookmarks' => [
+                                    [
+                                        'docParagraph' => [
+                                            'id' => 1,
+                                            'paraTitle' => 'A paragraph'
+                                        ]
+                                    ], [
+                                        'docParagraph' => [
+                                            'id' => 2,
+                                            'paraTitle' => 'Another paragraph'
+                                        ]
                                     ]
                                 ]
                             ]
-                        ]
-                    ],
-                    [
-                        'docBookmark' => [
-                            'description' => 'Another sample bookmark',
-                            'name' => 'another_sample_bookmark',
-                            'docParagraphBookmarks' => [
-                                [
-                                    'docParagraph' => [
-                                        'id' => 3,
-                                        'paraTitle' => 'A third paragraph'
+                        ],
+                        [
+                            'docBookmark' => [
+                                'description' => 'Another sample bookmark',
+                                'name' => 'another_sample_bookmark',
+                                'docParagraphBookmarks' => [
+                                    [
+                                        'docParagraph' => [
+                                            'id' => 3,
+                                            'paraTitle' => 'A third paragraph'
+                                        ]
                                     ]
                                 ]
                             ]
                         ]
                     ]
-                ]
-            ];
+                ];
         }
     }
 
     private function mockDocument($data)
     {
         switch ($data['id']) {
-        case 123:
-            return null;
-        case 456:
-            return [
-                'identifier' => 'abc_123',
-                'filename' => 'my-document.rtf'
-            ];
+            case 123:
+                return null;
+            case 456:
+                return [
+                    'identifier' => 'abc_123',
+                    'filename' => 'my-document.rtf'
+                ];
         }
     }
 }

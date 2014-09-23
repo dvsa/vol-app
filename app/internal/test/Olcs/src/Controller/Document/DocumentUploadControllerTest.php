@@ -273,36 +273,36 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
     public function mockRestCall($service, $method, $data = array(), $bundle = array())
     {
         switch ($service) {
-        case 'Category':
-            return $this->mockCategory($data);
-        case 'DocumentSubCategory':
-            return $this->mockSubCategory($data);
-        case 'DocTemplate':
-            return $this->mockDocTemplate($data);
-        case 'BookmarkSearch':
-            return $this->mockBookmarkSearch($data);
-        case 'Document':
-            return $this->mockDocument($data);
-        default:
-            throw new \Exception("Service call " . $service . " not mocked");
+            case 'Category':
+                return $this->mockCategory($data);
+            case 'DocumentSubCategory':
+                return $this->mockSubCategory($data);
+            case 'DocTemplate':
+                return $this->mockDocTemplate($data);
+            case 'BookmarkSearch':
+                return $this->mockBookmarkSearch($data);
+            case 'Document':
+                return $this->mockDocument($data);
+            default:
+                throw new \Exception("Service call " . $service . " not mocked");
         }
     }
 
     public function mockServiceLocator($service)
     {
         switch ($service) {
-        case 'FileUploader':
-            $fileUploaderMock = $this->getMock('\stdClass', ['getUploader']);
-            $fileUploaderMock->expects($this->any())
-                ->method('getUploader')
-                ->will($this->returnValue($this->fileStoreMock));
-            return $fileUploaderMock;
-        case 'ContentStore':
-            return $this->contentStoreMock;
-        case 'Document':
-            return $this->documentMock;
-        default:
-            throw new \Exception("Service Locator " . $service . " not mocked");
+            case 'FileUploader':
+                $fileUploaderMock = $this->getMock('\stdClass', ['getUploader']);
+                $fileUploaderMock->expects($this->any())
+                    ->method('getUploader')
+                    ->will($this->returnValue($this->fileStoreMock));
+                return $fileUploaderMock;
+            case 'ContentStore':
+                return $this->contentStoreMock;
+            case 'Document':
+                return $this->documentMock;
+            default:
+                throw new \Exception("Service Locator " . $service . " not mocked");
         }
     }
 
