@@ -128,97 +128,9 @@ class ProhibitionController extends OlcsController\CrudAbstract
         )
     );
 
-    /*public function addAction()
-    {
-        $this->checkTableCrud();
-        parent::addAction();
-    }
-
-    public function editAction(){
-        $this->checkTableCrud();
-
-        $this->getViewHelperManager()->get('placeholder')->getContainer('table')->set(
-            $this->generateProhibitionDefectTable($this->getFromRoute('prohibition'))
-        );
-
-        parent::editAction();
-
-        $view = $this->getView();
-
-        $view->setTemplate('prohibition/edit');
-
-        return $this->renderView($view);
-    }
-
-    public function deleteAction()
-    {
-        $this->checkTableCrud();
-        parent::deleteAction();
-    }
-
-    public function checkTableCrud()
-    {
-        $action = $this->fromPost('action');
-        $defect = $this->fromPost('id');
-//echo $action . ' ' . $defect;
-        //die();
-        switch ($action) {
-            case 'Add':
-                return $this->redirectToRoute('case_prohibition_defect', ['action' => 'add'], [], true);
-            case 'Edit':
-                return $this->redirectToRoute(
-                    'case_prohibition_defect',
-                    ['action' => 'edit', 'id' => $defect],
-                    [],
-                    true
-                );
-            case 'Delete':
-                return $this->redirectToRoute(
-                    'case_prohibition_defect',
-                    ['action' => 'delete', 'id' => $defect],
-                    [],
-                    true
-                );
-        }
-    }
-
     /**
-     * Gets a table of defects for the prohibition
-     *
-     * @param int $prohibitionId
-     * @return string
-     */
-   /* private function generateProhibitionDefectTable($prohibitionId)
-    {
-        $bundle = [
-            'children' => [
-                'prohibition' => [
-                    'properties' => [
-                        'id'
-                    ]
-                ]
-
-            ]
-        ];
-
-        $results = $this->makeRestCall(
-            'ProhibitionDefect',
-            'GET',
-            array(
-                'prohibition' => $prohibitionId,
-                'bundle' => json_encode($bundle)
-            )
-        );
-
-        if (!$results['Count']) {
-            $results = array();
-        }
-
-        return $this->getTable('prohibitionDefect', $results);
-    }*/
-
-    /**
-     * If we wanted we could return a view, but we don't need to
+     * Gets Prohibition details from within ProhibitionDefectController.
+     * We don't need to ever return a view here.
      *
      * @return void
      */
