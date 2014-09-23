@@ -18,8 +18,9 @@ class Appeal extends CaseBase
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
-     * @Form\Required(false)
-     * @Form\Type("\Common\Form\Elements\InputFilters\DateRequired")
+     * @Form\Type("DateSelect")
+     * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
+     * @Form\Filter({"name": "DateSelectNullifier"})
      */
     public $deadlineDate = null;
 
@@ -30,8 +31,9 @@ class Appeal extends CaseBase
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
-     * @Form\Required(false)
-     * @Form\Type("\Common\Form\Elements\InputFilters\DateRequired")
+     * @Form\Type("DateSelect")
+     * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
+     * @Form\Filter({"name": "DateSelectNullifier"})
      */
     public $appealDate = null;
 
@@ -77,7 +79,9 @@ class Appeal extends CaseBase
      *     "render_delimiters": false
      * })
      * @Form\Required(false)
-     * @Form\Type("Common\Form\Elements\Custom\DateSelect")
+     * @Form\Type("DateSelect")
+     * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
+     * @Form\Filter({"name": "DateSelectNullifier"})
      */
     public $hearingDate = null;
 
@@ -89,7 +93,9 @@ class Appeal extends CaseBase
      *     "render_delimiters": false
      * })
      * @Form\Required(false)
-     * @Form\Type("Common\Form\Elements\Custom\DateSelect")
+     * @Form\Type("DateSelect")
+     * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
+     * @Form\Filter({"name": "DateSelectNullifier"})
      */
     public $decisionDate = null;
 
@@ -101,7 +107,9 @@ class Appeal extends CaseBase
      *     "render_delimiters": false
      * })
      * @Form\Required(false)
-     * @Form\Type("Common\Form\Elements\Custom\DateSelect")
+     * @Form\Type("DateSelect")
+     * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
+     * @Form\Filter({"name": "DateSelectNullifier"})
      */
     public $papersDueDate = null;
 
@@ -113,7 +121,9 @@ class Appeal extends CaseBase
      *     "render_delimiters": false
      * })
      * @Form\Required(false)
-     * @Form\Type("Common\Form\Elements\Custom\DateSelect")
+     * @Form\Type("DateSelect")
+     * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
+     * @Form\Filter({"name": "DateSelectNullifier"})
      */
     public $papersSentDate = null;
 
@@ -154,8 +164,21 @@ class Appeal extends CaseBase
      *     "render_delimiters": false,
      *     "hint": "Please note, all associated stay information on this case will also be withdrawn",
      * })
-     * @Form\Required(false)
-     * @Form\Type("\Common\Form\Elements\InputFilters\WithdrawnDate")
+     * @Form\AllowEmpty(true)
+     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
+     * @Form\Required(true)
+     * @Form\Type("DateSelect")
+     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Validator({"name": "ValidateIf",
+     *      "options":{
+     *          "context_field": "isWithdrawn",
+     *          "context_values": {"Y"},
+     *          "validators": {
+     *              {"name": "Date", "options": {"format": "Y-m-d"}},
+     *              {"name": "\Common\Form\Elements\Validators\DateNotInFuture"}
+     *          }
+     *      }
+     * })
      */
     public $withdrawnDate = null;
 
