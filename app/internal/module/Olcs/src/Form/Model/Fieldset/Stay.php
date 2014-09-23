@@ -23,8 +23,9 @@ class Stay extends CaseBase
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
-     * @Form\Required(false)
-     * @Form\Type("\Common\Form\Elements\InputFilters\DateRequired")
+     * @Form\Type("DateSelect")
+     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Validator({"name": "DateValidator", "options": {"format": "Y-m-d"}})
      */
     public $requestDate = null;
 
@@ -36,7 +37,13 @@ class Stay extends CaseBase
      *     "render_delimiters": false
      * })
      * @Form\Required(false)
-     * @Form\Type("\Common\Form\Elements\InputFilters\DecisionDateBeforeRequestDate")
+     * @Form\Type("DateSelect")
+     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Validator({"name": "DateValidator", "options": {"format": "Y-m-d"}})
+     * @Form\Validator({
+     *      "name": "\Common\Validator\DateCompare",
+     *      "options": {"compare_to": "requestDate", "operator":"gte", "compare_to_label": "Date of request"}
+     * })
      */
     public $decisionDate = null;
 
@@ -71,8 +78,7 @@ class Stay extends CaseBase
     public $notes = null;
 
     /**
-     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Is
-     * withdrawn?"})
+     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Is withdrawn?"})
      * @Form\Type("checkbox")
      */
     public $isWithdrawn = null;
@@ -85,7 +91,16 @@ class Stay extends CaseBase
      *     "render_delimiters": false
      * })
      * @Form\Required(false)
-     * @Form\Type("\Common\Form\Elements\InputFilters\WithdrawnDate")
+     * @Form\Type("DateSelect")
+     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Validator({"name": "ValidateIf", "options":{
+     *      "context_field": "isWithdrawn",
+     *      "context_values": {"Y"}
+     *      "validators": {
+     *          {"name": "DateValidator", "options": {"format": "Y-m-d"}},
+     *          {"name": "\Common\Form\Elements\Validators\DateNotInFuture"}
+     *      }
+     * })
      */
     public $withdrawnDate = null;
 }
