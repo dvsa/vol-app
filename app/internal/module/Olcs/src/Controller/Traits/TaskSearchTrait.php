@@ -40,7 +40,7 @@ trait TaskSearchTrait
         // state, "all", which shouldn't apply either filter
         if ($filters['status'] === 'tst_closed') {
             $filters['isClosed'] = true;
-        } else if ($filters['status'] === 'tst_open') {
+        } elseif ($filters['status'] === 'tst_open') {
             $filters['isClosed'] = false;
         }
 
