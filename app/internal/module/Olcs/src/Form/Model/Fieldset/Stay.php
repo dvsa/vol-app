@@ -25,7 +25,7 @@ class Stay extends CaseBase
      * })
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
-     * @Form\Validator({"name": "DateValidator", "options": {"format": "Y-m-d"}})
+     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
      */
     public $requestDate = null;
 
@@ -39,7 +39,7 @@ class Stay extends CaseBase
      * @Form\Required(false)
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
-     * @Form\Validator({"name": "DateValidator", "options": {"format": "Y-m-d"}})
+     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
      * @Form\Validator({
      *      "name": "\Common\Validator\DateCompare",
      *      "options": {"compare_to": "requestDate", "operator":"gte", "compare_to_label": "Date of request"}
@@ -93,12 +93,14 @@ class Stay extends CaseBase
      * @Form\Required(false)
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
-     * @Form\Validator({"name": "ValidateIf", "options":{
-     *      "context_field": "isWithdrawn",
-     *      "context_values": {"Y"}
-     *      "validators": {
-     *          {"name": "DateValidator", "options": {"format": "Y-m-d"}},
-     *          {"name": "\Common\Form\Elements\Validators\DateNotInFuture"}
+     * @Form\Validator({"name": "ValidateIf",
+     *      "options":{
+     *          "context_field": "isWithdrawn",
+     *          "context_values": {"Y"},
+     *          "validators": {
+     *              {"name": "Date", "options": {"format": "Y-m-d"}},
+     *              {"name": "\Common\Form\Elements\Validators\DateNotInFuture"}
+     *          }
      *      }
      * })
      */
