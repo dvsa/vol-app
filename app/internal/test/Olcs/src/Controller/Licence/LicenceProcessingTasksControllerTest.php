@@ -21,15 +21,16 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
     private $taskSearchViewExpectedData = [
         'assignedToUser' => 1,
         'assignedToTeam'  => 2,
-        'date'  => 'today',
-        'status' => 'open',
+        'date'  => 'tdt_today',
+        'status' => 'tst_open',
         'sort' => 'actionDate',
         'order' => 'ASC',
         'page' => 1,
         'limit' => 10,
         'actionDate' => '',
         'linkId' => 1234,
-        'linkType' => 'Licence'
+        'linkType' => 'Licence',
+        'isClosed' => false
     ];
     private $standardListData = [
         'limit' => 100,
@@ -39,27 +40,29 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
         'assignedToUser' => 1,
         'assignedToTeam'  => 2,
         'team'  => 2,
-        'date'  => 'today',
-        'status' => 'open',
+        'date'  => 'tdt_today',
+        'status' => 'tst_open',
         'sort' => 'name',
         'order' => 'ASC',
         'page' => 1,
         'limit' => 100,
         'actionDate' => '',
         'linkId' => 1234,
-        'linkType' => 'Licence'
+        'linkType' => 'Licence',
+        'isClosed' => false
     ];
     private $extendedListDataVariation1 = [
         'assignedToTeam'  => 2,
-        'date'  => 'today',
-        'status' => 'open',
+        'date'  => 'tdt_today',
+        'status' => 'tst_open',
         'sort' => 'name',
         'order' => 'ASC',
         'page' => 1,
         'limit' => 100,
         'linkType' => 'Licence',
         'actionDate' => '',
-        'team'  => 2
+        'team'  => 2,
+        'isClosed' => false
     ];
     private $altListData = [
         'limit' => 100,
