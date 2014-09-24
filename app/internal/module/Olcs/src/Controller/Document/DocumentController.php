@@ -201,6 +201,6 @@ class DocumentController extends AbstractController
 
     protected function formatFilename($input)
     {
-        return str_replace(' ', '_', $input);
+        return str_replace([' ', '/'], '_', $input);
     }
 }
