@@ -11,20 +11,19 @@ use Olcs\View\Helper\PiListData;
  */
 class PiListDataTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
-     * @dataProvider provide__invoke
+     * @dataProvider provideInvoke
      * @param $input
      * @param $expected
      */
-    public function test__invoke($input, $expected)
+    public function testInvoke($input, $expected)
     {
         $sut = new PiListData();
 
         $this->assertEquals($expected, $sut($input));
     }
 
-    public function provide__invoke()
+    public function provideInvoke()
     {
         return [
             [null, 'None selected'],
@@ -40,4 +39,3 @@ class PiListDataTest extends \PHPUnit_Framework_TestCase
         ];
     }
 }
- 

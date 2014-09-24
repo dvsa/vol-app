@@ -210,7 +210,12 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
             'case'  => array('case', null, $case)
         );
 
-        $params = array_map(function($element){return $element[2];}, $valueMap);
+        $params = array_map(
+            function ($element) {
+                return $element[2];
+            },
+            $valueMap
+        );
 
         $sut = $this->getSutForIsolatedTest(
             array('getQueryOrRouteParam', 'getListVars', 'initTable')
@@ -314,7 +319,10 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
 
         $this->assertTrue($sut->setNavigationCurrentLocation());
 
-        $this->assertEquals('nav-id-test', $sut->getServiceLocator()->get('Navigation')->findOneBy('active', 1)->getId());
+        $this->assertEquals(
+            'nav-id-test',
+            $sut->getServiceLocator()->get('Navigation')->findOneBy('active', 1)->getId()
+        );
     }
 
     /**

@@ -1,6 +1,5 @@
 <?php
 
-// @todo Find a nicer way to re-use this config file
 $applicationJourney = include(
     __DIR__ . '/../../../vendor/olcs/OlcsCommon/Common/config/journeys/application.journey.php'
 );
@@ -98,10 +97,10 @@ return array(
                             'use_route_match' => true,
                         ),
                         array(
-                            'id' => 'case_details_conditions',
-                            'label' => 'X Conditions & Undertakings',
-                            'route' => 'case',
-                            'action' => 'conditions',
+                            'id' => 'case_details_conditions_undertakings',
+                            'label' => 'Conditions & Undertakings',
+                            'route' => 'case_conditions_undertakings',
+                            'action' => 'index',
                             'use_route_match' => true,
                         ),
                         array(
