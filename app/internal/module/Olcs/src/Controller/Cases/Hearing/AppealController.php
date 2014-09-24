@@ -1,52 +1,47 @@
 <?php
 
 /**
- * Case Prohibition Controller
+ * Case Hearing Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-namespace Olcs\Controller\Cases\Prohibition;
+namespace Olcs\Controller\Cases\Hearing;
 
 // Olcs
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
+use Common\Exception\BadRequestException;
 
-    /**
-     * Case Prohibition Controller
-     *
-     * @author Ian Lindsay <ian@hemera-business-services.co.uk>
-     */
-class ProhibitionController extends OlcsController\CrudAbstract
+/**
+ * Case Appeal Controller
+ *
+ * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ */
+class AppealController extends OlcsController\CrudAbstract
 {
     use ControllerTraits\CaseControllerTrait;
+    use ControllerTraits\HearingAppealControllerTrait;
 
     /**
      * Identifier name
      *
      * @var string
      */
-    protected $identifierName = 'prohibition';
+    protected $identifierName = 'appeal';
 
     /**
      * Table name string
      *
      * @var string
      */
-    protected $tableName = 'prohibition';
-
-    /**
-     * Name of comment box field.
-     *
-     * @var string
-     */
-    protected $commentBoxName = 'prohibitionNote';
+    protected $tableName = 'appeal';
 
     /**
      * Holds the form name
      *
      * @var string
      */
-    protected $formName = 'prohibition';
+    protected $formName = 'appeal';
 
     /**
      * The current page's extra layout, over and above the
@@ -69,14 +64,14 @@ class ProhibitionController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $service = 'Prohibition';
+    protected $service = 'Appeal';
 
     /**
      * Holds the navigation ID,
      * required when an entire controller is
      * represneted by a single navigation id.
      */
-    protected $navigationId = 'case_details_prohibitions';
+    protected $navigationId = 'case_hearings_appeals_stays';
 
     /**
      * Holds an array of variables for the
@@ -90,10 +85,11 @@ class ProhibitionController extends OlcsController\CrudAbstract
      * Data map
      *
      * @var array
-    */
+     */
     protected $dataMap = array(
         'main' => array(
             'mapFrom' => array(
+                'details',
                 'fields',
                 'base',
             )
@@ -111,33 +107,64 @@ class ProhibitionController extends OlcsController\CrudAbstract
      * Holds the Data Bundle
      *
      * @var array
-    */
+     */
     protected $dataBundle = array(
         'children' => array(
-            'case' => array(
-                'properties' => array(
-                    'id'
-                )
-            ),
-            'prohibitionType' => array(
+            'outcome' => array(
                 'properties' => array(
                     'id',
                     'description'
+                )
+            ),
+            'reason' => array(
+                'properties' => array(
+                    'id',
+                    'description'
+                )
+            ),
+            'case' => array(
+                'properties' => array(
+                    'id'
                 )
             )
         )
     );
 
-    /**
-     * Gets Prohibition details from within ProhibitionDefectController.
-     * We don't need to ever return a view here.
-     *
-     * @return void
-     */
-    public function detailsAction()
+    public function addAction()
     {
-        $this->getViewHelperManager()->get('placeholder')->getContainer('prohibition')->set(
-            $this->loadCurrent()
+        $caseId = $this->getCase()['id'];
+        $appeal = $this->getAppealData($caseId);
+        if (empty($appeal)) {
+            return parent::addAction();
+        } else {
+            throw new BadRequestException('Case already has an appeal');
+        }
+    }
+
+    /**
+     * Override to ensure any form submit redirects to alternative controller
+     * details action.
+     *
+     * @return mixed|\Zend\Http\Response
+     */
+    public function indexAction()
+    {
+        return $this->redirectToIndex();
+    }
+
+    /**
+     * Override to ensure any form submit redirects to alternative controller
+     * details action.
+     *
+     * @return mixed|\Zend\Http\Response
+     */
+    public function redirectToIndex()
+    {
+        return $this->redirectToRoute(
+            'case_hearing_appeal',
+            ['action' => 'details'],
+            [],
+            true
         );
     }
 }

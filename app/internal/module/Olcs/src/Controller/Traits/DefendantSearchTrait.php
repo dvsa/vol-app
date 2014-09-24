@@ -110,7 +110,6 @@ trait DefendantSearchTrait
             // add the search fieldset to ensure the relevant person/operator
             // form elements are present based on defType
             $searchFieldset = $this->processGetPreparedForm($post);
-            //die(var_export($this->persist, 1));
         }
 
         return $searchFieldset;

@@ -7,7 +7,7 @@
  */
 namespace Olcs\Controller\Bus;
 
-use Olcs\Controller\AbstractController;
+use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits;
 
 /**
@@ -15,14 +15,70 @@ use Olcs\Controller\Traits;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class BusController extends AbstractController
+class BusController extends OlcsController\CrudAbstract
 {
     use Traits\BusControllerTrait;
 
+    /* bus controller properties */
     protected $layoutFile = 'licence/bus/layout';
     protected $subNavRoute;
     protected $section;
     protected $item;
+
+    /* properties required by CrudAbstract */
+    /**
+     * Table name string
+     *
+     * @var string
+     */
+    protected $tableName = 'none';
+
+    /**
+     * Identifier name from route
+     *
+     * @var string
+     */
+    protected $identifierName = 'busRegId';
+
+    /**
+     * Holds the form name
+     *
+     * @var string
+     */
+    protected $formName = 'none';
+
+    /**
+     * The current page's extra layout, over and above the
+     * standard base template, a sibling of the base though.
+     *
+     * @var string
+     */
+    protected $pageLayout = 'bus';
+
+    /**
+     * Holds the service name
+     *
+     * @var string
+     */
+    protected $service = 'BusReg';
+
+    /**
+     * Holds an array of variables for the
+     * default index list page.
+     */
+    protected $listVars = [
+        'licence',
+        'busRegId'
+    ];
+
+    /**
+     * Holds the Data Bundle
+     *
+     * @var array
+     */
+    protected $dataBundle = array(
+        '',
+    );
 
     /**
      * Index action
@@ -31,7 +87,7 @@ class BusController extends AbstractController
      */
     public function indexAction()
     {
-        //check whether we have a bus reg id or whether we're showing the list
+        //for now we're defaulting to the details page
         return $this->redirectToRoute('licence/bus-details', [], [], true);
     }
 

@@ -41,7 +41,90 @@ class BusControllerTraitTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Gets a sample rest result
+     * Tests isFromEbsr works when no id is passed
+     *
+     * @dataProvider isFromEbsrProvider
+     *
+     * @param int $resultCount
+     * @param bool $expectedResult
+     */
+    public function testIsFromEbsrNullId($resultCount, $expectedResult)
+    {
+        $id = 1;
+
+        $this->trait->expects($this->once())
+            ->method('getFromRoute')
+            ->with('busRegId')
+            ->will($this->returnValue($id));
+
+        $this->trait->expects($this->once())
+            ->method('makeRestCall')
+            ->with(
+                $this->equalTo('EbsrSubmission'),
+                $this->equalTo('GET'),
+                $this->equalTo(array('busReg' => $id))
+            )
+            ->will($this->returnValue($this->getSampleResultWithCount($resultCount)));
+
+        $this->assertEquals($this->trait->isFromEbsr(), $expectedResult);
+
+    }
+
+    /**
+     * Tests isFromEbsr works when the id is passed in
+     *
+     * @dataProvider isFromEbsrProvider
+     *
+     * @param int $resultCount
+     * @param bool $expectedResult
+     */
+    public function testIsFromEbsrWithId($resultCount, $expectedResult)
+    {
+        $id = 1;
+
+        $this->trait->expects($this->never())
+            ->method('getFromRoute');
+
+        $this->trait->expects($this->once())
+            ->method('makeRestCall')
+            ->with(
+                $this->equalTo('EbsrSubmission'),
+                $this->equalTo('GET'),
+                $this->equalTo(array('busReg' => $id))
+            )
+            ->will($this->returnValue($this->getSampleResultWithCount($resultCount)));
+
+        $this->assertEquals($this->trait->isFromEbsr($id), $expectedResult);
+    }
+
+    /**
+     * Data provider for isEbsr tests
+     *
+     * @return array
+     */
+    public function isFromEbsrProvider()
+    {
+        return [
+            [1, true],
+            [0, false]
+        ];
+    }
+
+    /**
+     * Simulates a rest call with or without results
+     *
+     * @param int $count
+     * @return array
+     */
+    private function getSampleResultWithCount($count)
+    {
+        return [
+            'Count' => $count
+        ];
+    }
+
+    /**
+     * Gets a sample bus registration rest result
      *
      * @return array
      */

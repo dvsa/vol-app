@@ -14,29 +14,17 @@ use Zend\Form\Annotation as Form;
 class ProhibitionDefect
 {
     /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $id = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $prohibition = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $version = null;
-
-    /**
-     * @Form\Name("main")
-     * @Form\Options({"label":"Prohibition defect"})
+     * @Form\Name("fields")
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\ProhibitionDefectMain")
      */
-    public $main = null;
+    public $fields = null;
+
+    /**
+     * @Form\Name("base")
+     * @Form\Attributes({"class":"base"})
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\CaseBase")
+     */
+    public $caseBase = null;
 
     /**
      * @Form\Name("form-actions")

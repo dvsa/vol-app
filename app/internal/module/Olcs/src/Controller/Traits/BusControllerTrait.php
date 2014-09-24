@@ -67,6 +67,21 @@ trait BusControllerTrait
     }
 
     /**
+     * @param int $id
+     * @return bool
+     */
+    public function isFromEbsr($id = null)
+    {
+        if (is_null($id)) {
+            $id = $this->getFromRoute('busRegId');
+        }
+
+        $ebsr = $this->makeRestCall('EbsrSubmission', 'GET', array('busReg' => $id));
+
+        return (bool)$ebsr['Count'];
+    }
+
+    /**
      * Gets the main navigation
      *
      * @return \Zend\Navigation\Navigation

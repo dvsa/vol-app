@@ -6,18 +6,17 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
- * @Form\Name("appeal")
- * @Form\Options({"label":"Appeal"})
+ * @Form\Name("bus-reg-quality")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
  * @Form\Options({"prefer_form_input_filter": true})
  */
-class Appeal
+class BusRegQuality
 {
     /**
      * @Form\Name("fields")
-     * @Form\Options({"label":"Appeal Details"})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\Appeal")
+     * @Form\Options({"label":"","class":""})
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\BusRegQuality")
      */
     public $fields = null;
 

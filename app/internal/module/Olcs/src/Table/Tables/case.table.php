@@ -41,7 +41,6 @@ return array(
         array(
             'title' => 'Case type',
             'formatter' => function ($row, $column, $sm) {
-                //die('<pre>' . print_r($row, 1));
                 if (isset($row['caseType']['id'])) {
                     return $sm->get('translator')->translate($row['caseType']['id']);
                 } else {
