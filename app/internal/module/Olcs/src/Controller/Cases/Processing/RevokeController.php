@@ -121,4 +121,61 @@ class RevokeController extends OlcsController\CrudAbstract
             )
         )
     );
+
+    /**
+     * Holds the details view
+     *
+     * @return array|\Zend\Http\Response|\Zend\View\Model\ViewModel
+     */
+    protected $detailsView = '/case/processing/revoke/details';
+
+    /**
+     * Identifier key
+     *
+     * @var string
+     */
+    protected $identifierKey = 'case_id';
+
+    /**
+     * Ensure index action redirects to details action
+     *
+     * @return array|mixed|\Zend\Http\Response|\Zend\View\Model\ViewModel
+     */
+    public function indexAction()
+    {
+        return $this->redirectToIndex();
+    }
+
+    /**
+     * Override to redirect to details page
+     *
+     * @return mixed|\Zend\Http\Response
+     */
+    public function redirectToIndex()
+    {
+        return $this->redirectToRoute(null, ['action' => 'details'], [], true);
+    }
+
+    /**
+     * Details action. Shows appeals and stays (if appeal exists)
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
+    public function detailsAction()
+    {
+        $results = $this->loadCurrent();
+        $revoke = isset($results['Results'][0]) ? $results['Results'][0] : [];
+
+        $view = $this->getView([]);
+
+        $this->getViewHelperManager()
+            ->get('placeholder')
+            ->getContainer($this->getIdentifierName())
+            ->set($revoke);
+        $view->setVariable('case', $this->getCase());
+        $view->setTemplate($this->detailsView);
+
+        return $this->renderView($view);
+    }
+
 }
