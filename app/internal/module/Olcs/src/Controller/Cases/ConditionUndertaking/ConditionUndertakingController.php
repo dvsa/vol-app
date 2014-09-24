@@ -267,8 +267,6 @@ class ConditionUndertakingController extends OlcsController\CrudAbstract
 
         $data = $this->determineFormAttachedTo($data);
 
-        //die('<pre>' . print_r($data, 1));
-
         return $data;
     }
 
@@ -281,8 +279,6 @@ class ConditionUndertakingController extends OlcsController\CrudAbstract
     public function processSave($data)
     {
         $data = $this->determineSavingAttachedTo($data);
-
-        //die('<pre>' . print_r($data, 1));
 
         return parent::processSave($data);
     }
