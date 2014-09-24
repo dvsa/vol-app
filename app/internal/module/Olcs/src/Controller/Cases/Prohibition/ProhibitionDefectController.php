@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Case Prohibition Controller
+ * Case Prohibition Defect Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
@@ -11,12 +11,12 @@ namespace Olcs\Controller\Cases\Prohibition;
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
 
-    /**
-     * Case Prohibition Controller
-     *
-     * @author Ian Lindsay <ian@hemera-business-services.co.uk>
-     */
-class ProhibitionController extends OlcsController\CrudAbstract
+/**
+ * Case Prohibition Defect Controller
+ *
+ * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ */
+class ProhibitionDefectController extends OlcsController\CrudAbstract
 {
     use ControllerTraits\CaseControllerTrait;
 
@@ -25,28 +25,21 @@ class ProhibitionController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $identifierName = 'prohibition';
+    protected $identifierName = 'id';
 
     /**
      * Table name string
      *
      * @var string
      */
-    protected $tableName = 'prohibition';
-
-    /**
-     * Name of comment box field.
-     *
-     * @var string
-     */
-    protected $commentBoxName = 'prohibitionNote';
+    protected $tableName = 'prohibitionDefect';
 
     /**
      * Holds the form name
      *
      * @var string
      */
-    protected $formName = 'prohibition';
+    protected $formName = 'prohibition-defect';
 
     /**
      * The current page's extra layout, over and above the
@@ -69,12 +62,12 @@ class ProhibitionController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $service = 'Prohibition';
+    protected $service = 'ProhibitionDefect';
 
     /**
      * Holds the navigation ID,
      * required when an entire controller is
-     * represneted by a single navigation id.
+     * represented by a single navigation id.
      */
     protected $navigationId = 'case_details_prohibitions';
 
@@ -84,13 +77,14 @@ class ProhibitionController extends OlcsController\CrudAbstract
      */
     protected $listVars = [
         'case',
+        'prohibition'
     ];
 
     /**
      * Data map
      *
      * @var array
-    */
+     */
     protected $dataMap = array(
         'main' => array(
             'mapFrom' => array(
@@ -111,33 +105,60 @@ class ProhibitionController extends OlcsController\CrudAbstract
      * Holds the Data Bundle
      *
      * @var array
-    */
+     */
     protected $dataBundle = array(
         'children' => array(
-            'case' => array(
-                'properties' => array(
-                    'id'
-                )
-            ),
-            'prohibitionType' => array(
-                'properties' => array(
-                    'id',
-                    'description'
-                )
+            'prohibition' => array(
+                'id'
             )
         )
     );
 
-    /**
-     * Gets Prohibition details from within ProhibitionDefectController.
-     * We don't need to ever return a view here.
-     *
-     * @return void
-     */
-    public function detailsAction()
+    public function redirectToIndex()
     {
-        $this->getViewHelperManager()->get('placeholder')->getContainer('prohibition')->set(
-            $this->loadCurrent()
+        return $this->redirectToRoute(
+            'case_prohibition_defect',
+            ['action'=>'index', 'prohibition' => $this->getFromRoute('prohibition'), 'id' => null],
+            ['code' => '303'], // Why? No cache is set with a 303 :)
+            true
         );
+    }
+
+    public function indexAction()
+    {
+        $this->forward()->dispatch(
+            'CaseProhibitionController',
+            array_merge(
+                array(
+                    'action' => 'details',
+                    'case' => $this->getFromRoute('case'),
+                    'prohibition' => $this->getFromRoute('prohibition')
+                )
+            )
+        );
+
+        $view = $this->getView([]);
+
+        $this->checkForCrudAction(null, [], $this->getIdentifierName());
+
+        $this->buildTableIntoView();
+
+        $view->setTemplate('prohibition/defect');
+
+        return $this->renderView($view);
+    }
+
+    /**
+     * Get data for form
+     *
+     * @return array
+     */
+    protected function getDataForForm()
+    {
+        $data = parent::getDataForForm();
+
+        $data['fields']['prohibition'] = $this->getFromRoute('prohibition');
+
+        return $data;
     }
 }

@@ -326,7 +326,7 @@ return array_merge(
                                 'route' => '/stop',
                                 'defaults' => [
                                     'controller' => 'BusDetailsStopController',
-                                    'action' => 'index',
+                                    'action' => 'edit',
                                 ]
                             ],
                         ],
@@ -346,7 +346,7 @@ return array_merge(
                                 'route' => '/quality',
                                 'defaults' => [
                                     'controller' => 'BusDetailsQualityController',
-                                    'action' => 'index',
+                                    'action' => 'edit',
                                 ]
                             ],
                         ]
@@ -751,19 +751,19 @@ return array_merge(
                     'action' => 'index'
                 ]
             ],
-            'may_terminate' => true,
-            'child_routes' => [
-                'defect' => [
-                    'type' => 'segment',
-                    'options' => [
-                        'route' => '/defect[/:defect]',
-                        'constraints' => [
-                            'defect' => '[0-9]+'
-                        ],
-                        'defaults' => [
-                            'controller' => 'CaseProhibitionDefectController'
-                        ]
-                    ]
+            'may_terminate' => true
+        ],
+        'case_prohibition_defect' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/case/:case/prohibition[/:prohibition]/defect[/:action][/:id]',
+                'constraints' => [
+                    'id' => '[0-9]+',
+                    'prohibition' => '[0-9]+'
+                ],
+                'defaults' => [
+                    'controller' => 'CaseProhibitionDefectController',
+                    'action' => 'index'
                 ]
             ]
         ],

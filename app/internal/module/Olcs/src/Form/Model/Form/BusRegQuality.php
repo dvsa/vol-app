@@ -6,25 +6,19 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
- * @Form\Name("prohibition-defect")
+ * @Form\Name("bus-reg-quality")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
  * @Form\Options({"prefer_form_input_filter": true})
  */
-class ProhibitionDefect
+class BusRegQuality
 {
     /**
      * @Form\Name("fields")
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\ProhibitionDefectMain")
+     * @Form\Options({"label":"","class":""})
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\BusRegQuality")
      */
     public $fields = null;
-
-    /**
-     * @Form\Name("base")
-     * @Form\Attributes({"class":"base"})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\CaseBase")
-     */
-    public $caseBase = null;
 
     /**
      * @Form\Name("form-actions")
