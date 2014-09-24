@@ -2,7 +2,7 @@
 
 return array(
     'variables' => array(
-        'title' => 'Conditions'
+        'title' => 'Conditions and undertakings'
     ),
     'settings' => array(
         'crud' => array(
@@ -23,20 +23,28 @@ return array(
         array(
             'title' => 'No.',
             'formatter' => function ($data, $column) {
+                /* if (!empty($data['operatingCentre'])) {
+                    die('<pre>' . print_r($data, 1));
+                } */
                 return '<a href="' . $this->generateUrl(
-                    array('action' => 'edit', 'id' => $data['id'], 'type' => 'conditions'),
-                    'conditions',
+                    array('action' => 'edit', 'id' => $data['id']),
+                    'case_conditions_undertakings',
                     true
                 ) . '">' . $data['id'] . '</a>';
             },
             'name' => 'id'
         ),
         array(
-            'title' => 'Added via',
-            'formatter' => function ($data, $column) {
-                return 'Case ' . $data['caseId'];
+            'title' => 'Type',
+            'formatter' => function ($data, $column, $sl) {
+                return $sl->get('translator')->translate($data['conditionType']['description']);
             },
-            'name' => 'caseId'
+        ),
+        array(
+            'title' => 'Added via',
+            'formatter' => function ($data, $column, $sl) {
+                return $sl->get('translator')->translate($data['addedVia']['description']);
+            },
         ),
         array(
             'title' => 'Fulfilled',
@@ -53,20 +61,29 @@ return array(
         array(
             'title' => 'Attached to',
             'formatter' => function ($data, $column, $sm) {
-                return $sm->get('translator')->translate($data['attachedTo']['id']);
+                return $sm->get('translator')->translate($data['attachedTo']['description']);
             },
         ),
         array(
             'title' => 'S4',
             'formatter' => function ($data, $column) {
-                return 'ToDo'; // todo S4 clarification
+                return 'ToDo';
             }
         ),
         array(
             'title' => 'OC Address',
-            'width' => '350px',
-            'formatter' => 'Address',
-            'name' => 'operatingCentreAddress',
-        )
+            'width' => '300px',
+            'formatter' => function ($data, $column, $sm) {
+
+                if (isset($data['operatingCentre']['address'])) {
+
+                    $column['formatter'] = 'Address';
+
+                    return $this->callFormatter($column, $data['operatingCentre']['address']);
+                }
+
+                return 'N/a';
+            }
+        ),
     )
 );

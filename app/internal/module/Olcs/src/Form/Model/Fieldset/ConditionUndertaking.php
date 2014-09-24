@@ -8,26 +8,8 @@ use Zend\Form\Annotation as Form;
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("condition-undertaking")
  */
-class ConditionUndertaking
+class ConditionUndertaking extends CaseBase
 {
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $id = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $version = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $case = null;
-
     /**
      * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
@@ -35,13 +17,20 @@ class ConditionUndertaking
     public $licence = null;
 
     /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
+     * @Form\Attributes({"id":""})
+     * @Form\Options({
+     *     "label": "Condition / Undertaking Type",
+     *     "empty_option": "Please Select",
+     *     "disable_inarray_validator": false,
+     *     "help-block": "Please select",
+     *     "category": "cond_type"
+     * })
+     * @Form\Type("DynamicSelect")
      */
     public $conditionType = null;
 
     /**
-     * @Form\Attributes({"value":"Case"})
+     * @Form\Attributes({"value":"cav_case"})
      * @Form\Type("Hidden")
      */
     public $addedVia = null;

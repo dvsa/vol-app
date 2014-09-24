@@ -14,10 +14,10 @@ use Zend\Form\Annotation as Form;
 class ConditionUndertakingForm
 {
     /**
-     * @Form\Name("condition-undertaking")
+     * @Form\Name("fields")
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\ConditionUndertaking")
      */
-    public $conditionUndertaking = null;
+    public $fields = null;
 
     /**
      * @Form\Name("form-actions")
