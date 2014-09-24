@@ -8,8 +8,14 @@ use Zend\Form\Annotation as Form;
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("fields")
  */
-class Fields
+class Stay extends CaseBase
 {
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $stayType = null;
+
     /**
      * @Form\Attributes({"id":"dob","class":"extra-long"})
      * @Form\Options({
@@ -17,10 +23,29 @@ class Fields
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
-     * @Form\Required(false)
-     * @Form\Type("\Common\Form\Elements\InputFilters\DateRequired")
+     * @Form\Type("DateSelect")
+     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
      */
     public $requestDate = null;
+
+    /**
+     * @Form\Attributes({"id":"dob"})
+     * @Form\Options({
+     *     "label": "Date of decision",
+     *     "create_empty_option": true,
+     *     "render_delimiters": false
+     * })
+     * @Form\Required(false)
+     * @Form\Type("DateSelect")
+     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Validator({
+     *      "name": "\Common\Validator\DateCompare",
+     *      "options": {"compare_to": "requestDate", "operator":"gte", "compare_to_label": "Date of request"}
+     * })
+     */
+    public $decisionDate = null;
 
     /**
      * @Form\Attributes({"id":"","placeholder":""})
@@ -53,8 +78,7 @@ class Fields
     public $notes = null;
 
     /**
-     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Is
-     * withdrawn?"})
+     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Is withdrawn?"})
      * @Form\Type("checkbox")
      */
     public $isWithdrawn = null;
@@ -66,8 +90,21 @@ class Fields
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
-     * @Form\Required(false)
-     * @Form\Type("\Common\Form\Elements\InputFilters\WithdrawnDate")
+     * @Form\AllowEmpty(true)
+     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
+     * @Form\Required(true)
+     * @Form\Type("DateSelect")
+     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Validator({"name": "ValidateIf",
+     *      "options":{
+     *          "context_field": "isWithdrawn",
+     *          "context_values": {"Y"},
+     *          "validators": {
+     *              {"name": "Date", "options": {"format": "Y-m-d"}},
+     *              {"name": "\Common\Form\Elements\Validators\DateNotInFuture"}
+     *          }
+     *      }
+     * })
      */
     public $withdrawnDate = null;
 }

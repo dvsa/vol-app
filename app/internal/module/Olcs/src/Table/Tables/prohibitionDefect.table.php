@@ -29,8 +29,8 @@ return array(
             'title' => 'Defect type',
             'formatter' => function ($data, $column) {
                 return '<a href="' . $this->generateUrl(
-                    array('action' => 'edit', 'id' => $data['prohibition']['id'], 'defect' => $data['id']),
-                    'case_prohibition/defect',
+                    array('action' => 'edit', 'prohibition' => $data['prohibition']['id'], 'id' => $data['id']),
+                    'case_prohibition_defect',
                     true
                 ) . '">' . $data['defectType'] . '</a>';
             }
