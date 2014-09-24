@@ -43,14 +43,16 @@ trait CaseControllerTrait
 
                 // Takes care of when a case is connected to a licence.
                 if (array_key_exists('licence', $case) && !empty($case['licence'])) {
-
                     $licence = $case['licence']['id'];
                 }
             }
 
             if ($licence = $this->params()->fromRoute('licence', $licence)) {
 
-                $licence = $this->makeRestCall('Licence', 'GET', array('id' => $licence));
+                /** @var \Olcs\Service\Data\Licence $dataService */
+                $dataService = $this->getServiceLocator()->get('Olcs\Service\Data\Licence');
+                $dataService->setId($licence); //set default licence id for use in forms
+                $licence = $dataService->fetchLicenceData($licence);
 
                 $licenceUrl = $this->url()->fromRoute(
                     'licence/cases',
