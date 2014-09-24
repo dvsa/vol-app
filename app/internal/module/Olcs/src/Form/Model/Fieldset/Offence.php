@@ -12,7 +12,7 @@ use Zend\Form\Annotation as Form;
 class Offence
 {
     /**
-     * @Form\Attributes({"id":"","placeholder":"","class":"extra-long"})
+     * @Form\Attributes({"id":"parentCategory","placeholder":"","class":"extra-long"})
      * @Form\Options({
      *     "label": "Act/si",
      *     "value_options": {
@@ -27,7 +27,7 @@ class Offence
     public $parentCategory = null;
 
     /**
-     * @Form\Attributes({"id":"","placeholder":"","class":"extra-long"})
+     * @Form\Attributes({"id":"category","placeholder":"","class":"extra-long"})
      * @Form\Options({
      *     "label": "Conviction description",
      *     "value_options": {
@@ -42,7 +42,7 @@ class Offence
     public $convictionCategory = null;
 
     /**
-     * @Form\Attributes({"id":"","class":"extra-long"})
+     * @Form\Attributes({"id":"categoryText","class":"extra-long"})
      * @Form\Options({
      *     "label": "Conviction description detail",
      *     "label_attributes": {
@@ -166,7 +166,7 @@ class Offence
      *     "label": "Declared to TC/TR",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category",
+     *     "help-block": "Has this conviction been declared to traffic commissioner?",
      *     "value_options": {"Y": "Yes", "N": "No"},
      * })
      * @Form\Type("Select")

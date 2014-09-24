@@ -31,8 +31,8 @@ return array(
             'title' => 'Case Number',
             'formatter' => function ($row) {
                 return '<a href="' . $this->generateUrl(
-                    array('case' => $row['id'], 'tab' => 'overview'),
-                    'case_manage',
+                    array('case' => $row['id'], 'action' => 'overview'),
+                    'case',
                     true
                 ) . '">' . $row['id'] . '</a>';
             },
@@ -40,8 +40,13 @@ return array(
         ),
         array(
             'title' => 'Case type',
-            'formatter' => function ($row) {
-                return $row['caseType']['id'];
+            'formatter' => function ($row, $column, $sm) {
+                //die('<pre>' . print_r($row, 1));
+                if (isset($row['caseType']['id'])) {
+                    return $sm->get('translator')->translate($row['caseType']['id']);
+                } else {
+                    return 'Not set';
+                }
             },
             'sort' => 'caseType'
         ),
