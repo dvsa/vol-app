@@ -9,7 +9,6 @@
 namespace Olcs\Controller\Cases;
 
 use Zend\View\Model\ViewModel;
-// Olcs
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
 
@@ -138,12 +137,6 @@ class CaseController extends OlcsController\CrudAbstract
     public function overviewAction()
     {
         return $this->detailsAction();
-
-        /* $view = $this->getView([]);
-
-        $view->setTemplate('case/overview');
-
-        return $this->renderView($view); */
     }
 
     public function redirectAction()
@@ -186,8 +179,6 @@ class CaseController extends OlcsController\CrudAbstract
 
         $result = $this->loadCurrent();
 
-        //die ('<pre>' . print_r($result, 1));
-
         // Data to eventually populate the form.
         $data = [];
 
@@ -219,7 +210,6 @@ class CaseController extends OlcsController\CrudAbstract
         // CR: Should be its own view helper - I'll refactor this later.
         $this->getViewHelperManager()->get('placeholder')->getContainer('form')->set($form);
 
-        //$view = $this->getView(['form' => $form]);
         $view = $this->getView([]);
         $view->setTemplate('crud/form');
         return $this->renderView($view);
@@ -248,7 +238,6 @@ class CaseController extends OlcsController\CrudAbstract
                 $data['fields']['caseType'] = 'case_t_app';
             }
         }
-        //die('<pre>' . print_r($data, 1));
 
         $data['fields']['submissionSections'] = $this->formatCategories($data['submissionSections']);
 

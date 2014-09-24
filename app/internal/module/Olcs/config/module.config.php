@@ -110,7 +110,6 @@ return array(
             'tableFilters' => 'Olcs\View\Helper\TableFilters',
             'piListData'   => 'Olcs\View\Helper\PiListData',
             'formSubmissionSections' => 'Olcs\Form\View\Helper\SubmissionSections',
-            'formSubmissionSectionsMultiCheckbox' => 'Olcs\Form\View\Helper\SubmissionSectionsMultiCheckbox'
         ),
         'delegators' => array(
             'formElement' => array('Olcs\Form\View\Helper\FormElementDelegatorFactory')

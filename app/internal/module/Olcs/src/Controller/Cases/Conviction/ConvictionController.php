@@ -246,8 +246,6 @@ class ConvictionController extends OlcsController\CrudAbstract
         // generate
         $this->setEntityData($data);
 
-        //die('<pre>' . print_r($data, 1));
-
         $form = $this->generateFormWithData(
             'conviction',
             'processConviction',
@@ -341,8 +339,6 @@ class ConvictionController extends OlcsController\CrudAbstract
         }
 
         $routeParams = $this->getParams(array('action', 'licence', 'case'));
-
-        //die('<pre>' . print_r($data, 1));
 
         if (strtolower($routeParams['action']) == 'edit' || strtolower($routeParams['action']) == 'dealt') {
             unset($data['case'], $data['parentCategory']);

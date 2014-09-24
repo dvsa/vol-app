@@ -10,7 +10,7 @@
             if (isset($pi['piHearings']) && !empty($pi['piHearings'])):
                 echo $this->render('case/page/partials/pi-hearings.phtml', array('pi' => $pi, 'table' => $piTable));
             else:
-                echo $this->render('case/page/partials/pi-empty.phtml', array('heading' => 'Hearing', 'route' => 'case_pi_action', 'section' => 'hearing', 'id'=>$pi['id']));
+                echo $this->render('case/page/partials/pi-empty.phtml', array('heading' => 'Hearing', 'route' => 'case_pi', 'section' => 'hearing', 'id'=>$pi['id']));
             endif;
 
             if (isset($pi['decidedByTc']) && !empty($pi['decidedByTc'])):
