@@ -15,12 +15,12 @@ use Zend\Form\Annotation as Form;
 class Revoke
 {
     /**
-     * @Form\Name("main")
+     * @Form\Name("fields")
      * @Form\Options({"label":"In office revocation"})
      * @Form\Attributes({"class":"actions-container"})
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\RevokeMain")
      */
-    public $main = null;
+    public $fields = null;
 
     /**
      * @Form\Name("form-actions")

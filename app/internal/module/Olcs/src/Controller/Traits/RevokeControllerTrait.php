@@ -53,37 +53,4 @@ trait RevokeControllerTrait
         return $this->makeRestCall('ProposeToRevoke', 'GET', array($by => $value), $this->revokeBundle);
     }
 
-
-    public function getPiReasonsNvpArray($goodsOrPsv, $niFlag)
-    {
-        $reasons = $this->makeRestCall(
-            'Reason',
-            'GET',
-            [
-                'isProposeToRevoke' => 1,
-                'goodsOrPsv' => $goodsOrPsv,
-                'isNi' => ($niFlag == 'Y') ? 0 : 0,
-                'limit' => 'all'
-            ]
-        );
-
-        $piReasons = [];
-
-        foreach ($reasons['Results'] as $result) {
-            $piReasons[$result['id']] = mb_substr($result['sectionCode'] . ' - ' . $result['description'], 0, 150);
-        }
-
-        return $piReasons;
-    }
-
-    public function getPresidingTcArray()
-    {
-        $tc = [];
-        $reasons = $this->makeRestCall('PresidingTc', 'GET', []);
-        foreach ($reasons['Results'] as $result) {
-            $tc[$result['id']] = $result['name'];
-        }
-
-        return $tc;
-    }
 }

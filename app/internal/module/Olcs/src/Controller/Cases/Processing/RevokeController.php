@@ -89,7 +89,6 @@ class RevokeController extends OlcsController\CrudAbstract
         'main' => array(
             'mapFrom' => array(
                 'fields',
-                'main',
                 'base',
             )
         )
@@ -122,21 +121,4 @@ class RevokeController extends OlcsController\CrudAbstract
             )
         )
     );
-
-    public function processLoad($data)
-    {
-        parent::processLoad($data);
-
-        $case = $this->getCase();
-
-        /*$data['main']['reasons'] = $this->getPiReasonsNvpArray(
-            $case['licence']['goodsOrPsv']['id'],
-            $case['licence']['niFlag']
-        );*/
-        //$data['main']['presidingTc'] = $this->getPresidingTcArray();
-
-        $revokes = $this->getRevokes($case['id']);
-
-        return $data;
-    }
 }

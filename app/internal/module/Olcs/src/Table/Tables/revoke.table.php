@@ -43,7 +43,7 @@ return array(
             'title' => 'Comment',
             'name' => 'comment',
             'formatter' => function ($data, $column) {
-                    return substr($data['notes'], 0, 150);
+                    return substr($data['comment'], 0, 150);
                 },
         )
     )
