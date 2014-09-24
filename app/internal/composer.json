@@ -22,7 +22,7 @@
         "doctrine/doctrine-orm-module": "0.*",
         "olcs/OlcsCommon": "dev-develop",
         "zendframework/zend-developer-tools": "dev-master",
-        "dvsa/jackrabbit": "dev-feature/OLCS-3688"
+        "dvsa/jackrabbit": "v1.1.0"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "~1.5.3",
