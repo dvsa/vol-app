@@ -178,8 +178,6 @@ class DocumentGenerationController extends DocumentController
             $result
         );
 
-        $file->setContent($content);
-
         /**
          * 5) All done; we can now persist our generated document
          *    to a temporary store. We also want to save some metadata
@@ -191,18 +189,26 @@ class DocumentGenerationController extends DocumentController
                 'bookmarks' => $data['bookmarks']
             ]
         );
-
-        $file->setMetaData(new \ArrayObject([self::METADATA_KEY => $details]));
+        $meta = [self::METADATA_KEY => $details];
 
         $uploader = $this->getUploader();
-        $uploader->setFile($file);
-        $filename = $uploader->upload(self::TMP_STORAGE_PATH);
+        $uploader->setFile(
+            [
+                'type'    => $file->getMimeType(),
+                'content' => $content,
+                'meta'    => $meta
+            ]
+        );
+
+        $storedFile = $uploader->upload(self::TMP_STORAGE_PATH);
 
         // we don't know what params are needed to satisfy this type's
         // finalise route; so to be safe we supply them all
         $redirectParams = array_merge(
             $routeParams,
-            ['tmpId' => $filename]
+            [
+                'tmpId' => $storedFile->getIdentifier()
+            ]
         );
 
         return $this->redirect()->toRoute(

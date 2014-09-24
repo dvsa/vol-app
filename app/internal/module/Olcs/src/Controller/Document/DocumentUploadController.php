@@ -18,6 +18,13 @@ use Dvsa\Jackrabbit\Data\Object\File;
  */
 class DocumentUploadController extends DocumentController
 {
+    private $mimeTypeMap = [
+        'application/rtf' => [
+            'ref_data' => 'doc_rtf',
+            'extension' => 'rtf'
+        ]
+    ];
+
     public function finaliseAction()
     {
         $routeParams = $this->params()->fromRoute();
@@ -79,14 +86,20 @@ class DocumentUploadController extends DocumentController
 
         $data = $this->fetchTmpData();
 
-        // @TODO wrap this in more abstract methods if poss. Also need
-        // to sort out proper validation; look at FormActionController
-        // and see if we can modify that
         $files = $this->getRequest()->getFiles()->toArray();
+
+        if (!isset($files['file']) || $files['file']['error'] !== UPLOAD_ERR_OK) {
+            // @TODO this needs to be handled better; by the time we get here we
+            // should *know* that our files are valid
+            return $this->redirect()->toRoute(
+                $routeParams['type'] . '/documents/finalise',
+                $routeParams
+            );
+        }
 
         $uploader = $this->getUploader();
         $uploader->setFile($files['file']);
-        $filename = $uploader->upload(self::FULL_STORAGE_PATH);
+        $file = $uploader->upload(self::FULL_STORAGE_PATH);
 
         $template = $this->makeRestCall(
             'DocTemplate',
@@ -96,19 +109,23 @@ class DocumentUploadController extends DocumentController
         );
 
         $templateName = $template['description'];
-        $fileName = date('YmdHi') . '_' . $this->formatFilename($templateName) . '.rtf';
+
+        // AC specifies this timestamp format...
+        $fileName = date('YmdHi')
+            .  '_' . $this->formatFilename($templateName)
+            . '.' . $this->getExtensionMap($file->getType());
 
         $data = [
-            'identifier'          => $filename,
+            'identifier'          => $file->getIdentifier(),
             'description'         => $templateName,
             'filename'            => $fileName,
-            'fileExtension'       => 'doc_rtf',
+            'fileExtension'       => $this->getRefDataMap($file->getType()),
             'category'            => $data['details']['category'],
             'documentSubCategory' => $data['details']['documentSubCategory'],
             'isDigital'           => true,
             'isReadOnly'          => true,
             'issuedDate'          => date('Y-m-d H:i:s'),
-            'size'                => 0  // @TODO fetch from $file
+            'size'                => $file->getSize()
         ];
 
         $data[$type] = $routeParams[$type];
@@ -125,5 +142,21 @@ class DocumentUploadController extends DocumentController
             $type . '/documents',
             $routeParams
         );
+    }
+
+    private function getRefDataMap($type)
+    {
+        if (isset($this->mimeTypeMap[$type])) {
+            return $this->mimeTypeMap[$type]['ref_data'];
+        }
+        return null;
+    }
+
+    private function getExtensionMap($type)
+    {
+        if (isset($this->mimeTypeMap[$type])) {
+            return $this->mimeTypeMap[$type]['extension'];
+        }
+        return null;
     }
 }
