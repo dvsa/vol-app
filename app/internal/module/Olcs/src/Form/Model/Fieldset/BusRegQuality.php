@@ -20,7 +20,9 @@ class BusRegQuality extends Base
      *              "Y":"Yes"
      *          }
      * })
-     * @Form\Attributes({"value": "N"})
+     * @Form\Attributes({
+     *      "id":"isQualityPartnership",
+     * })
      */
     public $isQualityPartnership;
 
@@ -38,17 +40,23 @@ class BusRegQuality extends Base
      *     "column-size": "",
      *     "help-block": "Local transport authority or lead authority for Quality Partnership Scheme"
      * })
-     * @Form\Type("TextArea")
+     *
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     *
+     * @Form\Type("Textarea")
+     * @Form\Required(false)
+     *
+     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     *
      * @Form\Validator({
-     *      "name":"Zend\Validator\StringLength",
-     *      "options":{
-     *          "min":5,
+     *      "name": "Zend\Validator\StringLength",
+     *      "options": {
+     *          "min": 5,
      *          "max":4000
      *      }
      * })
      */
-    public $qualityPartnershipDetails = null;
+    public $qualityPartnershipDetails;
 
     /**
      * @Form\Type("Radio")
@@ -60,9 +68,11 @@ class BusRegQuality extends Base
      *              "Y":"Yes"
      *          }
      * })
-     * @Form\Attributes({"value": "N"})
+     * @Form\Attributes({
+     *      "id":"qualityPartnershipFacilitiesUsed",
+     * })
      */
-    public $qualityPartnershipFacilitiesUsed = null;
+    public $qualityPartnershipFacilitiesUsed;
 
     /**
      * @Form\Type("Radio")
@@ -74,9 +84,12 @@ class BusRegQuality extends Base
      *              "Y":"Yes"
      *          }
      * })
-     * @Form\Attributes({"value": "N"})
+
+     * @Form\Attributes({
+     *      "id":"isQualityContract",
+     * })
      */
-    public $isQualityContract = null;
+    public $isQualityContract;
 
     /**
      * @Form\Attributes({
@@ -89,18 +102,21 @@ class BusRegQuality extends Base
      *     "label_attributes": {
      *         "class": "extra-long"
      *     },
-     *     "column-size": "",
-     *     "help-block": "Local transport authority or lead authority for Quality Contract Scheme"
+     *     "column-size": ""
      * })
-     * @Form\Type("TextArea")
+     *
+     * @Form\Type("Textarea")
+     * @Form\Required(false)
+     *
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     *
      * @Form\Validator({
-     *      "name":"Zend\Validator\StringLength",
-     *      "options":{
-     *          "min":5,
+     *      "name": "Zend\Validator\StringLength",
+     *      "options": {
+     *          "min": 5,
      *          "max":4000
      *      }
      * })
      */
-    public $qualityContractDetails = null;
+    public $qualityContractDetails;
 }
