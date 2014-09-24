@@ -127,26 +127,26 @@ class ProhibitionDefectController extends OlcsController\CrudAbstract
     public function indexAction()
     {
         $this->forward()->dispatch(
-             'CaseProhibitionController',
-             array_merge(
-                 array(
-                     'action' => 'details',
-                     'case' => $this->getFromRoute('case'),
-                     'prohibition' => $this->getFromRoute('prohibition')
-                 )
-             )
-         );
+            'CaseProhibitionController',
+            array_merge(
+                array(
+                    'action' => 'details',
+                    'case' => $this->getFromRoute('case'),
+                    'prohibition' => $this->getFromRoute('prohibition')
+                )
+            )
+        );
 
-         $view = $this->getView([]);
+        $view = $this->getView([]);
 
-         $this->checkForCrudAction(null, [], $this->getIdentifierName());
+        $this->checkForCrudAction(null, [], $this->getIdentifierName());
 
-         $this->buildTableIntoView();
+        $this->buildTableIntoView();
 
-         $view->setTemplate('prohibition/defect');
+        $view->setTemplate('prohibition/defect');
 
-         return $this->renderView($view);
-     }
+        return $this->renderView($view);
+    }
 
     /**
      * Get data for form
