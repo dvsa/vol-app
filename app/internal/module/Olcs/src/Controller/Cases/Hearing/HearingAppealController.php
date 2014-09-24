@@ -208,8 +208,12 @@ class HearingAppealController extends OlcsController\CrudAbstract
     {
         $stayRecords = array();
 
-        $stayResult = $this->makeRestCall('Stay', 'GET',
-            array('case' => $caseId), $this->stayDataBundle);
+        $stayResult = $this->makeRestCall(
+            'Stay',
+            'GET',
+            array('case' => $caseId),
+            $this->stayDataBundle
+        );
 
         //need a better way to do this...
         foreach ($stayResult['Results'] as $stay) {
