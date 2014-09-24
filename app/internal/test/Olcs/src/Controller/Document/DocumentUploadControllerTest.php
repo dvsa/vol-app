@@ -178,13 +178,65 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
 
         $url->expects($this->once())
             ->method('fromRoute')
-            ->with('fetch_tmp_document', ['path' => 'a-temp-file']);
+            ->with(
+                'fetch_tmp_document',
+                [
+                    'id' => 'a-temp-file',
+                    'filename' => 'A_template.rtf'
+                ]
+            );
 
         $this->controller->expects($this->once())
             ->method('url')
             ->will($this->returnValue($url));
 
         $this->controller->finaliseAction();
+    }
+
+    public function testProcessUploadWithFileError()
+    {
+        $fromRoute = $this->getMock('\stdClass', ['fromRoute']);
+        $fromRoute->expects($this->any())
+            ->method('fromRoute')
+            ->will(
+                $this->returnValue(
+                    array(
+                        'type' => 'licence',
+                    )
+                )
+            );
+
+        $this->controller->expects($this->at(0))
+            ->method('params')
+            ->will($this->returnValue($fromRoute));
+
+        $files = $this->getMock('\stdClass', ['toArray']);
+
+        $file = array(
+            'file' => array(
+                'error' => 1
+            )
+        );
+
+        $files->expects($this->once())
+            ->method('toArray')
+            ->will($this->returnValue($file));
+
+        $this->request->expects($this->once())
+            ->method('getFiles')
+            ->will($this->returnValue($files));
+
+        $redirect = $this->getMock('\stdClass', ['toRoute']);
+
+        $redirect->expects($this->once())
+            ->method('toRoute')
+            ->with('licence/documents/finalise', ['type' => 'licence']);
+
+        $this->controller->expects($this->once())
+            ->method('redirect')
+            ->will($this->returnValue($redirect));
+
+        $this->controller->processUpload(array());
     }
 
     public function testProcessUpload()
@@ -206,17 +258,12 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
             ->method('params')
             ->will($this->returnValue($fromRoute));
 
-        /*
-        $this->controller->expects($this->at(1))
-            ->method('params')
-            ->with('tmpId')
-            ->will($this->returnValue('a-temp-file'));
-         */
-
         $files = $this->getMock('\stdClass', ['toArray']);
 
         $file = array(
-            'file' => array()
+            'file' => array(
+                'error' => 0
+            )
         );
 
         $this->fileStoreMock = $this->getMock(
@@ -230,12 +277,25 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
 
         $this->fileStoreMock->expects($this->once())
             ->method('setFile')
-            ->with(array());
+            ->with(array('error' => 0));
+
+        $storeFile = $this->getMock('\stdClass', ['getIdentifier', 'getType', 'getSize']);
+        $storeFile->expects($this->any())
+            ->method('getIdentifier')
+            ->willReturn('full-filename');
+
+        $storeFile->expects($this->any())
+            ->method('getType')
+            ->willReturn('application/rtf');
+
+        $storeFile->expects($this->any())
+            ->method('getSize')
+            ->willReturn(1234);
 
         $this->fileStoreMock->expects($this->once())
             ->method('upload')
             ->with('documents')
-            ->will($this->returnValue('full-filename'));
+            ->will($this->returnValue($storeFile));
 
         // @NOTE: needs fixing; should have the temp path on it
         $this->fileStoreMock->expects($this->once())
@@ -245,6 +305,7 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
         $files->expects($this->once())
             ->method('toArray')
             ->will($this->returnValue($file));
+
         $this->request->expects($this->once())
             ->method('getFiles')
             ->will($this->returnValue($files));

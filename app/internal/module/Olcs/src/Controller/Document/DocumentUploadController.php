@@ -53,13 +53,18 @@ class DocumentUploadController extends DocumentController
             $lookups[$key] = $result['description'];
         }
 
+        $templateName = $lookups['documentTemplate'];
+
         $url = sprintf(
             '<a href="%s">%s</a>',
             $this->url()->fromRoute(
                 'fetch_tmp_document',
-                ['path' => $routeParams['tmpId']]
+                [
+                    'id' => $routeParams['tmpId'],
+                    'filename' => $this->formatFilename($templateName) . '.rtf'
+                ]
             ),
-            $lookups['documentTemplate']
+            $templateName
         );
 
         $data = [

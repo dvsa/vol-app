@@ -1029,7 +1029,7 @@ return array_merge(
         'fetch_tmp_document' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/documents/tmp/:path',
+                'route' => '/documents/tmp/:id/:filename',
                 'defaults' => [
                     'controller' => 'DocumentController',
                     'action'     => 'downloadTmp'

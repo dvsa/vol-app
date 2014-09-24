@@ -248,14 +248,26 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
             ]
         );
 
+        $fileData = [
+            'type' => 'application/rtf',
+            'content' => 'replaced content',
+            'meta' => [
+                'data' => '{"details":{"documentTemplate":999},"bookmarks":[]}'
+            ]
+        ];
         $this->fileStoreMock->expects($this->once())
             ->method('setFile')
-            ->with($file);
+            ->with($fileData);
+
+        $storedFile = $this->getMock('\stdClass', ['getIdentifier']);
+        $storedFile->expects($this->once())
+            ->method('getIdentifier')
+            ->willReturn('tmp-filename');
 
         $this->fileStoreMock->expects($this->once())
             ->method('upload')
             ->with('tmp/documents')
-            ->will($this->returnValue('tmp-filename'));
+            ->will($this->returnValue($storedFile));
 
         $redirect = $this->getMock('\stdClass', ['toRoute']);
 

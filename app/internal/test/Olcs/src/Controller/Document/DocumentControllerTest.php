@@ -92,14 +92,19 @@ class DocumentControllerTest extends AbstractHttpControllerTestCase
 
     public function testDownloadTmpAction()
     {
-        $this->controller->expects($this->once())
+        $this->controller->expects($this->at(0))
             ->method('params')
-            ->with('path')
-            ->will($this->returnValue('a-file'));
+            ->with('filename')
+            ->will($this->returnValue('a-file.rtf'));
+
+        $this->controller->expects($this->at(1))
+            ->method('params')
+            ->with('id')
+            ->will($this->returnValue('abc123'));
 
         $this->contentStoreMock->expects($this->once())
             ->method('download')
-            ->with('tmp/documents/a-file', 'a-file.rtf')
+            ->with('tmp/documents/abc123', 'a-file.rtf')
             ->will($this->returnValue('test return value'));
 
         $result = $this->controller->downloadTmpAction();
