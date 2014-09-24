@@ -167,8 +167,12 @@ class StayController extends OlcsController\CrudAbstract
      */
     public function redirectToIndex()
     {
-        return $this->redirectToRoute('case_hearing_appeal',
-            ['action' => 'details'], [], true);
+        return $this->redirectToRoute(
+            'case_hearing_appeal',
+            ['action' => 'details'],
+            [],
+            true
+        );
     }
 
     /**

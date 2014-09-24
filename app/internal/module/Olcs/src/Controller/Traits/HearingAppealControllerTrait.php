@@ -132,8 +132,12 @@ trait HearingAppealControllerTrait
     {
         $stayRecords = array();
 
-        $stayResult = $this->makeRestCall('Stay', 'GET',
-            array('case' => $caseId), $this->stayRecordBundle);
+        $stayResult = $this->makeRestCall(
+            'Stay',
+            'GET',
+            array('case' => $caseId),
+            $this->stayRecordBundle
+        );
 
         //need a better way to do this...
         foreach ($stayResult['Results'] as $stay) {

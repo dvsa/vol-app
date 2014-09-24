@@ -181,5 +181,4 @@ class Appeal extends CaseBase
      * })
      */
     public $withdrawnDate = null;
-
 }
