@@ -233,7 +233,7 @@ class CaseRevokeController extends CaseController implements CrudInterface
             [
                 'isProposeToRevoke' => 1,
                 'goodsOrPsv' => $goodsOrPsv,
-                'isNi' => (int)$niFlag,
+                'isNi' => (int)$niFlag == 'Y' ? 1 : 0,
                 'limit' => 'all'
             ]
         );

@@ -12,16 +12,15 @@ use Zend\Form\Annotation as Form;
 class RevokeMain
 {
     /**
-     * @Form\Attributes({"id":"","placeholder":"","multiple":"multiple"})
+     * @Form\Attributes({"id":"","placeholder":"","class":"long tall", "multiple" : true})
      * @Form\Options({
      *     "label": "Select legislation",
-     *     "value_options": {
-     *
-     *     },
+     *     "service_name": "Olcs\Service\Data\PublicInquiryReason",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Use CTRL to select multiple"
+     *     "help-block": "Use CTRL to select multiple",
+     *     "use_groups":true
      * })
-     * @Form\Type("\Zend\Form\Element\Select")
+     * @Form\Type("DynamicSelect")
      */
     public $reasons = null;
 
@@ -29,14 +28,12 @@ class RevokeMain
      * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
      *     "label": "TC/DTC agreed",
-     *     "value_options": {
-     *
-     *     },
+     *     "service_name": "Olcs\Service\Data\PresidingTc",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category"
+     *     "help-block": "Please select a category",
      * })
-     * @Form\Type("\Zend\Form\Element\Select")
+     * @Form\Type("DynamicSelect")
      */
     public $presidingTc = null;
 
