@@ -157,8 +157,7 @@ class DocumentGenerationController extends DocumentController
          *    we need to answer in order to populate those bookmarks
          */
         $query = $this->getDocumentService()->getBookmarkQueries(
-            $file->getMimeType(),
-            $file->getContent(),
+            $file,
             $queryData
         );
 
@@ -175,8 +174,7 @@ class DocumentGenerationController extends DocumentController
          *    give us back a modified file object which we can then save
          */
         $content = $this->getDocumentService()->populateBookmarks(
-            $file->getMimeType(),
-            $file->getContent(),
+            $file,
             $result
         );
 
@@ -200,16 +198,16 @@ class DocumentGenerationController extends DocumentController
         $uploader->setFile($file);
         $filename = $uploader->upload(self::TMP_STORAGE_PATH);
 
-        /*
-        $redirectParams = $this->params()->fromRoute();
-        $redirectParams['tmpId'] = $filename;
-         */
+        // we don't know what params are needed to satisfy this type's
+        // finalise route; so to be safe we supply them all
+        $redirectParams = array_merge(
+            $routeParams,
+            ['tmpId' => $filename]
+        );
 
         return $this->redirect()->toRoute(
             $routeParams['type'] . '/documents/finalise',
-            [
-                'tmpId' => $filename
-            ]
+            $redirectParams
         );
     }
 

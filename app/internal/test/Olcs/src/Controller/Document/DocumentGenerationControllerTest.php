@@ -230,14 +230,14 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
         );
         $this->documentMock->expects($this->once())
             ->method('getBookmarkQueries')
-            ->with('application/rtf', 'dummy content', $queryData);
+            ->with($file, $queryData);
 
         $resultData = array(
             'fake_bookmark' => 'dummy'
         );
         $this->documentMock->expects($this->once())
             ->method('populateBookmarks')
-            ->with('application/rtf', 'dummy content', $resultData)
+            ->with($file, $resultData)
             ->will($this->returnValue('replaced content'));
 
         $this->fileStoreMock = $this->getMock(
@@ -261,7 +261,7 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
 
         $redirect->expects($this->once())
             ->method('toRoute')
-            ->with('licence/documents/finalise', ['tmpId' => 'tmp-filename']);
+            ->with('licence/documents/finalise', ['tmpId' => 'tmp-filename', 'type' => 'licence']);
 
         $this->controller->expects($this->once())
             ->method('redirect')
