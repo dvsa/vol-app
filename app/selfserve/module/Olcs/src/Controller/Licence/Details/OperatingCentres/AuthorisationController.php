@@ -144,7 +144,7 @@ class AuthorisationController extends OperatingCentresController
      */
     protected function getFormTableData($id, $table)
     {
-        return $this->getSectionService()->getFormTableData($id);
+        return $this->getSectionService()->getFormTableData($id, $table);
     }
 
     /**
@@ -220,7 +220,7 @@ class AuthorisationController extends OperatingCentresController
     protected function addVariationInfoMessage()
     {
         $this->addCurrentMessage(
-            $this->formatTranslation(
+            $this->getSectionService()->formatTranslation(
                 '%s <a href="' . $this->url()->fromRoute('application-variation') . '">%s</a>',
                 array(
                     'variation-application-text',

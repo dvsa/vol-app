@@ -9,7 +9,7 @@
 
 namespace Olcs\Controller\Dashboard;
 
-use Common\Controller\AbstractController;
+use Common\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Http\Response;
 
@@ -19,7 +19,7 @@ use Zend\Http\Response;
  * @author Jakub Igla <jakub.igla@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class IndexController extends AbstractController
+class IndexController extends AbstractActionController
 {
 
     /**
