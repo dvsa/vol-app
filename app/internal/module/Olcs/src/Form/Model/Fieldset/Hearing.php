@@ -34,16 +34,16 @@ class Hearing
 
     /**
      * @Form\Attributes({"id":"","placeholder":"","class":"medium"})
+
      * @Form\Options({
      *     "label": "Hearing location",
-     *     "value_options": {
-     *
-     *     },
+     *     "service_name": "Olcs\Service\Data\PiVenue",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a category"
      * })
-     * @Form\Type("\Common\Form\Elements\InputFilters\SelectEmpty")
+     *
+     * @Form\Type("DynamicSelect")
      */
     public $piVenue = null;
 
