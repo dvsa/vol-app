@@ -14,7 +14,6 @@ class Complaint extends CaseBase
     /**
      * @Form\Attributes({"id":"complainantForename","class":"medium","name":"complainantForename"})
      * @Form\Options({"label":"Complainant first name"})
-     * @Form\Required(true)
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":35}})
@@ -24,7 +23,6 @@ class Complaint extends CaseBase
     /**
      * @Form\Attributes({"id":"complainantFamilyName","class":"medium","name":"complainantFamilyName"})
      * @Form\Options({"label":"Complainant family name"})
-     * @Form\Required(true)
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":35}})
@@ -38,8 +36,10 @@ class Complaint extends CaseBase
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
-     * @Form\Required(false)
-     * @Form\Type("\Common\Form\Elements\InputFilters\DateNotInFuture")
+     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
+     * @Form\Type("DateSelect")
      */
     public $complaintDate = null;
 
@@ -80,6 +80,7 @@ class Complaint extends CaseBase
      *     "help-block": "Complaint description"
      * })
      * @Form\Type("TextArea")
+     * @Form\Required(false)
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5,"max":4000}})
      */
@@ -95,6 +96,7 @@ class Complaint extends CaseBase
      *     "column-size": ""
      * })
      * @Form\Type("Text")
+     * @Form\Required(false)
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Filter({"name":"Zend\Filter\StringToUpper"})
      * @Form\Filter({
@@ -112,7 +114,7 @@ class Complaint extends CaseBase
     /**
      * @Form\Attributes({"placeholder":"","class":"medium","name":"driverForename"})
      * @Form\Options({"label":"Driver first name"})
-     * @Form\Required(true)
+     * @Form\Required(false)
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":35}})
@@ -122,7 +124,7 @@ class Complaint extends CaseBase
     /**
      * @Form\Attributes({"placeholder":"","class":"medium","name":"driverFamilyName"})
      * @Form\Options({"label":"Driver familty name"})
-     * @Form\Required(true)
+     * @Form\Required(false)
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":35}})

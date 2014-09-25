@@ -40,7 +40,7 @@ class PenaltyController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $commentBoxName = 'annualTestHistory';
+    protected $commentBoxName = 'penaltiesNote';
 
     /**
      * Holds the form name

@@ -44,7 +44,7 @@ class ConditionUndertaking extends CaseBase
     /**
      * @Form\Attributes({"id":"","class":"extra-long"})
      * @Form\Options({
-     *     "label": "",
+     *     "label": "Description",
      *     "label_attributes": {
      *         "class": "col-sm-2"
      *     },
@@ -64,7 +64,6 @@ class ConditionUndertaking extends CaseBase
      *     "unchecked_value": "N",
      *     "label": "Fulfilled",
      *     "help-block": "Please choose",
-     *     "must_be_value": "Y"
      * })
      * @Form\Type("\Common\Form\Elements\InputFilters\SingleCheckbox")
      */
