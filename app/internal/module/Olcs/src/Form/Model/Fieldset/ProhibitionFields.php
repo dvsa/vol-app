@@ -17,10 +17,10 @@ class ProhibitionFields
      *     "create_empty_option": true,
      *     "render_delimiters": "d m y"
      * })
-     * @Form\Required(true)
      * @Form\Type("DateSelect")
-     * @Form\Filter({"name":"DateSelectNullifier"})
-     * @Form\Validator({"name":"\Common\Form\Elements\Validators\DateNotInFuture"})
+     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $prohibitionDate = null;
 
@@ -71,8 +71,9 @@ class ProhibitionFields
      * })
      * @Form\Required(false)
      * @Form\Type("DateSelect")
-     * @Form\Filter({"name":"DateSelectNullifier"})
-     * @Form\Validator({"name":"\Common\Form\Elements\Validators\DateNotInFuture"})
+     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $clearedDate = null;
 
@@ -80,7 +81,6 @@ class ProhibitionFields
      * @Form\Attributes({"class":"","id":""})
      * @Form\Options({"label":"Location prohibition issued"})
      * @Form\Required(false)
-     * @Form\AllowEmpty(true)
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":255}})

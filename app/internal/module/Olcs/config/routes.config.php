@@ -554,6 +554,30 @@ return array_merge(
                         ]
                     ],
                     'may_terminate' => true,
+                    'child_routes' => [
+                        'generate' => [
+                            'type' => 'segment',
+                            'options' => [
+                                'route' => '/generate[/:tmpId]',
+                                'defaults' => [
+                                    'type'       => 'licence',
+                                    'controller' => 'DocumentGenerationController',
+                                    'action'     => 'generate'
+                                ]
+                            ],
+                        ],
+                        'finalise' => [
+                            'type' => 'segment',
+                            'options' => [
+                                'route' => '/finalise/:tmpId',
+                                'defaults' => [
+                                    'type'       => 'licence',
+                                    'controller' => 'DocumentUploadController',
+                                    'action'     => 'finalise'
+                                ]
+                            ],
+                        ],
+                    ],
                 ],
                 'processing' => [
                     'type' => 'literal',
@@ -999,26 +1023,6 @@ return array_merge(
                 ]
             ]
         ],
-        'document_generate' => [
-            'type' => 'segment',
-            'options' => [
-                'route' => '/document/generate/:template[/:format][/:country]',
-                'defaults' => [
-                    'controller' => 'DocumentController',
-                    'action' => 'generateDocument'
-                ]
-            ],
-        ],
-        'document_retrieve' => [
-            'type' => 'segment',
-            'options' => [
-                'route' => '/document/retrieve/:filename[/:format][/:country]',
-                'defaults' => [
-                    'controller' => 'DocumentController',
-                    'action' => 'retrieveDocument'
-                ]
-            ]
-        ],
         'case_impounding' => [
             'type' => 'segment',
             'options' => [
@@ -1055,6 +1059,40 @@ return array_merge(
                 'defaults' => [
                     'controller' => 'IndexController',
                     'action' => 'entityList'
+                ]
+            ]
+        ],
+        'template_lists' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/list-template-bookmarks/:id',
+                'constraints' => [
+                    'id' => '[0-9]+'
+                ],
+                'defaults' => [
+                    'type'       => 'licence',
+                    'controller' => 'DocumentController',
+                    'action'     => 'listTemplateBookmarks'
+                ]
+            ]
+        ],
+        'fetch_document' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/documents/:id/:filename',
+                'defaults' => [
+                    'controller' => 'DocumentController',
+                    'action'     => 'download'
+                ]
+            ]
+        ],
+        'fetch_tmp_document' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/documents/tmp/:id/:filename',
+                'defaults' => [
+                    'controller' => 'DocumentController',
+                    'action'     => 'downloadTmp'
                 ]
             ]
         ]

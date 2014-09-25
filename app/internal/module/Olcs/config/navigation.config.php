@@ -77,7 +77,7 @@ return array(
                         ),
                         array(
                             'id' => 'case_details_statements',
-                            'label' => 'X Statements',
+                            'label' => 'Statements',
                             'route' => 'case_statement',
                             'action' => 'index',
                             'use_route_match' => true,

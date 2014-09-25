@@ -17,7 +17,7 @@ class StatementDetails extends CaseBase
      *     "label": "Statement type",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category",
+     *     "help-block": "Please select a statement type",
      *     "category": "statement_type"
      * })
      * @Form\Type("DynamicSelect")
@@ -75,8 +75,15 @@ class StatementDetails extends CaseBase
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
+     * @Form\Type("DateSelect")
      * @Form\Required(false)
-     * @Form\Type("\Common\Form\Elements\InputFilters\StopDateBeforeRequestDate")
+     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
+     * @Form\Validator({
+     *      "name": "DateCompare",
+     *      "options": {"compare_to":"requestedDate", "compare_to_label":"Date requested", "operator": "lte"}
+     * })
      */
     public $stoppedDate = null;
 
@@ -88,7 +95,10 @@ class StatementDetails extends CaseBase
      *     "render_delimiters": false
      * })
      * @Form\Required(false)
-     * @Form\Type("\Common\Form\Elements\InputFilters\DateNotInFuture")
+     * @Form\Type("DateSelect")
+     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $requestedDate = null;
 
@@ -110,10 +120,10 @@ class StatementDetails extends CaseBase
      * @Form\Options({
      *     "label": "Authorised decision",
      *     "label_attributes": {
-     *         "class": "col-sm-2"
+     *         "class": ""
      *     },
-     *     "column-size": "sm-6",
-     *     "help-block": "You can type anything in this box."
+     *     "column-size": "",
+     *     "help-block": ""
      * })
      * @Form\Type("TextArea")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
