@@ -50,6 +50,8 @@ class BusRegStop extends Base
      *     "column-size": "",
      *     "help-block": "Manoeuvres comments"
      * })
+     *
+     * @Form\Required(false)
      * @Form\Type("TextArea")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({
@@ -89,6 +91,8 @@ class BusRegStop extends Base
      *     "column-size": "",
      *     "help-block": "Need new bus stops comments"
      * })
+     *
+     * @Form\Required(false)
      * @Form\Type("TextArea")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({
@@ -128,6 +132,8 @@ class BusRegStop extends Base
      *     "column-size": "",
      *     "help-block": "No fixed stopping points comments"
      * })
+     *
+     * @Form\Required(false)
      * @Form\Type("TextArea")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({
@@ -170,6 +176,8 @@ class BusRegStop extends Base
      *     "column-size": "",
      *     "help-block": "Supported by subsidies comments"
      * })
+     *
+     * @Form\Required(false)
      * @Form\Type("TextArea")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({

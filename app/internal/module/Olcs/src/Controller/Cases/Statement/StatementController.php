@@ -142,12 +142,17 @@ class StatementController extends OlcsController\CrudAbstract
 
     public function processLoad($data)
     {
-        $address = $data['requestorsAddress'];
+        if (isset($data['requestorsAddress'])) {
+            $address = $data['requestorsAddress'];
 
-        $data = parent::processLoad($data);
+            $data = parent::processLoad($data);
 
-        $data['requestorsAddress'] = $address;
-        $data['requestorsAddress']['countryCode'] = $address['countryCode']['id'];
+            $data['requestorsAddress'] = $address;
+
+            $data['requestorsAddress']['countryCode'] = $address['countryCode']['id'];
+        } else {
+            $data = parent::processLoad($data);
+        }
 
         return $data;
     }

@@ -326,6 +326,91 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
     }
 
     /**
+     * Tests process load for an existing record.
+     */
+    public function testProcessLoadWithId()
+    {
+        $bundle = array(
+            'properties' => 'ALL',
+            'children' => array(
+                'case' => ['id', 'name'],
+            )
+        );
+
+        $data = array(
+            'id' => '12345',
+            'case' => array(
+                'id' => '1234'
+            )
+        );
+
+        $result = array(
+            'id' => '12345',
+            'case' => '1234'
+        );
+
+        $result['fields'] = $result;
+        $result['base'] = $result;
+
+        $sut = $this->getSutForIsolatedTest(['getDataBundle', 'getQueryOrRouteParam']);
+        $sut->expects($this->exactly(2))->method('getDataBundle')
+            ->will($this->returnValue($bundle));
+
+        $this->assertEquals($result, $sut->processLoad($data));
+    }
+
+    /**
+     * Tests the process load method on a save for a new record.
+     */
+    public function testProcessLoadWithoutId()
+    {
+        $data = array();
+
+        $result = array('case' => '1234');
+        $result['fields']['case'] = '1234';
+        $result['base']['case'] = '1234';
+
+        $sut = $this->getSutForIsolatedTest(['getQueryOrRouteParam']);
+        $sut->expects($this->exactly(3))->method('getQueryOrRouteParam')
+            ->with('case')->will($this->returnValue('1234'));
+
+        $this->assertEquals($result, $sut->processLoad($data));
+    }
+
+    public function testBuildCommentsBoxIntoView()
+    {
+        $commentBoxName = 'prohibitionNotes';
+
+        $case = [
+            'id' => '12345',
+            'version' => '1',
+            $commentBoxName => 'comment text'
+        ];
+
+        $data = [];
+        $data['fields']['id'] = $case['id'];
+        $data['fields']['version'] = $case['version'];
+        $data['fields']['comment'] = $case[$commentBoxName];
+
+        $form = $this->getMock('\Zend\Form\Form', ['setData']);
+
+        $sut = $this->getSutForIsolatedTest(['generateForm', 'getCase', 'setPlaceholder']);
+
+        $sut->expects($this->exactly(1))->method('getCase')
+            ->will($this->returnValue($case));
+
+        $sut->expects($this->exactly(1))->method('generateForm')
+            ->will($this->returnValue($form));
+
+        $sut->expects($this->exactly(1))->method('setPlaceholder')
+            ->with('comments', $form);
+
+        $sut->setCommentBoxName($commentBoxName);
+
+        $this->assertEquals(null, $sut->buildCommentsBoxIntoView());
+    }
+
+    /**
      * Get a new SUT. Also tests that all the required abstracts
      * traits and interfaces are present.
      *

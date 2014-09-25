@@ -53,6 +53,9 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
      */
     protected $isAction = false;
 
+    /**
+     * @codeCoverageIgnore this is part of the event system.
+     */
     protected function attachDefaultListeners()
     {
         parent::attachDefaultListeners();
