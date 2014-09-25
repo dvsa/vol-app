@@ -175,7 +175,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
 
         $this->getViewHelperManager()
              ->get('placeholder')
-             ->getContainer($this->getIdentifierName())
+             ->getContainer($this->getPlaceholderName())
              ->set($this->loadCurrent());
 
         $view->setTemplate($this->detailsView);

@@ -26,7 +26,14 @@ class RevokeController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $identifierName = 'proposeToRevoke';
+    protected $identifierName = 'case';
+
+    /**
+     * Placeholder name
+     *
+     * @var string
+     */
+    protected $placeholderName = 'proposeToRevoke';
 
     /**
      * Table name string
@@ -134,7 +141,7 @@ class RevokeController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $identifierKey = 'case_id';
+    protected $identifierKey = 'case';
 
     /**
      * Ensure index action redirects to details action
@@ -155,27 +162,4 @@ class RevokeController extends OlcsController\CrudAbstract
     {
         return $this->redirectToRoute(null, ['action' => 'details'], [], true);
     }
-
-    /**
-     * Details action. Shows appeals and stays (if appeal exists)
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
-    public function detailsAction()
-    {
-        $results = $this->loadCurrent();
-        $revoke = isset($results['Results'][0]) ? $results['Results'][0] : [];
-
-        $view = $this->getView([]);
-
-        $this->getViewHelperManager()
-            ->get('placeholder')
-            ->getContainer($this->getIdentifierName())
-            ->set($revoke);
-        $view->setVariable('case', $this->getCase());
-        $view->setTemplate($this->detailsView);
-
-        return $this->renderView($view);
-    }
-
 }

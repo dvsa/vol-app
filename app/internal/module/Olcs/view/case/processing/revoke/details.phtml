@@ -1,5 +1,6 @@
 <?php
-$revoke = $this->placeholder('proposeToRevoke')->getValue(); ?>
+$revoke = $this->placeholder('proposeToRevoke')->getValue();
+?>
 
 <h4><?php echo $this->translate($this->navigation('navigation')->findOneBy('active', 1)->getLabel()); ?>
     <?php
@@ -8,9 +9,8 @@ $revoke = $this->placeholder('proposeToRevoke')->getValue(); ?>
     <a href="<?php echo $this->url(
         'processing_in_office_revocation',
         [
-            'case' => $case['id'],
             'action' => 'add'
-        ], [], false); ?>" class="action--secondary
+        ], [], true); ?>" class="action--secondary
         right-aligned"><?php echo $this->translate('Add in office revocation'); ?></a>
 </h4>
 
@@ -20,10 +20,9 @@ $revoke = $this->placeholder('proposeToRevoke')->getValue(); ?>
     <a href="<?php echo $this->url(
         'processing_in_office_revocation',
         [
-            'case' => $case['id'],
             'revoke' => $revoke['id'],
             'action' => 'edit'
-        ], [], false); ?>" class="action--secondary
+        ], [], true); ?>" class="action--secondary
         right-aligned"><?php echo $this->translate('Edit in office revocation'); ?></a>
     </h4>
 
@@ -37,6 +36,10 @@ $revoke = $this->placeholder('proposeToRevoke')->getValue(); ?>
                     }
                 ?>
             </dd>
+        </dl>
+        <dl>
+            <dt><?php echo $this->translate('TC/TDC agreed');?></dt>
+            <dd><?php echo $revoke['presidingTc']['name']; ?></dd>
         </dl>
         <dl>
             <dt><?php echo $this->translate('Agreed date');?></dt>
