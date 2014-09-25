@@ -19,7 +19,6 @@ use Olcs\Controller\Traits as ControllerTraits;
 class RevokeController extends OlcsController\CrudAbstract
 {
     use ControllerTraits\CaseControllerTrait;
-    use ControllerTraits\RevokeControllerTrait;
 
     /**
      * Identifier name

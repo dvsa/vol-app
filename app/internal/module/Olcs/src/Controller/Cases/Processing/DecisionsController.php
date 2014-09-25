@@ -105,5 +105,4 @@ class DecisionsController extends OlcsController\CrudAbstract
             )
         )
     );
-
 }
