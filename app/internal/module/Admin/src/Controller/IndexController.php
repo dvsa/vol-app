@@ -5,7 +5,7 @@
 
 namespace Admin\Controller;
 
-use Common\Controller\FormActionController;
+use Common\Controller\AbstractActionController;
 
 /**
  * IndexController
@@ -13,7 +13,7 @@ use Common\Controller\FormActionController;
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
 
-class IndexController extends FormActionController
+class IndexController extends AbstractActionController
 {
     public function indexAction()
     {
