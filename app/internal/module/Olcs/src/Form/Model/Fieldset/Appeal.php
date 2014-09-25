@@ -129,6 +129,7 @@ class Appeal extends CaseBase
 
     /**
      * @Form\Attributes({"id":"","placeholder":""})
+     * @Form\Required(false)
      * @Form\Options({
      *     "label": "Outcome",
      *     "empty_option": "Please Select",
