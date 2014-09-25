@@ -76,7 +76,6 @@ class StatementDetails extends CaseBase
      *     "render_delimiters": false
      * })
      * @Form\Type("DateSelect")
-     * @Form\Required(false)
      * @Form\Filter({"name": "DateSelectNullifier"})
      * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
@@ -94,7 +93,6 @@ class StatementDetails extends CaseBase
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
-     * @Form\Required(false)
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
      * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
