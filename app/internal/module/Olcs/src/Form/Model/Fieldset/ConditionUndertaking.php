@@ -64,7 +64,6 @@ class ConditionUndertaking extends CaseBase
      *     "unchecked_value": "N",
      *     "label": "Fulfilled",
      *     "help-block": "Please choose",
-     *     "must_be_value": "Y"
      * })
      * @Form\Type("\Common\Form\Elements\InputFilters\SingleCheckbox")
      */
