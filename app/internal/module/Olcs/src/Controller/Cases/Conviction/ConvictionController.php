@@ -439,45 +439,7 @@ class ConvictionController extends OlcsController\CrudAbstract
         );
     }
 
-    /**
-     * Creates and returns the comment form.
-     *
-     * @param array $case
-     * @return \Zend\Form\Form
-     */
-    public function generateCommentForm($case)
-    {
-        $data = [];
-        $data['main'] = $case;
-
-        $form = $this->generateForm(
-            'ConvictionComment',
-            'saveCommentForm'
-        );
-        $form->setData($data);
-
-        return $form;
-    }
-
-    /**
-     * Saves the comment form.
-     *
-     * @param array $data
-     */
-    public function saveCommentForm($data)
-    {
-        if (isset($data['main'])) {
-            $data = $data + $data['main'];
-            unset($data['main']);
-        }
-
-        $data = array_intersect_key($data, array_flip(['id', 'convictionNote', 'version']));
-        $this->processEdit($data, 'Cases');
-
-        return $this->redirect()->toRoute('case_convictions', [], [], true);
-    }
-
-    private function getIndexBundle()
+    /* private function getIndexBundle()
     {
         return array(
             'children' => array(
@@ -492,7 +454,7 @@ class ConvictionController extends OlcsController\CrudAbstract
                 )
             )
         );
-    }
+    } */
 
     public function getLegacyOffencesTable($legacyOffencesResults)
     {
