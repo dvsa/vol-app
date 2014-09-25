@@ -136,6 +136,14 @@ class RevokeController extends OlcsController\CrudAbstract
     protected $detailsView = '/case/processing/revoke/details';
 
     /**
+     * Is the result a result of REST call to getList. Set to true when
+     * identifierKey is not 'id'
+     *
+     * @var bool
+     */
+    protected $isListResult = true;
+
+    /**
      * Identifier key
      *
      * @var string
