@@ -364,7 +364,7 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
      */
     public function testProcessLoadWithoutId()
     {
-       $data = array();
+        $data = array();
 
         $result = array('case' => '1234');
         $result['fields']['case'] = '1234';
