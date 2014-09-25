@@ -28,7 +28,7 @@ class PublicInquiryController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $identifierName = 'pi';
+    protected $identifierName = 'case';
 
     /**
      * Holds the form name
@@ -164,6 +164,10 @@ class PublicInquiryController extends OlcsController\CrudAbstract
         ]
     ];
 
+    protected $isListResult = true;
+    protected $identifierKey = 'case';
+    protected $placeholderName = 'pi';
+
     public function redirectToIndex()
     {
         return $this->redirectToRoute(
@@ -181,36 +185,5 @@ class PublicInquiryController extends OlcsController\CrudAbstract
             $data['case'] = $this->params()->fromRoute('case');
         }
         return $data;
-    }
-
-    /**
-     * Load data for the form
-     *
-     * This method should be overridden
-     *
-     * @param int $id
-     * @return array
-     */
-    protected function load($id)
-    {
-        if (empty($this->loadedData)) {
-            $service = $this->getService();
-
-            $result = $this->makeRestCall(
-                $service,
-                'GET',
-                array('case' => $this->params()->fromRoute('case'), 'order'=>'id', 'limit'=>1),
-                $this->getDataBundle()
-            );
-
-            if (empty($result) || !array_key_exists('Results', $result) ||empty($result['Results'])) {
-                $this->setCaughtResponse($this->notFoundAction());
-                return;
-            }
-
-            $this->loadedData = current($result['Results']);
-        }
-
-        return $this->loadedData;
     }
 }
