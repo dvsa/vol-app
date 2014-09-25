@@ -12,20 +12,20 @@ use Zend\Form\Annotation as Form;
 class Outcome
 {
     /**
-     * @Form\Attributes({"id":"","placeholder":"","class":"medium"})
+     * @Form\Attributes({"id":"presidingTc","placeholder":"","class":"medium"})
      * @Form\Options({
-     *     "label": "Presiding TC/DTC",
+     *     "label": "Agreed by",
+     *     "service_name": "Olcs\Service\Data\PresidingTc",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a category",
-     *     "category": "presiding_tc"
      * })
      * @Form\Type("DynamicSelect")
      */
     public $presidingTc = null;
 
     /**
-     * @Form\Attributes({"id":"","placeholder":"","class":"medium"})
+     * @Form\Attributes({"id":"outcome","placeholder":"","class":"medium"})
      * @Form\Options({
      *     "label": "Outcome",
      *     "empty_option": "Please Select",
@@ -38,7 +38,7 @@ class Outcome
     public $outcome = null;
 
     /**
-     * @Form\Attributes({"id":"dob"})
+     * @Form\Attributes({"id":"outcomeSentDate"})
      * @Form\Options({
      *     "label": "Outcome sent date",
      *     "create_empty_option": true,
