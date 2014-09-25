@@ -14,22 +14,11 @@ use Zend\Form\Annotation as Form;
 class Impounding
 {
     /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
+     * @Form\Name("base")
+     * @Form\Attributes({"class":"base"})
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\CaseBase")
      */
-    public $case = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $id = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $version = null;
+    public $caseBase = null;
 
     /**
      * @Form\Name("application_details")
