@@ -928,7 +928,7 @@ return array_merge(
                 'route' => '/case/:case/processing/in-office-revocation[/:action]',
                 'constraints' => [
                     'case' => '[0-9]+',
-                    'action' => '(index|add|edit|details|overview)'
+                    'action' => '(add|edit|details)'
                 ],
                 'defaults' => [
                     'controller' => 'CaseRevokeController',

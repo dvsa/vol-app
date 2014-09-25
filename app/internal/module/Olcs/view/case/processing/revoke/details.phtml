@@ -1,5 +1,5 @@
 <?php
-$appeal = $this->placeholder('revoke')->getValue(); ?>
+$revoke = $this->placeholder('proposeToRevoke')->getValue(); ?>
 
 <h4><?php echo $this->translate($this->navigation('navigation')->findOneBy('active', 1)->getLabel()); ?>
     <?php
@@ -25,100 +25,34 @@ $appeal = $this->placeholder('revoke')->getValue(); ?>
             'action' => 'edit'
         ], [], false); ?>" class="action--secondary
         right-aligned"><?php echo $this->translate('Edit in office revocation'); ?></a>
-
     </h4>
 
     <div class="read-only">
         <dl>
-            <?php
-            var_dump($revoke);exit;
-            foreach ($revoke as $k => $v) {
-            ?>
-                <dt><?php echo $this->translate($k);?></dt>
-                <dd><?php echo $v; ?></dd>
-            <?php
-            }
-            ?>
-            <dt><?php echo $this->translate('Appeal number');?></dt>
-            <dd><?php echo $appeal['appealNo']; ?></dd>
-            <dt><?php echo $this->translate('Appeals deadline');?></dt>
-            <dd><?php echo $appeal['deadlineDate']; ?></dd>
-            <dt><?php echo $this->translate('Date of appeal');?></dt>
-            <dd><?php echo $appeal['appealDate']; ?></dd>
-            <dt><?php echo $this->translate('Reason');?></dt>
-            <dd><?php echo $appeal['reason']['description']; ?></dd>
-        </dl>
-
-        <dl>
-            <dt><?php echo $this->translate('Outline ground');?></dt>
-            <dd class="three-quarters"><?php echo $appeal['outlineGround'];
-                ?></dd>
+            <dt><?php echo $this->translate('Legislation');?></dt>
+            <dd class="three-quarters">
+                <?php
+                    foreach ($revoke['reasons'] as $reason) {
+                        echo $reason['sectionCode'] . ' - ' . $reason['description'] .'<br />';
+                    }
+                ?>
+            </dd>
         </dl>
         <dl>
-            <dt><?php echo $this->translate('Date of appeal hearing');?></dt>
-            <dd><?php echo $appeal['hearingDate']; ?></dd>
-            <dt><?php echo $this->translate('Date of decision');?></dt>
-            <dd><?php echo $appeal['decisionDate']; ?></dd>
-
-            <dt><?php echo $this->translate('Papers due at tribual');?></dt>
-            <dd><?php echo $appeal['papersDueDate']; ?></dd>
-            <dt><?php echo $this->translate('Papers sent date');?></dt>
-            <dd><?php echo $appeal['papersSentDate']; ?></dd>
-            <dt><?php echo $this->translate('Outcome');?></dt>
-            <dd><?php echo $appeal['outcome']['description']; ?></dd>
-
+            <dt><?php echo $this->translate('Agreed date');?></dt>
+            <dd><?php echo $revoke['ptrAgreedDate']; ?></dd>
         </dl>
         <dl>
-            <dt><?php echo $this->translate('Tm Case Id');?></dt>
-            <dd><?php echo $appeal['tmCaseId']; ?></dd>
-
-            <dt><?php echo $this->translate('Is withdrawn');?></dt>
-            <dd><?php echo $this->translate(empty($appeal['withdrawnDate']) ?
-                    'N' : 'Y'); ?></dd>
-            <dt><?php echo $this->translate('Withdrawn date');?></dt>
-            <dd><?php echo $appeal['withdrawnDate']; ?></dd>
+            <dt><?php echo $this->translate('Closed date');?></dt>
+            <dd><?php echo $revoke['closedDate']; ?></dd>
         </dl>
         <dl>
-            <dt><?php echo $this->translate('Comments');?></dt>
+            <dt><?php echo $this->translate('Notes');?></dt>
             <dd class="three-quarters"><?php echo
-                $appeal['comment'];
+                $revoke['comment'];
                 ?></dd>
         </dl>
     </div>
-
-    <?php
-    if (!empty($stayRecords['stay_t_tc'][0]))
-    {
-        echo $this->partial('case/hearing-appeal/stay-details.phtml',
-                $stayRecords['stay_t_tc'][0]);
-    } else {
-        echo $this->partial('case/hearing-appeal/stay-details.phtml',
-            [
-                'case' =>  $case,
-                'stayType' => [
-                    'id' => 'stay_t_tc',
-                    'description' => 'Traffic commissioner / transport
-                    regulator stay'
-                ]
-            ]
-        );
+<?php
     }
-    ?>
-    <?php
-    if (!empty($stayRecords['stay_t_ut'][0]))
-    {
-        echo $this->partial('case/hearing-appeal/stay-details.phtml',
-            $stayRecords['stay_t_ut'][0]);
-    } else {
-        echo $this->partial('case/hearing-appeal/stay-details.phtml',
-            [
-                'case' =>  $case,
-                'stayType' => [
-                    'id' => 'stay_t_ut',
-                    'description' => 'Upper tribunal stay'
-                ]
-            ]
-        );
-    }
-}
 ?>
