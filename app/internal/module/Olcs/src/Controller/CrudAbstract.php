@@ -291,7 +291,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
 
         foreach ($this->requiredProperties as $requiredProperty) {
 
-            if (!in_array($requiredProperty, $classProperties) /* || empty($this->{$requiredProperty}) */) {
+            if (!in_array($requiredProperty, $classProperties)) {
 
                 $missingProperties[] = $requiredProperty;
             }
@@ -323,13 +323,14 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     /**
      * Extend the render view method
      *
-     * @param type $view
+     * @param string|\Zend\View\Model\ViewModel $view
+     * @param string|null $pageTitle
+     * @param string|null $pageSubTitle
+     * @return \Zend\View\Model\ViewModel
      */
     protected function renderView($view, $pageTitle = null, $pageSubTitle = null)
     {
         if (!is_null($this->pageLayoutInner)) {
-
-            //die('<pre>' . print_r((array)$view->getVariables(), 1));
 
             // This is a zend\view\variables object - cast it to an array.
             $layout = $this->getView((array)$view->getVariables());
@@ -466,8 +467,6 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
             $data['fields']['version'] = $case['version'];
             $data['fields']['comment'] = $case[$this->commentBoxName];
 
-            //die('<pre>' . print_r($data, 1));
-
             $form->setData($data);
 
             $this->setPlaceholder('comments', $form);
@@ -499,8 +498,6 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
         $update['id'] = $data['fields']['id'];
         $update['version'] = $data['fields']['version'];
         $update[$this->commentBoxName] = $data['fields']['comment'];
-
-        //die('<pre>' . print_r($update, 1));
 
         $this->save($update, 'Cases');
 

@@ -17,15 +17,17 @@ return array(
             'CaseController' => 'Olcs\Controller\Cases\CaseController',
             'CaseStatementController' => 'Olcs\Controller\Cases\Statement\StatementController',
             'CaseHearingAppealController' => 'Olcs\Controller\Cases\Hearing\HearingAppealController',
-            'CaseAppealController' => 'Olcs\Controller\CaseAppealController',
+            'CaseAppealController' =>
+                'Olcs\Controller\Cases\Hearing\AppealController',
             'CaseComplaintController' => 'Olcs\Controller\Cases\Complaint\ComplaintController',
             'CaseConvictionController' => 'Olcs\Controller\Cases\Conviction\ConvictionController',
             'CaseSubmissionController' => 'Olcs\Controller\Cases\Submission\SubmissionController',
             'SubmissionController' => 'Olcs\Controller\Submission\SubmissionController',
-            'CaseStayController' => 'Olcs\Controller\CaseStayController',
+            'CaseStayController' =>
+                'Olcs\Controller\Cases\Hearing\StayController',
             'CasePenaltyController' => 'Olcs\Controller\Cases\Penalty\PenaltyController',
             'CaseProhibitionController' => 'Olcs\Controller\Cases\Prohibition\ProhibitionController',
-            'CaseProhibitionDefectController' => 'Olcs\Controller\CaseProhibitionDefectController',
+            'CaseProhibitionDefectController' => 'Olcs\Controller\Cases\Prohibition\ProhibitionDefectController',
             'CaseAnnualTestHistoryController' => 'Olcs\Controller\Cases\AnnualTestHistory\AnnualTestHistoryController',
             'SubmissionNoteController' => 'Olcs\Controller\Submission\SubmissionNoteController',
             'CaseImpoundingController' => 'Olcs\Controller\CaseImpoundingController',
@@ -40,7 +42,9 @@ return array(
             'PublicInquiry\RegisterDecisionController'
                 => 'Olcs\Controller\Cases\PublicInquiry\RegisterDecisionController',
             'CasePiHearingController' => 'Olcs\Controller\Cases\Pi\HearingController',
-            'DocumentController' => 'Olcs\Controller\DocumentController',
+            'DocumentController' => 'Olcs\Controller\Document\DocumentController',
+            'DocumentGenerationController' => 'Olcs\Controller\Document\DocumentGenerationController',
+            'DocumentUploadController' => 'Olcs\Controller\Document\DocumentUploadController',
             'DefendantSearchController' => 'Olcs\DefendantSearchController',
             'LicenceController' => 'Olcs\Controller\Licence\LicenceController',
             'TaskController' => 'Olcs\Controller\TaskController',
@@ -108,7 +112,6 @@ return array(
             'tableFilters' => 'Olcs\View\Helper\TableFilters',
             'piListData'   => 'Olcs\View\Helper\PiListData',
             'formSubmissionSections' => 'Olcs\Form\View\Helper\SubmissionSections',
-            'formSubmissionSectionsMultiCheckbox' => 'Olcs\Form\View\Helper\SubmissionSectionsMultiCheckbox'
         ),
         'delegators' => array(
             'formElement' => array('Olcs\Form\View\Helper\FormElementDelegatorFactory')

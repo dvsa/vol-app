@@ -37,7 +37,10 @@ return array(
         ),
         array(
             'title' => 'Statement type',
-            'name' => 'statementType'
+            'formatter' => function ($data, $column, $sm) {
+
+                return $data['statementType']['description'];
+            },
         ),
         array(
             'title' => 'Date stopped',
@@ -50,33 +53,18 @@ return array(
         ),
         array(
             'title' => 'Date issued',
-            'formatter' => 'Date',
+            'formatter' => function ($data, $column, $sl) {
+                $column['formatter'] = 'Date';
+                return (!empty($data['issuedDate']) ?
+                    $this->callFormatter($column, $data) :
+                    $sl->get('translator')->translate('Not issued')
+                );
+            },
             'name' => 'issuedDate'
         ),
         array(
             'title' => 'VRM',
             'name' => 'vrm'
-        ),
-        array(
-            'title' => 'Documents',
-            'formatter' => function ($data, $column) {
-                $filename =
-                    $data['id'] . '_' .
-                    'statement' . '_' .
-                    'S43_Letter';
-                return file_exists('/tmp/' . $filename . '.rtf') ? '<a href="' . $this->generateUrl(
-                    array(
-                        'controller' => 'Document',
-                        'action' => 'retrieve',
-                        'format' => 'rtf',
-                        'country' => 'en_GB',
-                        'filename' => $filename
-                        ),
-                    'document_retrieve',
-                    true
-                ) . '">'.$filename.'</a>' : '';
-            },
-            'name' => 'document'
         ),
     )
 );

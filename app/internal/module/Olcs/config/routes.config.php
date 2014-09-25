@@ -329,7 +329,7 @@ return array_merge(
                                 'route' => '/stop',
                                 'defaults' => [
                                     'controller' => 'BusDetailsStopController',
-                                    'action' => 'index',
+                                    'action' => 'edit',
                                 ]
                             ],
                         ],
@@ -349,7 +349,7 @@ return array_merge(
                                 'route' => '/quality',
                                 'defaults' => [
                                     'controller' => 'BusDetailsQualityController',
-                                    'action' => 'index',
+                                    'action' => 'edit',
                                 ]
                             ],
                         ]
@@ -557,6 +557,30 @@ return array_merge(
                         ]
                     ],
                     'may_terminate' => true,
+                    'child_routes' => [
+                        'generate' => [
+                            'type' => 'segment',
+                            'options' => [
+                                'route' => '/generate[/:tmpId]',
+                                'defaults' => [
+                                    'type'       => 'licence',
+                                    'controller' => 'DocumentGenerationController',
+                                    'action'     => 'generate'
+                                ]
+                            ],
+                        ],
+                        'finalise' => [
+                            'type' => 'segment',
+                            'options' => [
+                                'route' => '/finalise/:tmpId',
+                                'defaults' => [
+                                    'type'       => 'licence',
+                                    'controller' => 'DocumentUploadController',
+                                    'action'     => 'finalise'
+                                ]
+                            ],
+                        ],
+                    ],
                 ],
                 'processing' => [
                     'type' => 'literal',
@@ -677,20 +701,6 @@ return array_merge(
                 ]
             ]
         ],
-        'case_appeal' => [
-            'type' => 'segment',
-            'options' => [
-                'route' => '/licence/:licence/case/:case/appeals[/:action][/:id]',
-                'constraints' => [
-                    'case' => '[0-9]+',
-                    'id' => '[0-9]+'
-                ],
-                'defaults' => [
-                    'controller' => 'CaseAppealController',
-                    'action' => 'index'
-                ]
-            ]
-        ],
         'conviction_ajax' => [
             'type' => 'Literal',
             'options' => [
@@ -698,22 +708,6 @@ return array_merge(
                 'defaults' => [
                     'controller' => 'CaseConvictionController',
                     'action' => 'categories',
-                ]
-            ]
-        ],
-        'case_stay_action' => [
-            'type' => 'segment',
-            'options' => [
-                'route' => '/licence/[:licence]/case/[:case]/action/manage/stays[/:action][/:stayType][/:id]',
-                'constraints' => [
-                    'licence' => '[0-9]+',
-                    'case' => '[0-9]+',
-                    'staytype' => '[0-9]',
-                    'id' => '[0-9]+'
-                ],
-                'defaults' => [
-                    'controller' => 'CaseStayController',
-                    'action' => 'index'
                 ]
             ]
         ],
@@ -726,6 +720,34 @@ return array_merge(
                 ],
                 'defaults' => [
                     'controller' => 'CaseHearingAppealController',
+                    'action' => 'index'
+                ]
+            ]
+        ],
+        'case_appeal' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/case/:case/appeal[/:action][/:appeal]',
+                'constraints' => [
+                    'case' => '[0-9]+',
+                    'appeal' => '[0-9]+'
+                ],
+                'defaults' => [
+                    'controller' => 'CaseAppealController',
+                    'action' => 'index'
+                ]
+            ]
+        ],
+        'case_stay' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/case/:case/stay[/:action][/:stayType][/:stay]',
+                'constraints' => [
+                    'case' => '[0-9]+',
+                    'appeal' => '[0-9]+'
+                ],
+                'defaults' => [
+                    'controller' => 'CaseStayController',
                     'action' => 'index'
                 ]
             ]
@@ -756,19 +778,19 @@ return array_merge(
                     'action' => 'index'
                 ]
             ],
-            'may_terminate' => true,
-            'child_routes' => [
-                'defect' => [
-                    'type' => 'segment',
-                    'options' => [
-                        'route' => '/defect[/:defect]',
-                        'constraints' => [
-                            'defect' => '[0-9]+'
-                        ],
-                        'defaults' => [
-                            'controller' => 'CaseProhibitionDefectController'
-                        ]
-                    ]
+            'may_terminate' => true
+        ],
+        'case_prohibition_defect' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/case/:case/prohibition[/:prohibition]/defect[/:action][/:id]',
+                'constraints' => [
+                    'id' => '[0-9]+',
+                    'prohibition' => '[0-9]+'
+                ],
+                'defaults' => [
+                    'controller' => 'CaseProhibitionDefectController',
+                    'action' => 'index'
                 ]
             ]
         ],
@@ -924,26 +946,6 @@ return array_merge(
                 ]
             ]
         ],
-        'document_generate' => [
-            'type' => 'segment',
-            'options' => [
-                'route' => '/document/generate/:template[/:format][/:country]',
-                'defaults' => [
-                    'controller' => 'DocumentController',
-                    'action' => 'generateDocument'
-                ]
-            ],
-        ],
-        'document_retrieve' => [
-            'type' => 'segment',
-            'options' => [
-                'route' => '/document/retrieve/:filename[/:format][/:country]',
-                'defaults' => [
-                    'controller' => 'DocumentController',
-                    'action' => 'retrieveDocument'
-                ]
-            ]
-        ],
         'case_impounding' => [
             'type' => 'segment',
             'options' => [
@@ -973,52 +975,6 @@ return array_merge(
                 ]
             ]
         ],
-        /*'case_pi' => [
-            'type' => 'segment',
-            'options' => [
-                'route' => '/licence/:licence/case/:case/task/pi',
-                'constraints' => [
-                    'licence' => '[0-9]+',
-                    'case' => '[0-9]+'
-                ],
-                'defaults' => [
-                    'controller' => 'CasePiController',
-                    'action' => 'index'
-                ]
-            ]
-        ],*/
-        'case_pi_action' => [
-            'type' => 'segment',
-            'options' => [
-                'route' => '/licence/:licence/case/:case/task/pi/:action/:section[/:id]',
-                'constraints' => [
-                    'licence' => '[0-9]+',
-                    'case' => '[0-9]+',
-                    'id' => '[0-9]+'
-                ],
-                'defaults' => [
-                    'controller' => 'CasePiController',
-                    'action' => 'index',
-                    'licence' => 7
-                ]
-            ]
-        ],
-        /*'case_pi_hearing' => [
-            'type' => 'segment',
-            'options' => [
-                'route' => '/licence/:licence/case/:case/pi/:piId/hearing[/:hearingId]',
-                'constraints' => [
-                    'licence' => '[0-9]+',
-                    'case' => '[0-9]+',
-                    'piId' => '[0-9]+',
-                    'hearingId' => '[0-9]+'
-                ],
-                'defaults' => [
-                    'controller' => 'CasePiHearingController',
-                    'action' => 'index'
-                ]
-            ]
-        ],*/
         'entity_lists' => [
             'type' => 'segment',
             'options' => [
@@ -1026,6 +982,40 @@ return array_merge(
                 'defaults' => [
                     'controller' => 'IndexController',
                     'action' => 'entityList'
+                ]
+            ]
+        ],
+        'template_lists' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/list-template-bookmarks/:id',
+                'constraints' => [
+                    'id' => '[0-9]+'
+                ],
+                'defaults' => [
+                    'type'       => 'licence',
+                    'controller' => 'DocumentController',
+                    'action'     => 'listTemplateBookmarks'
+                ]
+            ]
+        ],
+        'fetch_document' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/documents/:id/:filename',
+                'defaults' => [
+                    'controller' => 'DocumentController',
+                    'action'     => 'download'
+                ]
+            ]
+        ],
+        'fetch_tmp_document' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/documents/tmp/:id/:filename',
+                'defaults' => [
+                    'controller' => 'DocumentController',
+                    'action'     => 'downloadTmp'
                 ]
             ]
         ],

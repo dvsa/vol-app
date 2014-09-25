@@ -30,8 +30,8 @@ return array(
             'formatter' => function ($data, $column) {
                     $column['formatter'] = 'Date';
                     return '<a href="' . $this->generateUrl(
-                        array('action' => 'edit', 'prohibition' => $data['id']),
-                        'case_prohibition',
+                        array('prohibition' => $data['id']),
+                        'case_prohibition_defect',
                         true
                     ) . '">' . $this->callFormatter($column, $data) . '</a>';
             },
