@@ -14,11 +14,11 @@ use Zend\Form\Annotation as Form;
 class Statement
 {
     /**
-     * @Form\Name("details")
+     * @Form\Name("fields")
      * @Form\Options({"label":"Statement Details"})
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\StatementDetails")
      */
-    public $details = null;
+    public $fields = null;
 
     /**
      * @Form\Name("requestorsAddress")

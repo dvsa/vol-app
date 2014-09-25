@@ -10,20 +10,8 @@ use Zend\Form\Annotation as Form;
  * @Form\Type("\Common\Form\Elements\Types\Address")
  * @Form\Options({"label":"Requestors Address"})
  */
-class RequestorsAddress
+class RequestorsAddress extends Base
 {
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $id = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $version = null;
-
     /**
      * @Form\Options({"label":"Postcode search"})
      * @Form\Required(false)
