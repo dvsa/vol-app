@@ -171,7 +171,7 @@ class DocumentGenerationController extends DocumentController
         /**
          * 4) We've now got all our dynamic data which we can feedback into
          *    our bookmarks to actually replace tokens with data. This will
-         *    give us back a modified file object which we can then save
+         *    give us back a string of content which we can then save
          */
         $content = $this->getDocumentService()->populateBookmarks(
             $file,
