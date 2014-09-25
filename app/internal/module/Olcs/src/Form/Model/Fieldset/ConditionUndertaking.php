@@ -44,7 +44,7 @@ class ConditionUndertaking extends CaseBase
     /**
      * @Form\Attributes({"id":"","class":"extra-long"})
      * @Form\Options({
-     *     "label": "",
+     *     "label": "Description",
      *     "label_attributes": {
      *         "class": "col-sm-2"
      *     },

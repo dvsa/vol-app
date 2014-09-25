@@ -66,7 +66,14 @@ class Offence
      *     "render_delimiters": false
      * })
      * @Form\Required(false)
-     * @Form\Type("\Common\Form\Elements\InputFilters\OffenceDateBeforeConvictionDate")
+     * @Form\Type("DateSelect")
+     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
+     * @Form\Validator({
+     *      "name": "DateCompare",
+     *      "options": {"compare_to":"convictionDate", "compare_to_label":"Conviction date", "operator": "lte"}
+     * })
      */
     public $offenceDate = null;
 
@@ -77,8 +84,10 @@ class Offence
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
-     * @Form\Required(false)
-     * @Form\Type("\Common\Form\Elements\InputFilters\DateNotInFuture")
+     * @Form\Type("DateSelect")
+     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $convictionDate = null;
 
@@ -99,7 +108,6 @@ class Offence
      * @Form\Attributes({"class":"medium","id":""})
      * @Form\Options({"label":"Court/FPN"})
      * @Form\Required(false)
-     * @Form\AllowEmpty(true)
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":70}})
@@ -110,6 +118,7 @@ class Offence
      * @Form\Attributes({"class":"medium","id":""})
      * @Form\Options({"label":"Penalty"})
      * @Form\Type("Text")
+     * @Form\Required(false)
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":255}})
      */
@@ -119,7 +128,6 @@ class Offence
      * @Form\Attributes({"class":"medium","id":""})
      * @Form\Options({"label":"Costs"})
      * @Form\Required(false)
-     * @Form\AllowEmpty(true)
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":255}})

@@ -16,16 +16,47 @@ class BusDetailsStopController extends BusDetailsController
 {
     protected $item = 'stop';
 
-    /**
-     * Index action
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
-    public function indexAction()
-    {
-        $view = $this->getViewWithBusReg();
+    /* properties required by CrudAbstract */
+    protected $formName = 'bus-reg-stop';
 
-        $view->setTemplate('licence/bus/index');
-        return $this->renderView($view);
-    }
+    /**
+     * Data map
+     *
+     * @var array
+     */
+    protected $dataMap = array(
+        'main' => array(
+            'mapFrom' => array(
+                'fields',
+            )
+        )
+    );
+
+    /**
+     * Holds the Data Bundle
+     *
+     * @var array
+     */
+    protected $dataBundle = array(
+        'children' => array(
+            'subsidised' => array(
+                'id'
+            )
+        )
+    );
+
+    /**
+     * Array of form fields to disable if this is EBSR
+     */
+    protected $disableFormFields = array(
+        'useAllStops',
+        'hasManoeuvre',
+        'manoeuvreDetail',
+        'needNewStop',
+        'newStopDetail',
+        'hasNotFixedStop',
+        'notFixedStopDetail',
+        'subsidised',
+        'subsidyDetail'
+    );
 }

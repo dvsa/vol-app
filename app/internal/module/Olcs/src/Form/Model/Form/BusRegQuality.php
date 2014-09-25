@@ -6,24 +6,24 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
- * @Form\Name("annual-test-history-comment")
+ * @Form\Name("bus-reg-quality")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
  * @Form\Options({"prefer_form_input_filter": true})
  */
-class AnnualTestHistoryComment
+class BusRegQuality
 {
     /**
-     * @Form\Name("main")
-     * @Form\Options({"label":"Annual test history"})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\Main")
+     * @Form\Name("fields")
+     * @Form\Options({"label":"","class":""})
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\BusRegQuality")
      */
-    public $main = null;
+    public $fields = null;
 
     /**
      * @Form\Name("form-actions")
      * @Form\Attributes({"class":"actions-container"})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\ResetFormActions")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\CancelFormActions")
      */
     public $formActions = null;
 }
