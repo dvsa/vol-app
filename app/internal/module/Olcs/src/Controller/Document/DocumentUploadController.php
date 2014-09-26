@@ -9,14 +9,12 @@ namespace Olcs\Controller\Document;
 
 use Zend\View\Model\ViewModel;
 
-use Dvsa\Jackrabbit\Data\Object\File;
-
 /**
  * Document Upload Controller
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class DocumentUploadController extends DocumentController
+class DocumentUploadController extends AbstractDocumentController
 {
     private $mimeTypeMap = [
         'application/rtf' => [
@@ -104,7 +102,7 @@ class DocumentUploadController extends DocumentController
 
         $uploader = $this->getUploader();
         $uploader->setFile($files['file']);
-        $file = $uploader->upload(self::FULL_STORAGE_PATH);
+        $file = $uploader->upload();
 
         $template = $this->makeRestCall(
             'DocTemplate',
@@ -141,7 +139,7 @@ class DocumentUploadController extends DocumentController
             $data
         );
 
-        $uploader->remove($this->getTmpPath());
+        $this->removeTmpData();
 
         return $this->redirect()->toRoute(
             $type . '/documents',
@@ -163,5 +161,10 @@ class DocumentUploadController extends DocumentController
             return $this->mimeTypeMap[$type]['extension'];
         }
         return null;
+    }
+
+    private function formatFilename($input)
+    {
+        return str_replace([' ', '/'], '_', $input);
     }
 }

@@ -16,10 +16,8 @@ use Zend\View\Model\ViewModel;
  * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class DocumentGenerationController extends DocumentController
+class DocumentGenerationController extends AbstractDocumentController
 {
-    const EMPTY_LABEL = 'Please select';
-
     private $categoryMap = [
         // type (as set by the route) => default category name
         'licence' => 'Licensing'
@@ -55,7 +53,7 @@ class DocumentGenerationController extends DocumentController
             $data = (array)$this->getRequest()->getPost();
         } elseif ($this->params('tmpId')) {
             $data = $this->fetchTmpData();
-            $this->getUploader()->remove($this->getTmpPath());
+            $this->removeTmpData();
         }
 
         $data = array_merge($defaultData, $data);
@@ -215,6 +213,107 @@ class DocumentGenerationController extends DocumentController
             $routeParams['type'] . '/documents/finalise',
             $redirectParams
         );
+    }
+
+    public function listTemplateBookmarksAction()
+    {
+        $form = new \Zend\Form\Form();
+
+        $fieldset = new \Zend\Form\Fieldset();
+        $fieldset->setLabel('documents.bookmarks');
+        $fieldset->setName('bookmarks');
+
+        $form->add($fieldset);
+
+        $this->addTemplateBookmarks(
+            $this->params('id'),
+            $fieldset
+        );
+
+        $view = new ViewModel(['form' => $form]);
+        $view->setTemplate('form-simple');
+        $view->setTerminal(true);
+
+        return $view;
+    }
+
+    public function downloadTmpAction()
+    {
+        return $this->getUploader()->download(
+            $this->params('id'),
+            $this->params('filename'),
+            self::TMP_STORAGE_PATH
+        );
+    }
+
+    private function addTemplateBookmarks($id, $fieldset)
+    {
+        if (empty($id)) {
+            return;
+        }
+
+        /**
+         * Not the prettiest bundle, but what we ultimately want
+         * are the all the DB paragraphs availabe for a given template,
+         * grouped into bookmarks
+         *
+         * The relationships here involve two many-to-many relationships
+         * to keep bookmarks and paragraphs decoupled from templates, which
+         * translates into a fairly nested bundle query
+         */
+        $bundle = [
+            'properties' => ['docTemplateBookmarks'],
+            'children' => [
+                'docTemplateBookmarks' => [
+                    'properties' => ['docBookmark'],
+                    'children' => [
+                        'docBookmark' => [
+                            'properties' => ['name', 'description'],
+                            'children' => [
+                                'docParagraphBookmarks' => [
+                                    'properties' => ['docParagraph'],
+                                    'children' => [
+                                        'docParagraph' => [
+                                            'properties' => ['id', 'paraTitle']
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        $result = $this->makeRestCall(
+            'DocTemplate',
+            'GET',
+            ['id' => $id],
+            $bundle
+        );
+
+        $bookmarks = $result['docTemplateBookmarks'];
+
+        foreach ($bookmarks as $bookmark) {
+
+            $bookmark = $bookmark['docBookmark'];
+
+            $element = new \Common\Form\Elements\InputFilters\MultiCheckboxEmpty;
+            $element->setLabel($bookmark['description']);
+            $element->setName($bookmark['name']);
+            // user-supplied bookmarks are *all* optional
+            $element->setOptions(['required' => false]);
+
+            $options = [];
+            foreach ($bookmark['docParagraphBookmarks'] as $paragraph) {
+
+                $paragraph = $paragraph['docParagraph'];
+                $options[$paragraph['id']] = $paragraph['paraTitle'];
+            }
+            $element->setValueOptions($options);
+
+            $fieldset->add($element);
+        }
     }
 
     protected function getListData(
