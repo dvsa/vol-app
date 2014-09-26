@@ -34,8 +34,12 @@ class AgreedAndLegislationController extends PublicInquiryController
     /**
      * @return array
      */
-    public function getFormDefaults()
+    public function processLoad($data)
     {
-        return ['agreedDate' => date('Y-m-d')];
+        if (empty($data)) {
+            return ['fields' => ['agreedDate' => date('Y-m-d')]];
+        }
+
+        return parent::processLoad($data);
     }
 }
