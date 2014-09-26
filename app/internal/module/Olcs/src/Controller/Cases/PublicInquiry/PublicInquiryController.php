@@ -172,7 +172,7 @@ class PublicInquiryController extends OlcsController\CrudAbstract
     {
         return $this->redirectToRoute(
             'case_pi',
-            ['action'=>'details', $this->getIdentifierName() => null],
+            ['action'=>'details'],
             ['code' => '303'], // Why? No cache is set with a 303 :)
             true
         );
