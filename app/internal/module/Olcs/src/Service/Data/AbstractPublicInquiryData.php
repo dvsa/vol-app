@@ -62,13 +62,13 @@ abstract class AbstractPublicInquiryData extends AbstractData implements ListDat
      */
     public function fetchListOptions($context, $useGroups = false)
     {
-        $context = empty($context)? $this->getLicenceContext() : $context;
+        $context = empty($context) ?
+            $this->getLicenceContext() : array_merge($context, $this->getLicenceContext());
         $context['bundle'] = json_encode(['properties' => 'ALL']);
         $context['limit'] = 1000;
         $context['order'] = 'sectionCode';
 
         $data = $this->fetchPublicInquiryData($context);
-        $ret = [];
 
         if (!is_array($data)) {
             return [];

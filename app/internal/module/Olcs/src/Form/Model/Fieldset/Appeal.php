@@ -26,6 +26,7 @@ class Appeal extends CaseBase
 
     /**
      * @Form\Attributes({"id":"dob"})
+     * @Form\Required(false)
      * @Form\Options({
      *     "label": "Date of appeal",
      *     "create_empty_option": true,
@@ -129,6 +130,7 @@ class Appeal extends CaseBase
 
     /**
      * @Form\Attributes({"id":"","placeholder":""})
+     * @Form\Required(false)
      * @Form\Options({
      *     "label": "Outcome",
      *     "empty_option": "Please Select",
