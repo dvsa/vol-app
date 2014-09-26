@@ -55,6 +55,13 @@ return array(
                             'use_route_match' => true,
                         ),
                         array(
+                            'id' => 'case_details_legacy_offence',
+                            'label' => 'Legacy Offences',
+                            'route' => 'offence',
+                            'action' => 'index',
+                            'use_route_match' => true,
+                        ),
+                        array(
                             'id' => 'case_details_annual_test_history',
                             'label' => 'Annual test history',
                             'route' => 'case_annual_test_history',
