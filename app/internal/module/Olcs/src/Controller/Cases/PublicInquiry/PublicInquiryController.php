@@ -67,7 +67,7 @@ class PublicInquiryController extends OlcsController\CrudAbstract
      * required when an entire controller is
      * represneted by a single navigation id.
      */
-    protected $navigationId = 'case_details_public_inquiry';
+    protected $navigationId = 'case_hearings_appeals_public_inquiry';
 
     /**
      * Holds an array of variables for the
