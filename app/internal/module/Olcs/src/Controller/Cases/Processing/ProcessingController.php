@@ -25,16 +25,11 @@ class ProcessingController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $identifierName = 'case/';
+    protected $identifierName = 'case';
 
     public function overviewAction()
     {
         return $this->redirectToRoute('processing_decisions', ['action' => 'index'], [], true);
-    }
-
-    public function addAction()
-    {
-        die('Processing add page');
     }
 
     public function redirectToIndex()
