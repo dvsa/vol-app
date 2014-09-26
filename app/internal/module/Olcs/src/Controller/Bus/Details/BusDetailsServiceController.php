@@ -16,16 +16,47 @@ class BusDetailsServiceController extends BusDetailsController
 {
     protected $item = 'service';
 
-    /**
-     * Index action
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
-    public function indexAction()
-    {
-        $view = $this->getViewWithBusReg();
+    /* properties required by CrudAbstract */
+    protected $formName = 'bus-service-number-and-type';
 
-        $view->setTemplate('licence/bus/index');
-        return $this->renderView($view);
-    }
+    /**
+     * Data map
+     *
+     * @var array
+     */
+    protected $dataMap = array(
+        'main' => array(
+            'mapFrom' => array(
+                'fields',
+            )
+        )
+    );
+
+    /**
+     * Holds the Data Bundle
+     *
+     * @var array
+     */
+    protected $dataBundle = array(
+        'children' => array(
+            'subsidised' => array(
+                'id'
+            )
+        )
+    );
+
+    /**
+     * Array of form fields to disable if this is EBSR
+     */
+    /*protected $disableFormFields = array(
+        'useAllStops',
+        'hasManoeuvre',
+        'manoeuvreDetail',
+        'needNewStop',
+        'newStopDetail',
+        'hasNotFixedStop',
+        'notFixedStopDetail',
+        'subsidised',
+        'subsidyDetail'
+    );*/
 }
