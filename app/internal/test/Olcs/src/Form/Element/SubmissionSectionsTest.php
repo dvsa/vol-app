@@ -67,7 +67,14 @@ class SubmissionSectionsTest extends PHPUnit_Framework_TestCase
         $mockMultiCheckbox = m::mock('Zend\Form\Element\MultiCheckbox');
         $mockMultiCheckbox->shouldReceive(
             'getValueOptions'
-        )->andReturn(['submission_section_pers' => 'Persons','submission_section_case' => 'Cases']);
+        )->andReturn(
+            [
+                'submission_section_casu' => 'Case Summary',
+                'submission_section_intr' => 'Case Introduction',
+                'submission_section_pers' => 'Persons',
+                'submission_section_case' => 'Cases'
+            ]
+        );
         $mockMultiCheckbox->shouldReceive('setValueOptions');
         $mockMultiCheckbox->shouldReceive('setOptions')->with(['label_position'=>'append']);
         $mockMultiCheckbox->shouldReceive('setName')->with($name . '[sections]');
