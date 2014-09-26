@@ -316,7 +316,7 @@ return array_merge(
                                 'route' => '/service',
                                 'defaults' => [
                                     'controller' => 'BusDetailsServiceController',
-                                    'action' => 'index',
+                                    'action' => 'edit',
                                 ]
                             ],
                         ],
