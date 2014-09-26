@@ -26,6 +26,7 @@ class Appeal extends CaseBase
 
     /**
      * @Form\Attributes({"id":"dob"})
+     * @Form\Required(false)
      * @Form\Options({
      *     "label": "Date of appeal",
      *     "create_empty_option": true,
