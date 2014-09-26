@@ -31,7 +31,7 @@ trait DefendantSearchTrait
     {
         $form = $this->getFormClass($type);
 
-        $form = $this->getSectionService()->processPostcodeLookup($form);
+        $form = $this->processPostcodeLookup($form);
 
         $form = $this->processEntitySearchJourney($form);
 
