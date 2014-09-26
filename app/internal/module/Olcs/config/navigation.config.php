@@ -90,13 +90,6 @@ return array(
                             'use_route_match' => true,
                         ),
                         array(
-                            'id' => 'case_details_public_inquiry',
-                            'label' => 'Public inquiry',
-                            'route' => 'case_pi',
-                            'action' => 'index',
-                            'use_route_match' => true,
-                        ),
-                        array(
                             'id' => 'case_details_conditions_undertakings',
                             'label' => 'Conditions & Undertakings',
                             'route' => 'case_conditions_undertakings',
