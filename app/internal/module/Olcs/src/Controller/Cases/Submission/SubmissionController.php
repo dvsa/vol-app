@@ -106,7 +106,7 @@ class SubmissionController extends OlcsController\CrudAbstract
      * required when an entire controller is
      * represented by a single navigation id.
      */
-    protected $navigationId = 'case_submission';
+    protected $navigationId = 'case_submissions';
 
     /**
      * Save data. Also processes the submit submission select type drop down
