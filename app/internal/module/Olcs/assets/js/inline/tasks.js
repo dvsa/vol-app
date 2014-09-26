@@ -1,5 +1,7 @@
 $(function() {
   var form = "[name=tasks-home]";
+  var reassignHandler;
+  var closeHandler;
 
   OLCS.formHandler({
     // the form to bind to
@@ -27,7 +29,7 @@ $(function() {
     url: "/list/task-sub-categories"
   });
 
-  OLCS.conditionalButton({
+  reassignHandler = OLCS.conditionalButton({
     form: ".table__form",
     label: "Re-assign Task",
     predicate: function(length, callback) {
@@ -35,11 +37,16 @@ $(function() {
     }
   });
 
-  OLCS.conditionalButton({
+  closeHandler = OLCS.conditionalButton({
     form: ".table__form",
     label: "Close Task",
     predicate: function(length, callback) {
       callback(length < 1);
     }
+  });
+
+  OLCS.eventEmitter.on("update:.table__form", function() {
+    reassignHandler.check();
+    closeHandler.check();
   });
 });
