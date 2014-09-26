@@ -21,7 +21,7 @@ return array(
         array(
             'title' => 'Offence date from',
             'formatter' => function ($data, $column) {
-                $url = $this->generateUrl(['action' => 'view', 'offenceId' => $data['id']], 'offence', true);
+                $url = $this->generateUrl(['action' => 'details', 'offence' => $data['id']], 'offence', true);
 
                 if ($data['offenceDate'] == null) {
                     return '<a href="' . $url . '">N/A</a>';

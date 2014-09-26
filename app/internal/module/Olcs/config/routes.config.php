@@ -811,15 +811,15 @@ return array_merge(
         'offence' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/licence/[:licence]/case/[:case]/offence/view[/:offenceId]',
+                'route' => '/case/:case/offence[/:action/:offence]',
                 'constraints' => [
-                    'licence' => '[0-9]+',
                     'case' => '[0-9]+',
-                    'offenceId' => '[0-9]+',
+                    'action' => '[a-z]+',
+                    'offence' => '[0-9]+',
                 ],
                 'defaults' => [
-                    'controller' => 'CaseConvictionController',
-                    'action' => 'viewOffence'
+                    'controller' => 'CaseOffenceController',
+                    'action' => 'index'
                 ]
             ]
         ],
@@ -918,6 +918,86 @@ return array_merge(
                 ],
                 'defaults' => [
                     'controller' => 'CaseSubmissionController',
+                    'action' => 'index'
+                ]
+            ]
+        ],
+        'processing' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/case/:case/processing[/:action]',
+                'constraints' => [
+                    'case' => '[0-9]+',
+                    'action' => '(index|add|edit|details|overview)'
+                ],
+                'defaults' => [
+                    'controller' => 'CaseProcessingController',
+                    'action' => 'index'
+                ]
+            ]
+        ],
+        'processing_decisions' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/case/:case/processing/decisions[/:action]',
+                'constraints' => [
+                    'case' => '[0-9]+',
+                    'action' => '(index|add|edit|details|overview)'
+                ],
+                'defaults' => [
+                    'controller' => 'CaseDecisionsController'
+                ]
+            ],
+        ],
+        'processing_in_office_revocation' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/case/:case/processing/in-office-revocation[/:action]',
+                'constraints' => [
+                    'case' => '[0-9]+',
+                    'action' => '(add|edit|details)'
+                ],
+                'defaults' => [
+                    'controller' => 'CaseRevokeController',
+                    'action' => 'index'
+                ]
+            ]
+        ],
+        'processing_history' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/case/:case/processing/history[/:action]',
+                'constraints' => [
+                    'action' => '(index|add|edit|details|overview)'
+                ],
+                'defaults' => [
+                    'controller' => 'CaseHistoryController',
+                    'action' => 'index'
+                ]
+            ]
+        ],
+        'processing_tasks' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/case/:case/processing/tasks[/:action]',
+                'constraints' => [
+                    'action' => '(index|add|edit|details|overview)'
+                ],
+                'defaults' => [
+                    'controller' => 'CaseTaskController',
+                    'action' => 'index'
+                ]
+            ]
+        ],
+        'processing_notes' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/case/:case/processing/notes[/:action]',
+                'constraints' => [
+                    'action' => '(index|add|edit|details|overview)'
+                ],
+                'defaults' => [
+                    'controller' => 'CaseNotesController',
                     'action' => 'index'
                 ]
             ]

@@ -95,10 +95,11 @@ class LicenceController extends AbstractController
         $view = $this->getViewWithLicence(
             array(
                 'table' => $this->getDocumentsTable($filters),
-                'form'  => $this->getDocumentForm($filters),
-                'inlineScript' => $this->loadScripts(['documents'])
+                'form'  => $this->getDocumentForm($filters)
             )
         );
+
+        $this->loadScripts(['documents', 'table-actions']);
 
         $view->setTemplate('licence/documents');
         $view->setTerminal(
@@ -166,10 +167,11 @@ class LicenceController extends AbstractController
 
         $this->setTableFilters($form);
 
+        $this->loadScripts(['bus-reg-list']);
+
         $view = $this->getViewWithLicence(
             array(
-                'table' => $table,
-                'inlineScript' => $this->loadScripts(['bus-reg-list'])
+                'table' => $table
             )
         );
 
