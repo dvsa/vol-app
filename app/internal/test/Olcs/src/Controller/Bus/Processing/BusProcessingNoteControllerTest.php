@@ -36,7 +36,8 @@ class BusProcessingNoteControllerTest extends AbstractHttpControllerTestCase
                 'redirectToRoute',
                 'processAdd',
                 'processEdit',
-                'setTableFilters'
+                'setTableFilters',
+                'loadScripts'
             )
         );
 

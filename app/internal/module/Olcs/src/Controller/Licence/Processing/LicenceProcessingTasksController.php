@@ -39,10 +39,11 @@ class LicenceProcessingTasksController extends AbstractLicenceProcessingControll
 
         $this->setTableFilters($this->getTaskForm($filters));
 
+        $this->loadScripts(['tasks', 'table-actions']);
+
         $view = new ViewModel(
             array(
-                'table' => $table->render(),
-                'inlineScript' => $this->loadScripts(['tasks', 'table-actions'])
+                'table' => $table->render()
             )
         );
 
