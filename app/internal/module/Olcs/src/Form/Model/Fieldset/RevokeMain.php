@@ -45,7 +45,7 @@ class RevokeMain extends CaseBase
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
-     * @Form\Required(false)
+     * @Form\Required(true)
      * @Form\Type("\Common\Form\Elements\InputFilters\DateRequired")
      */
     public $ptrAgreedDate = null;
