@@ -929,7 +929,7 @@ return array_merge(
                 ],
                 'defaults' => [
                     'controller' => 'CaseProcessingController',
-                    'action' => 'index'
+                    'action' => 'overview'
                 ]
             ]
         ],
