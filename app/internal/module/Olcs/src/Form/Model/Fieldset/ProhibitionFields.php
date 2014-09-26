@@ -11,14 +11,16 @@ use Zend\Form\Annotation as Form;
 class ProhibitionFields
 {
     /**
-     * @Form\Attributes({"id":"dob"})
+     * @Form\Attributes({"id":"prohibitionDate"})
      * @Form\Options({
      *     "label": "Prohibition date",
      *     "create_empty_option": true,
-     *     "render_delimiters": false
+     *     "render_delimiters": "d m y"
      * })
-     * @Form\Required(false)
-     * @Form\Type("\Common\Form\Elements\InputFilters\DateNotInFuture")
+     * @Form\Type("DateSelect")
+     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $prohibitionDate = null;
 
@@ -61,14 +63,17 @@ class ProhibitionFields
     public $prohibitionType = null;
 
     /**
-     * @Form\Attributes({"id":"dob"})
+     * @Form\Attributes({"id":"clearedDate"})
      * @Form\Options({
      *     "label": "Date cleared",
      *     "create_empty_option": true,
-     *     "render_delimiters": false
+     *     "render_delimiters": "d m y"
      * })
      * @Form\Required(false)
-     * @Form\Type("\Common\Form\Elements\InputFilters\DateNotRequiredNotInFuture")
+     * @Form\Type("DateSelect")
+     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $clearedDate = null;
 
@@ -76,7 +81,6 @@ class ProhibitionFields
      * @Form\Attributes({"class":"","id":""})
      * @Form\Options({"label":"Location prohibition issued"})
      * @Form\Required(false)
-     * @Form\AllowEmpty(true)
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":255}})

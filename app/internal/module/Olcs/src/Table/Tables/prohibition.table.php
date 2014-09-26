@@ -9,7 +9,7 @@ return array(
             'actions' => array(
                 'add' => array('class' => 'primary'),
                 'edit' => array('requireRows' => true),
-                'delete' => array('class' => 'warning', 'requireRows' => true)
+                'delete' => array('class' => 'secondary', 'requireRows' => true)
             )
         ),
         'paginate' => array(
@@ -30,8 +30,8 @@ return array(
             'formatter' => function ($data, $column) {
                     $column['formatter'] = 'Date';
                     return '<a href="' . $this->generateUrl(
-                        array('action' => 'edit', 'id' => $data['id']),
-                        'case_prohibition',
+                        array('prohibition' => $data['id']),
+                        'case_prohibition_defect',
                         true
                     ) . '">' . $this->callFormatter($column, $data) . '</a>';
             },

@@ -9,7 +9,7 @@ return array(
             'actions' => array(
                 'add' => array('class' => 'primary'),
                 'edit' => array('requireRows' => true),
-                'delete' => array('class' => 'warning', 'requireRows' => true)
+                'delete' => array('class' => 'secondary', 'requireRows' => true)
             )
         ),
         'paginate' => array(
@@ -31,8 +31,8 @@ return array(
             'title' => 'Case Number',
             'formatter' => function ($row) {
                 return '<a href="' . $this->generateUrl(
-                    array('case' => $row['id'], 'tab' => 'overview'),
-                    'case_manage',
+                    array('case' => $row['id'], 'action' => 'overview'),
+                    'case',
                     true
                 ) . '">' . $row['id'] . '</a>';
             },
@@ -40,8 +40,12 @@ return array(
         ),
         array(
             'title' => 'Case type',
-            'formatter' => function ($row) {
-                return $row['caseType']['id'];
+            'formatter' => function ($row, $column, $sm) {
+                if (isset($row['caseType']['id'])) {
+                    return $sm->get('translator')->translate($row['caseType']['id']);
+                } else {
+                    return 'Not set';
+                }
             },
             'sort' => 'caseType'
         ),

@@ -1,0 +1,17 @@
+<?php
+
+$currentSection = $this->navigation('navigation')->findOneBy('active', 1);
+$currentSectionParent = $currentSection->getParent();
+
+$case = $this->placeholder('case')->getValue();
+
+?>
+
+<div class="one-fifth--left">
+    <h4><?php echo $this->translate($currentSection->getLabel()); ?></h4>
+    <?php echo $this->navigation($currentSectionParent)->menu()->setPartial('layout/partials/subNavigation'); ?>
+</div>
+<div class="three-fifths">
+    <?php echo $this->flashMessengerAll(); ?>
+    <?php echo $this->content; ?>
+</div>

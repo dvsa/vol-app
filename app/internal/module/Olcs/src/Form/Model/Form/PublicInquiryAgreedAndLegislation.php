@@ -9,16 +9,16 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("Public inquiry Agreed and Legislation")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
- * @Form\InputFilter("Common\Form\InputFilter")
+ * @Form\Options({"prefer_form_input_filter": true})
  */
 class PublicInquiryAgreedAndLegislation
 {
     /**
-     * @Form\Name("main")
+     * @Form\Name("fields")
      * @Form\Options({"label":""})
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\PublicInquiryAgreedAndLegislationMain")
      */
-    public $main;
+    public $fields;
 
     /**
      * @Form\Name("form-actions")

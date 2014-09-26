@@ -1,11 +1,7 @@
 $(function() {
   var form = "[name=tasks-home]";
-
-  OLCS.tableHandler({
-    table: ".table__form",
-    container: ".table__form",
-    filter: ".table__form"
-  });
+  var reassignHandler;
+  var closeHandler;
 
   OLCS.formHandler({
     // the form to bind to
@@ -33,7 +29,7 @@ $(function() {
     url: "/list/task-sub-categories"
   });
 
-  OLCS.conditionalButton({
+  reassignHandler = OLCS.conditionalButton({
     form: ".table__form",
     label: "Re-assign Task",
     predicate: function(length, callback) {
@@ -41,7 +37,7 @@ $(function() {
     }
   });
 
-  OLCS.conditionalButton({
+  closeHandler = OLCS.conditionalButton({
     form: ".table__form",
     label: "Close Task",
     predicate: function(length, callback) {
@@ -49,24 +45,8 @@ $(function() {
     }
   });
 
-  /**
-   * Non component logic; bridge the table controls to the form
-   */
-  $(document).on(
-    "click",
-    ".table__form .sortable a, .table__form .results-settings a",
-    function(e) {
-      e.preventDefault();
-
-      queryParams = OLCS.queryString.parse(
-        $(this).attr("href")
-      );
-
-      $.each(["sort", "order", "limit"], function(k, v) {
-        if (queryParams[v]) {
-          $("#" + v).val(queryParams[v]);
-        }
-      });
-    }
-  );
+  OLCS.eventEmitter.on("update:.table__form", function() {
+    reassignHandler.check();
+    closeHandler.check();
+  });
 });

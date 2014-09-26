@@ -42,8 +42,6 @@ class VehicleController extends AbstractLicenceDetailsController
     /**
      * Save the vehicle
      *
-     * @todo might be able to combine these 2 methods now
-     *
      * @param array $data
      * @param string $service
      */

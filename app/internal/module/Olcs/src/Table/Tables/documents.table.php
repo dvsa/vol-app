@@ -8,8 +8,9 @@ return array(
         'crud' => array(
             'actions' => array(
                 'upload' => array('class' => 'primary'),
+                'New letter' => array(),
                 'edit' => array('requireRows' => true),
-                'delete' => array('class' => 'warning', 'requireRows' => true)
+                'delete' => array('class' => 'secondary', 'requireRows' => true)
             )
         ),
         'paginate' => array(
@@ -20,17 +21,21 @@ return array(
     ),
     'attributes' => array(
     ),
+
     'columns' => array(
         array(
             'title' => 'Description',
             'name' => 'description',
             'sort' => 'description',
             'formatter' => function ($data, $column) {
-                return '<a href="' . $this->generateUrl(
-                    array('action' => 'filename', 'filename' => $data['filename']),
-                    'document_retrieve',
-                    true
-                ) . '" target=\'_new\'>' . $data['description'] . '</a>';
+                $url = $this->generateUrl(
+                    array(
+                        'id' => $data['document'],
+                        'filename' => $data['filename']
+                    ),
+                    'fetch_document'
+                );
+                return '<a href="' . $url . '">' . $data['description'] . '</a>';
             },
         ),
         array(
@@ -43,7 +48,7 @@ return array(
             'name' => 'documentSubCategoryName',
             'sort' => 'documentSubCategoryName',
             'formatter' => function ($data, $column) {
-                return $data['documentSubCategoryName'] . ($data['isDigital'] == 1?' (digital)':"");
+                return $data['documentSubCategoryName'] . ($data['isDigital'] == 1 ? ' (digital)' : '');
             },
         ),
         array(

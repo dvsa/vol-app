@@ -7,36 +7,19 @@ use Zend\Form\Annotation as Form;
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("appeal")
+ * @Form\Options({"label":"Appeal"})
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
- * @Form\InputFilter("Common\Form\InputFilter")
+ * @Form\Options({"prefer_form_input_filter": true})
  */
 class Appeal
 {
     /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $case = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $id = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $version = null;
-
-    /**
-     * @Form\Name("details")
+     * @Form\Name("fields")
      * @Form\Options({"label":"Appeal Details"})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\Details")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\Appeal")
      */
-    public $details = null;
+    public $fields = null;
 
     /**
      * @Form\Name("form-actions")

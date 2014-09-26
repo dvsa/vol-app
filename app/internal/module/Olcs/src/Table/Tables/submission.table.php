@@ -10,7 +10,7 @@ return array(
             'actions' => array(
                 'add' => array('class' => 'primary'),
                 'edit' => array('requireRows' => true),
-                'delete' => array('class' => 'warning', 'requireRows' => true)
+                'delete' => array('class' => 'secondary', 'requireRows' => true)
             )
         ),
         'paginate' => array(
@@ -18,7 +18,8 @@ return array(
                 'default' => 10,
                 'options' => array(10, 25, 50)
             )
-        )
+        ),
+        'useQuery' => true
     ),
     'attributes' => array(
     ),
@@ -32,11 +33,12 @@ return array(
             'title' => 'Submission #',
             'formatter' => function ($row) {
                 return '<a href="' . $this->generateUrl(
-                    array('id' => $row['id'], 'action' => 'edit'),
+                    array('submission' => $row['id'], 'action' => 'edit'),
                     'submission',
                     true
                 ) . '">' . $row['id'] . '</a>';
-            }
+            },
+            'sort' => 'id'
         ),
         array(
             'title' => 'Type',
@@ -49,8 +51,9 @@ return array(
         array(
             'title' => 'Date created',
             'formatter' => function ($row) {
-                return date('d/m/Y', strtotime($row['createdOn']));
-            }
+                return date('d/m/Y H:i:s', strtotime($row['createdOn']));
+            },
+            'sort' => 'createdOn'
         ),
         array(
             'title' => 'Date closed',
