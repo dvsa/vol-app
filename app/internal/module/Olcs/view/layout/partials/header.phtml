@@ -1,10 +1,10 @@
 <div class="page-header">
   <div class="page-header__wrapper">
     <div class="user-header">
-      <?php  echo $this->navigation('navigation') // <-- Update this!!
-      ->breadcrumbs()
-      ->setMinDepth(0)
-      ->setPartial(array('layout/partials/breadcrumbs.phtml', 'Olcs'));
+      <?php  echo $this->navigation('navigation')
+          ->breadcrumbs()
+          ->setMinDepth(0)
+          ->setPartial(array('layout/partials/breadcrumbs.phtml', 'Olcs'));
       ?>
       <ul class="user-menu">
         <li class="user-menu__item">Sam Quayle:</li>
@@ -13,8 +13,17 @@
       </ul>
     </div><!-- user-header -->
 
-    <h1><?php echo (isset($pageTitle) ? $this->translate($pageTitle) : ''); ?></h1>
-    <h3 class="page-header__subtitle"><?php echo (isset($pageSubTitle) ? $this->translate($pageSubTitle) : ''); ?></h3>
+    <?php if (isset($pageTitle) && !empty($pageTitle)): ?>
+    <h1><?php echo $this->translate($pageTitle); ?></h1>
+    <?php elseif (!empty($this->pageTitle())): ?>
+    <h1><?php echo $this->pageTitle(); ?></h1>
+    <?php endif; ?>
+
+    <?php if (isset($pageSubTitle) && !empty($pageSubTitle)): ?>
+    <h3 class="page-header__subtitle"><?php echo $this->translate($pageSubTitle); ?></h3>
+    <?php elseif (!empty($this->pageSubtitle())): ?>
+    <h3 class="page-header__subtitle"><?php echo $this->pageSubtitle(); ?></h3>
+    <?php endif; ?>
 
   </div><!-- end .page-header__wrapper-->
 </div><!-- end .page-header-->

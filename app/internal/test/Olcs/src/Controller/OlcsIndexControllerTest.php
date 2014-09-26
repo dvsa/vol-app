@@ -19,24 +19,26 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
     private $taskSearchViewExpectedData = [
         'assignedToUser'  => 1,
         'assignedToTeam'  => 2,
-        'date'  => 'today',
-        'status' => 'open',
-        'sort' => 'actionDate',
-        'order' => 'ASC',
-        'page' => 1,
-        'limit' => 10,
-        'actionDate' => ''
-    ];
-
-    private $taskSearchViewExpectedDataVar1 = [
-        'assignedToTeam'  => 2,
-        'date'  => 'today',
-        'status' => 'open',
+        'date'  => 'tdt_today',
+        'status' => 'tst_open',
         'sort' => 'actionDate',
         'order' => 'ASC',
         'page' => 1,
         'limit' => 10,
         'actionDate' => '',
+        'isClosed' => false
+    ];
+
+    private $taskSearchViewExpectedDataVar1 = [
+        'assignedToTeam'  => 2,
+        'date'  => 'tdt_today',
+        'status' => 'tst_open',
+        'sort' => 'actionDate',
+        'order' => 'ASC',
+        'page' => 1,
+        'limit' => 10,
+        'actionDate' => '',
+        'isClosed' => false
     ];
 
     private $standardListData = [
@@ -48,25 +50,27 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
         'assignedToUser' => 1,
         'assignedToTeam'  => 2,
         'team'  => 2,
-        'date'  => 'today',
-        'status' => 'open',
+        'date'  => 'tdt_today',
+        'status' => 'tst_open',
         'sort' => 'name',
         'order' => 'ASC',
         'page' => 1,
         'limit' => 100,
         'actionDate' => '',
+        'isClosed' => false
     ];
 
     private $extendedListDataVariation1 = [
         'assignedToTeam'  => 2,
-        'date'  => 'today',
-        'status' => 'open',
+        'date'  => 'tdt_today',
+        'status' => 'tst_open',
         'sort' => 'name',
         'order' => 'ASC',
         'page' => 1,
         'limit' => 100,
         'actionDate' => '',
-        'team'  => 2
+        'team'  => 2,
+        'isClosed' => false
     ];
 
     private $altListData = [
@@ -196,7 +200,7 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnSelf());
 
         $tableMock = $this->getMock('\stdClass', ['render', 'getSettings', 'setSettings']);
-                $settings = [
+        $settings = [
             'crud' => [
                 'actions' => [
                     'create task' => [],
@@ -226,10 +230,9 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
-     * Test task filter action invalid type
-     * @group task
+     * Test entity filter action invalid type
      */
-    public function testTaskFilterActionInvalidType()
+    public function testEntityFilterActionInvalidType()
     {
         $params = $this->getMock('\stdClass', ['fromRoute']);
 
@@ -245,7 +248,7 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
         try {
             $this->controller->entityListAction();
         } catch (\Exception $e) {
-            $this->assertEquals('Invalid task filter key: invalid', $e->getMessage());
+            $this->assertEquals('Invalid entity filter key: invalid', $e->getMessage());
             return;
         }
 
@@ -253,10 +256,9 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
-     * Test task filter action valid type
-     * @group task
+     * Test entity filter action valid type
      */
-    public function testTaskEntityListActionValidType()
+    public function testEntityListActionValidType()
     {
         $params = $this->getMock('\stdClass', ['fromRoute']);
 

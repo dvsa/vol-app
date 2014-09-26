@@ -31,8 +31,31 @@ class LicenceController extends AbstractController
 
     public function casesAction()
     {
+        $this->checkForCrudAction('case', [], 'case');
+
         $view = $this->getViewWithLicence();
-        $view->setTemplate('licence/index');
+
+        $params = [
+            'licence' => $this->params()->fromRoute('licence'),
+            'page'    => $this->params()->fromRoute('page', 1),
+            'sort'    => $this->params()->fromRoute('sort', 'id'),
+            'order'   => $this->params()->fromRoute('order', 'desc'),
+            'limit'   => $this->params()->fromRoute('limit', 10),
+        ];
+
+        $bundle = array(
+            'children' => array(
+                'caseType' => array(
+                    'properties' => 'ALL'
+                )
+            )
+        );
+
+        $results = $this->makeRestCall('Cases', 'GET', $params, $bundle);
+
+        $view->{'table'} = $this->getTable('case', $results, $params);
+
+        $view->setTemplate('licence/cases');
 
         return $this->renderView($view);
     }
@@ -47,17 +70,31 @@ class LicenceController extends AbstractController
 
     public function documentsAction()
     {
+        // @NOTE only supported action thus far is to
+        // generate a document, so no need to check anything
+        // other than post as there's no other action to take
+        if ($this->getRequest()->isPost()) {
+            $action = strtolower($this->params()->fromPost('action'));
+
+            $params = [
+                'licence' => $this->getFromRoute('licence')
+            ];
+
+            return $this->redirect()->toRoute(
+                'licence/documents/generate',
+                $params
+            );
+        }
+
         $this->pageLayout = 'licence';
 
         $filters = $this->mapDocumentFilters(
             array('licenceId' => $this->getFromRoute('licence'))
         );
 
-        $table = $this->getDocumentsTable($filters, false);
-
         $view = $this->getViewWithLicence(
             array(
-                'table' => $table->render(),
+                'table' => $this->getDocumentsTable($filters),
                 'form'  => $this->getDocumentForm($filters),
                 'inlineScript' => $this->loadScripts(['documents'])
             )

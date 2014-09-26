@@ -33,7 +33,6 @@ class IndexController extends AbstractController
 
     public function indexAction()
     {
-
         $redirect = $this->processTasksActions();
         if ($redirect) {
             return $redirect;
@@ -41,11 +40,12 @@ class IndexController extends AbstractController
 
         $filters = $this->mapTaskFilters();
 
+        $this->loadScripts(['tasks', 'table-actions']);
+
         $view = new ViewModel(
             array(
                 'table' => $this->getTaskTable($filters, true, true),
                 'form'  => $this->getTaskForm($filters),
-                'inlineScript' => $this->loadScripts(['tasks'])
             )
         );
         $view->setTemplate('index/home');
@@ -88,7 +88,7 @@ class IndexController extends AbstractController
 
         if (!isset($map[$key])) {
             // handle separately?
-            throw new \Exception("Invalid task filter key: " . $key);
+            throw new \Exception("Invalid entity filter key: " . $key);
         }
 
         $lookup = $map[$key];

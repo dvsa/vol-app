@@ -118,7 +118,7 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             'licenceId' => 1234
         );
 
-        $this->controller->expects($this->at(2))
+        $this->controller->expects($this->at(3))
             ->method('makeRestCall')
             ->with('DocumentSearchView', 'GET', $expectedParams)
             ->will($this->returnValue([]));
@@ -151,17 +151,17 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             'refDataCategoryId' => 'document_type'
         ];
 
-        $this->controller->expects($this->at(6))
+        $this->controller->expects($this->at(7))
             ->method('makeRestCall')
             ->with('Category', 'GET', $altListData)
             ->will($this->returnValue($altResponse));
 
-        $this->controller->expects($this->at(7))
+        $this->controller->expects($this->at(8))
             ->method('makeRestCall')
             ->with('DocumentSubCategory', 'GET', $extendedListData)
             ->will($this->returnValue($altResponse));
 
-        $this->controller->expects($this->at(8))
+        $this->controller->expects($this->at(9))
             ->method('makeRestCall')
             ->with('RefData', 'GET', $refDataList)
             ->will($this->returnValue($altResponse));
@@ -201,7 +201,7 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
     public function testDocumentsActionAjax()
     {
 
-        $this->controller->expects($this->at(2))
+        $this->controller->expects($this->at(3))
             ->method('makeRestCall')
             ->will($this->returnValue([]));
 
@@ -256,22 +256,22 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             'refDataCategoryId' => 'document_type'
         ];
 
-        $this->controller->expects($this->at(6))
+        $this->controller->expects($this->at(7))
             ->method('makeRestCall')
             ->with('Category', 'GET', $altListData)
             ->will($this->returnValue($altResponse));
 
-        $this->controller->expects($this->at(7))
+        $this->controller->expects($this->at(8))
             ->method('makeRestCall')
             ->with('DocumentSubCategory', 'GET', $extendedListData)
             ->will($this->returnValue($altResponse));
 
-        $this->controller->expects($this->at(8))
+        $this->controller->expects($this->at(9))
             ->method('makeRestCall')
             ->with('RefData', 'GET', $refDataList)
             ->will($this->returnValue($altResponse));
 
-        $this->controller->expects($this->at(10))
+        $this->controller->expects($this->at(11))
             ->method('makeRestCall')
             ->will($this->returnValue($response));
 
@@ -348,5 +348,45 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue($table));
 
         $this->controller->busAction();
+    }
+
+    /**
+     * @NOTE this test mirrors the controller which so far doesn't actually
+     * care about the action; it always redirects to generate. Update the
+     * name of it when/if it cares
+     */
+    public function testDocumentsActionWithPostAlwaysRedirectsToGenerate()
+    {
+        $this->request->expects($this->any())
+            ->method('isPost')
+            ->will($this->returnValue(true));
+
+        $params = $this->getMock('\stdClass', ['fromPost']);
+
+        $params->expects($this->once())
+            ->method('fromPost')
+            ->with('action')
+            ->will($this->returnValue('new letter'));
+
+        $this->controller->expects($this->once())
+            ->method('params')
+            ->will($this->returnValue($params));
+
+        $redirect = $this->getMock('\stdClass', ['toRoute']);
+
+        $redirect->expects($this->once())
+            ->method('toRoute')
+            ->with('licence/documents/generate', ['licence' => 1234]);
+
+        $this->controller->expects($this->once())
+            ->method('redirect')
+            ->will($this->returnValue($redirect));
+
+        $this->controller->expects($this->any())
+            ->method('getFromRoute')
+            ->with('licence')
+            ->will($this->returnValue(1234));
+
+        $response = $this->controller->documentsAction();
     }
 }

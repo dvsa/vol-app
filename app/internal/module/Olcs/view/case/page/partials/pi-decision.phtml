@@ -2,28 +2,25 @@
 
     <h3>Decision</h3>
     <div class="actions-container">
-        <a href="<?php //echo $this->url($this->route, ['action' => 'edit', 'id' => $pi['id'], 'section' => 'decision'], [], true); ?>" class="action--secondary" />Edit</a>
+        <a href="<?php echo $this->url('case_pi_decision', ['action' => 'edit'], [], true); ?>" class="action--secondary" />Edit</a>
     </div>
 
     <div style="clear: both"></div>
 
     <?php
 
-    // Latest hearing.
-    $hearing = end($pi['piHearings']);
-
     $summary = [
         'decisionPresidingTc' => [
             'label' => 'Presiding commissioner / regulator',
-            'value' => $hearing['presidingTc']['name']
+            'value' => $pi['decidedByTc']['name']
         ],
         'presidedByRole' => [
             'label' => 'Presiding commissioner / regulator role',
-            'value' => $this->translate($hearing['presidedByRole']['id'])
+            'value' => $pi['decidedByTcRole']['description']
         ],
         'decisionType' => [
             'label' => 'Decision',
-            'value' => is_array($pi['decisions']) ? implode(', ', array_map(function($item){return $item['sectionCode'];}, $pi['decisions'])) : 'None selected',
+            'value' => $this->piListData($pi['decisions'])
         ],
         'whitnesses' => [
             'label' => 'Witnesses',
@@ -31,12 +28,17 @@
         ],
         'decisionDate' => [
             'label' => 'Date of decision',
-            'value' => isset($pi['decisionDate']) ? date('m/d/Y', strtotime($pi['decisionDate'])) : 'dd-mm-yyyy',
-        ]/* ,
-        'legislation' => [
-            'label' => 'Decision Definition',
-            'value' => is_array($pi['decisionReasons']) ? implode(', ', array_map(function($item){return $item['sectionCode'];}, $pi['decisionReasons'])) : 'None selected',
-        ], */
+            'value' => isset($pi['decisionDate']) ? date('d/m/Y', strtotime($pi['decisionDate'])) : 'dd/mm/yyyy',
+        ],
+        'notificationDate' => [
+            'label' => 'Date of notification',
+            'value' => isset($pi['notificationDate']) ? date('d/m/Y', strtotime($pi['notificationDate'])) : 'dd/mm/yyyy',
+        ],
+        'decisionNotes' => [
+            'label' => "Details to be published",
+            'value' => $pi['decisionNotes']
+        ]
+
     ];
 
     echo $this->render('partials/summary/summary__list', ['items' => $summary, 'title' => 'Agreement and legislation']); ?>

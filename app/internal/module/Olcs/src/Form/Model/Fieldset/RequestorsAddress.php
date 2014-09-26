@@ -10,20 +10,8 @@ use Zend\Form\Annotation as Form;
  * @Form\Type("\Common\Form\Elements\Types\Address")
  * @Form\Options({"label":"Requestors Address"})
  */
-class RequestorsAddress
+class RequestorsAddress extends Base
 {
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $id = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $version = null;
-
     /**
      * @Form\Options({"label":"Postcode search"})
      * @Form\Required(false)
@@ -88,8 +76,8 @@ class RequestorsAddress
      *     "label": "Country",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category",
-     *     "category": "countries"
+     *     "help-block": "Please select a country",
+     *     "service_name": "Common\Service\Data\Country"
      * })
      * @Form\Type("DynamicSelect")
      */

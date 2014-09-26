@@ -6,22 +6,22 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
- * @Form\Name("main")
+ * @Form\Name("fields")
  * @Form\Attributes({"class":"actions-container"})
  */
-class RevokeMain
+class RevokeMain extends CaseBase
 {
     /**
-     * @Form\Attributes({"id":"","placeholder":"","multiple":"multiple"})
+     * @Form\Attributes({"id":"","placeholder":"","class":"long tall", "multiple" : true})
      * @Form\Options({
      *     "label": "Select legislation",
-     *     "value_options": {
-     *
-     *     },
+     *     "service_name": "Olcs\Service\Data\PublicInquiryReason",
+     *     "context": {"is_propose_to_revoke" : 1},
      *     "disable_inarray_validator": false,
-     *     "help-block": "Use CTRL to select multiple"
+     *     "help-block": "Use CTRL to select multiple",
+     *     "use_groups":true
      * })
-     * @Form\Type("\Zend\Form\Element\Select")
+     * @Form\Type("DynamicSelect")
      */
     public $reasons = null;
 
@@ -29,14 +29,12 @@ class RevokeMain
      * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
      *     "label": "TC/DTC agreed",
-     *     "value_options": {
-     *
-     *     },
+     *     "service_name": "Olcs\Service\Data\PresidingTc",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category"
+     *     "help-block": "Please select a category",
      * })
-     * @Form\Type("\Zend\Form\Element\Select")
+     * @Form\Type("DynamicSelect")
      */
     public $presidingTc = null;
 
@@ -80,22 +78,4 @@ class RevokeMain
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5,"max":4000}})
      */
     public $comment = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $case = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $id = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $version = null;
 }

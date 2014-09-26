@@ -26,20 +26,32 @@ return array(
             'title' => 'Link',
             'formatter' => 'TaskIdentifier',
             'name' => 'link',
+            'sort' => 'linkDisplay',
         ),
         array(
             'title' => 'Category',
             'name' => 'categoryName',
+            'sort' => 'categoryName',
         ),
         array(
             'title' => 'Sub category',
             'name' => 'taskSubCategoryName',
+            'sort' => 'taskSubCategoryName',
         ),
         array(
             'title' => 'Description',
             'formatter' => function ($row) {
-                return '<a href=#>' . $row['description'] . '</a>';
-            }
+                $url = $this->generateUrl(
+                    array('task' => $row['id'], 'action' => 'edit'),
+                    'task_action'
+                );
+                return '<a href="'
+                    . $url
+                    . '" class=js-modal-ajax>'
+                    . $row['description']
+                    . '</a>';
+            },
+            'sort' => 'description',
         ),
         array(
             'title' => 'Date',
@@ -54,11 +66,13 @@ return array(
                     return 'Unassigned';
                 }
                 return $row['ownerName'];
-            }
+            },
+            'sort' => 'ownerName',
         ),
         array(
             'title' => 'Name',
             'name' => 'name',
+            'sort' => 'name',
         ),
         array(
             'title' => '',

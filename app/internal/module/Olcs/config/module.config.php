@@ -14,24 +14,37 @@ return array(
             'DefaultController' => 'Olcs\Olcs\Placeholder\Controller\DefaultController',
             'IndexController' => 'Olcs\Controller\IndexController',
             'SearchController' => 'Olcs\Controller\SearchController',
-            'CaseController' => 'Olcs\Controller\CaseController',
-            'CaseStatementController' => 'Olcs\Controller\CaseStatementController',
-            'CaseAppealController' => 'Olcs\Controller\CaseAppealController',
-            'CaseComplaintController' => 'Olcs\Controller\CaseComplaintController',
-            'CaseConvictionController' => 'Olcs\Controller\CaseConvictionController',
+            'CaseController' => 'Olcs\Controller\Cases\CaseController',
+            'CaseStatementController' => 'Olcs\Controller\Cases\Statement\StatementController',
+            'CaseHearingAppealController' => 'Olcs\Controller\Cases\Hearing\HearingAppealController',
+            'CaseAppealController' =>
+                'Olcs\Controller\Cases\Hearing\AppealController',
+            'CaseComplaintController' => 'Olcs\Controller\Cases\Complaint\ComplaintController',
+            'CaseConvictionController' => 'Olcs\Controller\Cases\Conviction\ConvictionController',
+            'CaseSubmissionController' => 'Olcs\Controller\Cases\Submission\SubmissionController',
             'SubmissionController' => 'Olcs\Controller\Submission\SubmissionController',
-            'CaseStayController' => 'Olcs\Controller\CaseStayController',
-            'CasePenaltyController' => 'Olcs\Controller\CasePenaltyController',
-            'CaseProhibitionController' => 'Olcs\Controller\CaseProhibitionController',
-            'CaseProhibitionDefectController' => 'Olcs\Controller\CaseProhibitionDefectController',
-            'CaseAnnualTestHistoryController' => 'Olcs\Controller\CaseAnnualTestHistoryController',
+            'CaseStayController' =>
+                'Olcs\Controller\Cases\Hearing\StayController',
+            'CasePenaltyController' => 'Olcs\Controller\Cases\Penalty\PenaltyController',
+            'CaseProhibitionController' => 'Olcs\Controller\Cases\Prohibition\ProhibitionController',
+            'CaseProhibitionDefectController' => 'Olcs\Controller\Cases\Prohibition\ProhibitionDefectController',
+            'CaseAnnualTestHistoryController' => 'Olcs\Controller\Cases\AnnualTestHistory\AnnualTestHistoryController',
             'SubmissionNoteController' => 'Olcs\Controller\Submission\SubmissionNoteController',
             'CaseImpoundingController' => 'Olcs\Controller\CaseImpoundingController',
-            'CaseConditionUndertakingController' => 'Olcs\Controller\CaseConditionUndertakingController',
+            'CaseConditionUndertakingController'
+                => 'Olcs\Controller\Cases\ConditionUndertaking\ConditionUndertakingController',
             'CaseRevokeController' => 'Olcs\Controller\CaseRevokeController',
             'CasePiController' => 'Olcs\Controller\CasePiController',
+            'CasePublicInquiryController' => 'Olcs\Controller\Cases\PublicInquiry\PublicInquiryController',
+            'PublicInquiry\SlaController' => 'Olcs\Controller\Cases\PublicInquiry\SlaController',
+            'PublicInquiry\AgreedAndLegislationController'
+                => 'Olcs\Controller\Cases\PublicInquiry\AgreedAndLegislationController',
+            'PublicInquiry\RegisterDecisionController'
+                => 'Olcs\Controller\Cases\PublicInquiry\RegisterDecisionController',
             'CasePiHearingController' => 'Olcs\Controller\Cases\Pi\HearingController',
-            'DocumentController' => 'Olcs\Controller\DocumentController',
+            'DocumentController' => 'Olcs\Controller\Document\DocumentController',
+            'DocumentGenerationController' => 'Olcs\Controller\Document\DocumentGenerationController',
+            'DocumentUploadController' => 'Olcs\Controller\Document\DocumentUploadController',
             'DefendantSearchController' => 'Olcs\DefendantSearchController',
             'LicenceController' => 'Olcs\Controller\Licence\LicenceController',
             'TaskController' => 'Olcs\Controller\TaskController',
@@ -71,6 +84,9 @@ return array(
             'BusProcessingNoteController' => 'Olcs\Controller\Bus\Processing\BusProcessingNoteController',
             'BusFeesController' => 'Olcs\Controller\Bus\Fees\BusFeesController',
             'BusFeesPlaceholderController' => 'Olcs\Controller\Bus\Fees\BusFeesPlaceholderController',
+            'CaseProcessingController' => 'Olcs\Controller\Cases\Processing\ProcessingController',
+            'CaseDecisionsController' => 'Olcs\Controller\Cases\Processing\DecisionsController',
+            'CaseRevokeController' => 'Olcs\Controller\Cases\Processing\RevokeController',
         )
     ),
     'view_manager' => array(
@@ -85,7 +101,8 @@ return array(
             'error/index'             => __DIR__ . '/../view/error/index.phtml'
         ),
         'template_path_stack' => array(
-            'olcs/view' => dirname(__DIR__) . '/view',
+            'olcs' => dirname(__DIR__) . '/view',
+            //'olcs/view' => dirname(__DIR__) . '/view',
         ),
         'strategies' => array(
             'ViewJsonStrategy'
@@ -93,9 +110,14 @@ return array(
     ),
     'view_helpers' => array(
         'invokables' => array(
-
-            'tableFilters' => 'Olcs\View\Helper\TableFilters'
-
+            'pageTitle'    => 'Olcs\View\Helper\PageTitle',
+            'pageSubtitle' => 'Olcs\View\Helper\PageSubtitle',
+            'tableFilters' => 'Olcs\View\Helper\TableFilters',
+            'piListData'   => 'Olcs\View\Helper\PiListData',
+            'formSubmissionSections' => 'Olcs\Form\View\Helper\SubmissionSections',
+        ),
+        'delegators' => array(
+            'formElement' => array('Olcs\Form\View\Helper\FormElementDelegatorFactory')
         )
     ),
     'local_forms_path' => array(
@@ -121,6 +143,8 @@ return array(
                 return $helper;
             },
             'Olcs\Service\Data\PublicInquiryReason' => 'Olcs\Service\Data\PublicInquiryReason',
+            'Olcs\Service\Data\PublicInquiryDecision' => 'Olcs\Service\Data\PublicInquiryDecision',
+            'Olcs\Service\Data\PublicInquiryDefinition' => 'Olcs\Service\Data\PublicInquiryDefinition',
             'Olcs\Service\Data\Licence' => 'Olcs\Service\Data\Licence',
             'Olcs\Service\Data\User' => 'Olcs\Service\Data\User',
             'Olcs\Service\Data\PresidingTc' => 'Olcs\Service\Data\PresidingTc'
@@ -145,7 +169,8 @@ return array(
     ),
     'form_elements' =>[
         'factories' => [
-            'PublicInquiryReason' => 'Olcs\Form\Element\PublicInquiryReasonFactory'
+            'PublicInquiryReason' => 'Olcs\Form\Element\PublicInquiryReasonFactory',
+            'SubmissionSections' => 'Olcs\Form\Element\SubmissionSectionsFactory'
         ]
     ]
 
