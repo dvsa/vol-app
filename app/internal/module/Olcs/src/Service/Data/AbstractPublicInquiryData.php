@@ -4,7 +4,6 @@ namespace Olcs\Service\Data;
 
 use Common\Service\Data\AbstractData;
 use Common\Service\Data\ListDataInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Class PublicInquiryReason
@@ -12,43 +11,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  */
 abstract class AbstractPublicInquiryData extends AbstractData implements ListDataInterface
 {
-    /**
-     * @var \Olcs\Service\Data\Licence
-     */
-    protected $licenceService;
-
-    /**
-     * @param \Olcs\Service\Data\Licence $licenceService
-     * @return $this
-     */
-    public function setLicenceService($licenceService)
-    {
-        $this->licenceService = $licenceService;
-        return $this;
-    }
-
-    /**
-     * @return \Olcs\Service\Data\Licence
-     */
-    public function getLicenceService()
-    {
-        return $this->licenceService;
-    }
-
-    /**
-     * Still might not be the best place for this, however its the only place it's currently used
-     *
-     * @return array
-     */
-    protected function getLicenceContext()
-    {
-        $licence = $this->getLicenceService()->fetchLicenceData();
-
-        return [
-            'isNi' => $licence['niFlag'],
-            'goodsOrPsv' => $licence['goodsOrPsv']['id']
-        ];
-    }
+    use LicenceServiceTrait;
 
     /**
      * Fetch back a set of options for a drop down list, context passed is parameters which may need to be passed to the
@@ -97,21 +60,6 @@ abstract class AbstractPublicInquiryData extends AbstractData implements ListDat
         }
 
         return $this->getData('pid');
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        $service = parent::createService($serviceLocator);
-
-        $service->setLicenceService($serviceLocator->get('Olcs\Service\Data\Licence'));
-
-        return $service;
     }
 
     /**
