@@ -1,7 +1,7 @@
 <?php
 $details = $this->placeholder('details')->getValue();
 
-$noRender = array('createdOn', 'lastModifiedOn', 'createdBy', 'lastModifiedBy');
+$noRender = array('createdOn', 'lastModifiedOn', 'createdBy', 'lastModifiedBy', 'id', 'version');
 
 ?>
 
@@ -13,7 +13,11 @@ $noRender = array('createdOn', 'lastModifiedOn', 'createdBy', 'lastModifiedBy');
 
             <dt><?php echo $this->translate($key);?></dt>
 
+            <?php if (strstr(strtolower($key), 'date')): ?>
+            <dd><?php echo date('d/m/Y', strtotime($value)); ?></dd>
+            <?php else: ?>
             <dd><?php echo $value; ?></dd>
+            <?php endif; ?>
 
             <?php endif; ?>
 
