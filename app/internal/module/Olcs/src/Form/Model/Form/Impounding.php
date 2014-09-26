@@ -21,25 +21,10 @@ class Impounding
     public $caseBase = null;
 
     /**
-     * @Form\Name("application_details")
-     * @Form\Options({"label":"Application details"})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\ApplicationDetails")
+     * @Form\Name("fields")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\ImpoundingFields")
      */
-    public $applicationDetails = null;
-
-    /**
-     * @Form\Name("hearing")
-     * @Form\Options({"label":"Hearing","id":"hearing_fieldset"})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\Hearing")
-     */
-    public $hearing = null;
-
-    /**
-     * @Form\Name("outcome")
-     * @Form\Options({"label":"Outcome"})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\Outcome")
-     */
-    public $outcome = null;
+    public $fields = null;
 
     /**
      * @Form\Name("form-actions")

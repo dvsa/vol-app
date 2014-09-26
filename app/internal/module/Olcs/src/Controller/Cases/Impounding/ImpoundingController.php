@@ -87,9 +87,7 @@ class ImpoundingController extends OlcsController\CrudAbstract
     protected $dataMap = array(
         'main' => array(
             'mapFrom' => array(
-                'application_details',
-                'hearing',
-                'outcome',
+                'fields',
                 'base',
             )
         )
@@ -138,6 +136,14 @@ class ImpoundingController extends OlcsController\CrudAbstract
                     'name'
                 )
             ),
+            'impoundingLegislationTypes' => array(
+                'properties' => 'ALL'
+            ),
         )
     );
+
+    /**
+     * @var array
+     */
+    //protected $inlineScripts = ['impounding'];
 }
