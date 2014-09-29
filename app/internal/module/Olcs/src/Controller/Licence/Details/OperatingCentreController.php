@@ -78,7 +78,7 @@ class OperatingCentreController extends AbstractLicenceDetailsController
     protected function addVariationInfoMessage()
     {
         $this->addCurrentMessage(
-            $this->getSectionService()->formatTranslation(
+            $this->getHelperService('TranslationHelper')->formatTranslation(
                 '%s <a href="' . $this->url()->fromRoute('application-variation') . '">%s</a>',
                 array(
                     'variation-application-text',
