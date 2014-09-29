@@ -929,7 +929,7 @@ return array_merge(
                 ],
                 'defaults' => [
                     'controller' => 'CaseProcessingController',
-                    'action' => 'index'
+                    'action' => 'overview'
                 ]
             ]
         ],
@@ -1023,12 +1023,11 @@ return array_merge(
                 ]
             ]
         ],
-        'case_impounding' => [
+        'case_details_impounding' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/licence/[:licence]/case/[:case]/task/impounding[/:action][/:id]',
+                'route' => '/case/[:case]/impounding[/:action][/:id]',
                 'constraints' => [
-                    'licence' => '[0-9]+',
                     'case' => '[0-9]+',
                     'id' => '[0-9]+'
                 ],

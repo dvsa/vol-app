@@ -110,6 +110,7 @@ class StatementDetails extends CaseBase
      *     "category": "contact_method"
      * })
      * @Form\Type("DynamicSelect")
+     * @Form\AllowEmpty(true)
      */
     public $contactType = null;
 
