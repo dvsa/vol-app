@@ -39,6 +39,7 @@ class ImpoundingFields
     public $applicationReceiptDate = null;
 
     /**
+     * @Form\Required(true)
      * @Form\Attributes({"id":"vrm","placeholder":"","class":"medium"})
      * @Form\Options({
      *     "label": "Vehicle registration mark",
@@ -48,7 +49,7 @@ class ImpoundingFields
      *     "column-size": "sm-5",
      *     "help-block": "Between 2 and 7 characters."
      * })
-     * @Form\Required(false)
+     * 
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Filter({"name":"Zend\Filter\StringToUpper"})
@@ -101,7 +102,8 @@ class ImpoundingFields
     public $hearingDate = null;
 
     /**
-     * @Form\Attributes({"id":"piVenue","placeholder":"","class":"medium"})
+     * @Form\Required(true)
+     * @Form\Attributes({"id":"piVenue","placeholder":"","class":"medium", "required":false})
      * @Form\Options({
      *     "label": "Hearing location",
      *     "service_name": "Olcs\Service\Data\PiVenue",
@@ -109,11 +111,27 @@ class ImpoundingFields
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a category"
      * })
+     *
+     * @Form\AllowEmpty(true)
+     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "impoundingType",
-     *          "context_values": {"impt_paper"},
-     *          "allow_empty": true,
+     *          "context_values": {"impt_hearing"},
+     *          "allow_empty": false,
+     *          "validators": {
+     *              {
+     *                  "name": "ValidateIf",
+     *                  "options":{
+     *                      "context_field": "piVenueOther",
+     *                      "context_values": {""},
+     *                      "allow_empty": false,
+     *                      "validators": {
+     *                          {"name": "\Zend\Validator\NotEmpty"}
+     *                      }
+     *                  }
+     *              }
+     *          }
      *      }
      * })
      * @Form\Type("DynamicSelect")
