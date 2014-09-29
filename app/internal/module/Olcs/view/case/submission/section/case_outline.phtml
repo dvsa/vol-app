@@ -1,0 +1,52 @@
+
+<div class="read-only">
+    <dl>
+        <dt><?php echo $this->translate('Operator name');?></dt>
+        <dd><?php echo isset($this->data['data']['licence']['organisation']['name']) ?
+                $this->data['data']['licence']['organisation']['name'] : '';?></dd>
+        <dt><?php echo $this->translate('Entity');?></dt>
+        <dd><?php echo isset($this->data['data']['licence']['organisation']['type']['todo']) ?
+                $this->data['data']['licence']['organisation']['type']['todo'] : '';?></dd>
+        <dt><?php echo $this->translate('ECMS');?></dt>
+        <dd><?php echo isset($this->data['data']['ecmsNo']) ?
+                $this->data['data']['ecmsNo'] : '';?></dd>
+        <dt><?php echo $this->translate('Business type');?></dt>
+        <dd><?php echo isset($this->data['data']['organisation']['sicCode']['todo']) ?
+                $this->data['data']['organisation']['sicCode']['todo'] : '';?></dd>
+    </dl>
+</div>
+<div class="read-only">
+    <dl>
+        <dt><?php echo $this->translate('Licence number');?></dt>
+        <dd><?php echo isset($this->data['data']['licence']['licNo']) ?
+                $this->data['data']['licence']['licNo'] : '';?></dd>
+        <dt><?php echo $this->translate('Licence start date');?></dt>
+        <dd><?php echo isset($this->data['data']['licence']['grantedDate']) ?
+                $this->data['data']['licence']['grantedDate'] : '';?></dd>
+        <dt><?php echo $this->translate('Licence type');?></dt>
+        <dd><?php echo isset($this->data['data']['licence']['type']) ?
+                $this->data['data']['licence']['type'] : '';?></dd>
+        <dt><?php echo $this->translate('Service standard date');?></dt>
+        <dd><?php echo isset($this->data['data']['licence']['serviceStandardDate']) ?
+                $this->data['data']['licence']['serviceStandardDate'] : '';?></dd>
+        <dt><?php echo $this->translate('Licence status');?></dt>
+        <dd><?php echo isset($this->data['data']['licence']['status']['todo']) ?
+                $this->data['data']['licence']['status']['todo'] : '';?></dd>
+    </dl>
+</div>
+<div class="read-only">
+    <dl>
+        <dt><?php echo $this->translate('Total vehicle authorisation');?></dt>
+        <dd><?php echo isset($this->data['data']['licence']['totAuthVehicles']) ?
+                $this->data['data']['licence']['totAuthVehicles'] : '';?></dd>
+        <dt><?php echo $this->translate('Vehicles in possession');?></dt>
+        <dd><?php echo isset($this->data['data']['licence']['totAuthVehicles']) ?
+                $this->data['data']['licence']['totAuthVehicles'] : '';?></dd>
+        <dt><?php echo $this->translate('Trailer authorisation');?></dt>
+        <dd><?php echo isset($this->data['data']['licence']['totAuthTrailers']) ?
+                $this->data['data']['licence']['totAuthTrailers'] : '';?></dd>
+        <dt><?php echo $this->translate('Trailers in possession');?></dt>
+        <dd><?php echo isset($this->data['data']['licence']['trailersInPossession']) ?
+                $this->data['data']['licence']['trailersInPossession'] : '';?></dd>
+    </dl>
+</div>
