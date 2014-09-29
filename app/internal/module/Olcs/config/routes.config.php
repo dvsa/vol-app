@@ -1026,7 +1026,7 @@ return array_merge(
         'case_details_impounding' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/case/[:case]/task/impounding[/:action][/:id]',
+                'route' => '/case/[:case]/impounding[/:action][/:id]',
                 'constraints' => [
                     'case' => '[0-9]+',
                     'id' => '[0-9]+'
