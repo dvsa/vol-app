@@ -51,7 +51,6 @@ class Appeal extends CaseBase
     public $appealNo = null;
 
     /**
-     * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
      *     "label": "Reason",
      *     "empty_option": "Please Select",
@@ -60,6 +59,7 @@ class Appeal extends CaseBase
      *     "category": "appeal_reason"
      * })
      * @Form\Required(true)
+     * @Form\Attributes({"id":"","placeholder":"", "required":false})
      * @Form\Type("DynamicSelect")
      */
     public $reason = null;

@@ -6,7 +6,7 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
- * @Form\Name("main")
+ * @Form\Name("fields")
  * @Form\Options({"label":""})
  */
 class PublicInquiryRegisterDecisionMain
@@ -99,7 +99,8 @@ class PublicInquiryRegisterDecisionMain
     //public $reasons = null;
 
     /**
-     * @Form\Attributes({"id":"","placeholder":"","class":"long tall",  "multiple" : true})
+     * @Form\Required(true)
+     * @Form\Attributes({"id":"","placeholder":"","class":"long tall",  "multiple" : true, "required": false})
      * @Form\Options({
      *     "label": "Decisions",
      *     "service_name": "Olcs\Service\Data\PublicInquiryDecision",
