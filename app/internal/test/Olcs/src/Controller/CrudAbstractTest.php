@@ -27,6 +27,51 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
     protected $testClass = '\Olcs\Controller\CrudAbstract';
 
     /**
+     * Tests, in isolation, the public getter and setter for placeholderName.
+     */
+    public function testSetPlaceholderName()
+    {
+        $identifier = 'identifier1';
+
+        $sut = $this->getSutForIsolatedTest(['getIdentifierName']);
+        $sut->expects($this->once())->method('getIdentifierName')->will($this->returnValue($identifier));
+
+        $this->assertEquals($identifier, $sut->getPlaceholderName());
+
+        // Now test getter / setter
+
+        $this->assertEquals('pn', $sut->setPlaceholderName('pn')->getPlaceholderName());
+    }
+
+    /**
+     * Tests, in isolation, the public getter and setter for IsListResult.
+     */
+    public function testIsListResult()
+    {
+        $sut = $this->getSutForIsolatedTest(null);
+
+        $this->assertFalse($sut->isListResult());
+
+        // Now test getter / setter
+
+        $this->assertTrue($sut->setIsListResult(true)->isListResult());
+    }
+
+    /**
+     * Tests, in isolation, the public getter and setter for IdentifierKey.
+     */
+    public function testIdentifierKey()
+    {
+        $sut = $this->getSutForIsolatedTest(null);
+
+        $this->assertEquals('id', $sut->getIdentifierKey());
+
+        // Now test getter / setter
+
+        $this->assertEquals('idKey', $sut->setIdentifierKey('idKey')->getIdentifierKey());
+    }
+
+    /**
      * Tests that the method returns value from getQuery method.
      */
     public function testGetQueryOrRouteParamReturnsQueryParam()
@@ -246,19 +291,105 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
     /**
      * Isolated test for the redirect action method.
      */
-    public function redirectAction()
+    public function testRedirectAction()
     {
-        $redirect = $this->getMock('stdClass', 'toRoute');
+        $identifierName = 'id';
+        $identifier = '1';
+
+        $redirect = $this->getMock('stdClass', ['toRoute']);
         $redirect->expects($this->once())
                  ->method('toRoute')
+                 ->with(null, ['action' => 'index', $identifierName => $identifier], true)
                  ->will($this->returnValue('toRoute'));
 
-        $sut = $this->getSutForIsolatedTest(['redirect']);
+        $sut = $this->getSutForIsolatedTest(['redirect', 'getIdentifierName', 'getIdentifier']);
         $sut->expects($this->once())
             ->method('redirect')
             ->will($this->returnValue($redirect));
 
+        $sut->expects($this->once())
+            ->method('getIdentifier')
+            ->will($this->returnValue($identifier));
+
+        $sut->expects($this->once())
+            ->method('getIdentifierName')
+            ->will($this->returnValue($identifierName));
+
         $this->assertEquals('toRoute', $sut->redirectAction());
+    }
+
+    /**
+     * Isolated behaviour test.
+     */
+    public function testSaveThis()
+    {
+        $formName = 'MyFormName';
+        $callbackMethodName = 'myCallBackSaveMethod';
+        $dataForForm = ['id' => '1234', 'field' => 'value'];
+
+
+        $form = $this->getMock('Zend\Form\Form', null);
+
+        $view = $this->getMock('Zend\View\View', ['setTemplate']);
+        $view->expects($this->once())->method('setTemplate')
+                                     ->with($this->equalTo('crud/form'))->will($this->returnSelf());
+
+        $sut = $this->getSutForIsolatedTest(
+            [
+                'generateFormWithData',
+                'getFormName',
+                'getFormCallback',
+                'getDataForForm',
+                'getView',
+                'setPlaceholder',
+                'renderView'
+            ]
+        );
+        $sut->expects($this->once())->method('getFormName')->will($this->returnValue($formName));
+        $sut->expects($this->once())->method('getFormCallback')->will($this->returnValue($callbackMethodName));
+        $sut->expects($this->once())->method('getDataForForm')->will($this->returnValue($dataForForm));
+
+        $sut->expects($this->once())->method('getView')->will($this->returnValue($view));
+
+        $sut->expects($this->once())->method('generateFormWithData')
+                                    ->with($formName, $callbackMethodName, $dataForForm)
+                                    ->will($this->returnValue($form));
+
+        $sut->expects($this->once())->method('setPlaceholder')
+                                    ->with('form', $form);
+
+        $sut->expects($this->once())->method('renderView')
+                                    ->with($view, null, null)
+                                    ->will($this->returnValue($view));
+
+        $this->assertSame($view, $sut->saveThis());
+
+    }
+
+    public function testFromRoute()
+    {
+        $name = 'name';
+        $value = 'value';
+
+        $sut = $this->getSutForIsolatedTest(['getFromRoute']);
+        $sut->expects($this->any())->method('getFromRoute')
+            ->with($name, null)
+            ->will($this->returnValue($value));
+
+        $this->assertEquals($value, $sut->fromRoute($name, null));
+    }
+
+    public function testFromPost()
+    {
+        $name = 'namePost';
+        $value = 'namePost';
+
+        $sut = $this->getSutForIsolatedTest(['getFromPost']);
+        $sut->expects($this->any())->method('getFromPost')
+            ->with($name, null)
+            ->will($this->returnValue($value));
+
+        $this->assertEquals($value, $sut->fromPost($name, null));
     }
 
     /**
@@ -294,6 +425,19 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
         );
 
         $this->assertEquals($expected, $sut->replaceIds($data, $idsToConvert));
+    }
+
+    public function testGetViewHelperManager()
+    {
+        $viewHerlperMangaer = 'viewHelperManager';
+
+        $serviceManager = $this->getMock('Zend\ServiceManager\ServiceManager', null);
+        $serviceManager->setService('viewHelperManager', $viewHerlperMangaer);
+
+        $sut = $this->getSutForIsolatedTest(['getServiceLocator']);
+        $sut->expects($this->any())->method('getServiceLocator')->will($this->returnValue($serviceManager));
+
+        $this->assertSame($viewHerlperMangaer, $sut->getViewHelperManager());
     }
 
     /**
@@ -408,6 +552,31 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
         $sut->setCommentBoxName($commentBoxName);
 
         $this->assertEquals(null, $sut->buildCommentsBoxIntoView());
+    }
+
+    public function testProcessCommentForm()
+    {
+        $commentsBoxName = 'commentsBox';
+
+        $input = [
+            'fields' => [
+                'id' => '1',
+                'version' => '2',
+                'comment' => 'myComment'
+            ]
+        ];
+
+        $output = [
+            'id' => '1',
+            'version' => '2',
+            $commentsBoxName => 'myComment'
+        ];
+
+        $sut = $this->getSutForIsolatedTest(['save', 'addSuccessMessage', 'redirectToIndex']);
+        $sut->expects($this->once())->method('save')->with($output);
+        $sut->expects($this->once())->method('addSuccessMessage')->with('Comments updated successfully');
+
+        $sut->setCommentBoxName($commentsBoxName)->processCommentForm($input);
     }
 
     /**
