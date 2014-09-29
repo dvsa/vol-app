@@ -155,10 +155,11 @@ trait LicenceNoteTrait
             true
         );
 
+        $this->loadScripts(['note-filter']);
+
         $view = $this->getView(
             [
-                'table' => $table,
-                //'inlineScript' => $this->loadScripts(['note-filter'])
+                'table' => $table
             ]
         );
         $view->setTemplate($this->getTemplatePrefix() . '/notes/index');

@@ -53,6 +53,97 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
      */
     protected $isAction = false;
 
+    /**
+     * Contains the name of the view placeholder for the table.
+     *
+     * @var string
+     */
+    protected $tableViewPlaceholderName = 'table';
+
+    /**
+     * Identifier key
+     *
+     * @var string
+     */
+    protected $identifierKey = 'id';
+
+    /**
+     * Is the result a result of REST call to getList. Set to true when
+     * identifierKey is not 'id'
+     *
+     * @var bool
+     */
+    protected $isListResult = false;
+
+    /**
+     * Placeholdername
+     *
+     * @var null
+     */
+    protected $placeholderName = null;
+
+    /**
+     *
+     * @param null $placeholderName
+     */
+    public function setPlaceholderName($placeholderName)
+    {
+        $this->placeholderName = $placeholderName;
+    }
+
+    /**
+     * @return null
+     */
+    public function getPlaceholderName()
+    {
+        if (is_null($this->placeholderName)) {
+            return $this->getIdentifierName();
+        }
+        return $this->placeholderName;
+    }
+
+    /**
+     * @param boolean $isListResult
+     */
+    public function setIsListResult($isListResult)
+    {
+        $this->isListResult = (bool) $isListResult;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isListResult()
+    {
+        return (bool) $this->isListResult;
+    }
+
+    /**
+     * Sets the identifier key to use when loading current data bundle. Allows searching by other fields.
+     * Defaults to 'id'
+     *
+     * @param string $identifierKey
+     */
+    public function setIdentifierKey($identifierKey)
+    {
+        $this->identifierKey = $identifierKey;
+        return $this;
+    }
+
+    /**
+     * Identifier key to use when loading current data bundle. Allows searching by other fields.
+     * Defaults to 'id'
+     *
+     * @return string
+     */
+    public function getIdentifierKey()
+    {
+        return $this->identifierKey;
+    }
+
+    /**
+     * @codeCoverageIgnore this is part of the event system.
+     */
     protected function attachDefaultListeners()
     {
         parent::attachDefaultListeners();
@@ -127,10 +218,20 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
 
             $data = $this->preProcessTableData($data);
 
-            $this->getViewHelperManager()->get('placeholder')->getContainer('table')->set(
+            $this->getViewHelperManager()->get('placeholder')->getContainer($this->getTableViewPlaceholderName())->set(
                 $this->alterTable($this->getTable($tableName, $data, $params))
             );
         }
+    }
+
+    /**
+     * Returns the value of $this->tableViewPlaceholderName
+     *
+     * @return string
+     */
+    public function getTableViewPlaceholderName()
+    {
+        return $this->tableViewPlaceholderName;
     }
 
     public function loadListData(array $params)
@@ -175,7 +276,12 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
 
         $this->getViewHelperManager()
              ->get('placeholder')
-             ->getContainer($this->getIdentifierName())
+             ->getContainer($this->getPlaceholderName())
+             ->set($this->loadCurrent());
+
+        $this->getViewHelperManager()
+             ->get('placeholder')
+             ->getContainer('details')
              ->set($this->loadCurrent());
 
         $view->setTemplate($this->detailsView);
@@ -504,5 +610,45 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
         $this->addSuccessMessage('Comments updated successfully');
 
         $this->redirectToIndex();
+    }
+
+    /**
+     * Load data for the form
+     *
+     * This method should be overridden
+     *
+     * @param int $id
+     * @return array
+     */
+    protected function load($id)
+    {
+        if (empty($this->loadedData)) {
+            $service = $this->getService();
+
+            $result = $this->makeRestCall(
+                $service,
+                'GET',
+                array($this->getIdentifierKey() => $id),
+                $this->getDataBundle()
+            );
+
+            if ($this->isListResult()) {
+
+                if (!array_key_exists('Results', $result) || empty($result['Results'])) {
+                    return [];
+                }
+
+                $this->loadedData = current($result['Results']);
+            } else {
+                if (empty($result)) {
+                    $this->setCaughtResponse($this->notFoundAction());
+                    return;
+                }
+
+                $this->loadedData = $result;
+            }
+        }
+
+        return $this->loadedData;
     }
 }
