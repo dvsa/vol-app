@@ -18,6 +18,7 @@ class Stay extends CaseBase
 
     /**
      * @Form\Attributes({"id":"dob","class":"extra-long"})
+     * @Form\Required(true)
      * @Form\Options({
      *     "label": "Date of request",
      *     "create_empty_option": true,
@@ -49,6 +50,7 @@ class Stay extends CaseBase
 
     /**
      * @Form\Attributes({"id":"","placeholder":""})
+     * @Form\Required(false)
      * @Form\Options({
      *     "label": "Outcome",
      *     "empty_option": "Please Select",

@@ -24,10 +24,10 @@ if (!empty($id))
     <div class="read-only">
         <dl>
             <dt><?php echo $this->translate('Stay type');?></dt>
-            <dd><?php echo $stayType['description']; ?></dd>
+            <dd><?php echo isset($stayType['description']) ? $stayType['description'] : ''; ?></dd>
 
             <dt><?php echo $this->translate('Outcome');?></dt>
-            <dd><?php echo $outcome['description']; ?></dd>
+            <dd><?php echo isset($outcome['description']) ? $outcome['description'] : ''; ?></dd>
 
             <dt><?php echo $this->translate('Requested date');
                 ?></dt>
@@ -44,7 +44,7 @@ if (!empty($id))
         <dl>
             <dt><?php echo $this->translate('Notes');?></dt>
             <dd class="three-quarters"><?php echo
-                $notes;
+                isset($notes) ? $notes : '';
                 ?></dd>
         </dl>
     </div>
