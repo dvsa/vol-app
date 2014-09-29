@@ -89,6 +89,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     public function setPlaceholderName($placeholderName)
     {
         $this->placeholderName = $placeholderName;
+        return $this;
     }
 
     /**
@@ -108,6 +109,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     public function setIsListResult($isListResult)
     {
         $this->isListResult = (bool) $isListResult;
+        return $this;
     }
 
     /**
@@ -386,6 +388,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     /**
      * Method checks that the required properties exist.
      *
+     * @codeCoverageIgnore this is part of the event system.
      * @throws \LogicException
      * @return boolean
      */
