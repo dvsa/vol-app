@@ -808,15 +808,15 @@ return array_merge(
         'offence' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/licence/[:licence]/case/[:case]/offence/view[/:offenceId]',
+                'route' => '/case/:case/offence[/:action/:offence]',
                 'constraints' => [
-                    'licence' => '[0-9]+',
                     'case' => '[0-9]+',
-                    'offenceId' => '[0-9]+',
+                    'action' => '[a-z]+',
+                    'offence' => '[0-9]+',
                 ],
                 'defaults' => [
-                    'controller' => 'CaseConvictionController',
-                    'action' => 'viewOffence'
+                    'controller' => 'CaseOffenceController',
+                    'action' => 'index'
                 ]
             ]
         ],
@@ -929,7 +929,7 @@ return array_merge(
                 ],
                 'defaults' => [
                     'controller' => 'CaseProcessingController',
-                    'action' => 'index'
+                    'action' => 'overview'
                 ]
             ]
         ],
