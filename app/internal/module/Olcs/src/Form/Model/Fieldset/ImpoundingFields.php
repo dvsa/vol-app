@@ -39,7 +39,6 @@ class ImpoundingFields
     public $applicationReceiptDate = null;
 
     /**
-     * @Form\Required(true)
      * @Form\Attributes({"id":"vrm","placeholder":"","class":"medium"})
      * @Form\Options({
      *     "label": "Vehicle registration mark",
@@ -148,6 +147,7 @@ class ImpoundingFields
 
     /**
      * @Form\Attributes({"id":"presidingTc","placeholder":"","class":"medium"})
+     * @Form\Required(false)
      * @Form\Options({
      *     "label": "Agreed by",
      *     "service_name": "Olcs\Service\Data\PresidingTc",
@@ -161,6 +161,7 @@ class ImpoundingFields
 
     /**
      * @Form\Attributes({"id":"outcome","placeholder":"","class":"medium"})
+     * @Form\Required(false)
      * @Form\Options({
      *     "label": "Outcome",
      *     "empty_option": "Please Select",
