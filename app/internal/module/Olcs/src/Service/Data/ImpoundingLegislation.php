@@ -29,7 +29,7 @@ class ImpoundingLegislation extends RefData implements ListDataInterface
         if ($context['goodsOrPsv'] == 'lcat_psv') {
             $data = $this->fetchListData('impound_legislation_psv_gb');
         }
-        elseif($context['isNi'] == 'Y') {
+        elseif ($context['isNi'] == 'Y') {
             $data = $this->fetchListData('impound_legislation_goods_ni');
         } else {
             $data = $this->fetchListData('impound_legislation_goods_gb');
@@ -57,5 +57,4 @@ class ImpoundingLegislation extends RefData implements ListDataInterface
 
         return $this->getData($category);
     }
-
 }
