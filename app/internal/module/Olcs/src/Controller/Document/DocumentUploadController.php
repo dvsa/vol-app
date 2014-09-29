@@ -16,13 +16,6 @@ use Zend\View\Model\ViewModel;
  */
 class DocumentUploadController extends AbstractDocumentController
 {
-    private $mimeTypeMap = [
-        'application/rtf' => [
-            'ref_data' => 'doc_rtf',
-            'extension' => 'rtf'
-        ]
-    ];
-
     public function finaliseAction()
     {
         $routeParams = $this->params()->fromRoute();
@@ -116,13 +109,13 @@ class DocumentUploadController extends AbstractDocumentController
         // AC specifies this timestamp format...
         $fileName = date('YmdHi')
             .  '_' . $this->formatFilename($templateName)
-            . '.' . $this->getExtensionMap($file->getType());
+            . '.' . $file->getExtension();
 
         $data = [
             'identifier'          => $file->getIdentifier(),
             'description'         => $templateName,
             'filename'            => $fileName,
-            'fileExtension'       => $this->getRefDataMap($file->getType()),
+            'fileExtension'       => 'doc_' . $file->getExtension(),
             'category'            => $data['details']['category'],
             'documentSubCategory' => $data['details']['documentSubCategory'],
             'isDigital'           => true,
@@ -145,22 +138,6 @@ class DocumentUploadController extends AbstractDocumentController
             $type . '/documents',
             $routeParams
         );
-    }
-
-    private function getRefDataMap($type)
-    {
-        if (isset($this->mimeTypeMap[$type])) {
-            return $this->mimeTypeMap[$type]['ref_data'];
-        }
-        return null;
-    }
-
-    private function getExtensionMap($type)
-    {
-        if (isset($this->mimeTypeMap[$type])) {
-            return $this->mimeTypeMap[$type]['extension'];
-        }
-        return null;
     }
 
     private function formatFilename($input)

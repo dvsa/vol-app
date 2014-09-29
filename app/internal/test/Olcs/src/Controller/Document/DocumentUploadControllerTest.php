@@ -279,14 +279,14 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
             ->method('setFile')
             ->with(array('error' => 0));
 
-        $storeFile = $this->getMock('\stdClass', ['getIdentifier', 'getType', 'getSize']);
+        $storeFile = $this->getMock('\stdClass', ['getIdentifier', 'getExtension', 'getSize']);
         $storeFile->expects($this->any())
             ->method('getIdentifier')
             ->willReturn('full-filename');
 
         $storeFile->expects($this->any())
-            ->method('getType')
-            ->willReturn('application/rtf');
+            ->method('getExtension')
+            ->willReturn('rtf');
 
         $storeFile->expects($this->any())
             ->method('getSize')
@@ -398,18 +398,24 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
 
     private function mockDocument($data)
     {
+        $this->assertStringEndsWith('A_template.rtf', $data['filename']);
+        $this->assertStringStartsWith(date('Y-m-d'), $data['issuedDate']);
+
+        unset($data['filename']);
+        unset($data['issuedDate']);
+
         $expected = array(
             'identifier' => 'full-filename',
             'description' => 'A template',
-            'licence' => 'xxx',
+            'licence' => 1234,
             'fileExtension' => 'doc_rtf',
             'category' => 3,
             'documentSubCategory' => 2,
             'isDigital' => true,
             'isReadOnly' => true,
-            'size' => 0
+            'size' => 1234
         );
 
-        // $this->assertEquals($expected, $data);
+         $this->assertEquals($expected, $data);
     }
 }
