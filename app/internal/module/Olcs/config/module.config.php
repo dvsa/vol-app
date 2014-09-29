@@ -116,6 +116,7 @@ return array(
             'tableFilters' => 'Olcs\View\Helper\TableFilters',
             'piListData'   => 'Olcs\View\Helper\PiListData',
             'formSubmissionSections' => 'Olcs\Form\View\Helper\SubmissionSections',
+            'submissionSectionDetails' => 'Olcs\View\Helper\SubmissionSectionDetails',
         ),
         'delegators' => array(
             'formElement' => array('Olcs\Form\View\Helper\FormElementDelegatorFactory')

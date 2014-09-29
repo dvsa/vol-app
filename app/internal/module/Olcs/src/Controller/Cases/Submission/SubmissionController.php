@@ -270,6 +270,7 @@ class SubmissionController extends OlcsController\CrudAbstract
         foreach ($submissionSections as $submissionSection) {
             if (in_array($submissionSection['id'], $submissionsArray)) {
                 $sectionData[$submissionSection['id']]['description'] = $submissionSection['description'];
+                $sectionData[$submissionSection['id']]['data'] = $this->getSectionDataByType($submissionSection['id']);
             }
         }
 
@@ -286,6 +287,19 @@ class SubmissionController extends OlcsController\CrudAbstract
         $view->setTemplate($this->detailsView);
 
         return $this->renderView($view);
+    }
+
+    public function getSectionDataByType($sectionId)
+    {
+        switch($sectionId)
+        {
+            case 'submission_section_intr':
+            case 'submission_section_casu':
+            case 'submission_section_case':
+                return $this->getCase();
+            default:
+                return array();
+        }
     }
 
     /**

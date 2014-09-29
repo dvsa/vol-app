@@ -1,0 +1,29 @@
+<h4><?php echo isset($this->data['description']) ? $this->data['description'] : ''; ?>
+    <a href="<?php echo $this->url(
+        'submission', [
+            'case' => isset($this->data['id']),
+            'action' => 'edit',
+            'submission' => $this->data['id']
+        ]
+        );?>" class="action--secondary right-aligned">
+        <?php echo
+        $this->translate('Edit section');
+        ?></a>
+</h4>
+<div class="read-only">
+    <dl>
+        <?php
+        foreach ($this->data['data'] as $k => $v) {
+            if (is_string($v))
+            {
+        ?>
+        <dt><?php echo $this->translate($k);?></dt>
+        <dd><?php echo $v;?></dd>
+
+        <?php
+            }
+        }
+        ?>
+    </dl>
+</div>
+
