@@ -249,7 +249,6 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
         );
 
         $fileData = [
-            'type' => 'application/rtf',
             'content' => 'replaced content',
             'meta' => [
                 'data' => '{"details":{"documentTemplate":999},"bookmarks":[]}'

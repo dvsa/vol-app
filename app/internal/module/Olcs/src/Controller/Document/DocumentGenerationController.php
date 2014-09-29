@@ -192,7 +192,6 @@ class DocumentGenerationController extends AbstractDocumentController
         $uploader = $this->getUploader();
         $uploader->setFile(
             [
-                'type'    => $file->getMimeType(),
                 'content' => $content,
                 'meta'    => $meta
             ]
