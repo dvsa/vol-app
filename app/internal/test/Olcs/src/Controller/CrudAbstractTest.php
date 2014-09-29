@@ -327,7 +327,6 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
         $callbackMethodName = 'myCallBackSaveMethod';
         $dataForForm = ['id' => '1234', 'field' => 'value'];
 
-
         $form = $this->getMock('Zend\Form\Form', null);
 
         $view = $this->getMock('Zend\View\View', ['setTemplate']);
