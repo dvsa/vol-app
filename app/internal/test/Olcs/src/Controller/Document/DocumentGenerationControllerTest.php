@@ -266,7 +266,7 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
 
         $this->fileStoreMock->expects($this->once())
             ->method('upload')
-            ->with('tmp/documents')
+            ->with('tmp')
             ->will($this->returnValue($storedFile));
 
         $redirect = $this->getMock('\stdClass', ['toRoute']);
@@ -324,6 +324,71 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
         }
     }
 
+    public function testListTemplateBookmarksActionWithNoIdReturnsEmptyForm()
+    {
+        $this->controller->expects($this->once())
+            ->method('params')
+            ->with('id')
+            ->will($this->returnValue(null));
+
+        $view = $this->controller->listTemplateBookmarksAction();
+        $form = $view->getVariable('form');
+        $bookmarks = $form->get('bookmarks');
+
+        $this->assertCount(1, $form->getFieldsets());
+        $this->assertCount(0, $bookmarks->getElements());
+    }
+
+    public function testListTemplateBookmarksActionWithIdReturnsCorrectForm()
+    {
+        $this->controller->expects($this->once())
+            ->method('params')
+            ->with('id')
+            ->will($this->returnValue(123));
+
+        $view = $this->controller->listTemplateBookmarksAction();
+        $form = $view->getVariable('form');
+        $bookmarks = $form->get('bookmarks');
+
+        $this->assertCount(1, $form->getFieldsets());
+        $this->assertCount(2, $bookmarks->getElements());
+
+        $bookmark = $bookmarks->get('sample_bookmark');
+        $options = $bookmark->getValueOptions();
+
+        $this->assertEquals(
+            [
+                1 => 'A paragraph',
+                2 => 'Another paragraph'
+            ],
+            $options
+        );
+    }
+
+    public function testDownloadTmpAction()
+    {
+        $this->fileStoreMock = $this->getMock('\stdClass', ['download']);
+
+        $this->controller->expects($this->at(1))
+            ->method('params')
+            ->with('id')
+            ->will($this->returnValue('abc123'));
+
+        $this->controller->expects($this->at(2))
+            ->method('params')
+            ->with('filename')
+            ->will($this->returnValue('a-file.rtf'));
+
+        $this->fileStoreMock->expects($this->once())
+            ->method('download')
+            ->with('abc123', 'a-file.rtf', 'tmp')
+            ->will($this->returnValue('test return value'));
+
+        $result = $this->controller->downloadTmpAction();
+
+        $this->assertEquals('test return value', $result);
+    }
+
     private function mockCategory($data)
     {
         return [
@@ -364,6 +429,44 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
     {
         if (isset($data['id'])) {
             switch ($data['id']) {
+                case 123:
+                    return [
+                        'docTemplateBookmarks' => [
+                            [
+                                'docBookmark' => [
+                                    'description' => 'A sample bookmark',
+                                    'name' => 'sample_bookmark',
+                                    'docParagraphBookmarks' => [
+                                        [
+                                            'docParagraph' => [
+                                                'id' => 1,
+                                                'paraTitle' => 'A paragraph'
+                                            ]
+                                        ], [
+                                            'docParagraph' => [
+                                                'id' => 2,
+                                                'paraTitle' => 'Another paragraph'
+                                            ]
+                                        ]
+                                    ]
+                                ]
+                            ],
+                            [
+                                'docBookmark' => [
+                                    'description' => 'Another sample bookmark',
+                                    'name' => 'another_sample_bookmark',
+                                    'docParagraphBookmarks' => [
+                                        [
+                                            'docParagraph' => [
+                                                'id' => 3,
+                                                'paraTitle' => 'A third paragraph'
+                                            ]
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ];
                 case 888:
                     return [
                         'docTemplateBookmarks' => [

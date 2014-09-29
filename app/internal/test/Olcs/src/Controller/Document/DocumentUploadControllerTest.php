@@ -294,13 +294,12 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
 
         $this->fileStoreMock->expects($this->once())
             ->method('upload')
-            ->with('documents')
             ->will($this->returnValue($storeFile));
 
         // @NOTE: needs fixing; should have the temp path on it
         $this->fileStoreMock->expects($this->once())
             ->method('remove')
-            ->with('tmp/documents/');
+            ->with(null, 'tmp');
 
         $files->expects($this->once())
             ->method('toArray')
