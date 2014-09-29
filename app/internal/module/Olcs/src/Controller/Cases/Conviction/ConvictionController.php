@@ -129,11 +129,6 @@ class ConvictionController extends OlcsController\CrudAbstract
         )
     );
 
-    public function indexAction()
-    {
-        return parent::indexAction();
-    }
-
     /**
      * Dealt action
      */
@@ -437,71 +432,6 @@ class ConvictionController extends OlcsController\CrudAbstract
                 'bundle' => Json::encode($bundle)
             )
         );
-    }
-
-    /* private function getIndexBundle()
-    {
-        return array(
-            'children' => array(
-                'convictionCategory' => array(
-                    'properties' => array(
-                        'id',
-                        'description'
-                    )
-                ),
-                'defendantType' => array(
-                    'properties' => 'ALL'
-                )
-            )
-        );
-    } */
-
-    public function getLegacyOffencesTable($legacyOffencesResults)
-    {
-        $legacyOffencesTable = $this->getTable('legacyOffences', $legacyOffencesResults);
-
-        return $legacyOffencesTable;
-    }
-
-    public function viewOffenceAction()
-    {
-        $postParams = $this->params()->fromPost();
-        $routeParams = $this->params()->fromRoute();
-
-        $this->setBreadcrumb(array('licence_case_list/pagination' => array('licence' => $routeParams['licence'])));
-
-        $caseId = $routeParams['case'];
-        $offenceId = $routeParams['offenceId'];
-
-        $case = $this->getCase($caseId, $offenceId);
-
-        $offence = false;
-        if (!empty($case['legacyOffences'])) {
-            foreach ($case['legacyOffences'] as $legacyOffence) {
-
-                if ($legacyOffence['id'] ==  $offenceId) {
-                    $offence = $legacyOffence;
-                }
-            }
-        }
-        $summary = $this->getCaseSummaryArray($case);
-
-        $view = $this->getView();
-        $tabs = $this->getTabInformationArray();
-
-        $action = 'view';
-
-        $view->setVariables(
-            [
-                'case' => $case,
-                'offence' => $offence,
-                'tabs' => $tabs,
-                'tab' => $action,
-                'summary' => $summary
-            ]
-        );
-        $view->setTemplate('case/view-offence');
-        return $view;
     }
 
     /**
