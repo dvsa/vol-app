@@ -2,22 +2,26 @@
     "name": "olcs/olcs-selfserve",
     "description": "OLCS Self Service Web Site",
     "repositories": [{
-            "type": "package",
-            "package": {
-                "name": "olcs/OlcsCommon",
-                "version": "dev-develop",
-                "source": {
-                    "url": "git@gitlab.clb.npm:/olcs/olcs-common.git",
-                    "type": "git",
-                    "reference": "origin/develop"
-                }
+        "type": "package",
+        "package": {
+            "name": "olcs/OlcsCommon",
+            "version": "dev-develop",
+            "source": {
+                "url": "git@gitlab.clb.npm:/olcs/olcs-common.git",
+                "type": "git",
+                "reference": "origin/develop"
             }
-        }],
+        }
+    }, {
+        "type": "vcs",
+        "url": "git@gitlab.clb.npm:sc/jackrabbit.git"
+    }],
     "require": {
         "php": ">=5.4",
         "zendframework/zendframework": "2.3.*",
         "doctrine/doctrine-orm-module": "0.*",
-        "olcs/OlcsCommon": "dev-develop"
+        "olcs/OlcsCommon": "dev-develop",
+        "dvsa/jackrabbit": "v1.1.0"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "~1.5.3",
@@ -29,9 +33,9 @@
         }
     },
     "config": {
-      "preferred-install": "dist",
+        "preferred-install": "dist",
         "github-oauth": {
-          "github.com": "5cdf40f8d81a7675fdaa5fc92e9381526ef4db7f"
-      }
+            "github.com": "5cdf40f8d81a7675fdaa5fc92e9381526ef4db7f"
+        }
     }
 }
