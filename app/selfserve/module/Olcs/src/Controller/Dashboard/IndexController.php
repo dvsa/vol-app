@@ -179,7 +179,7 @@ class IndexController extends AbstractActionController
     }
 
     /**
-     * Currently there is no authentication mechanism, so userId is retrieved from route param
+     * Currently there is no authentication mechanism, so userId is hardcoded
      *
      * @return array|Response
      */
