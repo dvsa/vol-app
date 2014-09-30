@@ -17,7 +17,6 @@ class BusServiceNumberAndType extends Base
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":1,"max":70}})
-     * @Form\Validator({"name":"Zend\I18n\Validator\Alnum"})
      */
     public $serviceNo = null;
 
@@ -28,7 +27,6 @@ class BusServiceNumberAndType extends Base
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":1,"max":100}})
-     * @Form\Validator({"name":"Zend\I18n\Validator\Alnum"})
      */
     public $startPoint = null;
 
@@ -39,7 +37,6 @@ class BusServiceNumberAndType extends Base
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":1,"max":100}})
-     * @Form\Validator({"name":"Zend\I18n\Validator\Alnum"})
      */
     public $finishPoint = null;
 
@@ -50,7 +47,6 @@ class BusServiceNumberAndType extends Base
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":1,"max":255}})
-     * @Form\Validator({"name":"Zend\I18n\Validator\Alnum"})
      */
     public $via = null;
 
