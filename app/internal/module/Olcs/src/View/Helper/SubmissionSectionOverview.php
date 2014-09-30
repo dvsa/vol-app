@@ -22,7 +22,7 @@ class SubmissionSectionOverview extends AbstractHelper
      */
     protected $typeViewMap = array(
         'submission_section_intr'   => '/case/submission/section/blank',
-        'submission_section_casu'   => '/case/submission/section/case_outline',
+        'submission_section_casu'   => '/case/submission/section/case-summary',
         'submission_section_case'   => '/case/submission/section/blank',
         'submission_section_msin'   => '/case/submission/section/blank',
         'submission_section_pers'   => '/case/submission/section/blank',

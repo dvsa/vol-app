@@ -109,6 +109,11 @@ class SubmissionController extends OlcsController\CrudAbstract
     protected $navigationId = 'case_submissions';
 
     /**
+     * Holds all the submission section data
+     */
+    protected $submissionSectionData = array();
+
+    /**
      * Save data. Also processes the submit submission select type drop down
      * in order to dictate which checkboxes to manipulate.
      *
@@ -261,23 +266,25 @@ class SubmissionController extends OlcsController\CrudAbstract
 
         $submissionsArray = json_decode($submission['text']);
 
-        $submissionSections = $this->getServiceLocator()->get(
+        $this->submissionSections = $this->getServiceLocator()->get(
             'Common\Service\Data\RefData'
         )->fetchListData('submission_section');
+
         $submission['submissionTypeTitle'] = $this->getSubmissionTypeTitle($submission['submissionType']['id']);
 
-        $sectionData = [];
-        foreach ($submissionSections as $submissionSection) {
+        foreach ($this->submissionSections as $submissionSection) {
             if (in_array($submissionSection['id'], $submissionsArray)) {
-                $sectionData[$submissionSection['id']]['description'] = $submissionSection['description'];
-                $sectionData[$submissionSection['id']]['data'] = $this->getSectionDataByType($submissionSection['id']);
+                $this->submissionSectionData[$submissionSection['id']]['sectionInfo'] =
+                    $submissionSection;
+                $this->submissionSectionData[$submissionSection['id']]['data'] = isset
+                ($submissionsArray[$submissionSection['id']]) ? $submissionsArray[$submissionSection['id']] : [];
             }
         }
 
         $this->getViewHelperManager()
             ->get('placeholder')
             ->getContainer('sectionData')
-            ->set($sectionData);
+            ->set($this->submissionSectionData);
 
         $this->getViewHelperManager()
             ->get('placeholder')
@@ -287,19 +294,6 @@ class SubmissionController extends OlcsController\CrudAbstract
         $view->setTemplate($this->detailsView);
 
         return $this->renderView($view);
-    }
-
-    public function getSectionDataByType($sectionId)
-    {
-        switch($sectionId)
-        {
-            case 'submission_section_intr':
-            case 'submission_section_casu':
-            case 'submission_section_case':
-                return $this->getCase();
-            default:
-                return array();
-        }
     }
 
     /**
