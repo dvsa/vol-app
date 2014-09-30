@@ -14,43 +14,17 @@ use Zend\Form\Annotation as Form;
 class Impounding
 {
     /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
+     * @Form\Name("base")
+     * @Form\Attributes({"class":"base"})
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\CaseBase")
      */
-    public $case = null;
+    public $caseBase = null;
 
     /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
+     * @Form\Name("fields")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\ImpoundingFields")
      */
-    public $id = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $version = null;
-
-    /**
-     * @Form\Name("application_details")
-     * @Form\Options({"label":"Application details"})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\ApplicationDetails")
-     */
-    public $applicationDetails = null;
-
-    /**
-     * @Form\Name("hearing")
-     * @Form\Options({"label":"Hearing","id":"hearing_fieldset"})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\Hearing")
-     */
-    public $hearing = null;
-
-    /**
-     * @Form\Name("outcome")
-     * @Form\Options({"label":"Outcome"})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\Outcome")
-     */
-    public $outcome = null;
+    public $fields = null;
 
     /**
      * @Form\Name("form-actions")
