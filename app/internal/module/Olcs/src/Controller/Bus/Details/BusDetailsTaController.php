@@ -16,5 +16,19 @@ class BusDetailsTaController extends BusDetailsController
 {
     protected $item = 'ta';
 
+    /* properties required by CrudAbstract */
+    protected $formName = 'bus-reg-ta';
 
+    /**
+     * Data map
+     *
+     * @var array
+     */
+    protected $dataMap = array(
+        'main' => array(
+            'mapFrom' => array(
+                'fields',
+            )
+        )
+    );
 }
