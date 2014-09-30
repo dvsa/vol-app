@@ -1,9 +1,11 @@
-<h4><?php echo isset($this->data['sectionInfo']['description']) ? $this->data['sectionInfo']['description'] : ''; ?>
+<h4><?php
+    $case = $this->placeholder('case')->getValue();
+
+    echo isset($this->data['description']) ? $this->data['description'] : ''; ?>
     <a href="<?php echo $this->url(
         'submission', [
-            'case' => isset($this->data['data']['id']),
-            'action' => 'edit',
-            'submission' => $this->data['data']['id']
+            'case' => $case['id'],
+            'action' => 'edit'
         ]
         );?>" class="action--secondary right-aligned">
         <?php echo

@@ -77,6 +77,7 @@ class SubmissionSectionOverview extends AbstractHelper
      */
     public function __invoke($submissionSection = '', $data = array())
     {
+
         if (empty($submissionSection)) {
             return $this;
         }
@@ -86,7 +87,6 @@ class SubmissionSectionOverview extends AbstractHelper
 
     public function render($submissionSection, $data)
     {
-
         $viewTemplate = isset($this->typeViewMap[$submissionSection]) ?
             $this->typeViewMap[$submissionSection] : self::DEFAULT_VIEW;
 

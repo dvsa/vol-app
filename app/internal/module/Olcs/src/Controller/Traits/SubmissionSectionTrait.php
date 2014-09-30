@@ -1,6 +1,6 @@
 <?php
 
-namespace Olcs\Controller\Submission;
+namespace Olcs\Controller\Traits;
 
 use Zend\Filter\Word\DashToCamelCase;
 
@@ -100,8 +100,7 @@ trait SubmissionSectionTrait
      */
     public function getFilteredSectionData($method, $sectionData)
     {
-        $case = $this->getCase();
-        $data = array_merge($case, call_user_func(array($this, $method), $sectionData));
+        $data = call_user_func(array($this, $method), $sectionData);
         return $data;
     }
 

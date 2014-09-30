@@ -3,7 +3,7 @@
 $case = $this->placeholder('case')->getValue();
 $submission = $this->placeholder('submission')->getValue();
 $submissionTitle = $this->placeholder('submissionTitle')->getValue();
-$sectionData = $this->placeholder('sectionData')->getValue();
+$selectedSectionsArray = $this->placeholder('selectedSectionsArray')->getValue();
 ?>
 <h4><?php echo $submission['submissionTypeTitle']; ?>
     <a href="<?php echo $this->url(
@@ -18,10 +18,9 @@ $sectionData = $this->placeholder('sectionData')->getValue();
         ?></a>
 </h4>
 <?php
+foreach ($selectedSectionsArray as $sectionData) {
 
-foreach ($sectionData as $sectionId => $sectionData) {
-
-    echo $this->submissionSectionDetails($sectionId, $sectionData);
+    echo $this->submissionSectionDetails($sectionData['sectionId'], $sectionData);
 
 }
 ?>
