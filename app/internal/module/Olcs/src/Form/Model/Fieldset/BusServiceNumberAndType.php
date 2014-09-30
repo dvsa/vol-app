@@ -85,7 +85,9 @@ class BusServiceNumberAndType extends Base
      *     "render_delimiters": false
      * })
      * @Form\Required(false)
-     * @Form\Type("Common\Form\Elements\Custom\DateSelect")
+     * @Form\Type("DateSelect")
+     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
      * @Form\Validator({"name":"Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $receivedDate = null;
@@ -98,7 +100,9 @@ class BusServiceNumberAndType extends Base
      *     "render_delimiters": false
      * })
      * @Form\Required(false)
-     * @Form\Type("Common\Form\Elements\Custom\DateSelect")
+     * @Form\Type("DateSelect")
+     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
      */
     public $effectiveDate = null;
 
@@ -110,7 +114,9 @@ class BusServiceNumberAndType extends Base
      *     "render_delimiters": false
      * })
      * @Form\Required(false)
-     * @Form\Type("Common\Form\Elements\Custom\DateSelect")
+     * @Form\Type("DateSelect")
+     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
      */
     public $endDate = null;
 
