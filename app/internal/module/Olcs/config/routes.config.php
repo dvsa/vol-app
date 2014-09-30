@@ -336,7 +336,7 @@ return array_merge(
                                 'route' => '/ta',
                                 'defaults' => [
                                     'controller' => 'BusDetailsTaController',
-                                    'action' => 'index',
+                                    'action' => 'edit',
                                 ]
                             ],
                         ],
