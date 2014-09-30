@@ -23,36 +23,49 @@ class BusServiceNumberAndType extends Base
 
     /**
      * @Form\Attributes({"class":"","id":"startPoint"})
-     * @Form\Options({"label":"Service number"})
+     * @Form\Options({"label":"Start point"})
      * @Form\Required(false)
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":1,"max":70}})
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":1,"max":100}})
      * @Form\Validator({"name":"Zend\I18n\Validator\Alnum"})
      */
     public $startPoint = null;
 
     /**
      * @Form\Attributes({"class":"","id":"finishPoint"})
-     * @Form\Options({"label":"Service number"})
+     * @Form\Options({"label":"Finish point"})
      * @Form\Required(false)
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":1,"max":70}})
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":1,"max":100}})
      * @Form\Validator({"name":"Zend\I18n\Validator\Alnum"})
      */
     public $finishPoint = null;
 
     /**
      * @Form\Attributes({"class":"","id":"via"})
-     * @Form\Options({"label":"Service number"})
+     * @Form\Options({"label":"Via"})
      * @Form\Required(false)
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":1,"max":70}})
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":1,"max":255}})
      * @Form\Validator({"name":"Zend\I18n\Validator\Alnum"})
      */
     public $via = null;
+
+    /**
+     * @Form\Attributes({"id":"busServiceTypes","placeholder":"","multiple":"multiple"})
+     * @Form\Options({
+     *     "label": "Service type",
+     *     "disable_inarray_validator": false,
+     *     "help-block": "Use CTRL to select multiple",
+     *     "service_name": "Olcs\Service\Data\BusServiceType",
+     *     "use_groups": "false"
+     * })
+     * @Form\Type("DynamicSelect")
+     */
+    public $busServiceTypes = null;
 
     /**
      * @Form\Attributes({"class":"extra-long","id":"otherDetails"})
@@ -65,7 +78,7 @@ class BusServiceNumberAndType extends Base
     public $otherDetails = null;
 
     /**
-     * @Form\Attributes({"id":"dateReceived"})
+     * @Form\Attributes({"id":"receivedDate"})
      * @Form\Options({
      *     "label": "Date received",
      *     "create_empty_option": true,
@@ -75,7 +88,7 @@ class BusServiceNumberAndType extends Base
      * @Form\Type("Common\Form\Elements\Custom\DateSelect")
      * @Form\Validator({"name":"Common\Form\Elements\Validators\DateNotInFuture"})
      */
-    public $dateReceived = null;
+    public $receivedDate = null;
 
     /**
      * @Form\Attributes({"id":"effectiveDate"})
@@ -86,7 +99,6 @@ class BusServiceNumberAndType extends Base
      * })
      * @Form\Required(false)
      * @Form\Type("Common\Form\Elements\Custom\DateSelect")
-     * @Form\Validator({"name":"Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $effectiveDate = null;
 
@@ -99,7 +111,20 @@ class BusServiceNumberAndType extends Base
      * })
      * @Form\Required(false)
      * @Form\Type("Common\Form\Elements\Custom\DateSelect")
-     * @Form\Validator({"name":"Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $endDate = null;
+
+    /**
+     * @Form\Attributes({"id":"busNoticePeriod","placeholder":"","class":"medium"})
+     * @Form\Required(false)
+     * @Form\Options({
+     *     "label": "Rules",
+     *     "service_name": "Olcs\Service\Data\BusNoticePeriod",
+     *     "empty_option": "Please Select",
+     *     "disable_inarray_validator": false,
+     *     "help-block": "Please select rules",
+     * })
+     * @Form\Type("DynamicSelect")
+     */
+    public $busNoticePeriod = null;
 }

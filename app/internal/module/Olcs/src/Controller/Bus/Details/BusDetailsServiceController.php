@@ -41,6 +41,12 @@ class BusDetailsServiceController extends BusDetailsController
         'children' => array(
             'subsidised' => array(
                 'id'
+            ),
+            'busNoticePeriod' => array(
+                'id'
+            ),
+            'busServiceTypes' => array(
+                'properties' => 'ALL'
             )
         )
     );
@@ -48,15 +54,16 @@ class BusDetailsServiceController extends BusDetailsController
     /**
      * Array of form fields to disable if this is EBSR
      */
-    /*protected $disableFormFields = array(
-        'useAllStops',
-        'hasManoeuvre',
-        'manoeuvreDetail',
-        'needNewStop',
-        'newStopDetail',
-        'hasNotFixedStop',
-        'notFixedStopDetail',
-        'subsidised',
-        'subsidyDetail'
-    );*/
+    protected $disableFormFields = array(
+        'serviceNo',
+        'startPoint',
+        'finishPoint',
+        'via',
+        'busServiceTypes',
+        'otherDetails',
+        'receivedDate',
+        'effectiveDate',
+        'endDate',
+        'busNoticePeriod',
+    );
 }
