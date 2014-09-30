@@ -1,4 +1,4 @@
-$(function() {
+OLCS.ready(function() {
   var form = "form[name=task]";
 
   OLCS.cascadeInput({
