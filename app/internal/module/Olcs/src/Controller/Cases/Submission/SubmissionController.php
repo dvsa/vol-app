@@ -197,7 +197,8 @@ class SubmissionController extends OlcsController\CrudAbstract
 
         if (is_array($data['submissionSections']['sections']))
         {
-            $filter = new UnderscoreToCamelCase();
+            $filter = $this->getWordFilter();
+
             foreach ($data['submissionSections']['sections'] as $index => $sectionId)
             {
                 $sectionData = ['case' => $case['id']];
@@ -217,6 +218,11 @@ class SubmissionController extends OlcsController\CrudAbstract
         $data = parent::save($data, $service);
 
         return $data;
+    }
+
+    private function getWordFilter()
+    {
+        return new UnderscoreToCamelCase();
     }
 
     /**
