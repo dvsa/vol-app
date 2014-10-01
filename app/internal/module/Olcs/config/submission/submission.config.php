@@ -32,7 +32,11 @@ return array(
                                 'properties' => 'ALL'
                             ),
                             'licenceVehicles' => array(
-                                'properties' => 'ALL'
+                                'properties' => array(
+                                    'id',
+                                    'specifiedDate',
+                                    'deletedDate'
+                                )
                             ),
                             'organisation' => array(
                                 'properties' => 'ALL',

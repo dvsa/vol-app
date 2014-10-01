@@ -44,14 +44,8 @@ trait SubmissionSectionTrait
      */
     public function submissionSectionCasu(array $data = array())
     {
-        $vehiclesInPossession = 0;
-        if (isset($data['licence']['licenceVehicles'])) {
-            foreach ($data['licence']['licenceVehicles'] as $vehicle) {
-                if (isset($vehicle['specifiedDate']) && empty($vehicle['specifiedDate'])) {
-                    $vehiclesInPossession++;
-                }
-            }
-        }
+        $vehiclesInPossession = $this->calculateVehiclesInPossession($data['licence']);
+
         return array(
             'id' => $data['id'],
             'organisationName' => $data['licence']['organisation']['name'],
@@ -69,5 +63,24 @@ trait SubmissionSectionTrait
             'vehiclesInPossession' => $vehiclesInPossession,
             'trailersInPossession' => $data['licence']['totAuthTrailers']
         );
+    }
+
+    /**
+     * Calculates the vehicles in possession.
+     *
+     * @param array $data
+     * @return int
+     */
+    private function calculateVehiclesInPossession($licenceData)
+    {
+        $vehiclesInPossession = 0;
+        if (isset($licenceData['licenceVehicles']) && is_array($licenceData['licenceVehicles'])) {
+            foreach ($licenceData['licenceVehicles'] as $vehicle) {
+                if (!empty($vehicle['specifiedDate']) && empty($vehicle['deletedDate'])) {
+                    $vehiclesInPossession++;
+                }
+            }
+        }
+        return $vehiclesInPossession;
     }
 }
