@@ -29,10 +29,12 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
                 'getFromPost',
                 'getPersist',
                 'setPersist',
+                'getCase',
                 'getForm',
                 'generateFormWithData',
                 'getDataForForm',
-                'callParentProcessSave'
+                'callParentProcessSave',
+                'callParentProcessLoad'
             )
         );
         $serviceManager = Bootstrap::getServiceManager();
@@ -114,6 +116,67 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
+     * Tests first request for edit Action
+     */
+    public function testEditAction()
+    {
+
+        $formData = ['submissionSections' => ['submissionTypeSubmit' => '']];
+
+        $this->controller->expects($this->once())
+            ->method('setPersist')
+            ->with(false);
+
+        $this->controller->expects($this->once())
+            ->method('getFromPost')
+            ->with('fields')
+            ->will($this->returnValue($formData));
+
+        $mockForm = $this->getMock('\stdClass', ['remove']);
+
+        $this->controller->expects($this->once())
+            ->method('generateFormWithData')
+            ->will($this->returnValue($mockForm));
+
+        $response = $this->controller->editAction();
+
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+    }
+
+    /**
+     * Tests edit request when changing submission type
+     */
+    public function testEditActionChangingSubmissionType()
+    {
+
+        $formData = ['submissionSections' => []];
+
+        $this->controller->expects($this->once())
+            ->method('getFromPost')
+            ->with('fields')
+            ->will($this->returnValue($formData));
+
+        $mockForm = $this->getMock('\stdClass', ['remove']);
+
+        $mockForm->expects($this->once())
+            ->method('remove')
+            ->with('formActions[submit]');
+
+        $this->controller->expects($this->once())
+            ->method('getForm')
+            ->with('submission')
+            ->will($this->returnValue($mockForm));
+
+        $this->controller->expects($this->once())
+            ->method('generateFormWithData')
+            ->will($this->returnValue($mockForm));
+
+        $response = $this->controller->editAction();
+
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+    }
+
+    /**
      * Test save of new submissions
      *
      * @param $dataToSave
@@ -147,6 +210,76 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $this->controller->processSave($dataToSave);
     }
 
+    /**
+     * Test processLoad of submissions
+     *
+     * @param $dataToLoad
+     * @param $loadedData
+     *
+     * @dataProvider getSubmissionSectionsToLoadProvider
+     */
+    public function testProcessLoad($dataToLoad, $loadedData)
+    {
+        $this->controller->expects($this->once())
+            ->method('callParentProcessLoad')
+            ->with($dataToLoad)
+            ->will($this->returnValue($dataToLoad));
+
+        $this->controller->expects($this->once())
+            ->method('getCase')
+            ->will($this->returnValue(['id' => 24]));
+
+        $result = $this->controller->processLoad($dataToLoad);
+
+        $this->assertEquals($result, $loadedData);
+
+    }
+
+    /**
+     * Test GetSubmissionTypeTitle
+     *
+     * @param $input
+     * @param $expectedResult
+     *
+     * @dataProvider getSubmissionTitlesProvider
+     */
+    public function testGetSubmissionTypeTitle($input, $expectedResult)
+    {
+        $result = $this->controller->getSubmissionTypeTitle($input['submissionTypeId'], $input['submissionTitles']);
+
+        $this->assertEquals($result, $expectedResult);
+    }
+
+    public function getSubmissionTitlesProvider()
+    {
+        return array(
+            array(
+                array(
+                    'submissionTypeId' => 'submission_type_o_test',
+                    'submissionTitles' => array(
+                        array(
+                            'id' => 'submission_type_t_test',
+                            'description' => 'test title'
+                        )
+                    )
+                ),
+                'test title'
+            ),
+            array(
+                array(
+                    'submissionTypeId' => 'submission_type_o_testdoesntexist',
+                    'submissionTitles' => array(
+                        array(
+                            'id' => 'submission_type_t_test',
+                            'description' => 'test title'
+                        )
+                    )
+                ),
+                ''
+            )
+        );
+
+    }
     public function getSubmissionSectionsToSaveProvider()
     {
         return array(
@@ -165,4 +298,58 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         );
 
     }
+
+    public function getSubmissionSectionsToLoadProvider()
+    {
+        return array(
+            array(
+                array(
+                    'id' => 1,
+                    'version' => 1,
+                    'submissionType' => 'foo',
+                    'text' => '[{"sectionId":"submission_section_casu","data":{"data":[]}}]'
+                ),
+                array(
+                    'id' => 1,
+                    'version' => 1,
+                    'submissionType' => 'foo',
+                    'fields' => [
+                        'case' => 24,
+                        'submissionSections' => [
+                            'submissionType' => 'foo',
+                            'sections' => ['submission_section_casu']
+                        ],
+                        'id' => 1,
+                        'version' => 1,
+                    ],
+                    'text' => '[{"sectionId":"submission_section_casu","data":{"data":[]}}]',
+                    'case' => 24
+                ),
+            ),
+            array(
+                array(
+                    'id' => 1,
+                    'version' => 1,
+                    'submissionSections' => [
+                        'sections' => '[{"sectionId":"submission_section_casu"}]',
+                    ],
+                ),
+                array(
+                    'id' => 1,
+                    'version' => 1,
+                    'fields' => [
+                        'case' => 24,
+                        'submissionSections' => [
+                            'sections' => ['submission_section_casu']
+                        ],
+                    ],
+                    'submissionSections' => [
+                        'sections' => '[{"sectionId":"submission_section_casu"}]'
+                    ],
+                )
+            )
+        );
+
+    }
+
 }

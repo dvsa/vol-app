@@ -251,7 +251,7 @@ class SubmissionController extends OlcsController\CrudAbstract
      */
     public function processLoad($data)
     {
-        $data = parent::processLoad($data);
+        $data = $this->callParentProcessLoad($data);
 
         $case = $this->getCase();
 
@@ -270,6 +270,17 @@ class SubmissionController extends OlcsController\CrudAbstract
         }
 
         return $data;
+    }
+
+    /**
+     * Call parent process load and return result. Public method to allow unit testing
+     *
+     * @param array $data
+     * @return array
+     */
+    public function callParentProcessLoad($data)
+    {
+        return parent::processLoad($data);
     }
 
     private function extractSectionIds($sectionData)
@@ -295,7 +306,12 @@ class SubmissionController extends OlcsController\CrudAbstract
         )->fetchListOptions('submission_section');
 
         $submission = $this->loadCurrent();
-        $submission['submissionTypeTitle'] = $this->getSubmissionTypeTitle($submission['submissionType']['id']);
+
+        $submissionTitles = $this->getServiceLocator()
+            ->get('Common\Service\Data\RefData')->fetchListData('submission_type_title');
+
+        $submission['submissionTypeTitle'] =
+            $this->getSubmissionTypeTitle($submission['submissionType']['id'], $submissionTitles);
 
         $selectedSectionsArray = json_decode($submission['text'], true);
 
@@ -326,17 +342,17 @@ class SubmissionController extends OlcsController\CrudAbstract
     /**
      * Extracts the title from ref_data based on a given submission type.
      *
+     * @param array $submissionTitles
      * @param string $submissionType
      * @return string
      */
-    private function getSubmissionTypeTitle($submissionType)
+    public function getSubmissionTypeTitle($submissionType, $submissionTitles = array())
     {
-        $submissionTitles = $this->getServiceLocator()
-            ->get('Common\Service\Data\RefData')->fetchListData('submission_type_title');
-
-        foreach ($submissionTitles as $title) {
-            if ($title['id'] == str_replace('_o_', '_t_', $submissionType)) {
-                return $title['description'];
+        if (is_array($submissionTitles)) {
+            foreach ($submissionTitles as $title) {
+                if ($title['id'] == str_replace('_o_', '_t_', $submissionType)) {
+                    return $title['description'];
+                }
             }
         }
         return '';
