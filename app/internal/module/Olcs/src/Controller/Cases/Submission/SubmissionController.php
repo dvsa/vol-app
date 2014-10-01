@@ -299,10 +299,9 @@ class SubmissionController extends OlcsController\CrudAbstract
         )->fetchListOptions('submission_section');
 
         $submission = $this->loadCurrent();
+        $submission['submissionTypeTitle'] = $this->getSubmissionTypeTitle($submission['submissionType']['id']);
 
         $selectedSectionsArray = json_decode($submission['text'], true);
-
-        $submission['submissionTypeTitle'] = $this->getSubmissionTypeTitle($submission['submissionType']['id']);
 
         // add section description text from ref data
         foreach ($selectedSectionsArray as $index => $selectedSectionData) {
