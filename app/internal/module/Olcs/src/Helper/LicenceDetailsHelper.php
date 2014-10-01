@@ -83,6 +83,18 @@ class LicenceDetailsHelper
                 )
             )
         ),
+        'discs_psv' => array(
+            'restricted' => array(
+                array(
+                    self::LICENCE_CATEGORY_PSV,
+                    array(
+                        self::LICENCE_TYPE_RESTRICTED,
+                        self::LICENCE_TYPE_STANDARD_NATIONAL,
+                        self::LICENCE_TYPE_STANDARD_INTERNATIONAL
+                    )
+                )
+            )
+        ),
         'safety' => array(
             'restricted' => array(
                 self::LICENCE_TYPE_RESTRICTED,

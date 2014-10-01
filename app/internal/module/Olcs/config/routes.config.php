@@ -253,6 +253,16 @@ return array_merge(
                                 ]
                             ]
                         ],
+                        'discs_psv' => [
+                            'type' => 'segment',
+                            'options' => [
+                                'route' => '/discs',
+                                'defaults' => [
+                                    'controller' => 'LicenceDetailsDiscsPsvController',
+                                    'action' => 'index',
+                                ]
+                            ]
+                        ],
                         'safety' => [
                             'type' => 'segment',
                             'options' => [
