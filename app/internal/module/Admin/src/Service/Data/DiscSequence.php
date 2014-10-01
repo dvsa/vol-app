@@ -207,13 +207,9 @@ class DiscSequence extends AbstractData implements ListDataInterface
      */
     protected function getDiscDetails($type = 'number', $discSequence = '', $licenceType = '')
     {
-        if (!$discSequence) {
-            throw new \Exception('Error getting disc ' . $type . ' - no disc sequence provided');
+        if (!$discSequence || !$licenceType) {
+            return false;
         }
-        if (!$licenceType) {
-            throw new \Exception('Error getting disc ' . $type . ' - no licence type provided');
-        }
-
         $value = ($type == 'number') ? $this->numbers[$licenceType] :  $this->prefixes[$licenceType];
         if (is_null($this->getData($type . '-' . $value))) {
             $bundle = [
@@ -237,6 +233,46 @@ class DiscSequence extends AbstractData implements ListDataInterface
             }
         }
         return $this->getData($type . '-' . $value);
+
+    }
+
+    /**
+     * Set new start number
+     *
+     * @param string $licenceType
+     * @param int $discSequence
+     * @param int $startNumber
+     */
+    public function setNewStartNumber($licenceType = '', $discSequence = null, $startNumber = null)
+    {
+        if (!$licenceType) {
+            throw new \Exception('Error setting start number - no licence type provided');
+        }
+
+        if (!$discSequence) {
+            throw new \Exception('Error setting start number - no disc sequence provided');
+        }
+
+        if (!$startNumber) {
+            throw new \Exception('Error setting start number - no start number provided');
+        }
+
+        $bundle = [
+            'properties' => [
+                'version'
+            ]
+        ];
+        $details = $this->getRestClient()->get(['bundle' => json_encode($bundle), 'id' => $discSequence]);
+        if (!isset($details['version'])) {
+            throw new \Exception('Error setting start number - unable to get version');
+        }
+
+        $dataToUpdate = [
+            $this->numbers[$licenceType] => $startNumber,
+            'version' => $details['version']
+        ];
+
+        $this->getRestClient()->put('/' . $discSequence, ['data' => json_encode($dataToUpdate)]);
 
     }
 }

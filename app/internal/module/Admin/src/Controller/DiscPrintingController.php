@@ -47,10 +47,12 @@ class DiscPrintingController extends AbstractController
         if ($this->getRequest()->isPost() && $form->isValid()) {
             $inlineScripts[] = 'disc-printing-popup';
         }
+        $successStatus = $this->params()->fromRoute('success', null);
         $view = new ViewModel(
             [
                 'form' => $form,
-                'inlineScript' => $this->loadScripts($inlineScripts)
+                'inlineScript' => $this->loadScripts($inlineScripts),
+                'successStatus' => $successStatus
             ]
         );
         $view->setTemplate('disc-printing/index');
@@ -136,7 +138,9 @@ class DiscPrintingController extends AbstractController
             $discSequence,
             $startNumberEntered
         );
-        $goodsDiscNumberValidator->setOriginalStartNumber($numbering['startNumber']);
+        if (isset($numbering['startNumber'])) {
+            $goodsDiscNumberValidator->setOriginalStartNumber($numbering['startNumber']);
+        }
 
         $startNumberValidatorChain = $form
                                         ->getInputFilter()
@@ -145,8 +149,12 @@ class DiscPrintingController extends AbstractController
                                         ->getValidatorChain();
         $startNumberValidatorChain->attach($goodsDiscNumberValidator);
 
-        $form->get('discs-numbering')->get('endNumber')->setValue($numbering['endNumber']);
-        $form->get('discs-numbering')->get('totalPages')->setValue($numbering['totalPages']);
+        if (isset($numbering['endNumber'])) {
+            $form->get('discs-numbering')->get('endNumber')->setValue($numbering['endNumber']);
+        }
+        if (isset($numbering['totalPages'])) {
+            $form->get('discs-numbering')->get('totalPages')->setValue($numbering['totalPages']);
+        }
 
         return $form;
     }
@@ -169,35 +177,25 @@ class DiscPrintingController extends AbstractController
     public function discNumberingAction()
     {
         $params = $this->getFlattenParams();
-        if (!$params['niFlag']) {
-            throw new \Exception('Unable to get discs numbering details - no operator location provided');
-        }
+        $flProcess = true;
+        $viewResults = [];
 
-        if (!$params['operatorType']) {
-            throw new \Exception('Unable to get discs numbering details - no operator type provided');
-        }
-
-        if (!$params['licenceType']) {
-            throw new \Exception('Unable to get discs numbering details - no licence type provided');
-        }
-
-        if (!$params['discSequence']) {
-            throw new \Exception('Unable to get discs numbering details - no disc sequence provided');
-        }
-
-        if (!$params['discPrefix']) {
-            throw new \Exception('Unable to get discs numbering details - no disc prefix provided');
+        if (!$params['niFlag'] || !$params['operatorType'] || !$params['licenceType'] ||
+            !$params['discSequence'] || !$params['discPrefix']) {
+            $flProcess = false;
         }
 
         // calculate start and end numbers, number of pages
-        $viewResults = $this->processDiskNumbering(
-            $params['niFlag'],
-            $params['licenceType'],
-            $params['operatorType'],
-            $params['discPrefix'],
-            $params['discSequence'],
-            $params['startNumber']
-        );
+        if ($flProcess) {
+            $viewResults = $this->processDiskNumbering(
+                $params['niFlag'],
+                $params['licenceType'],
+                $params['operatorType'],
+                $params['discPrefix'],
+                $params['discSequence'],
+                $params['startNumber']
+            );
+        }
 
         return new JsonModel($viewResults);
     }
@@ -215,11 +213,16 @@ class DiscPrintingController extends AbstractController
      */
     protected function processDiskNumbering($niFlag, $licenceType, $operatorType, $discPrefix, $discSequence, $startNumberEntered = NULL)
     {
+        $retv = [];
+
+        if (!$niFlag || !$licenceType || !$operatorType || !$discPrefix || !$discSequence) {
+            return $retv;
+        }
+
         $discSequenceService = $this->getServiceLocator()->get('Admin\Service\Data\DiscSequence');
         $goodsDiscService = $this->getServiceLocator()->get('Admin\Service\Data\GoodsDisc');
 
         // calculate start and end numbers, number of pages
-        $retv = [];
         $retv['startNumber'] = $discSequenceService->getDiscNumber($discSequence, $licenceType);
         $retv['discsToPrint'] = count(
             $goodsDiscService->getDiscsToPrint($niFlag, $operatorType, $licenceType, $discPrefix)
@@ -283,12 +286,8 @@ class DiscPrintingController extends AbstractController
     protected function populateDiscPrefixes()
     {
         $params = $this->getFlattenParams();
-        if ($params['niFlag'] == 'N' && !$params['operatorType']) {
-            throw new \Exception('No operator type provided');
-        }
-
-        if (!$params['licenceType']) {
-            throw new \Exception('No licence type provided');
+        if (($params['niFlag'] == 'N' && !$params['operatorType']) || !$params['licenceType']) {
+            return [];
         }
 
         return $this->getDiscPrefixes($params['niFlag'], $params['operatorType'], $params['licenceType']);
@@ -320,7 +319,42 @@ class DiscPrintingController extends AbstractController
             isset($params['prefix']['discSequence']) ? $params['prefix']['discSequence'] :
             (isset($params['discSequence']) ? $params['discSequence'] : '');
         $flattenParams['discPrefix'] =isset($params['discPrefix']) ? $params['discPrefix'] : '';
+        $flattenParams['isSuccessfull'] =isset($params['isSuccessfull']) ? $params['isSuccessfull'] : '';
+        $flattenParams['endNumber'] =isset($params['endNumber']) ? $params['endNumber'] : '';
 
         return $flattenParams;
+    }
+
+    /**
+     * Confirm disc printing
+     *
+     */
+    public function confirmDiscPrintingAction()
+    {
+        $params = $this->getFlattenParams();
+        $retv = [];
+        $discSequenceService = $this->getServiceLocator()->get('Admin\Service\Data\DiscSequence');
+        $goodsDiscService = $this->getServiceLocator()->get('Admin\Service\Data\GoodsDisc');
+        $discsToPrint = $goodsDiscService->getDiscsToPrint(
+            $params['niFlag'],
+            $params['operatorType'],
+            $params['licenceType'],
+            $params['discPrefix']
+        );
+        try {
+            if ($params['isSuccessfull']) {
+                $goodsDiscService->setIsPrintingOffAndAssignNumber($discsToPrint, $params['startNumber']);
+                $discSequenceService->setNewStartNumber(
+                    $params['licenceType'],
+                    $params['discSequence'],
+                    $params['endNumber'] + 1
+                );
+            } else {
+                $goodsDiscService->setIsPrintingOff($discsToPrint);
+            }
+        } catch (\Exception $e) {
+            $retv['status'] = 500;
+        }
+        return new JsonModel($retv);
     }
 }

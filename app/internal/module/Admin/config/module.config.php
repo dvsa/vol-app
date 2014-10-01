@@ -105,13 +105,16 @@ return [
                         ],
                     ],
                     'admin-disc-printing' => [
-                        'type' => 'Literal',
+                        'type' => 'segment',
                         'options' => [
-                            'route' => '/disc-printing',
+                            'route' => '/disc-printing[/success[/:success]]',
                             'defaults' => [
                                 'controller' => 'Admin\DiscPrintingController',
                                 'action' => 'index',
-                            ]
+                            ],
+                            'constraints' => [
+                                'licence' => '[a-z]+'
+                            ],
                         ],
                         'may_terminate' => true,
                         'child_routes' => [
@@ -132,6 +135,16 @@ return [
                                     'defaults' => [
                                         'controller' => 'Admin\DiscPrintingController',
                                         'action' => 'disc-numbering'
+                                    ]
+                                ]
+                            ],
+                            'disc_printing' => [
+                                'type' => 'segment',
+                                'options' => [
+                                    'route' => '/confirm-disc-printing',
+                                    'defaults' => [
+                                        'controller' => 'Admin\DiscPrintingController',
+                                        'action' => 'confirm-disc-printing'
                                     ]
                                 ]
                             ],
