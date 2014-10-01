@@ -194,14 +194,12 @@ class SubmissionController extends OlcsController\CrudAbstract
         // modify $data
         $this->submissionConfig = $this->getServiceLocator()->get('config')['submission_config'];
 
-        $case = $this->getCase();
-
-        if (is_array($data['submissionSections']['sections']))
-        {
-            foreach ($data['submissionSections']['sections'] as $index => $sectionId)
-            {
-                $sectionData = $this->createSubmissionSection($sectionId,
-                    $this->submissionConfig['sections'][$sectionId]);
+        if (is_array($data['submissionSections']['sections'])) {
+            foreach ($data['submissionSections']['sections'] as $index => $sectionId) {
+                $sectionData = $this->createSubmissionSection(
+                    $sectionId,
+                    $this->submissionConfig['sections'][$sectionId]
+                );
 
                 $data['submissionSections']['sections'][$index] = [
                     'sectionId' => $sectionId,
@@ -277,10 +275,8 @@ class SubmissionController extends OlcsController\CrudAbstract
     private function extractSectionIds($sectionData)
     {
         $sectionIds = [];
-        if (is_array($sectionData))
-        {
-            foreach ($sectionData as $section)
-            {
+        if (is_array($sectionData)) {
+            foreach ($sectionData as $section) {
                 $sectionIds[] = $section['sectionId'];
             }
         }

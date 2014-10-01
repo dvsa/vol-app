@@ -67,7 +67,7 @@ class SubmissionSectionOverview extends AbstractHelper
         'submission_section_surr'   => '/case/submission/section/details',
         'submission_section_annx'   => '/case/submission/section/details'
     );
-    
+
     /**
      * Renders the data for a SubmissionSection details
      *
