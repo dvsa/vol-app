@@ -104,10 +104,10 @@ return array(
                             'use_route_match' => true,
                         ),
                         array(
-                            'id' => 'case_details_impoundings',
-                            'label' => 'X Impoundings',
-                            'route' => 'case',
-                            'action' => 'impoundings',
+                            'id' => 'case_details_impounding',
+                            'label' => 'Impoundings',
+                            'route' => 'case_details_impounding',
+                            'action' => 'index',
                             'use_route_match' => true,
                         ),
                     )

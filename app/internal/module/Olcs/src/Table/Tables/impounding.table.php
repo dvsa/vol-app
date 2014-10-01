@@ -31,7 +31,7 @@ return array(
                 $column['formatter'] = 'Date';
                 return '<a href="' . $this->generateUrl(
                     array('action' => 'edit', 'id' => $data['id']),
-                    'case_impounding',
+                    'case_details_impounding',
                     true
                 ) . '">' . $this->callFormatter($column, $data) . '</a>';
             },

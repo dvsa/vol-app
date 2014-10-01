@@ -7,7 +7,7 @@
  */
 namespace Olcs\Controller\Traits;
 
-use Olcs\Helper\LicenceDetailsHelper;
+use Common\Helper\LicenceDetailsHelper;
 
 /**
  * Licence Controller Trait
@@ -22,7 +22,7 @@ trait LicenceControllerTrait
      * @param array $variables
      * @return \Zend\View\Model\ViewModel
      */
-    public function getViewWithLicence($variables = array())
+    protected function getViewWithLicence($variables = array())
     {
         $licence = $this->getLicence();
 
@@ -42,18 +42,13 @@ trait LicenceControllerTrait
         return $view;
     }
 
-    public function getTranslator()
-    {
-        return $this->getServiceLocator()->get('translator');
-    }
-
     /**
      * Gets the licence by ID.
      *
      * @param integer $id
      * @return array
      */
-    public function getLicence($id = null)
+    protected function getLicence($id = null)
     {
         if (is_null($id)) {
             $id = $this->getFromRoute('licence');
