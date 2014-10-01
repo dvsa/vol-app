@@ -38,8 +38,6 @@ trait CaseControllerTrait
                 $case = $this->getCase();
 
                 $this->getViewHelperManager()->get('headTitle')->prepend('Case ' . $case['id']);
-                /* $this->getViewHelperManager()->get('pageTitle')->append('Case ' . $case['id']);
-                $this->getViewHelperManager()->get('pageSubtitle')->append('Case subtitle'); */
 
                 $placeholder->getContainer('pageTitle')->append('Case ' . $case['id']);
                 $placeholder->getContainer('pageSubtitle')->append('Case subtitle');
@@ -64,9 +62,6 @@ trait CaseControllerTrait
                     ['licence' => $licence['id']]
                 );
                 $licenceLink = '<a href="' . $licenceUrl . '">' . $licence['licNo'] . '</a>';
-                /* $this->getViewHelperManager()
-                     ->get('pageTitle')->setAutoEscape(false)
-                     ->prepend($licenceLink); */
 
                 $placeholder->getContainer('pageTitle')->prepend($licenceLink);
             }
