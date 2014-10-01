@@ -7,14 +7,14 @@
 
 namespace Admin\Controller;
 
-use Common\Controller\FormActionController;
+use Common\Controller\AbstractActionController;
 
 /**
  * Abstract Controller
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-abstract class AbstractController extends FormActionController
+abstract class AbstractController extends AbstractActionController
 {
     
 }
