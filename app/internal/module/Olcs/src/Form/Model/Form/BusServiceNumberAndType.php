@@ -6,23 +6,18 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
- * @Form\Name("impounding")
+ * @Form\Name("bus-service-number-and-type")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
  * @Form\Options({"prefer_form_input_filter": true})
  */
-class Impounding
+class BusServiceNumberAndType
 {
-    /**
-     * @Form\Name("base")
-     * @Form\Attributes({"class":"base"})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\CaseBase")
-     */
-    public $caseBase = null;
 
     /**
      * @Form\Name("fields")
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\ImpoundingFields")
+     * @Form\Options({"label":"","class":""})
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\BusServiceNumberAndType")
      */
     public $fields = null;
 

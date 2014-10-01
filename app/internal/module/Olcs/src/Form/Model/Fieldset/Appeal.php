@@ -19,6 +19,7 @@ class Appeal extends CaseBase
      *     "render_delimiters": false
      * })
      * @Form\Type("DateSelect")
+     * @Form\Required(false)
      * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
      * @Form\Filter({"name": "DateSelectNullifier"})
      */
@@ -26,6 +27,7 @@ class Appeal extends CaseBase
 
     /**
      * @Form\Attributes({"id":"dob"})
+     * @Form\Required(true)
      * @Form\Options({
      *     "label": "Date of appeal",
      *     "create_empty_option": true,
@@ -49,7 +51,6 @@ class Appeal extends CaseBase
     public $appealNo = null;
 
     /**
-     * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
      *     "label": "Reason",
      *     "empty_option": "Please Select",
@@ -57,6 +58,8 @@ class Appeal extends CaseBase
      *     "help-block": "Please select a category",
      *     "category": "appeal_reason"
      * })
+     * @Form\Required(true)
+     * @Form\Attributes({"id":"","placeholder":"", "required":false})
      * @Form\Type("DynamicSelect")
      */
     public $reason = null;
@@ -129,6 +132,7 @@ class Appeal extends CaseBase
 
     /**
      * @Form\Attributes({"id":"","placeholder":""})
+     * @Form\Required(false)
      * @Form\Options({
      *     "label": "Outcome",
      *     "empty_option": "Please Select",

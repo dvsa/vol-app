@@ -208,9 +208,12 @@ return array_merge(
                             ]
                         ],
                         'operating_centre' => [
-                            'type' => 'literal',
+                            'type' => 'segment',
                             'options' => [
-                                'route' => '/operating_centres',
+                                'route' => '/operating_centres[/:action][/:id]',
+                                'contraints' => [
+                                    'id' => '[0-9]+'
+                                ],
                                 'defaults' => [
                                     'controller' => 'LicenceDetailsOperatingCentreController',
                                     'action' => 'index',
@@ -316,7 +319,7 @@ return array_merge(
                                 'route' => '/service',
                                 'defaults' => [
                                     'controller' => 'BusDetailsServiceController',
-                                    'action' => 'index',
+                                    'action' => 'edit',
                                 ]
                             ],
                         ],
@@ -808,15 +811,15 @@ return array_merge(
         'offence' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/licence/[:licence]/case/[:case]/offence/view[/:offenceId]',
+                'route' => '/case/:case/offence[/:action/:offence]',
                 'constraints' => [
-                    'licence' => '[0-9]+',
                     'case' => '[0-9]+',
-                    'offenceId' => '[0-9]+',
+                    'action' => '[a-z]+',
+                    'offence' => '[0-9]+',
                 ],
                 'defaults' => [
-                    'controller' => 'CaseConvictionController',
-                    'action' => 'viewOffence'
+                    'controller' => 'CaseOffenceController',
+                    'action' => 'index'
                 ]
             ]
         ],
@@ -929,7 +932,7 @@ return array_merge(
                 ],
                 'defaults' => [
                     'controller' => 'CaseProcessingController',
-                    'action' => 'index'
+                    'action' => 'overview'
                 ]
             ]
         ],
@@ -1023,12 +1026,11 @@ return array_merge(
                 ]
             ]
         ],
-        'case_impounding' => [
+        'case_details_impounding' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/licence/[:licence]/case/[:case]/task/impounding[/:action][/:id]',
+                'route' => '/case/[:case]/impounding[/:action][/:id]',
                 'constraints' => [
-                    'licence' => '[0-9]+',
                     'case' => '[0-9]+',
                     'id' => '[0-9]+'
                 ],
@@ -1095,6 +1097,15 @@ return array_merge(
                     'action'     => 'downloadTmp'
                 ]
             ]
-        ]
+        ],
+        // @todo replace this with the real varitation route
+        'application-variation' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => '/variation',
+                'defaults' => array(
+                )
+            )
+        )
     ]
 );

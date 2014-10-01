@@ -9,7 +9,7 @@
  */
 namespace Olcs\Controller;
 
-use Common\Controller\FormActionController;
+use Common\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -19,7 +19,7 @@ use Zend\View\Model\ViewModel;
  * @author Mike Cooper <michael.cooper@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class SearchController extends FormActionController
+class SearchController extends AbstractActionController
 {
 
     /**

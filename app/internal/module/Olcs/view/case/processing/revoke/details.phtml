@@ -43,11 +43,23 @@ $revoke = $this->placeholder('proposeToRevoke')->getValue();
         </dl>
         <dl>
             <dt><?php echo $this->translate('Agreed date');?></dt>
-            <dd><?php echo $revoke['ptrAgreedDate']; ?></dd>
+            <dd><?php echo $this->dateFormat(
+                    \DateTime::createFromFormat(
+                        \DateTime::ISO8601,
+                        $revoke['ptrAgreedDate']
+                    ),
+                    \IntlDateFormatter::SHORT);
+                ?></dd>
         </dl>
         <dl>
             <dt><?php echo $this->translate('Closed date');?></dt>
-            <dd><?php echo $revoke['closedDate']; ?></dd>
+            <dd><?php echo $this->dateFormat(
+                    \DateTime::createFromFormat(
+                        \DateTime::ISO8601,
+                        $revoke['closedDate']
+                    ),
+                    \IntlDateFormatter::SHORT);
+                ?></dd>
         </dl>
         <dl>
             <dt><?php echo $this->translate('Notes');?></dt>

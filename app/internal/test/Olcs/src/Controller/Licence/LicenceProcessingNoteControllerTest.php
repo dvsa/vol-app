@@ -36,7 +36,8 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
                 'redirectToRoute',
                 'processAdd',
                 'processEdit',
-                'setTableFilters'
+                'setTableFilters',
+                'loadScripts'
 
             )
         );

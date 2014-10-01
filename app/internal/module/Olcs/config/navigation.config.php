@@ -55,6 +55,13 @@ return array(
                             'use_route_match' => true,
                         ),
                         array(
+                            'id' => 'case_details_legacy_offence',
+                            'label' => 'Legacy Offences',
+                            'route' => 'offence',
+                            'action' => 'index',
+                            'use_route_match' => true,
+                        ),
+                        array(
                             'id' => 'case_details_annual_test_history',
                             'label' => 'Annual test history',
                             'route' => 'case_annual_test_history',
@@ -90,13 +97,6 @@ return array(
                             'use_route_match' => true,
                         ),
                         array(
-                            'id' => 'case_details_public_inquiry',
-                            'label' => 'Public inquiry',
-                            'route' => 'case_pi',
-                            'action' => 'index',
-                            'use_route_match' => true,
-                        ),
-                        array(
                             'id' => 'case_details_conditions_undertakings',
                             'label' => 'Conditions & Undertakings',
                             'route' => 'case_conditions_undertakings',
@@ -104,10 +104,10 @@ return array(
                             'use_route_match' => true,
                         ),
                         array(
-                            'id' => 'case_details_impoundings',
-                            'label' => 'X Impoundings',
-                            'route' => 'case',
-                            'action' => 'impoundings',
+                            'id' => 'case_details_impounding',
+                            'label' => 'Impoundings',
+                            'route' => 'case_details_impounding',
+                            'action' => 'index',
                             'use_route_match' => true,
                         ),
                     )
@@ -116,13 +116,13 @@ return array(
                     'id' => 'case_oppositions',
                     'label' => 'Opposition',
                     'route' => 'case',
-                    'action' => 'opositions',
+                    'action' => 'oppositions',
                     'use_route_match' => true,
                     'pages' => array(
                         array(
                             'id' => 'case_submission_list',
                             'label' => 'Submission List',
-                            'route' => 'submission',
+                            'route' => 'case',
                             'action' => 'index',
                             'use_route_match' => true,
                         ),
@@ -132,7 +132,7 @@ return array(
                     'id' => 'case_submissions',
                     'label' => 'Submissions',
                     'route' => 'submission',
-                    'action' => 'redirect',
+                    'action' => 'index',
                     'use_route_match' => true,
                     'pages' => array(
                         array(
@@ -175,8 +175,8 @@ return array(
                         array(
                             'id' => 'case_hearings_appeals_public_inquiry',
                             'label' => 'Public inquiry',
-                            'route' => 'case_hearing_appeal',
-                            'action' => 'details',
+                            'route' => 'case_pi',
+                            'action' => 'index',
                             'use_route_match' => true,
                         ),
                     )
@@ -201,6 +201,7 @@ return array(
                     'id' => 'case_processing',
                     'label' => 'Processing',
                     'route' => 'processing',
+                    'action' => 'overview',
                     'use_route_match' => true,
                     'pages' => array(
                         array(

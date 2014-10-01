@@ -54,6 +54,13 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     protected $isAction = false;
 
     /**
+     * Contains the name of the view placeholder for the table.
+     *
+     * @var string
+     */
+    protected $tableViewPlaceholderName = 'table';
+
+    /**
      * Identifier key
      *
      * @var string
@@ -82,6 +89,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     public function setPlaceholderName($placeholderName)
     {
         $this->placeholderName = $placeholderName;
+        return $this;
     }
 
     /**
@@ -101,6 +109,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     public function setIsListResult($isListResult)
     {
         $this->isListResult = (bool) $isListResult;
+        return $this;
     }
 
     /**
@@ -211,10 +220,20 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
 
             $data = $this->preProcessTableData($data);
 
-            $this->getViewHelperManager()->get('placeholder')->getContainer('table')->set(
+            $this->getViewHelperManager()->get('placeholder')->getContainer($this->getTableViewPlaceholderName())->set(
                 $this->alterTable($this->getTable($tableName, $data, $params))
             );
         }
+    }
+
+    /**
+     * Returns the value of $this->tableViewPlaceholderName
+     *
+     * @return string
+     */
+    public function getTableViewPlaceholderName()
+    {
+        return $this->tableViewPlaceholderName;
     }
 
     public function loadListData(array $params)
@@ -260,6 +279,11 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
         $this->getViewHelperManager()
              ->get('placeholder')
              ->getContainer($this->getPlaceholderName())
+             ->set($this->loadCurrent());
+
+        $this->getViewHelperManager()
+             ->get('placeholder')
+             ->getContainer('details')
              ->set($this->loadCurrent());
 
         $view->setTemplate($this->detailsView);
@@ -364,6 +388,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     /**
      * Method checks that the required properties exist.
      *
+     * @codeCoverageIgnore this is part of the event system.
      * @throws \LogicException
      * @return boolean
      */
