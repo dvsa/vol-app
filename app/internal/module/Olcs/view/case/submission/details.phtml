@@ -18,9 +18,12 @@ $selectedSectionsArray = $this->placeholder('selectedSectionsArray')->getValue()
         ?></a>
 </h4>
 <?php
-foreach ($selectedSectionsArray as $sectionData) {
-
-    echo $this->submissionSectionDetails($sectionData['sectionId'], $sectionData);
-
+$selectedIds = array_column($selectedSectionsArray, 'sectionId');
+foreach ($allSections as $sectionId => $sectionDescription) {
+    if (in_array($sectionId, $selectedIds))
+    {
+        $key = array_search($sectionId, $selectedIds);
+        echo $this->submissionSectionDetails($selectedSectionsArray[$key]['sectionId'], $selectedSectionsArray[$key]);
+    }
 }
 ?>
