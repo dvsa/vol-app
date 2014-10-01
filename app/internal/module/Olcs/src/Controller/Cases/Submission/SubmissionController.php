@@ -192,6 +192,7 @@ class SubmissionController extends OlcsController\CrudAbstract
     protected function save($data, $service = null)
     {
         // modify $data
+        $this->submissionConfig = $this->getServiceLocator()->get('config')['submission_config'];
 
         $case = $this->getCase();
 
@@ -201,11 +202,9 @@ class SubmissionController extends OlcsController\CrudAbstract
 
             foreach ($data['submissionSections']['sections'] as $index => $sectionId)
             {
-                $sectionData = ['case' => $case['id']];
-                $method = lcfirst($filter->filter($sectionId));
-                if (method_exists($this, $method)) {
-                    $sectionData = array_merge($sectionData, $this->getFilteredSectionData($method, $case));
-                }
+                $sectionData = $this->createSubmissionSection($sectionId,
+                    $this->submissionConfig['sections'][$sectionId]);
+
                 $data['submissionSections']['sections'][$index] = [
                     'sectionId' => $sectionId,
                     'data' => $sectionData

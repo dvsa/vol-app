@@ -2,7 +2,7 @@
 
 namespace Olcs\Controller\Traits;
 
-use Zend\Filter\Word\DashToCamelCase;
+use Zend\Filter\Word\UnderscoreToCamelCase;
 
 /**
  * Trait for building submission section data
@@ -72,24 +72,23 @@ trait SubmissionSectionTrait
      * @param type $config
      * @return type
      */
-    public function createSubmissionSection($sectionName, $config = array())
+    public function createSubmissionSection($sectionId, $config = array())
     {
         $routeParams = $this->getParams(array('case'));
         $section['data'] = array();
-        $section['notes'] = array();
         $bundle = isset($config['bundle']) ? $config['bundle'] : array();
-        if (isset($config['dataPath'])) {
+        if (isset($config['service'])) {
             $this->sectionData = $this->makeRestCall(
-                $config['dataPath'],
+                $config['service'],
                 'GET',
                 array('id' => $routeParams['case']),
                 $bundle
             );
         }
-        $filter = new DashToCamelCase();
-        $method = $filter->filter($sectionName);
+        $filter = new UnderscoreToCamelCase();
+        $method = lcfirst($filter->filter($sectionId));
         if (method_exists($this, $method)) {
-            $section['data'] = $this->getFilteredSectionData($method, $this->sectionData);
+            $section = call_user_func(array($this, $method), $this->sectionData);
         }
 
         return $section;
@@ -111,17 +110,20 @@ trait SubmissionSectionTrait
     {
         return array(
             'id' => $data['id'],
-            'licNo' => $data['licence']['licNo'],
-            'name' => $data['licence']['organisation']['name'],
-            'licenceType' => $data['licence']['licenceType'],
-            'ecmsNo' => $data['ecmsNo'],
-            'description' => $data['description'],
-            'type' => $data['licence']['organisation']['type'],
-            'sicCode' => $data['licence']['organisation']['sicCode'],
+            'organisationName' => $data['licence']['organisation']['name'],
             'isMlh' => $data['licence']['organisation']['isMlh'],
-            'startDate' => $data['licence']['inForceDate'],
-            'authorisedVehicles' => $data['licence']['totAuthVehicles'],
-            'authorisedTrailers' => $data['licence']['totAuthTrailers'],
+            'organisationType' => $data['licence']['organisation']['type']['description'],
+            'businessType' => $data['licence']['organisation']['sicCode']['description'],
+            'ecmsNo' => $data['ecmsNo'],
+            'licNo' => $data['licence']['licNo'],
+            'licenceStartDate' => $data['licence']['inForceDate'],
+            'licenceType' => $data['licence']['licenceType']['description'],
+            'serviceStandardDate' => $data['licence']['createdOn'], // + 9 weeks?
+            'licenceStatus' => $data['licence']['status']['description'],
+            'totAuthorisedVehicles' => $data['licence']['totAuthVehicles'],
+            'totAuthorisedTrailers' => $data['licence']['totAuthTrailers'],
+            'vehiclesInPossession' => $data['licence']['totAuthVehicles'],
+            'trailersInPossession' => $data['licence']['totAuthTrailers']
         );
     }
 
