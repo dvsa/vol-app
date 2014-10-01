@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "1e931f6c35f5bafdab428c806a580bdc",
+    "hash": "683f5547112cbb9eb88b4f003c5da739",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -744,10 +744,10 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.clb.npm:olcs/olcs-common.git",
-                "reference": "origin/develop"
+                "reference": "0.5"
             },
             "type": "library",
-            "time": "2014-09-29 11:20:09"
+            "time": "2014-09-29 11:16:57"
         },
         {
             "name": "symfony/console",
