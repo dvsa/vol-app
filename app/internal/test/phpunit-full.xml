@@ -8,7 +8,7 @@
         </testsuite>
     </testsuites>
     <filter>
-        <whitelist processUncoveredFilesFromWhitelist="false">
+        <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">../module/Olcs/src</directory>
             <directory suffix=".php">../module/Admin/src</directory>
             <directory suffix=".php">../../olcs-common/Common/src</directory>

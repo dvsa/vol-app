@@ -9,7 +9,6 @@
  */
 namespace Olcs\Controller;
 
-use Common\Controller\FormActionController;
 use Olcs\Controller\AbstractController;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;

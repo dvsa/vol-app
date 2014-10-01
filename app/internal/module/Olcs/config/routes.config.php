@@ -208,9 +208,12 @@ return array_merge(
                             ]
                         ],
                         'operating_centre' => [
-                            'type' => 'literal',
+                            'type' => 'segment',
                             'options' => [
-                                'route' => '/operating_centres',
+                                'route' => '/operating_centres[/:action][/:id]',
+                                'contraints' => [
+                                    'id' => '[0-9]+'
+                                ],
                                 'defaults' => [
                                     'controller' => 'LicenceDetailsOperatingCentreController',
                                     'action' => 'index',
@@ -316,7 +319,7 @@ return array_merge(
                                 'route' => '/service',
                                 'defaults' => [
                                     'controller' => 'BusDetailsServiceController',
-                                    'action' => 'index',
+                                    'action' => 'edit',
                                 ]
                             ],
                         ],
@@ -1084,6 +1087,15 @@ return array_merge(
                     'action'     => 'downloadTmp'
                 ]
             ]
-        ]
+        ],
+        // @todo replace this with the real varitation route
+        'application-variation' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => '/variation',
+                'defaults' => array(
+                )
+            )
+        )
     ]
 );
