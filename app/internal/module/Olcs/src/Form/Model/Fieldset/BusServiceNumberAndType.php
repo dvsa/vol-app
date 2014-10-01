@@ -52,6 +52,7 @@ class BusServiceNumberAndType extends Base
 
     /**
      * @Form\Attributes({"id":"busServiceTypes","placeholder":"","multiple":"multiple"})
+     * @Form\Required(false)
      * @Form\Options({
      *     "label": "Service type",
      *     "disable_inarray_validator": false,

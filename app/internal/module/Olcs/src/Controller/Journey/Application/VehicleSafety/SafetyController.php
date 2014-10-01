@@ -70,7 +70,7 @@ class SafetyController extends ParentController
 
         // Get a new form without the removed validation
         $this->requiredFields = true;
-        $this->persist = false;
+        $this->setPersist(false);
         $form = $this->getNewForm();
         $form->remove('csrf');
 

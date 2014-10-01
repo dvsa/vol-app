@@ -5,7 +5,7 @@
 
 namespace Admin\Controller;
 
-use Common\Controller\FormActionController;
+use Common\Controller\AbstractActionController;
 
 /**
  * User Management Controller
@@ -13,7 +13,7 @@ use Common\Controller\FormActionController;
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
 
-class UserManagementController extends FormActionController
+class UserManagementController extends AbstractActionController
 {
     public function indexAction()
     {
