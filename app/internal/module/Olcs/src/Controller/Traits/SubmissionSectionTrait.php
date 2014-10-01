@@ -29,6 +29,7 @@ trait SubmissionSectionTrait
                 $bundle
             );
         }
+
         $filter = new UnderscoreToCamelCase();
         $method = lcfirst($filter->filter($sectionId));
         if (method_exists($this, $method)) {
@@ -43,6 +44,14 @@ trait SubmissionSectionTrait
      */
     public function submissionSectionCasu(array $data = array())
     {
+        $vehiclesInPossession = 0;
+        if (isset($data['licence']['licenceVehicles'])) {
+            foreach ($data['licence']['licenceVehicles'] as $vehicle) {
+                if (isset($vehicle['specifiedDate']) && empty($vehicle['specifiedDate'])) {
+                    $vehiclesInPossession++;
+                }
+            }
+        }
         return array(
             'id' => $data['id'],
             'organisationName' => $data['licence']['organisation']['name'],
@@ -57,7 +66,7 @@ trait SubmissionSectionTrait
             'licenceStatus' => $data['licence']['status']['description'],
             'totAuthorisedVehicles' => $data['licence']['totAuthVehicles'],
             'totAuthorisedTrailers' => $data['licence']['totAuthTrailers'],
-            'vehiclesInPossession' => $data['licence']['totAuthVehicles'],
+            'vehiclesInPossession' => $vehiclesInPossession,
             'trailersInPossession' => $data['licence']['totAuthTrailers']
         );
     }

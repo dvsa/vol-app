@@ -31,6 +31,9 @@ return array(
                             'trafficArea' => array(
                                 'properties' => 'ALL'
                             ),
+                            'licenceVehicles' => array(
+                                'properties' => 'ALL'
+                            ),
                             'organisation' => array(
                                 'properties' => 'ALL',
                                 'children' => array(
