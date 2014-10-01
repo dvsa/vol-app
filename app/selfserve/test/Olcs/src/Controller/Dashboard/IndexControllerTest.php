@@ -31,7 +31,7 @@ class IndexControllerTest extends PHPUnit_Framework_TestCase
     public function setUpAction($action = 'index')
     {
         $this->controller = $this->getMock(
-            'SelfServe\Controller\Dashboard\IndexController',
+            'Olcs\Controller\Dashboard\IndexController',
             array('makeRestCall')
         );
 

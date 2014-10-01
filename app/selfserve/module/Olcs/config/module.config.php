@@ -25,13 +25,31 @@ return array(
     ),
     'controllers' => array(
         'invokables' => array(
-            'SelfServe\Dashboard\Index' => 'SelfServe\Controller\Dashboard\IndexController',
+            'Olcs\Dashboard\Index' => 'Olcs\Controller\Dashboard\IndexController',
+            'LicenceOverview' => 'Olcs\Controller\Licence\Details\OverviewController',
+            'LicenceLicenceType' => 'Olcs\Controller\Licence\Details\LicenceType\LicenceTypeController',
+            'LicenceYourBusiness' => 'Olcs\Controller\Licence\Details\YourBusiness\YourBusinessController',
+            'LicenceOperatingCentres' => 'Olcs\Controller\Licence\Details\OperatingCentres\OperatingCentresController',
+            'LicenceOperatingCentresAuthorisation'
+                => 'Olcs\Controller\Licence\Details\OperatingCentres\AuthorisationController',
+            'LicenceOperatingCentresFinancial'
+                => 'Olcs\Controller\Licence\Details\OperatingCentres\FinancialController',
+            'LicenceTransportManagers'
+                => 'Olcs\Controller\Licence\Details\TransportManagers\TransportManagersController',
+            'LicenceVehiclesSafety'
+                => 'Olcs\Controller\Licence\Details\VehiclesSafety\VehiclesSafetyController',
+            'LicencePreviousHistory'
+                => 'Olcs\Controller\Licence\Details\PreviousHistory\PreviousHistoryController',
+            'LicenceReview'
+                => 'Olcs\Controller\Licence\Details\Review\ReviewController',
+            'LicencePay'
+                => 'Olcs\Controller\Licence\Details\Pay\PayController',
         )
     ),
-    'local_forms_path' => __DIR__ . '/../src/SelfServe/Form/Forms/',
+    'local_forms_path' => __DIR__ . '/../src/Form/Forms/',
     'tables' => array(
         'config' => array(
-            __DIR__ . '/../src/SelfServe/Table/Tables/'
+            __DIR__ . '/../src/Table/Tables/'
         )
     ),
     'service_manager' => array(
@@ -58,6 +76,11 @@ return array(
             __DIR__ . '/../../../vendor/olcs/OlcsCommon/Common/view',
             __DIR__ . '/../view',
             __DIR__ . '/../view/self-serve'
+        )
+    ),
+    'navigation' => array(
+        'default' => array(
+            include __DIR__ . '/navigation.config.php'
         )
     ),
     'asset_path' => '//dvsa-static.olcsdv-ap01.olcs.npm',

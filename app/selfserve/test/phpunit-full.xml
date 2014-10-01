@@ -8,12 +8,12 @@
         </testsuite>
     </testsuites>
     <filter>
-        <whitelist processUncoveredFilesFromWhitelist="false">
-            <directory suffix=".php">../module/SelfServe/src</directory>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">../module/Olcs/src</directory>
             <directory suffix=".php">../../olcs-common/Common/src</directory>
             <exclude>
-                <directory>../module/SelfServe/src/SelfServe/Table/</directory>
-                <directory>../module/SelfServe/src/SelfServe/Form/</directory>
+                <directory>../module/Olcs/src/Table/</directory>
+                <directory>../module/Olcs/src/Form/</directory>
                 <directory>../../olcs-common/Common/src/Common/Form/Forms/</directory>
                 <directory>../../olcs-common/Common/src/Common/Form/Fieldsets/*.fieldset.php</directory>
                 <directory>../../olcs-common/Common/src/Common/Form/Elements/*.element.php</directory>

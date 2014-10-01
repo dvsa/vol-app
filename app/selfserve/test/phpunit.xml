@@ -9,10 +9,10 @@
     </testsuites>
     <filter>
         <whitelist>
-            <directory suffix=".php">../module/SelfServe/src</directory>
+            <directory suffix=".php">../module/Olcs/src</directory>
             <exclude>
-                <directory>../module/SelfServe/src/SelfServe/Table/</directory>
-                <directory>../module/SelfServe/src/SelfServe/Form/</directory>
+                <directory>../module/Olcs/src/Table/</directory>
+                <directory>../module/Olcs/src/Form/</directory>
             </exclude>
         </whitelist>
     </filter>
