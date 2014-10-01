@@ -5,7 +5,7 @@
 
 namespace Admin\Controller;
 
-use Common\Controller\FormActionController;
+use Common\Controller\AbstractActionController;
 
 /**
  * Financial Standing Controller
@@ -13,7 +13,7 @@ use Common\Controller\FormActionController;
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
 
-class FinancialStandingController extends FormActionController
+class FinancialStandingController extends AbstractActionController
 {
     public function indexAction()
     {

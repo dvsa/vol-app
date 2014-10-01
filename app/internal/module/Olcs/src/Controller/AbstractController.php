@@ -9,12 +9,12 @@
 namespace Olcs\Controller;
 
 use Common\Controller\Traits;
-use Common\Controller\AbstractController as CommonAbstractController;
+use Common\Controller\AbstractActionController;
 
 /**
  * Abstract Controller
  */
-class AbstractController extends CommonAbstractController
+class AbstractController extends AbstractActionController
 {
     use Traits\ViewHelperManagerAware;
 

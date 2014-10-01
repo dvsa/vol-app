@@ -1500,7 +1500,8 @@ class VehiclePsvControllerTest extends AbstractLicenceDetailsControllerTestCase
             'properties' => array(
                 'id',
                 'version',
-                'niFlag'
+                'niFlag',
+                'licNo'
             ),
             'children' => array(
                 'goodsOrPsv' => array(
