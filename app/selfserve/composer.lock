@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "2da383ea74c48885f76ed8bdba68d2b9",
+    "hash": "94f7da70f29c47019702d2a62d6e0c53",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -745,10 +745,10 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.clb.npm:/olcs/olcs-common.git",
-                "reference": "origin/develop"
+                "reference": "0.5"
             },
             "type": "library",
-            "time": "2014-09-29 11:20:09"
+            "time": "2014-09-29 11:16:57"
         },
         {
             "name": "symfony/console",
