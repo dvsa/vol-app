@@ -9,7 +9,10 @@
     <div class="one-fifth--left">
         <div class="content">
             <h4><?php echo $this->translate('internal-licence-bus'); ?></h4>
-            <?php echo $this->tableFilters(); ?>
+            <?php
+            $tableFilters = $this->placeholder('tableFilters')->getValue();
+            echo $this->form($tableFilters);
+            ?>
         </div>
 
     </div>
