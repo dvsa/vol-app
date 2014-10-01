@@ -9,6 +9,8 @@
  */
 namespace Olcs\Controller\Licence\Details;
 
+use Common\Controller\Traits;
+
 /**
  * Discs Psv Controller
  *
@@ -16,6 +18,10 @@ namespace Olcs\Controller\Licence\Details;
  */
 class DiscsPsvController extends AbstractLicenceDetailsController
 {
+    use Traits\GenericIndexAction;
+
+    protected $sectionServiceName = 'VehicleSafety\\InternalLicenceDiscsPsv';
+
     /**
      * Set the form name
      *
