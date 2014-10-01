@@ -7,14 +7,14 @@
  */
 namespace Olcs\Controller\Submission;
 
-use Common\Controller\FormActionController;
+use Common\Controller\AbstractActionController;
 
 /**
  * Submission Notes Controller
  *
  * @author Mike Cooper <michael.cooper@valtech.co.uk>
  */
-class SubmissionNoteController extends FormActionController
+class SubmissionNoteController extends AbstractActionController
 {
 
     public $routeParams = array();

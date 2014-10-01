@@ -10,7 +10,7 @@
 namespace Olcs\Controller\Submission;
 
 use Common\Controller\CrudInterface;
-use Common\Controller\FormActionController;
+use Common\Controller\AbstractActionController;
 use Olcs\Controller\Traits\DeleteActionTrait;
 use Zend\View\Model\ViewModel;
 
@@ -20,7 +20,7 @@ use Zend\View\Model\ViewModel;
  *
  * @author Mike Cooper <michael.cooper@valtech.co.uk>
  */
-class SubmissionController extends FormActionController implements CrudInterface
+class SubmissionController extends AbstractActionController implements CrudInterface
 {
     use SubmissionSectionTrait;
     use DeleteActionTrait;

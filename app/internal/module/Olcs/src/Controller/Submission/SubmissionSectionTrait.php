@@ -2,8 +2,6 @@
 
 namespace Olcs\Controller\Submission;
 
-use Zend\Filter\Word\DashToCamelCase;
-
 /**
  * Trait for building submission section data
  * @author Mike Cooper <michael.cooper@valtech.co.uk>
@@ -86,8 +84,7 @@ trait SubmissionSectionTrait
                 $bundle
             );
         }
-        $filter = new DashToCamelCase();
-        $method = $filter->filter($sectionName);
+        $method = $this->getHelperService('StringHelper')->dashToCamel($sectionName);
         if (method_exists($this, $method)) {
             $section['data'] = $this->getFilteredSectionData($method, $this->sectionData);
         }
