@@ -34,7 +34,9 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
                 'generateFormWithData',
                 'getDataForForm',
                 'callParentProcessSave',
-                'callParentProcessLoad'
+                'callParentSave',
+                'callParentProcessLoad',
+                'createSubmissionSection'
             )
         );
         $serviceManager = Bootstrap::getServiceManager();
@@ -177,14 +179,14 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
-     * Test save of new submissions
+     * Test process save of new submissions
      *
      * @param $dataToSave
      * @param $expectedResult
      *
-     * @dataProvider getSubmissionSectionsToSaveProvider
+     * @dataProvider getSubmissionSectionsToProcessSaveProvider
      */
-    public function testSaveAddNew($dataToSave, $expectedResult)
+    public function testProcessSaveAddNew($dataToSave, $expectedResult)
     {
         $this->controller->expects($this->once())
             ->method('callParentProcessSave')
@@ -280,7 +282,8 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         );
 
     }
-    public function getSubmissionSectionsToSaveProvider()
+
+    public function getSubmissionSectionsToProcessSaveProvider()
     {
         return array(
             array(

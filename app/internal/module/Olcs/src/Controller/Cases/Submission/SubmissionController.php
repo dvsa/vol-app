@@ -210,7 +210,7 @@ class SubmissionController extends OlcsController\CrudAbstract
 
         $data['text'] = json_encode($data['submissionSections']['sections']);
         $data['submissionType'] = $data['submissionSections']['submissionType'];
-        $data = parent::save($data, $service);
+        $data = $this->callParentSave($data, $service);
 
         return $data;
     }
@@ -281,6 +281,17 @@ class SubmissionController extends OlcsController\CrudAbstract
     public function callParentProcessLoad($data)
     {
         return parent::processLoad($data);
+    }
+
+    /**
+     * Call parent process load and return result. Public method to allow unit testing
+     *
+     * @param array $data
+     * @return array
+     */
+    public function callParentSave($data, $service = null)
+    {
+        return parent::save($data, $service);
     }
 
     private function extractSectionIds($sectionData)
