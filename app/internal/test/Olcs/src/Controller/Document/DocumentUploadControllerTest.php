@@ -8,6 +8,7 @@
 namespace OlcsTest\Controller\Document;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
+use Common\Service\File\Exception as FileException;
 
 /**
  * Document upload controller tests
@@ -239,6 +240,84 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
         $this->controller->processUpload(array());
     }
 
+    public function testProcessUploadWhenStoreThrowsException()
+    {
+        $fromRoute = $this->getMock('\stdClass', ['fromRoute']);
+        $fromRoute->expects($this->any())
+            ->method('fromRoute')
+            ->will(
+                $this->returnValue(
+                    array(
+                        'type' => 'licence',
+                        'licence' => 1234,
+                        'tmpId' => 'a-temp-file'
+                    )
+                )
+            );
+
+        $this->controller->expects($this->at(0))
+            ->method('params')
+            ->will($this->returnValue($fromRoute));
+
+        $files = $this->getMock('\stdClass', ['toArray']);
+
+        $file = array(
+            'file' => array(
+                'error' => 0
+            )
+        );
+
+        $this->fileStoreMock = $this->getMock(
+            '\stdClass',
+            [
+                'setFile',
+                'upload',
+                'remove'
+            ]
+        );
+
+        $this->fileStoreMock->expects($this->once())
+            ->method('setFile')
+            ->with(array('error' => 0));
+
+        $storeFile = $this->getMock('\stdClass', ['getIdentifier', 'getExtension', 'getSize']);
+        $storeFile->expects($this->any())
+            ->method('getIdentifier')
+            ->willReturn('full-filename');
+
+        $storeFile->expects($this->any())
+            ->method('getExtension')
+            ->willReturn('rtf');
+
+        $storeFile->expects($this->any())
+            ->method('getSize')
+            ->willReturn(1234);
+
+        $this->fileStoreMock->expects($this->once())
+            ->method('upload')
+            ->will($this->throwException(new FileException()));
+
+        $files->expects($this->once())
+            ->method('toArray')
+            ->will($this->returnValue($file));
+
+        $this->request->expects($this->once())
+            ->method('getFiles')
+            ->will($this->returnValue($files));
+
+        $redirect = $this->getMock('\stdClass', ['toRoute']);
+
+        $redirect->expects($this->once())
+            ->method('toRoute')
+            ->with('licence/documents/finalise', ['type' => 'licence', 'tmpId' => 'a-temp-file', 'licence' => 1234]);
+
+        $this->controller->expects($this->once())
+            ->method('redirect')
+            ->will($this->returnValue($redirect));
+
+        $this->controller->processUpload(array());
+    }
+
     public function testProcessUpload()
     {
         $fromRoute = $this->getMock('\stdClass', ['fromRoute']);
@@ -279,14 +358,14 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
             ->method('setFile')
             ->with(array('error' => 0));
 
-        $storeFile = $this->getMock('\stdClass', ['getIdentifier', 'getType', 'getSize']);
+        $storeFile = $this->getMock('\stdClass', ['getIdentifier', 'getExtension', 'getSize']);
         $storeFile->expects($this->any())
             ->method('getIdentifier')
             ->willReturn('full-filename');
 
         $storeFile->expects($this->any())
-            ->method('getType')
-            ->willReturn('application/rtf');
+            ->method('getExtension')
+            ->willReturn('rtf');
 
         $storeFile->expects($this->any())
             ->method('getSize')
@@ -294,13 +373,12 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
 
         $this->fileStoreMock->expects($this->once())
             ->method('upload')
-            ->with('documents')
             ->will($this->returnValue($storeFile));
 
         // @NOTE: needs fixing; should have the temp path on it
         $this->fileStoreMock->expects($this->once())
             ->method('remove')
-            ->with('tmp/documents/');
+            ->with(null, 'tmp');
 
         $files->expects($this->once())
             ->method('toArray')
@@ -399,18 +477,24 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
 
     private function mockDocument($data)
     {
+        $this->assertStringEndsWith('A_template.rtf', $data['filename']);
+        $this->assertStringStartsWith(date('Y-m-d'), $data['issuedDate']);
+
+        unset($data['filename']);
+        unset($data['issuedDate']);
+
         $expected = array(
             'identifier' => 'full-filename',
             'description' => 'A template',
-            'licence' => 'xxx',
+            'licence' => 1234,
             'fileExtension' => 'doc_rtf',
             'category' => 3,
             'documentSubCategory' => 2,
             'isDigital' => true,
             'isReadOnly' => true,
-            'size' => 0
+            'size' => 1234
         );
 
-        // $this->assertEquals($expected, $data);
+         $this->assertEquals($expected, $data);
     }
 }

@@ -1086,18 +1086,8 @@ return array_merge(
                 ],
                 'defaults' => [
                     'type'       => 'licence',
-                    'controller' => 'DocumentController',
+                    'controller' => 'DocumentGenerationController',
                     'action'     => 'listTemplateBookmarks'
-                ]
-            ]
-        ],
-        'fetch_document' => [
-            'type' => 'segment',
-            'options' => [
-                'route' => '/documents/:id/:filename',
-                'defaults' => [
-                    'controller' => 'DocumentController',
-                    'action'     => 'download'
                 ]
             ]
         ],
@@ -1106,7 +1096,7 @@ return array_merge(
             'options' => [
                 'route' => '/documents/tmp/:id/:filename',
                 'defaults' => [
-                    'controller' => 'DocumentController',
+                    'controller' => 'DocumentGenerationController',
                     'action'     => 'downloadTmp'
                 ]
             ]
