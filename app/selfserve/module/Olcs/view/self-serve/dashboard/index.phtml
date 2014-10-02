@@ -7,7 +7,10 @@
         )
     );
 ?>
+
 <div class="three-quarters">
+    <?php echo $licencesTable; ?>
+
     <?php echo $applicationsTable; ?>
     <div class="actions-container">
         <a href="<?php echo $this->url('application_start', array('action' => 'create')); ?>" class="action--primary large">
@@ -15,6 +18,8 @@
         </a>
     </div>
 </div>
+
 <div class="one-quarter">
     <h3>Notifications</h3>
 </div>
+
