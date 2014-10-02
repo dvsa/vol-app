@@ -150,9 +150,11 @@ return array(
             'Olcs\Service\Data\PublicInquiryDefinition' => 'Olcs\Service\Data\PublicInquiryDefinition',
             'Olcs\Service\Data\ImpoundingLegislation' => 'Olcs\Service\Data\ImpoundingLegislation',
             'Olcs\Service\Data\Licence' => 'Olcs\Service\Data\Licence',
+            'Olcs\Service\Data\LocalAuthority' => 'Olcs\Service\Data\LocalAuthority',
             'Olcs\Service\Data\User' => 'Olcs\Service\Data\User',
             'Olcs\Service\Data\PiVenue' => 'Olcs\Service\Data\PiVenue',
-            'Olcs\Service\Data\PresidingTc' => 'Olcs\Service\Data\PresidingTc'
+            'Olcs\Service\Data\PresidingTc' => 'Olcs\Service\Data\PresidingTc',
+            'Olcs\Service\Data\TrafficArea' => 'Olcs\Service\Data\TrafficArea'
         )
     ),
     'application_journey' => array(
