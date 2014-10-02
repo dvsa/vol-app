@@ -17,7 +17,7 @@ return array(
             'name' => 'licNo',
             'formatter' => function ($row) {
                 return '<a href="' . $this->url->fromRoute(
-                    'licence/overview',
+                    'licence/operating_centres',
                     ['licence' => $row['id']]
                 ) . '">'.$row['licNo'].'</a>';
             }
