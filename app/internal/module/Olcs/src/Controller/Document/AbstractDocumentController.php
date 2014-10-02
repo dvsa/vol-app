@@ -26,11 +26,6 @@ abstract class AbstractDocumentController extends AbstractController
      */
     const METADATA_KEY = 'data';
 
-    /**
-     * Labels for empty select options
-     */
-    const EMPTY_LABEL = 'Please select';
-
     protected $tmpData = [];
 
     protected function getContentStore()

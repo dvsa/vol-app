@@ -18,9 +18,49 @@ use Zend\View\Model\ViewModel;
  */
 class DocumentGenerationController extends AbstractDocumentController
 {
+    /**
+     * Labels for empty select options
+     */
+    const EMPTY_LABEL = 'Please select';
+
+    /**
+     * how to map route param types to category names
+     */
     private $categoryMap = [
-        // type (as set by the route) => default category name
         'licence' => 'Licensing'
+    ];
+
+    /**
+     * Not the prettiest bundle, but what we ultimately want
+     * are the all the DB paragraphs availabe for a given template,
+     * grouped into bookmarks
+     *
+     * The relationships here involve two many-to-many relationships
+     * to keep bookmarks and paragraphs decoupled from templates, which
+     * translates into a fairly nested bundle query
+     */
+    private $templateBundle = [
+        'properties' => ['docTemplateBookmarks'],
+        'children' => [
+            'docTemplateBookmarks' => [
+                'properties' => ['docBookmark'],
+                'children' => [
+                    'docBookmark' => [
+                        'properties' => ['name', 'description'],
+                        'children' => [
+                            'docParagraphBookmarks' => [
+                                'properties' => ['docParagraph'],
+                                'children' => [
+                                    'docParagraph' => [
+                                        'properties' => ['id', 'paraTitle']
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ]
     ];
 
     private function getDefaultCategory($categories)
@@ -121,7 +161,7 @@ class DocumentGenerationController extends AbstractDocumentController
         $template = $this->makeRestCall(
             'DocTemplate',
             'GET',
-            ['id' => $templateId],
+            $templateId,
             [
                 'properties' => ['document'],
                 'children' => [
@@ -251,44 +291,12 @@ class DocumentGenerationController extends AbstractDocumentController
             return;
         }
 
-        /**
-         * Not the prettiest bundle, but what we ultimately want
-         * are the all the DB paragraphs availabe for a given template,
-         * grouped into bookmarks
-         *
-         * The relationships here involve two many-to-many relationships
-         * to keep bookmarks and paragraphs decoupled from templates, which
-         * translates into a fairly nested bundle query
-         */
-        $bundle = [
-            'properties' => ['docTemplateBookmarks'],
-            'children' => [
-                'docTemplateBookmarks' => [
-                    'properties' => ['docBookmark'],
-                    'children' => [
-                        'docBookmark' => [
-                            'properties' => ['name', 'description'],
-                            'children' => [
-                                'docParagraphBookmarks' => [
-                                    'properties' => ['docParagraph'],
-                                    'children' => [
-                                        'docParagraph' => [
-                                            'properties' => ['id', 'paraTitle']
-                                        ]
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ]
-                ]
-            ]
-        ];
 
         $result = $this->makeRestCall(
             'DocTemplate',
             'GET',
-            ['id' => $id],
-            $bundle
+            $id,
+            $this->templateBundle
         );
 
         $bookmarks = $result['docTemplateBookmarks'];

@@ -426,8 +426,8 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
 
     private function mockDocTemplate($data)
     {
-        if (isset($data['id'])) {
-            switch ($data['id']) {
+        if (!is_array($data)) {
+            switch ($data) {
                 case 123:
                     return [
                         'docTemplateBookmarks' => [
