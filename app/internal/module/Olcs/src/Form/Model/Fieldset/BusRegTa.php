@@ -5,8 +5,8 @@ namespace Olcs\Form\Model\Fieldset;
 use Zend\Form\Annotation as Form;
 
 /**
-* @codeCoverageIgnore Auto-generated file with no methods
-* @Form\Name("bus-reg-ta")
+ * @codeCoverageIgnore Auto-generated file with no methods
+ * @Form\Name("bus-reg-ta")
 */
 class BusRegTa extends Base
 {
@@ -16,7 +16,7 @@ class BusRegTa extends Base
      *     "label": "TAOs covered by route",
      *     "disable_inarray_validator": false,
      *     "help-block": "Use CTRL to select multiple",
-     *     "service_name": "Olcs\Service\Data\BusServiceType",
+     *     "service_name": "Olcs\Service\Data\TrafficArea",
      *     "use_groups": "false"
      * })
      * @Form\Type("DynamicSelect")
@@ -24,17 +24,17 @@ class BusRegTa extends Base
     public $trafficAreas = null;
 
     /**
-     * @Form\Attributes({"id":"localAuths","placeholder":"","multiple":"multiple"})
+     * @Form\Attributes({"id":"localAuthoritys","placeholder":"","multiple":"multiple"})
      * @Form\Options({
      *     "label": "Local authorities covered by route",
      *     "disable_inarray_validator": false,
      *     "help-block": "Use CTRL to select multiple",
-     *     "service_name": "Olcs\Service\Data\BusServiceType",
+     *     "service_name": "Olcs\Service\Data\LocalAuthority",
      *     "use_groups": "false"
      * })
      * @Form\Type("DynamicSelect")
      */
-    public $localAuths = null;
+    public $localAuthoritys = null;
 
     /**
      * @Form\Attributes({
