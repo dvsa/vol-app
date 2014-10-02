@@ -85,7 +85,7 @@ class SubmissionSectionDetails extends AbstractHelper
     public function __invoke($submissionSection = '', $data = array())
     {
         if (empty($submissionSection)) {
-            return $this;
+            return '';
         }
         return $this->render($submissionSection, $data);
     }
@@ -98,13 +98,11 @@ class SubmissionSectionDetails extends AbstractHelper
      *
      * @return mixed
      */
-    public function render($submissionSection, $data)
+    protected function render($submissionSection, $data)
     {
-        if (empty($submissionSection)) {
-            return $this;
-        }
 
         $renderer = $this->getView();
+
         if (!method_exists($renderer, 'plugin')) {
             // Bail early if renderer is not pluggable
             return '';
