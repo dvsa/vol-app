@@ -7,7 +7,7 @@
  */
 namespace Olcs\Controller\Traits;
 
-use Common\Helper\LicenceDetailsHelper;
+use Common\Controller\Service\LicenceSectionService;
 
 /**
  * Licence Controller Trait
@@ -26,7 +26,7 @@ trait LicenceControllerTrait
     {
         $licence = $this->getLicence();
 
-        if ($licence['goodsOrPsv']['id'] == LicenceDetailsHelper::GOODS_OR_PSV_GOODS) {
+        if ($licence['goodsOrPsv']['id'] == LicenceSectionService::LICENCE_CATEGORY_GOODS_VEHICLE) {
             $this->getServiceLocator()->get('Navigation')->findOneBy('id', 'licence_bus')->setVisible(0);
         }
 

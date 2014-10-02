@@ -25,11 +25,10 @@ class Module
         $moduleRouteListener->attach($eventManager);
 
         $viewHelperManager = $e->getApplication()->getServiceManager()->get('viewHelperManager');
-        $pageTitleHelper = $viewHelperManager->get('pageTitle');
-        $pageTitleHelper->setSeparator(' / ');
+        $placeholder = $viewHelperManager->get('placeholder');
 
-        $pageTitleHelper = $viewHelperManager->get('pageSubtitle');
-        $pageTitleHelper->setSeparator(' / ');
+        $placeholder->getContainer('pageTitle')->setSeparator(' / ');
+        $placeholder->getContainer('pageSubtitle')->setSeparator(' / ');
 
         $headTitleHelper = $viewHelperManager->get('headTitle');
         $headTitleHelper->setSeparator(' - ');

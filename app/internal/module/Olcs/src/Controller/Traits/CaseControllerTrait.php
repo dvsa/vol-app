@@ -31,15 +31,18 @@ trait CaseControllerTrait
 
         if (true !== $this->getRequest()->isXmlHttpRequest()) {
 
+            $placeholder = $this->getViewHelperManager()->get('placeholder');
+
             if ($this->params()->fromRoute('case')) {
 
                 $case = $this->getCase();
 
                 $this->getViewHelperManager()->get('headTitle')->prepend('Case ' . $case['id']);
-                $this->getViewHelperManager()->get('pageTitle')->append('Case ' . $case['id']);
-                $this->getViewHelperManager()->get('pageSubtitle')->append('Case subtitle');
 
-                $this->getViewHelperManager()->get('placeholder')->getContainer('case')->set($case);
+                $placeholder->getContainer('pageTitle')->append('Case ' . $case['id']);
+                $placeholder->getContainer('pageSubtitle')->append('Case subtitle');
+
+                $placeholder->getContainer('case')->set($case);
 
                 // Takes care of when a case is connected to a licence.
                 if (array_key_exists('licence', $case) && !empty($case['licence'])) {
@@ -59,9 +62,8 @@ trait CaseControllerTrait
                     ['licence' => $licence['id']]
                 );
                 $licenceLink = '<a href="' . $licenceUrl . '">' . $licence['licNo'] . '</a>';
-                $this->getViewHelperManager()
-                     ->get('pageTitle')->setAutoEscape(false)
-                     ->prepend($licenceLink);
+
+                $placeholder->getContainer('pageTitle')->prepend($licenceLink);
             }
         }
 
