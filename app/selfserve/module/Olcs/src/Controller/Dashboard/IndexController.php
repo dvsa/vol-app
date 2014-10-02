@@ -137,7 +137,10 @@ class IndexController extends AbstractActionController
         ksort($variationApplications);
         ksort($applications);
 
-        $licencesTable = $this->getTable('dashboard-licences', array_reverse($licences));
+        $licencesTable = $this->getTable(
+            'dashboard-licences',
+            array_reverse($licences)
+        );
         $variationApplicationsTable = $this->getTable(
             'dashboard-variationapplications',
             array_reverse($variationApplications)

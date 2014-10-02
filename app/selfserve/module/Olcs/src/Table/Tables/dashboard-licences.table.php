@@ -14,11 +14,12 @@ return array(
         ),
         array(
             'title' => 'Licence number',
-            'formatter' => function ($row, $col, $sm) {
-                if (!empty($row['licNo'])) {
-                    return $row['licNo'];
-                }
-                return $sm->get('translator')->translate('Not yet allocated');
+            'name' => 'licNo',
+            'formatter' => function ($row) {
+                return '<a href="' . $this->url->fromRoute(
+                    'licence/overview',
+                    ['licence' => $row['id']]
+                ) . '">'.$row['licNo'].'</a>';
             }
         ),
         array(
