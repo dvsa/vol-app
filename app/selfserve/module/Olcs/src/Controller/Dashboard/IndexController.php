@@ -105,7 +105,6 @@ class IndexController extends AbstractActionController
 
         $data = $this->makeRestCall('User', 'GET', array('id' => $user['id']), $this->applicationsBundle);
 
-//var_dump($data);exit(0);
         $applications = array();
         $variationApplications = array();
         $licences = array();
@@ -139,13 +138,21 @@ class IndexController extends AbstractActionController
         ksort($applications);
 
         $licencesTable = $this->getTable('dashboard-licences', array_reverse($licences));
-        $variationApplicationsTable = $this->getTable('dashboard-variationapplications', array_reverse($variationApplications));
-        $applicationsTable = $this->getTable('dashboard-applications', array_reverse($applications));
-        $view = $this->getViewModel([
-            'licencesTable' => $licencesTable,
-            'applicationsTable' => $applicationsTable,
-            'variationApplicationsTable' => $variationApplicationsTable
-        ]);
+        $variationApplicationsTable = $this->getTable(
+            'dashboard-variationapplications',
+            array_reverse($variationApplications)
+        );
+        $applicationsTable = $this->getTable(
+            'dashboard-applications',
+            array_reverse($applications)
+        );
+        $view = $this->getViewModel(
+            array(
+                'licencesTable' => $licencesTable,
+                'applicationsTable' => $applicationsTable,
+                'variationApplicationsTable' => $variationApplicationsTable
+            )
+        );
 
         $view->setTemplate('self-serve/dashboard/index');
 
