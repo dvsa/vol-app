@@ -8,7 +8,8 @@
 namespace Olcs\Controller\Bus;
 
 use Olcs\Controller as OlcsController;
-use Olcs\Controller\Traits;
+use Olcs\Controller\Traits as ControllerTraits;
+use Common\Controller\Traits;
 
 /**
  * Bus Controller
@@ -17,7 +18,8 @@ use Olcs\Controller\Traits;
  */
 class BusController extends OlcsController\CrudAbstract
 {
-    use Traits\BusControllerTrait;
+    use ControllerTraits\BusControllerTrait;
+    use Traits\ViewHelperManagerAware;
 
     /* bus controller properties */
     protected $layoutFile = 'licence/bus/layout';
@@ -115,5 +117,15 @@ class BusController extends OlcsController\CrudAbstract
         $layout->addChild($view, 'content');
 
         return parent::renderView($layout, $pageTitle, $pageSubTitle);
+    }
+
+    /**
+     * Sets the table filters.
+     *
+     * @param mixed $filters
+     */
+    public function setTableFilters($filters)
+    {
+        $this->getViewHelperManager()->get('placeholder')->getContainer('tableFilters')->set($filters);
     }
 }
