@@ -79,7 +79,7 @@ class SubmissionSectionOverview extends AbstractHelper
     {
 
         if (empty($submissionSection)) {
-            return $this;
+            return '';
         }
 
         return $this->render($submissionSection, $data);

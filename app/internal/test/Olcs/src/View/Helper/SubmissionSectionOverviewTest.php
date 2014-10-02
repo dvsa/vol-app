@@ -3,14 +3,14 @@
 
 namespace OlcsTest\View\Helper;
 
-use Olcs\View\Helper\SubmissionSectionDetails;
+use Olcs\View\Helper\SubmissionSectionOverview;
 use Mockery as m;
 
 /**
- * Class SubmissionSectionDetails
+ * Class SubmissionSectionOverview
  * @package OlcsTest\View\Helper
  */
-class SubmissionSectionDetailsTest extends \PHPUnit_Framework_TestCase
+class SubmissionSectionOverviewTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider provideInvoke
@@ -19,14 +19,15 @@ class SubmissionSectionDetailsTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvoke($input, $expected)
     {
-        $sut = new SubmissionSectionDetails();
+        $sut = new SubmissionSectionOverview();
 
         $mockView = m::mock('\Zend\View\Renderer\PhpRenderer');
 
-        $mockViewHelper = m::mock('Olcs\View\Helper\SubmissionSectionOverview[__invoke]');
+        $mockViewHelper = m::mock('Olcs\View\Helper\SubmissionSectionOverview');
 
         $mockViewHelper->shouldReceive('__invoke');
         $mockView->shouldReceive('plugin')->andReturn($mockViewHelper);
+        $mockView->shouldReceive('render');
 
         $sut->setView($mockView);
 
@@ -46,9 +47,11 @@ class SubmissionSectionDetailsTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvokeNotPluggable($input, $expected)
     {
-        $sut = new SubmissionSectionDetails();
+        $sut = new SubmissionSectionOverview();
 
         $mockView = m::mock('\Zend\View\Renderer\RendererInterface');
+
+        $mockView->shouldReceive('render');
 
         $sut->setView($mockView);
 
