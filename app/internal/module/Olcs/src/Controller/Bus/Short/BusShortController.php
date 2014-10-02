@@ -19,16 +19,52 @@ class BusShortController extends BusController
     protected $section = 'short';
     protected $subNavRoute = 'licence_bus_short';
 
-    /**
-     * Index action
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
-    public function indexAction()
-    {
-        $view = $this->getViewWithBusReg();
+    /* properties required by CrudAbstract */
+    protected $formName = 'bus-short-notice';
 
-        $view->setTemplate('licence/bus/index');
-        return $this->renderView($view);
+    /**
+     * Identifier name
+     *
+     * @var string
+     */
+    protected $identifierName = 'id';
+
+    /**
+     * Holds the service name
+     *
+     * @var string
+     */
+    protected $service = 'BusShortNotice';
+
+    /**
+     * Data map
+     *
+     * @var array
+     */
+    protected $dataMap = array(
+        'main' => array(
+            'mapFrom' => array(
+                'fields',
+            )
+        )
+    );
+
+    /**
+     * Holds the Data Bundle
+     *
+     * @var array
+     */
+    protected $dataBundle = array(
+        'properties' => 'ALL'
+    );
+
+    public function redirectToIndex()
+    {
+        return $this->redirectToRoute(
+            null,
+            ['action'=>'edit'],
+            ['code' => '303'], // Why? No cache is set with a 303 :)
+            true
+        );
     }
 }
