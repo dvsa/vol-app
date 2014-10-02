@@ -18,8 +18,14 @@ use Common\Controller\Traits;
  */
 class DiscsPsvController extends AbstractLicenceDetailsController
 {
-    use Traits\GenericIndexAction;
+    use Traits\GenericIndexAction,
+        Traits\GenericAddAction;
 
+    /**
+     * Define the section service to use
+     *
+     * @var string
+     */
     protected $sectionServiceName = 'VehicleSafety\\InternalLicenceDiscsPsv';
 
     /**
@@ -35,4 +41,22 @@ class DiscsPsvController extends AbstractLicenceDetailsController
      * @var string
      */
     protected $section = 'discs_psv';
+
+    /**
+     * Bespoke sub actions
+     */
+    protected $bespokeSubActions = array(
+        'replace',
+        'void'
+    );
+
+    public function replaceAction()
+    {
+        return $this->renderSection();
+    }
+
+    public function voidAction()
+    {
+        return $this->renderSection();
+    }
 }
