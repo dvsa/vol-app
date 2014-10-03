@@ -38,6 +38,8 @@ return array(
                 => 'Olcs\Controller\Licence\Details\TransportManagers\TransportManagersController',
             'LicenceVehiclesSafety'
                 => 'Olcs\Controller\Licence\Details\VehiclesSafety\VehiclesSafetyController',
+            'LicenceVehiclesSafetyDiscsPsv'
+                => 'Olcs\Controller\Licence\Details\VehiclesSafety\DiscsPsvController',
             'LicencePreviousHistory'
                 => 'Olcs\Controller\Licence\Details\PreviousHistory\PreviousHistoryController',
             'LicenceReview'

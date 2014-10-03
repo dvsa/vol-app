@@ -105,7 +105,23 @@ return array(
                     'defaults' => array(
                         'controller' => 'LicenceVehicleSafety',
                         'action' => 'index'
-                    )
+                    ),
+                ),
+                'may_terminate' => true,
+                'child_routes' => array(
+                    'discs' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/discs[/:action][/:id]',
+                            'contraints' => array(
+                                'id' => '[0-9]+'
+                            ),
+                            'defaults' => array(
+                                'controller' => 'LicenceVehiclesSafetyDiscsPsv',
+                                'action' => 'index'
+                            )
+                        )
+                    ),
                 )
             ),
             'previous_history' => array(
