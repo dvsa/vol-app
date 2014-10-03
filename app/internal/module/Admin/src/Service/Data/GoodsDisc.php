@@ -171,7 +171,7 @@ class GoodsDisc extends AbstractData
      */
     public function getBundle()
     {
-        $bundle = array(
+        $bundle = [
             'properties' => ['id', 'version'],
             'children' => [
                 'licenceVehicle' => [
@@ -200,7 +200,7 @@ class GoodsDisc extends AbstractData
                     ]
                 ],
             ]
-        );
+        ];
         return $bundle;
     }
 }

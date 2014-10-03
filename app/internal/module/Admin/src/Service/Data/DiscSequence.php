@@ -110,10 +110,11 @@ class DiscSequence extends AbstractData implements ListDataInterface
                                 [
                                     'bundle' => json_encode($bundle),
                                     'limit' => self::PAGE_SIZE,
-                                    'page' => $page++
+                                    'page' => $page
                                 ]
                             );
                 $data = array_merge($data, $result['Results']);
+                $page++;
             } while (count($result['Results']));
             $this->setData('prefixes', false);
             if (count($data)) {
@@ -227,7 +228,6 @@ class DiscSequence extends AbstractData implements ListDataInterface
                                 'id' => $discSequence
                             ]
                         );
-
             if (isset($result[$value])) {
                 $this->setData($type . '-' . $value, $result[$value]);
             }
@@ -272,7 +272,7 @@ class DiscSequence extends AbstractData implements ListDataInterface
             'version' => $details['version']
         ];
 
-        $this->getRestClient()->put('/' . $discSequence, ['data' => json_encode($dataToUpdate)]);
+        return $this->getRestClient()->put('/' . $discSequence, ['data' => json_encode($dataToUpdate)]);
 
     }
 }
