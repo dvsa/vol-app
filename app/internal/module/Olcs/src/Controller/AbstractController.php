@@ -77,6 +77,6 @@ class AbstractController extends AbstractActionController
      */
     public function setTableFilters($filters)
     {
-        $this->getViewHelperManager()->get('tableFilters')->set($filters);
+        $this->getViewHelperManager()->get('placeholder')->getContainer('tableFilters')->set($filters);
     }
 }

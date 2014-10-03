@@ -30,10 +30,10 @@ return array(
             'formatter' => function ($data, $column) {
                 $url = $this->generateUrl(
                     array(
-                        'id' => $data['document'],
-                        'filename' => $data['filename']
+                        'file' => $data['documentStoreIdentifier'],
+                        'name' => $data['filename']
                     ),
-                    'fetch_document'
+                    'getfile'
                 );
                 return '<a href="' . $url . '">' . $data['description'] . '</a>';
             },
