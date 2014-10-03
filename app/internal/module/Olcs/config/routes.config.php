@@ -256,6 +256,19 @@ return array_merge(
                                 ]
                             ]
                         ],
+                        'discs_psv' => [
+                            'type' => 'segment',
+                            'options' => [
+                                'route' => '/discs[/:action][/:id]',
+                                'contraints' => [
+                                    'id' => '[0-9]+'
+                                ],
+                                'defaults' => [
+                                    'controller' => 'LicenceDetailsDiscsPsvController',
+                                    'action' => 'index',
+                                ]
+                            ]
+                        ],
                         'safety' => [
                             'type' => 'segment',
                             'options' => [
