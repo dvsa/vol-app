@@ -1,6 +1,6 @@
 <?php
 
-namespace OlcsTest\FormTest;
+namespace OlcsTest\Form\Model\Form;
 
 use Common\FormTester\Data\Object as F;
 
@@ -24,4 +24,3 @@ class PublicInquiryRegisterDecisionTest extends AbstractFormTest
         ];
     }
 }
- 

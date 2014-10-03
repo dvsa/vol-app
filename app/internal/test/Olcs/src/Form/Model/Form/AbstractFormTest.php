@@ -1,10 +1,14 @@
 <?php
 
-namespace OlcsTest\FormTest;
+namespace OlcsTest\Form\Model\Form;
 
 use Common\FormTester\AbstractFormTest as BaseAbstract;
 use OlcsTest\Bootstrap;
 
+/**
+ * Class AbstractFormTest
+ * @package OlcsTest\Form\Model\Form
+ */
 abstract class AbstractFormTest extends BaseAbstract
 {
     /**
