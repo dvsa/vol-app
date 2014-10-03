@@ -8,24 +8,24 @@
 namespace Olcs\Controller;
 
 use Olcs\View\DashboardViewModel;
-use Common\Controller\AbstractActionController;
+use Olcs\Controller\AbstractExternalController;
 
 /**
  * Dashboard Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class DashboardController extends AbstractActionController
+class DashboardController extends AbstractExternalController
 {
     /**
      * Dashboard index action
      */
     public function indexAction()
     {
-        $user = $this->getEntityService('User')->getCurrentUser();
+        $organisation = $this->getCurrentOrganisation();
         $applicationService = $this->getEntityService('Application');
 
-        $applications = $applicationService->getForUser($user['id']);
+        $applications = $applicationService->getForOrganisation($organisation['id']);
 
         $view = new DashboardViewModel();
         $view->setServiceLocator($this->getServiceLocator());

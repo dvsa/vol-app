@@ -47,33 +47,30 @@ class DashboardViewModel extends AbstractViewModel
     /**
      * Set the application data
      *
-     * @param array $applications
+     * @param array $data
      */
-    public function setApplications(array $applications)
+    public function setApplications(array $data)
     {
         $this->applications = $this->variations = $this->licences = array();
 
-        if (isset($applications['organisationUsers'])) {
+        if (isset($data['licences']) && !empty($data['licences'])) {
 
-            foreach ($applications['organisationUsers'] as $organisationUsers) {
+            foreach ($data['licences'] as $licence) {
 
-                foreach ($organisationUsers['organisation']['licences'] as $licence) {
+                $licence['status'] = (string)$licence['status']['id'];
+                $licence['type'] = (string)$licence['licenceType']['id'];
 
-                    $licence['status'] = (string)$licence['status']['id'];
-                    $licence['type'] = (string)$licence['licenceType']['id'];
+                $this->licences[$licence['id']] = $licence;
 
-                    $this->licences[$licence['id']] = $licence;
+                foreach ($licence['applications'] as $application) {
+                    $newRow = $application;
+                    $newRow['licNo'] = $licence['licNo'];
+                    $newRow['status'] = (string)$application['status']['id'];
 
-                    foreach ($licence['applications'] as $application) {
-                        $newRow = $application;
-                        $newRow['licNo'] = $licence['licNo'];
-                        $newRow['status'] = (string)$application['status']['id'];
-
-                        if ($application['isVariation']) {
-                            $this->variations[$newRow['id']] = $newRow;
-                        } else {
-                            $this->applications[$newRow['id']] = $newRow;
-                        }
+                    if ($application['isVariation']) {
+                        $this->variations[$newRow['id']] = $newRow;
+                    } else {
+                        $this->applications[$newRow['id']] = $newRow;
                     }
                 }
             }

@@ -13,26 +13,26 @@ return array(
                     )
                 )
             ),
+            'create_application' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => 'application/create[/]',
+                    'defaults' => array(
+                        'controller' => 'Application',
+                        'action' => 'create'
+                    )
+                )
+            ),
             'application' => array(
                 'type' => 'segment',
                 'options' => array(
-                    'route' => 'application[/]',
+                    'route' => 'application/:id[/]',
+                    'constraints' => array(
+                        'id' => '[0-9]+'
+                    ),
                     'defaults' => array(
                         'controller' => 'Application',
                         'action' => 'index'
-                    )
-                ),
-                'may_terminate' => true,
-                'child_routes' => array(
-                    'create' => array(
-                        'type' => 'segment',
-                        'options' => array(
-                            'route' => 'create[/]',
-                            'defaults' => array(
-                                'controller' => 'Application',
-                                'action' => 'create'
-                            )
-                        )
                     )
                 )
             )
@@ -40,7 +40,8 @@ return array(
     ),
     'controllers' => array(
         'invokables' => array(
-            'Dashboard' => 'Olcs\Controller\DashboardController'
+            'Dashboard' => 'Olcs\Controller\DashboardController',
+            'Application' => 'Olcs\Controller\Application\ApplicationController'
         )
     ),
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',
