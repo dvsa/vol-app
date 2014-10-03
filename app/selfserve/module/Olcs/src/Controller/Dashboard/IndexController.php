@@ -38,6 +38,7 @@ class IndexController extends AbstractActionController
                         'children' => array(
                             'licences' => array(
                                 'properties' => array(
+                                    'id',
                                     'licNo'
                                 ),
                                 'children' => array(
@@ -45,7 +46,8 @@ class IndexController extends AbstractActionController
                                         'properties' => array(
                                             'id',
                                             'createdOn',
-                                            'receivedDate'
+                                            'receivedDate',
+                                            'isVariation'
                                         ),
                                         'children' => array(
                                             'status' => array(
@@ -53,6 +55,18 @@ class IndexController extends AbstractActionController
                                                     'id'
                                                 )
                                             )
+                                        )
+                                    ),
+                                    'licenceType' => array(
+                                        'properties' => array(
+                                            'id',
+                                            'description'
+                                        )
+                                    ),
+                                    'status' => array(
+                                        'properties' => array(
+                                            'id',
+                                            'description'
                                         )
                                     )
                                 )
@@ -92,25 +106,57 @@ class IndexController extends AbstractActionController
         $data = $this->makeRestCall('User', 'GET', array('id' => $user['id']), $this->applicationsBundle);
 
         $applications = array();
+        $variationApplications = array();
+        $licences = array();
 
         if (isset($data['organisationUsers'])) {
             foreach ($data['organisationUsers'] as $orgUser) {
                 foreach ($orgUser['organisation']['licences'] as $licence) {
+
+                    $licenceRow=$licence;
+                    $licenceRow['status'] = (string)$licence['status']['id'];
+                    $licenceRow['type'] = (string)$licence['licenceType']['id'];
+                    $licences[$licence['id']] = $licenceRow;
+
                     foreach ($licence['applications'] as $application) {
                         $newRow = $application;
                         $newRow['licNo'] = $licence['licNo'];
                         $newRow['status'] = (string)$application['status']['id'];
-                        $applications[$newRow['id']] = $newRow;
+
+                        if ( $application['isVariation'] ) {
+                            $variationApplications[$newRow['id']] = $newRow;
+                        } else {
+                            $applications[$newRow['id']] = $newRow;
+                        }
                     }
                 }
             }
         }
 
+        ksort($licences);
+        ksort($variationApplications);
         ksort($applications);
 
-        $applicationsTable = $this->getTable('dashboard-applications', array_reverse($applications));
+        $licencesTable = $this->getTable(
+            'dashboard-licences',
+            array_reverse($licences)
+        );
+        $variationApplicationsTable = $this->getTable(
+            'dashboard-variationapplications',
+            array_reverse($variationApplications)
+        );
+        $applicationsTable = $this->getTable(
+            'dashboard-applications',
+            array_reverse($applications)
+        );
+        $view = $this->getViewModel(
+            array(
+                'licencesTable' => $licencesTable,
+                'applicationsTable' => $applicationsTable,
+                'variationApplicationsTable' => $variationApplicationsTable
+            )
+        );
 
-        $view = $this->getViewModel(['applicationsTable' => $applicationsTable]);
         $view->setTemplate('self-serve/dashboard/index');
 
         return $view;
