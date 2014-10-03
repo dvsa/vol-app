@@ -260,39 +260,9 @@ class HearingAppealController extends OlcsController\CrudAbstract
         $appeal = array();
 
         if (!empty($appealResult['Results'][0])) {
-            $appeal = $this->formatDates(
-                $appealResult['Results'][0],
-                array(
-                    'deadlineDate',
-                    'appealDate',
-                    'hearingDate',
-                    'decisionDate',
-                    'papersDueDate',
-                    'papersSentDate',
-                    'withdrawnDate'
-                )
-            );
+            $appeal = $appealResult['Results'][0];
         }
 
         return $appeal;
-    }
-
-    /**
-     * Formats the specified fields in the supplied array with the correct date format
-     * Expect to replace this with a view helper later
-     *
-     * @param array $data
-     * @param array $fields
-     * @return array
-     */
-    private function formatDates($data, $fields)
-    {
-        foreach ($fields as $field) {
-            if (isset($data[$field])) {
-                $data[$field] = date('d/m/Y', strtotime($data[$field]));
-            }
-        }
-
-        return $data;
     }
 }
