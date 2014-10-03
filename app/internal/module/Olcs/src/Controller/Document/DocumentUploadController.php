@@ -8,23 +8,15 @@
 namespace Olcs\Controller\Document;
 
 use Zend\View\Model\ViewModel;
-
-use Dvsa\Jackrabbit\Data\Object\File;
+use Common\Service\File\Exception as FileException;
 
 /**
  * Document Upload Controller
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class DocumentUploadController extends DocumentController
+class DocumentUploadController extends AbstractDocumentController
 {
-    private $mimeTypeMap = [
-        'application/rtf' => [
-            'ref_data' => 'doc_rtf',
-            'extension' => 'rtf'
-        ]
-    ];
-
     public function finaliseAction()
     {
         $routeParams = $this->params()->fromRoute();
@@ -96,15 +88,25 @@ class DocumentUploadController extends DocumentController
         if (!isset($files['file']) || $files['file']['error'] !== UPLOAD_ERR_OK) {
             // @TODO this needs to be handled better; by the time we get here we
             // should *know* that our files are valid
+            $this->addErrorMessage('Sorry; there was a problem uploading the file. Please try again.');
             return $this->redirect()->toRoute(
-                $routeParams['type'] . '/documents/finalise',
+                $type . '/documents/finalise',
                 $routeParams
             );
         }
 
         $uploader = $this->getUploader();
         $uploader->setFile($files['file']);
-        $file = $uploader->upload(self::FULL_STORAGE_PATH);
+
+        try {
+            $file = $uploader->upload();
+        } catch (FileException $ex) {
+            $this->addErrorMessage('The document store is unavailable. Please try again later');
+            return $this->redirect()->toRoute(
+                $type . '/documents/finalise',
+                $routeParams
+            );
+        }
 
         $template = $this->makeRestCall(
             'DocTemplate',
@@ -117,14 +119,14 @@ class DocumentUploadController extends DocumentController
 
         // AC specifies this timestamp format...
         $fileName = date('YmdHi')
-            .  '_' . $this->formatFilename($templateName)
-            . '.' . $this->getExtensionMap($file->getType());
+            . '_' . $this->formatFilename($templateName)
+            . '.' . $file->getExtension();
 
         $data = [
             'identifier'          => $file->getIdentifier(),
             'description'         => $templateName,
             'filename'            => $fileName,
-            'fileExtension'       => $this->getRefDataMap($file->getType()),
+            'fileExtension'       => 'doc_' . $file->getExtension(),
             'category'            => $data['details']['category'],
             'documentSubCategory' => $data['details']['documentSubCategory'],
             'isDigital'           => true,
@@ -141,7 +143,7 @@ class DocumentUploadController extends DocumentController
             $data
         );
 
-        $uploader->remove($this->getTmpPath());
+        $this->removeTmpData();
 
         return $this->redirect()->toRoute(
             $type . '/documents',
@@ -149,19 +151,8 @@ class DocumentUploadController extends DocumentController
         );
     }
 
-    private function getRefDataMap($type)
+    private function formatFilename($input)
     {
-        if (isset($this->mimeTypeMap[$type])) {
-            return $this->mimeTypeMap[$type]['ref_data'];
-        }
-        return null;
-    }
-
-    private function getExtensionMap($type)
-    {
-        if (isset($this->mimeTypeMap[$type])) {
-            return $this->mimeTypeMap[$type]['extension'];
-        }
-        return null;
+        return str_replace([' ', '/'], '_', $input);
     }
 }

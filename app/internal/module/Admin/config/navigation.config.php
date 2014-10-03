@@ -9,6 +9,10 @@ return [
             'route' => 'admin-dashboard/admin-printing',
         ],
         [
+            'label' => 'Disc Printing',
+            'route' => 'admin-dashboard/admin-disc-printing',
+        ],
+        [
             'label' => 'Scanning',
             'route' => 'admin-dashboard/admin-scanning',
         ],

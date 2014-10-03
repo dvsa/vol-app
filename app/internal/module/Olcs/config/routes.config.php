@@ -256,6 +256,19 @@ return array_merge(
                                 ]
                             ]
                         ],
+                        'discs_psv' => [
+                            'type' => 'segment',
+                            'options' => [
+                                'route' => '/discs[/:action][/:id]',
+                                'contraints' => [
+                                    'id' => '[0-9]+'
+                                ],
+                                'defaults' => [
+                                    'controller' => 'LicenceDetailsDiscsPsvController',
+                                    'action' => 'index',
+                                ]
+                            ]
+                        ],
                         'safety' => [
                             'type' => 'segment',
                             'options' => [
@@ -1073,18 +1086,8 @@ return array_merge(
                 ],
                 'defaults' => [
                     'type'       => 'licence',
-                    'controller' => 'DocumentController',
+                    'controller' => 'DocumentGenerationController',
                     'action'     => 'listTemplateBookmarks'
-                ]
-            ]
-        ],
-        'fetch_document' => [
-            'type' => 'segment',
-            'options' => [
-                'route' => '/documents/:id/:filename',
-                'defaults' => [
-                    'controller' => 'DocumentController',
-                    'action'     => 'download'
                 ]
             ]
         ],
@@ -1093,7 +1096,7 @@ return array_merge(
             'options' => [
                 'route' => '/documents/tmp/:id/:filename',
                 'defaults' => [
-                    'controller' => 'DocumentController',
+                    'controller' => 'DocumentGenerationController',
                     'action'     => 'downloadTmp'
                 ]
             ]
