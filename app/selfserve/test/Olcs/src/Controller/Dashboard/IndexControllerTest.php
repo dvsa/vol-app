@@ -155,6 +155,7 @@ class IndexControllerTest extends PHPUnit_Framework_TestCase
                             'children' => array(
                                 'licences' => array(
                                     'properties' => array(
+                                        'id',
                                         'licNo'
                                     ),
                                     'children' => array(
@@ -162,7 +163,8 @@ class IndexControllerTest extends PHPUnit_Framework_TestCase
                                             'properties' => array(
                                                 'id',
                                                 'createdOn',
-                                                'receivedDate'
+                                                'receivedDate',
+                                                'isVariation'
                                             ),
                                             'children' => array(
                                                 'status' => array(
@@ -170,6 +172,18 @@ class IndexControllerTest extends PHPUnit_Framework_TestCase
                                                         'id'
                                                     )
                                                 )
+                                            )
+                                        ),
+                                        'licenceType' => array(
+                                            'properties' => array(
+                                                'id',
+                                                'description'
+                                            )
+                                        ),
+                                        'status' => array(
+                                            'properties' => array(
+                                                'id',
+                                                'description'
                                             )
                                         )
                                     )
@@ -188,6 +202,7 @@ class IndexControllerTest extends PHPUnit_Framework_TestCase
                         'organisation' => array(
                             'licences' => array(
                                 array(
+                                    'id' => 1,
                                     'licNo' => 123,
                                     'applications' => array(
                                         array(
@@ -196,9 +211,41 @@ class IndexControllerTest extends PHPUnit_Framework_TestCase
                                             'receivedDate' => '2014-01-01 00:00:00',
                                             'status' => array(
                                                 'id' => 'apsts_new'
-                                            )
+                                            ),
+                                            'isVariation' => false
                                         )
-                                    )
+                                    ),
+                                    'licenceType' => array(
+                                        'id' => 'ltyp_sn',
+                                        'description' => 'blah'
+                                    ),
+                                    'status' => array(
+                                        'id' => 'lsts_new',
+                                        'description' => 'blah'
+                                    ),
+                                ),
+                                array(
+                                    'id' => 2,
+                                    'licNo' => 456,
+                                    'applications' => array(
+                                        array(
+                                            'id' => 1,
+                                            'createdOn' => '2014-01-01 00:00:00',
+                                            'receivedDate' => '2014-01-01 00:00:00',
+                                            'status' => array(
+                                                'id' => 'apsts_new'
+                                            ),
+                                            'isVariation' => true
+                                        )
+                                    ),
+                                    'licenceType' => array(
+                                        'id' => 'ltyp_sn',
+                                        'description' => 'blah'
+                                    ),
+                                    'status' => array(
+                                        'id' => 'lsts_new',
+                                        'description' => 'blah'
+                                    ),
                                 )
                             )
                         )
