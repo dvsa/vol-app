@@ -19,24 +19,25 @@
               <input class="search__input" type="text" placeholder="Search">
               <input class="search__button" type="submit">
             </div>
-            <a href="/search" class="search__advanced">Advanced</a>
+            <a href="/search" class="search__advanced"><?php echo $this->translate('Advanced'); ?></a>
           </div><!-- end search -->
           <ul class="admin">
-            <li class="admin__title">Admin
+            <li class="admin__title"><?php echo $this->translate('Admin'); ?>
               <div class="admin__menu">
                 <ul class="admin__submenu">
-                  <li class="admin__item"><a href="/admin/scanning">Scanning</a></li>
-                  <li class="admin__item"><a href="/admin/printing">Printing</a></li>
-                  <li class="admin__item"><a href="/admin/publication">Publications</a></li>
-                  <li class="admin__item"><a href="/admin/continuation">Continuations</a></li>
-                  <li class="admin__item"><a href="/admin/report">Reports</a></li>
-                  <li class="admin__item"><a href="/admin/user-management">User management</a></li>
+                  <li class="admin__item"><a href="/admin/scanning"><?php echo $this->translate('Scanning'); ?></a></li>
+                  <li class="admin__item"><a href="/admin/printing"><?php echo $this->translate('Printing'); ?></a></li>
+                  <li class="admin__item"><a href="/admin/disc-printing"><?php echo $this->translate('Disc Printing'); ?></a></li>
+                  <li class="admin__item"><a href="/admin/publication"><?php echo $this->translate('Publications'); ?></a></li>
+                  <li class="admin__item"><a href="/admin/continuation"><?php echo $this->translate('Continuations'); ?></a></li>
+                  <li class="admin__item"><a href="/admin/report"><?php echo $this->translate('Reports'); ?></a></li>
                 </ul>
                 <ul class="admin__submenu">
-                  <li class="admin__item">System settings</li>
-                  <li class="admin__item"><a href="/admin/financial-standing">Financial standing rates</a></li>
-                  <li class="admin__item"><a href="/admin/public-holiday">Public holidays</a></li>
-                  <li class="admin__item"><a href="/admin/system-message">System messages</a></li>
+                  <li class="admin__item"><?php echo $this->translate('System settings'); ?></li>
+                  <li class="admin__item"><a href="/admin/user-management"><?php echo $this->translate('User management'); ?></a></li>
+                  <li class="admin__item"><a href="/admin/financial-standing"><?php echo $this->translate('Financial standing rates'); ?></a></li>
+                  <li class="admin__item"><a href="/admin/public-holiday"><?php echo $this->translate('Public holidays'); ?></a></li>
+                  <li class="admin__item"><a href="/admin/system-message"><?php echo $this->translate('System messages'); ?></a></li>
                 </ul><!-- admin__submenu -->
               </div><!-- admin__menu -->
             </li>
