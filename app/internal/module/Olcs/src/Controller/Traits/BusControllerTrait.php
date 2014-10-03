@@ -45,7 +45,7 @@ trait BusControllerTrait
     public function getBusReg($id = null)
     {
         if (is_null($id)) {
-            $id = $this->getFromRoute('busReg');
+            $id = $this->getFromRoute('busRegId');
         }
 
         $bundle = [
@@ -62,8 +62,7 @@ trait BusControllerTrait
             ]
         ];
 
-        $busReg = $this->makeRestCall('BusReg', 'GET', array('id' => $id, 'bundle' => json_encode($bundle)));
-        return $busReg['Results'][0];
+        return $this->makeRestCall('BusReg', 'GET', array('id' => $id, 'bundle' => json_encode($bundle)));
     }
 
     /**

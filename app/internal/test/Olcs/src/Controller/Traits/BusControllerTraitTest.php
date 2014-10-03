@@ -30,7 +30,7 @@ class BusControllerTraitTest extends \PHPUnit_Framework_TestCase
 
         $this->trait->expects($this->once())
             ->method('getFromRoute')
-            ->with('busReg')
+            ->with('busRegId')
             ->will($this->returnValue(1));
 
         $this->trait->expects($this->once())
@@ -131,20 +131,16 @@ class BusControllerTraitTest extends \PHPUnit_Framework_TestCase
     private function sampleRestResult()
     {
         return [
-            'Results' => [
-                0 => [
-                    'licence' => [
-                        'organisation' => [
-                            'name' => 'Organisation name'
-                        ]
-                    ],
-                    'status' => [
-                        'description' => 'Bus reg status'
-                    ],
-                    'routeSeq' => '123456',
-                    'regNo' => '1332432'
+            'licence' => [
+                'organisation' => [
+                    'name' => 'Organisation name'
                 ]
-            ]
+            ],
+            'status' => [
+                'description' => 'Bus reg status'
+            ],
+            'routeSeq' => '123456',
+            'regNo' => '1332432'
         ];
     }
 }
