@@ -1,4 +1,4 @@
-$(function() {
+OLCS.ready(function() {
 
   "use strict";
 
@@ -21,7 +21,7 @@ $(function() {
   var emptyLabel = "Please select";
 
   // get list of prefixes for selected operator location, operator type and licence type
-  $(licenceType).change(function () {
+  $(document).on('change', licenceType, function() {
     var data = {
       'niFlag': niFlag.filter(':checked').val(),
       'operatorType': operatorType.filter(':checked').val(),
@@ -135,8 +135,6 @@ $(function() {
     return true;
   });
 
-//  OLCS.modal.show('<div>this is body</div>','Discs printing');
-
   // set up a cascade form with the appropriate rules
   OLCS.cascadeForm({
     form: "#admin_disc-printing_form",
@@ -169,11 +167,11 @@ $(function() {
       },
       
       "prefix": function() {
-          return licenceType.filter(":checked").val()
+          return licenceType.filter(":checked").val();
       },
       
       "discs-numbering": function() {
-          return licenceType.filter(":checked").val() && $('#noDiscs').attr('class') == 'hidden'
+          return licenceType.filter(":checked").val() && $('#noDiscs').attr('class') == 'hidden';
       },
       
     },
