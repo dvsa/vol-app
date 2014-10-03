@@ -248,9 +248,7 @@ class TaskController extends AbstractController
         $url = $this->getLinkForTaskForm();
         $details->get('link')->setValue($url);
         $details->get('status')->setValue('<b>' . $textStatus . '</b>');
-
-        if (isset($data['buttonClicked']) && $data['buttonClicked'] == 'form-actions[close]') {
-            unset($data['buttonClicked']);
+        if ($this->isButtonPressed('close')) {
             $type = 'Close';
         }
         $form->setData($this->expandData($data));
