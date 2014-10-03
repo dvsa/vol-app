@@ -16,5 +16,5 @@ use Common\Controller\AbstractActionController;
  */
 abstract class AbstractController extends AbstractActionController
 {
-    
+
 }

@@ -211,8 +211,14 @@ class DiscPrintingController extends AbstractController
      * @param int $startNumberEntered
      * @return array
      */
-    protected function processDiskNumbering($niFlag, $licenceType, $operatorType, $discPrefix, $discSequence, $startNumberEntered = NULL)
-    {
+    protected function processDiskNumbering(
+        $niFlag,
+        $licenceType,
+        $operatorType,
+        $discPrefix,
+        $discSequence,
+        $startNumberEntered = null
+    ) {
         $retv = [];
 
         $discSequenceService = $this->getServiceLocator()->get('Admin\Service\Data\DiscSequence');

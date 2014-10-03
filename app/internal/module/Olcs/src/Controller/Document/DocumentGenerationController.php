@@ -291,7 +291,6 @@ class DocumentGenerationController extends AbstractDocumentController
             return;
         }
 
-
         $result = $this->makeRestCall(
             'DocTemplate',
             'GET',
