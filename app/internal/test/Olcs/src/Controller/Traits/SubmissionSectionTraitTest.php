@@ -1,6 +1,7 @@
 <?php
 
 namespace OlcsTest\Controller\Traits;
+
 use Mockery as m;
 
 /**
@@ -76,7 +77,6 @@ class SubmissionSectionTraitTest extends \PHPUnit_Framework_TestCase
             ['id' => $mockParams['case']],
             $input['config']['bundle']
         )->willReturn($mockRestCallData);
-
 
         $result = $this->sut->createSubmissionSection($input['sectionId'], $input['config']);
 

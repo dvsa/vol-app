@@ -1,10 +1,4 @@
 <?php
-
-/**
- * Search controller form post tests
- *
- * @author adminmwc <michael.cooper@valtech.co.uk>
- */
 namespace OlcsTest\Controller\Submission;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
@@ -12,7 +6,7 @@ use OlcsTest\Bootstrap;
 use Mockery as m;
 
 /**
- * Search controller form post tests
+ * Submission controller form post tests
  *
  * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
@@ -83,7 +77,6 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
 
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
     }
-
 
     /**
      * Tests the addAction once a submissionType has been set.
@@ -352,7 +345,5 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
                 )
             )
         );
-
     }
-
 }
