@@ -23,7 +23,6 @@ use Olcs\Controller\Traits as ControllerTraits;
  */
 class ConvictionController extends OlcsController\CrudAbstract
 {
-    //use DefendantSearchTrait;
     use ControllerTraits\CaseControllerTrait;
 
     /**
