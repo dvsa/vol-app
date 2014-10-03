@@ -6,7 +6,6 @@
  * @author Jakub Igla <jakub.igla@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-
 namespace Olcs\Controller\Dashboard;
 
 use Common\Controller\AbstractActionController;
@@ -21,63 +20,6 @@ use Zend\Http\Response;
  */
 class IndexController extends AbstractActionController
 {
-
-    /**
-     * Holds the applications bundle
-     *
-     * @var array
-     */
-    private $applicationsBundle = array(
-        'properties' => array(),
-        'children' => array(
-            'organisationUsers' => array(
-                'properties' => null,
-                'children' => array(
-                    'organisation' => array(
-                        'properties' => array(),
-                        'children' => array(
-                            'licences' => array(
-                                'properties' => array(
-                                    'id',
-                                    'licNo'
-                                ),
-                                'children' => array(
-                                    'applications' => array(
-                                        'properties' => array(
-                                            'id',
-                                            'createdOn',
-                                            'receivedDate',
-                                            'isVariation'
-                                        ),
-                                        'children' => array(
-                                            'status' => array(
-                                                'properties' => array(
-                                                    'id'
-                                                )
-                                            )
-                                        )
-                                    ),
-                                    'licenceType' => array(
-                                        'properties' => array(
-                                            'id',
-                                            'description'
-                                        )
-                                    ),
-                                    'status' => array(
-                                        'properties' => array(
-                                            'id',
-                                            'description'
-                                        )
-                                    )
-                                )
-                            )
-                        )
-                    )
-                )
-            )
-        )
-    );
-
     /**
      * Holds the organisation bundle
      *
@@ -93,74 +35,6 @@ class IndexController extends AbstractActionController
             )
         )
     );
-
-    /**
-     * Index action
-     *
-     * @return ViewModel
-     */
-    public function indexAction()
-    {
-        $user = $this->getUser();
-
-        $data = $this->makeRestCall('User', 'GET', array('id' => $user['id']), $this->applicationsBundle);
-
-        $applications = array();
-        $variationApplications = array();
-        $licences = array();
-
-        if (isset($data['organisationUsers'])) {
-            foreach ($data['organisationUsers'] as $orgUser) {
-                foreach ($orgUser['organisation']['licences'] as $licence) {
-
-                    $licenceRow=$licence;
-                    $licenceRow['status'] = (string)$licence['status']['id'];
-                    $licenceRow['type'] = (string)$licence['licenceType']['id'];
-                    $licences[$licence['id']] = $licenceRow;
-
-                    foreach ($licence['applications'] as $application) {
-                        $newRow = $application;
-                        $newRow['licNo'] = $licence['licNo'];
-                        $newRow['status'] = (string)$application['status']['id'];
-
-                        if ( $application['isVariation'] ) {
-                            $variationApplications[$newRow['id']] = $newRow;
-                        } else {
-                            $applications[$newRow['id']] = $newRow;
-                        }
-                    }
-                }
-            }
-        }
-
-        ksort($licences);
-        ksort($variationApplications);
-        ksort($applications);
-
-        $licencesTable = $this->getTable(
-            'dashboard-licences',
-            array_reverse($licences)
-        );
-        $variationApplicationsTable = $this->getTable(
-            'dashboard-variationapplications',
-            array_reverse($variationApplications)
-        );
-        $applicationsTable = $this->getTable(
-            'dashboard-applications',
-            array_reverse($applications)
-        );
-        $view = $this->getViewModel(
-            array(
-                'licencesTable' => $licencesTable,
-                'applicationsTable' => $applicationsTable,
-                'variationApplicationsTable' => $variationApplicationsTable
-            )
-        );
-
-        $view->setTemplate('self-serve/dashboard/index');
-
-        return $view;
-    }
 
     /**
      * Method to add the required database entries and redirect to beginning

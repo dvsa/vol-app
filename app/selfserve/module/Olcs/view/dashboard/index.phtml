@@ -9,13 +9,11 @@
 ?>
 
 <div class="three-quarters">
-    <?php echo $licencesTable; ?>
-
-    <?php echo $variationApplicationsTable; ?>
-
-    <?php echo $applicationsTable; ?>
+    <?php echo $licences->render(); ?>
+    <?php echo $variations->render(); ?>
+    <?php echo $applications->render(); ?>
     <div class="actions-container">
-        <a href="<?php echo $this->url('application_start', array('action' => 'create')); ?>" class="action--primary large">
+        <a href="<?php echo $this->url('application/create'); ?>" class="action--primary large">
             <?php echo $this->translate('application.new.button'); ?>
         </a>
     </div>
@@ -24,4 +22,3 @@
 <div class="one-quarter">
     <h3>Notifications</h3>
 </div>
-
