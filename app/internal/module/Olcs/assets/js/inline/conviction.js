@@ -78,14 +78,19 @@ $(function() {
 	
 	category.change(function() {
 		if ($(this).val() != '') {
-			categoryText.val('');
-			categoryText.prop('readonly');
+			//categoryText.val('');
+			categoryText.prop('readonly', 'true');
+			categoryText.val($(this).find('*:selected').html());
+		} else {
+			categoryText.removeProp('readonly');
+			categoryText.val('');			
 		}
 	});
 	
-	category.change(function() {
+	/*category.change(function() {
 		if ($(this).val() == '') {
 			categoryText.removeProp('readonly');
+			categoryText.val('');
 		}
-	});
+	});*/
 });
