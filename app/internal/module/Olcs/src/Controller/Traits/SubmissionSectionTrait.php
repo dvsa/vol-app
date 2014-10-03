@@ -16,7 +16,7 @@ trait SubmissionSectionTrait
      * @param type $config
      * @return type
      */
-    public function createSubmissionSection($sectionId, $config = array())
+    protected function createSubmissionSection($sectionId, $config = array())
     {
         $routeParams = $this->getParams(array('case'));
         $section['data'] = array();
@@ -42,7 +42,7 @@ trait SubmissionSectionTrait
     /**
      * section case-summary-info
      */
-    public function submissionSectionCasu(array $data = array())
+    private function submissionSectionCasu(array $data = array())
     {
         $vehiclesInPossession = $this->calculateVehiclesInPossession($data['licence']);
 
@@ -68,7 +68,7 @@ trait SubmissionSectionTrait
     /**
      * section case-outline
      */
-    public function submissionSectionCase(array $data = array())
+    private function submissionSectionCase(array $data = array())
     {
         $case = $this->getCase();
 
