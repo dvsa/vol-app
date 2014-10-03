@@ -22,6 +22,8 @@ class DiscsPsvController extends AbstractLicenceDetailsController
     use Traits\GenericIndexAction,
         Traits\GenericAddAction;
 
+    protected $inlineScripts = array('discs');
+
     /**
      * Define the section service to use
      *
