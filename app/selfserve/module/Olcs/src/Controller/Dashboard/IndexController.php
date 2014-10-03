@@ -184,7 +184,8 @@ class IndexController extends AbstractActionController
         $data = [
             'licence' => $licenceId,
             'createdOn' => date('Y-m-d h:i:s'),
-            'status' => 'apsts_not_submitted'
+            'status' => 'apsts_not_submitted',
+            'isVariation' => false
         ];
 
         $applicationResult = $this->makeRestCall('Application', 'POST', $data);
