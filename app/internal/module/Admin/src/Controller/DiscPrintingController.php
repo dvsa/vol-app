@@ -21,12 +21,6 @@ class DiscPrintingController extends AbstractController
 {
 
     /**
-     * Printing started flag
-     * 
-     * @var bool
-     */
-
-    /**
      * Discs on page
      */
     const DISCS_ON_PAGE = 6;
@@ -51,10 +45,10 @@ class DiscPrintingController extends AbstractController
         $view = new ViewModel(
             [
                 'form' => $form,
-                'inlineScript' => $this->loadScripts($inlineScripts),
                 'successStatus' => $successStatus
             ]
         );
+        $this->loadScripts($inlineScripts);
         $view->setTemplate('disc-printing/index');
         return $this->renderView($view);
     }
@@ -180,6 +174,8 @@ class DiscPrintingController extends AbstractController
         $flProcess = true;
         $viewResults = [];
 
+        // checking params which needed to calculate goods discs start/end numbers,
+        // we can't process further without having it defined
         if (!$params['niFlag'] || !$params['operatorType'] || !$params['licenceType'] ||
             !$params['discSequence'] || !$params['discPrefix']) {
             $flProcess = false;
@@ -230,6 +226,12 @@ class DiscPrintingController extends AbstractController
             $goodsDiscService->getDiscsToPrint($niFlag, $operatorType, $licenceType, $discPrefix)
         );
         $retv['endNumber'] = (int) ($retv['discsToPrint'] ? $retv['startNumber'] + $retv['discsToPrint'] : 0);
+        /*
+         * we have two end numbers, one original, which calculated based on start number entered by user
+         * and another one calculated by rounding up to nearest integer divided by 6. that's because
+         * there are numbers already printed on the discs pages, 6 discs pere page, and even we need to print 
+         * only one disc, other numbers will be used and voided.
+         */
         $retv['originalEndNumber'] = $retv['endNumber'];
         if ($retv['endNumber']) {
             while (($retv['endNumber'] - $retv['startNumber'] + 1) % self::DISCS_ON_PAGE) {
