@@ -66,6 +66,18 @@ trait SubmissionSectionTrait
     }
 
     /**
+     * section case-outline
+     */
+    public function submissionSectionCase(array $data = array())
+    {
+        $case = $this->getCase();
+
+        return array(
+            'outline' => $case['description']
+        );
+    }
+
+    /**
      * Calculates the vehicles in possession.
      *
      * @param array $data
