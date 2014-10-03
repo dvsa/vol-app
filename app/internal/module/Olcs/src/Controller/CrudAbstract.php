@@ -151,10 +151,19 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
         parent::attachDefaultListeners();
 
         $this->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, array($this, 'checkRequiredProperties'), 5);
+        $this->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, array($this, 'buildInScripts'), 6);
 
         if (method_exists($this, 'setNavigationCurrentLocation')) {
             $this->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, array($this, 'setNavigationCurrentLocation'), 6);
         }
+    }
+
+    /**
+     * @codeCoverageIgnore this is part of the event system.
+     */
+    public function buildInScripts()
+    {
+        $this->loadScripts([$this->identifierName]);
     }
 
     /**
