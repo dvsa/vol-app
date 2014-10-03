@@ -31,15 +31,30 @@ if (!empty($id))
 
             <dt><?php echo $this->translate('Requested date');
                 ?></dt>
-            <dd><?php echo isset($requestDate) ? $requestDate : ''; ?></dd>
+            <dd><?php echo isset($requestDate) ? $this->dateFormat(
+                    \DateTime::createFromFormat(
+                        \DateTime::ISO8601,
+                        $requestDate
+                    ),
+                    \IntlDateFormatter::SHORT) : ''; ?></dd>
 
             <dt><?php echo $this->translate('Decision date');?></dt>
-            <dd><?php echo isset($decisionDate) ? $decisionDate : ''; ?></dd>
+            <dd><?php echo isset($decisionDate) ? $this->dateFormat(
+                    \DateTime::createFromFormat(
+                        \DateTime::ISO8601,
+                        $decisionDate
+                    ),
+                    \IntlDateFormatter::SHORT) : ''; ?></dd>
             <dt><?php echo $this->translate('Is withdrawn');?></dt>
             <dd><?php echo $this->translate(empty($withdrawnDate) ?
                     'N' : 'Y'); ?></dd>
             <dt><?php echo $this->translate('Withdrawn date');?></dt>
-            <dd><?php echo isset($withdrawnDate) ? $withdrawnDate : ''; ?></dd>
+            <dd><?php echo isset($withdrawnDate) ? $this->dateFormat(
+                    \DateTime::createFromFormat(
+                        \DateTime::ISO8601,
+                        $withdrawnDate
+                    ),
+                    \IntlDateFormatter::SHORT) : ''; ?></dd>
         </dl>
         <dl>
             <dt><?php echo $this->translate('Notes');?></dt>
