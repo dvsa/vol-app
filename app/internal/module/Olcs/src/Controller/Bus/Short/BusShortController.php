@@ -27,7 +27,14 @@ class BusShortController extends BusController
      *
      * @var string
      */
-    protected $identifierName = 'id';
+    protected $identifierName = 'busRegId';
+
+    /**
+     * Identifier key
+     *
+     * @var string
+     */
+    protected $identifierKey = 'busReg';
 
     /**
      * Holds the service name
@@ -45,9 +52,19 @@ class BusShortController extends BusController
         'main' => array(
             'mapFrom' => array(
                 'fields',
+                'base'
             )
         )
     );
+
+    /**
+     * Load data for the form
+     *
+     * This method should be overridden
+     *
+     * @param int $id
+     * @return array
+     */
 
     /**
      * Holds the Data Bundle
@@ -57,6 +74,12 @@ class BusShortController extends BusController
     protected $dataBundle = array(
         'properties' => 'ALL'
     );
+
+    public function processLoad($data)
+    {
+        $data = (isset($data['Results'][0]) ? $data['Results'][0] : []);
+        return parent::processLoad($data);
+    }
 
     public function redirectToIndex()
     {
