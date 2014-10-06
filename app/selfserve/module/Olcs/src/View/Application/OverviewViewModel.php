@@ -5,7 +5,7 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-namespace Olcs\View;
+namespace Olcs\View\Application;
 
 use Common\View\AbstractViewModel;
 

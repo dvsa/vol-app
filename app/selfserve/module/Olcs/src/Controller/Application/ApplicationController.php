@@ -7,7 +7,7 @@
  */
 namespace Olcs\Controller\Application;
 
-use Olcs\View\OverviewViewModel;
+use Olcs\View\Application\OverviewViewModel;
 
 /**
  * Application Controller
