@@ -46,6 +46,16 @@ class DashboardViewModel extends AbstractViewModel
     protected $template = 'dashboard/index';
 
     /**
+     * Restrict the types of licence we display
+     */
+    private $displayLicenceStatus = array(
+        LicenceService::LICENCE_STATUS_VALID,
+        LicenceService::LICENCE_STATUS_CURTAILED,
+        LicenceService::LICENCE_STATUS_SUSPENDED
+    );
+
+
+    /**
      * Set the application data
      *
      * @param array $data
@@ -58,13 +68,7 @@ class DashboardViewModel extends AbstractViewModel
 
             foreach ($data['licences'] as $licence) {
 
-                $displayLicenceStatus = array(
-                    LicenceService::LICENCE_STATUS_VALID,
-                    LicenceService::LICENCE_STATUS_CURTAILED,
-                    LicenceService::LICENCE_STATUS_SUSPENDED
-                );
-
-                if (in_array($licence['status']['id'], $displayLicenceStatus)) {
+                if (in_array($licence['status']['id'], $this->displayLicenceStatus)) {
                     $licence['status'] = $licence['status']['id'];
                     $licence['type'] = $licence['licenceType']['id'];
                     $this->licences[$licence['id']] = $licence;
