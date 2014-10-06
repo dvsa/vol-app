@@ -5,7 +5,7 @@
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-namespace Olcs\View\Application;
+namespace Olcs\View\Model\Application;
 
 use Common\View\AbstractSectionOverviewModel;
 

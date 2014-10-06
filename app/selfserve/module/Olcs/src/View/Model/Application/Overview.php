@@ -39,7 +39,7 @@ class Overview extends AbstractViewModel
         $overviewSections = array();
 
         foreach ($sections as $section) {
-            $overviewSections[] = new OverviewSection($section);
+            $overviewSections[] = new OverviewSection($section, $data);
         }
 
         $this->setVariable('sections', $overviewSections);
