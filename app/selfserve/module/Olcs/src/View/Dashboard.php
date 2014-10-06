@@ -5,7 +5,7 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-namespace Olcs\View;
+namespace Olcs\View\Model;
 
 use Common\View\AbstractViewModel;
 use Common\Service\Entity\LicenceService;
@@ -15,7 +15,7 @@ use Common\Service\Entity\LicenceService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class DashboardViewModel extends AbstractViewModel
+class Dashboard extends AbstractViewModel
 {
     /**
      * Holds the applications
@@ -52,7 +52,9 @@ class DashboardViewModel extends AbstractViewModel
      */
     public function setApplications(array $data)
     {
-        $this->applications = $this->variations = $this->licences = array();
+        $this->applications = array();
+        $this->variations = array();
+        $this->licences = array();
 
         if (isset($data['licences']) && !empty($data['licences'])) {
 

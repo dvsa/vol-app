@@ -7,7 +7,7 @@
  */
 namespace Olcs\Controller;
 
-use Olcs\View\DashboardViewModel;
+use Olcs\View\Model\Dashboard;
 use Olcs\Controller\AbstractExternalController;
 
 /**
@@ -27,7 +27,7 @@ class DashboardController extends AbstractExternalController
 
         $applications = $applicationService->getForOrganisation($organisation['id']);
 
-        $view = new DashboardViewModel();
+        $view = new Dashboard();
         $view->setServiceLocator($this->getServiceLocator());
         $view->setApplications($applications);
 

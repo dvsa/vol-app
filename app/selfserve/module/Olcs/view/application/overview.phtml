@@ -1,5 +1,5 @@
 <div class="two-thirds">
-    <a href="<?php echo $this->url('dashboard'); ?>">Home</a>
+    <a href="<?php echo $this->url('dashboard'); ?>"><?php echo $this->translate('dashboard.link'); ?></a>
     <div class="page-header">
       <div class="page-header__wrapper">
         <h3 class="page-header__subtitle">
@@ -8,20 +8,27 @@
         <h1><?php echo $this->translate('application.overview.title'); ?></h1>
       </div>
     </div>
+    <ul style="list-style: none; clear: both;">
+        <?php
+        foreach ($sections as $section) {
+            echo $this->render($section);
+        }
+        ?>
+    </ul>
 </div>
 <div class="one-third">
-  <a href="#">Print application</a>
-  <a href="#">Delete application</a>
+  <a href="#"><?php echo $this->translate('application.print'); ?></a><br />
+  <a href="#"><?php echo $this->translate('application.delete'); ?></a>
   <p>
-    Created <br />
+    <?php echo $this->translate('created'); ?><br />
     <strong><?php echo $createdOn; ?></strong>
   </p>
   <p>
-    Progress
-    <strong>X of Y sections complete</strong>
+    <?php echo $this->translate('progress'); ?><br />
+    <strong><?php echo sprintf($this->translate('application.progress'), 'X', 'Y'); ?></strong>
   </p>
   <p>
-    Status
+    <?php echo $this->translate('status'); ?><br />
     <strong><?php echo $this->translate($status); ?></strong>
   </p>
 </div>

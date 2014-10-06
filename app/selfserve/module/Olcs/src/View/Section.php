@@ -5,7 +5,7 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-namespace Olcs\View;
+namespace Olcs\View\Model;
 
 use Common\View\AbstractViewModel;
 
@@ -14,7 +14,7 @@ use Common\View\AbstractViewModel;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class SectionViewModel extends AbstractViewModel
+class Section extends AbstractViewModel
 {
     /**
      * Holds the template

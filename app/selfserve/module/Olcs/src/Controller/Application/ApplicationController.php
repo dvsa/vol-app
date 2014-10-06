@@ -7,7 +7,7 @@
  */
 namespace Olcs\Controller\Application;
 
-use Olcs\View\Application\OverviewViewModel;
+use Olcs\View\Model\Application\Overview;
 
 /**
  * Application Controller
@@ -37,7 +37,10 @@ class ApplicationController extends AbstractApplicationController
             return $this->redirect()->toRoute('application/type-of-licence', array('id' => $applicationId));
         }
 
-        return new OverviewViewModel($data);
+        $sections = $this->getHelperService('SectionAccessHelper')
+            ->getAccessibleSections($data['licence']['goodsOrPsv']['id'], $data['licence']['licenceType']['id']);
+
+        return new Overview($data, array_keys($sections));
     }
 
     /**
