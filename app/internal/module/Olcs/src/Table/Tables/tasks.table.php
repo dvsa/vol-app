@@ -40,11 +40,28 @@ return array(
         ),
         array(
             'title' => 'Description',
-            'formatter' => function ($row) {
-                $url = $this->generateUrl(
-                    array('task' => $row['id'], 'action' => 'edit'),
-                    'task_action'
-                );
+            'formatter' => function ($row, $column, $serviceLocator) {
+                $router = $serviceLocator->get('router');
+                $request = $serviceLocator->get('request');
+                $routeMatch = $router->match($request);
+                switch ($routeMatch->getMatchedRouteName()) {
+                    case 'licence/processing/tasks':
+                        $url = $this->generateUrl(
+                            array(
+                                'task' => $row['id'],
+                                'action' => 'edit',
+                                'type' => 'licence',
+                                'typeId' => $row['linkId']
+                            ),
+                            'task_action'
+                        );
+                        break;
+                    default:
+                        $url = $this->generateUrl(
+                            array('task' => $row['id'], 'action' => 'edit'),
+                            'task_action'
+                        );
+                }
                 return '<a href="'
                     . $url
                     . '" class=js-modal-ajax>'

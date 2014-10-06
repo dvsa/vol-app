@@ -229,7 +229,7 @@ class DiscPrintingController extends AbstractController
         /*
          * we have two end numbers, one original, which calculated based on start number entered by user
          * and another one calculated by rounding up to nearest integer divided by 6. that's because
-         * there are numbers already printed on the discs pages, 6 discs pere page, and even we need to print 
+         * there are numbers already printed on the discs pages, 6 discs pere page, and even we need to print
          * only one disc, other numbers will be used and voided.
          */
         $retv['originalEndNumber'] = $retv['endNumber'];
