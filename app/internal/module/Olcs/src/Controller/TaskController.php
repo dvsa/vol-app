@@ -237,7 +237,8 @@ class TaskController extends AbstractController
         }
 
         if (isset($data['isClosed']) && $data['isClosed'] === 'Y') {
-            $this->disableFormElements($form);
+            $this->disableFormElements($form, ['cancel']);
+            $this->setValidateForm(false);
             $textStatus = 'Closed';
         } else {
             $textStatus = 'Open';
@@ -355,6 +356,10 @@ class TaskController extends AbstractController
         $data = $this->flattenData($data);
 
         $method = 'process' . $type;
+
+        if ($this->isButtonPressed('cancel')) {
+            $this->redirectToList();
+        }
 
         $result = $this->$method($data, 'Task');
 
@@ -541,23 +546,28 @@ class TaskController extends AbstractController
      * Disable form elements
      *
      * @param Zend\Form\Element
+     * @param array $exclude
      */
-    public function disableFormElements($element)
+    public function disableFormElements($element, $exclude = [])
     {
+        if (in_array($element->getName(), $exclude)) {
+            return;
+        }
+
         if ($element instanceof \Zend\Form\Fieldset) {
             foreach ($element->getFieldsets() as $child) {
-                $this->disableFormElements($child);
+                $this->disableFormElements($child, $exclude);
             }
 
             foreach ($element->getElements() as $child) {
-                $this->disableFormElements($child);
+                $this->disableFormElements($child, $exclude);
             }
         }
 
         if ($element instanceof \Zend\Form\Element\DateSelect) {
-            $this->disableFormElements($element->getDayElement());
-            $this->disableFormElements($element->getMonthElement());
-            $this->disableFormElements($element->getYearElement());
+            $this->disableFormElements($element->getDayElement(), $exclude);
+            $this->disableFormElements($element->getMonthElement(), $exclude);
+            $this->disableFormElements($element->getYearElement(), $exclude);
         }
 
         $element->setAttribute('disabled', 'disabled');
@@ -599,10 +609,6 @@ class TaskController extends AbstractController
 
     /**
      * Gets the licence by ID.
-     *
-     * @todo This method was removed from FormActionController (As it was in the wrong place)
-     *  I have put it here, as this is the only place that it is used, however there are lots of these getLicence
-     *  methods floating around, so feel free to remove this and use one of the others
      *
      * @param int $id
      * @return array

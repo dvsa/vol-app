@@ -300,15 +300,23 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
             ->method('get')
             ->will($this->returnSelf());
 
-        $e1 = $this->getMock('\stdClass', ['setAttribute']);
+        $e1 = $this->getMock('\stdClass', ['setAttribute', 'getName']);
         $e1->expects($this->once())
             ->method('setAttribute')
             ->with('disabled', 'disabled');
 
-        $e2 = $this->getMock('\stdClass', ['setAttribute']);
+        $e1->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue('name'));
+
+        $e2 = $this->getMock('\stdClass', ['setAttribute', 'getName']);
         $e2->expects($this->once())
             ->method('setAttribute')
             ->with('disabled', 'disabled');
+
+        $e2->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue('name'));
 
         $form->expects($this->any())
             ->method('getFieldsets')
