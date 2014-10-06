@@ -1,10 +1,4 @@
 <?php
-
-/**
- * Search controller form post tests
- *
- * @author adminmwc <michael.cooper@valtech.co.uk>
- */
 namespace OlcsTest\Controller\Submission;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
@@ -12,7 +6,7 @@ use OlcsTest\Bootstrap;
 use Mockery as m;
 
 /**
- * Search controller form post tests
+ * Submission controller form post tests
  *
  * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
@@ -29,10 +23,14 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
                 'getFromPost',
                 'getPersist',
                 'setPersist',
+                'getCase',
                 'getForm',
                 'generateFormWithData',
                 'getDataForForm',
-                'callParentProcessSave'
+                'callParentProcessSave',
+                'callParentSave',
+                'callParentProcessLoad',
+                'createSubmissionSection'
             )
         );
         $serviceManager = Bootstrap::getServiceManager();
@@ -80,7 +78,6 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
     }
 
-
     /**
      * Tests the addAction once a submissionType has been set.
      */
@@ -114,14 +111,75 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
-     * Test save of new submissions
+     * Tests first request for edit Action
+     */
+    public function testEditAction()
+    {
+
+        $formData = ['submissionSections' => ['submissionTypeSubmit' => '']];
+
+        $this->controller->expects($this->once())
+            ->method('setPersist')
+            ->with(false);
+
+        $this->controller->expects($this->once())
+            ->method('getFromPost')
+            ->with('fields')
+            ->will($this->returnValue($formData));
+
+        $mockForm = $this->getMock('\stdClass', ['remove']);
+
+        $this->controller->expects($this->once())
+            ->method('generateFormWithData')
+            ->will($this->returnValue($mockForm));
+
+        $response = $this->controller->editAction();
+
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+    }
+
+    /**
+     * Tests edit request when changing submission type
+     */
+    public function testEditActionChangingSubmissionType()
+    {
+
+        $formData = ['submissionSections' => []];
+
+        $this->controller->expects($this->once())
+            ->method('getFromPost')
+            ->with('fields')
+            ->will($this->returnValue($formData));
+
+        $mockForm = $this->getMock('\stdClass', ['remove']);
+
+        $mockForm->expects($this->once())
+            ->method('remove')
+            ->with('formActions[submit]');
+
+        $this->controller->expects($this->once())
+            ->method('getForm')
+            ->with('submission')
+            ->will($this->returnValue($mockForm));
+
+        $this->controller->expects($this->once())
+            ->method('generateFormWithData')
+            ->will($this->returnValue($mockForm));
+
+        $response = $this->controller->editAction();
+
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+    }
+
+    /**
+     * Test process save of new submissions
      *
      * @param $dataToSave
      * @param $expectedResult
      *
-     * @dataProvider getSubmissionSectionsToSaveProvider
+     * @dataProvider getSubmissionSectionsToProcessSaveProvider
      */
-    public function testSaveAddNew($dataToSave, $expectedResult)
+    public function testProcessSaveAddNew($dataToSave, $expectedResult)
     {
         $this->controller->expects($this->once())
             ->method('callParentProcessSave')
@@ -147,7 +205,78 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $this->controller->processSave($dataToSave);
     }
 
-    public function getSubmissionSectionsToSaveProvider()
+    /**
+     * Test processLoad of submissions
+     *
+     * @param $dataToLoad
+     * @param $loadedData
+     *
+     * @dataProvider getSubmissionSectionsToLoadProvider
+     */
+    public function testProcessLoad($dataToLoad, $loadedData)
+    {
+        $this->controller->expects($this->once())
+            ->method('callParentProcessLoad')
+            ->with($dataToLoad)
+            ->will($this->returnValue($dataToLoad));
+
+        $this->controller->expects($this->once())
+            ->method('getCase')
+            ->will($this->returnValue(['id' => 24]));
+
+        $result = $this->controller->processLoad($dataToLoad);
+
+        $this->assertEquals($result, $loadedData);
+
+    }
+
+    /**
+     * Test GetSubmissionTypeTitle
+     *
+     * @param $input
+     * @param $expectedResult
+     *
+     * @dataProvider getSubmissionTitlesProvider
+     */
+    public function testGetSubmissionTypeTitle($input, $expectedResult)
+    {
+        $result = $this->controller->getSubmissionTypeTitle($input['submissionTypeId'], $input['submissionTitles']);
+
+        $this->assertEquals($result, $expectedResult);
+    }
+
+    public function getSubmissionTitlesProvider()
+    {
+        return array(
+            array(
+                array(
+                    'submissionTypeId' => 'submission_type_o_test',
+                    'submissionTitles' => array(
+                        array(
+                            'id' => 'submission_type_t_test',
+                            'description' => 'test title'
+                        )
+                    )
+                ),
+                'test title'
+            ),
+            array(
+                array(
+                    'submissionTypeId' => 'submission_type_o_testdoesntexist',
+                    'submissionTitles' => array(
+                        array(
+                            'id' => 'submission_type_t_test',
+                            'description' => 'test title'
+                        )
+                    )
+                ),
+                ''
+            )
+        );
+
+    }
+
+    public function getSubmissionSectionsToProcessSaveProvider()
     {
         return array(
             array(
@@ -164,5 +293,57 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
             )
         );
 
+    }
+
+    public function getSubmissionSectionsToLoadProvider()
+    {
+        return array(
+            array(
+                array(
+                    'id' => 1,
+                    'version' => 1,
+                    'submissionType' => 'foo',
+                    'text' => '[{"sectionId":"submission_section_casu","data":{"data":[]}}]'
+                ),
+                array(
+                    'id' => 1,
+                    'version' => 1,
+                    'submissionType' => 'foo',
+                    'fields' => [
+                        'case' => 24,
+                        'submissionSections' => [
+                            'submissionType' => 'foo',
+                            'sections' => ['submission_section_casu']
+                        ],
+                        'id' => 1,
+                        'version' => 1,
+                    ],
+                    'text' => '[{"sectionId":"submission_section_casu","data":{"data":[]}}]',
+                    'case' => 24
+                ),
+            ),
+            array(
+                array(
+                    'id' => 1,
+                    'version' => 1,
+                    'submissionSections' => [
+                        'sections' => '[{"sectionId":"submission_section_casu"}]',
+                    ],
+                ),
+                array(
+                    'id' => 1,
+                    'version' => 1,
+                    'fields' => [
+                        'case' => 24,
+                        'submissionSections' => [
+                            'sections' => ['submission_section_casu']
+                        ],
+                    ],
+                    'submissionSections' => [
+                        'sections' => '[{"sectionId":"submission_section_casu"}]'
+                    ],
+                )
+            )
+        );
     }
 }

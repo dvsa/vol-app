@@ -3,7 +3,7 @@
 $case = $this->placeholder('case')->getValue();
 $submission = $this->placeholder('submission')->getValue();
 $submissionTitle = $this->placeholder('submissionTitle')->getValue();
-$sectionData = $this->placeholder('sectionData')->getValue();
+$selectedSectionsArray = $this->placeholder('selectedSectionsArray')->getValue();
 ?>
 <h4><?php echo $submission['submissionTypeTitle']; ?>
     <a href="<?php echo $this->url(
@@ -18,15 +18,12 @@ $sectionData = $this->placeholder('sectionData')->getValue();
         ?></a>
 </h4>
 <?php
-
-foreach ($sectionData as $section) {
-?>
-<div class="read-only">
-    <dl>
-        <dt><?php echo $this->translate($section['description']);?></dt>
-        <dd class="three-quarters"></dd>
-    </dl>
-</div>
-<?php
+$selectedIds = array_column($selectedSectionsArray, 'sectionId');
+foreach ($allSections as $sectionId => $sectionDescription) {
+    if (in_array($sectionId, $selectedIds))
+    {
+        $key = array_search($sectionId, $selectedIds);
+        echo $this->submissionSectionDetails($selectedSectionsArray[$key]['sectionId'], $selectedSectionsArray[$key]);
+    }
 }
 ?>
