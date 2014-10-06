@@ -16,7 +16,7 @@ trait SubmissionSectionTrait
      * @param type $config
      * @return type
      */
-    protected function createSubmissionSection($sectionId, $config = array())
+    public function createSubmissionSection($sectionId, $config = array())
     {
         $routeParams = $this->getParams(array('case'));
         $section['data'] = array();

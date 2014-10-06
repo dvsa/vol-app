@@ -374,7 +374,7 @@ return array_merge(
                         'route' => '/bus/:busRegId/short',
                         'defaults' => [
                             'controller' => 'BusShortController',
-                            'action' => 'index',
+                            'action' => 'edit',
                         ]
                     ],
                     'may_terminate' => true,

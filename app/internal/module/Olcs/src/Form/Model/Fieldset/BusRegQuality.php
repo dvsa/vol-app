@@ -51,7 +51,6 @@ class BusRegQuality extends Base
      * @Form\Validator({
      *      "name": "Zend\Validator\StringLength",
      *      "options": {
-     *          "min": 5,
      *          "max":4000
      *      }
      * })
@@ -113,7 +112,6 @@ class BusRegQuality extends Base
      * @Form\Validator({
      *      "name": "Zend\Validator\StringLength",
      *      "options": {
-     *          "min": 5,
      *          "max":4000
      *      }
      * })

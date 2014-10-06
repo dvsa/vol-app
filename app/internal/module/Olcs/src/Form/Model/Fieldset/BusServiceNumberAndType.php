@@ -70,7 +70,7 @@ class BusServiceNumberAndType extends Base
      * @Form\Required(false)
      * @Form\Type("TextArea")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5,"max":800}})
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":800}})
      */
     public $otherDetails = null;
 

@@ -4,7 +4,9 @@
         echo $this->navigation($navigation)->menu()->setPartial('layout/partials/subNavigation');
 
         $tableFilters = $this->placeholder('tableFilters')->getValue();
-        echo $this->form($tableFilters);
+        if($tableFilters instanceof \Zend\Form\Form) {
+            echo $this->form($tableFilters);
+        }
     ?>
 </div>
 <div class="three-fifths">
