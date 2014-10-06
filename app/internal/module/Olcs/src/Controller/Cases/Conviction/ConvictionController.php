@@ -127,4 +127,9 @@ class ConvictionController extends OlcsController\CrudAbstract
             )
         )
     );
+
+    /**
+     * @var array
+     */
+    protected $inlineScripts = ['showhideinput', 'conviction'];
 }

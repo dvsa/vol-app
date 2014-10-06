@@ -18,5 +18,5 @@ class SlaController extends PublicInquiryController
     /**
      * @var array
      */
-    protected $inlineScripts = ['pi-sla'];
+    protected $inlineScripts = ['showhideinput', 'pi-sla'];
 }
