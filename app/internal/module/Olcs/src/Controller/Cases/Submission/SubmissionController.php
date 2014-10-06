@@ -11,6 +11,7 @@ use Olcs\Controller as OlcsController;
 use Zend\View\Model\ViewModel;
 use Olcs\Controller\Cases\AbstractController as AbstractCasesController;
 use Olcs\Controller\Traits as ControllerTraits;
+use Zend\Filter\Word\UnderscoreToCamelCase;
 
 /**
  * Cases Submission Controller
@@ -20,6 +21,7 @@ use Olcs\Controller\Traits as ControllerTraits;
 class SubmissionController extends OlcsController\CrudAbstract
 {
     use ControllerTraits\CaseControllerTrait;
+    use ControllerTraits\SubmissionSectionTrait;
 
     /**
      * Identifier name
@@ -109,6 +111,11 @@ class SubmissionController extends OlcsController\CrudAbstract
     protected $navigationId = 'case_submissions';
 
     /**
+     * Holds all the submission section ref data with descriptions
+     */
+    protected $submissionSectionRefData = array();
+
+    /**
      * Save data. Also processes the submit submission select type drop down
      * in order to dictate which checkboxes to manipulate.
      *
@@ -185,10 +192,25 @@ class SubmissionController extends OlcsController\CrudAbstract
     protected function save($data, $service = null)
     {
         // modify $data
+        $this->submissionConfig = $this->getServiceLocator()->get('config')['submission_config'];
+
+        if (is_array($data['submissionSections']['sections'])) {
+            foreach ($data['submissionSections']['sections'] as $index => $sectionId) {
+                $sectionData = $this->createSubmissionSection(
+                    $sectionId,
+                    $this->submissionConfig['sections'][$sectionId]
+                );
+
+                $data['submissionSections']['sections'][$index] = [
+                    'sectionId' => $sectionId,
+                    'data' => $sectionData
+                ];
+            }
+        }
 
         $data['text'] = json_encode($data['submissionSections']['sections']);
         $data['submissionType'] = $data['submissionSections']['submissionType'];
-        $data = parent::save($data, $service);
+        $data = $this->callParentSave($data, $service);
 
         return $data;
     }
@@ -229,17 +251,19 @@ class SubmissionController extends OlcsController\CrudAbstract
      */
     public function processLoad($data)
     {
-        $data = parent::processLoad($data);
+        $data = $this->callParentProcessLoad($data);
 
         $case = $this->getCase();
 
         $data['fields']['case'] = $case['id'];
 
         if (isset($data['submissionSections']['sections'])) {
-            $data['fields']['submissionSections']['sections'] = json_decode($data['submissionSections']['sections']);
+            $sectionData = json_decode($data['submissionSections']['sections'], true);
+            $data['fields']['submissionSections']['sections'] = $this->extractSectionIds($sectionData);
         } elseif (isset($data['text'])) {
+            $sectionData = json_decode($data['text'], true);
             $data['fields']['submissionSections']['submissionType'] = $data['submissionType'];
-            $data['fields']['submissionSections']['sections'] = json_decode($data['text']);
+            $data['fields']['submissionSections']['sections'] = $this->extractSectionIds($sectionData);
             $data['case'] = $case['id'];
             $data['fields']['id'] = $data['id'];
             $data['fields']['version'] = $data['version'];
@@ -249,39 +273,77 @@ class SubmissionController extends OlcsController\CrudAbstract
     }
 
     /**
+     * Call parent process load and return result. Public method to allow unit testing
+     *
+     * @param array $data
+     * @return array
+     */
+    public function callParentProcessLoad($data)
+    {
+        return parent::processLoad($data);
+    }
+
+    /**
+     * Call parent process load and return result. Public method to allow unit testing
+     *
+     * @param array $data
+     * @return array
+     */
+    public function callParentSave($data, $service = null)
+    {
+        return parent::save($data, $service);
+    }
+
+    private function extractSectionIds($sectionData)
+    {
+        $sectionIds = [];
+        if (is_array($sectionData)) {
+            foreach ($sectionData as $section) {
+                $sectionIds[] = $section['sectionId'];
+            }
+        }
+        return $sectionIds;
+    }
+
+    /**
      * Details action - shows each section detail
      *
      * @return ViewModel
      */
     public function detailsAction()
     {
+        $this->submissionSectionRefData = $this->getServiceLocator()->get(
+            'Common\Service\Data\RefData'
+        )->fetchListOptions('submission_section');
+
         $submission = $this->loadCurrent();
 
-        $view = $this->getView([]);
+        $submissionTitles = $this->getServiceLocator()
+            ->get('Common\Service\Data\RefData')->fetchListData('submission_type_title');
 
-        $submissionsArray = json_decode($submission['text']);
+        $submission['submissionTypeTitle'] =
+            $this->getSubmissionTypeTitle($submission['submissionType']['id'], $submissionTitles);
 
-        $submissionSections = $this->getServiceLocator()->get(
-            'Common\Service\Data\RefData'
-        )->fetchListData('submission_section');
-        $submission['submissionTypeTitle'] = $this->getSubmissionTypeTitle($submission['submissionType']['id']);
+        $selectedSectionsArray = json_decode($submission['text'], true);
 
-        $sectionData = [];
-        foreach ($submissionSections as $submissionSection) {
-            if (in_array($submissionSection['id'], $submissionsArray)) {
-                $sectionData[$submissionSection['id']]['description'] = $submissionSection['description'];
-            }
+        // add section description text from ref data
+        foreach ($selectedSectionsArray as $index => $selectedSectionData) {
+            $selectedSectionsArray[$index]['description'] =
+                $this->submissionSectionRefData[$selectedSectionData['sectionId']];
         }
 
         $this->getViewHelperManager()
             ->get('placeholder')
-            ->getContainer('sectionData')
-            ->set($sectionData);
+            ->getContainer('selectedSectionsArray')
+            ->set($selectedSectionsArray);
 
         $this->getViewHelperManager()
             ->get('placeholder')
             ->getContainer($this->getIdentifierName())
             ->set($submission);
+
+        $view = $this->getView([]);
+        $view->setVariable('allSections', $this->submissionSectionRefData);
 
         $view->setTemplate($this->detailsView);
 
@@ -291,17 +353,17 @@ class SubmissionController extends OlcsController\CrudAbstract
     /**
      * Extracts the title from ref_data based on a given submission type.
      *
+     * @param array $submissionTitles
      * @param string $submissionType
      * @return string
      */
-    private function getSubmissionTypeTitle($submissionType)
+    public function getSubmissionTypeTitle($submissionType, $submissionTitles = array())
     {
-        $submissionTitles = $this->getServiceLocator()
-            ->get('Common\Service\Data\RefData')->fetchListData('submission_type_title');
-
-        foreach ($submissionTitles as $title) {
-            if ($title['id'] == str_replace('_o_', '_t_', $submissionType)) {
-                return $title['description'];
+        if (is_array($submissionTitles)) {
+            foreach ($submissionTitles as $title) {
+                if ($title['id'] == str_replace('_o_', '_t_', $submissionType)) {
+                    return $title['description'];
+                }
             }
         }
         return '';

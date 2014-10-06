@@ -1,0 +1,23 @@
+<?php
+if ($this->data['sectionId'] !== 'submission_section_intr'){
+    ?>
+
+    <h4><?php
+        $case = $this->placeholder('case')->getValue();
+
+        echo isset($this->data['description']) ? $this->data['description'] : ''; ?>
+        <a href="<?php echo $this->url(
+            'submission', [
+                'case' => $case['id'],
+                'action' => 'edit'
+            ]
+        );?>" class="action--secondary right-aligned">
+            <?php echo
+            $this->translate('Edit section');
+            ?></a>
+    </h4>
+<?php
+}
+?>
+
+

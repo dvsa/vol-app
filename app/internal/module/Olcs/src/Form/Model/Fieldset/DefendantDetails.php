@@ -18,7 +18,7 @@ class DefendantDetails
      *     "label": "Defendant type",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category",
+     *     "help-block": "Please select a defendant type",
      *     "category": "def_type"
      * })
      * @Form\Type("DynamicSelect")
