@@ -167,7 +167,7 @@ return array(
                     'pages' => array(
                         array(
                             'id' => 'case_hearings_appeals_stays',
-                            'label' => 'Appeals and stays',
+                            'label' => 'Appeal and stays',
                             'route' => 'case_hearing_appeal',
                             'action' => 'details',
                             'use_route_match' => true,
