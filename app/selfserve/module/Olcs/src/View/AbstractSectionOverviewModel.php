@@ -14,7 +14,7 @@ use Common\View\AbstractViewModel;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class AbstractSectionOverviewModel extends AbstractViewModel
+abstract class AbstractSectionOverviewModel extends AbstractViewModel
 {
     // @TODO backport code from RC's current 'OverviewSection'
     // implementation - generic
