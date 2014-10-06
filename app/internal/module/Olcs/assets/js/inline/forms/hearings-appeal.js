@@ -1,10 +1,10 @@
 OLCS.ready(function() {
   OLCS.cascadeForm({
-    form: "#appeal",
+    form: "form[method=post]",
     rulesets: {
       "fields": {
         "*": true,
-        "label:dob": function() {
+        "date:withdrawnDate": function() {
           return OLCS.formHelper.isChecked("fields", "isWithdrawn");
         }
       }

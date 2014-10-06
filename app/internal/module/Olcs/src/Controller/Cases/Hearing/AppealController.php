@@ -130,9 +130,15 @@ class AppealController extends OlcsController\CrudAbstract
         )
     );
 
+    /**
+     * Any inline scripts needed in this section
+     *
+     * @var array
+     */
+    protected $inlineScripts = array('forms/hearings-appeal');
+
     public function addAction()
     {
-        $this->loadScripts(['forms/appeal']);
         $caseId = $this->getCase()['id'];
         $appeal = $this->getAppealData($caseId);
         if (empty($appeal)) {
