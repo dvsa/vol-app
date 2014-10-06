@@ -32,6 +32,11 @@ abstract class AbstractDataServiceTest extends PHPUnit_Framework_TestCase
     public $serviceName = '\StdClass';
 
     /**
+     * @var \StdClass
+     */
+    public $mockRestClient;
+
+    /**
      * @var array $mockMethods;
      */
     public $mockMethods = [];
@@ -45,18 +50,18 @@ abstract class AbstractDataServiceTest extends PHPUnit_Framework_TestCase
 
         $this->service = $this->getMock($this->serviceName, $methods);
 
-        $mockRestClient = $this->getMock('\StdClass', ['get', 'put']);
+        $this->mockRestClient = $this->getMock('\StdClass', ['get', 'put']);
 
-        $mockRestClient->expects($this->any())
+        $this->mockRestClient->expects($this->any())
             ->method('get')
             ->will($this->returnCallback([$this, 'mockRestCallGet']));
 
-        $mockRestClient->expects($this->any())
+        $this->mockRestClient->expects($this->any())
             ->method('put')
             ->will($this->returnCallback([$this, 'mockRestCallPut']));
 
         $this->service->expects($this->any())
             ->method('getRestClient')
-            ->will($this->returnValue($mockRestClient));
+            ->will($this->returnValue($this->mockRestClient));
     }
 }
