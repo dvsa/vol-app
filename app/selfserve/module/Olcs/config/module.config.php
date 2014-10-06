@@ -48,7 +48,23 @@ return array(
                         )
                     )
                 )
+            ),
+            'licence' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/licence/:id[/]',
+                    'constraints' => array(
+                        'id' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Licence',
+                        'action' => 'index'
+                    )
+                ),
+                'may_terminate' => true,
+                // child_routes => array()
             )
+
         )
     ),
     'controllers' => array(
@@ -56,6 +72,7 @@ return array(
             'Dashboard' => 'Olcs\Controller\DashboardController',
             'Application' => 'Olcs\Controller\Application\ApplicationController',
             'Application/TypeOfLicence' => 'Olcs\Controller\Application\TypeOfLicenceController',
+            'Licence' => 'Olcs\Controller\Licence\LicenceController',
         )
     ),
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',
