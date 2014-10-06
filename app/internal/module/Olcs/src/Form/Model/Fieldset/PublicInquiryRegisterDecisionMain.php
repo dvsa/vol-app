@@ -100,7 +100,7 @@ class PublicInquiryRegisterDecisionMain
 
     /**
      * @Form\Required(true)
-     * @Form\Attributes({"id":"","placeholder":"","class":"long tall",  "multiple" : true, "required": false})
+     * @Form\Attributes({"id":"","placeholder":"","class":"extra-long tall",  "multiple" : true, "required": false})
      * @Form\Options({
      *     "label": "Decisions",
      *     "service_name": "Olcs\Service\Data\PublicInquiryDecision",
@@ -163,7 +163,7 @@ class PublicInquiryRegisterDecisionMain
     public $notificationDate = null;
 
     /**
-     * @Form\Attributes({"id":"","placeholder":"","class":"long tall", "multiple":true})
+     * @Form\Attributes({"id":"","placeholder":"","class":"extra-long tall", "multiple":true})
      * @Form\Options({
      *     "label": "Definition",
      *     "disable_inarray_validator": false,
