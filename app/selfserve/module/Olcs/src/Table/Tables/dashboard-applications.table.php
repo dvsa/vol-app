@@ -10,19 +10,21 @@ return array(
     'attributes' => array(),
     'columns' => array(
         array(
+            'title' => $translationPrefix . '-appId',
+            'formatter' => function ($row) {
+                return '<a href="' . $this->url->fromRoute(
+                    'application',
+                    array('id' => $row['id'])
+                ) . '">'.$row['id'].'</a>';
+            }
+        ),
+        array(
             'title' => $translationPrefix . '-licNo',
             'formatter' => function ($row, $col, $sm) {
                 if (!empty($row['licNo'])) {
                     return $row['licNo'];
                 }
                 return $sm->get('translator')->translate('Not yet allocated');
-            }
-        ),
-        array(
-            'title' => $translationPrefix . '-appId',
-            'formatter' => function ($row) {
-                // @todo add the real link in here
-                return '<a href="#">'.$row['id'].'</a>';
             }
         ),
         array(

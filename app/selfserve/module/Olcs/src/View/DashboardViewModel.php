@@ -8,6 +8,7 @@
 namespace Olcs\View;
 
 use Common\View\AbstractViewModel;
+use Common\Service\Entity\LicenceService;
 
 /**
  * Dashboard View Model
@@ -57,10 +58,17 @@ class DashboardViewModel extends AbstractViewModel
 
             foreach ($data['licences'] as $licence) {
 
-                $licence['status'] = (string)$licence['status']['id'];
-                $licence['type'] = (string)$licence['licenceType']['id'];
+                $displayLicenceStatus = array(
+                    LicenceService::LICENCE_STATUS_VALID,
+                    LicenceService::LICENCE_STATUS_CURTAILED,
+                    LicenceService::LICENCE_STATUS_SUSPENDED
+                );
 
-                $this->licences[$licence['id']] = $licence;
+                if (in_array($licence['status']['id'], $displayLicenceStatus)) {
+                    $licence['status'] = $licence['status']['id'];
+                    $licence['type'] = $licence['licenceType']['id'];
+                    $this->licences[$licence['id']] = $licence;
+                }
 
                 foreach ($licence['applications'] as $application) {
                     $newRow = $application;

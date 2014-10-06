@@ -5,25 +5,39 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-namespace Olcs\Application;
+namespace Olcs\Controller\Application;
 
-use Olcs\Controller\AbstractExternalController;
+use Olcs\View\OverviewViewModel;
 
 /**
  * Application Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ApplicationController extends AbstractExternalController
+class ApplicationController extends AbstractApplicationController
 {
     /**
      * Application overview
      */
     public function indexAction()
     {
-        $application = $this->params()->fromRoute('id');
-        $organisation = $this->getCurrentOrganisation();
-        die('here');
+        $applicationId = $this->params()->fromRoute('id');
+
+        if (!$this->checkAccess($applicationId)) {
+            return $this->redirect()->toRoute('dashboard');
+        }
+
+        $data = $this->getEntityService('Application')->getOverview($applicationId);
+
+        // If we don't have licence type, we need to redirect the user to TypeOfLicence
+        if ($data['licence']['niFlag'] === null
+            || $data['licence']['licenceType'] === null
+            || $data['licence']['goodsOrPsv'] === null
+        ) {
+            return $this->redirect()->toRoute('application/type-of-licence', array('id' => $applicationId));
+        }
+
+        return new OverviewViewModel($data);
     }
 
     /**

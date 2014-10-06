@@ -16,7 +16,7 @@ return array(
             'create_application' => array(
                 'type' => 'segment',
                 'options' => array(
-                    'route' => 'application/create[/]',
+                    'route' => '/application/create[/]',
                     'defaults' => array(
                         'controller' => 'Application',
                         'action' => 'create'
@@ -26,13 +26,26 @@ return array(
             'application' => array(
                 'type' => 'segment',
                 'options' => array(
-                    'route' => 'application/:id[/]',
+                    'route' => '/application/:id[/]',
                     'constraints' => array(
                         'id' => '[0-9]+'
                     ),
                     'defaults' => array(
                         'controller' => 'Application',
                         'action' => 'index'
+                    )
+                ),
+                'may_terminate' => true,
+                'child_routes' => array(
+                    'type-of-licence' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => 'type-of-licence[/]',
+                            'defaults' => array(
+                                'controller' => 'Application/TypeOfLicence',
+                                'action' => 'index'
+                            )
+                        )
                     )
                 )
             )
@@ -41,7 +54,8 @@ return array(
     'controllers' => array(
         'invokables' => array(
             'Dashboard' => 'Olcs\Controller\DashboardController',
-            'Application' => 'Olcs\Controller\Application\ApplicationController'
+            'Application' => 'Olcs\Controller\Application\ApplicationController',
+            'Application/TypeOfLicence' => 'Olcs\Controller\Application\TypeOfLicenceController',
         )
     ),
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',
