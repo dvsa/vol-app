@@ -7,6 +7,10 @@
                 echo ($this->data['data']['isMlh'] == 'Y') ?
                     '(' . $this->translate('MLH') . ')' : '';
             ?></dd>
+        <dt><?php echo $this->translate('Is MLH?');?></dt>
+        <dd><?php echo isset($this->data['data']['isMlh']) ?
+                $this->data['data']['isMlh'] : '';
+            ?></dd>
         <dt><?php echo $this->translate('Entity');?></dt>
         <dd><?php echo isset($this->data['data']['organisationType']) ?
                 $this->data['data']['organisationType'] : '';?></dd>
@@ -34,6 +38,9 @@
         <dt><?php echo $this->translate('Licence type');?></dt>
         <dd><?php echo isset($this->data['data']['licenceType']) ?
                 $this->data['data']['licenceType'] : '';?></dd>
+        <?php
+            if (isset($this->data['data']['caseType']) && $this->data['data']['caseType'] == 'case_t_app') {
+        ?>
         <dt><?php echo $this->translate('Service standard date');?></dt>
         <dd><?php echo isset($this->data['data']['serviceStandardDate']) ?
                 $this->dateFormat(
@@ -42,9 +49,15 @@
                         $this->data['data']['serviceStandardDate']
                     ),
                     \IntlDateFormatter::SHORT) : '';?></dd>
+        <?php
+            }
+        ?>
         <dt><?php echo $this->translate('Licence status');?></dt>
         <dd><?php echo isset($this->data['data']['licenceStatus']) ?
                 $this->data['data']['licenceStatus'] : '';?></dd>
+        <dt><?php echo $this->translate('Type of licence');?></dt>
+        <dd><?php echo isset($this->data['data']['goodsOrPsv']) ?
+                $this->data['data']['goodsOrPsv'] : '';?></dd>
     </dl>
 </div>
 <div class="read-only">
