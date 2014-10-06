@@ -37,8 +37,12 @@ class OverviewViewModel extends AbstractViewModel
      */
     public function __construct($data)
     {
-        $this->data = $data;
+        print '<pre>';
+        print_r($data);
+        exit;
 
         $this->setVariable('applicationId', $data['id']);
+        $this->setVariable('createdOn', $data['createdOn']);
+        $this->setVariable('status', $data['status']['id']);
     }
 }
