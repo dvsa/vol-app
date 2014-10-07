@@ -210,7 +210,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                     'operating-centres',
                     'auth-requested-applied-for',
                     'transport-managers',
-                    'fitness-repute',
+                    'fitness-and-repute',
                     'bus-reg-app-details',
                     'transport-authority-comments',
                     'total-bus-registrations',
@@ -234,7 +234,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                     'auth-requested-applied-for',
                     'transport-managers',
                     'continuous-effective-control',
-                    'fitness-repute',
+                    'fitness-and-repute',
                     'local-licence-history',
                     'maintenance-tachographs-hours',
                     'objections',
@@ -249,7 +249,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                     'auth-requested-applied-for',
                     'transport-managers',
                     'continuous-effective-control',
-                    'fitness-repute',
+                    'fitness-and-repute',
                     'total-bus-registrations',
                     'local-licence-history',
                     'registration-details',
@@ -269,7 +269,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                     'auth-requested-applied-for',
                     'transport-managers',
                     'continuous-effective-control',
-                    'fitness-repute',
+                    'fitness-and-repute',
                     'local-licence-history',
                     'conviction-fpn-offence-history',
                     'te-reports',
@@ -288,7 +288,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                 $sections = [
                     'operating-centres',
                     'transport-managers',
-                    'fitness-repute',
+                    'fitness-and-repute',
                     'maintenance-tachographs-hours'
                 ];
                 break;
@@ -305,7 +305,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                     'auth-requested-applied-for',
                     'transport-managers',
                     'continuous-effective-control',
-                    'fitness-repute',
+                    'fitness-and-repute',
                     'local-licence-history',
                     'linked-mlh-history',
                     'maintenance-tachographs-hours',
@@ -321,14 +321,14 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                     'lead-tc-area',
                     'current-submissions',
                     'transport-managers',
-                    'fitness-repute',
+                    'fitness-and-repute',
                     'local-licence-history',
                     'maintenance-tachographs-hours',
                     'prohibition-history',
                     'conviction-fpn-offence-history',
                     'annual-test-history',
                     'penalties',
-                    'complaints',
+                    'case-complaints',
                     'financial-information'
                 ];
                 break;
@@ -337,7 +337,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                     'intelligent-unit-check',
                     'transport-managers',
                     'continuous-effective-control',
-                    'fitness-repute',
+                    'fitness-and-repute',
                     'objections'
                 ];
                 break;

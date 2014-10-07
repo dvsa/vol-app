@@ -106,7 +106,7 @@ return array(
                 )
             )
         ),
-        'case-summary' => array(
+        'old-case-summary' => array(
             'view' => 'submission/partials/case-summary',
             'dataPath' => 'Cases',
             'bundle' => array(

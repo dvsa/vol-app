@@ -4,7 +4,7 @@
         <dt><?php echo $this->translate('Operator name');?></dt>
         <dd><?php echo isset($this->data['data']['organisationName']) ?
                 $this->data['data']['organisationName'] : '';
-                echo ($this->data['data']['isMlh'] == 'Y') ?
+                echo (isset($this->data['data']['isMlh']) && $this->data['data']['isMlh'] == 'Y') ?
                     '(' . $this->translate('MLH') . ')' : '';
             ?></dd>
         <dt><?php echo $this->translate('Is MLH?');?></dt>

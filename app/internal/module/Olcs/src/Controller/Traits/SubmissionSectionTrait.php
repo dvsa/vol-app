@@ -2,7 +2,7 @@
 
 namespace Olcs\Controller\Traits;
 
-use Zend\Filter\Word\UnderscoreToCamelCase;
+use Zend\Filter\Word\DashToCamelCase;
 
 /**
  * Trait for building submission section data
@@ -30,8 +30,8 @@ trait SubmissionSectionTrait
             );
         }
 
-        $filter = new UnderscoreToCamelCase();
-        $method = lcfirst($filter->filter($sectionId));
+        $filter = $this->getFilter();
+        $method = 'get' . ucfirst($filter->filter($sectionId)) . 'SectionData';
         if (method_exists($this, $method)) {
             $section = call_user_func(array($this, $method), $this->sectionData);
         }
@@ -39,10 +39,15 @@ trait SubmissionSectionTrait
         return $section;
     }
 
+    private function getFilter()
+    {
+        return new DashToCamelCase();
+    }
+
     /**
-     * section case-summary-info
+     * section case-summary
      */
-    private function submissionSectionCasu(array $data = array())
+    private function getCaseSummarySectionData(array $data = array())
     {
         $vehiclesInPossession = $this->calculateVehiclesInPossession($data['licence']);
         $filteredData = array(
@@ -73,7 +78,7 @@ trait SubmissionSectionTrait
     /**
      * section case-outline
      */
-    private function submissionSectionCase(array $data = array())
+    private function getCaseOutlineSectionData(array $data = array())
     {
         $case = $this->getCase();
 
