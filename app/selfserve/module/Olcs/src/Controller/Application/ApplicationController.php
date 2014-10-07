@@ -7,6 +7,7 @@
  */
 namespace Olcs\Controller\Application;
 
+use Common\Service\Data\SectionConfig;
 use Olcs\View\Model\Application\Overview;
 
 /**
@@ -37,8 +38,18 @@ class ApplicationController extends AbstractApplicationController
             return $this->redirect()->toRoute('application/type-of-licence', array('id' => $applicationId));
         }
 
-        $sections = $this->getHelperService('SectionAccessHelper')
-            ->getAccessibleSections($data['licence']['goodsOrPsv']['id'], $data['licence']['licenceType']['id']);
+        $access = array(
+            'external',
+            'application',
+            $data['licence']['goodsOrPsv']['id'],
+            $data['licence']['licenceType']['id']
+        );
+
+        $sectionConfig = new SectionConfig();
+        $inputSections = $sectionConfig->getAll();
+
+        $sections = $this->getHelperService('AccessHelper')->setSections($inputSections)
+            ->getAccessibleSections($access);
 
         return new Overview($data, array_keys($sections));
     }
