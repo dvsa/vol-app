@@ -1,21 +1,20 @@
 <?php
 
 /**
- * Overview View Model
+ * Application Overview View Model
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 namespace Olcs\View\Model\Application;
 
-use Common\View\AbstractViewModel;
-use Olcs\View\Model\OverviewSection;
+use Olcs\View\Model\LvaOverview;
 
 /**
- * Overview View Model
+ * Application Overview View Model
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class Overview extends AbstractViewModel
+class Overview extends LvaOverview
 {
     /**
      * Holds the template
@@ -36,12 +35,6 @@ class Overview extends AbstractViewModel
         $this->setVariable('createdOn', date('d F Y', strtotime($data['createdOn'])));
         $this->setVariable('status', $data['status']['id']);
 
-        $overviewSections = array();
-
-        foreach ($sections as $section) {
-            $overviewSections[] = new OverviewSection($section, $data);
-        }
-
-        $this->setVariable('sections', $overviewSections);
+        parent::__construct($data, $sections);
     }
 }

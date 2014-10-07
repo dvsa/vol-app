@@ -7,7 +7,7 @@
  */
 namespace Olcs\Controller\Licence;
 
-use Olcs\View\Licence\OverviewViewModel;
+use Olcs\View\Model\Licence\Overview;
 
 /**
  * Licence Controller
@@ -21,5 +21,9 @@ class LicenceController extends AbstractLicenceController
      */
     public function indexAction()
     {
+        $data = [
+            'id' => $this->params('id')
+        ];
+        return new Overview($data, []);
     }
 }
