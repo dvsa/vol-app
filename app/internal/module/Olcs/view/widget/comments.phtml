@@ -5,7 +5,7 @@ $form = $this->placeholder('comments')->getValue();
 
 <h4>
     <?php echo $this->navigation('navigation')->findOneBy('active', 1)->getLabel(); ?>
-     <?php echo $this->translate(ucwords($form->getOption('label'))); ?>
+     <?php echo $this->translate(strtolower($form->getOption('label'))); ?>
 </h4>
 
 <?php echo $this->formErrors($form); ?>

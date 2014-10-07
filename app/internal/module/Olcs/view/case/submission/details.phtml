@@ -9,6 +9,15 @@ $selectedSectionsArray = $this->placeholder('selectedSectionsArray')->getValue()
     <a href="<?php echo $this->url(
         'submission', [
             'case' => $case['id'],
+            'action' => 'index'
+        ]
+    );?>" class="action--secondary right-aligned">
+        <?php echo
+        $this->translate('Return to list');
+        ?></a>
+    <a href="<?php echo $this->url(
+        'submission', [
+            'case' => $case['id'],
             'action' => 'edit',
             'submission' => $submission['id']
         ]
