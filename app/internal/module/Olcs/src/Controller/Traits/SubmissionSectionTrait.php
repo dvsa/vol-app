@@ -45,24 +45,29 @@ trait SubmissionSectionTrait
     private function submissionSectionCasu(array $data = array())
     {
         $vehiclesInPossession = $this->calculateVehiclesInPossession($data['licence']);
-
-        return array(
+        $filteredData = array(
             'id' => $data['id'],
             'organisationName' => $data['licence']['organisation']['name'],
             'isMlh' => $data['licence']['organisation']['isMlh'],
             'organisationType' => $data['licence']['organisation']['type']['description'],
             'businessType' => $data['licence']['organisation']['sicCode']['description'],
+            'caseType' => isset($data['caseType']['id']) ? $data['caseType']['id'] : null,
             'ecmsNo' => $data['ecmsNo'],
             'licNo' => $data['licence']['licNo'],
             'licenceStartDate' => $data['licence']['inForceDate'],
             'licenceType' => $data['licence']['licenceType']['description'],
-            'serviceStandardDate' => $data['licence']['createdOn'], // + 9 weeks?
+            'goodsOrPsv' => $data['licence']['goodsOrPsv']['description'],
+            'serviceStandardDate' =>
+                isset($data['application']['targetCompletionDate']) ?
+                    $data['application']['targetCompletionDate'] : null,
             'licenceStatus' => $data['licence']['status']['description'],
             'totAuthorisedVehicles' => $data['licence']['totAuthVehicles'],
             'totAuthorisedTrailers' => $data['licence']['totAuthTrailers'],
             'vehiclesInPossession' => $vehiclesInPossession,
             'trailersInPossession' => $data['licence']['totAuthTrailers']
         );
+
+        return $filteredData;
     }
 
     /**

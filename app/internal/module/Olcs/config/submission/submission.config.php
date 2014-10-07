@@ -7,6 +7,14 @@ return array(
             'service' => 'Cases',
             'bundle' => array(
                 'children' => array(
+                    'application' => array(
+                        'properties' => array(
+                            'targetCompletionDate'
+                        )
+                    ),
+                    'caseType' => array(
+                        'properties' => array('id')
+                    ),
                     'submissionSections' => array(
                         'properties' => array(
                             'id',
@@ -26,7 +34,7 @@ return array(
                                 'properties' => array('id', 'description')
                             ),
                             'goodsOrPsv' => array(
-                                'properties' => array('id')
+                                'properties' => array('id', 'description')
                             ),
                             'trafficArea' => array(
                                 'properties' => 'ALL'
