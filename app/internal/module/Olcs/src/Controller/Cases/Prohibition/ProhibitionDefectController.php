@@ -128,14 +128,18 @@ class ProhibitionDefectController extends OlcsController\CrudAbstract
     {
         $this->forward()->dispatch(
             'CaseProhibitionController',
-            array_merge(
-                array(
-                    'action' => 'details',
-                    'case' => $this->getFromRoute('case'),
-                    'prohibition' => $this->getFromRoute('prohibition')
-                )
+            array(
+                'action' => 'details',
+                'case' => $this->getFromRoute('case'),
+                'prohibition' => $this->getFromRoute('prohibition')
             )
         );
+
+        //the above call to CaseProhibitionController will have set things like the
+        //page title, so we need to reset these as otherwise they will be duplicated
+        $this->getViewHelperManager()->get('placeholder')->getContainer('pageTitle')->offsetUnset(1);
+        $this->getViewHelperManager()->get('placeholder')->getContainer('pageTitle')->offsetUnset(3);
+        $this->getViewHelperManager()->get('placeholder')->getContainer('pageSubtitle')->offsetUnset(1);
 
         $view = $this->getView([]);
 

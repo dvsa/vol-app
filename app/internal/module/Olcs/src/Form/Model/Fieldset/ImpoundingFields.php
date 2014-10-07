@@ -83,7 +83,7 @@ class ImpoundingFields
      *     "label": "Hearing date",
      *     "create_empty_option": true,
      *     "render_delimiters": true,
-     *     "pattern": "d MMMM y '</div><div class=""field""><label>Hearing time</label>'HH:mm:ss"
+     *     "pattern": "d MMMM y '</div><div class=""field""><label for=hearingDate>Hearing time</label>'HH:mm:ss"
      * })
      * @Form\Required(false)
      * @Form\Type("DateTimeSelect")

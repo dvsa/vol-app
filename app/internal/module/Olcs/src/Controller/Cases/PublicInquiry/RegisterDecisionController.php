@@ -14,4 +14,6 @@ class RegisterDecisionController extends PublicInquiryController
      * @var string
      */
     protected $formName = 'PublicInquiryRegisterDecision';
+
+    protected $inlineScripts = ['forms/pi-decision'];
 }

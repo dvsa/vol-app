@@ -130,6 +130,13 @@ class StayController extends OlcsController\CrudAbstract
     );
 
     /**
+     * Any inline scripts needed in this section
+     *
+     * @var array
+     */
+    protected $inlineScripts = array('forms/hearings-appeal');
+
+    /**
      * Add action. First checks if stay type already exists
      *
      * @return \Zend\View\Model\ViewModel
