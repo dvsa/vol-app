@@ -14,7 +14,7 @@ use Olcs\View\Model\LvaOverview;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class Overview extends LvaOverview
+class LicenceOverview extends LvaOverview
 {
     /**
      * Holds the template

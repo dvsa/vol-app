@@ -7,7 +7,7 @@
  */
 namespace Olcs\Controller\Application;
 
-use Olcs\View\Model\Application\Overview;
+use Olcs\View\Model\Application\ApplicationOverview;
 
 /**
  * Application Controller
@@ -40,7 +40,7 @@ class ApplicationController extends AbstractApplicationController
         $sections = $this->getHelperService('SectionAccessHelper')
             ->getAccessibleSections($data['licence']['goodsOrPsv']['id'], $data['licence']['licenceType']['id']);
 
-        return new Overview($data, array_keys($sections));
+        return new ApplicationOverview($data, array_keys($sections));
     }
 
     /**

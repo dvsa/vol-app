@@ -7,7 +7,7 @@
  */
 namespace Olcs\Controller\Licence;
 
-use Olcs\View\Model\Licence\Overview;
+use Olcs\View\Model\Licence\LicenceOverview;
 
 /**
  * Licence Controller
@@ -28,6 +28,6 @@ class LicenceController extends AbstractLicenceController
         $sections = $this->getHelperService('SectionAccessHelper')
             ->getAccessibleSections($data['goodsOrPsv']['id'], $data['licenceType']['id']);
 
-        return new Overview($data, array_keys($sections));
+        return new LicenceOverview($data, array_keys($sections));
     }
 }
