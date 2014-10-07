@@ -198,14 +198,13 @@ class SubmissionController extends OlcsController\CrudAbstract
             foreach ($data['submissionSections']['sections'] as $index => $sectionId) {
                 $config = isset($this->submissionConfig['sections'][$sectionId]) ?
                     $this->submissionConfig['sections'][$sectionId] : [];
-                $sectionData = $this->createSubmissionSection(
-                    $sectionId,
-                    $config
-                );
 
                 $data['submissionSections']['sections'][$index] = [
                     'sectionId' => $sectionId,
-                    'data' => $sectionData
+                    'data' => $this->createSubmissionSection(
+                        $sectionId,
+                        $config
+                    )
                 ];
             }
         }

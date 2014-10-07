@@ -11,6 +11,8 @@ use Zend\Filter\Word\DashToCamelCase;
 trait SubmissionSectionTrait
 {
 
+    protected $sectionData = array();
+
     /**
      * Create a sction from the submission config
      * @param type $config
@@ -22,7 +24,7 @@ trait SubmissionSectionTrait
         $section['data'] = array();
         $bundle = isset($config['bundle']) ? $config['bundle'] : array();
         if (isset($config['service'])) {
-            $this->sectionData = $this->makeRestCall(
+            $this->sectionData[$sectionId] = $this->makeRestCall(
                 $config['service'],
                 'GET',
                 array('id' => $routeParams['case']),
@@ -33,7 +35,7 @@ trait SubmissionSectionTrait
         $filter = $this->getFilter();
         $method = 'get' . ucfirst($filter->filter($sectionId)) . 'SectionData';
         if (method_exists($this, $method)) {
-            $section = call_user_func(array($this, $method), $this->sectionData);
+            $section = call_user_func(array($this, $method), $this->sectionData[$sectionId]);
         }
 
         return $section;
