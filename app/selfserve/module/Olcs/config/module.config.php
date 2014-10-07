@@ -6,7 +6,15 @@ $sections = $sectionConfig->getAll();
 $dashFilter = new \Zend\Filter\Word\UnderscoreToDash();
 $camelFilter = new \Zend\Filter\Word\UnderscoreToCamelCase();
 
-$types = array('application', 'licence', /* Variations... */);
+$types = array(
+    'application' => array(
+        'allowCreate' => true,
+    ),
+    'licence' => array(
+        'allowCreate' => false,
+    ),
+    /* variations => array() */
+);
 
 $routes = array(
     'dashboard' => array(
@@ -21,19 +29,21 @@ $routes = array(
     )
 );
 
-foreach ($types as $type) {
+foreach ($types as $type => $options) {
     $typeController = $camelFilter->filter($type);
 
-    $routes['create_' . $type] = array(
-        'type' => 'segment',
-        'options' => array(
-            'route' => '/' . $type . '/create[/]',
-            'defaults' => array(
-                'controller' => $typeController,
-                'action' => 'create'
+    if (isset($options['allowCreate']) && $options['allowCreate']) {
+        $routes['create_' . $type] = array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => '/' . $type . '/create[/]',
+                'defaults' => array(
+                    'controller' => $typeController,
+                    'action' => 'create'
+                )
             )
-        )
-    );
+        );
+    }
     $routes[$type] = array(
         'type' => 'segment',
         'options' => array(
