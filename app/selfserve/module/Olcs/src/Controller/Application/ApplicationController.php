@@ -21,7 +21,7 @@ class ApplicationController extends AbstractApplicationController
      */
     public function indexAction()
     {
-        $applicationId = $this->params()->fromRoute('id');
+        $applicationId = $this->params('id');
 
         if (!$this->checkAccess($applicationId)) {
             return $this->redirect()->toRoute('dashboard');

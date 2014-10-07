@@ -21,9 +21,9 @@ class LicenceController extends AbstractLicenceController
      */
     public function indexAction()
     {
-        $data = [
-            'id' => $this->params('id')
-        ];
+        $data = $this->getEntityService('Licence')->getOverview(
+            $this->params('id')
+        );
         return new Overview($data, []);
     }
 }
