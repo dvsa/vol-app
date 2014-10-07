@@ -33,7 +33,7 @@ class Overview extends LvaOverview
      */
     public function __construct($data, array $sections = array())
     {
-        $this->setVariable('licenceId', $data['id']);
+        $this->setVariable('licenceId', $data['licNo']);
         $this->setVariable('grantedDate', date('d F Y', strtotime($data['grantedDate'])));
         $this->setVariable('expiryDate', date('d F Y', strtotime($data['expiryDate'])));
         $this->setVariable('status', $data['status']['id']);
