@@ -3,16 +3,19 @@ OLCS.ready(function() {
   var hearingType = "impt_hearing";
   var otherVenue = "other";
 
+  function showHearing() {
+    return OLCS.formHelper("fields", "impoundingType").val() === hearingType;
+  }
+
   OLCS.cascadeForm({
     form: "form[method=post]",
     rulesets: {
       "fields": {
         "*": true,
-        "label:hearingDate": function() {
-          return OLCS.formHelper("fields", "impoundingType").val() === hearingType;
-        },
+        "label:hearingDate": showHearing,
+        "piVenue": showHearing,
         "piVenueOther": function() {
-          return OLCS.formHelper("fields", "piVenue").val() === otherVenue;
+          return showHearing() && OLCS.formHelper("fields", "piVenue").val() === otherVenue;
         }
       }
     }
