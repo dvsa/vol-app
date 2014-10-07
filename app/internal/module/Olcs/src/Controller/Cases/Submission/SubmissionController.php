@@ -115,24 +115,6 @@ class SubmissionController extends OlcsController\CrudAbstract
      */
     protected $submissionSectionRefData = array();
 
-    public function alterFormBeforeValidation($form)
-    {
-        $postData = $this->getFromPost('fields');
-        $formData = $this->getDataForForm();
-
-        // Intercept Submission type submit button to prevent saving
-        if (isset($postData['submissionSections']['submissionTypeSubmit']) ||
-            !(empty($formData['submissionType']))) {
-            $this->setPersist(false);
-        } else {
-            // remove form-actions
-            $form = $this->getForm($this->getFormName());
-            $form->remove('form-actions');
-        }
-
-        return $form;
-    }
-
     /**
      * Save data. Also processes the submit submission select type drop down
      * in order to dictate which checkboxes to manipulate.
@@ -144,6 +126,16 @@ class SubmissionController extends OlcsController\CrudAbstract
     public function addAction()
     {
         // Modify $data
+        $formData = $this->getFromPost('fields');
+
+        // Intercept Submission type submit button to prevent saving
+        if (isset($formData['submissionSections']['submissionTypeSubmit'])) {
+            $this->setPersist(false);
+        } else {
+            // remove form-actions
+            $form = $this->getForm($this->getFormName());
+            $form->remove('formActions[submit]');
+        }
 
         $form = $this->generateFormWithData($this->getFormName(), $this->getFormCallback(), $this->getDataForForm());
 
@@ -168,6 +160,15 @@ class SubmissionController extends OlcsController\CrudAbstract
     {
         // Modify $data
         $formData = $this->getFromPost('fields');
+
+        // Intercept Submission type submit button to prevent saving
+        if (isset($formData['submissionSections']['submissionTypeSubmit'])) {
+            $this->setPersist(false);
+        } else {
+            // remove form-actions
+            $form = $this->getForm($this->getFormName());
+            $form->remove('formActions[submit]');
+        }
 
         $form = $this->generateFormWithData($this->getFormName(), $this->getFormCallback(), $this->getDataForForm());
 
