@@ -86,7 +86,7 @@ return array(
     'controllers' => array(
         'invokables' => array(
             'Dashboard' => 'Olcs\Controller\DashboardController',
-            'Application' => 'Olcs\Controller\Application\ApplicationController',
+            'Application' => 'Olcs\Controller\Application\OverviewController',
             'Application/TypeOfLicence' => 'Olcs\Controller\Application\TypeOfLicenceController',
             'Licence' => 'Olcs\Controller\Licence\LicenceController',
         )

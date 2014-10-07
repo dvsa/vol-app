@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TypeOfLicence Controller
+ * Type Of Licence Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
@@ -10,7 +10,7 @@ namespace Olcs\Controller\Application;
 use Olcs\View\Model\Section;
 
 /**
- * TypeOfLicence Controller
+ * Type Of Licence Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
@@ -21,6 +21,9 @@ class TypeOfLicenceController extends AbstractApplicationController
      */
     public function indexAction()
     {
+        $form = $this->getHelperService('FormHelper')
+            ->createForm('TypeOfLicence');
+
         return new Section();
     }
 }

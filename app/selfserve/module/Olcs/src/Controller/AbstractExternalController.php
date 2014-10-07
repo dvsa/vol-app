@@ -1,20 +1,20 @@
 <?php
 
 /**
- * AbstractExternalController
+ * Abstract External Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 namespace Olcs\Controller;
 
-use Common\Controller\AbstractActionController;
+use Common\Controller\AbstractLvaController;
 
 /**
- * AbstractExternalController
+ * Abstract External Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-abstract class AbstractExternalController extends AbstractActionController
+abstract class AbstractExternalController extends AbstractLvaController
 {
     /**
      * Get current user

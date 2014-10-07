@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Application Controller
+ * Application Overview Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
@@ -11,11 +11,11 @@ use Common\Service\Data\SectionConfig;
 use Olcs\View\Model\Application\ApplicationOverview;
 
 /**
- * Application Controller
+ * Application Overview Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ApplicationController extends AbstractApplicationController
+class OverviewController extends AbstractApplicationController
 {
     /**
      * Application overview
