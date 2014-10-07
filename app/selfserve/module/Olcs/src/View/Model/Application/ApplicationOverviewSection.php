@@ -20,8 +20,6 @@ class ApplicationOverviewSection extends LvaOverviewSection
 
     public function __construct($ref, $data)
     {
-        parent::__construct($ref, $data);
-
         $filter = new \Zend\Filter\Word\DashToCamelCase();
         $index = lcfirst($filter->filter(str_replace('_', '-', $ref)));
 
@@ -29,20 +27,21 @@ class ApplicationOverviewSection extends LvaOverviewSection
 
         switch ($status) {
             case 1:
-                $linkSuffix = 'edit';
+                $mode = 'edit';
                 $statusText = 'INCOMPLETE';
                 break;
             case 2:
-                $linkSuffix = 'edit';
+                $mode = 'edit';
                 $statusText = 'COMPLETE';
                 break;
             default:
-                $linkSuffix = 'add';
+                $mode = 'add';
                 $statusText = 'NOT STARTED';
                 break;
         }
 
         $this->setVariable('status', $statusText);
-        $this->setVariable('link', 'section.link.' . $linkSuffix . '.' . $ref);
+
+        parent::__construct($ref, $data, $mode);
     }
 }

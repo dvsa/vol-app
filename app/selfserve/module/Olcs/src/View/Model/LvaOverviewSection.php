@@ -32,13 +32,14 @@ abstract class LvaOverviewSection extends AbstractViewModel
 
     protected $type;
 
-    public function __construct($ref, $data)
+    public function __construct($ref, $data, $mode)
     {
         $this->ref = $ref;
 
         $this->setVariable('identifier', $data['id']);
         $this->setVariable('name', 'section.name.' . $ref);
         $this->setVariable('route', $this->type . '/' . $this->refToRoute($ref));
+        $this->setVariable('link', 'section.link.' . $mode . '.' . $ref);
     }
 
     protected function refToRoute($ref)

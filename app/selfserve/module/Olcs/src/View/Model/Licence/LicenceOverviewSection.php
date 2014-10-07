@@ -20,8 +20,6 @@ class LicenceOverviewSection extends LvaOverviewSection
 
     public function __construct($ref, $data)
     {
-        parent::__construct($ref, $data);
-
-        $this->setVariable('link', 'section.link.update.' . $ref);
+        parent::__construct($ref, $data, 'update');
     }
 }
