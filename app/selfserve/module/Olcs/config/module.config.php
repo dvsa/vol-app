@@ -1,71 +1,77 @@
 <?php
 
+$sectionConfig = new \Common\Service\Data\SectionConfig();
+$sections = $sectionConfig->getAll();
+
+$dashFilter = new \Zend\Filter\Word\UnderscoreToDash();
+$camelFilter = new \Zend\Filter\Word\UnderscoreToCamelCase();
+
+$types = array('application', 'licence', /* Variations... */);
+
+$routes = array(
+    'dashboard' => array(
+        'type' => 'segment',
+        'options' => array(
+            'route' => '/dashboard[/]',
+            'defaults' => array(
+                'controller' => 'Dashboard',
+                'action' => 'index'
+            )
+        )
+    )
+);
+
+foreach ($types as $type) {
+    $typeController = $camelFilter->filter($type);
+
+    $routes['create_' . $type] = array(
+        'type' => 'segment',
+        'options' => array(
+            'route' => '/' . $type . '/create[/]',
+            'defaults' => array(
+                'controller' => $typeController,
+                'action' => 'create'
+            )
+        )
+    );
+    $routes[$type] = array(
+        'type' => 'segment',
+        'options' => array(
+            'route' => '/' . $type . '/:id[/]',
+            'constraints' => array(
+                'id' => '[0-9]+'
+            ),
+            'defaults' => array(
+                'controller' => $typeController,
+                'action' => 'index'
+            )
+        ),
+        'may_terminate' => true,
+        'child_routes' => array()
+    );
+
+    $childRoutes = array();
+    foreach ($sections as $section => $data) {
+        $routeKey = $dashFilter->filter($section);
+        $sectionController = $camelFilter($section);
+
+        $childRoutes[$routeKey] = array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => $routeKey . '[/]',
+                'defaults' => array(
+                    'controller' => $typeController . '/' . $sectionController,
+                    'action' => 'index'
+                )
+            )
+        );
+    }
+    $routes[$type]['child_routes'] = $childRoutes;
+}
+
 return array(
     'router' => array(
-        'routes' => array(
-            'dashboard' => array(
-                'type' => 'segment',
-                'options' => array(
-                    'route' => '/dashboard[/]',
-                    'defaults' => array(
-                        'controller' => 'Dashboard',
-                        'action' => 'index'
-                    )
-                )
-            ),
-            'create_application' => array(
-                'type' => 'segment',
-                'options' => array(
-                    'route' => '/application/create[/]',
-                    'defaults' => array(
-                        'controller' => 'Application',
-                        'action' => 'create'
-                    )
-                )
-            ),
-            'application' => array(
-                'type' => 'segment',
-                'options' => array(
-                    'route' => '/application/:id[/]',
-                    'constraints' => array(
-                        'id' => '[0-9]+'
-                    ),
-                    'defaults' => array(
-                        'controller' => 'Application',
-                        'action' => 'index'
-                    )
-                ),
-                'may_terminate' => true,
-                'child_routes' => array(
-                    'type-of-licence' => array(
-                        'type' => 'segment',
-                        'options' => array(
-                            'route' => 'type-of-licence[/]',
-                            'defaults' => array(
-                                'controller' => 'Application/TypeOfLicence',
-                                'action' => 'index'
-                            )
-                        )
-                    )
-                )
-            ),
-            'licence' => array(
-                'type' => 'segment',
-                'options' => array(
-                    'route' => '/licence/:id[/]',
-                    'constraints' => array(
-                        'id' => '[0-9]+'
-                    ),
-                    'defaults' => array(
-                        'controller' => 'Licence',
-                        'action' => 'index'
-                    )
-                ),
-                'may_terminate' => true,
-                // child_routes => array()
-            )
-
-        )
+        'routes' => $routes,
     ),
     'controllers' => array(
         'invokables' => array(
