@@ -1,9 +1,9 @@
 <?php
 return array(
     'sections' => array(
-        'submission_section_intr' => array(
+        'introduction' => array(
         ),
-        'submission_section_casu' => array(
+        'case-summary' => array(
             'service' => 'Cases',
             'bundle' => array(
                 'children' => array(
@@ -62,7 +62,7 @@ return array(
                 )
             )
         ),
-        'submission_section_case' => array(
+        'case-outline' => array(
             'service' => 'Cases',
             'bundle' => array(
                 'children' => array(
@@ -106,93 +106,7 @@ return array(
                 )
             )
         ),
-        'submission_section_msin' => array(
-        ),
-        'submission_section_pers' => array(
-        ),
-        'submission_section_opce' => array(
-        ),
-        'submission_section_ochi' => array(
-        ),
-        'submission_section_ctud' => array(
-        ),
-        'submission_section_inuc' => array(
-        ),
-        'submission_section_intm' => array(
-        ),
-        'submission_section_advt' => array(
-        ),
-        'submission_section_llan' => array(
-        ),
-        'submission_section_alau' => array(
-        ),
-        'submission_section_ltca' => array(
-        ),
-        'submission_section_cusu' => array(
-        ),
-        'submission_section_auth' => array(
-        ),
-        'submission_section_trma' => array(
-        ),
-        'submission_section_cnec' => array(
-        ),
-        'submission_section_fire' => array(
-        ),
-        'submission_section_preh' => array(
-        ),
-        'submission_section_brad' => array(
-        ),
-        'submission_section_trac' => array(
-        ),
-        'submission_section_tbus' => array(
-        ),
-        'submission_section_llhi' => array(
-        ),
-        'submission_section_mlhh' => array(
-        ),
-        'submission_section_regd' => array(
-        ),
-        'submission_section_mtdh' => array(
-        ),
-        'submission_section_proh' => array(
-        ),
-        'submission_section_cpoh' => array(
-        ),
-        'submission_section_anth' => array(
-        ),
-        'submission_section_pens' => array(
-        ),
-        'submission_section_misc' => array(
-        ),
-        'submission_section_terp' => array(
-        ),
-        'submission_section_site' => array(
-        ),
-        'submission_section_plpm' => array(
-        ),
-        'submission_section_acom' => array(
-        ),
-        'submission_section_vaes' => array(
-        ),
-        'submission_section_comp' => array(
-        ),
-        'submission_section_envc' => array(
-        ),
-        'submission_section_reps' => array(
-        ),
-        'submission_section_objs' => array(
-        ),
-        'submission_section_fnin' => array(
-        ),
-        'submission_section_maps' => array(
-        ),
-        'submission_section_wflf' => array(
-        ),
-        'submission_section_surr' => array(
-        ),
-        'submission_section_annx' => array(
-        ),
-        'case-summary-info' => array(
+        'case-summary' => array(
             'view' => 'submission/partials/case-summary',
             'dataPath' => 'Cases',
             'bundle' => array(
