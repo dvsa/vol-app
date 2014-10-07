@@ -27,9 +27,11 @@ class TypeOfLicenceController extends AbstractApplicationController
         // @todo sort out value options
         $form->get('operator-location')->get('niFlag')->setValueOptions(array('foo' => 'bar'));
 
-        $section = new Section();
-        $section->setForm($form);
-
-        return $section;
+        return new Section(
+            [
+                'title' => 'Type of licence',
+                'form' => $form
+            ]
+        );
     }
 }
