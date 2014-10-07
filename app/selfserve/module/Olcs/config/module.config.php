@@ -100,6 +100,14 @@ return array(
             'layout' => 'self-serve/journey/application/layout'
         )
     ),
+    'filters' => [
+        'factories' => [
+            'Olcs\Filter\Decompress' => 'Olcs\Filter\DecompressFactory',
+        ],
+        'aliases' => [
+            'DecompressToTmp' => 'Olcs\Filter\DecompressFactory'
+        ]
+    ],
     'service_api_mapping' => array(
         'endpoints' => array(
             'ebsr' => 'http://olcs-ebsr/'
