@@ -1,18 +1,11 @@
 OLCS.ready(function() {
   var select   = "[name='fields[definition][]']";
   var textarea = "[name='fields[decisionNotes]']";
-  var cache = {};
 
   function updateText(index) {
-    if (cache[index]) {
-      return;
-    }
-
     var str = $(select)
     .find("option[value=" + index + "]")
     .text();
-
-    cache[index] = true;
 
     $(textarea).val(
       $(textarea).val() + str + "\n"
