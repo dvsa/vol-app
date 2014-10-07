@@ -14,7 +14,7 @@ use Common\Controller\AbstractActionController;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class AbstractExternalController extends AbstractActionController
+abstract class AbstractExternalController extends AbstractActionController
 {
     /**
      * Get current user
