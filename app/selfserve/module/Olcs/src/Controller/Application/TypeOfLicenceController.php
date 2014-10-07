@@ -24,6 +24,11 @@ class TypeOfLicenceController extends AbstractApplicationController
         $form = $this->getHelperService('FormHelper')
             ->createForm('TypeOfLicence');
 
-        return new Section();
+        return new Section(
+            [
+                'title' => 'Type of licence',
+                'form' => $form
+            ]
+        );
     }
 }
