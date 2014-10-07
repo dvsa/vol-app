@@ -11,34 +11,93 @@ use Zend\Filter\Word\DashToCamelCase;
 trait SubmissionSectionTrait
 {
 
-    protected $sectionData = array();
+    protected $allSectionData = array();
 
     /**
-     * Create a sction from the submission config
-     * @param type $config
-     * @return type
+     * Create a section from the submission config
+     *
+     * @param string sectionId
+     * @param array $sectionConfig for the section being generated
+     * @return array $sectionData
      */
-    public function createSubmissionSection($sectionId, $config = array())
+    public function createSubmissionSection($sectionId, $sectionConfig = array())
     {
         $routeParams = $this->getParams(array('case'));
         $section['data'] = array();
-        $bundle = isset($config['bundle']) ? $config['bundle'] : array();
-        if (isset($config['service'])) {
-            $this->sectionData[$sectionId] = $this->makeRestCall(
-                $config['service'],
-                'GET',
-                array('id' => $routeParams['case']),
-                $bundle
-            );
+        echo '<p>Processing ' . $sectionId . '</p>';
+
+        if (empty($sectionConfig)) {
+            echo '<p>No config set</p>';
+            return [];
+        }
+        $this->allSectionData[$sectionId] = $this->loadCaseSectionData($routeParams['case'], $sectionId,
+            $sectionConfig);
+
+        $section = $this->filterSectionData($sectionId);
+
+        return $section;
+    }
+
+    /**
+     * Loads the section data from either data already extracted or a new REST call
+     *
+     * @param $caseId
+     * @param $sectionConfig
+     * @return array
+     */
+    public function loadCaseSectionData($caseId, $sectionId, $sectionConfig)
+    {
+        // first check we haven't already extracted the data
+        if (isset($this->allSectionData[$sectionId])) {
+            echo '<p>Already got this data. Returning data from array.</p>';
+            return $this->allSectionData[$sectionId];
         }
 
+        if (isset($sectionConfig['bundle'])) {
+            echo '<p>Bundle and service set for ' . $sectionId . '</p>';
+            if (is_string($sectionConfig['bundle'])) {
+                echo '<p>Bundle set to ' . $sectionConfig['bundle'] . '</p>';
+
+                return $this->loadCaseSectionData(
+                    $caseId,
+                    $sectionConfig['bundle'],
+                    $this->submissionConfig['sections'][$sectionConfig['bundle']]
+                );
+
+            } elseif (isset($sectionConfig['service']) && is_array($sectionConfig['bundle'])) {
+                $rawData =  $this->makeRestCall(
+                    $sectionConfig['service'],
+                    'GET',
+                    array('id' => $caseId),
+                    $sectionConfig['bundle']
+                );
+                $this->allSectionData[$sectionId] = $rawData;
+                echo '<p><b>Raw data:</b></p>';
+                var_dump($rawData);
+                return $rawData;
+            }
+        }
+
+        return [];
+    }
+
+    /**
+     * Method to get the filtered section data via callback method
+     *
+     * @param string $sectionId
+     * @return array $sectionData
+     */
+    public function filterSectionData($sectionId)
+    {
+        echo '<p>Filtering section data</p>';
+        $filteredSectionData = [];
         $filter = $this->getFilter();
         $method = 'get' . ucfirst($filter->filter($sectionId)) . 'SectionData';
         if (method_exists($this, $method)) {
-            $section = call_user_func(array($this, $method), $this->sectionData[$sectionId]);
+            echo '<p>Making callback -> ' . $method . '</p>';
+            $filteredSectionData = call_user_func(array($this, $method), $this->allSectionData[$sectionId]);
         }
-
-        return $section;
+        return $filteredSectionData;
     }
 
     private function getFilter()
@@ -80,13 +139,15 @@ trait SubmissionSectionTrait
     /**
      * section case-outline
      */
-    private function getCaseOutlineSectionData(array $data = array())
+    private function getCaseOutlineSectionData($data = array())
     {
-        $case = $this->getCase();
-
         return array(
-            'outline' => $case['description']
+            'outline' => $data['description']
         );
+    }
+
+    private function getConvictionFpnOffenceHistory($data = array()) {
+        return $data;
     }
 
     /**

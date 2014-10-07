@@ -6,6 +6,7 @@ return array(
         'case-summary' => array(
             'service' => 'Cases',
             'bundle' => array(
+                'properties' => 'ALL',
                 'children' => array(
                     'application' => array(
                         'properties' => array(
@@ -14,6 +15,17 @@ return array(
                     ),
                     'caseType' => array(
                         'properties' => array('id')
+                    ),
+                    'convictions' => array(
+                        'properties' => 'ALL',
+                        'children' => array(
+                            'category' => array(
+                                'properties' => array(
+                                    'id',
+                                    'description'
+                                )
+                            )
+                        )
                     ),
                     'submissionSections' => array(
                         'properties' => array(
@@ -63,48 +75,10 @@ return array(
             )
         ),
         'case-outline' => array(
-            'service' => 'Cases',
-            'bundle' => array(
-                'children' => array(
-                    'submissionSections' => array(
-                        'properties' => array(
-                            'id',
-                            'description'
-                        )
-                    ),
-                    'legacyOffences' => array(
-                        'properties' => 'ALL',
-                    ),
-                    'caseType' => array(
-                        'properties' => 'id',
-                    ),
-                    'licence' => array(
-                        'properties' => 'ALL',
-                        'children' => array(
-                            'status' => array(
-                                'properties' => array('id')
-                            ),
-                            'licenceType' => array(
-                                'properties' => array('id')
-                            ),
-                            'goodsOrPsv' => array(
-                                'properties' => array('id')
-                            ),
-                            'trafficArea' => array(
-                                'properties' => 'ALL'
-                            ),
-                            'organisation' => array(
-                                'properties' => 'ALL',
-                                'children' => array(
-                                    'type' => array(
-                                        'properties' => array('id')
-                                    )
-                                )
-                            )
-                        )
-                    )
-                )
-            )
+            'bundle' => 'case-summary'
+        ),
+        'conviction-fpn-offence-history' => array(
+            'bundle' => 'case-summary'
         ),
         'old-case-summary' => array(
             'view' => 'submission/partials/case-summary',
