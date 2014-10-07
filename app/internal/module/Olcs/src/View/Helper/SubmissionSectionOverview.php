@@ -49,7 +49,7 @@ class SubmissionSectionOverview extends AbstractHelper
         'registration-details'   => '/case/submission/section/details',
         'maintenance-tachographs-hours'   => '/case/submission/section/details',
         'prohibition-history'   => '/case/submission/section/details',
-        'conviction-fpn-offence-history'   => '/case/submission/section/details',
+        'conviction-fpn-offence-history'   => '/case/submission/section/conviction-fpn-offence-history',
         'penalties'   => '/case/submission/section/details',
         'other-issues'   => '/case/submission/section/details',
         'te-reports'   => '/case/submission/section/details',

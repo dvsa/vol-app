@@ -16,17 +16,6 @@ return array(
                     'caseType' => array(
                         'properties' => array('id')
                     ),
-                    'convictions' => array(
-                        'properties' => 'ALL',
-                        'children' => array(
-                            'category' => array(
-                                'properties' => array(
-                                    'id',
-                                    'description'
-                                )
-                            )
-                        )
-                    ),
                     'submissionSections' => array(
                         'properties' => array(
                             'id',
@@ -65,9 +54,9 @@ return array(
                                         'properties' => array('id', 'description')
                                     ),
                                     'sicCode' => array(
-                                            'properties' => array('id', 'description')
-                                        ),
-                                    )
+                                        'properties' => array('id', 'description')
+                                    ),
+                                )
                             )
                         )
                     )
@@ -78,7 +67,23 @@ return array(
             'bundle' => 'case-summary'
         ),
         'conviction-fpn-offence-history' => array(
-            'bundle' => 'case-summary'
+            'service' => 'Cases',
+            'bundle' => array(
+                'properties' => 'ALL',
+                'children' => array(
+                    'convictions' => array(
+                        'properties' => 'ALL',
+                        'children' => array(
+                            'category' => array(
+                                'properties' => array(
+                                    'id',
+                                    'description'
+                                )
+                            )
+                        )
+                    )
+                )
+            )
         ),
         'old-case-summary' => array(
             'view' => 'submission/partials/case-summary',

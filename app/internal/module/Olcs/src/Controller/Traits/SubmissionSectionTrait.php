@@ -24,10 +24,8 @@ trait SubmissionSectionTrait
     {
         $routeParams = $this->getParams(array('case'));
         $section['data'] = array();
-        echo '<p>Processing ' . $sectionId . '</p>';
 
         if (empty($sectionConfig)) {
-            echo '<p>No config set</p>';
             return [];
         }
         $this->allSectionData[$sectionId] = $this->loadCaseSectionData($routeParams['case'], $sectionId,
@@ -49,14 +47,11 @@ trait SubmissionSectionTrait
     {
         // first check we haven't already extracted the data
         if (isset($this->allSectionData[$sectionId])) {
-            echo '<p>Already got this data. Returning data from array.</p>';
             return $this->allSectionData[$sectionId];
         }
 
         if (isset($sectionConfig['bundle'])) {
-            echo '<p>Bundle and service set for ' . $sectionId . '</p>';
             if (is_string($sectionConfig['bundle'])) {
-                echo '<p>Bundle set to ' . $sectionConfig['bundle'] . '</p>';
 
                 return $this->loadCaseSectionData(
                     $caseId,
@@ -72,8 +67,6 @@ trait SubmissionSectionTrait
                     $sectionConfig['bundle']
                 );
                 $this->allSectionData[$sectionId] = $rawData;
-                echo '<p><b>Raw data:</b></p>';
-                var_dump($rawData);
                 return $rawData;
             }
         }
@@ -89,12 +82,10 @@ trait SubmissionSectionTrait
      */
     public function filterSectionData($sectionId)
     {
-        echo '<p>Filtering section data</p>';
         $filteredSectionData = [];
         $filter = $this->getFilter();
-        $method = 'get' . ucfirst($filter->filter($sectionId)) . 'SectionData';
+        $method = 'filter' . ucfirst($filter->filter($sectionId)) . 'Data';
         if (method_exists($this, $method)) {
-            echo '<p>Making callback -> ' . $method . '</p>';
             $filteredSectionData = call_user_func(array($this, $method), $this->allSectionData[$sectionId]);
         }
         return $filteredSectionData;
@@ -108,7 +99,7 @@ trait SubmissionSectionTrait
     /**
      * section case-summary
      */
-    private function getCaseSummarySectionData(array $data = array())
+    protected function filterCaseSummaryData(array $data = array())
     {
         $vehiclesInPossession = $this->calculateVehiclesInPossession($data['licence']);
         $filteredData = array(
@@ -139,15 +130,95 @@ trait SubmissionSectionTrait
     /**
      * section case-outline
      */
-    private function getCaseOutlineSectionData($data = array())
+    protected function filterCaseOutlineData($data = array())
     {
         return array(
             'outline' => $data['description']
         );
     }
 
-    private function getConvictionFpnOffenceHistory($data = array()) {
-        return $data;
+    /**
+     * section persons
+     */
+    protected function filterPersonsData(array $data = array())
+    {
+        $dataToReturnArray = array();
+
+        foreach ($data['licence']['organisation']['organisationPersons'] as $organisationOwner) {
+
+            $thisOrganisationOwner['familyName'] = $organisationOwner['person']['familyName'];
+            $thisOrganisationOwner['forename'] = $organisationOwner['person']['forename'];
+            $thisOrganisationOwner['birthDate'] = $organisationOwner['person']['birthDate'];
+            $dataToReturnArray[] = $thisOrganisationOwner;
+
+        }
+
+        return $dataToReturnArray;
+    }
+
+    /**
+     * section transportManagers
+     */
+    protected function filterTransportManagersData(array $data = array())
+    {
+        $dataToReturnArray = array();
+
+        foreach ($data['licence']['transportManagerLicences'] as $TmLicence) {
+
+            $thisTmLicence['familyName'] = $TmLicence['transportManager']['contactDetails']['person']['familyName'];
+            $thisTmLicence['forename'] = $TmLicence['transportManager']['contactDetails']['person']['forename'];
+            $thisTmLicence['tmType'] = $TmLicence['transportManager']['tmType'];
+            $thisTmLicence['qualifications'] = '';
+
+            foreach ($TmLicence['transportManager']['qualifications'] as $qualification) {
+                $thisTmLicence['qualifications'] .= $qualification['qualificationType'].' ';
+            }
+
+            $thisTmLicence['birthDate'] = $TmLicence['transportManager']['contactDetails']['person']['birthDate'];
+            $dataToReturnArray[] = $thisTmLicence;
+        }
+
+        return $dataToReturnArray;
+    }
+
+    /**
+     * Conviction FPN Offence History section
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function filterConvictionFpnOffenceHistoryData($data = array())
+    {
+        $dataToReturnArray = array();
+        //$config = $this->getServiceLocator()->get('Config');
+
+        //$staticDefType = $config['static-list-data']['defendant_types'];
+
+        foreach ($data['convictions'] as $conviction) {
+            $thisConviction['description'] = $conviction['categoryText'];
+
+            if ($conviction['operatorName']) {
+                $thisConviction['name'] = $conviction['operatorName'];
+            } else {
+                $thisConviction['name'] = $conviction['personFirstname'] . ' ' . $conviction['personLastname'];
+            }
+
+            //if (isset($staticDefType[$conviction['defType']])) {
+            //    $thisConviction['name'] .= ' / ' . $staticDefType[$conviction['defType']];
+            //}
+
+            $thisConviction['dateOfOffence'] = $conviction['dateOfOffence'];
+            $thisConviction['convictionDate'] = $conviction['convictionDate'];
+
+            $thisConviction['court'] = $conviction['court'];
+            $thisConviction['penalty'] = $conviction['penalty'];
+            $thisConviction['si'] = $conviction['si'];
+            $thisConviction['decToTc'] = $conviction['decToTc'];
+            $thisConviction['dealtWith'] = $conviction['dealtWith'];
+            $dataToReturnArray[] = $thisConviction;
+        }
+
+        return $dataToReturnArray;
     }
 
     /**

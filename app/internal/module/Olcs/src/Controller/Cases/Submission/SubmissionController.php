@@ -148,7 +148,6 @@ class SubmissionController extends OlcsController\CrudAbstract
 
         if (is_array($data['submissionSections']['sections'])) {
             foreach ($data['submissionSections']['sections'] as $index => $sectionId) {
-                echo '<p>Step 1 generating data for Section: ' . $sectionId . '</p>';
                 $sectionConfig = isset($this->submissionConfig['sections'][$sectionId]) ?
                     $this->submissionConfig['sections'][$sectionId] : [];
 
@@ -159,11 +158,7 @@ class SubmissionController extends OlcsController\CrudAbstract
                         $sectionConfig
                     )
                 ];
-
-                echo '<p>Filtered Data returned:</p>';
-                var_dump($data['submissionSections']['sections'][$index]);
             }
-            exit;
         }
 
         $data['text'] = json_encode($data['submissionSections']['sections']);
