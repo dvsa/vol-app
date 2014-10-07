@@ -104,7 +104,11 @@ class GoodsDiscTest extends AbstractDataServiceTest
      */
     public function testSetIsPrintingOn()
     {
-        $this->service->setIsPrintingOn(['id' => 1, 'version' => 1]);
+        $this->mockRestClient->expects($this->once())
+                ->method('put')
+                ->with($this->equalTo('/1'), $this->equalTo(['data' => '{"isPrinting":"Y","version":1}']))
+                ->will($this->returnValue([]));
+        $this->service->setIsPrintingOn([['id' => 1, 'version' => 1]]);
     }
 
     /**
@@ -113,7 +117,11 @@ class GoodsDiscTest extends AbstractDataServiceTest
      */
     public function testSetIsPrintingOff()
     {
-        $this->service->setIsPrintingOff(['id' => 1, 'version' => 1]);
+        $this->mockRestClient->expects($this->once())
+                ->method('put')
+                ->with($this->equalTo('/1'), $this->equalTo(['data' => '{"isPrinting":"N","version":1}']))
+                ->will($this->returnValue([]));
+        $this->service->setIsPrintingOff([['id' => 1, 'version' => 1]]);
     }
 
     /**
@@ -122,7 +130,16 @@ class GoodsDiscTest extends AbstractDataServiceTest
      */
     public function testSetIsPrintingOffAndAssignNumber()
     {
-        $this->service->setIsPrintingOffAndAssignNumber(['id' => 1, 'version' => 1], 1);
+        $this->mockRestClient->expects($this->once())
+                ->method('put')
+                ->with(
+                    $this->equalTo('/1'),
+                    $this->equalTo(
+                        ['data' => '{"isPrinting":"N","issuedDate":"2014-10-06","version":1,"discNo":1}']
+                    )
+                )
+                ->will($this->returnValue([]));
+        $this->service->setIsPrintingOffAndAssignNumber([['id' => 1, 'version' => 1]], 1);
     }
 
     /**

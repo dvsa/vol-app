@@ -6,18 +6,17 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
- * @Form\Name("Conviction")
- * @Form\Options({"label":"Conviction"})
+ * @Form\Name("bus-short-notice")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
  * @Form\Options({"prefer_form_input_filter": true})
  */
-class Conviction
+class BusShortNotice
 {
     /**
      * @Form\Name("fields")
-     * @Form\Options({"label":""})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\Offence")
+     * @Form\Options({"label":"","class":""})
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\BusShortNotice")
      */
     public $fields = null;
 

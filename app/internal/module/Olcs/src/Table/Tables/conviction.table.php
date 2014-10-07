@@ -10,7 +10,7 @@ return array(
             'actions' => array(
                 'add' => array('class' => 'primary'),
                 'edit' => array('requireRows' => true),
-                'dealt' => array('class' => 'secondary', 'requireRows' => true, 'label' => 'Mark as Dealt With'),
+                /* 'dealt' => array('class' => 'secondary', 'requireRows' => true, 'label' => 'Mark as Dealt With'), */
                 'delete' => array('class' => 'secondary', 'requireRows' => true)
             )
         ),
