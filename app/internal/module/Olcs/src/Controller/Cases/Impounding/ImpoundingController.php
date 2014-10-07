@@ -143,7 +143,9 @@ class ImpoundingController extends OlcsController\CrudAbstract
     );
 
     /**
+     * Any inline scripts needed in this section
+     *
      * @var array
      */
-    //protected $inlineScripts = ['impounding'];
+    protected $inlineScripts = array('forms/impounding');
 }
