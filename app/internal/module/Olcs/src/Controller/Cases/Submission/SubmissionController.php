@@ -134,53 +134,6 @@ class SubmissionController extends OlcsController\CrudAbstract
     }
 
     /**
-     * Save data. Also processes the submit submission select type drop down
-     * in order to dictate which checkboxes to manipulate.
-     *
-     * @param array $data
-     * @param string $service
-     * @return array
-     */
-    public function addAction()
-    {
-        // Modify $data
-
-        $form = $this->generateFormWithData($this->getFormName(), $this->getFormCallback(), $this->getDataForForm());
-
-        $view = $this->getView();
-
-        $this->getViewHelperManager()->get('placeholder')->getContainer('form')->set($form);
-
-        $view->setTemplate('crud/form');
-
-        return $this->renderView($view);
-    }
-
-    /**
-     * Save data. Also processes the submit submission select type drop down
-     * in order to dictate which checkboxes to manipulate.
-     *
-     * @param array $data
-     * @param string $service
-     * @return array
-     */
-    public function editAction()
-    {
-        // Modify $data
-        $formData = $this->getFromPost('fields');
-
-        $form = $this->generateFormWithData($this->getFormName(), $this->getFormCallback(), $this->getDataForForm());
-
-        $view = $this->getView();
-
-        $this->getViewHelperManager()->get('placeholder')->getContainer('form')->set($form);
-
-        $view->setTemplate('crud/form');
-
-        return $this->renderView($view);
-    }
-
-    /**
      * Override Save data to allow json encoding of submission sections
      * into submission 'text' field.
      *
