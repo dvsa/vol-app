@@ -7,7 +7,7 @@
  */
 namespace Olcs\Controller\Application;
 
-use Olcs\View\SectionViewModel;
+use Olcs\View\Model\Section;
 
 /**
  * TypeOfLicence Controller
@@ -21,6 +21,6 @@ class TypeOfLicenceController extends AbstractApplicationController
      */
     public function indexAction()
     {
-        return new SectionViewModel();
+        return new Section();
     }
 }
