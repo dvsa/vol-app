@@ -16,27 +16,12 @@ use Olcs\View\Model\LvaOverviewSection;
  */
 class LicenceOverviewSection extends LvaOverviewSection
 {
-    /**
-     * Holds the section reference
-     *
-     * @var string
-     */
-    private $ref;
+    protected $type = 'licence';
 
-    public function __construct($ref, $data, $mode = 'add')
+    public function __construct($ref, $data)
     {
-        $this->ref = $ref;
+        parent::__construct($ref, $data);
 
-        $this->setVariable('applicationId', $data['id']);
-        $this->setVariable('name', 'section.name.' . $ref);
-
-        $filter = new \Zend\Filter\Word\DashToCamelCase();
-        $index = lcfirst($filter->filter(str_replace('_', '-', $ref)));
-
-        // @todo these need sorting out
-        //$this->setVariable('route', 'application/' . $ref);
-        //$this->setVariable('route', 'application/type-of-licence');
-        //$this->setVariable('status', $statusText);
-        $this->setVariable('link', 'todo');
+        $this->setVariable('link', 'section.link.update.' . $ref);
     }
 }
