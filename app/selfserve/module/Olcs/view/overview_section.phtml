@@ -1,5 +1,7 @@
 <li style="padding: 10px; border-bottom: 1px solid #cccccc;">
     <span style="display: inline-block; width: 200px;"><?php echo $this->translate($name); ?></span>
-    <span><?php echo $this->translate($status); ?></span>
+    <?php if (isset($status)): ?>
+        <span><?php echo $this->translate($status); ?></span>
+    <?php endif; ?>
     <a href="<?php echo $this->url($route, array('id' => $applicationId)); ?>" style="width: 200px; text-align: right" class="right-aligned"><?php echo $this->translate($link); ?></a>
 </li>

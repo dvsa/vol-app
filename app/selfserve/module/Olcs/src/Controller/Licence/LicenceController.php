@@ -24,6 +24,10 @@ class LicenceController extends AbstractLicenceController
         $data = $this->getEntityService('Licence')->getOverview(
             $this->params('id')
         );
-        return new Overview($data, []);
+
+        $sections = $this->getHelperService('SectionAccessHelper')
+            ->getAccessibleSections($data['goodsOrPsv']['id'], $data['licenceType']['id']);
+
+        return new Overview($data, array_keys($sections));
     }
 }

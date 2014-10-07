@@ -23,6 +23,8 @@ class Overview extends LvaOverview
      */
     protected $template = 'application/overview';
 
+    protected $sectionModel = 'Application\\ApplicationOverviewSection';
+
     /**
      * Set the overview data
      *

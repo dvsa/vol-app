@@ -23,6 +23,8 @@ class Overview extends LvaOverview
      */
     protected $template = 'licence/overview';
 
+    protected $sectionModel = 'Licence\\LicenceOverviewSection';
+
     /**
      * Set the overview data
      *
