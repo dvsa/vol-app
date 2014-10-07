@@ -7,14 +7,14 @@
  */
 namespace Olcs\View\Model\Licence;
 
-use Olcs\View\Model\OverviewSection;
+use Olcs\View\Model\LvaOverviewSection;
 
 /**
  * Licence Overview Section
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class LicenceOverviewSection extends OverviewSection
+class LicenceOverviewSection extends LvaOverviewSection
 {
     /**
      * Holds the section reference

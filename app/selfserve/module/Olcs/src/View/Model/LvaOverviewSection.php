@@ -14,7 +14,7 @@ use Common\View\AbstractViewModel;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-abstract class OverviewSection extends AbstractViewModel
+abstract class LvaOverviewSection extends AbstractViewModel
 {
     /**
      * Holds the template

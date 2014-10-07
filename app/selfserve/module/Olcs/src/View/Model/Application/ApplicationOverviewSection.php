@@ -7,14 +7,14 @@
  */
 namespace Olcs\View\Model\Application;
 
-use Olcs\View\Model\OverviewSection;
+use Olcs\View\Model\LvaOverviewSection;
 
 /**
  * Application Overview Section
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ApplicationOverviewSection extends OverviewSection
+class ApplicationOverviewSection extends LvaOverviewSection
 {
     /**
      * Holds the section reference
