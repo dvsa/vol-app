@@ -128,12 +128,10 @@ class ProhibitionDefectController extends OlcsController\CrudAbstract
     {
         $this->forward()->dispatch(
             'CaseProhibitionController',
-            array_merge(
-                array(
-                    'action' => 'details',
-                    'case' => $this->getFromRoute('case'),
-                    'prohibition' => $this->getFromRoute('prohibition')
-                )
+            array(
+                'action' => 'details',
+                'case' => $this->getFromRoute('case'),
+                'prohibition' => $this->getFromRoute('prohibition')
             )
         );
 
