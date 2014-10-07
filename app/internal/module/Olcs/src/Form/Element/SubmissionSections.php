@@ -207,138 +207,138 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
         switch($submissionType) {
             case 'submission_type_o_bus_reg':
                 $sections = [
-                    'submission_section_opce',
-                    'submission_section_auth',
-                    'submission_section_trma',
-                    'submission_section_fire',
-                    'submission_section_brad',
-                    'submission_section_trac',
-                    'submission_section_tbus',
-                    'submission_section_llhi',
-                    'submission_section_regd',
-                    'submission_section_mtdh'
+                    'operating-centres',
+                    'auth-requested-applied-for',
+                    'transport-managers',
+                    'fitness-repute',
+                    'bus-reg-app-details',
+                    'transport-authority-comments',
+                    'total-bus-registrations',
+                    'local-licence-history',
+                    'registration-details',
+                    'maintenance-tachographs-hours'
                 ];
                 break;
             case 'submission_type_o_clo_fep':
                 $sections = [
-                    'submission_section_wflf'
+                    'waive-fee-late-fee'
                 ];
                 break;
             case 'submission_type_o_clo_g':
                 $sections = [
-                    'submission_section_opce',
-                    'submission_section_ctud',
-                    'submission_section_inuc',
-                    'submission_section_intm',
-                    'submission_section_advt',
-                    'submission_section_auth',
-                    'submission_section_trma',
-                    'submission_section_cnec',
-                    'submission_section_fire',
-                    'submission_section_llhi',
-                    'submission_section_mtdh',
-                    'submission_section_objs',
-                    'submission_section_fnin'
+                    'operating-centres',
+                    'conditions-and-undertakings',
+                    'intelligent-unit-check',
+                    'interim',
+                    'advertisement',
+                    'auth-requested-applied-for',
+                    'transport-managers',
+                    'continuous-effective-control',
+                    'fitness-repute',
+                    'local-licence-history',
+                    'maintenance-tachographs-hours',
+                    'objections',
+                    'financial-information'
                 ];
                 break;
             case 'submission_type_o_clo_psv':
                 $sections = [
-                    'submission_section_opce',
-                    'submission_section_ctud',
-                    'submission_section_inuc',
-                    'submission_section_auth',
-                    'submission_section_trma',
-                    'submission_section_cnec',
-                    'submission_section_fire',
-                    'submission_section_tbus',
-                    'submission_section_llhi',
-                    'submission_section_regd',
-                    'submission_section_mtdh',
-                    'submission_section_objs',
-                    'submission_section_fnin'
+                    'operating-centres',
+                    'conditions-and-undertakings',
+                    'intelligent-unit-check',
+                    'auth-requested-applied-for',
+                    'transport-managers',
+                    'continuous-effective-control',
+                    'fitness-repute',
+                    'total-bus-registrations',
+                    'local-licence-history',
+                    'registration-details',
+                    'maintenance-tachographs-hours',
+                    'objections',
+                    'financial-information'
                 ];
                 break;
             case 'submission_type_o_env':
                 $sections = [
-                    'submission_section_opce',
-                    'submission_section_ochi',
-                    'submission_section_ctud',
-                    'submission_section_inuc',
-                    'submission_section_intm',
-                    'submission_section_advt',
-                    'submission_section_auth',
-                    'submission_section_trma',
-                    'submission_section_cnec',
-                    'submission_section_fire',
-                    'submission_section_llhi',
-                    'submission_section_cpoh',
-                    'submission_section_terp',
-                    'submission_section_site',
-                    'submission_section_plpm',
-                    'submission_section_acom',
-                    'submission_section_vaes',
-                    'submission_section_envc',
-                    'submission_section_reps',
-                    'submission_section_objs',
-                    'submission_section_fnin',
-                    'submission_section_maps'
+                    'operating-centres',
+                    'operating-centre-history',
+                    'conditions-and-undertakings',
+                    'intelligent-unit-check',
+                    'interim',
+                    'advertisement',
+                    'auth-requested-applied-for',
+                    'transport-managers',
+                    'continuous-effective-control',
+                    'fitness-repute',
+                    'local-licence-history',
+                    'conviction-fpn-offence-history',
+                    'te-reports',
+                    'site-plans',
+                    'planning-permission',
+                    'applicants-comments',
+                    'visibility-access-egress-size',
+                    'environmental-complaints',
+                    'representations',
+                    'objections',
+                    'financial-information',
+                    'maps'
                 ];
                 break;
             case 'submission_type_o_irfo':
                 $sections = [
-                    'submission_section_opce',
-                    'submission_section_trma',
-                    'submission_section_fire',
-                    'submission_section_mtdh'
+                    'operating-centres',
+                    'transport-managers',
+                    'fitness-repute',
+                    'maintenance-tachographs-hours'
                 ];
                 break;
             case 'submission_type_o_mlh':
                 $sections = [
-                    'submission_section_opce',
-                    'submission_section_ctud',
-                    'submission_section_inuc',
-                    'submission_section_intm',
-                    'submission_section_advt',
-                    'submission_section_llan',
-                    'submission_section_alau',
-                    'submission_section_ltca',
-                    'submission_section_auth',
-                    'submission_section_trma',
-                    'submission_section_cnec',
-                    'submission_section_fire',
-                    'submission_section_llhi',
-                    'submission_section_mlhh',
-                    'submission_section_mtdh',
-                    'submission_section_fnin'
+                    'operating-centres',
+                    'conditions-and-undertakings',
+                    'intelligent-unit-check',
+                    'interim',
+                    'advertisement',
+                    'linked-licences-app-numbers',
+                    'all-auths',
+                    'lead-tc-area',
+                    'auth-requested-applied-for',
+                    'transport-managers',
+                    'continuous-effective-control',
+                    'fitness-repute',
+                    'local-licence-history',
+                    'linked-mlh-history',
+                    'maintenance-tachographs-hours',
+                    'financial-information'
                 ];
                 break;
             case 'submission_type_o_otc':
                 $sections = [
-                    'submission_section_opce',
-                    'submission_section_ctud',
-                    'submission_section_ituc',
-                    'submission_section_llan',
-                    'submission_section_ltca',
-                    'submission_section_cusu',
-                    'submission_section_trma',
-                    'submission_section_fire',
-                    'submission_section_llhi',
-                    'submission_section_mtdh',
-                    'submission_section_proh',
-                    'submission_section_cpoh',
-                    'submission_section_anth',
-                    'submission_section_pens',
-                    'submission_section_comp',
-                    'submission_section_fnin'
+                    'operating-centres',
+                    'conditions-and-undertakings',
+                    'intelligent-unit-check',
+                    'linked-licences-app-numbers',
+                    'lead-tc-area',
+                    'current-submissions',
+                    'transport-managers',
+                    'fitness-repute',
+                    'local-licence-history',
+                    'maintenance-tachographs-hours',
+                    'prohibition-history',
+                    'conviction-fpn-offence-history',
+                    'annual-test-history',
+                    'penalties',
+                    'complaints',
+                    'financial-information'
                 ];
                 break;
             case 'submission_type_o_tm':
                 $sections = [
-                    'submission_section_inuc',
-                    'submission_section_trma',
-                    'submission_section_cnec',
-                    'submission_section_fire',
-                    'submission_section_objs'
+                    'intelligent-unit-check',
+                    'transport-managers',
+                    'continuous-effective-control',
+                    'fitness-repute',
+                    'objections'
                 ];
                 break;
             default:
@@ -357,10 +357,10 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
     private function getMandatorySections()
     {
         return [
-            'submission_section_intr',
-            'submission_section_casu',
-            'submission_section_case',
-            'submission_section_pers',
+            'introduction',
+            'case-summary',
+            'case-outline',
+            'persons',
         ];
     }
 
@@ -372,12 +372,12 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
     private function getDefaultSections()
     {
         return [
-            'submission_section_case',
-            'submission_section_msin',
-            'submission_section_pers',
-            'submission_section_preh',
-            'submission_section_misc',
-            'submission_section_annx'
+            'case-outline',
+            'most-serious-infringement',
+            'persons',
+            'previous-history',
+            'other-issues',
+            'annex'
         ];
     }
 }
