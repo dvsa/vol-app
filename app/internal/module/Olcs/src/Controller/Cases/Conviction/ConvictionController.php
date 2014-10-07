@@ -106,7 +106,18 @@ class ConvictionController extends OlcsController\CrudAbstract
     protected $dataBundle = array(
         'children' => array(
             'case' => array(
-                'properties' => 'ALL'
+                'properties' => 'ALL',
+                'children' => array(
+                    'licence' => array(
+                        'properties' => 'ALL',
+
+                        'children' => array(
+                            'organisation' => array(
+                                'properties' => 'ALL'
+                            ),
+                        ),
+                    ),
+                ),
             ),
             'convictionCategory' => array(
                 'properties' => array(
@@ -124,7 +135,7 @@ class ConvictionController extends OlcsController\CrudAbstract
             ),
             'defendantType' => array(
                 'properties' => 'ALL'
-            )
+            ),
         )
     );
 

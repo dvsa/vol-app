@@ -131,6 +131,12 @@ class StatementController extends OlcsController\CrudAbstract
         )
     );
 
+    /**
+     * Transforms the data prior to saving.
+     *
+     * @param array $data
+     * @return array
+     */
     public function processSave($data)
     {
         unset($data['requestorsAddress']['searchPostcode']);
@@ -140,6 +146,12 @@ class StatementController extends OlcsController\CrudAbstract
         return parent::processSave($data);
     }
 
+    /**
+     * Map the data on load
+     *
+     * @param array $data
+     * @return array
+     */
     public function processLoad($data)
     {
         if (isset($data['requestorsAddress'])) {
