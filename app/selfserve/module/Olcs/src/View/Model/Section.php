@@ -7,6 +7,7 @@
  */
 namespace Olcs\View\Model;
 
+use Zend\Form\Form;
 use Common\View\AbstractViewModel;
 
 /**
@@ -22,4 +23,9 @@ class Section extends AbstractViewModel
      * @var string
      */
     protected $template = 'section';
+
+    public function setForm(Form $form)
+    {
+        $this->setVariable('form', $form);
+    }
 }
