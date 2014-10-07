@@ -8,7 +8,7 @@
 namespace Olcs\Controller\Application;
 
 use Common\Service\Data\SectionConfig;
-use Olcs\View\Model\Application\Overview;
+use Olcs\View\Model\Application\ApplicationOverview;
 
 /**
  * Application Controller
@@ -22,7 +22,7 @@ class ApplicationController extends AbstractApplicationController
      */
     public function indexAction()
     {
-        $applicationId = $this->params()->fromRoute('id');
+        $applicationId = $this->params('id');
 
         if (!$this->checkAccess($applicationId)) {
             return $this->redirect()->toRoute('dashboard');
@@ -51,7 +51,7 @@ class ApplicationController extends AbstractApplicationController
         $sections = $this->getHelperService('AccessHelper')->setSections($inputSections)
             ->getAccessibleSections($access);
 
-        return new Overview($data, array_keys($sections));
+        return new ApplicationOverview($data, array_keys($sections));
     }
 
     /**
