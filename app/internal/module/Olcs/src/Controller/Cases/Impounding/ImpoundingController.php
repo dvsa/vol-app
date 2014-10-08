@@ -149,6 +149,11 @@ class ImpoundingController extends OlcsController\CrudAbstract
      */
     protected $inlineScripts = array('forms/impounding');
 
+    public function callParentGenerateFormWithData($name, $callback, $data = null, $tables = false)
+    {
+        return parent::generateFormWithData($name, $callback, $data, $tables);
+    }
+
     /**
      * Overrides the parent so that hearing location can be processed properly
      *
@@ -160,7 +165,7 @@ class ImpoundingController extends OlcsController\CrudAbstract
      */
     public function generateFormWithData($name, $callback, $data = null, $tables = false)
     {
-        $form = parent::generateFormWithData($name, $callback, $data, $tables);
+        $form = $this->callParentGenerateFormWithData($name, $callback, $data, $tables);
 
         $fields = $form->get('fields');
 
