@@ -41,8 +41,8 @@ return array(
         array(
             'title' => 'Case type',
             'formatter' => function ($row, $column, $sm) {
-                if (isset($row['caseType']['id'])) {
-                    return $sm->get('translator')->translate($row['caseType']['id']);
+                if (isset($row['caseType']['description'])) {
+                    return $sm->get('translator')->translate($row['caseType']['description']);
                 } else {
                     return 'Not set';
                 }

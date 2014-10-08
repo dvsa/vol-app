@@ -58,7 +58,7 @@ class PublicInquiryReasonTest extends \PHPUnit_Framework_TestCase
         $mockLicenceService = $this->getMock('\Olcs\Service\Data\Licence');
         $mockLicenceService->expects($this->once())
             ->method('fetchLicenceData')
-            ->willReturn(['niFlag'=> true, 'goodsOrPsv' => ['id'=>'lcat_gv']]);
+            ->willReturn(['niFlag'=> true, 'goodsOrPsv' => ['id'=>'lcat_gv'], 'trafficArea' => ['id' => 'B']]);
 
         $sut = new PublicInquiryReason();
         $sut->setLicenceService($mockLicenceService);
@@ -72,7 +72,7 @@ class PublicInquiryReasonTest extends \PHPUnit_Framework_TestCase
         $mockLicenceService = $this->getMock('\Olcs\Service\Data\Licence');
         $mockLicenceService->expects($this->once())
             ->method('fetchLicenceData')
-            ->willReturn(['niFlag'=> true, 'goodsOrPsv' => ['id'=>'lcat_gv']]);
+            ->willReturn(['niFlag'=> true, 'goodsOrPsv' => ['id'=>'lcat_gv'], 'trafficArea' => ['id' => 'B']]);
 
         $sut = new PublicInquiryReason();
         $sut->setLicenceService($mockLicenceService);
@@ -97,7 +97,7 @@ class PublicInquiryReasonTest extends \PHPUnit_Framework_TestCase
         $mockLicenceService = $this->getMock('\Olcs\Service\Data\Licence');
         $mockLicenceService->expects($this->once())
             ->method('fetchLicenceData')
-            ->willReturn(['niFlag'=> true, 'goodsOrPsv' => ['id'=>'lcat_gv']]);
+            ->willReturn(['niFlag'=> true, 'goodsOrPsv' => ['id'=>'lcat_gv'], 'trafficArea' => ['id' => 'B']]);
 
         $sut = new PublicInquiryReason();
         $sut->setLicenceService($mockLicenceService);

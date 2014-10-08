@@ -11,6 +11,8 @@ use Common\Service\Data\ListDataInterface;
  */
 class PiVenue extends AbstractData implements ListDataInterface
 {
+    use LicenceServiceTrait;
+
     protected $serviceName = 'PiVenue';
 
     /**
@@ -37,7 +39,11 @@ class PiVenue extends AbstractData implements ListDataInterface
      */
     public function fetchListOptions($category, $useGroups = false)
     {
-        $data = $this->fetchListData();
+        $context = $this->getLicenceContext();
+
+        $params = ['trafficArea' => $context['trafficArea']['id']];
+
+        $data = $this->fetchListData($params);
 
         if (!$data) {
             return [];
@@ -52,11 +58,11 @@ class PiVenue extends AbstractData implements ListDataInterface
      * @internal param $category
      * @return array
      */
-    public function fetchListData()
+    public function fetchListData($params)
     {
         if (is_null($this->getData('PiVenue'))) {
 
-            $data = $this->getRestClient()->get('', ['limit' => 1000]);
+            $data = $this->getRestClient()->get('', $params);
 
             $this->setData('PiVenue', false);
 

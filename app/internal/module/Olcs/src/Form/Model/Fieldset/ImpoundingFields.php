@@ -83,7 +83,7 @@ class ImpoundingFields
      *     "label": "Hearing date",
      *     "create_empty_option": true,
      *     "render_delimiters": true,
-     *     "pattern": "d MMMM y '</div><div class=""field""><label>Hearing time</label>'HH:mm:ss"
+     *     "pattern": "d MMMM y '</div><div class=""field""><label for=hearingDate>Hearing time</label>'HH:mm:ss"
      * })
      * @Form\Required(false)
      * @Form\Type("DateTimeSelect")
@@ -108,7 +108,8 @@ class ImpoundingFields
      *     "service_name": "Olcs\Service\Data\PiVenue",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category"
+     *     "help-block": "Please select a category",
+     *     "other_option" : true
      * })
      *
      * @Form\AllowEmpty(true)
@@ -138,10 +139,32 @@ class ImpoundingFields
     public $piVenue = null;
 
     /**
-     * @Form\Attributes({"class":"medium","id":"piVenueOther"})
+     * @Form\Required(true)
+     * @Form\Attributes({"class":"medium","id":"piVenueOther", "required":false})
      * @Form\Options({"label":"Other hearing location"})
-     * @Form\Required(false)
+     * @Form\AllowEmpty(true)
+     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("Text")
+     * @Form\Validator({"name": "ValidateIf",
+     *      "options":{
+     *          "context_field": "impoundingType",
+     *          "context_values": {"impt_hearing"},
+     *          "allow_empty": false,
+     *          "validators": {
+     *              {
+     *                  "name": "ValidateIf",
+     *                  "options":{
+     *                      "context_field": "piVenue",
+     *                      "context_values": {"other"},
+     *                      "allow_empty": false,
+     *                      "validators": {
+     *                          {"name": "\Zend\Validator\NotEmpty"}
+     *                      }
+     *                  }
+     *              }
+     *          }
+     *      }
+     * })
      */
     public $piVenueOther = null;
 

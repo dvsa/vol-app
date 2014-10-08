@@ -69,7 +69,7 @@ class AppealController extends OlcsController\CrudAbstract
     /**
      * Holds the navigation ID,
      * required when an entire controller is
-     * represneted by a single navigation id.
+     * represented by a single navigation id.
      */
     protected $navigationId = 'case_hearings_appeals_stays';
 
@@ -129,6 +129,13 @@ class AppealController extends OlcsController\CrudAbstract
             )
         )
     );
+
+    /**
+     * Any inline scripts needed in this section
+     *
+     * @var array
+     */
+    protected $inlineScripts = array('forms/hearings-appeal');
 
     public function addAction()
     {

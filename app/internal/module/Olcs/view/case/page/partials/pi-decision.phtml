@@ -1,12 +1,12 @@
-<div class="table__header">
-
-    <h3>Decision</h3>
-    <div class="actions-container">
-        <a href="<?php echo $this->url('case_pi_decision', ['action' => 'edit'], [], true); ?>" class="action--secondary" />Edit</a>
-    </div>
-
-    <div style="clear: both"></div>
-
+    <h4>
+        <?php echo $this->translate('Decision'); ?>
+        <a href="<?php echo $this->url(
+            'case_pi_decision',
+            ['action' => 'edit'],
+            [],
+            true
+        ); ?>" class="action--primary right-aligned" />Edit</a>
+    </h4>
     <?php
 
     $summary = [
@@ -40,6 +40,7 @@
         ]
 
     ];
-
-    echo $this->render('partials/summary/summary__list', ['items' => $summary, 'title' => 'Agreement and legislation']); ?>
+    ?>
+<div class="read-only">
+    <?php echo $this->render('partials/summary/summary__list-definition', ['items' => $summary, 'title' => 'Decision']); ?>
 </div>
