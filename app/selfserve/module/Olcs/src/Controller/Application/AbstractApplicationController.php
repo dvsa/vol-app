@@ -38,6 +38,16 @@ abstract class AbstractApplicationController extends AbstractExternalController
     }
 
     /**
+     * Get application id
+     *
+     * @return int
+     */
+    protected function getApplicationId()
+    {
+        return $this->params()->fromRoute('id');
+    }
+
+    /**
      * Get licence id
      *
      * @param int $applicationId
