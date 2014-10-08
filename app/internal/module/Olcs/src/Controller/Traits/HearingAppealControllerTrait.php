@@ -67,6 +67,22 @@ trait HearingAppealControllerTrait
     );
 
     /**
+     * @return array
+     */
+    public function getAppealDataBundle()
+    {
+        return $this->appealDataBundle;
+    }
+
+    /**
+     * @return array
+     */
+    public function getStayRecordBundle()
+    {
+        return $this->stayRecordBundle;
+    }
+
+    /**
      * Retrieves appeal data
      *
      * @param int $caseId
@@ -78,9 +94,9 @@ trait HearingAppealControllerTrait
             'Appeal',
             'GET',
             array(
-                'case' => $caseId,
-                'bundle' => json_encode($this->appealDataBundle)
-            )
+                'case' => $caseId
+            ),
+            $this->getAppealDataBundle()
         );
 
         $appeal = array();
@@ -106,7 +122,7 @@ trait HearingAppealControllerTrait
             'Stay',
             'GET',
             array('case' => $caseId),
-            $this->stayRecordBundle
+            $this->getStayRecordBundle()
         );
 
         //need a better way to do this...
