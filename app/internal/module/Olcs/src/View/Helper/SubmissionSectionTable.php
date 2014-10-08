@@ -20,11 +20,20 @@ class SubmissionSectionTable extends AbstractHelper
     private $tableBuilder;
 
     /**
-     * Type map to views
+     * View map
      *
      * @var array
      */
-    protected $typeViewMap = array();
+    protected $viewMap = array(
+        'conviction-fpn-offence-history'
+    );
+
+    /**
+     * Table config map
+     *
+     * @var array
+     */
+    protected $tableMap = array();
 
     /**
      * Renders the data for a SubmissionSection details
@@ -47,11 +56,18 @@ class SubmissionSectionTable extends AbstractHelper
     {
         $params = [];
 
-        $data['table'] = $this->getTableBuilder()->buildTable('conviction-section', $data, $data,
-            false);
-        $viewTemplate = isset($this->typeViewMap[$submissionSection]) ?
-            $this->typeViewMap[$submissionSection] : self::DEFAULT_VIEW;
+        $viewTemplate = isset($this->viewMap[$submissionSection]) ?
+            $this->viewMap[$submissionSection] : self::DEFAULT_VIEW;
 
+        $tableConfig = isset($this->tableMap[$submissionSection]) ?
+            $this->tableMap[$submissionSection] : 'SubmissionSections/' . $submissionSection;
+
+        $data['table'] = $this->getTableBuilder()->buildTable(
+            $tableConfig,
+            ['Results' => $data['data']],
+            $params,
+            false
+        );
         return $this->getView()->render($viewTemplate, ['data' => $data]);
     }
 

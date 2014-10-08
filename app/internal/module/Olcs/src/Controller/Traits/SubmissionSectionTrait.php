@@ -28,6 +28,7 @@ trait SubmissionSectionTrait
         if (empty($sectionConfig)) {
             return [];
         }
+
         $this->allSectionData[$sectionId] = $this->loadCaseSectionData($routeParams['case'], $sectionId,
             $sectionConfig);
 
@@ -66,7 +67,7 @@ trait SubmissionSectionTrait
                     array('id' => $caseId),
                     $sectionConfig['bundle']
                 );
-                $this->allSectionData[$sectionId] = $rawData;
+
                 return $rawData;
             }
         }
@@ -153,7 +154,7 @@ trait SubmissionSectionTrait
             //    $thisConviction['name'] .= ' / ' . $staticDefType[$conviction['defType']];
             //}
 
-            $thisConviction['dateOfOffence'] = $conviction['offenceDate'];
+            $thisConviction['offenceDate'] = $conviction['offenceDate'];
             $thisConviction['convictionDate'] = $conviction['convictionDate'];
 
             if ($conviction['operatorName']) {
@@ -162,12 +163,14 @@ trait SubmissionSectionTrait
                 $thisConviction['name'] = $conviction['personFirstname'] . ' ' . $conviction['personLastname'];
             }
 
-            $thisConviction['description'] = $conviction['categoryText'];
+            $thisConviction['categoryText'] = $conviction['categoryText'];
             $thisConviction['court'] = $conviction['court'];
             $thisConviction['penalty'] = $conviction['penalty'];
-            $thisConviction['si'] = $conviction['msi'];
-            $thisConviction['decToTc'] = $conviction['isDeclared'];
-            $thisConviction['dealtWith'] = $conviction['isDealtWith'];
+            $thisConviction['msi'] = $conviction['msi'];
+            $thisConviction['isDeclared'] = !empty($conviction['isDeclared']) ?
+                $conviction['isDeclared'] : 'N';
+            $thisConviction['isDealtWith'] = !empty($conviction['isDealtWith']) ?
+            $conviction['isDealtWith'] : 'N';
             $dataToReturnArray[] = $thisConviction;
         }
 
