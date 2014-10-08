@@ -2,7 +2,7 @@
 
 return array(
     'variables' => array(
-        'title' => 'Convictions list'
+        'submission_section' => 'display'
     ),
     'settings' => array(
         'paginate' => array(
