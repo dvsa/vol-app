@@ -20,7 +20,7 @@ class PublicInquiryDefinitionTest extends \PHPUnit_Framework_TestCase
         $mockLicenceService = $this->getMock('\Olcs\Service\Data\Licence');
         $mockLicenceService->expects($this->once())
             ->method('fetchLicenceData')
-            ->willReturn(['niFlag'=> true, 'goodsOrPsv' => ['id'=>'lcat_gv']]);
+            ->willReturn(['niFlag'=> true, 'goodsOrPsv' => ['id'=>'lcat_gv'], 'trafficArea' => ['id' => 'B']]);
 
         $sut = new PublicInquiryDefinition();
         $sut->setLicenceService($mockLicenceService);
