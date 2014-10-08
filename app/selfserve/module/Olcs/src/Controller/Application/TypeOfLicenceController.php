@@ -40,11 +40,13 @@ class TypeOfLicenceController extends AbstractApplicationController
 
                 $licenceId = $this->getLicenceId($applicationId);
 
-                // Process data
+                $data = $this->formatDataForSave($data);
 
-                // Save data
+                $data['id'] = $licenceId;
 
-                // Redirect
+                $this->getEntityService('Licence')->save($data);
+
+                return $this->goToOverview($applicationId);
             }
         } else {
             $licenceId = $this->getLicenceId($applicationId);
@@ -80,19 +82,36 @@ class TypeOfLicenceController extends AbstractApplicationController
 
             if ($form->isValid()) {
 
-                // Create licence
+                $organisation = $this->getCurrentOrganisation();
+                $ids = $this->getEntityService('Application')->createNew($organisation['id']);
 
-                // Create application
+                $data = $this->formatDataForSave($data);
 
-                // Process data
+                $data['id'] = $ids['licence'];
 
-                // Save data
+                $this->getEntityService('Licence')->save($data);
 
-                // Redirect
+                return $this->goToOverview($ids['application']);
             }
         }
 
         return $this->getSectionView($form);
+    }
+
+    /**
+     * Format data for save
+     *
+     * @param array $data
+     * @return array
+     */
+    private function formatDataForSave($data)
+    {
+        return array(
+            'version' => $data['version'],
+            'niFlag' => $data['type-of-licence']['operator-location'],
+            'goodsOrPsv' => $data['type-of-licence']['operator-type'],
+            'licenceType' => $data['type-of-licence']['licence-type']
+        );
     }
 
     /**

@@ -53,15 +53,4 @@ class OverviewController extends AbstractApplicationController
 
         return new ApplicationOverview($data, array_keys($sections));
     }
-
-    /**
-     * Create application
-     */
-    public function createAction()
-    {
-        $organisation = $this->getCurrentOrganisation();
-        $application = $this->getEntityService('Application')->createNew($organisation['id']);
-
-        return $this->redirect()->toRoute('application', array('id' => $application['id']));
-    }
 }

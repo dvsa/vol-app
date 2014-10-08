@@ -44,7 +44,7 @@ abstract class AbstractApplicationController extends AbstractExternalController
      */
     protected function getApplicationId()
     {
-        return $this->params()->fromRoute('id');
+        return $this->params('id');
     }
 
     /**
@@ -56,5 +56,16 @@ abstract class AbstractApplicationController extends AbstractExternalController
     protected function getLicenceId($applicationId)
     {
         return $this->getEntityService('Application')->getLicenceIdForApplication($applicationId);
+    }
+
+    /**
+     * Go to overview page
+     *
+     * @param int $applicationId
+     * @return \Zend\Http\Response
+     */
+    protected function goToOverview($applicationId)
+    {
+        return $this->redirect()->toRoute('application', array('id' => $applicationId));
     }
 }
