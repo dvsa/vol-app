@@ -217,6 +217,9 @@ class DiscPrintingController extends AbstractController
     ) {
         $retv = [];
 
+        if (!$niFlag || !$licenceType || !$operatorType || !$discPrefix || !$discSequence) {
+            return $retv;
+        } 
         $discSequenceService = $this->getServiceLocator()->get('Admin\Service\Data\DiscSequence');
         $goodsDiscService = $this->getServiceLocator()->get('Admin\Service\Data\GoodsDisc');
 
