@@ -40,6 +40,13 @@ class VehicleController extends AbstractLicenceDetailsController
     protected $section = 'vehicle';
 
     /**
+     * This section uses a flipped section, where the tables comes after.
+     *
+     * @var string
+     */
+    protected $viewTemplateName = 'partials/section-flipped';
+
+    /**
      * Save the vehicle
      *
      * @param array $data
