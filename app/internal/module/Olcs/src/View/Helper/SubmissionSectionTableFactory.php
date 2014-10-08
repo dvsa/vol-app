@@ -7,9 +7,9 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Class SubmissionSectionsTableFactory
- *
- * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  * @package Olcs\View\Helper
+ * 
+ * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
 class SubmissionSectionTableFactory implements FactoryInterface
 {

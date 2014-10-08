@@ -29,7 +29,9 @@ trait SubmissionSectionTrait
             return [];
         }
 
-        $this->allSectionData[$sectionId] = $this->loadCaseSectionData($routeParams['case'], $sectionId,
+        $this->allSectionData[$sectionId] = $this->loadCaseSectionData(
+            $routeParams['case'],
+            $sectionId,
             $sectionConfig);
 
         $section = $this->filterSectionData($sectionId);
