@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Stay Test Controller
+ * Appeal Test Controller
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
@@ -13,23 +13,25 @@ use Olcs\Controller\Cases\Hearing\StayController;
 use OlcsTest\Controller\ControllerTestAbstract;
 
 /**
- * Stay Test Controller
+ * Appeal Test Controller
  */
-class StayController extends ControllerTestAbstract
+class AppealControllerTest extends ControllerTestAbstract
 {
-    protected $testClass = 'Olcs\Controller\Cases\Hearing\StayController';
+    protected $testClass = 'Olcs\Controller\Cases\Hearing\AppealController';
+
+    protected $proxyMethdods = [
+        'indexAction' => 'redirectToIndex'
+    ];
 
     /**
      * Isolated test for the redirect action method.
      */
     public function testRedirectToIndex()
     {
-        $routeId = 'case_hearing_appeal';
-
         $sut = $this->getMock($this->testClass, ['redirectToRoute']);
         $sut->expects($this->once())
             ->method('redirectToRoute')
-            ->with($routeId, ['action' => 'details'], [], true)
+            ->with('case_hearing_appeal', ['action' => 'details'], [], true)
             ->will($this->returnValue('return'));
 
         $this->assertEquals('return', $sut->redirectToIndex());
