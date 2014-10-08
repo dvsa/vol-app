@@ -113,6 +113,11 @@ class TypeOfLicenceController extends AbstractApplicationController
      */
     private function getSectionView(Form $form)
     {
+        // @TODO in a custom view model instead?
+        $this->getServiceLocator()
+            ->get('Script')
+            ->loadFile('type-of-licence');
+
         return new Section(
             [
                 'title' => 'Type of licence',
