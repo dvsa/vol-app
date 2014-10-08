@@ -138,9 +138,46 @@ trait SubmissionSectionTrait
     }
 
     /**
+     * Conviction FPN Offence History section
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function filterConvictionFpnOffenceHistoryData($data = array())
+    {
+        $dataToReturnArray = array();
+
+        foreach ($data['convictions'] as $conviction) {
+
+            //if (isset($staticDefType[$conviction['defType']])) {
+            //    $thisConviction['name'] .= ' / ' . $staticDefType[$conviction['defType']];
+            //}
+
+            $thisConviction['dateOfOffence'] = $conviction['offenceDate'];
+            $thisConviction['convictionDate'] = $conviction['convictionDate'];
+
+            if ($conviction['operatorName']) {
+                $thisConviction['name'] = $conviction['operatorName'];
+            } else {
+                $thisConviction['name'] = $conviction['personFirstname'] . ' ' . $conviction['personLastname'];
+            }
+
+            $thisConviction['description'] = $conviction['categoryText'];
+            $thisConviction['court'] = $conviction['court'];
+            $thisConviction['penalty'] = $conviction['penalty'];
+            $thisConviction['si'] = $conviction['msi'];
+            $thisConviction['decToTc'] = $conviction['isDeclared'];
+            $thisConviction['dealtWith'] = $conviction['isDealtWith'];
+            $dataToReturnArray[] = $thisConviction;
+        }
+
+        return $dataToReturnArray;
+    }
+
+    /**
      * section persons
      */
-    protected function filterPersonsData(array $data = array())
+    protected function filterPersonsDataNotUsed(array $data = array())
     {
         $dataToReturnArray = array();
 
@@ -159,7 +196,7 @@ trait SubmissionSectionTrait
     /**
      * section transportManagers
      */
-    protected function filterTransportManagersData(array $data = array())
+    protected function filterTransportManagersDataNotUsed(array $data = array())
     {
         $dataToReturnArray = array();
 
@@ -176,46 +213,6 @@ trait SubmissionSectionTrait
 
             $thisTmLicence['birthDate'] = $TmLicence['transportManager']['contactDetails']['person']['birthDate'];
             $dataToReturnArray[] = $thisTmLicence;
-        }
-
-        return $dataToReturnArray;
-    }
-
-    /**
-     * Conviction FPN Offence History section
-     *
-     * @param array $data
-     * @return array
-     */
-    protected function filterConvictionFpnOffenceHistoryData($data = array())
-    {
-        $dataToReturnArray = array();
-        //$config = $this->getServiceLocator()->get('Config');
-
-        //$staticDefType = $config['static-list-data']['defendant_types'];
-
-        foreach ($data['convictions'] as $conviction) {
-            $thisConviction['description'] = $conviction['categoryText'];
-
-            if ($conviction['operatorName']) {
-                $thisConviction['name'] = $conviction['operatorName'];
-            } else {
-                $thisConviction['name'] = $conviction['personFirstname'] . ' ' . $conviction['personLastname'];
-            }
-
-            //if (isset($staticDefType[$conviction['defType']])) {
-            //    $thisConviction['name'] .= ' / ' . $staticDefType[$conviction['defType']];
-            //}
-
-            $thisConviction['dateOfOffence'] = $conviction['dateOfOffence'];
-            $thisConviction['convictionDate'] = $conviction['convictionDate'];
-
-            $thisConviction['court'] = $conviction['court'];
-            $thisConviction['penalty'] = $conviction['penalty'];
-            $thisConviction['si'] = $conviction['si'];
-            $thisConviction['decToTc'] = $conviction['decToTc'];
-            $thisConviction['dealtWith'] = $conviction['dealtWith'];
-            $dataToReturnArray[] = $thisConviction;
         }
 
         return $dataToReturnArray;
