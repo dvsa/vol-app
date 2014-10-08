@@ -15,7 +15,7 @@ use OlcsTest\Controller\ControllerTestAbstract;
 /**
  * Stay Test Controller
  */
-class StayControllerTest extends ControllerTestAbstract
+class StayController extends ControllerTestAbstract
 {
     protected $testClass = 'Olcs\Controller\Cases\Hearing\StayController';
 
