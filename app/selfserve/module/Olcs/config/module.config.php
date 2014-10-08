@@ -59,7 +59,7 @@ foreach ($types as $type => $options) {
         $routeKey = $dashFilter->filter($section);
         $sectionController = $camelFilter($section);
 
-        $childRoutes[$routeKey] = array(
+        $childRoutes[$section] = array(
             'type' => 'segment',
             'options' => array(
                 'route' => $routeKey . '[/]',

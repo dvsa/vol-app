@@ -17,6 +17,43 @@ use Olcs\Controller\AbstractExternalController;
 abstract class AbstractApplicationController extends AbstractExternalController
 {
     /**
+     * Holds the lva type
+     *
+     * @var string
+     */
+    protected $lva = 'application';
+
+    /**
+     * Redirect to the next section
+     *
+     * @param string $currentSection
+     */
+    protected function goToNextSection($currentSection)
+    {
+        $sections = $this->getAccessibleSections();
+
+        $index = array_search($currentSection, $sections);
+
+        // If there is no next section
+        if (!isset($sections[$index + 1])) {
+            return $this->goToOverview($this->getApplicationId());
+        } else {
+            return $this->redirect()
+                ->toRoute('application/' . $sections[$index + 1], array('id' => $this->getApplicationId()));
+        }
+    }
+
+    /**
+     * Update application status
+     *
+     * @params int $applicationId
+     */
+    protected function updateCompletionStatuses($applicationId)
+    {
+        $this->getEntityService('ApplicationCompletion')->updateCompletionStatuses($applicationId);
+    }
+
+    /**
      * Check if the user has access to the application
      *
      * @NOTE We might want to consider caching this information within the session, to save making this request on each
@@ -67,5 +104,17 @@ abstract class AbstractApplicationController extends AbstractExternalController
     protected function goToOverview($applicationId)
     {
         return $this->redirect()->toRoute('application', array('id' => $applicationId));
+    }
+
+    /**
+     * Get licence type information
+     *
+     * @return array
+     */
+    protected function getTypeOfLicenceData()
+    {
+        $licenceId = $this->getLicenceId($this->getApplicationId());
+
+        return $this->getEntityService('Licence')->getTypeOfLicenceData($licenceId);
     }
 }

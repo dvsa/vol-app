@@ -38,14 +38,7 @@ abstract class LvaOverviewSection extends AbstractViewModel
 
         $this->setVariable('identifier', $data['id']);
         $this->setVariable('name', 'section.name.' . $ref);
-        $this->setVariable('route', $this->type . '/' . $this->refToRoute($ref));
+        $this->setVariable('route', $this->type . '/' . $ref);
         $this->setVariable('link', 'section.link.' . $mode . '.' . $ref);
     }
-
-    protected function refToRoute($ref)
-    {
-        $filter = new \Zend\Filter\Word\UnderscoreToDash();
-        return $filter->filter($ref);
-    }
-
 }

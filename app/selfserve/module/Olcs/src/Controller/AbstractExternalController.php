@@ -17,6 +17,13 @@ use Common\Controller\AbstractLvaController;
 abstract class AbstractExternalController extends AbstractLvaController
 {
     /**
+     * Set the location
+     *
+     * @var string
+     */
+    protected $location = 'external';
+
+    /**
      * Get current user
      *
      * @return array
