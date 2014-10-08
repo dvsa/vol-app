@@ -46,13 +46,13 @@ return array(
         array(
             'title' => 'Presiding TC/DTC',
             'formatter' => function ($data) {
-                return $data['presidingTc']['name'];
+                return (isset($data['presidingTc']['name']) ? $data['presidingTc']['name'] : '');
             }
         ),
         array(
             'title' => 'Outcome',
             'formatter' => function ($data, $column, $sm) {
-                return $sm->get('translator')->translate($data['outcome']['id']);
+                return (isset($data['outcome']['id']) ? $sm->get('translator')->translate($data['outcome']['id']) : '');
             }
         ),
         array(
