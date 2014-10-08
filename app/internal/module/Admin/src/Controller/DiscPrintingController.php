@@ -176,7 +176,7 @@ class DiscPrintingController extends AbstractController
 
         // checking params which needed to calculate goods discs start/end numbers,
         // we can't process further without having it defined
-        if (!$params['niFlag'] || !$params['operatorType'] || !$params['licenceType'] ||
+        if (!$params['niFlag'] || ($params['niFlag'] == 'N' && !$params['operatorType']) || !$params['licenceType'] ||
             !$params['discSequence'] || !$params['discPrefix']) {
             $flProcess = false;
         }
@@ -217,7 +217,7 @@ class DiscPrintingController extends AbstractController
     ) {
         $retv = [];
 
-        if (!$niFlag || !$licenceType || !$operatorType || !$discPrefix || !$discSequence) {
+        if (!$niFlag || !$licenceType || ($niFlag == 'N' && !$operatorType) || !$discPrefix || !$discSequence) {
             return $retv;
         }
         $discSequenceService = $this->getServiceLocator()->get('Admin\Service\Data\DiscSequence');
