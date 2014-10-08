@@ -24,9 +24,6 @@ class TypeOfLicenceController extends AbstractApplicationController
         $form = $this->getHelperService('FormHelper')
             ->createForm('Lva\TypeOfLicence');
 
-        // @todo sort out value options
-        $form->get('operator-location')->get('niFlag')->setValueOptions(array('foo' => 'bar'));
-
         return new Section(
             [
                 'title' => 'Type of licence',
