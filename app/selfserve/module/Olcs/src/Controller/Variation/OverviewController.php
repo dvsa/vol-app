@@ -1,23 +1,23 @@
 <?php
 
 /**
- * Application Overview Controller
+ * Variation Overview Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-namespace Olcs\Controller\Application;
+namespace Olcs\Controller\Variation;
 
-use Olcs\View\Model\Application\ApplicationOverview;
+use Olcs\View\Model\Variation\VariationOverview;
 
 /**
- * Application Overview Controller
+ * Variation Overview Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class OverviewController extends AbstractApplicationController
+class OverviewController extends AbstractVariationController
 {
     /**
-     * Application overview
+     * Variation overview
      */
     public function indexAction()
     {
@@ -29,6 +29,6 @@ class OverviewController extends AbstractApplicationController
 
         $data = $this->getEntityService('Application')->getOverview($applicationId);
 
-        return new ApplicationOverview($data, $this->getAccessibleSections());
+        return new VariationOverview($data, $this->getAccessibleSections());
     }
 }

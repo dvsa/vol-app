@@ -9,7 +9,7 @@ $camelFilter = new \Zend\Filter\Word\UnderscoreToCamelCase();
 $types = array(
     'application' => array(),
     'licence' => array(),
-    /* variations => array() */
+    'variation' => array()
 );
 
 $routes = array(
@@ -96,7 +96,11 @@ return array(
             'Application/LicenceHistory' => 'Olcs\Controller\Application\LicenceHistoryController',
             'Application/ConvictionsPenalties' => 'Olcs\Controller\Application\ConvictionsPenaltiesController',
 
-            'Licence' => 'Olcs\Controller\Licence\LicenceController',
+            'Licence' => 'Olcs\Controller\Licence\OverviewController',
+            'Licence/TypeOfLicence' => 'Olcs\Controller\Licence\TypeOfLicenceController',
+
+            'Variation' => 'Olcs\Controller\Variation\OverviewController',
+            'Variation/TypeOfLicence' => 'Olcs\Controller\Variation\TypeOfLicenceController',
         )
     ),
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',

@@ -1,20 +1,22 @@
 <?php
 
 /**
- * Licence Controller
+ * Licence Overview Controller
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
+ * @author Rob Caiger <rob@clocal.co.uk>
  */
 namespace Olcs\Controller\Licence;
 
 use Olcs\View\Model\Licence\LicenceOverview;
 
 /**
- * Licence Controller
+ * Licence Overview Controller
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
+ * @author Rob Caiger <rob@clocal.co.uk>
  */
-class LicenceController extends AbstractLicenceController
+class OverviewController extends AbstractLicenceController
 {
     /**
      * Licence overview
@@ -22,12 +24,9 @@ class LicenceController extends AbstractLicenceController
     public function indexAction()
     {
         $data = $this->getEntityService('Licence')->getOverview(
-            $this->params('id')
+            $this->getLicenceId()
         );
 
-        $sections = $this->getHelperService('SectionAccessHelper')
-            ->getAccessibleSections($data['goodsOrPsv']['id'], $data['licenceType']['id']);
-
-        return new LicenceOverview($data, array_keys($sections));
+        return new LicenceOverview($data, $this->getAccessibleSections());
     }
 }

@@ -24,26 +24,6 @@ abstract class AbstractApplicationController extends AbstractExternalController
     protected $lva = 'application';
 
     /**
-     * Redirect to the next section
-     *
-     * @param string $currentSection
-     */
-    protected function goToNextSection($currentSection)
-    {
-        $sections = $this->getAccessibleSections();
-
-        $index = array_search($currentSection, $sections);
-
-        // If there is no next section
-        if (!isset($sections[$index + 1])) {
-            return $this->goToOverview($this->getApplicationId());
-        } else {
-            return $this->redirect()
-                ->toRoute('application/' . $sections[$index + 1], array('id' => $this->getApplicationId()));
-        }
-    }
-
-    /**
      * Update application status
      *
      * @params int $applicationId
@@ -103,11 +83,31 @@ abstract class AbstractApplicationController extends AbstractExternalController
      */
     protected function goToOverview($applicationId)
     {
-        return $this->redirect()->toRoute('application', array('id' => $applicationId));
+        return $this->redirect()->toRoute($this->lva, array('id' => $applicationId));
     }
 
     /**
-     * Get licence type information
+     * Redirect to the next section
+     *
+     * @param string $currentSection
+     */
+    protected function goToNextSection($currentSection)
+    {
+        $sections = $this->getAccessibleSections();
+
+        $index = array_search($currentSection, $sections);
+
+        // If there is no next section
+        if (!isset($sections[$index + 1])) {
+            return $this->goToOverview($this->getApplicationId());
+        } else {
+            return $this->redirect()
+                ->toRoute($this->lva . '/' . $sections[$index + 1], array('id' => $this->getApplicationId()));
+        }
+    }
+
+    /**
+     * Get type of licence data
      *
      * @return array
      */
