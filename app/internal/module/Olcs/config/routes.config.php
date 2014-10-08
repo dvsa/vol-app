@@ -546,7 +546,7 @@ return array_merge(
                             'page' => 1,
                             'limit' => 10,
                             'sort' => 'createdOn',
-                            'order' => 'ASC'
+                            'order' => 'DESC'
                         ]
                     ],
                     'may_terminate' => true,

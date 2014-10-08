@@ -549,7 +549,6 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
             $data['fields'] = $data;
             $data['base'] = $data;
         } else {
-            $data = [];
             $data['case'] = $this->getQueryOrRouteParam('case');
             $data['fields']['case'] = $this->getQueryOrRouteParam('case');
             $data['base']['case'] = $this->getQueryOrRouteParam('case');
