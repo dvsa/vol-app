@@ -57,9 +57,9 @@ return array(
                 $translator = $sm->get('translator');
 
                 $person = $data['personFirstname'] . ' ' . $data['personLastname'];
-                $organisationName = $data['operatorName'];
+                $organisationName = $data['case']['licence']['organisation']['name'];
                 $name = ($organisationName == '' ? $person : $organisationName) . ' <br /> '
-                      . $translator->translate($data['defendantType']['id']);
+                      . $translator->translate($data['defendantType']['description']);
 
                 return $name;
             }
