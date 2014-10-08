@@ -80,8 +80,22 @@ return array(
     'controllers' => array(
         'invokables' => array(
             'Dashboard' => 'Olcs\Controller\DashboardController',
+
             'Application' => 'Olcs\Controller\Application\OverviewController',
             'Application/TypeOfLicence' => 'Olcs\Controller\Application\TypeOfLicenceController',
+            'Application/BusinessType' => 'Olcs\Controller\Application\BusinessTypeController',
+            'Application/BusinessDetails' => 'Olcs\Controller\Application\BusinessDetailsController',
+            'Application/Addresses' => 'Olcs\Controller\Application\AddressesController',
+            'Application/People' => 'Olcs\Controller\Application\PeopleController',
+            'Application/OperatingCentres' => 'Olcs\Controller\Application\OperatingCentresController',
+            'Application/FinancialEvidence' => 'Olcs\Controller\Application\FinancialEvidenceController',
+            'Application/TransportManagers' => 'Olcs\Controller\Application\TransportManagersController',
+            'Application/Vehicles' => 'Olcs\Controller\Application\VehiclesController',
+            'Application/Safety' => 'Olcs\Controller\Application\SafetyController',
+            'Application/FinancialHistory' => 'Olcs\Controller\Application\FinancialHistoryController',
+            'Application/LicenceHistory' => 'Olcs\Controller\Application\LicenceHistoryController',
+            'Application/ConvictionsPenalties' => 'Olcs\Controller\Application\ConvictionsPenaltiesController',
+
             'Licence' => 'Olcs\Controller\Licence\LicenceController',
         )
     ),
