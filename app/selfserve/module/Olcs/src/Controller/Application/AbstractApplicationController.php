@@ -36,4 +36,15 @@ abstract class AbstractApplicationController extends AbstractExternalController
         $this->addErrorMessage('application-no-access');
         return false;
     }
+
+    /**
+     * Get licence id
+     *
+     * @param int $applicationId
+     * @return int
+     */
+    protected function getLicenceId($applicationId)
+    {
+        return $this->getEntityService('Application')->getLicenceIdForApplication($applicationId);
+    }
 }
