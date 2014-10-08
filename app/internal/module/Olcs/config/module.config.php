@@ -121,6 +121,9 @@ return array(
         ),
         'delegators' => array(
             'formElement' => array('Olcs\Form\View\Helper\FormElementDelegatorFactory')
+        ),
+        'factories' => array(
+            'SubmissionSectionTable' => 'Olcs\View\Helper\SubmissionSectionTableFactory'
         )
     ),
     'local_forms_path' => array(

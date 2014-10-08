@@ -49,7 +49,7 @@ class SubmissionSectionDetails extends AbstractHelper
         'registration-details'   => 'Olcs\View\Helper\SubmissionSectionOverview',
         'maintenance-tachographs-hours'   => 'Olcs\View\Helper\SubmissionSectionOverview',
         'prohibition-history'   => 'Olcs\View\Helper\SubmissionSectionOverview',
-        'conviction-fpn-offence-history'   => 'Olcs\View\Helper\SubmissionSectionOverview',
+        'conviction-fpn-offence-history'   => 'SubmissionSectionTable',
         'penalties'   => 'Olcs\View\Helper\SubmissionSectionOverview',
         'other-issues'   => 'Olcs\View\Helper\SubmissionSectionOverview',
         'te-reports'   => 'Olcs\View\Helper\SubmissionSectionOverview',
