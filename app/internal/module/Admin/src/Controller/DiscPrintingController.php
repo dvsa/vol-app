@@ -124,7 +124,7 @@ class DiscPrintingController extends AbstractController
 
         // set up start number validator
         $goodsDiscNumberValidator = $this->getServiceLocator()->get('goodsDiscStartNumberValidator');
-        $numbering = $this->processDiskNumbering(
+        $numbering = $this->processDiscNumbering(
             $niFlag,
             $licenceType,
             $operatorType,
@@ -183,7 +183,7 @@ class DiscPrintingController extends AbstractController
 
         // calculate start and end numbers, number of pages
         if ($flProcess) {
-            $viewResults = $this->processDiskNumbering(
+            $viewResults = $this->processDiscNumbering(
                 $params['niFlag'],
                 $params['licenceType'],
                 $params['operatorType'],
@@ -207,7 +207,7 @@ class DiscPrintingController extends AbstractController
      * @param int $startNumberEntered
      * @return array
      */
-    protected function processDiskNumbering(
+    protected function processDiscNumbering(
         $niFlag,
         $licenceType,
         $operatorType,
