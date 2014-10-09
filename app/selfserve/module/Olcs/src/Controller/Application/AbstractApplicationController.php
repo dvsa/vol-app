@@ -27,8 +27,6 @@ abstract class AbstractApplicationController extends AbstractExternalController
     protected $lva = 'application';
 
     /**
-<<<<<<< Updated upstream
-=======
      * Hook into the dispatch before the controller action is executed
      */
     protected function preDispatch()
@@ -56,7 +54,6 @@ abstract class AbstractApplicationController extends AbstractExternalController
     }
 
     /**
->>>>>>> Stashed changes
      * Check if the user has access to the application
      *
      * @NOTE We might want to consider caching this information within the session, to save making this request on each

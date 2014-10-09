@@ -39,9 +39,8 @@ class BusinessTypeController extends AbstractApplicationController
         }
 
         $form = $this->getHelperService('FormHelper')
-            ->createForm('Lva\BusinessType');
-
-        $form->setData($data);
+            ->createForm('Lva\BusinessType')
+            ->setData($data);
 
         if ($request->isPost() && $form->isValid()) {
             $data = array(
