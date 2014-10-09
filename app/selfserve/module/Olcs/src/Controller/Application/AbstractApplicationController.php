@@ -1,52 +1,30 @@
 <?php
 
 /**
- * Abstract Application Controller
+ * EXTERNAL Abstract Application Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 namespace Olcs\Controller\Application;
 
 use Olcs\Controller\AbstractExternalController;
-use Common\Service\Entity\ApplicationService;
+use Common\Controller\Traits\Lva\ApplicationControllerTrait;
 
 /**
- * Abstract Application Controller
+ * EXTERNAL Abstract Application Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 abstract class AbstractApplicationController extends AbstractExternalController
 {
+    use ApplicationControllerTrait;
+
     /**
      * Holds the lva type
      *
      * @var string
      */
     protected $lva = 'application';
-
-    /**
-     * Hook into the dispatch before the controller action is executed
-     */
-    protected function preDispatch()
-    {
-        $applicationId = $this->getApplicationId();
-
-        if (!$this->isApplicationNew($applicationId)) {
-            return $this->notFoundAction();
-        }
-
-        return $this->checkForRedirect($applicationId);
-    }
-
-    /**
-     * Update application status
-     *
-     * @params int $applicationId
-     */
-    protected function updateCompletionStatuses($applicationId)
-    {
-        $this->getEntityService('ApplicationCompletion')->updateCompletionStatuses($applicationId);
-    }
 
     /**
      * Check if the user has access to the application
@@ -70,59 +48,6 @@ abstract class AbstractApplicationController extends AbstractExternalController
     }
 
     /**
-     * Check if the application is new
-     *
-     * @param int $applicationId
-     * @return boolean
-     */
-    protected function isApplicationNew($applicationId)
-    {
-        return $this->getApplicationType($applicationId) === ApplicationService::APPLICATION_TYPE_NEW;
-    }
-
-    /**
-     * Check if the application is variation
-     *
-     * @param int $applicationId
-     * @return boolean
-     */
-    protected function isApplicationVariation($applicationId)
-    {
-        return $this->getApplicationType($applicationId) === ApplicationService::APPLICATION_TYPE_VARIATION;
-    }
-
-    /**
-     *
-     * @param int $applicationId
-     * @return int
-     */
-    protected function getApplicationType($applicationId)
-    {
-        return $this->getEntityService('Application')->getApplicationType($applicationId);
-    }
-
-    /**
-     * Get application id
-     *
-     * @return int
-     */
-    protected function getApplicationId()
-    {
-        return $this->params('id');
-    }
-
-    /**
-     * Get licence id
-     *
-     * @param int $applicationId
-     * @return int
-     */
-    protected function getLicenceId($applicationId)
-    {
-        return $this->getEntityService('Application')->getLicenceIdForApplication($applicationId);
-    }
-
-    /**
      * Redirect to the next section
      *
      * @param string $currentSection
@@ -140,17 +65,5 @@ abstract class AbstractApplicationController extends AbstractExternalController
             return $this->redirect()
                 ->toRoute('lva-' . $this->lva . '/' . $sections[$index + 1], array('id' => $this->getApplicationId()));
         }
-    }
-
-    /**
-     * Get type of licence data
-     *
-     * @return array
-     */
-    protected function getTypeOfLicenceData()
-    {
-        $licenceId = $this->getLicenceId($this->getApplicationId());
-
-        return $this->getEntityService('Licence')->getTypeOfLicenceData($licenceId);
     }
 }
