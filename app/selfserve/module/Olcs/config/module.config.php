@@ -1,107 +1,35 @@
 <?php
 
 $sectionConfig = new \Common\Service\Data\SectionConfig();
-$sections = $sectionConfig->getAllReferences();
-
-$dashFilter = new \Zend\Filter\Word\UnderscoreToDash();
-$camelFilter = new \Zend\Filter\Word\UnderscoreToCamelCase();
-
-$types = array(
-    'application' => array(),
-    'licence' => array(),
-    'variation' => array()
-);
-
-$routes = array(
-    'dashboard' => array(
-        'type' => 'segment',
-        'options' => array(
-            'route' => '/dashboard[/]',
-            'defaults' => array(
-                'controller' => 'Dashboard',
-                'action' => 'index'
-            )
-        )
-    ),
-    'create_application' => array(
-        'type' => 'segment',
-        'options' => array(
-            'route' => '/application/create[/]',
-            'defaults' => array(
-                'skipPreDispatch' => true,
-                'controller' => 'Application\TypeOfLicence',
-                'action' => 'createApplication'
-            )
-        )
-    )
-);
-
-foreach ($types as $type => $options) {
-    $typeController = $camelFilter->filter($type);
-
-    $routes[$type] = array(
-        'type' => 'segment',
-        'options' => array(
-            'route' => '/' . $type . '/:id[/]',
-            'constraints' => array(
-                'id' => '[0-9]+'
-            ),
-            'defaults' => array(
-                'controller' => $typeController,
-                'action' => 'index'
-            )
-        ),
-        'may_terminate' => true,
-        'child_routes' => array()
-    );
-
-    $childRoutes = array();
-    foreach ($sections as $section) {
-        $routeKey = $dashFilter->filter($section);
-        $sectionController = $camelFilter($section);
-
-        $childRoutes[$section] = array(
-            'type' => 'segment',
-            'options' => array(
-                'route' => $routeKey . '[/]',
-                'defaults' => array(
-                    'controller' => $typeController . '/' . $sectionController,
-                    'action' => 'index'
-                )
-            )
-        );
-    }
-    $routes[$type]['child_routes'] = $childRoutes;
-}
 
 return array(
     'router' => array(
-        'routes' => $routes,
+        'routes' => $sectionConfig->getAllRoutes(),
     ),
     'controllers' => array(
         'invokables' => array(
             'Dashboard' => 'Olcs\Controller\DashboardController',
 
-            'Application' => 'Olcs\Controller\Application\OverviewController',
-            'Application/TypeOfLicence' => 'Olcs\Controller\Application\TypeOfLicenceController',
-            'Application/BusinessType' => 'Olcs\Controller\Application\BusinessTypeController',
-            'Application/BusinessDetails' => 'Olcs\Controller\Application\BusinessDetailsController',
-            'Application/Addresses' => 'Olcs\Controller\Application\AddressesController',
-            'Application/People' => 'Olcs\Controller\Application\PeopleController',
-            'Application/OperatingCentres' => 'Olcs\Controller\Application\OperatingCentresController',
-            'Application/FinancialEvidence' => 'Olcs\Controller\Application\FinancialEvidenceController',
-            'Application/TransportManagers' => 'Olcs\Controller\Application\TransportManagersController',
-            'Application/Vehicles' => 'Olcs\Controller\Application\VehiclesController',
-            'Application/Safety' => 'Olcs\Controller\Application\SafetyController',
-            'Application/FinancialHistory' => 'Olcs\Controller\Application\FinancialHistoryController',
-            'Application/LicenceHistory' => 'Olcs\Controller\Application\LicenceHistoryController',
-            'Application/ConvictionsPenalties' => 'Olcs\Controller\Application\ConvictionsPenaltiesController',
+            'LvaApplication' => 'Olcs\Controller\Application\OverviewController',
+            'LvaApplication/TypeOfLicence' => 'Olcs\Controller\Application\TypeOfLicenceController',
+            'LvaApplication/BusinessType' => 'Olcs\Controller\Application\BusinessTypeController',
+            'LvaApplication/BusinessDetails' => 'Olcs\Controller\Application\BusinessDetailsController',
+            'LvaApplication/Addresses' => 'Olcs\Controller\Application\AddressesController',
+            'LvaApplication/People' => 'Olcs\Controller\Application\PeopleController',
+            'LvaApplication/OperatingCentres' => 'Olcs\Controller\Application\OperatingCentresController',
+            'LvaApplication/FinancialEvidence' => 'Olcs\Controller\Application\FinancialEvidenceController',
+            'LvaApplication/TransportManagers' => 'Olcs\Controller\Application\TransportManagersController',
+            'LvaApplication/Vehicles' => 'Olcs\Controller\Application\VehiclesController',
+            'LvaApplication/Safety' => 'Olcs\Controller\Application\SafetyController',
+            'LvaApplication/FinancialHistory' => 'Olcs\Controller\Application\FinancialHistoryController',
+            'LvaApplication/LicenceHistory' => 'Olcs\Controller\Application\LicenceHistoryController',
+            'LvaApplication/ConvictionsPenalties' => 'Olcs\Controller\Application\ConvictionsPenaltiesController',
 
-            'Licence' => 'Olcs\Controller\Licence\OverviewController',
-            'Licence/TypeOfLicence' => 'Olcs\Controller\Licence\TypeOfLicenceController',
+            'LvaLicence' => 'Olcs\Controller\Licence\OverviewController',
+            'LvaLicence/TypeOfLicence' => 'Olcs\Controller\Licence\TypeOfLicenceController',
 
-            'Variation' => 'Olcs\Controller\Variation\OverviewController',
-            'Variation/TypeOfLicence' => 'Olcs\Controller\Variation\TypeOfLicenceController',
+            'LvaVariation' => 'Olcs\Controller\Variation\OverviewController',
+            'LvaVariation/TypeOfLicence' => 'Olcs\Controller\Variation\TypeOfLicenceController',
         )
     ),
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',

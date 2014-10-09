@@ -12,8 +12,10 @@ return array(
         array(
             'title' => $translationPrefix . '-appId',
             'formatter' => function ($row) {
-                // @todo Add the real link in here
-                return '<a href="#">'.$row['id'].'</a>';
+                return '<a href="' . $this->url->fromRoute(
+                    'lva-variation',
+                    array('id' => $row['id'])
+                ) . '">'.$row['id'].'</a>';
             }
         ),
         array(

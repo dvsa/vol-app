@@ -39,23 +39,6 @@ abstract class AbstractApplicationController extends AbstractExternalController
     }
 
     /**
-     * Check for redirect
-     *
-     * @param int $applicationId
-     * @return null|\Zend\Http\Response
-     */
-    protected function checkForRedirect($applicationId)
-    {
-        if (!$this->checkAccess($applicationId)) {
-            return $this->redirect()->toRoute('dashboard');
-        }
-
-        if ($this->isButtonPressed('cancel')) {
-            return $this->goToOverview($applicationId);
-        }
-    }
-
-    /**
      * Update application status
      *
      * @params int $applicationId
@@ -140,17 +123,6 @@ abstract class AbstractApplicationController extends AbstractExternalController
     }
 
     /**
-     * Go to overview page
-     *
-     * @param int $applicationId
-     * @return \Zend\Http\Response
-     */
-    protected function goToOverview($applicationId)
-    {
-        return $this->redirect()->toRoute($this->lva, array('id' => $applicationId));
-    }
-
-    /**
      * Redirect to the next section
      *
      * @param string $currentSection
@@ -166,7 +138,7 @@ abstract class AbstractApplicationController extends AbstractExternalController
             return $this->goToOverview($this->getApplicationId());
         } else {
             return $this->redirect()
-                ->toRoute($this->lva . '/' . $sections[$index + 1], array('id' => $this->getApplicationId()));
+                ->toRoute('lva-' . $this->lva . '/' . $sections[$index + 1], array('id' => $this->getApplicationId()));
         }
     }
 

@@ -13,7 +13,7 @@ return array(
             'title' => $translationPrefix . '-appId',
             'formatter' => function ($row) {
                 return '<a href="' . $this->url->fromRoute(
-                    'application',
+                    'lva-application',
                     array('id' => $row['id'])
                 ) . '">'.$row['id'].'</a>';
             }

@@ -13,8 +13,10 @@ return array(
             'title' => $translationPrefix . '-licNo',
             'name' => 'licNo',
             'formatter' => function ($row) {
-                // @todo Add the real link in here
-                return '<a href="#">'.$row['licNo'].'</a>';
+                return '<a href="' . $this->url->fromRoute(
+                    'lva-licence',
+                    array('id' => $row['id'])
+                ) . '">'.$row['id'].'</a>';
             }
         ),
         array(

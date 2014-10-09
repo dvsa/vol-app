@@ -46,4 +46,32 @@ abstract class AbstractExternalController extends AbstractLvaController
         $user = $this->getCurrentUser();
         return $this->getEntityService('Organisation')->getForUser($user['id']);
     }
+
+    /**
+     * Go to overview page
+     *
+     * @param int $lvaId
+     * @return \Zend\Http\Response
+     */
+    protected function goToOverview($lvaId)
+    {
+        return $this->redirect()->toRoute('lva-' . $this->lva, array('id' => $licenceId));
+    }
+
+    /**
+     * Check for redirect
+     *
+     * @param int $lvaId
+     * @return null|\Zend\Http\Response
+     */
+    protected function checkForRedirect($lvaId)
+    {
+        if (!$this->checkAccess($lvaId)) {
+            return $this->redirect()->toRoute('dashboard');
+        }
+
+        if ($this->isButtonPressed('cancel')) {
+            return $this->goToOverview($lvaId);
+        }
+    }
 }

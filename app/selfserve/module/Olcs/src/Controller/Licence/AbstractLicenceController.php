@@ -36,23 +36,6 @@ abstract class AbstractLicenceController extends AbstractExternalController
     }
 
     /**
-     * Check for redirect
-     *
-     * @param int $licenceId
-     * @return null|\Zend\Http\Response
-     */
-    protected function checkForRedirect($licenceId)
-    {
-        if (!$this->checkAccess($licenceId)) {
-            return $this->redirect()->toRoute('dashboard');
-        }
-
-        if ($this->isButtonPressed('cancel')) {
-            return $this->goToOverview($licenceId);
-        }
-    }
-
-    /**
      * Check if the user has access to the licence
      *
      * @NOTE We might want to consider caching this information within the session, to save making this request on each
@@ -91,36 +74,5 @@ abstract class AbstractLicenceController extends AbstractExternalController
     protected function getTypeOfLicenceData()
     {
         return $this->getEntityService('Licence')->getTypeOfLicenceData($this->getLicenceId());
-    }
-
-    /**
-     * Go to overview page
-     *
-     * @param int $licenceId
-     * @return \Zend\Http\Response
-     */
-    protected function goToOverview($licenceId)
-    {
-        return $this->redirect()->toRoute('licence', array('id' => $licenceId));
-    }
-
-    /**
-     * Redirect to the next section
-     *
-     * @param string $currentSection
-     */
-    protected function goToNextSection($currentSection)
-    {
-        $sections = $this->getAccessibleSections();
-
-        $index = array_search($currentSection, $sections);
-
-        // If there is no next section
-        if (!isset($sections[$index + 1])) {
-            return $this->goToOverview($this->getLicnenceId());
-        } else {
-            return $this->redirect()
-                ->toRoute('licence/' . $sections[$index + 1], array('id' => $this->getLicnenceId()));
-        }
     }
 }
