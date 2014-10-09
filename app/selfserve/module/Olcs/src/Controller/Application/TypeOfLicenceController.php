@@ -45,13 +45,7 @@ class TypeOfLicenceController extends AbstractApplicationController
 
             $this->getEntityService('Licence')->save($data);
 
-            $this->updateCompletionStatuses($applicationId);
-
-            if ($this->isButtonPressed('saveAndContinue')) {
-                return $this->goToNextSection('type_of_licence');
-            }
-
-            return $this->goToOverview($applicationId);
+            return $this->completeSection('type_of_licence');
         }
 
         return $this->getSectionView($form);
