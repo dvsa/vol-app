@@ -21,21 +21,12 @@ class Layout extends AbstractViewModel
 
     protected $terminate = true;
 
-    public function __construct($content, $quickActions, array $params = array())
+    public function __construct($content, array $params = array())
     {
-        $header = new ViewModel();
+        $header = new ViewModel($params);
         $header->setTemplate('application/header');
 
         $this->addChild($header, 'header');
-
-        $applicationLayout = new ViewModel();
-        $applicationLayout->setTemplate('application/layout');
-
-        $mainNav = new ViewModel();
-        $mainNav->setTemplate('application/main-nav');
-
-        $applicationLayout->addChild($mainNav, 'mainNav');
-        $applicationLayout->addChild($quickActions, 'quickActions');
-        $applicationLayout->addChild($content, 'content');
+        $this->addChild($content, 'content');
     }
 }
