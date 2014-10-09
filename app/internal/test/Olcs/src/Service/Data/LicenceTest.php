@@ -31,7 +31,7 @@ class LicenceTest extends \PHPUnit_Framework_TestCase
 
     public function testFetchLicenceData()
     {
-        $licence = ['id' => 78, 'isNi' => true];
+        $licence = ['id' => 78, 'isNi' => true, 'trafficArea' => ['id' => 'B']];
 
         $mockRestClient = $this->getMock('\Common\Util\RestClient', [], [], '', false);
         $mockRestClient->expects($this->once())

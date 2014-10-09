@@ -3,6 +3,7 @@
 namespace OlcsTest\Service\Data;
 
 use Olcs\Service\Data\PiVenue;
+use Olcs\Service\Data\Licence;
 use Mockery as m;
 
 /**
@@ -34,7 +35,14 @@ class PiVenueTest extends \PHPUnit_Framework_TestCase
      */
     public function testFetchListOptions($input, $expected)
     {
+        $mockLicenceService = $this->getMock('\Olcs\Service\Data\Licence');
+        $mockLicenceService->expects($this->once())
+            ->method('fetchLicenceData')
+            ->willReturn(['niFlag'=> true, 'goodsOrPsv' => ['id'=>'lcat_gv'], 'trafficArea' => ['id' => 'B']]);
+
         $sut = new PiVenue();
+        $sut->setLicenceService($mockLicenceService);
+
         $sut->setData('PiVenue', $input);
 
         $this->assertEquals($expected, $sut->fetchListOptions(''));
@@ -55,14 +63,16 @@ class PiVenueTest extends \PHPUnit_Framework_TestCase
      */
     public function testFetchListData($data, $expected)
     {
+        $params = ['trafficArea' => 'B'];
+
         $mockRestClient = m::mock('Common\Util\RestClient');
-        $mockRestClient->shouldReceive('get')->once()->with('', ['limit' => 1000])->andReturn($data);
+        $mockRestClient->shouldReceive('get')->once()->with('', $params)->andReturn($data);
 
         $sut = new PiVenue();
         $sut->setRestClient($mockRestClient);
 
-        $this->assertEquals($expected, $sut->fetchListData());
-        $sut->fetchListData(); //ensure data is cached
+        $this->assertEquals($expected, $sut->fetchListData($params));
+        $sut->fetchListData($params); //ensure data is cached
     }
 
     public function provideFetchListData()
