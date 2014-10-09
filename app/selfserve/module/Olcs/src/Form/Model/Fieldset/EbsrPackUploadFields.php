@@ -13,8 +13,7 @@ class EbsrPackUploadFields
     /**
      * @Form\Options({"label": "Choose File"})
      * @Form\Type("File")
-     * This input class first runs the configured field filters and validators and then runs the EBSR validators,
-     * @Form\Input("Olcs\InputFilter\EbsrFileInput")
+     * @Form\Input("Zend\InputFilter|FileInput")
      * @Form\Filter({"name": "DecompressToTmp"})
      */
     public $file;
