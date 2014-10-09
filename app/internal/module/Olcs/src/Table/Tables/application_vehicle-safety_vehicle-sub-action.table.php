@@ -15,13 +15,13 @@ return array(
         ),
         array(
             'title' => $translationPrefix . '.specified',
-            'formatter' => 'Date',
-            'name' => 'specifiedDate'
+            'name' => 'specifiedDate',
+            'formatter' => 'DateTime'
         ),
         array(
             'title' => $translationPrefix . '.removed',
-            'formatter' => 'Date',
-            'name' => 'deletedDate'
+            'name' => 'deletedDate',
+            'formatter' => 'DateTime'
         ),
         array(
             'title' => $translationPrefix . '.disc-no',
