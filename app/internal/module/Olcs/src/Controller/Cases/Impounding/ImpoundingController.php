@@ -149,6 +149,15 @@ class ImpoundingController extends OlcsController\CrudAbstract
      */
     protected $inlineScripts = array('forms/impounding');
 
+    /**
+     * @codeCoverageIgnore This method is to assist with unit testing
+     *
+     * @param string $name
+     * @param callable $callback
+     * @param mixed $data
+     * @param boolean $tables
+     * @return object
+     */
     public function callParentGenerateFormWithData($name, $callback, $data = null, $tables = false)
     {
         return parent::generateFormWithData($name, $callback, $data, $tables);
