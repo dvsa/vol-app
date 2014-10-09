@@ -19,6 +19,7 @@ use Olcs\Controller\Traits as ControllerTraits;
 class HearingAppealController extends OlcsController\CrudAbstract
 {
     use ControllerTraits\CaseControllerTrait;
+    use ControllerTraits\HearingAppealControllerTrait;
 
     /**
      * Identifier name
@@ -196,73 +197,5 @@ class HearingAppealController extends OlcsController\CrudAbstract
         $view->setVariable('stayRecords', $stayRecords);
 
         return $this->renderView($view);
-    }
-
-    /**
-     * Gets stay data for use on the index page
-     *
-     * @param int $caseId
-     * @return array
-     */
-    private function getStayData($caseId)
-    {
-        $stayRecords = array();
-
-        $stayResult = $this->makeRestCall(
-            'Stay',
-            'GET',
-            array('case' => $caseId),
-            $this->stayDataBundle
-        );
-
-        //need a better way to do this...
-        foreach ($stayResult['Results'] as $stay) {
-            $stayRecords[$stay['stayType']['id']][] = $stay;
-        }
-
-        return $stayRecords;
-    }
-
-    /**
-     * Retrieves appeal data
-     *
-     * @param int $caseId
-     * @return array
-     */
-    private function getAppealData($caseId)
-    {
-        $bundle = [
-            'children' => [
-                'reason' => [
-                    'properties' => [
-                        'id',
-                        'description'
-                    ]
-                ],
-                'outcome' => [
-                    'properties' => [
-                        'id',
-                        'description'
-                    ]
-                ]
-            ],
-        ];
-
-        $appealResult = $this->makeRestCall(
-            'Appeal',
-            'GET',
-            array(
-                'case' => $caseId,
-                'bundle' => json_encode($bundle)
-            )
-        );
-
-        $appeal = array();
-
-        if (!empty($appealResult['Results'][0])) {
-            $appeal = $appealResult['Results'][0];
-        }
-
-        return $appeal;
     }
 }
