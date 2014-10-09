@@ -1,6 +1,16 @@
 <?php
 
 return array(
+    'ebsr' => array(
+        'type' => 'segment',
+        'options' =>  array(
+            'route' => '/ebsr[/:action]',
+            'defaults' => array(
+                'controller' => 'Olcs\Ebsr\Uploads',
+                'action' => 'index'
+            )
+        )
+    ),
     'application_start' => array(
         'type' => 'segment',
         'options' => array(

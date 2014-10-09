@@ -25,6 +25,7 @@ return array(
     ),
     'controllers' => array(
         'invokables' => array(
+            'Olcs\Ebsr\Uploads' => 'Olcs\Controller\Ebsr\UploadsController',
             'Olcs\Dashboard\Index' => 'Olcs\Controller\Dashboard\IndexController',
             'LicenceOverview' => 'Olcs\Controller\Licence\Details\OverviewController',
             'LicenceLicenceType' => 'Olcs\Controller\Licence\Details\LicenceType\LicenceTypeController',
@@ -55,7 +56,9 @@ return array(
         )
     ),
     'service_manager' => array(
-        'factories' => array()
+        'factories' => array(
+            'Olcs\Service\Data\EbsrPack' => 'Olcs\Service\Data\EbsrPack'
+        )
     ),
     'controller_plugins' => array(
         'invokables' => array()
@@ -95,6 +98,11 @@ return array(
             'navigation' => 'self-serve/journey/application/navigation',
             'main' => 'self-serve/journey/application/main',
             'layout' => 'self-serve/journey/application/layout'
+        )
+    ),
+    'service_api_mapping' => array(
+        'endpoints' => array(
+            'ebsr' => 'http://olcs-ebsr/'
         )
     )
 );
