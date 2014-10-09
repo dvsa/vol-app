@@ -953,54 +953,8 @@ $routes = [
 ];
 
 $sectionConfig = new \Common\Service\Data\SectionConfig();
-$sections = $sectionConfig->getAllReferences();
 
-$dashFilter = new \Zend\Filter\Word\UnderscoreToDash();
-$camelFilter = new \Zend\Filter\Word\UnderscoreToCamelCase();
-
-$types = array(
-    'application' => array(),
-    'licence' => array(),
-    'variation' => array()
+return array_merge(
+    $routes,
+    $sectionConfig->getAllRoutes()
 );
-
-foreach ($types as $type => $options) {
-    $typeController = 'Lva' . $camelFilter->filter($type);
-    $baseRouteName = 'lva-' . $type;
-
-    $routes[$baseRouteName] = array(
-        'type' => 'segment',
-        'options' => array(
-            'route' => '/' . $type . '/:id[/]',
-            'constraints' => array(
-                'id' => '[0-9]+'
-            ),
-            'defaults' => array(
-                'controller' => $typeController,
-                'action' => 'index'
-            )
-        ),
-        'may_terminate' => true,
-        'child_routes' => array()
-    );
-
-    $childRoutes = array();
-    foreach ($sections as $section) {
-        $routeKey = $dashFilter->filter($section);
-        $sectionController = $camelFilter($section);
-
-        $childRoutes[$section] = array(
-            'type' => 'segment',
-            'options' => array(
-                'route' => $routeKey . '[/]',
-                'defaults' => array(
-                    'controller' => $typeController . '/' . $sectionController,
-                    'action' => 'index'
-                )
-            )
-        );
-    }
-    $routes[$baseRouteName]['child_routes'] = $childRoutes;
-}
-
-return $routes;
