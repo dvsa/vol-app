@@ -23,40 +23,19 @@ class TypeOfLicenceController extends AbstractApplicationController
      */
     public function indexAction()
     {
-        // @TODO Need to ensure the application is NOT a variation
-
-        $applicationId = $this->getApplicationId();
-
-        if (!$this->checkAccess($applicationId)) {
-            return $this->redirect()->toRoute('dashboard');
-        }
-
-        if ($this->isButtonPressed('cancel')) {
-            return $this->goToOverview($applicationId);
-        }
-
         $request = $this->getRequest();
-
-        $form = $this->getTypeOfLicenceForm();
 
         if ($request->isPost()) {
             $data = (array)$request->getPost();
         } else {
-            $typeOfLicenceData = $this->getTypeOfLicenceData();
-
-            $data = array(
-                'version' => $typeOfLicenceData['version'],
-                'type-of-licence' => array(
-                    'operator-location' => $typeOfLicenceData['niFlag'],
-                    'operator-type' => $typeOfLicenceData['goodsOrPsv'],
-                    'licence-type' => $typeOfLicenceData['licenceType']
-                )
-            );
+            $data = $this->formatDataForForm($this->getTypeOfLicenceData());
         }
 
-        $form->setData($data);
+        $form = $this->getTypeOfLicenceForm()->setData($data);
 
         if ($request->isPost() && $form->isValid()) {
+
+            $applicationId = $this->getApplicationId();
 
             $licenceId = $this->getLicenceId($applicationId);
 
@@ -90,8 +69,7 @@ class TypeOfLicenceController extends AbstractApplicationController
         $request = $this->getRequest();
 
         $form = $this->getTypeOfLicenceForm();
-        $form->get('form-actions')
-            ->remove('saveAndContinue')
+        $form->get('form-actions')->remove('saveAndContinue')
             ->get('save')->setLabel('continue.button');
 
         if ($request->isPost()) {

@@ -28,6 +28,7 @@ $routes = array(
         'options' => array(
             'route' => '/application/create[/]',
             'defaults' => array(
+                'skipPreDispatch' => true,
                 'controller' => 'Application\TypeOfLicence',
                 'action' => 'createApplication'
             )

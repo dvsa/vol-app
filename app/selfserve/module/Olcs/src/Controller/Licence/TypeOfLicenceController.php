@@ -23,35 +23,20 @@ class TypeOfLicenceController extends AbstractLicenceController
      */
     public function indexAction()
     {
-        $licenceId = $this->getLicenceId();
-
-        if ($this->isButtonPressed('cancel')) {
-            return $this->goToOverview($licenceId);
-        }
-
         $request = $this->getRequest();
-
-        $form = $this->getTypeOfLicenceForm();
-        $form->get('form-actions')->remove('saveAndContinue');
 
         if ($request->isPost()) {
             $data = (array)$request->getPost();
         } else {
-            $typeOfLicenceData = $this->getTypeOfLicenceData();
-
-            $data = array(
-                'version' => $typeOfLicenceData['version'],
-                'type-of-licence' => array(
-                    'operator-location' => $typeOfLicenceData['niFlag'],
-                    'operator-type' => $typeOfLicenceData['goodsOrPsv'],
-                    'licence-type' => $typeOfLicenceData['licenceType']
-                )
-            );
+            $data = $this->formatDataForForm($this->getTypeOfLicenceData());
         }
 
-        $form->setData($data);
+        $form = $this->getTypeOfLicenceForm()->setData($data);
+        $form->get('form-actions')->remove('saveAndContinue');
 
         if ($request->isPost() && $form->isValid()) {
+
+            $licenceId = $this->getLicenceId();
 
             $data = $this->formatDataForSave($data);
 

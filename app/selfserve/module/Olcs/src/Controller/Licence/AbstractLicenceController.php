@@ -26,6 +26,54 @@ abstract class AbstractLicenceController extends AbstractExternalController
     protected $lva = 'licence';
 
     /**
+     * Hook into the dispatch before the controller action is executed
+     */
+    protected function preDispatch()
+    {
+        $licenceId = $this->getLicenceId();
+
+        return $this->checkForRedirect($licenceId);
+    }
+
+    /**
+     * Check for redirect
+     *
+     * @param int $licenceId
+     * @return null|\Zend\Http\Response
+     */
+    protected function checkForRedirect($licenceId)
+    {
+        if (!$this->checkAccess($licenceId)) {
+            return $this->redirect()->toRoute('dashboard');
+        }
+
+        if ($this->isButtonPressed('cancel')) {
+            return $this->goToOverview($licenceId);
+        }
+    }
+
+    /**
+     * Check if the user has access to the licence
+     *
+     * @NOTE We might want to consider caching this information within the session, to save making this request on each
+     *  section
+     *
+     * @param int $licenceId
+     * @return boolean
+     */
+    protected function checkAccess($licenceId)
+    {
+        $organisation = $this->getCurrentOrganisation();
+
+        if ($this->getEntityService('Licence')->doesBelongToOrganisation($licenceId, $organisation['id'])) {
+            return true;
+        }
+
+        $this->addErrorMessage('licence-no-access');
+        return false;
+    }
+
+    /**
      * Get licence id
      *
      * @return int

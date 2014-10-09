@@ -8,6 +8,7 @@
 namespace Olcs\Controller\Application;
 
 use Olcs\Controller\AbstractExternalController;
+use Common\Service\Entity\ApplicationService;
 
 /**
  * Abstract Application Controller
@@ -22,6 +23,37 @@ abstract class AbstractApplicationController extends AbstractExternalController
      * @var string
      */
     protected $lva = 'application';
+
+    /**
+     * Hook into the dispatch before the controller action is executed
+     */
+    protected function preDispatch()
+    {
+        $applicationId = $this->getApplicationId();
+
+        if (!$this->isApplicationNew($applicationId)) {
+            return $this->notFoundAction();
+        }
+
+        return $this->checkForRedirect($applicationId);
+    }
+
+    /**
+     * Check for redirect
+     *
+     * @param int $applicationId
+     * @return null|\Zend\Http\Response
+     */
+    protected function checkForRedirect($applicationId)
+    {
+        if (!$this->checkAccess($applicationId)) {
+            return $this->redirect()->toRoute('dashboard');
+        }
+
+        if ($this->isButtonPressed('cancel')) {
+            return $this->goToOverview($applicationId);
+        }
+    }
 
     /**
      * Update application status
@@ -52,6 +84,38 @@ abstract class AbstractApplicationController extends AbstractExternalController
 
         $this->addErrorMessage('application-no-access');
         return false;
+    }
+
+    /**
+     * Check if the application is new
+     *
+     * @param int $applicationId
+     * @return boolean
+     */
+    protected function isApplicationNew($applicationId)
+    {
+        return $this->getApplicationType($applicationId) === ApplicationService::APPLICATION_TYPE_NEW;
+    }
+
+    /**
+     * Check if the application is variation
+     *
+     * @param int $applicationId
+     * @return boolean
+     */
+    protected function isApplicationVariation($applicationId)
+    {
+        return $this->getApplicationType($applicationId) === ApplicationService::APPLICATION_TYPE_VARIATION;
+    }
+
+    /**
+     *
+     * @param int $applicationId
+     * @return int
+     */
+    protected function getApplicationType($applicationId)
+    {
+        return $this->getEntityService('Application')->getApplicationType($applicationId);
     }
 
     /**

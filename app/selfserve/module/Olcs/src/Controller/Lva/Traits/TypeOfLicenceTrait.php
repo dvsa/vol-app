@@ -34,6 +34,24 @@ trait TypeOfLicenceTrait
     }
 
     /**
+     * Format data for form
+     *
+     * @param array $data
+     * @return array
+     */
+    private function formatDataForForm($data)
+    {
+        return array(
+            'version' => $data['version'],
+            'type-of-licence' => array(
+                'operator-location' => $data['niFlag'],
+                'operator-type' => $data['goodsOrPsv'],
+                'licence-type' => $data['licenceType']
+            )
+        );
+    }
+
+    /**
      * Get type of licence form
      *
      * @return \Zend\Form\Form
