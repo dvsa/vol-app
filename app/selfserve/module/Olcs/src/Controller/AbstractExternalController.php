@@ -55,7 +55,7 @@ abstract class AbstractExternalController extends AbstractLvaController
      */
     protected function goToOverview($lvaId)
     {
-        return $this->redirect()->toRoute('lva-' . $this->lva, array('id' => $licenceId));
+        return $this->redirect()->toRoute('lva-' . $this->lva, array('id' => $lvaId));
     }
 
     /**
