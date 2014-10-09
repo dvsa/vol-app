@@ -265,25 +265,20 @@ class SubmissionController extends OlcsController\CrudAbstract
      */
     public function detailsAction()
     {
-        $this->submissionSectionRefData = $this->getServiceLocator()->get(
-            'Common\Service\Data\RefData'
-        )->fetchListOptions('submission_section');
-
         $submission = $this->loadCurrent();
 
-        $submissionTitles = $this->getServiceLocator()
-            ->get('Common\Service\Data\RefData')->fetchListData('submission_type_title');
+        $submissionService = $this->getServiceLocator()
+            ->get('Olcs\Service\Data\Submission');
 
         $submission['submissionTypeTitle'] =
-            $this->getSubmissionTypeTitle($submission['submissionType']['id'], $submissionTitles);
+            $submissionService->getSubmissionTypeTitle(
+                $submission['submissionType']['id']
+            );
 
-        $selectedSectionsArray = json_decode($submission['text'], true);
-
-        // add section description text from ref data
-        foreach ($selectedSectionsArray as $index => $selectedSectionData) {
-            $selectedSectionsArray[$index]['description'] =
-                $this->submissionSectionRefData[$selectedSectionData['sectionId']];
-        }
+        $selectedSectionsArray =
+            $submissionService->extractSelectedSubmissionSectionsData(
+                $submission
+            );
 
         $this->getViewHelperManager()
             ->get('placeholder')
@@ -296,7 +291,7 @@ class SubmissionController extends OlcsController\CrudAbstract
             ->set($submission);
 
         $view = $this->getView([]);
-        $view->setVariable('allSections', $this->submissionSectionRefData);
+        $view->setVariable('allSections', $submissionService->getAllSectionsRefData());
 
         $view->setTemplate($this->detailsView);
 
