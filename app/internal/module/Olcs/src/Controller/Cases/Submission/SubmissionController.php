@@ -11,7 +11,6 @@ use Olcs\Controller as OlcsController;
 use Zend\View\Model\ViewModel;
 use Olcs\Controller\Cases\AbstractController as AbstractCasesController;
 use Olcs\Controller\Traits as ControllerTraits;
-use Zend\Filter\Word\UnderscoreToCamelCase;
 
 /**
  * Cases Submission Controller
@@ -21,7 +20,6 @@ use Zend\Filter\Word\UnderscoreToCamelCase;
 class SubmissionController extends OlcsController\CrudAbstract
 {
     use ControllerTraits\CaseControllerTrait;
-    use ControllerTraits\SubmissionSectionTrait;
 
     /**
      * Identifier name
@@ -145,6 +143,9 @@ class SubmissionController extends OlcsController\CrudAbstract
     {
         // modify $data
         $this->submissionConfig = $this->getServiceLocator()->get('config')['submission_config'];
+        $submissionService = $this->getServiceLocator()->get('Olcs\Service\Data\Submission');
+        $params = $this->getParams(array('case'));
+        $caseId = $params['case'];
 
         if (is_array($data['submissionSections']['sections'])) {
             foreach ($data['submissionSections']['sections'] as $index => $sectionId) {
@@ -153,7 +154,8 @@ class SubmissionController extends OlcsController\CrudAbstract
 
                 $data['submissionSections']['sections'][$index] = [
                     'sectionId' => $sectionId,
-                    'data' => $this->createSubmissionSection(
+                    'data' => $submissionService->createSubmissionSection(
+                        $caseId,
                         $sectionId,
                         $sectionConfig
                     )
@@ -296,24 +298,5 @@ class SubmissionController extends OlcsController\CrudAbstract
         $view->setTemplate($this->detailsView);
 
         return $this->renderView($view);
-    }
-
-    /**
-     * Extracts the title from ref_data based on a given submission type.
-     *
-     * @param array $submissionTitles
-     * @param string $submissionType
-     * @return string
-     */
-    public function getSubmissionTypeTitle($submissionType, $submissionTitles = array())
-    {
-        if (is_array($submissionTitles)) {
-            foreach ($submissionTitles as $title) {
-                if ($title['id'] == str_replace('_o_', '_t_', $submissionType)) {
-                    return $title['description'];
-                }
-            }
-        }
-        return '';
     }
 }

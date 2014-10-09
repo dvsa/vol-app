@@ -158,7 +158,7 @@ return array(
             'Olcs\Service\Data\User' => 'Olcs\Service\Data\User',
             'Olcs\Service\Data\PiVenue' => 'Olcs\Service\Data\PiVenue',
             'Olcs\Service\Data\PresidingTc' => 'Olcs\Service\Data\PresidingTc',
-            'Olcs\Service\Data\Submission' => 'Olcs\Service\Data\SubmissionFactory'
+            'Olcs\Service\Data\Submission' => 'Olcs\Service\Data\Submission'
         )
     ),
     'application_journey' => array(
