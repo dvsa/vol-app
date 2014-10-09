@@ -89,6 +89,9 @@ return array(
             'CaseProcessingController' => 'Olcs\Controller\Cases\Processing\ProcessingController',
             'CaseDecisionsController' => 'Olcs\Controller\Cases\Processing\DecisionsController',
             'CaseRevokeController' => 'Olcs\Controller\Cases\Processing\RevokeController',
+
+
+            'LvaApplication' => 'Olcs\Controller\Application\OverviewController',
         )
     ),
     'view_manager' => array(
