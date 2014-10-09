@@ -893,6 +893,20 @@ return array_merge(
                 ]
             ]
         ],
+        'case_pi_hearing' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/case/:case/pi/hearing[/:action]',
+                'constraints' => [
+                    'case' => '[0-9]+',
+                    'action' => '[a-z]+',
+                ],
+                'defaults' => [
+                    'controller' => 'PublicInquiry\HearingController',
+                    'action' => 'index'
+                ]
+            ]
+        ],
         'case_pi_decision' => [
             'type' => 'segment',
             'options' => [
