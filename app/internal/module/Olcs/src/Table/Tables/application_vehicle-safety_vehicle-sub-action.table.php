@@ -20,7 +20,7 @@ return array(
         ),
         array(
             'title' => $translationPrefix . '.removed',
-            'name' => 'deletedDate',
+            'name' => 'removalDate',
             'formatter' => 'DateTime'
         ),
         array(
