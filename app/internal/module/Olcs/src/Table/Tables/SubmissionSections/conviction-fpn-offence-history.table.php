@@ -1,17 +1,8 @@
 <?php
 
 return array(
-    'variables' => array(
-        'submission_section' => 'display'
-    ),
     'settings' => array(
-        'paginate' => array(
-            'limit' => array(
-                'default' => 10,
-                'options' => array(10, 25, 50)
-            )
-        ),
-        'useQuery' => true
+        'submission_section' => 'display'
     ),
     'attributes' => array(
     ),
