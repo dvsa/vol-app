@@ -7,7 +7,6 @@
  */
 namespace Olcs\Controller\Application;
 
-use Zend\View\Model\ViewModel;
 use Olcs\Controller\AbstractExternalController;
 use Common\Controller\Traits\Lva\ApplicationControllerTrait;
 
@@ -85,15 +84,5 @@ abstract class AbstractApplicationController extends AbstractExternalController
         $licenceId = $this->getLicenceId($this->getApplicationId());
 
         return $this->getEntityService('Licence')->getTypeOfLicenceData($licenceId);
-    }
-
-    /**
-     * Render the section
-     *
-     * @param ViewModel $content
-     */
-    protected function render(ViewModel $content)
-    {
-        return $content;
     }
 }

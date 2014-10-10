@@ -7,6 +7,7 @@
  */
 namespace Olcs\Controller;
 
+use Zend\View\Model\ViewModel;
 use Common\Controller\AbstractLvaController;
 
 /**
@@ -73,5 +74,15 @@ abstract class AbstractExternalController extends AbstractLvaController
         if ($this->isButtonPressed('cancel')) {
             return $this->goToOverview($lvaId);
         }
+    }
+
+    /**
+     * Render the section
+     *
+     * @param ViewModel $content
+     */
+    protected function render(ViewModel $content)
+    {
+        return $content;
     }
 }
