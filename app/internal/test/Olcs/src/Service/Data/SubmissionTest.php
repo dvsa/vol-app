@@ -84,9 +84,4 @@ class LicenceTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($mockRestClient, $service->getRestClient());
         $this->assertSame($mockRefDataService, $service->getRefDataService());
     }
-
-    public function testExtractSelectedSubmissionSectionsData()
-    {
-
-    }
 }
