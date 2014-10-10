@@ -645,12 +645,14 @@ class VehicleControllerTest extends AbstractLicenceDetailsControllerTestCase
             'properties' => array(),
             'children' => array(
                 'vehicle' => array(
-                    'properties' => array('vrm')
+                    'properties' => array(
+                        'vrm'
+                    )
                 )
             )
         );
 
-        if ($service == 'LicenceVehicle' && $method == 'GET' && $bundle = $licenceVehicleBundle) {
+        if ($service == 'LicenceVehicle' && $method == 'GET' && $bundle == $licenceVehicleBundle) {
             return array(
                 'Count' => 1,
                 'Results' => array(
@@ -663,11 +665,36 @@ class VehicleControllerTest extends AbstractLicenceDetailsControllerTestCase
             );
         }
 
+
+        $licenceVehicleBundleWithId = array(
+            'properties' => array(
+                'id'
+            ),
+            'children' => array(
+                'vehicle' => array(
+                    'properties' => array(
+                        'vrm'
+                    )
+                )
+            )
+        );
+
+        if ($service == 'LicenceVehicle' && $method == 'GET' && $bundle == $licenceVehicleBundleWithId) {
+            return array(
+                'id' => 1,
+                'vehicle' => array(
+                    'vrm' => 'RANDOM'
+                )
+            );
+        }
+
         if ($service == 'LicenceVehicle' && $method == 'GET') {
             return array(
                 'Count' => 1,
                 'Results' => array(
-                    array('id' => 1)
+                    array(
+                        'id' => 1
+                    )
                 )
             );
         }
