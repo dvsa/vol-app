@@ -48,7 +48,7 @@ abstract class AbstractApplicationController extends AbstractExternalController
     protected function updateCompletionStatuses($applicationId = null)
     {
         if ($applicationId === null) {
-            $applicationId = $this->params('id');
+            $applicationId = $this->getApplicationId();
         }
         $this->getEntityService('ApplicationCompletion')->updateCompletionStatuses($applicationId);
     }
@@ -64,9 +64,9 @@ abstract class AbstractApplicationController extends AbstractExternalController
      */
     protected function checkAccess($applicationId)
     {
-        $organisation = $this->getCurrentOrganisation();
+        $organisationId = $this->getCurrentOrganisationId();
 
-        if ($this->getEntityService('Application')->doesBelongToOrganisation($applicationId, $organisation['id'])) {
+        if ($this->getEntityService('Application')->doesBelongToOrganisation($applicationId, $organisationId)) {
             return true;
         }
 

@@ -24,7 +24,7 @@ class BusinessTypeController extends AbstractApplicationController
     {
         $request = $this->getRequest();
 
-        $orgId = $this->getCurrentOrganisation()['id'];
+        $orgId = $this->getCurrentOrganisationId();
 
         if ($request->isPost()) {
             $data = (array)$request->getPost();
@@ -54,10 +54,10 @@ class BusinessTypeController extends AbstractApplicationController
         }
 
         return new Section(
-            [
+            array(
                 'title' => 'Business type',
                 'form' => $form
-            ]
+            )
         );
     }
 }

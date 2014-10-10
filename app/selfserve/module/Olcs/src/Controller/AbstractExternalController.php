@@ -36,8 +36,8 @@ abstract class AbstractExternalController extends AbstractLvaController
     /**
      * Get current organisation
      *
-     * @NOTE at the moment this, will just return the users first organisation, eventually the user will be able to
-     *  select which organisation they are managing
+     * @NOTE at the moment this will just return the users first organisation,
+     * eventually the user will be able to select which organisation they are managing
      *
      * @return array
      */
@@ -45,6 +45,17 @@ abstract class AbstractExternalController extends AbstractLvaController
     {
         $user = $this->getCurrentUser();
         return $this->getEntityService('Organisation')->getForUser($user['id']);
+    }
+
+    /**
+     * Get current organisation ID only
+     *
+     * @return int|null
+     */
+    protected function getCurrentOrganisationId()
+    {
+        $organisation = $this->getCurrentOrganisation();
+        return (isset($organisation['id'])) ? $organisation['id'] : null;
     }
 
     /**
