@@ -75,26 +75,6 @@ abstract class AbstractApplicationController extends AbstractExternalController
     }
 
     /**
-     * Redirect to the next section
-     *
-     * @param string $currentSection
-     */
-    protected function goToNextSection($currentSection)
-    {
-        $sections = $this->getAccessibleSections();
-
-        $index = array_search($currentSection, $sections);
-
-        // If there is no next section
-        if (!isset($sections[$index + 1])) {
-            return $this->goToOverview($this->getApplicationId());
-        } else {
-            return $this->redirect()
-                ->toRoute('lva-' . $this->lva . '/' . $sections[$index + 1], array('id' => $this->getApplicationId()));
-        }
-    }
-
-    /**
      * Get type of licence data
      *
      * @return array
@@ -107,19 +87,12 @@ abstract class AbstractApplicationController extends AbstractExternalController
     }
 
     /**
-     * Complete a section and potentially redirect to the next
-     * one depending on the user's choice
+     * Render the section
      *
-     * @return \Zend\Http\Response
+     * @param ViewModel $content
      */
-    protected function completeSection($section)
+    protected function render(ViewModel $content)
     {
-        $this->updateCompletionStatuses();
-
-        if ($this->isButtonPressed('saveAndContinue')) {
-            return $this->goToNextSection($section);
-        }
-
-        return $this->goToOverview();
+        return $content;
     }
 }

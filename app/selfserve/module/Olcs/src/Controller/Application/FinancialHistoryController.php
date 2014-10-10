@@ -7,8 +7,7 @@
  */
 namespace Olcs\Controller\Application;
 
-use Olcs\View\Model\Section;
-use Zend\Form\Form;
+use Common\View\Model\Section;
 
 /**
  * FinancialHistory Controller

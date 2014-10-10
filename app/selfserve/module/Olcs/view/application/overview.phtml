@@ -15,6 +15,7 @@
         <h1><?php echo $this->translate('application.overview.title'); ?></h1>
       </div>
     </div>
+    <?php echo $this->flashMessengerAll(); ?>
     <ul style="list-style: none; clear: both;">
         <?php
         foreach ($sections as $section) {

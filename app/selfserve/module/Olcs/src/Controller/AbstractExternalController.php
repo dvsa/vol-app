@@ -59,20 +59,6 @@ abstract class AbstractExternalController extends AbstractLvaController
     }
 
     /**
-     * Go to overview page
-     *
-     * @param int $lvaId
-     * @return \Zend\Http\Response
-     */
-    protected function goToOverview($lvaId = null)
-    {
-        if ($lvaId === null) {
-            $lvaId = $this->params('id');
-        }
-        return $this->redirect()->toRoute('lva-' . $this->lva, array('id' => $lvaId));
-    }
-
-    /**
      * Check for redirect
      *
      * @param int $lvaId

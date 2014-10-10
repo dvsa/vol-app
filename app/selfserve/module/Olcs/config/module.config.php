@@ -1,7 +1,7 @@
 <?php
 
 $sectionConfig = new \Common\Service\Data\SectionConfig();
-$configRotues = $sectionConfig->getAllRoutes();
+$configRoutes = $sectionConfig->getAllRoutes();
 
 $routes = array(
     'ebsr' => array(
@@ -30,7 +30,7 @@ $routes = array(
             'route' => '/application/create[/]',
             'defaults' => array(
                 'skipPreDispatch' => true,
-                'controller' => 'Application\TypeOfLicence',
+                'controller' => 'LvaApplication/TypeOfLicence',
                 'action' => 'createApplication'
             )
         )
