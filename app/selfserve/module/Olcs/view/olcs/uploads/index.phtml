@@ -1,0 +1,11 @@
+<?php
+echo $this->render(
+    '/partials/page-header.phtml',
+    array(
+        'pageTitle' => $this->translate('Ebsr Packs'),
+        'pageSubTitle'=> $this->translate('These are all the EBSR pack files you have uploaded.'),
+    )
+);
+?>
+
+<?php echo $this->table; ?>

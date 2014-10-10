@@ -1,13 +1,50 @@
 <?php
 
 $sectionConfig = new \Common\Service\Data\SectionConfig();
+$configRotues = $sectionConfig->getAllRoutes();
+
+$routes = array(
+    'ebsr' => array(
+        'type' => 'segment',
+        'options' =>  array(
+            'route' => '/ebsr[/:action]',
+            'defaults' => array(
+                'controller' => 'Olcs\Ebsr\Uploads',
+                'action' => 'index'
+            )
+        )
+    ),
+    'dashboard' => array(
+        'type' => 'segment',
+        'options' => array(
+            'route' => '/dashboard[/]',
+            'defaults' => array(
+                'controller' => 'Dashboard',
+                'action' => 'index'
+            )
+        )
+    ),
+    'create_application' => array(
+        'type' => 'segment',
+        'options' => array(
+            'route' => '/application/create[/]',
+            'defaults' => array(
+                'skipPreDispatch' => true,
+                'controller' => 'Application\TypeOfLicence',
+                'action' => 'createApplication'
+            )
+        )
+    )
+);
 
 return array(
     'router' => array(
-        'routes' => $sectionConfig->getAllRoutes(),
+        'routes' => array_merge($routes, $configRoutes),
     ),
     'controllers' => array(
         'invokables' => array(
+
+            'Olcs\Ebsr\Uploads' => 'Olcs\Controller\Ebsr\UploadsController',
             'Dashboard' => 'Olcs\Controller\DashboardController',
 
             'LvaApplication' => 'Olcs\Controller\Application\OverviewController',
@@ -39,7 +76,9 @@ return array(
         )
     ),
     'service_manager' => array(
-        'factories' => array()
+        'factories' => array(
+            'Olcs\Service\Data\EbsrPack' => 'Olcs\Service\Data\EbsrPack'
+        )
     ),
     'controller_plugins' => array(
         'invokables' => array()
@@ -76,6 +115,11 @@ return array(
             'navigation' => 'self-serve/journey/application/navigation',
             'main' => 'self-serve/journey/application/main',
             'layout' => 'self-serve/journey/application/layout'
+        )
+    ),
+    'service_api_mapping' => array(
+        'endpoints' => array(
+            'ebsr' => 'http://olcs-ebsr/'
         )
     )
 );
