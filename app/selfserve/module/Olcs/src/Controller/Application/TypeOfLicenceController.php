@@ -7,7 +7,7 @@
  */
 namespace Olcs\Controller\Application;
 
-use Olcs\Controller\Lva\Traits\TypeOfLicenceTrait;
+use Common\Controller\Traits\Lva\TypeOfLicenceTrait;
 
 /**
  * Type Of Licence Controller
@@ -45,13 +45,7 @@ class TypeOfLicenceController extends AbstractApplicationController
 
             $this->getEntityService('Licence')->save($data);
 
-            $this->updateCompletionStatuses($applicationId);
-
-            if ($this->isButtonPressed('saveAndContinue')) {
-                return $this->goToNextSection('type_of_licence');
-            }
-
-            return $this->goToOverview($applicationId);
+            return $this->completeSection('type_of_licence');
         }
 
         return $this->getSectionView($form);
@@ -79,8 +73,8 @@ class TypeOfLicenceController extends AbstractApplicationController
 
             if ($form->isValid()) {
 
-                $organisation = $this->getCurrentOrganisation();
-                $ids = $this->getEntityService('Application')->createNew($organisation['id']);
+                $organisationId = $this->getCurrentOrganisationId();
+                $ids = $this->getEntityService('Application')->createNew($organisationId);
 
                 $data = $this->formatDataForSave($data);
 

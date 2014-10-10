@@ -22,10 +22,10 @@ class DashboardController extends AbstractExternalController
      */
     public function indexAction()
     {
-        $organisation = $this->getCurrentOrganisation();
+        $organisationId = $this->getCurrentOrganisationId();
         $applicationService = $this->getEntityService('Application');
 
-        $applications = $applicationService->getForOrganisation($organisation['id']);
+        $applications = $applicationService->getForOrganisation($organisationId);
 
         $view = new Dashboard();
         $view->setServiceLocator($this->getServiceLocator());
