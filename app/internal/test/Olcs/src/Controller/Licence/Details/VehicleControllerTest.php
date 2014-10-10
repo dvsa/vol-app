@@ -671,5 +671,27 @@ class VehicleControllerTest extends AbstractLicenceDetailsControllerTestCase
                 )
             );
         }
+
+        if ($service == 'Vehicle' && $method == 'GET') {
+            return array(
+                'id' => 1,
+                'version' => 1,
+                'vrm' => 'AB12 ABC',
+                'isNovelty' => 'Y'
+            );
+        }
+
+        if ($service == 'VehicleHistoryView' && $method == 'GET' ) {
+            return array(
+                array(
+                    'id' => 1,
+                    'vrm' => 'VRM1',
+                    'licenceNo' => '123456',
+                    'specifiedDate' => '2014-01-01 00:00:00',
+                    'removalDate' => '2014-01-02 00:00:00',
+                    'discNo' => 1234567
+                )
+            );
+        }
     }
 }

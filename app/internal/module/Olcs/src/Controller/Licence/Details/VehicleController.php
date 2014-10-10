@@ -33,11 +33,25 @@ class VehicleController extends AbstractLicenceDetailsController
     protected $tableName = 'application_vehicle-safety_vehicle';
 
     /**
+     * Holds the action table name
+     *
+     * @var string
+     */
+    protected $actionTableName = 'application_vehicle-safety_vehicle-history';
+
+    /**
      * Setup the section
      *
      * @var string
      */
     protected $section = 'vehicle';
+
+    /**
+     * This section uses a flipped section, where the tables comes after.
+     *
+     * @var string
+     */
+    protected $viewTemplateName = 'partials/section-flipped';
 
     /**
      * Save the vehicle
