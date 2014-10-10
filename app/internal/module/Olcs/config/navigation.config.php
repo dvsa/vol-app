@@ -1,24 +1,16 @@
 <?php
 
-$applicationJourney = include(
-    __DIR__ . '/../../../vendor/olcs/OlcsCommon/Common/config/journeys/application.journey.php'
-);
+$sectionConfig = new \Common\Service\Data\SectionConfig();
+$sections = $sectionConfig->getAllReferences();
+$applicationDetailsPages = array();
 
-$navItems = array();
-
-$filter = new \Zend\Filter\Word\CamelCaseToDash();
-
-foreach ($applicationJourney['Application']['sections'] as $sectionName => $section) {
-
-    foreach ($section['subSections'] as $subSectionName => $subSection) {
-        $label = strtolower('application.' . $filter->filter($sectionName) . '.' . $filter->filter($subSectionName));
-        $navItems[] = array(
-            'id' => 'application_details_' . $sectionName . '_' . $subSectionName,
-            'label' => $label,
-            'route' => 'Application/' . $sectionName . '/' . $subSectionName,
-            'use_route_match' => true
-        );
-    }
+foreach ($sections as $section) {
+    $applicationDetailsPages[] = array(
+        'id' => 'applicaiton_' . $section,
+        'label' => 'navigation_' . $section,
+        'route' => 'lva-' . $section,
+        'use_route_match' => true
+    );
 }
 
 return array(
@@ -534,15 +526,15 @@ return array(
         array(
             'id' => 'application',
             'label' => 'Application',
-            'route' => 'Application',
+            'route' => 'lva-application',
             'use_route_match' => true,
             'pages' => array(
                 array(
                     'id' => 'application_details',
                     'label' => 'Application details',
-                    'route' => 'Application',
+                    'route' => 'lva-application',
                     'use_route_match' => true,
-                    'pages' => $navItems
+                    'pages' => $applicationDetailsPages
                 ),
                 array(
                     'id' => 'application_case',
@@ -573,7 +565,7 @@ return array(
                     'label' => 'Fees',
                     'route' => 'Application/fee',
                     'use_route_match' => true
-                ),
+                )
             )
         )
     )

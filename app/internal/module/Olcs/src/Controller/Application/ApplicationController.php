@@ -29,7 +29,7 @@ class ApplicationController extends AbstractController
 
         $applicationJourneyHelper = $this->getServiceLocator()->get('ApplicationJourneyHelper');
 
-        $applicationId = $this->params()->fromRoute('applicationId');
+        $applicationId = $this->params('id');
 
         return $applicationJourneyHelper->render($view, $applicationId);
     }
@@ -46,7 +46,7 @@ class ApplicationController extends AbstractController
 
         $applicationJourneyHelper = $this->getServiceLocator()->get('ApplicationJourneyHelper');
 
-        $applicationId = $this->params()->fromRoute('applicationId');
+        $applicationId = $this->params('id');
 
         return $applicationJourneyHelper->render($view, $applicationId);
     }
@@ -63,7 +63,7 @@ class ApplicationController extends AbstractController
 
         $applicationJourneyHelper = $this->getServiceLocator()->get('ApplicationJourneyHelper');
 
-        $applicationId = $this->params()->fromRoute('applicationId');
+        $applicationId = $this->params('id');
 
         return $applicationJourneyHelper->render($view, $applicationId);
     }
@@ -80,7 +80,7 @@ class ApplicationController extends AbstractController
 
         $applicationJourneyHelper = $this->getServiceLocator()->get('ApplicationJourneyHelper');
 
-        $applicationId = $this->params()->fromRoute('applicationId');
+        $applicationId = $this->params('id');
 
         return $applicationJourneyHelper->render($view, $applicationId);
     }
@@ -97,7 +97,7 @@ class ApplicationController extends AbstractController
 
         $applicationJourneyHelper = $this->getServiceLocator()->get('ApplicationJourneyHelper');
 
-        $applicationId = $this->params()->fromRoute('applicationId');
+        $applicationId = $this->params('id');
 
         return $applicationJourneyHelper->render($view, $applicationId);
     }

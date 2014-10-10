@@ -70,12 +70,12 @@ $routes = [
         'may_terminate' => true,
     ],
 
-    'application' => [
+    'Application' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/application/:application',
+            'route' => '/application/:id/',
             'constraints' => [
-                'licence' => '[0-9]+'
+                'id' => '[0-9]+'
             ],
             'defaults' => [
                 'controller' => 'ApplicationController',
