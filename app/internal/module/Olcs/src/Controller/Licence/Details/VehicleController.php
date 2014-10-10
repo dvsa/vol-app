@@ -33,6 +33,13 @@ class VehicleController extends AbstractLicenceDetailsController
     protected $tableName = 'application_vehicle-safety_vehicle';
 
     /**
+     * Holds the action table name
+     *
+     * @var string
+     */
+    protected $actionTableName = 'application_vehicle-safety_vehicle-history';
+
+    /**
      * Setup the section
      *
      * @var string

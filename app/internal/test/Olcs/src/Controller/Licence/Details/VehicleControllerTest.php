@@ -681,7 +681,7 @@ class VehicleControllerTest extends AbstractLicenceDetailsControllerTestCase
             );
         }
 
-        if ($service == 'VehicleHistoryView' && $method == 'GET' && $bundle == $this->actionTableDataBundle) {
+        if ($service == 'VehicleHistoryView' && $method == 'GET' ) {
             return array(
                 array(
                     'id' => 1,
