@@ -1,41 +1,39 @@
 <?php
-    /**
-     * @NOTE: might want to DRY up with Application / Application Variation overview
-     * templates if maintaining three is a pain. Lots of common ground, but they're
-     * small templates so no biggie to have them separate for now
-     */
+/**
+ * @NOTE: might want to DRY up with Licence / Application Variation overview
+ * templates if maintaining three is a pain. Lots of common ground, but they're
+ * small templates so no biggie to have them separate for now
+ */
 ?>
-<div class="two-thirds">
-    <a href="<?php echo $this->url('dashboard'); ?>"><?php echo $this->translate('dashboard.link'); ?></a>
-    <div class="page-header">
-      <div class="page-header__wrapper">
-        <h3 class="page-header__subtitle">
-            <?php echo $this->translate('licence.overview.licence-no'); ?> <?php echo $licenceId; ?>
-        </h3>
-        <h1><?php echo $this->translate('licence.overview.title'); ?></h1>
-      </div>
-    </div>
-    <ul style="list-style: none; clear: both;">
-        <?php
-        foreach ($sections as $section) {
-            echo $this->render($section);
-        }
-        ?>
-    </ul>
+<div class="page-header">
+  <div class="page-header__wrapper">
+    <h3 class="page-header__subtitle">
+        <?php echo $this->translate('licence.overview.licence-no'); ?> <?php echo $licenceId; ?>
+    </h3>
+    <h1><?php echo $this->translate('licence.overview.title'); ?></h1>
+  </div><!-- end .page-header__wrapper -->
+  <ul class="page-header__actions">
+    <li><a href="" class="page-header__action"><?php echo $this->translate('licence.print'); ?></a></li>
+    <li><a href="" class="page-header__action"><?php echo $this->translate('licence.surrender'); ?></a></li>
+  </ul>
 </div>
-<div class="one-third">
-  <a href="#"><?php echo $this->translate('licence.print'); ?></a><br />
-  <a href="#"><?php echo $this->translate('licence.delete'); ?></a>
-  <p>
-    <?php echo $this->translate('started'); ?><br />
-    <strong><?php echo $grantedDate; ?></strong>
-  </p>
-  <p>
-    <?php echo $this->translate('renewal'); ?><br />
-    <strong><?php echo $expiryDate; ?></strong>
-  </p>
-  <p>
-    <?php echo $this->translate('status'); ?><br />
-    <strong><?php echo $this->translate($status); ?></strong>
-  </p>
+<div class="two-thirds">
+    <?php echo $this->flashMessengerAll(); ?>
+  <ul class="overview-navigation">
+      <?php
+      foreach ($sections as $section) {
+          echo $this->render($section);
+      }
+      ?>
+  </ul>
+</div>
+<div class="one-third sidebar">
+  <dl class="meta">
+    <dt><?php echo $this->translate('started'); ?></dt>
+    <dd><?php echo $grantedDate; ?></dd>
+    <dt><?php echo $this->translate('renewal'); ?></dt>
+    <dd><?php echo $expiryDate; ?></dd>
+    <dt><?php echo $this->translate('status'); ?></dt>
+    <dd><?php echo $this->translate($status); ?></dd>
+  </dl>
 </div>

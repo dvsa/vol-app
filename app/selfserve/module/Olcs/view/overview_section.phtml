@@ -1,7 +1,11 @@
-<li style="padding: 10px; border-bottom: 1px solid #cccccc;">
-    <span style="display: inline-block; width: 200px;"><?php echo $this->translate($name); ?></span>
+<li class="overview-item ">
+  <div class="overview-item__header">
+    <a href="<?php echo $this->url($route, array('id' => $identifier)); ?>" class="overview-item__control">
+        <h4><?php echo $this->translate($name); ?></h4>
+    </a>
     <?php if (isset($status)): ?>
-        <span><?php echo $this->translate($status); ?></span>
+        <span class="status <?php echo $statusColour; ?>"><?php echo $this->translate($status); ?></span>
     <?php endif; ?>
-    <a href="<?php echo $this->url($route, array('id' => $identifier)); ?>" style="width: 200px; text-align: right" class="right-aligned"><?php echo $this->translate($link); ?></a>
+    <a href="<?php echo $this->url($route, array('id' => $identifier)); ?>" class="overview-item__edit"><?php echo $this->translate($link); ?></a>
+  </div>
 </li>

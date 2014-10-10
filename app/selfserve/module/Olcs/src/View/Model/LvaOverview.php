@@ -8,7 +8,6 @@
 namespace Olcs\View\Model;
 
 use Common\View\AbstractViewModel;
-use Olcs\View\Model\OverviewSection;
 
 /**
  * LVA Overview View Model

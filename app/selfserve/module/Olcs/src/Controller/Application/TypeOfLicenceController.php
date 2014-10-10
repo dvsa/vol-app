@@ -7,6 +7,7 @@
  */
 namespace Olcs\Controller\Application;
 
+use Zend\View\Model\ViewModel;
 use Common\Controller\Traits\Lva;
 
 /**

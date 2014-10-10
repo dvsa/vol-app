@@ -24,23 +24,28 @@ class ApplicationOverviewSection extends LvaOverviewSection
         $index = lcfirst($filter->filter(str_replace('_', '-', $ref)));
 
         $status = $data['applicationCompletions'][0][$index . 'Status'];
+        $statusColour = '';
 
         switch ($status) {
             case 1:
                 $mode = 'edit';
                 $statusText = 'INCOMPLETE';
+                $statusColour = 'orange';
                 break;
             case 2:
                 $mode = 'edit';
                 $statusText = 'COMPLETE';
+                $statusColour = 'green';
                 break;
             default:
                 $mode = 'add';
                 $statusText = 'NOT STARTED';
+                $statusColour = 'grey';
                 break;
         }
 
         $this->setVariable('status', $statusText);
+        $this->setVariable('statusColour', $statusColour);
 
         parent::__construct($ref, $data, $mode);
     }
