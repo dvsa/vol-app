@@ -90,8 +90,14 @@ return array(
             'CaseDecisionsController' => 'Olcs\Controller\Cases\Processing\DecisionsController',
             'CaseRevokeController' => 'Olcs\Controller\Cases\Processing\RevokeController',
 
-
             'LvaApplication' => 'Olcs\Controller\Application\OverviewController',
+            'LvaApplication/TypeOfLicence' => 'Olcs\Controller\Application\TypeOfLicenceController',
+
+            'LvaLicence' => 'Olcs\Controller\Licence\OverviewController',
+            'LvaLicence/TypeOfLicence' => 'Olcs\Controller\Licence\TypeOfLicenceController',
+
+            'LvaVariation' => 'Olcs\Controller\Variation\OverviewController',
+            'LvaVariation/TypeOfLicence' => 'Olcs\Controller\Variation\TypeOfLicenceController',
         )
     ),
     'view_manager' => array(

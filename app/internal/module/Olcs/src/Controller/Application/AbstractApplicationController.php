@@ -25,13 +25,24 @@ class AbstractApplicationController extends AbstractInternalController
     use ApplicationControllerTrait;
 
     /**
+     * Holds the lva type
+     *
+     * @var string
+     */
+    protected $lva = 'application';
+
+    /**
      * Render the section
      *
      * @param ViewModel $content
      */
     protected function render(ViewModel $content)
     {
-        $sectionLayout = new SectionLayout(array('sections' => $this->getSectionsForView()));
+        $routeName = $this->getEvent()->getRouteMatch()->getMatchedRouteName();
+
+        $sectionLayout = new SectionLayout(
+            array('sections' => $this->getSectionsForView(), 'currentRoute' => $routeName)
+        );
         $sectionLayout->addChild($content, 'content');
 
         $applicationLayout = new ApplicationLayout();
@@ -51,12 +62,11 @@ class AbstractApplicationController extends AbstractInternalController
      */
     protected function getSectionsForView()
     {
-        $routeName = $this->getEvent()->getRouteMatch()->getMatchedRouteName();
         $applicationStatuses = $this->getCompletionStatuses($this->getApplicationId());
         $filter = $this->getHelperService('StringHelper');
 
         $sections = array(
-            'overview' => array('class' => 'no-background', 'current' => ($routeName === 'lva-application'))
+            'overview' => array('class' => 'no-background', 'route' => 'lva-' . $this->lva)
         );
 
         foreach ($this->getAccessibleSections() as $section) {
@@ -73,7 +83,7 @@ class AbstractApplicationController extends AbstractInternalController
                     break;
             }
 
-            $sections[$section] = array('class' => $class, 'current' => ('lva-application/' . $section === $routeName));
+            $sections[$section] = array('class' => $class, 'route' => 'lva-' . $this->lva . '/' . $section);
         }
 
         return $sections;

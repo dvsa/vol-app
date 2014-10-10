@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Application Layout
+ * Create Application Layout
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
@@ -10,11 +10,11 @@ namespace Olcs\View\Model\Application;
 use Common\View\AbstractViewModel;
 
 /**
- * Application Layout
+ * Create Application Layout
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ApplicationLayout extends AbstractViewModel
+class CreateApplicationLayout extends AbstractViewModel
 {
-    protected $template = 'application/layout';
+    protected $template = 'application/create-layout';
 }

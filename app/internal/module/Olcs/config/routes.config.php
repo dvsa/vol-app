@@ -949,6 +949,17 @@ $routes = [
                 'action'     => 'downloadTmp'
             ]
         ]
+    ],
+    'create_application' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/application/create[/]',
+            'defaults' => [
+                'skipPreDispatch' => true,
+                'controller' => 'LvaApplication/TypeOfLicence',
+                'action' => 'createApplication'
+            ]
+        ]
     ]
 ];
 

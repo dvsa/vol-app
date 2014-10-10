@@ -13,16 +13,8 @@
       </ul>
     </div><!-- user-header -->
 
-    <?php if (!empty($applicationId)) : ?>
-
-    <h1><?php
-        if (!empty($licNo)) {
-            ?><a href="<?php echo $this->url('lva-licence', array('id' => $licenceId)); ?>"><?php echo $licNo; ?></a> / <?php
-      }
-      echo $applicationId;
-      ?></h1>
+    <h1><?php echo $licNo; ?></h1>
     <h3 class="page-header__subtitle"><?php echo $companyName; ?>  <span class="page-header__status suspended"><?php echo $this->translate($status); ?></span></h3>
-    <?php endif; ?>
 
   </div><!-- end .page-header__wrapper-->
 </div>

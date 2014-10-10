@@ -3,12 +3,28 @@
 $sectionConfig = new \Common\Service\Data\SectionConfig();
 $sections = $sectionConfig->getAllReferences();
 $applicationDetailsPages = array();
+$licenceDetailsPages = array();
+$variationDetailsPages = array();
 
 foreach ($sections as $section) {
     $applicationDetailsPages[] = array(
-        'id' => 'applicaiton_' . $section,
-        'label' => 'navigation_' . $section,
-        'route' => 'lva-' . $section,
+        'id' => 'application_' . $section,
+        'label' => 'section.name.' . $section,
+        'route' => 'lva-application/' . $section,
+        'use_route_match' => true
+    );
+
+    $licenceDetailsPages[] = array(
+        'id' => 'licence_' . $section,
+        'label' => 'section.name.' . $section,
+        'route' => 'lva-licence/' . $section,
+        'use_route_match' => true
+    );
+
+    $variationDetailsPages[] = array(
+        'id' => 'variation_' . $section,
+        'label' => 'section.name.' . $section,
+        'route' => 'lva-variation/' . $section,
         'use_route_match' => true
     );
 }
@@ -263,70 +279,9 @@ return array(
                         array(
                             'id' => 'licence_details_overview',
                             'label' => 'internal-licence-details-breadcrumb',
-                            'route' => 'licence/details/overview',
+                            'route' => 'lva-licence',
                             'use_route_match' => true,
-                            'pages' => array(
-                                array(
-                                    'id' => 'licence_details_type_of_licence',
-                                    'label' => 'internal-licence-details-type_of_licence',
-                                    'route' => 'licence/details/type_of_licence',
-                                    'use_route_match' => true
-                                ),
-                                array(
-                                    'id' => 'licence_details_business_details',
-                                    'label' => 'internal-licence-details-business_details',
-                                    'route' => 'licence/details/business_details',
-                                    'use_route_match' => true
-                                ),
-                                array(
-                                    'id' => 'licence_details_address',
-                                    'label' => 'internal-licence-details-address',
-                                    'route' => 'licence/details/address',
-                                    'use_route_match' => true
-                                ),
-                                array(
-                                    'id' => 'licence_details_people',
-                                    'label' => 'internal-licence-details-people',
-                                    'route' => 'licence/details/people',
-                                    'use_route_match' => true
-                                ),
-                                array(
-                                    'id' => 'licence_details_operating_centre',
-                                    'label' => 'internal-licence-details-operating_centre',
-                                    'route' => 'licence/details/operating_centre',
-                                    'use_route_match' => true
-                                ),
-                                array(
-                                    'id' => 'licence_details_transport_manager',
-                                    'label' => 'internal-licence-details-transport_manager',
-                                    'route' => 'licence/details/transport_manager',
-                                    'use_route_match' => true
-                                ),
-                                array(
-                                    'id' => 'licence_details_vehicle',
-                                    'label' => 'internal-licence-details-vehicle',
-                                    'route' => 'licence/details/vehicle',
-                                    'use_route_match' => true
-                                ),
-                                array(
-                                    'id' => 'licence_details_safety',
-                                    'label' => 'internal-licence-details-safety',
-                                    'route' => 'licence/details/safety',
-                                    'use_route_match' => true
-                                ),
-                                array(
-                                    'id' => 'licence_details_condition_undertaking',
-                                    'label' => 'internal-licence-details-condition_undertaking',
-                                    'route' => 'licence/details/condition_undertaking',
-                                    'use_route_match' => true
-                                ),
-                                array(
-                                    'id' => 'licence_details_taxi_phv',
-                                    'label' => 'internal-licence-details-taxi_phv',
-                                    'route' => 'licence/details/taxi_phv',
-                                    'use_route_match' => true
-                                )
-                            )
+                            'pages' => $licenceDetailsPages
                         ),
                         array(
                             'id' => 'licence_bus',
@@ -516,6 +471,12 @@ return array(
             )
         ),
         array(
+            'id' => 'create_application',
+            'label' => 'Create application',
+            'route' => 'create_application',
+            'use_route_match' => true
+        ),
+        array(
             'id' => 'application',
             'label' => 'Application',
             'route' => 'lva-application',
@@ -557,6 +518,21 @@ return array(
                     'label' => 'Fees',
                     'route' => 'Application/fee',
                     'use_route_match' => true
+                )
+            )
+        ),
+        array(
+            'id' => 'variation',
+            'label' => 'Variation application',
+            'route' => 'lva-variation',
+            'use_route_match' => true,
+            'pages' => array(
+                array(
+                    'id' => 'variation_details',
+                    'label' => 'Variation details',
+                    'route' => 'lva-variation',
+                    'use_route_match' => true,
+                    'pages' => $variationDetailsPages
                 )
             )
         )

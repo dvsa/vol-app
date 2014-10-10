@@ -35,4 +35,26 @@ abstract class AbstractInternalController extends AbstractLvaController
             return $this->redirect()->toRoute(null, array(), array(), true);
         }
     }
+
+    /**
+     * Get the current organisation id
+     *
+     * @todo This method needs implementing properly once we know the users journey to get here
+     *
+     * @return int
+     */
+    protected function getCurrentOrganisationId()
+    {
+        return 1;
+    }
+
+    /**
+     * Wrapper method so we can extend this behaviour
+     *
+     * @return \Zend\Http\Response
+     */
+    protected function goToOverviewAfterSave($lvaId = null)
+    {
+        return $this->redirect()->toRoute(null, array(), array(), true);
+    }
 }
