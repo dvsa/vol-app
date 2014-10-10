@@ -19,7 +19,12 @@ class UploadsController extends AbstractActionController
         /** @var \Olcs\Service\Data\EbsrPack $dataService */
         $dataService = $this->getServiceLocator()->get('Olcs\Service\Data\EbsrPack');
 
-        $table = $tableBuilder->buildTable('ebsr-packs', $dataService->fetchPackList(), ['url' => $this->plugin('url')], false);
+        $table = $tableBuilder->buildTable(
+            'ebsr-packs',
+            $dataService->fetchPackList(),
+            ['url' => $this->plugin('url')],
+            false
+        );
 
         return $this->getView(['table' => $table]);
     }
