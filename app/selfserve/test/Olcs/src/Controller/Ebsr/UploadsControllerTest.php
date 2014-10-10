@@ -5,6 +5,10 @@ namespace OlcsTest\Controller\Ebsr;
 use Olcs\Controller\Ebsr\UploadsController;
 use Mockery as m;
 
+/**
+ * Class UploadsControllerTest
+ * @package OlcsTest\Controller\Ebsr
+ */
 class UploadsControllerTest extends \PHPUnit_Framework_TestCase
 {
     public function tearDown()
@@ -43,4 +47,3 @@ class UploadsControllerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('table', $result->table);
     }
 }
- 

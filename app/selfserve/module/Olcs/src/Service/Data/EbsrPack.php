@@ -4,8 +4,15 @@ namespace Olcs\Service\Data;
 
 use Common\Service\Data\AbstractData;
 
+/**
+ * Class EbsrPack
+ * @package Olcs\Service\Data
+ */
 class EbsrPack extends AbstractData
 {
+    /**
+     * @var string
+     */
     protected $serviceName = 'ebsr\pack';
 
     /**
