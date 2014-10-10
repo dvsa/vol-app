@@ -78,6 +78,26 @@ class Submission extends AbstractData
     }
 
     /**
+     * Fetch submission data
+     *
+     * @param integer|null $id
+     * @param array|null $bundle
+     * @return array
+     */
+    public function fetchSubmissionData($id = null, $bundle = null)
+    {
+        $id = is_null($id) ? $this->getId() : $id;
+
+        if (is_null($this->getData($id))) {
+            $bundle = is_null($bundle) ? $this->getBundle() : $bundle;
+            $data =  $this->getRestClient()->get(sprintf('/%d', $id), ['bundle' => json_encode($bundle)]);
+            $this->setData($id, $data);
+        }
+
+        return $this->getData($id);
+    }
+
+    /**
      * @param integer|null $id
      * @param array|null $bundle
      * @return array
@@ -175,15 +195,16 @@ class Submission extends AbstractData
             return $this->allSectionData[$sectionId];
         }
 
+        $rawData = [];
+
         if (isset($sectionConfig['bundle'])) {
             if (is_string($sectionConfig['bundle'])) {
 
-                return $this->loadCaseSectionData(
+                $rawData = $this->loadCaseSectionData(
                     $caseId,
                     $sectionConfig['bundle'],
                     $this->getSubmissionConfig()['sections'][$sectionConfig['bundle']]
                 );
-
             } elseif (isset($sectionConfig['service']) && is_array($sectionConfig['bundle'])) {
 
                 $rawData = $this->getApiResolver()->getClient($sectionConfig['service'])->get('',
@@ -194,7 +215,7 @@ class Submission extends AbstractData
             }
         }
 
-        return [];
+        return $rawData;
     }
 
     /**
@@ -295,6 +316,7 @@ class Submission extends AbstractData
                 $conviction['isDealtWith'] : 'N';
             $dataToReturnArray[] = $thisConviction;
         }
+        var_export($dataToReturnArray);exit;
 
         return $dataToReturnArray;
     }
@@ -360,6 +382,26 @@ class Submission extends AbstractData
             }
         }
         return $vehiclesInPossession;
+    }
+
+    /**
+     * @return array
+     */
+    public function getBundle()
+    {
+        $bundle =  array(
+            'properties' => 'ALL',
+            'children' => array(
+                'submissionType' => array(
+                    'properties' => 'ALL',
+                ),
+                'case' => array(
+                    'properties' => 'ALL',
+                )
+            )
+        );
+
+        return $bundle;
     }
 
     /**

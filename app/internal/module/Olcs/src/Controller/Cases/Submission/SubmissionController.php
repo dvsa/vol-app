@@ -267,10 +267,12 @@ class SubmissionController extends OlcsController\CrudAbstract
      */
     public function detailsAction()
     {
-        $submission = $this->loadCurrent();
+        $submissionId = $this->getQueryOrRouteParam('submission');
 
         $submissionService = $this->getServiceLocator()
             ->get('Olcs\Service\Data\Submission');
+
+        $submission = $submissionService->fetchSubmissionData($submissionId);
 
         $submission['submissionTypeTitle'] =
             $submissionService->getSubmissionTypeTitle(
