@@ -210,7 +210,6 @@ class Submission extends AbstractData
                 $rawData = $this->getApiResolver()->getClient($sectionConfig['service'])->get('',
                     array('id' => $caseId,
                     'bundle' => json_encode($sectionConfig['bundle'])));
-
                 return $rawData;
             }
         }
@@ -267,7 +266,6 @@ class Submission extends AbstractData
             'vehiclesInPossession' => $vehiclesInPossession,
             'trailersInPossession' => $data['licence']['totAuthTrailers']
         );
-
         return $filteredData;
     }
 
@@ -316,7 +314,6 @@ class Submission extends AbstractData
                 $conviction['isDealtWith'] : 'N';
             $dataToReturnArray[] = $thisConviction;
         }
-        var_export($dataToReturnArray);exit;
 
         return $dataToReturnArray;
     }
