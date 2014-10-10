@@ -370,15 +370,7 @@ return array(
                                     'id' => 'licence_bus_short',
                                     'label' => 'internal-licence-bus-short',
                                     'route' => 'licence/bus-short',
-                                    'use_route_match' => true,
-                                    'pages' => array(
-                                        array(
-                                            'id' => 'licence_bus_short-placeholder',
-                                            'label' => 'internal-licence-bus-short-placeholder',
-                                            'route' => 'licence/bus-short/placeholder',
-                                            'use_route_match' => true,
-                                        ),
-                                    )
+                                    'use_route_match' => true
                                 ),
                                 array(
                                     'id' => 'licence_bus_route',
