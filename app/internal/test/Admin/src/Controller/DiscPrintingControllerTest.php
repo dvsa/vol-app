@@ -353,4 +353,33 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
         $this->assertEquals(is_array($result), true);
         $this->assertEquals($result['status'], 500);
     }
+
+    /**
+     * Test index action with POST with bad params
+     * @group discPrinting
+     */
+    public function testIndexActionWithPostWithBadParams()
+    {
+
+        $this->isPost = true;
+        $this->needMockGetPost = false;
+
+        $this->setUpAction(null, []);
+
+        $this->controller->setEnabledCsrf(false);
+
+        $mockParams = $this->getMock('\StdClass', ['fromRoute']);
+        $mockParams->expects($this->once())
+            ->method('fromRoute')
+            ->will($this->returnValue(null));
+
+        $this->controller->expects($this->once())
+            ->method('params')
+            ->will($this->returnValue($mockParams));
+
+        $response = $this->controller->indexAction();
+
+        // Make sure we get a view not a response
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+    }
 }

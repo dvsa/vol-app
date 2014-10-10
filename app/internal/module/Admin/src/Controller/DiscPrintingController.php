@@ -124,7 +124,7 @@ class DiscPrintingController extends AbstractController
 
         // set up start number validator
         $goodsDiscNumberValidator = $this->getServiceLocator()->get('goodsDiscStartNumberValidator');
-        $numbering = $this->processDiskNumbering(
+        $numbering = $this->processDiscNumbering(
             $niFlag,
             $licenceType,
             $operatorType,
@@ -176,14 +176,14 @@ class DiscPrintingController extends AbstractController
 
         // checking params which needed to calculate goods discs start/end numbers,
         // we can't process further without having it defined
-        if (!$params['niFlag'] || !$params['operatorType'] || !$params['licenceType'] ||
+        if (!$params['niFlag'] || ($params['niFlag'] == 'N' && !$params['operatorType']) || !$params['licenceType'] ||
             !$params['discSequence'] || !$params['discPrefix']) {
             $flProcess = false;
         }
 
         // calculate start and end numbers, number of pages
         if ($flProcess) {
-            $viewResults = $this->processDiskNumbering(
+            $viewResults = $this->processDiscNumbering(
                 $params['niFlag'],
                 $params['licenceType'],
                 $params['operatorType'],
@@ -207,7 +207,7 @@ class DiscPrintingController extends AbstractController
      * @param int $startNumberEntered
      * @return array
      */
-    protected function processDiskNumbering(
+    protected function processDiscNumbering(
         $niFlag,
         $licenceType,
         $operatorType,
@@ -217,6 +217,9 @@ class DiscPrintingController extends AbstractController
     ) {
         $retv = [];
 
+        if (!$niFlag || !$licenceType || ($niFlag == 'N' && !$operatorType) || !$discPrefix || !$discSequence) {
+            return $retv;
+        }
         $discSequenceService = $this->getServiceLocator()->get('Admin\Service\Data\DiscSequence');
         $goodsDiscService = $this->getServiceLocator()->get('Admin\Service\Data\GoodsDisc');
 

@@ -75,8 +75,8 @@ class GoodsDisc extends AbstractData
                             'bundle' => json_encode($bundle),
                             'limit' => self::PAGE_SIZE,
                             'page' => $page++,
-                            'issuedDate' => null,
-                            'ceasedDate' => null
+                            'issuedDate' => 'NULL',
+                            'ceasedDate' => 'NULL'
                             ]
                         );
 
@@ -89,7 +89,7 @@ class GoodsDisc extends AbstractData
                         isset($result['licenceVehicle']['licence']['licenceType']['id']) &&
                         $result['licenceVehicle']['licence']['licenceType']['id'] == $licenceType &&
                         isset($result['licenceVehicle']['licence']['trafficArea']['id']) &&
-                        $result['licenceVehicle']['licence']['trafficArea']['id'] == $trafficArea &&
+                        $result['licenceVehicle']['licence']['trafficArea']['id'] == self::NI_TRAFFIC_AREA_CODE &&
                         is_array($result['licenceVehicle']['vehicle'])) {
                         $discsToPrint[] = $result;
                          // for non-NI licences we should check operator type as well
