@@ -56,7 +56,6 @@ class BusinessDetailsController extends AbstractApplicationController
             ->setTable($table);
 
         if ($request->isPost()) {
-
             /**
              * we'll re-use this in a few places, so cache the lookup
              * just for the sake of legibility
@@ -85,8 +84,7 @@ class BusinessDetailsController extends AbstractApplicationController
                     if ($result['Count'] == 1) {
 
                         $companyName = $result['Results'][0]['CompanyName'];
-                        // @TODO reimplement adding name into form
-                        $data['name'] = $companyName;
+                        $form->get('data')->get('name')->setValue($companyName);
 
                     } else {
 
@@ -128,9 +126,20 @@ class BusinessDetailsController extends AbstractApplicationController
                     $this->getEntityService('TradingNames')->save($tradingNames);
                 }
 
-                $data = $this->formatDataForSave($data);
-                $data['id'] = $orgId;
-                $this->getEntityService('Organisation')->save($data);
+                $saveData = $this->formatDataForSave($data);
+                $saveData['id'] = $orgId;
+                $this->getEntityService('Organisation')->save($saveData);
+
+                if (isset($data['table']['action'])) {
+                    return $this->redirect()->toRoute(
+                        'lva-application/business_details',
+                        array(
+                            'action' => 'add'
+                        ),
+                        array(),
+                        true
+                    );
+                }
 
                 return $this->completeSection('business_details');
             }
@@ -143,7 +152,12 @@ class BusinessDetailsController extends AbstractApplicationController
             )
         );
     }
-    public function formatTradingNamesDataForSave($organisationId, $data)
+
+    public function addAction() {
+        // @TODO table sub page
+    }
+
+    private function formatTradingNamesDataForSave($organisationId, $data)
     {
         $tradingNames = [];
 
