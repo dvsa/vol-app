@@ -18,6 +18,51 @@ trait CaseControllerTrait
 {
     protected $cases = array();
 
+    private $caseInformationBundle = array(
+        'children' => array(
+            'submissionSections' => array(
+                'properties' => array(
+                    'id',
+                    'description'
+                )
+            ),
+            'legacyOffences' => array(
+                'properties' => 'ALL',
+            ),
+            'caseType' => array(
+                'properties' => 'id',
+            ),
+            'licence' => array(
+                'properties' => 'ALL',
+                'children' => array(
+                    'status' => array(
+                        'properties' => array('id')
+                    ),
+                    'licenceType' => array(
+                        'properties' => array('id')
+                    ),
+                    'goodsOrPsv' => array(
+                        'properties' => array('id')
+                    ),
+                    'trafficArea' => array(
+                        'properties' => 'ALL'
+                    ),
+                    'organisation' => array(
+                        'properties' => 'ALL',
+                        'children' => array(
+                            'type' => array(
+                                'properties' => array('id')
+                            )
+                        )
+                    )
+                )
+            )
+        )
+    );
+
+    /**
+     * @codeCoverageIgnore
+     */
     protected function attachDefaultListeners()
     {
         parent::attachDefaultListeners();
@@ -30,44 +75,60 @@ trait CaseControllerTrait
         $licence = null;
 
         if (true !== $this->getRequest()->isXmlHttpRequest()) {
-
-            $placeholder = $this->getViewHelperManager()->get('placeholder');
-
             if ($this->params()->fromRoute('case')) {
-
+                $this->setupCase();
                 $case = $this->getCase();
-
-                $this->getViewHelperManager()->get('headTitle')->prepend('Case ' . $case['id']);
-
-                $placeholder->getContainer('pageTitle')->append('Case ' . $case['id']);
-                $placeholder->getContainer('pageSubtitle')->append('Case subtitle');
-
-                $placeholder->getContainer('case')->set($case);
-
-                // Takes care of when a case is connected to a licence.
                 if (array_key_exists('licence', $case) && !empty($case['licence'])) {
                     $licence = $case['licence']['id'];
+                    //$this->setupLicence($licence);
                 }
             }
 
             if ($licence = $this->params()->fromRoute('licence', $licence)) {
-
-                /** @var \Olcs\Service\Data\Licence $dataService */
-                $dataService = $this->getServiceLocator()->get('Olcs\Service\Data\Licence');
-                $dataService->setId($licence); //set default licence id for use in forms
-                $licence = $dataService->fetchLicenceData($licence);
-
-                $licenceUrl = $this->url()->fromRoute(
-                    'licence/cases',
-                    ['licence' => $licence['id']]
-                );
-                $licenceLink = '<a href="' . $licenceUrl . '">' . $licence['licNo'] . '</a>';
-
-                $placeholder->getContainer('pageTitle')->prepend($licenceLink);
+                // get it from the route.
+                $this->setupLicence($licence);
             }
         }
 
         return true;
+    }
+
+    public function setupLicence($licence)
+    {
+        $placeholder = $this->getViewHelperManager()->get('placeholder');
+        /** @var \Olcs\Service\Data\Licence $dataService */
+        $dataService = $this->getServiceLocator()->get('Olcs\Service\Data\Licence');
+        $dataService->setId($licence); //set default licence id for use in forms
+        $licence = $dataService->fetchLicenceData($licence);
+
+        $licenceUrl = $this->url()->fromRoute(
+            'licence/cases',
+            ['licence' => $licence['id']]
+        );
+        $licenceLink = '<a href="' . $licenceUrl . '">' . $licence['licNo'] . '</a>';
+
+        $placeholder->getContainer('pageTitle')->prepend($licenceLink);
+    }
+
+    public function setupCase()
+    {
+        $placeholder = $this->getViewHelperManager()->get('placeholder');
+        $case = $this->getCase();
+
+        $this->getViewHelperManager()->get('headTitle')->prepend('Case ' . $case['id']);
+
+        $placeholder->getContainer('pageTitle')->append('Case ' . $case['id']);
+        $placeholder->getContainer('pageSubtitle')->append('Case subtitle');
+
+        $placeholder->getContainer('case')->set($case);
+    }
+
+    /**
+     * @return array
+     */
+    public function getCaseInformationBundle()
+    {
+        return $this->caseInformationBundle;
     }
 
     /**
@@ -83,49 +144,13 @@ trait CaseControllerTrait
         }
 
         if (!isset($this->cases[$id])) {
-            $bundle = array(
-                'children' => array(
-                    'submissionSections' => array(
-                        'properties' => array(
-                            'id',
-                            'description'
-                        )
-                    ),
-                    'legacyOffences' => array(
-                        'properties' => 'ALL',
-                    ),
-                    'caseType' => array(
-                        'properties' => 'id',
-                    ),
-                    'licence' => array(
-                        'properties' => 'ALL',
-                        'children' => array(
-                            'status' => array(
-                                'properties' => array('id')
-                            ),
-                            'licenceType' => array(
-                                'properties' => array('id')
-                            ),
-                            'goodsOrPsv' => array(
-                                'properties' => array('id')
-                            ),
-                            'trafficArea' => array(
-                                'properties' => 'ALL'
-                            ),
-                            'organisation' => array(
-                                'properties' => 'ALL',
-                                'children' => array(
-                                    'type' => array(
-                                        'properties' => array('id')
-                                    )
-                                )
-                            )
-                        )
-                    )
-                )
-            );
 
-            $this->cases[$id] = $this->makeRestCall('Cases', 'GET', array('id' => $id), $bundle);
+            $this->cases[$id] = $this->makeRestCall(
+                'Cases',
+                'GET',
+                array('id' => $id),
+                $this->getCaseInformationBundle()
+            );
         }
 
         return $this->cases[$id];
