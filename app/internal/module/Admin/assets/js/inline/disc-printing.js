@@ -21,14 +21,14 @@ OLCS.ready(function() {
   var emptyLabel = "Please select";
 
   // get list of prefixes for selected operator location, operator type and licence type
-  $(document).on('change', licenceType, function() {
+  $(licenceType).change(function() {
     var data = {
       'niFlag': niFlag.filter(':checked').val(),
       'operatorType': operatorType.filter(':checked').val(),
       'licenceType': licenceType.filter(':checked').val()
     };
     $.post(discPrefixesUrl, data, function(result) {
-      var str = "<option value=''>Please select</option>";
+      var str = "<option value=''>Please Select</option>";
       $.each(result, function(i, r) {
         if (r.value === "" && emptyLabel) {
           r.label = emptyLabel;
@@ -53,9 +53,11 @@ OLCS.ready(function() {
     endNumber.val('');
     totalPages.val('');
     $(noDiscs).hide();
+    $('#submit').attr('disabled', 'disabled');
 
     // get disc numbering settings
     $.post(discNumberingUrl, data, function(result) {
+      $('#submit').removeAttr('disabled');
       if ("endNumber" in result && result.endNumber == 0) {
         // no discs to print
         $(discNumbering).hide();

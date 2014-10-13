@@ -124,21 +124,18 @@ class BusDetailsControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
-     * Placeholder unit test for index action
+     * Unit test for index action
      */
     public function testIndexAction()
     {
         $this->controller->expects($this->once())
-             ->method('getViewWithBusReg')
-             ->will($this->returnValue($this->view));
-
-        $this->view->expects($this->once())
-             ->method('setTemplate')
-             ->with('licence/bus/index');
-
-        $this->controller->expects($this->once())
-            ->method('renderView')
-            ->with($this->view);
+            ->method('redirectToRoute')
+            ->with(
+                $this->equalTo('licence/bus-details/service'),
+                $this->equalTo(['action'=>'edit']),
+                $this->equalTo(['code' => '303']),
+                $this->equalTo(true)
+            );
 
         $this->controller->indexAction();
     }

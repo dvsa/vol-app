@@ -26,10 +26,12 @@ class BusDetailsController extends BusController
      */
     public function indexAction()
     {
-        $view = $this->getViewWithBusReg();
-
-        $view->setTemplate('licence/bus/index');
-        return $this->renderView($view);
+        return $this->redirectToRoute(
+            'licence/bus-details/service',
+            ['action'=>'edit'],
+            ['code' => '303'], // Why? No cache is set with a 303 :)
+            true
+        );
     }
 
     public function alterFormBeforeValidation($form)
