@@ -7,6 +7,7 @@
  */
 namespace Olcs\Controller\Application;
 
+use Common\Controller\Traits\Lva\EnabledSectionTrait;
 use Olcs\View\Model\Application\ApplicationOverview;
 
 /**
@@ -16,6 +17,8 @@ use Olcs\View\Model\Application\ApplicationOverview;
  */
 class OverviewController extends AbstractApplicationController
 {
+    use EnabledSectionTrait;
+
     /**
      * Application overview
      */
@@ -29,6 +32,11 @@ class OverviewController extends AbstractApplicationController
 
         $data = $this->getEntityService('Application')->getOverview($applicationId);
 
-        return new ApplicationOverview($data, $this->getAccessibleSections());
+        $sections = $this->setEnabledFlagOnSections(
+            $this->getAccessibleSections(false),
+            $data['applicationCompletions'][0]
+        );
+
+        return new ApplicationOverview($data, $sections);
     }
 }

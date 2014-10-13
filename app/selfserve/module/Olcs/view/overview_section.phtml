@@ -1,11 +1,15 @@
-<li class="overview-item ">
+<li class="overview-item <?php echo ($enabled ? '' : 'disabled'); ?>">
   <div class="overview-item__header">
-    <a href="<?php echo $this->url($route, array('id' => $identifier)); ?>" class="overview-item__control">
-        <h4><?php echo $this->translate($name); ?></h4>
-    </a>
-    <?php if (isset($status)): ?>
-        <span class="status <?php echo $statusColour; ?>"><?php echo $this->translate($status); ?></span>
+    <?php if ($enabled) : ?>
+        <a href="<?php echo $this->url($route, array('id' => $identifier)); ?>" class="overview-item__control">
     <?php endif; ?>
-    <a href="<?php echo $this->url($route, array('id' => $identifier)); ?>" class="overview-item__edit"><?php echo $this->translate($link); ?></a>
+    <h4><?php echo $this->translate($name); ?></h4>
+    <?php if ($enabled) : ?>
+        </a>
+        <?php if (isset($status)): ?>
+            <span class="status <?php echo $statusColour; ?>"><?php echo $this->translate($status); ?></span>
+        <?php endif; ?>
+        <a href="<?php echo $this->url($route, array('id' => $identifier)); ?>" class="overview-item__edit"><?php echo $this->translate($link); ?></a>
+    <?php endif; ?>
   </div>
 </li>

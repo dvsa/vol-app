@@ -18,7 +18,7 @@ class ApplicationOverviewSection extends LvaOverviewSection
 {
     protected $type = 'application';
 
-    public function __construct($ref, $data)
+    public function __construct($ref, $data, $sectionDetails)
     {
         $filter = new \Zend\Filter\Word\DashToCamelCase();
         $index = lcfirst($filter->filter(str_replace('_', '-', $ref)));
@@ -44,6 +44,7 @@ class ApplicationOverviewSection extends LvaOverviewSection
                 break;
         }
 
+        $this->setVariable('enabled', $sectionDetails['enabled']);
         $this->setVariable('status', $statusText);
         $this->setVariable('statusColour', $statusColour);
 
