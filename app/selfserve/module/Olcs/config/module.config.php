@@ -68,6 +68,7 @@ return array(
 
             'LvaVariation' => 'Olcs\Controller\Variation\OverviewController',
             'LvaVariation/TypeOfLicence' => 'Olcs\Controller\Variation\TypeOfLicenceController',
+            'LvaVariation/BusinessType' => 'Olcs\Controller\Variation\BusinessTypeController',
         )
     ),
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',
