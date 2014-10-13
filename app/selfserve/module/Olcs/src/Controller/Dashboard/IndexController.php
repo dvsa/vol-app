@@ -132,7 +132,7 @@ class IndexController extends AbstractActionController
                     $licences[$licence['id']] = $licenceRow;
 
                     foreach ($licence['applications'] as $application) {
-                        if ( in_array($application['status'], $applicationStatuses)) {
+                        if ( in_array($application['status']['id'], $applicationStatuses)) {
 
                             $newRow = $application;
                             $newRow['licNo'] = $licence['licNo'];
