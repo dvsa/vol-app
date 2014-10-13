@@ -74,8 +74,21 @@ abstract class AbstractExternalController extends AbstractLvaController
         }
 
         if ($this->isButtonPressed('cancel')) {
-            return $this->goToOverview($lvaId);
+            return $this->handleCancelRedirect($lvaId);
         }
+    }
+
+    /**
+     * Handle a redirect based on 'cancel' being clicked
+     * Declared separately so controllers can customise
+     * what cancel does
+     *
+     * @param int $lvaId
+     * @return null|\Zend\Http\Response
+     */
+    protected function handleCancelRedirect($lvaId)
+    {
+        return $this->goToOverview($lvaId);
     }
 
     /**

@@ -131,11 +131,26 @@ class BusinessDetailsController extends AbstractApplicationController
                 $this->getEntityService('Organisation')->save($saveData);
 
                 if (isset($data['table']['action'])) {
+                    $action = strtolower($data['table']['action']);
+
+                    if ($action === 'add') {
+                        $routeParams = array(
+                            'action' => 'add'
+                        );
+                    } elseif ($action === 'edit') {
+                        $routeParams = array(
+                            'action' => 'edit',
+                            'child_id' => $data['table']['id']
+                        );
+                    } else {
+                        $routeParams = array();
+                        $this->getEntityService('CompanySubsidiary')
+                            ->delete($data['table']['id']);
+                    }
+
                     return $this->redirect()->toRoute(
                         'lva-application/business_details',
-                        array(
-                            'action' => 'add'
-                        ),
+                        $routeParams,
                         array(),
                         true
                     );
@@ -145,16 +160,57 @@ class BusinessDetailsController extends AbstractApplicationController
             }
         }
 
-        return new Section(
-            array(
-                'title' => 'Business details',
-                'form' => $form
-            )
-        );
+        return $this->render('business_details', $form);
     }
 
-    public function addAction() {
-        // @TODO table sub page
+    public function addAction()
+    {
+        return $this->addOrEdit(true);
+    }
+
+    public function editAction()
+    {
+        return $this->addOrEdit(false);
+    }
+
+    private function addOrEdit($add = true)
+    {
+        $mode = $add ? 'add' : 'edit';
+        $orgId = $this->getCurrentOrganisationId();
+        $request = $this->getRequest();
+
+        $data = array();
+        if ($request->isPost()) {
+            $data = (array)$request->getPost();
+        } elseif ($mode === 'edit') {
+            $data = $this->formatSubsidiaryDataForForm(
+                $this->getEntityService('CompanySubsidiary')->getById($this->params('child_id'))
+            );
+        }
+
+        $form = $this->getHelperService('FormHelper')
+            ->createForm('Lva\BusinessDetailsSubsidiaryCompany')
+            ->setData($data);
+
+        if ($request->isPost() && $form->isValid()) {
+            $data = $this->formatSubsidiaryDataForSave($data);
+            $data['organisation'] = $orgId;
+
+            $this->getEntityService('CompanySubsidiary')->save($data);
+
+            $routeParams = array(
+                'id' => $this->getApplicationId()
+            );
+            if ($this->isButtonPressed('addAnother')) {
+                $routeParams['action'] = 'add';
+            }
+            return $this->redirect()->toRoute(
+                'lva-application/business_details',
+                $routeParams
+            );
+        }
+
+        return $this->render($mode . '_subsidiary_company', $form);
     }
 
     private function formatTradingNamesDataForSave($organisationId, $data)
@@ -176,5 +232,23 @@ class BusinessDetailsController extends AbstractApplicationController
             'licence' => $this->getLicenceId(),
             'tradingNames' => $tradingNames
         );
+    }
+
+    /**
+     * Override built-in cancel functionality; need
+     * to check if we're on a sub action
+     *
+     * Might be able to squeeze this into the abstract,
+     * will see how consistent other sub actions are first
+     */
+    protected function handleCancelRedirect($lvaId)
+    {
+        if ($this->params('action') !== 'index') {
+            return $this->redirect()->toRoute(
+                'lva-application/business_details',
+                array('id' => $lvaId)
+            );
+        }
+        return parent::handleCancelRedirect($lvaId);
     }
 }
