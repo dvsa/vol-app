@@ -40,7 +40,7 @@ class Submission extends AbstractData
      *
      * @var array
      */
-    protected $allSectionData = [];
+    protected $loadedSectionData = [];
 
     /**
      * ApiResolver attached to perform submission section REST calls on different entities
@@ -169,11 +169,12 @@ class Submission extends AbstractData
             return [];
         }
 
-        $this->allSectionData[$sectionId] = $this->loadCaseSectionData(
+        $loadedData = $this->loadCaseSectionData(
             $caseId,
             $sectionId,
             $sectionConfig
         );
+        $this->setLoadedSectionDataForSection($sectionId, $loadedData);
 
         $section = $this->filterSectionData($sectionId);
 
@@ -191,8 +192,8 @@ class Submission extends AbstractData
     public function loadCaseSectionData($caseId, $sectionId, $sectionConfig)
     {
         // first check we haven't already extracted the data
-        if (isset($this->allSectionData[$sectionId])) {
-            return $this->allSectionData[$sectionId];
+        if (isset($this->getLoadedSectionData()[$sectionId])) {
+            return $this->getLoadedSectionData()[$sectionId];
         }
 
         $rawData = [];
@@ -234,7 +235,7 @@ class Submission extends AbstractData
         $filter = $this->getFilter();
         $method = 'filter' . ucfirst($filter->filter($sectionId)) . 'Data';
         if (method_exists($this, $method)) {
-            $filteredSectionData = call_user_func(array($this, $method), $this->allSectionData[$sectionId]);
+            $filteredSectionData = call_user_func(array($this, $method), $this->getLoadedSectionData()[$sectionId]);
         }
         return $filteredSectionData;
     }
@@ -322,12 +323,12 @@ class Submission extends AbstractData
     /**
      * section persons
      */
-    protected function filterPersonsDataNotUsed(array $data = array())
+    protected function filterPersonsData(array $data = array())
     {
         $dataToReturnArray = array();
 
         foreach ($data['licence']['organisation']['organisationPersons'] as $organisationOwner) {
-
+            $thisOrganisationOwner['title'] = $organisationOwner['person']['title'];
             $thisOrganisationOwner['familyName'] = $organisationOwner['person']['familyName'];
             $thisOrganisationOwner['forename'] = $organisationOwner['person']['forename'];
             $thisOrganisationOwner['birthDate'] = $organisationOwner['person']['birthDate'];
@@ -460,6 +461,7 @@ class Submission extends AbstractData
     public function setSubmissionConfig($submissionConfig)
     {
         $this->submissionConfig = $submissionConfig;
+        return $this;
     }
 
     /**
@@ -468,5 +470,31 @@ class Submission extends AbstractData
     public function getSubmissionConfig()
     {
         return $this->submissionConfig;
+    }
+
+    /**
+     * @param array $loadedSectionData
+     */
+    public function setLoadedSectionData($loadedSectionData)
+    {
+        $this->loadedSectionData = $loadedSectionData;
+        return $this;
+    }
+
+    /**
+     * @param array $loadedSectionData
+     */
+    public function setLoadedSectionDataForSection($sectionId, $data)
+    {
+        $this->loadedSectionData[$sectionId] = $data;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getLoadedSectionData()
+    {
+        return $this->loadedSectionData;
     }
 }
