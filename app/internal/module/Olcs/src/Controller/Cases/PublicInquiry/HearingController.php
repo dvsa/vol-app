@@ -78,10 +78,33 @@ class HearingController extends PublicInquiryController
     protected function getDataForForm()
     {
         $data = parent::getDataForForm();
-        //echo'<pre>';
-//print_r($data); die();
         $data['fields']['pi'] = $this->getFromRoute('pi');
 
         return $data;
+    }
+
+    /**
+     * Overrides the parent, make sure there's nothing there shouldn't be in the optional fields
+     *
+     * @param array $data
+     * @return \Zend\Http\Response
+     */
+    public function processSave($data)
+    {
+        if ($data['fields']['piVenue'] != 'other') {
+            $data['fields']['piVenueOther'] = null;
+        }
+
+        if ($data['fields']['isCancelled'] != 'Y') {
+            $data['fields']['cancelledReason'] = null;
+            $data['fields']['cancelledDate'] = null;
+        }
+
+        if ($data['fields']['isAdjourned'] != 'Y') {
+            $data['fields']['adjournedReason'] = null;
+            $data['fields']['adjournedDate'] = null;
+        }
+
+        return parent::processSave($data);
     }
 }
