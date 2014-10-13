@@ -28,9 +28,9 @@ abstract class ControllerTestAbstract extends AbstractHttpControllerTestCase
             return;
         }
 
-        $sut = $this->getMock($this->testClass, array_values($this->proxyMethdods));
-
         foreach ($this->proxyMethdods as $methodName => $proxy) {
+
+            $sut = $this->getMock($this->testClass, [$proxy]);
             $sut->expects($this->once())->method($proxy)->will($this->returnValue($proxy));
             $this->assertEquals($proxy, $sut->{$methodName}());
         }
