@@ -16,6 +16,7 @@ use Olcs\View\Model\Application\ApplicationLayout;
 use Olcs\Controller\AbstractInternalController;
 use Common\Service\Entity\ApplicationCompletionService;
 use Common\Controller\Traits\Lva\ApplicationControllerTrait;
+use Common\Controller\Traits\Lva\EnabledSectionTrait;
 
 /**
  * INTERNAL Abstract Application Controller
@@ -24,7 +25,8 @@ use Common\Controller\Traits\Lva\ApplicationControllerTrait;
  */
 class AbstractApplicationController extends AbstractInternalController
 {
-    use ApplicationControllerTrait;
+    use ApplicationControllerTrait,
+        EnabledSectionTrait;
 
     /**
      * Holds the lva type
@@ -74,10 +76,15 @@ class AbstractApplicationController extends AbstractInternalController
         $filter = $this->getHelperService('StringHelper');
 
         $sections = array(
-            'overview' => array('class' => 'no-background', 'route' => 'lva-' . $this->lva)
+            'overview' => array('class' => 'no-background', 'route' => 'lva-' . $this->lva, 'enabled' => true)
         );
 
-        foreach ($this->getAccessibleSections() as $section) {
+        $accessibleSections = $this->setEnabledFlagOnSections(
+            $this->getAccessibleSections(false),
+            $applicationStatuses
+        );
+
+        foreach ($accessibleSections as $section => $settings) {
 
             $statusIndex = lcfirst($filter->underscoreToCamel($section)) . 'Status';
 
@@ -91,7 +98,10 @@ class AbstractApplicationController extends AbstractInternalController
                     break;
             }
 
-            $sections[$section] = array('class' => $class, 'route' => 'lva-' . $this->lva . '/' . $section);
+            $sections[$section] = array_merge(
+                $settings,
+                array('class' => $class, 'route' => 'lva-' . $this->lva . '/' . $section)
+            );
         }
 
         return $sections;
