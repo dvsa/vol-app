@@ -16,6 +16,10 @@ use Common\View\AbstractViewModel;
  */
 abstract class LvaOverviewSection extends AbstractViewModel
 {
+    protected $variables = array(
+        'enabled' => true
+    );
+
     /**
      * Holds the section reference
      *
