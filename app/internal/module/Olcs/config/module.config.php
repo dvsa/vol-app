@@ -38,6 +38,7 @@ return array(
             'CasePiController' => 'Olcs\Controller\CasePiController',
             'CasePublicInquiryController' => 'Olcs\Controller\Cases\PublicInquiry\PublicInquiryController',
             'PublicInquiry\SlaController' => 'Olcs\Controller\Cases\PublicInquiry\SlaController',
+            'PublicInquiry\HearingController' => 'Olcs\Controller\Cases\PublicInquiry\HearingController',
             'PublicInquiry\AgreedAndLegislationController'
                 => 'Olcs\Controller\Cases\PublicInquiry\AgreedAndLegislationController',
             'PublicInquiry\RegisterDecisionController'
@@ -133,6 +134,9 @@ return array(
         ),
         'delegators' => array(
             'formElement' => array('Olcs\Form\View\Helper\FormElementDelegatorFactory')
+        ),
+        'factories' => array(
+            'SubmissionSectionTable' => 'Olcs\View\Helper\SubmissionSectionTableFactory'
         )
     ),
     'local_forms_path' => array(
@@ -166,7 +170,8 @@ return array(
             'Olcs\Service\Data\Licence' => 'Olcs\Service\Data\Licence',
             'Olcs\Service\Data\User' => 'Olcs\Service\Data\User',
             'Olcs\Service\Data\PiVenue' => 'Olcs\Service\Data\PiVenue',
-            'Olcs\Service\Data\PresidingTc' => 'Olcs\Service\Data\PresidingTc'
+            'Olcs\Service\Data\PresidingTc' => 'Olcs\Service\Data\PresidingTc',
+            'Olcs\Service\Data\Submission' => 'Olcs\Service\Data\Submission'
         )
     ),
     'application_journey' => array(

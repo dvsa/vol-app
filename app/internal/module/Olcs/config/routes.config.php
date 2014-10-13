@@ -614,6 +614,163 @@ $routes = [
             ]
         ]
     ],
+    'offence' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/case/:case/offence[/:action/:offence]',
+            'constraints' => [
+                'case' => '[0-9]+',
+                'action' => '[a-z]+',
+                'offence' => '[0-9]+',
+            ],
+            'defaults' => [
+                'controller' => 'CaseOffenceController',
+                'action' => 'index'
+            ]
+        ]
+    ],
+    'case_penalty' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/case/:case/penalty[/:action][/:penalty]',
+            'constraints' => [
+                'case' => '[0-9]+',
+                'penalty' => '[0-9]+',
+            ],
+            'defaults' => [
+                'controller' => 'CasePenaltyController',
+                'action' => 'index'
+            ]
+        ]
+    ],
+    'case_complaint' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/case/:case/complaint[/:action][/:complaint]',
+            'constraints' => [
+                'case' => '[0-9]+',
+                'action' => '[a-z]+',
+                'complaint' => '[0-9]+'
+            ],
+            'defaults' => [
+                'controller' => 'CaseComplaintController',
+                'action' => 'index'
+            ]
+        ]
+    ],
+    'case_pi' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/case/:case/pi',
+            'constraints' => [
+                'case' => '[0-9]+',
+                'action' => '[a-z]+',
+            ],
+            'defaults' => [
+                'controller' => 'CasePublicInquiryController',
+                'action' => 'details'
+            ]
+        ]
+    ],
+    'case_pi_agreed' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/case/:case/pi/agreed[/:action]',
+            'constraints' => [
+                'case' => '[0-9]+',
+                'action' => '[a-z]+'
+            ],
+            'defaults' => [
+                'controller' => 'PublicInquiry\AgreedAndLegislationController',
+                'action' => 'index'
+            ]
+        ]
+    ],
+    'case_pi_hearing' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/case/:case/pi/:pi/hearing[/:action][/:id]',
+            'constraints' => [
+                'case' => '[0-9]+',
+                'pi' => '[0-9]+',
+                'action' => '[a-z]+',
+                'id' => '[0-9]+',
+            ],
+            'defaults' => [
+                'controller' => 'PublicInquiry\HearingController',
+                'action' => 'index'
+            ]
+        ]
+    ],
+    'case_pi_decision' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/case/:case/pi/decision[/:action]',
+            'constraints' => [
+                'case' => '[0-9]+',
+                'action' => '[a-z]+',
+            ],
+            'defaults' => [
+                'controller' => 'PublicInquiry\RegisterDecisionController',
+                'action' => 'index'
+            ]
+        ]
+    ],
+    'case_pi_sla' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/case/:case/pi/sla[/:action]',
+            'constraints' => [
+                'case' => '[0-9]+',
+                'action' => '[a-z]+',
+            ],
+            'defaults' => [
+                'controller' => 'PublicInquiry\SlaController',
+                'action' => 'index'
+            ]
+        ]
+    ],
+    'submission' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/case/:case/submission/:action[/:submission]',
+            'constraints' => [
+                'case' => '[0-9]+',
+                'submission' => '[0-9]+',
+            ],
+            'defaults' => [
+                'controller' => 'CaseSubmissionController',
+                'action' => 'index'
+            ]
+        ]
+    ],
+    'processing' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/case/:case/processing[/:action]',
+            'constraints' => [
+                'case' => '[0-9]+',
+                'action' => '(index|add|edit|details|overview)'
+            ],
+            'defaults' => [
+                'controller' => 'CaseProcessingController',
+                'action' => 'overview'
+            ]
+        ]
+    ],
+    'processing_decisions' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/case/:case/processing/decisions[/:action]',
+            'constraints' => [
+                'case' => '[0-9]+',
+                'action' => '(index|add|edit|details|overview)'
+            ],
+            'defaults' => [
+                'controller' => 'CaseDecisionsController'
+            ]
+        ]
+    ],
     'case_annual_test_history' => [
         'type' => 'segment',
         'options' => [

@@ -41,9 +41,7 @@ class PiVenue extends AbstractData implements ListDataInterface
     {
         $context = $this->getLicenceContext();
 
-        $params = ['trafficArea' => $context['trafficArea']['id']];
-
-        $data = $this->fetchListData($params);
+        $data = $this->fetchListData($context);
 
         if (!$data) {
             return [];

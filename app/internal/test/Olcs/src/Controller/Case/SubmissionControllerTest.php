@@ -100,21 +100,6 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
 
     }
 
-    /**
-     * Test GetSubmissionTypeTitle
-     *
-     * @param $input
-     * @param $expectedResult
-     *
-     * @dataProvider getSubmissionTitlesProvider
-     */
-    public function testGetSubmissionTypeTitle($input, $expectedResult)
-    {
-        $result = $this->controller->getSubmissionTypeTitle($input['submissionTypeId'], $input['submissionTitles']);
-
-        $this->assertEquals($result, $expectedResult);
-    }
-
     public function getSubmissionTitlesProvider()
     {
         return array(
