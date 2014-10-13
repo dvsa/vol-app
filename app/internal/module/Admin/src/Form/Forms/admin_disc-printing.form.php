@@ -60,7 +60,7 @@ return [
                 ],
                 'elements' => [
                     'discSequence' => [
-                        'type' => 'select-noempty',
+                        'type' => 'select',
                     ]
                 ]
             ],

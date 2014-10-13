@@ -645,12 +645,14 @@ class VehicleControllerTest extends AbstractLicenceDetailsControllerTestCase
             'properties' => array(),
             'children' => array(
                 'vehicle' => array(
-                    'properties' => array('vrm')
+                    'properties' => array(
+                        'vrm'
+                    )
                 )
             )
         );
 
-        if ($service == 'LicenceVehicle' && $method == 'GET' && $bundle = $licenceVehicleBundle) {
+        if ($service == 'LicenceVehicle' && $method == 'GET' && $bundle == $licenceVehicleBundle) {
             return array(
                 'Count' => 1,
                 'Results' => array(
@@ -663,11 +665,58 @@ class VehicleControllerTest extends AbstractLicenceDetailsControllerTestCase
             );
         }
 
+
+        $licenceVehicleBundleWithId = array(
+            'properties' => array(
+                'id'
+            ),
+            'children' => array(
+                'vehicle' => array(
+                    'properties' => array(
+                        'vrm'
+                    )
+                )
+            )
+        );
+
+        if ($service == 'LicenceVehicle' && $method == 'GET' && $bundle == $licenceVehicleBundleWithId) {
+            return array(
+                'id' => 1,
+                'vehicle' => array(
+                    'vrm' => 'RANDOM'
+                )
+            );
+        }
+
         if ($service == 'LicenceVehicle' && $method == 'GET') {
             return array(
                 'Count' => 1,
                 'Results' => array(
-                    array('id' => 1)
+                    array(
+                        'id' => 1
+                    )
+                )
+            );
+        }
+
+        if ($service == 'Vehicle' && $method == 'GET') {
+            return array(
+                'id' => 1,
+                'version' => 1,
+                'vrm' => 'AB12 ABC',
+                'isNovelty' => 'Y'
+            );
+        }
+
+        if ($service == 'VehicleHistoryView' && $method == 'GET' ) {
+            return array(
+                array(
+                    'id' => 1,
+                    'vrm' => 'VRM1',
+                    'licenceNo' => '123456',
+                    'specifiedDate' => '2014-01-01 00:00:00',
+                    'removalDate' => '2014-01-02 00:00:00',
+                    'discNo' => 1234567
                 )
             );
         }

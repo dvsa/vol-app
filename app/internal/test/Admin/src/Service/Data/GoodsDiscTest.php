@@ -92,7 +92,7 @@ class GoodsDiscTest extends AbstractDataServiceTest
     public function getDiscsToPrintWithResultsProvider()
     {
         return [
-            ['Y', null, 'ltyp_r', 'OK', ['niFlag' => 'Y', 'licenceType' => 'ltyp_r', 'trafficArea' => 'K']],
+            ['Y', null, 'ltyp_r', 'OK', ['niFlag' => 'Y', 'licenceType' => 'ltyp_r', 'trafficArea' => 'N']],
             ['N', 'lcat_gv', 'ltyp_r', 'OK', ['niFlag' => 'N', 'goodsOrPsv' => 'lcat_gv','licenceType' => 'ltyp_r',
             'trafficArea' => 'K']],
         ];
