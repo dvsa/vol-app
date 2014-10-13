@@ -94,14 +94,17 @@ return array(
             'LvaApplication' => 'Olcs\Controller\Application\OverviewController',
             'LvaApplication/TypeOfLicence' => 'Olcs\Controller\Application\TypeOfLicenceController',
             'LvaApplication/BusinessType' => 'Olcs\Controller\Application\BusinessTypeController',
+            'LvaApplication/BusinessDetails' => 'Olcs\Controller\Application\BusinessDetailsController',
 
             'LvaLicence' => 'Olcs\Controller\Licence\OverviewController',
             'LvaLicence/TypeOfLicence' => 'Olcs\Controller\Licence\TypeOfLicenceController',
             'LvaLicence/BusinessType' => 'Olcs\Controller\Licence\BusinessTypeController',
+            'LvaLicence/BusinessDetails' => 'Olcs\Controller\Licence\BusinessDetailsController',
 
             'LvaVariation' => 'Olcs\Controller\Variation\OverviewController',
             'LvaVariation/TypeOfLicence' => 'Olcs\Controller\Variation\TypeOfLicenceController',
             'LvaVariation/BusinessType' => 'Olcs\Controller\Variation\BusinessTypeController',
+            'LvaVariation/BusinessDetails' => 'Olcs\Controller\Variation\BusinessDetailsController',
         )
     ),
     'view_manager' => array(
