@@ -119,8 +119,7 @@ class Submission extends AbstractData
 
     public function getAllSectionsRefData()
     {
-        if (empty($this->allSectionsRefData))
-        {
+        if (empty($this->allSectionsRefData)) {
             $this->allSectionsRefData =
                 $this->getRefDataService()->fetchListOptions(
                     'submission_section'
@@ -173,7 +172,8 @@ class Submission extends AbstractData
         $this->allSectionData[$sectionId] = $this->loadCaseSectionData(
             $caseId,
             $sectionId,
-            $sectionConfig);
+            $sectionConfig
+        );
 
         $section = $this->filterSectionData($sectionId);
 
@@ -207,9 +207,14 @@ class Submission extends AbstractData
                 );
             } elseif (isset($sectionConfig['service']) && is_array($sectionConfig['bundle'])) {
 
-                $rawData = $this->getApiResolver()->getClient($sectionConfig['service'])->get('',
+                $rawData = $this->getApiResolver()->getClient(
+                    $sectionConfig['service']
+                )->get(
+                    '',
                     array('id' => $caseId,
-                    'bundle' => json_encode($sectionConfig['bundle'])));
+                    'bundle' => json_encode($sectionConfig['bundle'])
+                    )
+                );
                 return $rawData;
             }
         }
@@ -468,5 +473,4 @@ class Submission extends AbstractData
     {
         return $this->submissionConfig;
     }
-
 }

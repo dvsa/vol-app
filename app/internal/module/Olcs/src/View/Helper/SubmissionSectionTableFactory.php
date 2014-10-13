@@ -27,7 +27,4 @@ class SubmissionSectionTableFactory implements FactoryInterface
 
         return $service;
     }
-
-
-
 }

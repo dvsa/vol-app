@@ -8,7 +8,7 @@ use Olcs\Service\Data\Submission;
  * Class SubmissionTest
  * @package OlcsTest\Service\Data
  */
-class LicenceTest extends \PHPUnit_Framework_TestCase
+class SubmissionTest extends \PHPUnit_Framework_TestCase
 {
     protected $sut;
 
@@ -52,7 +52,7 @@ class LicenceTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($mockRefDataService, $service->getRefDataService());
     }
 
-    function testFetchSubmissionData()
+    public function testFetchSubmissionData()
     {
         $submission = ['id' => 24];
 
@@ -81,9 +81,12 @@ class LicenceTest extends \PHPUnit_Framework_TestCase
         $mockRefDataService = $this->getMock('Common\Service\Data\RefData', ['fetchListOptions']);
 
         $mockSectionRefData = $this->getMockSectionRefData();
-        $mockRefDataService->expects($this->once())->method('fetchListOptions')->with('submission_section')
-            ->willReturn
-            ($mockSectionRefData);
+        $mockRefDataService->expects(
+            $this->once()
+        )->method(
+            'fetchListOptions'
+        )->with('submission_section')
+        ->willReturn($mockSectionRefData);
 
         $this->sut->setRefDataService($mockRefDataService);
 
@@ -98,9 +101,11 @@ class LicenceTest extends \PHPUnit_Framework_TestCase
         $mockRefDataService = $this->getMock('Common\Service\Data\RefData', ['fetchListOptions']);
 
         $mockSectionRefData = $this->getMockSectionRefData();
-        $mockRefDataService->expects($this->once())->method('fetchListOptions')->with('submission_section')
-            ->willReturn
-            ($mockSectionRefData);
+        $mockRefDataService->expects(
+            $this->once()
+        )->method('fetchListOptions')->with('submission_section')
+            ->willReturn($mockSectionRefData);
+
         $this->sut->setRefDataService($mockRefDataService);
 
         $result = $this->sut->getAllSectionsRefData();
@@ -127,8 +132,7 @@ class LicenceTest extends \PHPUnit_Framework_TestCase
 
         $mockSubmissionTitles = $this->getMockSubmissionTitles();
         $mockRefDataService->expects($this->any())->method('fetchListData')->with('submission_type_title')
-            ->willReturn
-            ($mockSubmissionTitles);
+            ->willReturn($mockSubmissionTitles);
 
         $this->sut->setRefDataService($mockRefDataService);
 
@@ -161,9 +165,12 @@ class LicenceTest extends \PHPUnit_Framework_TestCase
         $mockRestClient = $this->getMock('\Common\Util\RestClient', [], [], '', false);
         $mockRestClient->expects($this->any())
             ->method('get')
-            ->with('',
+            ->with(
+                '',
                 array('id' => $input['caseId'],
-                    'bundle' => json_encode($input['sectionConfig']['bundle'])))
+                    'bundle' => json_encode($input['sectionConfig']['bundle'])
+                )
+            )
             ->willReturn($expected['loadedCaseSectionData']);
 
         $mockApiResolver = $this->getMock('stdClass', ['getClient']);
@@ -260,7 +267,7 @@ class LicenceTest extends \PHPUnit_Framework_TestCase
                                 'offenceDate' => '2012-03-10T00:00:00+0000',
                                 'convictionDate' => '2012-06-15T00:00:00+0100',
                                 'operatorName' => 'John Smith Haulage Ltd.',
-                                'categoryText' => NULL,
+                                'categoryText' => null,
                                 'court' => 'FPN',
                                 'penalty' => '3 points on licence',
                                 'msi' => 'N',
@@ -273,7 +280,7 @@ class LicenceTest extends \PHPUnit_Framework_TestCase
                                 'operatorName' => false,
                                 'personFirstname' => 'John',
                                 'personLastname' => 'Smith',
-                                'categoryText' => NULL,
+                                'categoryText' => null,
                                 'court' => 'FPN',
                                 'penalty' => '3 points on licence',
                                 'msi' => 'N',
@@ -287,7 +294,7 @@ class LicenceTest extends \PHPUnit_Framework_TestCase
                             'offenceDate' => '2012-03-10T00:00:00+0000',
                             'convictionDate' => '2012-06-15T00:00:00+0100',
                             'name' => 'John Smith Haulage Ltd.',
-                            'categoryText' => NULL,
+                            'categoryText' => null,
                             'court' => 'FPN',
                             'penalty' => '3 points on licence',
                             'msi' => 'N',
@@ -298,7 +305,7 @@ class LicenceTest extends \PHPUnit_Framework_TestCase
                             'offenceDate' => '2012-03-10T00:00:00+0000',
                             'convictionDate' => '2012-06-15T00:00:00+0100',
                             'name' => 'John Smith',
-                            'categoryText' => NULL,
+                            'categoryText' => null,
                             'court' => 'FPN',
                             'penalty' => '3 points on licence',
                             'msi' => 'N',
@@ -348,7 +355,7 @@ class LicenceTest extends \PHPUnit_Framework_TestCase
                             ],
                         'licence' => [
                             'licNo' => 'OB1234567',
-                            'trailersInPossession' => NULL,
+                            'trailersInPossession' => null,
                             'totAuthTrailers' => 4,
                             'totAuthVehicles' => 12,
                             'inForceDate' => '2010-01-12T00:00:00+0000',
@@ -359,7 +366,7 @@ class LicenceTest extends \PHPUnit_Framework_TestCase
                             'organisation' => [
                                 'isMlh' => 'Y',
                                 'name' => 'John Smith Haulage Ltd.',
-                                'sicCode' => NULL,
+                                'sicCode' => null,
                                 'type' =>
                                     [
                                         'description' => 'Registered Company',
@@ -369,22 +376,22 @@ class LicenceTest extends \PHPUnit_Framework_TestCase
                             'licenceVehicles' => [
                                 0 => [
                                     'id' => 1,
-                                    'deletedDate' => NULL,
+                                    'deletedDate' => null,
                                     'specifiedDate' => '2014-02-20T00:00:00+0000',
                                 ],
                                 1 => [
                                     'id' => 2,
-                                    'deletedDate' => NULL,
+                                    'deletedDate' => null,
                                     'specifiedDate' => '2014-02-20T00:00:00+0000',
                                 ],
                                 2 => [
                                     'id' => 3,
-                                    'deletedDate' => NULL,
+                                    'deletedDate' => null,
                                     'specifiedDate' => '2014-02-20T00:00:00+0000',
                                 ],
                                 3 => [
                                     'id' => 4,
-                                    'deletedDate' => NULL,
+                                    'deletedDate' => null,
                                     'specifiedDate' => '2014-02-20T00:00:00+0000',
                                 ],
                             ],
@@ -402,14 +409,14 @@ class LicenceTest extends \PHPUnit_Framework_TestCase
                         'organisationName' => 'John Smith Haulage Ltd.',
                         'isMlh' => 'Y',
                         'organisationType' => 'Registered Company',
-                        'businessType' => NULL,
+                        'businessType' => null,
                         'caseType' => 'case_t_lic',
                         'ecmsNo' => 'E123456',
                         'licNo' => 'OB1234567',
                         'licenceStartDate' => '2010-01-12T00:00:00+0000',
                         'licenceType' => 'Standard National',
                         'goodsOrPsv' => 'Goods Vehicle',
-                        'serviceStandardDate' => NULL,
+                        'serviceStandardDate' => null,
                         'licenceStatus' => 'New',
                         'totAuthorisedVehicles' => 12,
                         'totAuthorisedTrailers' => 4,
@@ -421,131 +428,6 @@ class LicenceTest extends \PHPUnit_Framework_TestCase
             ]
         ];
     }
-/*
-
-
-                // case-summary
-                [
-                    'caseId' => 24,
-                    'sectionId' => 'case-summary',
-                    'sectionConfig' => [
-                        'service' => 'Cases',
-                        'bundle' => ['some_bundle'],
-                    ]
-                ],
-                // case-outline
-                [
-                    'caseId' => 24,
-                    'sectionId' => 'case-outline',
-                    'sectionConfig' => [
-                        'service' => 'Cases',
-                        'bundle' => ['some_bundle'],
-                    ]
-                ],
-                [
-                    'loadedCaseSectionData' => [
-                        0 => [
-                            'description' => 'test description'
-                        ]
-                    ],
-                    'filteredSectionData' => [
-                        0 => [
-                            'outline' => 'test description',
-                        ]
-                    ]
-                ]
-            ],
-
-
-            [
-                'loadedCaseSectionData' => [
-                    0 => [
-                        'ecmsNo' => 'E123456',
-                        'description' => 'Case for convictions against company directors',
-                        'id' => 24,
-                        'caseType' =>
-                            [
-                                'id' => 'case_t_lic',
-                            ],
-                        'licence' =>
-                            [
-                                'licNo' => 'OB1234567',
-                                'trailersInPossession' => NULL,
-                                'totAuthTrailers' => 4,
-                                'totAuthVehicles' => 12,
-                                'organisation' =>
-                                    [
-                                        'name' => 'John Smith Haulage Ltd.',
-                                        'sicCode' => NULL,
-                                        'type' =>
-                                            [
-                                                'description' => 'Registered Company',
-                                                'id' => 'org_t_rc',
-                                            ],
-                                    ],
-                                'licenceVehicles' =>
-                                    [
-                                        0 =>
-                                            [
-                                                'id' => 1,
-                                                'deletedDate' => NULL,
-                                                'specifiedDate' => '2014-02-20T00:00:00+0000',
-                                            ],
-                                        1 =>
-                                            [
-                                                'id' => 2,
-                                                'deletedDate' => NULL,
-                                                'specifiedDate' => '2014-02-20T00:00:00+0000',
-                                            ],
-                                        2 =>
-                                            [
-                                                'id' => 3,
-                                                'deletedDate' => NULL,
-                                                'specifiedDate' => '2014-02-20T00:00:00+0000',
-                                            ],
-                                        3 =>
-                                            [
-                                                'id' => 4,
-                                                'deletedDate' => NULL,
-                                                'specifiedDate' => '2014-02-20T00:00:00+0000',
-                                            ],
-                                    ],
-                                'licenceType' =>
-                                    [
-                                        'description' => 'Standard National',
-                                        'id' => 'ltyp_sn',
-                                    ],
-                                'goodsOrPsv' =>
-                                    [
-                                        'description' => 'Goods Vehicle',
-                                    ],
-                            ],
-                    ]
-                ],
-                'filteredSectionData' => [
-                    0 => [
-                        'id' => 24,
-                        'organisationName' => 'John Smith Haulage Ltd.',
-                        'isMlh' => 'N',
-                        'organisationType' => 'Registered Company',
-                        'businessType' => NULL,
-                        'caseType' => 'case_t_lic',
-                        'ecmsNo' => 'E123456',
-                        'licNo' => 'OB1234567',
-                        'licenceStartDate' => '2010-01-12T00:00:00+0000',
-                        'licenceType' => 'Standard National',
-                        'goodsOrPsv' => 'Goods Vehicle',
-                        'serviceStandardDate' => NULL,
-                        'licenceStatus' => 'New',
-                        'totAuthorisedVehicles' => 12,
-                        'totAuthorisedTrailers' => 4,
-                        'vehiclesInPossession' => 4,
-                        'trailersInPossession' => 4,
-
-                    ]
-                ]
-            ],*/
-
 
     public function providerSubmissions()
     {
@@ -573,82 +455,82 @@ class LicenceTest extends \PHPUnit_Framework_TestCase
                     array (
                         'description' => 'MLH Submission',
                         'refDataCategoryId' => 'submission_type_title',
-                        'olbsKey' => NULL,
+                        'olbsKey' => null,
                         'displayOrder' => 1,
                         'id' => 'submission_type_t_mlh',
-                        'parent' => NULL,
+                        'parent' => null,
                     ),
                 1 =>
                     array (
                         'description' => 'Licencing (G) Submission',
                         'refDataCategoryId' => 'submission_type_title',
-                        'olbsKey' => NULL,
+                        'olbsKey' => null,
                         'displayOrder' => 2,
                         'id' => 'submission_type_t_clo_g',
-                        'parent' => NULL,
+                        'parent' => null,
                     ),
                 2 =>
                     array (
                         'description' => 'Licencing (PSV) Submission',
                         'refDataCategoryId' => 'submission_type_title',
-                        'olbsKey' => NULL,
+                        'olbsKey' => null,
                         'displayOrder' => 3,
                         'id' => 'submission_type_t_clo_psv',
-                        'parent' => NULL,
+                        'parent' => null,
                     ),
                 3 =>
                     array (
                         'description' => 'Licencing Fees Submission',
                         'refDataCategoryId' => 'submission_type_title',
-                        'olbsKey' => NULL,
+                        'olbsKey' => null,
                         'displayOrder' => 4,
                         'id' => 'submission_type_t_clo_fep',
-                        'parent' => NULL,
+                        'parent' => null,
                     ),
                 4 =>
                     array (
                         'description' => 'Compliance submission',
                         'refDataCategoryId' => 'submission_type_title',
-                        'olbsKey' => NULL,
+                        'olbsKey' => null,
                         'displayOrder' => 5,
                         'id' => 'submission_type_t_otc',
-                        'parent' => NULL,
+                        'parent' => null,
                     ),
                 5 =>
                     array (
                         'description' => 'ENV Submission',
                         'refDataCategoryId' => 'submission_type_title',
-                        'olbsKey' => NULL,
+                        'olbsKey' => null,
                         'displayOrder' => 6,
                         'id' => 'submission_type_t_env',
-                        'parent' => NULL,
+                        'parent' => null,
                     ),
                 6 =>
                     array (
                         'description' => 'IRFO Submission',
                         'refDataCategoryId' => 'submission_type_title',
-                        'olbsKey' => NULL,
+                        'olbsKey' => null,
                         'displayOrder' => 7,
                         'id' => 'submission_type_t_irfo',
-                        'parent' => NULL,
+                        'parent' => null,
                     ),
                 7 =>
                     array (
                         'description' => 'Bus Registration Submission',
                         'refDataCategoryId' => 'submission_type_title',
-                        'olbsKey' => NULL,
+                        'olbsKey' => null,
                         'displayOrder' => 8,
                         'id' => 'submission_type_t_bus_reg',
-                        'parent' => NULL,
+                        'parent' => null,
                     ),
                 8 =>
                     array (
                         'description' => 'TM Only Submission',
                         'refDataCategoryId' => 'submission_type_title',
-                        'olbsKey' => NULL,
+                        'olbsKey' => null,
                         'displayOrder' => 9,
                         'id' => 'submission_type_t_tm',
-                        'parent' => NULL,
+                        'parent' => null,
                     ),
             );
     }
