@@ -114,7 +114,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
         $m_sections = $this->getMandatorySections();
 
         foreach ($m_sections as $m_key) {
-            $sections[$m_key] = ['label' => $sections[$m_key], 'selected' => 'seleected', 'disabled' => true];
+            $sections[$m_key] = ['label' => $sections[$m_key], 'selected' => 'selected', 'disabled' => true];
         }
         $this->getSections()->setValueOptions($sections);
         $this->getSections()->setOptions(['label_position'=>'append']);
@@ -134,7 +134,6 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
 
         $this->getSubmissionType()->setValue($value['submissionType']);
         $sections = [];
-        $optionalSections = [];
 
         if (isset($value['submissionType'])) {
             if (!(isset($value['sections']))) {
@@ -149,7 +148,6 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
             }
         }
 
-        //$sections = array_unique($sections);
         $this->getSections()->setValue($sections);
 
         return $this;
