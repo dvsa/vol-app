@@ -4,24 +4,20 @@
  * Vehicles Controller
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
+ * @author Rob Caiger <rob@clocal.co.uk>
  */
 namespace Olcs\Controller\Application;
-
-use Common\View\Model\Section;
 
 /**
  * Vehicles Controller
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
+ * @author Rob Caiger <rob@clocal.co.uk>
  */
 class VehiclesController extends AbstractApplicationController
 {
     public function indexAction()
     {
-        return new Section(
-            array(
-                'title' => 'Vehicles'
-            )
-        );
+        return $this->render('vehicles');
     }
 }

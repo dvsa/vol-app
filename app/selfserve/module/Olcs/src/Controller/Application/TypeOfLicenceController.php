@@ -7,7 +7,7 @@
  */
 namespace Olcs\Controller\Application;
 
-use Zend\View\Model\ViewModel;
+use Common\View\Model\Section;
 use Common\Controller\Traits\Lva;
 
 /**
@@ -23,10 +23,12 @@ class TypeOfLicenceController extends AbstractApplicationController
     /**
      * Render the section
      *
-     * @param ViewModel $content
+     * @param string $titleSuffix
+     * @param \Zend\Form\Form $form
+     * @return \Common\View\Model\Section
      */
-    protected function renderCreateApplication(ViewModel $content)
+    protected function renderCreateApplication($titleSuffix, Form $form = null)
     {
-        return $content;
+        return new Section(array('title' => 'lva.section.title.' . $titleSuffix, 'form' => $form));
     }
 }

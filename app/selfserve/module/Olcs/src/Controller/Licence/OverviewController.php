@@ -23,9 +23,7 @@ class OverviewController extends AbstractLicenceController
      */
     public function indexAction()
     {
-        $data = $this->getEntityService('Licence')->getOverview(
-            $this->getLicenceId()
-        );
+        $data = $this->getEntityService('Licence')->getOverview($this->getLicenceId());
 
         return new LicenceOverview($data, $this->getAccessibleSections());
     }

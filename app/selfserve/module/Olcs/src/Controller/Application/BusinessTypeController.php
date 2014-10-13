@@ -4,15 +4,15 @@
  * Business Type Controller
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
+ * @author Rob Caiger <rob@clocal.co.uk>
  */
 namespace Olcs\Controller\Application;
-
-use Common\View\Model\Section;
 
 /**
  * Business Type Controller
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
+ * @author Rob Caiger <rob@clocal.co.uk>
  */
 class BusinessTypeController extends AbstractApplicationController
 {
@@ -28,35 +28,59 @@ class BusinessTypeController extends AbstractApplicationController
         if ($request->isPost()) {
             $data = (array)$request->getPost();
         } else {
-            $orgData = $this->getEntityService('Organisation')->getType($orgId);
-            $data = array(
-                'version' => $orgData['version'],
-                'data' => array(
-                    'type' => $orgData['type']['id']
-                )
-            );
+            $data = $this->formatDataForForm($this->getEntityService('Organisation')->getType($orgId));
         }
 
-        $form = $this->getHelperService('FormHelper')
-            ->createForm('Lva\BusinessType')
-            ->setData($data);
+        $form = $this->getBusinessTypeForm()->setData($data);
 
         if ($request->isPost() && $form->isValid()) {
-            $data = array(
-                'id' => $orgId,
-                'version' => $data['version'],
-                'type' => $data['data']['type']
-            );
-            $this->getEntityService('Organisation')->save($data);
+            $this->getEntityService('Organisation')->save($this->formatDataForSave($orgId, $data));
 
             return $this->completeSection('business_type');
         }
 
-        return new Section(
-            array(
-                'title' => 'Business type',
-                'form' => $form
+        return $this->render('business_type', $form);
+    }
+
+    /**
+     * Format data for form
+     *
+     * @param array $data
+     * @return array
+     */
+    private function formatDataForForm($data)
+    {
+        return array(
+            'version' => $data['version'],
+            'data' => array(
+                'type' => $data['type']['id']
             )
         );
+    }
+
+    /**
+     * Format data for save
+     *
+     * @param int $orgId
+     * @param array $data
+     * @return array
+     */
+    private function formatDataForSave($orgId, $data)
+    {
+        return array(
+            'id' => $orgId,
+            'version' => $data['version'],
+            'type' => $data['data']['type']
+        );
+    }
+
+    /**
+     * Get business type form
+     *
+     * @return \Zend\Form\Form
+     */
+    private function getBusinessTypeForm()
+    {
+        return $this->getHelperService('FormHelper')->createForm('Lva\BusinessType');
     }
 }

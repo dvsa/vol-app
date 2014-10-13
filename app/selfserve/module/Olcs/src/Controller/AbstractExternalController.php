@@ -7,7 +7,9 @@
  */
 namespace Olcs\Controller;
 
+use Zend\Form\Form;
 use Zend\View\Model\ViewModel;
+use Common\View\Model\Section;
 use Common\Controller\AbstractLvaController;
 
 /**
@@ -79,10 +81,16 @@ abstract class AbstractExternalController extends AbstractLvaController
     /**
      * Render the section
      *
-     * @param ViewModel $content
+     * @param string $titleSuffix
+     * @param \Zend\Form\Form $form
+     * @return \Common\View\Model\Section
      */
-    protected function render(ViewModel $content)
+    protected function render($titleSuffix, Form $form = null)
     {
-        return $content;
+        if ($titleSuffix instanceof ViewModel) {
+            return $titleSuffix;
+        }
+
+        return new Section(array('title' => 'lva.section.title.' . $titleSuffix, 'form' => $form));
     }
 }
