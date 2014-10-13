@@ -65,10 +65,12 @@ return array(
             'LvaLicence' => 'Olcs\Controller\Licence\OverviewController',
             'LvaLicence/TypeOfLicence' => 'Olcs\Controller\Licence\TypeOfLicenceController',
             'LvaLicence/BusinessType' => 'Olcs\Controller\Licence\BusinessTypeController',
+            'LvaLicence/BusinessDetails' => 'Olcs\Controller\Licence\BusinessDetailsController',
 
             'LvaVariation' => 'Olcs\Controller\Variation\OverviewController',
             'LvaVariation/TypeOfLicence' => 'Olcs\Controller\Variation\TypeOfLicenceController',
             'LvaVariation/BusinessType' => 'Olcs\Controller\Variation\BusinessTypeController',
+            'LvaVariation/BusinessDetails' => 'Olcs\Controller\Variation\BusinessDetailsController',
         )
     ),
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',
