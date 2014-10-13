@@ -47,7 +47,7 @@ trait LicenceServiceTrait
         return [
             'isNi' => $licence['niFlag'],
             'goodsOrPsv' => $licence['goodsOrPsv']['id'],
-            'trafficArea' => $licence['trafficArea']
+            'trafficArea' => $licence['trafficArea']['id']
         ];
     }
 
