@@ -8,6 +8,8 @@
  */
 namespace Olcs\Controller\Application;
 
+use Common\Controller\Traits\Lva;
+
 /**
  * Addresses Controller
  *
@@ -16,8 +18,5 @@ namespace Olcs\Controller\Application;
  */
 class AddressesController extends AbstractApplicationController
 {
-    public function indexAction()
-    {
-        return $this->render('addresses');
-    }
+    use Lva\AddressesTrait;
 }
