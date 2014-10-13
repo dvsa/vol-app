@@ -12,8 +12,7 @@ use Zend\Form\Annotation as Form;
 class PublicInquiryHearingFields extends Base
 {
     /**
-     * @Form\Required(true)
-     * @Form\Attributes({"id":"piVenue","placeholder":"","class":"medium", "required":false})
+     * @Form\Attributes({"id":"piVenue","placeholder":"","class":"medium"})
      * @Form\Options({
      *     "label": "Venue",
      *     "service_name": "Olcs\Service\Data\PiVenue",
@@ -23,28 +22,6 @@ class PublicInquiryHearingFields extends Base
      *     "other_option" : true
      * })
      *
-     * @Form\AllowEmpty(true)
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Validator({"name": "ValidateIf",
-     *      "options":{
-     *          "context_field": "piVenue",
-     *          "context_values": {"other"},
-     *          "allow_empty": false,
-     *          "validators": {
-     *              {
-     *                  "name": "ValidateIf",
-     *                  "options":{
-     *                      "context_field": "piVenueOther",
-     *                      "context_values": {""},
-     *                      "allow_empty": false,
-     *                      "validators": {
-     *                          {"name": "\Zend\Validator\NotEmpty"}
-     *                      }
-     *                  }
-     *              }
-     *          }
-     *      }
-     * })
      * @Form\Type("DynamicSelect")
      */
     public $piVenue;
@@ -82,7 +59,7 @@ class PublicInquiryHearingFields extends Base
      * })
      * @Form\Type("DateTimeSelect")
      * @Form\Filter({"name": "DateTimeSelectNullifier"})
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d h:i:s"}})
+     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d H:i:s"}})
      */
     public $hearingDate;
 
@@ -152,7 +129,7 @@ class PublicInquiryHearingFields extends Base
 
     /**
      * @Form\Required(true)
-     * @Form\Attributes({"class":"extra-long","id":"", "required":false})
+     * @Form\Attributes({"class":"extra-long","id":"cancelledReason", "required":false})
      * @Form\Options({"label":"Cancelled reason"})
      * @Form\AllowEmpty(true)
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
@@ -170,7 +147,7 @@ class PublicInquiryHearingFields extends Base
      *      }
      * })
      */
-    public $cancelledReason = null;
+    public $cancelledReason;
 
     /**
      * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Adjourned"})
