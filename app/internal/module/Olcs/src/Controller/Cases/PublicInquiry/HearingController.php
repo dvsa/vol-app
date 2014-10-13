@@ -75,7 +75,7 @@ class HearingController extends PublicInquiryController
      *
      * @return array
      */
-    protected function getDataForForm()
+    public function getDataForForm()
     {
         $data = parent::getDataForForm();
         $data['fields']['pi'] = $this->getFromRoute('pi');
