@@ -76,6 +76,7 @@ class PublicInquiryHearingFields extends Base
      * @Form\Options({
      *     "label": "Date of Pi",
      *     "create_empty_option": true,
+     *     "max_year": 2016,
      *     "render_delimiters": true,
      *     "pattern": "d MMMM y '</div><div class=""field""><label for=hearingDate>Time of Pi</label>'HH:mm:ss"
      * })
@@ -110,6 +111,15 @@ class PublicInquiryHearingFields extends Base
      * @Form\Type("DynamicSelect")
      */
     public $presidedByRole;
+
+    /**
+     * @Form\Attributes({"id":"","placeholder":"","class":"small"})
+     * @Form\Options({"label": "Witnesses"})
+     * @Form\Type("Text")
+     * @Form\Required(false)
+     * @Form\Validator({"name":"Digits"})
+     */
+    public $witnesses;
 
     /**
      * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Cancelled"})
@@ -163,16 +173,16 @@ class PublicInquiryHearingFields extends Base
     public $cancelledReason = null;
 
     /**
-     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Ajourned"})
+     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Adjourned"})
      * @Form\Type("checkbox")
      */
-    public $isAjourned;
+    public $isAdjourned;
 
     /**
      * @Form\Required(true)
-     * @Form\Attributes({"id":"ajournedDate", "required": false})
+     * @Form\Attributes({"id":"adjournedDate", "required": false})
      * @Form\Options({
-     *     "label": "Ajourned date",
+     *     "label": "Adjourned date",
      *     "create_empty_option": true,
      * })
      * @Form\AllowEmpty(true)
@@ -181,7 +191,7 @@ class PublicInquiryHearingFields extends Base
      * @Form\Filter({"name": "DateSelectNullifier"})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
-     *          "context_field": "isAjourned",
+     *          "context_field": "isAdjourned",
      *          "context_values": {"Y"},
      *          "validators": {
      *              {"name": "Date", "options": {"format": "Y-m-d"}}
@@ -189,19 +199,19 @@ class PublicInquiryHearingFields extends Base
      *      }
      * })
      */
-    public $ajournedDate;
+    public $adjournedDate;
 
     /**
      * @Form\Required(true)
      * @Form\Attributes({"class":"extra-long","id":"", "required":false})
-     * @Form\Options({"label":"Ajourned reason"})
+     * @Form\Options({"label":"Adjourned reason"})
      * @Form\AllowEmpty(true)
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("TextArea")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
-     *          "context_field": "isAjourned",
+     *          "context_field": "isAdjourned",
      *          "context_values": {"Y"},
      *          "allow_empty": false,
      *          "validators": {
@@ -211,7 +221,7 @@ class PublicInquiryHearingFields extends Base
      *      }
      * })
      */
-    public $ajournedReason = null;
+    public $adjournedReason = null;
 
     /**
      * @Form\Required(false)
@@ -233,7 +243,7 @@ class PublicInquiryHearingFields extends Base
      * @Form\Required(false)
      * @Form\Type("TextArea")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":4000}})
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5, "max":4000}})
      */
     public $details = null;
 
