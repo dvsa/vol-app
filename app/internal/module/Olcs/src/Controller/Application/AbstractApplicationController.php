@@ -7,7 +7,9 @@
  */
 namespace Olcs\Controller\Application;
 
+use Zend\Form\Form;
 use Zend\View\Model\ViewModel;
+use Common\View\Model\Section;
 use Olcs\View\Model\Application\Layout;
 use Olcs\View\Model\Application\SectionLayout;
 use Olcs\View\Model\Application\ApplicationLayout;
@@ -34,10 +36,16 @@ class AbstractApplicationController extends AbstractInternalController
     /**
      * Render the section
      *
-     * @param ViewModel $content
+     * @param string|ViewModel $content
+     * @param \Zend\Form\Form $form
+     * @return \Zend\View\Model\ViewModel
      */
-    protected function render(ViewModel $content)
+    protected function render($content, Form $form = null)
     {
+        if (! ($content instanceof ViewModel)) {
+            $content = new Section(array('title' => 'lva.section.title.' . $content, 'form' => $form));
+        }
+
         $routeName = $this->getEvent()->getRouteMatch()->getMatchedRouteName();
 
         $sectionLayout = new SectionLayout(

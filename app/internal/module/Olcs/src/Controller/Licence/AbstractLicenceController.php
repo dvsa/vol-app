@@ -8,6 +8,7 @@
  */
 namespace Olcs\Controller\Licence;
 
+use Zend\Form\Form;
 use Zend\View\Model\ViewModel;
 use Olcs\View\Model\Licence\SectionLayout;
 use Olcs\View\Model\Licence\Layout;
@@ -63,10 +64,16 @@ abstract class AbstractLicenceController extends AbstractInternalController
     /**
      * Render the section
      *
-     * @param ViewModel $content
+     * @param string|ViewModel $content
+     * @param \Zend\Form\Form $form
+     * @return \Zend\View\Model\ViewModel
      */
-    protected function render(ViewModel $content)
+    protected function render($content, Form $form = null)
     {
+        if (! ($content instanceof ViewModel)) {
+            $content = new Section(array('title' => 'lva.section.title.' . $content, 'form' => $form));
+        }
+
         $routeName = $this->getEvent()->getRouteMatch()->getMatchedRouteName();
 
         $sectionLayout = new SectionLayout(
