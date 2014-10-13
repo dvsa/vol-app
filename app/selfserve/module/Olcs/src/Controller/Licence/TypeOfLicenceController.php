@@ -16,6 +16,5 @@ use Common\Controller\Traits\Lva;
  */
 class TypeOfLicenceController extends AbstractLicenceController
 {
-    use Lva\TypeOfLicenceTrait,
-        Lva\LicenceTypeOfLicenceTrait;
+    use Lva\TypeOfLicenceTrait;
 }

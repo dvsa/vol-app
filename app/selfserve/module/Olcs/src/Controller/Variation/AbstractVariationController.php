@@ -7,6 +7,7 @@
  */
 namespace Olcs\Controller\Variation;
 
+use Common\Controller\Traits\Lva;
 use Olcs\Controller\Application\AbstractApplicationController;
 
 /**
@@ -16,6 +17,8 @@ use Olcs\Controller\Application\AbstractApplicationController;
  */
 abstract class AbstractVariationController extends AbstractApplicationController
 {
+    use Lva\VariationControllerTrait;
+
     /**
      * Lva
      *
@@ -24,16 +27,19 @@ abstract class AbstractVariationController extends AbstractApplicationController
     protected $lva = 'variation';
 
     /**
-     * Hook into the dispatch before the controller action is executed
+     * Complete section
+     *
+     * @param string $section
+     * @return \Zend\Http\Response
      */
-    protected function preDispatch()
+    protected function completeSection($section)
     {
-        $applicationId = $this->getApplicationId();
+        $this->addSectionUpdatedMessage($section);
 
-        if (!$this->isApplicationVariation($applicationId)) {
-            return $this->notFoundAction();
+        if ($this->isButtonPressed('saveAndContinue')) {
+            return $this->goToNextSection($section);
         }
 
-        return $this->checkForRedirect($applicationId);
+        return $this->goToOverviewAfterSave();
     }
 }

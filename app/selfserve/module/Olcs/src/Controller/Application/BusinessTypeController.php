@@ -8,6 +8,8 @@
  */
 namespace Olcs\Controller\Application;
 
+use Common\Controller\Traits\Lva;
+
 /**
  * Business Type Controller
  *
@@ -16,6 +18,8 @@ namespace Olcs\Controller\Application;
  */
 class BusinessTypeController extends AbstractApplicationController
 {
+    use Lva\BusinessTypeTrait;
+
     /**
      * Business type section
      */
@@ -40,47 +44,5 @@ class BusinessTypeController extends AbstractApplicationController
         }
 
         return $this->render('business_type', $form);
-    }
-
-    /**
-     * Format data for form
-     *
-     * @param array $data
-     * @return array
-     */
-    private function formatDataForForm($data)
-    {
-        return array(
-            'version' => $data['version'],
-            'data' => array(
-                'type' => $data['type']['id']
-            )
-        );
-    }
-
-    /**
-     * Format data for save
-     *
-     * @param int $orgId
-     * @param array $data
-     * @return array
-     */
-    private function formatDataForSave($orgId, $data)
-    {
-        return array(
-            'id' => $orgId,
-            'version' => $data['version'],
-            'type' => $data['data']['type']
-        );
-    }
-
-    /**
-     * Get business type form
-     *
-     * @return \Zend\Form\Form
-     */
-    private function getBusinessTypeForm()
-    {
-        return $this->getHelperService('FormHelper')->createForm('Lva\BusinessType');
     }
 }

@@ -64,6 +64,7 @@ return array(
 
             'LvaLicence' => 'Olcs\Controller\Licence\OverviewController',
             'LvaLicence/TypeOfLicence' => 'Olcs\Controller\Licence\TypeOfLicenceController',
+            'LvaLicence/BusinessType' => 'Olcs\Controller\Licence\BusinessTypeController',
 
             'LvaVariation' => 'Olcs\Controller\Variation\OverviewController',
             'LvaVariation/TypeOfLicence' => 'Olcs\Controller\Variation\TypeOfLicenceController',

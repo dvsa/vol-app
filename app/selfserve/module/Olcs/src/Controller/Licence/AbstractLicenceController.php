@@ -8,6 +8,7 @@
  */
 namespace Olcs\Controller\Licence;
 
+use Zend\Form\Form;
 use Olcs\Controller\AbstractExternalController;
 
 /**
@@ -74,5 +75,32 @@ abstract class AbstractLicenceController extends AbstractExternalController
     protected function getTypeOfLicenceData()
     {
         return $this->getEntityService('Licence')->getTypeOfLicenceData($this->getLicenceId());
+    }
+
+    /**
+     * Complete a section and potentially redirect to the next
+     * one depending on the user's choice
+     *
+     * @return \Zend\Http\Response
+     */
+    protected function completeSection($section)
+    {
+        $this->addSectionUpdatedMessage($section);
+
+        return $this->goToOverviewAfterSave($this->getLicenceId());
+    }
+
+    /**
+     * Render the section
+     *
+     * @param string $titleSuffix
+     * @param \Zend\Form\Form $form
+     * @return \Common\View\Model\Section
+     */
+    protected function render($titleSuffix, Form $form = null)
+    {
+        $form->get('form-actions')->remove('saveAndContinue');
+
+        return parent::render($titleSuffix, $form);
     }
 }
