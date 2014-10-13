@@ -1,28 +1,20 @@
 <div class="full-width">
     <?php echo $this->flashMessengerAll(); ?>
-    <?php
 
-    if (isset($title)) {
-        ?>
+    <?php if (isset($title)): ?>
         <h2><?php echo $this->translate($title); ?></h2>
+    <?php endif; ?>
+
+
+    <?php if (isset($table)): ?>
+        <?php echo $table; ?>
+    <?php endif; ?>
+
+    <?php if (isset($form)): ?>
         <?php
-    }
-
-
-    if (isset($table)) {
-        echo $table;
-    }
-
-    if (isset($form)) {
         $form->prepare();
         echo $this->formErrors($form);
         echo $this->form($form);
-    }
-
-    if (isset($scripts)) {
-        foreach ($scripts as $script) {
-            $this->inlineScript()->appendScript($script);
-        }
-    }
-    ?>
+        ?>
+    <?php endif; ?>
 </div>
