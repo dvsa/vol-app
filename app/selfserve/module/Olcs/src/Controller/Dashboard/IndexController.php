@@ -10,6 +10,7 @@
 namespace Olcs\Controller\Dashboard;
 
 use Common\Controller\AbstractActionController;
+use Common\Controller\Application\Application\ApplicationController;
 use Zend\View\Model\ViewModel;
 use Zend\Http\Response;
 
@@ -97,6 +98,8 @@ class IndexController extends AbstractActionController
     /**
      * Index action
      *
+     * @todo Refactor this so there are fewer loops
+     *
      * @return ViewModel
      */
     public function indexAction()
@@ -109,24 +112,37 @@ class IndexController extends AbstractActionController
         $variationApplications = array();
         $licences = array();
 
+        $applicationStatuses = array(
+            ApplicationController::APPLICATION_STATUS_NOT_YET_SUBMITTED,
+            ApplicationController::APPLICATION_STATUS_UNDER_CONSIDERATION,
+            ApplicationController::APPLICATION_STATUS_GRANTED
+        );
+
         if (isset($data['organisationUsers'])) {
             foreach ($data['organisationUsers'] as $orgUser) {
                 foreach ($orgUser['organisation']['licences'] as $licence) {
 
                     $licenceRow=$licence;
                     $licenceRow['status'] = (string)$licence['status']['id'];
-                    $licenceRow['type'] = (string)$licence['licenceType']['id'];
+                    if ( isset($licence['licenceType']['id']) ) {
+                        $licenceRow['type'] = (string)$licence['licenceType']['id'];
+                    } else {
+                        $licenceRow['type'] = '-';
+                    }
                     $licences[$licence['id']] = $licenceRow;
 
                     foreach ($licence['applications'] as $application) {
-                        $newRow = $application;
-                        $newRow['licNo'] = $licence['licNo'];
-                        $newRow['status'] = (string)$application['status']['id'];
+                        if ( in_array($application['status'], $applicationStatuses)) {
 
-                        if ( $application['isVariation'] ) {
-                            $variationApplications[$newRow['id']] = $newRow;
-                        } else {
-                            $applications[$newRow['id']] = $newRow;
+                            $newRow = $application;
+                            $newRow['licNo'] = $licence['licNo'];
+                            $newRow['status'] = (string)$application['status']['id'];
+
+                            if ( $application['isVariation'] ) {
+                                $variationApplications[$newRow['id']] = $newRow;
+                            } else {
+                                $applications[$newRow['id']] = $newRow;
+                            }
                         }
                     }
                 }
