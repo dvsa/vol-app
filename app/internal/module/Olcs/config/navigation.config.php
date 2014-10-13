@@ -113,17 +113,31 @@ return array(
                     )
                 ),
                 array(
-                    'id' => 'case_oppositions',
+                    'id' => 'case_opposition',
                     'label' => 'Opposition',
-                    'route' => 'case',
-                    'action' => 'oppositions',
+                    'route' => 'case_opposition',
+                    'action' => 'redirect',
                     'use_route_match' => true,
                     'pages' => array(
                         array(
-                            'id' => 'case_submission_list',
-                            'label' => 'Submission List',
-                            'route' => 'case',
+                            'id' => 'case_opposition_list',
+                            'label' => 'Opposition List',
+                            'route' => 'case_opposition',
                             'action' => 'index',
+                            'use_route_match' => true,
+                        ),
+                        array(
+                            'id' => 'case_opposition_add',
+                            'label' => 'Add Opposition',
+                            'route' => 'case_opposition',
+                            'action' => 'add',
+                            'use_route_match' => true,
+                        ),
+                        array(
+                            'id' => 'case_opposition_edit',
+                            'label' => 'Edit Opposition',
+                            'route' => 'case_opposition',
+                            'action' => 'edit',
                             'use_route_match' => true,
                         ),
                     )
