@@ -9,10 +9,12 @@ namespace Olcs\Controller\Variation;
 
 use Zend\Form\Form;
 use Zend\View\Model\ViewModel;
+use Common\View\Model\Section;
 use Olcs\View\Model\Variation\VariationLayout;
 use Olcs\View\Model\Application\Layout;
 use Olcs\View\Model\Variation\SectionLayout;
 use Olcs\Controller\Application\AbstractApplicationController;
+use Common\Controller\Traits\Lva;
 
 /**
  * INTERNAL Abstract Variation Controller
@@ -21,6 +23,8 @@ use Olcs\Controller\Application\AbstractApplicationController;
  */
 class AbstractVariationController extends AbstractApplicationController
 {
+    use Lva\VariationControllerTrait;
+
     /**
      * Lva
      *
@@ -37,7 +41,7 @@ class AbstractVariationController extends AbstractApplicationController
      */
     protected function render($content, Form $form = null)
     {
-        if (! ($content instanceof ViewModel)) {
+        if (!($content instanceof ViewModel)) {
             $content = new Section(array('title' => 'lva.section.title.' . $content, 'form' => $form));
         }
 

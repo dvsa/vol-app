@@ -10,6 +10,7 @@ namespace Olcs\Controller\Licence;
 
 use Zend\Form\Form;
 use Zend\View\Model\ViewModel;
+use Common\View\Model\Section;
 use Olcs\View\Model\Licence\SectionLayout;
 use Olcs\View\Model\Licence\Layout;
 use Olcs\View\Model\Licence\LicenceLayout;
@@ -70,6 +71,10 @@ abstract class AbstractLicenceController extends AbstractInternalController
      */
     protected function render($content, Form $form = null)
     {
+        if ($form instanceof Form) {
+            $form->get('form-actions')->remove('saveAndContinue');
+        }
+
         if (! ($content instanceof ViewModel)) {
             $content = new Section(array('title' => 'lva.section.title.' . $content, 'form' => $form));
         }
@@ -138,5 +143,18 @@ abstract class AbstractLicenceController extends AbstractInternalController
         }
 
         return $sections;
+    }
+
+    /**
+     * Complete a section and potentially redirect to the next
+     * one depending on the user's choice
+     *
+     * @return \Zend\Http\Response
+     */
+    protected function completeSection($section)
+    {
+        $this->addSectionUpdatedMessage($section);
+
+        return $this->goToOverviewAfterSave($this->getLicenceId());
     }
 }
