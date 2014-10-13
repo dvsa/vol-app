@@ -180,6 +180,20 @@ class LicenceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $expected['filteredSectionData']);
     }
 
+    public function testCreateSubmissionSectionEmptyConfig()
+    {
+
+        $input = [
+            'caseId' => 24,
+            'sectionId' => 'conviction-fpn-offence-history',
+            'sectionConfig' => []
+        ];
+
+        $result = $this->sut->createSubmissionSection($input['caseId'], $input['sectionId'], $input['sectionConfig']);
+
+        $this->assertEquals($result, []);
+    }
+
     public function testSetId()
     {
         $this->sut->setId(1);
@@ -230,7 +244,6 @@ class LicenceTest extends \PHPUnit_Framework_TestCase
     public function providerSubmissionSectionData()
     {
         return [
-
             [
                 [
                     'caseId' => 24,
