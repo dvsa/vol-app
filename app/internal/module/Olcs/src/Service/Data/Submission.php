@@ -296,10 +296,6 @@ class Submission extends AbstractData
 
         foreach ($data['convictions'] as $conviction) {
 
-            //if (isset($staticDefType[$conviction['defType']])) {
-            //    $thisConviction['name'] .= ' / ' . $staticDefType[$conviction['defType']];
-            //}
-
             $thisConviction['offenceDate'] = $conviction['offenceDate'];
             $thisConviction['convictionDate'] = $conviction['convictionDate'];
 
