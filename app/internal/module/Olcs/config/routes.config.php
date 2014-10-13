@@ -885,10 +885,26 @@ return array_merge(
                 'route' => '/case/:case/pi/agreed[/:action]',
                 'constraints' => [
                     'case' => '[0-9]+',
-                    'action' => '[a-z]+',
+                    'action' => '[a-z]+'
                 ],
                 'defaults' => [
                     'controller' => 'PublicInquiry\AgreedAndLegislationController',
+                    'action' => 'index'
+                ]
+            ]
+        ],
+        'case_pi_hearing' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/case/:case/pi/:pi/hearing[/:action][/:id]',
+                'constraints' => [
+                    'case' => '[0-9]+',
+                    'pi' => '[0-9]+',
+                    'action' => '[a-z]+',
+                    'id' => '[0-9]+',
+                ],
+                'defaults' => [
+                    'controller' => 'PublicInquiry\HearingController',
                     'action' => 'index'
                 ]
             ]
