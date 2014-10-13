@@ -11,7 +11,6 @@ use Olcs\Controller as OlcsController;
 use Zend\View\Model\ViewModel;
 use Olcs\Controller\Cases\AbstractController as AbstractCasesController;
 use Olcs\Controller\Traits as ControllerTraits;
-use Zend\Filter\Word\UnderscoreToCamelCase;
 
 /**
  * Cases Submission Controller
@@ -21,7 +20,6 @@ use Zend\Filter\Word\UnderscoreToCamelCase;
 class SubmissionController extends OlcsController\CrudAbstract
 {
     use ControllerTraits\CaseControllerTrait;
-    use ControllerTraits\SubmissionSectionTrait;
 
     /**
      * Identifier name
@@ -145,17 +143,22 @@ class SubmissionController extends OlcsController\CrudAbstract
     {
         // modify $data
         $this->submissionConfig = $this->getServiceLocator()->get('config')['submission_config'];
+        $submissionService = $this->getServiceLocator()->get('Olcs\Service\Data\Submission');
+        $params = $this->getParams(array('case'));
+        $caseId = $params['case'];
 
         if (is_array($data['submissionSections']['sections'])) {
             foreach ($data['submissionSections']['sections'] as $index => $sectionId) {
-                $sectionData = $this->createSubmissionSection(
-                    $sectionId,
-                    $this->submissionConfig['sections'][$sectionId]
-                );
+                $sectionConfig = isset($this->submissionConfig['sections'][$sectionId]) ?
+                    $this->submissionConfig['sections'][$sectionId] : [];
 
                 $data['submissionSections']['sections'][$index] = [
                     'sectionId' => $sectionId,
-                    'data' => $sectionData
+                    'data' => $submissionService->createSubmissionSection(
+                        $caseId,
+                        $sectionId,
+                        $sectionConfig
+                    )
                 ];
             }
         }
@@ -264,25 +267,22 @@ class SubmissionController extends OlcsController\CrudAbstract
      */
     public function detailsAction()
     {
-        $this->submissionSectionRefData = $this->getServiceLocator()->get(
-            'Common\Service\Data\RefData'
-        )->fetchListOptions('submission_section');
+        $submissionId = $this->getQueryOrRouteParam('submission');
 
-        $submission = $this->loadCurrent();
+        $submissionService = $this->getServiceLocator()
+            ->get('Olcs\Service\Data\Submission');
 
-        $submissionTitles = $this->getServiceLocator()
-            ->get('Common\Service\Data\RefData')->fetchListData('submission_type_title');
+        $submission = $submissionService->fetchSubmissionData($submissionId);
 
         $submission['submissionTypeTitle'] =
-            $this->getSubmissionTypeTitle($submission['submissionType']['id'], $submissionTitles);
+            $submissionService->getSubmissionTypeTitle(
+                $submission['submissionType']['id']
+            );
 
-        $selectedSectionsArray = json_decode($submission['text'], true);
-
-        // add section description text from ref data
-        foreach ($selectedSectionsArray as $index => $selectedSectionData) {
-            $selectedSectionsArray[$index]['description'] =
-                $this->submissionSectionRefData[$selectedSectionData['sectionId']];
-        }
+        $selectedSectionsArray =
+            $submissionService->extractSelectedSubmissionSectionsData(
+                $submission
+            );
 
         $this->getViewHelperManager()
             ->get('placeholder')
@@ -295,29 +295,10 @@ class SubmissionController extends OlcsController\CrudAbstract
             ->set($submission);
 
         $view = $this->getView([]);
-        $view->setVariable('allSections', $this->submissionSectionRefData);
+        $view->setVariable('allSections', $submissionService->getAllSectionsRefData());
 
         $view->setTemplate($this->detailsView);
 
         return $this->renderView($view);
-    }
-
-    /**
-     * Extracts the title from ref_data based on a given submission type.
-     *
-     * @param array $submissionTitles
-     * @param string $submissionType
-     * @return string
-     */
-    public function getSubmissionTypeTitle($submissionType, $submissionTitles = array())
-    {
-        if (is_array($submissionTitles)) {
-            foreach ($submissionTitles as $title) {
-                if ($title['id'] == str_replace('_o_', '_t_', $submissionType)) {
-                    return $title['description'];
-                }
-            }
-        }
-        return '';
     }
 }

@@ -121,6 +121,9 @@ return array(
         ),
         'delegators' => array(
             'formElement' => array('Olcs\Form\View\Helper\FormElementDelegatorFactory')
+        ),
+        'factories' => array(
+            'SubmissionSectionTable' => 'Olcs\View\Helper\SubmissionSectionTableFactory'
         )
     ),
     'local_forms_path' => array(
@@ -154,7 +157,8 @@ return array(
             'Olcs\Service\Data\Licence' => 'Olcs\Service\Data\Licence',
             'Olcs\Service\Data\User' => 'Olcs\Service\Data\User',
             'Olcs\Service\Data\PiVenue' => 'Olcs\Service\Data\PiVenue',
-            'Olcs\Service\Data\PresidingTc' => 'Olcs\Service\Data\PresidingTc'
+            'Olcs\Service\Data\PresidingTc' => 'Olcs\Service\Data\PresidingTc',
+            'Olcs\Service\Data\Submission' => 'Olcs\Service\Data\Submission'
         )
     ),
     'application_journey' => array(
