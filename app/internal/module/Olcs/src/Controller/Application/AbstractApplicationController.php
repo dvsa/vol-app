@@ -127,7 +127,7 @@ class AbstractApplicationController extends AbstractInternalController
      */
     protected function getHeaderParams()
     {
-        $data = $this->getEntityService('Application')->getHeaderData($this->getApplicationId());
+        $data = $this->getServiceLocator()->get('Entity\Application')->getHeaderData($this->getApplicationId());
 
         return array(
             'applicationId' => $data['id'],

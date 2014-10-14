@@ -59,7 +59,7 @@ abstract class AbstractLicenceController extends AbstractInternalController
      */
     protected function getTypeOfLicenceData()
     {
-        return $this->getEntityService('Licence')->getTypeOfLicenceData($this->getLicenceId());
+        return $this->getServiceLocator()->get('Entity\Licence')->getTypeOfLicenceData($this->getLicenceId());
     }
 
     /**
@@ -104,7 +104,7 @@ abstract class AbstractLicenceController extends AbstractInternalController
      */
     protected function getHeaderParams()
     {
-        $data = $this->getEntityService('Licence')->getHeaderParams($this->getLicenceId());
+        $data = $this->getServiceLocator()->get('Entity\Licence')->getHeaderParams($this->getLicenceId());
 
         return array(
             'licNo' => $data['licNo'],
