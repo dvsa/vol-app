@@ -11,15 +11,6 @@ $routes = [
             ]
         ]
     ],
-    'styleguide' => [
-        'type' => 'segment',
-        'options' => [
-            'route' => '/styleguide[/:action]',
-            'defaults' => [
-                'controller' => 'IndexController',
-            ]
-        ]
-    ],
     'operators' => [
         'type' => 'Literal',
         'options' => [
