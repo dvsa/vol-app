@@ -53,12 +53,14 @@ abstract class AbstractApplicationController extends AbstractExternalController
     {
         $organisationId = $this->getCurrentOrganisationId();
 
-        if ($this->getServiceLocator()->get('Entity\Application')->doesBelongToOrganisation($applicationId, $organisationId)) {
-            return true;
+        $doesBelong = $this->getServiceLocator()->get('Entity\Application')
+            ->doesBelongToOrganisation($applicationId, $organisationId);
+
+        if (!$doesBelong) {
+            $this->addErrorMessage('application-no-access');
         }
 
-        $this->addErrorMessage('application-no-access');
-        return false;
+        return $doesBelong;
     }
 
     /**
