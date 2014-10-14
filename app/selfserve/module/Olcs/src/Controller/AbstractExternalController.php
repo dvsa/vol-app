@@ -33,7 +33,7 @@ abstract class AbstractExternalController extends AbstractLvaController
      */
     protected function getCurrentUser()
     {
-        return $this->getEntityService('User')->getCurrentUser();
+        return $this->getServiceLocator()->get('Entity\User')->getCurrentUser();
     }
 
     /**
@@ -47,7 +47,7 @@ abstract class AbstractExternalController extends AbstractLvaController
     protected function getCurrentOrganisation()
     {
         $user = $this->getCurrentUser();
-        return $this->getEntityService('Organisation')->getForUser($user['id']);
+        return $this->getServiceLocator()->get('Entity\Organisation')->getForUser($user['id']);
     }
 
     /**

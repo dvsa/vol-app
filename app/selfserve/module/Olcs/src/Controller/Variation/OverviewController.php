@@ -27,7 +27,7 @@ class OverviewController extends AbstractVariationController
             return $this->redirect()->toRoute('dashboard');
         }
 
-        $data = $this->getEntityService('Application')->getOverview($applicationId);
+        $data = $this->getServiceLocator()->get('Entity\Application')->getOverview($applicationId);
 
         return new VariationOverview($data, $this->getAccessibleSections());
     }

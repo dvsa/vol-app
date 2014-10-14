@@ -8,7 +8,7 @@
 namespace Olcs\View\Model;
 
 use Common\View\AbstractViewModel;
-use Common\Service\Entity\LicenceService;
+use Common\Service\Entity\LicenceEntityService;
 
 /**
  * Dashboard View Model
@@ -49,9 +49,9 @@ class Dashboard extends AbstractViewModel
      * Restrict the types of licence we display
      */
     private $displayLicenceStatus = array(
-        LicenceService::LICENCE_STATUS_VALID,
-        LicenceService::LICENCE_STATUS_CURTAILED,
-        LicenceService::LICENCE_STATUS_SUSPENDED
+        LicenceEntityService::LICENCE_STATUS_VALID,
+        LicenceEntityService::LICENCE_STATUS_CURTAILED,
+        LicenceEntityService::LICENCE_STATUS_SUSPENDED
     );
 
 

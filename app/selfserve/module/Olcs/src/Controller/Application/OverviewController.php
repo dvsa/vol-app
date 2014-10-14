@@ -30,7 +30,7 @@ class OverviewController extends AbstractApplicationController
             return $this->redirect()->toRoute('dashboard');
         }
 
-        $data = $this->getEntityService('Application')->getOverview($applicationId);
+        $data = $this->getServiceLocator()->get('Entity\Application')->getOverview($applicationId);
 
         $sections = $this->setEnabledFlagOnSections(
             $this->getAccessibleSections(false),

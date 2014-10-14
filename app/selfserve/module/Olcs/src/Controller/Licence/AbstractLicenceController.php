@@ -49,7 +49,10 @@ abstract class AbstractLicenceController extends AbstractExternalController
     {
         $organisation = $this->getCurrentOrganisation();
 
-        if ($this->getEntityService('Licence')->doesBelongToOrganisation($licenceId, $organisation['id'])) {
+        $doesBelong = $this->getServiceLocator()->get('Entity\Licence')
+            ->doesBelongToOrganisation($licenceId, $organisation['id']);
+
+        if ($doesBelong) {
             return true;
         }
 
@@ -74,7 +77,7 @@ abstract class AbstractLicenceController extends AbstractExternalController
      */
     protected function getTypeOfLicenceData()
     {
-        return $this->getEntityService('Licence')->getTypeOfLicenceData($this->getLicenceId());
+        return $this->getServiceLocator()->get('Entity\Licence')->getTypeOfLicenceData($this->getLicenceId());
     }
 
     /**

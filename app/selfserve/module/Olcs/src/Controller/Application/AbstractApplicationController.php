@@ -50,7 +50,7 @@ abstract class AbstractApplicationController extends AbstractExternalController
         if ($applicationId === null) {
             $applicationId = $this->getApplicationId();
         }
-        $this->getEntityService('ApplicationCompletion')->updateCompletionStatuses($applicationId);
+        $this->getServiceLocator()->get('Entity\ApplicationCompletion')->updateCompletionStatuses($applicationId);
     }
 
     /**
@@ -66,7 +66,7 @@ abstract class AbstractApplicationController extends AbstractExternalController
     {
         $organisationId = $this->getCurrentOrganisationId();
 
-        if ($this->getEntityService('Application')->doesBelongToOrganisation($applicationId, $organisationId)) {
+        if ($this->getServiceLocator()->get('Entity\Application')->doesBelongToOrganisation($applicationId, $organisationId)) {
             return true;
         }
 
@@ -83,6 +83,6 @@ abstract class AbstractApplicationController extends AbstractExternalController
     {
         $licenceId = $this->getLicenceId($this->getApplicationId());
 
-        return $this->getEntityService('Licence')->getTypeOfLicenceData($licenceId);
+        return $this->getServiceLocator()->get('Entity\Licence')->getTypeOfLicenceData($licenceId);
     }
 }

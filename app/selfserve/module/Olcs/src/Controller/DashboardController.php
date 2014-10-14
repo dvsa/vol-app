@@ -23,7 +23,7 @@ class DashboardController extends AbstractExternalController
     public function indexAction()
     {
         $organisationId = $this->getCurrentOrganisationId();
-        $applicationService = $this->getEntityService('Application');
+        $applicationService = $this->getServiceLocator()->get('Entity\Application');
 
         $applications = $applicationService->getForOrganisation($organisationId);
 
