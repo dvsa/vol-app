@@ -5,7 +5,7 @@ namespace OlcsTest\Form\Model\Form;
 use Common\FormTester\Data\Object as F;
 
 /**
- * Class PublicInquiryAgreedAndLegislationTest
+ * Class BusShortNoticeTest
  * @package OlcsTest\FormTest
  * @group ComponentTests
  * @group FormTests
