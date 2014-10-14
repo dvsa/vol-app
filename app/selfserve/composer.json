@@ -1,21 +1,16 @@
 {
     "name": "olcs/olcs-selfserve",
     "description": "OLCS Self Service Web Site",
-    "repositories": [{
-        "type": "package",
-        "package": {
-            "name": "olcs/OlcsCommon",
-            "version": "dev-develop",
-            "source": {
-                "url": "git@gitlab.clb.npm:/olcs/olcs-common.git",
-                "type": "git",
-                "reference": "origin/develop"
-            }
+    "repositories": [
+        {
+            "url": "git@gitlab.clb.npm:olcs/olcs-common.git",
+            "type": "vcs"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.clb.npm:sc/jackrabbit.git"
         }
-    }, {
-        "type": "vcs",
-        "url": "git@gitlab.clb.npm:sc/jackrabbit.git"
-    }],
+    ],
     "require": {
         "php": ">=5.4",
         "zendframework/zendframework": "2.3.*",
