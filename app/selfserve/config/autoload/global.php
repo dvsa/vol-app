@@ -1,6 +1,7 @@
 <?php
 
 return array(
+    'version' => (file_exists('../version') ? file_get_contents('../version'): ''),
     'service_api_mapping' => array(
         array(
             'endpoints' => array(
