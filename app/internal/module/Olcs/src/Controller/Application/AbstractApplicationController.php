@@ -73,7 +73,7 @@ class AbstractApplicationController extends AbstractInternalController
     protected function getSectionsForView()
     {
         $applicationStatuses = $this->getCompletionStatuses($this->getApplicationId());
-        $filter = $this->getHelperService('StringHelper');
+        $filter = $this->getServiceLocator()->get('Helper\String');
 
         $sections = array(
             'overview' => array('class' => 'no-background', 'route' => 'lva-' . $this->lva, 'enabled' => true)
