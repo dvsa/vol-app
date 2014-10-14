@@ -1,0 +1,16 @@
+<div class="page-header">
+  <div class="page-header__wrapper">
+    <h3 class="page-header__subtitle">#<?php echo $this->pageTitle; ?></h3>
+    <h1><?php echo $this->pageSubTitle; ?></h1>
+  </div>
+</div>
+<div class="full-width">
+  <?php
+
+  echo $this->navigation('navigation')
+        ->menu($this->navigation()->findOneBy('id', 'licence_overview'))
+        ->setPartial('layout/partials/tabs');
+  ?>
+</div>
+<?php
+echo $this->content;

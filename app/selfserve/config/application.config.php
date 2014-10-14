@@ -5,7 +5,7 @@ return array(
         'Common',
         'DoctrineModule',
         'DoctrineORMModule',
-        'SelfServe'
+        'Olcs'
     ),
     'module_listener_options' => array(
         'module_paths' => array(

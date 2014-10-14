@@ -1,0 +1,46 @@
+<!-- start progress -->
+<div class="full-width">
+    <ul class="app-navigation items-<?php echo count($sections); ?>" role="navigation">
+        <?php
+        foreach($sections as $section) {
+
+            $classes = array();
+
+            if (!$section['enabled']) {
+                $classes[] = 'disabled';
+            }
+
+            if ($section['current']) {
+                $classes[] = 'current';
+            }
+
+            if ($section['status'] !== null) {
+                $classes[] = $section['status'];
+            } else {
+                $classes[] = 'no-background';
+            }
+
+            ?>
+        <li class="app-navigation__item <?php echo implode(' ', $classes); ?>">
+            <?php
+            if (!$section['current'] && $section['enabled']) {
+                ?>
+                <a href="<?php echo $this->url($section['route'], array(), array(), true); ?>">
+                <?php
+                }
+            ?>
+            <span><?php echo $this->translate($section['title']); ?></span>
+            <?php
+            if (!$section['current'] && $section['enabled']) {
+                ?>
+                </a>
+                <?php
+            }
+            ?>
+        </li>
+            <?php
+        }
+        ?>
+    </ul>
+</div>
+<!-- end .progress -->
