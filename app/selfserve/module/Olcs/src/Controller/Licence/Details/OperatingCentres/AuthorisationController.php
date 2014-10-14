@@ -73,7 +73,7 @@ class AuthorisationController extends OperatingCentresController
     protected function addVariationInfoMessage()
     {
         $this->addCurrentMessage(
-            $this->getHelperService('TranslationHelper')->formatTranslation(
+            $this->getServiceLocator()->get('Helper\Translation')->formatTranslation(
                 '%s <a href="' . $this->url()->fromRoute('application-variation') . '">%s</a>',
                 array(
                     'variation-application-text',
