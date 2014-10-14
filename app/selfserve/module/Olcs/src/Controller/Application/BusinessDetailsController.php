@@ -7,7 +7,6 @@
  */
 namespace Olcs\Controller\Application;
 
-use Common\View\Model\Section;
 use Common\Controller\Traits\Lva\BusinessDetailsTrait;
 
 /**

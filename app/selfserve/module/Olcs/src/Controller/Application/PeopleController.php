@@ -8,6 +8,8 @@
  */
 namespace Olcs\Controller\Application;
 
+use Common\Controller\Traits\Lva\PeopleTrait;
+
 /**
  * People Controller
  *
@@ -16,8 +18,5 @@ namespace Olcs\Controller\Application;
  */
 class PeopleController extends AbstractApplicationController
 {
-    public function indexAction()
-    {
-        return $this->render('people');
-    }
+    use PeopleTrait;
 }
