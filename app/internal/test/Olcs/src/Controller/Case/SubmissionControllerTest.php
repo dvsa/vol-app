@@ -20,6 +20,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         );
         $this->controller = $this->getMock(
             '\Olcs\Controller\Cases\Submission\SubmissionController', array(
+                'getParams',
                 'getFromPost',
                 'getPersist',
                 'setPersist',
@@ -98,6 +99,52 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
 
         $this->assertEquals($result, $loadedData);
 
+    }
+
+    /**
+     * Tests the first time a user goes to the submission form
+     */
+    public function testAlterFormBeforeValidationNoSubmissionType()
+    {
+        $mockForm = $this->getMock(
+            '\Zend\Form\Form',
+            array(
+                'remove',
+                'get'
+            )
+        );
+
+        $mockForm->expects($this->once())
+            ->method('remove')
+            ->with($this->equalTo('form-actions'));
+
+        $this->controller->alterFormBeforeValidation($mockForm);
+    }
+
+    /**
+     * Tests the submission type being chosen
+     */
+    public function testAlterFormBeforeValidationSubmissionTypePosted()
+    {
+        $mockPostData = [
+            'submissionSections' => [
+                'submissionTypeSubmit' => 'some_type'
+            ]
+        ];
+        $this->controller->expects($this->once())
+            ->method('getFromPost')
+            ->with('fields')
+            ->willReturn($mockPostData);
+
+        $mockForm = $this->getMock(
+            '\Zend\Form\Form'
+        );
+
+        $this->controller->expects($this->once())
+            ->method('setPersist')
+            ->with($this->equalTo(false));
+
+        $this->controller->alterFormBeforeValidation($mockForm);
     }
 
     public function getSubmissionTitlesProvider()
