@@ -41,19 +41,6 @@ abstract class AbstractApplicationController extends AbstractExternalController
     }
 
     /**
-     * Update application status
-     *
-     * @params int $applicationId
-     */
-    protected function updateCompletionStatuses($applicationId = null)
-    {
-        if ($applicationId === null) {
-            $applicationId = $this->getApplicationId();
-        }
-        $this->getServiceLocator()->get('Entity\ApplicationCompletion')->updateCompletionStatuses($applicationId);
-    }
-
-    /**
      * Check if the user has access to the application
      *
      * @NOTE We might want to consider caching this information within the session, to save making this request on each
