@@ -4,6 +4,11 @@ namespace OlcsTest\Controller\Submission;
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use OlcsTest\Bootstrap;
 use Mockery as m;
+use Zend\Http\Request;
+use Zend\Http\Response;
+use Zend\Mvc\MvcEvent;
+use Zend\Mvc\Router\RouteMatch;
+use Zend\Mvc\Router\Http\TreeRouteStack as HttpRouter;
 
 /**
  * Submission controller form post tests
@@ -31,7 +36,8 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
                 'callParentProcessSave',
                 'callParentSave',
                 'callParentProcessLoad',
-                'createSubmissionSection'
+                'createSubmissionSection',
+                'getServiceLocator'
             )
         );
         $serviceManager = Bootstrap::getServiceManager();
@@ -145,6 +151,141 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
             ->with($this->equalTo(false));
 
         $this->controller->alterFormBeforeValidation($mockForm);
+    }
+
+    public function testSave()
+    {
+
+        $data = ['submissionSections' =>
+            [
+                'submissionType' => 'bar',
+                'sections' => [
+                    0 => 'section1',
+                    1 => 'section2'
+                ]
+            ]
+        ];
+        $service = 'Submission';
+
+        $mockConfig = ['submission_config' =>
+            [
+                'sections' =>
+                    [
+                        'section1' => 'foo'
+                    ]
+            ]
+        ];
+
+        $mockSubmissionService = m::mock('Olcs\Service\Data\Submission');
+        $mockRestHelper = m::mock('RestHelper');
+
+        $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn(['id' => 99]);
+
+        $mockSubmissionService->shouldReceive('createSubmissionSection')
+            ->withAnyArgs()
+            ->andReturn(['sectionData']);
+
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+
+        $mockServiceManager->shouldReceive('get')->with('HelperService')->andReturnSelf();
+        $mockServiceManager->shouldReceive('getHelperService')->with('RestHelper')->andReturn($mockRestHelper);
+
+        $mockServiceManager->shouldReceive('get->getHelperService')->with('RestService')->andReturn($mockRestHelper);
+
+        $mockServiceManager->shouldReceive('get')->with('config')->andReturn($mockConfig);
+        $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\Submission')
+            ->andReturn($mockSubmissionService);
+
+        $sut = new \Olcs\Controller\Cases\Submission\SubmissionController();
+        $routeMatch = new RouteMatch(array('controller' => 'submission'));
+        $event      = new MvcEvent();
+        $routerConfig = isset($config['router']) ? $config['router'] : array();
+        $router = HttpRouter::factory($routerConfig);
+
+        $event->setRouter($router);
+        $event->setRouteMatch($routeMatch);
+        $sut->setEvent($event);
+
+        $sut->getEvent()->getRouteMatch()->setParam('case', 24);
+
+        $sut->setServiceLocator($mockServiceManager);
+
+        $result = $sut->save($data, $service);
+
+        $this->assertEquals(['id' => 99], $result);
+    }
+
+    public function testDetailsAction()
+    {
+        $sut = new \Olcs\Controller\Cases\Submission\SubmissionController();
+
+        $submissionId = 99;
+        $mockSubmission = ['submissionType' =>
+            [
+                'id' => 'foo'
+            ]
+        ];
+
+        $mockSelectedSectionArray = [
+            0 => [
+                'sectionId' => 'section1',
+                'data' => []
+            ]
+        ];
+
+        $mockSubmissionTitle = 'Section title';
+        $placeholder = new \Zend\View\Helper\Placeholder();
+
+        $mockViewHelperManager = new \Zend\View\HelperPluginManager();
+        $mockViewHelperManager->setService('placeholder', $placeholder);
+
+        $routeMatch = new RouteMatch(array('controller' => 'submission'));
+        $event      = new MvcEvent();
+        $routerConfig = isset($config['router']) ? $config['router'] : array();
+        $router = HttpRouter::factory($routerConfig);
+
+        $event->setRouter($router);
+        $event->setRouteMatch($routeMatch);
+        $sut->setEvent($event);
+
+        $sut->getEvent()->getRouteMatch()->setParam('submission', $submissionId);
+
+        $mockSubmissionService = m::mock('Olcs\Service\Data\Submission');
+        $mockSubmissionService->shouldReceive('fetchSubmissionData')
+            ->with($submissionId)
+            ->andReturn($mockSubmission);
+
+        $mockSubmissionService->shouldReceive('getSubmissionTypeTitle')
+            ->with($mockSubmission['submissionType']['id'])
+            ->andReturn($mockSubmissionTitle);
+
+        $mockSubmissionService->shouldReceive('extractSelectedSubmissionSectionsData')
+            ->with(array_merge($mockSubmission, ['submissionTypeTitle' => $mockSubmissionTitle]))
+            ->andReturn($mockSelectedSectionArray);
+
+        $mockSubmissionService->shouldReceive('getAllSectionsRefData')
+            ->andReturn($mockSelectedSectionArray);
+
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+
+        $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\Submission')
+            ->andReturn($mockSubmissionService);
+
+        $mockServiceManager->shouldReceive('get')->with('viewHelperManager')
+            ->andReturn($mockViewHelperManager);
+
+        $sut->setServiceLocator($mockServiceManager);
+
+        $sut->detailsAction();
+
+        $this->assertEquals(
+            $mockSelectedSectionArray,
+            $mockViewHelperManager->get('placeholder')->getContainer('selectedSectionsArray')->getValue()
+        );
+        $this->assertEquals(
+            array_merge($mockSubmission, ['submissionTypeTitle' => $mockSubmissionTitle]),
+            $mockViewHelperManager->get('placeholder')->getContainer('submission')->getValue()
+        );
     }
 
     public function getSubmissionTitlesProvider()
