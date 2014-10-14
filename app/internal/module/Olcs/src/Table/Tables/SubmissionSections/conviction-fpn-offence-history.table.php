@@ -31,7 +31,7 @@ return array(
         ),
         array(
             'title' => 'Description',
-            'name' => 'description'
+            'name' => 'categoryText'
         ),
         array(
             'title' => 'Court/FPN',
