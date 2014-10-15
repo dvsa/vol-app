@@ -5,6 +5,10 @@ namespace OlcsTest\InputFilter;
 use Olcs\InputFilter\EbsrPackFactory;
 use Mockery as m;
 
+/**
+ * Class EbsrPackFactoryTest
+ * @package OlcsTest\InputFilter
+ */
 class EbsrPackFactoryTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreateService()
@@ -21,4 +25,3 @@ class EbsrPackFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\Zend\InputFilter\Input', $service);
     }
 }
- 

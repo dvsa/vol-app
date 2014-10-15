@@ -5,7 +5,6 @@ namespace OlcsTest\Filter;
 use Olcs\Filter\DecompressUploadToTmp;
 use Mockery as m;
 
-
 /**
  * Class DecompressUploadToTmpTest
  *
@@ -43,4 +42,3 @@ class DecompressUploadToTmpTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['tmp_name' => $filename, 'extracted_dir' => $extractDir], $result);
     }
 }
- 

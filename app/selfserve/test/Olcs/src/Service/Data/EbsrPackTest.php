@@ -1,12 +1,15 @@
 <?php
 
-
 namespace OlcsTest\Service\Data;
 
 use Olcs\Service\Data\EbsrPack;
 use Mockery as m;
 use org\bovigo\vfs\vfsStream;
 
+/**
+ * Class EbsrPackTest
+ * @package OlcsTest\Service\Data
+ */
 class EbsrPackTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreateService()
@@ -29,7 +32,6 @@ class EbsrPackTest extends \PHPUnit_Framework_TestCase
         $mockSl->shouldReceive('get')->with('translator')->andReturn($mockTranslator);
         $mockSl->shouldReceive('get')->with('ServiceApiResolver')->andReturn($mockApiResolver);
         $mockSl->shouldReceive('get')->with('Olcs\InputFilter\EbsrPackInput')->andReturn($mockValidationChain);
-
 
         $sut = new EbsrPack();
         $service = $sut->createService($mockSl);
@@ -55,4 +57,3 @@ class EbsrPackTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $sut->processPackUpload($data));
     }
 }
- 

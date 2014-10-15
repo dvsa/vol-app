@@ -17,7 +17,6 @@ class UploadsController extends AbstractActionController
         $tableBuilder = $this->getServiceLocator()->get('Table');
         $dataService = $this->getEbsrDataService();
 
-
         $table = $tableBuilder->buildTable(
             'ebsr-packs',
             $dataService->fetchPackList(),

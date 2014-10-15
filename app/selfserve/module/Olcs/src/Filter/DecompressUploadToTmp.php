@@ -5,6 +5,10 @@ namespace Olcs\Filter;
 use Zend\Filter\AbstractFilter;
 use Zend\Filter\Exception;
 
+/**
+ * Class DecompressUploadToTmp
+ * @package Olcs\Filter
+ */
 class DecompressUploadToTmp extends AbstractFilter
 {
     /**
@@ -102,9 +106,11 @@ class DecompressUploadToTmp extends AbstractFilter
         $filesystem = $this->getFileSystem();
         $tmpDir = $filesystem->createTmpDir($this->getTempRootDir(), 'zip');
 
-        register_shutdown_function(function () use ($tmpDir, $filesystem) {
-            $filesystem->remove($tmpDir);
-        });
+        register_shutdown_function(
+            function () use ($tmpDir, $filesystem) {
+                $filesystem->remove($tmpDir);
+            }
+        );
 
         return $tmpDir;
     }

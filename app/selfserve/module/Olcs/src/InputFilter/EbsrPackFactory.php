@@ -6,6 +6,10 @@ use Zend\InputFilter\Input;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Class EbsrPackFactory
+ * @package Olcs\InputFilter
+ */
 class EbsrPackFactory implements FactoryInterface
 {
     /**

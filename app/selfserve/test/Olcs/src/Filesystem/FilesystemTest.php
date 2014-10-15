@@ -1,11 +1,14 @@
 <?php
 
-
 namespace OlcsTest\Filesystem;
 
 use Olcs\Filesystem\Filesystem;
 use org\bovigo\vfs\vfsStream;
 
+/**
+ * Class FilesystemTest
+ * @package OlcsTest\Filesystem
+ */
 class FilesystemTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreateTmpDir()
@@ -18,4 +21,3 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_dir($dir));
     }
 }
- 

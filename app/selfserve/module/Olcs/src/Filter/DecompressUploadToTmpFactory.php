@@ -7,6 +7,10 @@ use Zend\Filter\Decompress;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Class DecompressUploadToTmpFactory
+ * @package Olcs\Filter
+ */
 class DecompressUploadToTmpFactory implements FactoryInterface
 {
     /**
@@ -25,7 +29,6 @@ class DecompressUploadToTmpFactory implements FactoryInterface
         $service->setDecompressFilter($filter);
         $service->setTempRootDir($tmpRoot);
         $service->setFileSystem(new Filesystem());
-
 
         return $service;
     }
