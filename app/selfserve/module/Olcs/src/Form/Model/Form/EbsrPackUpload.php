@@ -12,7 +12,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Type("Common\Form\Form")
  * @Form\Options({"prefer_form_input_filter": true})
  */
-class Appeal
+class EbsrPackUpload
 {
     /**
      * @Form\Name("fields")

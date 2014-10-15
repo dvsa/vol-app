@@ -15,9 +15,8 @@ class UploadsController extends AbstractActionController
     {
         /** @var \Common\Service\Table\TableBuilder $tableBuilder */
         $tableBuilder = $this->getServiceLocator()->get('Table');
+        $dataService = $this->getEbsrDataService();
 
-        /** @var \Olcs\Service\Data\EbsrPack $dataService */
-        $dataService = $this->getServiceLocator()->get('Olcs\Service\Data\EbsrPack');
 
         $table = $tableBuilder->buildTable(
             'ebsr-packs',
@@ -27,5 +26,37 @@ class UploadsController extends AbstractActionController
         );
 
         return $this->getView(['table' => $table]);
+    }
+
+    public function uploadAction()
+    {
+        $form = $this->generateFormWithData('EbsrPackUpload', 'processSave');
+
+        return $this->getView(['form' => $form]);
+    }
+
+    public function processSave($data)
+    {
+        $dataService = $this->getEbsrDataService();
+        $validPacks = $dataService->processPackUpload($data['validData']);
+
+        if ($validPacks) {
+            $this->addSuccessMessage($validPacks . 'successfully submitted for processing');
+            $this->redirectToIndex();
+        } else {
+            $this->addErrorMessage(
+                'No valid packs were found in your upload, please verify your file and try again'
+            );
+        }
+    }
+
+    /**
+     * @return \Olcs\Service\Data\EbsrPack
+     */
+    public function getEbsrDataService()
+    {
+        /** @var \Olcs\Service\Data\EbsrPack $dataService */
+        $dataService = $this->getServiceLocator()->get('Olcs\Service\Data\EbsrPack');
+        return $dataService;
     }
 }

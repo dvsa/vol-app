@@ -13,8 +13,9 @@ class EbsrPackUploadFields
     /**
      * @Form\Options({"label": "Choose File"})
      * @Form\Type("File")
-     * @Form\Input("Zend\InputFilter|FileInput")
-     * @Form\Filter({"name": "DecompressToTmp"})
+     * @Form\Input("Zend\InputFilter\FileInput")
+     * @Form\Filter({"name": "DecompressUploadToTmp"})
+     * @Form\Validator({"name": "FileMimeType", "options":{"mimeType": "application/zip"}})
      */
     public $file;
 }

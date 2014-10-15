@@ -57,7 +57,8 @@ return array(
     ),
     'service_manager' => array(
         'factories' => array(
-            'Olcs\Service\Data\EbsrPack' => 'Olcs\Service\Data\EbsrPack'
+            'Olcs\Service\Data\EbsrPack' => 'Olcs\Service\Data\EbsrPack',
+            'Olcs\InputFilter\EbsrPackInput' => 'Olcs\InputFilter\EbsrPackFactory'
         )
     ),
     'controller_plugins' => array(
