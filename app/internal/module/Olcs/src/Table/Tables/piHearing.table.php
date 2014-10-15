@@ -8,8 +8,8 @@ return array(
         'crud' => array(
             'formName' => 'PublicInquiryHearing',
             'actions' => array(
-                'addHearing' => array('class' => 'primary', 'value' => 'Add Hearing'),
-                'editHearing' => array('requireRows' => true, 'value' => 'Edit Hearing')
+                'addHearing' => array('class' => 'primary', 'value' => 'Add'),
+                'editHearing' => array('requireRows' => true, 'value' => 'Edit')
             )
         ),
         'paginate' => array(
@@ -37,6 +37,7 @@ return array(
                 $column['formatter'] = 'Date';
                 return '<a href="' . $url . '">' . date('d/m/Y', strtotime($data['hearingDate'])) . '</a>';
             },
+            'name' => 'id'
         ),
         array(
             'title' => 'Venue',
