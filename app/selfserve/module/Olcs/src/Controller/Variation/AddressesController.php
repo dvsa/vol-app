@@ -1,22 +1,22 @@
 <?php
 
 /**
- * Application Addresses Controller
+ * Variation Addresses Controller
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-namespace Olcs\Controller\Application;
+namespace Olcs\Controller\Variation;
 
 use Common\Controller\Traits\Lva;
 
 /**
- * Application Addresses Controller
+ * Variation Addresses Controller
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class AddressesController extends AbstractApplicationController
+class AddressesController extends AbstractVariationController
 {
     use Lva\AddressesTrait;
 }

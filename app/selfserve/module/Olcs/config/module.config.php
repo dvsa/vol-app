@@ -66,11 +66,13 @@ return array(
             'LvaLicence/TypeOfLicence' => 'Olcs\Controller\Licence\TypeOfLicenceController',
             'LvaLicence/BusinessType' => 'Olcs\Controller\Licence\BusinessTypeController',
             'LvaLicence/BusinessDetails' => 'Olcs\Controller\Licence\BusinessDetailsController',
+            'LvaLicence/Addresses' => 'Olcs\Controller\Licence\AddressesController',
 
             'LvaVariation' => 'Olcs\Controller\Variation\OverviewController',
             'LvaVariation/TypeOfLicence' => 'Olcs\Controller\Variation\TypeOfLicenceController',
             'LvaVariation/BusinessType' => 'Olcs\Controller\Variation\BusinessTypeController',
             'LvaVariation/BusinessDetails' => 'Olcs\Controller\Variation\BusinessDetailsController',
+            'LvaVariation/Addresses' => 'Olcs\Controller\Variation\AddressesController',
         )
     ),
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',
