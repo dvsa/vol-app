@@ -166,4 +166,9 @@ class VehiclePsvController extends AbstractLicenceDetailsController
 
         return $count;
     }
+
+    protected function parentActionSave($data, $service = null)
+    {
+        return parent::actionSave($data, $service);
+    }
 }
