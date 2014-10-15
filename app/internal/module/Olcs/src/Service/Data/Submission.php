@@ -299,8 +299,9 @@ class Submission extends AbstractData
 
             $thisConviction['offenceDate'] = $conviction['offenceDate'];
             $thisConviction['convictionDate'] = $conviction['convictionDate'];
+            $thisConviction['defendantType'] = $conviction['defendantType'];
 
-            if ($conviction['operatorName']) {
+            if ($conviction['defendantType']['id'] == 'def_t_op') {
                 $thisConviction['name'] = $conviction['operatorName'];
             } else {
                 $thisConviction['name'] = $conviction['personFirstname'] . ' ' . $conviction['personLastname'];
