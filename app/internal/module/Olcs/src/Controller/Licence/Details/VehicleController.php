@@ -90,4 +90,9 @@ class VehicleController extends AbstractLicenceDetailsController
 
         return count($data['licenceVehicles']);
     }
+
+    protected function parentActionSave($data, $service = null)
+    {
+        return parent::actionSave($data, $service);
+    }
 }
