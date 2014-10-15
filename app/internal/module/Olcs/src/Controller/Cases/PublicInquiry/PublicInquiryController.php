@@ -186,4 +186,38 @@ class PublicInquiryController extends OlcsController\CrudAbstract
         }
         return $data;
     }
+
+    public function detailsAction()
+    {
+        $this->forward()->dispatch(
+            'PublicInquiry\HearingController',
+            array(
+                'action' => 'index',
+                'case' => $this->getFromRoute('case'),
+                'pi' => $this->getFromRoute('pi')
+            )
+        );
+
+        //the above call to CaseProhibitionController will have set things like the
+        //page title, so we need to reset these as otherwise they will be duplicated
+        $this->getViewHelperManager()->get('placeholder')->getContainer('pageTitle')->offsetUnset(1);
+        $this->getViewHelperManager()->get('placeholder')->getContainer('pageTitle')->offsetUnset(3);
+        $this->getViewHelperManager()->get('placeholder')->getContainer('pageSubtitle')->offsetUnset(1);
+
+        $view = $this->getView([]);
+
+        $this->getViewHelperManager()
+            ->get('placeholder')
+            ->getContainer($this->getPlaceholderName())
+            ->set($this->loadCurrent());
+
+        $this->getViewHelperManager()
+            ->get('placeholder')
+            ->getContainer('details')
+            ->set($this->loadCurrent());
+
+        $view->setTemplate('case/page/pi');
+
+        return $this->renderView($view);
+    }
 }
