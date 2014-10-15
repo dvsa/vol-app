@@ -1078,6 +1078,58 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
+     * Test edit action for application
+     */
+    public function testEditActionForApplication()
+    {
+        $form = $this->getMock('\Zend\Form\Form', ['get', 'setValue', 'setValueOptions', 'remove', 'setData']);
+
+        $form->expects($this->any())
+            ->method('get')
+            ->will($this->returnSelf());
+
+        $this->controller->expects($this->once())
+            ->method('getForm')
+            ->will($this->returnValue($form));
+
+        $this->controller->expects($this->any())
+            ->method('getFromRoute')
+            ->will(
+                $this->returnValueMap(
+                    array(
+                        array('type', 'application'),
+                        array('typeId', 123),
+                        array('task', 456),
+                    )
+                )
+            );
+
+        $this->url->expects($this->once())
+                ->method('fromRoute')
+                ->with('Application/Overview/Details', array('applicationId' => 123))
+                ->will($this->returnValue(''));
+
+        $this->controller->expects($this->once())
+                ->method('url')
+                ->will($this->returnValue($this->url));
+
+        $toArray = $this->getMock('\stdClass', ['toArray']);
+        $toArray->expects($this->any())
+            ->method('toArray')
+            ->will($this->returnValue([]));
+
+        $this->request->expects($this->any())
+            ->method('getPost')
+            ->will($this->returnValue($toArray));
+
+        $view = $this->controller->editAction();
+
+        list($header, $content) = $view->getChildren();
+
+        $this->assertEquals('Edit task', $header->getVariable('pageTitle'));
+    }
+
+    /**
      * Mock the rest call
      *
      * @param string $service
