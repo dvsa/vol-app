@@ -2,11 +2,12 @@
 
 namespace Olcs\Filter;
 
+use Olcs\Filesystem\Filesystem;
 use Zend\Filter\Decompress;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class DecompressFactory implements FactoryInterface
+class DecompressUploadToTmpFactory implements FactoryInterface
 {
     /**
      * Create service
@@ -16,16 +17,16 @@ class DecompressFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $config = $serviceLocator->get('Config');
+        $config = $serviceLocator->getServiceLocator()->get('Config');
         $tmpRoot = (isset($config['tmpDirectory']) ? $config['tmpDirectory'] : sys_get_temp_dir());
+        $filter = new Decompress('zip');
 
-        $tmpDir = tempnam($tmpRoot, 'zip');
-        unlink($tmpDir);
-        mkdir($tmpDir);
+        $service = new DecompressUploadToTmp();
+        $service->setDecompressFilter($filter);
+        $service->setTempRootDir($tmpRoot);
+        $service->setFileSystem(new Filesystem());
 
-        $filter = new Decompress();
-        $filter->setOptions(['target'=>$tmpDir]);
 
-        return $filter;
+        return $service;
     }
 }

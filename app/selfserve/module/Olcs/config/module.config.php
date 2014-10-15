@@ -102,10 +102,10 @@ return array(
     ),
     'filters' => [
         'factories' => [
-            'Olcs\Filter\DecompressToTmp' => 'Olcs\Filter\DecompressFactory',
+            'Olcs\Filter\DecompressUploadToTmp' => 'Olcs\Filter\DecompressUploadToTmpFactory',
         ],
         'aliases' => [
-            'DecompressToTmp' => 'Olcs\Filter\DecompressToTmp'
+            'DecompressUploadToTmp' => 'Olcs\Filter\DecompressUploadToTmp'
         ]
     ],
     'service_api_mapping' => array(
