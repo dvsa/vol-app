@@ -95,16 +95,19 @@ return array(
             'LvaApplication/TypeOfLicence' => 'Olcs\Controller\Application\TypeOfLicenceController',
             'LvaApplication/BusinessType' => 'Olcs\Controller\Application\BusinessTypeController',
             'LvaApplication/BusinessDetails' => 'Olcs\Controller\Application\BusinessDetailsController',
+            'LvaApplication/Addresses' => 'Olcs\Controller\Application\AddressesController',
 
             'LvaLicence' => 'Olcs\Controller\Licence\OverviewController',
             'LvaLicence/TypeOfLicence' => 'Olcs\Controller\Licence\TypeOfLicenceController',
             'LvaLicence/BusinessType' => 'Olcs\Controller\Licence\BusinessTypeController',
             'LvaLicence/BusinessDetails' => 'Olcs\Controller\Licence\BusinessDetailsController',
+            'LvaLicence/Addresses' => 'Olcs\Controller\Licence\AddressesController',
 
             'LvaVariation' => 'Olcs\Controller\Variation\OverviewController',
             'LvaVariation/TypeOfLicence' => 'Olcs\Controller\Variation\TypeOfLicenceController',
             'LvaVariation/BusinessType' => 'Olcs\Controller\Variation\BusinessTypeController',
             'LvaVariation/BusinessDetails' => 'Olcs\Controller\Variation\BusinessDetailsController',
+            'LvaVariation/Addresses' => 'Olcs\Controller\Variation\AddressesController',
         )
     ),
     'view_manager' => array(

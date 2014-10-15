@@ -14,7 +14,7 @@ use Olcs\View\Model\Application\Layout;
 use Olcs\View\Model\Application\SectionLayout;
 use Olcs\View\Model\Application\ApplicationLayout;
 use Olcs\Controller\AbstractInternalController;
-use Common\Service\Entity\ApplicationCompletionService;
+use Common\Service\Entity\ApplicationCompletionEntityService;
 use Common\Controller\Traits\Lva\ApplicationControllerTrait;
 use Common\Controller\Traits\Lva\EnabledSectionTrait;
 
@@ -90,10 +90,10 @@ class AbstractApplicationController extends AbstractInternalController
 
             $class = '';
             switch ($applicationStatuses[$statusIndex]) {
-                case ApplicationCompletionService::STATUS_COMPLETE:
+                case ApplicationCompletionEntityService::STATUS_COMPLETE:
                     $class = 'complete';
                     break;
-                case ApplicationCompletionService::STATUS_INCOMPLETE:
+                case ApplicationCompletionEntityService::STATUS_INCOMPLETE:
                     $class = 'incomplete';
                     break;
             }
