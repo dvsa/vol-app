@@ -189,16 +189,37 @@ class PublicInquiryController extends OlcsController\CrudAbstract
 
     public function detailsAction()
     {
+        $pi = $this->loadCurrent();
+
+        if ($this->getRequest()->isPost()) {
+            $action = strtolower($this->getFromPost('action'));
+            $id = $this->getFromPost('id');
+
+            if (!($action == 'edit' && !is_numeric($id))) {
+                //if we have an add action make sure there's no row selected
+                if ($action == 'add') {
+                    $id = null;
+                }
+
+                return $this->redirectToRoute(
+                    'case_pi_hearing',
+                    ['action' => $action, 'id' => $id, 'pi' => $pi['id']],
+                    ['code' => '303'], // Why? No cache is set with a 303 :)
+                    true
+                );
+            }
+        }
+
         $this->forward()->dispatch(
             'PublicInquiry\HearingController',
             array(
                 'action' => 'index',
                 'case' => $this->getFromRoute('case'),
-                'pi' => $this->getFromRoute('pi')
+                'pi' => $pi['id']
             )
         );
 
-        //the above call to CaseProhibitionController will have set things like the
+        //the above call to HearingController will have set things like the
         //page title, so we need to reset these as otherwise they will be duplicated
         $this->getViewHelperManager()->get('placeholder')->getContainer('pageTitle')->offsetUnset(1);
         $this->getViewHelperManager()->get('placeholder')->getContainer('pageTitle')->offsetUnset(3);
@@ -209,12 +230,12 @@ class PublicInquiryController extends OlcsController\CrudAbstract
         $this->getViewHelperManager()
             ->get('placeholder')
             ->getContainer($this->getPlaceholderName())
-            ->set($this->loadCurrent());
+            ->set($pi);
 
         $this->getViewHelperManager()
             ->get('placeholder')
             ->getContainer('details')
-            ->set($this->loadCurrent());
+            ->set($pi);
 
         $view->setTemplate('case/page/pi');
 
