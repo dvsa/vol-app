@@ -81,7 +81,8 @@ return array(
     ),
     'service_manager' => array(
         'factories' => array(
-            'Olcs\Service\Data\EbsrPack' => 'Olcs\Service\Data\EbsrPack'
+            'Olcs\Service\Data\EbsrPack' => 'Olcs\Service\Data\EbsrPack',
+            'Olcs\InputFilter\EbsrPackInput' => 'Olcs\InputFilter\EbsrPackFactory'
         )
     ),
     'controller_plugins' => array(
@@ -121,6 +122,14 @@ return array(
             'layout' => 'self-serve/journey/application/layout'
         )
     ),
+    'filters' => [
+        'factories' => [
+            'Olcs\Filter\DecompressUploadToTmp' => 'Olcs\Filter\DecompressUploadToTmpFactory',
+        ],
+        'aliases' => [
+            'DecompressUploadToTmp' => 'Olcs\Filter\DecompressUploadToTmp'
+        ]
+    ],
     'service_api_mapping' => array(
         'endpoints' => array(
             'ebsr' => 'http://olcs-ebsr/'

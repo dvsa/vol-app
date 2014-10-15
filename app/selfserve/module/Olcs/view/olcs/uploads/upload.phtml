@@ -1,0 +1,16 @@
+<?php
+echo $this->render(
+    '/partials/page-header.phtml',
+    array(
+        'pageTitle' => $this->translate('Ebsr Pack upload'),
+        'pageSubTitle'=> $this->translate('Use this form to upload an ebsr pack'),
+    )
+);
+?>
+
+<?php echo $this->flashMessengerAll(); ?>
+
+<?php
+$this->form->prepare();
+echo $this->form()->render($this->form);
+?>
