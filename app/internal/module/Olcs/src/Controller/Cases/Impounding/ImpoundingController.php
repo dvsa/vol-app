@@ -151,11 +151,11 @@ class ImpoundingController extends OlcsController\CrudAbstract
     protected $inlineScripts = array('forms/impounding');
 
     /**
- * Overrides the parent, needed to make absolutely sure we can't have data in both venue fields :)
- *
- * @param array $data
- * @return \Zend\Http\Response
- */
+    * Overrides the parent, needed to make absolutely sure we can't have data in both venue fields :)
+    *
+    * @param array $data
+    * @return \Zend\Http\Response
+    */
     public function processSave($data)
     {
         if ($data['fields']['piVenue'] != 'other') {

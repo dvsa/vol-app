@@ -30,7 +30,10 @@ return array(
         array(
             'title' => 'Date of Pi',
             'formatter' => function ($data, $column) {
-                $url = $this->generateUrl(['action' => 'edit', 'id' => $data['id'], 'pi' => $data['pi']['id']], 'case_pi_hearing', true);
+                $url = $this->generateUrl(
+                    ['action' => 'edit', 'id' => $data['id'], 'pi' => $data['pi']['id']],
+                    'case_pi_hearing', true
+                );
                 $column['formatter'] = 'Date';
                 return '<a href="' . $url . '">' . date('d/m/Y', strtotime($data['hearingDate'])) . '</a>';
             },
