@@ -90,4 +90,26 @@ class HearingControllerTest extends AbstractHttpControllerTestCase
 
         $this->assertEquals($data, $controller->getDataForForm());
     }
+
+    /**
+     * Tests redirectToIndex
+     */
+    public function testRedirectToIndex()
+    {
+        $controller = $this->getMock(
+            'Olcs\Controller\Cases\PublicInquiry\HearingController',
+            ['redirectToRoute']
+        );
+
+        $controller->expects($this->once())
+            ->method('redirectToRoute')
+            ->with(
+                $this->equalTo('case_pi'),
+                $this->equalTo(['action'=>'details']),
+                $this->equalTo(['code' => '303']),
+                $this->equalTo(true)
+            );
+
+        $controller->redirectToIndex();
+    }
 }

@@ -7,7 +7,6 @@ use Zend\Form\Annotation as Form;
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("main")
- * @Form\Options({"label":""})
  */
 class PublicInquiryHearingFields extends Base
 {
@@ -32,7 +31,7 @@ class PublicInquiryHearingFields extends Base
      * @Form\Options({"label":"Other venue"})
      * @Form\AllowEmpty(true)
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Type("TextArea")
+     * @Form\Type("Text")
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "piVenue",

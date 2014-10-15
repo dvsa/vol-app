@@ -6,9 +6,8 @@
         if (isset($pi['agreedDate'])):
             echo $this->render('case/page/partials/pi-agreed.phtml', array('pi' => $pi));
 
-
             if (isset($pi['piHearings']) && !empty($pi['piHearings'])):
-                echo $this->render('case/page/partials/pi-hearings.phtml', array('pi' => $pi));
+                echo $this->render('widget/table');
             else:
                 echo $this->render('case/page/partials/pi-empty.phtml', array('heading' => 'Hearing', 'route' => 'case_pi_hearing', 'section' => 'hearing', 'pi' => $pi));
             endif;
