@@ -40,7 +40,7 @@ class CaseController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $formName = 'case';
+    protected $formName = 'cases';
 
     /**
      * The current page's extra layout, over and above the
@@ -90,6 +90,9 @@ class CaseController extends OlcsController\CrudAbstract
             ),
             'caseType' => array(
                 'properties' => 'id',
+            ),
+            'categorys' => array(
+                'properties' => 'ALL',
             ),
             'licence' => array(
                 'properties' => 'ALL',
@@ -172,7 +175,7 @@ class CaseController extends OlcsController\CrudAbstract
      *
      * @return ViewModel
      */
-    public function editAction()
+    /* public function editAction()
     {
         // we don't want the ewrapping view/layout
         $this->pageLayout = null;
@@ -213,7 +216,7 @@ class CaseController extends OlcsController\CrudAbstract
         $view = $this->getView([]);
         $view->setTemplate('crud/form');
         return $this->renderView($view);
-    }
+    } */
 
     /**
      * Process updating the case
