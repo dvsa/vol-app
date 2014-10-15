@@ -249,7 +249,6 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
             case 'submission_type_o_env':
                 $sections = [
                     'operating-centres',
-                    'operating-centre-history',
                     'conditions-and-undertakings',
                     'intelligent-unit-check',
                     'interim',
@@ -266,7 +265,6 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                     'applicants-comments',
                     'visibility-access-egress-size',
                     'environmental-complaints',
-                    'representations',
                     'objections',
                     'financial-information',
                     'maps'
@@ -288,7 +286,6 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                     'interim',
                     'advertisement',
                     'linked-licences-app-numbers',
-                    'all-auths',
                     'lead-tc-area',
                     'auth-requested-applied-for',
                     'transport-managers',
@@ -316,7 +313,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                     'conviction-fpn-offence-history',
                     'annual-test-history',
                     'penalties',
-                    'case-complaints',
+                    'compliance-complaints',
                     'financial-information'
                 ];
                 break;
@@ -326,16 +323,14 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                     'transport-managers',
                     'continuous-effective-control',
                     'fitness-and-repute',
-                    'objections'
+                    'oppositions'
                 ];
                 break;
             case 'submission_type_o_schedule_41':
                 $sections = [
                     'operating-centres',
-                    'operating-centre-history',
                     'conditions-and-undertakings',
                     'linked-licences-app-numbers',
-                    'all-auths',
                     'lead-tc-area',
                     'auth-requested-applied-for',
                     'site-plans',
