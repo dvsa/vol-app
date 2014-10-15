@@ -300,6 +300,12 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                                 'msi' => 'N',
                                 'isDeclared' => 'N',
                                 'isDealtWith' => 'N',
+                                'defendantType' => [
+                                    'id' => 'def_t_op',
+                                    'description' => 'Operator'
+                                ],
+                                'personFirstname' => '',
+                                'personLastname' => '',
                             ],
                             1 => [
                                 'offenceDate' => '2012-03-10T00:00:00+0000',
@@ -313,6 +319,12 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                                 'msi' => 'N',
                                 'isDeclared' => 'N',
                                 'isDealtWith' => 'N',
+                                'defendantType' => [
+                                    'id' => 'def_t_owner',
+                                    'description' => 'Owner'
+                                ],
+                                'personFirstname' => 'Bob',
+                                'personLastname' => 'Smith',
                             ]
                         ]
                     ],
@@ -327,17 +339,25 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                             'msi' => 'N',
                             'isDeclared' => 'N',
                             'isDealtWith' => 'N',
+                            'defendantType' => [
+                                'id' => 'def_t_op',
+                                'description' => 'Operator'
+                            ],
                         ],
                         1 => [
                             'offenceDate' => '2012-03-10T00:00:00+0000',
                             'convictionDate' => '2012-06-15T00:00:00+0100',
-                            'name' => 'John Smith',
+                            'name' => 'Bob Smith',
                             'categoryText' => null,
                             'court' => 'FPN',
                             'penalty' => '3 points on licence',
                             'msi' => 'N',
                             'isDeclared' => 'N',
                             'isDealtWith' => 'N',
+                            'defendantType' => [
+                                'id' => 'def_t_owner',
+                                'description' => 'Owner'
+                            ],
                         ]
                     ]
                 ],

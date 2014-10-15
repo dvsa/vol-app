@@ -82,6 +82,12 @@ return array(
                     'convictions' => array(
                         'properties' => 'ALL',
                         'children' => array(
+                            'defendantType' => array(
+                                'properties' => array(
+                                    'id',
+                                    'description'
+                                )
+                            ),
                             'category' => array(
                                 'properties' => array(
                                     'id',
