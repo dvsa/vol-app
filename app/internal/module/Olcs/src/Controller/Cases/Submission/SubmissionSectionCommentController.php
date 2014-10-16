@@ -40,7 +40,7 @@ class SubmissionSectionCommentController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $formName = 'comment';
+    protected $formName = 'submissionSectionComment';
 
     /**
      * The current page's extra layout, over and above the
@@ -59,7 +59,7 @@ class SubmissionSectionCommentController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $service = 'Submission';
+    protected $service = 'SubmissionSectionComments';
 
     /**
      * Holds an array of variables for the default
@@ -111,6 +111,20 @@ class SubmissionSectionCommentController extends OlcsController\CrudAbstract
     protected $submissionSectionRefData = array();
 
     /**
+     * Map the data on load
+     *
+     * @param array $data
+     * @return array
+     */
+    public function processLoad($data)
+    {
+        $data = parent::processLoad($data);
+        $data['fields']['submission'] = $this->params()->fromRoute('submission');
+
+        return $data;
+    }
+
+    /**
      * Complete section and save
      * Redirects to details action.
      *
@@ -123,6 +137,19 @@ class SubmissionSectionCommentController extends OlcsController\CrudAbstract
 
         $id = isset($result['id']) ? $result['id'] : $data['fields']['id'];
         return $this->redirect()->toRoute('submission', ['action' => 'details', 'submission' => $id], [], true);
+    }
+
+    /**
+     * Call parent process save and return result. Public method to allow unit testing
+     *
+     * @param array $data
+     * @return array
+     */
+    public function callParentProcessSave($data)
+    {
+        // pass false to prevent default redirect back to index action
+        // and return result of the save
+        return parent::processSave($data, false);
     }
 
     /**
