@@ -187,6 +187,7 @@ class SubmissionController extends OlcsController\CrudAbstract
     }
 
     /**
+     * @codeCoverageIgnore Calls parent method
      * Call parent process save and return result. Public method to allow unit testing
      *
      * @param array $data
@@ -229,6 +230,7 @@ class SubmissionController extends OlcsController\CrudAbstract
     }
 
     /**
+     * @codeCoverageIgnore Calls parent method
      * Call parent process load and return result. Public method to allow unit testing
      *
      * @param array $data
@@ -240,6 +242,7 @@ class SubmissionController extends OlcsController\CrudAbstract
     }
 
     /**
+     * @codeCoverageIgnore Calls parent method
      * Call parent process load and return result. Public method to allow unit testing
      *
      * @param array $data
