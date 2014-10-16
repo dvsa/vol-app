@@ -68,6 +68,7 @@ return array(
             'LvaLicence/BusinessDetails' => 'Olcs\Controller\Licence\BusinessDetailsController',
             'LvaLicence/Addresses' => 'Olcs\Controller\Licence\AddressesController',
             'LvaLicence/People' => 'Olcs\Controller\Licence\PeopleController',
+            'LvaLicence/TransportManagers' => 'Olcs\Controller\Licence\TransportManagersController',
 
             'LvaVariation' => 'Olcs\Controller\Variation\OverviewController',
             'LvaVariation/TypeOfLicence' => 'Olcs\Controller\Variation\TypeOfLicenceController',
@@ -75,6 +76,7 @@ return array(
             'LvaVariation/BusinessDetails' => 'Olcs\Controller\Variation\BusinessDetailsController',
             'LvaVariation/Addresses' => 'Olcs\Controller\Variation\AddressesController',
             'LvaVariation/People' => 'Olcs\Controller\Variation\PeopleController',
+            'LvaVariation/TransportManagers' => 'Olcs\Controller\Variation\TransportManagersController',
         )
     ),
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',
