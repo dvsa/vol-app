@@ -3,87 +3,158 @@
 /**
  * Document Upload Controller
  *
+ * @author Jessica Rowbottom <jess.rowbottom@valtech.co.uk>
+ * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
 namespace Olcs\Controller\Document;
 
 use Zend\View\Model\ViewModel;
-use Common\Service\File\Exception as FileException;
 
 /**
- * Document Upload Controller
+ * Document Generation Controller
  *
+ * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class DocumentFinaliseController extends AbstractDocumentController
+class DocumentUploadController extends AbstractDocumentController
 {
-    public function finaliseAction()
-    {
-        $routeParams = $this->params()->fromRoute();
-        if ($this->isButtonPressed('back')) {
-            return $this->redirect()->toRoute(
-                $routeParams['type'] . '/documents/generate',
-                $routeParams
-            );
-        }
-        $data = $this->fetchTmpData();
+    /**
+     * Labels for empty select options
+     */
+    const EMPTY_LABEL = 'Please select';
 
-        $entities = [
-            'Category' => 'category',
-            'DocumentSubCategory' => 'documentSubCategory',
-            'DocTemplate' => 'documentTemplate'
-        ];
+    /**
+     * how to map route param types to category names
+     */
+    private $categoryMap = [
+        'licence' => 'Licensing'
+    ];
 
-        $lookups = [];
-        foreach ($entities as $entity => $key) {
-            $result = $this->makeRestCall(
-                $entity,
-                'GET',
-                ['id' => $data['details'][$key]],
-                ['properties' => ['description']]
-            );
-            $lookups[$key] = $result['description'];
-        }
-
-        $templateName = $lookups['documentTemplate'];
-
-        $url = sprintf(
-            '<a href="%s">%s</a>',
-            $this->url()->fromRoute(
-                'fetch_tmp_document',
-                [
-                    'id' => $routeParams['tmpId'],
-                    'filename' => $this->formatFilename($templateName) . '.rtf'
+    /**
+     * Not the prettiest bundle, but what we ultimately want
+     * are the all the DB paragraphs availabe for a given template,
+     * grouped into bookmarks
+     *
+     * The relationships here involve two many-to-many relationships
+     * to keep bookmarks and paragraphs decoupled from templates, which
+     * translates into a fairly nested bundle query
+     */
+    private $templateBundle = [
+        'properties' => ['docTemplateBookmarks'],
+        'children' => [
+            'docTemplateBookmarks' => [
+                'properties' => ['docBookmark'],
+                'children' => [
+                    'docBookmark' => [
+                        'properties' => ['name', 'description'],
+                        'children' => [
+                            'docParagraphBookmarks' => [
+                                'properties' => ['docParagraph'],
+                                'children' => [
+                                    'docParagraph' => [
+                                        'properties' => ['id', 'paraTitle']
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
                 ]
-            ),
-            $templateName
-        );
+            ]
+        ]
+    ];
 
-        $data = [
-            'category'    => $lookups['category'],
-            'subCategory' => $lookups['documentSubCategory'],
-            'template'    => $url
-        ];
-        $form = $this->generateFormWithData(
-            'finalise-document',
-            'processUpload',
-            $data
-        );
-
-        $view = new ViewModel(['form' => $form]);
-        $view->setTemplate('form-simple');
-        return $this->renderView($view, 'Amend letter');
+    private function getDefaultCategory($categories)
+    {
+        $name = $this->categoryMap[$this->params('type')];
+        return array_search($name, $categories);
     }
 
+    protected function alterFormBeforeValidation($form)
+    {
+        $categories = $this->getListData(
+            'Category',
+            ['isDocCategory' => true],
+            'description',
+            'id',
+            false
+        );
+
+        $defaultData = [
+            'details' => [
+                'category' => $this->getDefaultCategory($categories)
+            ]
+        ];
+        $data = [];
+        $filters = [];
+        $subCategories = ['' => self::EMPTY_LABEL];
+        $docTemplates = ['' => self::EMPTY_LABEL];
+
+        if ($this->getRequest()->isPost()) {
+            $data = (array)$this->getRequest()->getPost();
+        } elseif ($this->params('tmpId')) {
+            $data = $this->fetchTmpData();
+            $this->removeTmpData();
+        }
+
+        $data = array_merge($defaultData, $data);
+
+        $details = isset($data['details']) ? $data['details'] : [];
+
+        $filters['category'] = $details['category'];
+
+        $subCategories = $this->getListData(
+            'DocumentSubCategory',
+            $filters
+        );
+
+/*        if (isset($details['documentSubCategory'])) {
+            $filters['documentSubCategory'] = $details['documentSubCategory'];
+            $docTemplates = $this->getListData(
+                'DocTemplate',
+                $filters
+            );
+        }
+*/
+        $selects = [
+            'details' => [
+                'category' => $categories,
+                'documentSubCategory' => $subCategories
+            ]
+        ];
+
+        foreach ($selects as $fieldset => $inputs) {
+            foreach ($inputs as $name => $options) {
+                $form->get($fieldset)
+                    ->get($name)
+                    ->setValueOptions($options);
+            }
+        }
+
+        $form->setData($data);
+
+        return $form;
+    }
+
+    public function uploadAction()
+    {
+        $form = $this->generateForm('upload-document', 'processUpload');
+
+        $this->loadScripts(['upload-document']);
+
+        $view = new ViewModel(['form' => $form]);
+
+        $view->setTemplate('form-simple');
+        return $this->renderView($view, 'Upload Document');
+    }
 
     public function processUpload($data)
     {
         $routeParams = $this->params()->fromRoute();
         $type = $routeParams['type'];
 
-        $data = $this->fetchTmpData();
-
         $files = $this->getRequest()->getFiles()->toArray();
+        $files=$files['details'];
 
         if (!isset($files['file']) || $files['file']['error'] !== UPLOAD_ERR_OK) {
             // @TODO this needs to be handled better; by the time we get here we
@@ -94,32 +165,32 @@ class DocumentFinaliseController extends AbstractDocumentController
                 $routeParams
             );
         }
-
         $uploader = $this->getUploader();
         $uploader->setFile($files['file']);
+
 
         try {
             $file = $uploader->upload();
         } catch (FileException $ex) {
             $this->addErrorMessage('The document store is unavailable. Please try again later');
             return $this->redirect()->toRoute(
-                $type . '/documents/finalise',
+                $type . '/documents/upload',
                 $routeParams
             );
         }
 
-        $template = $this->makeRestCall(
-            'DocTemplate',
-            'GET',
-            ['id' => $data['details']['documentTemplate']],
-            ['properties' => ['description']]
+        // we don't know what params are needed to satisfy this type's
+        // finalise route; so to be safe we supply them all
+        $routeParams = array_merge(
+            $routeParams,
+            [
+                'tmpId' => $file->getIdentifier()
+            ]
         );
-
-        $templateName = $template['description'];
 
         // AC specifies this timestamp format...
         $fileName = date('YmdHi')
-            . '_' . $this->formatFilename($templateName)
+            . '_' . $this->formatFilename($files['name'])
             . '.' . $file->getExtension();
 
         $data = [
@@ -149,10 +220,84 @@ class DocumentFinaliseController extends AbstractDocumentController
             $type . '/documents',
             $routeParams
         );
+
     }
 
-    private function formatFilename($input)
+    public function listTemplateBookmarksAction()
     {
-        return str_replace([' ', '/'], '_', $input);
+        $form = new \Zend\Form\Form();
+
+        $fieldset = new \Zend\Form\Fieldset();
+        $fieldset->setLabel('documents.bookmarks');
+        $fieldset->setName('bookmarks');
+
+        $form->add($fieldset);
+
+        $this->addTemplateBookmarks(
+            $this->params('id'),
+            $fieldset
+        );
+
+        $view = new ViewModel(['form' => $form]);
+        $view->setTemplate('form-simple');
+        $view->setTerminal(true);
+
+        return $view;
+    }
+
+    public function downloadTmpAction()
+    {
+        return $this->getUploader()->download(
+            $this->params('id'),
+            $this->params('filename'),
+            self::TMP_STORAGE_PATH
+        );
+    }
+
+    private function addTemplateBookmarks($id, $fieldset)
+    {
+        if (empty($id)) {
+            return;
+        }
+
+        $result = $this->makeRestCall(
+            'DocTemplate',
+            'GET',
+            $id,
+            $this->templateBundle
+        );
+
+        $bookmarks = $result['docTemplateBookmarks'];
+
+        foreach ($bookmarks as $bookmark) {
+
+            $bookmark = $bookmark['docBookmark'];
+
+            $element = new \Common\Form\Elements\InputFilters\MultiCheckboxEmpty;
+            $element->setLabel($bookmark['description']);
+            $element->setName($bookmark['name']);
+            // user-supplied bookmarks are *all* optional
+            $element->setOptions(['required' => false]);
+
+            $options = [];
+            foreach ($bookmark['docParagraphBookmarks'] as $paragraph) {
+
+                $paragraph = $paragraph['docParagraph'];
+                $options[$paragraph['id']] = $paragraph['paraTitle'];
+            }
+            $element->setValueOptions($options);
+
+            $fieldset->add($element);
+        }
+    }
+
+    protected function getListData(
+        $entity,
+        $filters = array(),
+        $titleField = '',
+        $keyField = '',
+        $showAll = self::EMPTY_LABEL
+    ) {
+        return parent::getListData($entity, $filters, 'description', 'id', $showAll);
     }
 }

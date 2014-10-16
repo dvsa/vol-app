@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'generate-document' => [
-        'name' => 'generate-document',
+    'upload-document' => [
+        'name' => 'upload-document',
         'attributes' => [
             'method' => 'post',
         ],
@@ -21,25 +21,14 @@ return [
                         'type' => 'select-noempty',
                         'label' => 'documents.data.sub_category'
                     ],
-                    'documentTemplate' => [
-                        'type' => 'select-noempty',
-                        'label' => 'documents.data.template'
+                    'description' => [
+                        'type' => 'text',
+                        'label' => 'documents.data.description'
+                    ],
+                    'file' => [
+                        'type' => 'file',
+                        'label' => 'documents.data.file'
                     ]
-                ]
-            ],
-            [
-                'name' => 'bookmarks',
-                'options' => [
-                    'label' => 'documents.bookmarks'
-                ],
-                'elements' => [
-                    /**
-                     * We can't populate our bookmarks statically
-                     * from config. They're one to many with the
-                     * template the user chooses, and each bookmark
-                     * has many child paragraphs. As such we have to
-                     * build them up in the controller
-                     */
                 ]
             ],
             [
@@ -51,7 +40,7 @@ return [
                     'submit' => [
                         'type' => 'submit',
                         'filters' => '\Common\Form\Elements\InputFilters\ActionButton',
-                        'label' => 'Generate',
+                        'label' => 'Upload',
                         'class' => 'action--primary large'
                     ],
                     'cancel' => [
