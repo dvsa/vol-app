@@ -134,14 +134,6 @@ class CaseController extends OlcsController\CrudAbstract
         'transportManager'
     ];
 
-    /**
-     * This action is the case overview page.
-     */
-    /* public function overviewAction()
-    {
-        return $this->redirect()->toRoute('case', ['action' => 'details'], [], true);
-    } */
-
     public function redirectAction()
     {
         return $this->redirect()->toRoute('case', ['action' => 'details'], [], true);
@@ -167,13 +159,22 @@ class CaseController extends OlcsController\CrudAbstract
 
     public function processSave($data)
     {
-        if (empty($data['id'])) {
+        if (empty($data['fields']['id'])) {
             $data['fields']['openDate'] = date('Y-m-d');
         }
 
         $result = parent::processSave($data, false);
 
-        return $this->redirectToIndex($result['id']);
+        /* print('<pre>' . print_r($data, 1));
+        die('<pre>' . print_r($result, 1)); */
+
+        if (empty($data['fields']['id'])) {
+            $case = $result['id'];
+        } else {
+            $case = $data['fields']['id'];
+        }
+
+        return $this->redirectToIndex($case);
     }
 
     /**
@@ -184,7 +185,6 @@ class CaseController extends OlcsController\CrudAbstract
     public function indexAction()
     {
         return $this->redirect()->toRoute('case', ['action' => 'details'], [], true);
-        //return $this->redirect()->toRoute('licence/cases', [], [], true);
     }
 
     /**
