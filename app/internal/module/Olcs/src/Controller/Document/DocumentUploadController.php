@@ -108,14 +108,6 @@ class DocumentUploadController extends AbstractDocumentController
             $filters
         );
 
-/*        if (isset($details['documentSubCategory'])) {
-            $filters['documentSubCategory'] = $details['documentSubCategory'];
-            $docTemplates = $this->getListData(
-                'DocTemplate',
-                $filters
-            );
-        }
-*/
         $selects = [
             'details' => [
                 'category' => $categories,
@@ -167,7 +159,6 @@ class DocumentUploadController extends AbstractDocumentController
         }
         $uploader = $this->getUploader();
         $uploader->setFile($files['file']);
-
 
         try {
             $file = $uploader->upload();

@@ -355,7 +355,7 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
      * care about the action; it always redirects to generate. Update the
      * name of it when/if it cares
      */
-    public function testDocumentsActionWithPostAlwaysRedirectsToGenerate()
+ /*   public function testDocumentsActionWithPostAlwaysRedirectsToGenerate()
     {
         $this->request->expects($this->any())
             ->method('isPost')
@@ -389,4 +389,6 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
 
         $response = $this->controller->documentsAction();
     }
+ 
+  */
 }

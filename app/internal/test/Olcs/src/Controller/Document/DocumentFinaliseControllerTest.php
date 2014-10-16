@@ -15,7 +15,7 @@ use Common\Service\File\Exception as FileException;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
+class DocumentFinaliseControllerTest extends AbstractHttpControllerTestCase
 {
     public function setUp($extraParams = array())
     {
@@ -23,7 +23,7 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
             include __DIR__.'/../../../../../config/application.config.php'
         );
         $this->controller = $this->getMock(
-            '\Olcs\Controller\Document\DocumentUploadController',
+            '\Olcs\Controller\Document\DocumentFinaliseController',
             array_merge(
                 array(
                     'makeRestCall',

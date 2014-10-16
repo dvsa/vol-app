@@ -15,7 +15,7 @@ use Common\Service\File\Exception as FileException;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class DocumentUploadController extends AbstractDocumentController
+class DocumentFinaliseController extends AbstractDocumentController
 {
     public function finaliseAction()
     {
@@ -150,6 +150,4 @@ class DocumentUploadController extends AbstractDocumentController
             $routeParams
         );
     }
-
-
 }
