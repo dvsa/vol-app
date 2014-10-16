@@ -27,7 +27,7 @@ class SearchController extends AbstractActionController
      *
      * @return ViewModel
      */
-    public function indexAction()
+    public function advancedAction()
     {
         // Below is for setting route params for the breadcrumb
         $this->setBreadcrumb(array('search' => array()));

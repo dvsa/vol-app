@@ -119,6 +119,16 @@ return array_merge(
                 ]
             ]
         ],
+        'advancedsearch' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/advancedsearch',
+                'defaults' => [
+                    'controller' => 'SearchController',
+                    'action' => 'advanced'
+                ]
+            ]
+        ],
         'task_action' => [
             'type' => 'segment',
             'options' => [
