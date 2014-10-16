@@ -132,7 +132,7 @@ class SubmissionController extends OlcsController\CrudAbstract
 
     /**
      * Override Save data to allow json encoding of submission sections
-     * into submission 'text' field.
+     * into submission 'dataSnapshot' field.
      *
      * @param array $data
      * @param string $service
@@ -163,8 +163,9 @@ class SubmissionController extends OlcsController\CrudAbstract
             }
         }
 
-        $data['text'] = json_encode($data['submissionSections']['sections']);
+        $data['dataSnapshot'] = json_encode($data['submissionSections']['sections']);
         $data['submissionType'] = $data['submissionSections']['submissionType'];
+
         $data = $this->callParentSave($data, $service);
 
         return $data;
@@ -215,8 +216,8 @@ class SubmissionController extends OlcsController\CrudAbstract
         if (isset($data['submissionSections']['sections'])) {
             $sectionData = json_decode($data['submissionSections']['sections'], true);
             $data['fields']['submissionSections']['sections'] = $this->extractSectionIds($sectionData);
-        } elseif (isset($data['text'])) {
-            $sectionData = json_decode($data['text'], true);
+        } elseif (isset($data['dataSnapshot'])) {
+            $sectionData = json_decode($data['dataSnapshot'], true);
             $data['fields']['submissionSections']['submissionType'] = $data['submissionType'];
             $data['fields']['submissionSections']['sections'] = $this->extractSectionIds($sectionData);
             $data['case'] = $case['id'];

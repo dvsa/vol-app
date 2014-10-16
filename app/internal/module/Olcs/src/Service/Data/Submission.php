@@ -106,7 +106,7 @@ class Submission extends AbstractData
     {
         $submissionSectionRefData = $this->getRefDataService()->fetchListOptions('submission_section');
 
-        $selectedSectionsArray = json_decode($submission['text'], true);
+        $selectedSectionsArray = json_decode($submission['dataSnapshot'], true);
 
         // add section description text from ref data
         foreach ($selectedSectionsArray as $index => $selectedSectionData) {
