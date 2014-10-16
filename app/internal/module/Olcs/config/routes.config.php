@@ -593,6 +593,17 @@ return array_merge(
                                 ]
                             ],
                         ],
+                        'upload' => [
+                            'type' => 'segment',
+                            'options' => [
+                                'route' => '/upload',
+                                'defaults' => [
+                                    'type'       => 'licence',
+                                    'controller' => 'DocumentUploadController',
+                                    'action'     => 'upload'
+                                ]
+                            ],
+                        ],
                     ],
                 ],
                 'processing' => [
