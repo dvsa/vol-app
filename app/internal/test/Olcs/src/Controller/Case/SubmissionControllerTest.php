@@ -346,7 +346,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
                     'id' => 1,
                     'version' => 1,
                     'submissionType' => 'foo',
-                    'text' => '[{"sectionId":"submission_section_casu","data":{"data":[]}}]'
+                    'dataSnapshot' => '[{"sectionId":"submission_section_casu","data":{"data":[]}}]'
                 ),
                 array(
                     'id' => 1,
@@ -361,7 +361,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
                         'id' => 1,
                         'version' => 1,
                     ],
-                    'text' => '[{"sectionId":"submission_section_casu","data":{"data":[]}}]',
+                    'dataSnapshot' => '[{"sectionId":"submission_section_casu","data":{"data":[]}}]',
                     'case' => 24
                 ),
             ),

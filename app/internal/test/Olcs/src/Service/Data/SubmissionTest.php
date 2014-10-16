@@ -454,7 +454,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 [
-                    'text' =>
+                    'dataSnapshot' =>
                         '[{"sectionId":"introduction","data":[]}]'
                 ],
                 [ 0 => [
