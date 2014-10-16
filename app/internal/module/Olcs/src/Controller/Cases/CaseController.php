@@ -144,11 +144,13 @@ class CaseController extends OlcsController\CrudAbstract
      */
     public function redirectToIndex()
     {
-        if (!$case = func_get_arg(0)) {
+        // Makes cancel work.
+        $case = $this->getQueryOrRouteParam('case', null);
+
+        if (!$case && (!$case = func_get_arg(0))) {
             throw new \LogicException('Case missing');
         }
 
-        //die('<pre>' . print_r(['action' => 'details', $this->getIdentifierName() => $case], 1));
         return $this->redirectToRoute(
             'case',
             ['action' => 'details', $this->getIdentifierName() => $case],
@@ -164,9 +166,6 @@ class CaseController extends OlcsController\CrudAbstract
         }
 
         $result = parent::processSave($data, false);
-
-        /* print('<pre>' . print_r($data, 1));
-        die('<pre>' . print_r($result, 1)); */
 
         if (empty($data['fields']['id'])) {
             $case = $result['id'];
