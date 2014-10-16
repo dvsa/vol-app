@@ -955,12 +955,12 @@ return array_merge(
         'submission_section_comments' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/case/:case/submission/[:submission]/section/:section/comment/:action[/:id]',
+                'route' => '/case/:case/submission/[:submission]/section/:submissionSection/comment/:action[/:id]',
                 'constraints' => [
                     'case' => '[0-9]+',
                     'action' => '(add|edit)',
                     'submission' => '[0-9]+',
-                    'section' => '[a-z\-]+',
+                    'submissionSection' => '[a-z\-]+',
                     'id' => '[0-9]+',
                 ],
                 'defaults' => [

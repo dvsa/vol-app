@@ -18,6 +18,12 @@ class SubmissionSectionComment extends Base
     public $submission = null;
 
     /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $submissionSection = null;
+
+    /**
      * @Form\Attributes({"id":"comment","class":"extra-long","name":"comment"})
      * @Form\Options({
      *     "label": "",

@@ -120,6 +120,7 @@ class SubmissionSectionCommentController extends OlcsController\CrudAbstract
     {
         $data = parent::processLoad($data);
         $data['fields']['submission'] = $this->params()->fromRoute('submission');
+        $data['fields']['submissionSection'] = $this->params()->fromRoute('submissionSection');
 
         return $data;
     }
