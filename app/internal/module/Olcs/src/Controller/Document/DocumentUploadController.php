@@ -161,7 +161,7 @@ class DocumentUploadController extends AbstractDocumentController
             // should *know* that our files are valid
             $this->addErrorMessage('Sorry; there was a problem uploading the file. Please try again.');
             return $this->redirect()->toRoute(
-                $type . '/documents/finalise',
+                $type . '/documents/upload',
                 $routeParams
             );
         }
@@ -190,12 +190,12 @@ class DocumentUploadController extends AbstractDocumentController
 
         // AC specifies this timestamp format...
         $fileName = date('YmdHi')
-            . '_' . $this->formatFilename($files['name'])
+            . '_' . $this->formatFilename($files['file']['name'])
             . '.' . $file->getExtension();
 
         $data = [
             'identifier'          => $file->getIdentifier(),
-            'description'         => $templateName,
+            'description'         => $data['details']['description'],
             'filename'            => $fileName,
             'fileExtension'       => 'doc_' . $file->getExtension(),
             'category'            => $data['details']['category'],

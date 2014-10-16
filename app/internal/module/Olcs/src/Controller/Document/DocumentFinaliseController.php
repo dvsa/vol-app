@@ -151,8 +151,5 @@ class DocumentUploadController extends AbstractDocumentController
         );
     }
 
-    private function formatFilename($input)
-    {
-        return str_replace([' ', '/'], '_', $input);
-    }
+
 }
