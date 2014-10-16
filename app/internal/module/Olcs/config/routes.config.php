@@ -952,7 +952,7 @@ return array_merge(
                 ]
             ]
         ],
-        'submission_section_comments' => [
+        'submission_section_comment' => [
             'type' => 'segment',
             'options' => [
                 'route' => '/case/:case/submission/[:submission]/section/:submissionSection/comment/:action[/:id]',

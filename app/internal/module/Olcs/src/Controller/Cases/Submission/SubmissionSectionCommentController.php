@@ -26,7 +26,7 @@ class SubmissionSectionCommentController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $identifierName = 'submissionSectionComment';
+    protected $identifierName = 'id';
 
     /**
      * Table name string
@@ -40,7 +40,7 @@ class SubmissionSectionCommentController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $formName = 'submissionSectionComment';
+    protected $formName = 'SubmissionSectionComment';
 
     /**
      * The current page's extra layout, over and above the
@@ -60,14 +60,6 @@ class SubmissionSectionCommentController extends OlcsController\CrudAbstract
      * @var string
      */
     protected $service = 'SubmissionSectionComments';
-
-    /**
-     * Holds an array of variables for the default
-     * index list page.
-     */
-    protected $listVars = [
-        'case',
-    ];
 
     /**
      * Data map
@@ -104,11 +96,6 @@ class SubmissionSectionCommentController extends OlcsController\CrudAbstract
      * represented by a single navigation id.
      */
     protected $navigationId = 'case_submissions';
-
-    /**
-     * Holds all the submission section ref data with descriptions
-     */
-    protected $submissionSectionRefData = array();
 
     /**
      * Map the data on load
