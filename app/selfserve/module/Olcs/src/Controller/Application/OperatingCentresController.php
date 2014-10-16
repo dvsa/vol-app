@@ -67,4 +67,9 @@ class OperatingCentresController extends AbstractApplicationController
         $data = $this->getTypeOfLicenceData();
         return isset($data['goodsOrPsv']) && $data['goodsOrPsv'] === LicenceEntityService::LICENCE_CATEGORY_PSV;
     }
+
+    protected function getIdentifier()
+    {
+        return $this->getApplicationId();
+    }
 }
