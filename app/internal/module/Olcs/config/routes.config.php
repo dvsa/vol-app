@@ -674,13 +674,13 @@ return array_merge(
             'options' => [
                 'route' => '/case/:action[/:case][/licence/:licence]',
                 'constraints' => [
-                    'case' => '[0-9]+',
+                    //'case' => '[0-9]+',
                     'action' => '[a-z]+',
                     'licence' => '[0-9]+'
                 ],
                 'defaults' => [
                     'controller' => 'CaseController',
-                    'action'     => 'overview'
+                    'action'     => 'details'
                 ],
             ],
             'may_terminate' => true

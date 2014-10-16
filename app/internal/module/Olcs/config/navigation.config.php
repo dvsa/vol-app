@@ -44,7 +44,7 @@ return array(
                             'id' => 'case_details_overview',
                             'label' => 'Overview',
                             'route' => 'case',
-                            'action' => 'overview',
+                            'action' => 'details',
                             'use_route_match' => true,
                         ),
                         array(
