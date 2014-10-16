@@ -73,9 +73,7 @@ abstract class AbstractExternalController extends AbstractLvaController
             return $this->redirect()->toRoute('dashboard');
         }
 
-        if ($this->isButtonPressed('cancel')) {
-            return $this->handleCancelRedirect($lvaId);
-        }
+        return parent::checkForRedirect($lvaId);
     }
 
     /**
