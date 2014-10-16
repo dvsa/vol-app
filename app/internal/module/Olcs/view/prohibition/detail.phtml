@@ -2,23 +2,32 @@
     $prohibition = $this->placeholder('prohibition')->getValue();
 ?>
 <div class="read-only">
-    <h4>
-        <?php echo $this->translate('Prohibition Detail'); ?>
-        <a href="<?php echo $this->url('case_prohibition', ['action' => 'index', 'prohibition' => null], [], true); ?>" class="action--secondary right-aligned"><?php echo $this->translate('Return to list'); ?></a>
-        <a href="<?php echo $this->url('case_prohibition', ['action' => 'edit'], [], true); ?>" class="action--secondary right-aligned"><?php echo $this->translate('Edit Prohibition'); ?></a>
-    </h4>
-    <dl>
-        <dt><?php echo $this->translate('Prohibition date'); ?></dt>
-        <dd><?php echo ((isset($prohibition['prohibitionDate']) &&  $prohibition['prohibitionDate']) ? date('d/m/Y', strtotime($prohibition['prohibitionDate'])) : ''); ?></dd>
-        <dt><?php echo $this->translate('Vehicle registration mark'); ?></dt>
-        <dd><?php echo $this->escapeHtml($prohibition['vrm']); ?></dd>
-        <dt><?php echo $this->translate('Trailer'); ?></dt>
-        <dd><?php echo $this->translate($prohibition['isTrailer'] == 'Y' ? 'Yes' : 'No'); ?></dd>
-        <dt><?php echo $this->translate('Prohibition type'); ?></dt>
-        <dd><?php echo $prohibition['prohibitionType']['description']; ?></dd>
-        <dt><?php echo $this->translate('Date cleared'); ?></dt>
-        <dd><?php echo ((isset($prohibition['clearedDate']) &&  $prohibition['clearedDate']) ? date('d/m/Y', strtotime($prohibition['clearedDate'])) : ''); ?></dd>
-        <dt><?php echo $this->translate('Location prohibition issued'); ?></dt>
-        <dd><?php echo $this->escapeHtml($prohibition['imposedAt']); ?></dd>
-    </dl>
+    <div class="read-only__header">
+        <h4 class="read-only__title">
+            <?php echo $this->translate('Prohibition Detail'); ?>
+        </h4>
+        <div class="actions-container">
+            <a href="<?php echo $this->url('case_prohibition', ['action' => 'index', 'prohibition' => null], [], true); ?>" class="action--secondary right-aligned"><?php echo $this->translate('Return to list'); ?></a>
+            <a href="<?php echo $this->url('case_prohibition', ['action' => 'edit'], [], true); ?>" class="action--secondary right-aligned"><?php echo $this->translate('Edit Prohibition'); ?></a>
+        </div>
+    </div>
+
+    <?php
+        echo $this->render('partials/read-only/list',
+            [
+                'header' => 'Prohibition Detail',
+                'actions' => [
+                    'url' => ''
+                ],
+                'items' => [
+                    ['label' => 'Prohibition date', 'date' => $prohibition['prohibitionDate']],
+                    ['label' => 'Vehicle registration mark', 'value' => $prohibition['vrm']],
+                    ['label' => 'Trailer', 'value' => $prohibition['isTrailer']],
+                    ['label' => 'Prohibition type', 'value' => $prohibition['prohibitionType']['description']],
+                    ['label' => 'Date cleared', 'date' => $prohibition['clearedDate']],
+                    ['label' => 'Location prohibition issued', 'value' => $prohibition['imposedAt']]
+                ]
+            ]
+        )
+    ?>
 </div>
