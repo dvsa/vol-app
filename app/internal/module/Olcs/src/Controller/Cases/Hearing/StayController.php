@@ -144,8 +144,6 @@ class StayController extends OlcsController\CrudAbstract
      */
     public function addAction()
     {
-        $this->makeRestCall();
-
         $stayType = $this->params()->fromRoute('stayType');
         $caseId = $this->getCase()['id'];
 
