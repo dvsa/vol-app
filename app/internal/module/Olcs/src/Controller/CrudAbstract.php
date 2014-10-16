@@ -554,8 +554,6 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
             $data['base']['case'] = $this->getQueryOrRouteParam('case');
         }
 
-        //die('<pre>' . print_r($data, 1));
-
         return $data;
     }
 
