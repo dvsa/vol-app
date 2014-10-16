@@ -42,26 +42,3 @@ echo $this->render('partials/read-only/main',
         ]
     ]
 );
-
-?>
-
-<div class="read-only">
-    <h4>
-        Last Submission
-        <a href="<?php echo $this->url('case', ['case' => $case['id'], 'action' => 'edit'], [], false); ?>" class="action--secondary right-aligned"><?php echo $this->translate('Edit Submission'); ?></a>
-    </h4>
-        <dl>
-            <dt>Submission no.</dt>
-            <dd>1234</dd>
-            <dt>Type</dt>
-            <dd>Lorem ispum</dd>
-            <dt>Date created</dt>
-            <dd>13:01 12 May 2014</dd>
-            <dt>Date closed</dt>
-            <dd>N/a</dd>
-            <dt>Currently with</dt>
-            <dd>Kevin Rooney</dd>
-            <dt>Note</dt>
-            <dd>This section contains test data.</dd>
-        </dl>
-</div>
