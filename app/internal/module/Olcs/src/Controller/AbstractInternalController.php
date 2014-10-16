@@ -24,16 +24,16 @@ abstract class AbstractInternalController extends AbstractLvaController
     protected $location = 'internal';
 
     /**
-     * Check for redirect
+     * Handle a redirect based on 'cancel' being clicked
+     * Declared separately so controllers can customise
+     * what cancel does
      *
      * @param int $lvaId
      * @return null|\Zend\Http\Response
      */
-    protected function checkForRedirect($lvaId)
+    protected function handleCancelRedirect($lvaId)
     {
-        if ($this->isButtonPressed('cancel')) {
-            return $this->redirect()->toRoute(null, array(), array(), true);
-        }
+        return $this->redirect()->toRoute(null, array(), array(), true);
     }
 
     /**
