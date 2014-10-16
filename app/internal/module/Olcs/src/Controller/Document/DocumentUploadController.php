@@ -14,6 +14,7 @@ use Zend\View\Model\ViewModel;
 /**
  * Document Generation Controller
  *
+ * @author Jessica Rowbottom <jess.rowbottom@valtech.co.uk>
  * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
@@ -183,7 +184,6 @@ class DocumentUploadController extends AbstractDocumentController
         $fileName = date('YmdHi')
             . '_' . $this->formatFilename($files['file']['name'])
             . '.' . $file->getExtension();
-
         $data = [
             'identifier'          => $file->getIdentifier(),
             'description'         => $data['details']['description'],
