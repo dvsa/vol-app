@@ -191,39 +191,41 @@ class PublicInquiryController extends OlcsController\CrudAbstract
     {
         $pi = $this->loadCurrent();
 
-        if ($this->getRequest()->isPost()) {
-            $action = strtolower($this->getFromPost('action'));
-            $id = $this->getFromPost('id');
+        if (!empty($pi)) {
+            if ($this->getRequest()->isPost()) {
+                $action = strtolower($this->getFromPost('action'));
+                $id = $this->getFromPost('id');
 
-            if (!($action == 'edit' && !is_numeric($id))) {
-                //if we have an add action make sure there's no row selected
-                if ($action == 'add') {
-                    $id = null;
+                if (!($action == 'edit' && !is_numeric($id))) {
+                    //if we have an add action make sure there's no row selected
+                    if ($action == 'add') {
+                        $id = null;
+                    }
+
+                    return $this->redirectToRoute(
+                        'case_pi_hearing',
+                        ['action' => $action, 'id' => $id, 'pi' => $pi['id']],
+                        ['code' => '303'], // Why? No cache is set with a 303 :)
+                        true
+                    );
                 }
-
-                return $this->redirectToRoute(
-                    'case_pi_hearing',
-                    ['action' => $action, 'id' => $id, 'pi' => $pi['id']],
-                    ['code' => '303'], // Why? No cache is set with a 303 :)
-                    true
-                );
             }
+
+            $this->forward()->dispatch(
+                'PublicInquiry\HearingController',
+                array(
+                    'action' => 'index',
+                    'case' => $this->getFromRoute('case'),
+                    'pi' => $pi['id']
+                )
+            );
+
+            //the above call to HearingController will have set things like the
+            //page title, so we need to reset these as otherwise they will be duplicated
+            $this->getViewHelperManager()->get('placeholder')->getContainer('pageTitle')->offsetUnset(1);
+            $this->getViewHelperManager()->get('placeholder')->getContainer('pageTitle')->offsetUnset(3);
+            $this->getViewHelperManager()->get('placeholder')->getContainer('pageSubtitle')->offsetUnset(1);
         }
-
-        $this->forward()->dispatch(
-            'PublicInquiry\HearingController',
-            array(
-                'action' => 'index',
-                'case' => $this->getFromRoute('case'),
-                'pi' => $pi['id']
-            )
-        );
-
-        //the above call to HearingController will have set things like the
-        //page title, so we need to reset these as otherwise they will be duplicated
-        $this->getViewHelperManager()->get('placeholder')->getContainer('pageTitle')->offsetUnset(1);
-        $this->getViewHelperManager()->get('placeholder')->getContainer('pageTitle')->offsetUnset(3);
-        $this->getViewHelperManager()->get('placeholder')->getContainer('pageSubtitle')->offsetUnset(1);
 
         $view = $this->getView([]);
 
