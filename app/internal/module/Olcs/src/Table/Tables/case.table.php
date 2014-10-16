@@ -31,7 +31,7 @@ return array(
             'title' => 'Case Number',
             'formatter' => function ($row) {
                 return '<a href="' . $this->generateUrl(
-                    array('case' => $row['id'], 'action' => 'overview'),
+                    array('case' => $row['id'], 'action' => 'details'),
                     'case',
                     true
                 ) . '">' . $row['id'] . '</a>';
