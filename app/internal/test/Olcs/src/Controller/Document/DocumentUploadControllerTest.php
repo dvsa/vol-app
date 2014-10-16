@@ -54,7 +54,7 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
              ->will($this->returnValue($mockServiceLocator));
 
         $query = new \Zend\Stdlib\Parameters();
-        $request = $this->getMock('\stdClass', ['isXmlHttpRequest', 'isPost', 'getPost', 'getFiles']);
+        $request = $this->getMock('\stdClass', ['getQuery', 'isXmlHttpRequest', 'isPost', 'getPost', 'getFiles']);
         $request->expects($this->any())
             ->method('getQuery')
             ->will($this->returnValue($query));
@@ -158,11 +158,12 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
 
         $this->fileStoreMock->expects($this->once())
             ->method('setFile')
-            ->with(array(
-                'name' => 'testfile',
-                'error' => 0
-            )
-        );
+            ->with(
+                array(
+                    'name' => 'testfile',
+                    'error' => 0
+                )
+            );
 
         $storeFile = $this->getMock('\stdClass', ['getIdentifier', 'getExtension', 'getSize']);
         $storeFile->expects($this->any())
@@ -205,6 +206,192 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue($redirect));
 
         $this->controller->processUpload($file);
+    }
+
+    public function testProcessUploadWithoutFileFails()
+    {
+        $fromRoute = $this->getMock('\stdClass', ['fromRoute']);
+        $fromRoute->expects($this->any())
+            ->method('fromRoute')
+            ->will(
+                $this->returnValue(
+                    array(
+                        'type' => 'licence',
+                        'licence' => 1234,
+                        'tmpId' => 'full-filename'
+                    )
+                )
+            );
+
+        $this->controller->expects($this->at(0))
+            ->method('params')
+            ->will($this->returnValue($fromRoute));
+
+        $files = $this->getMock('\stdClass', ['toArray']);
+
+        $file = array(
+            'details' => array(
+                'description' => 'file description',
+                'category' => 3,
+                'documentSubCategory' => 2
+            )
+        );
+
+        $files->expects($this->once())
+            ->method('toArray')
+            ->will($this->returnValue($file));
+
+        $this->request->expects($this->once())
+            ->method('getFiles')
+            ->will($this->returnValue($files));
+
+        $redirect = $this->getMock('\stdClass', ['toRoute']);
+
+        $redirect->expects($this->once())
+            ->method('toRoute')
+            ->with('licence/documents/upload', ['type' => 'licence', 'tmpId' => 'full-filename', 'licence' => 1234]);
+
+        $this->controller->expects($this->once())
+            ->method('redirect')
+            ->will($this->returnValue($redirect));
+
+        $this->controller->processUpload($file);
+    }
+
+    public function testProcessUploadWhenStoreThrowsException()
+    {
+        $fromRoute = $this->getMock('\stdClass', ['fromRoute']);
+        $fromRoute->expects($this->any())
+            ->method('fromRoute')
+            ->will(
+                $this->returnValue(
+                    array(
+                        'type' => 'licence',
+                        'licence' => 1234,
+                        'tmpId' => 'full-filename'
+                    )
+                )
+            );
+
+        $this->controller->expects($this->at(0))
+            ->method('params')
+            ->will($this->returnValue($fromRoute));
+
+        $files = $this->getMock('\stdClass', ['toArray']);
+
+        $this->request->expects($this->once())
+            ->method('getFiles')
+            ->will($this->returnValue($files));
+
+        $file = array(
+            'details' => array(
+                'description' => 'file description',
+                'category' => 3,
+                'documentSubCategory' => 2,
+                'file' => array(
+                    'name' => 'testfile',
+                    'error' => 0
+                )
+            )
+        );
+
+        $this->fileStoreMock = $this->getMock(
+            '\stdClass',
+            [
+                'setFile',
+                'upload'
+            ]
+        );
+
+        $this->fileStoreMock->expects($this->once())
+            ->method('setFile')
+            ->with(
+                array(
+                    'name' => 'testfile',
+                    'error' => 0
+                )
+            );
+
+        $storeFile = $this->getMock('\stdClass', ['getIdentifier', 'getExtension', 'getSize']);
+        $storeFile->expects($this->any())
+            ->method('getIdentifier')
+            ->willReturn('full-filename');
+
+        $storeFile->expects($this->any())
+            ->method('getExtension')
+            ->willReturn('rtf');
+
+        $storeFile->expects($this->any())
+            ->method('getSize')
+            ->willReturn(1234);
+
+        $this->fileStoreMock->expects($this->once())
+            ->method('upload')
+            ->will($this->throwException(new FileException()));
+
+        $files->expects($this->once())
+            ->method('toArray')
+            ->will($this->returnValue($file));
+
+        $redirect = $this->getMock('\stdClass', ['toRoute']);
+
+        $redirect->expects($this->once())
+            ->method('toRoute')
+            ->with('licence/documents/upload', ['type' => 'licence', 'tmpId' => 'full-filename', 'licence' => 1234]);
+
+        $this->controller->expects($this->once())
+            ->method('redirect')
+            ->will($this->returnValue($redirect));
+
+        $this->controller->processUpload($file);
+    }
+
+    public function testUploadAction()
+    {
+        $this->controller->expects($this->at(2))
+            ->method('params')
+            ->with('type')
+            ->will($this->returnValue('licence'));
+
+        $response = $this->controller->uploadAction();
+
+        $variables = $response->getVariables();
+
+        $this->assertEquals('Upload Document', $variables['pageTitle']);
+    }
+
+    public function testUploadActionWithPostInvokesProcessUpload()
+    {
+        $this->setUp(['processUpload']);
+
+        $this->request->expects($this->any())
+            ->method('isPost')
+            ->will($this->returnValue(true));
+
+        $postData = array(
+            'details' => array(
+                'description' => 'file description',
+                'category' => 3,
+                'documentSubCategory' => 2,
+                'file' => array(
+                    'name' => 'testfile',
+                    'error' => 0
+                )
+            )
+        );
+        $this->request->expects($this->any())
+            ->method('getPost')
+            ->will($this->returnValue($postData));
+
+        $this->controller->expects($this->any())
+            ->method('params')
+            ->with('type')
+            ->will($this->returnValue('licence'));
+
+        $this->controller->expects($this->once())
+            ->method('processUpload');
+
+        $this->controller->uploadAction();
     }
 
     /**
@@ -250,16 +437,36 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
     private function mockCategory($data)
     {
         return [
-            'id' => 3,
-            'description' => 'Another Category',
+            'Results' => [
+                [
+                    'id' => 1,
+                    'description' => 'A Category',
+                ], [
+                    'id' => 2,
+                    'description' => 'Licensing',
+                ], [
+                    'id' => 3,
+                    'description' => 'Another Category',
+                ],
+            ]
         ];
     }
 
     private function mockSubCategory($data)
     {
         return [
-            'id' => 2,
-            'description' => 'A Sub Category',
+            'Results' => [
+                [
+                    'id' => 10,
+                    'description' => 'A Sub Category',
+                ], [
+                    'id' => 20,
+                    'description' => 'Publishable Applications',
+                ], [
+                    'id' => 30,
+                    'description' => 'Another Sub Category',
+                ],
+            ]
         ];
     }
 

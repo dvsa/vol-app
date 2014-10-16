@@ -10,6 +10,8 @@
 namespace Olcs\Controller\Document;
 
 use Zend\View\Model\ViewModel;
+use Common\Service\File\Exception as FileException;
+use Olcs\Controller\Traits\DocumentUploadTrait;
 
 /**
  * Document Generation Controller
@@ -20,6 +22,8 @@ use Zend\View\Model\ViewModel;
  */
 class DocumentUploadController extends AbstractDocumentController
 {
+    use DocumentUploadTrait;
+
     /**
      * Labels for empty select options
      */
@@ -31,45 +35,6 @@ class DocumentUploadController extends AbstractDocumentController
     private $categoryMap = [
         'licence' => 'Licensing'
     ];
-
-    /**
-     * Not the prettiest bundle, but what we ultimately want
-     * are the all the DB paragraphs availabe for a given template,
-     * grouped into bookmarks
-     *
-     * The relationships here involve two many-to-many relationships
-     * to keep bookmarks and paragraphs decoupled from templates, which
-     * translates into a fairly nested bundle query
-     */
-    private $templateBundle = [
-        'properties' => ['docTemplateBookmarks'],
-        'children' => [
-            'docTemplateBookmarks' => [
-                'properties' => ['docBookmark'],
-                'children' => [
-                    'docBookmark' => [
-                        'properties' => ['name', 'description'],
-                        'children' => [
-                            'docParagraphBookmarks' => [
-                                'properties' => ['docParagraph'],
-                                'children' => [
-                                    'docParagraph' => [
-                                        'properties' => ['id', 'paraTitle']
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ]
-                ]
-            ]
-        ]
-    ];
-
-    private function getDefaultCategory($categories)
-    {
-        $name = $this->categoryMap[$this->params('type')];
-        return array_search($name, $categories);
-    }
 
     protected function alterFormBeforeValidation($form)
     {
@@ -93,9 +58,6 @@ class DocumentUploadController extends AbstractDocumentController
 
         if ($this->getRequest()->isPost()) {
             $data = (array)$this->getRequest()->getPost();
-        } elseif ($this->params('tmpId')) {
-            $data = $this->fetchTmpData();
-            $this->removeTmpData();
         }
 
         $data = array_merge($defaultData, $data);
@@ -212,83 +174,5 @@ class DocumentUploadController extends AbstractDocumentController
             $routeParams
         );
 
-    }
-
-    public function listTemplateBookmarksAction()
-    {
-        $form = new \Zend\Form\Form();
-
-        $fieldset = new \Zend\Form\Fieldset();
-        $fieldset->setLabel('documents.bookmarks');
-        $fieldset->setName('bookmarks');
-
-        $form->add($fieldset);
-
-        $this->addTemplateBookmarks(
-            $this->params('id'),
-            $fieldset
-        );
-
-        $view = new ViewModel(['form' => $form]);
-        $view->setTemplate('form-simple');
-        $view->setTerminal(true);
-
-        return $view;
-    }
-
-    public function downloadTmpAction()
-    {
-        return $this->getUploader()->download(
-            $this->params('id'),
-            $this->params('filename'),
-            self::TMP_STORAGE_PATH
-        );
-    }
-
-    private function addTemplateBookmarks($id, $fieldset)
-    {
-        if (empty($id)) {
-            return;
-        }
-
-        $result = $this->makeRestCall(
-            'DocTemplate',
-            'GET',
-            $id,
-            $this->templateBundle
-        );
-
-        $bookmarks = $result['docTemplateBookmarks'];
-
-        foreach ($bookmarks as $bookmark) {
-
-            $bookmark = $bookmark['docBookmark'];
-
-            $element = new \Common\Form\Elements\InputFilters\MultiCheckboxEmpty;
-            $element->setLabel($bookmark['description']);
-            $element->setName($bookmark['name']);
-            // user-supplied bookmarks are *all* optional
-            $element->setOptions(['required' => false]);
-
-            $options = [];
-            foreach ($bookmark['docParagraphBookmarks'] as $paragraph) {
-
-                $paragraph = $paragraph['docParagraph'];
-                $options[$paragraph['id']] = $paragraph['paraTitle'];
-            }
-            $element->setValueOptions($options);
-
-            $fieldset->add($element);
-        }
-    }
-
-    protected function getListData(
-        $entity,
-        $filters = array(),
-        $titleField = '',
-        $keyField = '',
-        $showAll = self::EMPTY_LABEL
-    ) {
-        return parent::getListData($entity, $filters, 'description', 'id', $showAll);
     }
 }

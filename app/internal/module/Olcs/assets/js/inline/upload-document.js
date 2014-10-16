@@ -14,14 +14,6 @@ OLCS.ready(function() {
     clearWhenEmpty: true
   });
 
-/*  OLCS.cascadeInput({
-    source: form + " #documentSubCategory",
-    dest: form + " #documentTemplate",
-    url: "/list/document-templates",
-    emptyLabel: "Please select",
-    clearWhenEmpty: true
-  });
-*/
   /**
    * @TODO move this into a component if we can standardise it a bit
    */
