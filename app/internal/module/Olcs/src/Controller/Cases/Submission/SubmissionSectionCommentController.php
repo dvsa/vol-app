@@ -113,18 +113,24 @@ class SubmissionSectionCommentController extends OlcsController\CrudAbstract
     }
 
     /**
-     * Complete section and save
-     * Redirects to details action.
+     * Ensure index action redirects to details action
      *
-     * @param array $data
-     * @return array
+     * @return array|mixed|\Zend\Http\Response|\Zend\View\Model\ViewModel
      */
-    public function processSave($data)
+    public function indexAction()
     {
-        $result = $this->callParentProcessSave($data);
+        return $this->redirectToIndex();
+    }
 
-        $id = isset($result['id']) ? $result['id'] : $data['fields']['id'];
-        return $this->redirect()->toRoute('submission', ['action' => 'details', 'submission' => $id], [], true);
+    /**
+     * Override to redirect to details page
+     *
+     * @return mixed|\Zend\Http\Response
+     */
+    public function redirectToIndex()
+    {
+        $submissionId = $this->params()->fromRoute('submission');
+        return $this->redirectToRoute(submission, ['id' => $submissionId, 'action' => 'details'], [], true);
     }
 
     /**
