@@ -1,65 +1,63 @@
-    <h4>
-        <?php echo $this->translate('Service level agreement'); ?>
-        <a href="<?php echo $this->url(
-            'case_pi_sla',
-            ['action' => 'edit'],
-            [],
-            true
-        ); ?>" class="action--primary right-aligned" />Edit</a>
-    </h4>
+<?php
 
+$items = [
+    ['label' => 'Date call up letter issued', 'date' => $pi['callUpLetterDate']],
+    ['label' => 'Date brief to TC', 'date' => $pi['briefToTcDate']],
+    [
+        'label' => 'Written outcome',
+        'value' => isset($pi['writtenOutcome']['description']) ? $pi['writtenOutcome']['description'] : ''
+    ]
+];
 
-    <?php
-
-    $summary = [
-        'dateCallUpLetterIssued' => [
-            'label' => 'Date call up letter issued',
-            'value' => isset($pi['callUpLetterDate']) ? date('d/m/Y', strtotime($pi['callUpLetterDate'])) : 'dd/mm/yyyy',
-        ],
-        'dateBriefToTc' => [
-            'label' => 'Date brief to TC',
-            'value' => isset($pi['briefToTcDate']) ? date('d/m/Y', strtotime($pi['briefToTcDate'])) : 'dd/mm/yyyy',
-        ],
-        'writtenOutcome' => [
-            'label' => 'Written outcome',
-            'value' => isset($pi['writtenOutcome']['description']) ? $pi['writtenOutcome']['description'] : ''
-        ]
-    ];
-
-    if (isset($pi['writtenOutcome']['id'])) {
-        switch ($pi['writtenOutcome']['id']) {
-            case 'piwo_reason':
-                $summary['writtenReasonDate'] = [
-                    "label" => "Date of written reason",
-                    'value' =>isset($pi['writtenReasonDate']) ? date('d/m/Y', strtotime($pi['writtenReasonDate'])) : 'dd/mm/yyyy'
-                ];
-                $summary['tcWrittenReasonDate'] = [
-                    "label" => "Date of TC's written reason",
-                    'value' =>isset($pi['tcWrittenReasonDate']) ? date('d/m/Y', strtotime($pi['tcWrittenReasonDate'])) : 'dd/mm/yyyy'
-                ];
-                $summary['writtenReasonLetterDate'] = [
-                    "label" => "Written reason letter sent",
-                    'value' =>isset($pi['writtenReasonLetterDate']) ? date('d/m/Y', strtotime($pi['writtenReasonLetterDate'])) : 'dd/mm/yyyy'
-                ];
-                break;
-            case 'piwo_decision':
-                $summary['decisionLetterSentDate'] = [
-                    "label" => "Decision letter sent",
-                    'value' =>isset($pi['decisionLetterSentDate']) ? date('d/m/Y', strtotime($pi['decisionLetterSentDate'])) : 'dd/mm/yyyy'
-                ];
-                $summary['tcWrittenDecisionDate'] = [
-                    "label" => "Date of TC's written decision",
-                    'value' =>isset($pi['tcWrittenDecisionDate']) ? date('d/m/Y', strtotime($pi['tcWrittenDecisionDate'])) : 'dd/mm/yyyy'
-                ];
-                break;
-        }
+if (isset($pi['writtenOutcome']['id'])) {
+    switch ($pi['writtenOutcome']['id']) {
+        case 'piwo_reason':
+            $items[] = [
+                'label' => 'Date of written reason',
+                'date' => $pi['writtenReasonDate']
+            ];
+            $items[] = [
+                'label' => 'Date of TC\'s written reason',
+                'date' => $pi['tcWrittenReasonDate']
+            ];
+            $items[] = [
+                'label' => 'Written reason letter sent',
+                'date' => $pi['writtenReasonLetterDate']
+            ];
+            break;
+        case 'piwo_decision':
+            $items[] = [
+                'label' => 'Decision letter sent',
+                'date' => $pi['decisionLetterSentDate']
+            ];
+            $items[] = [
+                'label' => 'Date of TC\'s written decision',
+                'date' => $pi['tcWrittenDecisionDate']
+            ];
+            break;
     }
+}
 
-    $summary['decisionLetterSentAfterWrittenDecisionDate'] = [
-        "label" => "Decision letter sent after written decision date",
-        'value' =>isset($pi['decisionLetterSentAfterWrittenDecisionDate']) ? date('d/m/Y', strtotime($pi['decisionLetterSentAfterWrittenDecisionDate'])) : 'dd/mm/yyyy'
-    ];
-?>
-<div class="read-only">
-    <?php echo $this->render('partials/summary/summary__list-definition', ['items' => $summary, 'title' => 'Service level agreement']); ?>
-</div>
+$items[] = [
+    'label' => 'Decision letter sent after written decision date',
+    'date' => $pi['decSentAfterWrittenDecDate']
+];
+
+echo $this->render('partials/read-only/main',
+    [
+        'header' => 'Service level agreement',
+        'actions' => [
+            [
+                'label' => 'Edit',
+                'url' => $this->url(
+                    'case_pi_sla',
+                    ['action' => 'edit'],
+                    [],
+                    true
+                ),
+                'class' => 'action--primary right-aligned'
+            ],
+        ],
+        'items' => $items
+    ]
+);
