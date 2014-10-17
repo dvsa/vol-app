@@ -10,7 +10,7 @@
     </div> -->
         <dl>
             <dt>Case type:</dt>
-            <dd><?php echo $this->translate($case['caseType']['description']); ?></dd>
+            <dd><?php echo $case['caseType']['description']; ?></dd>
             <dt>Open Date:</dt>
             <dd><?php echo $this->dateFormat(\DateTime::createFromFormat(\DateTime::ISO8601, $case['openDate']), \IntlDateFormatter::GREGORIAN); ?></dd>
             <dt>ECMS</dt>
