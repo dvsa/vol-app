@@ -137,4 +137,12 @@ class AbstractApplicationController extends AbstractInternalController
             'status' => $data['status']['id']
         );
     }
+
+    /**
+     * Complete crud action
+     *
+     * @param string $section
+     * @param string $mode
+     */
+    abstract protected function completeApplicationCrudAction($section);
 }
