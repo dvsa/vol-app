@@ -40,6 +40,8 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
 
     protected $pageLayoutInner = null;
 
+    protected $defaultTableSortField = 'id';
+
     /**
      * Holds an array of variables for the
      * default index list page.
@@ -245,7 +247,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     {
         $params = [
             'page'    => $this->getQueryOrRouteParam('page', 1),
-            'sort'    => $this->getQueryOrRouteParam('sort', 'id'),
+            'sort'    => $this->getQueryOrRouteParam('sort', $this->defaultTableSortField),
             'order'   => $this->getQueryOrRouteParam('order', 'DESC'),
             'limit'   => $this->getQueryOrRouteParam('limit', 10),
         ];
