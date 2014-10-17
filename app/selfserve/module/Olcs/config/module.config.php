@@ -68,6 +68,7 @@ return array(
             'LvaLicence/BusinessDetails' => 'Olcs\Controller\Licence\BusinessDetailsController',
             'LvaLicence/Addresses' => 'Olcs\Controller\Licence\AddressesController',
             'LvaLicence/People' => 'Olcs\Controller\Licence\PeopleController',
+            'LvaLicence/OperatingCentres' => 'Olcs\Controller\Licence\OperatingCentresController',
             'LvaLicence/TransportManagers' => 'Olcs\Controller\Licence\TransportManagersController',
 
             'LvaVariation' => 'Olcs\Controller\Variation\OverviewController',
@@ -76,6 +77,7 @@ return array(
             'LvaVariation/BusinessDetails' => 'Olcs\Controller\Variation\BusinessDetailsController',
             'LvaVariation/Addresses' => 'Olcs\Controller\Variation\AddressesController',
             'LvaVariation/People' => 'Olcs\Controller\Variation\PeopleController',
+            'LvaVariation/OperatingCentres' => 'Olcs\Controller\Variation\OperatingCentresController',
             'LvaVariation/TransportManagers' => 'Olcs\Controller\Variation\TransportManagersController',
         )
     ),

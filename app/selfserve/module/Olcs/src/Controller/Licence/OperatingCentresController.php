@@ -6,10 +6,9 @@
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-namespace Olcs\Controller\Application;
+namespace Olcs\Controller\Licence;
 
 use Common\Controller\Traits\Lva;
-use Common\Service\Entity\LicenceEntityService;
 use Zend\Form\Form;
 
 /**
@@ -18,12 +17,23 @@ use Zend\Form\Form;
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class OperatingCentresController extends AbstractApplicationController
+class OperatingCentresController extends AbstractLicenceController
 {
     use Lva\OperatingCentresTrait;
 
+    /**
+     * Alter the form
+     *
+     * @param \Zend\Form\Form $form
+     * @return \Zend\Form\Form
+     */
+    public function alterForm(Form $form)
+    {
+        return $form;
+    }
+
     protected function getIdentifier()
     {
-        return $this->getApplicationId();
+        return $this->getLicenceId();
     }
 }

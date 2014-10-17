@@ -65,7 +65,7 @@ abstract class AbstractLicenceController extends AbstractExternalController
      *
      * @return int
      */
-    protected function getLicenceId()
+    protected function getLicenceId($lva = null)
     {
         return $this->params('id');
     }
