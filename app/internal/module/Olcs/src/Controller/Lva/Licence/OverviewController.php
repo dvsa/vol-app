@@ -5,17 +5,24 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-namespace Olcs\Controller\Licence;
+namespace Olcs\Controller\Lva\Licence;
 
 use Zend\View\Model\ViewModel;
+use Common\Controller\Lva\AbstractController;
+use Olcs\Controller\Traits\LicenceControllerTrait;
 
 /**
  * Internal Licence Overview Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class OverviewController extends AbstractLicenceController
+class OverviewController extends AbstractController
 {
+    use LicenceControllerTrait;
+
+    protected $lva = 'licence';
+    protected $location = 'internal';
+
     /**
      * Licence overview
      */

@@ -6,7 +6,7 @@
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob.caiger@clocal.co.uk>
  */
-namespace Olcs\Controller\Licence;
+namespace Olcs\Controller\Lva\Traits;
 
 use Zend\Form\Form;
 use Zend\View\Model\ViewModel;
@@ -14,21 +14,15 @@ use Common\View\Model\Section;
 use Olcs\View\Model\Licence\SectionLayout;
 use Olcs\View\Model\Licence\Layout;
 use Olcs\View\Model\Licence\LicenceLayout;
-use Olcs\Controller\AbstractInternalController;
 
 /**
  * Internal Abstract Licence Controller
  *
  * @author Rob Caiger <rob.caiger@clocal.co.uk>
  */
-abstract class AbstractLicenceController extends AbstractInternalController
+trait LicenceControllerTrait
 {
-    /**
-     * Lva
-     *
-     * @var string
-     */
-    protected $lva = 'licence';
+    use InternalControllerTrait;
 
     /**
      * Hook into the dispatch before the controller action is executed

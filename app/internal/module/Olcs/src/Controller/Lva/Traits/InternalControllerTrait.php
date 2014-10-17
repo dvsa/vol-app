@@ -5,24 +5,15 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-namespace Olcs\Controller;
-
-use Common\Controller\AbstractLvaController;
+namespace Olcs\Controller\Lva\Traits;
 
 /**
  * Abstract Internal Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-abstract class AbstractInternalController extends AbstractLvaController
+trait InternalControllerTrait
 {
-    /**
-     * Set the location
-     *
-     * @var string
-     */
-    protected $location = 'internal';
-
     /**
      * Handle a redirect based on 'cancel' being clicked
      * Declared separately so controllers can customise

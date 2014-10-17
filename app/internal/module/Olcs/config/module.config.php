@@ -90,7 +90,6 @@ return array(
             'CaseDecisionsController' => 'Olcs\Controller\Cases\Processing\DecisionsController',
             'CaseRevokeController' => 'Olcs\Controller\Cases\Processing\RevokeController',
 
-            'LvaApplication' => 'Olcs\Controller\Application\OverviewController',
             'LvaApplication/TypeOfLicence' => 'Olcs\Controller\Application\TypeOfLicenceController',
             'LvaApplication/BusinessType' => 'Olcs\Controller\Application\BusinessTypeController',
             'LvaApplication/BusinessDetails' => 'Olcs\Controller\Application\BusinessDetailsController',
@@ -99,7 +98,6 @@ return array(
             'LvaApplication/FinancialEvidence' => 'Olcs\Controller\Application\FinancialEvidenceController',
             'LvaApplication/TransportManagers' => 'Olcs\Controller\Application\TransportManagersController',
 
-            'LvaLicence' => 'Olcs\Controller\Licence\OverviewController',
             'LvaLicence/TypeOfLicence' => 'Olcs\Controller\Licence\TypeOfLicenceController',
             'LvaLicence/BusinessType' => 'Olcs\Controller\Licence\BusinessTypeController',
             'LvaLicence/BusinessDetails' => 'Olcs\Controller\Licence\BusinessDetailsController',
@@ -107,13 +105,17 @@ return array(
             'LvaLicence/People' => 'Olcs\Controller\Licence\PeopleController',
             'LvaLicence/TransportManagers' => 'Olcs\Controller\Licence\TransportManagersController',
 
-            'LvaVariation' => 'Olcs\Controller\Variation\OverviewController',
             'LvaVariation/TypeOfLicence' => 'Olcs\Controller\Variation\TypeOfLicenceController',
             'LvaVariation/BusinessType' => 'Olcs\Controller\Variation\BusinessTypeController',
             'LvaVariation/BusinessDetails' => 'Olcs\Controller\Variation\BusinessDetailsController',
             'LvaVariation/Addresses' => 'Olcs\Controller\Variation\AddressesController',
             'LvaVariation/People' => 'Olcs\Controller\Variation\PeopleController',
             'LvaVariation/TransportManagers' => 'Olcs\Controller\Variation\TransportManagersController',
+
+            // New "flipped" controllers
+            'LvaApplication'                    => 'Olcs\Controller\Lva\Application\OverviewController',
+            'LvaLicence'                        => 'Olcs\Controller\Lva\Licence\OverviewController',
+            'LvaVariation'                      => 'Olcs\Controller\Lva\Variation\OverviewController',
         )
     ),
     'view_manager' => array(

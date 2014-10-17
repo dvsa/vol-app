@@ -5,7 +5,7 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-namespace Olcs\Controller\Variation;
+namespace Olcs\Controller\Lva\Traits;
 
 use Zend\Form\Form;
 use Zend\View\Model\ViewModel;
@@ -13,24 +13,17 @@ use Common\View\Model\Section;
 use Olcs\View\Model\Variation\VariationLayout;
 use Olcs\View\Model\Application\Layout;
 use Olcs\View\Model\Variation\SectionLayout;
-use Olcs\Controller\Application\AbstractApplicationController;
-use Common\Controller\Traits\Lva;
+use Common\Controller\Lva\Traits\CommonVariationControllerTrait;
 
 /**
  * INTERNAL Abstract Variation Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class AbstractVariationController extends AbstractApplicationController
+trait VariationControllerTrait
 {
-    use Lva\VariationControllerTrait;
-
-    /**
-     * Lva
-     *
-     * @var string
-     */
-    protected $lva = 'variation';
+    use ApplicationControllerTrait,
+        CommonVariationControllerTrait;
 
     /**
      * Render the section

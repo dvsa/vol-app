@@ -5,35 +5,28 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-namespace Olcs\Controller\Application;
+namespace Olcs\Controller\Lva\Traits;
 
 use Zend\Form\Form;
 use Zend\View\Model\ViewModel;
-use Common\View\Model\Section;
 use Olcs\View\Model\Application\Layout;
 use Olcs\View\Model\Application\SectionLayout;
 use Olcs\View\Model\Application\ApplicationLayout;
-use Olcs\Controller\AbstractInternalController;
+use Common\View\Model\Section;
+use Common\Controller\Lva\Traits\EnabledSectionTrait;
+use Common\Controller\Lva\Traits\CommonApplicationControllerTrait;
 use Common\Service\Entity\ApplicationCompletionEntityService;
-use Common\Controller\Traits\Lva\ApplicationControllerTrait;
-use Common\Controller\Traits\Lva\EnabledSectionTrait;
 
 /**
  * INTERNAL Abstract Application Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class AbstractApplicationController extends AbstractInternalController
+trait ApplicationControllerTrait
 {
-    use ApplicationControllerTrait,
+    use InternalControllerTrait,
+        CommonApplicationControllerTrait,
         EnabledSectionTrait;
-
-    /**
-     * Holds the lva type
-     *
-     * @var string
-     */
-    protected $lva = 'application';
 
     /**
      * Render the section
@@ -137,12 +130,4 @@ class AbstractApplicationController extends AbstractInternalController
             'status' => $data['status']['id']
         );
     }
-
-    /**
-     * Complete crud action
-     *
-     * @param string $section
-     * @param string $mode
-     */
-    abstract protected function completeApplicationCrudAction($section);
 }

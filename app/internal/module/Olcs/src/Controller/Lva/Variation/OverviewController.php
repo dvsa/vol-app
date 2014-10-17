@@ -5,17 +5,24 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-namespace Olcs\Controller\Variation;
+namespace Olcs\Controller\Lva\Variation;
 
 use Zend\View\Model\ViewModel;
+use Common\Controller\Lva\AbstractController;
+use Olcs\Controller\Lva\Traits\VariationControllerTrait;
 
 /**
  * Application Overview Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class OverviewController extends AbstractVariationController
+class OverviewController extends AbstractController
 {
+    use VariationControllerTrait;
+
+    protected $lva = 'variation';
+    protected $location = 'internal';
+
     /**
      * Application overview
      */
