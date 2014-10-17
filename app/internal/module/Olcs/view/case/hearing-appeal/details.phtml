@@ -1,157 +1,87 @@
 <?php
-$appeal = $this->placeholder('appeal')->getValue(); ?>
+$appeal = $this->placeholder('appeal')->getValue();
 
-<h4><?php echo $this->translate($this->navigation('navigation')->findOneBy('active', 1)->getLabel()); ?>
-    <?php
-    if (empty($appeal)){
-    ?>
-    <a href="<?php echo $this->url(
-        'case_appeal',
+if (empty($appeal)){
+    echo $this->render('partials/read-only/empty',
         [
-            'case' => $case['id'],
-            'action' => 'add'
-        ], [], false); ?>" class="action--primary
-        right-aligned"><?php echo $this->translate('Add appeal'); ?></a>
-</h4>
-
-<?php
+            'header' => $this->navigation('navigation')->findOneBy('active', 1)->getLabel(),
+            'helpText' => 'There is currently no appeal',
+            'url' => $this->url('case_appeal', ['case' => $case['id'], 'action' => 'add'], [], false),
+            'label' => 'Add appeal'
+        ]
+    );
 } else {
-    ?>
-    <a href="<?php echo $this->url(
-        'case_appeal',
+    echo $this->render('partials/read-only/main',
         [
-            'case' => $case['id'],
-            'appeal' => $appeal['id'],
-            'action' => 'edit'
-        ], [], false); ?>" class="action--primary
-        right-aligned"><?php echo $this->translate('Edit appeal'); ?></a>
-
-    </h4>
-
-    <div class="read-only">
-        <dl>
-            <dt><?php echo $this->translate('Appeal number');?></dt>
-            <dd><?php echo isset($appeal['appealNo']) ? $appeal['appealNo'] : ''; ?></dd>
-            <dt><?php echo $this->translate('Appeals deadline');?></dt>
-            <dd><?php echo isset($appeal['deadlineDate']) ?
-                    $this->dateFormat(
-                        \DateTime::createFromFormat(
-                            \DateTime::ISO8601,
-                            $appeal['deadlineDate']
-                        ),
-                        \IntlDateFormatter::SHORT) : ''; ?></dd>
-            <dt><?php echo $this->translate('Date of appeal');?></dt>
-            <dd><?php echo isset($appeal['appealDate']) ?
-                    $this->dateFormat(
-                    \DateTime::createFromFormat(
-                        \DateTime::ISO8601,
-                        $appeal['appealDate']
+            'header' => $this->navigation('navigation')->findOneBy('active', 1)->getLabel(),
+            'actions' => [
+                [
+                    'label' => 'Edit appeal',
+                    'url' => $this->url(
+                        'case_appeal',
+                        ['case' => $case['id'], 'appeal' => $appeal['id'], 'action' => 'edit'],
+                        [],
+                        false
                     ),
-                    \IntlDateFormatter::SHORT) : ''; ?></dd>
-            <dt><?php echo $this->translate('Reason');?></dt>
-            <dd><?php echo isset($appeal['reason']['description']) ? $appeal['reason']['description'] : ''; ?></dd>
-        </dl>
+                    'class' => 'action--primary right-aligned'
+                ]
+            ],
+            'items' => [
+                ['label' => 'Appeal number', 'value' => $appeal['appealNo']],
+                ['label' => 'Appeals deadline', 'date' => $appeal['deadlineDate']],
+                ['label' => 'Date of appeal', 'date' => $appeal['appealDate']],
+                ['label' => 'Reason', 'value' => (isset($appeal['reason']['description']) ?
+                    $appeal['reason']['description'] : '')],
+                ['label' => 'Outline ground', 'value' => $appeal['outlineGround'], 'class' => 'three-quarters'],
+                ['label' => 'Date of appeal hearing', 'date' => $appeal['hearingDate']],
+                ['label' => 'Date of decision', 'date' => $appeal['decisionDate']],
+                ['label' => 'Papers due at tribunal', 'date' => $appeal['papersDueDate']],
+                ['label' => 'Papers sent date', 'date' => $appeal['papersSentDate']],
+                ['label' => 'Outcome', 'value' => (isset($appeal['outcome']['description']) ?
+                    $appeal['outcome']['description'] : '')],
+                ['label' => 'Tm Case Id', 'value' => $appeal['tmCaseId']],
+                ['label' => 'Is withdrawn', 'value' => (empty($appeal['withdrawnDate']) ? 'N' : 'Y')],
+                ['label' => 'Withdrawn date', 'date' => $appeal['withdrawnDate']],
+                ['label' => 'Comments', 'value' => $appeal['comment'], 'class' => 'full-width'],
+            ]
+        ]
+    );
 
-        <dl>
-            <dt><?php echo $this->translate('Outline ground');?></dt>
-            <dd class="three-quarters"><?php echo isset($appeal['outlineGround']) ? $appeal['outlineGround'] : '';
-                ?></dd>
-        </dl>
-        <dl>
-            <dt><?php echo $this->translate('Date of appeal hearing');?></dt>
-            <dd><?php echo isset($appeal['hearingDate']) ?
-                    $this->dateFormat(
-                        \DateTime::createFromFormat(
-                            \DateTime::ISO8601,
-                            $appeal['hearingDate']
-                        ),
-                        \IntlDateFormatter::SHORT) : ''; ?></dd>
-            <dt><?php echo $this->translate('Date of decision');?></dt>
-            <dd><?php echo isset($appeal['decisionDate']) ?
-                    $this->dateFormat(
-                        \DateTime::createFromFormat(
-                            \DateTime::ISO8601,
-                            $appeal['decisionDate']
-                        ),
-                        \IntlDateFormatter::SHORT) : ''; ?></dd>
-
-            <dt><?php echo $this->translate('Papers due at tribunal');?></dt>
-            <dd><?php echo isset($appeal['papersDueDate']) ?
-                    $this->dateFormat(
-                        \DateTime::createFromFormat(
-                            \DateTime::ISO8601,
-                            $appeal['papersDueDate']
-                        ),
-                        \IntlDateFormatter::SHORT) : ''; ?></dd>
-            <dt><?php echo $this->translate('Papers sent date');?></dt>
-            <dd><?php echo isset($appeal['papersSentDate']) ?
-                    $this->dateFormat(
-                        \DateTime::createFromFormat(
-                            \DateTime::ISO8601,
-                            $appeal['papersSentDate']
-                        ),
-                        \IntlDateFormatter::SHORT) : ''; ?></dd>
-            <dt><?php echo $this->translate('Outcome');?></dt>
-            <dd><?php echo isset($appeal['outcome']['description']) ? $appeal['outcome']['description'] : ''; ?></dd>
-
-        </dl>
-        <dl>
-            <dt><?php echo $this->translate('Tm Case Id');?></dt>
-            <dd><?php echo isset($appeal['tmCaseId']) ? $appeal['tmCaseId'] : ''; ?></dd>
-
-            <dt><?php echo $this->translate('Is withdrawn');?></dt>
-            <dd><?php echo $this->translate(empty($appeal['withdrawnDate']) ?
-                    'N' : 'Y'); ?></dd>
-            <dt><?php echo $this->translate('Withdrawn date');?></dt>
-            <dd><?php echo isset($appeal['withdrawnDate']) ?
-                    $this->dateFormat(
-                        \DateTime::createFromFormat(
-                            \DateTime::ISO8601,
-                            $appeal['withdrawnDate']
-                        ),
-                        \IntlDateFormatter::SHORT) : ''; ?></dd>
-        </dl>
-        <dl>
-            <dt><?php echo $this->translate('Comments');?></dt>
-            <dd class="three-quarters"><?php echo
-                isset($appeal['comment']) ? $appeal['comment'] : '';
-                ?></dd>
-        </dl>
-    </div>
-
-    <?php
     if (!empty($stayRecords['stay_t_tc'][0]))
     {
-        echo $this->partial('case/hearing-appeal/stay-details.phtml',
-                $stayRecords['stay_t_tc'][0]);
+        echo $this->partial('case/hearing-appeal/stay-details.phtml', $stayRecords['stay_t_tc'][0]);
     } else {
-        echo $this->partial('case/hearing-appeal/stay-details.phtml',
+        echo $this->render('partials/read-only/empty',
             [
-                'case' =>  $case,
-                'stayType' => [
-                    'id' => 'stay_t_tc',
-                    'description' => 'Traffic commissioner / transport
-                    regulator stay'
-                ]
+                'header' => 'Traffic commissioner / transport regulator stay',
+                'helpText' => 'There is currently no Traffic commissioner / transport regulator stay',
+                'url' => $this->url(
+                    'case_stay',
+                    ['case' => $case['id'], 'action' => 'add', 'stayType' => 'stay_t_tc'],
+                    [],
+                    false
+                ),
+                'label' => 'Add stay'
             ]
         );
     }
-    ?>
-    <?php
+
     if (!empty($stayRecords['stay_t_ut'][0]))
     {
-        echo $this->partial('case/hearing-appeal/stay-details.phtml',
-            $stayRecords['stay_t_ut'][0]);
+        echo $this->partial('case/hearing-appeal/stay-details.phtml', $stayRecords['stay_t_ut'][0]);
     } else {
-        echo $this->partial('case/hearing-appeal/stay-details.phtml',
+        echo $this->render('partials/read-only/empty',
             [
-                'case' =>  $case,
-                'stayType' => [
-                    'id' => 'stay_t_ut',
-                    'description' => 'Upper tribunal stay'
-                ]
+                'header' => 'Upper tribunal stay',
+                'helpText' => 'There is currently no Upper tribunal stay',
+                'url' => $this->url(
+                    'case_stay',
+                    ['case' => $case['id'], 'action' => 'add', 'stayType' => 'stay_t_ut'],
+                    [],
+                    false
+                ),
+                'label' => 'Add stay'
             ]
         );
     }
 }
-?>
