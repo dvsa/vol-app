@@ -30,13 +30,15 @@ if (empty($appeal)){
                 ['label' => 'Appeal number', 'value' => $appeal['appealNo']],
                 ['label' => 'Appeals deadline', 'date' => $appeal['deadlineDate']],
                 ['label' => 'Date of appeal', 'date' => $appeal['appealDate']],
-                ['label' => 'Reason', 'value' => (isset($appeal['reason']['description']) ? $appeal['reason']['description'] : '')],
+                ['label' => 'Reason', 'value' => (isset($appeal['reason']['description']) ?
+                    $appeal['reason']['description'] : '')],
                 ['label' => 'Outline ground', 'value' => $appeal['outlineGround'], 'class' => 'three-quarters'],
                 ['label' => 'Date of appeal hearing', 'date' => $appeal['hearingDate']],
                 ['label' => 'Date of decision', 'date' => $appeal['decisionDate']],
                 ['label' => 'Papers due at tribunal', 'date' => $appeal['papersDueDate']],
                 ['label' => 'Papers sent date', 'date' => $appeal['papersSentDate']],
-                ['label' => 'Outcome', 'value' => (isset($appeal['outcome']['description']) ? $appeal['outcome']['description'] : '')],
+                ['label' => 'Outcome', 'value' => (isset($appeal['outcome']['description']) ?
+                    $appeal['outcome']['description'] : '')],
                 ['label' => 'Tm Case Id', 'value' => $appeal['tmCaseId']],
                 ['label' => 'Is withdrawn', 'value' => (empty($appeal['withdrawnDate']) ? 'N' : 'Y')],
                 ['label' => 'Withdrawn date', 'date' => $appeal['withdrawnDate']],
