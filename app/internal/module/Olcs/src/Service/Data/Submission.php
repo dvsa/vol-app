@@ -112,9 +112,32 @@ class Submission extends AbstractData
         foreach ($selectedSectionsArray as $index => $selectedSectionData) {
             $selectedSectionsArray[$index]['description'] =
                 $submissionSectionRefData[$selectedSectionData['sectionId']];
+            $selectedSectionsArray[$index]['comments'] = $this->filterCommentsBySection(
+                $selectedSectionData['sectionId'],
+                $submission['submissionSectionComments']
+            );
         }
 
         return $selectedSectionsArray;
+    }
+
+    /**
+     * Loops through all comments attached to a submission and returns only those
+     * which match the section
+     *
+     * @param string $sectionId
+     * @param array $comments
+     * @return array
+     */
+    public function filterCommentsBySection($sectionId, $comments)
+    {
+        $sectionComments = [];
+        foreach ($comments as $comment) {
+            if ($sectionId == $comment['submissionSection']['id']) {
+                $sectionComments[] = $comment;
+            }
+        }
+        return $sectionComments;
     }
 
     public function getAllSectionsRefData()
@@ -397,6 +420,16 @@ class Submission extends AbstractData
                 ),
                 'case' => array(
                     'properties' => 'ALL',
+                ),
+                'submissionSectionComments' =>  array(
+                    'properties' => 'ALL',
+                    'children' => array(
+                        'submissionSection' => array(
+                            'properties' => array(
+                                'id'
+                            )
+                        )
+                    )
                 )
             )
         );

@@ -1,0 +1,28 @@
+<div class="read-only">
+
+<?php
+
+if (empty($this->section['comments'])) {
+    ?>
+    <div class="read-only__header">
+        <div class="actions-container">
+            <input class="action--secondary" type="submit" value="Add comment">
+        </div>
+    </div><!-- read-only__header -->
+<?php
+} else {
+    foreach ($this->section['comments'] as $comment) {
+        echo $comment['comment'];
+    }
+?>
+    <div class="read-only">
+        <div class="read-only__header">
+            <div class="actions-container">
+                <input class="action--secondary" type="submit" value="Edit comment">
+            </div>
+        </div><!-- read-only__header -->
+    </div>
+<?php
+}
+?>
+</div>

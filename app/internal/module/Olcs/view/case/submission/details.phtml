@@ -32,6 +32,8 @@ foreach ($allSections as $sectionId => $sectionDescription) {
     {
         $key = array_search($sectionId, $selectedIds);
         echo $this->submissionSectionDetails($selectedSectionsArray[$key]['sectionId'], $selectedSectionsArray[$key]);
+        echo $this->partial('case/submission/partials/comments',
+            ['section' => $selectedSectionsArray[$key]]);
     }
 }
 ?>
