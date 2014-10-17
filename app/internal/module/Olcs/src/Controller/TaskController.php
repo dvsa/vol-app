@@ -301,7 +301,17 @@ class TaskController extends AbstractController
                     $linkDisplay ? $linkDisplay : $licence['licNo']
                 );
                 break;
-
+            case 'application':
+                $url = sprintf(
+                    '<a href="%s">%s</a>',
+                    $this->url()->fromRoute(
+                        'Application/Overview/Details',
+                        array(
+                            'applicationId' => $taskTypeId
+                        )
+                    ), $linkDisplay
+                );
+                break;
             default:
                 $url='';
         }
