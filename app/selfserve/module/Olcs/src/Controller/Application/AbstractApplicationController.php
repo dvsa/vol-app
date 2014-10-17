@@ -74,4 +74,12 @@ abstract class AbstractApplicationController extends AbstractExternalController
 
         return $this->getServiceLocator()->get('Entity\Licence')->getTypeOfLicenceData($licenceId);
     }
+
+    /**
+     * Complete crud action
+     *
+     * @param string $section
+     * @param string $mode
+     */
+    abstract protected function completeApplicationCrudAction($section);
 }

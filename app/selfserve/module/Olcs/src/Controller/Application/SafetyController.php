@@ -8,6 +8,8 @@
  */
 namespace Olcs\Controller\Application;
 
+use Common\Controller\Traits\Lva;
+
 /**
  * Safety Controller
  *
@@ -16,8 +18,5 @@ namespace Olcs\Controller\Application;
  */
 class SafetyController extends AbstractApplicationController
 {
-    public function indexAction()
-    {
-        return $this->render('safety');
-    }
+    use Lva\SafetyTrait;
 }
