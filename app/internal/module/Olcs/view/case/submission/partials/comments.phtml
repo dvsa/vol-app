@@ -1,12 +1,21 @@
 <div class="read-only">
 
 <?php
-
 if (empty($this->section['comments'])) {
     ?>
     <div class="read-only__header">
         <div class="actions-container">
-            <input class="action--secondary" type="submit" value="Add comment">
+            <a href="<?php echo $this->url(
+                'submission_section_comment', [
+                    'case' => $this->caseId,
+                    'submission' => $this->submissionId,
+                    'submissionSection' => $this->section['sectionId'],
+                    'action' => 'add'
+                ]
+            );?>" class="action--secondary right-aligned">
+                <?php echo
+                $this->translate('Add comment');
+                ?></a>
         </div>
     </div><!-- read-only__header -->
 <?php
@@ -18,8 +27,19 @@ if (empty($this->section['comments'])) {
     <div class="read-only">
         <div class="read-only__header">
             <div class="actions-container">
-                <input class="action--secondary" type="submit" value="Edit comment">
-            </div>
+
+                <a href="<?php echo $this->url(
+                    'submission_section_comment', [
+                        'case' => $this->caseId,
+                        'submission' => $this->submissionId,
+                        'submissionSection' => $this->section['sectionId'],
+                        'id' => $this->section['comments'][0]['id'],
+                        'action' => 'edit'
+                    ]
+                );?>" class="action--secondary right-aligned">
+                    <?php echo
+                    $this->translate('Edit comment');
+                    ?></a>            </div>
         </div><!-- read-only__header -->
     </div>
 <?php
