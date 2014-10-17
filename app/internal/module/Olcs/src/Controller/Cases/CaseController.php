@@ -89,7 +89,7 @@ class CaseController extends OlcsController\CrudAbstract
                 'properties' => 'ALL',
             ),
             'caseType' => array(
-                'properties' => 'id',
+                'properties' => 'ALL',
             ),
             'categorys' => array(
                 'properties' => 'ALL',
@@ -136,7 +136,7 @@ class CaseController extends OlcsController\CrudAbstract
 
     public function redirectAction()
     {
-        return $this->redirect()->toRoute('case', ['action' => 'details'], [], true);
+        return $this->redirectToRoute('case', ['action' => 'details'], [], true);
     }
 
     /**
@@ -183,7 +183,7 @@ class CaseController extends OlcsController\CrudAbstract
      */
     public function indexAction()
     {
-        return $this->redirect()->toRoute('case', ['action' => 'details'], [], true);
+        return $this->redirectToRoute('case', ['action' => 'details'], [], true);
     }
 
     /**
