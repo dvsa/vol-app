@@ -48,6 +48,7 @@ return array(
             'DocumentController' => 'Olcs\Controller\Document\DocumentController',
             'DocumentGenerationController' => 'Olcs\Controller\Document\DocumentGenerationController',
             'DocumentUploadController' => 'Olcs\Controller\Document\DocumentUploadController',
+            'DocumentFinaliseController' => 'Olcs\Controller\Document\DocumentFinaliseController',
             'DefendantSearchController' => 'Olcs\DefendantSearchController',
             'LicenceController' => 'Olcs\Controller\Licence\LicenceController',
             'TaskController' => 'Olcs\Controller\TaskController',
