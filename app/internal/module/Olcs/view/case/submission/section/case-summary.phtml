@@ -1,81 +1,61 @@
+<?php
 
-<div class="read-only">
-    <dl>
-        <dt><?php echo $this->translate('Operator name');?></dt>
-        <dd><?php echo isset($this->data['data']['organisationName']) ?
-                $this->data['data']['organisationName'] : '';
-                echo (isset($this->data['data']['isMlh']) && $this->data['data']['isMlh'] == 'Y') ?
-                    '(' . $this->translate('MLH') . ')' : '';
-            ?></dd>
-        <dt><?php echo $this->translate('Is MLH?');?></dt>
-        <dd><?php echo isset($this->data['data']['isMlh']) ?
-                $this->data['data']['isMlh'] : '';
-            ?></dd>
-        <dt><?php echo $this->translate('Entity');?></dt>
-        <dd><?php echo isset($this->data['data']['organisationType']) ?
-                $this->data['data']['organisationType'] : '';?></dd>
-        <dt><?php echo $this->translate('ECMS');?></dt>
-        <dd><?php echo isset($this->data['data']['ecmsNo']) ?
-                $this->data['data']['ecmsNo'] : '';?></dd>
-        <dt><?php echo $this->translate('Business type');?></dt>
-        <dd><?php echo isset($this->data['data']['businessType']) ?
-                $this->data['data']['businessType'] : '';?></dd>
-    </dl>
-</div>
-<div class="read-only">
-    <dl>
-        <dt><?php echo $this->translate('Licence number');?></dt>
-        <dd><?php echo isset($this->data['data']['licNo']) ?
-                $this->data['data']['licNo'] : '';?></dd>
-        <dt><?php echo $this->translate('Licence start date');?></dt>
-        <dd><?php echo isset($this->data['data']['licenceStartDate']) ?
-                $this->dateFormat(
-                    \DateTime::createFromFormat(
-                        \DateTime::ISO8601,
-                        $this->data['data']['licenceStartDate']
-                    ),
-                    \IntlDateFormatter::SHORT) : '';?></dd>
-        <dt><?php echo $this->translate('Licence type');?></dt>
-        <dd><?php echo isset($this->data['data']['licenceType']) ?
-                $this->data['data']['licenceType'] : '';?></dd>
-        <?php
-            if (isset($this->data['data']['caseType']) && $this->data['data']['caseType'] == 'case_t_app') {
-        ?>
-        <dt><?php echo $this->translate('Service standard date');?></dt>
-        <dd><?php echo isset($this->data['data']['serviceStandardDate']) ?
-                $this->dateFormat(
-                    \DateTime::createFromFormat(
-                        \DateTime::ISO8601,
-                        $this->data['data']['serviceStandardDate']
-                    ),
-                    \IntlDateFormatter::SHORT) : '';?></dd>
-        <?php
-            }
-        ?>
-        <dt><?php echo $this->translate('Licence status');?></dt>
-        <dd><?php echo isset($this->data['data']['licenceStatus']) ?
-                $this->data['data']['licenceStatus'] : '';?></dd>
-        <dt><?php echo $this->translate('Type of licence');?></dt>
-        <dd><?php echo isset($this->data['data']['goodsOrPsv']) ?
-                $this->data['data']['goodsOrPsv'] : '';?></dd>
-    </dl>
-</div>
-<div class="read-only">
-    <dl>
-        <dt><?php echo $this->translate('Total vehicle authorisation');?></dt>
-        <dd><?php echo isset($this->data['data']['totAuthorisedVehicles']) ?
-                $this->data['data']['totAuthorisedVehicles'] : 0;?></dd>
+$operatorName = (isset($this->data['data']['organisationName']) ?
+    $this->data['data']['organisationName'] : '') .
+    ((isset($this->data['data']['isMlh']) && $this->data['data']['isMlh'] == 'Y') ?
+    '(MLH)' : '');
 
-        <dt><?php echo $this->translate('Vehicles in possession');?></dt>
-        <dd><?php echo isset($this->data['data']['vehiclesInPossession']) ?
-                $this->data['data']['vehiclesInPossession'] : 0;?></dd>
+$isMlh = (isset($this->data['data']['isMlh']) ?
+    $this->data['data']['isMlh'] : 'N');
 
-        <dt><?php echo $this->translate('Trailer authorisation');?></dt>
-        <dd><?php echo isset($this->data['data']['totAuthorisedTrailers']) ?
-                $this->data['data']['totAuthorisedTrailers'] : 0;?></dd>
+$entity = (isset($this->data['data']['organisationType']) ?
+    $this->data['data']['organisationType'] : '');
 
-        <dt><?php echo $this->translate('Trailers in possession');?></dt>
-        <dd><?php echo isset($this->data['data']['trailersInPossession']) ?
-                $this->data['data']['trailersInPossession'] : 0;?></dd>
-    </dl>
-</div>
+$ecmsNo = (isset($this->data['data']['ecmsNo']) ?
+    $this->data['data']['ecmsNo'] : '');
+
+$businessType = (isset($this->data['data']['businessType']) ?
+    $this->data['data']['businessType'] : '');
+
+echo $this->render('partials/read-only/main',
+    [
+        'items' => [
+            ['label' => 'Operator name', 'value' => $operatorName],
+            ['label' => 'Is MLH?', 'value' => $isMlh],
+            ['label' => 'Entity', 'value' => $entity],
+            ['label' => 'ECMS', 'value' => $ecmsNo],
+            ['label' => 'Business type', 'value' => $businessType]
+        ]
+    ]
+);
+
+$items = [
+    ['label' => 'Licence number', 'value' => $this->data['data']['licNo']],
+    ['label' => 'Licence start date', 'date' => $this->data['data']['licenceStartDate']],
+    ['label' => 'Licence type', 'value' => $this->data['data']['licenceType']],
+    ['label' => 'Licence status', 'value' => $this->data['data']['licenceStatus']],
+    ['label' => 'Type of licence', 'value' => $this->data['data']['goodsOrPsv']]
+];
+
+if (isset($this->data['data']['caseType']) && $this->data['data']['caseType'] == 'case_t_app') {
+    $items[] = ['label' => 'Service standard date', 'date' => $this->data['data']['serviceStandardDate']];
+}
+
+echo $this->render('partials/read-only/main',
+    [
+        'header' => 'Licence details',
+        'items' => $items
+    ]
+);
+
+echo $this->render('partials/read-only/main',
+    [
+        'header' => 'Authorisation',
+        'items' => [
+            ['label' => 'Total vehicle authorisation', 'numeric' => $this->data['data']['totAuthorisedVehicles']],
+            ['label' => 'Vehicles in possession', 'numeric' => $this->data['data']['vehiclesInPossession']],
+            ['label' => 'Trailer authorisation', 'numeric' => $this->data['data']['totAuthorisedTrailers']],
+            ['label' => 'Trailers in possession', 'numeric' => $this->data['data']['trailersInPossession']]
+        ]
+    ]
+);
