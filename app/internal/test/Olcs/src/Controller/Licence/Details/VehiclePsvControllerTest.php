@@ -1646,7 +1646,7 @@ class VehiclePsvControllerTest extends AbstractLicenceDetailsControllerTestCase
         }
 
         $licenceVehicleBundle = array(
-            'properties' => array(),
+            'properties' => array('removalDate'),
             'children' => array(
                 'vehicle' => array(
                     'properties' => array('vrm')
@@ -1659,6 +1659,7 @@ class VehiclePsvControllerTest extends AbstractLicenceDetailsControllerTestCase
                 'Count' => 1,
                 'Results' => array(
                     array(
+                        'removalDate' => null,
                         'vehicle' => array(
                             'vrm' => 'RANDOM'
                         )
