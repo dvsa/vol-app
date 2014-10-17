@@ -9,6 +9,7 @@
 namespace Olcs\Controller\Document;
 
 use Zend\View\Model\ViewModel;
+use Olcs\Controller\Traits\DocumentUploadTrait;
 
 /**
  * Document Generation Controller
@@ -18,6 +19,8 @@ use Zend\View\Model\ViewModel;
  */
 class DocumentGenerationController extends AbstractDocumentController
 {
+    use DocumentUploadTrait;
+
     /**
      * Labels for empty select options
      */
@@ -62,12 +65,6 @@ class DocumentGenerationController extends AbstractDocumentController
             ]
         ]
     ];
-
-    private function getDefaultCategory($categories)
-    {
-        $name = $this->categoryMap[$this->params('type')];
-        return array_search($name, $categories);
-    }
 
     protected function alterFormBeforeValidation($form)
     {
@@ -320,15 +317,5 @@ class DocumentGenerationController extends AbstractDocumentController
 
             $fieldset->add($element);
         }
-    }
-
-    protected function getListData(
-        $entity,
-        $filters = array(),
-        $titleField = '',
-        $keyField = '',
-        $showAll = self::EMPTY_LABEL
-    ) {
-        return parent::getListData($entity, $filters, 'description', 'id', $showAll);
     }
 }
