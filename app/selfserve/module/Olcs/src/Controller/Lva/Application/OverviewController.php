@@ -5,19 +5,22 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-namespace Olcs\Controller\Application;
+namespace Olcs\Controller\Lva\Application;
 
-use Common\Controller\Traits\Lva\EnabledSectionTrait;
+use Common\Controller\Lva\AbstractController;
+use Common\Controller\Lva\Traits\EnabledSectionTrait;
 use Olcs\View\Model\Application\ApplicationOverview;
+use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 
 /**
  * Application Overview Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class OverviewController extends AbstractApplicationController
+class OverviewController extends AbstractController
 {
-    use EnabledSectionTrait;
+    use ApplicationControllerTrait,
+        EnabledSectionTrait;
 
     /**
      * Application overview

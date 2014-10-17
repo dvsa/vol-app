@@ -47,9 +47,6 @@ return array(
             'Olcs\Ebsr\Uploads' => 'Olcs\Controller\Ebsr\UploadsController',
             'Dashboard' => 'Olcs\Controller\DashboardController',
 
-            'LvaApplication' => 'Olcs\Controller\Application\OverviewController',
-            'LvaApplication/TypeOfLicence' => 'Olcs\Controller\Application\TypeOfLicenceController',
-            'LvaApplication/BusinessType' => 'Olcs\Controller\Application\BusinessTypeController',
             'LvaApplication/BusinessDetails' => 'Olcs\Controller\Application\BusinessDetailsController',
             'LvaApplication/Addresses' => 'Olcs\Controller\Application\AddressesController',
             'LvaApplication/People' => 'Olcs\Controller\Application\PeopleController',
@@ -62,21 +59,28 @@ return array(
             'LvaApplication/LicenceHistory' => 'Olcs\Controller\Application\LicenceHistoryController',
             'LvaApplication/ConvictionsPenalties' => 'Olcs\Controller\Application\ConvictionsPenaltiesController',
 
-            'LvaLicence' => 'Olcs\Controller\Licence\OverviewController',
-            'LvaLicence/TypeOfLicence' => 'Olcs\Controller\Licence\TypeOfLicenceController',
-            'LvaLicence/BusinessType' => 'Olcs\Controller\Licence\BusinessTypeController',
             'LvaLicence/BusinessDetails' => 'Olcs\Controller\Licence\BusinessDetailsController',
             'LvaLicence/Addresses' => 'Olcs\Controller\Licence\AddressesController',
             'LvaLicence/People' => 'Olcs\Controller\Licence\PeopleController',
             'LvaLicence/TransportManagers' => 'Olcs\Controller\Licence\TransportManagersController',
 
-            'LvaVariation' => 'Olcs\Controller\Variation\OverviewController',
-            'LvaVariation/TypeOfLicence' => 'Olcs\Controller\Variation\TypeOfLicenceController',
-            'LvaVariation/BusinessType' => 'Olcs\Controller\Variation\BusinessTypeController',
             'LvaVariation/BusinessDetails' => 'Olcs\Controller\Variation\BusinessDetailsController',
             'LvaVariation/Addresses' => 'Olcs\Controller\Variation\AddressesController',
             'LvaVariation/People' => 'Olcs\Controller\Variation\PeopleController',
             'LvaVariation/TransportManagers' => 'Olcs\Controller\Variation\TransportManagersController',
+
+            // New "flipped" sections
+            'LvaApplication'                => 'Olcs\Controller\Lva\Application\OverviewController',
+            'LvaApplication/TypeOfLicence'  => 'Olcs\Controller\Lva\Application\TypeOfLicenceController',
+            'LvaApplication/BusinessType'   => 'Olcs\Controller\Lva\Application\BusinessTypeController',
+
+            'LvaLicence'                    => 'Olcs\Controller\Lva\Licence\OverviewController',
+            'LvaLicence/TypeOfLicence'      => 'Olcs\Controller\Lva\Licence\TypeOfLicenceController',
+            'LvaLicence/BusinessType'       => 'Olcs\Controller\Lva\Licence\BusinessTypeController',
+
+            'LvaVariation'                  => 'Olcs\Controller\Lva\Variation\OverviewController',
+            'LvaVariation/TypeOfLicence'    => 'Olcs\Controller\Lva\Variation\TypeOfLicenceController',
+            'LvaVariation/BusinessType'     => 'Olcs\Controller\Lva\Variation\BusinessTypeController',
         )
     ),
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',

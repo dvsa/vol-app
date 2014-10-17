@@ -5,26 +5,21 @@
  *
  * @author Rob Caiger <rob.caiger@clocal.co.uk>
  */
-namespace Olcs\Controller\Variation;
+namespace Olcs\Controller\Lva\Traits;
 
-use Common\Controller\Traits\Lva;
-use Olcs\Controller\Application\AbstractApplicationController;
+use Common\Controller\Lva\Traits\CommonVariationControllerTrait;
 
 /**
  * Abstract Variation Controller
  *
  * @author Rob Caiger <rob.caiger@clocal.co.uk>
  */
-abstract class AbstractVariationController extends AbstractApplicationController
+trait VariationControllerTrait
 {
-    use Lva\VariationControllerTrait;
-
-    /**
-     * Lva
-     *
-     * @var string
-     */
-    protected $lva = 'variation';
+    use ApplicationControllerTrait,
+        CommonVariationControllerTrait {
+            CommonVariationControllerTrait::preDispatch insteadof ApplicationControllerTrait;
+        }
 
     /**
      * Complete section

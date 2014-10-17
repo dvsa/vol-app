@@ -6,10 +6,9 @@
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob.caiger@clocal.co.uk>
  */
-namespace Olcs\Controller\Licence;
+namespace Olcs\Controller\Lva\Traits;
 
 use Zend\Form\Form;
-use Olcs\Controller\AbstractExternalController;
 
 /**
  * Abstract Licence Controller
@@ -17,14 +16,9 @@ use Olcs\Controller\AbstractExternalController;
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob.caiger@clocal.co.uk>
  */
-abstract class AbstractLicenceController extends AbstractExternalController
+trait LicenceControllerTrait
 {
-    /**
-     * Lva
-     *
-     * @var string
-     */
-    protected $lva = 'licence';
+    use ExternalControllerTrait;
 
     /**
      * Hook into the dispatch before the controller action is executed
@@ -93,17 +87,8 @@ abstract class AbstractLicenceController extends AbstractExternalController
         return $this->goToOverviewAfterSave($this->getLicenceId());
     }
 
-    /**
-     * Render the section
-     *
-     * @param string $titleSuffix
-     * @param \Zend\Form\Form $form
-     * @return \Common\View\Model\Section
-     */
-    protected function render($titleSuffix, Form $form = null)
+    protected function alterFormForLva(Form $form)
     {
         $form->get('form-actions')->remove('saveAndContinue');
-
-        return parent::render($titleSuffix, $form);
     }
 }

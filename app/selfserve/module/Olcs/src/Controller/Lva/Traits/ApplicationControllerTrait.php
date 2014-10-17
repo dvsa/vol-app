@@ -5,26 +5,19 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-namespace Olcs\Controller\Application;
+namespace Olcs\Controller\Lva\Traits;
 
-use Olcs\Controller\AbstractExternalController;
-use Common\Controller\Traits\Lva\ApplicationControllerTrait;
+use Common\Controller\Lva\Traits\CommonApplicationControllerTrait;
 
 /**
  * EXTERNAL Abstract Application Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-abstract class AbstractApplicationController extends AbstractExternalController
+trait ApplicationControllerTrait
 {
-    use ApplicationControllerTrait;
-
-    /**
-     * Holds the lva type
-     *
-     * @var string
-     */
-    protected $lva = 'application';
+    use ExternalControllerTrait,
+        CommonApplicationControllerTrait;
 
     /**
      * Hook into the dispatch before the controller action is executed
@@ -74,12 +67,4 @@ abstract class AbstractApplicationController extends AbstractExternalController
 
         return $this->getServiceLocator()->get('Entity\Licence')->getTypeOfLicenceData($licenceId);
     }
-
-    /**
-     * Complete crud action
-     *
-     * @param string $section
-     * @param string $mode
-     */
-    abstract protected function completeApplicationCrudAction($section);
 }

@@ -5,20 +5,24 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-namespace Olcs\Controller\Application;
+namespace Olcs\Controller\Lva\Application;
 
 use Common\View\Model\Section;
-use Common\Controller\Traits\Lva;
+use Common\Controller\Lva;
+use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 
 /**
  * External Type Of Licence Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class TypeOfLicenceController extends AbstractApplicationController
+class TypeOfLicenceController extends Lva\AbstractTypeOfLicenceController
 {
-    use Lva\TypeOfLicenceTrait,
-        Lva\ApplicationTypeOfLicenceTrait;
+    use ApplicationControllerTrait,
+        Lva\Traits\ApplicationTypeOfLicenceTrait;
+
+    protected $location = 'external';
+    protected $lva = 'application';
 
     /**
      * Render the section

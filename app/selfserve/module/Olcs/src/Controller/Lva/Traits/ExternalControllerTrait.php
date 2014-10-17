@@ -5,27 +5,19 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-namespace Olcs\Controller;
+namespace Olcs\Controller\Lva\Traits;
 
 use Zend\Form\Form;
 use Zend\View\Model\ViewModel;
 use Common\View\Model\Section;
-use Common\Controller\AbstractLvaController;
 
 /**
  * Abstract External Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-abstract class AbstractExternalController extends AbstractLvaController
+trait ExternalControllerTrait
 {
-    /**
-     * Set the location
-     *
-     * @var string
-     */
-    protected $location = 'external';
-
     /**
      * Get current user
      *

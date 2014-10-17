@@ -5,17 +5,20 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-namespace Olcs\Controller\Variation;
+namespace Olcs\Controller\Lva\Variation;
 
+use Common\Controller\Lva\AbstractController;
 use Olcs\View\Model\Variation\VariationOverview;
+use Olcs\Controller\Lva\Traits\VariationControllerTrait;
 
 /**
  * Variation Overview Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class OverviewController extends AbstractVariationController
+class OverviewController extends AbstractController
 {
+    use VariationControllerTrait;
     /**
      * Variation overview
      */
