@@ -588,8 +588,19 @@ return array_merge(
                                 'route' => '/finalise/:tmpId',
                                 'defaults' => [
                                     'type'       => 'licence',
-                                    'controller' => 'DocumentUploadController',
+                                    'controller' => 'DocumentFinaliseController',
                                     'action'     => 'finalise'
+                                ]
+                            ],
+                        ],
+                        'upload' => [
+                            'type' => 'segment',
+                            'options' => [
+                                'route' => '/upload',
+                                'defaults' => [
+                                    'type'       => 'licence',
+                                    'controller' => 'DocumentUploadController',
+                                    'action'     => 'upload'
                                 ]
                             ],
                         ],
