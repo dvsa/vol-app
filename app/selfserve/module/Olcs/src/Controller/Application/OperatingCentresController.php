@@ -33,7 +33,9 @@ class OperatingCentresController extends AbstractApplicationController
         // Make the same form alterations that are required for the summary section
         $form = $this->makeFormAlterations($form, $this->getAlterFormOptions());
 
-        if (empty($this->tableData)) {
+        $tableData = $this->getTableData();
+
+        if (empty($tableData)) {
             $form->remove('dataTrafficArea');
             return $form;
         }
