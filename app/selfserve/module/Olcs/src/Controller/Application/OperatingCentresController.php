@@ -52,12 +52,14 @@ class OperatingCentresController extends AbstractApplicationController
             );
             return $form;
         }
+        $options = $this->getServiceLocator()
+            ->get('Entity\TrafficArea')->getTrafficAreaValueOptions();
 
         $dataTrafficAreaFieldset->remove('trafficAreaInfoLabelExists')
             ->remove('trafficAreaInfoNameExists')
             ->remove('trafficAreaInfoHintExists')
             ->get('trafficArea')
-            ->setValueOptions($this->getTrafficAreaSectionService()->getTrafficAreaValueOptions());
+            ->setValueOptions($options);
 
         return $form;
     }
