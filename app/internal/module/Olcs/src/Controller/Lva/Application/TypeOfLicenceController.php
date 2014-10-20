@@ -5,23 +5,27 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-namespace Olcs\Controller\Application;
+namespace Olcs\Controller\Lva\Application;
 
 use Zend\Form\Form;
+use Common\Controller\Lva;
 use Common\View\Model\Section;
-use Common\Controller\Traits\Lva;
 use Olcs\View\Model\Application\Layout;
 use Olcs\View\Model\Application\CreateApplicationLayout;
+use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 
 /**
  * Internal Type Of Licence Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class TypeOfLicenceController extends AbstractApplicationController
+class TypeOfLicenceController extends Lva\AbstractTypeOfLicenceController
 {
-    use Lva\TypeOfLicenceTrait,
-        Lva\ApplicationTypeOfLicenceTrait;
+    use ApplicationControllerTrait,
+        Lva\Traits\ApplicationTypeOfLicenceTrait;
+
+    protected $location = 'internal';
+    protected $lva = 'application';
 
     /**
      * Render the section

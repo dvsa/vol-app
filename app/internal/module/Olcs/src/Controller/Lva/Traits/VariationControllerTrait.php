@@ -23,7 +23,9 @@ use Common\Controller\Lva\Traits\CommonVariationControllerTrait;
 trait VariationControllerTrait
 {
     use ApplicationControllerTrait,
-        CommonVariationControllerTrait;
+        CommonVariationControllerTrait {
+            CommonVariationControllerTrait::preDispatch insteadof ApplicationControllerTrait;
+        }
 
     /**
      * Render the section

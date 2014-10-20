@@ -6,9 +6,10 @@
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-namespace Olcs\Controller\Variation;
+namespace Olcs\Controller\Lva\Variation;
 
-use Common\Controller\Traits\Lva;
+use Common\Controller\Lva;
+use Olcs\Controller\Lva\Traits\VariationControllerTrait;
 
 /**
  * Internal Variation Addresses Controller
@@ -16,7 +17,10 @@ use Common\Controller\Traits\Lva;
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class AddressesController extends AbstractVariationController
+class AddressesController extends Lva\AbstractAddressesController
 {
-    use Lva\AddressesTrait;
+    use VariationControllerTrait;
+
+    protected $lva = 'variation';
+    protected $location = 'internal';
 }
