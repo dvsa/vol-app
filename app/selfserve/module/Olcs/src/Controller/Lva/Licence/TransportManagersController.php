@@ -6,9 +6,10 @@
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-namespace Olcs\Controller\Licence;
+namespace Olcs\Controller\Lva\Licence;
 
-use Common\Controller\Traits\Lva;
+use Common\Controller\Lva;
+use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
 
 /**
  * External Licence Transport Managers Controller
@@ -16,7 +17,10 @@ use Common\Controller\Traits\Lva;
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class TransportManagersController extends AbstractLicenceController
+class TransportManagersController extends Lva\AbstractTransportManagersController
 {
-    use Lva\TransportManagersTrait;
+    use LicenceControllerTrait;
+
+    protected $lva = 'licence';
+    protected $location = 'external';
 }

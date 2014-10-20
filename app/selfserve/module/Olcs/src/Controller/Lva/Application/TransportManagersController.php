@@ -6,9 +6,10 @@
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-namespace Olcs\Controller\Application;
+namespace Olcs\Controller\Lva\Application;
 
-use Common\Controller\Traits\Lva;
+use Common\Controller\Lva;
+use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 
 /**
  * External Application Transport Managers Controller
@@ -16,7 +17,10 @@ use Common\Controller\Traits\Lva;
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class TransportManagersController extends AbstractApplicationController
+class TransportManagersController extends Lva\AbstractTransportManagersController
 {
-    use Lva\TransportManagersTrait;
+    use ApplicationControllerTrait;
+
+    protected $lva = 'application';
+    protected $location = 'external';
 }
