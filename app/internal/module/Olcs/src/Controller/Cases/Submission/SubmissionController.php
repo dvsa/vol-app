@@ -273,6 +273,8 @@ class SubmissionController extends OlcsController\CrudAbstract
     {
         $submissionId = $this->getQueryOrRouteParam('submission');
 
+        $this->submissionConfig = $this->getServiceLocator()->get('config')['submission_config'];
+
         $submissionService = $this->getServiceLocator()
             ->get('Olcs\Service\Data\Submission');
 
@@ -300,6 +302,7 @@ class SubmissionController extends OlcsController\CrudAbstract
 
         $view = $this->getView([]);
         $view->setVariable('allSections', $submissionService->getAllSectionsRefData());
+        $view->setVariable('submissionConfig', $this->submissionConfig['sections']);
 
         $view->setTemplate($this->detailsView);
 
