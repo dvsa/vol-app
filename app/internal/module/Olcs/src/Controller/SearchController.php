@@ -22,6 +22,38 @@ use Zend\View\Model\ViewModel;
 class SearchController extends AbstractActionController
 {
 
+    public function indexAction()
+    {
+        $index = $this->params()->fromRoute('index');
+
+        if ($this->getRequest()->isPost()) {
+            $query = trim($this->params()->fromPost('search'));
+            //also process filter form...
+        } else {
+            //get params from session
+        }
+
+        if (empty($query)) {
+            return 'what do you want to find?';
+        }
+
+        $searchService = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\Search\Search');
+
+        $searchService->setIndex($index);
+        $searchService->setParams($query);
+
+        //$searchService->fetchFacets(); future improvement for filtering
+
+        $view = new ViewModel();
+
+        $view->indexes = $searchService->getNavigation();
+        $view->results = $searchService->fetchResultsTable();
+
+        $view->setTemplate('search/results');
+
+        return $this->renderView($view, 'Search results');
+    }
+
     /**
      * Search form action
      *

@@ -112,10 +112,11 @@ return array_merge(
         'search' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/search',
+                'route' => '/search[/:index]',
                 'defaults' => [
                     'controller' => 'SearchController',
-                    'action' => 'index'
+                    'action' => 'index',
+                    'index' => 'licence'
                 ]
             ]
         ],
