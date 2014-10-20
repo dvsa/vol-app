@@ -8,9 +8,10 @@
  */
 namespace Olcs\Controller\Application;
 
-use Common\Controller\Traits\Lva;
-use Common\Service\Entity\LicenceEntityService;
 use Zend\Form\Form;
+use Common\Controller\Lva;
+use Common\Service\Entity\LicenceEntityService;
+use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 
 /**
  * Operating Centres Controller
@@ -18,9 +19,9 @@ use Zend\Form\Form;
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class OperatingCentresController extends AbstractApplicationController
+class OperatingCentresController extends Lva\AbstractOperatingCentresController
 {
-    use Lva\OperatingCentresTrait;
+    use ApplicationControllerTrait;
 
     /**
      * Remove trailer elements for PSV and set up Traffic Area section
