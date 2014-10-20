@@ -99,6 +99,7 @@ return array(
             'LvaApplication/People'             => 'Olcs\Controller\Lva\Application\PeopleController',
             'LvaApplication/FinancialEvidence'  => 'Olcs\Controller\Lva\Application\FinancialEvidenceController',
             'LvaApplication/TransportManagers'  => 'Olcs\Controller\Lva\Application\TransportManagersController',
+            'LvaApplication/Safety'             => 'Olcs\Controller\Lva\Application\SafetyController',
 
             'LvaLicence'                        => 'Olcs\Controller\Lva\Licence\OverviewController',
             'LvaLicence/TypeOfLicence'          => 'Olcs\Controller\Lva\Licence\TypeOfLicenceController',
@@ -107,6 +108,7 @@ return array(
             'LvaLicence/Addresses'              => 'Olcs\Controller\Lva\Licence\AddressesController',
             'LvaLicence/People'                 => 'Olcs\Controller\Lva\Licence\PeopleController',
             'LvaLicence/TransportManagers'      => 'Olcs\Controller\Lva\Licence\TransportManagersController',
+            'LvaLicence/Safety'                 => 'Olcs\Controller\Lva\Licence\SafetyController',
 
             'LvaVariation'                      => 'Olcs\Controller\Lva\Variation\OverviewController',
             'LvaVariation/TypeOfLicence'        => 'Olcs\Controller\Lva\Variation\TypeOfLicenceController',
@@ -115,6 +117,7 @@ return array(
             'LvaVariation/Addresses'            => 'Olcs\Controller\Lva\Variation\AddressesController',
             'LvaVariation/People'               => 'Olcs\Controller\Lva\Variation\PeopleController',
             'LvaVariation/TransportManagers'    => 'Olcs\Controller\Lva\Variation\TransportManagersController',
+            'LvaVariation/Safety'               => 'Olcs\Controller\Lva\Variation\SafetyController',
         )
     ),
     'view_manager' => array(
