@@ -8,15 +8,17 @@
 namespace Olcs\Controller;
 
 use Olcs\View\Model\Dashboard;
-use Olcs\Controller\AbstractExternalController;
+use Common\Controller\Lva\AbstractController;
 
 /**
  * Dashboard Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class DashboardController extends AbstractExternalController
+class DashboardController extends AbstractController
 {
+    use Lva\Traits\ExternalControllerTrait;
+
     /**
      * Dashboard index action
      */
