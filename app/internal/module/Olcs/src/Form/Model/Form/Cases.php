@@ -5,20 +5,20 @@ namespace Olcs\Form\Model\Form;
 use Zend\Form\Annotation as Form;
 
 /**
- * @codeCoverageIgnore Auto-generated file with no methods
- * @Form\Name("Public inquiry hearing")
- * @Form\Attributes({"method":"post"})
+ * @Form\Name("Cases")
+ * @Form\Options({"label":"Case"})
+ * @Form\Attributes({"method":"post","label":"Case"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true, "label":"Hearing"})
+ * @Form\Options({"prefer_form_input_filter": true})
  */
-class PublicInquiryHearing
+class Cases
 {
     /**
      * @Form\Name("fields")
      * @Form\Options({"label":""})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\PublicInquiryHearingFields")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\Cases")
      */
-    public $fields;
+    public $fields = null;
 
     /**
      * @Form\Name("form-actions")

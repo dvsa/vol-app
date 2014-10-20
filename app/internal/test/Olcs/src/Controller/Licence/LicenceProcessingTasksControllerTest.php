@@ -19,8 +19,6 @@ use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCase
 {
     private $taskSearchViewExpectedData = [
-        'assignedToUser' => 1,
-        'assignedToTeam'  => 2,
         'date'  => 'tdt_today',
         'status' => 'tst_open',
         'sort' => 'actionDate',
@@ -37,9 +35,6 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
         'sort' => 'name'
     ];
     private $extendedListData = [
-        'assignedToUser' => 1,
-        'assignedToTeam'  => 2,
-        'team'  => 2,
         'date'  => 'tdt_today',
         'status' => 'tst_open',
         'sort' => 'name',
@@ -52,7 +47,6 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
         'isClosed' => false
     ];
     private $extendedListDataVariation1 = [
-        'assignedToTeam'  => 2,
         'date'  => 'tdt_today',
         'status' => 'tst_open',
         'sort' => 'name',
@@ -61,7 +55,6 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
         'limit' => 100,
         'linkType' => 'Licence',
         'actionDate' => '',
-        'team'  => 2,
         'isClosed' => false
     ];
     private $altListData = [
@@ -222,7 +215,7 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
 
     /**
      * Test index action AJAX
-     * @group task
+     * @group task2
      */
     public function testIndexActionAjax()
     {
@@ -514,16 +507,13 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
         $standardResponse = ['Results' => [['id' => 123,'name' => 'foo']]];
         $altResponse = ['Results' => [['id' => 123,'description' => 'foo']]];
 
-        if ($service == 'TaskSearchView' && $method == 'GET' && $data == $this->taskSearchViewExpectedData) {
+        if ($service == 'TaskSearchView' && $method == 'GET') {
             return [];
         }
         if ($service == 'Team' && $method == 'GET' && $data == $this->standardListData) {
             return $standardResponse;
         }
-        if ($service == 'User' && $method == 'GET' && $data == $this->extendedListData) {
-            return $standardResponse;
-        }
-        if ($service == 'User' && $method == 'GET' && $data == $this->extendedListDataVariation1) {
+        if ($service == 'User' && $method == 'GET') {
             return $standardResponse;
         }
         if ($service == 'TaskSubCategory' && $method == 'GET' && $data == $this->extendedListData) {

@@ -27,11 +27,14 @@ return array(
         ),
         array(
             'title' => 'Name / defendant type',
+            'formatter' => function ($data, $column, $sm) {
+                    return $data['name'] . '<br />' . $data['defendantType']['description'];
+            },
             'name' => 'name'
         ),
         array(
             'title' => 'Description',
-            'name' => 'description'
+            'name' => 'categoryText'
         ),
         array(
             'title' => 'Court/FPN',

@@ -187,6 +187,22 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $expected['filteredSectionData']);
     }
 
+    /**
+     * Tests for submission sections where the data has already been extracted
+     *
+     * @dataProvider providerSubmissionSectionPrebuiltData
+     * @param $input
+     * @param $expected
+     */
+    public function testCreateSubmissionSectionUsingPrebuiltData($input, $expected)
+    {
+        $this->sut->setLoadedSectionDataForSection($input['sectionId'], $expected['loadedCaseSectionData']);
+
+        $result = $this->sut->createSubmissionSection($input['caseId'], $input['sectionId'], $input['sectionConfig']);
+
+        $this->assertEquals($result, $expected['filteredSectionData']);
+    }
+
     public function testCreateSubmissionSectionEmptyConfig()
     {
 
@@ -224,6 +240,17 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->sut->getApiResolver());
     }
 
+    public function testGetLoadedSectionData()
+    {
+        $this->sut->setLoadedSectionData('foo');
+        $this->assertEquals('foo', $this->sut->getLoadedSectionData());
+    }
+
+    public function testSetLoadedSectionData()
+    {
+        $this->assertEquals($this->sut, $this->sut->setLoadedSectionData('foo'));
+    }
+
     public function testSetSubmissionConfig()
     {
         $config = ['foo'];
@@ -251,7 +278,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
     public function providerSubmissionSectionData()
     {
         return [
-            [
+            [   // conviction section
                 [
                     'caseId' => 24,
                     'sectionId' => 'conviction-fpn-offence-history',
@@ -273,6 +300,12 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                                 'msi' => 'N',
                                 'isDeclared' => 'N',
                                 'isDealtWith' => 'N',
+                                'defendantType' => [
+                                    'id' => 'def_t_op',
+                                    'description' => 'Operator'
+                                ],
+                                'personFirstname' => '',
+                                'personLastname' => '',
                             ],
                             1 => [
                                 'offenceDate' => '2012-03-10T00:00:00+0000',
@@ -286,6 +319,12 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                                 'msi' => 'N',
                                 'isDeclared' => 'N',
                                 'isDealtWith' => 'N',
+                                'defendantType' => [
+                                    'id' => 'def_t_owner',
+                                    'description' => 'Owner'
+                                ],
+                                'personFirstname' => 'Bob',
+                                'personLastname' => 'Smith',
                             ]
                         ]
                     ],
@@ -300,23 +339,30 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                             'msi' => 'N',
                             'isDeclared' => 'N',
                             'isDealtWith' => 'N',
+                            'defendantType' => [
+                                'id' => 'def_t_op',
+                                'description' => 'Operator'
+                            ],
                         ],
                         1 => [
                             'offenceDate' => '2012-03-10T00:00:00+0000',
                             'convictionDate' => '2012-06-15T00:00:00+0100',
-                            'name' => 'John Smith',
+                            'name' => 'Bob Smith',
                             'categoryText' => null,
                             'court' => 'FPN',
                             'penalty' => '3 points on licence',
                             'msi' => 'N',
                             'isDeclared' => 'N',
                             'isDealtWith' => 'N',
+                            'defendantType' => [
+                                'id' => 'def_t_owner',
+                                'description' => 'Owner'
+                            ],
                         ]
                     ]
                 ],
             ],
-            [
-                // case-outline
+            [   // case-outline
                 [ // input
                     'caseId' => 24,
                     'sectionId' => 'case-outline',
@@ -334,8 +380,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                     ]
                 ]
             ],
-            [
-                // case-summary
+            [   // case-summary
                 [ // input
                     'caseId' => 24,
                     'sectionId' => 'case-summary',
@@ -345,65 +390,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                     ]
                 ],
                 [ // expected
-                    'loadedCaseSectionData' => [
-                        'ecmsNo' => 'E123456',
-                        'description' => 'Case for convictions against company directors',
-                        'id' => 24,
-                        'caseType' =>
-                            [
-                                'id' => 'case_t_lic',
-                            ],
-                        'licence' => [
-                            'licNo' => 'OB1234567',
-                            'trailersInPossession' => null,
-                            'totAuthTrailers' => 4,
-                            'totAuthVehicles' => 12,
-                            'inForceDate' => '2010-01-12T00:00:00+0000',
-                            'status' => [
-                                'description' => 'New',
-                                'id' => 'lsts_new',
-                            ],
-                            'organisation' => [
-                                'isMlh' => 'Y',
-                                'name' => 'John Smith Haulage Ltd.',
-                                'sicCode' => null,
-                                'type' =>
-                                    [
-                                        'description' => 'Registered Company',
-                                        'id' => 'org_t_rc',
-                                    ],
-                            ],
-                            'licenceVehicles' => [
-                                0 => [
-                                    'id' => 1,
-                                    'deletedDate' => null,
-                                    'specifiedDate' => '2014-02-20T00:00:00+0000',
-                                ],
-                                1 => [
-                                    'id' => 2,
-                                    'deletedDate' => null,
-                                    'specifiedDate' => '2014-02-20T00:00:00+0000',
-                                ],
-                                2 => [
-                                    'id' => 3,
-                                    'deletedDate' => null,
-                                    'specifiedDate' => '2014-02-20T00:00:00+0000',
-                                ],
-                                3 => [
-                                    'id' => 4,
-                                    'deletedDate' => null,
-                                    'specifiedDate' => '2014-02-20T00:00:00+0000',
-                                ],
-                            ],
-                            'licenceType' => [
-                                'description' => 'Standard National',
-                                'id' => 'ltyp_sn',
-                            ],
-                            'goodsOrPsv' => [
-                                'description' => 'Goods Vehicle',
-                            ],
-                        ],
-                    ],
+                    'loadedCaseSectionData' => $this->getCaseSummaryMockData(),
                     'filteredSectionData' => [
                         'id' => 24,
                         'organisationName' => 'John Smith Haulage Ltd.',
@@ -423,6 +410,39 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                         'vehiclesInPossession' => 4,
                         'trailersInPossession' => 4,
 
+                    ]
+                ]
+            ]
+        ];
+    }
+
+
+    public function providerSubmissionSectionPrebuiltData()
+    {
+        return [
+            [
+                [
+                    'caseId' => 24,
+                    'sectionId' => 'persons',
+                    'sectionConfig' => [
+                        'bundle' => 'case-summary',
+                    ]
+                ],
+                [
+                    'loadedCaseSectionData' => $this->getCaseSummaryMockData(),
+                    'filteredSectionData' => [
+                        0 => [
+                            'title' => '',
+                            'forename' => 'Tom',
+                            'familyName' => 'Jones',
+                            'birthDate' => '1972-02-15T00:00:00+0100',
+                        ],
+                        1 => [
+                            'title' => '',
+                            'forename' => 'Keith',
+                            'familyName' => 'Winnard',
+                            'birthDate' => '1975-03-15T00:00:00+0100',
+                        ]
                     ]
                 ]
             ]
@@ -585,5 +605,86 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
             'surrender' => 'Surrender',
             'annex' => 'Annex',
         );
+    }
+
+    private function getCaseSummaryMockData()
+    {
+        return [
+            'ecmsNo' => 'E123456',
+            'description' => 'Case for convictions against company directors',
+            'id' => 24,
+            'caseType' =>
+                [
+                    'id' => 'case_t_lic',
+                ],
+            'licence' => [
+                'licNo' => 'OB1234567',
+                'trailersInPossession' => null,
+                'totAuthTrailers' => 4,
+                'totAuthVehicles' => 12,
+                'inForceDate' => '2010-01-12T00:00:00+0000',
+                'status' => [
+                    'description' => 'New',
+                    'id' => 'lsts_new',
+                ],
+                'organisation' => [
+                    'isMlh' => 'Y',
+                    'name' => 'John Smith Haulage Ltd.',
+                    'sicCode' => null,
+                    'type' =>
+                        [
+                            'description' => 'Registered Company',
+                            'id' => 'org_t_rc',
+                        ],
+                    'organisationPersons' => [
+                        0 => [
+                            'person' => [
+                                'title' => '',
+                                'forename' => 'Tom',
+                                'familyName' => 'Jones',
+                                'birthDate' => '1972-02-15T00:00:00+0100',
+                            ],
+                        ],
+                        1 => [
+                            'person' => [
+                                'title' => '',
+                                'forename' => 'Keith',
+                                'familyName' => 'Winnard',
+                                'birthDate' => '1975-03-15T00:00:00+0100',
+                            ]
+                        ]
+                    ]
+                ],
+                'licenceVehicles' => [
+                    0 => [
+                        'id' => 1,
+                        'deletedDate' => null,
+                        'specifiedDate' => '2014-02-20T00:00:00+0000',
+                    ],
+                    1 => [
+                        'id' => 2,
+                        'deletedDate' => null,
+                        'specifiedDate' => '2014-02-20T00:00:00+0000',
+                    ],
+                    2 => [
+                        'id' => 3,
+                        'deletedDate' => null,
+                        'specifiedDate' => '2014-02-20T00:00:00+0000',
+                    ],
+                    3 => [
+                        'id' => 4,
+                        'deletedDate' => null,
+                        'specifiedDate' => '2014-02-20T00:00:00+0000',
+                    ],
+                ],
+                'licenceType' => [
+                    'description' => 'Standard National',
+                    'id' => 'ltyp_sn',
+                ],
+                'goodsOrPsv' => [
+                    'description' => 'Goods Vehicle',
+                ],
+            ],
+        ];
     }
 }

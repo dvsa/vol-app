@@ -93,7 +93,7 @@ class ImpoundingFields
      *          "context_field": "impoundingType",
      *          "context_values": {"impt_hearing"},
      *          "validators": {
-     *              {"name": "Date", "options": {"format": "Y-m-d h:i:s"}}
+     *              {"name": "Date", "options": {"format": "Y-m-d H:i:s"}}
      *          }
      *      }
      * })

@@ -56,6 +56,14 @@ return array(
                                     'sicCode' => array(
                                         'properties' => array('id', 'description')
                                     ),
+                                    'organisationPersons' => array(
+                                        'properties' => 'ALL',
+                                        'children' => array(
+                                            'person' => array(
+                                                'properties' => 'ALL'
+                                            )
+                                        )
+                                    )
                                 )
                             )
                         )
@@ -74,6 +82,12 @@ return array(
                     'convictions' => array(
                         'properties' => 'ALL',
                         'children' => array(
+                            'defendantType' => array(
+                                'properties' => array(
+                                    'id',
+                                    'description'
+                                )
+                            ),
                             'category' => array(
                                 'properties' => array(
                                     'id',
@@ -162,7 +176,7 @@ return array(
             )
         ),
         'persons' => array(
-            'view' => 'submission/partials/persons'
+            'bundle' => 'case-summary'
         ),
         'transport-managers' => array(
             'view' => 'submission/partials/transport-managers',

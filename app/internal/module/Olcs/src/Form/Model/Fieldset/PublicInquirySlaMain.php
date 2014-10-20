@@ -261,7 +261,7 @@ class PublicInquirySlaMain
      * @Form\Filter({"name":"DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
-    public $decisionLetterSentAfterWrittenDecisionDate = null;
+    public $decSentAfterWrittenDecDate = null;
 
     /**
      * @Form\Attributes({"value":""})

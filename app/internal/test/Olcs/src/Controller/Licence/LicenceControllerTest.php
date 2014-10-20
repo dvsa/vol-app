@@ -355,7 +355,7 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
      * care about the action; it always redirects to generate. Update the
      * name of it when/if it cares
      */
-    public function testDocumentsActionWithPostAlwaysRedirectsToGenerate()
+    public function testDocumentsActionWithGenerateRedirectsToGenerate()
     {
         $this->request->expects($this->any())
             ->method('isPost')
@@ -366,7 +366,7 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
         $params->expects($this->once())
             ->method('fromPost')
             ->with('action')
-            ->will($this->returnValue('new letter'));
+            ->will($this->returnValue('generate'));
 
         $this->controller->expects($this->once())
             ->method('params')
@@ -377,6 +377,46 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
         $redirect->expects($this->once())
             ->method('toRoute')
             ->with('licence/documents/generate', ['licence' => 1234]);
+
+        $this->controller->expects($this->once())
+            ->method('redirect')
+            ->will($this->returnValue($redirect));
+
+        $this->controller->expects($this->any())
+            ->method('getFromRoute')
+            ->with('licence')
+            ->will($this->returnValue(1234));
+
+        $response = $this->controller->documentsAction();
+    }
+
+    /**
+     * @NOTE this test mirrors the controller which so far doesn't actually
+     * care about the action; it always redirects to generate. Update the
+     * name of it when/if it cares
+     */
+    public function testDocumentsActionWithUploadRedirectsToUpload()
+    {
+        $this->request->expects($this->any())
+            ->method('isPost')
+            ->will($this->returnValue(true));
+
+        $params = $this->getMock('\stdClass', ['fromPost']);
+
+        $params->expects($this->once())
+            ->method('fromPost')
+            ->with('action')
+            ->will($this->returnValue('upload'));
+
+        $this->controller->expects($this->once())
+            ->method('params')
+            ->will($this->returnValue($params));
+
+        $redirect = $this->getMock('\stdClass', ['toRoute']);
+
+        $redirect->expects($this->once())
+            ->method('toRoute')
+            ->with('licence/documents/upload', ['licence' => 1234]);
 
         $this->controller->expects($this->once())
             ->method('redirect')

@@ -124,7 +124,6 @@ class SubmissionController extends OlcsController\CrudAbstract
             $this->setPersist(false);
         } else {
             // remove form-actions
-            $form = $this->getForm($this->getFormName());
             $form->remove('form-actions');
         }
 
@@ -139,7 +138,7 @@ class SubmissionController extends OlcsController\CrudAbstract
      * @param string $service
      * @return array
      */
-    protected function save($data, $service = null)
+    public function save($data, $service = null)
     {
         // modify $data
         $this->submissionConfig = $this->getServiceLocator()->get('config')['submission_config'];
@@ -148,6 +147,7 @@ class SubmissionController extends OlcsController\CrudAbstract
         $caseId = $params['case'];
 
         if (is_array($data['submissionSections']['sections'])) {
+
             foreach ($data['submissionSections']['sections'] as $index => $sectionId) {
                 $sectionConfig = isset($this->submissionConfig['sections'][$sectionId]) ?
                     $this->submissionConfig['sections'][$sectionId] : [];

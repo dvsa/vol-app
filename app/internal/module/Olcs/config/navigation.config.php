@@ -44,7 +44,7 @@ return array(
                             'id' => 'case_details_overview',
                             'label' => 'Overview',
                             'route' => 'case',
-                            'action' => 'overview',
+                            'action' => 'details',
                             'use_route_match' => true,
                         ),
                         array(
@@ -192,6 +192,22 @@ return array(
                             'route' => 'case_pi',
                             'action' => 'index',
                             'use_route_match' => true,
+                            'pages' => array(
+                                array(
+                                    'id' => 'case_hearings_appeals_public_inquiry_add',
+                                    'label' => 'internal-pi-hearing-add',
+                                    'route' => 'case_pi_hearing',
+                                    'action' => 'add',
+                                    'use_route_match' => true
+                                ),
+                                array(
+                                    'id' => 'case_hearings_appeals_public_inquiry_edit',
+                                    'label' => 'internal-pi-hearing-edit',
+                                    'route' => 'case_pi_hearing',
+                                    'action' => 'edit',
+                                    'use_route_match' => true
+                                ),
+                            ),
                         ),
                     )
                 ),

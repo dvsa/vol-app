@@ -538,7 +538,8 @@ class VehicleControllerTest extends AbstractLicenceDetailsControllerTestCase
                         'id',
                         'receivedDate',
                         'specifiedDate',
-                        'deletedDate'
+                        'deletedDate',
+                        'removalDate'
                     ),
                     'children' => array(
                         'goodsDiscs' => array(
@@ -564,6 +565,7 @@ class VehicleControllerTest extends AbstractLicenceDetailsControllerTestCase
                         'receivedDate' => null,
                         'specifiedDate' => null,
                         'deletedDate' => null,
+                        'removalDate' => null,
                         'goodsDisc' => array(
                             array(
                                 'ceasedDate' => null,
@@ -580,6 +582,7 @@ class VehicleControllerTest extends AbstractLicenceDetailsControllerTestCase
                         'receivedDate' => null,
                         'specifiedDate' => null,
                         'deletedDate' => null,
+                        'removalDate' => '2014-01-01',
                         'goodsDisc' => array(
                             array(
                                 'ceasedDate' => null,
@@ -642,7 +645,7 @@ class VehicleControllerTest extends AbstractLicenceDetailsControllerTestCase
         }
 
         $licenceVehicleBundle = array(
-            'properties' => array(),
+            'properties' => array('removalDate'),
             'children' => array(
                 'vehicle' => array(
                     'properties' => array(
@@ -657,6 +660,7 @@ class VehicleControllerTest extends AbstractLicenceDetailsControllerTestCase
                 'Count' => 1,
                 'Results' => array(
                     array(
+                        'removalDate' => null,
                         'vehicle' => array(
                             'vrm' => 'RANDOM'
                         )
@@ -664,7 +668,6 @@ class VehicleControllerTest extends AbstractLicenceDetailsControllerTestCase
                 )
             );
         }
-
 
         $licenceVehicleBundleWithId = array(
             'properties' => array(
@@ -685,6 +688,18 @@ class VehicleControllerTest extends AbstractLicenceDetailsControllerTestCase
                 'vehicle' => array(
                     'vrm' => 'RANDOM'
                 )
+            );
+        }
+
+        $licenceVehicleBundleWithVersion = array(
+            'properties' => array(
+                'version'
+            )
+        );
+
+        if ($service == 'LicenceVehicle' && $method == 'GET' && $bundle == $licenceVehicleBundleWithVersion) {
+            return array(
+                'version' => 1
             );
         }
 

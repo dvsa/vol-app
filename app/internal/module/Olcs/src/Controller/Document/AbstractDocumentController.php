@@ -69,4 +69,9 @@ abstract class AbstractDocumentController extends AbstractController
         }
         return $this->tmpData;
     }
+
+    protected function formatFilename($input)
+    {
+        return str_replace([' ', '/'], '_', $input);
+    }
 }

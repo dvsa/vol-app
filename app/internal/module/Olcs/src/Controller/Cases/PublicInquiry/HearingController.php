@@ -2,25 +2,33 @@
 
 namespace Olcs\Controller\Cases\PublicInquiry;
 
+use Olcs\Controller as OlcsController;
+use Olcs\Controller\Traits as ControllerTraits;
+
+use Zend\View\Model\ViewModel;
+
 /**
  * Class HearingController
  * @package Olcs\Controller\Cases\PublicInquiry
  */
-class HearingController extends PublicInquiryController
+class HearingController extends OlcsController\CrudAbstract
 {
+    use ControllerTraits\CaseControllerTrait;
+    use ControllerTraits\HearingLocationTrait;
+
     /**
      * Identifier name
      *
      * @var string
      */
-    protected $identifierName = 'pi';
+    protected $identifierName = 'id';
 
     /**
-     * Identifier key
+     * Holds the form name
      *
      * @var string
      */
-    protected $identifierKey = 'pi';
+    protected $tableName = 'piHearing';
 
     /**
      * Holds the form name
@@ -37,6 +45,29 @@ class HearingController extends PublicInquiryController
     protected $service = 'PiHearing';
 
     /**
+     * The current page's extra layout, over and above the
+     * standard base template, a sibling of the base though.
+     *
+     * @var string
+     */
+    protected $pageLayout = 'case';
+
+    /**
+     * Holds the navigation ID,
+     * required when an entire controller is
+     * represneted by a single navigation id.
+     */
+    protected $navigationId = 'case_hearings_appeals_public_inquiry';
+
+    /**
+     * For most case crud controllers, we use the case/inner-layout
+     * layout file. Except submissions.
+     *
+     * @var string
+     */
+    protected $pageLayoutInner = 'case/inner-layout';
+
+    /**
      * Holds an array of variables for the
      * default index list page.
      */
@@ -44,6 +75,19 @@ class HearingController extends PublicInquiryController
         'case',
         'pi'
     ];
+
+    /**
+     * Data map
+     *
+     * @var array
+     */
+    protected $dataMap = array(
+        'main' => array(
+            'mapFrom' => array(
+                'fields',
+            )
+        )
+    );
 
     /**
      * Holds the Data Bundle
@@ -54,7 +98,8 @@ class HearingController extends PublicInquiryController
         'children' => [
             'piVenue' => [
                 'properties' => [
-                    'id'
+                    'id',
+                    'name'
                 ],
             ],
             'presidingTc' => [
@@ -67,15 +112,30 @@ class HearingController extends PublicInquiryController
                     'id'
                 ],
             ],
+            'pi' => [
+                'properties' => [
+                    'id'
+                ],
+            ],
         ]
     ];
+
+    public function redirectToIndex()
+    {
+        return $this->redirectToRoute(
+            'case_pi',
+            ['action'=>'details'],
+            ['code' => '303'], // Why? No cache is set with a 303 :)
+            true
+        );
+    }
 
     /**
      * Get data for form
      *
      * @return array
      */
-    protected function getDataForForm()
+    public function getDataForForm()
     {
         $data = parent::getDataForForm();
         $data['fields']['pi'] = $this->getFromRoute('pi');

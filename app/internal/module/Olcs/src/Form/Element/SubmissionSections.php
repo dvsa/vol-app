@@ -114,7 +114,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
         $m_sections = $this->getMandatorySections();
 
         foreach ($m_sections as $m_key) {
-            $sections[$m_key] = ['label' => $sections[$m_key], 'selected' => 'seleected', 'disabled' => true];
+            $sections[$m_key] = ['label' => $sections[$m_key], 'selected' => 'selected', 'disabled' => true];
         }
         $this->getSections()->setValueOptions($sections);
         $this->getSections()->setOptions(['label_position'=>'append']);
@@ -134,32 +134,20 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
 
         $this->getSubmissionType()->setValue($value['submissionType']);
         $sections = [];
-        $optionalSections = [];
 
         if (isset($value['submissionType'])) {
-
-            if (isset($value['submissionTypeSubmit'])) {
-                if (!(isset($value['sections']))) {
-                    // no sections set so just add preselected
-                    $sections = $this->getPreselectedSectionsForType($value['submissionType']);
-                } else {
-                    // merge preselected with those already selected
-                    $sections = array_merge(
-                        $value['sections'],
-                        $this->getPreselectedSectionsForType($value['submissionType'])
-                    );
-                }
+            if (!(isset($value['sections']))) {
+                $sections = $this->getPreselectedSectionsForType($value['submissionType']);
             } else {
-                // type not submitted
-                if (!(isset($value['sections']))) {
+                if (isset($value['submissionTypeSubmit'])) {
                     $sections = $this->getPreselectedSectionsForType($value['submissionType']);
                 } else {
+                    // type not submitted
                     $sections = $value['sections'];
                 }
             }
         }
 
-        $sections = array_unique($sections);
         $this->getSections()->setValue($sections);
 
         return $this;
@@ -261,7 +249,6 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
             case 'submission_type_o_env':
                 $sections = [
                     'operating-centres',
-                    'operating-centre-history',
                     'conditions-and-undertakings',
                     'intelligent-unit-check',
                     'interim',
@@ -278,7 +265,6 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                     'applicants-comments',
                     'visibility-access-egress-size',
                     'environmental-complaints',
-                    'representations',
                     'objections',
                     'financial-information',
                     'maps'
@@ -300,7 +286,6 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                     'interim',
                     'advertisement',
                     'linked-licences-app-numbers',
-                    'all-auths',
                     'lead-tc-area',
                     'auth-requested-applied-for',
                     'transport-managers',
@@ -328,7 +313,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                     'conviction-fpn-offence-history',
                     'annual-test-history',
                     'penalties',
-                    'case-complaints',
+                    'compliance-complaints',
                     'financial-information'
                 ];
                 break;
@@ -338,9 +323,23 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                     'transport-managers',
                     'continuous-effective-control',
                     'fitness-and-repute',
-                    'objections'
+                    'oppositions'
                 ];
                 break;
+            case 'submission_type_o_schedule_41':
+                $sections = [
+                    'operating-centres',
+                    'conditions-and-undertakings',
+                    'linked-licences-app-numbers',
+                    'lead-tc-area',
+                    'auth-requested-applied-for',
+                    'site-plans',
+                    'applicants-comments',
+                    'environmental-complaints',
+                    'waive-fee-late-fee'
+                ];
+                break;
+            case 'submission_type_impounding':
             default:
                 $sections = [];
         }
