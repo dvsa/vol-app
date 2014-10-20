@@ -8,8 +8,9 @@
  */
 namespace Olcs\Controller\Licence;
 
-use Common\Controller\Traits\Lva;
 use Zend\Form\Form;
+use Common\Controller\Lva;
+use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
 
 /**
  * Operating Centres Controller
@@ -17,9 +18,9 @@ use Zend\Form\Form;
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class OperatingCentresController extends AbstractLicenceController
+class OperatingCentresController extends Lva\AbstractOperatingCentresController
 {
-    use Lva\OperatingCentresTrait;
+    use LicenceControllerTrait;
 
     /**
      * Alter the form
