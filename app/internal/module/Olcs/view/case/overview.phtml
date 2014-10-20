@@ -16,7 +16,7 @@ echo $this->render('partials/read-only/main',
             ],
         ],
         'items' => [
-            ['label' => 'Case type', 'date' => $case['caseType']['description']],
+            ['label' => 'Case type', 'value' => $case['caseType']['description']],
             ['label' => 'Open date', 'date' => $case['openDate']],
             ['label' => 'ECMS', 'value' => $case['ecmsNo']],
             ['label' => 'Description', 'value' => $case['description'], 'class' => 'full-width'],
