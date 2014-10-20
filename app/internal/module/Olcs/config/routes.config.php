@@ -310,7 +310,7 @@ $routes = [
                     ]
                 ],
                 'may_terminate' => true,
-               'child_routes' => [
+                'child_routes' => [
                     'notes' => [
                         'type' => 'segment',
                         'options' => [
