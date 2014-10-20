@@ -22,8 +22,7 @@ if (empty($appeal)){
                         ['case' => $case['id'], 'appeal' => $appeal['id'], 'action' => 'edit'],
                         [],
                         false
-                    ),
-                    'class' => 'action--primary right-aligned'
+                    )
                 ]
             ],
             'items' => [
@@ -32,7 +31,7 @@ if (empty($appeal)){
                 ['label' => 'Date of appeal', 'date' => $appeal['appealDate']],
                 ['label' => 'Reason', 'value' => (isset($appeal['reason']['description']) ?
                     $appeal['reason']['description'] : '')],
-                ['label' => 'Outline ground', 'value' => $appeal['outlineGround'], 'class' => 'three-quarters'],
+                ['label' => 'Outline ground', 'value' => $appeal['outlineGround'], 'class' => 'full-width'],
                 ['label' => 'Date of appeal hearing', 'date' => $appeal['hearingDate']],
                 ['label' => 'Date of decision', 'date' => $appeal['decisionDate']],
                 ['label' => 'Papers due at tribunal', 'date' => $appeal['papersDueDate']],
