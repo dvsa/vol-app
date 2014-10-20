@@ -23,7 +23,8 @@ return [
                     ],
                     'description' => [
                         'type' => 'text',
-                        'label' => 'documents.data.description'
+                        'label' => 'documents.data.description',
+                        'class' => 'long'
                     ],
                     'file' => [
                         'type' => 'file',
