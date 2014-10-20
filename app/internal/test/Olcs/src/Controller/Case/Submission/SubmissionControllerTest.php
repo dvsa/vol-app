@@ -233,7 +233,6 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
             ]
         ];
 
-
         $mockConfig = ['submission_config' =>
             [
                 'sections' =>
@@ -242,8 +241,6 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
                     ]
             ]
         ];
-
-
 
         $mockSubmissionTitle = 'Section title';
         $placeholder = new \Zend\View\Helper\Placeholder();
