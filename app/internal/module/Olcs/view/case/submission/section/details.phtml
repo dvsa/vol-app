@@ -1,14 +1,11 @@
 <?php
-if ($this->data['sectionId'] !== 'submission_section_intr'){
-    ?>
+if ($this->data['sectionId'] !== 'submission_section_intr') {
+    $case = $this->placeholder('case')->getValue();
 
-    <h4><?php
-        $case = $this->placeholder('case')->getValue();
-
-        echo isset($this->data['description']) ? $this->data['description'] : ''; ?>
-    </h4>
-<?php
+    //last submission
+    echo $this->render('partials/read-only/main',
+        [
+            'header' => (isset($this->data['description']) ? $this->data['description'] : ''),
+        ]
+    );
 }
-?>
-
-

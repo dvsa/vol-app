@@ -3,24 +3,20 @@ $details = $this->placeholder('details')->getValue();
 
 $noRender = array('createdOn', 'lastModifiedOn', 'createdBy', 'lastModifiedBy', 'id', 'version');
 
-?>
+$items = [];
 
-    <div class="read-only">
-        <dl>
-        <?php foreach ($details as $key => $value): ?>
+foreach ($details as $key => $value) {
+    if (!is_array($value) && !in_array($key, $noRender)) {
+        $item = ['label' => $key];
 
-            <?php if (!is_array($value) && !in_array($key, $noRender)): ?>
+        if (strstr(strtolower($key), 'date')) {
+            $item[] = ['date' => $value];
+        } else {
+            $item[] = ['value' => $value];
+        }
 
-            <dt><?php echo $this->translate($key);?></dt>
+        $items[] = $item;
+    }
+}
 
-            <?php if (strstr(strtolower($key), 'date')): ?>
-            <dd><?php echo date('d/m/Y', strtotime($value)); ?></dd>
-            <?php else: ?>
-            <dd><?php echo $value; ?></dd>
-            <?php endif; ?>
-
-            <?php endif; ?>
-
-            <?php endforeach; ?>
-        </dl>
-    </div>
+echo $this->render('partials/read-only/main', ['items' => $items]);

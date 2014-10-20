@@ -1,8 +1,28 @@
 <?php
 $case = $this->placeholder('case')->getValue();
-?>
-    <h4><?php echo isset($this->data['description']) ? $this->data['description'] : ''; ?></h4>
-
-    <div class="read-only">
-        <?php echo $this->data['table'];?>
-    </div>
+echo $this->render('partials/read-only/main',
+    [
+        'header' => (isset($this->data['description']) ? $this->data['description'] : ''),
+        'actions' => [
+            [
+                'label' => 'Delete row',
+                'url' => $this->url(
+                    'submission', [
+                        'case' => $case['id'],
+                        'action' => 'delete'
+                    ]
+                )
+            ],
+            [
+                'label' => 'Refresh table',
+                'url' => $this->url(
+                        'submission', [
+                            'case' => $case['id'],
+                            'action' => 'refresh'
+                        ]
+                    )
+            ],
+        ],
+        'freetext' => $this->data['table']
+    ]
+);

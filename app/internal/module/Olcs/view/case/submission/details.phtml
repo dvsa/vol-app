@@ -3,36 +3,17 @@
 $case = $this->placeholder('case')->getValue();
 $submission = $this->placeholder('submission')->getValue();
 $selectedSectionsArray = $this->placeholder('selectedSectionsArray')->getValue();
-?>
-<h4><?php echo $submission['submissionTypeTitle']; ?>
-    <a href="<?php echo $this->url(
-        'submission', [
-            'case' => $case['id'],
-            'action' => 'index'
-        ]
-    );?>" class="action--secondary right-aligned">
-        <?php echo
-        $this->translate('Return to list');
-        ?></a>
-    <a href="<?php echo $this->url(
-        'submission', [
-            'case' => $case['id'],
-            'action' => 'edit',
-            'submission' => $submission['id']
-        ]
-        );?>" class="action--secondary right-aligned">
-        <?php echo
-        $this->translate('Edit submission');
-        ?></a>
-</h4>
-<?php
+
+$freetext = '';
+
 $selectedIds = array_column($selectedSectionsArray, 'sectionId');
 foreach ($allSections as $sectionId => $sectionDescription) {
     if (in_array($sectionId, $selectedIds))
     {
         $key = array_search($sectionId, $selectedIds);
-        echo $this->submissionSectionDetails($selectedSectionsArray[$key]['sectionId'], $selectedSectionsArray[$key]);
-        echo $this->partial('case/submission/partials/comments',
+
+        $freetext .= $this->submissionSectionDetails($selectedSectionsArray[$key]['sectionId'], $selectedSectionsArray[$key]);
+        $freetext .= $this->partial('case/submission/partials/comments',
             [
                 'section' => $selectedSectionsArray[$key],
                 'caseId' => $case['id'],
@@ -41,4 +22,32 @@ foreach ($allSections as $sectionId => $sectionDescription) {
         );
     }
 }
-?>
+
+//last submission
+echo $this->render('partials/read-only/main',
+    [
+        'header' => $submission['submissionTypeTitle'],
+        'actions' => [
+            [
+                'label' => 'Return to list',
+                'url' => $this->url(
+                    'submission', [
+                        'case' => $case['id'],
+                        'action' => 'index'
+                    ]
+                )
+            ],
+            [
+                'label' => 'Edit submission',
+                'url' => $this->url(
+                    'submission', [
+                        'case' => $case['id'],
+                        'action' => 'edit',
+                        'submission' => $submission['id']
+                    ]
+                )
+            ]
+        ],
+        'freetext' => $freetext
+    ]
+);
