@@ -10,18 +10,16 @@ echo $this->render('partials/read-only/main',
                         'case' => $case['id'],
                         'action' => 'edit',
                         'stayType' => $stayType['id'],
-                    ], [], false),
-                'class' => 'action--primary right-aligned'
+                    ], [], false)
             ],
         ],
         'items' => [
-            ['label' => 'Stay type', 'value' => $stayType['description']],
             ['label' => 'Outcome', 'value' => (isset($outcome['description']) ? $outcome['description'] : '')],
             ['label' => 'Requested date', 'date' => $requestDate],
             ['label' => 'Decision date', 'date' => $decisionDate],
             ['label' => 'Is withdrawn', 'value' => (empty($withdrawnDate) ? 'N' : 'Y')],
             ['label' => 'Withdrawn date', 'date' => $withdrawnDate],
-            ['label' => 'Notes', 'value' => $notes, 'class' => 'three-quarters']
+            ['label' => 'Notes', 'value' => $notes, 'class' => 'full-width']
         ]
     ]
 );
