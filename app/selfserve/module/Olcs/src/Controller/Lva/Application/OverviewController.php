@@ -22,6 +22,9 @@ class OverviewController extends AbstractController
     use ApplicationControllerTrait,
         EnabledSectionTrait;
 
+    protected $lva = 'application';
+    protected $location = 'external';
+
     /**
      * Application overview
      */

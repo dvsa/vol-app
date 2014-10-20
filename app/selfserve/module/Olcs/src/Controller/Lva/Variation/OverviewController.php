@@ -19,6 +19,10 @@ use Olcs\Controller\Lva\Traits\VariationControllerTrait;
 class OverviewController extends AbstractController
 {
     use VariationControllerTrait;
+
+    protected $lva = 'variation';
+    protected $location = 'external';
+
     /**
      * Variation overview
      */

@@ -21,6 +21,10 @@ use Common\Controller\Lva\AbstractController;
 class OverviewController extends AbstractController
 {
     use LicenceControllerTrait;
+
+    protected $lva = 'licence';
+    protected $location = 'external';
+
     /**
      * Licence overview
      */

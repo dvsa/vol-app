@@ -1,28 +1,28 @@
 <?php
 
 /**
- * External Application Safety Controller
+ * External Variation Safety Controller
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-namespace Olcs\Controller\Lva\Application;
+namespace Olcs\Controller\Lva\Variation;
 
 use Common\Controller\Lva;
-use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
+use Olcs\Controller\Lva\Traits\VariationControllerTrait;
 use Common\Controller\Lva\Traits\ApplicationSafetyControllerTrait;
 
 /**
- * External Application Safety Controller
+ * External Variation Safety Controller
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 class SafetyController extends Lva\AbstractSafetyController
 {
-    use ApplicationControllerTrait,
+    use VariationControllerTrait,
         ApplicationSafetyControllerTrait;
 
-    protected $lva = 'application';
+    protected $lva = 'variation';
     protected $location = 'external';
 }
