@@ -7,12 +7,10 @@ $items = [];
 
 foreach ($details as $key => $value) {
     if (!is_array($value) && !in_array($key, $noRender)) {
-        $item = ['label' => $key];
-
         if (strstr(strtolower($key), 'date')) {
-            $item[] = ['date' => $value];
+            $item = ['label' => $key, 'date' => $value];
         } else {
-            $item[] = ['value' => $value];
+            $item = ['label' => $key, 'value' => $value];
         }
 
         $items[] = $item;
