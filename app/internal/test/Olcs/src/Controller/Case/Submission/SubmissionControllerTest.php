@@ -233,6 +233,18 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
             ]
         ];
 
+
+        $mockConfig = ['submission_config' =>
+            [
+                'sections' =>
+                    [
+                        'section1' => 'foo'
+                    ]
+            ]
+        ];
+
+
+
         $mockSubmissionTitle = 'Section title';
         $placeholder = new \Zend\View\Helper\Placeholder();
 
@@ -267,6 +279,8 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
             ->andReturn($mockSelectedSectionArray);
 
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+
+        $mockServiceManager->shouldReceive('get')->with('config')->andReturn($mockConfig);
 
         $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\Submission')
             ->andReturn($mockSubmissionService);

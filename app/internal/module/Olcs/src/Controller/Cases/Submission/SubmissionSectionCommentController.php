@@ -105,11 +105,23 @@ class SubmissionSectionCommentController extends OlcsController\CrudAbstract
      */
     public function processLoad($data)
     {
-        $data = parent::processLoad($data);
+        $data = $this->callParentProcessLoad($data);
         $data['fields']['submission'] = $this->params()->fromRoute('submission');
         $data['fields']['submissionSection'] = $this->params()->fromRoute('submissionSection');
 
         return $data;
+    }
+
+    /**
+     * @codeCoverageIgnore Calls parent method
+     * Call parent process load and return result. Public method to allow unit testing
+     *
+     * @param array $data
+     * @return array
+     */
+    public function callParentProcessLoad($data)
+    {
+        return parent::processLoad($data);
     }
 
     /**
@@ -130,9 +142,15 @@ class SubmissionSectionCommentController extends OlcsController\CrudAbstract
     public function redirectToIndex()
     {
         $submissionId = $this->params()->fromRoute('submission');
-        return $this->redirectToRoute(submission, ['id' => $submissionId, 'action' => 'details'], [], true);
+        return $this->redirectToRoute('submission', ['id' => $submissionId, 'action' => 'details'], [], true);
     }
 
+    /**
+     * Alters form to set the form label to match the section being edited
+     *
+     * @param \Common\Controller\Form $form
+     * @return \Common\Controller\Form
+     */
     public function alterForm($form)
     {
         $sectionId = $this->params()->fromRoute('submissionSection');
@@ -146,7 +164,9 @@ class SubmissionSectionCommentController extends OlcsController\CrudAbstract
         $form->setOptions(['label' => $formLabel]);
         return $form;
     }
+
     /**
+     * @codeCoverageIgnore Calls parent method
      * Call parent process save and return result. Public method to allow unit testing
      *
      * @param array $data
@@ -160,6 +180,7 @@ class SubmissionSectionCommentController extends OlcsController\CrudAbstract
     }
 
     /**
+     * @codeCoverageIgnore Calls parent method
      * Call parent process load and return result. Public method to allow unit testing
      *
      * @param array $data
