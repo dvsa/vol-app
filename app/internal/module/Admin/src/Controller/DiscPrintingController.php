@@ -26,6 +26,21 @@ class DiscPrintingController extends AbstractController
     const DISCS_ON_PAGE = 6;
 
     /**
+     * Disc Jackrabbit template
+     */
+    const DISC_TEMPLATE = '/templates/GVDiscTemplate.rtf';
+
+    /**
+     * Where we store generated lists of discs in JR
+     */
+    const STORAGE_PATH = 'discs';
+
+    /**
+     * What we store the generated list files as
+     */
+    const STORAGE_FILE = 'GVDiscTemplate.rtf';
+
+    /**
      * Index action
      *
      * @return Zend\ViewModel\ViewModel
@@ -75,6 +90,52 @@ class DiscPrintingController extends AbstractController
             $params['licenceType'],
             $discPrefix
         );
+
+        foreach ($discsToPrint as $disc) {
+            $queryData[] = $disc['id'];
+        }
+
+        $file = $this->getServiceLocator()
+            ->get('ContentStore')
+            ->read(self::DISC_TEMPLATE);
+
+        $query = $this->getServiceLocator()
+            ->get('Document')
+            ->getBookmarkQueries($file, $queryData);
+
+        $result = $this->makeRestCall('BookmarkSearch', 'GET', [], $query);
+
+        $discNumber = (int)$params['startNumber'];
+
+        // NB the loop-by-reference here
+        foreach ($result['Disc_List'] as &$row) {
+            $row['discNo'] = $discNumber ++;
+        }
+
+        $content = $this->getServiceLocator()
+            ->get('Document')
+            ->populateBookmarks($file, $result);
+
+        $uploader = $this->getUploader();
+        $uploader->setFile(
+            [
+                'content' => $content
+            ]
+        );
+
+        //echo $content; die(); <-- remove
+
+        $filePath = date('YmdHis') . '_' . self::STORAGE_FILE;
+        $storedFile = $uploader->upload(
+            self::STORAGE_PATH,
+            $filePath
+        );
+
+        /**
+         * @TODO a future story will care about $storedFile->getIdentifier() because
+         * it will want to enqueue a message for the print scheduler to actually
+         * print the template out, for which it'll need the JackRabbit name...
+         */
 
         // set printing status ON
         $goodsDiscService->setIsPrintingOn($discsToPrint);
