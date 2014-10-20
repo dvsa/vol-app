@@ -81,7 +81,7 @@ class LicenceController extends AbstractController
             ];
 
             return $this->redirect()->toRoute(
-                'licence/documents/generate',
+                'licence/documents/'.$action,
                 $params
             );
         }

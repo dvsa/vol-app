@@ -63,6 +63,8 @@ class ConvictionController extends OlcsController\CrudAbstract
 
     protected $pageLayoutInner = 'case/inner-layout';
 
+    protected $defaultTableSortField = 'convictionDate';
+
     /**
      * Holds the service name
      *

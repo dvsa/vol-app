@@ -428,8 +428,19 @@ $routes = [
                             'route' => '/finalise/:tmpId',
                             'defaults' => [
                                 'type'       => 'licence',
-                                'controller' => 'DocumentUploadController',
+                                'controller' => 'DocumentFinaliseController',
                                 'action'     => 'finalise'
+                            ]
+                        ],
+                    ],
+                     'upload' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/upload',
+                            'defaults' => [
+                                'type'       => 'licence',
+                                'controller' => 'DocumentUploadController',
+                                'action'     => 'upload'
                             ]
                         ],
                     ],
@@ -464,7 +475,7 @@ $routes = [
                                 'controller' => 'LicenceProcessingNoteController',
                                 'action' => 'index'
                             ]
-                        ],
+                        ]
                     ],
                     'add-note' => [
                         'type' => 'segment',
@@ -508,19 +519,18 @@ $routes = [
     ],
 
     // These routes are for the licence page
-
     'case' => [
         'type' => 'segment',
         'options' => [
             'route' => '/case/:action[/:case][/licence/:licence]',
             'constraints' => [
-                'case' => '[0-9]+',
+                //'case' => '[0-9]+',
                 'action' => '[a-z]+',
                 'licence' => '[0-9]+'
             ],
             'defaults' => [
                 'controller' => 'CaseController',
-                'action'     => 'overview'
+                'action'     => 'details'
             ],
         ],
         'may_terminate' => true
