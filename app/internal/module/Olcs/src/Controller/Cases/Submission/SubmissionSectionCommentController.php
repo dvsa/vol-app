@@ -133,6 +133,19 @@ class SubmissionSectionCommentController extends OlcsController\CrudAbstract
         return $this->redirectToRoute(submission, ['id' => $submissionId, 'action' => 'details'], [], true);
     }
 
+    public function alterForm($form)
+    {
+        $sectionId = $this->params()->fromRoute('submissionSection');
+
+        $refDataService = $this->getServiceLocator()->get('Common\Service\Data\RefData');
+
+        $submissionSectionRefData = $refDataService->fetchListOptions('submission_section');
+
+        $formLabel = $submissionSectionRefData[$sectionId];
+
+        $form->setOptions(['label' => $formLabel]);
+        return $form;
+    }
     /**
      * Call parent process save and return result. Public method to allow unit testing
      *

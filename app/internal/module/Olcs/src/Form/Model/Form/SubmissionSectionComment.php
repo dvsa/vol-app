@@ -7,7 +7,7 @@ use Zend\Form\Annotation as Form;
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("SubmissionSectionComment")
- * @Form\Options({"label":"section"})
+ * @Form\Options({"label":""})
  * @Form\Attributes({"method":"post"})
  */
 class SubmissionSectionComment
