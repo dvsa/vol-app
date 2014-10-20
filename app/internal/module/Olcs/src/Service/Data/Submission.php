@@ -364,6 +364,7 @@ class Submission extends AbstractData
     }
 
     /**
+     * @codeCoverageIgnore Method not used, yet. Here for future story reference only.
      * section transportManagers
      */
     protected function filterTransportManagersDataNotUsed(array $data = array())
