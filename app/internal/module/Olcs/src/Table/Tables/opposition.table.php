@@ -2,7 +2,7 @@
 
 return array(
     'variables' => array(
-        'title' => 'Complaints'
+        'title' => 'Opposition'
     ),
     'settings' => array(
         'crud' => array(
@@ -26,26 +26,74 @@ return array(
             'format' => '{{[elements/radio]}}'
         ),
         array(
-            'title' => 'Date',
+            'title' => 'Date received',
+            'name' => 'raisedDate',
             'formatter' => function ($data, $column) {
                 $column['formatter'] = 'Date';
                 return '<a href="' . $this->generateUrl(
-                    array('action' => 'edit', 'complaint' => $data['id']),
-                    'case_complaint',
+                    array('action' => 'edit', 'opposition' => $data['id']),
+                    'case_opposition',
                     true
                 ) . '">' . $this->callFormatter($column, $data) . '</a>';
             },
-            'name' => 'complaintDate'
+            'sort' => 'raisedDate',
         ),
         array(
-            'title' => 'Complainant name',
+            'title' => 'Opposition type',
             'formatter' => function ($data, $column) {
-                return $data['complainantForename'] . ' ' . $data['complainantFamilyName'];
+                return '-';
+            },
+        ),
+
+        array(
+            'title' => 'Name',
+            'formatter' => function ($data, $column) {
+                $person = $data['opposer']['contactDetails']['person'];
+                return $person['forename'] . ' ' . $person['familyName'];
             }
         ),
         array(
-            'title' => 'Description',
-            'name' => 'description'
+            'title' => 'Grounds',
+            'formatter' => function ($data, $column) {
+                $grounds = [];
+                foreach ($data['grounds'] as $ground) {
+                    $grounds[] = $ground['grounds']['description'];
+                }
+
+                return implode(', ', $grounds);
+            }
+        ),
+        array(
+            'title' => 'Link',
+            'formatter' => function ($data, $column) {
+                return '-';
+            },
+        ),
+        array(
+            'title' => 'View',
+            'formatter' => function ($data, $column) {
+                return '-';
+            },
+        ),
+        array(
+            'title' => 'Valid',
+            'name' => 'isValid',
+            'sort' => 'isValid'
+        ),
+        array(
+            'title' => 'Copied',
+            'name' => 'isCopied',
+            'sort' => 'isCopied'
+        ),
+        array(
+            'title' => 'In time',
+            'name' => 'isInTime',
+            'sort' => 'isInTime'
+        ),
+        array(
+            'title' => 'Public inquiry',
+            'name' => 'isPublicInquiry',
+            'sort' => 'isPublicInquiry'
         )
     )
 );
