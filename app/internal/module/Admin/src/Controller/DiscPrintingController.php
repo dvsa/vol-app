@@ -95,13 +95,13 @@ class DiscPrintingController extends AbstractController
             $queryData[] = $disc['id'];
         }
 
+        $documentService = $this->getServiceLocator()->get('Document');
+
         $file = $this->getServiceLocator()
             ->get('ContentStore')
             ->read(self::DISC_TEMPLATE);
 
-        $query = $this->getServiceLocator()
-            ->get('Document')
-            ->getBookmarkQueries($file, $queryData);
+        $query = $documentService->getBookmarkQueries($file, $queryData);
 
         $result = $this->makeRestCall('BookmarkSearch', 'GET', [], $query);
 
@@ -112,16 +112,13 @@ class DiscPrintingController extends AbstractController
             $row['discNo'] = $discNumber ++;
         }
 
-        $content = $this->getServiceLocator()
-            ->get('Document')
-            ->populateBookmarks($file, $result);
+        $content = $documentService->populateBookmarks($file, $result);
 
-        $uploader = $this->getUploader();
-        $uploader->setFile(
-            [
-                'content' => $content
-            ]
-        );
+        $uploader = $this->getServiceLocator()
+            ->get('FileUploader')
+            ->getUploader();
+
+        $uploader->setFile(['content' => $content]);
 
         //echo $content; die(); <-- remove
 

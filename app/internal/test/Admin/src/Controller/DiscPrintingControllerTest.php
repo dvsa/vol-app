@@ -20,7 +20,7 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
 
     protected $isXmlHttpRequest = false;
 
-    protected $mockMethods = ['params', 'loadScripts'];
+    protected $mockMethods = ['params', 'loadScripts', 'makeRestCall'];
 
     protected $allParams = [
         'niFlag' => 'N',
@@ -186,6 +186,78 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
         $this->setUpAction(null, $this->formPost);
 
         $this->controller->setEnabledCsrf(false);
+
+        $restResult = [
+            'Disc_List' => [
+                ['foo' => 'bar']
+            ]
+        ];
+        $this->controller->expects($this->once())
+            ->method('makeRestCall')
+            ->with('BookmarkSearch')
+            ->willReturn($restResult);
+
+        $documentMock = $this->getMock(
+            '\stdClass',
+            ['getBookmarkQueries', 'populateBookmarks']
+        );
+
+        $this->controller->expects($this->any())
+            ->method('getLoggedInUser')
+            ->will($this->returnValue(123));
+
+        $file = new \Dvsa\Jackrabbit\Data\Object\File();
+        $file->setMimeType('application/rtf');
+        $file->setContent('dummy content');
+
+        $contentStoreMock = $this->getMock('\stdClass', ['read']);
+        $contentStoreMock->expects($this->once())
+            ->method('read')
+            ->with('/templates/GVDiscTemplate.rtf')
+            ->will($this->returnValue($file));
+
+        // disc IDs we expect to query against
+        $queryData = [1, 2];
+
+        $documentMock->expects($this->once())
+            ->method('getBookmarkQueries')
+            ->with($file, $queryData);
+
+        $resultData = array(
+            'Disc_List' => array(
+                array(
+                    'foo' => 'bar',
+                    'discNo' => 2
+                )
+            )
+        );
+
+        $documentMock->expects($this->once())
+            ->method('populateBookmarks')
+            ->with($file, $resultData)
+            ->will($this->returnValue('replaced content'));
+
+        $fileStoreMock = $this->getMock(
+            '\stdClass',
+            [
+                'setFile',
+                'upload'
+            ]
+        );
+
+        $mockFileUploader = $this->getMock('\stdClass', ['getUploader']);
+        $mockFileUploader->expects($this->any())
+            ->method('getUploader')
+            ->will($this->returnValue($fileStoreMock));
+
+        $fileData = ['content' => 'replaced content'];
+        $fileStoreMock->expects($this->once())
+            ->method('setFile')
+            ->with($fileData);
+
+        $this->serviceManager->setService('Document', $documentMock);
+        $this->serviceManager->setService('ContentStore', $contentStoreMock);
+        $this->serviceManager->setService('FileUploader', $mockFileUploader);
 
         $mockParams = $this->getMock('\StdClass', ['fromRoute']);
         $mockParams->expects($this->once())
