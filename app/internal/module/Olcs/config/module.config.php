@@ -197,7 +197,8 @@ return array(
     ],
     'search' => [
         'invokables' => [
-            'licence' => 'Olcs\Data\Object\Search\Licence'
+            'licence' => 'Olcs\Data\Object\Search\Licence',
+            'application' => 'Olcs\Data\Object\Search\Application'
         ]
     ]
 );
