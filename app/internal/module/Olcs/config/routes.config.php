@@ -712,9 +712,10 @@ return array_merge(
         'case_opposition' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/case/:case/opposition[/:action][/:opposition]',
+                'route' => '/case/:case/application[/:application]/opposition[/:action][/:opposition]',
                 'constraints' => [
                     'case' => '[0-9]+',
+                    'application' => '[0-9]+',
                     'action' => '[a-z]+',
                     'opposition' => '[0-9]+'
                 ],
