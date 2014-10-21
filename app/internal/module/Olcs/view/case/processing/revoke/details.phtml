@@ -32,11 +32,11 @@ if (empty($revoke)) {
                 ],
             ],
             'items' => [
-                ['label' => 'Legislation', 'value' => $revokeReasons, 'noEscape' => true, 'class' => 'three-quarters'],
+                ['label' => 'Legislation', 'value' => $revokeReasons, 'noEscape' => true, 'class' => 'full-width'],
                 ['label' => 'TC/TDC agreed', 'value' => $revoke['presidingTc']['name']],
                 ['label' => 'Agreed date', 'date' => $revoke['ptrAgreedDate']],
                 ['label' => 'Closed date', 'date' => $revoke['closedDate']],
-                ['label' => 'Notes', 'value' => $revoke['comment'], 'class' => 'three-quarters']
+                ['label' => 'Notes', 'value' => $revoke['comment'], 'class' => 'full-width']
             ]
         ]
     );
