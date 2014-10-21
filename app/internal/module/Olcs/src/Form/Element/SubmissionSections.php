@@ -180,6 +180,11 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                         }
                     )
                 )
+            ),
+            'validators' => array(
+                array(
+                    'name' => 'Olcs\Validator\SubmissionSection'
+                )
             )
         );
     }
