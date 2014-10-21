@@ -116,16 +116,9 @@ return array(
                     'id' => 'case_opposition',
                     'label' => 'Opposition',
                     'route' => 'case_opposition',
-                    'action' => 'redirect',
+                    'action' => 'index',
                     'use_route_match' => true,
                     'pages' => array(
-                        array(
-                            'id' => 'case_opposition_list',
-                            'label' => 'Opposition List',
-                            'route' => 'case_opposition',
-                            'action' => 'index',
-                            'use_route_match' => true,
-                        ),
                         array(
                             'id' => 'case_opposition_add',
                             'label' => 'Add Opposition',
