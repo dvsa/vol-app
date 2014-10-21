@@ -36,7 +36,7 @@ class DiscPrintingController extends AbstractController
     const STORAGE_PATH = 'discs';
 
     /**
-     * What we store the generated list files as
+     * What we store the generated file as
      */
     const STORAGE_FILE = 'GVDiscTemplate.rtf';
 
@@ -121,7 +121,7 @@ class DiscPrintingController extends AbstractController
         $discNumber = (int)$params['startNumber'];
 
         // NB the loop-by-reference here
-        foreach($result['Disc_List'] as &$row) {
+        foreach ($result['Disc_List'] as &$row) {
             $row['discNo'] = $discNumber ++;
         }
 
