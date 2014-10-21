@@ -67,6 +67,8 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
 
     protected $needAnException = false;
 
+    protected $isPsv = false;
+
     /**
      * Set up
      */
@@ -126,16 +128,16 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
                 ->method('getDiscPrefix')
                 ->will($this->returnValue('OK'));
 
-        $mockGoodsDisc = $this->getMock(
+        $mockDiscService = $this->getMock(
             '\StdClass',
             ['getDiscsToPrint', 'setIsPrintingOffAndAssignNumber', 'setIsPrintingOff', 'setIsPrintingOn']
         );
-        $mockGoodsDisc->expects($this->any())
+        $mockDiscService->expects($this->any())
                 ->method('getDiscsToPrint')
                 ->will($this->returnValue($this->discsToPrint));
 
         if ($this->needAnException) {
-            $mockGoodsDisc->expects($this->any())
+            $mockDiscService->expects($this->any())
                  ->method('setIsPrintingOff')
                  ->will($this->throwException(new \Exception));
         }
@@ -143,9 +145,12 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
             $post = new \Zend\Stdlib\Parameters($data);
             $this->controller->getRequest()->setMethod('post')->setPost($post);
         }
-
         $this->serviceManager->setService('Admin\Service\Data\DiscSequence', $mockDiscSequence);
-        $this->serviceManager->setService('Admin\Service\Data\GoodsDisc', $mockGoodsDisc);
+        if ($this->isPsv) {
+            $this->serviceManager->setService('Admin\Service\Data\PsvDisc', $mockDiscService);
+        } else {
+            $this->serviceManager->setService('Admin\Service\Data\GoodsDisc', $mockDiscService);
+        }
 
     }
 
@@ -182,6 +187,38 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
 
         $this->isPost = true;
         $this->needMockGetPost = false;
+
+        $this->setUpAction(null, $this->formPost);
+
+        $this->controller->setEnabledCsrf(false);
+
+        $mockParams = $this->getMock('\StdClass', ['fromRoute']);
+        $mockParams->expects($this->once())
+            ->method('fromRoute')
+            ->will($this->returnValue(null));
+
+        $this->controller->expects($this->once())
+            ->method('params')
+            ->will($this->returnValue($mockParams));
+
+        $response = $this->controller->indexAction();
+
+        // Make sure we get a view not a response
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+    }
+
+    /**
+     * Test index action with POST for PSV
+     * @group discPrinting
+     */
+    public function testIndexActionWithPostPsv()
+    {
+
+        $this->isPost = true;
+        $this->needMockGetPost = false;
+
+        $this->isPsv = true;
+        $this->formPost['operator-type']['goodsOrPsv'] = 'lcat_psv';
 
         $this->setUpAction(null, $this->formPost);
 
@@ -316,6 +353,25 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
     public function testConfirmDiscPrintingAction()
     {
         $this->allParams['isSuccessfull'] = true;
+        $this->setUpAction($this->allParams);
+        $response = $this->controller->confirmDiscPrintingAction();
+        $this->assertInstanceOf('Zend\View\Model\JsonModel', $response);
+        $result = json_decode($response->serialize(), true);
+        $this->assertEquals(is_array($result), true);
+        $this->assertEquals(isset($result['status']), false);
+    }
+
+    /**
+     * Test confirm disc printing for PSV
+     * @group discPrinting
+     */
+    public function testConfirmDiscPrintingActionPsv()
+    {
+        $this->allParams['isSuccessfull'] = true;
+
+        $this->isPsv = true;
+        $this->allParams['operatorType'] = 'lcat_psv';
+
         $this->setUpAction($this->allParams);
         $response = $this->controller->confirmDiscPrintingAction();
         $this->assertInstanceOf('Zend\View\Model\JsonModel', $response);

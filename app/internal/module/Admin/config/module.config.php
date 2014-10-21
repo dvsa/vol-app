@@ -182,7 +182,8 @@ return [
     'service_manager' => array(
         'factories' => array(
             'Admin\Service\Data\DiscSequence' => 'Admin\Service\Data\DiscSequence',
-            'Admin\Service\Data\GoodsDisc' => 'Admin\Service\Data\GoodsDisc'
+            'Admin\Service\Data\GoodsDisc' => 'Admin\Service\Data\GoodsDisc',
+            'Admin\Service\Data\PsvDisc' => 'Admin\Service\Data\PsvDisc'
         )
     ),
     'local_forms_path' => [__DIR__ . '/../src/Form/Forms/'],
