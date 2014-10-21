@@ -8,9 +8,6 @@
 
 namespace Olcs\Controller\Cases\Opposition;
 
-use Zend\View\Model\ViewModel;
-use Zend\Json\Json as Json;
-
 // Olcs
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
@@ -23,13 +20,6 @@ use Olcs\Controller\Traits as ControllerTraits;
 class OppositionController extends OlcsController\CrudAbstract
 {
     use ControllerTraits\CaseControllerTrait;
-
-    /**
-     * Identifier name
-     *
-     * @var string
-     */
-    protected $identifierName = 'opposition';
 
     /**
      * Table name string
@@ -74,7 +64,7 @@ class OppositionController extends OlcsController\CrudAbstract
      * index list page.
      */
     protected $listVars = [
-        'case',
+        'application'
     ];
 
     /**
@@ -95,10 +85,38 @@ class OppositionController extends OlcsController\CrudAbstract
      *
      * @var array
     */
-    protected $dataBundle = array();
+    protected $dataBundle = array(
+        'children' => array(
+            'application' => array(
+                'properties' => array(
+                    'id'
+                )
+            ),
+            'opposer' => array(
+                'children' => array(
+                    'contactDetails' => array(
+                        'children' => array(
+                            'person' => array(
+                                'properties' => array(
+                                    'forename',
+                                    'familyName'
+                                )
+                            )
+                        )
+                    )
+                )
+            ),
+            'grounds' => array(
+                'children' => array(
+                    'grounds' => array(
+                        'properties' => array(
+                            'id',
+                            'description'
+                        )
 
-    /**
-     * @var array
-     */
-    protected $inlineScripts = ['showhideinput', 'conviction'];
+                    )
+                )
+            )
+        )
+    );
 }
