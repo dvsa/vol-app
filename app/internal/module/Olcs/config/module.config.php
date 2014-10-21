@@ -24,6 +24,8 @@ return array(
             'CaseOffenceController' => 'Olcs\Controller\Cases\Conviction\OffenceController',
             'CaseSubmissionController' => 'Olcs\Controller\Cases\Submission\SubmissionController',
             'SubmissionController' => 'Olcs\Controller\Submission\SubmissionController',
+            'CaseSubmissionSectionController' =>
+                'Olcs\Controller\Cases\Submission\SubmissionSectionController',
             'CaseSubmissionSectionCommentController' =>
                 'Olcs\Controller\Cases\Submission\SubmissionSectionCommentController',
             'CaseStayController' =>
