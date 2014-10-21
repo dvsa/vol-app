@@ -45,6 +45,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
     protected $submissionTypeSubmit;
 
     /**
+     * Set submission type
      * @param \Common\Form\Elements\Custom\Select $submissionType
      *
      * @return $this
@@ -56,6 +57,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
     }
 
     /**
+     * Get submission type
      * @return \Common\Form\Elements\Custom\Select
      */
     public function getSubmissionType()
@@ -64,6 +66,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
     }
 
     /**
+     * Set sections
      * @param Array $sections
      *
      * @return $this
@@ -75,6 +78,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
     }
 
     /**
+     * Get sections from element
      * @return Array
      */
     public function getSections()
@@ -156,8 +160,8 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
     }
 
     /**
-     * Adds a class to highlight those options which were originally selected before a new submission
-     * type was posted.
+     * Adds a class to highlight those options which were originally selected but not included in a new submission
+     * type, when one is posted.
      *
      * @param array $postedSections
      * @param array $newDefaultSections
