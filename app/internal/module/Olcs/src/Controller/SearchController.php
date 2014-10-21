@@ -9,7 +9,7 @@
  */
 namespace Olcs\Controller;
 
-use Common\Controller\AbstractActionController;
+use Zend\Session\Container;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -19,30 +19,50 @@ use Zend\View\Model\ViewModel;
  * @author Mike Cooper <michael.cooper@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class SearchController extends AbstractActionController
+class SearchController extends AbstractController
 {
+
+    public function processSearchData()
+    {
+        //there are multiple places search data can come from:
+        //route, query, post and session
+
+        //there are lots of params we are interested in:
+        //filters, index, search query, page, limit
+
+        if ($this->getRequest()->isPost()) {
+            //a post request can come from two forms a) the filter form, b) the query form
+
+            $search = trim($this->params()->fromPost('search'));
+
+            if (!empty($search)) {
+                $form = $this->getSearchForm();
+                $form->setData($this->params()->fromPost());
+
+                if ($form->isValid()) {
+                    //save to session, reset filters in session...
+                    //get index from post as well, override what is in the route match
+                    $data = $form->getData();
+                    $this->getEvent()->getRouteMatch()->setParam('index', $data['index']);
+                }
+            }
+        }
+    }
 
     public function indexAction()
     {
-        $index = $this->params()->fromRoute('index');
+        $this->processSearchData();
+        $data = $this->getSearchForm()->getData();
 
-        if ($this->getRequest()->isPost()) {
-            $query = trim($this->params()->fromPost('search'));
-            //also process filter form...
-        } else {
-            //get params from session
-        }
-
-        if (empty($query)) {
+        if (empty($data['search'])) {
             return 'what do you want to find?';
         }
 
+        /** @var \Olcs\Service\Data\Search\Search $searchService **/
         $searchService = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\Search\Search');
 
-        $searchService->setIndex($index);
-        $searchService->setParams($query);
-
-        //$searchService->fetchFacets(); future improvement for filtering
+        $searchService->setIndex($data['index']);
+        $searchService->setParams($data['search']);
 
         $view = new ViewModel();
 

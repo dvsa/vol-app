@@ -15,6 +15,8 @@ class Search extends AbstractData implements ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait;
 
+    protected $serviceName = 'Search';
+
     /**
      * @var string
      */
@@ -77,26 +79,9 @@ class Search extends AbstractData implements ServiceLocatorAwareInterface
     /**
      * @return array
      */
-    public function fetchIndexes()
-    {
-        return [
-            'licence' => 'Licence',
-            'application' => 'Application',
-            'cases' => 'Cases',
-            'busregs' => 'Bus Registrations',
-            'addresses' => 'Addresses',
-            'people' => 'People',
-            'historicaltms' => 'Historical TMs',
-            'vehicles' => 'Vehicles'
-        ];
-    }
-
-    /**
-     * @return array
-     */
     public function fetchResults()
     {
-        return [];
+        return $this->getRestClient()->get(sprintf('/%s/%s', $this->getParams(), $this->getIndex()));
     }
 
     /**
@@ -109,7 +94,7 @@ class Search extends AbstractData implements ServiceLocatorAwareInterface
         return $tableBuilder->buildTable(
             $this->getDataClass()->getTableConfig(),
             $this->fetchResults(),
-            [],
+            ['limit'=>10],
             false
         );
     }
