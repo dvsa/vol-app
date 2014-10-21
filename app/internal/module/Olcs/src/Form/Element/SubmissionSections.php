@@ -141,6 +141,8 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
             } else {
                 if (isset($value['submissionTypeSubmit'])) {
                     $sections = $this->getPreselectedSectionsForType($value['submissionType']);
+                    $this->addCssToDifference($value['sections'], $sections);
+
                 } else {
                     // type not submitted
                     $sections = $value['sections'];
@@ -151,6 +153,24 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
         $this->getSections()->setValue($sections);
 
         return $this;
+    }
+
+    /**
+     * Adds a class to highlight those options which were originally selected before a new submission
+     * type was posted.
+     *
+     * @param array $postedSections
+     * @param array $newDefaultSections
+     */
+    public function addCssToDifference($postedSections = array(), $newDefaultSections = array())
+    {
+        $allSections = $this->getSections()->getValueOptions();
+        foreach ($allSections as $key => $title) {
+            if (in_array($key, $postedSections) && !in_array($key, $newDefaultSections)) {
+                $allSections[$key] = ['label' => $title . 'POSTED', 'attributes' => ['checked' => false]];
+            }
+        }
+        $this->getSections()->setValueOptions($allSections);
     }
 
     /**
