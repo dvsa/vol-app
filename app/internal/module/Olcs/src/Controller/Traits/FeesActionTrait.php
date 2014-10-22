@@ -36,34 +36,25 @@ trait FeesActionTrait
             $licenceId = $results['licence']['id'];
         } else {
             $applicationId = null;
+            $this->pageLayout = 'licence';
         }
         $params = [
             'licence' => $licenceId,
+            'feeStatus' => "IN ('lfs_ot', 'lfs_wr')",
             'page'    => $this->params()->fromRoute('page', 1),
-            'sort'    => $this->params()->fromRoute('sort', 'id'),
-            'order'   => $this->params()->fromRoute('order', 'desc'),
+            'sort'    => $this->params()->fromRoute('sort', 'receivedDate'),
+            'order'   => $this->params()->fromRoute('order', 'DESC'),
             'limit'   => $this->params()->fromRoute('limit', 10),
         ];
 
         $feesService = $this->getServiceLocator()->get('Olcs\Service\Data\Fee');
-        $filters = [
-            'feeStatus' => ['lfs_ot', 'lfs_wr']
-        ];
 
-        /*
-         * we need to present filtered and paginated table so we should
-         * fetch all data at once and paginate it on the table layer
-         */
-        $serviceParams = $params;
-        $serviceParams['page'] = 1;
-        $serviceParams['limit'] = self::MAX_LICENCE_FEES;
-                
-        $results = $feesService->getFees($serviceParams, null, $filters);
-        
+        $results = $feesService->getFees($params, null);
+
         $table = $this->getTable('fees', $results, $params);
         $view = $this->getViewWithLicence(['table' => $table]);
-        $view->setTemplate('licence/fees');        
-        
+        $view->setTemplate('licence/fees');
+
         if ($applicationId) {
             $applicationJourneyHelper = $this->getServiceLocator()->get('ApplicationJourneyHelper');
             $renderedView = $applicationJourneyHelper->render($view, $applicationId);

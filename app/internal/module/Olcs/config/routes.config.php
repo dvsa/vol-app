@@ -678,7 +678,7 @@ return array_merge(
                             'action' => 'fees',
                             'page' => 1,
                             'limit' => 10,
-                            'sort' => 'invoicedDate',
+                            'sort' => 'receivedDate',
                             'order' => 'DESC'
                         ]
                     ],

@@ -26,7 +26,7 @@ return array(
         ),
         array(
             'title' => 'No',
-            'sort' => 'No',
+            'sort' => 'invoiceNo',
             'name' => 'invoiceNo',
             'formatter' => function ($row, $column, $serviceLocator) {
 
