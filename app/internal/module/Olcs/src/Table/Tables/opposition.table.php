@@ -2,7 +2,7 @@
 
 return array(
     'variables' => array(
-        'title' => 'Opposition'
+        'title' => 'List of oppositions'
     ),
     'settings' => array(
         'crud' => array(
@@ -41,7 +41,7 @@ return array(
         array(
             'title' => 'Opposition type',
             'formatter' => function ($data, $column) {
-                return '-';
+                return $data['oppositionType']['description'];
             },
         ),
 
@@ -94,6 +94,11 @@ return array(
             'title' => 'Public inquiry',
             'name' => 'isPublicInquiry',
             'sort' => 'isPublicInquiry'
+        ),
+        array(
+            'title' => 'Withdrawn',
+            'name' => 'isWithdrawn',
+            'sort' => 'isWithdrawn'
         )
     )
 );
