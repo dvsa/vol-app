@@ -19,7 +19,7 @@ class Markers extends AbstractHelper
         $markup = '';
         if (isset($markers[$markerType]) && is_array($markers[$markerType])) {
             foreach ($markers[$markerType] as $marker) {
-                $markup .= isset($marker['html']) ? $marker['html'] : '';
+                $markup .= isset($marker['content']) ? $marker['content'] : '';
             }
         }
 

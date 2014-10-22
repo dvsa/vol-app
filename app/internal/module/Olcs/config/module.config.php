@@ -146,6 +146,9 @@ return array(
     ),
     'asset_path' => '//dvsa-static.olcsdv-ap01.olcs.npm',
     'service_manager' => array(
+        'invokables' => array(
+            'Olcs\Service\Marker\MarkerPluginManager' => 'Olcs\Service\Marker\MarkerPluginManager'
+        ),
         'factories' => array(
             'ApplicationJourneyHelper' => function ($sm) {
                 $helper = new \Olcs\Helper\ApplicationJourneyHelper();
@@ -162,7 +165,7 @@ return array(
             'Olcs\Service\Data\User' => 'Olcs\Service\Data\User',
             'Olcs\Service\Data\PiVenue' => 'Olcs\Service\Data\PiVenue',
             'Olcs\Service\Data\PresidingTc' => 'Olcs\Service\Data\PresidingTc',
-            'Olcs\Service\Data\Submission' => 'Olcs\Service\Data\Submission'
+            'Olcs\Service\Data\Submission' => 'Olcs\Service\Data\Submission',
         )
     ),
     'application_journey' => array(

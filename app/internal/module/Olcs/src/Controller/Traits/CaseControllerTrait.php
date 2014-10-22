@@ -82,6 +82,7 @@ trait CaseControllerTrait
                     $licence = $case['licence']['id'];
                     //$this->setupLicence($licence);
                 }
+                $this->setupMarkers($case);
             }
 
             if ($licence = $this->params()->fromRoute('licence', $licence)) {
@@ -121,6 +122,22 @@ trait CaseControllerTrait
         $placeholder->getContainer('pageSubtitle')->append('Case subtitle');
 
         $placeholder->getContainer('case')->set($case);
+    }
+
+    /**
+     * Set up markers as placeholder
+     */
+    public function setupMarkers($case)
+    {
+        $placeholder = $this->getViewHelperManager()->get('placeholder');
+
+        $caseMarkerPlugin = $this->getServiceLocator()
+            ->get('Olcs\Service\Marker\MarkerPluginManager')
+            ->get('Olcs\Service\Marker\CaseMarkers');
+
+        $markers = $caseMarkerPlugin->getStayMarkers(['case' => $case]);
+
+        $placeholder->getContainer('markers')->set($markers);
     }
 
     /**
