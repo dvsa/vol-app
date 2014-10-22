@@ -3,7 +3,7 @@
 /**
  * Case Opposition Controller
  *
- * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
+ * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
 
 namespace Olcs\Controller\Cases\Opposition;
@@ -15,7 +15,7 @@ use Olcs\Controller\Traits as ControllerTraits;
 /**
  * Case Opposition Controller
  *
- * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
+ * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
 class OppositionController extends OlcsController\CrudAbstract
 {
