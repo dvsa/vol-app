@@ -100,6 +100,7 @@ return array(
             'LvaApplication/FinancialEvidence'  => 'Olcs\Controller\Lva\Application\FinancialEvidenceController',
             'LvaApplication/TransportManagers'  => 'Olcs\Controller\Lva\Application\TransportManagersController',
             'LvaApplication/Safety'             => 'Olcs\Controller\Lva\Application\SafetyController',
+            'LvaApplication/FinancialHistory'   => 'Olcs\Controller\Lva\Application\FinancialHistoryController',
 
             'LvaLicence'                        => 'Olcs\Controller\Lva\Licence\OverviewController',
             'LvaLicence/TypeOfLicence'          => 'Olcs\Controller\Lva\Licence\TypeOfLicenceController',

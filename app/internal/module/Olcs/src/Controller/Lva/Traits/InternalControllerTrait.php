@@ -15,16 +15,13 @@ namespace Olcs\Controller\Lva\Traits;
 trait InternalControllerTrait
 {
     /**
-     * Handle a redirect based on 'cancel' being clicked
-     * Declared separately so controllers can customise
-     * what cancel does
-     *
-     * @param int $lvaId
-     * @return null|\Zend\Http\Response
+     * Discard changes and redirect back to the current route
      */
     protected function handleCancelRedirect($lvaId)
     {
-        return $this->redirect()->toRoute(null, array(), array(), true);
+        $this->getServiceLocator()->get('Helper\FlashMessenger')->addInfoMessage('flash-discarded-changes');
+
+        return $this->reload();
     }
 
     /**
@@ -46,6 +43,6 @@ trait InternalControllerTrait
      */
     protected function goToOverviewAfterSave($lvaId = null)
     {
-        return $this->redirect()->toRoute(null, array(), array(), true);
+        return $this->reload();
     }
 }
