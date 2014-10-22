@@ -173,8 +173,9 @@ class SubmissionSectionCommentControllerTest extends AbstractHttpControllerTestC
         $form->shouldReceive('setOptions')
             ->with(['label' => $mockSectionRefData[$sectionId]]);
 
-        $sut->alterForm($form);
+        $form = $sut->alterForm($form);
 
+        $this->assertEquals('object', gettype($form));
     }
 
     public function getSubmissionSectionsToLoadProvider()
