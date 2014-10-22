@@ -1,59 +1,40 @@
+<?php
 
-    <h4>
-        <?php echo $this->translate('Agreed and legislation'); ?>
-        <a href="<?php echo $this->url(
-            'case_pi_agreed',
-            ['action' => 'edit'],
-            [],
-            true
-        ); ?>" class="action--primary  right-aligned" />Edit</a>
-    </h4>
+$types = [];
+foreach ($pi['piTypes'] as $value) {
+    $types[] = $value['description'];
+}
 
-    <?php
+$piTypes = implode(', ', $types);
 
-    $summary = [
-        'agreedDate' => [
-            'label' => 'Agreed date',
-            'value' => isset($pi['agreedDate']) ? date('d/m/Y', strtotime($pi['agreedDate'])) : 'dd/mm/yyyy',
-        ]
-    ];
-
-    $types = [];
-    foreach ($pi['piTypes'] as $value) {
-        $types[] = $value['description'];
-    }
-    if (is_array($types)) {
-        $summary += [
-            'piType' => [
-                'label' => 'Type of public inquiry',
-                'value' => implode(', ', $types),
+echo $this->render('partials/read-only/main',
+    [
+        'header' => 'Agreed and legislation',
+        'actions' => [
+            [
+                'label' => 'Edit',
+                'url' => $this->url(
+                    'case_pi_agreed',
+                    ['action' => 'edit'],
+                    [],
+                    true
+                )
             ],
-        ];
-    }
-
-    $summary += [
-        'presidingTc' => [
-            'label' => 'Agreed by',
-            'value' => $pi['agreedByTc']['name'],
         ],
-        'agreedByRole' => [
-            'label' => 'Agreed by role',
-            'value' => $pi['agreedByTcRole']['description'],
-        ]/* ,
-        'assignedTo' => [
-            'label' => 'Assigned To',
-            'value' => $pi['assignedTo']['name'],
-        ] */,
-        'legislation' => [
-            'label' => 'Legislation',
-            'value' => is_array($pi['reasons']) ? implode(', ', array_map(function($item){return $item['sectionCode']. ' ' . $item['description'];}, $pi['reasons'])) : 'None selected',
-        ],
-        'comments' => [
-            'label' => 'Comments',
-            'value' => $pi['comment']
+        'items' => [
+            ['label' => 'Agreed date', 'date' => (isset($pi['agreedDate']) ? $pi['agreedDate'] : null)],
+            ['label' => 'Type of public inquiry', 'value' => $piTypes],
+            ['label' => 'Agreed by', 'value' => $pi['agreedByTc']['name']],
+            ['label' => 'Agreed by role', 'value' => $pi['agreedByTcRole']['description']],
+            ['label' => 'Legislation', 'class' => 'full-width', 'value' => is_array($pi['reasons']) ?
+                implode(
+                    ', ',
+                    array_map(
+                        function($item){return $item['sectionCode']. ' ' . $item['description'];},
+                        $pi['reasons']
+                    )
+                ) : 'None selected'],
+            ['label' => 'Comments', 'value' => $pi['comment'], 'class' => 'full-width'],
         ]
-    ];
-    ?>
-<div class="read-only">
-    <?php echo $this->render('partials/summary/summary__list-definition', ['items' => $summary, 'title' => 'Agreement and legislation']); ?>
-</div>
+    ]
+);

@@ -1,69 +1,25 @@
 <?php
-if (!empty($id))
-{
-    $action = 'Edit';
-} else {
-    $action = 'Add';
-}
-?>
-<h4><?php echo $this->translate(
-        $stayType['description']
-    ); ?>
-    <a href="<?php echo $this->url(
-        'case_stay',
-        [
-            'case' => $case['id'],
-            'action' => strtolower($action),
-            'stayType' => $stayType['id'],
-        ], [], false); ?>" class="action--primary
-        right-aligned"><?php echo $this->translate($action);
-        ?></a>
-</h4>
-
-<?php if ($action == 'Edit') { ?>
-    <div class="read-only">
-        <dl>
-            <dt><?php echo $this->translate('Stay type');?></dt>
-            <dd><?php echo isset($stayType['description']) ? $stayType['description'] : ''; ?></dd>
-
-            <dt><?php echo $this->translate('Outcome');?></dt>
-            <dd><?php echo isset($outcome['description']) ? $outcome['description'] : ''; ?></dd>
-
-            <dt><?php echo $this->translate('Requested date');
-                ?></dt>
-            <dd><?php echo isset($requestDate) ? $this->dateFormat(
-                    \DateTime::createFromFormat(
-                        \DateTime::ISO8601,
-                        $requestDate
-                    ),
-                    \IntlDateFormatter::SHORT) : ''; ?></dd>
-
-            <dt><?php echo $this->translate('Decision date');?></dt>
-            <dd><?php echo isset($decisionDate) ? $this->dateFormat(
-                    \DateTime::createFromFormat(
-                        \DateTime::ISO8601,
-                        $decisionDate
-                    ),
-                    \IntlDateFormatter::SHORT) : ''; ?></dd>
-            <dt><?php echo $this->translate('Is withdrawn');?></dt>
-            <dd><?php echo $this->translate(empty($withdrawnDate) ?
-                    'N' : 'Y'); ?></dd>
-            <dt><?php echo $this->translate('Withdrawn date');?></dt>
-            <dd><?php echo isset($withdrawnDate) ? $this->dateFormat(
-                    \DateTime::createFromFormat(
-                        \DateTime::ISO8601,
-                        $withdrawnDate
-                    ),
-                    \IntlDateFormatter::SHORT) : ''; ?></dd>
-        </dl>
-        <dl>
-            <dt><?php echo $this->translate('Notes');?></dt>
-            <dd class="three-quarters"><?php echo
-                isset($notes) ? $notes : '';
-                ?></dd>
-        </dl>
-    </div>
-
-<?php
-}
-?>
+echo $this->render('partials/read-only/main',
+    [
+        'header' => $stayType['description'],
+        'actions' => [
+            [
+                'label' => 'Edit',
+                'url' => $this->url('case_stay',
+                    [
+                        'case' => $case['id'],
+                        'action' => 'edit',
+                        'stayType' => $stayType['id'],
+                    ], [], false)
+            ],
+        ],
+        'items' => [
+            ['label' => 'Outcome', 'value' => (isset($outcome['description']) ? $outcome['description'] : '')],
+            ['label' => 'Requested date', 'date' => $requestDate],
+            ['label' => 'Decision date', 'date' => $decisionDate],
+            ['label' => 'Is withdrawn', 'value' => (empty($withdrawnDate) ? 'N' : 'Y')],
+            ['label' => 'Withdrawn date', 'date' => $withdrawnDate],
+            ['label' => 'Notes', 'value' => $notes, 'class' => 'full-width']
+        ]
+    ]
+);

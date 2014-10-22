@@ -263,6 +263,63 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->sut->getSubmissionConfig());
     }
 
+    /**
+     * Tests the filter comments by section
+     *
+     * @param $input
+     * @param $expected
+     */
+    public function testFilterCommentsBySection()
+    {
+        $fooComments = [0 => 'foo'];
+        $barComments = [1 => 'bar'];
+        $comments = [
+            0 => [
+                'submissionSection' => [
+                    'id' => 'section_bar'
+                ],
+                'comments' => $barComments
+            ],
+
+            1 => [
+                'submissionSection' => [
+                    'id' => 'section_foo'
+                ],
+                'comments' => $fooComments
+            ]
+        ];
+
+        $result = $this->sut->filterCommentsBySection('section_foo', $comments);
+
+        $this->assertEquals(
+            $result,
+            [
+                0 => [
+                    'submissionSection' => [
+                        'id' => 'section_foo',
+                    ],
+                    'comments' => [
+                        0 => 'foo',
+                    ]
+                ]
+            ]
+        );
+
+        $result = $this->sut->filterCommentsBySection('section_bar', $comments);
+        $this->assertEquals(
+            $result,
+            [
+                0 => [
+                    'submissionSection' => [
+                        'id' => 'section_bar',
+                    ],
+                    'comments' => [
+                        1 => 'bar',
+                    ]
+                ]
+            ]
+        );
+    }
 
     public function providerSubmissionTitles()
     {
@@ -454,13 +511,16 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 [
-                    'text' =>
-                        '[{"sectionId":"introduction","data":[]}]'
+                    'dataSnapshot' =>
+                        '[{"sectionId":"introduction","data":[]}]',
+                    'submissionSectionComments' =>
+                        []
                 ],
                 [ 0 => [
                     'sectionId' => 'introduction',
                     'description' => 'Introduction',
-                    'data' => []
+                    'data' => [],
+                    'comments' => []
                     ]
                 ]
             ]

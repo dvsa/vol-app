@@ -1,14 +1,20 @@
-<div class="read-only">
-    <h4><?php echo $this->translate($this->heading); ?>
-    <a href="<?php echo $this->url(
-        $this->route,
-        array(
-            'action' => 'add',
-            'section' => $this->section,
-            'id' => $this->id,
-            'pi' => $this->pi['id']),
+<?php
+
+echo $this->render('partials/read-only/empty',
+    [
+        'header' => $this->heading,
+        'helpText' => 'There is currently no ' . $this->shortHeading,
+        'url' => $this->url(
+            $this->route,
+            array(
+                'action' => 'add',
+                'section' => $this->section,
+                'id' => $this->id,
+                'pi' => $this->pi['id']),
             array(),
             true
-        ); ?>" class="action--primary right-aligned" />Add</a>
-    </h4>
-</div>
+        ),
+        'label' => 'Add ' . $this->shortHeading,
+        'class' => 'action--primary right-aligned'
+    ]
+);

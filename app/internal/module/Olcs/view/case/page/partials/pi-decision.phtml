@@ -1,46 +1,32 @@
-    <h4>
-        <?php echo $this->translate('Decision'); ?>
-        <a href="<?php echo $this->url(
-            'case_pi_decision',
-            ['action' => 'edit'],
-            [],
-            true
-        ); ?>" class="action--primary right-aligned" />Edit</a>
-    </h4>
-    <?php
+<?php
 
-    $summary = [
-        'decisionPresidingTc' => [
-            'label' => 'Presiding commissioner / regulator',
-            'value' => $pi['decidedByTc']['name']
+echo $this->render('partials/read-only/main',
+    [
+        'header' => 'Decision',
+        'actions' => [
+            [
+                'label' => 'Edit',
+                'url' => $this->url(
+                    'case_pi_decision',
+                    ['action' => 'edit'],
+                    [],
+                    true
+                ),
+            ],
         ],
-        'presidedByRole' => [
-            'label' => 'Presiding commissioner / regulator role',
-            'value' => $pi['decidedByTcRole']['description']
-        ],
-        'decisionType' => [
-            'label' => 'Decision',
-            'value' => $this->piListData($pi['decisions'])
-        ],
-        'whitnesses' => [
-            'label' => 'Witnesses',
-            'value' => $pi['witnesses'],
-        ],
-        'decisionDate' => [
-            'label' => 'Date of decision',
-            'value' => isset($pi['decisionDate']) ? date('d/m/Y', strtotime($pi['decisionDate'])) : 'dd/mm/yyyy',
-        ],
-        'notificationDate' => [
-            'label' => 'Date of notification',
-            'value' => isset($pi['notificationDate']) ? date('d/m/Y', strtotime($pi['notificationDate'])) : 'dd/mm/yyyy',
-        ],
-        'decisionNotes' => [
-            'label' => "Details to be published",
-            'value' => $pi['decisionNotes']
+        'items' => [
+            ['label' => 'Presiding commissioner / regulator', 'value' => $pi['decidedByTc']['name']],
+            ['label' => 'Presiding commissioner / regulator role', 'value' => $pi['decidedByTcRole']['description']],
+            ['label' => 'Decision', 'value' => $this->piListData($pi['decisions'])],
+            [
+                'label' => 'Date of decision',
+                'date' => $pi['decisionDate']
+            ],
+            [
+                'label' => 'Date of notification',
+                'date' => $pi['notificationDate']
+            ],
+            ['label' => 'Details to be published', 'value' => $pi['decisionNotes'], 'class' => 'full-width'],
         ]
-
-    ];
-    ?>
-<div class="read-only">
-    <?php echo $this->render('partials/summary/summary__list-definition', ['items' => $summary, 'title' => 'Decision']); ?>
-</div>
+    ]
+);

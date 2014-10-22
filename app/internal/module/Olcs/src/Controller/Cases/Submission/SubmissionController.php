@@ -132,7 +132,7 @@ class SubmissionController extends OlcsController\CrudAbstract
 
     /**
      * Override Save data to allow json encoding of submission sections
-     * into submission 'text' field.
+     * into submission 'dataSnapshot' field.
      *
      * @param array $data
      * @param string $service
@@ -163,8 +163,9 @@ class SubmissionController extends OlcsController\CrudAbstract
             }
         }
 
-        $data['text'] = json_encode($data['submissionSections']['sections']);
+        $data['dataSnapshot'] = json_encode($data['submissionSections']['sections']);
         $data['submissionType'] = $data['submissionSections']['submissionType'];
+
         $data = $this->callParentSave($data, $service);
 
         return $data;
@@ -186,6 +187,7 @@ class SubmissionController extends OlcsController\CrudAbstract
     }
 
     /**
+     * @codeCoverageIgnore Calls parent method
      * Call parent process save and return result. Public method to allow unit testing
      *
      * @param array $data
@@ -215,8 +217,8 @@ class SubmissionController extends OlcsController\CrudAbstract
         if (isset($data['submissionSections']['sections'])) {
             $sectionData = json_decode($data['submissionSections']['sections'], true);
             $data['fields']['submissionSections']['sections'] = $this->extractSectionIds($sectionData);
-        } elseif (isset($data['text'])) {
-            $sectionData = json_decode($data['text'], true);
+        } elseif (isset($data['dataSnapshot'])) {
+            $sectionData = json_decode($data['dataSnapshot'], true);
             $data['fields']['submissionSections']['submissionType'] = $data['submissionType'];
             $data['fields']['submissionSections']['sections'] = $this->extractSectionIds($sectionData);
             $data['case'] = $case['id'];
@@ -228,6 +230,7 @@ class SubmissionController extends OlcsController\CrudAbstract
     }
 
     /**
+     * @codeCoverageIgnore Calls parent method
      * Call parent process load and return result. Public method to allow unit testing
      *
      * @param array $data
@@ -239,6 +242,7 @@ class SubmissionController extends OlcsController\CrudAbstract
     }
 
     /**
+     * @codeCoverageIgnore Calls parent method
      * Call parent process load and return result. Public method to allow unit testing
      *
      * @param array $data
@@ -269,6 +273,8 @@ class SubmissionController extends OlcsController\CrudAbstract
     {
         $submissionId = $this->getQueryOrRouteParam('submission');
 
+        $this->submissionConfig = $this->getServiceLocator()->get('config')['submission_config'];
+
         $submissionService = $this->getServiceLocator()
             ->get('Olcs\Service\Data\Submission');
 
@@ -296,6 +302,7 @@ class SubmissionController extends OlcsController\CrudAbstract
 
         $view = $this->getView([]);
         $view->setVariable('allSections', $submissionService->getAllSectionsRefData());
+        $view->setVariable('submissionConfig', $this->submissionConfig['sections']);
 
         $view->setTemplate($this->detailsView);
 
