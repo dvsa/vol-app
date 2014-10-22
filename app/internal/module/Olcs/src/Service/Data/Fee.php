@@ -45,7 +45,7 @@ class Fee extends AbstractData
      * @param array $bundle
      * @return array
      */
-    public function fetchFeesData($params = array(), $bundle = null)
+    protected function fetchFeesData($params = array(), $bundle = null)
     {
         if (is_null($this->getData('Fees'))) {
             $bundle = is_null($bundle) ? $this->getBundle() : $bundle;

@@ -22,8 +22,6 @@ class LicenceController extends AbstractController
         Traits\DocumentSearchTrait,
         Traits\FeesActionTrait;
 
-    const MAX_LICENCE_FEES = 1000;
-
     public function detailsAction()
     {
         $view = $this->getViewWithLicence();

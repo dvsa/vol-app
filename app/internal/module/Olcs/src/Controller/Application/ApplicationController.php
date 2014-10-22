@@ -21,8 +21,6 @@ class ApplicationController extends AbstractController
     use Traits\LicenceControllerTrait,
         Traits\FeesActionTrait;
 
-    const MAX_LICENCE_FEES = 1000;
-
     /**
      * Placeholder stub
      *
