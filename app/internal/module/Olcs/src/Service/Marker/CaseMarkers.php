@@ -146,7 +146,7 @@ class CaseMarkers extends AbstractData
         $case = $this->getCase();
         return [
             'stayData' => $case['stays'],
-            'appealData' => $case['appeals'],
+            'appealData' => $case['appeals'][0],
         ];
     }
 
@@ -158,10 +158,42 @@ class CaseMarkers extends AbstractData
      */
     private function generateStayMarkers($data)
     {
-        return [
-            0 => [
-                'content' => 'Stay1 granted pending appeal'
-            ]
-        ];
+
+        if ((!empty($data['appealData']['decisionDate']) &&
+            !empty($data['appealData']['outcome'])
+            ) ||
+            !empty($data['appealData']['withdrawnDate'])
+        ) {
+            return [];
+        }
+
+        $markers = [];
+        if (!empty($data['stayData']) && !empty($data['appealData'])) {
+            for ($i=0;$i<count($data['stayData']);$i++) {
+                $stay = $data['stayData'][$i];
+                if (empty($stay['withdrawnDate'])) {
+                    $markers[$i]['content'] = $this->generateStayMarkerContent($stay);
+                }
+            }
+        }
+
+        return $markers;
+    }
+
+    /**
+     * Generates outcome status text
+     * @param $outcome
+     * @return string
+     */
+    private function generateStayMarkerContent($stay)
+    {
+        $content = 'Stay ';
+        $content .= isset($stay['outcome']['id']) ?
+            strtolower($stay['outcome']['description']) .  ' pending appeal - ' : ' in progress - ';
+        $content .= $stay['stayType']['id'] == 'stay_t_ut' ?  ' UT ' : ' TC/TR ';
+        $requestDate = new \DateTime($stay['requestDate']);
+        $content .= $requestDate->format('d-m-Y');
+
+        return $content;
     }
 }
