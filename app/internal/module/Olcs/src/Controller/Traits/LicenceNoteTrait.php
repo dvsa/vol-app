@@ -77,9 +77,10 @@ trait LicenceNoteTrait
      * @param string $noteType
      * @param string $action
      * @param int $id
+     * @param int $caseId
      * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
      */
-    public function getNotesList($licenceId, $linkedId, $noteType = 'note_t_lic', $action = null, $id = null)
+    public function getNotesList($licenceId, $linkedId, $noteType = 'note_t_lic', $action = null, $id = null, $caseId = null)
     {
         $routePrefix  = $this->getRoutePrefix();
 
@@ -89,6 +90,7 @@ trait LicenceNoteTrait
                     $routePrefix . '/add-note',
                     [
                         'action' => strtolower($action),
+                        'case' => $caseId,
                         'licence' => $licenceId,
                         'noteType' => $noteType,
                         'linkedId' => $linkedId
@@ -107,12 +109,18 @@ trait LicenceNoteTrait
         }
 
         $searchData = array(
-            'licence' => $licenceId,
             'page' => 1,
             'sort' => 'priority',
             'order' => 'DESC',
             'limit' => 10
         );
+
+        //we may be searching by either case of licence
+        if (!is_null($caseId)) {
+            $searchData['case'] = $caseId;
+        } else {
+            $searchData['licence'] = $licenceId;
+        }
 
         //if noteType is set to all
         if (isset($filters['noteType']) && !$filters['noteType']) {
@@ -142,7 +150,9 @@ trait LicenceNoteTrait
         $bundle = $this->getBundle();
 
         $resultData = $this->makeRestCall('Note', 'GET', $filters, $bundle);
-
+        //echo'<pre>';
+//print_r($resultData);
+        //die();
         $formattedResult = $this->appendLinkedId($resultData);
 
         $table = $this->getTable(
