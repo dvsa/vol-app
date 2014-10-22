@@ -18,8 +18,7 @@ return array(
             'CaseOppositionController' => 'Olcs\Controller\Cases\Opposition\OppositionController',
             'CaseStatementController' => 'Olcs\Controller\Cases\Statement\StatementController',
             'CaseHearingAppealController' => 'Olcs\Controller\Cases\Hearing\HearingAppealController',
-            'CaseAppealController' =>
-                'Olcs\Controller\Cases\Hearing\AppealController',
+            'CaseAppealController' => 'Olcs\Controller\Cases\Hearing\AppealController',
             'CaseComplaintController' => 'Olcs\Controller\Cases\Complaint\ComplaintController',
             'CaseConvictionController' => 'Olcs\Controller\Cases\Conviction\ConvictionController',
             'CaseOffenceController' => 'Olcs\Controller\Cases\Conviction\OffenceController',
@@ -91,6 +90,7 @@ return array(
             'BusFeesController' => 'Olcs\Controller\Bus\Fees\BusFeesController',
             'BusFeesPlaceholderController' => 'Olcs\Controller\Bus\Fees\BusFeesPlaceholderController',
             'CaseProcessingController' => 'Olcs\Controller\Cases\Processing\ProcessingController',
+            'CaseNoteController' => 'Olcs\Controller\Cases\Processing\NoteController',
             'CaseDecisionsController' => 'Olcs\Controller\Cases\Processing\DecisionsController',
             'CaseRevokeController' => 'Olcs\Controller\Cases\Processing\RevokeController',
         )
