@@ -159,7 +159,7 @@ trait CaseControllerTrait
     }
 
     /**
-     * Set up markers as placeholder
+     * Calls CaseMarkers plugin to generate markers and return as placeholder
      */
     public function setupMarkers($case)
     {
