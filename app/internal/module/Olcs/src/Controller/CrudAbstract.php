@@ -85,6 +85,13 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     protected $placeholderName = null;
 
     /**
+     * Listdata
+     *
+     * @var null
+     */
+    protected $listData = null;
+
+    /**
      *
      * @param null $placeholderName
      */
@@ -103,6 +110,28 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
             return $this->getIdentifierName();
         }
         return $this->placeholderName;
+    }
+
+    /**
+     * Sets the listData property.
+     *
+     * @param $listData
+     * @return array
+     */
+    public function setListData($listData)
+    {
+        $this->listData = $listData;
+        return $this;
+    }
+
+    /**
+     * Returns the listData property.
+     *
+     * @return array
+     */
+    public function getListData()
+    {
+        return $this->listData;
     }
 
     /**
@@ -240,7 +269,14 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
 
     public function loadListData(array $params)
     {
-        return $this->makeRestCall($this->getService(), 'GET', $params, $this->getDataBundle());
+        $listData = $this->getListData();
+
+        if ($listData == null) {
+            $this->setListData($this->makeRestCall($this->getService(), 'GET', $params, $this->getDataBundle()));
+            $listData = $this->getListData();
+        }
+
+        return $listData;
     }
 
     public function getTableParams()
