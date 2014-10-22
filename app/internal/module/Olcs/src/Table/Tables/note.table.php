@@ -32,8 +32,12 @@ return array(
 
                 switch ($data['noteType']['id']) {
                     case 'note_t_bus':
-                        $route = 'licence/bus-processing/modify-note';
-                        $routeParams['busRegId'] = $data['busReg']['id'];
+                    $route = 'licence/bus-processing/modify-note';
+                    $routeParams['busRegId'] = $data['busReg']['id'];
+                    break;
+                    case 'note_t_case':
+                        $route = 'case_processing_notes';
+                        $routeParams['case'] = $data['case']['id'];
                         break;
                     default:
                         $route = 'licence/processing/modify-note';
