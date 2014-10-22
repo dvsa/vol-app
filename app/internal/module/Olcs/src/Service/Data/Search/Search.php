@@ -21,17 +21,25 @@ class Search extends AbstractData implements ServiceLocatorAwareInterface
      * @var string
      */
     protected $index;
+
     /**
      * @var array
      */
-    protected $params;
+    protected $search;
+
+    /**
+     * @var \ArrayObject
+     */
+    protected $query;
 
     /**
      * @param mixed $index
+     * @return $this
      */
     public function setIndex($index)
     {
         $this->index = $index;
+        return $this;
     }
 
     /**
@@ -43,19 +51,49 @@ class Search extends AbstractData implements ServiceLocatorAwareInterface
     }
 
     /**
-     * @param mixed $params
+     * @param mixed $search
+     * @return $this
      */
-    public function setParams($params)
+    public function setSearch($search)
     {
-        $this->params = $params;
+        $this->search = $search;
+        return $this;
     }
 
     /**
      * @return mixed
      */
-    public function getParams()
+    public function getSearch()
     {
-        return $this->params;
+        return $this->search;
+    }
+
+    /**
+     * @param \ArrayObject $query
+     * @return $this
+     */
+    public function setQuery($query)
+    {
+        $this->query = $query;
+        return $this;
+    }
+
+    /**
+     * @return \ArrayObject
+     */
+    public function getQuery()
+    {
+        return $this->query;
+    }
+
+    public function getLimit()
+    {
+        return ($this->getQuery() === null || empty($this->getQuery()->limit))? 10 : $this->getQuery()->limit;
+    }
+
+    public function getPage()
+    {
+        return ($this->getQuery() === null || empty($this->getQuery()->page))? 1 : $this->getQuery()->page;
     }
 
     /**
@@ -81,7 +119,13 @@ class Search extends AbstractData implements ServiceLocatorAwareInterface
      */
     public function fetchResults()
     {
-        return $this->getRestClient()->get(sprintf('/%s/%s', $this->getParams(), $this->getIndex()));
+        $query = [
+            'limit' => $this->getLimit(),
+            'page' => $this->getPage()
+        ];
+
+        $uri = sprintf('/%s/%s?%s', $this->getSearch(), $this->getIndex(), http_build_query($query));
+        return $this->getRestClient()->get($uri);
     }
 
     /**
@@ -94,7 +138,11 @@ class Search extends AbstractData implements ServiceLocatorAwareInterface
         return $tableBuilder->buildTable(
             $this->getDataClass()->getTableConfig(),
             $this->fetchResults(),
-            ['limit'=>10],
+            [
+                'query' => $this->getQuery(),
+                'limit' => $this->getLimit(),
+                'page' => $this->getPage()
+            ],
             false
         );
     }

@@ -30,39 +30,47 @@ class SearchController extends AbstractController
         //there are lots of params we are interested in:
         //filters, index, search query, page, limit
 
-        if ($this->getRequest()->isPost()) {
-            //a post request can come from two forms a) the filter form, b) the query form
+        //a post request can come from two forms a) the filter form, b) the query form
 
-            $search = trim($this->params()->fromPost('search'));
+        $search = trim($this->params()->fromPost('search'));
 
-            if (!empty($search)) {
-                $form = $this->getSearchForm();
-                $form->setData($this->params()->fromPost());
+        if (!empty($search)) {
+            $form = $this->getSearchForm();
+            $form->setData($this->params()->fromPost());
 
-                if ($form->isValid()) {
-                    //save to session, reset filters in session...
-                    //get index from post as well, override what is in the route match
-                    $data = $form->getData();
-                    $this->getEvent()->getRouteMatch()->setParam('index', $data['index']);
-                }
+            if ($form->isValid()) {
+                //save to session, reset filters in session...
+                //get index from post as well, override what is in the route match
+                $data = $form->getData();
+                $this->getEvent()->getRouteMatch()->setParam('index', $data['index']);
             }
         }
     }
 
     public function indexAction()
     {
-        $this->processSearchData();
-        $data = $this->getSearchForm()->getData();
+
+        $data = $this->getSearchForm()->getObject();
+        //override with get route index unless request is post
+        if ($this->getRequest()->isPost()) {
+            $this->processSearchData();
+        }
+
+        //update data with information from route, and rebind to form so that form data is correct
+        $data['index'] = $this->params()->fromRoute('index');
+        $this->getSearchForm()->setData($data);
 
         if (empty($data['search'])) {
-            return 'what do you want to find?';
+            $this->flashMessenger()->addErrorMessage('Please provide a search term');
+            return $this->redirectToRoute('dashboard');
         }
 
         /** @var \Olcs\Service\Data\Search\Search $searchService **/
         $searchService = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\Search\Search');
 
-        $searchService->setIndex($data['index']);
-        $searchService->setParams($data['search']);
+        $searchService->setQuery($this->getRequest()->getQuery())
+                      ->setIndex($data['index'])
+                      ->setSearch($data['search']);
 
         $view = new ViewModel();
 
