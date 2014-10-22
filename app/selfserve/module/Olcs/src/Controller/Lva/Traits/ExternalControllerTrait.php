@@ -19,6 +19,14 @@ use Common\View\Model\Section;
 trait ExternalControllerTrait
 {
     /**
+     * Redirect back to overview
+     */
+    protected function handleCancelRedirect($lvaId)
+    {
+        return $this->goToOverview($lvaId);
+    }
+
+    /**
      * Get current user
      *
      * @return array
@@ -56,6 +64,8 @@ trait ExternalControllerTrait
     /**
      * Check for redirect
      *
+     * @todo now this is a trait, we can't call parent due to sonar
+     *
      * @param int $lvaId
      * @return null|\Zend\Http\Response
      */
@@ -66,19 +76,6 @@ trait ExternalControllerTrait
         }
 
         return parent::checkForRedirect($lvaId);
-    }
-
-    /**
-     * Handle a redirect based on 'cancel' being clicked
-     * Declared separately so controllers can customise
-     * what cancel does
-     *
-     * @param int $lvaId
-     * @return null|\Zend\Http\Response
-     */
-    protected function handleCancelRedirect($lvaId)
-    {
-        return $this->goToOverview($lvaId);
     }
 
     /**

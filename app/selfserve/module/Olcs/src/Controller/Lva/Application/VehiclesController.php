@@ -10,6 +10,7 @@ namespace Olcs\Controller\Lva\Application;
 
 use Common\Controller\Lva;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
+use Common\Controller\Lva\Traits;
 
 /**
  * External Application Vehicles Controller
@@ -19,7 +20,9 @@ use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
  */
 class VehiclesController extends Lva\AbstractVehiclesController
 {
-    use ApplicationControllerTrait;
+    use ApplicationControllerTrait,
+        Traits\ApplicationVehiclesControllerTrait,
+        Traits\ExternalVehiclesControllerTrait;
 
     protected $lva = 'application';
     protected $location = 'external';
