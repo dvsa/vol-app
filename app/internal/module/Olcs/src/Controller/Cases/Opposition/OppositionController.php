@@ -89,7 +89,20 @@ class OppositionController extends OlcsController\CrudAbstract
         'children' => array(
             'application' => array(
                 'properties' => array(
-                    'id'
+                    'id',
+                    'receivedDate'
+                ),
+                'children' => array(
+                    'operatingCentres' => array(
+                        'properties' => array(
+                            'adPlacedDate'
+                        )
+                    )
+                )
+            ),
+            'oppositionType' => array(
+                'properties' => array(
+                    'description'
                 )
             ),
             'opposer' => array(
@@ -119,4 +132,59 @@ class OppositionController extends OlcsController\CrudAbstract
             )
         )
     );
+
+    public function indexAction()
+    {
+        $view = $this->getView([]);
+
+        $this->checkForCrudAction(null, [], $this->getIdentifierName());
+
+        $this->buildTableIntoView();
+
+        //we will already have list data
+        $listData = $this->getListData();
+
+        //operating centre is linked to the application so we only need to check the first one
+        if (isset($listData['Results'][0]['application']['operatingCentres'][0]['adPlacedDate'])) {
+            $operatingCentres = $listData['Results'][0]['application']['operatingCentres'];
+            rsort($operatingCentres);
+
+            $newspaperDate = $operatingCentres[0]['adPlacedDate'];
+            $receivedDate = $listData['Results'][0]['application']['receivedDate'];
+
+            $viewVars = $this->calculateDates($receivedDate, $newspaperDate);
+        } else {
+            $viewVars = [
+                'oooDate' => null,
+                'oorDate' => null
+            ];
+        }
+
+        $view->setVariables($viewVars);
+        $view->setTemplate('case/page/opposition');
+
+        return $this->renderView($view);
+    }
+
+    private function calculateDates($applicationDate, $newsPaperDate)
+    {
+        $appDateObj = new \DateTime($applicationDate);
+        $appDateObj->setTime(0, 0, 0); //is from a datetime db field - stop the time affecting the 21 day calculation
+        $newsDateObj = new \DateTime($newsPaperDate);
+
+        if ($appDateObj > $newsDateObj) {
+            $oorDate = null;
+        } else {
+            $newsDateObj->add(new \DateInterval('P21D'));
+
+            //we could format the date here but returning the date in ISO format
+            //allows us to format the date using the configured view helper
+            $oorDate = $newsDateObj->format(\DateTime::ISO8601);
+        }
+
+        return [
+            'oooDate' => null,
+            'oorDate' => $oorDate
+        ];
+    }
 }
