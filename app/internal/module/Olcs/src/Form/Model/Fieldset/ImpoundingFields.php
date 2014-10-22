@@ -93,7 +93,16 @@ class ImpoundingFields
      *          "context_field": "impoundingType",
      *          "context_values": {"impt_hearing"},
      *          "validators": {
-     *              {"name": "Date", "options": {"format": "Y-m-d H:i:s"}}
+     *              {"name": "Date", "options": {"format": "Y-m-d H:i:s"}},
+     *              {
+     *                  "name": "DateCompare",
+     *                  "options": {
+     *                      "compare_to":"applicationReceiptDate",
+     *                      "compare_to_label":"Application received",
+     *                      "operator": "lte",
+     *                      "has_time": true
+     *                  }
+     *              }
      *          }
      *      }
      * })
