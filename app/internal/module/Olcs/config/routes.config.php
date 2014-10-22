@@ -1063,15 +1063,17 @@ return array_merge(
                 ]
             ]
         ],
-        'processing_notes' => [
+        'case_processing_notes' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/case/:case/processing/notes[/:action]',
+                'route' => '/case/:case/processing/notes[/:action][/:id]',
                 'constraints' => [
-                    'action' => '(index|add|edit|details|overview)'
+                    'action' => '(index|add|edit|)',
+                    'case' => '[0-9]+',
+                    'id' => '[0-9]+'
                 ],
                 'defaults' => [
-                    'controller' => 'CaseNotesController',
+                    'controller' => 'CaseNoteController',
                     'action' => 'index'
                 ]
             ]

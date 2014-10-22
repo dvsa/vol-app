@@ -258,9 +258,25 @@ return array(
                         array(
                             'id' => 'case_processing_notes',
                             'label' => 'Notes',
-                            'route' => 'processing_notes',
-                            'action' => 'redirect',
+                            'route' => 'case_processing_notes',
+                            'action' => 'index',
                             'use_route_match' => true,
+                            'pages' => array(
+                                array(
+                                    'id' => 'case_processing_notes_add',
+                                    'label' => 'Add note',
+                                    'route' => 'case_processing_notes',
+                                    'action' => 'add',
+
+                                ),
+                                array(
+                                    'id' => 'case_processing_notes_edit',
+                                    'label' => 'Edit note',
+                                    'route' => 'case_processing_notes',
+                                    'action' => 'edit',
+
+                                )
+                            )
                         ),
                     )
                 )
