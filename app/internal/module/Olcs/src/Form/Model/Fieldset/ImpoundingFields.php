@@ -99,7 +99,7 @@ class ImpoundingFields
      *                  "options": {
      *                      "compare_to":"applicationReceiptDate",
      *                      "compare_to_label":"Application received",
-     *                      "operator": "lte",
+     *                      "operator": "gte",
      *                      "has_time": true
      *                  }
      *              }
