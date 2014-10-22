@@ -26,6 +26,11 @@ class DiscPrintingController extends AbstractController
     const DISCS_ON_PAGE = 6;
 
     /**
+     * Discs on page
+     */
+    const OPERATOR_TYPE_PSV = 'lcat_psv';
+
+    /**
      * Index action
      *
      * @return Zend\ViewModel\ViewModel
@@ -68,16 +73,24 @@ class DiscPrintingController extends AbstractController
         $discPrefix = $discSequenceService->getDiscPrefix($params['discSequence'], $params['licenceType']);
 
         // get discs to print
-        $goodsDiscService = $this->getServiceLocator()->get('Admin\Service\Data\GoodsDisc');
-        $discsToPrint = $goodsDiscService->getDiscsToPrint(
-            $params['niFlag'],
-            $params['operatorType'],
-            $params['licenceType'],
-            $discPrefix
-        );
+        if ($params['niFlag'] == 'N' && $params['operatorType'] == self::OPERATOR_TYPE_PSV) {
+            $discService = $this->getServiceLocator()->get('Admin\Service\Data\PsvDisc');
+            $discsToPrint = $discService->getDiscsToPrint(
+                $params['licenceType'],
+                $discPrefix
+            );
+        } else {
+            $discService = $this->getServiceLocator()->get('Admin\Service\Data\GoodsDisc');
+            $discsToPrint = $discService->getDiscsToPrint(
+                $params['niFlag'],
+                $params['operatorType'],
+                $params['licenceType'],
+                $discPrefix
+            );
+        }
 
         // set printing status ON
-        $goodsDiscService->setIsPrintingOn($discsToPrint);
+        $discService->setIsPrintingOn($discsToPrint);
 
     }
 
@@ -221,13 +234,20 @@ class DiscPrintingController extends AbstractController
             return $retv;
         }
         $discSequenceService = $this->getServiceLocator()->get('Admin\Service\Data\DiscSequence');
-        $goodsDiscService = $this->getServiceLocator()->get('Admin\Service\Data\GoodsDisc');
 
         // calculate start and end numbers, number of pages
         $retv['startNumber'] = $discSequenceService->getDiscNumber($discSequence, $licenceType);
-        $retv['discsToPrint'] = count(
-            $goodsDiscService->getDiscsToPrint($niFlag, $operatorType, $licenceType, $discPrefix)
-        );
+        if ($niFlag == 'N' && $operatorType == self::OPERATOR_TYPE_PSV) {
+            $psvDiscService = $this->getServiceLocator()->get('Admin\Service\Data\PsvDisc');
+            $retv['discsToPrint'] = count(
+                $psvDiscService->getDiscsToPrint($licenceType, $discPrefix)
+            );
+        } else {
+            $goodsDiscService = $this->getServiceLocator()->get('Admin\Service\Data\GoodsDisc');
+            $retv['discsToPrint'] = count(
+                $goodsDiscService->getDiscsToPrint($niFlag, $operatorType, $licenceType, $discPrefix)
+            );
+        }
         $retv['endNumber'] = (int) ($retv['discsToPrint'] ? $retv['startNumber'] + $retv['discsToPrint'] : 0);
         /*
          * we have two end numbers, one original, which calculated based on start number entered by user
@@ -341,23 +361,31 @@ class DiscPrintingController extends AbstractController
         $params = $this->getFlattenParams();
         $retv = [];
         $discSequenceService = $this->getServiceLocator()->get('Admin\Service\Data\DiscSequence');
-        $goodsDiscService = $this->getServiceLocator()->get('Admin\Service\Data\GoodsDisc');
-        $discsToPrint = $goodsDiscService->getDiscsToPrint(
-            $params['niFlag'],
-            $params['operatorType'],
-            $params['licenceType'],
-            $params['discPrefix']
-        );
+        if ($params['niFlag'] == 'N' && $params['operatorType'] == self::OPERATOR_TYPE_PSV) {
+            $discService = $this->getServiceLocator()->get('Admin\Service\Data\PsvDisc');
+            $discsToPrint = $discService->getDiscsToPrint(
+                $params['licenceType'],
+                $params['discPrefix']
+            );
+        } else {
+            $discService = $this->getServiceLocator()->get('Admin\Service\Data\GoodsDisc');
+            $discsToPrint = $discService->getDiscsToPrint(
+                $params['niFlag'],
+                $params['operatorType'],
+                $params['licenceType'],
+                $params['discPrefix']
+            );
+        }
         try {
             if ($params['isSuccessfull']) {
-                $goodsDiscService->setIsPrintingOffAndAssignNumber($discsToPrint, $params['startNumber']);
+                $discService->setIsPrintingOffAndAssignNumber($discsToPrint, $params['startNumber']);
                 $discSequenceService->setNewStartNumber(
                     $params['licenceType'],
                     $params['discSequence'],
                     $params['endNumber'] + 1
                 );
             } else {
-                $goodsDiscService->setIsPrintingOff($discsToPrint);
+                $discService->setIsPrintingOff($discsToPrint);
             }
         } catch (\Exception $e) {
             $retv['status'] = 500;

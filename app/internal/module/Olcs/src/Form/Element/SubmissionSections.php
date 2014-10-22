@@ -45,6 +45,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
     protected $submissionTypeSubmit;
 
     /**
+     * Set submission type
      * @param \Common\Form\Elements\Custom\Select $submissionType
      *
      * @return $this
@@ -56,6 +57,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
     }
 
     /**
+     * Get submission type
      * @return \Common\Form\Elements\Custom\Select
      */
     public function getSubmissionType()
@@ -64,6 +66,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
     }
 
     /**
+     * Set sections
      * @param Array $sections
      *
      * @return $this
@@ -75,6 +78,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
     }
 
     /**
+     * Get sections from element
      * @return Array
      */
     public function getSections()
@@ -141,6 +145,8 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
             } else {
                 if (isset($value['submissionTypeSubmit'])) {
                     $sections = $this->getPreselectedSectionsForType($value['submissionType']);
+                    $this->addCssToDifference($value['sections'], $sections);
+
                 } else {
                     // type not submitted
                     $sections = $value['sections'];
@@ -151,6 +157,24 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
         $this->getSections()->setValue($sections);
 
         return $this;
+    }
+
+    /**
+     * Adds a class to highlight those options which were originally selected but not included in a new submission
+     * type, when one is posted.
+     *
+     * @param array $postedSections
+     * @param array $newDefaultSections
+     */
+    public function addCssToDifference($postedSections = array(), $newDefaultSections = array())
+    {
+        $allSections = $this->getSections()->getValueOptions();
+        foreach ($allSections as $key => $title) {
+            if (in_array($key, $postedSections) && !in_array($key, $newDefaultSections)) {
+                $allSections[$key] = ['label' => $title, 'label_attributes' => ['class' => 'pre-selected']];
+            }
+        }
+        $this->getSections()->setValueOptions($allSections);
     }
 
     /**
@@ -179,6 +203,11 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                             ];
                         }
                     )
+                )
+            ),
+            'validators' => array(
+                array(
+                    'name' => 'Olcs\Validator\SubmissionSection'
                 )
             )
         );

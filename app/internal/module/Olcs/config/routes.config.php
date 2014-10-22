@@ -964,10 +964,27 @@ return array_merge(
                 'constraints' => [
                     'case' => '[0-9]+',
                     'submission' => '[0-9]+',
+                    'action' => '(index|add|edit|details)'
                 ],
                 'defaults' => [
                     'controller' => 'CaseSubmissionController',
                     'action' => 'index'
+                ]
+            ]
+        ],
+        'submission_section_comment' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/case/:case/submission/[:submission]/section/:submissionSection/comment/:action[/:id]',
+                'constraints' => [
+                    'case' => '[0-9]+',
+                    'action' => '(add|edit)',
+                    'submission' => '[0-9]+',
+                    'submissionSection' => '[a-z\-]+',
+                    'id' => '[0-9]+',
+                ],
+                'defaults' => [
+                    'controller' => 'CaseSubmissionSectionCommentController',
                 ]
             ]
         ],

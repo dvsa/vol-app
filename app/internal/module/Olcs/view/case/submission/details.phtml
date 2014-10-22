@@ -11,7 +11,20 @@ foreach ($allSections as $sectionId => $sectionDescription) {
     if (in_array($sectionId, $selectedIds))
     {
         $key = array_search($sectionId, $selectedIds);
-        $freetext .= $this->submissionSectionDetails($selectedSectionsArray[$key]['sectionId'], $selectedSectionsArray[$key]);
+
+        $freetext .= $this->submissionSectionDetails(
+            $selectedSectionsArray[$key]['sectionId'],
+            $selectedSectionsArray[$key]
+        );
+        if (isset($submissionConfig[$sectionId]['editable']) && $submissionConfig[$sectionId]['editable']) {
+            $freetext .= $this->partial('case/submission/partials/comments',
+                [
+                    'section' => $selectedSectionsArray[$key],
+                    'caseId' => $case['id'],
+                    'submissionId' => $submission['id']
+                ]
+            );
+        }
     }
 }
 

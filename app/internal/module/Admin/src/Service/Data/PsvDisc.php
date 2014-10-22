@@ -1,6 +1,6 @@
 <?php
 /**
- * Goods Disc Service
+ * PSV Disc Service
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
@@ -12,22 +12,27 @@ use Common\Service\Data\AbstractData;
 /**
  * Service to get / update disk to print
  *
- * Class GoodsDisc
+ * Class PsvDisc
  * @package Admin\Service
  */
-class GoodsDisc extends AbstractData
+class PsvDisc extends AbstractData
 {
     /**
      * Service name
      *
      * @var string
      */
-    protected $serviceName = 'GoodsDisc';
+    protected $serviceName = 'PsvDisc';
 
     /**
      * Northern Ireland traffic area code
      */
     const NI_TRAFFIC_AREA_CODE = 'N';
+
+    /**
+     * Operator Type PSV
+     */
+    const OPERSTOR_TYPE_PSV = 'lcat_psv';
 
     /**
      * Default page size for rest call
@@ -37,20 +42,12 @@ class GoodsDisc extends AbstractData
     /**
      * Get Discs To Print Number
      *
-     * @param string $niFlag
-     * @param string $operatorType
      * @param string $licenceType
      * @param string $discPrefix
      * @return int
      */
-    public function getDiscsToPrint($niFlag = '', $operatorType = '', $licenceType = '', $discPrefix = '')
+    public function getDiscsToPrint($licenceType = '', $discPrefix = '')
     {
-        if (!$niFlag) {
-            throw new \Exception('Error getting discs to print number - no operator location provided');
-        }
-        if (!$operatorType && $niFlag == 'N') {
-            throw new \Exception('Error getting discs to print number - no operator type provided');
-        }
         if (!$licenceType) {
             throw new \Exception('Error getting discs to print number - no licence type provided');
         }
@@ -83,26 +80,15 @@ class GoodsDisc extends AbstractData
             // filter discs using provided parameters
             if (is_array($results['Results']) && count($results['Results'])) {
                 foreach ($results['Results'] as $result) {
-                    // for NI licences we don't check operator type
-                    if ($niFlag == 'Y' && isset($result['licenceVehicle']['licence']['niFlag']) &&
-                        $result['licenceVehicle']['licence']['niFlag'] == 'Y' &&
-                        isset($result['licenceVehicle']['licence']['licenceType']['id']) &&
-                        $result['licenceVehicle']['licence']['licenceType']['id'] == $licenceType &&
-                        isset($result['licenceVehicle']['licence']['trafficArea']['id']) &&
-                        $result['licenceVehicle']['licence']['trafficArea']['id'] == self::NI_TRAFFIC_AREA_CODE &&
-                        is_array($result['licenceVehicle']['vehicle'])) {
-                        $discsToPrint[] = $result;
-                         // for non-NI licences we should check operator type as well
-                    } elseif ($niFlag == 'N' && isset($result['licenceVehicle']['licence']['niFlag']) &&
-                        $result['licenceVehicle']['licence']['niFlag'] == 'N' &&
-                        isset($result['licenceVehicle']['licence']['goodsOrPsv']['id']) &&
-                        $result['licenceVehicle']['licence']['goodsOrPsv']['id'] == $operatorType &&
-                        isset($result['licenceVehicle']['licence']['licenceType']['id']) &&
-                        $result['licenceVehicle']['licence']['licenceType']['id'] == $licenceType &&
-                          // neet to pick up discs from all traffic areas apart from NI
-                        isset($result['licenceVehicle']['licence']['trafficArea']['id']) &&
-                        $result['licenceVehicle']['licence']['trafficArea']['id'] !== self::NI_TRAFFIC_AREA_CODE &&
-                        is_array($result['licenceVehicle']['vehicle'])) {
+                    if (isset($result['licence']['niFlag']) &&
+                        ($result['licence']['niFlag'] == 'N') &&
+                        isset($result['licence']['licenceType']['id']) &&
+                        $result['licence']['licenceType']['id'] == $licenceType &&
+                        isset($result['licence']['trafficArea']['id']) &&
+                        $result['licence']['trafficArea']['id'] !== self::NI_TRAFFIC_AREA_CODE &&
+                        isset($result['licence']['goodsOrPsv']['id']) &&
+                        $result['licence']['goodsOrPsv']['id'] == self::OPERSTOR_TYPE_PSV
+                        ) {
                         $discsToPrint[] = $result;
                     }
                 }
@@ -144,7 +130,7 @@ class GoodsDisc extends AbstractData
     }
 
     /**
-     * Update goods discs
+     * Update psv discs
      *
      * @param array $discs
      * @param array $data
@@ -174,29 +160,18 @@ class GoodsDisc extends AbstractData
         $bundle = [
             'properties' => ['id', 'version'],
             'children' => [
-                'licenceVehicle' => [
-                    'properties' => ['id'],
+                'licence' => [
+                    'properties' => ['id', 'niFlag'],
                     'children' => [
-                        'licence' => [
-                            'properties' => ['id', 'niFlag'],
-                            'children' => [
-                                'goodsOrPsv' => [
-                                    'properties' => ['id']
-                                ],
-                                'licenceType' => [
-                                    'properties' => ['id']
-                                ],
-                                'trafficArea' => [
-                                    'properties' => ['id']
-                                ],
-                            ]
+                        'goodsOrPsv' => [
+                            'properties' => ['id']
                         ],
-                        'vehicle' => [
-                            'properties' => [
-                                'id',
-                                'deletedDate'
-                            ]
-                        ]
+                        'licenceType' => [
+                            'properties' => ['id']
+                        ],
+                        'trafficArea' => [
+                            'properties' => ['id']
+                        ],
                     ]
                 ],
             ]

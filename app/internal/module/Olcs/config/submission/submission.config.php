@@ -2,8 +2,10 @@
 return array(
     'sections' => array(
         'introduction' => array(
+            'editable' => false
         ),
         'case-summary' => array(
+            'editable' => false,
             'service' => 'Cases',
             'bundle' => array(
                 'properties' => 'ALL',
@@ -72,9 +74,81 @@ return array(
             )
         ),
         'case-outline' => array(
+            'editable' => false,
             'bundle' => 'case-summary'
         ),
+        'most-serious-infringement'   => array(
+            'editable' => true,
+        ),
+        'persons' => array(
+            'editable' => false,
+            'bundle' => 'case-summary'
+        ),
+        'operating-centres'   => array(
+            'editable' => true,
+        ),
+        'conditions-and-undertakings'   => array(
+            'editable' => true,
+        ),
+        'intelligence-unit-check'   => array(
+            'editable' => true,
+        ),
+        'interim'   => array(
+            'editable' => true,
+        ),
+        'advertisement'   => array(
+            'editable' => true,
+        ),
+        'linked-licences-app-numbers'   => array(
+            'editable' => true,
+        ),
+        'lead-tc-area'   => array(
+            'editable' => true,
+        ),
+        'current-submissions'   => array(
+            'editable' => true,
+        ),
+        'auth-requested-applied-for'   => array(
+            'editable' => true,
+        ),
+        'transport-managers'   => array(
+            'editable' => true,
+        ),
+        'continuous-effective-control'   => array(
+            'editable' => true,
+        ),
+        'fitness-repute'   => array(
+            'editable' => true,
+        ),
+        'previous-history'   => array(
+            'editable' => true,
+        ),
+        'bus-reg-app-details'   => array(
+            'editable' => true,
+        ),
+        'transport-authority-comments'   => array(
+            'editable' => true,
+        ),
+        'total-bus-registrations'   => array(
+            'editable' => true,
+        ),
+        'local-licence-history'   => array(
+            'editable' => true,
+        ),
+        'linked-mlh-history'   => array(
+            'editable' => true,
+        ),
+        'registration-details'   => array(
+            'editable' => true,
+        ),
+        'maintenance-tachographs-hours'   => array(
+            'editable' => true,
+        ),
+        'prohibition-history'   => array(
+            'editable' => true,
+        ),
         'conviction-fpn-offence-history' => array(
+            'editable' => true,
             'service' => 'Cases',
             'bundle' => array(
                 'properties' => 'ALL',
@@ -99,125 +173,50 @@ return array(
                 )
             )
         ),
-        'old-case-summary' => array(
-            'view' => 'submission/partials/case-summary',
-            'dataPath' => 'Cases',
-            'bundle' => array(
-                'children' => array(
-                    'submissionSections' => array(
-                        'properties' => array(
-                            'id',
-                            'description'
-                        )
-                    ),
-                    'convictions' => array(
-                        'properties' => 'ALL',
-                        'children' => array(
-                            'category' => array(
-                                'properties' => array(
-                                    'id',
-                                    'description'
-                                )
-                            )
-                        )
-                    ),
-                    'licence' => array(
-                        'properties' => 'ALL',
-                        'children' => array(
-                            'licenceType' => array(
-                                'properties' => array('id')
-                            ),
-                            'trafficArea' => array(
-                                'properties' => 'ALL'
-                            ),
-                            'organisation' => array(
-                                'properties' => 'ALL',
-                                'children' => array(
-                                    'type' => array(
-                                        'properties' => array('id')
-                                    ),
-                                    'sicCode' => array(
-                                        'properties' => array('id')
-                                    ),
-                                    'organisationPersons' => array(
-                                        'properties' => 'ALL',
-                                        'children' => array(
-                                            'person' => array(
-                                                'properties' => 'ALL'
-                                            )
-                                        )
-                                    )
-                                )
-                            ),
-                            'transportManagerLicences' => array(
-                                'properties' => 'ALL',
-                                'children' => array(
-                                    'transportManager' => array(
-                                        'properties' => 'ALL',
-                                        'children' => array(
-                                            'qualifications' => array(
-                                                'properties' => 'ALL'
-                                            ),
-                                            'contactDetails' => array(
-                                                'properties' => 'ALL',
-                                                'children' => array(
-                                                    'person' => array(
-                                                        'properties' => 'ALL'
-                                                    )
-                                                )
-                                            )
-                                        )
-                                    )
-                                )
-                            )
-                        )
-                    )
-                )
-            )
+        'penalties'   => array(
+            'editable' => true,
         ),
-        'persons' => array(
-            'bundle' => 'case-summary'
+        'other-issues'   => array(
+            'editable' => true,
         ),
-        'transport-managers' => array(
-            'view' => 'submission/partials/transport-managers',
-            'exclude' => array(
-                'column' => 'licenceType/id',
-                'values' => array(
-                    'standard national',
-                    'standard international'
-                )
-            )
+        'te-reports'   => array(
+            'editable' => true,
         ),
-        'outstanding-applications' => null,
-        'objections' => null,
-        'representations' => null,
-        'complaints' => null,
-        'environmental' => null,
-        'previous-history' => null,
-        'operating-centre' => null,
-        'conditions' => null,
-        'undertakings' => null,
-        'annual-test-history' => null,
-        'prohibition-history' => null,
-        'conviction-history' => array(
-            'view' => 'submission/partials/conviction-history',
+        'site-plans'   => array(
+            'editable' => true,
         ),
-        'bus-services-registered' => array(
-            'exclude' => array(
-                'column' => 'goodsOrPsv/id',
-                'values' => array(
-                    'psv',
-                )
-            )
+        'planning-permission'   => array(
+            'editable' => true,
         ),
-        'bus-compliance-issues' => array(
-            'exclude' => array(
-                'column' => 'goodsOrPsv/id',
-                'values' => array(
-                    'psv',
-                )
-            )
+        'applicants-comments'   => array(
+            'editable' => true,
         ),
-        'current-submission' => null
+        'visibility-access-egress-size'   => array(
+            'editable' => true,
+        ),
+        'compliance-complaints'   => array(
+            'editable' => true,
+        ),
+        'environmental-complaints'   => array(
+            'editable' => true,
+        ),
+        'oppositions'   => array(
+            'editable' => true,
+        ),
+        'financial-information'   => array(
+            'editable' => true,
+        ),
+        'maps'   => array(
+            'editable' => true,
+        ),
+        'waive-fee-late-fee'   => array(
+            'editable' => true,
+        ),
+        'surrender'   => array(
+            'editable' => true,
+        ),
+        'annex'   => array(
+            'editable' => true,
+        )
     )
 );

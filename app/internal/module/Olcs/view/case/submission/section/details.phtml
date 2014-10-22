@@ -6,17 +6,6 @@ if ($this->data['sectionId'] !== 'submission_section_intr') {
     echo $this->render('partials/read-only/main',
         [
             'header' => (isset($this->data['description']) ? $this->data['description'] : ''),
-            'actions' => [
-                [
-                    'label' => 'Edit section',
-                    'url' => $this->url(
-                        'submission', [
-                            'case' => $case['id'],
-                            'action' => 'edit'
-                        ]
-                    )
-                ],
-            ]
         ]
     );
 }
