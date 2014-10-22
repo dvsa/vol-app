@@ -182,7 +182,11 @@ return array(
     'form_elements' =>[
         'factories' => [
             'PublicInquiryReason' => 'Olcs\Form\Element\PublicInquiryReasonFactory',
-            'SubmissionSections' => 'Olcs\Form\Element\SubmissionSectionsFactory'
+            'SubmissionSections' => 'Olcs\Form\Element\SubmissionSectionsFactory',
+            'Olcs\Form\Element\SlaDateSelect' => 'Olcs\Form\Element\SlaDateSelectFactory'
+        ],
+        'aliases' => [
+            'SlaDateSelect' => 'Olcs\Form\Element\SlaDateSelect'
         ]
     ]
 
