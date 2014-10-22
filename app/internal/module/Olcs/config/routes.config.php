@@ -963,21 +963,6 @@ return array_merge(
                 ]
             ]
         ],
-        'submission_section' => [
-            'type' => 'segment',
-            'options' => [
-                'route' => '/case/:case/submission/[:submission]/section/:submissionSection/:action',
-                'constraints' => [
-                    'case' => '[0-9]+',
-                    'action' => '(edit)',
-                    'submission' => '[0-9]+',
-                    'submissionSection' => '[a-z\-]+'
-                ],
-                'defaults' => [
-                    'controller' => 'CaseSubmissionSectionController',
-                ]
-            ]
-        ],
         'submission_section_comment' => [
             'type' => 'segment',
             'options' => [
