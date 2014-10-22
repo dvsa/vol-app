@@ -8,6 +8,7 @@ namespace Olcs\Form\Element;
 use Zend\Form\Element\DateSelect as ZendDateSelect;
 use Common\Service\Data\Sla as SlaService;
 use Zend\Form\Form as ZendForm;
+use Zend\Form\FormInterface as ZendFormInterface;
 
 /**
  * SlaDateSelect
@@ -42,30 +43,32 @@ class SlaDateSelect extends ZendDateSelect
     /**
      * Prepare the form element (mostly used for rendering purposes)
      *
-     * @param  FormInterface $form
+     * @param  ZendFormInterface $form
      * @return mixed
      */
-    public function prepareElement(FormInterface $form)
+    public function prepareElement(ZendFormInterface $form)
     {
         parent::prepareElement($form);
 
-        // our bit
+        $this->setHintFromSla($form);
     }
 
+    /**
+     *
+     * @param ZendForm $form
+     */
     public function setHintFromSla(ZendForm $form)
     {
-        $contextData = $form->getInputFilter()->getRawValues();
-
         try {
-            $date = $this->getSlaService()->getTargetDate($this->getOption('category'), $this->getName(), $contextData);
+            $date = $this->getSlaService()->getTargetDate($this->getOption('category'), $this->getOption('field'));
 
             $hint = 'Target date: ' . date('d/m/Y', strtotime($date));
+
         } catch (\LogicException $e) {
 
-            $hint = 'There was no target date found'
+            $hint = 'There was no target date found';
         }
 
-
-        $this->setOption('hint', $value)
+        $this->setOption('hint', $hint);
     }
 }
