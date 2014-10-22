@@ -1,7 +1,7 @@
 <?php
 
 $case = $this->placeholder('case')->getValue();
-$categories = is_array($case['submissionSections']) ?
+$categories = isset($case['submissionSections']) ?
     implode(', ', array_map(function($item){return $item['description'];}, $case['submissionSections'])) :
     'None selected';
 
