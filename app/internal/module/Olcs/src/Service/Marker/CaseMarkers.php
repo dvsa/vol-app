@@ -132,7 +132,7 @@ class CaseMarkers extends AbstractData
         $case = $this->getCase();
         return [
             'stayData' => $case['stays'],
-            'appealData' => $case['appeals'],
+            'appealData' => $case['appeals'][0],
         ];
     }
 
@@ -158,7 +158,6 @@ class CaseMarkers extends AbstractData
      */
     private function generateStayMarkers($data)
     {
-
         if ((!empty($data['appealData']['decisionDate']) &&
             !empty($data['appealData']['outcome'])
             ) ||
