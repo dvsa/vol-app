@@ -69,7 +69,7 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
             [
                 'get', 'setValue', 'setValueOptions',
                 'remove', 'setData', 'isValid',
-                'getData', 'add'
+                'getData', 'add', 'bind'
             ]
         );
 
