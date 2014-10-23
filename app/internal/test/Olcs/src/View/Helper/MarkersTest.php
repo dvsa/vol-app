@@ -22,7 +22,12 @@ class MarkersTest extends \PHPUnit_Framework_TestCase
         $result = $sut($input['markers'], $input['type']);
         if (isset($expected['count']) && $expected['count'] == 0) {
             $this->assertEquals($result, '');
-        } elseif(isset($expected['contains'])) {
+        } else {
+            // count individual markers
+            $this->assertEquals($expected['count'], substr_count($result, 'notice--warning'));
+        }
+
+        if(isset($expected['contains'])) {
             $this->assertContains($expected['contains'], $result);
         }
     }
@@ -49,6 +54,20 @@ class MarkersTest extends \PHPUnit_Framework_TestCase
                     'type' => 'sometype'
                 ],
                 ['count' => 1, 'contains' => 'foo'],
+            ],
+            [
+                [
+                    'markers' =>
+                        ['sometype' =>
+                            [
+                                0 => ['content' => 'bar'],
+                                1 => ['content' => 'bar'],
+                                2 => ['content' => 'bar']
+                            ]
+                        ],
+                    'type' => 'sometype'
+                ],
+                ['count' => 3, 'contains' => 'bar'],
             ]
         ];
     }
