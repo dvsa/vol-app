@@ -6,6 +6,10 @@ namespace Olcs\Service\Marker;
 use \Zend\ServiceManager\AbstractPluginManager;
 use Zend\ServiceManager\Exception;
 
+/**
+ * Class MarkerPluginManager test
+ * @package Olcs\Service\Marker
+ */
 class MarkerPluginManager extends AbstractPluginManager
 {
     /**
@@ -22,4 +26,4 @@ class MarkerPluginManager extends AbstractPluginManager
     {
         return true;
     }
-} 
+}

@@ -103,21 +103,23 @@ class CaseMarkers extends AbstractData
      */
     public function generateMarkerTypes($markerTypes, $data)
     {
-        if (isset($data['case'])) $this->setCase($data['case']);
+        if (isset($data['case'])) {
+            $this->setCase($data['case']);
+        }
 
         if (is_array($markerTypes)) {
-           foreach ($markerTypes as $type) {
-               if (empty($this->getTypeMarkers($type)) && !empty($this->getCase())) {
-                   $generateMethod = 'generate' . ucfirst($type) . 'Markers';
-                   $dataMethod = 'get' . ucfirst($type) . 'MarkerData';
+            foreach ($markerTypes as $type) {
+                if (empty($this->getTypeMarkers($type)) && !empty($this->getCase())) {
+                    $generateMethod = 'generate' . ucfirst($type) . 'Markers';
+                    $dataMethod = 'get' . ucfirst($type) . 'MarkerData';
 
-                   if (method_exists($this, $dataMethod) && method_exists($this, $generateMethod)) {
-                       $data = $this->$dataMethod();
-                       $markers = $this->$generateMethod($data);
-                       $this->setTypeMarkers($type, $markers);
-                   }
-               }
-           }
+                    if (method_exists($this, $dataMethod) && method_exists($this, $generateMethod)) {
+                        $data = $this->$dataMethod();
+                        $markers = $this->$generateMethod($data);
+                        $this->setTypeMarkers($type, $markers);
+                    }
+                }
+            }
         }
         return $this->getMarkers();
     }
@@ -154,7 +156,7 @@ class CaseMarkers extends AbstractData
 
         $markers = [];
         if (!empty($data['stayData']) && !empty($data['appealData'])) {
-            for ($i=0;$i<count($data['stayData']);$i++) {
+            for ($i=0; $i<count($data['stayData']); $i++) {
                 $stay = $data['stayData'][$i];
                 if (empty($stay['withdrawnDate'])) {
                     $markers[$i]['content'] = $this->generateStayMarkerContent($stay);

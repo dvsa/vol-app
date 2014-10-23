@@ -138,7 +138,8 @@ class CaseMarkersTest extends \PHPUnit_Framework_TestCase
                         'case' => [
                             'id' => 1,
                             'stays' => $this->generateStayData(3),
-                            'appeals' => [0 => $this->getAppealData(
+                            'appeals' => [
+                                0 => $this->getAppealData(
                                     ['withdrawnDate' => '2000-01-01 00:00:00']
                                 )
                             ],
@@ -157,11 +158,11 @@ class CaseMarkersTest extends \PHPUnit_Framework_TestCase
                             'id' => 1,
                             'stays' => $this->generateStayData(3),
                             'appeals' => [0 => $this->getAppealData(
-                                    [
-                                        'outcome' => 'test',
-                                        'decisionDate' => 'test'
-                                    ]
-                                )
+                                [
+                                    'outcome' => 'test',
+                                    'decisionDate' => 'test'
+                                ]
+                            )
                             ],
                         ]
                     ]
@@ -175,7 +176,7 @@ class CaseMarkersTest extends \PHPUnit_Framework_TestCase
     private function generateStayData($howMany, $override = array())
     {
         $stayData = [];
-        for ($i=0;$i<$howMany; $i++) {
+        for ($i=0; $i<$howMany; $i++) {
             $stayData[] = [
                 'withdrawnDate' => isset($override['withdrawnDate']) ? $override['withdrawnDate'] : '',
                 'outcome' => isset($override['outcome']) ? $override['outcome'] : '',

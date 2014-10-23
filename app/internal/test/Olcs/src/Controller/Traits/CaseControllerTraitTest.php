@@ -217,11 +217,13 @@ class CaseControllerTraitTest extends \PHPUnit_Framework_TestCase
         $mpm = $this->getMock('Olcs\Service\Marker\MarkerPluginManager', ['get']);
         $cm = $this->getMock('Olcs\Service\Marker\CaseMarkers', ['generateMarkerTypes']);
 
-        $cm->expects($this->any())->method('generateMarkerTypes')->with(['stay',
-            'appeal'])->will($this->returnValue($markers));
+        $cm->expects($this->any())->method('generateMarkerTypes')->with(
+            ['stay', 'appeal']
+        )->will($this->returnValue($markers));
 
-        $mpm->expects($this->any())->method('get')->with('Olcs\Service\Marker\CaseMarkers')->will($this->returnValue
-            ($cm));
+        $mpm->expects($this->any())->method('get')->with('Olcs\Service\Marker\CaseMarkers')->will(
+            $this->returnValue($cm)
+        );
 
         $sl->expects($this->once())->method('get')->with('Olcs\Service\Marker\MarkerPluginManager')
             ->will($this->returnValue($mpm));

@@ -27,7 +27,7 @@ class MarkersTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals($expected['count'], substr_count($result, 'notice--warning'));
         }
 
-        if(isset($expected['contains'])) {
+        if (isset($expected['contains'])) {
             $this->assertContains($expected['contains'], $result);
         }
     }

@@ -1,6 +1,7 @@
 <?php
 
 namespace OlcsTest\Service\Marker;
+
 use Olcs\Service\Marker\MarkerPluginManager;
 
 /**
