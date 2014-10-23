@@ -541,7 +541,13 @@ return array(
                                     )
                                 )
                             )
-                        )
+                        ),
+                        array(
+                            'id' => 'licence_fees',
+                            'label' => 'Fees',
+                            'route' => 'licence/fees',
+                            'use_route_match' => true
+                        ),
                     )
                 )
             )
@@ -586,7 +592,7 @@ return array(
                 array(
                     'id' => 'application_fee',
                     'label' => 'Fees',
-                    'route' => 'Application/fee',
+                    'route' => 'Application/fees',
                     'use_route_match' => true
                 ),
             )
