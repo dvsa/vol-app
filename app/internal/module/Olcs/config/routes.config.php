@@ -710,6 +710,23 @@ return array_merge(
                 ]
             ]
         ],
+        'case_opposition' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/case/:case/application[/:application]/opposition[/:action][/:opposition]',
+                'constraints' => [
+                    'case' => '[0-9]+',
+                    'application' => '[0-9]+',
+                    'action' => '[a-z]+',
+                    'opposition' => '[0-9]+'
+                ],
+                'defaults' => [
+                    'controller' => 'CaseOppositionController',
+                    'action' => 'index',
+
+                ]
+            ]
+        ],
         'case_statement' => [
             'type' => 'segment',
             'options' => [

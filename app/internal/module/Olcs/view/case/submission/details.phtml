@@ -16,7 +16,7 @@ foreach ($allSections as $sectionId => $sectionDescription) {
             $selectedSectionsArray[$key]['sectionId'],
             $selectedSectionsArray[$key]
         );
-        if (isset($submissionConfig[$sectionId]['editable']) && $submissionConfig[$sectionId]['editable']) {
+        if (isset($submissionConfig[$sectionId]['allow_comments']) && $submissionConfig[$sectionId]['allow_comments']) {
             $freetext .= $this->partial('case/submission/partials/comments',
                 [
                     'section' => $selectedSectionsArray[$key],

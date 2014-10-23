@@ -26,6 +26,21 @@ class DiscPrintingController extends AbstractController
     const DISCS_ON_PAGE = 6;
 
     /**
+     * Disc Jackrabbit template
+     */
+    const DISC_TEMPLATE = '/templates/GVDiscTemplate.rtf';
+
+    /**
+     * Where we store generated lists of discs in JR
+     */
+    const STORAGE_PATH = 'discs';
+
+    /**
+     * What we store the generated file as
+     */
+    const STORAGE_FILE = 'GVDiscTemplate.rtf';
+
+    /*
      * Discs on page
      */
     const OPERATOR_TYPE_PSV = 'lcat_psv';
@@ -88,6 +103,75 @@ class DiscPrintingController extends AbstractController
                 $discPrefix
             );
         }
+
+        foreach ($discsToPrint as $disc) {
+            $queryData[] = $disc['id'];
+        }
+
+        $documentService = $this->getServiceLocator()->get('Document');
+
+        $file = $this->getServiceLocator()
+            ->get('ContentStore')
+            ->read(self::DISC_TEMPLATE);
+
+        $query = $documentService->getBookmarkQueries($file, $queryData);
+
+        $result = $this->makeRestCall('BookmarkSearch', 'GET', [], $query);
+
+        $discNumber = (int)$params['startNumber'];
+
+        // NB the loop-by-reference here
+        foreach ($result['Disc_List'] as &$row) {
+            $row['discNo'] = $discNumber ++;
+        }
+
+        $content = $documentService->populateBookmarks($file, $result);
+
+        $uploader = $this->getServiceLocator()
+            ->get('FileUploader')
+            ->getUploader();
+
+        $uploader->setFile(['content' => $content]);
+
+        $filePath = date('YmdHis') . '_' . self::STORAGE_FILE;
+        $storedFile = $uploader->upload(
+            // @TODO: must swap these back, see note below
+            //self::STORAGE_PATH,
+            'documents',
+            $filePath
+        );
+
+        /**
+         * @TODO: this *is* temporary; we just need some way of exposing the
+         * generated document so the content of it can be QA'd until the print
+         * scheduling logic is built.
+         *
+         * a future story will care about $storedFile->getIdentifier() because
+         * it will want to enqueue a message for the print scheduler to actually
+         * print the template out, for which it'll need the JackRabbit name...
+         */
+        $data = [
+            'identifier'          => $storedFile->getIdentifier(),
+            'description'         => 'Goods Disc List',
+            'filename'            => 'Goods_Disc_List.rtf',
+            'fileExtension'       => 'doc_rtf',
+            'licence'             => 7, // hard coded simply so we can demo against *something*
+            'category'            => 1, // ditto
+            'documentSubCategory' => 6, // ditto
+            'isDigital'           => true,
+            'isReadOnly'          => true,
+            'issuedDate'          => date('Y-m-d H:i:s'),
+            'size'                => $storedFile->getSize()
+        ];
+
+        $this->makeRestCall(
+            'Document',
+            'POST',
+            $data
+        );
+        /**
+         * End of temporary persistence logic
+         */
 
         // set printing status ON
         $discService->setIsPrintingOn($discsToPrint);

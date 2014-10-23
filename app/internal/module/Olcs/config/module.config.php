@@ -15,6 +15,7 @@ return array(
             'IndexController' => 'Olcs\Controller\IndexController',
             'SearchController' => 'Olcs\Controller\SearchController',
             'CaseController' => 'Olcs\Controller\Cases\CaseController',
+            'CaseOppositionController' => 'Olcs\Controller\Cases\Opposition\OppositionController',
             'CaseStatementController' => 'Olcs\Controller\Cases\Statement\StatementController',
             'CaseHearingAppealController' => 'Olcs\Controller\Cases\Hearing\HearingAppealController',
             'CaseAppealController' =>
@@ -185,7 +186,11 @@ return array(
     'form_elements' =>[
         'factories' => [
             'PublicInquiryReason' => 'Olcs\Form\Element\PublicInquiryReasonFactory',
-            'SubmissionSections' => 'Olcs\Form\Element\SubmissionSectionsFactory'
+            'SubmissionSections' => 'Olcs\Form\Element\SubmissionSectionsFactory',
+            'Olcs\Form\Element\SlaDateSelect' => 'Olcs\Form\Element\SlaDateSelectFactory'
+        ],
+        'aliases' => [
+            'SlaDateSelect' => 'Olcs\Form\Element\SlaDateSelect'
         ]
     ]
 
