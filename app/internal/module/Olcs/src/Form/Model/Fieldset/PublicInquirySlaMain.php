@@ -12,11 +12,6 @@ use Zend\Form\Annotation as Form;
 class PublicInquirySlaMain extends CaseBase
 {
     /**
-     * @Form\Type("Hidden")
-     */
-    public $agreedDate = null;
-
-    /**
      * @Form\Options({
      *     "label": "Call up letter issued",
      *     "create_empty_option": true,
