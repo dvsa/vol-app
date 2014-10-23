@@ -52,14 +52,10 @@ $allRoutes['Application']['child_routes'] = array_merge(
         'fees' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => '/fees[/page/:page][/limit/:limit][/sort/:sort][/order/:order]',
+                'route' => '/fees[/]',
                 'defaults' => array(
                     'controller' => 'ApplicationController',
                     'action' => 'fees',
-                    'page' => 1,
-                    'limit' => 10,
-                    'sort' => 'invoicedDate',
-                    'order' => 'DESC'
                 )
             ),
             'may_terminate' => true,
@@ -673,13 +669,9 @@ return array_merge(
                 'fees' => [
                     'type' => 'segment',
                     'options' => [
-                        'route' => '/fees[/page/:page][/limit/:limit][/sort/:sort][/order/:order]',
+                        'route' => '/fees[/]',
                         'defaults' => [
                             'action' => 'fees',
-                            'page' => 1,
-                            'limit' => 10,
-                            'sort' => 'receivedDate',
-                            'order' => 'DESC'
                         ]
                     ],
                     'may_terminate' => true,
