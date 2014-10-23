@@ -20,7 +20,7 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
 
     protected $isXmlHttpRequest = false;
 
-    protected $mockMethods = ['params', 'loadScripts'];
+    protected $mockMethods = ['params', 'loadScripts', 'makeRestCall'];
 
     protected $allParams = [
         'niFlag' => 'N',
@@ -192,6 +192,74 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
 
         $this->controller->setEnabledCsrf(false);
 
+        $this->controller->expects($this->any())
+            ->method('makeRestCall')
+            ->will($this->returnCallback(array($this, 'mockRestCall')));
+
+        $documentMock = $this->getMock(
+            '\stdClass',
+            ['getBookmarkQueries', 'populateBookmarks']
+        );
+
+        $file = new \Dvsa\Jackrabbit\Data\Object\File();
+        $file->setMimeType('application/rtf');
+        $file->setContent('dummy content');
+
+        $contentStoreMock = $this->getMock('\stdClass', ['read']);
+        $contentStoreMock->expects($this->once())
+            ->method('read')
+            ->with('/templates/GVDiscTemplate.rtf')
+            ->will($this->returnValue($file));
+
+        // disc IDs we expect to query against
+        $queryData = [1, 2];
+
+        $documentMock->expects($this->once())
+            ->method('getBookmarkQueries')
+            ->with($file, $queryData);
+
+        $resultData = array(
+            'Disc_List' => array(
+                array(
+                    'foo' => 'bar',
+                    'discNo' => 2
+                )
+            )
+        );
+
+        $documentMock->expects($this->once())
+            ->method('populateBookmarks')
+            ->with($file, $resultData)
+            ->will($this->returnValue('replaced content'));
+
+        $storeFile = $this->getMock('\stdClass', ['getIdentifier', 'getExtension', 'getSize']);
+
+        $fileStoreMock = $this->getMock(
+            '\stdClass',
+            [
+                'setFile',
+                'upload'
+            ]
+        );
+
+        $fileStoreMock->expects($this->once())
+            ->method('upload')
+            ->will($this->returnValue($storeFile));
+
+        $mockFileUploader = $this->getMock('\stdClass', ['getUploader']);
+        $mockFileUploader->expects($this->any())
+            ->method('getUploader')
+            ->will($this->returnValue($fileStoreMock));
+
+        $fileData = ['content' => 'replaced content'];
+        $fileStoreMock->expects($this->once())
+            ->method('setFile')
+            ->with($fileData);
+
+        $this->serviceManager->setService('Document', $documentMock);
+        $this->serviceManager->setService('ContentStore', $contentStoreMock);
+        $this->serviceManager->setService('FileUploader', $mockFileUploader);
+
         $mockParams = $this->getMock('\StdClass', ['fromRoute']);
         $mockParams->expects($this->once())
             ->method('fromRoute')
@@ -223,6 +291,74 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
         $this->setUpAction(null, $this->formPost);
 
         $this->controller->setEnabledCsrf(false);
+
+        $this->controller->expects($this->any())
+            ->method('makeRestCall')
+            ->will($this->returnCallback(array($this, 'mockRestCall')));
+
+        $documentMock = $this->getMock(
+            '\stdClass',
+            ['getBookmarkQueries', 'populateBookmarks']
+        );
+
+        $file = new \Dvsa\Jackrabbit\Data\Object\File();
+        $file->setMimeType('application/rtf');
+        $file->setContent('dummy content');
+
+        $contentStoreMock = $this->getMock('\stdClass', ['read']);
+        $contentStoreMock->expects($this->once())
+            ->method('read')
+            ->with('/templates/GVDiscTemplate.rtf')
+            ->will($this->returnValue($file));
+
+        // disc IDs we expect to query against
+        $queryData = [1, 2];
+
+        $documentMock->expects($this->once())
+            ->method('getBookmarkQueries')
+            ->with($file, $queryData);
+
+        $resultData = array(
+            'Disc_List' => array(
+                array(
+                    'foo' => 'bar',
+                    'discNo' => 2
+                )
+            )
+        );
+
+        $documentMock->expects($this->once())
+            ->method('populateBookmarks')
+            ->with($file, $resultData)
+            ->will($this->returnValue('replaced content'));
+
+        $storeFile = $this->getMock('\stdClass', ['getIdentifier', 'getExtension', 'getSize']);
+
+        $fileStoreMock = $this->getMock(
+            '\stdClass',
+            [
+                'setFile',
+                'upload'
+            ]
+        );
+
+        $fileStoreMock->expects($this->once())
+            ->method('upload')
+            ->will($this->returnValue($storeFile));
+
+        $mockFileUploader = $this->getMock('\stdClass', ['getUploader']);
+        $mockFileUploader->expects($this->any())
+            ->method('getUploader')
+            ->will($this->returnValue($fileStoreMock));
+
+        $fileData = ['content' => 'replaced content'];
+        $fileStoreMock->expects($this->once())
+            ->method('setFile')
+            ->with($fileData);
+
+        $this->serviceManager->setService('Document', $documentMock);
+        $this->serviceManager->setService('ContentStore', $contentStoreMock);
+        $this->serviceManager->setService('FileUploader', $mockFileUploader);
 
         $mockParams = $this->getMock('\StdClass', ['fromRoute']);
         $mockParams->expects($this->once())
@@ -437,5 +573,29 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
 
         // Make sure we get a view not a response
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+    }
+
+    /**
+     * Mock a given rest call
+     *
+     * @param string $service
+     * @param string $method
+     * @param array $data
+     * @param array $bundle
+     */
+    public function mockRestCall($service, $method, $data = array(), $bundle = array())
+    {
+        switch ($service) {
+            case 'BookmarkSearch':
+                return [
+                    'Disc_List' => [
+                        ['foo' => 'bar']
+                    ]
+                ];
+            case 'Document':
+                return null;
+            default:
+                throw new \Exception("Service call " . $service . " not mocked");
+        }
     }
 }
