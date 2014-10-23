@@ -14,7 +14,7 @@ class Markers extends AbstractHelper
      * @param $data
      * @return string
      */
-    public function __invoke($markers, $markerType)
+    public function __invoke($markers, $markerType, $convertNewLines = true)
     {
 
         $markup = '';
@@ -22,7 +22,12 @@ class Markers extends AbstractHelper
             $markup = '<div class="notice-container">';
             foreach ($markers[$markerType] as $marker) {
                 $markup .= '<div class="notice--warning">';
-                $markup .= isset($marker['content']) ? $marker['content'] : '';
+                $content = isset($marker['content']) ? $marker['content'] : '';
+
+                if ($convertNewLines) {
+                    $content = nl2br($content, true);
+                }
+                $markup .= $content;
                 $markup .= '</div>';
             }
             $markup .= '</div>';

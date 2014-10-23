@@ -176,7 +176,7 @@ class CaseMarkers extends AbstractData
     {
         $content = 'Stay ';
         $content .= isset($stay['outcome']['id']) ?
-            strtolower($stay['outcome']['description']) .  ' pending appeal - ' : ' in progress - ';
+            strtolower($stay['outcome']['description']) .  " pending appeal - \n" : " in progress - \n";
         $content .= $stay['stayType']['id'] == 'stay_t_ut' ?  ' UT ' : ' TC/TR ';
         $requestDate = new \DateTime($stay['requestDate']);
         $content .= $requestDate->format('d-m-Y');
