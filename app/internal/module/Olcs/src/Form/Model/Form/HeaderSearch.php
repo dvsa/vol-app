@@ -19,13 +19,9 @@ class HeaderSearch
 
     /**
      * @Form\Attributes({"class": "search__select", "id": "search-select", "style": "position:absolute; top:3px; right:40px"})
-     * @Form\Type("Select")
+     * @Form\Type("DynamicSelect")
      * @Form\Options({
-     *      "value_options": {
-     *          "licence": "Licence",
-     *          "application": "Application",
-     *          "case": "Cases"
-     *      }
+     *      "service_name": "Olcs\Service\Data\Search\Search"
      * })
      */
     protected $index;

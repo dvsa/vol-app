@@ -49,7 +49,6 @@ class SearchController extends AbstractController
 
     public function indexAction()
     {
-
         $data = $this->getSearchForm()->getObject();
         //override with get route index unless request is post
         if ($this->getRequest()->isPost()) {

@@ -18,11 +18,27 @@ abstract class SearchAbstract
     protected $key;
 
     /**
+     * @return mixed
+     */
+    public function getKey()
+    {
+        return $this->key;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
      * @return array
      */
     public function getVariables()
     {
-        return ['title' => $this->title];
+        return ['title' => $this->getTitle()];
     }
 
     /**
@@ -73,6 +89,6 @@ abstract class SearchAbstract
      */
     public function getNavigation()
     {
-        return ['label' => $this->title, 'route' => 'search', 'params' => ['index' => $this->key]];
+        return ['label' => $this->getTitle(), 'route' => 'search', 'params' => ['index' => $this->getKey()]];
     }
 }

@@ -3,6 +3,7 @@
 namespace Olcs\Service\Data\Search;
 
 use Common\Service\Data\AbstractData;
+use Common\Service\Data\ListDataInterface;
 use Zend\Navigation\Service\ConstructedNavigationFactory;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
@@ -11,7 +12,7 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
  * Class Search
  * @package Olcs\Service\Data\Search
  */
-class Search extends AbstractData implements ServiceLocatorAwareInterface
+class Search extends AbstractData implements ServiceLocatorAwareInterface, ListDataInterface
 {
     use ServiceLocatorAwareTrait;
 
@@ -101,11 +102,7 @@ class Search extends AbstractData implements ServiceLocatorAwareInterface
      */
     public function getNavigation()
     {
-        $manager = $this->getServiceLocator()->get('Olcs\Service\Data\Search\SearchTypeManager');
-
-        $services = $manager->getRegisteredServices();
-        foreach(array_merge($services['factories'], $services['invokableClasses']) as $searchIndexName) {
-            $searchIndex = $manager->get($searchIndexName);
+        foreach ($this->getSearchTypes() as $searchIndex) {
             $nav[] = $searchIndex->getNavigation();
         }
 
@@ -145,6 +142,42 @@ class Search extends AbstractData implements ServiceLocatorAwareInterface
             ],
             false
         );
+    }
+
+    /**
+     * Fetch back a set of options for a drop down list, context passed is parameters which may need to be passed to the
+     * back end to filter the result set returned, use groups when specified should, cause this method to return the
+     * data as a multi dimensioned array suitable for display in opt-groups. It is permissible for the method to ignore
+     * this flag if the data doesn't allow for option groups to be constructed.
+     *
+     * @param mixed $context
+     * @param bool $useGroups
+     * @return array
+     */
+    public function fetchListOptions($context, $useGroups = false)
+    {
+        $options = [];
+
+        foreach ($this->getSearchTypes() as $searchIndex) {
+            /** @var $searchIndex \Olcs\Data\Object\Search\SearchAbstract  */
+            $options[$searchIndex->getKey()] = $searchIndex->getTitle();
+        }
+
+        return $options;
+    }
+
+    protected function getSearchTypes()
+    {
+        $manager = $this->getServiceLocator()->get('Olcs\Service\Data\Search\SearchTypeManager');
+        $services = $manager->getRegisteredServices();
+
+        $indexes = [];
+
+        foreach (array_merge($services['factories'], $services['invokableClasses']) as $searchIndexName) {
+            $indexes[] = $manager->get($searchIndexName);
+        }
+
+        return $indexes;
     }
 
     /**
