@@ -95,7 +95,6 @@ trait FeesActionTrait
             case 'current':
             default:
                 $feeStatus = "IN ('lfs_ot', 'lfs_wr')";
-                break;
         }
         $params = [
             'licence' => $licenceId,
