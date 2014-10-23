@@ -192,15 +192,9 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
 
         $this->controller->setEnabledCsrf(false);
 
-        $restResult = [
-            'Disc_List' => [
-                ['foo' => 'bar']
-            ]
-        ];
-        $this->controller->expects($this->once())
+        $this->controller->expects($this->any())
             ->method('makeRestCall')
-            ->with('BookmarkSearch')
-            ->willReturn($restResult);
+            ->will($this->returnCallback(array($this, 'mockRestCall')));
 
         $documentMock = $this->getMock(
             '\stdClass',
@@ -238,6 +232,8 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
             ->with($file, $resultData)
             ->will($this->returnValue('replaced content'));
 
+        $storeFile = $this->getMock('\stdClass', ['getIdentifier', 'getExtension', 'getSize']);
+
         $fileStoreMock = $this->getMock(
             '\stdClass',
             [
@@ -245,6 +241,10 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
                 'upload'
             ]
         );
+
+        $fileStoreMock->expects($this->once())
+            ->method('upload')
+            ->will($this->returnValue($storeFile));
 
         $mockFileUploader = $this->getMock('\stdClass', ['getUploader']);
         $mockFileUploader->expects($this->any())
@@ -292,15 +292,9 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
 
         $this->controller->setEnabledCsrf(false);
 
-        $restResult = [
-            'Disc_List' => [
-                ['foo' => 'bar']
-            ]
-        ];
-        $this->controller->expects($this->once())
+        $this->controller->expects($this->any())
             ->method('makeRestCall')
-            ->with('BookmarkSearch')
-            ->willReturn($restResult);
+            ->will($this->returnCallback(array($this, 'mockRestCall')));
 
         $documentMock = $this->getMock(
             '\stdClass',
@@ -338,6 +332,8 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
             ->with($file, $resultData)
             ->will($this->returnValue('replaced content'));
 
+        $storeFile = $this->getMock('\stdClass', ['getIdentifier', 'getExtension', 'getSize']);
+
         $fileStoreMock = $this->getMock(
             '\stdClass',
             [
@@ -345,6 +341,10 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
                 'upload'
             ]
         );
+
+        $fileStoreMock->expects($this->once())
+            ->method('upload')
+            ->will($this->returnValue($storeFile));
 
         $mockFileUploader = $this->getMock('\stdClass', ['getUploader']);
         $mockFileUploader->expects($this->any())
@@ -573,5 +573,29 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
 
         // Make sure we get a view not a response
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+    }
+
+    /**
+     * Mock a given rest call
+     *
+     * @param string $service
+     * @param string $method
+     * @param array $data
+     * @param array $bundle
+     */
+    public function mockRestCall($service, $method, $data = array(), $bundle = array())
+    {
+        switch ($service) {
+            case 'BookmarkSearch':
+                return [
+                    'Disc_List' => [
+                        ['foo' => 'bar']
+                    ]
+                ];
+            case 'Document':
+                return null;
+            default:
+                throw new \Exception("Service call " . $service . " not mocked");
+        }
     }
 }
