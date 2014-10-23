@@ -49,16 +49,21 @@ $allRoutes['Application']['child_routes'] = array_merge(
                 )
             )
         ),
-        'fee' => array(
+        'fees' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => 'fee/',
+                'route' => '/fees[/page/:page][/limit/:limit][/sort/:sort][/order/:order]',
                 'defaults' => array(
                     'controller' => 'ApplicationController',
-                    'action' => 'fee'
+                    'action' => 'fees',
+                    'page' => 1,
+                    'limit' => 10,
+                    'sort' => 'invoicedDate',
+                    'order' => 'DESC'
                 )
-            )
-        )
+            ),
+            'may_terminate' => true,
+        ),
     )
 );
 
@@ -666,11 +671,15 @@ return array_merge(
                     ]
                 ],
                 'fees' => [
-                    'type' => 'literal',
+                    'type' => 'segment',
                     'options' => [
-                        'route' => '/fees',
+                        'route' => '/fees[/page/:page][/limit/:limit][/sort/:sort][/order/:order]',
                         'defaults' => [
                             'action' => 'fees',
+                            'page' => 1,
+                            'limit' => 10,
+                            'sort' => 'receivedDate',
+                            'order' => 'DESC'
                         ]
                     ],
                     'may_terminate' => true,
@@ -706,6 +715,23 @@ return array_merge(
                 'defaults' => [
                     'controller' => 'CaseController',
                     'action'     => 'add'
+                ]
+            ]
+        ],
+        'case_opposition' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/case/:case/application[/:application]/opposition[/:action][/:opposition]',
+                'constraints' => [
+                    'case' => '[0-9]+',
+                    'application' => '[0-9]+',
+                    'action' => '[a-z]+',
+                    'opposition' => '[0-9]+'
+                ],
+                'defaults' => [
+                    'controller' => 'CaseOppositionController',
+                    'action' => 'index',
+
                 ]
             ]
         ],

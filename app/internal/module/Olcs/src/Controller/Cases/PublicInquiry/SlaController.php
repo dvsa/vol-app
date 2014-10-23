@@ -19,4 +19,13 @@ class SlaController extends PublicInquiryController
      * @var array
      */
     protected $inlineScripts = ['showhideinput', 'pi-sla'];
+
+    public function processLoad($data)
+    {
+        $data = parent::processLoad($data);
+
+        $this->getServiceLocator()->get('Common\Service\Data\Sla')->setContext('pi', $data);
+
+        return $data;
+    }
 }

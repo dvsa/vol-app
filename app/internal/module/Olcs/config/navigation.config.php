@@ -113,17 +113,24 @@ return array(
                     )
                 ),
                 array(
-                    'id' => 'case_oppositions',
+                    'id' => 'case_opposition',
                     'label' => 'Opposition',
-                    'route' => 'case',
-                    'action' => 'oppositions',
+                    'route' => 'case_opposition',
+                    'action' => 'index',
                     'use_route_match' => true,
                     'pages' => array(
                         array(
-                            'id' => 'case_submission_list',
-                            'label' => 'Submission List',
-                            'route' => 'case',
-                            'action' => 'index',
+                            'id' => 'case_opposition_add',
+                            'label' => 'Add Opposition',
+                            'route' => 'case_opposition',
+                            'action' => 'add',
+                            'use_route_match' => true,
+                        ),
+                        array(
+                            'id' => 'case_opposition_edit',
+                            'label' => 'Edit Opposition',
+                            'route' => 'case_opposition',
+                            'action' => 'edit',
                             'use_route_match' => true,
                         ),
                     )
@@ -534,7 +541,13 @@ return array(
                                     )
                                 )
                             )
-                        )
+                        ),
+                        array(
+                            'id' => 'licence_fees',
+                            'label' => 'Fees',
+                            'route' => 'licence/fees',
+                            'use_route_match' => true
+                        ),
                     )
                 )
             )
@@ -579,7 +592,7 @@ return array(
                 array(
                     'id' => 'application_fee',
                     'label' => 'Fees',
-                    'route' => 'Application/fee',
+                    'route' => 'Application/fees',
                     'use_route_match' => true
                 ),
             )
