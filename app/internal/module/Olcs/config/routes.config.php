@@ -1171,7 +1171,7 @@ return array_merge(
                 ]
             ]
         ],
-        // @todo replace this with the real varitation route
+        // @to-do replace this with the real variation route
         'application-variation' => array(
             'type' => 'segment',
             'options' => array(

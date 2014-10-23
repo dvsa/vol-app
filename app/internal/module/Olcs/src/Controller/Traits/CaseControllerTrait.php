@@ -26,6 +26,40 @@ trait CaseControllerTrait
                     'description'
                 )
             ),
+            'appeals' => array(
+                'properties' => 'ALL',
+                'children' => array(
+                    'outcome' => array(
+                        'properties' => array(
+                            'id',
+                            'description'
+                        )
+                    ),
+                    'reason' => array(
+                        'properties' => array(
+                            'id',
+                            'description'
+                        )
+                    ),
+                )
+            ),
+            'stays' => array(
+                'properties' => 'ALL',
+                'children' => array(
+                    'stayType' => array(
+                        'properties' => array(
+                            'id',
+                            'description'
+                        )
+                    ),
+                    'outcome' => array(
+                        'properties' => array(
+                            'id',
+                            'description'
+                        )
+                    )
+                )
+            ),
             'legacyOffences' => array(
                 'properties' => 'ALL',
             ),
@@ -82,6 +116,7 @@ trait CaseControllerTrait
                     $licence = $case['licence']['id'];
                     //$this->setupLicence($licence);
                 }
+                $this->setupMarkers($case);
             }
 
             if ($licence = $this->params()->fromRoute('licence', $licence)) {
@@ -121,6 +156,22 @@ trait CaseControllerTrait
         $placeholder->getContainer('pageSubtitle')->append('Case subtitle');
 
         $placeholder->getContainer('case')->set($case);
+    }
+
+    /**
+     * Calls CaseMarkers plugin to generate markers and return as placeholder
+     */
+    public function setupMarkers($case)
+    {
+        $placeholder = $this->getViewHelperManager()->get('placeholder');
+
+        $caseMarkerPlugin = $this->getServiceLocator()
+            ->get('Olcs\Service\Marker\MarkerPluginManager')
+            ->get('Olcs\Service\Marker\CaseMarkers');
+
+        $markers = $caseMarkerPlugin->generateMarkerTypes(['stay', 'appeal'], ['case' => $case]);
+
+        $placeholder->getContainer('markers')->set($markers);
     }
 
     /**
