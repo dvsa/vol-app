@@ -137,20 +137,6 @@ class CaseMarkers extends AbstractData
     }
 
     /**
-     * Gets the data required to generate the appeal marker. Extracted from case.
-     *
-     * @return array
-     */
-    private function getAppealData()
-    {
-        $case = $this->getCase();
-        return [
-            'stayData' => $case['stays'],
-            'appealData' => $case['appeals'][0],
-        ];
-    }
-
-    /**
      * Generate the stay markers
      *
      * @param array $data
