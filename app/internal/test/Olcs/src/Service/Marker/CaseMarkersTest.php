@@ -1,6 +1,6 @@
 <?php
 
-namespace OlcsTest\Service\Data;
+namespace OlcsTest\Service\Marker;
 
 use Olcs\Service\Marker\CaseMarkers;
 
