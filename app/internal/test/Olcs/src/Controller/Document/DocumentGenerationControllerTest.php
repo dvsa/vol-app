@@ -33,6 +33,7 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
                     'getRequest',
                     'redirect',
                     'getLoggedInUser',
+                    'getSearchForm'
                 ),
                 $extraParams
             )

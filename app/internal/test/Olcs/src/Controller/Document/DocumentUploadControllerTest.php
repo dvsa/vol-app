@@ -35,6 +35,7 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
                     'redirect',
                     'url',
                     'isButtonPressed',
+                    'getSearchForm'
                 ),
                 $extraParams
             )

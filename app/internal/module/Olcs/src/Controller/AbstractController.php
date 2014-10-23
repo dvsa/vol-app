@@ -89,7 +89,7 @@ class AbstractController extends AbstractActionController
     protected function getSearchForm()
     {
         if ($this->searchForm === null) {
-            $this->searchForm = $this->getForm('HeaderSearch');
+            $this->searchForm = $this->getFormClass('HeaderSearch');
 
             $container = new Container('search');
             $this->searchForm->bind($container);
