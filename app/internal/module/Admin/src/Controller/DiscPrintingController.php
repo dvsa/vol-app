@@ -135,8 +135,9 @@ class DiscPrintingController extends AbstractController
 
         $filePath = date('YmdHis') . '_' . self::STORAGE_FILE;
         $storedFile = $uploader->upload(
-            //self::STORAGE_PATH, <-- see the paragraph below
-            'documents',    // @TODO: must remove, see note below
+            // @TODO: must swap these back, see note below
+            //self::STORAGE_PATH,
+            'documents',
             $filePath
         );
 
