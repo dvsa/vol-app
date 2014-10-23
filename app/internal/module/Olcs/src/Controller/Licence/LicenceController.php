@@ -19,7 +19,8 @@ class LicenceController extends AbstractController
 {
     use Traits\LicenceControllerTrait,
         Traits\TaskSearchTrait,
-        Traits\DocumentSearchTrait;
+        Traits\DocumentSearchTrait,
+        Traits\FeesActionTrait;
 
     public function detailsAction()
     {
@@ -105,14 +106,6 @@ class LicenceController extends AbstractController
         $view->setTerminal(
             $this->getRequest()->isXmlHttpRequest()
         );
-
-        return $this->renderView($view);
-    }
-
-    public function feesAction()
-    {
-        $view = $this->getViewWithLicence();
-        $view->setTemplate('licence/index');
 
         return $this->renderView($view);
     }
