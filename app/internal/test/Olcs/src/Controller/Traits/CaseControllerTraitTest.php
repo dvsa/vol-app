@@ -45,12 +45,13 @@ class CaseControllerTraitTest extends \PHPUnit_Framework_TestCase
             false, // don't call constructor,
             false, // call clone
             true, // call clone
-            ['getRequest', 'params', 'setupCase', 'getCase', 'setupLicence']
+            ['getRequest', 'params', 'setupCase', 'getCase', 'setupLicence', 'setupMarkers']
         );
         $sut->expects($this->any())->method('getRequest')->will($this->returnValue($getRequestMock));
         $sut->expects($this->any())->method('params')->will($this->returnValue($paramsMock));
 
         $sut->expects($this->once())->method('setupCase');
+        $sut->expects($this->once())->method('setupMarkers');
 
         $sut->expects($this->any())->method('getCase')->will($this->returnValue($case));
         $sut->expects($this->exactly(1))->method('setupLicence')->with($case['licence']['id']);
@@ -184,6 +185,53 @@ class CaseControllerTraitTest extends \PHPUnit_Framework_TestCase
 
         // Should return same again. Assert method called once should fail if called again.
         $this->assertEquals($result, $sut->getCase($caseId));
+
+    }
+
+    public function testSetupMarkers()
+    {
+        $case = [
+            'id' => '1',
+            'name' => 'shaun'
+        ];
+
+        $sut = $this->getMockForTrait(
+            '\Olcs\Controller\Traits\CaseControllerTrait',
+            [],
+            uniqid('mock_CaseControllerTrait_testSetupMarkers'),
+            false, // don't call constructor,
+            false, // call clone
+            true, // call clone
+            ['getViewHelperManager', 'getServiceLocator']
+        );
+
+        $vh = new HelperPluginManager();
+        $markers = [];
+
+        $pl = $this->getMock('\Zend\View\Helper\Placeholder', ['getContainer', 'append', 'set']);
+
+        $pl->expects($this->once())->method('set')->with($markers);
+        $pl->expects($this->any())->method('getContainer')->will($this->returnSelf());
+
+        $sl = $this->getMock('\Zend\Service\Manager', ['get']);
+        $mpm = $this->getMock('Olcs\Service\Marker\MarkerPluginManager', ['get']);
+        $cm = $this->getMock('Olcs\Service\Marker\CaseMarkers', ['generateMarkerTypes']);
+
+        $cm->expects($this->any())->method('generateMarkerTypes')->with(['stay',
+            'appeal'])->will($this->returnValue($markers));
+
+        $mpm->expects($this->any())->method('get')->with('Olcs\Service\Marker\CaseMarkers')->will($this->returnValue
+            ($cm));
+
+        $sl->expects($this->once())->method('get')->with('Olcs\Service\Marker\MarkerPluginManager')
+            ->will($this->returnValue($mpm));
+
+        $vh->setService('placeholder', $pl);
+
+        $sut->expects($this->once())->method('getServiceLocator')->will($this->returnValue($sl));
+        $sut->expects($this->once())->method('getViewHelperManager')->will($this->returnValue($vh));
+
+        $this->assertNull($sut->setupMarkers($case));
 
     }
 }
