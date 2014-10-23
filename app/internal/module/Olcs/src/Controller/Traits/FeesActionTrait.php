@@ -45,7 +45,7 @@ trait FeesActionTrait
         $filters = [
             'status' => $status
         ];
-        
+
         $table = $this->getFeesTable($licenceId, $status);
 
         $view = $this->getViewWithLicence(['table' => $table, 'form'  => $this->getFeeFilterForm($filters)]);
@@ -60,7 +60,7 @@ trait FeesActionTrait
 
         return $renderedView;
     }
-    
+
     /**
      * Get fee filter form
      * 
@@ -75,7 +75,7 @@ trait FeesActionTrait
 
         return $form;
     }
-    
+
     /**
      * Get fees table
      * 
@@ -113,8 +113,7 @@ trait FeesActionTrait
 
         $tableParams = array_merge($params, ['query' => $this->getRequest()->getQuery()]);
         $table = $this->getTable('fees', $results, $tableParams);
-        
+
         return $table;
     }
-    
 }
