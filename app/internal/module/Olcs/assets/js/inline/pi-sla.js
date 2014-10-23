@@ -8,6 +8,10 @@ $(function() {
         return value == 'piwo_decision';
     };
 
+    var isNeither = function (value) {
+        return value == 'piwo_none';
+    };
+
     OLCS.showHideInput({
         'source': 'select[name="fields[writtenOutcome]"]',
         'dest': 'label[for="fields[writtenReasonDate]"]',
@@ -36,5 +40,11 @@ $(function() {
         'source': 'select[name="fields[writtenOutcome]"]',
         'dest': 'label[for="fields[decisionLetterSentDate]"]',
         'predicate': isDecision
+    });
+
+    OLCS.showHideInput({
+        'source': 'select[name="fields[writtenOutcome]"]',
+        'dest': 'label[for="fields[decSentAfterWrittenDecDate]"]',
+        'predicate': isNeither
     });
 });

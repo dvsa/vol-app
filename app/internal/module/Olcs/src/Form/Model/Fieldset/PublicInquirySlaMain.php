@@ -86,34 +86,6 @@ class PublicInquirySlaMain extends CaseBase
 
     /**
      * @Form\Options({
-     *     "label": "Decision letter sent",
-     *     "create_empty_option": true,
-     *     "render_delimiters": "d m y",
-     *     "category": "pi",
-     *     "field": "decisionLetterSentDate"
-     * })
-     * @Form\Required(true)
-     * @Form\AllowEmpty(true)
-     * @Form\Input("\Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Type("SlaDateSelect")
-     * @Form\Filter({"name":"DateSelectNullifier"})
-     * @Form\Validator({
-     *      "name": "ValidateIf",
-     *      "options": {
-     *          "context_field": "writtenOutcome",
-     *          "context_values": {"piwo_decision"},
-     *          "allow_empty": true,
-     *          "validators": {
-     *              {"name": "Date", "options": {"format": "Y-m-d"}},
-     *              {"name": "\Common\Form\Elements\Validators\DateNotInFuture"}
-     *          }
-     *      }
-     * })
-     */
-    public $decisionLetterSentDate = null;
-
-    /**
-     * @Form\Options({
      *     "label": "Date of TC's written decision",
      *     "create_empty_option": true,
      *     "render_delimiters": "d m y",
@@ -139,6 +111,34 @@ class PublicInquirySlaMain extends CaseBase
      * })
      */
     public $tcWrittenDecisionDate = null;
+
+    /**
+     * @Form\Options({
+     *     "label": "Decision letter sent",
+     *     "create_empty_option": true,
+     *     "render_delimiters": "d m y",
+     *     "category": "pi",
+     *     "field": "decisionLetterSentDate"
+     * })
+     * @Form\Required(true)
+     * @Form\AllowEmpty(true)
+     * @Form\Input("\Common\InputFilter\ContinueIfEmptyInput")
+     * @Form\Type("SlaDateSelect")
+     * @Form\Filter({"name":"DateSelectNullifier"})
+     * @Form\Validator({
+     *      "name": "ValidateIf",
+     *      "options": {
+     *          "context_field": "writtenOutcome",
+     *          "context_values": {"piwo_decision"},
+     *          "allow_empty": true,
+     *          "validators": {
+     *              {"name": "Date", "options": {"format": "Y-m-d"}},
+     *              {"name": "\Common\Form\Elements\Validators\DateNotInFuture"}
+     *          }
+     *      }
+     * })
+     */
+    public $decisionLetterSentDate = null;
 
     /**
      * @Form\Options({
