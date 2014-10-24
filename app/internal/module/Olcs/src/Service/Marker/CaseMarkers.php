@@ -4,96 +4,14 @@ namespace Olcs\Service\Marker;
 
 use Common\Service\Data\AbstractData;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Olcs\Service\Marker\Markers;
 
 /**
  * Class CaseMarkers service. Used to contain business logic for generating markers
  * @package Olcs\Service
  */
-class CaseMarkers extends AbstractData
+class CaseMarkers extends Markers
 {
-
-    /**
-     * Case
-     *
-     * @var array
-     */
-    private $case = array();
-
-    private $markers = array();
-
-    /**
-     * Set markers for type
-     *
-     * @param string $type
-     * @param array $markers
-     *
-     * @return object
-     */
-    public function setTypeMarkers($type, $markers)
-    {
-        $this->markers[$type] = $markers;
-        return $this;
-    }
-
-    /**
-     * Get markers for type
-     *
-     * @param string $type
-     * @return array
-     */
-    public function getTypeMarkers($type)
-    {
-        if (isset($this->markers[$type]) && is_array($this->markers[$type])) {
-            return $this->markers[$type];
-        };
-        return array();
-    }
-
-    /**
-     * Set markers
-     *
-     * @param array
-     * @return object
-     */
-    public function setMarkers($markers)
-    {
-        $this->markers = $markers;
-        return $this;
-    }
-
-    /**
-     * Get markers
-     *
-     * @return array
-     */
-    public function getMarkers()
-    {
-        return $this->markers;
-    }
-
-    /**
-     * Set case
-     *
-     * @param array $case
-     *
-     * @return object
-     */
-    public function setCase($case)
-    {
-        $this->case = $case;
-        return $this;
-    }
-
-    /**
-     * Get case
-     *
-     * @return array
-     */
-    public function getCase()
-    {
-        return $this->case;
-    }
-
     /**
      * Generate marker types based on array of types and data
      *
@@ -110,8 +28,7 @@ class CaseMarkers extends AbstractData
         if (is_array($markerTypes)) {
             foreach ($markerTypes as $type) {
                 if (empty($this->getTypeMarkers($type)) &&
-                    !empty($this->getCase()) &&
-                    !empty($this->getCase()['appeals'][0])
+                    !empty($this->getCase())
                 ) {
                     $generateMethod = 'generate' . ucfirst($type) . 'Markers';
                     $dataMethod = 'get' . ucfirst($type) . 'MarkerData';
@@ -137,7 +54,7 @@ class CaseMarkers extends AbstractData
         $case = $this->getCase();
         return [
             'stayData' => $case['stays'],
-            'appealData' => $case['appeals'][0],
+            'appealData' => isset($case['appeals'][0]) ? $case['appeals'][0] : null,
         ];
     }
 
@@ -149,9 +66,10 @@ class CaseMarkers extends AbstractData
      */
     private function generateStayMarkers($data)
     {
-        if ((!empty($data['appealData']['decisionDate']) &&
-            !empty($data['appealData']['outcome'])
-            ) ||
+        if (empty($data['appealData']) ||
+            (!empty($data['appealData']['decisionDate']) &&
+            !empty($data['appealData']['outcome']))
+             ||
             !empty($data['appealData']['withdrawnDate'])
         ) {
             return [];

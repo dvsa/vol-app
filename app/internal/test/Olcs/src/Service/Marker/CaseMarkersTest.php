@@ -108,12 +108,12 @@ class CaseMarkersTest extends \PHPUnit_Framework_TestCase
                         'case' => [
                             'id' => 1,
                             'stays' => [],
-                            'appeals' => [0 => []]
+                            'appeals' => []
                         ]
                     ]
                 ],
-                // expected no type count and no markers as appeals not set
-                ['typeCount' => 0, 'markerCount' => []]
+                // expected one type count and no markers as appeals not set
+                ['typeCount' => 1, 'markerCount' => []]
             ],
             [
                 // input all valid stay data 3 markers expected
