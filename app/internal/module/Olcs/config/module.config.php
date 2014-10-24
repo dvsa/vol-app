@@ -122,6 +122,7 @@ return array(
             'piListData'   => 'Olcs\View\Helper\PiListData',
             'formSubmissionSections' => 'Olcs\Form\View\Helper\SubmissionSections',
             'submissionSectionDetails' => 'Olcs\View\Helper\SubmissionSectionDetails',
+            'markers' => 'Olcs\View\Helper\Markers',
         ),
         'delegators' => array(
             'formElement' => array('Olcs\Form\View\Helper\FormElementDelegatorFactory')
@@ -146,6 +147,9 @@ return array(
     ),
     'asset_path' => '//dvsa-static.olcsdv-ap01.olcs.npm',
     'service_manager' => array(
+        'invokables' => array(
+            'Olcs\Service\Marker\MarkerPluginManager' => 'Olcs\Service\Marker\MarkerPluginManager'
+        ),
         'factories' => array(
             'ApplicationJourneyHelper' => function ($sm) {
                 $helper = new \Olcs\Helper\ApplicationJourneyHelper();
@@ -162,7 +166,8 @@ return array(
             'Olcs\Service\Data\User' => 'Olcs\Service\Data\User',
             'Olcs\Service\Data\PiVenue' => 'Olcs\Service\Data\PiVenue',
             'Olcs\Service\Data\PresidingTc' => 'Olcs\Service\Data\PresidingTc',
-            'Olcs\Service\Data\Submission' => 'Olcs\Service\Data\Submission'
+            'Olcs\Service\Data\Submission' => 'Olcs\Service\Data\Submission',
+            'Olcs\Service\Data\Fee' => 'Olcs\Service\Data\Fee'
         )
     ),
     'application_journey' => array(
@@ -185,7 +190,11 @@ return array(
     'form_elements' =>[
         'factories' => [
             'PublicInquiryReason' => 'Olcs\Form\Element\PublicInquiryReasonFactory',
-            'SubmissionSections' => 'Olcs\Form\Element\SubmissionSectionsFactory'
+            'SubmissionSections' => 'Olcs\Form\Element\SubmissionSectionsFactory',
+            'Olcs\Form\Element\SlaDateSelect' => 'Olcs\Form\Element\SlaDateSelectFactory'
+        ],
+        'aliases' => [
+            'SlaDateSelect' => 'Olcs\Form\Element\SlaDateSelect'
         ]
     ]
 

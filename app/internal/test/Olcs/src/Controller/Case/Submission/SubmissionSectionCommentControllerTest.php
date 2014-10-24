@@ -157,7 +157,7 @@ class SubmissionSectionCommentControllerTest extends AbstractHttpControllerTestC
             'section_1' => 'Section 1 Title'
         ];
 
-        $mockRefDataService = m::mock('Olcs\Service\Data\RefData');
+        $mockRefDataService = m::mock('Common\Service\Data\RefData');
 
         $mockRefDataService->shouldReceive('fetchListOptions')
             ->with('submission_section')

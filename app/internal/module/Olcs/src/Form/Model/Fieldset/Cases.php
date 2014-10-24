@@ -49,7 +49,7 @@ class Cases extends Base
      * @Form\Required(false)
      * @Form\Type("TextArea")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5,"max":4000}})
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5,"max":1024}})
      */
     public $description = null;
 

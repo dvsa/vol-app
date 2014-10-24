@@ -1,7 +1,7 @@
 <?php
 
 $case = $this->placeholder('case')->getValue();
-
+$markers = $this->placeholder('markers')->getValue();
 ?>
 
 <div class="four-fiths--left">
@@ -29,4 +29,8 @@ $case = $this->placeholder('case')->getValue();
     <p><?php echo $this->translate($case['licence']['licenceType']['id']); ?><br/><?php echo $this->translate($case['licence']['status']['id']); ?></p>
     <?php endif; ?>
 
+    <?php
+        echo $this->markers($markers, 'appeal');
+        echo $this->markers($markers, 'stay');
+    ?>
 </div>

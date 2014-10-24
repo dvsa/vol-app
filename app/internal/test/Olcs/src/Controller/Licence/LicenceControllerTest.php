@@ -4,6 +4,7 @@
  * Licence controller tests
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 namespace OlcsTest\Controller\Licence;
 
@@ -13,6 +14,7 @@ use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
  * Licence controller tests
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 class LicenceControllerTest extends AbstractHttpControllerTestCase
 {
@@ -53,10 +55,6 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             ->method('getRequest')
             ->will($this->returnValue($request));
 
-        $this->controller->expects($this->any())
-             ->method('getServiceLocator')
-             ->will($this->returnValue($this->getServiceLocatorTranslator()));
-
         parent::setUp();
     }
 
@@ -79,6 +77,9 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
         return $serviceMock;
     }
 
+    /**
+     * @group licenceController
+     */
     public function testDocumentsActionWithNoQueryUsesDefaultParams()
     {
         $licenceData = array(
@@ -96,6 +97,10 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
                 'description' => 'S1'
             )
         );
+
+        $this->controller->expects($this->any())
+             ->method('getServiceLocator')
+             ->will($this->returnValue($this->getServiceLocatorTranslator()));
 
         $this->controller->expects($this->any())
             ->method('getLicence')
@@ -198,8 +203,18 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
 
     }
 
+    /**
+     * @group licenceController
+     */
     public function testDocumentsActionAjax()
     {
+        $this->controller->expects($this->any())
+             ->method('getServiceLocator')
+             ->will($this->returnValue($this->getServiceLocatorTranslator()));
+
+        $this->controller->expects($this->any())
+             ->method('getServiceLocator')
+             ->will($this->returnValue($this->getServiceLocatorTranslator()));
 
         $this->controller->expects($this->at(3))
             ->method('makeRestCall')
@@ -286,6 +301,7 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
 
     /**
      * Tests the bus action
+     * @group licenceController
      */
     public function testBusAction()
     {
@@ -355,8 +371,15 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
      * care about the action; it always redirects to generate. Update the
      * name of it when/if it cares
      */
+    /**
+     * @group licenceController
+     */
     public function testDocumentsActionWithGenerateRedirectsToGenerate()
     {
+        $this->controller->expects($this->any())
+             ->method('getServiceLocator')
+             ->will($this->returnValue($this->getServiceLocatorTranslator()));
+
         $this->request->expects($this->any())
             ->method('isPost')
             ->will($this->returnValue(true));
@@ -394,9 +417,14 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
      * @NOTE this test mirrors the controller which so far doesn't actually
      * care about the action; it always redirects to generate. Update the
      * name of it when/if it cares
+     * @group licenceController
      */
     public function testDocumentsActionWithUploadRedirectsToUpload()
     {
+        $this->controller->expects($this->any())
+             ->method('getServiceLocator')
+             ->will($this->returnValue($this->getServiceLocatorTranslator()));
+
         $this->request->expects($this->any())
             ->method('isPost')
             ->will($this->returnValue(true));
@@ -428,5 +456,117 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue(1234));
 
         $response = $this->controller->documentsAction();
+    }
+
+    /**
+     * Test fees action
+     * @group licenceController
+     * @dataProvider feesProvider
+     */
+    public function testFeesAction($status, $feeStatus)
+    {
+        $params = $this->getMock('\stdClass', ['fromRoute', 'fromQuery']);
+
+        $params->expects($this->once())
+            ->method('fromRoute')
+            ->with('licence')
+            ->will($this->returnValue(1));
+
+        $params->expects($this->any())->method('fromQuery')
+            ->will(
+                $this->returnValueMap(
+                    [
+                        ['status', $status],
+                        ['page', 1, 1],
+                        ['sort', 'receivedDate', 'receivedDate'],
+                        ['order', 'DESC', 'DESC'],
+                        ['limit', 10, 10],
+                    ]
+                )
+            );
+
+        $this->controller->expects($this->any())
+            ->method('params')
+            ->will($this->returnValue($params));
+
+        $mockFeeService = $this->getMock('\StdClass', ['getFees']);
+
+        $feesParams = [
+            'licence' => 1,
+            'page'    => '1',
+            'sort'    => 'receivedDate',
+            'order'   => 'DESC',
+            'limit'   => 10,
+        ];
+        if ($feeStatus) {
+            $feesParams['feeStatus'] = $feeStatus;
+        }
+
+        $fees = [
+            'Results' => [
+                [
+                    'invoiceNo' => 'i',
+                    'invoiceStatus' => 'is',
+                    'description' => 'ds',
+                    'amount' => 1,
+                    'invoicedDate' => '2014-01-01',
+                    'receiptNo' => '1',
+                    'receivedDate' => '2014-01-01',
+                    'feeStatus' => [
+                        'id' => 'lfs_ot',
+                        'description' => 'd'
+                    ]
+                ]
+            ],
+            'Count' => 1
+        ];
+
+        $mockFeeService->expects($this->once())
+            ->method('getFees')
+            ->with($this->equalTo($feesParams))
+            ->will($this->returnValue($fees));
+
+        $mockServiceLocator = $this->getMock('\StdClass', ['get']);
+        $mockServiceLocator->expects($this->any())
+            ->method('get')
+            ->with($this->equalTo('Olcs\Service\Data\Fee'))
+            ->will($this->returnValue($mockFeeService));
+
+        $this->controller->expects($this->any())
+             ->method('getServiceLocator')
+             ->will($this->returnValue($mockServiceLocator));
+
+        $mockForm = $this->getMock('\StdClass', ['remove', 'setData']);
+        $mockForm->expects($this->once())
+            ->method('remove')
+            ->with($this->equalTo('csrf'))
+            ->will($this->returnValue(true));
+
+        $mockForm->expects($this->once())
+            ->method('setData')
+            ->will($this->returnValue(true));
+
+        $this->controller->expects($this->once())
+            ->method('getForm')
+            ->will($this->returnValue($mockForm));
+
+        $response = $this->controller->feesAction();
+
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+
+    }
+
+    /**
+     * Goods or psv provider
+     *
+     * @return array
+     */
+    public function feesProvider()
+    {
+        return [
+            ['current', "IN ('lfs_ot', 'lfs_wr')"],
+            ['all', ''],
+            ['historical', "IN ('lfs_pd', 'lfs_w', 'lfs_cn')"]
+        ];
     }
 }

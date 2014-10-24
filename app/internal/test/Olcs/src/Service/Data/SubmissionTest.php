@@ -19,7 +19,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateService()
     {
-        $mockRefDataService = $this->getMock('\Olcs\Service\Data\RefData');
+        $mockRefDataService = $this->getMock('\Common\Service\Data\RefData');
 
         $mockTranslator = $this->getMock('stdClass', ['getLocale']);
         $mockTranslator->expects($this->once())->method('getLocale')->willReturn('en_GB');
