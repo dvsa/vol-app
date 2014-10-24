@@ -11,6 +11,7 @@ namespace Olcs\Controller\Lva\Licence;
 use Zend\Form\Form;
 use Common\Controller\Lva;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
+use Common\Controller\Lva\Traits\LicenceOperatingCentresControllerTrait;
 
 /**
  * Operating Centres Controller
@@ -20,7 +21,8 @@ use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
  */
 class OperatingCentresController extends Lva\AbstractOperatingCentresController
 {
-    use LicenceControllerTrait;
+    use LicenceControllerTrait,
+        LicenceOperatingCentresControllerTrait;
 
     protected $lva = 'licence';
     protected $location = 'external';
