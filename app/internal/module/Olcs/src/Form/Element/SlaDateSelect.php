@@ -62,6 +62,10 @@ class SlaDateSelect extends ZendDateSelect
         try {
             $date = $this->getSlaService()->getTargetDate($this->getOption('category'), $this->getOption('field'));
 
+            if (null === $date) {
+                throw new \LogicException('There was no target date found');
+            }
+
             $hint = 'Target date: ' . date('d/m/Y', strtotime($date));
 
         } catch (\LogicException $e) {
