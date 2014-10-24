@@ -264,15 +264,15 @@ return array(
                             'pages' => array(
                                 array(
                                     'id' => 'case_processing_notes_add',
-                                    'label' => 'Add note',
-                                    'route' => 'case_processing_notes',
+                                    'label' => 'case-note-add-label',
+                                    'route' => 'case_processing_notes/add-note',
                                     'action' => 'add',
 
                                 ),
                                 array(
                                     'id' => 'case_processing_notes_edit',
-                                    'label' => 'Edit note',
-                                    'route' => 'case_processing_notes',
+                                    'label' => 'case-note-edit-label',
+                                    'route' => 'case_processing_notes/modify-note',
                                     'action' => 'edit',
 
                                 )
