@@ -151,6 +151,7 @@ return array(
             'NavigationFactory' => 'Olcs\Service\NavigationFactory'
         ],
         'invokables' =>[
+            'Olcs\Service\Marker\MarkerPluginManager' => 'Olcs\Service\Marker\MarkerPluginManager',
             'Olcs\Service\NavigationFactory' => 'Olcs\Service\NavigationFactory'
         ],
         'factories' => array(
