@@ -19,7 +19,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateService()
     {
-        $mockRefDataService = $this->getMock('\Common\Service\Data\RefData');
+        $mockRefDataService = $this->getMock('Common\Service\Data\RefData');
 
         $mockTranslator = $this->getMock('stdClass', ['getLocale']);
         $mockTranslator->expects($this->once())->method('getLocale')->willReturn('en_GB');
@@ -78,7 +78,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
      */
     public function testExtractSelectedSubmissionSectionsData($input, $expected)
     {
-        $mockRefDataService = $this->getMock('Common\Service\Data\RefData', ['fetchListOptions']);
+        $mockRefDataService = $this->getMock('Common\Service\Data\RefData');
 
         $mockSectionRefData = $this->getMockSectionRefData();
         $mockRefDataService->expects(
@@ -98,7 +98,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAllSectionsRefData()
     {
-        $mockRefDataService = $this->getMock('Common\Service\Data\RefData', ['fetchListOptions']);
+        $mockRefDataService = $this->getMock('Common\Service\Data\RefData');
 
         $mockSectionRefData = $this->getMockSectionRefData();
         $mockRefDataService->expects(
@@ -128,7 +128,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSubmissionTypeTitle()
     {
-        $mockRefDataService = $this->getMock('Common\Service\Data\RefData', ['fetchListData']);
+        $mockRefDataService = $this->getMock('Common\Service\Data\RefData');
 
         $mockSubmissionTitles = $this->getMockSubmissionTitles();
         $mockRefDataService->expects($this->any())->method('fetchListData')->with('submission_type_title')
