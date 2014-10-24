@@ -60,13 +60,16 @@ class ConvictionControllerTest extends AbstractHttpControllerTestCase
         ];
 
         // get case
-        $mockRestHelper->shouldReceive('makeRestCall')->with('Cases',
+        $mockRestHelper->shouldReceive('makeRestCall')->with(
+            'Cases',
             'GET',
             array('id' => $caseId),
-            m::type('array'))->andReturn($case);
+            m::type('array')
+        )->andReturn($case);
 
         // save conviction
-        $mockRestHelper->shouldReceive('makeRestCall')->with('Conviction',
+        $mockRestHelper->shouldReceive('makeRestCall')->with(
+            'Conviction',
             'PUT',
             m::type('array'),
             ""
