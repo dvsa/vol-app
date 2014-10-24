@@ -19,10 +19,51 @@ abstract class Markers extends AbstractData
     private $case = array();
 
     /**
+     * Licence
+     *
+     * @var array
+     */
+    private $licence = array();
+
+    /**
      * Markers array indexed by type
      * @var array
      */
     private $markers = array();
+
+    /**
+     * Generate marker types based on array of types and data
+     *
+     * @param array $markerTypes
+     * @param array $data
+     * @return array
+     */
+    public function generateMarkerTypes($markerTypes, $data)
+    {
+        if (isset($data['case'])) {
+            $this->setCase($data['case']);
+        }
+
+        if (isset($data['case']['licence'])) {
+            $this->setLicence($data['case']['licence']);
+        }
+
+        if (is_array($markerTypes)) {
+            foreach ($markerTypes as $type) {
+                if (empty($this->getTypeMarkers($type))) {
+                    $generateMethod = 'generate' . ucfirst($type) . 'Markers';
+                    $dataMethod = 'get' . ucfirst($type) . 'MarkerData';
+
+                    if (method_exists($this, $dataMethod) && method_exists($this, $generateMethod)) {
+                        $data = $this->$dataMethod();
+                        $markers = $this->$generateMethod($data);
+                        $this->setTypeMarkers($type, $markers);
+                    }
+                }
+            }
+        }
+        return $this->getMarkers();
+    }
 
     /**
      * Set markers for type
@@ -98,12 +139,19 @@ abstract class Markers extends AbstractData
     }
 
     /**
-     * Generate marker types based on array of types and data
-     *
-     * @param array $markerTypes
-     * @param array $data
+     * @param array $licence
+     */
+    public function setLicence($licence)
+    {
+        $this->licence = $licence;
+    }
+
+    /**
      * @return array
      */
-    abstract function generateMarkerTypes($markerTypes, $data);
-
+    public function getLicence()
+    {
+        return $this->licence;
+    }
+    
 }

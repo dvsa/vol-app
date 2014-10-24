@@ -13,48 +13,15 @@ use Olcs\Service\Marker\Markers;
 class CaseMarkers extends Markers
 {
     /**
-     * Generate marker types based on array of types and data
-     *
-     * @param array $markerTypes
-     * @param array $data
-     * @return array
-     */
-    public function generateMarkerTypes($markerTypes, $data)
-    {
-        if (isset($data['case'])) {
-            $this->setCase($data['case']);
-        }
-
-        if (is_array($markerTypes)) {
-            foreach ($markerTypes as $type) {
-                if (empty($this->getTypeMarkers($type)) &&
-                    !empty($this->getCase())
-                ) {
-                    $generateMethod = 'generate' . ucfirst($type) . 'Markers';
-                    $dataMethod = 'get' . ucfirst($type) . 'MarkerData';
-
-                    if (method_exists($this, $dataMethod) && method_exists($this, $generateMethod)) {
-                        $data = $this->$dataMethod();
-                        $markers = $this->$generateMethod($data);
-                        $this->setTypeMarkers($type, $markers);
-                    }
-                }
-            }
-        }
-        return $this->getMarkers();
-    }
-
-    /**
      * Gets the data required to generate the stay marker. Extracted from case.
      *
      * @return array
      */
-    private function getStayMarkerData()
+    protected function getStayMarkerData()
     {
-        $case = $this->getCase();
         return [
-            'stayData' => $case['stays'],
-            'appealData' => isset($case['appeals'][0]) ? $case['appeals'][0] : null,
+            'stayData' => isset($this->getCase()['stays']) ? $this->getCase()['stays'] : [],
+            'appealData' => isset($this->getCase()['appeals'][0]) ? $this->getCase()['appeals'][0] : [],
         ];
     }
 
@@ -64,7 +31,7 @@ class CaseMarkers extends Markers
      * @param array $data
      * @return array
      */
-    private function generateStayMarkers($data)
+    protected function generateStayMarkers($data)
     {
         if (empty($data['appealData']) ||
             (!empty($data['appealData']['decisionDate']) &&
