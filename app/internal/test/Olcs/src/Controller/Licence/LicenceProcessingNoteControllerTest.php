@@ -86,7 +86,7 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
         $mockRequest = m::mock('\Zend\Http\PhpEnvironment\Request');
         $mockRequest->shouldReceive('getQuery')->andReturn($mockParams);
 
-        $this->controller->expects($this->exactly(2))
+        $this->controller->expects($this->once())
             ->method('getRequest')
             ->will($this->returnValue($mockRequest));
 

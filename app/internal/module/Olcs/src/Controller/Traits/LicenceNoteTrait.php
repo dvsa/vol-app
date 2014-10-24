@@ -158,9 +158,11 @@ trait LicenceNoteTrait
             $searchData['licence'] = $licenceId;
         }
 
+        $requestQuery = $this->getRequest()->getQuery();
+
         $filters = array_merge(
             $searchData,
-            $this->getRequest()->getQuery()->toArray()
+            $requestQuery->toArray()
         );
 
         //if noteType is set to all
@@ -185,7 +187,7 @@ trait LicenceNoteTrait
             $formattedResult,
             array_merge(
                 $filters,
-                array('query' => $this->getRequest()->getQuery())
+                array('query' => $requestQuery)
             ),
             true
         );
