@@ -106,9 +106,9 @@ class Search extends AbstractData implements ServiceLocatorAwareInterface, ListD
             $nav[] = $searchIndex->getNavigation();
         }
 
-        $navFactory = new ConstructedNavigationFactory($nav);
+        $navFactory = $this->getServiceLocator()->getServiceLocator()->get('NavigationFactory');
 
-        return $navFactory->createService($this->getServiceLocator()->getServiceLocator());
+        return $navFactory->getNavigation($nav);
     }
 
     /**
@@ -116,13 +116,16 @@ class Search extends AbstractData implements ServiceLocatorAwareInterface, ListD
      */
     public function fetchResults()
     {
-        $query = [
-            'limit' => $this->getLimit(),
-            'page' => $this->getPage()
-        ];
+        if (is_null($this->getData('results'))) {
+            $query = [
+                'limit' => $this->getLimit(),
+                'page' => $this->getPage()
+            ];
 
-        $uri = sprintf('/%s/%s?%s', $this->getSearch(), $this->getIndex(), http_build_query($query));
-        return $this->getRestClient()->get($uri);
+            $uri = sprintf('/%s/%s?%s', $this->getSearch(), $this->getIndex(), http_build_query($query));
+            $this->setData('results', $this->getRestClient()->get($uri));
+        }
+        return $this->getData('results');
     }
 
     /**

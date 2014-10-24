@@ -66,10 +66,7 @@ abstract class SearchAbstract
     /**
      * @return array
      */
-    public function getColumns()
-    {
-        return [];
-    }
+    abstract public function getColumns();
 
     /**
      * @return array

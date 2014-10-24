@@ -14,6 +14,7 @@ class HeaderSearch
     /**
      * @Form\Attributes({"class": "search__input", "placeholder": "Search"})
      * @Form\Type("Text")
+     * @Form\Validator({"name": "NotEmpty"})
      */
     protected $search;
 

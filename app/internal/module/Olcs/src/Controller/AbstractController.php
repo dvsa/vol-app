@@ -83,10 +83,16 @@ class AbstractController extends AbstractActionController
         $this->getViewHelperManager()->get('placeholder')->getContainer('tableFilters')->set($filters);
     }
 
+    public function setSearchForm($form)
+    {
+        $this->searchForm = $form;
+        return $this;
+    }
+
     /**
      * Gets the search form for the header, it is cached on the object so that the search query is maintained
      */
-    protected function getSearchForm()
+    public function getSearchForm()
     {
         if ($this->searchForm === null) {
             $this->searchForm = $this->getFormClass('HeaderSearch');

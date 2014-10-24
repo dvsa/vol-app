@@ -30,6 +30,6 @@ class SearchTypeManager extends AbstractPluginManager
             return;
         }
 
-        throw Exception\RuntimeException('Invalid class');
+        throw new Exception\RuntimeException('Invalid class');
     }
 }

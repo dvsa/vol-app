@@ -31,19 +31,14 @@ class SearchController extends AbstractController
         //filters, index, search query, page, limit
 
         //a post request can come from two forms a) the filter form, b) the query form
+        $form = $this->getSearchForm();
+        $form->setData($this->params()->fromPost());
 
-        $search = trim($this->params()->fromPost('search'));
-
-        if (!empty($search)) {
-            $form = $this->getSearchForm();
-            $form->setData($this->params()->fromPost());
-
-            if ($form->isValid()) {
-                //save to session, reset filters in session...
-                //get index from post as well, override what is in the route match
-                $data = $form->getData();
-                $this->getEvent()->getRouteMatch()->setParam('index', $data['index']);
-            }
+        if ($form->isValid()) {
+            //save to session, reset filters in session...
+            //get index from post as well, override what is in the route match
+            $data = $form->getData();
+            $this->getEvent()->getRouteMatch()->setParam('index', $data['index']);
         }
     }
 

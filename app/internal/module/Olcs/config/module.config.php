@@ -147,6 +147,12 @@ return array(
     ),
     'asset_path' => '//dvsa-static.olcsdv-ap01.olcs.npm',
     'service_manager' => array(
+        'aliases' => [
+            'NavigationFactory' => 'Olcs\Service\NavigationFactory'
+        ],
+        'invokables' =>[
+            'Olcs\Service\NavigationFactory' => 'Olcs\Service\NavigationFactory'
+        ],
         'factories' => array(
             'ApplicationJourneyHelper' => function ($sm) {
                 $helper = new \Olcs\Helper\ApplicationJourneyHelper();
