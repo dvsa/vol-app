@@ -126,7 +126,7 @@ class PsvDisc extends AbstractData
      */
     public function setIsPrintingOffAndAssignNumber($discs = [], $startNumber = null)
     {
-        $this->updateDiscs($discs, ['isPrinting' => 'N', 'issuedDate' => strftime("%Y-%m-%d")], $startNumber);
+        $this->updateDiscs($discs, ['isPrinting' => 'N', 'issuedDate' => strftime("%Y-%m-%d %H:%M:%S")], $startNumber);
     }
 
     /**
