@@ -22,7 +22,9 @@ use Common\Controller\Lva\Traits\LicenceOperatingCentresControllerTrait;
 class OperatingCentresController extends Lva\AbstractOperatingCentresController
 {
     use LicenceControllerTrait,
-        LicenceOperatingCentresControllerTrait;
+        LicenceOperatingCentresControllerTrait {
+            LicenceOperatingCentresControllerTrait::alterActionForm as commonAlterActionForm;
+        }
 
     protected $lva = 'licence';
     protected $location = 'external';
@@ -74,9 +76,7 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController
      */
 
     /**
-     * Generic licence action form alterations
-     *
-     * @TODO should live in the licence trait, but calls parent... so needs refactoring
+     * Alter action form
      *
      * @param \Zend\Form\Form $form
      */
@@ -84,16 +84,26 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController
     {
         $form = parent::alterActionForm($form);
 
-        $filter = $form->getInputFilter();
+        // invoke aliased method
+        $this->commonAlterActionForm($form);
 
-        $data = $this->getVehicleAuthsForOperatingCentre($this->params('child_id'));
+        $addressElement = $form->get('address');
 
-        foreach (['vehicles', 'trailers'] as $which) {
-            $key = 'noOf' . ucfirst($which) . 'Possessed';
+        $helper = $this->getServiceLocator()
+            ->get('Helper\Form');
+        $helper->disableElements($addressElement);
+        $helper->disableValidation($form->getInputFilter()->get('address'));
 
-            if ($filter->get('data')->has($key)) {
-                $this->attachCantIncreaseValidator($filter->get('data')->get($key), $which, $data[$key]);
-            }
+        $lockedElements = array(
+            $addressElement->get('searchPostcode'),
+            $addressElement->get('addressLine1'),
+            $addressElement->get('town'),
+            $addressElement->get('postcode'),
+            $addressElement->get('countryCode'),
+        );
+
+        foreach ($lockedElements as $element) {
+            $helper->lockElement($element, 'operating-centre-address-requires-variation');
         }
 
         return $form;
