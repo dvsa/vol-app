@@ -143,4 +143,19 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController
 
         return $form;
     }
+
+    /**
+     * Remove the advertisements fieldset and the confirmation checkboxes
+     *
+     * @param \Zend\Form\Form $form
+     */
+    protected function alterActionFormForGoods(Form $form)
+    {
+        parent::alterActionFormForGoods($form);
+
+        $form->remove('advertisements')
+            ->get('data')
+            ->remove('sufficientParking')
+            ->remove('permission');
+    }
 }
