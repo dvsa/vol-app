@@ -206,8 +206,8 @@ class CaseMarkersTest extends \PHPUnit_Framework_TestCase
                             'id' => 1,
                             'appeals' => [
                                 0 => $this->getAppealData(
-                                        ['withdrawnDate' => '2000-01-01 00:00:00']
-                                    )
+                                    ['withdrawnDate' => '2000-01-01 00:00:00']
+                                )
                             ]
                         ]
                     ]
@@ -222,7 +222,8 @@ class CaseMarkersTest extends \PHPUnit_Framework_TestCase
                     'data' => [
                         'case' => [
                             'id' => 1,
-                            'appeals' => [0 => $this->getAppealData(
+                            'appeals' => [
+                                0 => $this->getAppealData(
                                     [
                                         'outcome' => 'test',
                                         'decisionDate' => 'test'
