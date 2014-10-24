@@ -39,10 +39,25 @@ class NoteController extends OlcsController\CrudAbstract
      */
     protected $pageLayoutInner = 'case/inner-layout';
 
+    /**
+     * Holds the navigation ID,
+     * required when an entire controller is
+     * represented by a single navigation id.
+     */
+    protected $navigationId = 'case_processing_notes';
+
+    /**
+     * Holds the service name
+     *
+     * @var string
+     */
+    protected $service = 'Note';
+
     public function __construct()
     {
         $this->setTemplatePrefix('case/processing');
-        $this->setRoutePrefix('case/processing');
+        $this->setRoutePrefix('case_processing_notes');
+        $this->setRedirectIndexRoute('');
     }
 
     /**
