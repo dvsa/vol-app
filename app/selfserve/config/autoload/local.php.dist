@@ -8,4 +8,12 @@ return array(
             'postcode' => 'http://sc-address.scdv-ap01.sc.npm/'
         ),
     ),
+    'jackrabbit' => array(
+        'http' => array(),
+        'client' => array(
+            'baseuri' => 'http://scdv-ap05.sc.npm:8080/hcs',
+            'uuid' => 'uD12345',
+            'workspace' => 'olcs'
+        )
+    ),
 );
