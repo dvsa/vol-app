@@ -109,7 +109,10 @@ class CaseMarkers extends AbstractData
 
         if (is_array($markerTypes)) {
             foreach ($markerTypes as $type) {
-                if (empty($this->getTypeMarkers($type)) && !empty($this->getCase())) {
+                if (empty($this->getTypeMarkers($type)) &&
+                    !empty($this->getCase()) &&
+                    !empty($this->getCase()['appeals'][0])
+                ) {
                     $generateMethod = 'generate' . ucfirst($type) . 'Markers';
                     $dataMethod = 'get' . ucfirst($type) . 'MarkerData';
 
