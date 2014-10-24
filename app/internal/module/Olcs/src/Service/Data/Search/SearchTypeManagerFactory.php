@@ -6,6 +6,10 @@ use Zend\ServiceManager\Config as ServiceManagerConfig;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Class SearchTypeManagerFactory
+ * @package Olcs\Service\Data\Search
+ */
 class SearchTypeManagerFactory implements FactoryInterface
 {
     /**

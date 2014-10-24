@@ -5,6 +5,10 @@ namespace OlcsTest\Service\Data\Search;
 use Olcs\Data\Object\Search\Licence;
 use Olcs\Service\Data\Search\SearchTypeManager;
 
+/**
+ * Class SearchTypeManagerTest
+ * @package OlcsTest\Service\Data\Search
+ */
 class SearchTypeManagerTest extends \PHPUnit_Framework_TestCase
 {
     public function testValidatePlugin()

@@ -19,7 +19,11 @@ class HeaderSearch
     protected $search;
 
     /**
-     * @Form\Attributes({"class": "search__select", "id": "search-select", "style": "position:absolute; top:3px; right:40px"})
+     * @Form\Attributes({
+     *      "class": "search__select",
+     *      "id": "search-select",
+     *      "style": "position:absolute; top:3px; right:40px"
+     * })
      * @Form\Type("DynamicSelect")
      * @Form\Options({
      *      "service_name": "Olcs\Service\Data\Search\Search"

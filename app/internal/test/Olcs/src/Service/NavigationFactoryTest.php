@@ -9,6 +9,10 @@ use Zend\Mvc\Router\RouteMatch;
 use Zend\Mvc\Service\ServiceManagerConfig;
 use Zend\ServiceManager\ServiceManager;
 
+/**
+ * Class NavigationFactoryTest
+ * @package OlcsTest\Service
+ */
 class NavigationFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -31,32 +35,32 @@ class NavigationFactoryTest extends \PHPUnit_Framework_TestCase
                     'service_manager' => array(
                         'factories' => array(
                             'Config' => function () {
-                                    return array(
-                                        'navigation' => array(
-                                            'file'    => __DIR__ . '/_files/navigation.xml',
-                                            'default' => array(
-                                                array(
-                                                    'label' => 'Page 1',
-                                                    'uri'   => 'page1.html'
-                                                ),
-                                                array(
-                                                    'label' => 'MVC Page',
-                                                    'route' => 'foo',
-                                                    'pages' => array(
-                                                        array(
-                                                            'label' => 'Sub MVC Page',
-                                                            'route' => 'foo'
-                                                        )
+                                return array(
+                                    'navigation' => array(
+                                        'file'    => __DIR__ . '/_files/navigation.xml',
+                                        'default' => array(
+                                            array(
+                                                'label' => 'Page 1',
+                                                'uri'   => 'page1.html'
+                                            ),
+                                            array(
+                                                'label' => 'MVC Page',
+                                                'route' => 'foo',
+                                                'pages' => array(
+                                                    array(
+                                                        'label' => 'Sub MVC Page',
+                                                        'route' => 'foo'
                                                     )
-                                                ),
-                                                array(
-                                                    'label' => 'Page 3',
-                                                    'uri'   => 'page3.html'
                                                 )
+                                            ),
+                                            array(
+                                                'label' => 'Page 3',
+                                                'uri'   => 'page3.html'
                                             )
                                         )
-                                    );
-                                }
+                                    )
+                                );
+                            }
                         )
                     ),
                 )
@@ -69,11 +73,15 @@ class NavigationFactoryTest extends \PHPUnit_Framework_TestCase
         $sm->get('Application')->bootstrap();
 
         $app = $this->serviceManager->get('Application');
-        $app->getMvcEvent()->setRouteMatch(new RouteMatch(array(
-            'controller' => 'post',
-            'action'     => 'view',
-            'id'         => '1337',
-        )));
+        $app->getMvcEvent()->setRouteMatch(
+            new RouteMatch(
+                array(
+                    'controller' => 'post',
+                    'action'     => 'view',
+                    'id'         => '1337',
+                )
+            )
+        );
     }
 
     public function testCreateService()
@@ -84,4 +92,3 @@ class NavigationFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Zend\Navigation\Navigation', $sut->getNavigation([]));
     }
 }
- 
