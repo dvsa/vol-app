@@ -52,12 +52,19 @@ class CaseMarkersTest extends \PHPUnit_Framework_TestCase
 
     public function testSetAndGetCase()
     {
-        $input = new \StdClass();
+        $input = ['foo'];
         $this->sut->setCase($input);
 
         $this->assertEquals($this->sut->getCase(), $input);
     }
 
+    public function testSetAndGetLicence()
+    {
+        $input = ['foo'];
+        $this->sut->setLicence($input);
+
+        $this->assertEquals($this->sut->getLicence(), $input);
+    }
 
     /**
      * Test generate markers
@@ -108,7 +115,8 @@ class CaseMarkersTest extends \PHPUnit_Framework_TestCase
                         'case' => [
                             'id' => 1,
                             'stays' => [],
-                            'appeals' => []
+                            'appeals' => [],
+                            'licence' => 'foo'
                         ]
                     ]
                 ],
@@ -123,7 +131,8 @@ class CaseMarkersTest extends \PHPUnit_Framework_TestCase
                         'case' => [
                             'id' => 1,
                             'stays' => $this->generateStayData(3),
-                            'appeals' => [0 => $this->getAppealData()]
+                            'appeals' => [0 => $this->getAppealData()],
+                            'licence' => 'foo'
                         ]
                     ]
                 ],
@@ -143,6 +152,7 @@ class CaseMarkersTest extends \PHPUnit_Framework_TestCase
                                     ['withdrawnDate' => '2000-01-01 00:00:00']
                                 )
                             ],
+                            'licence' => 'foo'
                         ]
                     ]
                 ],
@@ -164,11 +174,67 @@ class CaseMarkersTest extends \PHPUnit_Framework_TestCase
                                 ]
                             )
                             ],
+                            'licence' => 'foo'
                         ]
                     ]
                 ],
                 // expected no markers because appeal decision date is set
                 ['typeCount' => 1, 'markerCount' => ['stay' => 0]]
+            ],
+            // appeal markers
+            [
+                // input all valid data 1 marker expected
+                [
+                    'markerTypes' => ['appeal'],
+                    'data' => [
+                        'case' => [
+                            'id' => 1,
+                            'appeals' => [0 => $this->getAppealData()],
+                            'licence' => 'foo'
+                        ]
+                    ]
+                ],
+                // expected
+                ['typeCount' => 1, 'markerCount' => ['appeal' => 1]]
+            ],
+            [
+                // input all valid stay data 0 markers expected as appeal withdrawn date is set
+                [
+                    'markerTypes' => ['appeal'],
+                    'data' => [
+                        'case' => [
+                            'id' => 1,
+                            'appeals' => [
+                                0 => $this->getAppealData(
+                                        ['withdrawnDate' => '2000-01-01 00:00:00']
+                                    )
+                            ]
+                        ]
+                    ]
+                ],
+                // expected no markers because appeal decision date is set
+                ['typeCount' => 1, 'markerCount' => ['appeal' => 0]]
+            ],
+            [
+                // input all valid stay data 0 markers expected as appeal outcome and decision date is set
+                [
+                    'markerTypes' => ['appeal'],
+                    'data' => [
+                        'case' => [
+                            'id' => 1,
+                            'appeals' => [0 => $this->getAppealData(
+                                    [
+                                        'outcome' => 'test',
+                                        'decisionDate' => 'test'
+                                    ]
+                                )
+                            ],
+                            'licence' => 'foo'
+                        ]
+                    ]
+                ],
+                // expected no markers because appeal decision date is set
+                ['typeCount' => 1, 'markerCount' => ['appeal' => 0]]
             ]
         ];
     }
@@ -193,6 +259,7 @@ class CaseMarkersTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'withdrawnDate' => isset($override['withdrawnDate']) ? $override['withdrawnDate'] : '',
+            'appealDate' => isset($override['appealDate']) ? $override['appealDate'] : '',
             'outcome' => isset($override['outcome']) ? $override['outcome'] : '',
             'decisionDate' =>  isset($override['decisionDate']) ? $override['decisionDate'] : ''
         ];
