@@ -71,6 +71,7 @@ return array(
             'LvaLicence/OperatingCentres'           => 'Olcs\Controller\Lva\Licence\OperatingCentresController',
             'LvaLicence/TransportManagers'          => 'Olcs\Controller\Lva\Licence\TransportManagersController',
             'LvaLicence/Safety'                     => 'Olcs\Controller\Lva\Licence\SafetyController',
+            'LvaLicence/CommunityLicences'          => 'Olcs\Controller\Lva\Licence\CommunityLicencesController',
 
             'LvaVariation'                          => 'Olcs\Controller\Lva\Variation\OverviewController',
             'LvaVariation/TypeOfLicence'            => 'Olcs\Controller\Lva\Variation\TypeOfLicenceController',
@@ -81,6 +82,7 @@ return array(
             'LvaVariation/OperatingCentres'         => 'Olcs\Controller\Lva\Variation\OperatingCentresController',
             'LvaVariation/TransportManagers'        => 'Olcs\Controller\Lva\Variation\TransportManagersController',
             'LvaVariation/Safety'                   => 'Olcs\Controller\Lva\Variation\SafetyController',
+            'LvaVariation/CommunityLicences'        => 'Olcs\Controller\Lva\Variation\CommunityLicencesController',
         )
     ),
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',
