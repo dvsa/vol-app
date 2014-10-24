@@ -88,7 +88,7 @@ return array_merge(
         'operators' => [
             'type' => 'Literal',
             'options' => [
-                'route' => '/search/operators',
+                'route' => '/search2/operators',
                 'defaults' => [
                     'controller' => 'SearchController',
                     'action' => 'operator'
