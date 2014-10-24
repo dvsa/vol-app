@@ -97,6 +97,7 @@ return array(
             'LvaApplication/BusinessDetails'    => 'Olcs\Controller\Lva\Application\BusinessDetailsController',
             'LvaApplication/Addresses'          => 'Olcs\Controller\Lva\Application\AddressesController',
             'LvaApplication/People'             => 'Olcs\Controller\Lva\Application\PeopleController',
+            'LvaApplication/OperatingCentres'   => 'Olcs\Controller\Lva\Application\OperatingCentresController',
             'LvaApplication/FinancialEvidence'  => 'Olcs\Controller\Lva\Application\FinancialEvidenceController',
             'LvaApplication/TransportManagers'  => 'Olcs\Controller\Lva\Application\TransportManagersController',
             'LvaApplication/Safety'             => 'Olcs\Controller\Lva\Application\SafetyController',
