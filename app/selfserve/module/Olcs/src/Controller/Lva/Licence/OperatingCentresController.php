@@ -72,4 +72,65 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController
         return $this->getLicenceId();
     }
      */
+
+    /**
+     * Generic licence action form alterations
+     *
+     * @TODO should live in the licence trait, but calls parent... so needs refactoring
+     *
+     * @param \Zend\Form\Form $form
+     */
+    public function alterActionForm(Form $form)
+    {
+        $form = parent::alterActionForm($form);
+
+        $filter = $form->getInputFilter();
+
+        $data = $this->getVehicleAuthsForOperatingCentre($this->params('child_id'));
+
+        foreach (['vehicles', 'trailers'] as $which) {
+            $key = 'noOf' . ucfirst($which) . 'Possessed';
+
+            if ($filter->get('data')->has($key)) {
+                $this->attachCantIncreaseValidator($filter->get('data')->get($key), $which, $data[$key]);
+            }
+        }
+
+        return $form;
+    }
+
+    /**
+     * Alter the form
+     *
+     * @TODO should live in the licence trait, but calls parent... so needs refactoring
+     *
+     * @param \Zend\Form\Form $form
+     * @return \Zend\Form\Form
+     */
+    public function alterForm(Form $form)
+    {
+        /*
+        $form = $this->getLicenceSectionService()->alterForm($form);
+         */
+
+        $form = parent::alterForm($form);
+
+        $data = $this->getTotalAuthorisationsForLicence($this->getIdentifier());
+
+        $filter = $form->getInputFilter();
+
+        foreach (['vehicles', 'trailers'] as $which) {
+            $key = 'totAuth' . ucfirst($which);
+
+            if ($filter->get('data')->has($key)) {
+                $this->attachCantIncreaseValidator(
+                    $filter->get('data')->get($key),
+                    'total-' . $which,
+                    $data[$key]
+                );
+            }
+        }
+
+        return $form;
+    }
 }
