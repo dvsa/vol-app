@@ -58,34 +58,6 @@ class PublicInquirySlaMain extends CaseBase
 
     /**
      * @Form\Options({
-     *     "label": "Date of written reason",
-     *     "create_empty_option": true,
-     *     "render_delimiters": "d m y",
-     *     "category": "pi",
-     *     "field": "writtenReasonDate"
-     * })
-     * @Form\Required(true)
-     * @Form\AllowEmpty(true)
-     * @Form\Input("\Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Type("SlaDateSelect")
-     * @Form\Filter({"name":"DateSelectNullifier"})
-     * @Form\Validator({
-     *      "name": "ValidateIf",
-     *      "options": {
-     *          "context_field": "writtenOutcome",
-     *          "context_values": {"piwo_reason"},
-     *          "allow_empty": true,
-     *          "validators": {
-     *              {"name": "Date", "options": {"format": "Y-m-d"}},
-     *              {"name": "\Common\Form\Elements\Validators\DateNotInFuture"}
-     *          }
-     *      }
-     * })
-     */
-    public $writtenReasonDate = null;
-
-    /**
-     * @Form\Options({
      *     "label": "Date of TC's written decision",
      *     "create_empty_option": true,
      *     "render_delimiters": "d m y",

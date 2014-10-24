@@ -14,12 +14,6 @@ $(function() {
 
     OLCS.showHideInput({
         'source': 'select[name="fields[writtenOutcome]"]',
-        'dest': 'label[for="fields[writtenReasonDate]"]',
-        'predicate': isReason
-    });
-
-    OLCS.showHideInput({
-        'source': 'select[name="fields[writtenOutcome]"]',
         'dest': 'label[for="fields[tcWrittenReasonDate]"]',
         'predicate': isReason
     });
