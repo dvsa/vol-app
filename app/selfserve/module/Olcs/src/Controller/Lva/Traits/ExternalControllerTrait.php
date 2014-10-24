@@ -87,6 +87,8 @@ trait ExternalControllerTrait
      */
     protected function render($titleSuffix, Form $form = null)
     {
+        $this->attachCurrentMessages();
+
         if ($titleSuffix instanceof ViewModel) {
             return $titleSuffix;
         }

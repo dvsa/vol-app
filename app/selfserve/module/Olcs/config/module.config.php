@@ -34,6 +34,16 @@ $routes = array(
                 'action' => 'createApplication'
             )
         )
+    ),
+    'create_variation' => array(
+        'type' => 'segment',
+        'options' => array(
+            'route' => '/variation/create/:id',
+            'defaults' => array(
+                'controller' => 'LvaLicence/Overview',
+                'action' => 'createVariation'
+            )
+        )
     )
 );
 
