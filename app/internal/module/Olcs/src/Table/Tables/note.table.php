@@ -31,21 +31,20 @@ return array(
                 $routeParams = array('action' => 'edit', 'id' => $data['id']);
 
                 switch ($data['noteType']['id']) {
-                    case 'note_t_bus':
-                    $route = 'licence/bus-processing/modify-note';
-                    $routeParams['busRegId'] = $data['busReg']['id'];
-                    break;
-                    case 'note_t_case':
-                        $route = 'case_processing_notes';
+                    case 'licence/bus-processing':
+                        $routeParams['busRegId'] = $data['busReg']['id'];
+                        break;
+                    case 'case_processing_notes':
                         $routeParams['case'] = $data['case']['id'];
                         break;
-                    default:
-                        $route = 'licence/processing/modify-note';
+                    case 'licence/processing':
+                        $routeParams['licence'] = $data['licence']['id'];
+                        break;
                 }
 
                 return '<a href="' . $this->generateUrl(
                     $routeParams,
-                    $route,
+                    $data['routePrefix'] . '/modify-note',
                     true
                 ) . '">' . (new \DateTime($data['createdOn']))->format('d/m/Y') . '</a>';
             },
