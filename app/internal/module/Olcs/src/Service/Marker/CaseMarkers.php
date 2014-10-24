@@ -78,7 +78,7 @@ class CaseMarkers extends Markers
         $marker = [];
         if (!empty($data['appealData'])) {
             if (empty($data['appealData']['withdrawnDate']) &&
-                (empty($data['appealData']['decisionDate']) && empty($data['appealData']['outcome']))
+                (empty($data['appealData']['decisionDate']) || empty($data['appealData']['outcome']))
             ) {
                 array_push($marker, ['content' => $this->generateAppealMarkerContent($data['appealData'])]);
             }

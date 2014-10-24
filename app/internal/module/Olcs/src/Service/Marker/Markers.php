@@ -153,5 +153,4 @@ abstract class Markers extends AbstractData
     {
         return $this->licence;
     }
-    
 }
