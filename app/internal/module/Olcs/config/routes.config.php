@@ -88,7 +88,7 @@ return array_merge(
         'operators' => [
             'type' => 'Literal',
             'options' => [
-                'route' => '/search/operators',
+                'route' => '/search2/operators',
                 'defaults' => [
                     'controller' => 'SearchController',
                     'action' => 'operator'
@@ -112,10 +112,21 @@ return array_merge(
         'search' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/search',
+                'route' => '/search[/:index]',
                 'defaults' => [
                     'controller' => 'SearchController',
-                    'action' => 'index'
+                    'action' => 'index',
+                    'index' => 'licence'
+                ]
+            ]
+        ],
+        'advancedsearch' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/advancedsearch',
+                'defaults' => [
+                    'controller' => 'SearchController',
+                    'action' => 'advanced'
                 ]
             ]
         ],

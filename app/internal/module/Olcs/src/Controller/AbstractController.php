@@ -10,6 +10,7 @@ namespace Olcs\Controller;
 
 use Common\Controller\Traits;
 use Common\Controller\AbstractActionController;
+use Zend\Session\Container;
 
 /**
  * Abstract Controller
@@ -19,6 +20,8 @@ class AbstractController extends AbstractActionController
     use Traits\ViewHelperManagerAware;
 
     const MAX_LIST_DATA_LIMIT = 100;
+
+    private $searchForm;
 
     /**
      * Retrieve some data from the backend and convert it for use in
@@ -78,5 +81,35 @@ class AbstractController extends AbstractActionController
     public function setTableFilters($filters)
     {
         $this->getViewHelperManager()->get('placeholder')->getContainer('tableFilters')->set($filters);
+    }
+
+    public function setSearchForm($form)
+    {
+        $this->searchForm = $form;
+        return $this;
+    }
+
+    /**
+     * Gets the search form for the header, it is cached on the object so that the search query is maintained
+     */
+    public function getSearchForm()
+    {
+        if ($this->searchForm === null) {
+            $this->searchForm = $this->getFormClass('HeaderSearch');
+
+            $container = new Container('search');
+            $this->searchForm->bind($container);
+        }
+
+        return $this->searchForm;
+    }
+
+    protected function renderView($view, $pageTitle = null, $pageSubTitle = null)
+    {
+        $view = parent::renderView($view, $pageTitle, $pageSubTitle);
+
+        $view->setVariable('searchForm', $this->getSearchForm());
+
+        return $view;
     }
 }

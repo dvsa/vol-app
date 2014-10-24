@@ -82,7 +82,8 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
                 'redirect',
                 'getServiceLocator',
                 'getSubNavigation',
-                'setTableFilters'
+                'setTableFilters',
+                'getSearchForm'
             )
         );
 
