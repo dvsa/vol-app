@@ -19,6 +19,8 @@ trait FeesActionTrait
      */
     public function feesAction()
     {
+        $this->loadScripts(['fee-filter', 'table-actions']);
+
         $licenceId = $this->params()->fromRoute('licence');
         if (!$licenceId) {
             $applicationId = $this->params()->fromRoute('applicationId');
@@ -38,21 +40,15 @@ trait FeesActionTrait
             $applicationId = null;
             $this->pageLayout = 'licence';
         }
-        $params = [
-            'licence' => $licenceId,
-            'feeStatus' => "IN ('lfs_ot', 'lfs_wr')",
-            'page'    => $this->params()->fromRoute('page', 1),
-            'sort'    => $this->params()->fromRoute('sort', 'receivedDate'),
-            'order'   => $this->params()->fromRoute('order', 'DESC'),
-            'limit'   => $this->params()->fromRoute('limit', 10),
+
+        $status = $this->params()->fromQuery('status');
+        $filters = [
+            'status' => $status
         ];
 
-        $feesService = $this->getServiceLocator()->get('Olcs\Service\Data\Fee');
+        $table = $this->getFeesTable($licenceId, $status);
 
-        $results = $feesService->getFees($params, null);
-
-        $table = $this->getTable('fees', $results, $params);
-        $view = $this->getViewWithLicence(['table' => $table]);
+        $view = $this->getViewWithLicence(['table' => $table, 'form'  => $this->getFeeFilterForm($filters)]);
         $view->setTemplate('licence/fees');
 
         if ($applicationId) {
@@ -63,5 +59,60 @@ trait FeesActionTrait
         }
 
         return $renderedView;
+    }
+
+    /**
+     * Get fee filter form
+     * 
+     * @param array $filters
+     * @return Zend\Form\Form
+     */
+    protected function getFeeFilterForm($filters = [])
+    {
+        $form = $this->getForm('fee-filter');
+        $form->remove('csrf');
+        $form->setData($filters);
+
+        return $form;
+    }
+
+    /**
+     * Get fees table
+     * 
+     * @param string $licenceId
+     * @param string $status
+     * @return Common\Service\Table\TableBuilder;
+     */
+    protected function getFeesTable($licenceId, $status)
+    {
+        switch ($status) {
+            case 'historical':
+                $feeStatus = "IN ('lfs_pd', 'lfs_w', 'lfs_cn')";
+                break;
+            case 'all':
+                $feeStatus = "";
+                break;
+            case 'current':
+            default:
+                $feeStatus = "IN ('lfs_ot', 'lfs_wr')";
+        }
+        $params = [
+            'licence' => $licenceId,
+            'page'    => $this->params()->fromQuery('page', 1),
+            'sort'    => $this->params()->fromQuery('sort', 'receivedDate'),
+            'order'   => $this->params()->fromQuery('order', 'DESC'),
+            'limit'   => $this->params()->fromQuery('limit', 10)
+        ];
+        if ($feeStatus) {
+            $params['feeStatus'] = $feeStatus;
+        }
+
+        $feesService = $this->getServiceLocator()->get('Olcs\Service\Data\Fee');
+        $results = $feesService->getFees($params, null);
+
+        $tableParams = array_merge($params, ['query' => $this->getRequest()->getQuery()]);
+        $table = $this->getTable('fees', $results, $tableParams);
+
+        return $table;
     }
 }

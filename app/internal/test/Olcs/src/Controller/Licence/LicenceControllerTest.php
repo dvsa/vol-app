@@ -461,35 +461,29 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
     /**
      * Test fees action
      * @group licenceController
+     * @dataProvider feesProvider
      */
-    public function testFeesAction()
+    public function testFeesAction($status, $feeStatus)
     {
-        $params = $this->getMock('\stdClass', ['fromRoute']);
+        $params = $this->getMock('\stdClass', ['fromRoute', 'fromQuery']);
 
-        $params->expects($this->at(0))
+        $params->expects($this->once())
             ->method('fromRoute')
             ->with('licence')
             ->will($this->returnValue(1));
 
-        $params->expects($this->at(1))
-            ->method('fromRoute')
-            ->with('page')
-            ->will($this->returnValue(1));
-
-        $params->expects($this->at(2))
-            ->method('fromRoute')
-            ->with('sort')
-            ->will($this->returnValue('receivedDate'));
-
-        $params->expects($this->at(3))
-            ->method('fromRoute')
-            ->with('order')
-            ->will($this->returnValue('DESC'));
-
-        $params->expects($this->at(4))
-            ->method('fromRoute')
-            ->with('limit')
-            ->will($this->returnValue(10));
+        $params->expects($this->any())->method('fromQuery')
+            ->will(
+                $this->returnValueMap(
+                    [
+                        ['status', $status],
+                        ['page', 1, 1],
+                        ['sort', 'receivedDate', 'receivedDate'],
+                        ['order', 'DESC', 'DESC'],
+                        ['limit', 10, 10],
+                    ]
+                )
+            );
 
         $this->controller->expects($this->any())
             ->method('params')
@@ -499,12 +493,14 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
 
         $feesParams = [
             'licence' => 1,
-            'feeStatus' => "IN ('lfs_ot', 'lfs_wr')",
-            'page'    => 1,
+            'page'    => '1',
             'sort'    => 'receivedDate',
             'order'   => 'DESC',
             'limit'   => 10,
         ];
+        if ($feeStatus) {
+            $feesParams['feeStatus'] = $feeStatus;
+        }
 
         $fees = [
             'Results' => [
@@ -540,9 +536,37 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
              ->method('getServiceLocator')
              ->will($this->returnValue($mockServiceLocator));
 
+        $mockForm = $this->getMock('\StdClass', ['remove', 'setData']);
+        $mockForm->expects($this->once())
+            ->method('remove')
+            ->with($this->equalTo('csrf'))
+            ->will($this->returnValue(true));
+
+        $mockForm->expects($this->once())
+            ->method('setData')
+            ->will($this->returnValue(true));
+
+        $this->controller->expects($this->once())
+            ->method('getForm')
+            ->will($this->returnValue($mockForm));
+
         $response = $this->controller->feesAction();
 
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
 
+    }
+
+    /**
+     * Goods or psv provider
+     *
+     * @return array
+     */
+    public function feesProvider()
+    {
+        return [
+            ['current', "IN ('lfs_ot', 'lfs_wr')"],
+            ['all', ''],
+            ['historical', "IN ('lfs_pd', 'lfs_w', 'lfs_cn')"]
+        ];
     }
 }
