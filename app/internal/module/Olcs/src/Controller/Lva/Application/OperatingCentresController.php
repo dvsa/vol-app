@@ -9,6 +9,7 @@ namespace Olcs\Controller\Lva\Application;
 
 use Common\Controller\Lva;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
+use Common\Controller\Lva\Traits\ApplicationOperatingCentresControllerTrait;
 
 /**
  * Internal Application Operating Centres Controller
@@ -17,7 +18,8 @@ use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
  */
 class OperatingCentresController extends Lva\AbstractOperatingCentresController
 {
-    use ApplicationControllerTrait;
+    use ApplicationControllerTrait,
+        ApplicationOperatingCentresControllerTrait;
 
     protected $lva = 'application';
     protected $location = 'internal';
