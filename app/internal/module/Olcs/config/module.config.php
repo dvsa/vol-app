@@ -113,6 +113,7 @@ return array(
             'LvaLicence/People'                     => 'Olcs\Controller\Lva\Licence\PeopleController',
             'LvaLicence/TransportManagers'          => 'Olcs\Controller\Lva\Licence\TransportManagersController',
             'LvaLicence/Safety'                     => 'Olcs\Controller\Lva\Licence\SafetyController',
+            'LvaLicence/CommunityLicences'          => 'Olcs\Controller\Lva\Licence\CommunityLicencesController',
 
             'LvaVariation'                          => 'Olcs\Controller\Lva\Variation\OverviewController',
             'LvaVariation/TypeOfLicence'            => 'Olcs\Controller\Lva\Variation\TypeOfLicenceController',
@@ -122,6 +123,7 @@ return array(
             'LvaVariation/People'                   => 'Olcs\Controller\Lva\Variation\PeopleController',
             'LvaVariation/TransportManagers'        => 'Olcs\Controller\Lva\Variation\TransportManagersController',
             'LvaVariation/Safety'                   => 'Olcs\Controller\Lva\Variation\SafetyController',
+            'LvaVariation/CommunityLicences'        => 'Olcs\Controller\Lva\Variation\CommunityLicencesController',
         )
     ),
     'view_manager' => array(
