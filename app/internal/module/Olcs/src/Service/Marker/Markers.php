@@ -50,7 +50,8 @@ abstract class Markers extends AbstractData
 
         if (is_array($markerTypes)) {
             foreach ($markerTypes as $type) {
-                if (empty($this->getTypeMarkers($type))) {
+                $typeMarkers = $this->getTypeMarkers($type);
+                if (empty($typeMarkers)) {
                     $generateMethod = 'generate' . ucfirst($type) . 'Markers';
                     $dataMethod = 'get' . ucfirst($type) . 'MarkerData';
 
