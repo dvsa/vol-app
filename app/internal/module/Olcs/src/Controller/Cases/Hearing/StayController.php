@@ -205,9 +205,55 @@ class StayController extends OlcsController\CrudAbstract
             $data = $stayRecords[$stayType][0];
         }
 
-        $data = parent::processLoad($data);
+        $data = $this->callParentProcessLoad($data);
+        if (!empty($data['fields']['withdrawnDate'])) {
+            $data['fields']['isWithdrawn'] = 'Y';
+        }
         $data['fields']['stayType'] = $stayType;
 
         return $data;
+    }
+
+    /**
+     * @codeCoverageIgnore Calls parent method
+     * Call parent process load and return result. Public method to allow unit testing
+     *
+     * @param array $data
+     * @return array
+     */
+    public function callParentProcessLoad($data)
+    {
+        return parent::processLoad($data);
+    }
+
+    /**
+     * Override Save data to set the isWithdrawn flag
+     *
+     * @param array $data
+     * @param string $service
+     * @return array
+     */
+    public function save($data, $service = null)
+    {
+        // modify $data
+        if (isset($data['isWithdrawn']) && $data['isWithdrawn'] == 'N') {
+            $data['withdrawnDate'] = null;
+        }
+
+        $data = $this->callParentSave($data, $service);
+
+        return $data;
+    }
+
+    /**
+     * @codeCoverageIgnore Calls parent method
+     * Call parent process load and return result. Public method to allow unit testing
+     *
+     * @param array $data
+     * @return array
+     */
+    public function callParentSave($data, $service = null)
+    {
+        return parent::save($data, $service);
     }
 }

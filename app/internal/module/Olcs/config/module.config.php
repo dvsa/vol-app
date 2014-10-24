@@ -122,6 +122,7 @@ return array(
             'piListData'   => 'Olcs\View\Helper\PiListData',
             'formSubmissionSections' => 'Olcs\Form\View\Helper\SubmissionSections',
             'submissionSectionDetails' => 'Olcs\View\Helper\SubmissionSectionDetails',
+            'markers' => 'Olcs\View\Helper\Markers',
         ),
         'delegators' => array(
             'formElement' => array('Olcs\Form\View\Helper\FormElementDelegatorFactory')
@@ -146,6 +147,9 @@ return array(
     ),
     'asset_path' => '//dvsa-static.olcsdv-ap01.olcs.npm',
     'service_manager' => array(
+        'invokables' => array(
+            'Olcs\Service\Marker\MarkerPluginManager' => 'Olcs\Service\Marker\MarkerPluginManager'
+        ),
         'factories' => array(
             'ApplicationJourneyHelper' => function ($sm) {
                 $helper = new \Olcs\Helper\ApplicationJourneyHelper();
