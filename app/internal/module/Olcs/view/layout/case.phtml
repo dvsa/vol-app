@@ -30,6 +30,7 @@ $markers = $this->placeholder('markers')->getValue();
     <?php endif; ?>
 
     <?php
+        echo $this->markers($markers, 'appeal');
         echo $this->markers($markers, 'stay');
     ?>
 </div>

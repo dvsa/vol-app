@@ -169,7 +169,7 @@ trait CaseControllerTrait
             ->get('Olcs\Service\Marker\MarkerPluginManager')
             ->get('Olcs\Service\Marker\CaseMarkers');
 
-        $markers = $caseMarkerPlugin->generateMarkerTypes(['stay', 'appeal'], ['case' => $case]);
+        $markers = $caseMarkerPlugin->generateMarkerTypes(['appeal', 'stay'], ['case' => $case]);
 
         $placeholder->getContainer('markers')->set($markers);
     }

@@ -24,6 +24,7 @@ class Markers extends AbstractHelper
                 $markup .= '<div class="notice--warning">';
                 $content = isset($marker['content']) ? $marker['content'] : '';
 
+                // split content on new lines
                 if ($convertNewLines) {
                     $content = nl2br($content, true);
                 }
