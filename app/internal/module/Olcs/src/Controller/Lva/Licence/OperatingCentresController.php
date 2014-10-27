@@ -26,4 +26,11 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController
 
     protected $lva = 'licence';
     protected $location = 'internal';
+
+    public function indexAction()
+    {
+        // we can't traitify this due to the parent reference...
+        $this->addVariationInfoMessage();
+        return parent::indexAction();
+    }
 }
