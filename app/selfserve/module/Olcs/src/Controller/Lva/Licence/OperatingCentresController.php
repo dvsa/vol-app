@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Operating Centres Controller
+ * External Licencing Operating Centres Controller
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
@@ -14,7 +14,7 @@ use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
 use Common\Controller\Lva\Traits\LicenceOperatingCentresControllerTrait;
 
 /**
- * Operating Centres Controller
+ * External Licencing Operating Centres Controller
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
@@ -31,30 +31,9 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController
 
     public function indexAction()
     {
+        // we can't traitify this due to the parent reference...
         $this->addVariationInfoMessage();
-
         return parent::indexAction();
-    }
-
-    /**
-     * Add variation info message
-     */
-    protected function addVariationInfoMessage()
-    {
-        $params = [
-            'id' => $this->getIdentifier()
-        ];
-
-        $this->addCurrentMessage(
-            $this->getServiceLocator()->get('Helper\Translation')->formatTranslation(
-                '%s <a href="' . $this->url()->fromRoute('create_variation', $params) . '">%s</a>',
-                array(
-                    'variation-application-text',
-                    'variation-application-link-text'
-                )
-            ),
-            'info'
-        );
     }
 
     /**
@@ -95,35 +74,15 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController
      * Alter the form
      *
      * @TODO should live in the licence trait, but calls parent... so needs refactoring
+     * Therefore currently duped across internal and external
      *
      * @param \Zend\Form\Form $form
      * @return \Zend\Form\Form
      */
     public function alterForm(Form $form)
     {
-        /*
-        $form = $this->getLicenceSectionService()->alterForm($form);
-         */
-
         $form = parent::alterForm($form);
-
-        $data = $this->getTotalAuthorisationsForLicence($this->getIdentifier());
-
-        $filter = $form->getInputFilter();
-
-        foreach (['vehicles', 'trailers'] as $which) {
-            $key = 'totAuth' . ucfirst($which);
-
-            if ($filter->get('data')->has($key)) {
-                $this->attachCantIncreaseValidator(
-                    $filter->get('data')->get($key),
-                    'total-' . $which,
-                    $data[$key]
-                );
-            }
-        }
-
-        return $form;
+        return $this->commonAlterForm($form);
     }
 
     /**
@@ -135,9 +94,9 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController
     {
         parent::alterActionFormForGoods($form);
 
-        $form->remove('advertisements')
-            ->get('data')
-            ->remove('sufficientParking')
-            ->remove('permission');
+        $this->getServiceLocator()->get('Helper\Form')
+            ->remove($form, 'advertisements')
+            ->remove($form, 'data->sufficientParking')
+            ->remove($form, 'data->permission');
     }
 }
