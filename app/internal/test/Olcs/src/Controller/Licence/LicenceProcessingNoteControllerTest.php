@@ -213,7 +213,7 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
         $licenceId = 7;
         $noteType = 'note_t_lic';
         $linkedId = 1;
-        $caseId = 28;
+        $caseId = null;
 
         $this->getFromRoute(0, 'licence', $licenceId);
         $this->getFromRoute(1, 'case', $caseId);

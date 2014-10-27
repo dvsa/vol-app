@@ -35,7 +35,8 @@ class NoteControllerTest extends AbstractHttpControllerTestCase
                 'renderView',
                 'redirectToRoute',
                 'setTableFilters',
-                'loadScripts'
+                'loadScripts',
+                'getCase'
 
             )
         );
@@ -162,7 +163,6 @@ class NoteControllerTest extends AbstractHttpControllerTestCase
     public function testIndexActionModifyRedirect($action)
     {
         $licenceId = 7;
-        $caseId = 28;
         $id = 1;
         $caseId = 28;
         $route = $this->controller->getRoutePrefix() . '/modify-note';
@@ -182,6 +182,41 @@ class NoteControllerTest extends AbstractHttpControllerTestCase
             );
 
         $this->controller->indexAction();
+    }
+
+    public function testAddAction()
+    {
+        $licenceId = 7;
+        $noteType = 'note_t_case';
+        $linkedId = 1;
+        $caseId = 28;
+
+        $this->getFromRoute(0, 'licence', $licenceId);
+        $this->getFromRoute(1, 'case', $caseId);
+        $this->getFromRoute(2, 'noteType', $noteType);
+        $this->getFromRoute(3, 'linkedId', $linkedId);
+
+        $this->controller->expects($this->once())
+            ->method('generateFormWithData');
+
+        $this->controller->expects($this->once())
+            ->method('getCase')
+            ->with($caseId)
+            ->will($this->returnValue(['licence' => ['id' => $licenceId]]));
+
+        $this->controller->expects($this->once())
+            ->method('getView')
+            ->will($this->returnValue($this->view));
+
+        $this->view->expects($this->once())
+            ->method('setTemplate')
+            ->with($this->controller->getTemplatePrefix() . '/notes/form');
+
+        $this->controller->expects($this->once())
+            ->method('renderView')
+            ->with($this->equalTo($this->view));
+
+        $this->controller->addAction();
     }
 
     public function indexActionModifyRedirectProvider()
