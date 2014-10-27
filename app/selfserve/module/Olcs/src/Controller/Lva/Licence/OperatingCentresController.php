@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Operating Centres Controller
+ * External Licencing Operating Centres Controller
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
@@ -14,7 +14,7 @@ use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
 use Common\Controller\Lva\Traits\LicenceOperatingCentresControllerTrait;
 
 /**
- * Operating Centres Controller
+ * External Licencing Operating Centres Controller
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
@@ -31,30 +31,9 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController
 
     public function indexAction()
     {
+        // we can't traitify this due to the parent reference...
         $this->addVariationInfoMessage();
-
         return parent::indexAction();
-    }
-
-    /**
-     * Add variation info message
-     */
-    protected function addVariationInfoMessage()
-    {
-        $params = [
-            'id' => $this->getIdentifier()
-        ];
-
-        $this->addCurrentMessage(
-            $this->getServiceLocator()->get('Helper\Translation')->formatTranslation(
-                '%s <a href="' . $this->url()->fromRoute('create_variation', $params) . '">%s</a>',
-                array(
-                    'variation-application-text',
-                    'variation-application-link-text'
-                )
-            ),
-            'info'
-        );
     }
 
     /**
