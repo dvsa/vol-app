@@ -33,4 +33,19 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController
         $this->addVariationInfoMessage();
         return parent::indexAction();
     }
+
+    /**
+     * Alter the form
+     *
+     * @TODO should live in the licence trait, but calls parent... so needs refactoring
+     * Therefore currently duped across internal and external
+     *
+     * @param \Zend\Form\Form $form
+     * @return \Zend\Form\Form
+     */
+    public function alterForm(Form $form)
+    {
+        $form = parent::alterForm($form);
+        return $this->commonAlterForm($form);
+    }
 }
