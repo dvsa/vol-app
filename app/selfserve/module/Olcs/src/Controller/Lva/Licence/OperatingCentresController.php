@@ -58,24 +58,6 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController
     }
 
     /**
-     * Alter the form
-     *
-     * @param \Zend\Form\Form $form
-     * @return \Zend\Form\Form
-     */
-    /*
-    public function alterForm(Form $form)
-    {
-        return $form;
-    }
-
-    protected function getIdentifier()
-    {
-        return $this->getLicenceId();
-    }
-     */
-
-    /**
      * Alter action form
      *
      * @param \Zend\Form\Form $form
@@ -84,7 +66,7 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController
     {
         $form = parent::alterActionForm($form);
 
-        // invoke aliased method
+        // invoke trait aliased method
         $this->commonAlterActionForm($form);
 
         $addressElement = $form->get('address');
