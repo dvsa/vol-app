@@ -24,6 +24,8 @@ class SlaController extends PublicInquiryController
     {
         $data = parent::processLoad($data);
 
+        //die('<pre>' . print_r($data, 1));
+
         $data = $this->formatData($data);
 
         $this->getServiceLocator()->get('Common\Service\Data\Sla')->setContext('pi', $data);
@@ -45,5 +47,10 @@ class SlaController extends PublicInquiryController
         }
 
         return $data;
+    }
+
+    public function onInvalidPost($form)
+    {
+        $this->processLoad($this->loadCurrent());
     }
 }
