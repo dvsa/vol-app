@@ -9,7 +9,15 @@ $case = $this->placeholder('case')->getValue();
 
 <div class="one-fifth--left">
     <h4><?php echo $this->translate($currentSection->getParent()->getLabel()); ?></h4>
-    <?php echo $this->navigation($currentSectionParent)->menu()->setPartial('layout/partials/subNavigation'); ?>
+    <?php
+        echo $this->navigation($currentSectionParent)->menu()->setPartial('layout/partials/subNavigation');
+
+        $tableFilters = $this->placeholder('tableFilters')->getValue();
+
+        if($tableFilters instanceof \Zend\Form\Form) {
+            echo $this->form($tableFilters);
+        }
+    ?>
 </div>
 <div class="three-fifths">
     <?php echo $this->flashMessengerAll(); ?>

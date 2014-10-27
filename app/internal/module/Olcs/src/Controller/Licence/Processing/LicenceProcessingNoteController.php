@@ -30,6 +30,7 @@ class LicenceProcessingNoteController extends AbstractLicenceProcessingControlle
     {
         $this->setTemplatePrefix('licence/processing');
         $this->setRoutePrefix('licence/processing');
+        $this->setRedirectIndexRoute('/notes');
     }
 
     /**

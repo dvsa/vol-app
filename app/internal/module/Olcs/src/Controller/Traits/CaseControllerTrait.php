@@ -206,4 +206,14 @@ trait CaseControllerTrait
 
         return $this->cases[$id];
     }
+
+    /**
+     * Sets the table filters.
+     *
+     * @param mixed $filters
+     */
+    public function setTableFilters($filters)
+    {
+        $this->getViewHelperManager()->get('placeholder')->getContainer('tableFilters')->set($filters);
+    }
 }

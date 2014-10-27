@@ -7,6 +7,7 @@
 namespace OlcsTest\Controller\Licence;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
+use Mockery as m;
 
 /**
  * Licence Processing Note controller tests
@@ -15,11 +16,14 @@ use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
  */
 class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
 {
+    protected $testClass = '\Olcs\Controller\Licence\Processing\LicenceProcessingNoteController';
+
     public function setUp()
     {
         $this->setApplicationConfig(
             include __DIR__.'/../../../../../config/application.config.php'
         );
+
         $this->controller = $this->getMock(
             '\Olcs\Controller\Licence\Processing\LicenceProcessingNoteController',
             array(
@@ -37,8 +41,8 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
                 'processAdd',
                 'processEdit',
                 'setTableFilters',
-                'loadScripts'
-
+                'loadScripts',
+                'getRequest'
             )
         );
 
@@ -64,6 +68,28 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
     {
         $licenceId = 7;
 
+        $requestArray = array(
+            'page' => 1,
+            'sort' => 'priority',
+            'order' => 'DESC',
+            'limit' => 10,
+            'noteType' => ''
+        );
+
+        $table = $this->getMock(
+            'Common\Service\Table\TableBuilder', [], [], '', false
+        );
+
+        $mockParams = m::mock('\Zend\Stdlib\Parameters');
+        $mockParams->shouldReceive('toArray')->andReturn($requestArray);
+
+        $mockRequest = m::mock('\Zend\Http\PhpEnvironment\Request');
+        $mockRequest->shouldReceive('getQuery')->andReturn($mockParams);
+
+        $this->controller->expects($this->once())
+            ->method('getRequest')
+            ->will($this->returnValue($mockRequest));
+
         $this->getFromRoute(0, 'licence', $licenceId);
         $this->getFromPost(1, 'action', null);
         $this->getFromPost(2, 'id', null);
@@ -85,17 +111,25 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
             ->method('setData');
 
         $this->controller->expects($this->once())
-            ->method('setTableFilters');
+            ->method('setTableFilters')
+            ->with($this->form);
 
         $this->controller->expects($this->once())
-            ->method('getTable');
+            ->method('getTable')
+            ->will($this->returnValue($table));
+
+        $this->controller->expects($this->once())
+            ->method('loadScripts')
+            ->with(['note-filter']);
 
         $this->controller->expects($this->once())
             ->method('getView')
-        ->will($this->returnValue($this->view));
+            ->with($this->equalTo(['table' => $table]))
+            ->will($this->returnValue($this->view));
 
         $this->view->expects($this->once())
-            ->method('setTemplate');
+            ->method('setTemplate')
+            ->with($this->controller->getTemplatePrefix() . '/notes/index');
 
         $this->controller->expects($this->once())
             ->method('renderView');
@@ -111,7 +145,7 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
         $licenceId = 7;
         $action = 'Add';
         $id = null;
-        $route = 'licence/processing/add-note';
+        $route = $this->controller->getRoutePrefix() . '/add-note';
 
         $this->getFromRoute(0, 'licence', $licenceId);
         $this->getFromPost(1, 'action', $action);
@@ -126,7 +160,10 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
                         'action' => strtolower($action),
                         'licence' => $licenceId,
                         'noteType' => 'note_t_lic',
-                        'linkedId' => $licenceId]
+                        'linkedId' => $licenceId,
+                        'case' => null
+
+                    ]
                 ),
                 $this->equalTo([]),
                 $this->equalTo(true)
@@ -146,7 +183,7 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
     {
         $licenceId = 7;
         $id = 1;
-        $route = 'licence/processing/modify-note';
+        $route = $this->controller->getRoutePrefix() . '/modify-note';
 
         $this->getFromRoute(0, 'licence', $licenceId);
         $this->getFromPost(1, 'action', $action);
@@ -176,10 +213,12 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
         $licenceId = 7;
         $noteType = 'note_t_lic';
         $linkedId = 1;
+        $caseId = null;
 
         $this->getFromRoute(0, 'licence', $licenceId);
-        $this->getFromRoute(1, 'noteType', $noteType);
-        $this->getFromRoute(2, 'linkedId', $linkedId);
+        $this->getFromRoute(1, 'case', $caseId);
+        $this->getFromRoute(2, 'noteType', $noteType);
+        $this->getFromRoute(3, 'linkedId', $linkedId);
 
         $this->controller->expects($this->once())
             ->method('generateFormWithData');
@@ -190,7 +229,7 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
 
         $this->view->expects($this->once())
             ->method('setTemplate')
-            ->with('licence/processing/notes/form');
+            ->with($this->controller->getTemplatePrefix() . '/notes/form');
 
         $this->controller->expects($this->once())
             ->method('renderView')
@@ -224,7 +263,8 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue($this->view));
 
         $this->view->expects($this->once())
-            ->method('setTemplate');
+            ->method('setTemplate')
+            ->with($this->controller->getTemplatePrefix() . '/notes/form');
 
         $this->controller->expects($this->once())
             ->method('renderView')
@@ -275,7 +315,7 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
         $this->controller->expects($this->once())
             ->method('redirectToRoute')
             ->with(
-                $this->equalTo('licence/processing/add-note'),
+                $this->equalTo($this->controller->getRoutePrefix() . '/add-note'),
                 $this->equalTo(['action' => 'Add']),
                 $this->equalTo([]),
                 $this->equalTo(true)
@@ -318,14 +358,20 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
 
     public function testProcessEditNotes()
     {
+        $loggedInUser = 1;
         $data = $this->getTestFormPost('', 1, 1);
+        $processedData = $this->getTestProcessedFormPost(1, 1, $loggedInUser);
 
         $this->controller->expects($this->once())
             ->method('getLoggedInUser')
-            ->will($this->returnValue(1));
+            ->will($this->returnValue($loggedInUser));
 
         $this->controller->expects($this->once())
             ->method('processEdit')
+            ->with(
+                $this->equalTo($processedData),
+                $this->equalTo('Note')
+            )
             ->will($this->returnValue([]));
 
         $this->getRedirectToIndex();
@@ -335,20 +381,26 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
 
     public function testProcessEditNotesFail()
     {
+        $loggedInUser = 1;
         $data = $this->getTestFormPost('', 1, 1);
+        $processedData = $this->getTestProcessedFormPost(1, 1, $loggedInUser);
 
         $this->controller->expects($this->once())
             ->method('getLoggedInUser')
-            ->will($this->returnValue(1));
+            ->will($this->returnValue($loggedInUser));
 
         $this->controller->expects($this->once())
             ->method('processEdit')
+            ->with(
+                $this->equalTo($processedData),
+                $this->equalTo('Note')
+            )
             ->will($this->returnValue(['failed']));
 
         $this->controller->expects($this->once())
             ->method('redirectToRoute')
             ->with(
-                $this->equalTo('licence/processing/modify-note'),
+                $this->equalTo($this->controller->getRoutePrefix() . '/modify-note'),
                 $this->equalTo(['action' => 'Edit']),
                 $this->equalTo([]),
                 $this->equalTo(true)
@@ -378,12 +430,48 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
     public function getIdFieldProvider()
     {
         return [
-            ['note_t_lic', 'licence'],
-            ['note_t_app', 'application'],
-            ['note_t_irfo_gv', 'irfoGvPermit'],
-            ['note_t_irfo_psv', 'irfoPsvAuth'],
-            ['note_t_case', 'case'],
-            ['note_t_bus', 'busReg']
+            ['note_t_lic',
+                [
+                    'field' => 'empty', //deliberately doesn't show licence id in lists
+                    'displayId' => 'id',
+                    'id' => 'id'
+                ]
+            ],
+            ['note_t_app',
+                [
+                    'field' => 'application',
+                    'displayId' => 'id',
+                    'id' => 'id'
+                ]
+            ],
+            ['note_t_irfo_gv',
+                [
+                    'field' => 'irfoGvPermit',
+                    'displayId' => 'id',
+                    'id' => 'id'
+                ]
+            ],
+            ['note_t_irfo_psv',
+                [
+                    'field' => 'irfoPsvAuth',
+                    'displayId' => 'id',
+                    'id' => 'id'
+                ]
+            ],
+            ['note_t_case',
+                [
+                    'field' => 'case',
+                    'displayId' => 'id',
+                    'id' => 'id'
+                ]
+            ],
+            ['note_t_bus',
+                [
+                    'field' => 'busReg',
+                    'displayId' => 'routeNo',
+                    'id' => 'id'
+                ]
+            ]
         ];
     }
 
@@ -397,9 +485,9 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
         $this->controller->expects($this->once())
             ->method('redirectToRoute')
             ->with(
-                $this->equalTo('licence/processing/notes'),
-                $this->equalTo([]),
-                $this->equalTo([]),
+                $this->equalTo($this->controller->getRoutePrefix() . $this->controller->getRedirectIndexRoute()),
+                $this->equalTo(['action'=>'index', 'id' => null]),
+                $this->equalTo(['code' => '303']),
                 $this->equalTo(true)
             );
     }
@@ -415,7 +503,22 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
             'licence' => 7,
             'noteType' => $refDataNoteType,
             'linkedId' => $linkedId,
+            'case' => 28,
             'version' => $version
+        ];
+    }
+
+    public function getTestProcessedFormPost($id = null, $version = null, $loggedInUser = 1)
+    {
+        return [
+            'main' => [
+                'comment' => 'the comment',
+                'priority' => 'Y'
+            ],
+            'id' => $id,
+            'version' => $version,
+            'priority' => 'Y',
+            'lastModifiedBy' => $loggedInUser
         ];
     }
 
@@ -435,9 +538,9 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
 
     private function getEditForm()
     {
-        $formMock = $this->getMock('stdClass', ['get']);
-        $getElementMock = $this->getMock('stdClass', ['get']);
-        $setAttributeMock = $this->getMock('stdClass', ['setAttribute']);
+        $formMock = $this->getMock('\Zend\Form\Form', ['get']);
+        $getElementMock = $this->getMock('\Zend\Form\Fieldset', ['get']);
+        $setAttributeMock = $this->getMock('\Zend\Form\Element', ['setAttribute']);
 
         $setAttributeMock->expects($this->once())
             ->method('setAttribute');
@@ -473,34 +576,6 @@ class LicenceProcessingNoteControllerTest extends AbstractHttpControllerTestCase
             $this->controller->expects($this->at($at))
                 ->method('getFromRoute')
                 ->with($this->equalTo($with));
-        }
-    }
-
-    /**
-     * Generate a fromRoute function call
-     *
-     * @param int $at
-     * @param mixed $with
-     * @param mixed $default
-     * @param mixed $will
-     */
-    private function getFromRouteWithDefault($at, $with, $default, $will = false)
-    {
-        if ($will) {
-            $this->controller->expects($this->at($at))
-                ->method('getFromRoute')
-                ->with(
-                    $this->equalTo($with),
-                    $this->equalTo($default)
-                )
-                ->will($this->returnValue($will));
-        } else {
-            $this->controller->expects($this->at($at))
-                ->method('getFromRoute')
-                ->with(
-                    $this->equalTo($with),
-                    $this->equalTo($default)
-                );
         }
     }
 
