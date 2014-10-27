@@ -68,7 +68,7 @@ return array(
             'sort' => 'amount'
         ),
         array(
-            'title' => 'Raised',
+            'title' => 'Created',
             'name' => 'invoicedDate',
             'formatter' => 'Date',
             'sort' => 'invoicedDate'
