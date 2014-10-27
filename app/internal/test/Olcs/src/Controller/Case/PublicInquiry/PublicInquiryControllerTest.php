@@ -60,4 +60,30 @@ class PublicInquiryControllerTest extends AbstractHttpControllerTestCase
         $this->assertEquals('redirectResponse', $this->sut->redirectToIndex());
     }
 
+    public function testProcessDataMapForSave()
+    {
+        $mockDataService = m::mock('Common\Service\Helper\DataHelperService');
+        $mockDataService->shouldReceive('processDataMap')->andReturn([]);
+
+        $mockHelperService = m::mock('Common\Service\Helper\HelperServiceFactory');
+        $mockHelperService->shouldReceive('getHelperService')->with('DataHelper')->andReturn
+            ($mockDataService);
+
+        $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
+        $mockSl->shouldReceive('get')->with('HelperService')->andReturn($mockHelperService);
+
+        $this->sut->setServiceLocator($mockSl);
+
+        $caseId = 99;
+        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(['params' => 'Params']);
+        $mockParams = $mockPluginManager->get('params', '');
+        $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
+
+        $this->sut->setPluginManager($mockPluginManager);
+
+        $result = $this->sut->processDataMapForSave(['oldData' => []], []);
+
+        $this->assertArrayHasKey('case', $result);
+    }
+    
 }
