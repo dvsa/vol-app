@@ -212,6 +212,15 @@ trait LicenceNoteTrait
         $noteType = $this->getFromRoute('noteType');
         $linkedId = $this->getFromRoute('linkedId');
 
+        //if this is from a case, we also need to populate a licence id, which won't be in the route
+        if (!is_null($caseId)) {
+            $caseDetail = $this->getCase($caseId);
+
+            if (isset($caseDetail['licence']['id'])) {
+                $licenceId = $caseDetail['licence']['id'];
+            }
+        }
+
         $form = $this->generateFormWithData(
             'licence-notes',
             'processAddNotes',
