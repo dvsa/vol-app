@@ -7,6 +7,7 @@
 namespace OlcsTest\Controller;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
+use Mockery as m;
 
 /**
  * Case note controller tests
@@ -36,7 +37,8 @@ class NoteControllerTest extends AbstractHttpControllerTestCase
                 'redirectToRoute',
                 'setTableFilters',
                 'loadScripts',
-                'getCase'
+                'getCase',
+                'getRequest'
 
             )
         );
@@ -64,9 +66,27 @@ class NoteControllerTest extends AbstractHttpControllerTestCase
         $licenceId = 7;
         $caseId = 28;
 
+        $requestArray = array(
+            'page' => 1,
+            'sort' => 'priority',
+            'order' => 'DESC',
+            'limit' => 10,
+            'noteType' => 'note_t_lic'
+        );
+
         $table = $this->getMock(
             'Common\Service\Table\TableBuilder', [], [], '', false
         );
+
+        $mockParams = m::mock('\Zend\Stdlib\Parameters');
+        $mockParams->shouldReceive('toArray')->andReturn($requestArray);
+
+        $mockRequest = m::mock('\Zend\Http\PhpEnvironment\Request');
+        $mockRequest->shouldReceive('getQuery')->andReturn($mockParams);
+
+        $this->controller->expects($this->once())
+            ->method('getRequest')
+            ->will($this->returnValue($mockRequest));
 
         $this->getFromRoute(0, 'licence', $licenceId);
         $this->getFromRoute(1, 'case', $caseId);
@@ -88,6 +108,11 @@ class NoteControllerTest extends AbstractHttpControllerTestCase
 
         $this->form->expects($this->once())
             ->method('setData');
+
+        $this->controller->expects($this->once())
+            ->method('getCase')
+            ->with($caseId)
+            ->will($this->returnValue(['licence' => ['id' => $licenceId]]));
 
         $this->controller->expects($this->once())
             ->method('setTableFilters')
