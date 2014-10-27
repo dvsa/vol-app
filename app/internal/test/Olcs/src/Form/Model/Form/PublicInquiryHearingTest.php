@@ -2,7 +2,7 @@
 
 namespace OlcsTest\Form\Model\Form;
 
-use Common\FormTester\Data\Object as F;
+use Olcs\TestHelpers\FormTester\Data\Object as F;
 
 /**
  * Class PublicInquiryHearingTest
