@@ -49,9 +49,11 @@ class PublicInquiryControllerTest extends AbstractHttpControllerTestCase
     {
         $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(['redirect' => 'Redirect']);
         $mockRedirect = $mockPluginManager->get('redirect', '');
-        $mockRedirect->shouldReceive('toRoute')->with('case_pi',
+        $mockRedirect->shouldReceive('toRoute')->with(
+            'case_pi',
             ['action'=>'details'],
-            ['code' => '303'], true)->andReturn('redirectResponse');
+            ['code' => '303'], true
+        )->andReturn('redirectResponse');
 
         $mockPluginManager->shouldReceive('get')->with('redirect')->andReturn($mockRedirect);
 
@@ -66,8 +68,9 @@ class PublicInquiryControllerTest extends AbstractHttpControllerTestCase
         $mockDataService->shouldReceive('processDataMap')->andReturn([]);
 
         $mockHelperService = m::mock('Common\Service\Helper\HelperServiceFactory');
-        $mockHelperService->shouldReceive('getHelperService')->with('DataHelper')->andReturn
-            ($mockDataService);
+        $mockHelperService->shouldReceive('getHelperService')
+            ->with('DataHelper')
+            ->andReturn($mockDataService);
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('HelperService')->andReturn($mockHelperService);
@@ -153,8 +156,12 @@ class PublicInquiryControllerTest extends AbstractHttpControllerTestCase
         $mockServiceManager->shouldReceive('getHelperService')->with('RestHelper')->andReturn($mockRestHelper);
         $mockServiceManager->shouldReceive('get->getHelperService')->with('RestService')->andReturn($mockRestHelper);
 
-        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(['forward' => 'Forward',
-            'params' => 'Params']);
+        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
+            [
+                'forward' => 'Forward',
+                'params' => 'Params'
+            ]
+        );
         $mockParams = $mockPluginManager->get('params', '');
         $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
 
@@ -226,8 +233,13 @@ class PublicInquiryControllerTest extends AbstractHttpControllerTestCase
         $mockServiceManager->shouldReceive('getHelperService')->with('RestHelper')->andReturn($mockRestHelper);
         $mockServiceManager->shouldReceive('get->getHelperService')->with('RestService')->andReturn($mockRestHelper);
 
-        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(['forward' => 'Forward',
-            'params' => 'Params', 'redirect', 'Redirect']);
+        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
+            [
+                'forward' => 'Forward',
+                'params' => 'Params',
+                'redirect', 'Redirect'
+            ]
+        );
         $mockParams = $mockPluginManager->get('params', '');
         $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
         $mockParams->shouldReceive('fromPost')->with('action')->andReturn($action);
@@ -297,8 +309,13 @@ class PublicInquiryControllerTest extends AbstractHttpControllerTestCase
         $mockServiceManager->shouldReceive('getHelperService')->with('RestHelper')->andReturn($mockRestHelper);
         $mockServiceManager->shouldReceive('get->getHelperService')->with('RestService')->andReturn($mockRestHelper);
 
-        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(['forward' => 'Forward',
-            'params' => 'Params', 'redirect', 'Redirect']);
+        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
+            [
+                'forward' => 'Forward',
+                'params' => 'Params',
+                'redirect', 'Redirect'
+            ]
+        );
         $mockParams = $mockPluginManager->get('params', '');
         $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
         $mockParams->shouldReceive('fromPost')->with('action')->andReturn($action);
