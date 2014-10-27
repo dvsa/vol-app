@@ -9,6 +9,7 @@ namespace Olcs\Controller\Application;
 
 use Olcs\Controller\AbstractController;
 use Zend\View\Model\ViewModel;
+use Olcs\Controller\Traits;
 
 /**
  * Application Controller
@@ -17,6 +18,9 @@ use Zend\View\Model\ViewModel;
  */
 class ApplicationController extends AbstractController
 {
+    use Traits\LicenceControllerTrait,
+        Traits\FeesActionTrait;
+
     /**
      * Placeholder stub
      *

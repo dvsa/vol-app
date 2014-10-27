@@ -90,7 +90,8 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
                 'redirect',
                 'processAdd',
                 'processEdit',
-                'getFromRoute'
+                'getFromRoute',
+                'getSearchForm'
             )
         );
 

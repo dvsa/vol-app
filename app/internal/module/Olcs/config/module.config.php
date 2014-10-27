@@ -15,6 +15,7 @@ return array(
             'IndexController' => 'Olcs\Controller\IndexController',
             'SearchController' => 'Olcs\Controller\SearchController',
             'CaseController' => 'Olcs\Controller\Cases\CaseController',
+            'CaseOppositionController' => 'Olcs\Controller\Cases\Opposition\OppositionController',
             'CaseStatementController' => 'Olcs\Controller\Cases\Statement\StatementController',
             'CaseHearingAppealController' => 'Olcs\Controller\Cases\Hearing\HearingAppealController',
             'CaseAppealController' =>
@@ -24,6 +25,8 @@ return array(
             'CaseOffenceController' => 'Olcs\Controller\Cases\Conviction\OffenceController',
             'CaseSubmissionController' => 'Olcs\Controller\Cases\Submission\SubmissionController',
             'SubmissionController' => 'Olcs\Controller\Submission\SubmissionController',
+            'CaseSubmissionSectionCommentController' =>
+                'Olcs\Controller\Cases\Submission\SubmissionSectionCommentController',
             'CaseStayController' =>
                 'Olcs\Controller\Cases\Hearing\StayController',
             'CasePenaltyController' => 'Olcs\Controller\Cases\Penalty\PenaltyController',
@@ -153,6 +156,7 @@ return array(
             'piListData'   => 'Olcs\View\Helper\PiListData',
             'formSubmissionSections' => 'Olcs\Form\View\Helper\SubmissionSections',
             'submissionSectionDetails' => 'Olcs\View\Helper\SubmissionSectionDetails',
+            'markers' => 'Olcs\View\Helper\Markers',
         ),
         'delegators' => array(
             'formElement' => array('Olcs\Form\View\Helper\FormElementDelegatorFactory')
@@ -177,6 +181,13 @@ return array(
     ),
     'asset_path' => '//dvsa-static.olcsdv-ap01.olcs.npm',
     'service_manager' => array(
+        'aliases' => [
+            'NavigationFactory' => 'Olcs\Service\NavigationFactory'
+        ],
+        'invokables' =>[
+            'Olcs\Service\Marker\MarkerPluginManager' => 'Olcs\Service\Marker\MarkerPluginManager',
+            'Olcs\Service\NavigationFactory' => 'Olcs\Service\NavigationFactory'
+        ],
         'factories' => array(
             'ApplicationJourneyHelper' => function ($sm) {
                 $helper = new \Olcs\Helper\ApplicationJourneyHelper();
@@ -193,7 +204,9 @@ return array(
             'Olcs\Service\Data\User' => 'Olcs\Service\Data\User',
             'Olcs\Service\Data\PiVenue' => 'Olcs\Service\Data\PiVenue',
             'Olcs\Service\Data\PresidingTc' => 'Olcs\Service\Data\PresidingTc',
-            'Olcs\Service\Data\Submission' => 'Olcs\Service\Data\Submission'
+            'Olcs\Service\Data\Submission' => 'Olcs\Service\Data\Submission',
+            'Olcs\Service\Data\Fee' => 'Olcs\Service\Data\Fee',
+            'Olcs\Service\Data\Search\SearchTypeManager' => 'Olcs\Service\Data\Search\SearchTypeManagerFactory'
         )
     ),
     'application_journey' => array(
@@ -216,8 +229,17 @@ return array(
     'form_elements' =>[
         'factories' => [
             'PublicInquiryReason' => 'Olcs\Form\Element\PublicInquiryReasonFactory',
-            'SubmissionSections' => 'Olcs\Form\Element\SubmissionSectionsFactory'
+            'SubmissionSections' => 'Olcs\Form\Element\SubmissionSectionsFactory',
+            'Olcs\Form\Element\SlaDateSelect' => 'Olcs\Form\Element\SlaDateSelectFactory'
+        ],
+        'aliases' => [
+            'SlaDateSelect' => 'Olcs\Form\Element\SlaDateSelect'
+        ]
+    ],
+    'search' => [
+        'invokables' => [
+            'licence' => 'Olcs\Data\Object\Search\Licence',
+            'application' => 'Olcs\Data\Object\Search\Application'
         ]
     ]
-
 );

@@ -14,7 +14,7 @@ $routes = [
     'operators' => [
         'type' => 'Literal',
         'options' => [
-            'route' => '/search/operators',
+            'route' => '/search2/operators',
             'defaults' => [
                 'controller' => 'SearchController',
                 'action' => 'operator'
@@ -38,10 +38,21 @@ $routes = [
     'search' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/search',
+            'route' => '/search[/:index]',
             'defaults' => [
                 'controller' => 'SearchController',
-                'action' => 'index'
+                'action' => 'index',
+                'index' => 'licence'
+            ]
+        ]
+    ],
+    'advancedsearch' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/advancedsearch',
+            'defaults' => [
+                'controller' => 'SearchController',
+                'action' => 'advanced'
             ]
         ]
     ],
@@ -60,7 +71,6 @@ $routes = [
         ],
         'may_terminate' => true,
     ],
-
     'Application' => [
         'type' => 'segment',
         'options' => [
@@ -115,21 +125,20 @@ $routes = [
                     ]
                 ]
             ],
-            'fee' => [
+            'fees' => [
                 'type' => 'segment',
                 'options' => [
-                    'route' => 'fee/',
+                    'route' => '/fees[/]',
                     'defaults' => [
                         'controller' => 'ApplicationController',
-                        'action' => 'fee'
+                        'action' => 'fees'
                     ]
-                ]
+                ],
+                'may_terminate' => true
             ]
         ]
     ],
-
     // These routes are for the licence page
-
     'licence' => [
         'type' => 'segment',
         'options' => [
@@ -416,9 +425,9 @@ $routes = [
                         'options' => [
                             'route' => '/generate[/:tmpId]',
                             'defaults' => [
-                                'type'       => 'licence',
+                                'type' => 'licence',
                                 'controller' => 'DocumentGenerationController',
-                                'action'     => 'generate'
+                                'action' => 'generate'
                             ]
                         ],
                     ],
@@ -427,20 +436,20 @@ $routes = [
                         'options' => [
                             'route' => '/finalise/:tmpId',
                             'defaults' => [
-                                'type'       => 'licence',
+                                'type' => 'licence',
                                 'controller' => 'DocumentFinaliseController',
-                                'action'     => 'finalise'
+                                'action' => 'finalise'
                             ]
                         ],
                     ],
-                     'upload' => [
+                    'upload' => [
                         'type' => 'segment',
                         'options' => [
                             'route' => '/upload',
                             'defaults' => [
-                                'type'       => 'licence',
+                                'type' => 'licence',
                                 'controller' => 'DocumentUploadController',
-                                'action'     => 'upload'
+                                'action' => 'upload'
                             ]
                         ],
                     ],
@@ -506,9 +515,9 @@ $routes = [
                 ]
             ],
             'fees' => [
-                'type' => 'literal',
+                'type' => 'segment',
                 'options' => [
-                    'route' => '/fees',
+                    'route' => '/fees[/]',
                     'defaults' => [
                         'action' => 'fees',
                     ]
@@ -517,7 +526,6 @@ $routes = [
             ],
         ]
     ],
-
     // These routes are for the licence page
     'case' => [
         'type' => 'segment',
@@ -530,7 +538,7 @@ $routes = [
             ],
             'defaults' => [
                 'controller' => 'CaseController',
-                'action'     => 'details'
+                'action' => 'details'
             ],
         ],
         'may_terminate' => true
@@ -544,7 +552,23 @@ $routes = [
             ],
             'defaults' => [
                 'controller' => 'CaseController',
-                'action'     => 'add'
+                'action' => 'add'
+            ]
+        ]
+    ],
+    'case_opposition' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/case/:case/application[/:application]/opposition[/:action][/:opposition]',
+            'constraints' => [
+                'case' => '[0-9]+',
+                'application' => '[0-9]+',
+                'action' => '[a-z]+',
+                'opposition' => '[0-9]+'
+            ],
+            'defaults' => [
+                'controller' => 'CaseOppositionController',
+                'action' => 'index',
             ]
         ]
     ],
@@ -560,7 +584,6 @@ $routes = [
             'defaults' => [
                 'controller' => 'CaseStatementController',
                 'action' => 'index',
-
             ]
         ]
     ],
@@ -738,10 +761,27 @@ $routes = [
             'constraints' => [
                 'case' => '[0-9]+',
                 'submission' => '[0-9]+',
+                'action' => '(index|add|edit|details)'
             ],
             'defaults' => [
                 'controller' => 'CaseSubmissionController',
                 'action' => 'index'
+            ]
+        ]
+    ],
+    'submission_section_comment' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/case/:case/submission/[:submission]/section/:submissionSection/comment/:action[/:id]',
+            'constraints' => [
+                'case' => '[0-9]+',
+                'action' => '(add|edit)',
+                'submission' => '[0-9]+',
+                'submissionSection' => '[a-z\-]+',
+                'id' => '[0-9]+',
+            ],
+            'defaults' => [
+                'controller' => 'CaseSubmissionSectionCommentController',
             ]
         ]
     ],
@@ -1036,9 +1076,9 @@ $routes = [
         'options' => [
             'route' => '/case/:case/conditions-undertakings[/:action[/:id]]',
             'constraints' => [
-                'case'   => '[0-9]+',
+                'case' => '[0-9]+',
                 'action' => '[a-z]+',
-                'id'     => '[0-9]+',
+                'id' => '[0-9]+',
             ],
             'defaults' => [
                 'controller' => 'CaseConditionUndertakingController',
@@ -1092,9 +1132,9 @@ $routes = [
                 'id' => '[0-9]+'
             ],
             'defaults' => [
-                'type'       => 'licence',
+                'type' => 'licence',
                 'controller' => 'DocumentGenerationController',
-                'action'     => 'listTemplateBookmarks'
+                'action' => 'listTemplateBookmarks'
             ]
         ]
     ],
@@ -1104,7 +1144,7 @@ $routes = [
             'route' => '/documents/tmp/:id/:filename',
             'defaults' => [
                 'controller' => 'DocumentGenerationController',
-                'action'     => 'downloadTmp'
+                'action' => 'downloadTmp'
             ]
         ]
     ],
@@ -1124,6 +1164,5 @@ $routes = [
 $sectionConfig = new \Common\Service\Data\SectionConfig();
 
 return array_merge(
-    $routes,
-    $sectionConfig->getAllRoutes()
+$routes, $sectionConfig->getAllRoutes()
 );

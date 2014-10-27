@@ -22,8 +22,7 @@ if (empty($appeal)){
                         ['case' => $case['id'], 'appeal' => $appeal['id'], 'action' => 'edit'],
                         [],
                         false
-                    ),
-                    'class' => 'action--primary right-aligned'
+                    )
                 ]
             ],
             'items' => [
@@ -32,7 +31,7 @@ if (empty($appeal)){
                 ['label' => 'Date of appeal', 'date' => $appeal['appealDate']],
                 ['label' => 'Reason', 'value' => (isset($appeal['reason']['description']) ?
                     $appeal['reason']['description'] : '')],
-                ['label' => 'Outline ground', 'value' => $appeal['outlineGround'], 'class' => 'three-quarters'],
+                ['label' => 'Outline ground', 'value' => $appeal['outlineGround'], 'class' => 'full-width'],
                 ['label' => 'Date of appeal hearing', 'date' => $appeal['hearingDate']],
                 ['label' => 'Date of decision', 'date' => $appeal['decisionDate']],
                 ['label' => 'Papers due at tribunal', 'date' => $appeal['papersDueDate']],
@@ -47,41 +46,43 @@ if (empty($appeal)){
         ]
     );
 
-    if (!empty($stayRecords['stay_t_tc'][0]))
-    {
-        echo $this->partial('case/hearing-appeal/stay-details.phtml', $stayRecords['stay_t_tc'][0]);
-    } else {
-        echo $this->render('partials/read-only/empty',
-            [
-                'header' => 'Traffic commissioner / transport regulator stay',
-                'helpText' => 'There is currently no Traffic commissioner / transport regulator stay',
-                'url' => $this->url(
-                    'case_stay',
-                    ['case' => $case['id'], 'action' => 'add', 'stayType' => 'stay_t_tc'],
-                    [],
-                    false
-                ),
-                'label' => 'Add stay'
-            ]
-        );
-    }
+    if (empty($appeal['withdrawnDate'])) {
+        if (!empty($stayRecords['stay_t_tc'][0]))
+        {
+            echo $this->partial('case/hearing-appeal/stay-details.phtml', $stayRecords['stay_t_tc'][0]);
+        } else {
+            echo $this->render('partials/read-only/empty',
+                [
+                    'header' => 'Traffic commissioner / transport regulator stay',
+                    'helpText' => 'There is currently no Traffic commissioner / transport regulator stay',
+                    'url' => $this->url(
+                        'case_stay',
+                        ['case' => $case['id'], 'action' => 'add', 'stayType' => 'stay_t_tc'],
+                        [],
+                        false
+                    ),
+                    'label' => 'Add stay'
+                ]
+            );
+        }
 
-    if (!empty($stayRecords['stay_t_ut'][0]))
-    {
-        echo $this->partial('case/hearing-appeal/stay-details.phtml', $stayRecords['stay_t_ut'][0]);
-    } else {
-        echo $this->render('partials/read-only/empty',
-            [
-                'header' => 'Upper tribunal stay',
-                'helpText' => 'There is currently no Upper tribunal stay',
-                'url' => $this->url(
-                    'case_stay',
-                    ['case' => $case['id'], 'action' => 'add', 'stayType' => 'stay_t_ut'],
-                    [],
-                    false
-                ),
-                'label' => 'Add stay'
-            ]
-        );
+        if (!empty($stayRecords['stay_t_ut'][0]))
+        {
+            echo $this->partial('case/hearing-appeal/stay-details.phtml', $stayRecords['stay_t_ut'][0]);
+        } else {
+            echo $this->render('partials/read-only/empty',
+                [
+                    'header' => 'Upper tribunal stay',
+                    'helpText' => 'There is currently no Upper tribunal stay',
+                    'url' => $this->url(
+                        'case_stay',
+                        ['case' => $case['id'], 'action' => 'add', 'stayType' => 'stay_t_ut'],
+                        [],
+                        false
+                    ),
+                    'label' => 'Add stay'
+                ]
+            );
+        }
     }
 }

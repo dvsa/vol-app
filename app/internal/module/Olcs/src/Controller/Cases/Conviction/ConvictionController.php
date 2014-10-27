@@ -145,4 +145,38 @@ class ConvictionController extends OlcsController\CrudAbstract
      * @var array
      */
     protected $inlineScripts = ['showhideinput', 'conviction'];
+
+    /**
+     * Override Save data to set the operator name field if defendant type is operator
+     *
+     * @param array $data
+     * @param string $service
+     * @return array
+     */
+    public function save($data, $service = null)
+    {
+        // modify $data
+        $case = $this->getCase();
+
+        if ($data['defendantType'] == 'def_t_op') {
+            $data['operatorName'] = $case['licence']['organisation']['name'];
+        }
+
+        $data = $this->callParentSave($data, $service);
+
+        return $data;
+    }
+
+    /**
+     * @codeCoverageIgnore Calls parent method
+     * Call parent process load and return result. Public method to allow unit testing
+     *
+     * @param $data
+     * @param null $service
+     * @return array
+     */
+    public function callParentSave($data, $service = null)
+    {
+        return parent::save($data, $service);
+    }
 }

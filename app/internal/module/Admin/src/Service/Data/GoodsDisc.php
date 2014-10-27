@@ -18,7 +18,7 @@ use Common\Service\Data\AbstractData;
 class GoodsDisc extends AbstractData
 {
     /**
-     * Licence type to prefixes mapping
+     * Service name
      *
      * @var string
      */

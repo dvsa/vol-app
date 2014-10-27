@@ -21,7 +21,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
     public function setUp()
     {
         $this->setApplicationConfig(
-            include __DIR__ . '/../../../../../' . 'config/application.config.php'
+            include __DIR__ . '/../../../../../../' . 'config/application.config.php'
         );
         $this->controller = $this->getMock(
             '\Olcs\Controller\Cases\Submission\SubmissionController', array(
@@ -233,6 +233,15 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
             ]
         ];
 
+        $mockConfig = ['submission_config' =>
+            [
+                'sections' =>
+                    [
+                        'section1' => 'foo'
+                    ]
+            ]
+        ];
+
         $mockSubmissionTitle = 'Section title';
         $placeholder = new \Zend\View\Helper\Placeholder();
 
@@ -267,6 +276,8 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
             ->andReturn($mockSelectedSectionArray);
 
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+
+        $mockServiceManager->shouldReceive('get')->with('config')->andReturn($mockConfig);
 
         $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\Submission')
             ->andReturn($mockSubmissionService);
@@ -346,7 +357,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
                     'id' => 1,
                     'version' => 1,
                     'submissionType' => 'foo',
-                    'text' => '[{"sectionId":"submission_section_casu","data":{"data":[]}}]'
+                    'dataSnapshot' => '[{"sectionId":"submission_section_casu","data":{"data":[]}}]'
                 ),
                 array(
                     'id' => 1,
@@ -361,7 +372,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
                         'id' => 1,
                         'version' => 1,
                     ],
-                    'text' => '[{"sectionId":"submission_section_casu","data":{"data":[]}}]',
+                    'dataSnapshot' => '[{"sectionId":"submission_section_casu","data":{"data":[]}}]',
                     'case' => 24
                 ),
             ),

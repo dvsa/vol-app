@@ -100,7 +100,8 @@ class OlcsIndexControllerTest extends AbstractHttpControllerTestCase
                 'loadScripts',
                 'params',
                 'getFromRoute',
-                'redirect'
+                'redirect',
+                'getSearchForm'
             )
         );
 

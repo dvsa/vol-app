@@ -1,8 +1,8 @@
 <?php
 
 $case = $this->placeholder('case')->getValue();
-$categories = is_array($case['submissionSections']) ?
-    implode(', ', array_map(function($item){return $item['description'];}, $case['submissionSections'])) :
+$categories = isset($case['categorys']) && is_array($case['categorys']) ?
+    implode(', ', array_map(function($item){return $item['description'];}, $case['categorys'])) :
     'None selected';
 
 //case overview
@@ -16,7 +16,7 @@ echo $this->render('partials/read-only/main',
             ],
         ],
         'items' => [
-            ['label' => 'Case type', 'date' => $case['caseType']['description']],
+            ['label' => 'Case type', 'value' => $case['caseType']['description']],
             ['label' => 'Open date', 'date' => $case['openDate']],
             ['label' => 'ECMS', 'value' => $case['ecmsNo']],
             ['label' => 'Description', 'value' => $case['description'], 'class' => 'full-width'],

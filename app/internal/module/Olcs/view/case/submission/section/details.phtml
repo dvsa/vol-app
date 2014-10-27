@@ -1,22 +1,12 @@
 <?php
-if ($this->data['sectionId'] !== 'submission_section_intr') {
+if ($this->data['sectionId'] !== 'introduction') {
     $case = $this->placeholder('case')->getValue();
 
     //last submission
-    echo $this->render('partials/read-only/main',
+    echo $this->render(
+        'partials/read-only/main',
         [
             'header' => (isset($this->data['description']) ? $this->data['description'] : ''),
-            'actions' => [
-                [
-                    'label' => 'Edit section',
-                    'url' => $this->url(
-                        'submission', [
-                            'case' => $case['id'],
-                            'action' => 'edit'
-                        ]
-                    )
-                ],
-            ]
         ]
     );
 }

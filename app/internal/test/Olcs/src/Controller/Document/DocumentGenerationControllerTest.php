@@ -33,6 +33,7 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
                     'getRequest',
                     'redirect',
                     'getLoggedInUser',
+                    'getSearchForm'
                 ),
                 $extraParams
             )
@@ -69,7 +70,7 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
             [
                 'get', 'setValue', 'setValueOptions',
                 'remove', 'setData', 'isValid',
-                'getData', 'add'
+                'getData', 'add', 'bind'
             ]
         );
 

@@ -42,7 +42,10 @@ return array(
         ),
         array(
             'title' => 'Type',
-            'name' => 'type',
+            'formatter' => function ($row) {
+                return $row['submissionType']['description'];
+            },
+            'name' => 'submissionType',
         ),
         array(
             'title' => 'Sub status',
