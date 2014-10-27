@@ -5,6 +5,7 @@ namespace OlcsTest\Controller;
 use Olcs\Controller\SearchController;
 use Mockery as m;
 use Zend\Stdlib\ArrayObject;
+use Olcs\TestHelpers\ControllerPluginManagerHelper;
 
 /**
  * Class SearchControllerTest
@@ -12,9 +13,19 @@ use Zend\Stdlib\ArrayObject;
  */
 class SearchControllerTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var ControllerPluginManagerHelper
+     */
+    protected $pluginManagerHelper;
+
+    public function __construct()
+    {
+        $this->pluginManagerHelper = new ControllerPluginManagerHelper();
+    }
+
     public function testIndexActionWithNoData()
     {
-        $mockPluginManager = $this->getMockPluginManager(
+        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
             ['params' => 'Params', 'flashMessenger' => 'FlashMessenger', 'redirect' => 'Redirect']
         );
 
@@ -43,7 +54,7 @@ class SearchControllerTest extends \PHPUnit_Framework_TestCase
     {
         $postData = ['index' => 'application', 'search' => 'asdf'];
 
-        $mockPluginManager = $this->getMockPluginManager(['params' => 'Params']);
+        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(['params' => 'Params']);
 
         $mockParams = $mockPluginManager->get('params', '');
         $mockParams->shouldReceive('fromRoute')->with('index')->andReturn('licence');
@@ -86,7 +97,7 @@ class SearchControllerTest extends \PHPUnit_Framework_TestCase
 
     public function testIndexActionWithSessionData()
     {
-        $mockPluginManager = $this->getMockPluginManager(['params' => 'Params']);
+        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(['params' => 'Params']);
 
         $mockParams = $mockPluginManager->get('params', '');
         $mockParams->shouldReceive('fromRoute')->with('index')->andReturn('licence');
@@ -117,37 +128,5 @@ class SearchControllerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('navigation', $view->indexes);
         $this->assertEquals('resultsTable', $view->results);
-    }
-
-    /**
-     * @param $class
-     * @return m\MockInterface
-     */
-    protected function getMockPlugin($class)
-    {
-        if (strpos($class, '\\') === false) {
-            $class = 'Zend\Mvc\Controller\Plugin\\' . $class;
-        }
-
-        $mockPlugin = m::mock($class);
-        $mockPlugin->shouldReceive('__invoke')->andReturnSelf();
-        return $mockPlugin;
-    }
-
-    /**
-     * @param $plugins
-     * @return m\MockInterface|\Zend\Mvc\Controller\PluginManager
-     */
-    protected function getMockPluginManager($plugins)
-    {
-        $mockPluginManager = m::mock('Zend\Mvc\Controller\PluginManager');
-        $mockPluginManager->shouldReceive('setController');
-
-        foreach ($plugins as $name => $class) {
-            $mockPlugin = $this->getMockPlugin($class);
-            $mockPluginManager->shouldReceive('get')->with($name, '')->andReturn($mockPlugin);
-        }
-
-        return $mockPluginManager;
     }
 }
