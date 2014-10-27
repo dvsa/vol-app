@@ -137,6 +137,20 @@ class SearchTest extends \PHPUnit_Framework_TestCase
 
     }
 
+    public function testFetchResultsWithSpace()
+    {
+        $mockRestClient = m::mock('Common\Util\RestClient');
+        $mockRestClient->shouldReceive('get')->with('/search+space/index?limit=10&page=1')->andReturn('result');
+
+        $sut = new Search();
+        $sut->setRestClient($mockRestClient);
+        $sut->setSearch('search space');
+        $sut->setIndex('index');
+
+        $this->assertEquals('result', $sut->fetchResults());
+
+    }
+
     public function testFetchResultsTable()
     {
         $mockTableBuilder = m::mock('Common\Service\Table\TableBuilder');

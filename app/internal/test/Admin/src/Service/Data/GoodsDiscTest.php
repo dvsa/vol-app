@@ -136,7 +136,7 @@ class GoodsDiscTest extends AbstractDataServiceTest
                     $this->equalTo('/1'),
                     $this->equalTo(
                         ['data' => '{"isPrinting":"N","issuedDate":"' .
-                                strftime("%Y-%m-%d") . '","version":1,"discNo":1}']
+                                strftime("%Y-%m-%d %H:%M:%S") . '","version":1,"discNo":1}']
                     )
                 )
                 ->will($this->returnValue([]));
