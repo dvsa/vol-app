@@ -147,9 +147,13 @@ return array(
     ),
     'asset_path' => '//dvsa-static.olcsdv-ap01.olcs.npm',
     'service_manager' => array(
-        'invokables' => array(
-            'Olcs\Service\Marker\MarkerPluginManager' => 'Olcs\Service\Marker\MarkerPluginManager'
-        ),
+        'aliases' => [
+            'NavigationFactory' => 'Olcs\Service\NavigationFactory'
+        ],
+        'invokables' =>[
+            'Olcs\Service\Marker\MarkerPluginManager' => 'Olcs\Service\Marker\MarkerPluginManager',
+            'Olcs\Service\NavigationFactory' => 'Olcs\Service\NavigationFactory'
+        ],
         'factories' => array(
             'ApplicationJourneyHelper' => function ($sm) {
                 $helper = new \Olcs\Helper\ApplicationJourneyHelper();
@@ -167,7 +171,8 @@ return array(
             'Olcs\Service\Data\PiVenue' => 'Olcs\Service\Data\PiVenue',
             'Olcs\Service\Data\PresidingTc' => 'Olcs\Service\Data\PresidingTc',
             'Olcs\Service\Data\Submission' => 'Olcs\Service\Data\Submission',
-            'Olcs\Service\Data\Fee' => 'Olcs\Service\Data\Fee'
+            'Olcs\Service\Data\Fee' => 'Olcs\Service\Data\Fee',
+            'Olcs\Service\Data\Search\SearchTypeManager' => 'Olcs\Service\Data\Search\SearchTypeManagerFactory'
         )
     ),
     'application_journey' => array(
@@ -196,6 +201,11 @@ return array(
         'aliases' => [
             'SlaDateSelect' => 'Olcs\Form\Element\SlaDateSelect'
         ]
+    ],
+    'search' => [
+        'invokables' => [
+            'licence' => 'Olcs\Data\Object\Search\Licence',
+            'application' => 'Olcs\Data\Object\Search\Application'
+        ]
     ]
-
 );

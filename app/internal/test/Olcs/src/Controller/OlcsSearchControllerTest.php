@@ -31,7 +31,8 @@ class OlcsSearchControllerTest extends AbstractHttpControllerTestCase
                 'params',
                 'makeRestCall',
                 'url',
-                'getTable'
+                'getTable',
+                'getSearchForm'
             )
         );
         $this->serviceLocator = $this->getMock('\stdClass', array('get'));
@@ -51,7 +52,7 @@ class OlcsSearchControllerTest extends AbstractHttpControllerTestCase
             ->with('search', 'processSearch')
             ->will($this->returnValue('zendForm'));
 
-        $this->controller->indexAction();
+        $this->controller->advancedAction();
     }
 
     public function testProcessSearchAction()

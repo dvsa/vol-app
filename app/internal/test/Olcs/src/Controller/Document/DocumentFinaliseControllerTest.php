@@ -35,6 +35,7 @@ class DocumentFinaliseControllerTest extends AbstractHttpControllerTestCase
                     'redirect',
                     'url',
                     'isButtonPressed',
+                    'getSearchForm'
                 ),
                 $extraParams
             )
@@ -71,7 +72,7 @@ class DocumentFinaliseControllerTest extends AbstractHttpControllerTestCase
             [
                 'get', 'setValue', 'setValueOptions',
                 'remove', 'setData', 'isValid',
-                'getData', 'add'
+                'getData', 'add', 'bind'
             ]
         );
 

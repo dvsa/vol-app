@@ -9,7 +9,7 @@
  */
 namespace Olcs\Controller;
 
-use Common\Controller\AbstractActionController;
+use Zend\Session\Container;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -19,15 +19,69 @@ use Zend\View\Model\ViewModel;
  * @author Mike Cooper <michael.cooper@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class SearchController extends AbstractActionController
+class SearchController extends AbstractController
 {
+
+    public function processSearchData()
+    {
+        //there are multiple places search data can come from:
+        //route, query, post and session
+
+        //there are lots of params we are interested in:
+        //filters, index, search query, page, limit
+
+        //a post request can come from two forms a) the filter form, b) the query form
+        $form = $this->getSearchForm();
+        $form->setData($this->params()->fromPost());
+
+        if ($form->isValid()) {
+            //save to session, reset filters in session...
+            //get index from post as well, override what is in the route match
+            $data = $form->getData();
+            $this->getEvent()->getRouteMatch()->setParam('index', $data['index']);
+        }
+    }
+
+    public function indexAction()
+    {
+        $data = $this->getSearchForm()->getObject();
+        //override with get route index unless request is post
+        if ($this->getRequest()->isPost()) {
+            $this->processSearchData();
+        }
+
+        //update data with information from route, and rebind to form so that form data is correct
+        $data['index'] = $this->params()->fromRoute('index');
+        $this->getSearchForm()->setData($data);
+
+        if (empty($data['search'])) {
+            $this->flashMessenger()->addErrorMessage('Please provide a search term');
+            return $this->redirectToRoute('dashboard');
+        }
+
+        /** @var \Olcs\Service\Data\Search\Search $searchService **/
+        $searchService = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\Search\Search');
+
+        $searchService->setQuery($this->getRequest()->getQuery())
+                      ->setIndex($data['index'])
+                      ->setSearch($data['search']);
+
+        $view = new ViewModel();
+
+        $view->indexes = $searchService->getNavigation();
+        $view->results = $searchService->fetchResultsTable();
+
+        $view->setTemplate('search/results');
+
+        return $this->renderView($view, 'Search results');
+    }
 
     /**
      * Search form action
      *
      * @return ViewModel
      */
-    public function indexAction()
+    public function advancedAction()
     {
         // Below is for setting route params for the breadcrumb
         $this->setBreadcrumb(array('search' => array()));
