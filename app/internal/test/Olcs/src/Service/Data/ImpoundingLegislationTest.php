@@ -8,7 +8,6 @@ use Mockery as m;
 /**
  * Class ImpoundingLegislationTest
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- * @package CommonTest\Service
  */
 class ImpoundingLegislationTest extends \PHPUnit_Framework_TestCase
 {
