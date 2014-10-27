@@ -74,35 +74,15 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController
      * Alter the form
      *
      * @TODO should live in the licence trait, but calls parent... so needs refactoring
+     * Therefore currently duped across internal and external
      *
      * @param \Zend\Form\Form $form
      * @return \Zend\Form\Form
      */
     public function alterForm(Form $form)
     {
-        /*
-        $form = $this->getLicenceSectionService()->alterForm($form);
-         */
-
         $form = parent::alterForm($form);
-
-        $data = $this->getTotalAuthorisationsForLicence($this->getIdentifier());
-
-        $filter = $form->getInputFilter();
-
-        foreach (['vehicles', 'trailers'] as $which) {
-            $key = 'totAuth' . ucfirst($which);
-
-            if ($filter->get('data')->has($key)) {
-                $this->attachCantIncreaseValidator(
-                    $filter->get('data')->get($key),
-                    'total-' . $which,
-                    $data[$key]
-                );
-            }
-        }
-
-        return $form;
+        return $this->commonAlterForm($form);
     }
 
     /**
@@ -114,9 +94,9 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController
     {
         parent::alterActionFormForGoods($form);
 
-        $form->remove('advertisements')
-            ->get('data')
-            ->remove('sufficientParking')
-            ->remove('permission');
+        $this->getServiceLocator()->get('Helper\Form')
+            ->remove($form, 'advertisements')
+            ->remove($form, 'data->sufficientParking')
+            ->remove($form, 'data->permission');
     }
 }
