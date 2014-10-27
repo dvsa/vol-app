@@ -162,6 +162,7 @@ trait LicenceNoteTrait
 
                 if (isset($caseDetail['licence']['id'])) {
                     $licenceId = $caseDetail['licence']['id'];
+                    $caseId = null;
                 }
             }
 
