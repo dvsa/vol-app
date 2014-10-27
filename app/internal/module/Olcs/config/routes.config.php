@@ -1158,11 +1158,21 @@ $routes = [
                 'action' => 'createApplication'
             ]
         ]
+    ],
+    'create_variation' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/variation/create/:id',
+            'defaults' => [
+                'controller' => 'LvaLicence/Overview',
+                'action' => 'createVariation'
+            ]
+        ]
     ]
 ];
 
 $sectionConfig = new \Common\Service\Data\SectionConfig();
 
 return array_merge(
-$routes, $sectionConfig->getAllRoutes()
+    $routes, $sectionConfig->getAllRoutes()
 );
