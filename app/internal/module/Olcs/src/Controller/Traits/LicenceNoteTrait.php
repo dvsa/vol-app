@@ -18,6 +18,7 @@ trait LicenceNoteTrait
 {
     private $templatePrefix;
     private $routePrefix;
+    private $redirectIndexRoute;
 
     /**
      * Allows the template to change based on the controller being used
@@ -60,13 +61,38 @@ trait LicenceNoteTrait
     }
 
     /**
+     * Route used for index redirects
+     *
+     * @return string
+     */
+    public function getRedirectIndexRoute()
+    {
+        return $this->redirectIndexRoute;
+    }
+
+    /**
+     * Route used for index redirects
+     *
+     * @param string $redirectIndexRoute
+     */
+    public function setRedirectIndexRoute($redirectIndexRoute)
+    {
+        $this->redirectIndexRoute = $redirectIndexRoute;
+    }
+
+    /**
      * Redirects to the index page, dependant on the note type
      *
      * @return \Zend\Http\Response
      */
     public function redirectToIndex()
     {
-        $this->redirectToRoute($this->getRoutePrefix() . '/notes', [], [], true);
+        return $this->redirectToRoute(
+            $this->getRoutePrefix() . $this->getRedirectIndexRoute(),
+            ['action'=>'index', $this->getIdentifierName() => null],
+            ['code' => '303'], // Why? No cache is set with a 303 :)
+            true
+        );
     }
 
     /**
@@ -77,10 +103,17 @@ trait LicenceNoteTrait
      * @param string $noteType
      * @param string $action
      * @param int $id
+     * @param int $caseId
      * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
      */
-    public function getNotesList($licenceId, $linkedId, $noteType = 'note_t_lic', $action = null, $id = null)
-    {
+    public function getNotesList(
+        $licenceId,
+        $linkedId,
+        $noteType = 'note_t_lic',
+        $action = null,
+        $id = null,
+        $caseId = null
+    ) {
         $routePrefix  = $this->getRoutePrefix();
 
         switch ($action) {
@@ -89,9 +122,10 @@ trait LicenceNoteTrait
                     $routePrefix . '/add-note',
                     [
                         'action' => strtolower($action),
-                        'licence' => $licenceId,
                         'noteType' => $noteType,
-                        'linkedId' => $linkedId
+                        'linkedId' => $linkedId,
+                        'licence' => $licenceId,
+                        'case' => $caseId
                     ],
                     [],
                     true
@@ -107,28 +141,31 @@ trait LicenceNoteTrait
         }
 
         $searchData = array(
-            'licence' => $licenceId,
             'page' => 1,
             'sort' => 'priority',
             'order' => 'DESC',
-            'limit' => 10
+            'limit' => 10,
+            'noteType' => $noteType
         );
 
-        //if noteType is set to all
-        if (isset($filters['noteType']) && !$filters['noteType']) {
-            unset($filters['noteType']);
+        //if we have a case id
+        if (!is_null($caseId)) {
+            $searchData['case'] = $caseId;
         }
-        //no filter so fall back to default
-        elseif ($noteType != 'note_t_lic') {
-            $searchData['noteType'] = $noteType;
+
+        //if we have a licence id
+        if (!is_null($licenceId)) {
+            $searchData['licence'] = $licenceId;
         }
+
+        $requestQuery = $this->getRequest()->getQuery();
 
         $filters = array_merge(
             $searchData,
-            $this->getRequest()->getQuery()->toArray()
+            $requestQuery->toArray()
         );
 
-        // if status is set to all
+        //if noteType is set to all
         if (isset($filters['noteType']) && !$filters['noteType']) {
             unset($filters['noteType']);
         }
@@ -143,25 +180,21 @@ trait LicenceNoteTrait
 
         $resultData = $this->makeRestCall('Note', 'GET', $filters, $bundle);
 
-        $formattedResult = $this->appendLinkedId($resultData);
+        $formattedResult = $this->appendLinkedId($resultData, $routePrefix);
 
         $table = $this->getTable(
             'note',
             $formattedResult,
             array_merge(
                 $filters,
-                array('query' => $this->getRequest()->getQuery())
+                array('query' => $requestQuery)
             ),
             true
         );
 
         $this->loadScripts(['note-filter']);
 
-        $view = $this->getView(
-            [
-                'table' => $table
-            ]
-        );
+        $view = $this->getView(['table' => $table]);
         $view->setTemplate($this->getTemplatePrefix() . '/notes/index');
 
         return $view;
@@ -175,14 +208,25 @@ trait LicenceNoteTrait
     public function addAction()
     {
         $licenceId = $this->getFromRoute('licence');
+        $caseId = $this->getFromRoute('case');
         $noteType = $this->getFromRoute('noteType');
         $linkedId = $this->getFromRoute('linkedId');
+
+        //if this is from a case, we also need to populate a licence id, which won't be in the route
+        if (!is_null($caseId)) {
+            $caseDetail = $this->getCase($caseId);
+
+            if (isset($caseDetail['licence']['id'])) {
+                $licenceId = $caseDetail['licence']['id'];
+            }
+        }
 
         $form = $this->generateFormWithData(
             'licence-notes',
             'processAddNotes',
             array(
                 'licence' => $licenceId,
+                'case' => $caseId,
                 'noteType' => $noteType,
                 'linkedId' => $linkedId
             )
@@ -213,12 +257,12 @@ trait LicenceNoteTrait
         $field = $this->getIdField($data['noteType']);
 
         //if this is a licence note this isn't needed, for other types of note it is expected
-        if ($field) {
+        if (!empty($field)) {
             if (!(int)$data['linkedId']) {
                 throw new BadRequestException('Unable to link your note to the correct record');
             }
 
-            $data[$field] = $data['linkedId'];
+            $data[$field['field']] = $data['linkedId'];
         }
 
         $result = $this->processAdd($data, 'Note');
@@ -277,8 +321,8 @@ trait LicenceNoteTrait
     {
         $data = array_merge($data, $data['main']);
 
-        //don't allow licence, note type or linkedId or comment to be changed
-        unset($data['licence'], $data['noteType'], $data['linkedId'], $data['comment']);
+        //don't allow licence, case, note type, linkedId or comment to be changed
+        unset($data['licence'], $data['noteType'], $data['linkedId'], $data['comment'], $data['case']);
 
         $data['lastModifiedBy'] = $this->getLoggedInUser();
 
@@ -292,12 +336,12 @@ trait LicenceNoteTrait
     }
 
     /**
-     * Appends a linked ID e.g. licence, case, application id etc.
+     * Appends the route prefix and a linked ID e.g. licence, case, application id etc.
      *
      * @param array $resultData
      * @return array
      */
-    public function appendLinkedId($resultData)
+    public function appendLinkedId($resultData, $routePrefix)
     {
         $formatted = [];
 
@@ -305,8 +349,14 @@ trait LicenceNoteTrait
             $field = $this->getIdField($result['noteType']['id']);
 
             $formatted[$key] = $result;
+
+            $id = (isset($result[$field['field']][$field['displayId']]) ?
+                $result[$field['field']][$field['displayId']] : '');
+
             $formatted[$key]['noteType']['description'] =
-                $result['noteType']['description'] . ' ' . (isset($result[$field]['id']) ? $result[$field]['id'] : '');
+                $result['noteType']['description'] . ' ' . $id;
+
+            $formatted[$key]['routePrefix'] = $routePrefix;
         }
 
         $resultData['Results'] = $formatted;
@@ -315,33 +365,38 @@ trait LicenceNoteTrait
     }
 
     /**
-     * Returns the field name used for linking the id to the appropriate record type
+     * Returns the field info used for linking the id to the appropriate record type
      *
      * @param $noteType
      * @return string
      */
     public function getIdField($noteType)
     {
-        $field = '';
+        $field = [
+            'field' => 'empty',
+            'displayId' => 'id',
+            'id' => 'id'
+        ];
 
         switch ($noteType) {
             case 'note_t_lic':
-                $field = 'licence';
-                break;
-            case 'note_t_app':
-                $field = 'application';
-                break;
-            case 'note_t_irfo_gv':
-                $field = 'irfoGvPermit';
-                break;
-            case 'note_t_irfo_psv':
-                $field = 'irfoPsvAuth';
+                //we're not going to show licence number in the tables
                 break;
             case 'note_t_case':
-                $field = 'case';
+                $field['field'] = 'case';
                 break;
             case 'note_t_bus':
-                $field = 'busReg';
+                $field['field'] = 'busReg';
+                $field['displayId'] = 'routeNo';
+                break;
+            case 'note_t_app':
+                $field['field'] = 'application';
+                break;
+            case 'note_t_irfo_gv':
+                $field['field'] = 'irfoGvPermit';
+                break;
+            case 'note_t_irfo_psv':
+                $field['field'] = 'irfoPsvAuth';
                 break;
         }
 
@@ -370,7 +425,8 @@ trait LicenceNoteTrait
                 ],
                 'licence' => [
                     'properties' => [
-                        'id'
+                        'id',
+                        'licNo'
                     ]
                 ],
                 'application' => [
@@ -395,7 +451,8 @@ trait LicenceNoteTrait
                 ],
                 'busReg' => [
                     'properties' => [
-                        'id'
+                        'id',
+                        'routeNo'
                     ]
                 ]
             ]

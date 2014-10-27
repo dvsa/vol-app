@@ -489,11 +489,7 @@ return array_merge(
                                 'route' => '/notes',
                                 'defaults' => [
                                     'controller' => 'BusProcessingNoteController',
-                                    'action' => 'index',
-                                    'page' => 1,
-                                    'limit' => 10,
-                                    'sort' => 'priority',
-                                    'order' => 'DESC'
+                                    'action' => 'index'
                                 ]
                             ],
                         ],
@@ -1075,18 +1071,51 @@ return array_merge(
                 ]
             ]
         ],
-        'processing_notes' => [
+        'case_processing_notes' => [
             'type' => 'segment',
             'options' => [
-                'route' => '/case/:case/processing/notes[/:action]',
+                'route' => '/case/:case/processing/notes',
                 'constraints' => [
-                    'action' => '(index|add|edit|details|overview)'
+                    'case' => '[0-9]+',
                 ],
                 'defaults' => [
-                    'controller' => 'CaseNotesController',
+                    'controller' => 'CaseNoteController',
                     'action' => 'index'
                 ]
-            ]
+            ],
+            'may_terminate' => true,
+            'child_routes' => [
+                'add-note' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => '/:action/:noteType[/:linkedId]',
+                        'defaults' => [
+                            'constraints' => [
+                                'case' => '[0-9]+',
+                                'noteType' => '[A-Za-z]+',
+                                'linkedId' => '[0-9]+',
+                            ],
+                            'controller' => 'CaseNoteController',
+                            'action' => 'add'
+                        ]
+                    ]
+
+                ],
+                'modify-note' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => '/:action[/:id]',
+                        'defaults' => [
+                            'constraints' => [
+                                'case' => '[0-9]+',
+                                'id' => '[0-9]+',
+                            ],
+                            'controller' => 'CaseNoteController',
+                            'action' => 'edit'
+                        ]
+                    ],
+                ]
+            ],
         ],
         'note' => [
             'type' => 'segment',
