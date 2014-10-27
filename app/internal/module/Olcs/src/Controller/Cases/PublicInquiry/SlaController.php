@@ -46,4 +46,9 @@ class SlaController extends PublicInquiryController
 
         return $data;
     }
+
+    public function onInvalidPost($form)
+    {
+        $this->processLoad($this->loadCurrent());
+    }
 }
