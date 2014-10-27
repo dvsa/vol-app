@@ -9,7 +9,7 @@ namespace Olcs\Controller\Lva\Licence;
 
 use Zend\View\Model\ViewModel;
 use Common\Controller\Lva\AbstractController;
-use Olcs\Controller\Traits\LicenceControllerTrait;
+use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
 
 /**
  * Internal Licence Overview Controller
