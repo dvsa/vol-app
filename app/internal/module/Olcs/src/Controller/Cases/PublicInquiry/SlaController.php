@@ -24,8 +24,6 @@ class SlaController extends PublicInquiryController
     {
         $data = parent::processLoad($data);
 
-        //die('<pre>' . print_r($data, 1));
-
         $data = $this->formatData($data);
 
         $this->getServiceLocator()->get('Common\Service\Data\Sla')->setContext('pi', $data);
