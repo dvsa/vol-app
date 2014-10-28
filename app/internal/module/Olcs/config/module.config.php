@@ -110,6 +110,7 @@ return array(
             'LvaApplication/ConvictionsPenalties'   => 'Olcs\Controller\Lva\Application\ConvictionsPenaltiesController',
             'LvaApplication/TaxiPhv'                => 'Olcs\Controller\Lva\Application\TaxiPhvController',
             'LvaApplication/ConditionsUndertakings' => 'Olcs\Controller\Lva\Application\ConditionsUndertakingsController',
+            'LvaApplication/VehiclesDeclarations'   => 'Olcs\Controller\Lva\Application\VehiclesDeclarationsController',
 
             'LvaLicence'                            => 'Olcs\Controller\Lva\Licence\OverviewController',
             'LvaLicence/TypeOfLicence'              => 'Olcs\Controller\Lva\Licence\TypeOfLicenceController',
