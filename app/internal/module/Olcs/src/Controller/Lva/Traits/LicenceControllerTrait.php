@@ -65,6 +65,8 @@ trait LicenceControllerTrait
      */
     protected function render($content, Form $form = null)
     {
+        $this->attachCurrentMessages();
+
         if ($form instanceof Form) {
             $form->get('form-actions')->remove('saveAndContinue');
         }
