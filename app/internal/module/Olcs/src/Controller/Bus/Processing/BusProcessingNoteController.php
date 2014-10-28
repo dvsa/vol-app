@@ -20,9 +20,9 @@ use Olcs\Controller\Traits\LicenceNoteTrait;
  */
 class BusProcessingNoteController extends BusProcessingController implements CrudInterface
 {
-    use DeleteActionTrait;
     use LicenceNoteTrait;
 
+    protected $identifierName = 'id';
     protected $item = 'notes';
     protected $service = 'Note';
 
@@ -33,6 +33,7 @@ class BusProcessingNoteController extends BusProcessingController implements Cru
     {
         $this->setTemplatePrefix('licence/bus/processing');
         $this->setRoutePrefix('licence/bus-processing');
+        $this->setRedirectIndexRoute('/notes');
     }
 
     /**
