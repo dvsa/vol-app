@@ -2,7 +2,9 @@
 
 return array(
     'router' => [
-        'routes' => include __DIR__ . '/routes.config.php'
+        // @TODO *must* revert this back to 'routes', simply a WIP fix
+        // on OLCS-4522 to stop constant misleading conflicts on routes
+        'routes' => include __DIR__ . '/routes-temp.config.php'
     ],
     'tables' => array(
         'config' => array(
