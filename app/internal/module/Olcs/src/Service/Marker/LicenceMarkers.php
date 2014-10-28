@@ -20,12 +20,12 @@ class LicenceMarkers extends CaseMarkers
      */
     protected function generateStayMarkerContent($stay)
     {
-        $content = 'Case %s ';
+        $content = "Case %s \nStay";
         $content .= isset($stay['outcome']['id']) ?
-            strtolower($stay['outcome']['description']) .  " pending appeal - \n" : " in progress - \n";
+            strtolower($stay['outcome']['description']) .  " pending appeal \n" : " in progress \n";
         $content .= $stay['stayType']['id'] == 'stay_t_ut' ?  ' UT ' : ' TC/TR ';
         $requestDate = new \DateTime($stay['requestDate']);
-        $content .= $requestDate->format('d-m-Y');
+        $content .= $requestDate->format('d/m/Y');
 
         return $content;
     }
@@ -36,7 +36,7 @@ class LicenceMarkers extends CaseMarkers
      * @param array $stay
      * @return array
      */
-    protected function generateStayMarkerData($stay)
+    protected function generateStayMarkerData()
     {
         $data[] = [
             'type' => 'url',
@@ -55,10 +55,20 @@ class LicenceMarkers extends CaseMarkers
      */
     protected function generateAppealMarkerContent($appeal)
     {
-        $content = "Appeal in progress \n";
+        $content = "Case %s \nAppeal in progress \n";
         $appealDate = new \DateTime($appeal['appealDate']);
-        $content .= $appealDate->format('d-m-Y');
+        $content .= $appealDate->format('d/m/Y');
 
         return $content;
+    }
+
+    /**
+     * Generates data associated with the content for the marker. For licences, we require a link to be generated
+     *
+     * @return array
+     */
+    protected function generateAppealMarkerData()
+    {
+        return $this->generateStayMarkerData();
     }
 }
