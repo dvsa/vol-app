@@ -11,6 +11,7 @@ namespace Olcs\Controller\Cases\PublicInquiry;
 // Olcs
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
+use Common\Service\Data\SlaServiceAwareTrait;
 
 use Zend\View\Model\ViewModel;
 
@@ -22,6 +23,7 @@ use Zend\View\Model\ViewModel;
 class PublicInquiryController extends OlcsController\CrudAbstract
 {
     use ControllerTraits\CaseControllerTrait;
+    use SlaServiceAwareTrait;
 
     /**
      * Identifier name
@@ -192,6 +194,9 @@ class PublicInquiryController extends OlcsController\CrudAbstract
         $pi = $this->loadCurrent();
 
         if (!empty($pi)) {
+
+            $pi = $this->setupSla($pi);
+
             if ($this->getRequest()->isPost()) {
                 $action = strtolower($this->getFromPost('action'));
                 $id = $this->getFromPost('id');
@@ -227,6 +232,8 @@ class PublicInquiryController extends OlcsController\CrudAbstract
             $this->getViewHelperManager()->get('placeholder')->getContainer('pageSubtitle')->offsetUnset(1);
         }
 
+        //die('<pre>' . print_r($pi, 1));
+
         $view = $this->getView([]);
 
         $this->getViewHelperManager()
@@ -242,5 +249,46 @@ class PublicInquiryController extends OlcsController\CrudAbstract
         $view->setTemplate('case/page/pi');
 
         return $this->renderView($view);
+    }
+
+    public function setupSla($pi)
+    {
+        //die('<pre>' . print_r($pi, 1));
+
+        $pi = $this->formatDataForSlaService($pi);
+
+        $this->setSlaService($this->getServiceLocator()->get('Common\Service\Data\Sla'));
+
+        $this->getSlaService()->setContext('pi', $pi);
+
+        $businessRules = $this->getSlaService()->fetchBusRules('pi');
+        $businessRules = array_map(function($item){ return $item['field']; }, $businessRules);
+
+        foreach (array_keys($pi) as $key) {
+            if (in_array($key, $businessRules)) {
+                $tKey = $key . 'Target';
+                $pi[$tKey] = $this->getSlaService()->getTargetDate('pi', $key);
+            }
+        }
+
+        //die('<pre>' . print_r($pi, 1));
+
+        return $pi;
+    }
+
+    public function formatDataForSlaService($data)
+    {
+        if (isset($data['piHearings']) && is_array($data['piHearings']) && count($data['piHearings']) > 0) {
+
+            $hearing = end($data['piHearings']);
+
+            if ($hearing['isAdjourned'] != 'Y' && $hearing['isCancelled'] != 'Y') {
+
+                $data['hearingDate'] = $hearing['hearingDate'];
+            }
+
+        }
+
+        return $data;
     }
 }
