@@ -19,8 +19,13 @@ class SlaIndicator extends AbstractHelper
      *
      * @return string
      */
-    public function __invoke($date = null, $targetDate = null)
+    public function __invoke()
     {
-        return 'hey hey hey';
+        return $this;
+    }
+
+    public function hasTargetBeenMet($date = null, $targetDate = null)
+    {
+        return '<span class="status grey">Inactive</span>';
     }
 }

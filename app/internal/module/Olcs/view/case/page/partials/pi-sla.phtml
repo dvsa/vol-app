@@ -4,7 +4,7 @@ $items = [
     [
         'label' => 'Date call up letter issued',
         'date' => $pi['callUpLetterDate'],
-        'suffix' => $this->slaIndicator('abc')
+        'suffix' => $this->slaIndicator()->hasTargetBeenMet()
     ],
     ['label' => 'Target date', 'date' => $pi['callUpLetterDateTarget'], 'dateFormat' => 'Y-m-d'],
     ['label' => 'Date brief to TC', 'date' => $pi['briefToTcDate']],
