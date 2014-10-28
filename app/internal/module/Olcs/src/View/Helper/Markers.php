@@ -22,7 +22,7 @@ class Markers extends AbstractHelper
             $markup = '<div class="notice-container">';
             foreach ($markers[$markerType] as $marker) {
                 $markup .= '<div class="notice--warning">';
-                $content = isset($marker['content']) ? $marker['content'] : '';
+                $content = $this->insertPlaceholders($marker);
 
                 // split content on new lines
                 if ($convertNewLines) {
@@ -35,5 +35,27 @@ class Markers extends AbstractHelper
         }
 
         return $markup;
+    }
+
+    private function insertPlaceholders($marker)
+    {
+        $urlHelper = $this->getView()->plugin('url');
+
+        $content = $marker['content'];
+        if (!empty($marker['data']) && is_array($marker['data']))
+        {
+            $contentPlaceholders = [];
+            foreach ($marker['data'] as $data) {
+                if (isset($data['type']) && $data['type'] == 'url') {
+                    array_push($contentPlaceholders, '<a href="' . $urlHelper($data['route'],
+                            $data['params']) . '">' . $data['linkText'] .
+                        '</a>');
+                }
+            }
+            if (count($contentPlaceholders) > 0) {
+                return vsprintf($marker['content'], $contentPlaceholders);
+            }
+        }
+        return $content;
     }
 }

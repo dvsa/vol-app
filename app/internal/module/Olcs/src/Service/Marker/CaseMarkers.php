@@ -60,11 +60,23 @@ class CaseMarkers extends Markers
                 $stay = $data['stayData'][$i];
                 if (empty($stay['withdrawnDate'])) {
                     $markers[$i]['content'] = $this->generateStayMarkerContent($stay);
+                    $markers[$i]['data'] = $this->generateStayMarkerData($stay);
                 }
             }
         }
 
         return $markers;
+    }
+
+    /**
+     * Generates data associated with the content for the marker. For cases, nothing needed.
+     *
+     * @param array $stay
+     * @return array
+     */
+    protected function generateStayMarkerData($stay)
+    {
+        return [];
     }
 
     /**
@@ -93,7 +105,7 @@ class CaseMarkers extends Markers
      * @param $stay
      * @return string
      */
-    private function generateStayMarkerContent($stay)
+    protected function generateStayMarkerContent($stay)
     {
         $content = 'Stay ';
         $content .= isset($stay['outcome']['id']) ?
@@ -110,7 +122,7 @@ class CaseMarkers extends Markers
      * @param array $appeal
      * @return string
      */
-    private function generateAppealMarkerContent($appeal)
+    protected function generateAppealMarkerContent($appeal)
     {
         $content = "Appeal in progress \n";
         $appealDate = new \DateTime($appeal['appealDate']);
