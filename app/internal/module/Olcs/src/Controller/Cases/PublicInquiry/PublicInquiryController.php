@@ -232,8 +232,6 @@ class PublicInquiryController extends OlcsController\CrudAbstract
             $this->getViewHelperManager()->get('placeholder')->getContainer('pageSubtitle')->offsetUnset(1);
         }
 
-        //die('<pre>' . print_r($pi, 1));
-
         $view = $this->getView([]);
 
         $this->getViewHelperManager()
@@ -253,8 +251,6 @@ class PublicInquiryController extends OlcsController\CrudAbstract
 
     public function setupSla($pi)
     {
-        //die('<pre>' . print_r($pi, 1));
-
         $pi = $this->formatDataForSlaService($pi);
 
         $this->setSlaService($this->getServiceLocator()->get('Common\Service\Data\Sla'));
@@ -262,7 +258,12 @@ class PublicInquiryController extends OlcsController\CrudAbstract
         $this->getSlaService()->setContext('pi', $pi);
 
         $businessRules = $this->getSlaService()->fetchBusRules('pi');
-        $businessRules = array_map(function($item){ return $item['field']; }, $businessRules);
+        $businessRules = array_map(
+            function ($item) {
+                return $item['field'];
+            },
+            $businessRules
+        );
 
         foreach (array_keys($pi) as $key) {
             if (in_array($key, $businessRules)) {
@@ -270,8 +271,6 @@ class PublicInquiryController extends OlcsController\CrudAbstract
                 $pi[$tKey] = $this->getSlaService()->getTargetDate('pi', $key);
             }
         }
-
-        //die('<pre>' . print_r($pi, 1));
 
         return $pi;
     }
