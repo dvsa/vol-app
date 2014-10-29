@@ -23,15 +23,6 @@ $items = [
 if (isset($pi['writtenOutcome']['id'])) {
     switch ($pi['writtenOutcome']['id']) {
         case 'piwo_reason':
-            /*$ items[] = [
-                'label' => 'Date of written reason',
-                'date' => $pi['writtenReasonDate']
-            ];
-            $items[] = [
-                'label' => 'Target',
-                'date' => $pi['writtenReasonDateTarget'],
-                'dateFormat' => 'Y-m-d'
-            ]; */
             $items[] = [
                 'label' => 'Date of TC\'s written reason',
                 'date' => $pi['tcWrittenReasonDate'],
@@ -104,8 +95,6 @@ if (isset($pi['writtenOutcome']['id'])) {
             break;
     }
 }
-
-
 
 echo $this->render('partials/read-only/main',
     [
