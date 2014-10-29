@@ -57,7 +57,7 @@ class Markers extends AbstractHelper
                 }
             }
             if (count($contentPlaceholders) > 0) {
-                return vsprintf($marker['content'], $contentPlaceholders);
+                $content = vsprintf($marker['content'], $contentPlaceholders);
             }
         }
         return $content;

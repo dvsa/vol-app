@@ -77,6 +77,43 @@ class MarkersTest extends \PHPUnit_Framework_TestCase
                     'type' => 'sometype'
                 ],
                 ['count' => 3, 'contains' => 'bar'],
+            ],
+            [
+                [
+                    'markers' =>
+                        ['sometype' =>
+                            [
+                                0 => [
+                                    'content' => 'bar %s', 'data' => [
+                                        0 => [
+                                            'linkText' => 'blah',
+                                            'type' => 'url',
+                                            'route' => 'case',
+                                            'params' => [
+                                                'case' => 1
+                                            ]
+                                        ]
+                                    ]
+                                ],
+                            ]
+                        ],
+                    'type' => 'sometype'
+                ],
+                ['count' => 1, 'contains' => 'blah'],
+            ],
+            [
+                [
+                    'markers' =>
+                        ['sometype' =>
+                            [
+                                0 => [
+                                    'content' => 'bar %s', 'data' => null
+                                ],
+                            ]
+                        ],
+                    'type' => 'sometype'
+                ],
+                ['count' => 1, 'contains' => 'bar %s'],
             ]
         ];
     }
