@@ -36,7 +36,6 @@ class ConvictionControllerTest extends AbstractHttpControllerTestCase
 
     public function testSaveDefendantTypeOperator()
     {
-
         $service = 'Conviction';
         $data = [
             'id' => 1,
@@ -48,7 +47,6 @@ class ConvictionControllerTest extends AbstractHttpControllerTestCase
             ]
         ];
 
-        $mockRestHelper = m::mock('RestHelper');
         $caseId = 1;
         $case = [
             'id' => 99,
@@ -59,14 +57,7 @@ class ConvictionControllerTest extends AbstractHttpControllerTestCase
             ]
         ];
 
-        // get case
-        $mockRestHelper->shouldReceive('makeRestCall')->with(
-            'Cases',
-            'GET',
-            array('id' => $caseId),
-            m::type('array')
-        )->andReturn($case);
-
+        $mockRestHelper = m::mock('RestHelper');
         // save conviction
         $mockRestHelper->shouldReceive('makeRestCall')->with(
             'Conviction',
@@ -75,8 +66,13 @@ class ConvictionControllerTest extends AbstractHttpControllerTestCase
             ""
         );
 
+        $mockCaseService = m::mock('Olcs\Service\Data\Cases');
+        $mockCaseService->shouldReceive('fetchCaseData')->with($caseId)->andReturn($case);
+
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
         $mockServiceManager->shouldReceive('get')->with('HelperService')->andReturnSelf();
+        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
+        $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\Cases')->andReturn($mockCaseService);
         $mockServiceManager->shouldReceive('getHelperService')->with('RestHelper')->andReturn($mockRestHelper);
         $mockServiceManager->shouldReceive('get->getHelperService')->with('RestService')->andReturn($mockRestHelper);
 
