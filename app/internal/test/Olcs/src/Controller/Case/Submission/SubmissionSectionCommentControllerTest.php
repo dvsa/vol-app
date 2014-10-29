@@ -6,9 +6,7 @@ use OlcsTest\Bootstrap;
 use Mockery as m;
 use Zend\Http\Request;
 use Zend\Http\Response;
-use Zend\Mvc\MvcEvent;
-use Zend\Mvc\Router\RouteMatch;
-use Zend\Mvc\Router\Http\TreeRouteStack as HttpRouter;
+use Olcs\TestHelpers\ControllerRouteMatchHelper;
 
 /**
  * SubmissionSectionComment controller tests
@@ -24,6 +22,8 @@ class SubmissionSectionCommentControllerTest extends AbstractHttpControllerTestC
             include __DIR__ . '/../../../../../../' . 'config/application.config.php'
         );
 
+        $this->routeMatchHelper = new ControllerRouteMatchHelper();
+
         parent::setUp();
     }
 
@@ -38,13 +38,7 @@ class SubmissionSectionCommentControllerTest extends AbstractHttpControllerTestC
     public function testProcessLoad($dataToLoad, $loadedData)
     {
         $sut = new \Olcs\Controller\Cases\Submission\SubmissionSectionCommentController();
-        $routeMatch = new RouteMatch(array('controller' => 'submission_section_comment'));
-        $event      = new MvcEvent();
-        $routerConfig = isset($config['router']) ? $config['router'] : array();
-        $router = HttpRouter::factory($routerConfig);
-
-        $event->setRouter($router);
-        $event->setRouteMatch($routeMatch);
+        $event = $this->routeMatchHelper->getMockRouteMatch(array('controller' => 'submission_section_comment'));
         $sut->setEvent($event);
 
         $sut->getEvent()->getRouteMatch()->setParam('case', $dataToLoad['case']);
@@ -128,13 +122,7 @@ class SubmissionSectionCommentControllerTest extends AbstractHttpControllerTestC
     public function testAlterForm()
     {
         $sut = new \Olcs\Controller\Cases\Submission\SubmissionSectionCommentController();
-        $routeMatch = new RouteMatch(array('controller' => 'submission_section_comment'));
-        $event      = new MvcEvent();
-        $routerConfig = isset($config['router']) ? $config['router'] : array();
-        $router = HttpRouter::factory($routerConfig);
-
-        $event->setRouter($router);
-        $event->setRouteMatch($routeMatch);
+        $event = $this->routeMatchHelper->getMockRouteMatch(array('controller' => 'submission_section_comment'));
         $sut->setEvent($event);
 
         $sectionId = 'section_1';
