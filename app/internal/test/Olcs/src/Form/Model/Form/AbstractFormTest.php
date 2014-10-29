@@ -2,7 +2,7 @@
 
 namespace OlcsTest\Form\Model\Form;
 
-use Common\FormTester\AbstractFormTest as BaseAbstract;
+use Olcs\TestHelpers\FormTester\AbstractFormTest as BaseAbstract;
 use OlcsTest\Bootstrap;
 
 /**
