@@ -44,8 +44,8 @@ abstract class Markers extends AbstractData
             $this->setCase($data['case']);
         }
 
-        if (isset($data['case']['licence'])) {
-            $this->setLicence($data['case']['licence']);
+        if (isset($data['licence'])) {
+            $this->setLicence($data['licence']);
         }
 
         if (is_array($markerTypes)) {
@@ -63,7 +63,19 @@ abstract class Markers extends AbstractData
                 }
             }
         }
-        return $this->getMarkers();
+
+        $markers = $this->getMarkers();
+
+        $this->resetMarkers();
+
+        return $markers;
+    }
+
+    private function resetMarkers()
+    {
+        unset($this->markers);
+        unset($this->case);
+        unset($this->licence);
     }
 
     /**

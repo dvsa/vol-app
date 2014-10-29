@@ -1,3 +1,8 @@
+<?php
+
+$cases = $licence['cases'];
+$allCaseMarkers = $markers;
+?>
 <div class="four-fiths--left">
     <?php
         echo $this->navigation('navigation')
@@ -18,4 +23,12 @@
       <li class="record-actions__item actions--secondary"><a href="">Create case</a></li>
     </ul>
   </div>
+    <?php
+    if (is_array($allCaseMarkers)) {
+        foreach($allCaseMarkers as $markers) {
+            echo $this->markers($markers, 'appeal');
+            echo $this->markers($markers, 'stay');
+        }
+    }
+    ?>
 </div>
