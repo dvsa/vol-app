@@ -29,6 +29,8 @@ class SafetyControllerTest extends AbstractLicenceDetailsControllerTestCase
     {
         $this->goodsOrPsv = $goodsOrPsv;
 
+        array_push($this->additionalMockedMethods, 'setupMarkers');
+
         $this->setupAction('index');
 
         $response = $this->controller->indexAction();

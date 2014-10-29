@@ -34,7 +34,6 @@ class Licence extends AbstractData
             $data =  $this->getRestClient()->get(sprintf('/%d', $id), ['bundle' => json_encode($bundle)]);
             $this->setData($id, $data);
         }
-
         return $this->getData($id);
     }
 
@@ -46,6 +45,45 @@ class Licence extends AbstractData
         $bundle = array(
             'properties' => 'ALL',
             'children' => array(
+                'cases' => array(
+                    'properties' => 'ALL',
+                    'children' => array(
+                        'appeals' => array(
+                            'properties' => 'ALL',
+                            'children' => array(
+                                'outcome' => array(
+                                    'properties' => array(
+                                        'id',
+                                        'description'
+                                    )
+                                ),
+                                'reason' => array(
+                                    'properties' => array(
+                                        'id',
+                                        'description'
+                                    )
+                                ),
+                            )
+                        ),
+                        'stays' => array(
+                            'properties' => 'ALL',
+                            'children' => array(
+                                'stayType' => array(
+                                    'properties' => array(
+                                        'id',
+                                        'description'
+                                    )
+                                ),
+                                'outcome' => array(
+                                    'properties' => array(
+                                        'id',
+                                        'description'
+                                    )
+                                )
+                            )
+                        )
+                    )
+                ),
                 'status' => array(
                     'properties' => array('id', 'description')
                 ),

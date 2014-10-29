@@ -60,11 +60,34 @@ class CaseMarkers extends Markers
                 $stay = $data['stayData'][$i];
                 if (empty($stay['withdrawnDate'])) {
                     $markers[$i]['content'] = $this->generateStayMarkerContent($stay);
+                    $markers[$i]['data'] = $this->generateStayMarkerData($stay);
                 }
             }
         }
 
         return $markers;
+    }
+
+    /**
+     * Generates data associated with the content for the marker. For cases, nothing needed.
+     *
+     * @param array $stay
+     * @return array
+     */
+    protected function generateStayMarkerData()
+    {
+        return [];
+    }
+
+    /**
+     * Generates data associated with the content for the marker. For cases, nothing needed.
+     *
+     * @param array $stay
+     * @return array
+     */
+    protected function generateAppealMarkerData()
+    {
+        return [];
     }
 
     /**
@@ -80,7 +103,13 @@ class CaseMarkers extends Markers
             if (empty($data['appealData']['withdrawnDate']) &&
                 (empty($data['appealData']['decisionDate']) || empty($data['appealData']['outcome']))
             ) {
-                array_push($marker, ['content' => $this->generateAppealMarkerContent($data['appealData'])]);
+                array_push(
+                    $marker,
+                    [
+                        'content' => $this->generateAppealMarkerContent($data['appealData']),
+                        'data' => $this->generateAppealMarkerData()
+                    ]
+                );
             }
         }
 
@@ -93,14 +122,14 @@ class CaseMarkers extends Markers
      * @param $stay
      * @return string
      */
-    private function generateStayMarkerContent($stay)
+    protected function generateStayMarkerContent($stay)
     {
         $content = 'Stay ';
         $content .= isset($stay['outcome']['id']) ?
             strtolower($stay['outcome']['description']) .  " pending appeal - \n" : " in progress - \n";
         $content .= $stay['stayType']['id'] == 'stay_t_ut' ?  ' UT ' : ' TC/TR ';
         $requestDate = new \DateTime($stay['requestDate']);
-        $content .= $requestDate->format('d-m-Y');
+        $content .= $requestDate->format('d/m/Y');
 
         return $content;
     }
@@ -110,11 +139,11 @@ class CaseMarkers extends Markers
      * @param array $appeal
      * @return string
      */
-    private function generateAppealMarkerContent($appeal)
+    protected function generateAppealMarkerContent($appeal)
     {
         $content = "Appeal in progress \n";
         $appealDate = new \DateTime($appeal['appealDate']);
-        $content .= $appealDate->format('d-m-Y');
+        $content .= $appealDate->format('d/m/Y');
 
         return $content;
     }

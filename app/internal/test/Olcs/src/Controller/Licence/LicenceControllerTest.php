@@ -39,7 +39,8 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
                 'getTable',
                 'url',
                 'setTableFilters',
-                'getSearchForm'
+                'getSearchForm',
+                'setupMarkers'
             )
         );
 

@@ -116,9 +116,11 @@ class ProhibitionDefectController extends OlcsController\CrudAbstract
 
     public function redirectToIndex()
     {
+        $prohibition = $this->getFromRoute('prohibition');
+
         return $this->redirectToRoute(
             'case_prohibition_defect',
-            ['action'=>'index', 'prohibition' => $this->getFromRoute('prohibition'), 'id' => null],
+            ['action'=>'index', 'prohibition' => $prohibition, 'id' => null],
             ['code' => '303'], // Why? No cache is set with a 303 :)
             true
         );
@@ -157,7 +159,7 @@ class ProhibitionDefectController extends OlcsController\CrudAbstract
      *
      * @return array
      */
-    protected function getDataForForm()
+    public function getDataForForm()
     {
         $data = parent::getDataForForm();
 

@@ -170,14 +170,18 @@ return array(
             'piListData'   => 'Olcs\View\Helper\PiListData',
             'formSubmissionSections' => 'Olcs\Form\View\Helper\SubmissionSections',
             'submissionSectionDetails' => 'Olcs\View\Helper\SubmissionSectionDetails',
-            'markers' => 'Olcs\View\Helper\Markers',
+            'markers' => 'Olcs\View\Helper\Markers'
         ),
         'delegators' => array(
             'formElement' => array('Olcs\Form\View\Helper\FormElementDelegatorFactory')
         ),
         'factories' => array(
-            'SubmissionSectionTable' => 'Olcs\View\Helper\SubmissionSectionTableFactory'
-        )
+            'SubmissionSectionTable' => 'Olcs\View\Helper\SubmissionSectionTableFactory',
+            'Olcs\View\Helper\SlaIndicator' => 'Olcs\View\Helper\SlaIndicator'
+        ),
+        'aliases' => [
+            'slaIndicator' => 'Olcs\View\Helper\SlaIndicator'
+        ]
     ),
     'local_forms_path' => array(
         __DIR__ . '/../src/Form/Forms/'

@@ -9,36 +9,14 @@ use Zend\Form\Element\DateSelect as ZendDateSelect;
 use Common\Service\Data\Sla as SlaService;
 use Zend\Form\Form as ZendForm;
 use Zend\Form\FormInterface as ZendFormInterface;
+use Common\Service\Data\SlaServiceAwareTrait as SlaServiceAwareTrait;
 
 /**
  * SlaDateSelect
  */
 class SlaDateSelect extends ZendDateSelect
 {
-    /**
-     * @var SlaService
-     */
-    protected $slaService;
-
-    /**
-     *
-     * @return \Common\Service\Data\Sla
-     */
-    public function getSlaService()
-    {
-        return $this->slaService;
-    }
-
-    /**
-     *
-     * @param SlaService $slaService
-     * @return \Olcs\Form\Element\SlaDateSelect
-     */
-    public function setSlaService(SlaService $slaService)
-    {
-        $this->slaService = $slaService;
-        return $this;
-    }
+    use SlaServiceAwareTrait;
 
     /**
      * Prepare the form element (mostly used for rendering purposes)

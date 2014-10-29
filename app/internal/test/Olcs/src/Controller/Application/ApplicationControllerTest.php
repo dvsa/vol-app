@@ -36,7 +36,8 @@ class ApplicationControllerTest extends AbstractHttpControllerTestCase
                 'getServiceLocator',
                 'getTable',
                 'url',
-                'setTableFilters'
+                'setTableFilters',
+                'setupMarkers'
             )
         );
 
