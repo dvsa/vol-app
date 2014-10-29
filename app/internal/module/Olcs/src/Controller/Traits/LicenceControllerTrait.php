@@ -67,13 +67,14 @@ trait LicenceControllerTrait
      */
     public function setupMarkers($licence)
     {
-        $licenceMarkerPlugin = $this->getServiceLocator()
-            ->get('Olcs\Service\Marker\MarkerPluginManager')
-            ->get('Olcs\Service\Marker\LicenceMarkers');
-
         $markers = [];
 
         if (!empty($licence['cases'])) {
+
+            $licenceMarkerPlugin = $this->getServiceLocator()
+                ->get('Olcs\Service\Marker\MarkerPluginManager')
+                ->get('Olcs\Service\Marker\LicenceMarkers');
+
             foreach ($licence['cases'] as $case) {
 
                 $caseMarkers = $licenceMarkerPlugin->generateMarkerTypes(
