@@ -73,11 +73,13 @@ trait LicenceControllerTrait
         if (!empty($licence['cases'])) {
             foreach ($licence['cases'] as $case) {
 
-                $caseMarkers = $licenceMarkerPlugin->generateMarkerTypes(['appeal', 'stay'],
+                $caseMarkers = $licenceMarkerPlugin->generateMarkerTypes(
+                    ['appeal', 'stay'],
                     [
                         'case' => $case,
                         'licence' => $licence
-                    ]);
+                    ]
+                );
                 $markers[] = $caseMarkers;
             }
         }

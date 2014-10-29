@@ -42,14 +42,18 @@ class Markers extends AbstractHelper
         $urlHelper = $this->getView()->plugin('url');
 
         $content = $marker['content'];
-        if (!empty($marker['data']) && is_array($marker['data']))
-        {
+        if (!empty($marker['data']) && is_array($marker['data'])) {
             $contentPlaceholders = [];
             foreach ($marker['data'] as $data) {
                 if (isset($data['type']) && $data['type'] == 'url') {
-                    array_push($contentPlaceholders, '<a href="' . $urlHelper($data['route'],
-                            $data['params']) . '">' . $data['linkText'] .
-                        '</a>');
+                    array_push(
+                        $contentPlaceholders,
+                        '<a href="' . $urlHelper(
+                            $data['route'],
+                            $data['params']
+                        ) . '">' . $data['linkText'] .
+                        '</a>'
+                    );
                 }
             }
             if (count($contentPlaceholders) > 0) {
