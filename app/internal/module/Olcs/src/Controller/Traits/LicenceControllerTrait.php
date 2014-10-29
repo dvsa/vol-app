@@ -60,15 +60,18 @@ trait LicenceControllerTrait
     }
 
     /**
-     * Calls CaseMarkers plugin to generate markers and return as placeholder
+     * Gets markers for the licence. Calls CaseMarkers plugin to generate markers and return as placeholder
+     *
+     * @param array $licence
+     * @return array $markers
      */
     public function setupMarkers($licence)
     {
-        $placeholder = $this->getViewHelperManager()->get('placeholder');
-
         $licenceMarkerPlugin = $this->getServiceLocator()
             ->get('Olcs\Service\Marker\MarkerPluginManager')
             ->get('Olcs\Service\Marker\LicenceMarkers');
+
+        $markers = [];
 
         if (!empty($licence['cases'])) {
             foreach ($licence['cases'] as $case) {
@@ -83,6 +86,6 @@ trait LicenceControllerTrait
                 $markers[] = $caseMarkers;
             }
         }
-        $placeholder->getContainer('markers')->set($markers);
+        return $markers;
     }
 }

@@ -83,7 +83,8 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
                 'getServiceLocator',
                 'getSubNavigation',
                 'setTableFilters',
-                'getSearchForm'
+                'getSearchForm',
+                'setupMarkers'
             )
         );
 
