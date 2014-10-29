@@ -74,7 +74,6 @@ class LicenceTest extends TestCase
         $mockSl->shouldReceive('get')->with('Olcs\Service\Data\Licence')->andReturn($mockLicenceService);
         $mockSl->shouldReceive('get')->with('Router')->andReturn($mockRouter);
 
-
         $sut = new Licence();
         $service = $sut->createService($mockSl);
 
@@ -84,4 +83,3 @@ class LicenceTest extends TestCase
         $this->assertSame($mockViewHelperManager, $sut->getViewHelperManager());
     }
 }
- 

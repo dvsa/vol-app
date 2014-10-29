@@ -13,6 +13,10 @@ use Zend\View\Helper\Navigation\PluginManager as ViewHelperManager;
 use Olcs\Service\Data\Licence as LicenceService;
 use Zend\Mvc\Router\RouteStackInterface;
 
+/**
+ * Class Licence
+ * @package Olcs\Listener\RouteParam
+ */
 class Licence implements ListenerAggregateInterface, FactoryInterface
 {
     use ListenerAggregateTrait;
@@ -101,6 +105,9 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
         $this->listeners[] = $events->attach(RouteParams::EVENT_PARAM . 'licence', array($this, 'onLicence'), 1);
     }
 
+    /**
+     * @param RouteParam $e
+     */
     public function onLicence(RouteParam $e)
     {
         $this->getLicenceService()->setId($e->getValue()); //set default licence id for use in forms

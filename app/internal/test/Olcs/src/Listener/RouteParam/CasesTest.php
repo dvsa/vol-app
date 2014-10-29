@@ -155,4 +155,3 @@ class CasesTest extends TestCase
         $this->assertSame($mockViewHelperManager, $sut->getViewHelperManager());
     }
 }
- 

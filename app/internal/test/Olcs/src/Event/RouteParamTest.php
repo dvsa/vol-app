@@ -29,4 +29,3 @@ class RouteParamTest extends TestCase
         $this->assertEquals(['test'=>'value'], $sut->getContext());
     }
 }
- 

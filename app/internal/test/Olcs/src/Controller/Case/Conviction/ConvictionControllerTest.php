@@ -36,7 +36,6 @@ class ConvictionControllerTest extends AbstractHttpControllerTestCase
 
     public function testSaveDefendantTypeOperator()
     {
-
         $service = 'Conviction';
         $data = [
             'id' => 1,
@@ -57,7 +56,6 @@ class ConvictionControllerTest extends AbstractHttpControllerTestCase
                 ]
             ]
         ];
-
 
         $mockRestHelper = m::mock('RestHelper');
         // save conviction

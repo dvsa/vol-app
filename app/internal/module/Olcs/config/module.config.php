@@ -24,14 +24,16 @@ return array(
             'CaseConvictionController' => 'Olcs\Controller\Cases\Conviction\ConvictionController',
             'CaseOffenceController' => 'Olcs\Controller\Cases\Conviction\OffenceController',
             'CaseSubmissionController' => 'Olcs\Controller\Cases\Submission\SubmissionController',
-            'CaseSubmissionSectionCommentController' => 'Olcs\Controller\Cases\Submission\SubmissionSectionCommentController',
+            'CaseSubmissionSectionCommentController'
+                => 'Olcs\Controller\Cases\Submission\SubmissionSectionCommentController',
             'CaseStayController' => 'Olcs\Controller\Cases\Hearing\StayController',
             'CasePenaltyController' => 'Olcs\Controller\Cases\Penalty\PenaltyController',
             'CaseProhibitionController' => 'Olcs\Controller\Cases\Prohibition\ProhibitionController',
             'CaseProhibitionDefectController' => 'Olcs\Controller\Cases\Prohibition\ProhibitionDefectController',
             'CaseAnnualTestHistoryController' => 'Olcs\Controller\Cases\AnnualTestHistory\AnnualTestHistoryController',
             'CaseImpoundingController' => 'Olcs\Controller\Cases\Impounding\ImpoundingController',
-            'CaseConditionUndertakingController' => 'Olcs\Controller\Cases\ConditionUndertaking\ConditionUndertakingController',
+            'CaseConditionUndertakingController'
+                => 'Olcs\Controller\Cases\ConditionUndertaking\ConditionUndertakingController',
             'CasePublicInquiryController' => 'Olcs\Controller\Cases\PublicInquiry\PublicInquiryController',
             'PublicInquiry\SlaController' => 'Olcs\Controller\Cases\PublicInquiry\SlaController',
             'PublicInquiry\HearingController' => 'Olcs\Controller\Cases\PublicInquiry\HearingController',
@@ -40,12 +42,11 @@ return array(
             'PublicInquiry\RegisterDecisionController'
                 => 'Olcs\Controller\Cases\PublicInquiry\RegisterDecisionController',
             'CaseProcessingController' => 'Olcs\Controller\Cases\Processing\ProcessingController',
-			'CaseNoteController' => 'Olcs\Controller\Cases\Processing\NoteController',
+            'CaseNoteController' => 'Olcs\Controller\Cases\Processing\NoteController',
             'CaseDecisionsController' => 'Olcs\Controller\Cases\Processing\DecisionsController',
             'CaseRevokeController' => 'Olcs\Controller\Cases\Processing\RevokeController',
         ),
         'invokables' => array(
-			'SubmissionNoteController' => 'Olcs\Controller\Submission\SubmissionNoteController',
             'DefaultController' => 'Olcs\Olcs\Placeholder\Controller\DefaultController',
             'IndexController' => 'Olcs\Controller\IndexController',
             'SearchController' => 'Olcs\Controller\SearchController',

@@ -70,4 +70,3 @@ class CaseControllerAbstractFactoryTest extends TestCase
         return $mockSl;
     }
 }
- 

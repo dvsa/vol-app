@@ -54,4 +54,3 @@ class RouteParamsTest extends TestCase
         $sut->onDispatch($mockEvent);
     }
 }
- 

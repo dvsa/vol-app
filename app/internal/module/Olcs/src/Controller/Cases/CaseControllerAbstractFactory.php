@@ -6,6 +6,10 @@ use Zend\ServiceManager\AbstractFactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\Mvc\MvcEvent;
 
+/**
+ * Class CaseControllerAbstractFactory
+ * @package Olcs\Controller\Cases
+ */
 class CaseControllerAbstractFactory implements AbstractFactoryInterface
 {
     /**
