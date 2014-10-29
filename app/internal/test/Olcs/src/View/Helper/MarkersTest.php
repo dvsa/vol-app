@@ -3,6 +3,8 @@
 namespace OlcsTest\View\Helper;
 
 use Olcs\View\Helper\Markers;
+use Zend\View\Model\ViewModel;
+use Mockery as m;
 
 /**
  * Class MarkersTest
@@ -18,6 +20,13 @@ class MarkersTest extends \PHPUnit_Framework_TestCase
     public function testInvoke($input, $expected)
     {
         $sut = new Markers();
+
+        $mockView = m::mock('\Zend\View\Renderer\PhpRenderer');
+        $mockViewHelper = m::mock('\Zend\View\Helper\Url');
+        $mockViewHelper->shouldReceive('__invoke');
+        $mockView->shouldReceive('plugin')->andReturn($mockViewHelper);
+
+        $sut->setView($mockView);
 
         $result = $sut($input['markers'], $input['type']);
         if (isset($expected['count']) && $expected['count'] == 0) {
@@ -68,6 +77,43 @@ class MarkersTest extends \PHPUnit_Framework_TestCase
                     'type' => 'sometype'
                 ],
                 ['count' => 3, 'contains' => 'bar'],
+            ],
+            [
+                [
+                    'markers' =>
+                        ['sometype' =>
+                            [
+                                0 => [
+                                    'content' => 'bar %s', 'data' => [
+                                        0 => [
+                                            'linkText' => 'blah',
+                                            'type' => 'url',
+                                            'route' => 'case',
+                                            'params' => [
+                                                'case' => 1
+                                            ]
+                                        ]
+                                    ]
+                                ],
+                            ]
+                        ],
+                    'type' => 'sometype'
+                ],
+                ['count' => 1, 'contains' => 'blah'],
+            ],
+            [
+                [
+                    'markers' =>
+                        ['sometype' =>
+                            [
+                                0 => [
+                                    'content' => 'bar %s', 'data' => null
+                                ],
+                            ]
+                        ],
+                    'type' => 'sometype'
+                ],
+                ['count' => 1, 'contains' => 'bar %s'],
             ]
         ];
     }
