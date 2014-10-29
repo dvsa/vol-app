@@ -139,10 +139,15 @@ class PublicInquiryControllerTest extends AbstractHttpControllerTestCase
         $mockRestHelper = m::mock('RestHelper');
         $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn($mockPi);
 
+        $mockSlaService = m::mock('Common\Service\Data\Sla');
+        $mockSlaService->shouldReceive('setContext')->withAnyArgs();
+        $mockSlaService->shouldReceive('fetchBusRules')->withAnyArgs()->andReturn([]);
+
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
         $mockServiceManager->shouldReceive('get')->with('HelperService')->andReturnSelf();
         $mockServiceManager->shouldReceive('getHelperService')->with('RestHelper')->andReturn($mockRestHelper);
         $mockServiceManager->shouldReceive('get->getHelperService')->with('RestService')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('Common\Service\Data\Sla')->andReturn($mockSlaService);
 
         $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
             [
@@ -209,10 +214,15 @@ class PublicInquiryControllerTest extends AbstractHttpControllerTestCase
         $mockRestHelper = m::mock('RestHelper');
         $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn($mockPi);
 
+        $mockSlaService = m::mock('Common\Service\Data\Sla');
+        $mockSlaService->shouldReceive('setContext')->withAnyArgs();
+        $mockSlaService->shouldReceive('fetchBusRules')->withAnyArgs()->andReturn([]);
+
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
         $mockServiceManager->shouldReceive('get')->with('HelperService')->andReturnSelf();
         $mockServiceManager->shouldReceive('getHelperService')->with('RestHelper')->andReturn($mockRestHelper);
         $mockServiceManager->shouldReceive('get->getHelperService')->with('RestService')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('Common\Service\Data\Sla')->andReturn($mockSlaService);
 
         $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
             [
@@ -278,10 +288,15 @@ class PublicInquiryControllerTest extends AbstractHttpControllerTestCase
         $mockRestHelper = m::mock('RestHelper');
         $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn($mockPi);
 
+        $mockSlaService = m::mock('Common\Service\Data\Sla');
+        $mockSlaService->shouldReceive('setContext')->withAnyArgs();
+        $mockSlaService->shouldReceive('fetchBusRules')->withAnyArgs()->andReturn([]);
+
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
         $mockServiceManager->shouldReceive('get')->with('HelperService')->andReturnSelf();
         $mockServiceManager->shouldReceive('getHelperService')->with('RestHelper')->andReturn($mockRestHelper);
         $mockServiceManager->shouldReceive('get->getHelperService')->with('RestService')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('Common\Service\Data\Sla')->andReturn($mockSlaService);
 
         $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
             [
