@@ -4,10 +4,14 @@ $items = [
     [
         'label' => 'Date call up letter issued',
         'date' => $pi['callUpLetterDate'],
-        'suffix' => $this->slaIndicator()->hasTargetBeenMet()
+        'suffix' => $this->slaIndicator()->hasTargetBeenMet($pi['callUpLetterDate'], $pi['callUpLetterDateTarget'])
     ],
     ['label' => 'Target date', 'date' => $pi['callUpLetterDateTarget'], 'dateFormat' => 'Y-m-d'],
-    ['label' => 'Date brief to TC', 'date' => $pi['briefToTcDate']],
+    [
+        'label' => 'Date brief to TC',
+        'date' => $pi['briefToTcDate'],
+        'suffix' => $this->slaIndicator()->hasTargetBeenMet($pi['briefToTcDate'], $pi['briefToTcDateTarget'])
+    ],
     ['label' => 'Target date', 'date' => $pi['briefToTcDateTarget'], 'dateFormat' => 'Y-m-d'],
     [
         'label' => 'Written outcome',
@@ -31,7 +35,10 @@ if (isset($pi['writtenOutcome']['id'])) {
             $items[] = [
                 'label' => 'Date of TC\'s written reason',
                 'date' => $pi['tcWrittenReasonDate'],
-                //'suffix' => $this->slaIndicator()
+                'suffix' => $this->slaIndicator()->hasTargetBeenMet(
+                    $pi['tcWrittenReasonDate'],
+                    $pi['tcWrittenReasonDateTarget']
+                )
             ];
             $items[] = [
                 'label' => 'Target date',
@@ -41,7 +48,10 @@ if (isset($pi['writtenOutcome']['id'])) {
             $items[] = [
                 'label' => 'Written reason letter sent',
                 'date' => $pi['writtenReasonLetterDate'],
-                //'suffix' => $this->slaIndicator()
+                'suffix' => $this->slaIndicator()->hasTargetBeenMet(
+                    $pi['writtenReasonLetterDate'],
+                    $pi['writtenReasonLetterDateTarget']
+                )
             ];
             $items[] = [
                 'label' => 'Target date',
@@ -53,7 +63,10 @@ if (isset($pi['writtenOutcome']['id'])) {
             $items[] = [
                 'label' => 'Decision letter sent',
                 'date' => $pi['decisionLetterSentDate'],
-                //'suffix' => $this->slaIndicator()
+                'suffix' => $this->slaIndicator()->hasTargetBeenMet(
+                    $pi['decisionLetterSentDate'],
+                    $pi['decisionLetterSentDateTarget']
+                )
             ];
             $items[] = [
                 'label' => 'Target date',
@@ -63,7 +76,10 @@ if (isset($pi['writtenOutcome']['id'])) {
             $items[] = [
                 'label' => 'Date of TC\'s written decision',
                 'date' => $pi['tcWrittenDecisionDate'],
-                'suffix' => $this->slaIndicator()
+                'suffix' => $this->slaIndicator()->hasTargetBeenMet(
+                    $pi['tcWrittenDecisionDate'],
+                    $pi['tcWrittenDecisionDateTarget']
+                )
             ];
             $items[] = [
                 'label' => 'Target date',
@@ -75,7 +91,10 @@ if (isset($pi['writtenOutcome']['id'])) {
             $items[] = [
                 'label' => 'Decision letter sent after written decision date',
                 'date' => $pi['decSentAfterWrittenDecDate'],
-                //'suffix' => $this->slaIndicator()
+                'suffix' => $this->slaIndicator()->hasTargetBeenMet(
+                    $pi['decSentAfterWrittenDecDate'],
+                    $pi['decSentAfterWrittenDecDateTarget']
+                )
             ];
             $items[] = [
                 'label' => 'Target date',

@@ -26,6 +26,28 @@ class SlaIndicator extends AbstractHelper
 
     public function hasTargetBeenMet($date = null, $targetDate = null)
     {
-        return '<span class="status grey">Inactive</span>';
+        if (is_null($date) || is_null($targetDate)) {
+            return '<span class="status grey">Inactive</span>';
+        }
+
+        $retVal = $this->doHasTargetBeenMet($date, $targetDate);
+
+        if (!$retVal) {
+            return '<span class="status red">Fail</span>';
+        }
+
+        return '<span class="status green">Pass</span>';
+    }
+
+    public function doHasTargetBeenMet($date = null, $targetDate = null)
+    {
+        $dateTime = \DateTime::createFromFormat('Y-m-d', date('Y-m-d', strtotime($date)));
+        $targetDateTime = \DateTime::createFromFormat('Y-m-d', date('Y-m-d', strtotime($targetDate)));
+
+        if ($dateTime <= $targetDateTime) {
+            return true;
+        }
+
+        return false;
     }
 }
