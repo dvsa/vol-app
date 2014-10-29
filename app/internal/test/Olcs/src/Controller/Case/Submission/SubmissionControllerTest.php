@@ -6,9 +6,7 @@ use OlcsTest\Bootstrap;
 use Mockery as m;
 use Zend\Http\Request;
 use Zend\Http\Response;
-use Zend\Mvc\MvcEvent;
-use Zend\Mvc\Router\RouteMatch;
-use Zend\Mvc\Router\Http\TreeRouteStack as HttpRouter;
+use Olcs\TestHelpers\ControllerRouteMatchHelper;
 
 /**
  * Submission controller form post tests
@@ -42,7 +40,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         );
         $serviceManager = Bootstrap::getServiceManager();
         $this->controller->setServiceLocator($serviceManager);
-
+        $this->routeMatchHelper = new ControllerRouteMatchHelper();
         $this->controller->routeParams = array();
 
         parent::setUp();
@@ -197,13 +195,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
             ->andReturn($mockSubmissionService);
 
         $sut = new \Olcs\Controller\Cases\Submission\SubmissionController();
-        $routeMatch = new RouteMatch(array('controller' => 'submission'));
-        $event      = new MvcEvent();
-        $routerConfig = isset($config['router']) ? $config['router'] : array();
-        $router = HttpRouter::factory($routerConfig);
-
-        $event->setRouter($router);
-        $event->setRouteMatch($routeMatch);
+        $event = $this->routeMatchHelper->getMockRouteMatch(array('controller' => 'submission'));
         $sut->setEvent($event);
 
         $sut->getEvent()->getRouteMatch()->setParam('case', 24);
@@ -248,13 +240,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $mockViewHelperManager = new \Zend\View\HelperPluginManager();
         $mockViewHelperManager->setService('placeholder', $placeholder);
 
-        $routeMatch = new RouteMatch(array('controller' => 'submission'));
-        $event      = new MvcEvent();
-        $routerConfig = isset($config['router']) ? $config['router'] : array();
-        $router = HttpRouter::factory($routerConfig);
-
-        $event->setRouter($router);
-        $event->setRouteMatch($routeMatch);
+        $event = $this->routeMatchHelper->getMockRouteMatch(array('controller' => 'submission_section_comment'));
         $sut->setEvent($event);
 
         $sut->getEvent()->getRouteMatch()->setParam('submission', $submissionId);
