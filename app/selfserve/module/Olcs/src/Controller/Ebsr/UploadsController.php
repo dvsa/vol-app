@@ -3,8 +3,6 @@
 namespace Olcs\Controller\Ebsr;
 
 use Common\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
-use Zend\Http\Response;
 
 /**
  * Class UploadsController

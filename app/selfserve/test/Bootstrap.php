@@ -14,7 +14,6 @@ chdir(dirname(__DIR__));
  */
 class Bootstrap
 {
-
     protected static $config = array();
     protected static $di;
 
@@ -22,13 +21,14 @@ class Bootstrap
     {
         // Setup the autloader
         $loader = static::initAutoloader();
-        $loader->addPsr4('OlcsTest\\', __DIR__ . '/Olcs');
-        $loader->addPsr4('CommonTest\\', __DIR__ . '/../vendor/olcs/OlcsCommon/application_test/Common/src/Common/');
+        $loader->addPsr4('OlcsTest\\', __DIR__ . '/Olcs/src');
 
         // Grab the application config
         $config = include dirname(__DIR__) . '/config/application.config.php';
 
         self::$config = $config;
+
+        self::getServiceManager();
 
         // Setup Di
         $di = new Di();
