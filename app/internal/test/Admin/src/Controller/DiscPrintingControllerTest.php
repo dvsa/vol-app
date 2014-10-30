@@ -152,7 +152,7 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
             $this->serviceManager->setService('Admin\Service\Data\GoodsDisc', $mockDiscService);
         }
 
-        $mockVehicleList = $this->getMock('\StdClas', ['setLicenceIds', 'setLoggedInUser', 'generateVehicleList']);
+        $mockVehicleList = $this->getMock('\StdClass', ['setLicenceIds', 'setLoggedInUser', 'generateVehicleList']);
         $mockVehicleList->expects($this->any())
             ->method('setLicenceIds')
             ->with([1, 2])
