@@ -399,7 +399,11 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
         return [
             [
                 ['fields' => ['attachedTo' => 'cat_lic']]
+            ],
+            [
+                ['fields' => ['attachedTo' => 'something_else']]
             ]
+
         ];
     }
 }
