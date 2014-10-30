@@ -109,35 +109,17 @@ class PublicInquiryReasonTest extends \PHPUnit_Framework_TestCase
     public function testCreateService()
     {
         $mockLicenceService = $this->getMock('\Olcs\Service\Data\Licence');
-        $mockTranslator = $this->getMock('stdClass', ['getLocale']);
-        $mockTranslator->expects($this->once())->method('getLocale')->willReturn('en_GB');
-
-        $mockRestClient = $this->getMock('\Common\Util\RestClient', [], [], '', 0);
-        $mockRestClient->expects($this->once())->method('setLanguage')->with($this->equalTo('en_GB'));
-
-        $mockApiResolver = $this->getMock('stdClass', ['getClient']);
-        $mockApiResolver
-            ->expects($this->once())
-            ->method('getClient')
-            ->with($this->equalTo('Reason'))
-            ->willReturn($mockRestClient);
 
         $mockSl = $this->getMock('\Zend\ServiceManager\ServiceManager');
-        $mockSl->expects($this->any())
+        $mockSl->expects($this->once())
             ->method('get')
-            ->willReturnMap(
-                [
-                    ['translator', true, $mockTranslator],
-                    ['ServiceApiResolver', true, $mockApiResolver],
-                    ['Olcs\Service\Data\Licence', true, $mockLicenceService]
-                ]
-            );
+            ->with('Olcs\Service\Data\Licence')
+            ->willReturn($mockLicenceService);
 
         $sut = new PublicInquiryReason();
         $service = $sut->createService($mockSl);
 
         $this->assertInstanceOf('\Olcs\Service\Data\PublicInquiryReason', $service);
-        $this->assertSame($mockRestClient, $service->getRestClient());
         $this->assertSame($mockLicenceService, $service->getLicenceService());
     }
 }
