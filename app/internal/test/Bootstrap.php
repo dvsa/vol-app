@@ -23,12 +23,12 @@ class Bootstrap
 
         $loader->addPsr4('OlcsTest\\', __DIR__ . '/Olcs/src');
 
-        self::getServiceManager();
-
         // Grab the application config
         $config = include dirname(__DIR__) . '/config/application.config.php';
 
         self::$config = $config;
+
+        self::getServiceManager();
     }
 
     public static function getServiceManager()
