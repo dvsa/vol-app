@@ -244,16 +244,22 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
         $this->pluginManagerHelper = new ControllerPluginManagerHelper();
         $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
             [
-                'flashMessenger' => 'FlashMessenger',
+                'FlashMessenger' => 'FlashMessenger',
+                'redirect' => 'Redirect'
             ]
         );
 
+        $mockFlashMessenger = $mockPluginManager->get('FlashMessenger', '');
+        $mockFlashMessenger->shouldReceive('addSuccessMessage')->with(m::type('string'));
+
+        $mockRedirectPlugin = $mockPluginManager->get('redirect', '');
+        $mockRedirectPlugin->shouldReceive('toRoute')->with(
+            '',
+            ['action' => 'index', 'id'=>null],
+            ['code' => 303],
+            true
+        );
         $this->sut->setPluginManager($mockPluginManager);
-        $mockFlashMessenger = $mockPluginManager->get('flashMessenger', '');
-        /*$mockFlashMessenger->shouldReceive('getParam')->with(
-        'case',
-        ''
-    )->andReturn($caseId);*/
 
         $mockRestHelper = m::mock('RestHelper');
         $mockRestHelper->shouldReceive('makeRestCall')->with(
@@ -320,11 +326,10 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
     {
         return [
             [
-                ['fields' => ['attachedTo' => 'cat_lic']], ['fields' => ['attachedTo' => 'cat_lic', 'licence' => 99, 'case' => 99], 'case' => 99, 'base' => ['case' => 99]]
+                ['fields' => ['attachedTo' => 'cat_lic']], null
             ],
             [
-                ['fields' => ['attachedTo' => 'something_else']], ['fields' => ['attachedTo' => '',
-                'licence' => 99, 'case' => 99], 'case' => 99, 'base' => ['case' => 99]]
+                ['fields' => ['attachedTo' => 'something_else']], null
             ]
         ];
     }
