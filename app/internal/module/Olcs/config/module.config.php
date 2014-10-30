@@ -116,7 +116,8 @@ return array(
             'LvaApplication/LicenceHistory'         => 'Olcs\Controller\Lva\Application\LicenceHistoryController',
             'LvaApplication/ConvictionsPenalties'   => 'Olcs\Controller\Lva\Application\ConvictionsPenaltiesController',
             'LvaApplication/TaxiPhv'                => 'Olcs\Controller\Lva\Application\TaxiPhvController',
-            'LvaApplication/ConditionsUndertakings' => 'Olcs\Controller\Lva\Application\ConditionsUndertakingsController',
+            'LvaApplication/ConditionsUndertakings'
+                => 'Olcs\Controller\Lva\Application\ConditionsUndertakingsController',
             'LvaApplication/VehiclesDeclarations'   => 'Olcs\Controller\Lva\Application\VehiclesDeclarationsController',
 
             'LvaLicence'                            => 'Olcs\Controller\Lva\Licence\OverviewController',

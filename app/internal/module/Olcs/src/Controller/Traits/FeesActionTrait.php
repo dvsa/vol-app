@@ -63,7 +63,7 @@ trait FeesActionTrait
 
     /**
      * Get fee filter form
-     * 
+     *
      * @param array $filters
      * @return Zend\Form\Form
      */
@@ -78,7 +78,7 @@ trait FeesActionTrait
 
     /**
      * Get fees table
-     * 
+     *
      * @param string $licenceId
      * @param string $status
      * @return Common\Service\Table\TableBuilder;
