@@ -130,14 +130,18 @@ class ProhibitionController extends OlcsController\CrudAbstract
 
     /**
      * Gets Prohibition details from within ProhibitionDefectController.
-     * We don't need to ever return a view here.
+     * We don't need to return anything here, however we do to assist with unit testing.
      *
-     * @return void
+     * @return array
      */
     public function detailsAction()
     {
+        $prohibitionDetails = $this->loadCurrent();
+
         $this->getViewHelperManager()->get('placeholder')->getContainer('prohibition')->set(
-            $this->loadCurrent()
+            $prohibitionDetails
         );
+
+        return $prohibitionDetails;
     }
 }

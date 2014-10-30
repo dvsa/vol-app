@@ -12,10 +12,8 @@ use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use Mockery as m;
 use Zend\Http\Request;
 use Zend\Http\Response;
-use Zend\Mvc\MvcEvent;
-use Zend\Mvc\Router\RouteMatch;
-use Zend\Mvc\Router\Http\TreeRouteStack as HttpRouter;
 use \Olcs\TestHelpers\ControllerPluginManagerHelper;
+use \Olcs\TestHelpers\ControllerRouteMatchHelper;
 
 /**
  * Public Inquiry Test Controller
@@ -32,6 +30,7 @@ class PublicInquiryControllerTest extends AbstractHttpControllerTestCase
     public function __construct()
     {
         $this->pluginManagerHelper = new ControllerPluginManagerHelper();
+        $this->routeMatchHelper = new ControllerRouteMatchHelper();
     }
 
     public function setUp()
@@ -91,13 +90,7 @@ class PublicInquiryControllerTest extends AbstractHttpControllerTestCase
 
     public function testDetailsActionEmptyPi()
     {
-        $routeMatch = new RouteMatch(array('controller' => 'public_inquiry'));
-        $event      = new MvcEvent();
-        $routerConfig = isset($config['router']) ? $config['router'] : array();
-        $router = HttpRouter::factory($routerConfig);
-
-        $event->setRouter($router);
-        $event->setRouteMatch($routeMatch);
+        $event = $this->routeMatchHelper->getMockRouteMatch(array('controller' => 'public_inquiry'));
         $this->sut->setEvent($event);
 
         $mockPi = [];
@@ -136,14 +129,9 @@ class PublicInquiryControllerTest extends AbstractHttpControllerTestCase
     {
         $caseId = 99;
 
-        $routeMatch = new RouteMatch(array('controller' => 'public_inquiry'));
-        $event      = new MvcEvent();
-        $routerConfig = isset($config['router']) ? $config['router'] : array();
-        $router = HttpRouter::factory($routerConfig);
-
-        $event->setRouter($router);
-        $event->setRouteMatch($routeMatch);
+        $event = $this->routeMatchHelper->getMockRouteMatch(array('controller' => 'public_inquiry'));
         $this->sut->setEvent($event);
+
         $this->sut->getRequest()->setMethod('get');
 
         $mockPi = ['Results' => [0 => ['id' => 1]], 'Count' => 1];
@@ -216,14 +204,7 @@ class PublicInquiryControllerTest extends AbstractHttpControllerTestCase
         $postId = 33;
         $action = 'edit';
 
-        $routeMatch = new RouteMatch(array('controller' => 'public_inquiry'));
-        $event      = new MvcEvent();
-        $routerConfig = isset($config['router']) ? $config['router'] : array();
-        $router = HttpRouter::factory($routerConfig);
-
-        $event->setRouter($router);
-        $event->setRouteMatch($routeMatch);
-
+        $event = $this->routeMatchHelper->getMockRouteMatch(array('controller' => 'public_inquiry'));
         $this->sut->setEvent($event);
 
         $this->sut->getRequest()->setMethod('post');
@@ -297,14 +278,7 @@ class PublicInquiryControllerTest extends AbstractHttpControllerTestCase
         $postId = 33;
         $action = 'add';
 
-        $routeMatch = new RouteMatch(array('controller' => 'public_inquiry'));
-        $event      = new MvcEvent();
-        $routerConfig = isset($config['router']) ? $config['router'] : array();
-        $router = HttpRouter::factory($routerConfig);
-
-        $event->setRouter($router);
-        $event->setRouteMatch($routeMatch);
-
+        $event = $this->routeMatchHelper->getMockRouteMatch(array('controller' => 'public_inquiry'));
         $this->sut->setEvent($event);
 
         $this->sut->getRequest()->setMethod('post');
