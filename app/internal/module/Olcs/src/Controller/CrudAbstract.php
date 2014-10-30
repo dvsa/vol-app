@@ -401,7 +401,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     {
         $result = parent::processSave($data);
 
-        $this->addSuccessMessage('Saved sucessfully');
+        $this->addSuccessMessage('Saved successfully');
 
         if (func_num_args() > 1 && func_get_arg(1) === false /* redirect = false */) {
             return $result;
