@@ -173,6 +173,19 @@ class DiscPrintingController extends AbstractController
          * End of temporary persistence logic
          */
 
+        $licenceIds = [];
+        foreach ($discsToPrint as $disc) {
+            $licenceIds[] = $disc['licenceVehicle']['licence']['id'];
+        }
+        $licenceIds = array_unique($licenceIds);
+
+        $vehicleListService = $this->getServiceLocator()->get('vehicleList');
+
+        // generate vehicle list for all licences which are affected by new Goods Discss
+        $vehicleListService->setLicenceIds($licenceIds);
+        $vehicleListService->setLoggedInUser($this->getLoggedInUser());
+        $vehicleListService->generateVehicleList();
+
         // set printing status ON
         $discService->setIsPrintingOn($discsToPrint);
 

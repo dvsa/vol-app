@@ -61,6 +61,9 @@ class NoteControllerTest extends AbstractHttpControllerTestCase
         parent::setUp();
     }
 
+    /**
+     * Tests index action when there is a licence in the route
+     */
     public function testIndexAction()
     {
         $licenceId = 7;
@@ -110,9 +113,91 @@ class NoteControllerTest extends AbstractHttpControllerTestCase
             ->method('setData');
 
         $this->controller->expects($this->once())
+            ->method('setTableFilters')
+            ->with($this->form);
+
+        $this->controller->expects($this->once())
+            ->method('getTable')
+            ->will($this->returnValue($table));
+
+        $this->controller->expects($this->once())
+            ->method('loadScripts')
+            ->with(['note-filter']);
+
+        $this->controller->expects($this->once())
+            ->method('getView')
+            ->with($this->equalTo(['table' => $table]))
+            ->will($this->returnValue($this->view));
+
+        $this->view->expects($this->once())
+            ->method('setTemplate')
+            ->with($this->controller->getTemplatePrefix() . '/notes/index');
+
+        $this->controller->expects($this->once())
+            ->method('renderView');
+
+        $this->controller->indexAction();
+    }
+
+    /**
+     * Tests index action when there is no licence in the route
+     *
+     * @dataProvider indexActionNoRouteLicenceProvider
+     *
+     * @param $caseId
+     * @param $caseLicenceId
+     */
+    public function testIndexActionNoRouteLicence($caseId, $caseLicenceId)
+    {
+        $licenceId = null;
+
+        $requestArray = array(
+            'page' => 1,
+            'sort' => 'priority',
+            'order' => 'DESC',
+            'limit' => 10,
+            'noteType' => 'note_t_lic'
+        );
+
+        $table = $this->getMock(
+            'Common\Service\Table\TableBuilder', [], [], '', false
+        );
+
+        $mockParams = m::mock('\Zend\Stdlib\Parameters');
+        $mockParams->shouldReceive('toArray')->andReturn($requestArray);
+
+        $mockRequest = m::mock('\Zend\Http\PhpEnvironment\Request');
+        $mockRequest->shouldReceive('getQuery')->andReturn($mockParams);
+
+        $this->controller->expects($this->once())
+            ->method('getRequest')
+            ->will($this->returnValue($mockRequest));
+
+        $this->getFromRoute(0, 'licence', $licenceId);
+        $this->getFromRoute(1, 'case', $caseId);
+        $this->getFromPost(2, 'action', null);
+        $this->getFromPost(3, 'id', null);
+
+        $this->controller->expects($this->once())
+            ->method('makeRestCall')
+            ->will($this->returnValue($this->getSampleResult()));
+
+        $this->controller->expects($this->once())
+            ->method('getForm')
+            ->with('note-filter')
+            ->will($this->returnValue($this->form));
+
+        $this->form->expects($this->once())
+            ->method('remove')
+            ->with('csrf');
+
+        $this->form->expects($this->once())
+            ->method('setData');
+
+        $this->controller->expects($this->once())
             ->method('getCase')
             ->with($caseId)
-            ->will($this->returnValue(['licence' => ['id' => $licenceId]]));
+            ->will($this->returnValue(['licence' => ['id' => $caseLicenceId]]));
 
         $this->controller->expects($this->once())
             ->method('setTableFilters')
@@ -139,6 +224,14 @@ class NoteControllerTest extends AbstractHttpControllerTestCase
             ->method('renderView');
 
         $this->controller->indexAction();
+    }
+
+    public function indexActionNoRouteLicenceProvider()
+    {
+        return [
+            [28, null],
+            [28, 7]
+        ];
     }
 
     /**
