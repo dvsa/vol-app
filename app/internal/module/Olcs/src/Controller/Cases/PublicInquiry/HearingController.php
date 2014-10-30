@@ -14,7 +14,6 @@ use Zend\View\Model\ViewModel;
 class HearingController extends OlcsController\CrudAbstract
 {
     use ControllerTraits\CaseControllerTrait;
-    use ControllerTraits\HearingLocationTrait;
 
     /**
      * Identifier name
