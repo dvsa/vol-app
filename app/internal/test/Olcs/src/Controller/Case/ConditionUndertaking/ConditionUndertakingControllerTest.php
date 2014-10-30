@@ -236,10 +236,69 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
      * @param $input
      * @param $expected
      */
-    public function testProcessSaveUpdate($input, $expected)
+    public function testProcessSaveUpdate($input)
     {
-        $caseId = 99;
         $mockDataToSave = ['id' => 99];
+
+        $this->pluginManagerHelper = new ControllerPluginManagerHelper();
+        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
+            [
+                'FlashMessenger' => 'FlashMessenger',
+                'redirect' => 'Redirect'
+            ]
+        );
+
+        $mockFlashMessenger = $mockPluginManager->get('FlashMessenger', '');
+        $mockFlashMessenger->shouldReceive('addSuccessMessage')->with(m::type('string'));
+
+        $mockRedirectPlugin = $mockPluginManager->get('redirect', '');
+
+        $mockRedirectPlugin->shouldReceive('toRoute')->with(
+            '',
+            ['action' => 'index', 'id'=>''],
+            ['code' => 303],
+            true
+        )->andReturn('mockResponse');
+        $this->sut->setPluginManager($mockPluginManager);
+
+        $mockRestHelper = m::mock('RestHelper');
+        $mockRestHelper->shouldReceive('makeRestCall')->with(
+            'ConditionUndertaking',
+            'PUT',
+            $mockDataToSave,
+            ""
+        )->andReturnNull();
+
+        $mockDataHelper = m::mock('DataHelper');
+        $mockDataHelper->shouldReceive('processDataMap')->with(
+            m::Type('array'),
+            m::Type('array'),
+            m::Type('string')
+        )->andReturn($mockDataToSave);
+
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('HelperService')->andReturnSelf();
+        $mockServiceManager->shouldReceive('getHelperService')->with('RestHelper')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('getHelperService')->with('DataHelper')->andReturn($mockDataHelper);
+        $mockServiceManager->shouldReceive('get->getHelperService')->with('RestService')->andReturn($mockRestHelper);
+
+        $this->sut->setServiceLocator($mockServiceManager);
+
+        $this->assertEquals('mockResponse', $this->sut->processSave($input));
+
+    }
+
+
+    /**
+     * @dataProvider formSaveProvider
+     * Test for processSave
+     *
+     * @param $input
+     * @param $expected
+     */
+    public function testProcessSaveInsert($input)
+    {
+        $mockDataToSave = $input;
 
         $this->pluginManagerHelper = new ControllerPluginManagerHelper();
         $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
@@ -255,23 +314,27 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
         $mockRedirectPlugin = $mockPluginManager->get('redirect', '');
         $mockRedirectPlugin->shouldReceive('toRoute')->with(
             '',
-            ['action' => 'index', 'id'=>null],
+            ['action' => 'index', 'id'=>''],
             ['code' => 303],
             true
-        );
+        )->andReturn('mockResponse');
+
         $this->sut->setPluginManager($mockPluginManager);
 
         $mockRestHelper = m::mock('RestHelper');
         $mockRestHelper->shouldReceive('makeRestCall')->with(
             'ConditionUndertaking',
-            'PUT',
+            'POST',
             $mockDataToSave,
             ""
-        )->andReturnNull();
+        )->andReturn(['id' => 99]);
 
         $mockDataHelper = m::mock('DataHelper');
-        $mockDataHelper->shouldReceive('processDataMap')->with(m::Type('array'), m::Type('array'),
-            m::Type('string'))->andReturn($mockDataToSave);
+        $mockDataHelper->shouldReceive('processDataMap')->with(
+            m::Type('array'),
+            m::Type('array'),
+            m::Type('string')
+        )->andReturn($mockDataToSave);
 
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
         $mockServiceManager->shouldReceive('get')->with('HelperService')->andReturnSelf();
@@ -281,7 +344,7 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
 
         $this->sut->setServiceLocator($mockServiceManager);
 
-        $this->assertEquals($expected, $this->sut->processSave($input));
+        $this->assertEquals('mockResponse', $this->sut->processSave($input));
 
     }
 
@@ -313,11 +376,20 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
                 ['foo'], ['foo', 'fields' => ['licence' => 99, 'case' => 99], 'case' => 99, 'base' => ['case' => 99]]
             ],
             [
-                ['fields' => ['attachedTo' => 'cat_lic']], ['fields' => ['attachedTo' => 'cat_lic', 'licence' => 99, 'case' => 99], 'case' => 99, 'base' => ['case' => 99]]
+                ['fields' => ['attachedTo' => 'cat_lic']],
+                ['fields' =>
+                    [
+                        'attachedTo' => 'cat_lic',
+                        'licence' => 99,
+                        'case' => 99
+                    ],
+                    'case' => 99,
+                    'base' => ['case' => 99]
+                ]
             ],
             [
-                ['fields' => ['attachedTo' => 'something_else']], ['fields' => ['attachedTo' => '',
-                'licence' => 99, 'case' => 99], 'case' => 99, 'base' => ['case' => 99]]
+                ['fields' => ['attachedTo' => 'something_else']],
+                ['fields' => ['attachedTo' => '','licence' => 99, 'case' => 99], 'case' => 99, 'base' => ['case' => 99]]
             ]
         ];
     }
@@ -326,10 +398,7 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
     {
         return [
             [
-                ['fields' => ['attachedTo' => 'cat_lic']], null
-            ],
-            [
-                ['fields' => ['attachedTo' => 'something_else']], null
+                ['fields' => ['attachedTo' => 'cat_lic']]
             ]
         ];
     }
