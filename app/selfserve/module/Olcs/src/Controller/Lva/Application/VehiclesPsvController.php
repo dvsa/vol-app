@@ -8,8 +8,9 @@
  */
 namespace Olcs\Controller\Lva\Application;
 
-use Common\Controller\Lva;
+use Olcs\Controller\Lva\AbstractGenericVehiclesPsvController;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
+use Common\Controller\Lva\Traits;
 
 /**
  * External Application Vehicles PSV Controller
@@ -17,9 +18,10 @@ use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class VehiclesPsvController extends Lva\AbstractVehiclesPsvController
+class VehiclesPsvController extends AbstractGenericVehiclesPsvController
 {
-    use ApplicationControllerTrait;
+    use ApplicationControllerTrait,
+        Traits\ApplicationGenericVehiclesControllerTrait;
 
     protected $lva = 'application';
     protected $location = 'external';
