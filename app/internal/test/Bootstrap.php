@@ -14,7 +14,7 @@ chdir(dirname(__DIR__));
  */
 class Bootstrap
 {
-    protected static $serviceManager;
+    protected static $config = array();
 
     public static function init()
     {
@@ -30,8 +30,13 @@ class Bootstrap
         // Grab the application config
         $config = include dirname(__DIR__) . '/config/application.config.php';
 
+        self::$config = $config;
+    }
+
+    public static function getServiceManager()
+    {
         $serviceManager = new ServiceManager(new ServiceManagerConfig());
-        $serviceManager->setService('ApplicationConfig', $config);
+        $serviceManager->setService('ApplicationConfig', self::$config);
         $serviceManager->get('ModuleManager')->loadModules();
 
         // Mess up the backend, so any real rest calls will fail
@@ -41,12 +46,7 @@ class Bootstrap
         $serviceManager->setService('Config', $config);
         $serviceManager->setAllowOverride(false);
 
-        static::$serviceManager = $serviceManager;
-    }
-
-    public static function getServiceManager()
-    {
-        return static::$serviceManager;
+        return $serviceManager;
     }
 
     protected static function initAutoloader()
