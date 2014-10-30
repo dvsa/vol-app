@@ -15,7 +15,7 @@ chdir(dirname(__DIR__));
 class Bootstrap
 {
 
-    protected static $serviceManager;
+    protected static $config = array();
     protected static $di;
 
     public static function init()
@@ -28,18 +28,7 @@ class Bootstrap
         // Grab the application config
         $config = include dirname(__DIR__) . '/config/application.config.php';
 
-        $serviceManager = new ServiceManager(new ServiceManagerConfig());
-        $serviceManager->setService('ApplicationConfig', $config);
-        $serviceManager->get('ModuleManager')->loadModules();
-
-        // Mess up the backend, so any real rest calls will fail
-        $config = $serviceManager->get('Config');
-        $serviceManager->setAllowOverride(true);
-        $config['service_api_mapping']['endpoints']['backend'] = 'http://some-fake-backend/';
-        $serviceManager->setService('Config', $config);
-        $serviceManager->setAllowOverride(false);
-
-        static::$serviceManager = $serviceManager;
+        self::$config = $config;
 
         // Setup Di
         $di = new Di();
@@ -62,7 +51,18 @@ class Bootstrap
 
     public static function getServiceManager()
     {
-        return static::$serviceManager;
+        $serviceManager = new ServiceManager(new ServiceManagerConfig());
+        $serviceManager->setService('ApplicationConfig', self::$config);
+        $serviceManager->get('ModuleManager')->loadModules();
+
+        // Mess up the backend, so any real rest calls will fail
+        $config = $serviceManager->get('Config');
+        $serviceManager->setAllowOverride(true);
+        $config['service_api_mapping']['endpoints']['backend'] = 'http://some-fake-backend/';
+        $serviceManager->setService('Config', $config);
+        $serviceManager->setAllowOverride(false);
+
+        return $serviceManager;
     }
 
     protected static function initAutoloader()
