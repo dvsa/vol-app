@@ -10,7 +10,7 @@ ini_set("display_errors", 1);
 ini_set('intl.default_locale', 'en_GB');
 date_default_timezone_set('Europe/London');
 set_error_handler(
-    function($errno, $errstr, $errfile, $errline) {
+    function ($errno, $errstr, $errfile, $errline) {
         throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
     }
 );
@@ -46,6 +46,10 @@ if ($profile) {
 
     $uri = strtok($_SERVER['REQUEST_URI'], "?");
     $request = $_SERVER['REQUEST_METHOD'] . " " . $uri;
-    fwrite($fp, "[olcs-selfserve] " . date("Y-m-d H:i:s") . " " . $request . " " . "http://192.168.149.2/xhprof/xhprof_html/index.php?run=" . $run_id . "&source=olcs-selfserve\n");
+
+    $content = "[olcs-selfserve] " . date("Y-m-d H:i:s") . " " . $request
+        . " http://192.168.149.2/xhprof/xhprof_html/index.php?run=" . $run_id . "&source=olcs-selfserve\n";
+
+    fwrite($fp, $content);
     fclose($fp);
 }
