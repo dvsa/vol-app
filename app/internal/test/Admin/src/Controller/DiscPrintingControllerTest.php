@@ -38,8 +38,8 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
     ];
 
     protected $discsToPrint = [
-        ['id' => 1, 'version' => 1],
-        ['id' => 2, 'version' => 1]
+        ['id' => 1, 'version' => 1, 'licenceVehicle' => ['licence' => ['id' => 1]]],
+        ['id' => 2, 'version' => 1, 'licenceVehicle' => ['licence' => ['id' => 2]]]
     ];
 
     protected $formPost = [
@@ -151,6 +151,23 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
         } else {
             $this->serviceManager->setService('Admin\Service\Data\GoodsDisc', $mockDiscService);
         }
+
+        $mockVehicleList = $this->getMock('\StdClass', ['setLicenceIds', 'setLoggedInUser', 'generateVehicleList']);
+        $mockVehicleList->expects($this->any())
+            ->method('setLicenceIds')
+            ->with([1, 2])
+            ->will($this->returnValue(true));
+
+        $mockVehicleList->expects($this->any())
+            ->method('setLoggedInUser')
+            ->with(null)
+            ->will($this->returnValue(true));
+
+        $mockVehicleList->expects($this->any())
+            ->method('generateVehicleList')
+            ->will($this->returnValue(true));
+
+        $this->serviceManager->setService('vehicleList', $mockVehicleList);
 
     }
 
