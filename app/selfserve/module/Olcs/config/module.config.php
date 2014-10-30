@@ -67,6 +67,7 @@ return array(
             'LvaApplication/FinancialEvidence'      => 'Olcs\Controller\Lva\Application\FinancialEvidenceController',
             'LvaApplication/TransportManagers'      => 'Olcs\Controller\Lva\Application\TransportManagersController',
             'LvaApplication/Vehicles'               => 'Olcs\Controller\Lva\Application\VehiclesController',
+            'LvaApplication/VehiclesPsv'            => 'Olcs\Controller\Lva\Application\VehiclesPsvController',
             'LvaApplication/Safety'                 => 'Olcs\Controller\Lva\Application\SafetyController',
             'LvaApplication/FinancialHistory'       => 'Olcs\Controller\Lva\Application\FinancialHistoryController',
             'LvaApplication/LicenceHistory'         => 'Olcs\Controller\Lva\Application\LicenceHistoryController',
