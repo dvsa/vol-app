@@ -51,42 +51,4 @@ class ImpoundingControllerTest extends AbstractHttpControllerTestCase
 
         $this->assertNull(null, $controller->processSave($inData));
     }
-
-    public function testGenerateFormWithData()
-    {
-        $formName = 'impounding';
-        $callback = 'processSave';
-        $data = array();
-        $tables = false;
-
-        $piVenueMock = m::mock('\Zend\Form\Element');
-        $piVenueOtherMock = m::mock('\Zend\Form\Element');
-        $piVenueMock->shouldReceive('getValue')->andReturn(null);
-        $piVenueMock->shouldReceive('setValue')->with('other');
-        $piVenueOtherMock->shouldReceive('getValue')->andReturn('test data');
-
-        $mockFormFields = m::mock('\Zend\Form\Fieldset');
-        $mockFormFields->shouldReceive('get')->with('piVenue')->andReturn($piVenueMock);
-        $mockFormFields->shouldReceive('get')->with('piVenueOther')->andReturn($piVenueOtherMock);
-
-        $mockForm = m::mock('\Zend\Form\Form');
-        $mockForm->shouldReceive('get')->with('fields')->andReturn($mockFormFields);
-
-        $controller = $this->getMock(
-            'Olcs\Controller\Cases\Impounding\ImpoundingController',
-            ['callParentGenerateFormWithData']
-        );
-
-        $controller->expects($this->once())
-            ->method('callParentGenerateFormWithData')
-            ->with(
-                $this->equalTo($formName),
-                $this->equalTo($callback),
-                $this->equalTo($data),
-                $this->equalTo($tables)
-            )
-            ->will($this->returnValue($mockForm));
-
-        $controller->generateFormWithData($formName, $callback, $data, $tables);
-    }
 }
