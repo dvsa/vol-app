@@ -151,30 +151,20 @@ trait LicenceNoteTrait
         $requestQuery = $this->getRequest()->getQuery();
         $requestArray = $requestQuery->toArray();
 
-        $requestedNoteType = (isset($requestArray['noteType']) ? $requestArray['noteType'] : $noteType);
-
-        //if we have a case id
-        if (!is_null($caseId) ) {
-            //if searching for licence notes or all notes from the cases page,
-            //we actually need to unset the case search and add the licence id instead
-            if ($requestedNoteType == 'note_t_lic' || !$requestedNoteType) {
-                $caseDetail = $this->getCase($caseId);
-
-                if (isset($caseDetail['licence']['id'])) {
-                    $licenceId = $caseDetail['licence']['id'];
-                    $caseId = null;
-                }
-            }
-
-            //if case id is still set
-            if (!is_null($caseId) ) {
-                $searchData['case'] = $caseId;
-            }
-        }
-
-        //if we have a licence id
+        /**
+         * The aim is to always have a licence id by the end of this process and use that to search for all notes on
+         * that licence, including multiple cases etc.
+         */
         if (!is_null($licenceId)) {
             $searchData['licence'] = $licenceId;
+        } elseif (!is_null($caseId)) {
+            $caseDetail = $this->getCase($caseId);
+
+            if (isset($caseDetail['licence']['id'])) {
+                $searchData['licence'] = $caseDetail['licence']['id'];
+            } else {
+                $searchData['case'] = $caseId;
+            }
         }
 
         $filters = array_merge(
