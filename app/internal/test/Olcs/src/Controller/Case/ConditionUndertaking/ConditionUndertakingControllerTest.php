@@ -78,7 +78,13 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
             m::type('array')
         )->andReturn($mockCase);
 
+        $mockCaseService = m::mock('Olcs\Service\Data\Cases');
+        $mockCaseService->shouldReceive('fetchCaseData')->with($caseId)->andReturn($mockCase);
+
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
+        $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\Cases')->andReturn($mockCaseService);
+
         $mockServiceManager->shouldReceive('get')->with('HelperService')->andReturnSelf();
         $mockServiceManager->shouldReceive('getHelperService')->with('RestHelper')->andReturn($mockRestHelper);
         $mockServiceManager->shouldReceive('get->getHelperService')->with('RestService')->andReturn($mockRestHelper);
@@ -152,7 +158,13 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
             m::type('array')
         )->andReturn($mockCase);
 
+        $mockCaseService = m::mock('Olcs\Service\Data\Cases');
+        $mockCaseService->shouldReceive('fetchCaseData')->with($caseId)->andReturn($mockCase);
+
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
+        $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\Cases')->andReturn($mockCaseService);
+
         $mockServiceManager->shouldReceive('get')->with('HelperService')->andReturnSelf();
         $mockServiceManager->shouldReceive('getHelperService')->with('RestHelper')->andReturn($mockRestHelper);
         $mockServiceManager->shouldReceive('get->getHelperService')->with('RestService')->andReturn($mockRestHelper);
@@ -200,7 +212,13 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
             m::type('array')
         )->andReturn($mockCase);
 
+        $mockCaseService = m::mock('Olcs\Service\Data\Cases');
+        $mockCaseService->shouldReceive('fetchCaseData')->with($caseId)->andReturn($mockCase);
+
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
+        $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\Cases')->andReturn($mockCaseService);
+
         $mockServiceManager->shouldReceive('get')->with('HelperService')->andReturnSelf();
         $mockServiceManager->shouldReceive('getHelperService')->with('RestHelper')->andReturn($mockRestHelper);
         $mockServiceManager->shouldReceive('get->getHelperService')->with('RestService')->andReturn($mockRestHelper);
@@ -208,6 +226,56 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
         $this->sut->setServiceLocator($mockServiceManager);
 
         $this->assertEquals($expected, $this->sut->processLoad($input));
+
+    }
+
+    /**
+     * @dataProvider formSaveProvider
+     * Test for processSave
+     *
+     * @param $input
+     * @param $expected
+     */
+    public function testProcessSaveUpdate($input, $expected)
+    {
+        $caseId = 99;
+        $mockDataToSave = ['id' => 99];
+
+        $this->pluginManagerHelper = new ControllerPluginManagerHelper();
+        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
+            [
+                'flashMessenger' => 'FlashMessenger',
+            ]
+        );
+
+        $this->sut->setPluginManager($mockPluginManager);
+        $mockFlashMessenger = $mockPluginManager->get('flashMessenger', '');
+        /*$mockFlashMessenger->shouldReceive('getParam')->with(
+        'case',
+        ''
+    )->andReturn($caseId);*/
+
+        $mockRestHelper = m::mock('RestHelper');
+        $mockRestHelper->shouldReceive('makeRestCall')->with(
+            'ConditionUndertaking',
+            'PUT',
+            $mockDataToSave,
+            ""
+        )->andReturnNull();
+
+        $mockDataHelper = m::mock('DataHelper');
+        $mockDataHelper->shouldReceive('processDataMap')->with(m::Type('array'), m::Type('array'),
+            m::Type('string'))->andReturn($mockDataToSave);
+
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('HelperService')->andReturnSelf();
+        $mockServiceManager->shouldReceive('getHelperService')->with('RestHelper')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('getHelperService')->with('DataHelper')->andReturn($mockDataHelper);
+        $mockServiceManager->shouldReceive('get->getHelperService')->with('RestService')->andReturn($mockRestHelper);
+
+        $this->sut->setServiceLocator($mockServiceManager);
+
+        $this->assertEquals($expected, $this->sut->processSave($input));
 
     }
 
@@ -238,6 +306,19 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
             [
                 ['foo'], ['foo', 'fields' => ['licence' => 99, 'case' => 99], 'case' => 99, 'base' => ['case' => 99]]
             ],
+            [
+                ['fields' => ['attachedTo' => 'cat_lic']], ['fields' => ['attachedTo' => 'cat_lic', 'licence' => 99, 'case' => 99], 'case' => 99, 'base' => ['case' => 99]]
+            ],
+            [
+                ['fields' => ['attachedTo' => 'something_else']], ['fields' => ['attachedTo' => '',
+                'licence' => 99, 'case' => 99], 'case' => 99, 'base' => ['case' => 99]]
+            ]
+        ];
+    }
+
+    public function formSaveProvider()
+    {
+        return [
             [
                 ['fields' => ['attachedTo' => 'cat_lic']], ['fields' => ['attachedTo' => 'cat_lic', 'licence' => 99, 'case' => 99], 'case' => 99, 'base' => ['case' => 99]]
             ],
