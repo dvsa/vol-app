@@ -42,7 +42,7 @@ class LicenceMarkers extends CaseMarkers
             'type' => 'url',
             'route' => 'case',
             'params' => ['case' => $this->getCase()['id']],
-            'linkText' => $this->getCase()['ecmsNo']
+            'linkText' => $this->getCase()['id']
         ];
 
         return $data;
