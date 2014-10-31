@@ -7,14 +7,14 @@
  */
 namespace Olcs\Controller\Lva;
 
-use Common\Controller\Lva\AbstractVehiclesController;
+use Common\Controller\Lva\AbstractVehiclesGoodsController;
 
 /**
  * Abstract Generic Goods Vehicles Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-abstract class AbstractGenericVehiclesGoodsController extends AbstractVehiclesController
+abstract class AbstractGenericVehiclesGoodsController extends AbstractVehiclesGoodsController
 {
     /**
      * Alter vehicle form
