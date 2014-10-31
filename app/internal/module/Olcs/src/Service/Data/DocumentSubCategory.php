@@ -6,6 +6,10 @@ use Common\Service\Data\ListDataInterface;
 use Common\Service\Data\AbstractData;
 use Common\Service\Data\ListDataTrait;
 
+/**
+ * Class DocumentSubCategory
+ * @package Olcs\Service\Data
+ */
 class DocumentSubCategory extends AbstractData implements ListDataInterface
 {
     use ListDataTrait;
@@ -52,7 +56,7 @@ class DocumentSubCategory extends AbstractData implements ListDataInterface
             $params['category'] = $category;
             $key = $category;
         }
-        
+
         if (is_null($this->getData($key))) {
             $data = $this->getRestClient()->get('', $params);
             $this->setData($key, false);

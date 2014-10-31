@@ -6,6 +6,10 @@ use Common\Service\Data\ListDataInterface;
 use Common\Service\Data\AbstractData;
 use Common\Service\Data\ListDataTrait;
 
+/**
+ * Class Category
+ * @package Olcs\Service\Data
+ */
 class Category extends AbstractData implements ListDataInterface
 {
     use ListDataTrait;
