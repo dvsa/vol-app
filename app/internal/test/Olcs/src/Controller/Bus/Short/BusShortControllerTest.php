@@ -75,7 +75,7 @@ class BusShortControllerTest extends AbstractHttpControllerTestCase
         $result['fields']['case'] = null;
         $result['base']['case'] = null;
 
-        $this->controller->expects($this->exactly(3))->method('getQueryOrRouteParam')
+        $this->controller->expects($this->once())->method('getQueryOrRouteParam')
             ->with('case')->will($this->returnValue(null));
 
         $this->assertEquals($result, $this->controller->processLoad($data));
