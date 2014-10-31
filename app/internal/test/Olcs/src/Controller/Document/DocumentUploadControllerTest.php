@@ -17,6 +17,7 @@ use Common\Service\File\Exception as FileException;
  */
 class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
 {
+    protected $controller;
     public function setUp($extraParams = array())
     {
         $this->setApplicationConfig(
@@ -49,6 +50,8 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
         $mockServiceLocator->expects($this->any())
             ->method('get')
             ->will($this->returnCallback(array($this, 'mockServiceLocator')));
+
+        $this->servicelocatorMock = $mockServiceLocator;
 
         $this->controller->expects($this->any())
              ->method('getServiceLocator')
@@ -349,10 +352,18 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
 
     public function testUploadAction()
     {
-        $this->controller->expects($this->at(2))
+        $fromRoute = $this->getMock('\stdClass', ['fromRoute']);
+        $fromRoute->expects($this->any())
+            ->method('fromRoute')
+            ->will(
+                $this->returnValue(
+                    'licence'
+                )
+            );
+
+        $this->controller->expects($this->any())
             ->method('params')
-            ->with('type')
-            ->will($this->returnValue('licence'));
+            ->will($this->returnValue($fromRoute));
 
         $response = $this->controller->uploadAction();
 
@@ -384,10 +395,18 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
             ->method('getPost')
             ->will($this->returnValue($postData));
 
+        $fromRoute = $this->getMock('\stdClass', ['fromRoute']);
+        $fromRoute->expects($this->any())
+            ->method('fromRoute')
+            ->will(
+                $this->returnValue(
+                    'licence'
+                )
+            );
+
         $this->controller->expects($this->any())
             ->method('params')
-            ->with('type')
-            ->will($this->returnValue('licence'));
+            ->will($this->returnValue($fromRoute));
 
         $this->controller->expects($this->once())
             ->method('processUpload');
@@ -430,6 +449,10 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
                 return $this->contentStoreMock;
             case 'Document':
                 return $this->documentMock;
+            case 'DataServiceManager':
+                return $this->servicelocatorMock;
+            case 'Olcs\Service\Data\DocumentSubCategory':
+                return $this->getMock('Olcs\Service\Data\DocumentSubCategory');
             default:
                 throw new \Exception("Service Locator " . $service . " not mocked");
         }

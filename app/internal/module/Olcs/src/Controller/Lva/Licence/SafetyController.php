@@ -10,6 +10,7 @@ namespace Olcs\Controller\Lva\Licence;
 
 use Common\Controller\Lva;
 use Common\Controller\Lva\Traits\LicenceSafetyControllerTrait;
+use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
 
 /**
  * Internal Licence Safety Controller
@@ -19,7 +20,8 @@ use Common\Controller\Lva\Traits\LicenceSafetyControllerTrait;
  */
 class SafetyController extends Lva\AbstractSafetyController
 {
-    use LicenceSafetyControllerTrait;
+    use LicenceSafetyControllerTrait,
+        LicenceControllerTrait;
 
     protected $lva = 'licence';
     protected $location = 'internal';

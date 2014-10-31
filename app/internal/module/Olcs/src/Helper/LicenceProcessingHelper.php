@@ -29,6 +29,29 @@ class LicenceProcessingHelper
     );
 
     /**
+     * Gets sections
+     *
+     * @return array
+     */
+    public function getSections()
+    {
+        return $this->sections;
+    }
+
+    /**
+     * Sets sections
+     *
+     * @param array $sections
+     * @return $this
+     */
+    public function setSections($sections)
+    {
+        $this->sections = $sections;
+
+        return $this;
+    }
+
+    /**
      * Gets navigation
      *
      * @param int $licenceId
@@ -37,7 +60,7 @@ class LicenceProcessingHelper
      */
     public function getNavigation($licenceId, $activeSection = null)
     {
-        $sections = $this->sections;
+        $sections = $this->getSections();
 
         $navigation = array();
 

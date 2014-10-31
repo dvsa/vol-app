@@ -59,10 +59,8 @@ trait LicenceServiceTrait
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $service = parent::createService($serviceLocator);
+        $this->setLicenceService($serviceLocator->get('Olcs\Service\Data\Licence'));
 
-        $service->setLicenceService($serviceLocator->get('Olcs\Service\Data\Licence'));
-
-        return $service;
+        return $this;
     }
 }

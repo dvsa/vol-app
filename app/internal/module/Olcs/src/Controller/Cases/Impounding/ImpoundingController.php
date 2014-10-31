@@ -19,7 +19,6 @@ use Olcs\Controller\Traits as ControllerTraits;
 class ImpoundingController extends OlcsController\CrudAbstract
 {
     use ControllerTraits\CaseControllerTrait;
-    use ControllerTraits\HearingLocationTrait;
 
     /**
      * Identifier name
