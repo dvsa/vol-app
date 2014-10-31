@@ -34,11 +34,12 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
         'dataBundle',
         'service',
         'pageLayout',
-        'listVars',
-        //'detailsView'
+        'listVars'
     ];
 
     protected $pageLayoutInner = null;
+
+    protected $detailsView = null;
 
     protected $defaultTableSortField = 'id';
 
@@ -93,7 +94,8 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
 
     /**
      *
-     * @param null $placeholderName
+     * @param string $placeholderName
+     * @return $this
      */
     public function setPlaceholderName($placeholderName)
     {
@@ -110,6 +112,42 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
             return $this->getIdentifierName();
         }
         return $this->placeholderName;
+    }
+
+    /**
+     * @param string $pageLayoutInner
+     * @return $this
+     */
+    public function setPageLayoutInner($pageLayoutInner)
+    {
+        $this->pageLayoutInner = $pageLayoutInner;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPageLayoutInner()
+    {
+        return $this->pageLayoutInner;
+    }
+
+    /**
+     * @param string $detailsView
+     * @return $this
+     */
+    public function setDetailsView($detailsView)
+    {
+        $this->detailsView = $detailsView;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDetailsView()
+    {
+        return $this->detailsView;
     }
 
     /**
@@ -314,17 +352,19 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     {
         $view = $this->getView([]);
 
+        $result = $this->loadCurrent();
+
         $this->getViewHelperManager()
              ->get('placeholder')
              ->getContainer($this->getPlaceholderName())
-             ->set($this->loadCurrent());
+             ->set($result);
 
         $this->getViewHelperManager()
              ->get('placeholder')
              ->getContainer('details')
-             ->set($this->loadCurrent());
+             ->set($result);
 
-        $view->setTemplate($this->detailsView);
+        $view->setTemplate($this->getDetailsView());
 
         return $this->renderView($view);
     }
@@ -477,12 +517,14 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
      */
     protected function renderView($view, $pageTitle = null, $pageSubTitle = null)
     {
-        if (!is_null($this->pageLayoutInner)) {
+        $pageLayoutInner = $this->getPageLayoutInner();
+
+        if (!is_null($pageLayoutInner)) {
 
             // This is a zend\view\variables object - cast it to an array.
             $layout = $this->getView((array)$view->getVariables());
 
-            $layout->setTemplate($this->pageLayoutInner);
+            $layout->setTemplate($pageLayoutInner);
 
             $this->maybeAddScripts($layout);
 
@@ -579,17 +621,20 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     public function processLoad($data)
     {
         if (isset($data['id'])) {
-            if (isset($this->getDataBundle()['children'])) {
+            $bundle = $this->getDataBundle();
 
-                $fields = array_keys($this->getDataBundle()['children']);
+            if (isset($bundle['children'])) {
+                $fields = array_keys($bundle['children']);
                 $data = $this->replaceIds($data, $fields);
             }
+
             $data['fields'] = $data;
             $data['base'] = $data;
         } else {
-            $data['case'] = $this->getQueryOrRouteParam('case');
-            $data['fields']['case'] = $this->getQueryOrRouteParam('case');
-            $data['base']['case'] = $this->getQueryOrRouteParam('case');
+            $caseId = $this->getQueryOrRouteParam('case');
+            $data['case'] = $caseId;
+            $data['fields']['case'] = $caseId;
+            $data['base']['case'] = $caseId;
         }
 
         return $data;
@@ -660,9 +705,11 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
      * @param int $id
      * @return array
      */
-    protected function load($id)
+    public function load($id)
     {
-        if (empty($this->loadedData)) {
+        $existingData = $this->getLoadedData();
+
+        if (empty($existingData)) {
             $service = $this->getService();
 
             $result = $this->makeRestCall(
@@ -678,17 +725,17 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
                     return [];
                 }
 
-                $this->loadedData = current($result['Results']);
+                $this->setLoadedData(current($result['Results']));
             } else {
                 if (empty($result)) {
                     $this->setCaughtResponse($this->notFoundAction());
                     return;
                 }
 
-                $this->loadedData = $result;
+                $this->setLoadedData($result);
             }
         }
 
-        return $this->loadedData;
+        return $this->getLoadedData();
     }
 }
