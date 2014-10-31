@@ -193,16 +193,16 @@ class CaseController extends OlcsController\CrudAbstract
      */
     public function addAction()
     {
-        $this->pageLayout = 'licence';
-        $this->pageLayoutInner = null;
+        $this->setPageLayout('licence');
+        $this->setPageLayoutInner(null);
 
         return parent::saveThis();
     }
 
     public function editAction()
     {
-        $this->pageLayout = 'case';
-        $this->pageLayoutInner = null;
+        $this->setPageLayout('case');
+        $this->setPageLayoutInner(null);
 
         return parent::saveThis();
     }
