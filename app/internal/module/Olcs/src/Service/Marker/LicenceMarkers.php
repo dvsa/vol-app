@@ -20,7 +20,7 @@ class LicenceMarkers extends CaseMarkers
      */
     protected function generateStayMarkerContent($stay)
     {
-        $content = "Case %s \nStay";
+        $content = "Case %s \nStay ";
         $content .= isset($stay['outcome']['id']) ?
             strtolower($stay['outcome']['description']) .  " pending appeal \n" : " in progress \n";
         $content .= $stay['stayType']['id'] == 'stay_t_ut' ?  ' UT ' : ' TC/TR ';
