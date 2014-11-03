@@ -11,7 +11,6 @@ namespace Olcs\Controller\Document;
 
 use Zend\View\Model\ViewModel;
 use Common\Service\File\Exception as FileException;
-use Olcs\Controller\Traits\DocumentUploadTrait;
 
 /**
  * Document Generation Controller
@@ -22,78 +21,23 @@ use Olcs\Controller\Traits\DocumentUploadTrait;
  */
 class DocumentUploadController extends AbstractDocumentController
 {
-    use DocumentUploadTrait;
-
-    /**
-     * Labels for empty select options
-     */
-    const EMPTY_LABEL = 'Please select';
-
     /**
      * how to map route param types to category names
      */
     private $categoryMap = [
-        'licence' => 'Licensing'
+        'licence' => 1
     ];
-
-    protected function alterFormBeforeValidation($form)
-    {
-        $categories = $this->getListData(
-            'Category',
-            ['isDocCategory' => true],
-            'description',
-            'id',
-            false
-        );
-
-        $defaultData = [
-            'details' => [
-                'category' => $this->getDefaultCategory($categories)
-            ]
-        ];
-        $data = [];
-        $filters = [];
-        $subCategories = ['' => self::EMPTY_LABEL];
-        $docTemplates = ['' => self::EMPTY_LABEL];
-
-        if ($this->getRequest()->isPost()) {
-            $data = (array)$this->getRequest()->getPost();
-        }
-
-        $data = array_merge($defaultData, $data);
-
-        $details = isset($data['details']) ? $data['details'] : [];
-
-        $filters['category'] = $details['category'];
-
-        $subCategories = $this->getListData(
-            'DocumentSubCategory',
-            $filters
-        );
-
-        $selects = [
-            'details' => [
-                'category' => $categories,
-                'documentSubCategory' => $subCategories
-            ]
-        ];
-
-        foreach ($selects as $fieldset => $inputs) {
-            foreach ($inputs as $name => $options) {
-                $form->get($fieldset)
-                    ->get($name)
-                    ->setValueOptions($options);
-            }
-        }
-
-        $form->setData($data);
-
-        return $form;
-    }
 
     public function uploadAction()
     {
-        $form = $this->generateForm('upload-document', 'processUpload');
+        $category = $this->categoryMap[$this->params()->fromRoute('type')];
+        $this->getServiceLocator()
+             ->get('DataServiceManager')
+             ->get('Olcs\Service\Data\DocumentSubCategory')
+             ->setCategory($category);
+
+        $defaults = ['details' => ['category' => $category]];
+        $form = $this->generateFormWithData('upload-document', 'processUpload', $defaults);
 
         $this->loadScripts(['upload-document']);
 
