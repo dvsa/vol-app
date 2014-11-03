@@ -626,7 +626,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
             'operating-centres' => 'Operating centres',
             'operating-centre-history' => 'Operating centre history',
             'conditions-and-undertakings' => 'Conditions and undertakings',
-            'intelligent-unit-check' => 'Intelligence unit check',
+            'intelligence-unit-check' => 'Intelligence unit check',
             'interim' => 'Interim',
             'advertisement' => 'Advertisement',
             'linked-licences-app-numbers' => 'Linked licences & application numbers',

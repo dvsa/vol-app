@@ -78,7 +78,7 @@ return array(
         ),
         'case-outline' => array(
             'section_type' => ['text'],
-            'data_field' => ['description'],
+            'data_field' => 'outline',
             'allow_comments' => true,
             'bundle' => 'case-summary'
         ),
@@ -146,7 +146,7 @@ return array(
             'data_field' => [],
             'allow_comments' => true,
         ),
-        'fitness-repute'   => array(
+        'fitness-and-repute'   => array(
             'section_type' => ['text'],
             'data_field' => [],
             'allow_comments' => true,
@@ -223,6 +223,11 @@ return array(
                     )
                 )
             )
+        ),
+        'annual-test-history'   => array(
+            'section_type' => ['text'],
+            'data_field' => [],
+            'allow_comments' => true,
         ),
         'penalties'   => array(
             'section_type' => ['list', 'text'],
