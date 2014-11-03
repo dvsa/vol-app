@@ -38,19 +38,34 @@ class OverviewController extends AbstractController
 
         $data = $this->getServiceLocator()->get('Entity\Application')->getOverview($applicationId);
 
-        $sections = $this->setEnabledFlagOnSections(
+        $sections = $this->setEnabledAndCompleteFlagOnSections(
             $this->getAccessibleSections(false),
             $data['applicationCompletions'][0]
         );
 
-        $form = $this->getServiceLocator()
-            ->get('Helper\Form')
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+
+        $form = $formHelper
             ->createForm('Lva\PaymentSubmission')
             ->setData($data);
 
         $action = $this->url()->fromRoute('application_payment', ['id' => $applicationId]);
         $form->setAttribute('action', $action);
 
+        if (!$this->isApplicationComplete($sections)) {
+            $formHelper->disableElement($form, 'submitPay');
+        }
+
         return new ApplicationOverview($data, $sections, $form);
+    }
+
+    private function isApplicationComplete($sections)
+    {
+        foreach($sections as $section) {
+            if ($section['enabled'] && !$section['complete']) {
+                return false;
+            }
+        }
+        return true;
     }
 }
