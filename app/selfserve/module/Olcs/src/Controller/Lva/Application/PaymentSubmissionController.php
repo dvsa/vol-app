@@ -80,7 +80,7 @@ class PaymentSubmissionController extends AbstractController
             }
 
             // otherwise just assume we want to view our application summary
-            return $this->redirect()->toRoute('overview', ['id' => $this->getApplicationId()]);
+            return $this->redirect()->toRoute('lva-application', ['id' => $this->getApplicationId()]);
         }
         $form = $this->getServiceLocator()
             ->get('Helper\Form')
