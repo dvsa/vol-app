@@ -59,8 +59,31 @@ return array(
         ),
         array(
             'title' => 'Description',
-            'name' => 'description',
-            'sort' => 'description'
+            'formatter' => function ($row, $column, $serviceLocator) {
+                $router = $serviceLocator->get('router');
+                $request = $serviceLocator->get('request');
+                $routeMatch = $router->match($request);
+                switch ($routeMatch->getMatchedRouteName()) {
+                    case 'licence/fees':
+                        $url = $this->generateUrl(
+                            array('fee' => $row['id'], 'action' => 'edit-fee', 'controller' => 'LicenceController'),
+                            'licence/fees/fee_action'
+                        );
+                        break;
+                    case 'Application/fees':
+                    default:
+                        $url = $this->generateUrl(
+                            array('fee' => $row['id'], 'action' => 'edit-fee', 'controller' => 'ApplicationController'),
+                            'Application/fees/fee_action'
+                        );
+                }
+                return '<a href="'
+                    . $url
+                    . '" class=js-modal-ajax>'
+                    . $row['description']
+                    . '</a>';
+            },
+            'sort' => 'description',
         ),
         array(
             'title' => 'Amount',

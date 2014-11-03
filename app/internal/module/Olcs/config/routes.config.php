@@ -59,6 +59,18 @@ $allRoutes['Application']['child_routes'] = array_merge(
                 )
             ),
             'may_terminate' => true,
+            'child_routes' => array(
+                'fee_action' => array(
+                    'type' => 'segment',
+                    'options' => array(
+                        'route' => '/:action/:fee',
+                        'constraints' => array(
+                            'fee' => '[0-9-]+',
+                        ),
+                    ),
+                    'may_terminate' => true,
+                ),
+            )
         ),
     )
 );
@@ -676,12 +688,24 @@ return array_merge(
                 'fees' => [
                     'type' => 'segment',
                     'options' => [
-                        'route' => '/fees[/]',
+                        'route' => '/fees',
                         'defaults' => [
                             'action' => 'fees',
                         ]
                     ],
                     'may_terminate' => true,
+                    'child_routes' => [
+                        'fee_action' => [
+                            'type' => 'segment',
+                            'options' => [
+                                'route' => '/:action/:fee',
+                                'constraints' => [
+                                    'fee' => '[0-9-]+',
+                                ],
+                            ],
+                            'may_terminate' => true,
+                        ],
+                    ]
                 ],
             ]
         ],
