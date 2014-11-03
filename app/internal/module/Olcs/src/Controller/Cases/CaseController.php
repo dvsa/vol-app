@@ -204,7 +204,7 @@ class CaseController extends OlcsController\CrudAbstract
         $this->setPageLayout('case');
         $this->setPageLayoutInner(null);
 
-        return parent::addAction();
+        return parent::editAction();
     }
 
     public function processLoad($data)
