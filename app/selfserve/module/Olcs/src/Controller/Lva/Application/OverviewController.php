@@ -53,6 +53,9 @@ class OverviewController extends AbstractController
         $form->setAttribute('action', $action);
 
         if (!$this->isApplicationComplete($sections)) {
+            // @NOTE: this will need to take account of the application's status
+            // too, but we've no UX decision yet as to whether the button will
+            // even be shown or not (doesn't really make sense)
             $formHelper->disableElement($form, 'submitPay');
         }
 
