@@ -141,34 +141,44 @@ class SubmissionController extends OlcsController\CrudAbstract
     public function save($data, $service = null)
     {
         // modify $data
-        $this->submissionConfig = $this->getServiceLocator()->get('config')['submission_config'];
-        $submissionService = $this->getServiceLocator()->get('Olcs\Service\Data\Submission');
-        $params = $this->getParams(array('case'));
-        $caseId = $params['case'];
+        $params = $this->getParams(array('case', 'submission'));
 
-        if (is_array($data['submissionSections']['sections'])) {
-
-            foreach ($data['submissionSections']['sections'] as $index => $sectionId) {
-                $sectionConfig = isset($this->submissionConfig['sections'][$sectionId]) ?
-                    $this->submissionConfig['sections'][$sectionId] : [];
-
-                $data['submissionSections']['sections'][$index] = [
-                    'sectionId' => $sectionId,
-                    'data' => $submissionService->createSubmissionSection(
-                        $caseId,
-                        $sectionId,
-                        $sectionConfig
-                    )
-                ];
-            }
+        $submissionId = isset($params['submission']) ? $params['submission'] : null;
+        if (!empty($submissionId)) {
+            $data = $this->updateSubmission($params, $data);
+        } else {
+            $data = $this->insertSubmission($params, $data);
         }
 
-        $data['dataSnapshot'] = json_encode($data['submissionSections']['sections']);
+        return $data;
+    }
+
+    public function insertSubmission($params, $data)
+    {
+        $submissionService = $this->getServiceLocator()->get('Olcs\Service\Data\Submission');
+        $commentService = $this->getServiceLocator()->get
+            ('Olcs\Service\Data\SubmissionSectionComment');
+
+        $caseId = $params['case'];
+
+        $snapshotData = $submissionService->generateSnapshotData($caseId, $data);
+        $data['dataSnapshot'] = json_encode($snapshotData);
+
         $data['submissionType'] = $data['submissionSections']['submissionType'];
 
-        $data = $this->callParentSave($data, $service);
+        // save submission entity
+        $result = $this->callParentSave($data);
+        $data['submissionId'] = $result['id'];
+
+        // Generate comments for all sections that are configured as type = 'text' and have a data field
+        $commentsData = $commentService->generateComments($caseId, $data);
 
         return $data;
+    }
+
+    public function updateSubmission($params, $data)
+    {
+        // TODO
     }
 
     /**

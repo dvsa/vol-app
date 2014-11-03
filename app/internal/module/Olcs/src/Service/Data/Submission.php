@@ -180,7 +180,8 @@ class Submission extends AbstractData
     /**
      * Create a section from the submission config
      *
-     * @param string sectionId
+     * @param integer $caseId
+     * @param string $sectionId
      * @param array $sectionConfig for the section being generated
      * @return array $sectionData
      */
@@ -436,6 +437,88 @@ class Submission extends AbstractData
         );
 
         return $bundle;
+    }
+
+    /**
+     * Generates the sectionData for each submission section via business rules:
+     *  - If new section data, add as normal
+     *  - If updating submission with existing sections, keep existing data where sections are editable
+     *
+     * @param $data
+     */
+    public function generateSnapshotData($caseId, $data)
+    {
+        $sectionData = [];
+        if (is_array($data['submissionSections']['sections'])) {
+            $submissionConfig = $this->getSubmissionConfig();
+
+            foreach ($data['submissionSections']['sections'] as $index => $sectionId) {
+
+                $sectionConfig = isset($submissionConfig['sections'][$sectionId]) ?
+                    $submissionConfig['sections'][$sectionId] : [];
+
+                // if section type is list, generate sectionData for snapshot
+                if (in_array('list', $sectionConfig['section_type'])) {
+
+                    $sectionData[$index] = [
+                        'sectionId' => $sectionId,
+                        'data' => $this->createSubmissionSection(
+                            $caseId,
+                            $sectionId,
+                            $sectionConfig
+                        )
+                    ];
+                }
+            }
+        }
+
+        return $sectionData;
+    }
+
+    public function generateComments($caseId, $data)
+    {
+        $sectionData = [];
+        if (is_array($data['submissionSections']['sections'])) {
+            $submissionConfig = $this->getSubmissionConfig();
+
+            foreach ($data['submissionSections']['sections'] as $index => $sectionId) {
+
+                $sectionConfig = isset($submissionConfig['sections'][$sectionId]) ?
+                    $submissionConfig['sections'][$sectionId] : [];
+
+                // if section type is text, generate sectionData for comment
+                if (in_array('text', $sectionConfig['section_type']) && !empty($sectionConfig['data_field'])) {
+
+                    $sectionData = $this->createSubmissionSection(
+                        $caseId,
+                        $sectionId,
+                        $sectionConfig
+                    );
+
+                    $commentData = [
+                        'submissionSection' => $sectionId,
+                        'submissionId' => $data['submissionId'],
+                        'comment' => $sectionData[$sectionConfig['data_field']],
+                    ];
+
+                    $client = $apiResolver->getClient('SubmissionSectionComment');
+                    $client->setLanguage($translator->getLocale());
+                    $client->
+                    $this->makeRestCall('SubmissionSectionComment', 'POST', $comment);
+                }
+            }
+        }
+
+        foreach ($data['submissionSections']['sections'] as $index => $sectionId) {
+            $sectionConfig = isset($submissionConfig['sections'][$sectionId]) ?
+                $submissionConfig['sections'][$sectionId] : [];
+
+            // if section type is list, generate sectionData for snapshot
+            if (in_array('text', $sectionConfig['section_type']) && isset($sectionConfig['data_field'])) {
+
+                $this->makeRestCall('SubmissionSectionComment', 'POST', $comment);
+            }
+        }
     }
 
     /**
