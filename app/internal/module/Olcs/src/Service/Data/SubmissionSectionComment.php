@@ -88,18 +88,16 @@ class SubmissionSectionComment extends AbstractData
                     );
 
                     $commentData = [
-                        'data' => [
-                            'submissionSection' => $sectionId,
-                            'submission' => $data['submissionId'],
-                            'comment' => $sectionData[$sectionConfig['data_field']],
-                        ]
+                        "data" => json_encode([
+                            "submissionSection" => $sectionId,
+                            "submission" => $data['id'],
+                            "comment" => $sectionData[$sectionConfig['data_field']],
+                        ])
                     ];
 
-                    $result = $this->getRestClient()->post('', $commentData);
-                    var_dump($result);
+                    $this->getRestClient()->post('', $commentData);
                 }
             }
-            exit;
         }
     }
 
