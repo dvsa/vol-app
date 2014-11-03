@@ -35,6 +35,32 @@ $routes = array(
             )
         )
     ),
+    'application_payment' => array(
+        'type' => 'segment',
+        'options' => array(
+            'route' => '/application/:id/payment[/]',
+            'constraints' => array(
+                'id' => '[0-9]+'
+            ),
+            'defaults' => array(
+                'controller' => 'LvaApplication/PaymentSubmission',
+                'action' => 'index'
+            )
+        )
+    ),
+    'application_summary' => array(
+        'type' => 'segment',
+        'options' => array(
+            'route' => '/application/:id/summary[/]',
+            'constraints' => array(
+                'id' => '[0-9]+'
+            ),
+            'defaults' => array(
+                'controller' => 'LvaApplication/PaymentSubmission',
+                'action' => 'summary'
+            )
+        )
+    ),
     'create_variation' => array(
         'type' => 'segment',
         'options' => array(
@@ -74,6 +100,7 @@ return array(
             'LvaApplication/ConvictionsPenalties'   => 'Olcs\Controller\Lva\Application\ConvictionsPenaltiesController',
             'LvaApplication/TaxiPhv'                => 'Olcs\Controller\Lva\Application\TaxiPhvController',
             'LvaApplication/VehiclesDeclarations'   => 'Olcs\Controller\Lva\Application\VehiclesDeclarationsController',
+            'LvaApplication/PaymentSubmission'      => 'Olcs\Controller\Lva\Application\PaymentSubmissionController',
 
             'LvaLicence'                            => 'Olcs\Controller\Lva\Licence\OverviewController',
             'LvaLicence/TypeOfLicence'              => 'Olcs\Controller\Lva\Licence\TypeOfLicenceController',

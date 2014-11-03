@@ -27,6 +27,10 @@
       }
       ?>
   </ul>
+
+  <?php if (isset($submissionForm)): ?>
+    <?php echo $this->form($submissionForm); ?>
+  <?php endif ?>
 </div>
 <div class="one-third sidebar">
   <dl class="meta">

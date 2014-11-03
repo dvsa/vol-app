@@ -43,6 +43,14 @@ class OverviewController extends AbstractController
             $data['applicationCompletions'][0]
         );
 
-        return new ApplicationOverview($data, $sections);
+        $form = $this->getServiceLocator()
+            ->get('Helper\Form')
+            ->createForm('Lva\PaymentSubmission')
+            ->setData($data);
+
+        $action = $this->url()->fromRoute('application_payment', ['id' => $applicationId]);
+        $form->setAttribute('action', $action);
+
+        return new ApplicationOverview($data, $sections, $form);
     }
 }
