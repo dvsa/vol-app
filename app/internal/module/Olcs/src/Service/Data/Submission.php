@@ -107,13 +107,17 @@ class Submission extends AbstractData
         $submissionSectionRefData = $this->getRefDataService()->fetchListOptions('submission_section');
 
         $selectedSectionsArray = json_decode($submission['dataSnapshot'], true);
+        $selectedCommentsArray = $submission['submissionSectionComments'];
+        foreach ($selectedCommentsArray as $comment) {
+            $selectedSectionsArray[$comment['submissionSection']['id']] = ['data' => []];
+        }
 
         // add section description text from ref data
-        foreach ($selectedSectionsArray as $index => $selectedSectionData) {
-            $selectedSectionsArray[$index]['description'] =
-                $submissionSectionRefData[$selectedSectionData['sectionId']];
-            $selectedSectionsArray[$index]['comments'] = $this->filterCommentsBySection(
-                $selectedSectionData['sectionId'],
+        foreach ($selectedSectionsArray as $sectionId => $selectedSectionData) {
+            $selectedSectionsArray[$sectionId]['sectionId'] = $sectionId;
+            $selectedSectionsArray[$sectionId]['description'] = $submissionSectionRefData[$sectionId];
+            $selectedSectionsArray[$sectionId]['comments'] = $this->filterCommentsBySection(
+                $sectionId,
                 $submission['submissionSectionComments']
             );
         }
@@ -460,8 +464,7 @@ class Submission extends AbstractData
                 // if section type is list, generate sectionData for snapshot
                 if (in_array('list', $sectionConfig['section_type'])) {
 
-                    $sectionData[$index] = [
-                        'sectionId' => $sectionId,
+                    $sectionData[$sectionId] = [
                         'data' => $this->createSubmissionSection(
                             $caseId,
                             $sectionId,

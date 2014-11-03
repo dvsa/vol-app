@@ -168,7 +168,8 @@ class SubmissionController extends OlcsController\CrudAbstract
 
         // save submission entity
         $result = $this->callParentSave($data);
-        $data['submissionId'] = $result['id'];
+
+        $data['id'] = $result['id'];
 
         // Generate comments for all sections that are configured as type = 'text' and have a data field
         $commentsData = $commentService->generateComments($caseId, $data);
