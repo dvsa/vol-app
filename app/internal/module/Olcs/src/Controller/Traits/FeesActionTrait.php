@@ -182,7 +182,6 @@ trait FeesActionTrait
                 // cancelled
                 $form = null;
                 break;
-            default:
         }
         return $form;
     }
@@ -192,7 +191,7 @@ trait FeesActionTrait
      *
      * @param Zend\Form\Form $form
      */
-    public function processForm($form)
+    protected function processForm($form)
     {
         if ($this->isButtonPressed('recommend')) {
             $this->formPost($form, 'recommendWaive');
@@ -302,7 +301,7 @@ trait FeesActionTrait
      *
      * @return redirect
      */
-    public function redirectToList()
+    protected function redirectToList()
     {
         $licenceId = $this->getFromRoute('licence');
         if ($licenceId) {
@@ -314,12 +313,8 @@ trait FeesActionTrait
             $params = ['applicationId' => $applicationId];
         }
 
-        if ($this->getRequest()->isXmlHttpRequest()) {
-            $data = ['status' => 302, 'location' => $this->url()->fromRoute($route, $params)];
-            $this->getResponse()->getHeaders()->addHeaders(['Content-Type' => 'application/json']);
-            $this->getResponse()->setContent(Json::encode($data));
-            return;
-        }
-        $this->redirect()->toRoute($route, $params);
+        $data = ['status' => 302, 'location' => $this->url()->fromRoute($route, $params)];
+        $this->getResponse()->getHeaders()->addHeaders(['Content-Type' => 'application/json']);
+        $this->getResponse()->setContent(Json::encode($data));
     }
 }
