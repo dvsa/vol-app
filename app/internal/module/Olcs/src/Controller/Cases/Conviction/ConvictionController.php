@@ -158,7 +158,7 @@ class ConvictionController extends OlcsController\CrudAbstract
         // modify $data
         $case = $this->getCase();
 
-        if ($data['defendantType'] == 'def_t_op') {
+        if (isset($data['defendantType']) && $data['defendantType'] == 'def_t_op') {
             $data['operatorName'] = $case['licence']['organisation']['name'];
         }
 
