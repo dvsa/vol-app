@@ -462,7 +462,8 @@ class Submission extends AbstractData
                     $submissionConfig['sections'][$sectionId] : [];
 
                 // if section type is list, generate sectionData for snapshot
-                if (in_array('list', $sectionConfig['section_type'])) {
+                //if (in_array('list', $sectionConfig['section_type']) ||
+//                    in_array('overview', $sectionConfig['section_type'])) {
 
                     $sectionData[$sectionId] = [
                         'data' => $this->createSubmissionSection(
@@ -471,7 +472,7 @@ class Submission extends AbstractData
                             $sectionConfig
                         )
                     ];
-                }
+    //            }
             }
         }
 
@@ -490,8 +491,8 @@ class Submission extends AbstractData
                     $submissionConfig['sections'][$sectionId] : [];
 
                 // if section type is text, generate sectionData for comment
-                if (in_array('text', $sectionConfig['section_type']) && !empty($sectionConfig['data_field'])) {
-
+                    if ((in_array('text', $sectionConfig['section_type']) && !empty($sectionConfig['data_field'])) ||
+                        in_array('overview', $sectionConfig['section_type'])) {
                     $sectionData = $this->createSubmissionSection(
                         $caseId,
                         $sectionId,
@@ -517,8 +518,8 @@ class Submission extends AbstractData
                 $submissionConfig['sections'][$sectionId] : [];
 
             // if section type is list, generate sectionData for snapshot
-            if (in_array('text', $sectionConfig['section_type']) && isset($sectionConfig['data_field'])) {
-
+            if ((in_array('text', $sectionConfig['section_type']) && !empty($sectionConfig['data_field'])) ||
+                in_array('overview', $sectionConfig['section_type'])) {
                 $this->makeRestCall('SubmissionSectionComment', 'POST', $comment);
             }
         }

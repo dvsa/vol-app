@@ -80,18 +80,25 @@ class SubmissionSectionComment extends AbstractData
 
                 // if section type is text, generate sectionData for comment
                 if (in_array('text', $sectionConfig['section_type']) && !empty($sectionConfig['data_field'])) {
-
                     $sectionData = $this->getSubmissionService()->createSubmissionSection(
                         $caseId,
                         $sectionId,
                         $sectionConfig
                     );
 
+                    $dataField = $sectionConfig['data_field'];
+
+                    if (empty($dataField) || !isset($sectionData[$dataField])) {
+                        $initialComment = 'Placeholder for ' . $sectionId;
+                    } else {
+                        $initialComment = $sectionData[$dataField];
+                    }
+
                     $commentData = [
                         "data" => json_encode([
                             "submissionSection" => $sectionId,
                             "submission" => $data['id'],
-                            "comment" => $sectionData[$sectionConfig['data_field']],
+                            "comment" => $initialComment,
                         ])
                     ];
 

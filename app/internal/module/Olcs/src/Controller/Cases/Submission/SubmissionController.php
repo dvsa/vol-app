@@ -162,6 +162,7 @@ class SubmissionController extends OlcsController\CrudAbstract
         $caseId = $params['case'];
 
         $snapshotData = $submissionService->generateSnapshotData($caseId, $data);
+
         $data['dataSnapshot'] = json_encode($snapshotData);
 
         $data['submissionType'] = $data['submissionSections']['submissionType'];
@@ -171,7 +172,7 @@ class SubmissionController extends OlcsController\CrudAbstract
 
         $data['id'] = $result['id'];
 
-        // Generate comments for all sections that are configured as type = 'text' and have a data field
+        // Generate comments for all sections that are configured as type = 'text'
         $commentsData = $commentService->generateComments($caseId, $data);
 
         return $data;

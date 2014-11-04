@@ -11,7 +11,6 @@ $selectedIds = array_column($selectedSectionsArray, 'sectionId');
 foreach ($allSections as $sectionId => $sectionDescription) {
     if (array_key_exists($sectionId, $selectedSectionsArray))
     {
-
         $freetext .= $this->submissionSectionDetails(
             $sectionId,
             $selectedSectionsArray[$sectionId]
