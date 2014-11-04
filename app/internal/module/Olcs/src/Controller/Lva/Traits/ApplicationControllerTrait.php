@@ -72,7 +72,7 @@ trait ApplicationControllerTrait
             'overview' => array('class' => 'no-background', 'route' => 'lva-' . $this->lva, 'enabled' => true)
         );
 
-        $accessibleSections = $this->setEnabledFlagOnSections(
+        $accessibleSections = $this->setEnabledAndCompleteFlagOnSections(
             $this->getAccessibleSections(false),
             $applicationStatuses
         );
