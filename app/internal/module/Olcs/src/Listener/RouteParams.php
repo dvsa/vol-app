@@ -24,7 +24,26 @@ class RouteParams implements EventManagerAwareInterface, ListenerAggregateInterf
     /**
      * @var array
      */
+    protected $triggeredEvents = [];
+
+    /**
+     * @var array
+     */
     protected $params = [];
+
+    public function setTriggeredEvent($event)
+    {
+        $this->triggeredEvents[$event] = true;
+    }
+
+    public function checkEventHasBeenTriggered($event)
+    {
+        if (isset($this->triggeredEvents[$event])) {
+            return true;
+        }
+
+        return false;
+    }
 
     /**
      * Attach one or more listeners
@@ -59,6 +78,12 @@ class RouteParams implements EventManagerAwareInterface, ListenerAggregateInterf
      */
     public function trigger($event, $value)
     {
+        if ($this->checkEventHasBeenTriggered($event)) {
+            return;
+        }
+
+        $this->setTriggeredEvent($event);
+
         $e = new RouteParam();
         $e->setContext($this->params)
           ->setValue($value)
