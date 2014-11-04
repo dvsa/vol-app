@@ -64,7 +64,7 @@ class OverviewController extends AbstractController
 
     private function isApplicationComplete($sections)
     {
-        foreach($sections as $section) {
+        foreach ($sections as $section) {
             if ($section['enabled'] && !$section['complete']) {
                 return false;
             }
