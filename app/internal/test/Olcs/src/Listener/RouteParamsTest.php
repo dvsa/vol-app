@@ -63,7 +63,7 @@ class RouteParamsTest extends TestCase
 
         $sut = new RouteParams();
 
-        $sut->setTriggeredEvent('test');
+        $sut->addTriggeredEvent('test');
 
         $matcher = function ($item) use ($params, $sut) {
             if (!($item instanceof RouteParam)) {
