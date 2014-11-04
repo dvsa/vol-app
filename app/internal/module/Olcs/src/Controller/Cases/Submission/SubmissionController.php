@@ -228,11 +228,11 @@ class SubmissionController extends OlcsController\CrudAbstract
 
         if (isset($data['submissionSections']['sections'])) {
             $sectionData = json_decode($data['submissionSections']['sections'], true);
-            $data['fields']['submissionSections']['sections'] = $this->extractSectionIds($sectionData);
+            $data['fields']['submissionSections']['sections'] = array_keys($sectionData);
         } elseif (isset($data['dataSnapshot'])) {
             $sectionData = json_decode($data['dataSnapshot'], true);
             $data['fields']['submissionSections']['submissionType'] = $data['submissionType'];
-            $data['fields']['submissionSections']['sections'] = $this->extractSectionIds($sectionData);
+            $data['fields']['submissionSections']['sections'] = array_keys($sectionData);
             $data['case'] = $case['id'];
             $data['fields']['id'] = $data['id'];
             $data['fields']['version'] = $data['version'];
@@ -263,17 +263,6 @@ class SubmissionController extends OlcsController\CrudAbstract
     public function callParentSave($data, $service = null)
     {
         return parent::save($data, $service);
-    }
-
-    private function extractSectionIds($sectionData)
-    {
-        $sectionIds = [];
-        if (is_array($sectionData)) {
-            foreach ($sectionData as $section) {
-                $sectionIds[] = $section['sectionId'];
-            }
-        }
-        return $sectionIds;
     }
 
     /**
