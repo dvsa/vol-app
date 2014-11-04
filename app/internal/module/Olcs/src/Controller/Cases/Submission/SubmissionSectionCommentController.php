@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Cases SubmissionSectionComments Controller
+ * Cases SubmissionSectionComment Controller
  *
  * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
@@ -59,7 +59,7 @@ class SubmissionSectionCommentController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $service = 'SubmissionSectionComments';
+    protected $service = 'SubmissionSectionComment';
 
     /**
      * Data map
