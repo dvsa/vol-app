@@ -105,12 +105,9 @@ class Submission extends AbstractData
     public function extractSelectedSubmissionSectionsData($submission)
     {
         $submissionSectionRefData = $this->getRefDataService()->fetchListOptions('submission_section');
+        $submissionConfig = $this->getSubmissionConfig();
 
         $selectedSectionsArray = json_decode($submission['dataSnapshot'], true);
-        $selectedCommentsArray = $submission['submissionSectionComments'];
-        foreach ($selectedCommentsArray as $comment) {
-            $selectedSectionsArray[$comment['submissionSection']['id']] = ['data' => []];
-        }
 
         // add section description text from ref data
         foreach ($selectedSectionsArray as $sectionId => $selectedSectionData) {
@@ -120,6 +117,11 @@ class Submission extends AbstractData
                 $sectionId,
                 $submission['submissionSectionComments']
             );
+            
+            // if we only have a type of text, then unset any other data to prevent comments being repeated
+            if ($submissionConfig['sections'][$sectionId]['section_type'] == ['text']) {
+                $selectedSectionsArray[$sectionId]['data'] = [];
+            }
         }
 
         return $selectedSectionsArray;

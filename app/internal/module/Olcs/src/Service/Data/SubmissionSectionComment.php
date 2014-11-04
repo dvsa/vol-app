@@ -69,7 +69,6 @@ class SubmissionSectionComment extends AbstractData
 
     public function generateComments($caseId, $data)
     {
-        $sectionData = [];
         if (is_array($data['submissionSections']['sections'])) {
             $submissionConfig = $this->getSubmissionConfig();
 
@@ -79,7 +78,7 @@ class SubmissionSectionComment extends AbstractData
                     $submissionConfig['sections'][$sectionId] : [];
 
                 // if section type is text, generate sectionData for comment
-                if (in_array('text', $sectionConfig['section_type']) && !empty($sectionConfig['data_field'])) {
+                if (in_array('text', $sectionConfig['section_type'])) {
                     $sectionData = $this->getSubmissionService()->createSubmissionSection(
                         $caseId,
                         $sectionId,
