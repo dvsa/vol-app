@@ -54,34 +54,17 @@ class RouteParamsTest extends TestCase
         $sut->onDispatch($mockEvent);
     }
 
-    public function testEventNotTriggeredMultiple()
+    public function testEventMatchedOnlyOnce()
     {
-        $params = ['test' => 'value'];
-
-        $mockEvent = m::mock('Zend\Mvc\MvcEvent');
-        $mockEvent->shouldReceive('getRouteMatch->getParams')->andReturn($params);
-
         $sut = new RouteParams();
 
-        $sut->addTriggeredEvent('test');
+        $event = 'event';
+        $value = 'value';
 
-        $matcher = function ($item) use ($params, $sut) {
-            if (!($item instanceof RouteParam)) {
-                return false;
-            }
-            if ($item->getValue() != 'value' || $item->getContext() != $params || $item->getTarget() != $sut) {
-                return false;
-            }
+        $sut->addTriggeredEvent($event);
 
-            return true;
-        };
+        $sut->setParams([$event => $value]);
 
-        $mockEventManager = m::mock('Zend\EventManager\EventManagerInterface');
-        $mockEventManager->shouldIgnoreMissing();
-        $mockEventManager->shouldReceive('trigger')->with(RouteParams::EVENT_PARAM . 'test', m::on($matcher))->never();
-
-        $sut->setEventManager($mockEventManager);
-
-        $sut->onDispatch($mockEvent);
+        $this->assertEquals(false, $sut->trigger($event, $value));
     }
 }
