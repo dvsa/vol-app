@@ -50,11 +50,11 @@ class PublicInquiryHearingFields extends Base
     /**
      * @Form\Attributes({"id":"hearingDate"})
      * @Form\Options({
-     *     "label": "Date of Pi",
+     *     "label": "Date of PI",
      *     "create_empty_option": true,
      *     "max_year": 2016,
      *     "render_delimiters": true,
-     *     "pattern": "d MMMM y '</div><div class=""field""><label for=hearingDate>Time of Pi</label>'HH:mm:ss"
+     *     "pattern": "d MMMM y '</div><div class=""field""><label for=hearingDate>Time of PI</label>'HH:mm:ss"
      * })
      * @Form\Type("DateTimeSelect")
      * @Form\Filter({"name": "DateTimeSelectNullifier"})

@@ -28,7 +28,7 @@ return array(
             'format' => '{{[elements/radio]}}'
         ),
         array(
-            'title' => 'Date of Pi',
+            'title' => 'Date of PI',
             'formatter' => function ($data, $column) {
                 $url = $this->generateUrl(
                     ['action' => 'edit', 'id' => $data['id'], 'pi' => $data['pi']['id']],
