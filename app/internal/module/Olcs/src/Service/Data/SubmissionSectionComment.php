@@ -69,10 +69,11 @@ class SubmissionSectionComment extends AbstractData
 
     public function generateComments($caseId, $data)
     {
+        $commentData = [];
         if (is_array($data['submissionSections']['sections'])) {
             $submissionConfig = $this->getSubmissionConfig();
 
-            foreach ($data['submissionSections']['sections'] as $index => $sectionId) {
+            foreach ($data['submissionSections']['sections'] as $sectionId) {
 
                 $sectionConfig = isset($submissionConfig['sections'][$sectionId]) ?
                     $submissionConfig['sections'][$sectionId] : [];
@@ -93,18 +94,18 @@ class SubmissionSectionComment extends AbstractData
                         $initialComment = $sectionData[$dataField];
                     }
 
-                    $commentData = [
-                        "data" => json_encode([
-                            "submissionSection" => $sectionId,
-                            "submission" => $data['id'],
-                            "comment" => $initialComment,
-                        ])
-                    ];
-
-                    $this->getRestClient()->post('', $commentData);
+                    array_push(
+                        $commentData,
+                        [
+                            'id' => '',
+                            'submissionSection' => $sectionId,
+                            'comment' => $initialComment,
+                        ]
+                    );
                 }
             }
         }
+        return $commentData;
     }
 
     /**

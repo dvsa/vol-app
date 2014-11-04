@@ -141,39 +141,30 @@ class SubmissionController extends OlcsController\CrudAbstract
     public function save($data, $service = null)
     {
         // modify $data
+        $submissionService = $this->getServiceLocator()->get('Olcs\Service\Data\Submission');
+        $commentService = $this->getServiceLocator()->get('Olcs\Service\Data\SubmissionSectionComment');
         $params = $this->getParams(array('case', 'submission'));
 
-        $submissionId = isset($params['submission']) ? $params['submission'] : null;
-        if (!empty($submissionId)) {
-            $data = $this->updateSubmission($params, $data);
-        } else {
-            $data = $this->insertSubmission($params, $data);
-        }
-
-        return $data;
-    }
-
-    public function insertSubmission($params, $data)
-    {
-        $submissionService = $this->getServiceLocator()->get('Olcs\Service\Data\Submission');
-        $commentService = $this->getServiceLocator()->get
-            ('Olcs\Service\Data\SubmissionSectionComment');
-
         $caseId = $params['case'];
-
         $snapshotData = $submissionService->generateSnapshotData($caseId, $data);
 
         $data['dataSnapshot'] = json_encode($snapshotData);
-
         $data['submissionType'] = $data['submissionSections']['submissionType'];
+
+        // Generate comments for all sections that are configured as type = 'text'
+        $submissionSectionComments = $commentService->generateComments($caseId, $data);
 
         // save submission entity
         $result = $this->callParentSave($data);
 
-        $data['id'] = $result['id'];
-
-        // Generate comments for all sections that are configured as type = 'text'
-        $commentsData = $commentService->generateComments($caseId, $data);
+        if (isset($result['id'])) {
+            $data['id'] = $result['id'];
+            // insert comments
+            foreach ($submissionSectionComments as $comment) {
+                $comment['submission'] = $data['id'];
+                $this->makeRestCall('SubmissionSectionComment', 'POST', $comment);
+            }
+        }
 
         return $data;
     }
