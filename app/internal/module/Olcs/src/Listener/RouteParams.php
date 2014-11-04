@@ -32,6 +32,24 @@ class RouteParams implements EventManagerAwareInterface, ListenerAggregateInterf
     protected $params = [];
 
     /**
+     * @param array $params
+     * @return $this
+     */
+    public function setParams($params)
+    {
+        $this->params = $params;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getParams()
+    {
+        return $this->params;
+    }
+
+    /**
      * Adds event to the list of triggered events
      *
      * @param string $event
@@ -78,9 +96,9 @@ class RouteParams implements EventManagerAwareInterface, ListenerAggregateInterf
      */
     public function onDispatch(MvcEvent $e)
     {
-        $this->params = $e->getRouteMatch()->getParams();
+        $this->setParams($e->getRouteMatch()->getParams());
 
-        foreach ($this->params as $key => $value) {
+        foreach ($this->getParams() as $key => $value) {
             $this->trigger($key, $value);
         }
     }
@@ -92,13 +110,13 @@ class RouteParams implements EventManagerAwareInterface, ListenerAggregateInterf
     public function trigger($event, $value)
     {
         if ($this->hasEventBeenTriggered($event)) {
-            return;
+            return false;
         }
 
         $this->addTriggeredEvent($event);
 
         $e = new RouteParam();
-        $e->setContext($this->params)
+        $e->setContext($this->getParams())
           ->setValue($value)
           ->setTarget($this);
 
