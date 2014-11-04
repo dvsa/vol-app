@@ -49,13 +49,13 @@ return array(
         array(
             'title' => 'Fulfilled',
             'formatter' => function ($data, $column) {
-                return $data['isFulfilled'] ? 'Yes' : 'No';
+                return $data['isFulfilled'] == 'Y' ? 'Yes' : 'No';
             },
         ),
         array(
             'title' => 'Status',
             'formatter' => function ($data, $column) {
-                return $data['isDraft'] ? 'Draft' : 'Approved';
+                return $data['isDraft'] == 'Y' ? 'Draft' : 'Approved';
             },
         ),
         array(
