@@ -21,12 +21,15 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
     /**
      * Set up
      */
-    public function setUpAction($controllerName = '\Olcs\Controller\Licence\LicenceController', $mockGetForm = true, $noContent = true)
-    {
+    public function setUpAction(
+        $controllerName = '\Olcs\Controller\Licence\LicenceController',
+        $mockGetForm = true,
+        $noContent = true
+    ) {
         $this->setApplicationConfig(
             include __DIR__.'/../../../../../config/application.config.php'
         );
-        
+
         $methods = [
             'makeRestCall',
             'getLoggedInUser',
@@ -56,7 +59,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
         $mockRedirect->expects($this->any())
             ->method('toRoute')
             ->will($this->returnValue('redirect'));
-        
+
         $this->controller->expects($this->any())
             ->method('redirect')
             ->will($this->returnValue($mockRedirect));
@@ -80,16 +83,16 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
         $request->expects($this->any())
             ->method('getPost')
             ->will($this->returnValue($this->post));
-        
+
         $mockUri = $this->getMock('\StdClass', ['getPath']);
         $mockUri->expects($this->any())
             ->method('getPath')
             ->will($this->returnValue('/'));
-        
+
         $request->expects($this->any())
             ->method('getUri')
             ->will($this->returnValue($mockUri));
-        
+
         $this->query = $query;
         $this->request = $request;
 
@@ -213,7 +216,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
             ['historical', "IN ('lfs_pd', 'lfs_w', 'lfs_cn')"]
         ];
     }
- 
+
     /**
      * Test fees action
      * @group feesTrait
@@ -364,7 +367,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
             ['historical', "IN ('lfs_pd', 'lfs_w', 'lfs_cn')"]
         ];
     }
- 
+
     /**
      * Test edit fee action with form alteration
      *
@@ -375,7 +378,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
     public function testEditFeeActionWithFormAlteration($statusId, $statusDescription)
     {
         $this->setUpAction('\Olcs\Controller\Licence\LicenceController', false);
-        
+
         $feeId = 1;
         $feeDetails = [
             'id' => 1,
@@ -401,33 +404,33 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
                 'name' => 'Some User'
             ]
         ];
-        
+
         $mockParams = $this->getMock('\StdClass', ['fromRoute']);
         $mockParams->expects($this->any())
             ->method('fromRoute')
             ->with('fee', null)
             ->will($this->returnValue($feeId));
-        
+
         $this->controller->expects($this->once())
             ->method('params')
             ->will($this->returnValue($mockParams));
-        
+
         $mockFeeService = $this->getMock('\StdClass', ['getFee', 'updateFee']);
         $mockFeeService->expects($this->once())
             ->method('getFee')
             ->with($feeId)
             ->will($this->returnValue($feeDetails));
-        
+
         $mockServiceLocator = Bootstrap::getServiceManager();
         $mockServiceLocator->setAllowOverride(true);
         $mockServiceLocator->setService('Olcs\Service\Data\Fee', $mockFeeService);
-        
+
         $this->controller->expects($this->any())
             ->method('getServiceLocator')
             ->will($this->returnValue($mockServiceLocator));
-        
+
         $response = $this->controller->editFeeAction();
-        
+
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
     }
 
@@ -454,15 +457,21 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
      * @dataProvider feePostProvider
      * @return array
      */
-    public function testEditFeeActionWithPost($statusId, $statusDescription, $post = [], $controllerName, $paramNameWithValue, $paramNameWithNull)
-    {
+    public function testEditFeeActionWithPost(
+        $statusId,
+        $statusDescription,
+        $post,
+        $controllerName,
+        $paramNameWithValue,
+        $paramNameWithNull
+    ) {
         $this->post = $post;
 
         $this->setUpAction($controllerName, false, false);
         $this->request->expects($this->any())
             ->method('isPost')
             ->will($this->returnValue(true));
-        
+
         $this->request->expects($this->any())
             ->method('isXmlHttpRequest')
             ->will($this->returnValue(true));
@@ -471,12 +480,15 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
         $mockUrl->expects($this->any())
             ->method('fromRoute')
             ->will($this->returnValue('location'));
-        
+
         $this->controller->expects($this->any())
             ->method('url')
             ->will($this->returnValue($mockUrl));
 
-        $mockResponse = $this->getMock('\StdClass', ['getHeaders', 'setContent', 'setHeaders', 'getContent', 'addHeaders']);
+        $mockResponse = $this->getMock(
+            '\StdClass',
+            ['getHeaders', 'setContent', 'setHeaders', 'getContent', 'addHeaders']
+        );
         $mockResponse->expects($this->any())
             ->method('getHeaders')
             ->will($this->returnValue($mockResponse));
@@ -496,7 +508,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
         $this->controller->expects($this->any())
             ->method('getResponse')
             ->will($this->returnValue($mockResponse));
-        
+
         $this->controller->expects($this->any())
             ->method('getFromRoute')
             ->will(
@@ -504,9 +516,10 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
                     [
                         [$paramNameWithValue, 1],
                         [$paramNameWithNull, null]
-                    ]    
-            ));
-        
+                    ]
+                )
+            );
+
         $feeId = 1;
         $feeDetails = [
             'id' => 1,
@@ -532,37 +545,37 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
                 'name' => 'Some User'
             ]
         ];
-        
+
         $mockParams = $this->getMock('\StdClass', ['fromRoute']);
         $mockParams->expects($this->any())
             ->method('fromRoute')
             ->with('fee', null)
             ->will($this->returnValue($feeId));
-        
+
         $this->controller->expects($this->once())
             ->method('params')
             ->will($this->returnValue($mockParams));
-        
+
         $mockFeeService = $this->getMock('\StdClass', ['getFee', 'updateFee']);
         $mockFeeService->expects($this->once())
             ->method('getFee')
             ->with($feeId)
             ->will($this->returnValue($feeDetails));
-        
+
         $mockServiceLocator = Bootstrap::getServiceManager();
         $mockServiceLocator->setAllowOverride(true);
         $mockServiceLocator->setService('Olcs\Service\Data\Fee', $mockFeeService);
-        
+
         $this->controller->expects($this->any())
             ->method('getServiceLocator')
             ->will($this->returnValue($mockServiceLocator));
-        
+
         $response = $this->controller->editFeeAction();
-        
+
         $this->assertEquals($mockResponse, $response);
-        
+
     }
-    
+
     /**
      * Data provider
      *
