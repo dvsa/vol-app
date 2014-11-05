@@ -146,7 +146,8 @@ class SubmissionSectionComment extends AbstractData
         return ['add' => $commentDataToAdd, 'remove' => $commentDataToRemove];
     }
 
-    private function getDefaultComment($sectionId, $sectionConfig, $sectionData) {
+    private function getDefaultComment($sectionId, $sectionConfig, $sectionData)
+    {
         $dataField = $sectionConfig['data_field'];
 
         if (empty($dataField) || !isset($sectionData[$dataField])) {
@@ -225,6 +226,4 @@ class SubmissionSectionComment extends AbstractData
     {
         return $this->submissionConfig;
     }
-
-
 }
