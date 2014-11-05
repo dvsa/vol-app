@@ -2,6 +2,7 @@
 
 return array(
     'modules' => array(
+        'Olcs\Logging',
         'Common',
         'DoctrineModule',
         'DoctrineORMModule',
