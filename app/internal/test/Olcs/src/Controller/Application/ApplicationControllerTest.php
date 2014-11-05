@@ -8,6 +8,7 @@
 namespace OlcsTest\Controller\Licence;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
+use Common\Service\Entity\ApplicationEntityService;
 
 /**
  * Appication controller tests
@@ -151,11 +152,6 @@ class ApplicationControllerTest extends AbstractHttpControllerTestCase
             ->with($this->equalTo($feesParams))
             ->will($this->returnValue($fees));
 
-        $mockApplicationJourneyHelper = $this->getMock('\StdClass', ['render']);
-        $mockApplicationJourneyHelper->expects($this->once())
-            ->method('render')
-            ->will($this->returnValue('rendered view'));
-
         $mockServiceLocator = $this->getMock('\StdClass', ['get']);
 
         $mockServiceLocator->expects($this->at(0))
@@ -163,10 +159,39 @@ class ApplicationControllerTest extends AbstractHttpControllerTestCase
             ->with($this->equalTo('Olcs\Service\Data\Fee'))
             ->will($this->returnValue($mockFeeService));
 
+        $mockApplicationEntity = $this->getMock('\stdClass', array('getStatus', 'getHeaderData'));
+
+        $mockApplicationEntity->expects($this->once())
+            ->method('getStatus')
+            ->will($this->returnValue(ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION));
+
+        $headerData = array(
+            'id' => 1,
+            'licence' => array(
+                'id' => 3,
+                'licNo' => 'dfdfsdf',
+                'organisation' => array(
+                    'name' => 'fjdsah lkjfah'
+                )
+            ),
+            'status' => array(
+                'id' => 'foo'
+            )
+        );
+
+        $mockApplicationEntity->expects($this->once())
+            ->method('getHeaderData')
+            ->will($this->returnValue($headerData));
+
         $mockServiceLocator->expects($this->at(1))
             ->method('get')
-            ->with($this->equalTo('ApplicationJourneyHelper'))
-            ->will($this->returnValue($mockApplicationJourneyHelper));
+            ->with('Entity\Application')
+            ->will($this->returnValue($mockApplicationEntity));
+
+        $mockServiceLocator->expects($this->at(2))
+            ->method('get')
+            ->with('Entity\Application')
+            ->will($this->returnValue($mockApplicationEntity));
 
         $this->controller->expects($this->any())
              ->method('getServiceLocator')
@@ -188,7 +213,7 @@ class ApplicationControllerTest extends AbstractHttpControllerTestCase
 
         $response = $this->controller->feesAction();
 
-        $this->assertEquals('rendered view', $response);
+        $this->assertInstanceOf('\Olcs\View\Model\Application\Layout', $response);
 
     }
 
