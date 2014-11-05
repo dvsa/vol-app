@@ -39,12 +39,13 @@ trait ApplicationControllerTrait
      */
     protected function getQuickActions()
     {
-        $showGrantButton = $this->shouldShowGrantButton();
+        $status = $this->getServiceLocator()->get('Entity\Application')->getStatus($this->params('application'));
+        $showGrantButton = $this->shouldShowGrantButton($status);
 
         if ($showGrantButton) {
             $showUndoGrantButton = false;
         } else {
-            $showUndoGrantButton = $this->shouldShowUndoGrantButton();
+            $showUndoGrantButton = $this->shouldShowUndoGrantButton($status);
         }
 
         $viewModel = new ViewModel(
@@ -58,28 +59,23 @@ trait ApplicationControllerTrait
         return $viewModel;
     }
 
-    protected function shouldShowGrantButton()
+    protected function shouldShowGrantButton($status)
     {
-        $status = $this->getServiceLocator()->get('Entity\Application')->getStatus($this->params('application'));
-
         return ($status === ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION);
     }
 
-    protected function shouldShowUndoGrantButton()
+    protected function shouldShowUndoGrantButton($status)
     {
         $applicationId = $this->params('application');
 
-        if ($this->isApplicationNew($applicationId)) {
+        if ($this->isApplicationNew($applicationId)
+            && $status === ApplicationEntityService::APPLICATION_STATUS_GRANTED) {
 
             $applicationService = $this->getServiceLocator()->get('Entity\Application');
 
-            $status = $applicationService->getStatus($applicationId);
+            $category = $applicationService->getCategory($applicationId);
 
-            if ($status === ApplicationEntityService::APPLICATION_STATUS_GRANTED) {
-                $category = $applicationService->getCategory($applicationId);
-
-                return ($category === LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE);
-            }
+            return ($category === LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE);
 
         }
 
