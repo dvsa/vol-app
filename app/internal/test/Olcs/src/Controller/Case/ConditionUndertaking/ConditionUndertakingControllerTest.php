@@ -1,9 +1,8 @@
 <?php
 namespace OlcsTest\Controller\ConditionUndertaking;
 
-use OlcsTest\Bootstrap;
 use Mockery as m;
-use \Olcs\TestHelpers\ControllerPluginManagerHelper;
+use Olcs\TestHelpers\ControllerPluginManagerHelper;
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
 /**
@@ -85,9 +84,7 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
         $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
         $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\Cases')->andReturn($mockCaseService);
 
-        $mockServiceManager->shouldReceive('get')->with('HelperService')->andReturnSelf();
-        $mockServiceManager->shouldReceive('getHelperService')->with('RestHelper')->andReturn($mockRestHelper);
-        $mockServiceManager->shouldReceive('get->getHelperService')->with('RestService')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
 
         $this->sut->setServiceLocator($mockServiceManager);
 
@@ -165,9 +162,7 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
         $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
         $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\Cases')->andReturn($mockCaseService);
 
-        $mockServiceManager->shouldReceive('get')->with('HelperService')->andReturnSelf();
-        $mockServiceManager->shouldReceive('getHelperService')->with('RestHelper')->andReturn($mockRestHelper);
-        $mockServiceManager->shouldReceive('get->getHelperService')->with('RestService')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
 
         $this->sut->setServiceLocator($mockServiceManager);
 
@@ -219,9 +214,7 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
         $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
         $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\Cases')->andReturn($mockCaseService);
 
-        $mockServiceManager->shouldReceive('get')->with('HelperService')->andReturnSelf();
-        $mockServiceManager->shouldReceive('getHelperService')->with('RestHelper')->andReturn($mockRestHelper);
-        $mockServiceManager->shouldReceive('get->getHelperService')->with('RestService')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
 
         $this->sut->setServiceLocator($mockServiceManager);
 
@@ -277,10 +270,8 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
         )->andReturn($mockDataToSave);
 
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
-        $mockServiceManager->shouldReceive('get')->with('HelperService')->andReturnSelf();
-        $mockServiceManager->shouldReceive('getHelperService')->with('RestHelper')->andReturn($mockRestHelper);
-        $mockServiceManager->shouldReceive('getHelperService')->with('DataHelper')->andReturn($mockDataHelper);
-        $mockServiceManager->shouldReceive('get->getHelperService')->with('RestService')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('Helper\Data')->andReturn($mockDataHelper);
 
         $this->sut->setServiceLocator($mockServiceManager);
 
@@ -337,10 +328,8 @@ class ConditionUndertakingControllerTest extends AbstractHttpControllerTestCase
         )->andReturn($mockDataToSave);
 
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
-        $mockServiceManager->shouldReceive('get')->with('HelperService')->andReturnSelf();
-        $mockServiceManager->shouldReceive('getHelperService')->with('RestHelper')->andReturn($mockRestHelper);
-        $mockServiceManager->shouldReceive('getHelperService')->with('DataHelper')->andReturn($mockDataHelper);
-        $mockServiceManager->shouldReceive('get->getHelperService')->with('RestService')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('Helper\Data')->andReturn($mockDataHelper);
 
         $this->sut->setServiceLocator($mockServiceManager);
 

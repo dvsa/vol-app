@@ -185,10 +185,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
 
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
 
-        $mockServiceManager->shouldReceive('get')->with('HelperService')->andReturnSelf();
-        $mockServiceManager->shouldReceive('getHelperService')->with('RestHelper')->andReturn($mockRestHelper);
-
-        $mockServiceManager->shouldReceive('get->getHelperService')->with('RestService')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
 
         $mockServiceManager->shouldReceive('get')->with('config')->andReturn($mockConfig);
         $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\Submission')

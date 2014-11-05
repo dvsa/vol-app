@@ -4,7 +4,6 @@
     <testsuites>
         <testsuite name="OLCS Internal Application">
             <directory>./</directory>
-            <directory>../vendor/olcs/OlcsCommon/application_test/</directory>
         </testsuite>
     </testsuites>
     <filter>

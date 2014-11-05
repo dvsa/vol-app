@@ -695,9 +695,7 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
         $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn([]);
 
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
-        $mockServiceManager->shouldReceive('get')->with('HelperService')->andReturnSelf();
-        $mockServiceManager->shouldReceive('getHelperService')->with('RestHelper')->andReturn($mockRestHelper);
-        $mockServiceManager->shouldReceive('get->getHelperService')->with('RestService')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
 
         $event = $this->routeMatchHelper->getMockRouteMatch(array('action' => 'not-found'));
         $sut->setEvent($event);
@@ -727,9 +725,7 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
         $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn($mockResult);
 
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
-        $mockServiceManager->shouldReceive('get')->with('HelperService')->andReturnSelf();
-        $mockServiceManager->shouldReceive('getHelperService')->with('RestHelper')->andReturn($mockRestHelper);
-        $mockServiceManager->shouldReceive('get->getHelperService')->with('RestService')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
 
         $sut->setServiceLocator($mockServiceManager);
         $sut->expects($this->never())->method('notFoundAction');
@@ -762,10 +758,8 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
         $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn([]);
 
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
-        $mockServiceManager->shouldReceive('get')->with('HelperService')->andReturnSelf();
-        $mockServiceManager->shouldReceive('getHelperService')->with('RestHelper')->andReturn($mockRestHelper);
-        $mockServiceManager->shouldReceive('getHelperService')->with('DataHelper')->andReturn($mockDataService);
-        $mockServiceManager->shouldReceive('get->getHelperService')->with('RestService')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('Helper\Data')->andReturn($mockDataService);
 
         $sut->setServiceLocator($mockServiceManager);
 
@@ -793,10 +787,8 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
         $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn([]);
 
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
-        $mockServiceManager->shouldReceive('get')->with('HelperService')->andReturnSelf();
-        $mockServiceManager->shouldReceive('getHelperService')->with('RestHelper')->andReturn($mockRestHelper);
-        $mockServiceManager->shouldReceive('getHelperService')->with('DataHelper')->andReturn($mockDataService);
-        $mockServiceManager->shouldReceive('get->getHelperService')->with('RestService')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('Helper\Data')->andReturn($mockDataService);
 
         $sut->setServiceLocator($mockServiceManager);
 
@@ -871,9 +863,7 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
         $mockViewHelperManager->setService('placeholder', $placeholder);
 
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
-        $mockServiceManager->shouldReceive('get')->with('HelperService')->andReturnSelf();
-        $mockServiceManager->shouldReceive('getHelperService')->with('RestHelper')->andReturn($mockRestHelper);
-        $mockServiceManager->shouldReceive('get->getHelperService')->with('RestService')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
         $mockServiceManager->shouldReceive('get')->with('viewHelperManager')->andReturn($mockViewHelperManager);
         $mockServiceManager->shouldReceive('get')->with('Script')->andReturn($scripts);
 
@@ -955,9 +945,7 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
         $mockViewHelperManager->setService('placeholder', $placeholder);
 
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
-        $mockServiceManager->shouldReceive('get')->with('HelperService')->andReturnSelf();
-        $mockServiceManager->shouldReceive('getHelperService')->with('RestHelper')->andReturn($mockRestHelper);
-        $mockServiceManager->shouldReceive('get->getHelperService')->with('RestService')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
         $mockServiceManager->shouldReceive('get')->with('viewHelperManager')->andReturn($mockViewHelperManager);
 
         $sut->setServiceLocator($mockServiceManager);
