@@ -9,7 +9,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("condition-undertaking-form")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true, "label":"Add Condition / Undertaking"})
+ * @Form\Options({"prefer_form_input_filter": true, "label":"Add Condition or Undertaking"})
  */
 class ConditionUndertakingForm
 {
