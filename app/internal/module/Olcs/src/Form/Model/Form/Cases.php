@@ -6,10 +6,9 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @Form\Name("Cases")
- * @Form\Options({"label":"Case"})
  * @Form\Attributes({"method":"post","label":"Case"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true})
+ * @Form\Options({"prefer_form_input_filter": true,"label": "Case"})
  */
 class Cases
 {
