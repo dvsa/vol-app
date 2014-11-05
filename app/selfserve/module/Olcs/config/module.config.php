@@ -173,17 +173,6 @@ return array(
         'default' => array()
     ),
     'asset_path' => '//dvsa-static.olcsdv-ap01.olcs.npm',
-    'application_journey' => array(
-        'access_keys' => array(
-            'selfserve'
-        ),
-        'templates' => array(
-            'not-found' => 'self-serve/journey/not-found',
-            'navigation' => 'self-serve/journey/application/navigation',
-            'main' => 'self-serve/journey/application/main',
-            'layout' => 'self-serve/journey/application/layout'
-        )
-    ),
     'filters' => [
         'factories' => [
             'Olcs\Filter\DecompressUploadToTmp' => 'Olcs\Filter\DecompressUploadToTmpFactory',
