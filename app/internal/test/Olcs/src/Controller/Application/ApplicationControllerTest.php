@@ -70,7 +70,7 @@ class ApplicationControllerTest extends AbstractHttpControllerTestCase
             ->will(
                 $this->returnValueMap(
                     [
-                        ['applicationId', 1],
+                        ['application', 1],
                         ['licence', null],
                     ]
                 )

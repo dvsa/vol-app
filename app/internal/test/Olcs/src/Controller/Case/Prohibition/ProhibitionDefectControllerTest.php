@@ -134,8 +134,7 @@ class ProhibitionDefectControllerTest extends \PHPUnit_Framework_TestCase
 
         //mock service manager
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
-        $mockServiceManager->shouldReceive('get')->with('HelperService')->andReturnSelf();
-        $mockServiceManager->shouldReceive('getHelperService')->with('RestHelper')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
         $mockServiceManager->shouldReceive('get')->with('viewHelperManager')->andReturn($mockViewHelperManager);
         $mockServiceManager->shouldReceive('get')->with('Table')->andReturn($mockTableBuilder);
 
@@ -195,8 +194,7 @@ class ProhibitionDefectControllerTest extends \PHPUnit_Framework_TestCase
 
         //mock service manager
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
-        $mockServiceManager->shouldReceive('get')->with('HelperService')->andReturnSelf();
-        $mockServiceManager->shouldReceive('getHelperService')->with('RestHelper')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
 
         $this->sut->setServiceLocator($mockServiceManager);
 
@@ -251,8 +249,7 @@ class ProhibitionDefectControllerTest extends \PHPUnit_Framework_TestCase
 
         //mock service manager
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
-        $mockServiceManager->shouldReceive('get')->with('HelperService')->andReturnSelf();
-        $mockServiceManager->shouldReceive('getHelperService')->with('RestHelper')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
 
         $this->sut->setServiceLocator($mockServiceManager);
 
