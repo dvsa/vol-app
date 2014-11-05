@@ -194,7 +194,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                     'options' => array(
                         'callback' => function ($data) {
                                 $sections = array_merge(
-                                    $data['sections'],
+                                    isset($data['sections']) ? $data['sections'] : [],
                                     $this->getMandatorySections()
                                 );
                             return [
@@ -245,7 +245,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                 $sections = [
                     'operating-centres',
                     'conditions-and-undertakings',
-                    'intelligent-unit-check',
+                    'intelligence-unit-check',
                     'interim',
                     'advertisement',
                     'auth-requested-applied-for',
@@ -262,7 +262,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                 $sections = [
                     'operating-centres',
                     'conditions-and-undertakings',
-                    'intelligent-unit-check',
+                    'intelligence-unit-check',
                     'auth-requested-applied-for',
                     'transport-managers',
                     'continuous-effective-control',
@@ -279,7 +279,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                 $sections = [
                     'operating-centres',
                     'conditions-and-undertakings',
-                    'intelligent-unit-check',
+                    'intelligence-unit-check',
                     'interim',
                     'advertisement',
                     'auth-requested-applied-for',
@@ -311,7 +311,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                 $sections = [
                     'operating-centres',
                     'conditions-and-undertakings',
-                    'intelligent-unit-check',
+                    'intelligence-unit-check',
                     'interim',
                     'advertisement',
                     'linked-licences-app-numbers',
@@ -330,7 +330,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                 $sections = [
                     'operating-centres',
                     'conditions-and-undertakings',
-                    'intelligent-unit-check',
+                    'intelligence-unit-check',
                     'linked-licences-app-numbers',
                     'lead-tc-area',
                     'current-submissions',
@@ -348,7 +348,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                 break;
             case 'submission_type_o_tm':
                 $sections = [
-                    'intelligent-unit-check',
+                    'intelligence-unit-check',
                     'transport-managers',
                     'continuous-effective-control',
                     'fitness-and-repute',
