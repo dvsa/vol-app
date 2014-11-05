@@ -193,7 +193,8 @@ class HearingController extends OlcsController\CrudAbstract
             }
 
             $task['description'] = 'Verify adjournment of case';
-            $task['actionDate'] = date('Y-m-d',
+            $task['actionDate'] = date(
+                'Y-m-d',
                 mktime(date("H"), date("i"), date("s"), date("n"), date("j")+7, date("Y"))
             );
             $task['urgent'] = '1';
