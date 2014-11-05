@@ -9,7 +9,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("bus-reg-list")
  * @Form\Attributes({"method":"get"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true})
+ * @Form\Options({"prefer_form_input_filter": true, "label":"Bus Registration List"})
  */
 class BusRegList
 {
