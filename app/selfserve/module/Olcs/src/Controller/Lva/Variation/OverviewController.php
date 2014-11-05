@@ -35,6 +35,7 @@ class OverviewController extends AbstractController
         }
 
         $data = $this->getServiceLocator()->get('Entity\Application')->getOverview($applicationId);
+        $data['idIndex'] = $this->getIdentifierIndex();
 
         return new VariationOverview($data, $this->getAccessibleSections());
     }

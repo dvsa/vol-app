@@ -35,32 +35,6 @@ $routes = array(
             )
         )
     ),
-    'application_payment' => array(
-        'type' => 'segment',
-        'options' => array(
-            'route' => '/application/:id/payment[/]',
-            'constraints' => array(
-                'id' => '[0-9]+'
-            ),
-            'defaults' => array(
-                'controller' => 'LvaApplication/PaymentSubmission',
-                'action' => 'index'
-            )
-        )
-    ),
-    'application_summary' => array(
-        'type' => 'segment',
-        'options' => array(
-            'route' => '/application/:id/summary[/]',
-            'constraints' => array(
-                'id' => '[0-9]+'
-            ),
-            'defaults' => array(
-                'controller' => 'LvaApplication/PaymentSubmission',
-                'action' => 'summary'
-            )
-        )
-    ),
     'create_variation' => array(
         'type' => 'segment',
         'options' => array(
@@ -68,6 +42,32 @@ $routes = array(
             'defaults' => array(
                 'controller' => 'LvaLicence/Overview',
                 'action' => 'createVariation'
+            )
+        )
+    )
+);
+
+$configRoutes['lva-application']['child_routes'] = array_merge(
+    $configRoutes['lva-application']['child_routes'],
+    array(
+        'payment' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'payment[/]',
+                'defaults' => array(
+                    'controller' => 'LvaApplication/PaymentSubmission',
+                    'action' => 'index'
+                )
+            )
+        ),
+        'summary' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'summary[/]',
+                'defaults' => array(
+                    'controller' => 'LvaApplication/PaymentSubmission',
+                    'action' => 'summary'
+                )
             )
         )
     )

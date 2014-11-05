@@ -37,6 +37,7 @@ class OverviewController extends AbstractController
         }
 
         $data = $this->getServiceLocator()->get('Entity\Application')->getOverview($applicationId);
+        $data['idIndex'] = $this->getIdentifierIndex();
 
         $sections = $this->setEnabledAndCompleteFlagOnSections(
             $this->getAccessibleSections(false),
@@ -49,7 +50,7 @@ class OverviewController extends AbstractController
             ->createForm('Lva\PaymentSubmission')
             ->setData($data);
 
-        $action = $this->url()->fromRoute('application_payment', ['id' => $applicationId]);
+        $action = $this->url()->fromRoute('lva-application/payment', [$this->getIdentifierIndex() => $applicationId]);
         $form->setAttribute('action', $action);
 
         if (!$this->isApplicationComplete($sections)) {

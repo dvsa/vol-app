@@ -15,7 +15,7 @@ return array(
             'formatter' => function ($row) {
                 return '<a href="' . $this->url->fromRoute(
                     'lva-licence',
-                    array('id' => $row['id'])
+                    array('licence' => $row['id'])
                 ) . '">'.$row['id'].'</a>';
             }
         ),

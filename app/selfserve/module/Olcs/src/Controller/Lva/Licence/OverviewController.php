@@ -31,6 +31,7 @@ class OverviewController extends AbstractController
     public function indexAction()
     {
         $data = $this->getServiceLocator()->get('Entity\Licence')->getOverview($this->getLicenceId());
+        $data['idIndex'] = $this->getIdentifierIndex();
 
         return new LicenceOverview($data, $this->getAccessibleSections());
     }

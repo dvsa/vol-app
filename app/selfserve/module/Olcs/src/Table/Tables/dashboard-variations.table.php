@@ -14,7 +14,7 @@ return array(
             'formatter' => function ($row) {
                 return '<a href="' . $this->url->fromRoute(
                     'lva-variation',
-                    array('id' => $row['id'])
+                    array('application' => $row['id'])
                 ) . '">'.$row['id'].'</a>';
             }
         ),

@@ -61,7 +61,7 @@ trait LicenceControllerTrait
      */
     protected function getLicenceId($lva = null)
     {
-        return $this->params('id');
+        return $this->getIdentifier();
     }
 
     /**

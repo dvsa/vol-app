@@ -67,7 +67,7 @@ class PaymentSubmissionController extends AbstractController
             ->get('Entity\Task')
             ->save($task);
 
-        return $this->redirect()->toRoute('application_summary', ['id' => $applicationId]);
+        return $this->redirect()->toRoute('lva-application/summary', [$this->getIdentifierIndex() => $applicationId]);
     }
 
     public function summaryAction()
@@ -80,7 +80,7 @@ class PaymentSubmissionController extends AbstractController
             }
 
             // otherwise just assume we want to view our application summary
-            return $this->redirect()->toRoute('lva-application', ['id' => $this->getApplicationId()]);
+            return $this->redirect()->toRoute('lva-application', [$this->getIdentifierIndex() => $this->getApplicationId()]);
         }
         $form = $this->getServiceLocator()
             ->get('Helper\Form')
