@@ -110,7 +110,6 @@ class ImpoundingFields
     public $hearingDate = null;
 
     /**
-     * @Form\Required(true)
      * @Form\Attributes({"id":"piVenue","placeholder":"","class":"medium", "required":false})
      * @Form\Options({
      *     "label": "Hearing location",
@@ -122,55 +121,24 @@ class ImpoundingFields
      * })
      *
      * @Form\AllowEmpty(true)
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Validator({"name": "ValidateIf",
-     *      "options":{
-     *          "context_field": "impoundingType",
-     *          "context_values": {"impt_hearing"},
-     *          "allow_empty": false,
-     *          "validators": {
-     *              {
-     *                  "name": "ValidateIf",
-     *                  "options":{
-     *                      "context_field": "piVenueOther",
-     *                      "context_values": {""},
-     *                      "allow_empty": false,
-     *                      "validators": {
-     *                          {"name": "\Zend\Validator\NotEmpty"}
-     *                      }
-     *                  }
-     *              }
-     *          }
-     *      }
-     * })
      * @Form\Type("DynamicSelect")
      */
     public $piVenue = null;
 
     /**
-     * @Form\Required(true)
+     * @Form\Required(false)
      * @Form\Attributes({"class":"medium","id":"piVenueOther", "required":false})
      * @Form\Options({"label":"Other hearing location"})
      * @Form\AllowEmpty(true)
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("Text")
+     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "impoundingType",
      *          "context_values": {"impt_hearing"},
-     *          "allow_empty": false,
+     *          "allow_empty": true,
      *          "validators": {
-     *              {
-     *                  "name": "ValidateIf",
-     *                  "options":{
-     *                      "context_field": "piVenue",
-     *                      "context_values": {"other"},
-     *                      "allow_empty": false,
-     *                      "validators": {
-     *                          {"name": "\Zend\Validator\NotEmpty"}
-     *                      }
-     *                  }
-     *              }
+     *              {"name":"Zend\Validator\StringLength","options":{"max":255}}
      *          }
      *      }
      * })
