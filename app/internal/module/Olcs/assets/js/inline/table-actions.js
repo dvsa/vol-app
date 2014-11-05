@@ -1,4 +1,4 @@
-$(function() {
+OLCS.ready(function() {
   OLCS.tableHandler({
     table: ".table__form",
     container: ".table__form",
