@@ -308,9 +308,9 @@ trait FeesActionTrait
             $route = 'licence/fees';
             $params = ['licence' => $licenceId];
         } else {
-            $applicationId = $this->getFromRoute('applicationId');
-            $route = 'Application/fees';
-            $params = ['applicationId' => $applicationId];
+            $applicationId = $this->getFromRoute('application');
+            $route = 'lva-application/fees';
+            $params = ['application' => $applicationId];
         }
 
         if ($this->getRequest()->isXmlHttpRequest()) {

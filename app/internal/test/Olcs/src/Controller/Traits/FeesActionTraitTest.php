@@ -232,7 +232,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
             ->will(
                 $this->returnValueMap(
                     [
-                        ['applicationId', 1],
+                        ['application', 1],
                         ['licence', null],
                     ]
                 )
@@ -463,7 +463,8 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
         $post,
         $controllerName,
         $paramNameWithValue,
-        $paramNameWithNull
+        $paramNameWithNull,
+        $isXmlHttpReuest
     ) {
         $this->post = $post;
 
@@ -474,7 +475,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
 
         $this->request->expects($this->any())
             ->method('isXmlHttpRequest')
-            ->will($this->returnValue(true));
+            ->will($this->returnValue($isXmlHttpReuest));
 
         $mockUrl = $this->getMock('\StdClass', ['fromRoute']);
         $mockUrl->expects($this->any())
@@ -600,7 +601,8 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
                 ],
                 '\Olcs\Controller\Licence\LicenceController',
                 'licence',
-                'applicationId'
+                'application',
+                true
             ],
             [
                 'lfs_wr',
@@ -618,7 +620,8 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
                 ],
                 '\Olcs\Controller\Licence\LicenceController',
                 'licence',
-                'applicationId'
+                'application',
+                true
             ],
             [
                 'lfs_wr',
@@ -636,7 +639,8 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
                 ],
                 '\Olcs\Controller\Licence\LicenceController',
                 'licence',
-                'applicationId'
+                'application',
+                true
             ],
             [
                 'lfs_wr',
@@ -654,7 +658,8 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
                 ],
                 '\Olcs\Controller\Licence\LicenceController',
                 'licence',
-                'applicationId'
+                'application',
+                true
             ],
             [
                 'lfs_ot',
@@ -672,7 +677,8 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
                 ],
                 '\Olcs\Controller\Licence\LicenceController',
                 'licence',
-                'applicationId'
+                'application',
+                true
             ],
             [
                 'lfs_ot',
@@ -691,6 +697,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
                 '\Olcs\Controller\Application\ApplicationController',
                 'applicaitonId',
                 'licence',
+                true
             ],
             [
                 'lfs_wr',
@@ -709,6 +716,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
                 '\Olcs\Controller\Application\ApplicationController',
                 'applicaitonId',
                 'licence',
+                true
             ],
             [
                 'lfs_wr',
@@ -727,6 +735,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
                 '\Olcs\Controller\Application\ApplicationController',
                 'applicaitonId',
                 'licence',
+                true
             ],
             [
                 'lfs_wr',
@@ -745,6 +754,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
                 '\Olcs\Controller\Application\ApplicationController',
                 'applicaitonId',
                 'licence',
+                true
             ],
             [
                 'lfs_ot',
@@ -763,6 +773,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
                 '\Olcs\Controller\Application\ApplicationController',
                 'applicaitonId',
                 'licence',
+                false
             ],
         ];
     }

@@ -70,11 +70,11 @@ return array(
                             'licence/fees/fee_action'
                         );
                         break;
-                    case 'Application/fees':
+                    case 'lva-application/fees':
                     default:
                         $url = $this->generateUrl(
                             array('fee' => $row['id'], 'action' => 'edit-fee', 'controller' => 'ApplicationController'),
-                            'Application/fees/fee_action'
+                            'lva-application/fees/fee_action'
                         );
                 }
                 return '<a href="'
