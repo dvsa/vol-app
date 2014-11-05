@@ -6,7 +6,7 @@ namespace OlcsTest\Data\Object\Search;
  * Class SearchAbstractTest
  * @package OlcsTest\Data\Object\Search
  */
-class SearchAbstractTest extends \PHPUnit_Framework_TestCase
+abstract class SearchAbstractTest extends \PHPUnit_Framework_TestCase
 {
     protected $class = '';
 

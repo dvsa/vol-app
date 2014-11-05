@@ -1,24 +1,32 @@
 <?php
 
-$applicationJourney = include(
-    __DIR__ . '/../../../vendor/olcs/OlcsCommon/Common/config/journeys/application.journey.php'
-);
+$sectionConfig = new \Common\Service\Data\SectionConfig();
+$sections = $sectionConfig->getAllReferences();
+$applicationDetailsPages = array();
+$licenceDetailsPages = array();
+$variationDetailsPages = array();
 
-$navItems = array();
+foreach ($sections as $section) {
+    $applicationDetailsPages[] = array(
+        'id' => 'application_' . $section,
+        'label' => 'section.name.' . $section,
+        'route' => 'lva-application/' . $section,
+        'use_route_match' => true
+    );
 
-$filter = new \Zend\Filter\Word\CamelCaseToDash();
+    $licenceDetailsPages[] = array(
+        'id' => 'licence_' . $section,
+        'label' => 'section.name.' . $section,
+        'route' => 'lva-licence/' . $section,
+        'use_route_match' => true
+    );
 
-foreach ($applicationJourney['Application']['sections'] as $sectionName => $section) {
-
-    foreach ($section['subSections'] as $subSectionName => $subSection) {
-        $label = strtolower('application.' . $filter->filter($sectionName) . '.' . $filter->filter($subSectionName));
-        $navItems[] = array(
-            'id' => 'application_details_' . $sectionName . '_' . $subSectionName,
-            'label' => $label,
-            'route' => 'Application/' . $sectionName . '/' . $subSectionName,
-            'use_route_match' => true
-        );
-    }
+    $variationDetailsPages[] = array(
+        'id' => 'variation_' . $section,
+        'label' => 'section.name.' . $section,
+        'route' => 'lva-variation/' . $section,
+        'use_route_match' => true
+    );
 }
 
 return array(
@@ -304,76 +312,15 @@ return array(
                 array(
                     'id' => 'licence',
                     'label' => 'Licence',
-                    'route' => 'licence',
+                    'route' => 'lva-licence',
                     'use_route_match' => true,
                     'pages' => array(
                         array(
                             'id' => 'licence_details_overview',
                             'label' => 'internal-licence-details-breadcrumb',
-                            'route' => 'licence/details/overview',
+                            'route' => 'lva-licence',
                             'use_route_match' => true,
-                            'pages' => array(
-                                array(
-                                    'id' => 'licence_details_type_of_licence',
-                                    'label' => 'internal-licence-details-type_of_licence',
-                                    'route' => 'licence/details/type_of_licence',
-                                    'use_route_match' => true
-                                ),
-                                array(
-                                    'id' => 'licence_details_business_details',
-                                    'label' => 'internal-licence-details-business_details',
-                                    'route' => 'licence/details/business_details',
-                                    'use_route_match' => true
-                                ),
-                                array(
-                                    'id' => 'licence_details_address',
-                                    'label' => 'internal-licence-details-address',
-                                    'route' => 'licence/details/address',
-                                    'use_route_match' => true
-                                ),
-                                array(
-                                    'id' => 'licence_details_people',
-                                    'label' => 'internal-licence-details-people',
-                                    'route' => 'licence/details/people',
-                                    'use_route_match' => true
-                                ),
-                                array(
-                                    'id' => 'licence_details_operating_centre',
-                                    'label' => 'internal-licence-details-operating_centre',
-                                    'route' => 'licence/details/operating_centre',
-                                    'use_route_match' => true
-                                ),
-                                array(
-                                    'id' => 'licence_details_transport_manager',
-                                    'label' => 'internal-licence-details-transport_manager',
-                                    'route' => 'licence/details/transport_manager',
-                                    'use_route_match' => true
-                                ),
-                                array(
-                                    'id' => 'licence_details_vehicle',
-                                    'label' => 'internal-licence-details-vehicle',
-                                    'route' => 'licence/details/vehicle',
-                                    'use_route_match' => true
-                                ),
-                                array(
-                                    'id' => 'licence_details_safety',
-                                    'label' => 'internal-licence-details-safety',
-                                    'route' => 'licence/details/safety',
-                                    'use_route_match' => true
-                                ),
-                                array(
-                                    'id' => 'licence_details_condition_undertaking',
-                                    'label' => 'internal-licence-details-condition_undertaking',
-                                    'route' => 'licence/details/condition_undertaking',
-                                    'use_route_match' => true
-                                ),
-                                array(
-                                    'id' => 'licence_details_taxi_phv',
-                                    'label' => 'internal-licence-details-taxi_phv',
-                                    'route' => 'licence/details/taxi_phv',
-                                    'use_route_match' => true
-                                )
-                            )
+                            'pages' => $licenceDetailsPages
                         ),
                         array(
                             'id' => 'licence_bus',
@@ -569,48 +516,69 @@ return array(
             )
         ),
         array(
+            'id' => 'create_application',
+            'label' => 'Create application',
+            'route' => 'create_application',
+            'use_route_match' => true
+        ),
+        array(
             'id' => 'application',
             'label' => 'Application',
-            'route' => 'Application',
+            'route' => 'lva-application',
             'use_route_match' => true,
             'pages' => array(
                 array(
                     'id' => 'application_details',
                     'label' => 'Application details',
-                    'route' => 'Application',
+                    'route' => 'lva-application',
                     'use_route_match' => true,
-                    'pages' => $navItems
+                    'pages' => $applicationDetailsPages
                 ),
                 array(
                     'id' => 'application_case',
                     'label' => 'Cases',
-                    'route' => 'Application/case',
+                    'route' => 'lva-application/case',
                     'use_route_match' => true
                 ),
                 array(
                     'id' => 'application_environmental',
                     'label' => 'Environmental',
-                    'route' => 'Application/environmental',
+                    'route' => 'lva-application/environmental',
                     'use_route_match' => true
                 ),
                 array(
                     'id' => 'application_document',
                     'label' => 'Docs & attachments',
-                    'route' => 'Application/document',
+                    'route' => 'lva-application/document',
                     'use_route_match' => true
                 ),
                 array(
                     'id' => 'application_processing',
                     'label' => 'Processing',
-                    'route' => 'Application/processing',
+                    'route' => 'lva-application/processing',
                     'use_route_match' => true
                 ),
                 array(
                     'id' => 'application_fee',
                     'label' => 'Fees',
-                    'route' => 'Application/fees',
+                    'route' => 'lva-application/fees',
                     'use_route_match' => true
-                ),
+                )
+            )
+        ),
+        array(
+            'id' => 'variation',
+            'label' => 'Variation application',
+            'route' => 'lva-variation',
+            'use_route_match' => true,
+            'pages' => array(
+                array(
+                    'id' => 'variation_details',
+                    'label' => 'Variation details',
+                    'route' => 'lva-variation',
+                    'use_route_match' => true,
+                    'pages' => $variationDetailsPages
+                )
             )
         )
     )

@@ -9,7 +9,7 @@ return array(
             __DIR__ . '/../src/Table/Tables/'
         )
     ),
-        'controllers' => array(
+    'controllers' => array(
         'abstract_factories' => array(
             'Olcs\Controller\Cases\CaseControllerAbstractFactory'
         ),
@@ -68,11 +68,11 @@ return array(
             'LicenceDetailsDiscsPsvController' => 'Olcs\Controller\Licence\Details\DiscsPsvController',
             'LicenceDetailsSafetyController' => 'Olcs\Controller\Licence\Details\SafetyController',
             'LicenceDetailsConditionUndertakingController' =>
-                'Olcs\Controller\Licence\Details\ConditionUndertakingController',
+            'Olcs\Controller\Licence\Details\ConditionUndertakingController',
             'LicenceDetailsTaxiPhvController' => 'Olcs\Controller\Licence\Details\TaxiPhvController',
             'ApplicationController' => 'Olcs\Controller\Application\ApplicationController',
             'LicenceProcessingOverviewController' =>
-                'Olcs\Controller\Licence\Processing\LicenceProcessingOverviewController',
+            'Olcs\Controller\Licence\Processing\LicenceProcessingOverviewController',
             'LicenceProcessingTasksController' => 'Olcs\Controller\Licence\Processing\LicenceProcessingTasksController',
             'LicenceProcessingNoteController' => 'Olcs\Controller\Licence\Processing\LicenceProcessingNoteController',
             'BusController' => 'Olcs\Controller\Bus\BusController',
@@ -93,6 +93,59 @@ return array(
             'BusProcessingNoteController' => 'Olcs\Controller\Bus\Processing\BusProcessingNoteController',
             'BusFeesController' => 'Olcs\Controller\Bus\Fees\BusFeesController',
             'BusFeesPlaceholderController' => 'Olcs\Controller\Bus\Fees\BusFeesPlaceholderController',
+            'CaseProcessingController' => 'Olcs\Controller\Cases\Processing\ProcessingController',
+            'CaseNoteController' => 'Olcs\Controller\Cases\Processing\NoteController',
+            'CaseDecisionsController' => 'Olcs\Controller\Cases\Processing\DecisionsController',
+            'CaseRevokeController' => 'Olcs\Controller\Cases\Processing\RevokeController',
+            'LvaApplication' => 'Olcs\Controller\Lva\Application\OverviewController',
+            'LvaApplication/TypeOfLicence' => 'Olcs\Controller\Lva\Application\TypeOfLicenceController',
+            'LvaApplication/BusinessType' => 'Olcs\Controller\Lva\Application\BusinessTypeController',
+            'LvaApplication/BusinessDetails' => 'Olcs\Controller\Lva\Application\BusinessDetailsController',
+            'LvaApplication/Addresses' => 'Olcs\Controller\Lva\Application\AddressesController',
+            'LvaApplication/People' => 'Olcs\Controller\Lva\Application\PeopleController',
+            'LvaApplication/OperatingCentres' => 'Olcs\Controller\Lva\Application\OperatingCentresController',
+            'LvaApplication/FinancialEvidence' => 'Olcs\Controller\Lva\Application\FinancialEvidenceController',
+            'LvaApplication/TransportManagers' => 'Olcs\Controller\Lva\Application\TransportManagersController',
+            'LvaApplication/Vehicles' => 'Olcs\Controller\Lva\Application\VehiclesController',
+            'LvaApplication/VehiclesPsv' => 'Olcs\Controller\Lva\Application\VehiclesPsvController',
+            'LvaApplication/Safety' => 'Olcs\Controller\Lva\Application\SafetyController',
+            'LvaApplication/FinancialHistory' => 'Olcs\Controller\Lva\Application\FinancialHistoryController',
+            'LvaApplication/LicenceHistory' => 'Olcs\Controller\Lva\Application\LicenceHistoryController',
+            'LvaApplication/ConvictionsPenalties' => 'Olcs\Controller\Lva\Application\ConvictionsPenaltiesController',
+            'LvaApplication/TaxiPhv' => 'Olcs\Controller\Lva\Application\TaxiPhvController',
+            'LvaApplication/ConditionsUndertakings'
+                => 'Olcs\Controller\Lva\Application\ConditionsUndertakingsController',
+            'LvaApplication/VehiclesDeclarations' => 'Olcs\Controller\Lva\Application\VehiclesDeclarationsController',
+            'LvaLicence' => 'Olcs\Controller\Lva\Licence\OverviewController',
+            'LvaLicence/TypeOfLicence' => 'Olcs\Controller\Lva\Licence\TypeOfLicenceController',
+            'LvaLicence/BusinessType' => 'Olcs\Controller\Lva\Licence\BusinessTypeController',
+            'LvaLicence/BusinessDetails' => 'Olcs\Controller\Lva\Licence\BusinessDetailsController',
+            'LvaLicence/Addresses' => 'Olcs\Controller\Lva\Licence\AddressesController',
+            'LvaLicence/People' => 'Olcs\Controller\Lva\Licence\PeopleController',
+            'LvaLicence/OperatingCentres' => 'Olcs\Controller\Lva\Licence\OperatingCentresController',
+            'LvaLicence/TransportManagers' => 'Olcs\Controller\Lva\Licence\TransportManagersController',
+            'LvaLicence/Vehicles' => 'Olcs\Controller\Lva\Licence\VehiclesController',
+            'LvaLicence/VehiclesPsv' => 'Olcs\Controller\Lva\Licence\VehiclesPsvController',
+            'LvaLicence/Safety' => 'Olcs\Controller\Lva\Licence\SafetyController',
+            'LvaLicence/CommunityLicences' => 'Olcs\Controller\Lva\Licence\CommunityLicencesController',
+            'LvaLicence/TaxiPhv' => 'Olcs\Controller\Lva\Licence\TaxiPhvController',
+            'LvaLicence/Discs' => 'Olcs\Controller\Lva\Licence\DiscsController',
+            'LvaLicence/ConditionsUndertakings' => 'Olcs\Controller\Lva\Licence\ConditionsUndertakingsController',
+            'LvaVariation' => 'Olcs\Controller\Lva\Variation\OverviewController',
+            'LvaVariation/TypeOfLicence' => 'Olcs\Controller\Lva\Variation\TypeOfLicenceController',
+            'LvaVariation/BusinessType' => 'Olcs\Controller\Lva\Variation\BusinessTypeController',
+            'LvaVariation/BusinessDetails' => 'Olcs\Controller\Lva\Variation\BusinessDetailsController',
+            'LvaVariation/Addresses' => 'Olcs\Controller\Lva\Variation\AddressesController',
+            'LvaVariation/People' => 'Olcs\Controller\Lva\Variation\PeopleController',
+            'LvaVariation/OperatingCentres' => 'Olcs\Controller\Lva\Variation\OperatingCentresController',
+            'LvaVariation/TransportManagers' => 'Olcs\Controller\Lva\Variation\TransportManagersController',
+            'LvaVariation/Vehicles' => 'Olcs\Controller\Lva\Variation\VehiclesController',
+            'LvaVariation/VehiclesPsv' => 'Olcs\Controller\Lva\Variation\VehiclesPsvController',
+            'LvaVariation/Safety' => 'Olcs\Controller\Lva\Variation\SafetyController',
+            'LvaVariation/CommunityLicences' => 'Olcs\Controller\Lva\Variation\CommunityLicencesController',
+            'LvaVariation/TaxiPhv' => 'Olcs\Controller\Lva\Variation\TaxiPhvController',
+            'LvaVariation/Discs' => 'Olcs\Controller\Lva\Variation\DiscsController',
+            'LvaVariation/ConditionsUndertakings' => 'Olcs\Controller\Lva\Variation\ConditionsUndertakingsController',
         )
     ),
     'view_manager' => array(
@@ -102,9 +155,9 @@ return array(
         'not_found_template' => 'error/404',
         'exception_template' => 'error/index',
         'template_map' => array(
-            'layout/layout'           => __DIR__ . '/../view/layout/base.phtml',
-            'error/404'               => __DIR__ . '/../view/error/404.phtml',
-            'error/index'             => __DIR__ . '/../view/error/index.phtml'
+            'layout/layout' => __DIR__ . '/../view/layout/base.phtml',
+            'error/404' => __DIR__ . '/../view/error/404.phtml',
+            'error/index' => __DIR__ . '/../view/error/index.phtml'
         ),
         'template_path_stack' => array(
             'olcs' => dirname(__DIR__) . '/view',
@@ -116,10 +169,10 @@ return array(
     ),
     'view_helpers' => array(
         'invokables' => array(
-            'pageTitle'    => 'Olcs\View\Helper\PageTitle',
+            'pageTitle' => 'Olcs\View\Helper\PageTitle',
             'pageSubtitle' => 'Olcs\View\Helper\PageSubtitle',
             'tableFilters' => 'Olcs\View\Helper\TableFilters',
-            'piListData'   => 'Olcs\View\Helper\PiListData',
+            'piListData' => 'Olcs\View\Helper\PiListData',
             'formSubmissionSections' => 'Olcs\Form\View\Helper\SubmissionSections',
             'submissionSectionDetails' => 'Olcs\View\Helper\SubmissionSectionDetails',
             'markers' => 'Olcs\View\Helper\Markers',
@@ -155,7 +208,7 @@ return array(
             'NavigationFactory' => 'Olcs\Service\NavigationFactory',
             'RouteParamsListener' => 'Olcs\Listener\RouteParams'
         ],
-        'invokables' =>[
+        'invokables' => [
             'Olcs\Service\Marker\MarkerPluginManager' => 'Olcs\Service\Marker\MarkerPluginManager',
             'Olcs\Service\NavigationFactory' => 'Olcs\Service\NavigationFactory',
             'Olcs\Listener\RouteParams' => 'Olcs\Listener\RouteParams',
@@ -196,7 +249,7 @@ return array(
             )
         )
     ),
-    'form_elements' =>[
+    'form_elements' => [
         'factories' => [
             'PublicInquiryReason' => 'Olcs\Form\Element\PublicInquiryReasonFactory',
             'SubmissionSections' => 'Olcs\Form\Element\SubmissionSectionsFactory',
@@ -227,7 +280,5 @@ return array(
             'Olcs\Service\Data\ImpoundingLegislation' => 'Olcs\Service\Data\ImpoundingLegislation',
             'Olcs\Service\Data\PiVenue' => 'Olcs\Service\Data\PiVenue',
         ]
-
     ]
-
 );

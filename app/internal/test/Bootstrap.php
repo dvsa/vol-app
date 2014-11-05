@@ -14,7 +14,7 @@ chdir(dirname(__DIR__));
  */
 class Bootstrap
 {
-    protected static $serviceManager;
+    protected static $config = array();
 
     public static function init()
     {
@@ -22,16 +22,19 @@ class Bootstrap
         $loader = static::initAutoloader();
 
         $loader->addPsr4('OlcsTest\\', __DIR__ . '/Olcs/src');
-        $loader->addPsr4(
-            'CommonTest\\',
-            dirname(__DIR__) . '/vendor/olcs/OlcsCommon/application_test/Common/src/Common'
-        );
 
         // Grab the application config
         $config = include dirname(__DIR__) . '/config/application.config.php';
 
+        self::$config = $config;
+
+        self::getServiceManager();
+    }
+
+    public static function getServiceManager()
+    {
         $serviceManager = new ServiceManager(new ServiceManagerConfig());
-        $serviceManager->setService('ApplicationConfig', $config);
+        $serviceManager->setService('ApplicationConfig', self::$config);
         $serviceManager->get('ModuleManager')->loadModules();
 
         // Mess up the backend, so any real rest calls will fail
@@ -41,12 +44,7 @@ class Bootstrap
         $serviceManager->setService('Config', $config);
         $serviceManager->setAllowOverride(false);
 
-        static::$serviceManager = $serviceManager;
-    }
-
-    public static function getServiceManager()
-    {
-        return static::$serviceManager;
+        return $serviceManager;
     }
 
     protected static function initAutoloader()
