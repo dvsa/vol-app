@@ -214,11 +214,6 @@ return array(
             'Olcs\Listener\RouteParams' => 'Olcs\Listener\RouteParams',
         ],
         'factories' => array(
-            'ApplicationJourneyHelper' => function ($sm) {
-                $helper = new \Olcs\Helper\ApplicationJourneyHelper();
-                $helper->setServiceLocator($sm);
-                return $helper;
-            },
             'Olcs\Listener\RouteParam\Cases' => 'Olcs\Listener\RouteParam\Cases',
             'Olcs\Listener\RouteParam\Licence' => 'Olcs\Listener\RouteParam\Licence',
             'Olcs\Listener\RouteParam\Marker' => 'Olcs\Listener\RouteParam\Marker',
@@ -230,23 +225,6 @@ return array(
             'Olcs\Service\Data\Submission' => 'Olcs\Service\Data\Submission',
             'Olcs\Service\Data\Fee' => 'Olcs\Service\Data\Fee',
             'Olcs\Service\Data\Search\SearchTypeManager' => 'Olcs\Service\Data\Search\SearchTypeManagerFactory'
-        )
-    ),
-    'application_journey' => array(
-        'access_keys' => array(
-            'internal'
-        ),
-        'templates' => array(
-            'not-found' => 'journey/not-found',
-            'navigation' => 'journey/application/navigation',
-            'main' => 'journey/application/main',
-            'layout' => 'journey/application/layout'
-        ),
-        'render' => array(
-            'pre-render' => array(
-                'service' => 'ApplicationJourneyHelper',
-                'method' => 'render'
-            )
         )
     ),
     'form_elements' => [
