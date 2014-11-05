@@ -3,24 +3,24 @@
     "description": "OLCS Internal Web Site",
     "repositories": [
         {
-            "url": "git@gitlab.clb.npm:olcs/olcs-common.git",
-            "type": "vcs"
+            "type": "vcs",
+            "url": "git@gitlab.clb.npm:olcs/olcs-common.git"
         },
         {
             "type": "vcs",
             "url": "git@gitlab.clb.npm:sc/jackrabbit.git"
         },
         {
-            "url": "git@gitlab.clb.npm:olcs/olcs-testhelpers.git",
-            "type": "vcs"
+            "type": "vcs",
+            "url": "git@gitlab.clb.npm:olcs/olcs-testhelpers.git"
         },
         {
             "type": "vcs",
             "url": "https://github.com/MajorCaiger/phpcov.git"
         },
         {
-            "url": "git@gitlab.clb.npm:olcs/olcs-logging.git",
-            "type": "vcs"
+            "type": "vcs",
+            "url": "git@gitlab.clb.npm:olcs/olcs-logging.git"
         }
     ],
     "require": {
