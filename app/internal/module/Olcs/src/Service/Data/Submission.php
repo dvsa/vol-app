@@ -98,8 +98,11 @@ class Submission extends AbstractData
     }
 
     /**
-     * @param integer|null $id
-     * @param array|null $bundle
+     * Extracts sections from dataSnapshot, adds description from refData to returned array and comments
+     * for each section
+     *
+     * @param array $submission
+     *
      * @return array
      */
     public function extractSelectedSubmissionSectionsData($submission)
@@ -146,6 +149,10 @@ class Submission extends AbstractData
         return $sectionComments;
     }
 
+    /**
+     * Returns list of submission sections from ref data table
+     * @return array
+     */
     public function getAllSectionsRefData()
     {
         if (empty($this->allSectionsRefData)) {
@@ -157,6 +164,12 @@ class Submission extends AbstractData
         return $this->allSectionsRefData;
     }
 
+    /**
+     * Sets ref data list of submission sections
+     *
+     * @param $allSectionsRefData
+     * @return $this
+     */
     public function setAllSectionsRefData($allSectionsRefData)
     {
         $this->allSectionsRefData = $allSectionsRefData;
