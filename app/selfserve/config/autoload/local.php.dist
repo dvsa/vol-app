@@ -15,5 +15,5 @@ return array(
             'uuid' => 'uD12345',
             'workspace' => 'olcs'
         )
-    ),
+    )
 );

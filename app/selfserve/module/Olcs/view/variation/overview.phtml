@@ -1,0 +1,51 @@
+<?php
+/**
+ * @NOTE: might want to DRY up with Licence / Application Variation overview
+ * templates if maintaining three is a pain. Lots of common ground, but they're
+ * small templates so no biggie to have them separate for now
+ */
+?>
+
+<div class="page-header">
+  <div class="page-header__wrapper">
+    <h3 class="page-header__subtitle">
+        <?php echo $this->translate('application.overview.application-no'); ?> <?php echo $applicationId; ?>
+    </h3>
+    <h1><?php echo $this->translate('application.overview.title'); ?></h1>
+  </div><!-- end .page-header__wrapper -->
+  <ul class="page-header__actions">
+    <li><a href="" class="page-header__action"><?php echo $this->translate('application.print'); ?></a></li>
+    <li><a href="" class="page-header__action"><?php echo $this->translate('application.cancel'); ?></a></li>
+  </ul>
+</div>
+<div class="two-thirds">
+    <?php echo $this->flashMessengerAll(); ?>
+  <ul class="overview-navigation">
+      <?php
+      foreach ($sections as $section) {
+          echo $this->render($section);
+      }
+      ?>
+  </ul>
+</div>
+<div class="one-third sidebar">
+  <dl class="meta">
+    <dt><?php echo $this->translate('created'); ?></dt>
+    <dd><?php echo $createdOn; ?></dd>
+    <dt><?php echo $this->translate('progress'); ?></dt>
+    <dd><?php echo sprintf($this->translate('application.progress'), 'X', 'Y'); ?></dd>
+    <dt><?php echo $this->translate('status'); ?></dt>
+    <dd><?php echo $this->translate($status); ?></dd>
+  </dl>
+
+  <div class="links">
+    <h3>Applying for a new licence</h3>
+    <ul class="links-list">
+      <li class="links-list__item"><a href="">Complete your applications for a goods vehicle operator's licence</a></li>
+      <li class="links-list__item"><a href="">Advertise your application for a licence</a></li>
+      <li class="links-list__item"><a href="">Financial information</a></li>
+      <li class="links-list__item"><a href="">A guide to operator fees</a></li>
+      <li class="links-list__item"><a href="">How to draw up a maintenance contract</a></li>
+    </ul>
+  </div>
+</div>

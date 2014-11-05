@@ -1,34 +1,31 @@
 <?php
 
+$translationPrefix = 'dashboard-table-licences';
+
 return array(
     'variables' => array(
-        'title' => 'Licences'
+        'title' => $translationPrefix
     ),
     'settings' => array(),
     'attributes' => array(),
     'columns' => array(
         array(
-            'title' => '',
-            'width' => 'checkbox',
-            'format' => '{{[elements/radio]}}'
-        ),
-        array(
-            'title' => 'Licence number',
+            'title' => $translationPrefix . '-licNo',
             'name' => 'licNo',
             'formatter' => function ($row) {
                 return '<a href="' . $this->url->fromRoute(
-                    'licence/operating_centres',
-                    ['licence' => $row['id']]
-                ) . '">'.$row['licNo'].'</a>';
+                    'lva-licence',
+                    array('licence' => $row['id'])
+                ) . '">'.$row['id'].'</a>';
             }
         ),
         array(
-            'title' => 'Licence Type',
+            'title' => $translationPrefix . '-licType',
             'name' => 'type',
             'formatter' => 'Translate'
         ),
         array(
-            'title' => 'Status',
+            'title' => $translationPrefix . '-status',
             'name' => 'status',
             'formatter' => 'Translate'
         )

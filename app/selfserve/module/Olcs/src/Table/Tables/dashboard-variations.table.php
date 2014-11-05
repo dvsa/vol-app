@@ -1,6 +1,6 @@
 <?php
 
-$translationPrefix = 'dashboard-table-applications';
+$translationPrefix = 'dashboard-table-variations';
 
 return array(
     'variables' => array(
@@ -13,7 +13,7 @@ return array(
             'title' => $translationPrefix . '-appId',
             'formatter' => function ($row) {
                 return '<a href="' . $this->url->fromRoute(
-                    'lva-application',
+                    'lva-variation',
                     array('application' => $row['id'])
                 ) . '">'.$row['id'].'</a>';
             }
@@ -33,7 +33,7 @@ return array(
             'formatter' => 'Date'
         ),
         array(
-            'title' => $translationPrefix  . '-submittedDate',
+            'title' => $translationPrefix . '-submittedDate',
             'name' => 'receivedDate',
             'formatter' => 'Date'
         ),
