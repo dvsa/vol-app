@@ -5,7 +5,7 @@
             <?php $current = ($details['route'] === $currentRoute); ?>
             <li class="vertical-navigation__item <?php echo $current ? 'current' : ''; ?>">
                 <?php if (!$current) : ?>
-                    <a href="<?php echo $this->url($details['route'], ['licence' => $licenceId]); ?>">
+                    <a href="<?php echo $this->url($details['route'], ['licence' => $lvaId]); ?>">
                 <?php endif; ?>
                 <span><?php echo $this->translate('section.name.' . $reference); ?></span>
                 <?php if (!$current) : ?>

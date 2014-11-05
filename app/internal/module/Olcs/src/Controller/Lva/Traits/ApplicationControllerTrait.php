@@ -44,7 +44,11 @@ trait ApplicationControllerTrait
         $routeName = $this->getEvent()->getRouteMatch()->getMatchedRouteName();
 
         $sectionLayout = new SectionLayout(
-            array('sections' => $this->getSectionsForView(), 'currentRoute' => $routeName)
+            array(
+                'sections'     => $this->getSectionsForView(),
+                'currentRoute' => $routeName,
+                'lvaId'        => $this->getIdentifier()
+            )
         );
         $sectionLayout->addChild($content, 'content');
 

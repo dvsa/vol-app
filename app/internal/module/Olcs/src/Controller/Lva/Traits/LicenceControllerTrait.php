@@ -79,7 +79,7 @@ trait LicenceControllerTrait
             array(
                 'sections'     => $this->getSectionsForView(),
                 'currentRoute' => $routeName,
-                'licenceId'    => $this->getIdentifier()
+                'lvaId'        => $this->getIdentifier()
             )
         );
 
