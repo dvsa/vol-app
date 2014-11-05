@@ -80,32 +80,81 @@ class SubmissionSectionComment extends AbstractData
 
                 // if section type is text, generate sectionData for comment
                 if (in_array('text', $sectionConfig['section_type'])) {
-                    $sectionData = $this->getSubmissionService()->createSubmissionSection(
-                        $caseId,
-                        $sectionId,
-                        $sectionConfig
-                    );
-
-                    $dataField = $sectionConfig['data_field'];
-
-                    if (empty($dataField) || !isset($sectionData[$dataField])) {
-                        $initialComment = 'Placeholder for ' . $sectionId;
-                    } else {
-                        $initialComment = $sectionData[$dataField];
-                    }
-
+                    $sectionData =
+                        $this->getSubmissionService()->createSubmissionSection($caseId, $sectionId, $sectionConfig);
                     array_push(
                         $commentData,
                         [
                             'id' => '',
                             'submissionSection' => $sectionId,
-                            'comment' => $initialComment,
+                            'comment' => $this->getDefaultComment($sectionId, $sectionConfig, $sectionData),
                         ]
                     );
                 }
             }
         }
         return $commentData;
+    }
+
+    public function updateComments($caseId, $data)
+    {
+        $commentDataToAdd = [];
+        $commentDataToRemove = [];
+        $commentDataToKeep = [];
+        $submissionConfig = $this->getSubmissionConfig();
+        $submission = $this->getSubmissionService()->fetchSubmissionData($data['id']);
+        $existingComments = $submission['submissionSectionComments'];
+
+        // first remove any existing comments no longer required
+        foreach ($existingComments as $comment) {
+            if (!in_array($comment['submissionSection']['id'], $submissionConfig['mandatory-sections'])) {
+                if (!in_array($comment['submissionSection']['id'], $data['submissionSections']['sections'])) {
+                    // remove comment
+                    $commentDataToRemove[] = $comment['id'];
+                } else {
+                    $commentDataToKeep[] = $comment['submissionSection']['id'];
+                }
+            }
+        }
+
+        if (is_array($data['submissionSections']['sections'])) {
+            foreach ($data['submissionSections']['sections'] as $sectionId) {
+                if (!in_array($sectionId, $submissionConfig['mandatory-sections'])) {
+
+                    $sectionConfig = isset($submissionConfig['sections'][$sectionId]) ?
+                        $submissionConfig['sections'][$sectionId] : [];
+
+                    // if section type is text, generate sectionData for comment
+                    if (in_array('text', $sectionConfig['section_type']) &&
+                        !in_array($sectionId, $commentDataToKeep)
+                    ) {
+                        $sectionData =
+                            $this->getSubmissionService()->createSubmissionSection($caseId, $sectionId, $sectionConfig);
+
+                        array_push(
+                            $commentDataToAdd,
+                            [
+                                'id' => '',
+                                'submissionSection' => $sectionId,
+                                'comment' => $this->getDefaultComment($sectionId, $sectionConfig, $sectionData),
+                            ]
+                        );
+                    }
+                }
+            }
+        }
+        return ['add' => $commentDataToAdd, 'remove' => $commentDataToRemove];
+    }
+
+    private function getDefaultComment($sectionId, $sectionConfig, $sectionData) {
+        $dataField = $sectionConfig['data_field'];
+
+        if (empty($dataField) || !isset($sectionData[$dataField])) {
+            $defaultComment = 'Placeholder for ' . $sectionId;
+        } else {
+            $defaultComment = $sectionData[$dataField];
+        }
+        return $defaultComment;
     }
 
     /**

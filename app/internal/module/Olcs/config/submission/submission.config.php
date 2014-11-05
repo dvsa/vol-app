@@ -1,5 +1,11 @@
 <?php
 return array(
+    'mandatory-sections' => array(
+        'introduction',
+        'case-summary',
+        'case-outline',
+        'persons'
+    ),
     'sections' => array(
         'introduction' => array(
             'section_type' => [],
@@ -83,7 +89,8 @@ return array(
             'bundle' => 'case-summary'
         ),
         'most-serious-infringement'   => array(
-            'section_type' => ['overview'],
+            'section_type' => ['text','overview'],
+            'data_field' => '',
             'allow_comments' => true,
         ),
         'persons' => array(
@@ -101,18 +108,18 @@ return array(
             'allow_comments' => true,
         ),
         'intelligence-unit-check'   => array(
-            'section_type' => ['text'],
+            'section_type' => [],
             'data_field' => '',
             'section_editable' => false,
             'allow_comments' => true,
         ),
         'interim'   => array(
-            'section_type' => ['text'],
+            'section_type' => [],
             'data_field' => '',
             'allow_comments' => true,
         ),
         'advertisement'   => array(
-            'section_type' => ['text'],
+            'section_type' => [],
             'data_field' => '',
             'allow_comments' => true,
         ),
@@ -127,7 +134,7 @@ return array(
             'allow_comments' => true,
         ),
         'current-submissions'   => array(
-            'section_type' => ['text'],
+            'section_type' => [],
             'data_field' => '',
             'allow_comments' => true,
         ),
@@ -142,52 +149,52 @@ return array(
             'allow_comments' => true,
         ),
         'continuous-effective-control'   => array(
-            'section_type' => ['list', 'text'],
+            'section_type' => [],
             'data_field' => '',
             'allow_comments' => true,
         ),
         'fitness-and-repute'   => array(
-            'section_type' => ['text'],
+            'section_type' => [],
             'data_field' => '',
             'allow_comments' => true,
         ),
         'previous-history'   => array(
-            'section_type' => ['text'],
+            'section_type' => [],
             'data_field' => '',
             'allow_comments' => true,
         ),
         'bus-reg-app-details'   => array(
-            'section_type' => ['text'],
+            'section_type' => [],
             'data_field' => '',
             'allow_comments' => true,
         ),
         'transport-authority-comments'   => array(
-            'section_type' => ['text'],
+            'section_type' => [],
             'data_field' => '',
             'allow_comments' => true,
         ),
         'total-bus-registrations'   => array(
-            'section_type' => ['text'],
+            'section_type' => [],
             'data_field' => '',
             'allow_comments' => true,
         ),
         'local-licence-history'   => array(
-            'section_type' => ['text'],
+            'section_type' => [],
             'data_field' => '',
             'allow_comments' => true,
         ),
         'linked-mlh-history'   => array(
-            'section_type' => ['text'],
+            'section_type' => [],
             'data_field' => '',
             'allow_comments' => true,
         ),
         'registration-details'   => array(
-            'section_type' => ['text'],
+            'section_type' => [],
             'data_field' => '',
             'allow_comments' => true,
         ),
         'maintenance-tachographs-hours'   => array(
-            'section_type' => ['text'],
+            'section_type' => [],
             'data_field' => '',
             'allow_comments' => true,
         ),
@@ -235,32 +242,32 @@ return array(
             'allow_comments' => true,
         ),
         'other-issues'   => array(
-            'section_type' => ['text'],
+            'section_type' => [],
             'data_field' => '',
             'allow_comments' => true,
         ),
         'te-reports'   => array(
-            'section_type' => ['text'],
+            'section_type' => [],
             'data_field' => '',
             'allow_comments' => true,
         ),
         'site-plans'   => array(
-            'section_type' => ['text'],
+            'section_type' => [],
             'data_field' => '',
             'allow_comments' => true,
         ),
         'planning-permission'   => array(
-            'section_type' => ['text'],
+            'section_type' => [],
             'data_field' => '',
             'allow_comments' => true,
         ),
         'applicants-comments'   => array(
-            'section_type' => ['text'],
+            'section_type' => [],
             'data_field' => '',
             'allow_comments' => true,
         ),
         'visibility-access-egress-size'   => array(
-            'section_type' => ['text'],
+            'section_type' => [],
             'data_field' => '',
             'allow_comments' => true,
         ),
@@ -280,27 +287,27 @@ return array(
             'allow_comments' => true,
         ),
         'financial-information'   => array(
-            'section_type' => ['text'],
+            'section_type' => [],
             'data_field' => '',
             'allow_comments' => true,
         ),
         'maps'   => array(
-            'section_type' => ['text', 'file'],
+            'section_type' => ['file'],
             'data_field' => '',
             'allow_comments' => true,
         ),
         'waive-fee-late-fee'   => array(
-            'section_type' => ['text'],
+            'section_type' => [],
             'data_field' => '',
             'allow_comments' => true,
         ),
         'surrender'   => array(
-            'section_type' => ['text'],
+            'section_type' => [],
             'data_field' => '',
             'allow_comments' => true,
         ),
         'annex'   => array(
-            'section_type' => ['text', 'file'],
+            'section_type' => ['file'],
             'data_field' => '',
             'allow_comments' => true,
         )

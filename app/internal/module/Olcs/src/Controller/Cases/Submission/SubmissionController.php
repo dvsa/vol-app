@@ -151,27 +151,38 @@ class SubmissionController extends OlcsController\CrudAbstract
         $data['dataSnapshot'] = json_encode($snapshotData);
         $data['submissionType'] = $data['submissionSections']['submissionType'];
 
-        // Generate comments for all sections that are configured as type = 'text'
-        $submissionSectionComments = $commentService->generateComments($caseId, $data);
-
         // save submission entity
         $result = $this->callParentSave($data);
 
         if (isset($result['id'])) {
+            // insert
             $data['id'] = $result['id'];
+
+            // Generate comments for all sections that are configured as type = 'text'
+            $submissionSectionComments = $commentService->generateComments($caseId, $data);
+
             // insert comments
             foreach ($submissionSectionComments as $comment) {
                 $comment['submission'] = $data['id'];
                 $this->makeRestCall('SubmissionSectionComment', 'POST', $comment);
             }
+        } else {
+            // update
+            // Generate comments for all sections that are configured as type = 'text'
+            $commentResult = $commentService->updateComments($caseId, $data);
+
+            // insert new comments
+            foreach ($commentResult['add'] as $comment) {
+                $comment['submission'] = $data['id'];
+                $this->makeRestCall('SubmissionSectionComment', 'POST', $comment);
+            }
+            // remove unwanted comments
+            foreach ($commentResult['remove'] as $commentId) {
+                $this->makeRestCall('SubmissionSectionComment', 'DELETE', ['id' => $commentId]);
+            }
         }
 
         return $data;
-    }
-
-    public function updateSubmission($params, $data)
-    {
-        // TODO
     }
 
     /**
