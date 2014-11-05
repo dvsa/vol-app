@@ -24,7 +24,57 @@ class RouteParams implements EventManagerAwareInterface, ListenerAggregateInterf
     /**
      * @var array
      */
+    protected $triggeredEvents = [];
+
+    /**
+     * @var array
+     */
     protected $params = [];
+
+    /**
+     * @param array $params
+     * @return $this
+     */
+    public function setParams($params)
+    {
+        $this->params = $params;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getParams()
+    {
+        return $this->params;
+    }
+
+    /**
+     * Adds event to the list of triggered events
+     *
+     * @param string $event
+     * @return $this
+     */
+    public function addTriggeredEvent($event)
+    {
+        $this->triggeredEvents[$event] = true;
+        return $this;
+    }
+
+    /**
+     * Checks whether an event has already been triggered
+     *
+     * @param string $event
+     * @return bool
+     */
+    public function hasEventBeenTriggered($event)
+    {
+        if (isset($this->triggeredEvents[$event])) {
+            return true;
+        }
+
+        return false;
+    }
 
     /**
      * Attach one or more listeners
@@ -46,9 +96,9 @@ class RouteParams implements EventManagerAwareInterface, ListenerAggregateInterf
      */
     public function onDispatch(MvcEvent $e)
     {
-        $this->params = $e->getRouteMatch()->getParams();
+        $this->setParams($e->getRouteMatch()->getParams());
 
-        foreach ($this->params as $key => $value) {
+        foreach ($this->getParams() as $key => $value) {
             $this->trigger($key, $value);
         }
     }
@@ -59,8 +109,14 @@ class RouteParams implements EventManagerAwareInterface, ListenerAggregateInterf
      */
     public function trigger($event, $value)
     {
+        if ($this->hasEventBeenTriggered($event)) {
+            return false;
+        }
+
+        $this->addTriggeredEvent($event);
+
         $e = new RouteParam();
-        $e->setContext($this->params)
+        $e->setContext($this->getParams())
           ->setValue($value)
           ->setTarget($this);
 

@@ -153,12 +153,6 @@ class PublicInquiryControllerTest extends AbstractHttpControllerTestCase
         $this->sut->setPluginManager($mockPluginManager);
 
         $placeholder = new \Zend\View\Helper\Placeholder();
-        $placeholder->getContainer('pageTitle')->set('foo1');
-        $placeholder->getContainer('pageTitle')->append('foo2');
-        $placeholder->getContainer('pageTitle')->append('foo3');
-        $placeholder->getContainer('pageTitle')->append('foo4');
-        $placeholder->getContainer('pageSubtitle')->set('foo1');
-        $placeholder->getContainer('pageSubtitle')->append('foo2');
 
         $mockViewHelperManager = new \Zend\View\HelperPluginManager();
         $mockViewHelperManager->setService('placeholder', $placeholder);
@@ -178,13 +172,6 @@ class PublicInquiryControllerTest extends AbstractHttpControllerTestCase
             $mockPi['Results'][0],
             $mockViewHelperManager->get('placeholder')->getContainer('pi')->getValue()
         );
-
-        $this->assertTrue($placeholder->getContainer('pageTitle')->offsetExists(0));
-        $this->assertFalse($placeholder->getContainer('pageTitle')->offsetExists(1));
-        $this->assertTrue($placeholder->getContainer('pageTitle')->offsetExists(2));
-        $this->assertFalse($placeholder->getContainer('pageTitle')->offsetExists(3));
-        $this->assertTrue($placeholder->getContainer('pageSubtitle')->offsetExists(0));
-        $this->assertFalse($placeholder->getContainer('pageSubtitle')->offsetExists(1));
     }
 
     public function testPostEditDetailsActionPiSet()
@@ -237,12 +224,6 @@ class PublicInquiryControllerTest extends AbstractHttpControllerTestCase
         $this->sut->setPluginManager($mockPluginManager);
 
         $placeholder = new \Zend\View\Helper\Placeholder();
-        $placeholder->getContainer('pageTitle')->set('foo1');
-        $placeholder->getContainer('pageTitle')->append('foo2');
-        $placeholder->getContainer('pageTitle')->append('foo3');
-        $placeholder->getContainer('pageTitle')->append('foo4');
-        $placeholder->getContainer('pageSubtitle')->set('foo1');
-        $placeholder->getContainer('pageSubtitle')->append('foo2');
 
         $mockViewHelperManager = new \Zend\View\HelperPluginManager();
         $mockViewHelperManager->setService('placeholder', $placeholder);
@@ -309,12 +290,6 @@ class PublicInquiryControllerTest extends AbstractHttpControllerTestCase
         $this->sut->setPluginManager($mockPluginManager);
 
         $placeholder = new \Zend\View\Helper\Placeholder();
-        $placeholder->getContainer('pageTitle')->set('foo1');
-        $placeholder->getContainer('pageTitle')->append('foo2');
-        $placeholder->getContainer('pageTitle')->append('foo3');
-        $placeholder->getContainer('pageTitle')->append('foo4');
-        $placeholder->getContainer('pageSubtitle')->set('foo1');
-        $placeholder->getContainer('pageSubtitle')->append('foo2');
 
         $mockViewHelperManager = new \Zend\View\HelperPluginManager();
         $mockViewHelperManager->setService('placeholder', $placeholder);
