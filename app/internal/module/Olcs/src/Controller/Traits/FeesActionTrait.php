@@ -274,7 +274,7 @@ trait FeesActionTrait
         $feesService = $this->getServiceLocator()->get('Olcs\Service\Data\Fee');
         $feesService->updateFee($data);
         if ($message) {
-            $this->getHelperService('FlashMessengerHelper')->addSuccessMessage($message);
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage($message);
         }
         $this->redirectToList();
     }
@@ -313,8 +313,12 @@ trait FeesActionTrait
             $params = ['applicationId' => $applicationId];
         }
 
-        $data = ['status' => 302, 'location' => $this->url()->fromRoute($route, $params)];
-        $this->getResponse()->getHeaders()->addHeaders(['Content-Type' => 'application/json']);
-        $this->getResponse()->setContent(Json::encode($data));
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $data = ['status' => 302, 'location' => $this->url()->fromRoute($route, $params)];
+            $this->getResponse()->getHeaders()->addHeaders(['Content-Type' => 'application/json']);
+            $this->getResponse()->setContent(Json::encode($data));
+            return;
+        }
+        $this->redirect()->toRoute($route, $params);
     }
 }
