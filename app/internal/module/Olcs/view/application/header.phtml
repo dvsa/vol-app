@@ -1,0 +1,28 @@
+<div class="page-header">
+  <div class="page-header__wrapper">
+    <div class="user-header">
+        <?php
+        echo $this->navigation('navigation')->breadcrumbs()->setMinDepth(0)
+            ->setPartial(array('layout/partials/breadcrumbs.phtml', 'Olcs'));
+        ?>
+
+      <ul class="user-menu">
+        <li class="user-menu__item">Sam Quayle:</li>
+        <li class="user-menu__item"><a href="/styleguides/selfserve/">My settings</a></li>
+        <li class="user-menu__item"><a href="">Sign out</a></li>
+      </ul>
+    </div><!-- user-header -->
+
+    <?php if (!empty($applicationId)) : ?>
+
+    <h1><?php
+        if (!empty($licNo)) {
+            ?><a href="<?php echo $this->url('lva-licence', array('licence' => $licenceId)); ?>"><?php echo $licNo; ?></a> / <?php
+      }
+      echo $applicationId;
+      ?></h1>
+    <h3 class="page-header__subtitle"><?php echo $companyName; ?>  <span class="page-header__status suspended"><?php echo $this->translate($status); ?></span></h3>
+    <?php endif; ?>
+
+  </div><!-- end .page-header__wrapper-->
+</div>

@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<phpunit bootstrap="Bootstrap.php" colors="true" stopOnFailure="false" syntaxCheck="true" strict="true">
+<phpunit bootstrap="Bootstrap.php" colors="true" stopOnFailure="true" syntaxCheck="true" strict="true">
     <testsuites>
         <testsuite name="OLCS Internal Application">
             <directory>./</directory>
-            <directory>../vendor/olcs/OlcsCommon/application_test/</directory>
         </testsuite>
     </testsuites>
     <filter>

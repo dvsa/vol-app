@@ -53,4 +53,18 @@ class RouteParamsTest extends TestCase
 
         $sut->onDispatch($mockEvent);
     }
+
+    public function testEventMatchedOnlyOnce()
+    {
+        $sut = new RouteParams();
+
+        $event = 'event';
+        $value = 'value';
+
+        $sut->addTriggeredEvent($event);
+
+        $sut->setParams([$event => $value]);
+
+        $this->assertEquals(false, $sut->trigger($event, $value));
+    }
 }

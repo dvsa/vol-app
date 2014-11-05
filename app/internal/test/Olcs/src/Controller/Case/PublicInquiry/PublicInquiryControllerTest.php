@@ -10,8 +10,6 @@ namespace OlcsTest\Controller;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use Mockery as m;
-use Zend\Http\Request;
-use Zend\Http\Response;
 use \Olcs\TestHelpers\ControllerPluginManagerHelper;
 use \Olcs\TestHelpers\ControllerRouteMatchHelper;
 
@@ -66,13 +64,8 @@ class PublicInquiryControllerTest extends AbstractHttpControllerTestCase
         $mockDataService = m::mock('Common\Service\Helper\DataHelperService');
         $mockDataService->shouldReceive('processDataMap')->andReturn([]);
 
-        $mockHelperService = m::mock('Common\Service\Helper\HelperServiceFactory');
-        $mockHelperService->shouldReceive('getHelperService')
-            ->with('DataHelper')
-            ->andReturn($mockDataService);
-
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
-        $mockSl->shouldReceive('get')->with('HelperService')->andReturn($mockHelperService);
+        $mockSl->shouldReceive('get')->with('Helper\Data')->andReturn($mockDataService);
 
         $this->sut->setServiceLocator($mockSl);
 
@@ -99,9 +92,7 @@ class PublicInquiryControllerTest extends AbstractHttpControllerTestCase
         $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn($mockPi);
 
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
-        $mockServiceManager->shouldReceive('get')->with('HelperService')->andReturnSelf();
-        $mockServiceManager->shouldReceive('getHelperService')->with('RestHelper')->andReturn($mockRestHelper);
-        $mockServiceManager->shouldReceive('get->getHelperService')->with('RestService')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
 
         $placeholder = new \Zend\View\Helper\Placeholder();
 
@@ -144,9 +135,7 @@ class PublicInquiryControllerTest extends AbstractHttpControllerTestCase
         $mockSlaService->shouldReceive('fetchBusRules')->withAnyArgs()->andReturn([]);
 
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
-        $mockServiceManager->shouldReceive('get')->with('HelperService')->andReturnSelf();
-        $mockServiceManager->shouldReceive('getHelperService')->with('RestHelper')->andReturn($mockRestHelper);
-        $mockServiceManager->shouldReceive('get->getHelperService')->with('RestService')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
         $mockServiceManager->shouldReceive('get')->with('Common\Service\Data\Sla')->andReturn($mockSlaService);
 
         $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
@@ -164,12 +153,6 @@ class PublicInquiryControllerTest extends AbstractHttpControllerTestCase
         $this->sut->setPluginManager($mockPluginManager);
 
         $placeholder = new \Zend\View\Helper\Placeholder();
-        $placeholder->getContainer('pageTitle')->set('foo1');
-        $placeholder->getContainer('pageTitle')->append('foo2');
-        $placeholder->getContainer('pageTitle')->append('foo3');
-        $placeholder->getContainer('pageTitle')->append('foo4');
-        $placeholder->getContainer('pageSubtitle')->set('foo1');
-        $placeholder->getContainer('pageSubtitle')->append('foo2');
 
         $mockViewHelperManager = new \Zend\View\HelperPluginManager();
         $mockViewHelperManager->setService('placeholder', $placeholder);
@@ -189,13 +172,6 @@ class PublicInquiryControllerTest extends AbstractHttpControllerTestCase
             $mockPi['Results'][0],
             $mockViewHelperManager->get('placeholder')->getContainer('pi')->getValue()
         );
-
-        $this->assertTrue($placeholder->getContainer('pageTitle')->offsetExists(0));
-        $this->assertFalse($placeholder->getContainer('pageTitle')->offsetExists(1));
-        $this->assertTrue($placeholder->getContainer('pageTitle')->offsetExists(2));
-        $this->assertFalse($placeholder->getContainer('pageTitle')->offsetExists(3));
-        $this->assertTrue($placeholder->getContainer('pageSubtitle')->offsetExists(0));
-        $this->assertFalse($placeholder->getContainer('pageSubtitle')->offsetExists(1));
     }
 
     public function testPostEditDetailsActionPiSet()
@@ -219,9 +195,7 @@ class PublicInquiryControllerTest extends AbstractHttpControllerTestCase
         $mockSlaService->shouldReceive('fetchBusRules')->withAnyArgs()->andReturn([]);
 
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
-        $mockServiceManager->shouldReceive('get')->with('HelperService')->andReturnSelf();
-        $mockServiceManager->shouldReceive('getHelperService')->with('RestHelper')->andReturn($mockRestHelper);
-        $mockServiceManager->shouldReceive('get->getHelperService')->with('RestService')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
         $mockServiceManager->shouldReceive('get')->with('Common\Service\Data\Sla')->andReturn($mockSlaService);
 
         $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
@@ -250,12 +224,6 @@ class PublicInquiryControllerTest extends AbstractHttpControllerTestCase
         $this->sut->setPluginManager($mockPluginManager);
 
         $placeholder = new \Zend\View\Helper\Placeholder();
-        $placeholder->getContainer('pageTitle')->set('foo1');
-        $placeholder->getContainer('pageTitle')->append('foo2');
-        $placeholder->getContainer('pageTitle')->append('foo3');
-        $placeholder->getContainer('pageTitle')->append('foo4');
-        $placeholder->getContainer('pageSubtitle')->set('foo1');
-        $placeholder->getContainer('pageSubtitle')->append('foo2');
 
         $mockViewHelperManager = new \Zend\View\HelperPluginManager();
         $mockViewHelperManager->setService('placeholder', $placeholder);
@@ -293,9 +261,7 @@ class PublicInquiryControllerTest extends AbstractHttpControllerTestCase
         $mockSlaService->shouldReceive('fetchBusRules')->withAnyArgs()->andReturn([]);
 
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
-        $mockServiceManager->shouldReceive('get')->with('HelperService')->andReturnSelf();
-        $mockServiceManager->shouldReceive('getHelperService')->with('RestHelper')->andReturn($mockRestHelper);
-        $mockServiceManager->shouldReceive('get->getHelperService')->with('RestService')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
         $mockServiceManager->shouldReceive('get')->with('Common\Service\Data\Sla')->andReturn($mockSlaService);
 
         $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
@@ -324,12 +290,6 @@ class PublicInquiryControllerTest extends AbstractHttpControllerTestCase
         $this->sut->setPluginManager($mockPluginManager);
 
         $placeholder = new \Zend\View\Helper\Placeholder();
-        $placeholder->getContainer('pageTitle')->set('foo1');
-        $placeholder->getContainer('pageTitle')->append('foo2');
-        $placeholder->getContainer('pageTitle')->append('foo3');
-        $placeholder->getContainer('pageTitle')->append('foo4');
-        $placeholder->getContainer('pageSubtitle')->set('foo1');
-        $placeholder->getContainer('pageSubtitle')->append('foo2');
 
         $mockViewHelperManager = new \Zend\View\HelperPluginManager();
         $mockViewHelperManager->setService('placeholder', $placeholder);

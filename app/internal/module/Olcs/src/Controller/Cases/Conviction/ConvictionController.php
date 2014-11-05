@@ -5,14 +5,9 @@
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-
 namespace Olcs\Controller\Cases\Conviction;
 
-use Zend\View\Model\ViewModel;
-use Zend\Json\Json as Json;
 //use Olcs\Controller\Traits\DeleteActionTrait;
-use Olcs\Controller\Traits\DefendantSearchTrait;
-// Olcs
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
 
