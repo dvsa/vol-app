@@ -154,7 +154,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $this->controller->alterFormBeforeValidation($mockForm);
     }
 
-    public function testSaveNew()
+    public function testInsertSubmission()
     {
 
         $data = ['submissionSections' =>
@@ -183,7 +183,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $mockCommentService = m::mock('Olcs\Service\Data\SubmissionSectionComment');
         $mockCommentService->shouldReceive('generateComments')
             ->withAnyArgs()
-            ->andReturn([]);
+            ->andReturn($this->generateMockComment());
 
         $mockSubmissionService = m::mock('Olcs\Service\Data\Submission');
         $mockSubmissionService->shouldReceive('generateSnapshotData')
@@ -212,6 +212,89 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $result = $sut->save($data, $service);
 
         $this->assertArrayHasKey('id', $result);
+        $this->assertArrayHasKey('dataSnapshot', $result);
+        $this->assertArrayHasKey('submissionSections', $result);
+        $this->assertArrayHasKey('submissionType', $result);
+    }
+
+    public function testUpdateSubmission()
+    {
+
+        $data = [
+            'id' => 3,
+            'submissionSections' =>
+            [
+                'submissionType' => 'bar',
+                'sections' => [
+                    0 => 'section1',
+                    1 => 'section2'
+                ]
+            ]
+        ];
+        $service = 'Submission';
+
+        $mockConfig = ['submission_config' =>
+            [
+                'sections' =>
+                    [
+                        'section1' => 'foo'
+                    ]
+            ]
+        ];
+
+        $mockRestHelper = m::mock('RestHelper');
+        $mockRestHelper->shouldReceive('makeRestCall')->with(
+            'Submission',
+            'PUT',
+            m::type('array'),
+            ''
+        )->andReturnNull();
+
+        $mockRestHelper->shouldReceive('makeRestCall')->with(
+            'SubmissionSectionComment',
+            'POST',
+            m::type('array'),
+            ''
+        );
+
+        $mockRestHelper->shouldReceive('makeRestCall')->with(
+            'SubmissionSectionComment',
+            'DELETE',
+            m::type('array'),
+            ''
+        );
+
+        $mockCommentService = m::mock('Olcs\Service\Data\SubmissionSectionComment');
+        $mockCommentService->shouldReceive('updateComments')
+            ->withAnyArgs()
+            ->andReturn(['add' => $this->generateMockComment(1), 'remove' => $this->generateMockComment(2)]);
+
+        $mockSubmissionService = m::mock('Olcs\Service\Data\Submission');
+        $mockSubmissionService->shouldReceive('generateSnapshotData')
+            ->withAnyArgs()
+            ->andReturn(['sectionData']);
+        $mockSubmissionService->shouldReceive('generateSnapshotData')
+            ->withAnyArgs()
+            ->andReturn(['sectionData']);
+
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('config')->andReturn($mockConfig);
+        $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\SubmissionSectionComment')
+            ->andReturn($mockCommentService);
+        $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\Submission')
+            ->andReturn($mockSubmissionService);
+
+        $sut = new \Olcs\Controller\Cases\Submission\SubmissionController();
+        $event = $this->routeMatchHelper->getMockRouteMatch(array('controller' => 'submission'));
+        $sut->setEvent($event);
+
+        $sut->getEvent()->getRouteMatch()->setParam('case', 24);
+
+        $sut->setServiceLocator($mockServiceManager);
+
+        $result = $sut->save($data, $service);
+
         $this->assertArrayHasKey('dataSnapshot', $result);
         $this->assertArrayHasKey('submissionSections', $result);
         $this->assertArrayHasKey('submissionType', $result);
@@ -366,5 +449,16 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
                 )
             )
         );
+    }
+
+    private function generateMockComment($id = '')
+    {
+        return [
+            0 => [
+                'id' => $id,
+                'submissionSection' => 'foo',
+                'comment' => 'bar'
+            ]
+        ];
     }
 }
