@@ -318,12 +318,4 @@ trait FeesActionTrait
         }
         $this->redirect()->toRoute($route, $params);
     }
-
-    /**
-     * No-op that is overridden in the implementing controller
-     */
-    protected function render($view)
-    {
-        return $view;
-    }
 }
