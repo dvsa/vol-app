@@ -159,23 +159,6 @@ class SubmissionSectionComment extends AbstractData
     }
 
     /**
-     * @param object $refDataService
-     */
-    public function setRefDataService($refDataService)
-    {
-        $this->refDataService = $refDataService;
-        return $this;
-    }
-
-    /**
-     * @return object
-     */
-    public function getRefDataService()
-    {
-        return $this->refDataService;
-    }
-
-    /**
      * @param integer $id
      * @return $this
      */
