@@ -144,6 +144,7 @@ class PublicInquiryRegisterDecisionMain
      * @Form\Required(false)
      * @Form\Type("DateSelect")
      * @Form\Filter({"name":"DateSelectNullifier"})
+     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $decisionDate = null;
@@ -158,6 +159,7 @@ class PublicInquiryRegisterDecisionMain
      * @Form\Required(false)
      * @Form\Type("DateSelect")
      * @Form\Filter({"name":"DateSelectNullifier"})
+     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $notificationDate = null;

@@ -223,6 +223,7 @@ return array(
             'Olcs\Service\Data\User' => 'Olcs\Service\Data\User',
             'Olcs\Service\Data\PresidingTc' => 'Olcs\Service\Data\PresidingTc',
             'Olcs\Service\Data\Submission' => 'Olcs\Service\Data\Submission',
+            'Olcs\Service\Data\SubmissionSectionComment' => 'Olcs\Service\Data\SubmissionSectionComment',
             'Olcs\Service\Data\Fee' => 'Olcs\Service\Data\Fee',
             'Olcs\Service\Data\Search\SearchTypeManager' => 'Olcs\Service\Data\Search\SearchTypeManagerFactory'
         )

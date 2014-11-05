@@ -3,6 +3,13 @@
     <?php echo $this->form($this->form); ?>
 </div>
 <div class="three-fifths">
+    <?php
+    echo $this->flashMessenger()
+        ->setMessageOpenFormat('<div%s><div class="notice-container"><div class="notice--success">')
+        ->setMessageSeparatorString('</div></div><div class="notice-container"><div class="notice-info">')
+        ->setMessageCloseString('</div></div></div>')
+        ->render('success');
+    ?>
     <h4><?php echo $this->translate('internal-licence-fees-fees'); ?></h4>
     <?php echo $this->table; ?>
 </div>

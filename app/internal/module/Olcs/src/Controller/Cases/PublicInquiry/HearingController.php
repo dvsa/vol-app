@@ -164,6 +164,53 @@ class HearingController extends OlcsController\CrudAbstract
             $data['fields']['adjournedDate'] = null;
         }
 
+        $this->addTask($data);
+
         return parent::processSave($data);
+    }
+
+    public function addTask(array $data)
+    {
+        if (isset($data['fields']) && is_array($data['fields'])) {
+            $data = $data['fields'];
+        }
+
+        if ($data['isAdjourned'] == 'Y') {
+
+            $task = [
+                'assignedByUser' => $this->getLoggedInUser(),
+                'assignedToUser' => $this->getLoggedInUser(),
+                'assignedToTeam' => 2, // @NOTE: not stubbed yet
+                'cases' => $this->getCase()['id']
+            ];
+
+            if (isset($this->getCase()['licence']['id'])) {
+                $task['licence'] = $this->getCase()['licence']['id'];
+            }
+
+            if (isset($this->getCase()['licence']['application']['id'])) {
+                $task['applciation'] = $this->getCase()['licence']['application']['id'];
+            }
+
+            $task['description'] = 'Verify adjournment of case';
+            $task['actionDate'] = date(
+                'Y-m-d',
+                mktime(date("H"), date("i"), date("s"), date("n"), date("j")+7, date("Y"))
+            );
+            $task['urgent'] = '1';
+            $task['category'] = '2';
+            $task['taskSubCategory'] = '81';
+
+            $service = $this->getTaskService();
+            $service->create($task);
+        }
+    }
+
+    /**
+     * @return \Common\Service\Data\Task
+     */
+    public function getTaskService()
+    {
+        return $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\Task');
     }
 }
