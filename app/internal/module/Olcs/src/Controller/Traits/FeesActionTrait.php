@@ -1,10 +1,10 @@
 <?php
+
 /**
  * Fees action trait
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-
 namespace Olcs\Controller\Traits;
 
 use Zend\View\Model\ViewModel;
@@ -55,13 +55,10 @@ trait FeesActionTrait
         $view->setTemplate('licence/fees');
 
         if ($applicationId) {
-            $applicationJourneyHelper = $this->getServiceLocator()->get('ApplicationJourneyHelper');
-            $renderedView = $applicationJourneyHelper->render($view, $applicationId);
+            return $this->render($view);
         } else {
-            $renderedView = $this->renderView($view);
+            return $this->renderView($view);
         }
-
-        return $renderedView;
     }
 
     /**
@@ -155,9 +152,9 @@ trait FeesActionTrait
 
     /**
      * Alter fee form
-     * 
+     *
      * @param Zend\Form\Form $form
-     * @return Zend\Form\Form 
+     * @return Zend\Form\Form
      */
     protected function alterFeeForm($form, $status)
     {

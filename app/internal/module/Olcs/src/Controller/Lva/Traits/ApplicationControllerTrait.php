@@ -9,13 +9,12 @@ namespace Olcs\Controller\Lva\Traits;
 
 use Zend\Form\Form;
 use Zend\View\Model\ViewModel;
-use Olcs\View\Model\Application\Layout;
 use Olcs\View\Model\Application\SectionLayout;
-use Olcs\View\Model\Application\ApplicationLayout;
 use Common\View\Model\Section;
 use Common\Controller\Lva\Traits\EnabledSectionTrait;
 use Common\Controller\Lva\Traits\CommonApplicationControllerTrait;
 use Common\Service\Entity\ApplicationCompletionEntityService;
+use Olcs\Controller\Traits\ApplicationControllerTrait as GenericInternalApplicationControllerTrait;
 
 /**
  * INTERNAL Abstract Application Controller
@@ -26,7 +25,10 @@ trait ApplicationControllerTrait
 {
     use InternalControllerTrait,
         CommonApplicationControllerTrait,
-        EnabledSectionTrait;
+        EnabledSectionTrait,
+        GenericInternalApplicationControllerTrait {
+            GenericInternalApplicationControllerTrait::render as genericRender;
+        }
 
     /**
      * Render the section
@@ -48,14 +50,7 @@ trait ApplicationControllerTrait
         );
         $sectionLayout->addChild($content, 'content');
 
-        $applicationLayout = new ApplicationLayout();
-
-        $applicationLayout->addChild($this->getQuickActions(), 'actions');
-        $applicationLayout->addChild($sectionLayout, 'content');
-
-        $params = $this->getHeaderParams();
-
-        return new Layout($applicationLayout, $params);
+        return $this->genericRender($sectionLayout);
     }
 
     /**
@@ -98,36 +93,5 @@ trait ApplicationControllerTrait
         }
 
         return $sections;
-    }
-
-    /**
-     * Quick action view model
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
-    protected function getQuickActions()
-    {
-        $viewModel = new ViewModel();
-        $viewModel->setTemplate('application/quick-actions');
-
-        return $viewModel;
-    }
-
-    /**
-     * Get headers params
-     *
-     * @return array
-     */
-    protected function getHeaderParams()
-    {
-        $data = $this->getServiceLocator()->get('Entity\Application')->getHeaderData($this->getApplicationId());
-
-        return array(
-            'applicationId' => $data['id'],
-            'licNo' => $data['licence']['licNo'],
-            'licenceId' => $data['licence']['id'],
-            'companyName' => $data['licence']['organisation']['name'],
-            'status' => $data['status']['id']
-        );
     }
 }
