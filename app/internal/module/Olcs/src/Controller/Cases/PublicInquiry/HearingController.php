@@ -201,8 +201,6 @@ class HearingController extends OlcsController\CrudAbstract
             $task['category'] = '2';
             $task['taskSubCategory'] = '81';
 
-            //die('<pre>' . print_r($task, 1));
-
             $service = $this->getTaskService();
             $service->create($task);
         }
