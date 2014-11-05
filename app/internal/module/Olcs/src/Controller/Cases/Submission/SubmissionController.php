@@ -130,6 +130,35 @@ class SubmissionController extends OlcsController\CrudAbstract
         return $form;
     }
 
+    public function refreshAction()
+    {
+        $params = $this->getParams(array('case', 'section', 'submission'));
+        $submissionService = $this->getServiceLocator()->get('Olcs\Service\Data\Submission');
+
+        $configService = $this->getServiceLocator()->get('config');
+        $submissionConfig = $configService['submission_config'];
+
+        $submission = $submissionService->fetchSubmissionData($params['submission']);
+        $snapshotData = json_decode($submission['dataSnapshot'], true);
+
+        if (array_key_exists($params['section'], $snapshotData)) {
+            $snapshotData[$params['section']]['data'] = $submissionService->createSubmissionSection(
+                $params['case'],
+                $params['section'],
+                $submissionConfig['sections'][$params['section']]
+            );
+        }
+        $data['id'] = $params['submission'];
+        $data['version'] = $submission['version'];
+        $data['dataSnapshot'] = json_encode($snapshotData);
+
+        $this->callParentSave($data);
+
+        return $this->redirect()->toRoute('submission', ['action' => 'details',
+            'submission' => $params['submission']], [], true);
+
+    }
+
     /**
      * Override Save data to allow json encoding of submission sections
      * into submission 'dataSnapshot' field.
