@@ -21,9 +21,9 @@ trait FeesActionTrait
     {
         $this->loadScripts(['fee-filter', 'table-actions']);
 
-        $licenceId = $this->params()->fromRoute('licence');
+        $licenceId = $this->params('licence');
         if (!$licenceId) {
-            $applicationId = $this->params()->fromRoute('applicationId');
+            $applicationId = $this->params('application');
             $bundle = [
                 'properties' => null,
                 'children' => [

@@ -31,8 +31,6 @@ trait LicenceControllerTrait
     {
         $licenceId = $this->getLicenceId();
 
-        $this->getEvent()->getRouteMatch()->setParam('licence', $licenceId);
-
         return $this->checkForRedirect($licenceId);
     }
 
@@ -43,7 +41,7 @@ trait LicenceControllerTrait
      */
     protected function getLicenceId()
     {
-        return $this->params('id');
+        return $this->getIdentifier();
     }
 
     /**

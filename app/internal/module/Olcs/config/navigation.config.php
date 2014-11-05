@@ -312,7 +312,7 @@ return array(
                 array(
                     'id' => 'licence',
                     'label' => 'Licence',
-                    'route' => 'licence',
+                    'route' => 'lva-licence',
                     'use_route_match' => true,
                     'pages' => array(
                         array(
@@ -537,31 +537,31 @@ return array(
                 array(
                     'id' => 'application_case',
                     'label' => 'Cases',
-                    'route' => 'Application/case',
+                    'route' => 'lva-application/case',
                     'use_route_match' => true
                 ),
                 array(
                     'id' => 'application_environmental',
                     'label' => 'Environmental',
-                    'route' => 'Application/environmental',
+                    'route' => 'lva-application/environmental',
                     'use_route_match' => true
                 ),
                 array(
                     'id' => 'application_document',
                     'label' => 'Docs & attachments',
-                    'route' => 'Application/document',
+                    'route' => 'lva-application/document',
                     'use_route_match' => true
                 ),
                 array(
                     'id' => 'application_processing',
                     'label' => 'Processing',
-                    'route' => 'Application/processing',
+                    'route' => 'lva-application/processing',
                     'use_route_match' => true
                 ),
                 array(
                     'id' => 'application_fee',
                     'label' => 'Fees',
-                    'route' => 'Application/fees',
+                    'route' => 'lva-application/fees',
                     'use_route_match' => true
                 )
             )

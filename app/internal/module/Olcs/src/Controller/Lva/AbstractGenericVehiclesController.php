@@ -58,7 +58,7 @@ abstract class AbstractGenericVehiclesController extends AbstractVehiclesGoodsCo
         $lvaType = $this->lva;
 
         $data = [
-            $lvaType              => $this->params('id'),
+            $lvaType              => $this->getIdentifier(),
             'identifier'          => $uploadedFile->getIdentifier(),
             'description'         => 'Goods Vehicle List',
             'filename'            => $fileName,

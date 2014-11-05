@@ -17,7 +17,7 @@
 
     <h1><?php
         if (!empty($licNo)) {
-            ?><a href="<?php echo $this->url('lva-licence', array('id' => $licenceId)); ?>"><?php echo $licNo; ?></a> / <?php
+            ?><a href="<?php echo $this->url('lva-licence', array('licence' => $licenceId)); ?>"><?php echo $licNo; ?></a> / <?php
       }
       echo $applicationId;
       ?></h1>
