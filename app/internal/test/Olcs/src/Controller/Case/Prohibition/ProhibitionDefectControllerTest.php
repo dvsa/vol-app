@@ -75,6 +75,16 @@ class ProhibitionDefectControllerTest extends \PHPUnit_Framework_TestCase
         $defaultLimit = 10;
         $mockRestData = ['Results' => [0 => ['id' => 1]], 'Count' => 1];
 
+        $layout = 'layout/base';
+        $headerTemplate = 'layout/partials/header';
+        $pageLayout = 'case';
+        $pageTitle = 'Page title';
+        $pageSubTitle = 'Page sub title';
+
+        $this->sut->setPageLayout($pageLayout);
+        $this->sut->setPageTitle($pageTitle);
+        $this->sut->setPageSubTitle($pageSubTitle);
+
         //mock plugin manager
         $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
             [
@@ -117,12 +127,6 @@ class ProhibitionDefectControllerTest extends \PHPUnit_Framework_TestCase
 
         //placeholders
         $placeholder = new \Zend\View\Helper\Placeholder();
-        $placeholder->getContainer('pageTitle')->set('foo1');
-        $placeholder->getContainer('pageTitle')->append('foo2');
-        $placeholder->getContainer('pageTitle')->append('foo3');
-        $placeholder->getContainer('pageTitle')->append('foo4');
-        $placeholder->getContainer('pageSubtitle')->set('foo1');
-        $placeholder->getContainer('pageSubtitle')->append('foo2');
 
         //add placeholders to view helper
         $mockViewHelperManager = new \Zend\View\HelperPluginManager();
@@ -140,14 +144,26 @@ class ProhibitionDefectControllerTest extends \PHPUnit_Framework_TestCase
 
         $this->sut->setServiceLocator($mockServiceManager);
 
-        $this->sut->indexAction();
+        $view = $this->sut->indexAction();
 
-        $this->assertTrue($placeholder->getContainer('pageTitle')->offsetExists(0));
-        $this->assertFalse($placeholder->getContainer('pageTitle')->offsetExists(1));
-        $this->assertTrue($placeholder->getContainer('pageTitle')->offsetExists(2));
-        $this->assertFalse($placeholder->getContainer('pageTitle')->offsetExists(3));
-        $this->assertTrue($placeholder->getContainer('pageSubtitle')->offsetExists(0));
-        $this->assertFalse($placeholder->getContainer('pageSubtitle')->offsetExists(1));
+        $viewChildren = $view->getChildren();
+        $headerView = $viewChildren[0];
+        $headerVariables = $headerView->getVariables();
+        $layoutView = $viewChildren[1];
+
+        //check we have view models
+        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $view);
+        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $headerView);
+        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $layoutView);
+
+        //check scripts and titles set
+        $this->assertEquals($headerVariables['pageTitle'], $pageTitle);
+        $this->assertEquals($headerVariables['pageSubTitle'], $pageSubTitle);
+
+        //check templates set
+        $this->assertEquals($view->getTemplate(), $layout);
+        $this->assertEquals($headerView->getTemplate(), $headerTemplate);
+        $this->assertEquals($layoutView->getTemplate(), 'layout/' . $pageLayout);
     }
 
     /**
