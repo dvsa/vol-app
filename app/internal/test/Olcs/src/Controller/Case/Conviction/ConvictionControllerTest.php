@@ -2,10 +2,7 @@
 namespace OlcsTest\Controller\Conviction;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
-use OlcsTest\Bootstrap;
 use Mockery as m;
-use Zend\Http\Request;
-use Zend\Http\Response;
 use Zend\Mvc\MvcEvent;
 use Zend\Mvc\Router\RouteMatch;
 use Zend\Mvc\Router\Http\TreeRouteStack as HttpRouter;
@@ -17,14 +14,13 @@ use Zend\Mvc\Router\Http\TreeRouteStack as HttpRouter;
  */
 class ConvictionControllerTest extends AbstractHttpControllerTestCase
 {
-
     public function setUp()
     {
         $this->sut = new \Olcs\Controller\Cases\Conviction\ConvictionController();
 
         $routeMatch = new RouteMatch(array('controller' => 'conviction'));
-        $this->event      = new MvcEvent();
-        $routerConfig = isset($config['router']) ? $config['router'] : array();
+        $this->event = new MvcEvent();
+        $routerConfig = array();
         $router = HttpRouter::factory($routerConfig);
 
         $this->event->setRouter($router);
@@ -70,11 +66,9 @@ class ConvictionControllerTest extends AbstractHttpControllerTestCase
         $mockCaseService->shouldReceive('fetchCaseData')->with($caseId)->andReturn($case);
 
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
-        $mockServiceManager->shouldReceive('get')->with('HelperService')->andReturnSelf();
         $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
         $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\Cases')->andReturn($mockCaseService);
-        $mockServiceManager->shouldReceive('getHelperService')->with('RestHelper')->andReturn($mockRestHelper);
-        $mockServiceManager->shouldReceive('get->getHelperService')->with('RestService')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
 
         $this->sut->getEvent()->getRouteMatch()->setParam('case', $caseId);
 

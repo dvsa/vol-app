@@ -3,16 +3,24 @@
     "description": "OLCS Internal Web Site",
     "repositories": [
         {
-            "url": "git@gitlab.clb.npm:olcs/olcs-common.git",
-            "type": "vcs"
+            "type": "vcs",
+            "url": "git@gitlab.clb.npm:olcs/olcs-common.git"
         },
         {
             "type": "vcs",
             "url": "git@gitlab.clb.npm:sc/jackrabbit.git"
         },
         {
-            "url": "git@gitlab.clb.npm:olcs/olcs-testhelpers.git",
-            "type": "vcs"
+            "type": "vcs",
+            "url": "git@gitlab.clb.npm:olcs/olcs-testhelpers.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/MajorCaiger/phpcov.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.clb.npm:olcs/olcs-logging.git"
         }
     ],
     "require": {
@@ -21,13 +29,15 @@
         "doctrine/doctrine-orm-module": "0.*",
         "olcs/OlcsCommon": "dev-develop",
         "zendframework/zend-developer-tools": "dev-master",
-        "dvsa/jackrabbit": "v1.1.0"
+        "dvsa/jackrabbit": "v1.1.0",
+        "olcs/olcs-logging": "dev-master"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "~1.5.3",
-        "phpunit/phpunit": "~4.0.1",
+        "phpunit/phpunit": "4.*",
+        "phpunit/phpcov": "dev-master",
         "mockery/mockery": "0.9.x-dev",
-        "olcs/olcs-testhelpers": "dev-master"
+        "olcs/olcs-testhelpers": "dev-develop"
     },
     "autoload": {
         "psr-4": {

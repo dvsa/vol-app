@@ -1,0 +1,21 @@
+<div class="one-fifth--left">
+    <h4><?php echo $this->translate('licence-details-nav'); ?></h4>
+    <ul class="vertical-navigation" role="menu">
+        <?php foreach ($sections as $reference => $details) : ?>
+            <?php $current = ($details['route'] === $currentRoute); ?>
+            <li class="vertical-navigation__item <?php echo $current ? 'current' : ''; ?>">
+                <?php if (!$current) : ?>
+                    <a href="<?php echo $this->url($details['route'], array(), array(), true); ?>">
+                <?php endif; ?>
+                <span><?php echo $this->translate('section.name.' . $reference); ?></span>
+                <?php if (!$current) : ?>
+                    </a>
+                <?php endif; ?>
+            </li>
+        <?php endforeach; ?>
+    </ul><!-- end .progress -->
+</div>
+<div class="three-fifths">
+  <?php echo $this->flashMessengerAll(); ?>
+  <?php echo $this->content; ?>
+</div>

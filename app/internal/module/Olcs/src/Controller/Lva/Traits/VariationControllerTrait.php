@@ -1,0 +1,59 @@
+<?php
+
+/**
+ * INTERNAL Abstract Variation Controller
+ *
+ * @author Rob Caiger <rob@clocal.co.uk>
+ */
+namespace Olcs\Controller\Lva\Traits;
+
+use Zend\Form\Form;
+use Zend\View\Model\ViewModel;
+use Common\View\Model\Section;
+use Olcs\View\Model\Variation\VariationLayout;
+use Olcs\View\Model\Application\Layout;
+use Olcs\View\Model\Variation\SectionLayout;
+use Common\Controller\Lva\Traits\CommonVariationControllerTrait;
+
+/**
+ * INTERNAL Abstract Variation Controller
+ *
+ * @author Rob Caiger <rob@clocal.co.uk>
+ */
+trait VariationControllerTrait
+{
+    use ApplicationControllerTrait,
+        CommonVariationControllerTrait {
+            CommonVariationControllerTrait::preDispatch insteadof ApplicationControllerTrait;
+        }
+
+    /**
+     * Render the section
+     *
+     * @param string|ViewModel $content
+     * @param \Zend\Form\Form $form
+     * @return \Zend\View\Model\ViewModel
+     */
+    protected function render($content, Form $form = null)
+    {
+        if (!($content instanceof ViewModel)) {
+            $content = new Section(array('title' => 'lva.section.title.' . $content, 'form' => $form));
+        }
+
+        $routeName = $this->getEvent()->getRouteMatch()->getMatchedRouteName();
+
+        $sectionLayout = new SectionLayout(
+            array('sections' => $this->getSectionsForView(), 'currentRoute' => $routeName)
+        );
+        $sectionLayout->addChild($content, 'content');
+
+        $applicationLayout = new VariationLayout();
+
+        $applicationLayout->addChild($this->getQuickActions(), 'actions');
+        $applicationLayout->addChild($sectionLayout, 'content');
+
+        $params = $this->getHeaderParams();
+
+        return new Layout($applicationLayout, $params);
+    }
+}

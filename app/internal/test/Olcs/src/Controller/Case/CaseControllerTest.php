@@ -137,10 +137,10 @@ class CaseControllerTest extends ControllerTestAbstract
         $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn($restResult);
 
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
-        $mockServiceManager->shouldReceive('get')->with('HelperService')->andReturnSelf();
-        $mockServiceManager->shouldReceive('getHelperService')->with('RestHelper')->andReturn($mockRestHelper);
-        $mockServiceManager->shouldReceive('getHelperService')->with('DataHelper')->andReturn($mockDataService);
-        $mockServiceManager->shouldReceive('get->getHelperService')->with('RestService')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('Helper\Data')->andReturn($mockDataService);
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
+        //$mockServiceManager->shouldReceive('getHelperService')->with('DataHelper')->andReturn($mockDataService);
+        //$mockServiceManager->shouldReceive('get->getHelperService')->with('RestService')->andReturn($mockRestHelper);
 
         $sut->setServiceLocator($mockServiceManager);
 
