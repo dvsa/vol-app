@@ -9,7 +9,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("Public inquiry Agreed and Legislation")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true})
+ * @Form\Options({"prefer_form_input_filter": true, "label": "Public inquiry Agreed and Legislation"})
  */
 class PublicInquiryAgreedAndLegislation
 {

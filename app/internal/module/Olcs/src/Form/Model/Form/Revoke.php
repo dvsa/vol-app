@@ -9,8 +9,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("revoke")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true})
- * @Form\Options({"label":"In office revocation"})
+ * @Form\Options({"prefer_form_input_filter": true, "label":"In office revocation"})
  */
 class Revoke
 {
