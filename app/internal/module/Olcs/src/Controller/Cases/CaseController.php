@@ -147,7 +147,7 @@ class CaseController extends OlcsController\CrudAbstract
         // Makes cancel work.
         $case = $this->getQueryOrRouteParam('case', null);
 
-        if (!$case && (!$case = func_get_arg(0))) {
+        if (!$case && (!func_num_args() || !$case = func_get_arg(0))) {
             throw new \LogicException('Case missing');
         }
 
@@ -193,18 +193,18 @@ class CaseController extends OlcsController\CrudAbstract
      */
     public function addAction()
     {
-        $this->pageLayout = 'licence';
-        $this->pageLayoutInner = null;
+        $this->setPageLayout('licence');
+        $this->setPageLayoutInner(null);
 
-        return parent::saveThis();
+        return parent::addAction();
     }
 
     public function editAction()
     {
-        $this->pageLayout = 'case';
-        $this->pageLayoutInner = null;
+        $this->setPageLayout('case');
+        $this->setPageLayoutInner(null);
 
-        return parent::saveThis();
+        return parent::editAction();
     }
 
     public function processLoad($data)

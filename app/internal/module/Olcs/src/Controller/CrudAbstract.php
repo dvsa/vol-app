@@ -37,6 +37,8 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
         'listVars'
     ];
 
+    protected $pageLayout = null;
+
     protected $pageLayoutInner = null;
 
     protected $detailsView = null;
@@ -112,6 +114,24 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
             return $this->getIdentifierName();
         }
         return $this->placeholderName;
+    }
+
+    /**
+     * @param string $pageLayout
+     * @return $this
+     */
+    public function setPageLayout($pageLayout)
+    {
+        $this->pageLayout = $pageLayout;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPageLayout()
+    {
+        return $this->pageLayout;
     }
 
     /**

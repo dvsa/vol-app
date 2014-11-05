@@ -44,31 +44,6 @@ class PsvDiscTest extends AbstractDataServiceTest
     }
 
     /**
-     * Test get discs to print with bad params
-     * @expectedException \Exception
-     * @dataProvider getDiscsToPrintWithBadParamsProvider
-     * @group psvDisc
-     */
-    public function testGetDiscsToPrintWithBadParams($niFlag, $operatorType, $licenceType, $discPrefix)
-    {
-        $this->service->getDiscsToPrint($niFlag, $operatorType, $licenceType, $discPrefix);
-    }
-
-    /**
-     * Data provider for testGetDiscsToPrintWithBadParams
-     * @group psvDisc
-     */
-    public function getDiscsToPrintWithBadParamsProvider()
-    {
-        return [
-            [null, null],
-            [null, 'OK'],
-            ['ltyp_r', null],
-            ['ltyp_r', 'O']
-        ];
-    }
-
-    /**
      * Test get discs to print
      * @dataProvider getDiscsToPrintWithResultsProvider
      * @group psvDisc
@@ -144,7 +119,7 @@ class PsvDiscTest extends AbstractDataServiceTest
 
     /**
      * Mock rest call get method
-     * 
+     *
      * @param string|array $path
      * @param array $data
      * @return array
@@ -210,7 +185,7 @@ class PsvDiscTest extends AbstractDataServiceTest
 
     /**
      * Mock rest call put method
-     * 
+     *
      * @param string|array $path
      * @param array $data
      * @return array

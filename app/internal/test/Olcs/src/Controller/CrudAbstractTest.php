@@ -11,6 +11,7 @@ namespace OlcsTest\Controller;
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use Olcs\TestHelpers\ControllerRouteMatchHelper;
 use \Olcs\TestHelpers\ControllerPluginManagerHelper;
+use Olcs\TestHelpers\ControllerAddEditHelper;
 use Mockery as m;
 
 /**
@@ -276,17 +277,105 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
     }
 
     /**
-     * Isolated test for the add action method calls the saveThis method.
+     * Tests the edit action
      */
-    public function testAddEditAction()
+    public function testEditAction()
     {
-        $sut = $this->getSutForIsolatedTest(['saveThis']);
-        $sut->expects($this->exactly(2))
-            ->method('saveThis')
-            ->will($this->returnValue('saveThis'));
+        $caseId = 28;
+        $licence = 7;
+        $id = 1;
+        $mockResult = ['id' => $id];
+        $action = 'edit';
+        $pageLayoutInner = 'case/inner-layout';
 
-        $this->assertEquals('saveThis', $sut->addAction());
-        $this->assertEquals('saveThis', $sut->editAction());
+        $sut = $this->getSutForIsolatedTest();
+        $sut->setPageLayoutInner($pageLayoutInner);
+
+        $addEditHelper = new ControllerAddEditHelper();
+
+        $mockPluginManager = $addEditHelper->getPluginManager(
+            $action,
+            $caseId,
+            $licence,
+            $sut->getIdentifierName(),
+            $id
+        );
+
+        $sut->setPluginManager($mockPluginManager);
+
+        $mockServiceManager = $addEditHelper->getServiceManager($action, $mockResult, null);
+        $sut->setServiceLocator($mockServiceManager);
+
+        $view = $sut->editAction();
+        $this->createAddEditAssertions($pageLayoutInner, $view, $addEditHelper, $mockServiceManager);
+    }
+
+    /**
+     * Tests the add action correctly passed the amended page layouts
+     */
+    public function testAddAction()
+    {
+        $caseId = 28;
+        $licence = 7;
+        $id = 1;
+        $mockResult = [];
+        $action = 'add';
+        $pageLayoutInner = 'case/inner-layout';
+
+        $sut = $this->getSutForIsolatedTest();
+        $sut->setPageLayoutInner($pageLayoutInner);
+
+        $addEditHelper = new ControllerAddEditHelper();
+
+        $mockPluginManager = $addEditHelper->getPluginManager(
+            $action,
+            $caseId,
+            $licence,
+            $sut->getIdentifierName(),
+            $id
+        );
+
+        $sut->setPluginManager($mockPluginManager);
+
+        $mockServiceManager = $addEditHelper->getServiceManager($action, $mockResult, null);
+        $sut->setServiceLocator($mockServiceManager);
+
+        $event = $this->routeMatchHelper->getMockRouteMatch(array('action' => 'not-found'));
+        $sut->setEvent($event);
+
+        $view = $sut->addAction();
+        $this->createAddEditAssertions($pageLayoutInner, $view, $addEditHelper, $mockServiceManager);
+    }
+
+    /**
+     * Adds the assertions for the add and edit form tests
+     *
+     * @param $pageLayout
+     * @param $view
+     * @param $addEditHelper
+     * @param $mockServiceManager
+     */
+    private function createAddEditAssertions($pageLayout, $view, $addEditHelper, $mockServiceManager)
+    {
+        $viewChildren = $view->getChildren();
+        $headerView = $viewChildren[0];
+        $layoutView = $viewChildren[1];
+        $innerView = $layoutView->getChildren();
+
+        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $view);
+        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $headerView);
+        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $layoutView);
+        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $innerView[0]);
+
+        $this->assertEquals($view->getTemplate(), 'layout/base');
+        $this->assertEquals($headerView->getTemplate(), 'layout/partials/header');
+        $this->assertEquals($layoutView->getTemplate(), $pageLayout);
+        $this->assertEquals($innerView[0]->getTemplate(), 'crud/form');
+
+        $this->assertEquals(
+            $addEditHelper->getForm(),
+            $mockServiceManager->get('viewHelperManager')->get('placeholder')->getContainer('form')->getValue()
+        );
     }
 
     /**
