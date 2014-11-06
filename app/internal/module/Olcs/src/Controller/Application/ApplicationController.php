@@ -19,7 +19,10 @@ use Olcs\Controller\Traits;
 class ApplicationController extends AbstractController
 {
     use Traits\LicenceControllerTrait,
-        Traits\FeesActionTrait;
+        Traits\FeesActionTrait,
+        Traits\ApplicationControllerTrait {
+            Traits\ApplicationControllerTrait::render as genericRender;
+        }
 
     /**
      * Placeholder stub
@@ -31,11 +34,7 @@ class ApplicationController extends AbstractController
         $view = new ViewModel();
         $view->setTemplate('application/index');
 
-        $applicationJourneyHelper = $this->getServiceLocator()->get('ApplicationJourneyHelper');
-
-        $applicationId = $this->params('application');
-
-        return $applicationJourneyHelper->render($view, $applicationId);
+        return $this->render($view);
     }
 
     /**
@@ -48,11 +47,7 @@ class ApplicationController extends AbstractController
         $view = new ViewModel();
         $view->setTemplate('application/index');
 
-        $applicationJourneyHelper = $this->getServiceLocator()->get('ApplicationJourneyHelper');
-
-        $applicationId = $this->params('application');
-
-        return $applicationJourneyHelper->render($view, $applicationId);
+        return $this->render($view);
     }
 
     /**
@@ -65,11 +60,7 @@ class ApplicationController extends AbstractController
         $view = new ViewModel();
         $view->setTemplate('application/index');
 
-        $applicationJourneyHelper = $this->getServiceLocator()->get('ApplicationJourneyHelper');
-
-        $applicationId = $this->params('application');
-
-        return $applicationJourneyHelper->render($view, $applicationId);
+        return $this->render($view);
     }
 
     /**
@@ -82,27 +73,11 @@ class ApplicationController extends AbstractController
         $view = new ViewModel();
         $view->setTemplate('application/index');
 
-        $applicationJourneyHelper = $this->getServiceLocator()->get('ApplicationJourneyHelper');
-
-        $applicationId = $this->params('application');
-
-        return $applicationJourneyHelper->render($view, $applicationId);
+        return $this->render($view);
     }
 
-    /**
-     * Placeholder stub
-     *
-     * @return ViewModel
-     */
-    public function feeAction()
+    protected function render($view)
     {
-        $view = new ViewModel();
-        $view->setTemplate('application/index');
-
-        $applicationJourneyHelper = $this->getServiceLocator()->get('ApplicationJourneyHelper');
-
-        $applicationId = $this->params('application');
-
-        return $applicationJourneyHelper->render($view, $applicationId);
+        return $this->genericRender($view);
     }
 }
