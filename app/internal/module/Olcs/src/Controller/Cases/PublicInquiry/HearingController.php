@@ -197,7 +197,7 @@ class HearingController extends OlcsController\CrudAbstract
                 'Y-m-d',
                 mktime(date("H"), date("i"), date("s"), date("n"), date("j")+7, date("Y"))
             );
-            $task['urgent'] = '1';
+            $task['urgent'] = 'Y';
             $task['category'] = '2';
             $task['taskSubCategory'] = '81';
 
