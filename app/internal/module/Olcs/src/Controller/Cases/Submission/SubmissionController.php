@@ -130,6 +130,12 @@ class SubmissionController extends OlcsController\CrudAbstract
         return $form;
     }
 
+    /**
+     * Refreshes a single section within the dataSnapshot field of a submission with the latest data
+     * from the rest of the database. Redirects back to details page.
+     *
+     * @return \Zend\Http\Response
+     */
     public function refreshAction()
     {
         $params = $this->getParams(array('case', 'section', 'submission'));
