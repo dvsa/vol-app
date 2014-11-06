@@ -160,8 +160,12 @@ class SubmissionController extends OlcsController\CrudAbstract
 
         $this->callParentSave($data);
 
-        return $this->redirect()->toRoute('submission', ['action' => 'details',
-            'submission' => $params['submission']], [], true);
+        return $this->redirect()->toRoute(
+            'submission',
+            ['action' => 'details','submission' => $params['submission']],
+            [],
+            true
+        );
 
     }
 
