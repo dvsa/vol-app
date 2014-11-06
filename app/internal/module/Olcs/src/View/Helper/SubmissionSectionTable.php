@@ -68,6 +68,7 @@ class SubmissionSectionTable extends AbstractHelper
             $params,
             false
         );
+        $data['sectionId'] = $submissionSection;
         return $this->getView()->render($viewTemplate, ['data' => $data]);
     }
 
