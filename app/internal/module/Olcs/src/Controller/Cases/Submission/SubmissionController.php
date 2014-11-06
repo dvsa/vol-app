@@ -153,10 +153,10 @@ class SubmissionController extends OlcsController\CrudAbstract
                 $params['section'],
                 $submissionConfig['sections'][$params['section']]
             );
+            $data['id'] = $params['submission'];
+            $data['version'] = $submission['version'];
+            $data['dataSnapshot'] = json_encode($snapshotData);
         }
-        $data['id'] = $params['submission'];
-        $data['version'] = $submission['version'];
-        $data['dataSnapshot'] = json_encode($snapshotData);
 
         $this->callParentSave($data);
 
@@ -166,7 +166,44 @@ class SubmissionController extends OlcsController\CrudAbstract
             [],
             true
         );
+    }
 
+    /**
+     * Deletes a single row from a section's list data, reassigns and persists the new data back to dataSnapshot field
+     * from the rest of the database. Redirects back to details page.
+     *
+     * @return \Zend\Http\Response
+     */
+    public function deleteRowAction()
+    {
+        $params = $this->getParams(array('case', 'section', 'submission', 'rowId'));
+        $submissionService = $this->getServiceLocator()->get('Olcs\Service\Data\Submission');
+
+        $configService = $this->getServiceLocator()->get('config');
+        $submissionConfig = $configService['submission_config'];
+
+        $submission = $submissionService->fetchSubmissionData($params['submission']);
+        $snapshotData = json_decode($submission['dataSnapshot'], true);
+
+        if (array_key_exists($params['section'], $snapshotData) &&
+        is_array($snapshotData[$params['section']]['data'])) {
+            if (isset($snapshotData[$params['section']]['data'][$params['rowId']])) {
+                unset($snapshotData[$params['section']]['data'][$params['rowId']]);
+            }
+            ksort($snapshotData[$params['section']]['data']);
+            $data['id'] = $params['submission'];
+            $data['version'] = $submission['version'];
+            $data['dataSnapshot'] = json_encode($snapshotData);
+
+            $this->callParentSave($data);
+        }
+
+        return $this->redirect()->toRoute(
+            'submission',
+            ['action' => 'details','submission' => $params['submission']],
+            [],
+            true
+        );
     }
 
     /**

@@ -384,6 +384,21 @@ $routes = [
             ]
         ]
     ],
+    'submission_delete_row' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/case/:case/submission/:submission/delete-row/:section/:rowId',
+            'constraints' => [
+                'case' => '[0-9]+',
+                'submission' => '[0-9]+',
+                'rowId' => '[0-9]+'
+            ],
+            'defaults' => [
+                'controller' => 'CaseSubmissionController',
+                'action' => 'delete-row'
+            ]
+        ]
+    ],
     'submission_section_comment' => [
         'type' => 'segment',
         'options' => [
