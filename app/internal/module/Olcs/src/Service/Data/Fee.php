@@ -18,6 +18,13 @@ use Common\Service\Data\AbstractData;
 class Fee extends AbstractData
 {
     /**
+     * Service name
+     *
+     * @var string
+     */
+    protected $serviceName = 'Fee';
+
+    /**
      * Get fee data
      * 
      * @param array $params
@@ -87,7 +94,6 @@ class Fee extends AbstractData
         $bundle = [
             'properties' => [
                 'id',
-                'invoiceNo',
                 'invoiceStatus',
                 'description',
                 'amount',

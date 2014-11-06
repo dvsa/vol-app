@@ -26,8 +26,8 @@ return array(
         ),
         array(
             'title' => 'No',
-            'sort' => 'invoiceNo',
-            'name' => 'invoiceNo',
+            'sort' => 'id',
+            'name' => 'id',
             'formatter' => function ($row, $column, $serviceLocator) {
 
                 $url = '';
@@ -53,7 +53,7 @@ return array(
                         $statusClass = '';
                         break;
                 }
-                return '<a href="' . $url . '">' . $row['invoiceNo'] . '</a> <span class="status ' .
+                return $row['id'] . ' <span class="status ' .
                         $statusClass . '">' . $row['feeStatus']['description'] . '</span>';
             },
         ),
