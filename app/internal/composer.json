@@ -30,7 +30,7 @@
         "olcs/OlcsCommon": "dev-develop",
         "zendframework/zend-developer-tools": "dev-master",
         "dvsa/jackrabbit": "v1.1.0",
-        "olcs/olcs-logging": "dev-master"
+        "olcs/olcs-logging": "dev-develop"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "~1.5.3",
