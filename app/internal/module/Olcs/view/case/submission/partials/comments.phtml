@@ -10,7 +10,7 @@ if (empty($this->section['comments'])) {
                 'submission_section_comment', [
                     'case' => $this->caseId,
                     'submission' => $this->submissionId,
-                    'submissionSection' => $this->section['sectionId'],
+                    'submissionSection' => $this->sectionId,
                     'action' => 'add'
                 ]
             );?>"><?php echo $this->translate('Add comments');?></a>
@@ -27,7 +27,7 @@ if (empty($this->section['comments'])) {
                     'submission_section_comment', [
                         'case' => $this->caseId,
                         'submission' => $this->submissionId,
-                        'submissionSection' => $this->section['sectionId'],
+                        'submissionSection' => $this->sectionId,
                         'id' => $this->section['comments'][0]['id'],
                         'action' => 'edit'
                     ]

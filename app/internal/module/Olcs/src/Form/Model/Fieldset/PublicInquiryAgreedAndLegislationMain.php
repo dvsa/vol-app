@@ -12,7 +12,6 @@ use Zend\Form\Annotation as Form;
 class PublicInquiryAgreedAndLegislationMain
 {
     /**
-     * @Form\Attributes({"id":"dob"})
      * @Form\Options({
      *     "label": "Agreed date",
      *     "create_empty_option": false,
@@ -20,6 +19,7 @@ class PublicInquiryAgreedAndLegislationMain
      * })
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $agreedDate = null;

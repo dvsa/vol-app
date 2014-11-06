@@ -1,12 +1,19 @@
 <?php
 return array(
+    'mandatory-sections' => array(
+        'introduction',
+        'case-summary',
+        'case-outline',
+        'persons'
+    ),
     'sections' => array(
         'introduction' => array(
-            'section_editable' => false,
+            'section_type' => [],
             'allow_comments' => true,
         ),
         'case-summary' => array(
-            'section_editable' => false,
+            'section_type' => ['overview'],
+            'data_field' => '',
             'allow_comments' => true,
             'service' => 'Cases',
             'bundle' => array(
@@ -76,105 +83,129 @@ return array(
             )
         ),
         'case-outline' => array(
-            'section_editable' => true,
+            'section_type' => ['text'],
+            'data_field' => 'outline',
             'allow_comments' => true,
             'bundle' => 'case-summary'
         ),
         'most-serious-infringement'   => array(
-            'section_editable' => false,
+            'section_type' => ['text','overview'],
+            'data_field' => '',
             'allow_comments' => true,
         ),
         'persons' => array(
-            'section_editable' => false,
+            'section_type' => ['list'],
             'allow_comments' => true,
             'bundle' => 'case-summary'
         ),
         'operating-centres'   => array(
-            'section_editable' => false,
+            'section_type' => ['list'],
             'allow_comments' => true,
         ),
         'conditions-and-undertakings'   => array(
+            'section_type' => ['list'],
             'section_editable' => false,
             'allow_comments' => true,
         ),
         'intelligence-unit-check'   => array(
+            'section_type' => [],
+            'data_field' => '',
             'section_editable' => false,
             'allow_comments' => true,
         ),
         'interim'   => array(
-            'section_editable' => false,
+            'section_type' => [],
+            'data_field' => '',
             'allow_comments' => true,
         ),
         'advertisement'   => array(
-            'section_editable' => false,
+            'section_type' => [],
+            'data_field' => '',
             'allow_comments' => true,
         ),
         'linked-licences-app-numbers'   => array(
-            'section_editable' => false,
+            'section_type' => ['list'],
+            'data_field' => '',
             'allow_comments' => true,
         ),
         'lead-tc-area'   => array(
-            'section_editable' => false,
+            'section_type' => ['text'],
+            'data_field' => '',
             'allow_comments' => true,
         ),
         'current-submissions'   => array(
-            'section_editable' => false,
+            'section_type' => [],
+            'data_field' => '',
             'allow_comments' => true,
         ),
         'auth-requested-applied-for'   => array(
-            'section_editable' => false,
+            'section_type' => ['text'],
+            'data_field' => '',
             'allow_comments' => true,
         ),
         'transport-managers'   => array(
-            'section_editable' => false,
+            'section_type' => ['list'],
+            'data_field' => '',
             'allow_comments' => true,
         ),
         'continuous-effective-control'   => array(
-            'section_editable' => false,
+            'section_type' => [],
+            'data_field' => '',
             'allow_comments' => true,
         ),
-        'fitness-repute'   => array(
-            'section_editable' => false,
+        'fitness-and-repute'   => array(
+            'section_type' => [],
+            'data_field' => '',
             'allow_comments' => true,
         ),
         'previous-history'   => array(
-            'section_editable' => false,
+            'section_type' => [],
+            'data_field' => '',
             'allow_comments' => true,
         ),
         'bus-reg-app-details'   => array(
-            'section_editable' => false,
+            'section_type' => [],
+            'data_field' => '',
             'allow_comments' => true,
         ),
         'transport-authority-comments'   => array(
-            'section_editable' => false,
+            'section_type' => [],
+            'data_field' => '',
             'allow_comments' => true,
         ),
         'total-bus-registrations'   => array(
-            'section_editable' => false,
+            'section_type' => [],
+            'data_field' => '',
             'allow_comments' => true,
         ),
         'local-licence-history'   => array(
-            'section_editable' => false,
+            'section_type' => [],
+            'data_field' => '',
             'allow_comments' => true,
         ),
         'linked-mlh-history'   => array(
-            'section_editable' => false,
+            'section_type' => [],
+            'data_field' => '',
             'allow_comments' => true,
         ),
         'registration-details'   => array(
-            'section_editable' => false,
+            'section_type' => [],
+            'data_field' => '',
             'allow_comments' => true,
         ),
         'maintenance-tachographs-hours'   => array(
-            'section_editable' => false,
+            'section_type' => [],
+            'data_field' => '',
             'allow_comments' => true,
         ),
         'prohibition-history'   => array(
-            'section_editable' => false,
+            'section_type' => ['list', 'text'],
+            'data_field' => '',
             'allow_comments' => true,
         ),
         'conviction-fpn-offence-history' => array(
-            'section_editable' => false,
+            'section_type' => ['list', 'text'],
+            'data_field' => '',
             'allow_comments' => true,
             'service' => 'Cases',
             'bundle' => array(
@@ -200,64 +231,84 @@ return array(
                 )
             )
         ),
+        'annual-test-history'   => array(
+            'section_type' => ['text'],
+            'data_field' => '',
+            'allow_comments' => true,
+        ),
         'penalties'   => array(
-            'section_editable' => false,
+            'section_type' => ['list', 'text'],
+            'data_field' => '',
             'allow_comments' => true,
         ),
         'other-issues'   => array(
-            'section_editable' => false,
+            'section_type' => [],
+            'data_field' => '',
             'allow_comments' => true,
         ),
         'te-reports'   => array(
-            'section_editable' => false,
+            'section_type' => [],
+            'data_field' => '',
             'allow_comments' => true,
         ),
         'site-plans'   => array(
-            'section_editable' => false,
+            'section_type' => [],
+            'data_field' => '',
             'allow_comments' => true,
         ),
         'planning-permission'   => array(
-            'section_editable' => false,
+            'section_type' => [],
+            'data_field' => '',
             'allow_comments' => true,
         ),
         'applicants-comments'   => array(
-            'section_editable' => false,
+            'section_type' => [],
+            'data_field' => '',
             'allow_comments' => true,
         ),
         'visibility-access-egress-size'   => array(
-            'section_editable' => false,
+            'section_type' => [],
+            'data_field' => '',
             'allow_comments' => true,
         ),
         'compliance-complaints'   => array(
-            'section_editable' => false,
+            'section_type' => ['list'],
+            'data_field' => '',
             'allow_comments' => true,
         ),
         'environmental-complaints'   => array(
-            'section_editable' => false,
+            'section_type' => ['list'],
+            'data_field' => '',
             'allow_comments' => true,
         ),
         'oppositions'   => array(
-            'section_editable' => false,
+            'section_type' => ['list'],
+            'data_field' => '',
             'allow_comments' => true,
         ),
         'financial-information'   => array(
-            'section_editable' => false,
+            'section_type' => [],
+            'data_field' => '',
             'allow_comments' => true,
         ),
         'maps'   => array(
-            'section_editable' => false,
+            'section_type' => ['file'],
+            'data_field' => '',
             'allow_comments' => true,
         ),
         'waive-fee-late-fee'   => array(
-            'section_editable' => false,
+            'section_type' => [],
+            'data_field' => '',
             'allow_comments' => true,
         ),
         'surrender'   => array(
-            'section_editable' => false,
+            'section_type' => [],
+            'data_field' => '',
             'allow_comments' => true,
         ),
         'annex'   => array(
-            'section_editable' => false,
+            'section_type' => ['file'],
+            'data_field' => '',
             'allow_comments' => true,
         )
     )
