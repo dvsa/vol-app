@@ -83,23 +83,6 @@ abstract class AbstractGenericVehiclesController extends AbstractVehiclesGoodsCo
         return $uploader->serveFile($file, $fileName);
     }
 
-
-    /**
-     * Shared logic between internal vehicle sections
-     *
-     * @param array $data
-     * @param string $mode
-     * @return mixed
-     */
-    protected function saveVehicle($data, $mode)
-    {
-        if ($mode == 'add') {
-            $data['licence-vehicle']['specifiedDate'] = date('Y-m-d');
-        }
-
-        return parent::saveVehicle($data, $mode);
-    }
-
     /**
      * We want to remove the table when adding
      *
