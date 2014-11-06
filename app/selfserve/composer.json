@@ -24,7 +24,7 @@
         "zendframework/zendframework": "2.3.*",
         "doctrine/doctrine-orm-module": "0.*",
         "olcs/OlcsCommon": "dev-develop",
-        "olcs/olcs-logging": "dev-master",
+        "olcs/olcs-logging": "dev-develop",
         "dvsa/jackrabbit": "v1.1.0",
         "symfony/Filesystem": "~2.6.0-dev"
     },
