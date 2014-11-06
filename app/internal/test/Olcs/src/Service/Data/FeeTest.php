@@ -45,7 +45,7 @@ class FeeTest extends \PHPUnit_Framework_TestCase
 
         $this->service = $this->getMock($this->serviceName, $methods);
 
-        $this->mockRestClient = $this->getMock('\StdClass', ['get']);
+        $this->mockRestClient = $this->getMock('\StdClass', ['get', 'put']);
 
         $this->service->expects($this->any())
             ->method('getRestClient')
@@ -81,5 +81,41 @@ class FeeTest extends \PHPUnit_Framework_TestCase
         //test data is cached
         $this->assertEquals($fees, $this->service->getFees($someParams));
 
+    }
+
+    /**
+     * Test get fees method
+     * @group feeService
+     */
+    public function testGetFee()
+    {
+        $fee = ['key' => 'value'];
+        $id = 1;
+
+        $this->mockRestClient->expects($this->once())
+            ->method('get')
+            ->with($this->equalTo(''), $this->isType('array'))
+            ->willReturn($fee);
+
+        $this->assertEquals($fee, $this->service->getFee($id));
+        //test data is cached
+        $this->assertEquals($fee, $this->service->getFee($id));
+
+    }
+
+    /**
+     * Test update fee method
+     * @group feeService
+     */
+    public function testUpdateFee()
+    {
+        $fee = ['key' => 'value', 'id' => 1];
+
+        $this->mockRestClient->expects($this->once())
+            ->method('put')
+            ->with($this->equalTo('/1'), $this->isType('array'))
+            ->willReturn($this->returnValue(null));
+
+        $this->assertEquals(null, $this->service->updateFee($fee));
     }
 }
