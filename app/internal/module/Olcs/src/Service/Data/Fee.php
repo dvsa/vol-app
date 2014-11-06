@@ -7,7 +7,7 @@
 
 namespace Olcs\Service\Data;
 
-use Common\Service\Fee\FeeGeneration;
+use Common\Service\Data\AbstractData;
 
 /**
  * Service to get licence fees
@@ -15,15 +15,8 @@ use Common\Service\Fee\FeeGeneration;
  * Class Fee
  * @package Olcs\Service
  */
-class Fee extends FeeGeneration
+class Fee extends AbstractData
 {
-    /**
-     * Service name
-     *
-     * @var string
-     */
-    protected $serviceName = 'Fee';
-
     /**
      * Get fee data
      * 
