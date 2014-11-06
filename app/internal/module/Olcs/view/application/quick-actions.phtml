@@ -8,7 +8,9 @@
 <h5>Decisions</h5>
 <ul class="record-actions__group">
     <?php if ($showGrant) : ?>
-    <li class="record-actions__item action--secondary"><a href="">Grant application</a></li>
+    <li class="record-actions__item action--secondary">
+        <a href="<?php echo $this->url('lva-application/grant', array(), array(), true); ?>">Grant application</a>
+    </li>
     <?php endif; ?>
     <?php if ($showUndoGrant) : ?>
     <li class="record-actions__item action--secondary"><a href="">Undo grant application</a></li>

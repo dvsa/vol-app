@@ -87,14 +87,14 @@ trait FeesActionTrait
     {
         switch ($status) {
             case 'historical':
-                $feeStatus = "IN ('lfs_pd', 'lfs_w', 'lfs_cn')";
+                $feeStatus = 'IN ["lfs_pd","lfs_w","lfs_cn"]';
                 break;
             case 'all':
                 $feeStatus = "";
                 break;
             case 'current':
             default:
-                $feeStatus = "IN ('lfs_ot', 'lfs_wr')";
+                $feeStatus = 'IN ["lfs_ot","lfs_wr"]';
         }
         $params = [
             'licence' => $licenceId,

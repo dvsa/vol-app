@@ -1163,6 +1163,16 @@ $routes['lva-licence']['child_routes'] = array_merge(
 $routes['lva-application']['child_routes'] = array_merge(
     $routes['lva-application']['child_routes'],
     array(
+        'grant' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'grant/',
+                'defaults' => array(
+                    'controller' => 'ApplicationController',
+                    'action' => 'grant'
+                )
+            )
+        ),
         'overview' => array(
             'type' => 'segment',
             'options' => array(

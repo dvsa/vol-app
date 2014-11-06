@@ -212,9 +212,9 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
     public function feesForLicenceProvider()
     {
         return [
-            ['current', "IN ('lfs_ot', 'lfs_wr')"],
+            ['current', 'IN ["lfs_ot","lfs_wr"]'],
             ['all', ''],
-            ['historical', "IN ('lfs_pd', 'lfs_w', 'lfs_cn')"]
+            ['historical', 'IN ["lfs_pd","lfs_w","lfs_cn"]']
         ];
     }
 
@@ -386,9 +386,9 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
     public function feesForApplicationProvider()
     {
         return [
-            ['current', "IN ('lfs_ot', 'lfs_wr')"],
+            ['current', 'IN ["lfs_ot","lfs_wr"]'],
             ['all', ''],
-            ['historical', "IN ('lfs_pd', 'lfs_w', 'lfs_cn')"]
+            ['historical', 'IN ["lfs_pd","lfs_w","lfs_cn"]']
         ];
     }
 
