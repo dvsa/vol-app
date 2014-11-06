@@ -370,6 +370,20 @@ $routes = [
             ]
         ]
     ],
+    'submission_refresh_section' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/case/:case/submission/:submission/refresh/:section',
+            'constraints' => [
+                'case' => '[0-9]+',
+                'submission' => '[0-9]+'
+            ],
+            'defaults' => [
+                'controller' => 'CaseSubmissionController',
+                'action' => 'refresh'
+            ]
+        ]
+    ],
     'submission_section_comment' => [
         'type' => 'segment',
         'options' => [
