@@ -98,24 +98,33 @@ class Submission extends AbstractData
     }
 
     /**
-     * @param integer|null $id
-     * @param array|null $bundle
+     * Extracts sections from dataSnapshot, adds description from refData to returned array and comments
+     * for each section
+     *
+     * @param array $submission
+     *
      * @return array
      */
     public function extractSelectedSubmissionSectionsData($submission)
     {
         $submissionSectionRefData = $this->getRefDataService()->fetchListOptions('submission_section');
+        $submissionConfig = $this->getSubmissionConfig();
 
         $selectedSectionsArray = json_decode($submission['dataSnapshot'], true);
 
         // add section description text from ref data
-        foreach ($selectedSectionsArray as $index => $selectedSectionData) {
-            $selectedSectionsArray[$index]['description'] =
-                $submissionSectionRefData[$selectedSectionData['sectionId']];
-            $selectedSectionsArray[$index]['comments'] = $this->filterCommentsBySection(
-                $selectedSectionData['sectionId'],
+        foreach ($selectedSectionsArray as $sectionId => $selectedSectionData) {
+            $selectedSectionsArray[$sectionId]['sectionId'] = $sectionId;
+            $selectedSectionsArray[$sectionId]['description'] = $submissionSectionRefData[$sectionId];
+            $selectedSectionsArray[$sectionId]['comments'] = $this->filterCommentsBySection(
+                $sectionId,
                 $submission['submissionSectionComments']
             );
+
+            // if we only have a type of text, then unset any other data to prevent comments being repeated
+            if ($submissionConfig['sections'][$sectionId]['section_type'] == ['text']) {
+                $selectedSectionsArray[$sectionId]['data'] = [];
+            }
         }
 
         return $selectedSectionsArray;
@@ -140,6 +149,10 @@ class Submission extends AbstractData
         return $sectionComments;
     }
 
+    /**
+     * Returns list of submission sections from ref data table
+     * @return array
+     */
     public function getAllSectionsRefData()
     {
         if (empty($this->allSectionsRefData)) {
@@ -151,6 +164,12 @@ class Submission extends AbstractData
         return $this->allSectionsRefData;
     }
 
+    /**
+     * Sets ref data list of submission sections
+     *
+     * @param $allSectionsRefData
+     * @return $this
+     */
     public function setAllSectionsRefData($allSectionsRefData)
     {
         $this->allSectionsRefData = $allSectionsRefData;
@@ -180,7 +199,8 @@ class Submission extends AbstractData
     /**
      * Create a section from the submission config
      *
-     * @param string sectionId
+     * @param integer $caseId
+     * @param string $sectionId
      * @param array $sectionConfig for the section being generated
      * @return array $sectionData
      */
@@ -345,7 +365,9 @@ class Submission extends AbstractData
     }
 
     /**
-     * section persons
+     * Filters data for person section
+     * @param array $data
+     * @return array $dataToReturnArray
      */
     protected function filterPersonsData(array $data = array())
     {
@@ -392,7 +414,7 @@ class Submission extends AbstractData
     /**
      * Calculates the vehicles in possession.
      *
-     * @param array $data
+     * @param array $licenceData
      * @return int
      */
     private function calculateVehiclesInPossession($licenceData)
@@ -409,6 +431,7 @@ class Submission extends AbstractData
     }
 
     /**
+     * Returns the bundle required to get a submission
      * @return array
      */
     public function getBundle()
@@ -439,7 +462,44 @@ class Submission extends AbstractData
     }
 
     /**
+     * Generates the sectionData for each submission section via business rules:
+     *  - If new section data, add as normal
+     *  - If updating submission with existing sections, keep existing data where sections are editable
+     *
+     * @param $caseId
+     * @param $data
+     * @return array
+     */
+    public function generateSnapshotData($caseId, $data)
+    {
+        $sectionData = [];
+        if (is_array($data['submissionSections']['sections'])) {
+            $submissionConfig = $this->getSubmissionConfig();
+
+            foreach ($data['submissionSections']['sections'] as $index => $sectionId) {
+
+                $sectionConfig = isset($submissionConfig['sections'][$sectionId]) ?
+                    $submissionConfig['sections'][$sectionId] : [];
+
+                // if section type is list, generate sectionData for snapshot
+                $sectionData[$sectionId] = [
+                    'data' => $this->createSubmissionSection(
+                        $caseId,
+                        $sectionId,
+                        $sectionConfig
+                    )
+                ];
+            }
+        }
+
+        return $sectionData;
+    }
+
+    /**
+     * Set refData service
+     *
      * @param object $refDataService
+     * @return object $this
      */
     public function setRefDataService($refDataService)
     {
@@ -474,7 +534,10 @@ class Submission extends AbstractData
     }
 
     /**
+     * Set ApiResolver
      * @param array $apiResolver
+     *
+     * @return object $this
      */
     public function setApiResolver($apiResolver)
     {
@@ -483,6 +546,8 @@ class Submission extends AbstractData
     }
 
     /**
+     * get api resolver
+     *
      * @return array
      */
     public function getApiResolver()
@@ -491,7 +556,10 @@ class Submission extends AbstractData
     }
 
     /**
+     * Sets the submission config
+     *
      * @param array $submissionConfig
+     * @return object $this
      */
     public function setSubmissionConfig($submissionConfig)
     {
@@ -500,6 +568,8 @@ class Submission extends AbstractData
     }
 
     /**
+     * Gets the submission config
+     *
      * @return array
      */
     public function getSubmissionConfig()
@@ -508,7 +578,10 @@ class Submission extends AbstractData
     }
 
     /**
+     * Sets loadedSectionData
+     *
      * @param array $loadedSectionData
+     * @return object $this
      */
     public function setLoadedSectionData($loadedSectionData)
     {
@@ -517,7 +590,11 @@ class Submission extends AbstractData
     }
 
     /**
-     * @param array $loadedSectionData
+     * Sets LoadedSectionDataForSection
+     *
+     * @param $sectionId
+     * @param $data
+     * @return $this
      */
     public function setLoadedSectionDataForSection($sectionId, $data)
     {
@@ -526,6 +603,7 @@ class Submission extends AbstractData
     }
 
     /**
+     * Gets the loadedSectionData
      * @return array
      */
     public function getLoadedSectionData()

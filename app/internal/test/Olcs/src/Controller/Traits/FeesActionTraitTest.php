@@ -9,6 +9,7 @@ namespace OlcsTest\Controller\Traits;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use OlcsTest\Bootstrap;
+use Common\Service\Entity\ApplicationEntityService;
 
 /**
  * Fees action trait tests
@@ -313,11 +314,6 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
             ->with($this->equalTo($feesParams))
             ->will($this->returnValue($fees));
 
-        $mockApplicationJourneyHelper = $this->getMock('\StdClass', ['render']);
-        $mockApplicationJourneyHelper->expects($this->once())
-            ->method('render')
-            ->will($this->returnValue('rendered view'));
-
         $mockServiceLocator = $this->getMock('\StdClass', ['get']);
 
         $mockServiceLocator->expects($this->at(0))
@@ -325,10 +321,38 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
             ->with($this->equalTo('Olcs\Service\Data\Fee'))
             ->will($this->returnValue($mockFeeService));
 
+        $mockApplicationHelper = $this->getMock('\stdClass', array('getStatus', 'getHeaderData'));
+        $mockApplicationHelper->expects($this->once())
+            ->method('getStatus')
+            ->will($this->returnValue(ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION));
+
+        $headerData = array(
+            'id' => 1,
+            'status' => array(
+                'id' => 'Foo'
+            ),
+            'licence' => array(
+                'id' => 123,
+                'licNo' => 'asdjlkads',
+                'organisation' => array(
+                    'name' => 'sdjfhkjsdhf'
+                )
+            )
+        );
+
+        $mockApplicationHelper->expects($this->once())
+            ->method('getHeaderData')
+            ->will($this->returnValue($headerData));
+
         $mockServiceLocator->expects($this->at(1))
             ->method('get')
-            ->with($this->equalTo('ApplicationJourneyHelper'))
-            ->will($this->returnValue($mockApplicationJourneyHelper));
+            ->with('Entity\Application')
+            ->will($this->returnValue($mockApplicationHelper));
+
+        $mockServiceLocator->expects($this->at(2))
+            ->method('get')
+            ->with('Entity\Application')
+            ->will($this->returnValue($mockApplicationHelper));
 
         $this->controller->expects($this->any())
              ->method('getServiceLocator')
@@ -350,7 +374,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
 
         $response = $this->controller->feesAction();
 
-        $this->assertEquals('rendered view', $response);
+        $this->assertInstanceOf('\Olcs\View\Model\Application\Layout', $response);
 
     }
 

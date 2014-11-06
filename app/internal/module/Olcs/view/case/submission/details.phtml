@@ -7,19 +7,19 @@ $selectedSectionsArray = $this->placeholder('selectedSectionsArray')->getValue()
 $freetext = '';
 
 $selectedIds = array_column($selectedSectionsArray, 'sectionId');
-foreach ($allSections as $sectionId => $sectionDescription) {
-    if (in_array($sectionId, $selectedIds))
-    {
-        $key = array_search($sectionId, $selectedIds);
 
+foreach ($allSections as $sectionId => $sectionDescription) {
+    if (array_key_exists($sectionId, $selectedSectionsArray))
+    {
         $freetext .= $this->submissionSectionDetails(
-            $selectedSectionsArray[$key]['sectionId'],
-            $selectedSectionsArray[$key]
+            $sectionId,
+            $selectedSectionsArray[$sectionId]
         );
         if (isset($submissionConfig[$sectionId]['allow_comments']) && $submissionConfig[$sectionId]['allow_comments']) {
             $freetext .= $this->partial('case/submission/partials/comments',
                 [
-                    'section' => $selectedSectionsArray[$key],
+                    'sectionId' => $sectionId,
+                    'section' => $selectedSectionsArray[$sectionId],
                     'caseId' => $case['id'],
                     'submissionId' => $submission['id']
                 ]

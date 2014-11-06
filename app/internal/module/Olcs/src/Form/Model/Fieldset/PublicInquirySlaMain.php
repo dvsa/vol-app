@@ -23,6 +23,7 @@ class PublicInquirySlaMain extends CaseBase
      * @Form\Required(false)
      * @Form\Type("SlaDateSelect")
      * @Form\Filter({"name":"DateSelectNullifier"})
+     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $callUpLetterDate = null;
@@ -38,6 +39,7 @@ class PublicInquirySlaMain extends CaseBase
      * @Form\Required(false)
      * @Form\Type("SlaDateSelect")
      * @Form\Filter({"name":"DateSelectNullifier"})
+     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $briefToTcDate = null;
@@ -179,6 +181,7 @@ class PublicInquirySlaMain extends CaseBase
      * @Form\Required(false)
      * @Form\Type("SlaDateSelect")
      * @Form\Filter({"name":"DateSelectNullifier"})
+     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $decSentAfterWrittenDecDate = null;

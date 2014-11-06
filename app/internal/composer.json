@@ -35,6 +35,7 @@
     "require-dev": {
         "squizlabs/php_codesniffer": "~1.5.3",
         "phpunit/phpunit": "4.*",
+        "sebastian/diff": "dev-master",
         "phpunit/phpcov": "dev-master",
         "mockery/mockery": "0.9.x-dev",
         "olcs/olcs-testhelpers": "dev-develop"
