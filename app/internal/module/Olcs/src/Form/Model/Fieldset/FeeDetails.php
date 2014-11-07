@@ -26,7 +26,7 @@ class FeeDetails
     /**
      * @Form\Attributes({"class":"long","id":""})
      * @Form\Options({"label":"Waive note"})
-     * @Form\Type("\Common\Form\Elements\InputFilters\TexareatMax255Min5")
+     * @Form\Type("\Common\Form\Elements\InputFilters\FeeWaiveNote")
      */
     public $waiveReason = null;
 }

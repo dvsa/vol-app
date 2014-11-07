@@ -141,6 +141,7 @@ trait FeesActionTrait
             'status' => isset($fee['feeStatus']['description']) ? $fee['feeStatus']['description'] : '',
             'receiptNo' => $fee['receiptNo'],
             'receivedAmount' => $fee['receivedAmount'],
+            'receivedDate' => $fee['receivedDate'],
             'paymentMethod' => isset($fee['paymentMethod']['description']) ? : '',
             'processedBy' => isset($fee['lastModifiedBy']['name']) ? $fee['lastModifiedBy']['name'] : ''
         ];
