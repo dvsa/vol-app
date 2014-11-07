@@ -7,203 +7,208 @@
  */
 namespace OlcsTest\Controller\Application;
 
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
-use Common\Service\Entity\ApplicationEntityService;
+use PHPUnit_Framework_TestCase;
+use OlcsTest\Bootstrap;
 
 /**
  * Application Controller Test
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ApplicationControllerTest extends AbstractHttpControllerTestCase
+class ApplicationControllerTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
+    private $sut;
+    private $sm;
+    private $mockParams;
+    private $mockRouteParams;
+    private $pluginManager;
+
+    protected function setUp()
     {
-        $this->setApplicationConfig(
-            include __DIR__ . '/../../../../../config/application.config.php'
-        );
-        $this->controller = $this->getMock(
-            '\Olcs\Controller\Application\ApplicationController',
-            array(
-                'getRequest',
-                'params',
-                'redirect',
-                'getTable',
-                'getForm',
-                'getFromRoute',
-                'getLicence'
-            )
-        );
+        $this->sm = Bootstrap::getServiceManager();
+        $this->sm->setAllowOverride(true);
 
-        $query = new \Zend\Stdlib\Parameters();
-        $request = $this->getMock('\stdClass', ['getQuery', 'isXmlHttpRequest', 'isPost']);
-        $request->expects($this->any())
-            ->method('getQuery')
-            ->will($this->returnValue($query));
-
-        $this->query = $query;
-        $this->request = $request;
-
-        $this->controller->expects($this->any())
-            ->method('getRequest')
-            ->will($this->returnValue($request));
-
-        parent::setUp();
+        $this->sut = $this->getMock('\Olcs\Controller\Application\ApplicationController', array('render'));
+        $this->sut->setServiceLocator($this->sm);
+        $this->pluginManager = $this->sut->getPluginManager();
     }
 
     /**
      * @group application_controller
-     *
-     * @dataProvider feesForApplicationProvider
      */
-    public function testFeesAction($status, $feeStatus)
+    public function testCaseAction()
     {
-        $params = $this->getMock('\stdClass', ['fromRoute', 'fromQuery']);
+        $this->mockRender();
 
-        $params->expects($this->once())
-            ->method('fromRoute')
-            ->with('application')
-            ->will($this->returnValue(1));
+        $view = $this->sut->caseAction();
 
-        $params->expects($this->any())->method('fromQuery')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        ['status', $status],
-                        ['page', 1, 1],
-                        ['sort', 'receivedDate', 'receivedDate'],
-                        ['order', 'DESC', 'DESC'],
-                        ['limit', 10, 10],
-                    ]
-                )
-            );
-
-        $bundle = [
-            'properties' => null,
-            'children' => [
-                'licence' => [
-                    'properties' => [
-                        'id'
-                    ]
-                ]
-            ]
-        ];
-
-        $mockApplicationService = $this->getMock(
-            '\stdClass',
-            array('getLicenceIdForApplication', 'getStatus', 'getHeaderData')
-        );
-        $mockApplicationService->expects($this->once())
-            ->method('getLicenceIdForApplication')
-            ->with(1)
-            ->will($this->returnValue(1));
-
-        $mockApplicationService->expects($this->once())
-            ->method('getStatus')
-            ->will($this->returnValue(ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION));
-
-        $headerData = array(
-            'id' => 1,
-            'status' => array(
-                'id' => 'Foo'
-            ),
-            'licence' => array(
-                'id' => 123,
-                'licNo' => 'asdjlkads',
-                'organisation' => array(
-                    'name' => 'sdjfhkjsdhf'
-                )
-            )
-        );
-
-        $mockApplicationService->expects($this->once())
-            ->method('getHeaderData')
-            ->will($this->returnValue($headerData));
-
-        $mockScriptService = $this->getMock('\stdClass', array('loadFiles'));
-
-        $sm = \OlcsTest\Bootstrap::getServiceManager();
-        $sm->setAllowOverride(true);
-        $sm->setService('Entity\Application', $mockApplicationService);
-        $sm->setService('Script', $mockScriptService);
-
-        $this->controller->expects($this->any())
-            ->method('params')
-            ->will($this->returnValue($params));
-
-        $mockFeeService = $this->getMock('\stdClass', ['getFees']);
-
-        $feesParams = [
-            'licence' => 1,
-            'page'    => '1',
-            'sort'    => 'receivedDate',
-            'order'   => 'DESC',
-            'limit'   => 10,
-        ];
-
-        if ($feeStatus) {
-            $feesParams['feeStatus'] = $feeStatus;
-        }
-
-        $fees = [
-            'Results' => [
-                [
-                    'id' => 1,
-                    'invoiceStatus' => 'is',
-                    'description' => 'ds',
-                    'amount' => 1,
-                    'invoicedDate' => '2014-01-01',
-                    'receiptNo' => '1',
-                    'receivedDate' => '2014-01-01',
-                    'feeStatus' => [
-                        'id' => 'lfs_ot',
-                        'description' => 'd'
-                    ]
-                ]
-            ],
-            'Count' => 1
-        ];
-
-        $mockFeeService->expects($this->once())
-            ->method('getFees')
-            ->with($this->equalTo($feesParams))
-            ->will($this->returnValue($fees));
-
-        $sm->setService('Olcs\Service\Data\Fee', $mockFeeService);
-
-        $this->controller->setServiceLocator($sm);
-
-        $mockForm = $this->getMock('\StdClass', ['remove', 'setData']);
-        $mockForm->expects($this->once())
-            ->method('remove')
-            ->with($this->equalTo('csrf'))
-            ->will($this->returnValue(true));
-
-        $mockForm->expects($this->once())
-            ->method('setData')
-            ->will($this->returnValue(true));
-
-        $this->controller->expects($this->once())
-            ->method('getForm')
-            ->will($this->returnValue($mockForm));
-
-        $response = $this->controller->feesAction();
-
-        $this->assertInstanceOf('\Olcs\View\Model\Application\Layout', $response);
-
+        $this->assertEquals('application/index', $view->getTemplate());
     }
 
     /**
-     * Data provider
-     *
-     * @return array
+     * @group application_controller
      */
-    public function feesForApplicationProvider()
+    public function testEnvironmentalAction()
     {
-        return [
-            ['current', 'IN ["lfs_ot","lfs_wr"]'],
-            ['all', ''],
-            ['historical', 'IN ["lfs_pd","lfs_w","lfs_cn"]']
-        ];
+        $this->mockRender();
+
+        $view = $this->sut->environmentalAction();
+
+        $this->assertEquals('application/index', $view->getTemplate());
+    }
+
+    /**
+     * @group application_controller
+     */
+    public function testDocumentAction()
+    {
+        $this->mockRender();
+
+        $view = $this->sut->documentAction();
+
+        $this->assertEquals('application/index', $view->getTemplate());
+    }
+
+    /**
+     * @group application_controller
+     */
+    public function testProcessingAction()
+    {
+        $this->mockRender();
+
+        $view = $this->sut->processingAction();
+
+        $this->assertEquals('application/index', $view->getTemplate());
+    }
+
+    /**
+     * @group application_controller
+     */
+    public function testGrantActionWithGet()
+    {
+        $id = 7;
+
+        $this->mockRouteParam('application', $id);
+
+        $this->mockRender();
+
+        $request = $this->sut->getRequest();
+        $request->setMethod('GET');
+
+        $formHelper = $this->getMock('\stdClass', ['createForm']);
+        $formHelper->expects($this->once())
+            ->method('createForm')
+            ->with('GenericConfirmation')
+            ->will($this->returnValue('FORM'));
+        $this->sm->setService('Helper\Form', $formHelper);
+
+        $view = $this->sut->grantAction();
+        $this->assertEquals('application/grant', $view->getTemplate());
+        $this->assertEquals('FORM', $view->getVariable('form'));
+    }
+
+    /**
+     * @group application_controller
+     */
+    public function testGrantActionWithCancelButton()
+    {
+        $id = 7;
+        $post = array(
+            'form-actions' => array(
+                'cancel' => 'foo'
+            )
+        );
+
+        $this->mockRouteParam('application', $id);
+
+        $request = $this->sut->getRequest();
+        $request->setMethod('POST');
+        $request->setPost(new \Zend\Stdlib\Parameters($post));
+
+        $redirect = $this->mockRedirect();
+        $redirect->expects($this->once())
+            ->method('toRoute')
+            ->with('lva-application', array('application' => 7))
+            ->will($this->returnValue('REDIRECT'));
+
+        $this->assertEquals('REDIRECT', $this->sut->grantAction());
+    }
+
+    /**
+     * @group application_controller
+     */
+    public function testGrantActionWithPost()
+    {
+        $id = 7;
+        $post = array();
+
+        $this->mockRouteParam('application', $id);
+
+        $request = $this->sut->getRequest();
+        $request->setMethod('POST');
+        $request->setPost(new \Zend\Stdlib\Parameters($post));
+
+        // @todo Mock grant action post
+        $this->fail('Finish me');
+
+        $redirect = $this->mockRedirect();
+        $redirect->expects($this->once())
+            ->method('toRoute')
+            ->with('lva-application', array('application' => 7))
+            ->will($this->returnValue('REDIRECT'));
+
+        $this->assertEquals('REDIRECT', $this->sut->grantAction());
+    }
+
+    /**
+     * Helper method
+     */
+    protected function mockRouteParam($name, $value)
+    {
+        $this->mockRouteParams[$name] = $value;
+
+        if ($this->mockParams === null) {
+            $this->mockParams = $this->getMock('\Zend\Mvc\Controller\Plugin\Params', array('__invoke'));
+
+            $this->mockParams->expects($this->any())
+                ->method('__invoke')
+                ->will($this->returnCallback(array($this, 'getRouteParam')));
+
+            $this->pluginManager->setService('params', $this->mockParams);
+        }
+    }
+
+    /**
+     * Helper method
+     */
+    public function getRouteParam($name)
+    {
+        return isset($this->mockRouteParams[$name]) ? $this->mockRouteParams[$name] : null;
+    }
+
+    /**
+     * Helper method
+     */
+    protected function mockRender()
+    {
+        $this->sut->expects($this->once())
+            ->method('render')
+            ->will(
+                $this->returnCallback(
+                    function ($view) {
+                        return $view;
+                    }
+                )
+            );
+    }
+
+    /**
+     * Helper method
+     */
+    protected function mockRedirect()
+    {
+        $mockRedirect = $this->getMock('\Zend\Mvc\Controller\Plugin\Redirect', array('toRoute'));
+        $this->pluginManager->setService('Redirect', $mockRedirect);
+        return $mockRedirect;
     }
 }
