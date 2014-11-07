@@ -266,8 +266,21 @@ $routes = [
                 'controller' => 'CasePenaltyController',
                 'action' => 'index'
             ]
-        ]
+        ],
     ],
+    /*'case_penalty_applied' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/case/:case/penalty/:action[/:penalty]',
+            'defaults' => [
+                'constraints' => [
+                    'action' => '[A-Za-z]+',
+                    'penalty' => '[0-9]+',
+                ],
+                'controller' => 'CaseAppliedPenaltyController',
+            ]
+        ]
+    ],*/
     'case_complaint' => [
         'type' => 'segment',
         'options' => [

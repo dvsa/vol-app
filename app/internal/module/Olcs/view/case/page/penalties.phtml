@@ -1,3 +1,48 @@
-<div class="full-width">
-    <?php echo $this->form($commentForm); ?>
-</div>
+<?php
+    $data = $this->placeholder('penalties')->getValue();
+
+    if (!empty($data)) {
+        echo $this->render('partials/read-only/main',
+            [
+                'header' => 'ERRU Penalties',
+                'multiItems' => [
+                    0 => [
+                        ['label' => 'VRM', 'value' => $data['case']['erruVrm']],
+                    ],
+                    1 => [
+                        ['label' => 'Infringement ID', 'value' => $data['id']],
+                        ['label' => 'Notification number', 'value' => $data['notificationNumber']],
+                    ],
+                    2 => [
+                        ['label' => 'Category', 'value' => $data['siCategory']['description']],
+                        ['label' => 'Type', 'value' => $data['siCategoryType']['description']],
+                        ['label' => 'Date of infringement', 'date' => $data['infringementDate']],
+                        ['label' => 'Date of check', 'date' => $data['checkDate']]
+                    ],
+                    3 => [
+                        [
+                            'label' => 'Transport undertaking name',
+                            'value' => $data['case']['erruTransportUndertakingName'],
+                            'class' => 'full-width'
+                        ],
+                        [
+                            'label' => 'Member state',
+                            'value' => $data['memberStateCode']['countryDesc'],
+                            'class' => 'full-width'
+                        ],
+                        [
+                            'label' => 'Originating authority',
+                            'value' => $data['case']['erruOriginatingAuthority'],
+                            'class' => 'full-width'
+                        ]
+                    ]
+                ]
+            ]
+        );
+
+        echo $this->placeholder('erru-imposed')->getValue();
+        echo $this->placeholder('erru-requested')->getValue();
+        echo $this->placeholder('erru-applied')->getValue();
+
+        echo $this->render('widget/comments');
+    }
