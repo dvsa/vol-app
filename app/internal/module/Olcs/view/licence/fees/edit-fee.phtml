@@ -13,6 +13,7 @@ echo $this->render('partials/read-only/main',
             [
                 ['label' => $this->translate('Receipt No:'), 'value' => $receiptNo, 'class' => 'full-width'],
                 ['label' => $this->translate('Amount received:'), 'numeric' => $receivedAmount, 'class' => 'full-width'],
+                ['label' => $this->translate('Received:'), 'date' => $receivedDate, 'class' => 'full-width'],
                 ['label' => $this->translate('Payment method:'), 'value' => $paymentMethod, 'class' => 'full-width'],
                 ['label' => $this->translate('Processed by:'), 'value' => $processedBy, 'class' => 'full-width'],
             ]
