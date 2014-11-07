@@ -13,7 +13,9 @@
     </li>
     <?php endif; ?>
     <?php if ($showUndoGrant) : ?>
-    <li class="record-actions__item action--secondary"><a href="">Undo grant application</a></li>
+    <li class="record-actions__item action--secondary">
+        <a href="<?php echo $this->url('lva-application/undo-grant', array(), array(), true); ?>">Undo grant application</a>
+    </li>
     <?php endif; ?>
 </ul>
 <?php endif;

@@ -540,6 +540,12 @@ return array(
                                 'label' => 'Grant application',
                                 'route' => 'lva-application/grant',
                                 'use_route_match' => true
+                            ),
+                            array(
+                                'id' => 'undogrant_application',
+                                'label' => 'Undo grant application',
+                                'route' => 'lva-application/undo-grant',
+                                'use_route_match' => true
                             )
                         )
                     )

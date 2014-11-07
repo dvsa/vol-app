@@ -12,7 +12,6 @@ use Zend\View\Model\ViewModel;
 use Olcs\Controller\Traits;
 use Common\Service\Entity\ApplicationEntityService;
 use Common\Service\Entity\LicenceEntityService;
-use Common\Service\Entity\TaskEntityService;
 use Common\Service\Data\FeeTypeDataService;
 use Common\Service\Entity\FeeEntityService;
 use Common\Service\Data\CategoryDataService;
@@ -113,10 +112,9 @@ class ApplicationController extends AbstractController
             if (!$this->isButtonPressed('cancel')) {
 
                 $licenceId = $this->getServiceLocator()->get('Entity\Application')->getLicenceIdForApplication($id);
-                //$this->grantApplication($id);
-                //$this->grantLicence($licenceId);
-                //$taskId = $this->createGrantTask($id, $licenceId);
-                $taskId = 1;
+                $this->grantApplication($id);
+                $this->grantLicence($licenceId);
+                $taskId = $this->createGrantTask($id, $licenceId);
                 $this->createGrantFee($id, $licenceId, $taskId);
 
                 $this->getServiceLocator()->get('Helper\FlashMessenger')
@@ -132,6 +130,61 @@ class ApplicationController extends AbstractController
         $view->setTemplate('application/grant');
 
         return $this->render($view);
+    }
+
+    public function undoGrantAction()
+    {
+        $request = $this->getRequest();
+        $id = $this->params('application');
+
+        if ($request->isPost()) {
+
+            if (!$this->isButtonPressed('cancel')) {
+
+                $licenceId = $this->getServiceLocator()->get('Entity\Application')->getLicenceIdForApplication($id);
+                $this->undoGrantApplication($id);
+                $this->undoGrantLicence($licenceId);
+                $this->cancelFees($licenceId);
+                $this->closeGrantTask($id, $licenceId);
+
+                $this->getServiceLocator()->get('Helper\FlashMessenger')
+                    ->addSuccessMessage('The application grant has been undone successfully');
+            }
+
+            return $this->redirect()->toRoute('lva-application', array('application' => $id));
+        }
+
+        $form = $this->getServiceLocator()->get('Helper\Form')->createForm('GenericConfirmation');
+
+        $view = new ViewModel(array('form' => $form));
+        $view->setTemplate('application/undo-grant');
+
+        return $this->render($view);
+    }
+
+    protected function cancelFees($licenceId)
+    {
+        $this->getServiceLocator()->get('Entity\Fee')->cancelForLicence($licenceId);
+    }
+
+    protected function undoGrantApplication($id)
+    {
+        $applicationData = array(
+            'status' => ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION,
+            'grantedDate' => null
+        );
+
+        $this->getServiceLocator()->get('Entity\Application')->forceUpdate($id, $applicationData);
+    }
+
+    protected function undoGrantLicence($id)
+    {
+        $licenceData = array(
+            'status' => LicenceEntityService::LICENCE_STATUS_UNDER_CONSIDERATION,
+            'grantedDate' => null
+        );
+
+        $this->getServiceLocator()->get('Entity\Licence')->forceUpdate($id, $licenceData);
     }
 
     protected function grantApplication($id)
@@ -158,6 +211,18 @@ class ApplicationController extends AbstractController
         $this->getServiceLocator()->get('Entity\Licence')->forceUpdate($id, $licenceData);
     }
 
+    protected function closeGrantTask($id, $licenceId)
+    {
+        $this->getServiceLocator()->get('Entity\Task')->closeByQuery(
+            array(
+                'category' => CategoryDataService::CATEGORY_APPLICATION,
+                'taskSubCategory' => CategoryDataService::TASK_SUB_CATEGORY_APPLICATION_GRANT_FEE_DUE,
+                'licence' => $licenceId,
+                'application' => $id
+            )
+        );
+    }
+
     protected function createGrantTask($id, $licenceId)
     {
         $user = $this->getServiceLocator()->get('Entity\User')->getCurrentUser();
@@ -170,7 +235,7 @@ class ApplicationController extends AbstractController
             'actionDate' => $date,
             'assignedToUser' => $user['id'],
             'assignedToTeam' => $user['team']['id'],
-            'status' => TaskEntityService::STATUS_OPEN,
+            'isClosed' => 'N',
             'urgent' => 'N',
             'application' => $id,
             'licence' => $licenceId,
@@ -185,10 +250,6 @@ class ApplicationController extends AbstractController
     {
         $feeType = $this->getFeeTypeForLicence($applicationId, $licenceId);
         $date = $this->getServiceLocator()->get('Helper\Date')->getDate();
-
-        print '<pre>';
-        print_r($feeType);
-        exit;
 
         $feeData = array(
             'amount' => (float)($feeType['fixedValue'] === '0.00' ? $feeType['fiveYearValue'] : $feeType['fixedValue']),
