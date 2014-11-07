@@ -38,7 +38,10 @@ $routes = array(
     'create_variation' => array(
         'type' => 'segment',
         'options' => array(
-            'route' => '/variation/create/:id',
+            'route' => '/variation/create/:licence',
+            'constraints' => array(
+                'licence' => '[0-9]+',
+            ),
             'defaults' => array(
                 'controller' => 'LvaLicence/Overview',
                 'action' => 'createVariation'
