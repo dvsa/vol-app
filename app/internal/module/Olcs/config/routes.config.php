@@ -1166,6 +1166,19 @@ $routes = [
                 ]
             ],
         ]
+    ],
+    'create_variation' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/variation/create/:licence',
+            'defaults' => [
+                'constraints' => [
+                    'licence' => '[0-9]+',
+                ],
+                'controller' => 'LvaLicence/Overview',
+                'action' => 'createVariation'
+            ]
+        ]
     ]
 ];
 

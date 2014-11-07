@@ -11,7 +11,7 @@
             ?>
             <li class="app-navigation__item <?php echo $details['class']; ?> <?php echo $details['enabled'] ? '' : 'disabled'; ?>">
                 <?php if (!$current && $details['enabled']) : ?>
-                    <a href="<?php echo $this->url($details['route'], array(), array(), true); ?>">
+                    <a href="<?php echo $this->url($details['route'], ['application' => $lvaId]); ?>">
                 <?php endif; ?>
                 <span><?php echo $this->translate('section.name.' . $reference); ?></span>
                 <?php if (!$current && $details['enabled']) : ?>
