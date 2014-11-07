@@ -34,8 +34,9 @@ class ApplicationController extends AbstractController
     {
         $this->loadScripts(['fee-filter', 'table-actions']);
 
-        $applicationId = $this->params('application');
-        $licenceId = $this->getServiceLocator()->get('Entity\Application')->getLicenceIdForApplication($applicationId);
+        $applicationId = $this->params()->fromRoute('application');
+        $licenceId = $this->getServiceLocator()->get('Entity\Application')
+            ->getLicenceIdForApplication($applicationId);
 
         $status = $this->params()->fromQuery('status');
         $filters = [

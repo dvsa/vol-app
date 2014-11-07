@@ -18,50 +18,6 @@ use Zend\Json\Json;
 trait FeesActionTrait
 {
     /**
-     * Shows fees table
-     */
-    public function feesAction()
-    {
-        $this->loadScripts(['fee-filter', 'table-actions']);
-
-        $licenceId = $this->params()->fromRoute('licence');
-        if (!$licenceId) {
-            $applicationId = $this->params()->fromRoute('application');
-            $bundle = [
-                'properties' => null,
-                'children' => [
-                    'licence' => [
-                        'properties' => [
-                            'id'
-                        ]
-                    ]
-                ]
-            ];
-            $results = $this->makeRestCall('Application', 'GET', ['id' => $applicationId], $bundle);
-            $licenceId = $results['licence']['id'];
-        } else {
-            $applicationId = null;
-            $this->pageLayout = 'licence';
-        }
-
-        $status = $this->params()->fromQuery('status');
-        $filters = [
-            'status' => $status
-        ];
-
-        $table = $this->getFeesTable($licenceId, $status);
-
-        $view = $this->getViewWithLicence(['table' => $table, 'form'  => $this->getFeeFilterForm($filters)]);
-        $view->setTemplate('licence/fees');
-
-        if ($applicationId) {
-            return $this->render($view);
-        } else {
-            return $this->renderView($view);
-        }
-    }
-
-    /**
      * Get fee filter form
      *
      * @param array $filters
