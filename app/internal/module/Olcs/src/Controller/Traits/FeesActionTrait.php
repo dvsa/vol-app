@@ -22,7 +22,7 @@ trait FeesActionTrait
      */
     public function feesAction()
     {
-        $this->loadScripts(['fee-filter', 'table-actions']);
+        $this->loadScripts(['forms/filter', 'table-actions']);
 
         $licenceId = $this->params()->fromRoute('licence');
         if (!$licenceId) {
