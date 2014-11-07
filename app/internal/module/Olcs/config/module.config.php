@@ -241,7 +241,8 @@ return array(
     'search' => [
         'invokables' => [
             'licence' => 'Olcs\Data\Object\Search\Licence',
-            'application' => 'Olcs\Data\Object\Search\Application'
+            'application' => 'Olcs\Data\Object\Search\Application',
+            'case' => 'Olcs\Data\Object\Search\Cases'
         ]
     ],
     'route_param_listeners' => [
