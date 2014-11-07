@@ -153,7 +153,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
         $fees = [
             'Results' => [
                 [
-                    'invoiceNo' => 'i',
+                    'id' => 1,
                     'invoiceStatus' => 'is',
                     'description' => 'ds',
                     'amount' => 1,
@@ -293,7 +293,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
         $fees = [
             'Results' => [
                 [
-                    'invoiceNo' => 'i',
+                    'id' => 1,
                     'invoiceStatus' => 'is',
                     'description' => 'ds',
                     'amount' => 1,
@@ -406,7 +406,6 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
         $feeId = 1;
         $feeDetails = [
             'id' => 1,
-            'invoiceNo' => '123',
             'description' => 'desc',
             'amount' => 123.12,
             'invoicedDate' => '2014-01-01 10:10:10',
@@ -548,7 +547,6 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
         $feeId = 1;
         $feeDetails = [
             'id' => 1,
-            'invoiceNo' => '123',
             'description' => 'desc',
             'amount' => 123.12,
             'invoicedDate' => '2014-01-01 10:10:10',

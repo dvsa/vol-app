@@ -134,7 +134,7 @@ trait FeesActionTrait
 
         $viewParams = [
             'form' => $form,
-            'invoiceNo' => $fee['invoiceNo'],
+            'invoiceNo' => $fee['id'],
             'description' => $fee['description'],
             'amount' => $fee['amount'],
             'created' => $fee['invoicedDate'],
@@ -147,7 +147,7 @@ trait FeesActionTrait
         $view = new ViewModel($viewParams);
         $view->setTemplate('licence/fees/edit-fee');
 
-        return $this->renderView($view, 'No # ' . $fee['invoiceNo']);
+        return $this->renderView($view, 'No # ' . $fee['id']);
     }
 
     /**
