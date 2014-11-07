@@ -6,16 +6,16 @@ namespace Olcs\Data\Object\Search;
  * Class Licence
  * @package Olcs\Data\Object\Search
  */
-class Licence extends SearchAbstract
+class Cases extends SearchAbstract
 {
     /**
      * @var string
      */
-    protected $title = 'Licence';
+    protected $title = 'Case';
     /**
      * @var string
      */
-    protected $key = 'licence';
+    protected $key = 'case';
 
     /**
      * @return array
@@ -23,13 +23,14 @@ class Licence extends SearchAbstract
     public function getColumns()
     {
         return [
+            ['title' => 'Case type', 'name'=> 'caseTypeDesc'],
+            ['title' => 'Case Id', 'name'=> 'caseId'],
             ['title' => 'Licence number', 'name'=> 'licNo'],
             ['title' => 'Licence status', 'name'=> 'licStatusDesc'],
+            ['title' => 'Application Id', 'name'=> 'appId'],
+            ['title' => 'Application Status', 'name'=> 'appStatusDesc'],
             ['title' => 'Operator name', 'name'=> 'orgName'],
-            ['title' => 'Trading name', 'name'=> 'tradingName'],
-            ['title' => 'Entity type', 'name'=> 'orgTypeDesc'],
-            ['title' => 'Licence type', 'name'=> 'licTypeDesc'],
-            ['title' => 'Cases', 'name'=> 'caseCount'],
+            ['title' => 'Case status', 'name'=> 'caseStatusDesc'],
         ];
     }
 }
