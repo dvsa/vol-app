@@ -35,11 +35,12 @@ class UploadsController extends AbstractActionController
     public function processSave($data)
     {
         $dataService = $this->getEbsrDataService();
-        $validPacks = $dataService->processPackUpload($data['validData']);
+        $validPacks = $dataService->processPackUpload($data);
 
         if ($validPacks) {
-            $this->addSuccessMessage($validPacks . 'successfully submitted for processing');
-            $this->redirectToIndex();
+            $this->addSuccessMessage(
+                $validPacks . (($validPacks > 1)? ' packs': ' pack'). ' successfully submitted for processing'
+            );
         } else {
             $this->addErrorMessage(
                 'No valid packs were found in your upload, please verify your file and try again'

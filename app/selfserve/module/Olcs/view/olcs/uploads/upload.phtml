@@ -7,10 +7,11 @@ echo $this->render(
     )
 );
 ?>
-
+<div class="two-thirds">
 <?php echo $this->flashMessengerAll(); ?>
 
 <?php
 $this->form->prepare();
 echo $this->form()->render($this->form);
 ?>
+</div>

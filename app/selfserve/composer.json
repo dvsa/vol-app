@@ -24,13 +24,14 @@
         "zendframework/zendframework": "2.3.*",
         "doctrine/doctrine-orm-module": "0.*",
         "olcs/OlcsCommon": "dev-develop",
-        "olcs/olcs-logging": "dev-master",
+        "olcs/olcs-logging": "dev-develop",
         "dvsa/jackrabbit": "v1.1.0",
         "symfony/Filesystem": "~2.6.0-dev"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "~1.5.3",
         "phpunit/phpunit": "4.*",
+        "sebastian/diff": "dev-master",
         "phpunit/phpcov": "dev-master",
         "mockery/mockery": "~0.9.2",
         "mikey179/vfsStream": "~1.4.0"
