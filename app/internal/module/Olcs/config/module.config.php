@@ -242,7 +242,9 @@ return array(
         'invokables' => [
             'licence' => 'Olcs\Data\Object\Search\Licence',
             'application' => 'Olcs\Data\Object\Search\Application',
-            'case' => 'Olcs\Data\Object\Search\Cases'
+            'case' => 'Olcs\Data\Object\Search\Cases',
+            'psv_disc' => 'Olcs\Data\Object\Search\PsvDisc',
+            'vehicle_current' => 'Olcs\Data\Object\Search\VehicleCurrent',
         ]
     ],
     'route_param_listeners' => [
