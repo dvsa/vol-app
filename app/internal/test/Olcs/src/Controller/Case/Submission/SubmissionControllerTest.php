@@ -163,20 +163,41 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
                 'submissionTypeSubmit' => 'some_type'
             ]
         ];
-        $this->controller->expects($this->once())
-            ->method('getFromPost')
-            ->with('fields')
-            ->willReturn($mockPostData);
+        $caseId = 24;
+        $mockCase = ['id' => $caseId];
 
         $mockForm = $this->getMock(
             '\Zend\Form\Form'
         );
+        $pluginManagerHelper = new ControllerPluginManagerHelper();
+        $mockPluginManager = $pluginManagerHelper->getMockPluginManager(
+            [
+                'params' => 'Params',
+            ]
+        );
+        $mockParams = $mockPluginManager->get('params', '');
+        $mockParams->shouldReceive('fromPost')->with('fields')->andReturn($mockPostData);
+        $mockParams->shouldReceive('fromRoute')->with('action');
+        $mockParams->shouldReceive('fromRoute')->with('submission');
+        $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
 
-        $this->controller->expects($this->once())
-            ->method('setPersist')
-            ->with($this->equalTo(false));
+        $mockRestHelper = m::mock('RestHelper');
+        $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn(['id' => $caseId]);
 
-        $this->controller->alterFormBeforeValidation($mockForm);
+        $mockCaseService = m::mock('Olcs\Service\Data\Cases');
+        $mockCaseService->shouldReceive('fetchCaseData')->with($caseId)->andReturn($mockCase);
+
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
+        $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\Cases')->andReturn($mockCaseService);
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
+
+        $sut = new \Olcs\Controller\Cases\Submission\SubmissionController();
+        $sut->setServiceLocator($mockServiceManager);
+        $sut->setPluginManager($mockPluginManager);
+
+        $result = $sut->alterFormBeforeValidation($mockForm);
+        $this->assertSame($mockForm, $result);
     }
 
     public function testInsertSubmission()
@@ -293,15 +314,6 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
             ->andReturn($mockSubmissionService);
 
         $sut = new \Olcs\Controller\Cases\Submission\SubmissionController();
-
-        $event = $this->routeMatchHelper->getMockRouteMatch(
-            array('controller' => 'submission','action' => 'refresh')
-        );
-        $sut->setEvent($event);
-
-        $sut->getEvent()->getRouteMatch()->setParam('case', $caseId);
-        $sut->getEvent()->getRouteMatch()->setParam('submission', $submissionId);
-        $sut->getEvent()->getRouteMatch()->setParam('section', $section);
 
         $sut->setServiceLocator($mockServiceManager);
         $sut->setPluginManager($mockPluginManager);
