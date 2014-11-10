@@ -21,7 +21,7 @@ class TransportManagerController extends AbstractController
      * @var string
      */
     protected $pageLayout = 'transport-manager';
-    
+
     /**
      * Redirect to the first menu section
      *
@@ -43,18 +43,18 @@ class TransportManagerController extends AbstractController
     {
         return $this->redirect()->toRoute('transport-manager/processing/notes', [], [], true);
     }
-    
+
     /**
      * Get view with TM
      *
      * @param array $variables
      * @return \Zend\View\Model\ViewModel
      */
-    protected function getViewWithTM($variables = [])
+    protected function getViewWithTm($variables = [])
     {
         // implement later
         $transportManager = null;
-        
+
         $variables['transportManager'] = $transportManager;
         $variables['section'] = $this->section;
 

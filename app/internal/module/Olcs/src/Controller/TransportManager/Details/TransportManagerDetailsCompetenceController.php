@@ -29,7 +29,7 @@ class TransportManagerDetailsCompetenceController extends AbstractTransportManag
      */
     public function indexAction()
     {
-        $view = $this->getViewWithTM();
+        $view = $this->getViewWithTm();
         $view->setTemplate('transport-manager/index');
         return $this->renderView($view);
     }
