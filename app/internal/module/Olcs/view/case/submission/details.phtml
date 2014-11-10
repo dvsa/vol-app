@@ -68,7 +68,10 @@ echo $this->render('partials/read-only/main',
         <h4><?php echo $sa['isDecision'] == 'Y' ? 'Descision' : 'Recommendation'; ?>:
             <?php echo $sa['submissionActionStatus']['description']; ?></h4>
 
-        <a class="submission-item__edit" href="">Edit</a>
+
+        <?php $route = 'submission_action_' . ($sa['isDecision'] == 'Y' ? 'decision' : 'recommendation'); ?>
+
+        <a class="submission-item__edit" href="<?php echo $this->url($route, ['action' => 'edit', 'id' => $sa['id']], [], true); ?>">Edit</a>
         <p><?php echo $sa['comment']; ?></p>
         <div class="submission-item__meta">
             <p><b>From</b> <?php echo $sa['senderUser']['name']; ?></p>
@@ -86,6 +89,6 @@ echo $this->render('partials/read-only/main',
 
 
 <div class="actions-container" data-group="form-actions">
-    <a href="#" class="action--primary large">Add recommendation</a>
-    <a href="#" class="action--primary large">Add decision</a>
+    <a href="<?php echo $this->url('submission_action_recommendation', ['action' => 'add'], [], true); ?>" class="action--primary large">Add recommendation</a>
+    <a href="<?php echo $this->url('submission_action_decision', ['action' => 'add'], [], true); ?>" class="action--primary large">Add decision</a>
 </div>
