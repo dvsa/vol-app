@@ -24,12 +24,12 @@ class Application extends SearchAbstract
     {
         return [
             ['title' => 'Application id', 'name'=> 'appId'],
-            ['title' => 'Application status', 'name'=> 'appStatus'],
+            ['title' => 'Application status', 'name'=> 'appStatusDesc'],
             ['title' => 'Date received', 'name'=> 'receivedDate'],
             ['title' => 'Licence number', 'name'=> 'licNo'],
-            ['title' => 'Licence status', 'name'=> 'licStatus'],
-            ['title' => 'Licence type', 'name'=> 'licType'],
-            ['title' => 'Operator name', 'name'=> 'name'],
+            ['title' => 'Licence status', 'name'=> 'licStatusDesc'],
+            ['title' => 'Licence type', 'name'=> 'licTypeDesc'],
+            ['title' => 'Operator name', 'name'=> 'orgName'],
             ['title' => 'Authorisation vehicles', 'name'=> 'totAuthVehicles'],
             ['title' => 'Authorisation trailers', 'name'=> 'totAuthTrailers'],
         ];

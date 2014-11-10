@@ -454,6 +454,20 @@ class Submission extends AbstractData
                             )
                         )
                     )
+                ),
+                'submissionActions' => array(
+                    'properties' => 'ALL',
+                    'children' => array(
+                        'recipientUser' => array(
+                            'properties' => 'ALL'
+                        ),
+                        'senderUser' => array(
+                            'properties' => 'ALL'
+                        ),
+                        'submissionActionStatus' => array(
+                            'properties' => 'ALL'
+                        )
+                    )
                 )
             )
         );

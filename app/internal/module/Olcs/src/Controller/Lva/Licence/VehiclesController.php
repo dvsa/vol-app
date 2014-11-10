@@ -28,13 +28,15 @@ class VehiclesController extends AbstractGenericVehiclesController
     protected $location = 'internal';
 
     /**
-     * This method is used to hook the traits postSaveVehicle method into the parent save vehicle method
+     * This method is used to hook the trait's pre & post save methods into the parent save vehicle method
      *
      * @param array $data
      * @param string $mode
      */
     protected function saveVehicle($data, $mode)
     {
+        $data = $this->preSaveVehicle($data, $mode);
+
         $licenceVehicleId = parent::saveVehicle($data, $mode);
 
         $this->postSaveVehicle($licenceVehicleId, $mode);

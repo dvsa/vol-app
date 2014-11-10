@@ -1,5 +1,7 @@
 <?php
 $case = $this->placeholder('case')->getValue();
+$submission = $this->placeholder('submission')->getValue();
+
 echo $this->render('partials/read-only/main',
     [
         'header' => (isset($this->data['description']) ? $this->data['description'] : ''),
@@ -16,9 +18,11 @@ echo $this->render('partials/read-only/main',
             [
                 'label' => 'Refresh table',
                 'url' => $this->url(
-                        'submission', [
+                        'submission_refresh_section', [
                             'case' => $case['id'],
-                            'action' => 'todo'
+                            'submission' => $submission['id'],
+                            'section' => $this->data['sectionId'],
+                            'action' => 'refresh'
                         ]
                     )
             ],

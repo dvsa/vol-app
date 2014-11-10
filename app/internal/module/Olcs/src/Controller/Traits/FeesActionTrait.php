@@ -1,10 +1,10 @@
 <?php
+
 /**
  * Fees action trait
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-
 namespace Olcs\Controller\Traits;
 
 use Zend\View\Model\ViewModel;
@@ -55,13 +55,10 @@ trait FeesActionTrait
         $view->setTemplate('licence/fees');
 
         if ($applicationId) {
-            $applicationJourneyHelper = $this->getServiceLocator()->get('ApplicationJourneyHelper');
-            $renderedView = $applicationJourneyHelper->render($view, $applicationId);
+            return $this->render($view);
         } else {
-            $renderedView = $this->renderView($view);
+            return $this->renderView($view);
         }
-
-        return $renderedView;
     }
 
     /**
@@ -137,27 +134,28 @@ trait FeesActionTrait
 
         $viewParams = [
             'form' => $form,
-            'invoiceNo' => $fee['invoiceNo'],
+            'invoiceNo' => $fee['id'],
             'description' => $fee['description'],
             'amount' => $fee['amount'],
             'created' => $fee['invoicedDate'],
             'status' => isset($fee['feeStatus']['description']) ? $fee['feeStatus']['description'] : '',
             'receiptNo' => $fee['receiptNo'],
             'receivedAmount' => $fee['receivedAmount'],
+            'receivedDate' => $fee['receivedDate'],
             'paymentMethod' => isset($fee['paymentMethod']['description']) ? : '',
             'processedBy' => isset($fee['lastModifiedBy']['name']) ? $fee['lastModifiedBy']['name'] : ''
         ];
         $view = new ViewModel($viewParams);
         $view->setTemplate('licence/fees/edit-fee');
 
-        return $this->renderView($view, 'No # ' . $fee['invoiceNo']);
+        return $this->renderView($view, 'No # ' . $fee['id']);
     }
 
     /**
      * Alter fee form
-     * 
+     *
      * @param Zend\Form\Form $form
-     * @return Zend\Form\Form 
+     * @return Zend\Form\Form
      */
     protected function alterFeeForm($form, $status)
     {

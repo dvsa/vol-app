@@ -3,19 +3,19 @@
 namespace Olcs\Data\Object\Search;
 
 /**
- * Class Licence
+ * Class PsvDisc
  * @package Olcs\Data\Object\Search
  */
-class Licence extends SearchAbstract
+class PsvDisc extends SearchAbstract
 {
     /**
      * @var string
      */
-    protected $title = 'Licence';
+    protected $title = 'Psv Disc';
     /**
      * @var string
      */
-    protected $key = 'licence';
+    protected $key = 'psv_disc';
 
     /**
      * @return array
@@ -26,10 +26,10 @@ class Licence extends SearchAbstract
             ['title' => 'Licence number', 'name'=> 'licNo'],
             ['title' => 'Licence status', 'name'=> 'licStatusDesc'],
             ['title' => 'Operator name', 'name'=> 'orgName'],
-            ['title' => 'Trading name', 'name'=> 'tradingName'],
-            ['title' => 'Entity type', 'name'=> 'orgTypeDesc'],
-            ['title' => 'Licence type', 'name'=> 'licTypeDesc'],
-            ['title' => 'Cases', 'name'=> 'caseCount'],
+            ['title' => 'VRM', 'name'=> ''],
+            ['title' => 'Disc Number', 'name'=> 'discNo'],
+            ['title' => 'Specified date', 'name'=> ''],
+            ['title' => 'Removed date', 'name'=> ''],
         ];
     }
 }

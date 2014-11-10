@@ -94,7 +94,6 @@ class Fee extends AbstractData
         $bundle = [
             'properties' => [
                 'id',
-                'invoiceNo',
                 'invoiceStatus',
                 'description',
                 'amount',

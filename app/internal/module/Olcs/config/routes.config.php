@@ -383,6 +383,20 @@ $routes = [
             ]
         ]
     ],
+    'submission_refresh_section' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/case/:case/submission/:submission/refresh/:section',
+            'constraints' => [
+                'case' => '[0-9]+',
+                'submission' => '[0-9]+'
+            ],
+            'defaults' => [
+                'controller' => 'CaseSubmissionController',
+                'action' => 'refresh'
+            ]
+        ]
+    ],
     'submission_section_comment' => [
         'type' => 'segment',
         'options' => [
@@ -1149,6 +1163,19 @@ $routes = [
                     ],
                 ]
             ],
+        ]
+    ],
+    'create_variation' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/variation/create/:licence',
+            'defaults' => [
+                'constraints' => [
+                    'licence' => '[0-9]+',
+                ],
+                'controller' => 'LvaLicence/Overview',
+                'action' => 'createVariation'
+            ]
         ]
     ]
 ];
