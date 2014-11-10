@@ -68,15 +68,16 @@ trait ApplicationControllerTrait
     {
         $applicationId = $this->params('application');
 
-        if ($this->isApplicationNew($applicationId)
-            && $status === ApplicationEntityService::APPLICATION_STATUS_GRANTED) {
+        $applicationType = $this->getServiceLocator()->get('Entity\Application')->getApplicationType($applicationId);
 
+        if ($applicationType === ApplicationEntityService::APPLICATION_TYPE_NEW
+            && $status === ApplicationEntityService::APPLICATION_STATUS_GRANTED
+        ) {
             $applicationService = $this->getServiceLocator()->get('Entity\Application');
 
             $category = $applicationService->getCategory($applicationId);
 
             return ($category === LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE);
-
         }
 
         return false;

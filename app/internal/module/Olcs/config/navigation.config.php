@@ -85,22 +85,8 @@ return array(
                         ),
                         array(
                             'id' => 'case_details_penalties',
-                            'label' => 'Penalties',
+                            'label' => 'ERRU penalties',
                             'route' => 'case_penalty',
-                            'action' => 'index',
-                            'use_route_match' => true,
-                        ),
-                        array(
-                            'id' => 'case_details_statements',
-                            'label' => 'Statements',
-                            'route' => 'case_statement',
-                            'action' => 'index',
-                            'use_route_match' => true,
-                        ),
-                        array(
-                            'id' => 'case_details_complaints',
-                            'label' => 'Complaints',
-                            'route' => 'case_complaint',
                             'action' => 'index',
                             'use_route_match' => true,
                         ),
@@ -532,7 +518,23 @@ return array(
                     'label' => 'Application details',
                     'route' => 'lva-application',
                     'use_route_match' => true,
-                    'pages' => $applicationDetailsPages
+                    'pages' => array_merge(
+                        $applicationDetailsPages,
+                        array(
+                            array(
+                                'id' => 'grant_application',
+                                'label' => 'Grant application',
+                                'route' => 'lva-application/grant',
+                                'use_route_match' => true
+                            ),
+                            array(
+                                'id' => 'undogrant_application',
+                                'label' => 'Undo grant application',
+                                'route' => 'lva-application/undo-grant',
+                                'use_route_match' => true
+                            )
+                        )
+                    )
                 ),
                 array(
                     'id' => 'application_case',

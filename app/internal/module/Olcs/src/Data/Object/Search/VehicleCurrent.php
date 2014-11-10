@@ -3,19 +3,19 @@
 namespace Olcs\Data\Object\Search;
 
 /**
- * Class Licence
+ * Class VehicleCurrent
  * @package Olcs\Data\Object\Search
  */
-class Licence extends SearchAbstract
+class VehicleCurrent extends SearchAbstract
 {
     /**
      * @var string
      */
-    protected $title = 'Licence';
+    protected $title = 'Vehicle';
     /**
      * @var string
      */
-    protected $key = 'licence';
+    protected $key = 'vehicle_current';
 
     /**
      * @return array
@@ -26,10 +26,10 @@ class Licence extends SearchAbstract
             ['title' => 'Licence number', 'name'=> 'licNo'],
             ['title' => 'Licence status', 'name'=> 'licStatusDesc'],
             ['title' => 'Operator name', 'name'=> 'orgName'],
-            ['title' => 'Trading name', 'name'=> 'tradingName'],
-            ['title' => 'Entity type', 'name'=> 'orgTypeDesc'],
-            ['title' => 'Licence type', 'name'=> 'licTypeDesc'],
-            ['title' => 'Cases', 'name'=> 'caseCount'],
+            ['title' => 'VRM', 'name'=> 'vrm'],
+            ['title' => 'Disc Number', 'name'=> 'discNo'],
+            ['title' => 'Specified date', 'name'=> 'specifiedDate'],
+            ['title' => 'Removed date', 'name'=> 'removalDate'],
         ];
     }
 }

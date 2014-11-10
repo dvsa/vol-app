@@ -122,7 +122,7 @@ class NoteControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->once())
             ->method('loadScripts')
-            ->with(['note-filter']);
+            ->with(['forms/filter']);
 
         $this->controller->expects($this->once())
             ->method('getView')
@@ -209,7 +209,7 @@ class NoteControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->once())
             ->method('loadScripts')
-            ->with(['note-filter']);
+            ->with(['forms/filter']);
 
         $this->controller->expects($this->once())
             ->method('getView')

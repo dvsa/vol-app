@@ -80,10 +80,11 @@ class TaskController extends AbstractController
             return $this->getResponse();
         }
 
+        $this->loadScripts(['forms/task']);
+
         $view = new ViewModel(
             [
-                'form' => $form,
-                'inlineScript' => $this->loadScripts(['task-form'])
+                'form' => $form
             ]
         );
 
@@ -116,10 +117,12 @@ class TaskController extends AbstractController
         if ($tasksCount > 1) {
             $form->get('details')->setLabel('tasks.close.multiple');
         }
+
+        $this->loadScripts(['forms/task']);
+
         $view = new ViewModel(
             [
-                'form' => $form,
-                'inlineScript' => $this->loadScripts(['task-form'])
+                'form' => $form
             ]
         );
 
@@ -130,7 +133,7 @@ class TaskController extends AbstractController
 
     /**
      * Callback invoked when the form is valid
-     * 
+     *
      * @param array $data
      */
     public function processCloseTask($data)
@@ -262,10 +265,11 @@ class TaskController extends AbstractController
             return $this->getResponse();
         }
 
+        $this->loadScripts(['forms/task']);
+
         $view = new ViewModel(
             [
-                'form' => $form,
-                'inlineScript' => $this->loadScripts(['task-form'])
+                'form' => $form
             ]
         );
 
@@ -293,7 +297,7 @@ class TaskController extends AbstractController
                 $url = sprintf(
                     '<a href="%s">%s</a>',
                     $this->url()->fromRoute(
-                        'licence/details/overview',
+                        'lva-licence',
                         array(
                             'licence' => $taskTypeId
                         )
@@ -305,9 +309,9 @@ class TaskController extends AbstractController
                 $url = sprintf(
                     '<a href="%s">%s</a>',
                     $this->url()->fromRoute(
-                        'Application/Overview/Details',
+                        'lva-application',
                         array(
-                            'applicationId' => $taskTypeId
+                            'application' => $taskTypeId
                         )
                     ), $linkDisplay
                 );

@@ -32,6 +32,7 @@ return array(
                 => 'Olcs\Controller\Cases\Submission\DecisionController',
             'CaseStayController' => 'Olcs\Controller\Cases\Hearing\StayController',
             'CasePenaltyController' => 'Olcs\Controller\Cases\Penalty\PenaltyController',
+            'CaseAppliedPenaltyController' => 'Olcs\Controller\Cases\Penalty\AppliedPenaltyController',
             'CaseProhibitionController' => 'Olcs\Controller\Cases\Prohibition\ProhibitionController',
             'CaseProhibitionDefectController' => 'Olcs\Controller\Cases\Prohibition\ProhibitionDefectController',
             'CaseAnnualTestHistoryController' => 'Olcs\Controller\Cases\AnnualTestHistory\AnnualTestHistoryController',
@@ -245,7 +246,10 @@ return array(
     'search' => [
         'invokables' => [
             'licence' => 'Olcs\Data\Object\Search\Licence',
-            'application' => 'Olcs\Data\Object\Search\Application'
+            'application' => 'Olcs\Data\Object\Search\Application',
+            'case' => 'Olcs\Data\Object\Search\Cases',
+            'psv_disc' => 'Olcs\Data\Object\Search\PsvDisc',
+            'vehicle_current' => 'Olcs\Data\Object\Search\VehicleCurrent',
         ]
     ],
     'route_param_listeners' => [

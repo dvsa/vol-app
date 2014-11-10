@@ -100,11 +100,10 @@ class ApplicationControllerTraitTest extends PHPUnit_Framework_TestCase
     public function testRenderWithNoButtons()
     {
         $this->stub->setParams(array('application' => 1));
-        $this->stub->setApplicationNew(false);
 
         $viewModel = new ViewModel();
 
-        $mockApplicationHelper = $this->getMock('\stdClass', array('getStatus', 'getHeaderData'));
+        $mockApplicationHelper = $this->getMock('\stdClass', array('getStatus', 'getHeaderData', 'getApplicationType'));
         $mockApplicationHelper->expects($this->once())
             ->method('getStatus')
             ->will($this->returnValue(ApplicationEntityService::APPLICATION_STATUS_GRANTED));
@@ -126,6 +125,10 @@ class ApplicationControllerTraitTest extends PHPUnit_Framework_TestCase
         $mockApplicationHelper->expects($this->once())
             ->method('getHeaderData')
             ->will($this->returnValue($headerData));
+
+        $mockApplicationHelper->expects($this->once())
+            ->method('getApplicationType')
+            ->will($this->returnValue(ApplicationEntityService::APPLICATION_TYPE_VARIATION));
 
         $this->sm->setAllowOverride(true);
         $this->sm->setService('Entity\Application', $mockApplicationHelper);
@@ -164,11 +167,13 @@ class ApplicationControllerTraitTest extends PHPUnit_Framework_TestCase
     public function testRenderWithShowUndoGrantFalse()
     {
         $this->stub->setParams(array('application' => 1));
-        $this->stub->setApplicationNew(true);
 
         $viewModel = new ViewModel();
 
-        $mockApplicationHelper = $this->getMock('\stdClass', array('getStatus', 'getCategory', 'getHeaderData'));
+        $mockApplicationHelper = $this->getMock(
+            '\stdClass',
+            array('getStatus', 'getCategory', 'getHeaderData', 'getApplicationType')
+        );
         $mockApplicationHelper->expects($this->once())
             ->method('getStatus')
             ->will($this->returnValue(ApplicationEntityService::APPLICATION_STATUS_GRANTED));
@@ -194,6 +199,10 @@ class ApplicationControllerTraitTest extends PHPUnit_Framework_TestCase
         $mockApplicationHelper->expects($this->once())
             ->method('getHeaderData')
             ->will($this->returnValue($headerData));
+
+        $mockApplicationHelper->expects($this->once())
+            ->method('getApplicationType')
+            ->will($this->returnValue(ApplicationEntityService::APPLICATION_TYPE_NEW));
 
         $this->sm->setAllowOverride(true);
         $this->sm->setService('Entity\Application', $mockApplicationHelper);
@@ -232,11 +241,13 @@ class ApplicationControllerTraitTest extends PHPUnit_Framework_TestCase
     public function testRenderWithShowUndoGrant()
     {
         $this->stub->setParams(array('application' => 1));
-        $this->stub->setApplicationNew(true);
 
         $viewModel = new ViewModel();
 
-        $mockApplicationHelper = $this->getMock('\stdClass', array('getStatus', 'getCategory', 'getHeaderData'));
+        $mockApplicationHelper = $this->getMock(
+            '\stdClass',
+            array('getStatus', 'getCategory', 'getHeaderData', 'getApplicationType')
+        );
         $mockApplicationHelper->expects($this->once())
             ->method('getStatus')
             ->will($this->returnValue(ApplicationEntityService::APPLICATION_STATUS_GRANTED));
@@ -262,6 +273,10 @@ class ApplicationControllerTraitTest extends PHPUnit_Framework_TestCase
         $mockApplicationHelper->expects($this->once())
             ->method('getHeaderData')
             ->will($this->returnValue($headerData));
+
+        $mockApplicationHelper->expects($this->once())
+            ->method('getApplicationType')
+            ->will($this->returnValue(ApplicationEntityService::APPLICATION_TYPE_NEW));
 
         $this->sm->setAllowOverride(true);
         $this->sm->setService('Entity\Application', $mockApplicationHelper);
