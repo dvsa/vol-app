@@ -133,7 +133,7 @@ class TaskController extends AbstractController
 
     /**
      * Callback invoked when the form is valid
-     * 
+     *
      * @param array $data
      */
     public function processCloseTask($data)
@@ -297,7 +297,7 @@ class TaskController extends AbstractController
                 $url = sprintf(
                     '<a href="%s">%s</a>',
                     $this->url()->fromRoute(
-                        'licence/details/overview',
+                        'lva-licence',
                         array(
                             'licence' => $taskTypeId
                         )
@@ -309,9 +309,9 @@ class TaskController extends AbstractController
                 $url = sprintf(
                     '<a href="%s">%s</a>',
                     $this->url()->fromRoute(
-                        'Application/Overview/Details',
+                        'lva-application',
                         array(
-                            'applicationId' => $taskTypeId
+                            'application' => $taskTypeId
                         )
                     ), $linkDisplay
                 );

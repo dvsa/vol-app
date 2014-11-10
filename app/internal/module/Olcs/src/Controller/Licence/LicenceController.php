@@ -22,6 +22,29 @@ class LicenceController extends AbstractController
         Traits\DocumentSearchTrait,
         Traits\FeesActionTrait;
 
+    /**
+     * Shows fees table
+     */
+    public function feesAction()
+    {
+        $this->loadScripts(['forms/filter', 'table-actions']);
+
+        $licenceId = $this->params()->fromRoute('licence');
+        $this->pageLayout = 'licence';
+
+        $status = $this->params()->fromQuery('status');
+        $filters = [
+            'status' => $status
+        ];
+
+        $table = $this->getFeesTable($licenceId, $status);
+
+        $view = $this->getViewWithLicence(['table' => $table, 'form'  => $this->getFeeFilterForm($filters)]);
+        $view->setTemplate('licence/fees');
+
+        return $this->renderView($view);
+    }
+
     public function detailsAction()
     {
         $view = $this->getViewWithLicence();
