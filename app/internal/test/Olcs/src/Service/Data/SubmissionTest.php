@@ -348,6 +348,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                     'loadedCaseSectionData' => [
                         'convictions' => [
                             0 => [
+                                'id' => 1,
                                 'offenceDate' => '2012-03-10T00:00:00+0000',
                                 'convictionDate' => '2012-06-15T00:00:00+0100',
                                 'operatorName' => 'John Smith Haulage Ltd.',
@@ -365,6 +366,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                                 'personLastname' => '',
                             ],
                             1 => [
+                                'id' => 2,
                                 'offenceDate' => '2012-03-10T00:00:00+0000',
                                 'convictionDate' => '2012-06-15T00:00:00+0100',
                                 'operatorName' => false,
@@ -387,6 +389,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                     ],
                     'filteredSectionData' => [
                         0 => [
+                            'id' => 1,
                             'offenceDate' => '2012-03-10T00:00:00+0000',
                             'convictionDate' => '2012-06-15T00:00:00+0100',
                             'name' => 'John Smith Haulage Ltd.',
@@ -402,6 +405,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                             ],
                         ],
                         1 => [
+                            'id' => 2,
                             'offenceDate' => '2012-03-10T00:00:00+0000',
                             'convictionDate' => '2012-06-15T00:00:00+0100',
                             'name' => 'Bob Smith',
@@ -489,12 +493,14 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                     'loadedCaseSectionData' => $this->getCaseSummaryMockData(),
                     'filteredSectionData' => [
                         0 => [
+                            'id' => 1,
                             'title' => '',
                             'forename' => 'Tom',
                             'familyName' => 'Jones',
                             'birthDate' => '1972-02-15T00:00:00+0100',
                         ],
                         1 => [
+                            'id' => 2,
                             'title' => '',
                             'forename' => 'Keith',
                             'familyName' => 'Winnard',
@@ -699,6 +705,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                     'organisationPersons' => [
                         0 => [
                             'person' => [
+                                'id' => 1,
                                 'title' => '',
                                 'forename' => 'Tom',
                                 'familyName' => 'Jones',
@@ -707,6 +714,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                         ],
                         1 => [
                             'person' => [
+                                'id' => 2,
                                 'title' => '',
                                 'forename' => 'Keith',
                                 'familyName' => 'Winnard',
