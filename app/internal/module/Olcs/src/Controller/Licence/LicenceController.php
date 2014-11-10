@@ -27,7 +27,7 @@ class LicenceController extends AbstractController
      */
     public function feesAction()
     {
-        $this->loadScripts(['fee-filter', 'table-actions']);
+        $this->loadScripts(['forms/filter', 'table-actions']);
 
         $licenceId = $this->params()->fromRoute('licence');
         $this->pageLayout = 'licence';
@@ -183,7 +183,7 @@ class LicenceController extends AbstractController
 
         $this->setTableFilters($form);
 
-        $this->loadScripts(['bus-reg-list']);
+        $this->loadScripts(['forms/filter']);
 
         $view = $this->getViewWithLicence(
             array(

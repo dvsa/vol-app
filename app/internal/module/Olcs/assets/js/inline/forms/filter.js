@@ -1,9 +1,13 @@
-$(function() {
-  var form = "[name=note-filter]";
+OLCS.ready(function() {
+  /**
+   * @NOTE: This is a generic form handler which just binds
+   * to forms with a known class. It should be reusable wherever
+   * filters are needed
+   */
 
   OLCS.formHandler({
     // the form to bind to
-    form: form,
+    form: ".form__filter",
     // make sure the primary submit button is hidden
     hideSubmit: true,
     // where we'll render any response data to
