@@ -253,7 +253,7 @@ class ApplicationController extends AbstractController
         $date = $this->getServiceLocator()->get('Helper\Date')->getDate();
 
         $feeData = array(
-            'amount' => (float)(!$feeType['fixedValue'] ? $feeType['fiveYearValue'] : $feeType['fixedValue']),
+            'amount' => (float)($feeType['fixedValue'] === '0.00' ? $feeType['fiveYearValue'] : $feeType['fixedValue']),
             'application' => $applicationId,
             'licence' => $licenceId,
             'invoicedDate' => $date,

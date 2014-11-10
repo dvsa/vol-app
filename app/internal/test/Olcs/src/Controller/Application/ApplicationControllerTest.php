@@ -150,8 +150,8 @@ class ApplicationControllerTest extends PHPUnit_Framework_TestCase
         $teamId = 1;
         $taskId = 9;
         $feeTypeId = 700;
-        $fixedValue = 0.00;
-        $fiveYearValue = 10.00;
+        $fixedValue = '0.00';
+        $fiveYearValue = '10.00';
         $appDate = '2012-01-01';
         $date = date('Y-m-d');
         $this->mockDate($date);
