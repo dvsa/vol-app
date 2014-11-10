@@ -14,6 +14,7 @@ use Common\View\Model\Section;
 use Olcs\View\Model\Licence\SectionLayout;
 use Olcs\View\Model\Licence\Layout;
 use Olcs\View\Model\Licence\LicenceLayout;
+use Common\Service\Entity\LicenceEntityService;
 
 /**
  * Internal Abstract Licence Controller
