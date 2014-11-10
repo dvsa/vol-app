@@ -7,7 +7,7 @@ use Zend\Form\Annotation as Form;
 /**
  * @codeCoverageIgnore No methods
  * @Form\Name("fee-filter")
- * @Form\Attributes({"method":"get"})
+ * @Form\Attributes({"method":"get", "class":"form__filter"})
  * @Form\Type("Common\Form\Form")
  */
 class FeeFilter

@@ -257,16 +257,16 @@ $routes = [
     'case_penalty' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/case/:case/penalty[/:action][/:penalty]',
+            'route' => '/case/:case/penalty[/:action][/:id]',
             'constraints' => [
                 'case' => '[0-9]+',
-                'penalty' => '[0-9]+',
+                'id' => '[0-9]+',
             ],
             'defaults' => [
                 'controller' => 'CasePenaltyController',
                 'action' => 'index'
             ]
-        ]
+        ],
     ],
     'case_complaint' => [
         'type' => 'segment',
@@ -355,10 +355,42 @@ $routes = [
             ]
         ]
     ],
+    'submission_action_recommendation' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/case/:case/submission/:submission/action/recommendation[/:action[/:id]]',
+            'constraints' => [
+                'case' => '[0-9]+',
+                'action' => '(add|edit)',
+                'submission' => '[0-9]+',
+                'id' => '[0-9]+',
+            ],
+            'defaults' => [
+                'controller' => 'CaseSubmissionRecommendationController',
+                'action' => 'add'
+            ]
+        ]
+    ],
+    'submission_action_decision' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/case/:case/submission/:submission/action/decision[/:action[/:id]]',
+            'constraints' => [
+                'case' => '[0-9]+',
+                'action' => '(add|edit)',
+                'submission' => '[0-9]+',
+                'id' => '[0-9]+',
+            ],
+            'defaults' => [
+                'controller' => 'CaseSubmissionDecisionController',
+                'action' => 'add'
+            ]
+        ]
+    ],
     'submission' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/case/:case/submission/:action[/:submission]',
+            'route' => '/case/:case/submission/:action[/:submission][/:section][/:rowId]',
             'constraints' => [
                 'case' => '[0-9]+',
                 'submission' => '[0-9]+',
@@ -370,17 +402,18 @@ $routes = [
             ]
         ]
     ],
-    'submission_refresh_section' => [
+    'submission_update_table' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/case/:case/submission/:submission/refresh/:section',
+            'route' => '/case/:case/submission/:submission/update-table/:section',
             'constraints' => [
                 'case' => '[0-9]+',
-                'submission' => '[0-9]+'
+                'submission' => '[0-9]+',
+                'action' => '(index|add|edit|details|update-table)'
             ],
             'defaults' => [
                 'controller' => 'CaseSubmissionController',
-                'action' => 'refresh'
+                'action' => 'update-table'
             ]
         ]
     ],
@@ -1320,6 +1353,26 @@ $routes['lva-licence']['child_routes'] = array_merge(
 $routes['lva-application']['child_routes'] = array_merge(
     $routes['lva-application']['child_routes'],
     array(
+        'grant' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'grant/',
+                'defaults' => array(
+                    'controller' => 'ApplicationController',
+                    'action' => 'grant'
+                )
+            )
+        ),
+        'undo-grant' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'undo-grant/',
+                'defaults' => array(
+                    'controller' => 'ApplicationController',
+                    'action' => 'undoGrant'
+                )
+            )
+        ),
         'overview' => array(
             'type' => 'segment',
             'options' => array(

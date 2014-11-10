@@ -30,18 +30,12 @@ class ConvictionControllerTest extends AbstractHttpControllerTestCase
         parent::setUp();
     }
 
-    public function testSaveDefendantTypeOperator()
+    /**
+     * @dataProvider saveDefendantTypeOperatorProvider
+     */
+    public function testSaveDefendantTypeOperator($data)
     {
         $service = 'Conviction';
-        $data = [
-            'id' => 1,
-            'defendantType' => 'def_t_op',
-            'licence' => [
-                'organisation' => [
-                    'name' => 'some operator'
-                ]
-            ]
-        ];
 
         $caseId = 1;
         $case = [
@@ -77,5 +71,24 @@ class ConvictionControllerTest extends AbstractHttpControllerTestCase
         $result = $this->sut->save($data, $service);
 
         $this->assertNull($result);
+    }
+
+    public function saveDefendantTypeOperatorProvider()
+    {
+        return [
+            [[
+                'id' => 1,
+                'defendantType' => 'def_t_op',
+                'licence' => [
+                    'organisation' => [
+                        'name' => 'some operator'
+                    ]
+                ]
+            ]],
+            [[
+                'id' => 1,
+                'defendantType' => 'def_t_driver'
+            ]]
+        ];
     }
 }

@@ -5,28 +5,6 @@ $submission = $this->placeholder('submission')->getValue();
 echo $this->render('partials/read-only/main',
     [
         'header' => (isset($this->data['description']) ? $this->data['description'] : ''),
-        'actions' => [
-            [
-                'label' => 'Delete row',
-                'url' => $this->url(
-                    'submission', [
-                        'case' => $case['id'],
-                        'action' => 'todo'
-                    ]
-                )
-            ],
-            [
-                'label' => 'Refresh table',
-                'url' => $this->url(
-                        'submission_refresh_section', [
-                            'case' => $case['id'],
-                            'submission' => $submission['id'],
-                            'section' => $this->data['sectionId'],
-                            'action' => 'refresh'
-                        ]
-                    )
-            ],
-        ],
         'freetext' => $this->data['table']
     ]
 );
