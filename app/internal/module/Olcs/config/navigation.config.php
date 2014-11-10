@@ -89,22 +89,6 @@ return array(
                             'route' => 'case_penalty',
                             'action' => 'index',
                             'use_route_match' => true,
-                            /*'pages' => array(
-                                array(
-                                    'id' => 'case_details_penalties_add',
-                                    'label' => 'Add ERRU penalties',
-                                    'route' => 'case_penalty',
-                                    'action' => 'add',
-                                    'use_route_match' => true,
-                                ),
-                                array(
-                                    'id' => 'case_details_penalties_edit',
-                                    'label' => 'Edit ERRU penalties',
-                                    'route' => 'case_penalty',
-                                    'action' => 'edit',
-                                    'use_route_match' => true,
-                                ),
-                            )*/
                         ),
                         array(
                             'id' => 'case_details_conditions_undertakings',
