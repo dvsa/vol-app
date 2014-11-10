@@ -39,6 +39,31 @@ class PenaltyControllerTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
     }
 
+    public function testRedirectToIndex()
+    {
+        $caseId = 29;
+
+        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
+            ['params' => 'Params', 'redirect' => 'Redirect']
+        );
+
+        $mockParams = $mockPluginManager->get('params', '');
+        $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
+
+        $mockRedirect = $mockPluginManager->get('redirect', '');
+        $mockRedirect->shouldReceive('toRoute')->with(
+            null,
+            ['action'=>'index', 'case' => $caseId],
+            ['code' => '303'], true
+        )->andReturn('redirectResponse');
+
+        $mockPluginManager->shouldReceive('get')->with('redirect')->andReturn($mockRedirect);
+
+        $this->sut->setPluginManager($mockPluginManager);
+
+        $this->assertEquals('redirectResponse', $this->sut->redirectToIndex());
+    }
+
     public function testIndexAction()
     {
         $caseId = 29;

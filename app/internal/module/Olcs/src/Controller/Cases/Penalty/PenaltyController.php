@@ -155,6 +155,19 @@ class PenaltyController extends OlcsController\CrudAbstract
     );
 
     /**
+     * Simple redirect to index.
+     */
+    public function redirectToIndex()
+    {
+        return $this->redirectToRoute(
+            null,
+            ['action'=>'index', $this->getIdentifierName() => $this->fromRoute($this->getIdentifierName())],
+            ['code' => '303'], // Why? No cache is set with a 303 :)
+            true
+        );
+    }
+
+    /**
      * Loads the tables and read only data
      *
      * @return array|\Zend\View\Model\ViewModel
