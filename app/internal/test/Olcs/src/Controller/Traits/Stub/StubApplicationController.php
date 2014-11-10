@@ -24,7 +24,6 @@ class StubApplicationController implements ServiceLocatorAwareInterface
         ServiceLocatorAwareTrait;
 
     private $params;
-    private $applicationNew;
 
     public function doRender($view)
     {
@@ -39,15 +38,5 @@ class StubApplicationController implements ServiceLocatorAwareInterface
     public function params($name)
     {
         return isset($this->params[$name]) ? $this->params[$name] : null;
-    }
-
-    public function setApplicationNew($applicationNew)
-    {
-        $this->applicationNew = $applicationNew;
-    }
-
-    public function isApplicationNew()
-    {
-        return $this->applicationNew;
     }
 }
