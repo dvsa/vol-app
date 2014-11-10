@@ -242,7 +242,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $this->assertArrayHasKey('submissionType', $result);
     }
 
-    public function testRefreshAction()
+    public function testRefreshTable()
     {
         $submissionId = 99;
         $caseId = 24;
@@ -280,14 +280,6 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $mockParams->shouldReceive('fromRoute')->with('submission')->andReturn($submissionId);
         $mockParams->shouldReceive('fromRoute')->with('section')->andReturn($section);
 
-        $mockRedirect = $mockPluginManager->get('redirect', '');
-        $mockRedirect->shouldReceive('toRoute')->with(
-            'submission',
-            ['action' => 'details', 'submission' => $submissionId],
-            [],
-            true
-        )->andReturn($mockResponse);
-
         $mockSubmissionService->shouldReceive('fetchSubmissionData')
             ->with($submissionId)
             ->andReturn($submissionData);
@@ -300,7 +292,6 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $mockServiceManager->shouldReceive('get')->with('config')->andReturn($mockConfig);
         $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\Submission')
             ->andReturn($mockSubmissionService);
-        $mockPluginManager->shouldReceive('get')->with('redirect')->andReturn($mockRedirect);
 
         $sut = new \Olcs\Controller\Cases\Submission\SubmissionController();
 
@@ -316,9 +307,9 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $sut->setServiceLocator($mockServiceManager);
         $sut->setPluginManager($mockPluginManager);
 
-        $result = $sut->refreshAction();
+        $result = $sut->refreshTable();
 
-        $this->assertEquals($result, $mockResponse);
+        $this->assertNull($result);
     }
 
     public function testUpdateSubmission()
