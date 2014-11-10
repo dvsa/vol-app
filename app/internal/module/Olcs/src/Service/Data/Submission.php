@@ -339,7 +339,7 @@ class Submission extends AbstractData
         $dataToReturnArray = array();
 
         foreach ($data['convictions'] as $conviction) {
-
+            $thisConviction['id'] = $conviction['id'];
             $thisConviction['offenceDate'] = $conviction['offenceDate'];
             $thisConviction['convictionDate'] = $conviction['convictionDate'];
             $thisConviction['defendantType'] = $conviction['defendantType'];
@@ -374,6 +374,7 @@ class Submission extends AbstractData
         $dataToReturnArray = array();
 
         foreach ($data['licence']['organisation']['organisationPersons'] as $organisationOwner) {
+            $thisOrganisationOwner['id'] = $organisationOwner['person']['id'];
             $thisOrganisationOwner['title'] = $organisationOwner['person']['title'];
             $thisOrganisationOwner['familyName'] = $organisationOwner['person']['familyName'];
             $thisOrganisationOwner['forename'] = $organisationOwner['person']['forename'];
