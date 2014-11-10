@@ -158,7 +158,6 @@ class RecommendationController extends OlcsController\CrudAbstract
             $data['fields']['senderUser'] = $this->getLoggedInUser();
         }
 
-        //die('<pre>' . print_r($data, 1));
         return $data;
     }
 }
