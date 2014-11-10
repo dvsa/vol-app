@@ -160,7 +160,7 @@ class LicenceController extends AbstractController
 
         $this->setTableFilters($form);
 
-        $this->loadScripts(['bus-reg-list']);
+        $this->loadScripts(['forms/filter']);
 
         $view = $this->getViewWithLicence(
             array(
