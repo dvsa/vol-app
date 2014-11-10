@@ -7,7 +7,6 @@
  */
 namespace Olcs\Controller\Cases\Conviction;
 
-//use Olcs\Controller\Traits\DeleteActionTrait;
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
 
@@ -153,25 +152,20 @@ class ConvictionController extends OlcsController\CrudAbstract
         // modify $data
         $case = $this->getCase();
 
-        if (isset($data['defendantType']) && $data['defendantType'] == 'def_t_op') {
-            $data['operatorName'] = $case['licence']['organisation']['name'];
+        if (isset($data['defendantType'])) {
+            if ($data['defendantType'] == 'def_t_op') {
+                //set organisation name, remove person name
+                $data['operatorName'] = $case['licence']['organisation']['name'];
+                $data['personFirstname'] = '';
+                $data['personLastname'] = '';
+            } else {
+                //this is a person name so remove operator name
+                $data['operatorName'] = '';
+            }
         }
 
-        $data = $this->callParentSave($data, $service);
+        $data = parent::save($data, $service);
 
         return $data;
-    }
-
-    /**
-     * @codeCoverageIgnore Calls parent method
-     * Call parent process load and return result. Public method to allow unit testing
-     *
-     * @param $data
-     * @param null $service
-     * @return array
-     */
-    public function callParentSave($data, $service = null)
-    {
-        return parent::save($data, $service);
     }
 }
