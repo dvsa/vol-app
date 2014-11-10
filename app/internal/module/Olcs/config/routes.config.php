@@ -355,6 +355,38 @@ $routes = [
             ]
         ]
     ],
+    'submission_action_recommendation' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/case/:case/submission/:submission/action/recommendation[/:action[/:id]]',
+            'constraints' => [
+                'case' => '[0-9]+',
+                'action' => '(add|edit)',
+                'submission' => '[0-9]+',
+                'id' => '[0-9]+',
+            ],
+            'defaults' => [
+                'controller' => 'CaseSubmissionRecommendationController',
+                'action' => 'add'
+            ]
+        ]
+    ],
+    'submission_action_decision' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/case/:case/submission/:submission/action/decision[/:action[/:id]]',
+            'constraints' => [
+                'case' => '[0-9]+',
+                'action' => '(add|edit)',
+                'submission' => '[0-9]+',
+                'id' => '[0-9]+',
+            ],
+            'defaults' => [
+                'controller' => 'CaseSubmissionDecisionController',
+                'action' => 'add'
+            ]
+        ]
+    ],
     'submission' => [
         'type' => 'segment',
         'options' => [

@@ -26,6 +26,10 @@ return array(
             'CaseSubmissionController' => 'Olcs\Controller\Cases\Submission\SubmissionController',
             'CaseSubmissionSectionCommentController'
                 => 'Olcs\Controller\Cases\Submission\SubmissionSectionCommentController',
+            'CaseSubmissionRecommendationController'
+                => 'Olcs\Controller\Cases\Submission\RecommendationController',
+            'CaseSubmissionDecisionController'
+                => 'Olcs\Controller\Cases\Submission\DecisionController',
             'CaseStayController' => 'Olcs\Controller\Cases\Hearing\StayController',
             'CasePenaltyController' => 'Olcs\Controller\Cases\Penalty\PenaltyController',
             'CaseProhibitionController' => 'Olcs\Controller\Cases\Prohibition\ProhibitionController',
