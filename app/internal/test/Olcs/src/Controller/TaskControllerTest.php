@@ -1107,7 +1107,7 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
 
         $this->url->expects($this->once())
                 ->method('fromRoute')
-                ->with('Application/Overview/Details', array('applicationId' => 123))
+                ->with('lva-application', array('application' => 123))
                 ->will($this->returnValue(''));
 
         $this->controller->expects($this->once())

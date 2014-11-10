@@ -685,7 +685,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                 'inForceDate' => '2010-01-12T00:00:00+0000',
                 'status' => [
                     'description' => 'New',
-                    'id' => 'lsts_new',
+                    'id' => 'lsts_consideration',
                 ],
                 'organisation' => [
                     'isMlh' => 'Y',

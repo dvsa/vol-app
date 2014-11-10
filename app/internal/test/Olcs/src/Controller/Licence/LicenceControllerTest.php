@@ -59,6 +59,117 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
+     * @group licence_controller
+     *
+     * @dataProvider feesForLicenceProvider
+     */
+    public function testFeesAction($status, $feeStatus)
+    {
+        $params = $this->getMock('\stdClass', ['fromRoute', 'fromQuery']);
+
+        $params->expects($this->once())
+            ->method('fromRoute')
+            ->with('licence')
+            ->will($this->returnValue(1));
+
+        $params->expects($this->any())
+            ->method('fromQuery')
+            ->will(
+                $this->returnValueMap(
+                    [
+                        ['status', $status],
+                        ['page', 1, 1],
+                        ['sort', 'receivedDate', 'receivedDate'],
+                        ['order', 'DESC', 'DESC'],
+                        ['limit', 10, 10],
+                    ]
+                )
+            );
+
+        $this->controller->expects($this->any())
+            ->method('params')
+            ->will($this->returnValue($params));
+
+        $feesParams = [
+            'licence' => 1,
+            'page'    => '1',
+            'sort'    => 'receivedDate',
+            'order'   => 'DESC',
+            'limit'   => 10,
+        ];
+        if ($feeStatus) {
+            $feesParams['feeStatus'] = $feeStatus;
+        }
+
+        $fees = [
+            'Results' => [
+                [
+                    'id' => 1,
+                    'invoiceStatus' => 'is',
+                    'description' => 'ds',
+                    'amount' => 1,
+                    'invoicedDate' => '2014-01-01',
+                    'receiptNo' => '1',
+                    'receivedDate' => '2014-01-01',
+                    'feeStatus' => [
+                        'id' => 'lfs_ot',
+                        'description' => 'd'
+                    ]
+                ]
+            ],
+            'Count' => 1
+        ];
+
+        $mockFeeService = $this->getMock('\StdClass', ['getFees']);
+        $mockFeeService->expects($this->once())
+            ->method('getFees')
+            ->with($this->equalTo($feesParams))
+            ->will($this->returnValue($fees));
+
+        $mockServiceLocator = $this->getMock('\StdClass', ['get']);
+        $mockServiceLocator->expects($this->any())
+            ->method('get')
+            ->with($this->equalTo('Olcs\Service\Data\Fee'))
+            ->will($this->returnValue($mockFeeService));
+
+        $this->controller->expects($this->any())
+             ->method('getServiceLocator')
+             ->will($this->returnValue($mockServiceLocator));
+
+        $mockForm = $this->getMock('\StdClass', ['remove', 'setData']);
+        $mockForm->expects($this->once())
+            ->method('remove')
+            ->with($this->equalTo('csrf'))
+            ->will($this->returnValue(true));
+
+        $mockForm->expects($this->once())
+            ->method('setData')
+            ->will($this->returnValue(true));
+
+        $this->controller->expects($this->once())
+            ->method('getForm')
+            ->will($this->returnValue($mockForm));
+
+        $response = $this->controller->feesAction();
+
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+    }
+
+    /**
+     * Data provider
+     *
+     * @return array
+     */
+    public function feesForLicenceProvider()
+    {
+        return [
+            ['current', 'IN ["lfs_ot","lfs_wr"]'],
+            ['all', ''],
+            ['historical', 'IN ["lfs_pd","lfs_w","lfs_cn"]']
+        ];
+    }
+
+    /**
      * Gets a mock version of translator
      */
     private function getServiceLocatorTranslator()
