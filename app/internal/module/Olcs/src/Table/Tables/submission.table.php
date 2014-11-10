@@ -33,7 +33,7 @@ return array(
             'title' => 'Submission #',
             'formatter' => function ($row) {
                 return '<a href="' . $this->generateUrl(
-                    array('submission' => $row['id'], 'action' => 'edit'),
+                    array('submission' => $row['id'], 'action' => 'details'),
                     'submission',
                     true
                 ) . '">' . $row['id'] . '</a>';
