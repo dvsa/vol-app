@@ -85,22 +85,8 @@ return array(
                         ),
                         array(
                             'id' => 'case_details_penalties',
-                            'label' => 'Penalties',
+                            'label' => 'ERRU penalties',
                             'route' => 'case_penalty',
-                            'action' => 'index',
-                            'use_route_match' => true,
-                        ),
-                        array(
-                            'id' => 'case_details_statements',
-                            'label' => 'Statements',
-                            'route' => 'case_statement',
-                            'action' => 'index',
-                            'use_route_match' => true,
-                        ),
-                        array(
-                            'id' => 'case_details_complaints',
-                            'label' => 'Complaints',
-                            'route' => 'case_complaint',
                             'action' => 'index',
                             'use_route_match' => true,
                         ),
