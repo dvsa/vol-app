@@ -358,7 +358,7 @@ $routes = [
     'submission' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/case/:case/submission/:action[/:submission]',
+            'route' => '/case/:case/submission/:action[/:submission][/:section][/:rowId]',
             'constraints' => [
                 'case' => '[0-9]+',
                 'submission' => '[0-9]+',
@@ -370,17 +370,18 @@ $routes = [
             ]
         ]
     ],
-    'submission_refresh_section' => [
+    'submission_update_table' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/case/:case/submission/:submission/refresh/:section',
+            'route' => '/case/:case/submission/:submission/update-table/:section',
             'constraints' => [
                 'case' => '[0-9]+',
-                'submission' => '[0-9]+'
+                'submission' => '[0-9]+',
+                'action' => '(index|add|edit|details|update-table)'
             ],
             'defaults' => [
                 'controller' => 'CaseSubmissionController',
-                'action' => 'refresh'
+                'action' => 'update-table'
             ]
         ]
     ],
