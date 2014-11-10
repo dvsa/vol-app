@@ -4,15 +4,6 @@ return array(
     'variables' => array(
         'title' => 'Applied penalties'
     ),
-    'settings' => array(
-        'crud' => array(
-            'actions' => array(
-                'add' => array('class' => 'primary'),
-                'edit' => array('requireRows' => true),
-                'delete' => array('class' => 'secondary', 'requireRows' => true)
-            )
-        ),
-    ),
     'columns' => array(
         array(
             'title' => '',

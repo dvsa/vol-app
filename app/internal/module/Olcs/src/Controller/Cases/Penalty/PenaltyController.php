@@ -114,7 +114,7 @@ class PenaltyController extends OlcsController\CrudAbstract
                     )
                 )
             ),
-            'erruImposedPenalties' => array(
+            'imposedErrus' => array(
                 'properties' => array(
                     'finalDecisionDate',
                     'startDate',
@@ -129,7 +129,7 @@ class PenaltyController extends OlcsController\CrudAbstract
                     )
                 )
             ),
-            'erruRequestedPenalties' => array(
+            'requestedErrus' => array(
                 'properties' => 'ALL',
                 'children' => array(
                     'siPenaltyRequestedType' => array(
@@ -154,6 +154,11 @@ class PenaltyController extends OlcsController\CrudAbstract
         )
     );
 
+    /**
+     * Loads the tables and read only data
+     *
+     * @return array|\Zend\View\Model\ViewModel
+     */
     public function indexAction()
     {
         //using loadListData so can use the case id in parameters, but we'll only ever have one result
@@ -165,37 +170,14 @@ class PenaltyController extends OlcsController\CrudAbstract
 
         if (isset($data['Results'][0])) {
             $this->getViewHelperManager()->get('placeholder')->getContainer('penalties')->set($data['Results'][0]);
-            $this->getErruTable('erru-imposed', 'erruImposedPenalties');
-            $this->getErruTable('erru-requested', 'erruRequestedPenalties');
+            $this->getErruTable('erru-imposed', 'imposedErrus');
+            $this->getErruTable('erru-requested', 'requestedErrus');
             $this->getErruTable('erru-applied', 'appliedPenalties');
         }
 
         $view->setTemplate('case/page/penalties');
 
         return $this->renderView($view);
-    }
-
-    public function addAction()
-    {
-        return $this->forward()->dispatch(
-            'CaseAppliedPenaltyController',
-            array(
-                'action' => 'add',
-                'case' => $this->getFromRoute('case')
-            )
-        );
-    }
-
-    public function editAction()
-    {
-        return $this->forward()->dispatch(
-            'CaseAppliedPenaltyController',
-            array(
-                'action' => 'edit',
-                'case' => $this->getFromRoute('case'),
-                'penalty' => $this->getFromRoute('penalty')
-            )
-        );
     }
 
     /**
