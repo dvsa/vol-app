@@ -396,4 +396,10 @@ class SubmissionController extends OlcsController\CrudAbstract
 
         return $this->renderView($view);
     }
+
+    public function addAction()
+    {
+        $this->getServiceLocator()->get('Script')->loadFile('forms/submission');
+        return parent::addAction();
+    }
 }

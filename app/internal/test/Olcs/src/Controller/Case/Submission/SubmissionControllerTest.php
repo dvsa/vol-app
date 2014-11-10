@@ -36,7 +36,8 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
                 'callParentSave',
                 'callParentProcessLoad',
                 'createSubmissionSection',
-                'getServiceLocator'
+                'getServiceLocator',
+                'saveThis'
             )
         );
         $serviceManager = Bootstrap::getServiceManager();
@@ -45,6 +46,29 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $this->controller->routeParams = array();
 
         parent::setUp();
+    }
+
+    public function testAddLoadsScripts()
+    {
+        $scriptMock = $this->getMock('\stdClass', ['loadFile']);
+        $scriptMock->expects($this->once())
+            ->method('loadFile')
+            ->with('forms/submission');
+
+        $sm = $this->getMock('\stdClass', ['get']);
+        $sm->expects($this->once())
+            ->method('get')
+            ->with('Script')
+            ->willReturn($scriptMock);
+
+        $this->controller->expects($this->any())
+            ->method('getServiceLocator')
+            ->willReturn($sm);
+
+        $this->controller->expects($this->once())
+            ->method('saveThis');
+
+        $this->controller->addAction();
     }
 
     /**

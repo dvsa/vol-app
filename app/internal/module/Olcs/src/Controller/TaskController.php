@@ -80,10 +80,11 @@ class TaskController extends AbstractController
             return $this->getResponse();
         }
 
+        $this->loadScripts(['forms/task']);
+
         $view = new ViewModel(
             [
-                'form' => $form,
-                'inlineScript' => $this->loadScripts(['task-form'])
+                'form' => $form
             ]
         );
 
@@ -116,10 +117,12 @@ class TaskController extends AbstractController
         if ($tasksCount > 1) {
             $form->get('details')->setLabel('tasks.close.multiple');
         }
+
+        $this->loadScripts(['forms/task']);
+
         $view = new ViewModel(
             [
-                'form' => $form,
-                'inlineScript' => $this->loadScripts(['task-form'])
+                'form' => $form
             ]
         );
 
@@ -262,10 +265,11 @@ class TaskController extends AbstractController
             return $this->getResponse();
         }
 
+        $this->loadScripts(['forms/task']);
+
         $view = new ViewModel(
             [
-                'form' => $form,
-                'inlineScript' => $this->loadScripts(['task-form'])
+                'form' => $form
             ]
         );
 
