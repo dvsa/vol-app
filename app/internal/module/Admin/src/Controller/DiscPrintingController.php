@@ -393,6 +393,10 @@ class DiscPrintingController extends AbstractController
         );
 
         $retv = array();
+
+        // sort prefixes alphabetically by label
+        asort($prefixes);
+
         foreach ($prefixes as $id => $result) {
             $retv[] = array(
                 'value' => $id,
