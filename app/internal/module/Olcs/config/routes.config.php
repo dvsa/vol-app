@@ -257,16 +257,16 @@ $routes = [
     'case_penalty' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/case/:case/penalty[/:action][/:penalty]',
+            'route' => '/case/:case/penalty[/:action][/:id]',
             'constraints' => [
                 'case' => '[0-9]+',
-                'penalty' => '[0-9]+',
+                'id' => '[0-9]+',
             ],
             'defaults' => [
                 'controller' => 'CasePenaltyController',
                 'action' => 'index'
             ]
-        ]
+        ],
     ],
     'case_complaint' => [
         'type' => 'segment',
@@ -367,6 +367,20 @@ $routes = [
             'defaults' => [
                 'controller' => 'CaseSubmissionController',
                 'action' => 'index'
+            ]
+        ]
+    ],
+    'submission_refresh_section' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/case/:case/submission/:submission/refresh/:section',
+            'constraints' => [
+                'case' => '[0-9]+',
+                'submission' => '[0-9]+'
+            ],
+            'defaults' => [
+                'controller' => 'CaseSubmissionController',
+                'action' => 'refresh'
             ]
         ]
     ],
@@ -1117,13 +1131,38 @@ $routes = [
             'fees' => [
                 'type' => 'segment',
                 'options' => [
-                    'route' => '/fees[/]',
+                    'route' => '/fees',
                     'defaults' => [
                         'action' => 'fees',
                     ]
                 ],
                 'may_terminate' => true,
+                'child_routes' => [
+                    'fee_action' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/:action/:fee',
+                            'constraints' => [
+                                'fee' => '[0-9-]+',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                    ],
+                ]
             ],
+        ]
+    ],
+    'create_variation' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/variation/create/:licence',
+            'defaults' => [
+                'constraints' => [
+                    'licence' => '[0-9]+',
+                ],
+                'controller' => 'LvaLicence/Overview',
+                'action' => 'createVariation'
+            ]
         ]
     ]
 ];
@@ -1151,6 +1190,26 @@ $routes['lva-licence']['child_routes'] = array_merge(
 $routes['lva-application']['child_routes'] = array_merge(
     $routes['lva-application']['child_routes'],
     array(
+        'grant' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'grant/',
+                'defaults' => array(
+                    'controller' => 'ApplicationController',
+                    'action' => 'grant'
+                )
+            )
+        ),
+        'undo-grant' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'undo-grant/',
+                'defaults' => array(
+                    'controller' => 'ApplicationController',
+                    'action' => 'undoGrant'
+                )
+            )
+        ),
         'overview' => array(
             'type' => 'segment',
             'options' => array(
@@ -1204,14 +1263,26 @@ $routes['lva-application']['child_routes'] = array_merge(
         'fees' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => 'fees/',
+                'route' => 'fees[/]',
                 'defaults' => array(
                     'controller' => 'ApplicationController',
                     'action' => 'fees',
                 )
             ),
             'may_terminate' => true,
-        )
+            'child_routes' => array(
+                'fee_action' => array(
+                    'type' => 'segment',
+                    'options' => array(
+                        'route' => '/:action/:fee',
+                        'constraints' => array(
+                            'fee' => '[0-9-]+',
+                        ),
+                    ),
+                    'may_terminate' => true,
+                ),
+            )
+        ),
     )
 );
 

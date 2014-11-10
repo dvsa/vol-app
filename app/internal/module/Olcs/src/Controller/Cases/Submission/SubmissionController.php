@@ -131,6 +131,45 @@ class SubmissionController extends OlcsController\CrudAbstract
     }
 
     /**
+     * Refreshes a single section within the dataSnapshot field of a submission with the latest data
+     * from the rest of the database. Redirects back to details page.
+     *
+     * @return \Zend\Http\Response
+     */
+    public function refreshAction()
+    {
+        $params = $this->getParams(array('case', 'section', 'submission'));
+        $submissionService = $this->getServiceLocator()->get('Olcs\Service\Data\Submission');
+
+        $configService = $this->getServiceLocator()->get('config');
+        $submissionConfig = $configService['submission_config'];
+
+        $submission = $submissionService->fetchSubmissionData($params['submission']);
+        $snapshotData = json_decode($submission['dataSnapshot'], true);
+
+        if (array_key_exists($params['section'], $snapshotData)) {
+            $snapshotData[$params['section']]['data'] = $submissionService->createSubmissionSection(
+                $params['case'],
+                $params['section'],
+                $submissionConfig['sections'][$params['section']]
+            );
+        }
+        $data['id'] = $params['submission'];
+        $data['version'] = $submission['version'];
+        $data['dataSnapshot'] = json_encode($snapshotData);
+
+        $this->callParentSave($data);
+
+        return $this->redirect()->toRoute(
+            'submission',
+            ['action' => 'details','submission' => $params['submission']],
+            [],
+            true
+        );
+
+    }
+
+    /**
      * Override Save data to allow json encoding of submission sections
      * into submission 'dataSnapshot' field.
      *
@@ -141,32 +180,46 @@ class SubmissionController extends OlcsController\CrudAbstract
     public function save($data, $service = null)
     {
         // modify $data
-        $this->submissionConfig = $this->getServiceLocator()->get('config')['submission_config'];
         $submissionService = $this->getServiceLocator()->get('Olcs\Service\Data\Submission');
-        $params = $this->getParams(array('case'));
+        $commentService = $this->getServiceLocator()->get('Olcs\Service\Data\SubmissionSectionComment');
+        $params = $this->getParams(array('case', 'submission'));
+
         $caseId = $params['case'];
+        $snapshotData = $submissionService->generateSnapshotData($caseId, $data);
 
-        if (is_array($data['submissionSections']['sections'])) {
-
-            foreach ($data['submissionSections']['sections'] as $index => $sectionId) {
-                $sectionConfig = isset($this->submissionConfig['sections'][$sectionId]) ?
-                    $this->submissionConfig['sections'][$sectionId] : [];
-
-                $data['submissionSections']['sections'][$index] = [
-                    'sectionId' => $sectionId,
-                    'data' => $submissionService->createSubmissionSection(
-                        $caseId,
-                        $sectionId,
-                        $sectionConfig
-                    )
-                ];
-            }
-        }
-
-        $data['dataSnapshot'] = json_encode($data['submissionSections']['sections']);
+        $data['dataSnapshot'] = json_encode($snapshotData);
         $data['submissionType'] = $data['submissionSections']['submissionType'];
 
-        $data = $this->callParentSave($data, $service);
+        // save submission entity
+        $result = $this->callParentSave($data);
+
+        if (isset($result['id'])) {
+            // insert
+            $data['id'] = $result['id'];
+
+            // Generate comments for all sections that are configured as type = 'text'
+            $submissionSectionComments = $commentService->generateComments($caseId, $data);
+
+            // insert comments
+            foreach ($submissionSectionComments as $comment) {
+                $comment['submission'] = $data['id'];
+                $this->makeRestCall('SubmissionSectionComment', 'POST', $comment);
+            }
+        } else {
+            // update
+            // Generate comments for all sections that are configured as type = 'text'
+            $commentResult = $commentService->updateComments($caseId, $data);
+
+            // insert new comments
+            foreach ($commentResult['add'] as $comment) {
+                $comment['submission'] = $data['id'];
+                $this->makeRestCall('SubmissionSectionComment', 'POST', $comment);
+            }
+            // remove unwanted comments
+            foreach ($commentResult['remove'] as $commentId) {
+                $this->makeRestCall('SubmissionSectionComment', 'DELETE', ['id' => $commentId]);
+            }
+        }
 
         return $data;
     }
@@ -216,11 +269,11 @@ class SubmissionController extends OlcsController\CrudAbstract
 
         if (isset($data['submissionSections']['sections'])) {
             $sectionData = json_decode($data['submissionSections']['sections'], true);
-            $data['fields']['submissionSections']['sections'] = $this->extractSectionIds($sectionData);
+            $data['fields']['submissionSections']['sections'] = array_keys($sectionData);
         } elseif (isset($data['dataSnapshot'])) {
             $sectionData = json_decode($data['dataSnapshot'], true);
             $data['fields']['submissionSections']['submissionType'] = $data['submissionType'];
-            $data['fields']['submissionSections']['sections'] = $this->extractSectionIds($sectionData);
+            $data['fields']['submissionSections']['sections'] = array_keys($sectionData);
             $data['case'] = $case['id'];
             $data['fields']['id'] = $data['id'];
             $data['fields']['version'] = $data['version'];
@@ -251,17 +304,6 @@ class SubmissionController extends OlcsController\CrudAbstract
     public function callParentSave($data, $service = null)
     {
         return parent::save($data, $service);
-    }
-
-    private function extractSectionIds($sectionData)
-    {
-        $sectionIds = [];
-        if (is_array($sectionData)) {
-            foreach ($sectionData as $section) {
-                $sectionIds[] = $section['sectionId'];
-            }
-        }
-        return $sectionIds;
     }
 
     /**
@@ -307,5 +349,11 @@ class SubmissionController extends OlcsController\CrudAbstract
         $view->setTemplate($this->detailsView);
 
         return $this->renderView($view);
+    }
+
+    public function addAction()
+    {
+        $this->getServiceLocator()->get('Script')->loadFile('forms/submission');
+        return parent::addAction();
     }
 }

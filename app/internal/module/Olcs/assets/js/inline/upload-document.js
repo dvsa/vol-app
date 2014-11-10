@@ -1,10 +1,5 @@
 OLCS.ready(function() {
   var form = "form[name=upload-document]";
-  var F = OLCS.formHelper;
-
-  if (F("bookmarks").find(":input").length === 0) {
-    F("bookmarks").hide();
-  }
 
   OLCS.cascadeInput({
     source: form + " #category",
@@ -12,22 +7,5 @@ OLCS.ready(function() {
     url: "/list/document-sub-categories",
     emptyLabel: "Please select",
     clearWhenEmpty: true
-  });
-
-  /**
-   * @TODO move this into a component if we can standardise it a bit
-   */
-  $(document).on("change", form + " #documentTemplate", function(e) {
-    e.preventDefault();
-    var value = $(this).val();
-
-    if (value === "") {
-      return F("bookmarks").hide();
-    }
-
-    $.get("/list-template-bookmarks/" + value, function(response) {
-      var content = $(response).find("fieldset[data-group=bookmarks]");
-      F("bookmarks").replaceWith(content).show();
-    });
   });
 });

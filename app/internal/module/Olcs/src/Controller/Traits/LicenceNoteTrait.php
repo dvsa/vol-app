@@ -199,7 +199,7 @@ trait LicenceNoteTrait
             true
         );
 
-        $this->loadScripts(['note-filter']);
+        $this->loadScripts(['forms/filter']);
 
         $view = $this->getView(['table' => $table]);
         $view->setTemplate($this->getTemplatePrefix() . '/notes/index');

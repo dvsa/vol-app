@@ -7,6 +7,7 @@ use Mockery as m;
 use Zend\Http\Request;
 use Zend\Http\Response;
 use Olcs\TestHelpers\ControllerRouteMatchHelper;
+use Olcs\TestHelpers\ControllerPluginManagerHelper;
 
 /**
  * Submission controller form post tests
@@ -35,7 +36,8 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
                 'callParentSave',
                 'callParentProcessLoad',
                 'createSubmissionSection',
-                'getServiceLocator'
+                'getServiceLocator',
+                'saveThis'
             )
         );
         $serviceManager = Bootstrap::getServiceManager();
@@ -44,6 +46,29 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $this->controller->routeParams = array();
 
         parent::setUp();
+    }
+
+    public function testAddLoadsScripts()
+    {
+        $scriptMock = $this->getMock('\stdClass', ['loadFile']);
+        $scriptMock->expects($this->once())
+            ->method('loadFile')
+            ->with('forms/submission');
+
+        $sm = $this->getMock('\stdClass', ['get']);
+        $sm->expects($this->once())
+            ->method('get')
+            ->with('Script')
+            ->willReturn($scriptMock);
+
+        $this->controller->expects($this->any())
+            ->method('getServiceLocator')
+            ->willReturn($sm);
+
+        $this->controller->expects($this->once())
+            ->method('saveThis');
+
+        $this->controller->addAction();
     }
 
     /**
@@ -88,7 +113,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
      *
      * @dataProvider getSubmissionSectionsToLoadProvider
      */
-    public function testProcessLoad($dataToLoad, $loadedData)
+    public function testProcessLoad($dataToLoad)
     {
         $this->controller->expects($this->once())
             ->method('callParentProcessLoad')
@@ -101,7 +126,10 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
 
         $result = $this->controller->processLoad($dataToLoad);
 
-        $this->assertEquals($result, $loadedData);
+        $this->assertArrayHasKey('id', $result);
+        $this->assertArrayHasKey('version', $result);
+        $this->assertArrayHasKey('submissionSections', $result['fields']);
+        $this->assertArrayHasKey('case', $result['fields']);
 
     }
 
@@ -151,7 +179,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $this->controller->alterFormBeforeValidation($mockForm);
     }
 
-    public function testSave()
+    public function testInsertSubmission()
     {
 
         $data = ['submissionSections' =>
@@ -174,20 +202,27 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
             ]
         ];
 
-        $mockSubmissionService = m::mock('Olcs\Service\Data\Submission');
         $mockRestHelper = m::mock('RestHelper');
-
         $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn(['id' => 99]);
 
-        $mockSubmissionService->shouldReceive('createSubmissionSection')
+        $mockCommentService = m::mock('Olcs\Service\Data\SubmissionSectionComment');
+        $mockCommentService->shouldReceive('generateComments')
+            ->withAnyArgs()
+            ->andReturn($this->generateMockComment());
+
+        $mockSubmissionService = m::mock('Olcs\Service\Data\Submission');
+        $mockSubmissionService->shouldReceive('generateSnapshotData')
+            ->withAnyArgs()
+            ->andReturn(['sectionData']);
+        $mockSubmissionService->shouldReceive('generateSnapshotData')
             ->withAnyArgs()
             ->andReturn(['sectionData']);
 
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
-
         $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
-
         $mockServiceManager->shouldReceive('get')->with('config')->andReturn($mockConfig);
+        $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\SubmissionSectionComment')
+            ->andReturn($mockCommentService);
         $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\Submission')
             ->andReturn($mockSubmissionService);
 
@@ -201,7 +236,172 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
 
         $result = $sut->save($data, $service);
 
-        $this->assertEquals(['id' => 99], $result);
+        $this->assertArrayHasKey('id', $result);
+        $this->assertArrayHasKey('dataSnapshot', $result);
+        $this->assertArrayHasKey('submissionSections', $result);
+        $this->assertArrayHasKey('submissionType', $result);
+    }
+
+    public function testRefreshAction()
+    {
+        $submissionId = 99;
+        $caseId = 24;
+        $section = 'persons';
+        $mockConfig = ['submission_config'=>['sections' => [$section => 'foo']]];
+
+        $submissionData = ['version' => 1, 'dataSnapshot' => '{"' . $section . '":{"data":"foo"}}'];
+
+        $submissionSectionData = ['data' => 'bar'];
+        $pluginManagerHelper = new ControllerPluginManagerHelper();
+
+        $mockPluginManager = $pluginManagerHelper->getMockPluginManager(
+            [
+                'params' => 'Params',
+                'redirect' => 'Redirect'
+            ]
+        );
+        $mockResponse = m::mock('\Zend\Http\Response');
+        $mockSubmissionService = m::mock('Olcs\Service\Data\Submission');
+        $mockRestHelper = m::mock('RestHelper');
+
+        $mockRestHelper->shouldReceive('makeRestCall')->with(
+            'Submission',
+            'PUT',
+            [
+                'id' => $submissionId,
+                'version' => $submissionData['version'],
+                'dataSnapshot' => json_encode([$section => ['data' => $submissionSectionData]])
+            ],
+            ''
+        )->andReturnNull();
+
+        $mockParams = $mockPluginManager->get('params', '');
+        $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
+        $mockParams->shouldReceive('fromRoute')->with('submission')->andReturn($submissionId);
+        $mockParams->shouldReceive('fromRoute')->with('section')->andReturn($section);
+
+        $mockRedirect = $mockPluginManager->get('redirect', '');
+        $mockRedirect->shouldReceive('toRoute')->with(
+            'submission',
+            ['action' => 'details', 'submission' => $submissionId],
+            [],
+            true
+        )->andReturn($mockResponse);
+
+        $mockSubmissionService->shouldReceive('fetchSubmissionData')
+            ->with($submissionId)
+            ->andReturn($submissionData);
+        $mockSubmissionService->shouldReceive('createSubmissionSection')
+            ->with($caseId, $section, $mockConfig['submission_config']['sections'][$section])
+            ->andReturn($submissionSectionData);
+
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('config')->andReturn($mockConfig);
+        $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\Submission')
+            ->andReturn($mockSubmissionService);
+        $mockPluginManager->shouldReceive('get')->with('redirect')->andReturn($mockRedirect);
+
+        $sut = new \Olcs\Controller\Cases\Submission\SubmissionController();
+
+        $event = $this->routeMatchHelper->getMockRouteMatch(
+            array('controller' => 'submission','action' => 'refresh')
+        );
+        $sut->setEvent($event);
+
+        $sut->getEvent()->getRouteMatch()->setParam('case', $caseId);
+        $sut->getEvent()->getRouteMatch()->setParam('submission', $submissionId);
+        $sut->getEvent()->getRouteMatch()->setParam('section', $section);
+
+        $sut->setServiceLocator($mockServiceManager);
+        $sut->setPluginManager($mockPluginManager);
+
+        $result = $sut->refreshAction();
+
+        $this->assertEquals($result, $mockResponse);
+    }
+
+    public function testUpdateSubmission()
+    {
+
+        $data = [
+            'id' => 3,
+            'submissionSections' =>
+            [
+                'submissionType' => 'bar',
+                'sections' => [
+                    0 => 'section1',
+                    1 => 'section2'
+                ]
+            ]
+        ];
+        $service = 'Submission';
+
+        $mockConfig = ['submission_config' =>
+            [
+                'sections' =>
+                    [
+                        'section1' => 'foo'
+                    ]
+            ]
+        ];
+
+        $mockRestHelper = m::mock('RestHelper');
+        $mockRestHelper->shouldReceive('makeRestCall')->with(
+            'Submission',
+            'PUT',
+            m::type('array'),
+            ''
+        )->andReturnNull();
+
+        $mockRestHelper->shouldReceive('makeRestCall')->with(
+            'SubmissionSectionComment',
+            'POST',
+            m::type('array'),
+            ''
+        );
+
+        $mockRestHelper->shouldReceive('makeRestCall')->with(
+            'SubmissionSectionComment',
+            'DELETE',
+            m::type('array'),
+            ''
+        );
+
+        $mockCommentService = m::mock('Olcs\Service\Data\SubmissionSectionComment');
+        $mockCommentService->shouldReceive('updateComments')
+            ->withAnyArgs()
+            ->andReturn(['add' => $this->generateMockComment(1), 'remove' => $this->generateMockComment(2)]);
+
+        $mockSubmissionService = m::mock('Olcs\Service\Data\Submission');
+        $mockSubmissionService->shouldReceive('generateSnapshotData')
+            ->withAnyArgs()
+            ->andReturn(['sectionData']);
+        $mockSubmissionService->shouldReceive('generateSnapshotData')
+            ->withAnyArgs()
+            ->andReturn(['sectionData']);
+
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('config')->andReturn($mockConfig);
+        $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\SubmissionSectionComment')
+            ->andReturn($mockCommentService);
+        $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\Submission')
+            ->andReturn($mockSubmissionService);
+
+        $sut = new \Olcs\Controller\Cases\Submission\SubmissionController();
+        $event = $this->routeMatchHelper->getMockRouteMatch(array('controller' => 'submission'));
+        $sut->setEvent($event);
+
+        $sut->getEvent()->getRouteMatch()->setParam('case', 24);
+
+        $sut->setServiceLocator($mockServiceManager);
+
+        $result = $sut->save($data, $service);
+
+        $this->assertArrayHasKey('dataSnapshot', $result);
+        $this->assertArrayHasKey('submissionSections', $result);
+        $this->assertArrayHasKey('submissionType', $result);
     }
 
     public function testDetailsAction()
@@ -339,48 +539,30 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
                 array(
                     'id' => 1,
                     'version' => 1,
-                    'submissionType' => 'foo',
-                    'dataSnapshot' => '[{"sectionId":"submission_section_casu","data":{"data":[]}}]'
-                ),
-                array(
-                    'id' => 1,
-                    'version' => 1,
-                    'submissionType' => 'foo',
-                    'fields' => [
-                        'case' => 24,
-                        'submissionSections' => [
-                            'submissionType' => 'foo',
-                            'sections' => ['submission_section_casu']
-                        ],
-                        'id' => 1,
-                        'version' => 1,
+                    'submissionSections' => [
+                        'sections' => '[{"sectionId":"introduction"}]'
                     ],
-                    'dataSnapshot' => '[{"sectionId":"submission_section_casu","data":{"data":[]}}]',
-                    'case' => 24
-                ),
+                )
             ),
             array(
                 array(
-                    'id' => 1,
+                    'id' => 2,
                     'version' => 1,
-                    'submissionSections' => [
-                        'sections' => '[{"sectionId":"submission_section_casu"}]',
-                    ],
-                ),
-                array(
-                    'id' => 1,
-                    'version' => 1,
-                    'fields' => [
-                        'case' => 24,
-                        'submissionSections' => [
-                            'sections' => ['submission_section_casu']
-                        ],
-                    ],
-                    'submissionSections' => [
-                        'sections' => '[{"sectionId":"submission_section_casu"}]'
-                    ],
+                    'submissionType' => 'foo',
+                    'dataSnapshot' => '[{"case-summary":{"data":[]}}]'
                 )
             )
         );
+    }
+
+    private function generateMockComment($id = '')
+    {
+        return [
+            0 => [
+                'id' => $id,
+                'submissionSection' => 'foo',
+                'comment' => 'bar'
+            ]
+        ];
     }
 }

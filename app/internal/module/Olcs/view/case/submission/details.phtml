@@ -7,19 +7,19 @@ $selectedSectionsArray = $this->placeholder('selectedSectionsArray')->getValue()
 $freetext = '';
 
 $selectedIds = array_column($selectedSectionsArray, 'sectionId');
-foreach ($allSections as $sectionId => $sectionDescription) {
-    if (in_array($sectionId, $selectedIds))
-    {
-        $key = array_search($sectionId, $selectedIds);
 
+foreach ($allSections as $sectionId => $sectionDescription) {
+    if (array_key_exists($sectionId, $selectedSectionsArray))
+    {
         $freetext .= $this->submissionSectionDetails(
-            $selectedSectionsArray[$key]['sectionId'],
-            $selectedSectionsArray[$key]
+            $sectionId,
+            $selectedSectionsArray[$sectionId]
         );
         if (isset($submissionConfig[$sectionId]['allow_comments']) && $submissionConfig[$sectionId]['allow_comments']) {
             $freetext .= $this->partial('case/submission/partials/comments',
                 [
-                    'section' => $selectedSectionsArray[$key],
+                    'sectionId' => $sectionId,
+                    'section' => $selectedSectionsArray[$sectionId],
                     'caseId' => $case['id'],
                     'submissionId' => $submission['id']
                 ]
@@ -56,3 +56,36 @@ echo $this->render('partials/read-only/main',
         'freetext' => $freetext
     ]
 );
+
+?>
+<?php if (count($submission['submissionActions']) > 0): ?>
+<h3>Submission actions</h3>
+
+<ul class="submission-actions" style="width: 100%">
+    <?php foreach ($submission['submissionActions'] as $sa): ?>
+    <li class="submission-item">
+
+        <h4><?php echo $sa['isDecision'] == 'Y' ? 'Descision' : 'Recommendation'; ?>:
+            <?php echo $sa['submissionActionStatus']['description']; ?></h4>
+
+        <a class="submission-item__edit" href="">Edit</a>
+        <p><?php echo $sa['comment']; ?></p>
+        <div class="submission-item__meta">
+            <p><b>From</b> <?php echo $sa['senderUser']['name']; ?></p>
+            <p><b>To</b> <?php echo $sa['recipientUser']['name']; ?></p>
+            <p><b>Created</b> <?php echo date('H:i d/m/Y', strtotime($sa['createdOn'])); ?></p>
+            <p><b>Urgent</b> <?php echo $sa['urgent']; ?></p>
+        </div><!-- submission-item__meta -->
+    </li><!-- submission-item -->
+  <?php endforeach; ?>
+</ul>
+
+<?php endif; ?>
+
+<div>&nbsp;</div>
+
+
+<div class="actions-container" data-group="form-actions">
+    <a href="#" class="action--primary large">Add recommendation</a>
+    <a href="#" class="action--primary large">Add decision</a>
+</div>

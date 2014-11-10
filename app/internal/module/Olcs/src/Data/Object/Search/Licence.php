@@ -24,12 +24,12 @@ class Licence extends SearchAbstract
     {
         return [
             ['title' => 'Licence number', 'name'=> 'licNo'],
-            ['title' => 'Licence status', 'name'=> 'licStatus'],
-            ['title' => 'Operator name', 'name'=> 'opName'],
-            ['title' => 'Trading name', 'name'=> 'tradName'],
-            ['title' => 'Entity type', 'name'=> 'entityType'],
-            ['title' => 'Licence type', 'name'=> 'licType'],
-            ['title' => 'Cases', 'name'=> 'cases'],
+            ['title' => 'Licence status', 'name'=> 'licStatusDesc'],
+            ['title' => 'Operator name', 'name'=> 'orgName'],
+            ['title' => 'Trading name', 'name'=> 'tradingName'],
+            ['title' => 'Entity type', 'name'=> 'orgTypeDesc'],
+            ['title' => 'Licence type', 'name'=> 'licTypeDesc'],
+            ['title' => 'Cases', 'name'=> 'caseCount'],
         ];
     }
 }

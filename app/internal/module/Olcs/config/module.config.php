@@ -28,6 +28,7 @@ return array(
                 => 'Olcs\Controller\Cases\Submission\SubmissionSectionCommentController',
             'CaseStayController' => 'Olcs\Controller\Cases\Hearing\StayController',
             'CasePenaltyController' => 'Olcs\Controller\Cases\Penalty\PenaltyController',
+            'CaseAppliedPenaltyController' => 'Olcs\Controller\Cases\Penalty\AppliedPenaltyController',
             'CaseProhibitionController' => 'Olcs\Controller\Cases\Prohibition\ProhibitionController',
             'CaseProhibitionDefectController' => 'Olcs\Controller\Cases\Prohibition\ProhibitionDefectController',
             'CaseAnnualTestHistoryController' => 'Olcs\Controller\Cases\AnnualTestHistory\AnnualTestHistoryController',
@@ -214,11 +215,6 @@ return array(
             'Olcs\Listener\RouteParams' => 'Olcs\Listener\RouteParams',
         ],
         'factories' => array(
-            'ApplicationJourneyHelper' => function ($sm) {
-                $helper = new \Olcs\Helper\ApplicationJourneyHelper();
-                $helper->setServiceLocator($sm);
-                return $helper;
-            },
             'Olcs\Listener\RouteParam\Cases' => 'Olcs\Listener\RouteParam\Cases',
             'Olcs\Listener\RouteParam\Licence' => 'Olcs\Listener\RouteParam\Licence',
             'Olcs\Listener\RouteParam\Marker' => 'Olcs\Listener\RouteParam\Marker',
@@ -228,25 +224,9 @@ return array(
             'Olcs\Service\Data\User' => 'Olcs\Service\Data\User',
             'Olcs\Service\Data\PresidingTc' => 'Olcs\Service\Data\PresidingTc',
             'Olcs\Service\Data\Submission' => 'Olcs\Service\Data\Submission',
+            'Olcs\Service\Data\SubmissionSectionComment' => 'Olcs\Service\Data\SubmissionSectionComment',
             'Olcs\Service\Data\Fee' => 'Olcs\Service\Data\Fee',
             'Olcs\Service\Data\Search\SearchTypeManager' => 'Olcs\Service\Data\Search\SearchTypeManagerFactory'
-        )
-    ),
-    'application_journey' => array(
-        'access_keys' => array(
-            'internal'
-        ),
-        'templates' => array(
-            'not-found' => 'journey/not-found',
-            'navigation' => 'journey/application/navigation',
-            'main' => 'journey/application/main',
-            'layout' => 'journey/application/layout'
-        ),
-        'render' => array(
-            'pre-render' => array(
-                'service' => 'ApplicationJourneyHelper',
-                'method' => 'render'
-            )
         )
     ),
     'form_elements' => [
@@ -262,7 +242,10 @@ return array(
     'search' => [
         'invokables' => [
             'licence' => 'Olcs\Data\Object\Search\Licence',
-            'application' => 'Olcs\Data\Object\Search\Application'
+            'application' => 'Olcs\Data\Object\Search\Application',
+            'case' => 'Olcs\Data\Object\Search\Cases',
+            'psv_disc' => 'Olcs\Data\Object\Search\PsvDisc',
+            'vehicle_current' => 'Olcs\Data\Object\Search\VehicleCurrent',
         ]
     ],
     'route_param_listeners' => [

@@ -26,8 +26,8 @@ return array(
         ),
         array(
             'title' => 'No',
-            'sort' => 'invoiceNo',
-            'name' => 'invoiceNo',
+            'sort' => 'id',
+            'name' => 'id',
             'formatter' => function ($row, $column, $serviceLocator) {
 
                 $url = '';
@@ -53,14 +53,37 @@ return array(
                         $statusClass = '';
                         break;
                 }
-                return '<a href="' . $url . '">' . $row['invoiceNo'] . '</a> <span class="status ' .
+                return $row['id'] . ' <span class="status ' .
                         $statusClass . '">' . $row['feeStatus']['description'] . '</span>';
             },
         ),
         array(
             'title' => 'Description',
-            'name' => 'description',
-            'sort' => 'description'
+            'formatter' => function ($row, $column, $serviceLocator) {
+                $router = $serviceLocator->get('router');
+                $request = $serviceLocator->get('request');
+                $routeMatch = $router->match($request);
+                switch ($routeMatch->getMatchedRouteName()) {
+                    case 'licence/fees':
+                        $url = $this->generateUrl(
+                            array('fee' => $row['id'], 'action' => 'edit-fee', 'controller' => 'LicenceController'),
+                            'licence/fees/fee_action'
+                        );
+                        break;
+                    case 'lva-application/fees':
+                    default:
+                        $url = $this->generateUrl(
+                            array('fee' => $row['id'], 'action' => 'edit-fee', 'controller' => 'ApplicationController'),
+                            'lva-application/fees/fee_action'
+                        );
+                }
+                return '<a href="'
+                    . $url
+                    . '" class=js-modal-ajax>'
+                    . $row['description']
+                    . '</a>';
+            },
+            'sort' => 'description',
         ),
         array(
             'title' => 'Amount',

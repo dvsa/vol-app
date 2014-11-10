@@ -512,11 +512,11 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
             [
                 [
                     'dataSnapshot' =>
-                        '[{"sectionId":"introduction","data":[]}]',
+                        '{"introduction":{"data":[]}}',
                     'submissionSectionComments' =>
                         []
                 ],
-                [ 0 => [
+                [ 'introduction' => [
                     'sectionId' => 'introduction',
                     'description' => 'Introduction',
                     'data' => [],
@@ -626,7 +626,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
             'operating-centres' => 'Operating centres',
             'operating-centre-history' => 'Operating centre history',
             'conditions-and-undertakings' => 'Conditions and undertakings',
-            'intelligent-unit-check' => 'Intelligence unit check',
+            'intelligence-unit-check' => 'Intelligence unit check',
             'interim' => 'Interim',
             'advertisement' => 'Advertisement',
             'linked-licences-app-numbers' => 'Linked licences & application numbers',
@@ -685,7 +685,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                 'inForceDate' => '2010-01-12T00:00:00+0000',
                 'status' => [
                     'description' => 'New',
-                    'id' => 'lsts_new',
+                    'id' => 'lsts_consideration',
                 ],
                 'organisation' => [
                     'isMlh' => 'Y',
