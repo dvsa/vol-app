@@ -115,7 +115,7 @@ class SubmissionController extends OlcsController\CrudAbstract
 
     public function alterFormBeforeValidation($form)
     {
-        $postData = $this->getFromPost('fields');
+        $postData = $this->params()->fromPost('fields');
         $formData = $this->getDataForForm();
 
         // Intercept Submission type submit button to prevent saving
@@ -137,8 +137,10 @@ class SubmissionController extends OlcsController\CrudAbstract
      */
     public function updateTableAction()
     {
-        $params = $this->getParams(array('case', 'section', 'submission'));
-        $formAction = strtolower($this->getFromPost('formAction'));
+        $params['case'] = $this->params()->fromRoute('case');
+        $params['section'] = $this->params()->fromRoute('section');
+        $params['submission'] = $this->params()->fromRoute('submission');
+        $formAction = strtolower($this->params()->fromPost('formAction'));
 
         if ($formAction == 'refresh-table') {
             $this->refreshTable();
@@ -162,7 +164,9 @@ class SubmissionController extends OlcsController\CrudAbstract
      */
     public function refreshTable()
     {
-        $params = $this->getParams(array('case', 'section', 'submission'));
+        $params['case'] = $this->params()->fromRoute('case');
+        $params['section'] = $this->params()->fromRoute('section');
+        $params['submission'] = $this->params()->fromRoute('submission');
         $submissionService = $this->getServiceLocator()->get('Olcs\Service\Data\Submission');
 
         $configService = $this->getServiceLocator()->get('config');
@@ -193,8 +197,10 @@ class SubmissionController extends OlcsController\CrudAbstract
      */
     public function deleteTableRows()
     {
-        $params = $this->getParams(array('case', 'section', 'submission'));
-        $rowsToDelete = $this->getFromPost('id');
+        $params['case'] = $this->params()->fromRoute('case');
+        $params['section'] = $this->params()->fromRoute('section');
+        $params['submission'] = $this->params()->fromRoute('submission');
+        $rowsToDelete = $this->params()->fromPost('id');
         $submissionService = $this->getServiceLocator()->get('Olcs\Service\Data\Submission');
 
         $submission = $submissionService->fetchSubmissionData($params['submission']);
@@ -228,8 +234,8 @@ class SubmissionController extends OlcsController\CrudAbstract
         // modify $data
         $submissionService = $this->getServiceLocator()->get('Olcs\Service\Data\Submission');
         $commentService = $this->getServiceLocator()->get('Olcs\Service\Data\SubmissionSectionComment');
-        $params = $this->getParams(array('case', 'submission'));
-
+        $params['case'] = $this->params()->fromRoute('case');
+        $params['submission'] = $this->params()->fromRoute('submission');
         $caseId = $params['case'];
         $snapshotData = $submissionService->generateSnapshotData($caseId, $data);
 
