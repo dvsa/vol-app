@@ -149,7 +149,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
             ->method('params')
             ->will($this->returnValue($mockParams));
 
-        $mockFeeService = $this->getMock('\StdClass', ['getFee', 'updateFee']);
+        $mockFeeService = $this->getMock('\StdClass', ['getFee']);
         $mockFeeService->expects($this->once())
             ->method('getFee')
             ->with($feeId)
@@ -290,7 +290,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
             ->method('params')
             ->will($this->returnValue($mockParams));
 
-        $mockFeeService = $this->getMock('\StdClass', ['getFee', 'updateFee']);
+        $mockFeeService = $this->getMock('\StdClass', ['getFee']);
         $mockFeeService->expects($this->once())
             ->method('getFee')
             ->with($feeId)
