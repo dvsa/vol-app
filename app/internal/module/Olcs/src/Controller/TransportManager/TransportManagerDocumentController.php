@@ -8,7 +8,6 @@
 namespace Olcs\Controller\TransportManager;
 
 use Olcs\Controller\TransportManager\TransportManagerController;
-use Olcs\Controller\Traits;
 
 /**
  * Transport Manager Document Controller

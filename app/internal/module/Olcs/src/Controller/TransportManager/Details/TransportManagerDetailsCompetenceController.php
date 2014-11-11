@@ -8,7 +8,6 @@
 namespace Olcs\Controller\TransportManager\Details;
 
 use Olcs\Controller\TransportManager\Details\AbstractTransportManagerDetailsController;
-use Zend\Navigation\Navigation;
 
 /**
  * Transport Manager Details Competence Controller
