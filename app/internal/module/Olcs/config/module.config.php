@@ -207,7 +207,7 @@ return array(
     'local_scripts_path' => array(
         __DIR__ . '/../assets/js/inline/'
     ),
-    'asset_path' => '//dvsa-static.olcsdv-ap01.olcs.npm',
+    'asset_path' => '//olcs-static',
     'service_manager' => array(
         'aliases' => [
             'NavigationFactory' => 'Olcs\Service\NavigationFactory',
