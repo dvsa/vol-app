@@ -71,6 +71,29 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $this->controller->addAction();
     }
 
+    public function testEditLoadsScripts()
+    {
+        $scriptMock = $this->getMock('\stdClass', ['loadFile']);
+        $scriptMock->expects($this->once())
+            ->method('loadFile')
+            ->with('forms/submission');
+
+        $sm = $this->getMock('\stdClass', ['get']);
+        $sm->expects($this->once())
+            ->method('get')
+            ->with('Script')
+            ->willReturn($scriptMock);
+
+        $this->controller->expects($this->any())
+            ->method('getServiceLocator')
+            ->willReturn($sm);
+
+        $this->controller->expects($this->once())
+            ->method('saveThis');
+
+        $this->controller->editAction();
+    }
+
     /**
      * Test process save of new submissions
      *
@@ -163,20 +186,41 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
                 'submissionTypeSubmit' => 'some_type'
             ]
         ];
-        $this->controller->expects($this->once())
-            ->method('getFromPost')
-            ->with('fields')
-            ->willReturn($mockPostData);
+        $caseId = 24;
+        $mockCase = ['id' => $caseId];
 
         $mockForm = $this->getMock(
             '\Zend\Form\Form'
         );
+        $pluginManagerHelper = new ControllerPluginManagerHelper();
+        $mockPluginManager = $pluginManagerHelper->getMockPluginManager(
+            [
+                'params' => 'Params',
+            ]
+        );
+        $mockParams = $mockPluginManager->get('params', '');
+        $mockParams->shouldReceive('fromPost')->with('fields')->andReturn($mockPostData);
+        $mockParams->shouldReceive('fromRoute')->with('action');
+        $mockParams->shouldReceive('fromRoute')->with('submission');
+        $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
 
-        $this->controller->expects($this->once())
-            ->method('setPersist')
-            ->with($this->equalTo(false));
+        $mockRestHelper = m::mock('RestHelper');
+        $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn(['id' => $caseId]);
 
-        $this->controller->alterFormBeforeValidation($mockForm);
+        $mockCaseService = m::mock('Olcs\Service\Data\Cases');
+        $mockCaseService->shouldReceive('fetchCaseData')->with($caseId)->andReturn($mockCase);
+
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
+        $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\Cases')->andReturn($mockCaseService);
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
+
+        $sut = new \Olcs\Controller\Cases\Submission\SubmissionController();
+        $sut->setServiceLocator($mockServiceManager);
+        $sut->setPluginManager($mockPluginManager);
+
+        $result = $sut->alterFormBeforeValidation($mockForm);
+        $this->assertSame($mockForm, $result);
     }
 
     public function testInsertSubmission()
@@ -242,7 +286,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $this->assertArrayHasKey('submissionType', $result);
     }
 
-    public function testRefreshAction()
+    public function testRefreshTable()
     {
         $submissionId = 99;
         $caseId = 24;
@@ -260,7 +304,6 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
                 'redirect' => 'Redirect'
             ]
         );
-        $mockResponse = m::mock('\Zend\Http\Response');
         $mockSubmissionService = m::mock('Olcs\Service\Data\Submission');
         $mockRestHelper = m::mock('RestHelper');
 
@@ -280,13 +323,67 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $mockParams->shouldReceive('fromRoute')->with('submission')->andReturn($submissionId);
         $mockParams->shouldReceive('fromRoute')->with('section')->andReturn($section);
 
-        $mockRedirect = $mockPluginManager->get('redirect', '');
-        $mockRedirect->shouldReceive('toRoute')->with(
-            'submission',
-            ['action' => 'details', 'submission' => $submissionId],
-            [],
-            true
-        )->andReturn($mockResponse);
+        $mockSubmissionService->shouldReceive('fetchSubmissionData')
+            ->with($submissionId)
+            ->andReturn($submissionData);
+        $mockSubmissionService->shouldReceive('createSubmissionSection')
+            ->with($caseId, $section, $mockConfig['submission_config']['sections'][$section])
+            ->andReturn($submissionSectionData);
+
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('config')->andReturn($mockConfig);
+        $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\Submission')
+            ->andReturn($mockSubmissionService);
+
+        $sut = new \Olcs\Controller\Cases\Submission\SubmissionController();
+
+        $sut->setServiceLocator($mockServiceManager);
+        $sut->setPluginManager($mockPluginManager);
+
+        $result = $sut->refreshTable();
+
+        $this->assertNull($result);
+    }
+
+    public function testDeleteTableRows()
+    {
+        $submissionId = 99;
+        $caseId = 24;
+        $section = 'persons';
+        $mockConfig = ['submission_config'=>['sections' => [$section => 'foo']]];
+
+        $submissionData = ['version' => 1, 'dataSnapshot' => '{"' . $section . '":{"data":{"0":{"id":"77"}}}}'];
+
+        $submissionSectionData = ['data' => 'bar'];
+        $pluginManagerHelper = new ControllerPluginManagerHelper();
+
+        $mockPluginManager = $pluginManagerHelper->getMockPluginManager(
+            [
+                'params' => 'Params',
+                'redirect' => 'Redirect'
+            ]
+        );
+
+        $mockSubmissionService = m::mock('Olcs\Service\Data\Submission');
+        $mockRestHelper = m::mock('RestHelper');
+
+        $mockRestHelper->shouldReceive('makeRestCall')->with(
+            'Submission',
+            'PUT',
+            [
+                'id' => $submissionId,
+                'version' => $submissionData['version'],
+                'dataSnapshot' => json_encode([$section => ['data' => []]])
+            ],
+            ''
+        )->andReturnNull();
+
+        $mockParams = $mockPluginManager->get('params', '');
+        $mockParams->shouldReceive('fromPost')->with('id')->andReturn([0 => 77]);
+        $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
+        $mockParams->shouldReceive('fromRoute')->with('submission')->andReturn($submissionId);
+        $mockParams->shouldReceive('fromRoute')->with('section')->andReturn($section);
 
         $mockSubmissionService->shouldReceive('fetchSubmissionData')
             ->with($submissionId)
@@ -294,6 +391,85 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $mockSubmissionService->shouldReceive('createSubmissionSection')
             ->with($caseId, $section, $mockConfig['submission_config']['sections'][$section])
             ->andReturn($submissionSectionData);
+
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('config')->andReturn($mockConfig);
+        $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\Submission')
+            ->andReturn($mockSubmissionService);
+
+        $sut = new \Olcs\Controller\Cases\Submission\SubmissionController();
+
+        $event = $this->routeMatchHelper->getMockRouteMatch(
+            array('controller' => 'submission_updateTable','action' => 'update-table')
+        );
+        $sut->setEvent($event);
+
+        $sut->getEvent()->getRouteMatch()->setParam('case', $caseId);
+        $sut->getEvent()->getRouteMatch()->setParam('submission', $submissionId);
+        $sut->getEvent()->getRouteMatch()->setParam('section', $section);
+
+        $sut->setServiceLocator($mockServiceManager);
+        $sut->setPluginManager($mockPluginManager);
+
+        $result = $sut->deleteTableRows();
+
+        $this->assertNull($result);
+    }
+
+    public function testUpdateTableDeleteRows()
+    {
+        $submissionId = 99;
+        $caseId = 24;
+        $section = 'persons';
+        $mockConfig = ['submission_config'=>['sections' => [$section => 'foo']]];
+
+        $submissionData = ['version' => 1, 'dataSnapshot' => '{"' . $section . '":{"data":"foo"}}'];
+
+        $submissionSectionData = ['data' => 'bar'];
+        $pluginManagerHelper = new ControllerPluginManagerHelper();
+
+        $mockPluginManager = $pluginManagerHelper->getMockPluginManager(
+            [
+                'params' => 'Params',
+                'redirect' => 'Redirect'
+            ]
+        );
+        $mockResponse = m::mock('\Zend\Http\Response');
+        $mockSubmissionService = m::mock('Olcs\Service\Data\Submission');
+        $mockSubmissionService->shouldReceive('fetchSubmissionData')
+            ->with($submissionId)
+            ->andReturn($submissionData);
+        $mockSubmissionService->shouldReceive('createSubmissionSection')
+            ->with($caseId, $section, $mockConfig['submission_config']['sections'][$section])
+            ->andReturn($submissionSectionData);
+
+        $mockRestHelper = m::mock('RestHelper');
+        $mockRestHelper->shouldReceive('makeRestCall')->with(
+            'Submission',
+            'PUT',
+            [
+                'id' => $submissionId,
+                'version' => $submissionData['version'],
+                'dataSnapshot' => json_encode([$section => ['data' => []]])
+            ],
+            ''
+        )->andReturnNull();
+
+        $mockParams = $mockPluginManager->get('params', '');
+        $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
+        $mockParams->shouldReceive('fromRoute')->with('submission')->andReturn($submissionId);
+        $mockParams->shouldReceive('fromRoute')->with('section')->andReturn($section);
+        $mockParams->shouldReceive('fromPost')->with('formAction')->andReturn('delete-row');
+        $mockParams->shouldReceive('fromPost')->with('id')->andReturn([0 => 77]);
+
+        $mockRedirect = $mockPluginManager->get('redirect', '');
+        $mockRedirect->shouldReceive('toRoute')->with(
+            'submission',
+            ['action' => 'details', 'submission' => $submissionId],
+            [],
+            true
+        )->andReturn($mockResponse);
 
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
         $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
@@ -316,7 +492,87 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $sut->setServiceLocator($mockServiceManager);
         $sut->setPluginManager($mockPluginManager);
 
-        $result = $sut->refreshAction();
+        $result = $sut->updateTableAction();
+
+        $this->assertEquals($result, $mockResponse);
+    }
+
+
+    public function testUpdateTableRefreshTable()
+    {
+        $submissionId = 99;
+        $caseId = 24;
+        $section = 'persons';
+        $mockConfig = ['submission_config'=>['sections' => [$section => 'foo']]];
+
+        $submissionData = ['version' => 1, 'dataSnapshot' => '{"' . $section . '":{"data":"foo"}}'];
+
+        $submissionSectionData = ['data' => 'bar'];
+        $pluginManagerHelper = new ControllerPluginManagerHelper();
+
+        $mockPluginManager = $pluginManagerHelper->getMockPluginManager(
+            [
+                'params' => 'Params',
+                'redirect' => 'Redirect'
+            ]
+        );
+        $mockResponse = m::mock('\Zend\Http\Response');
+        $mockSubmissionService = m::mock('Olcs\Service\Data\Submission');
+        $mockSubmissionService->shouldReceive('fetchSubmissionData')
+            ->with($submissionId)
+            ->andReturn($submissionData);
+        $mockSubmissionService->shouldReceive('createSubmissionSection')
+            ->with($caseId, $section, $mockConfig['submission_config']['sections'][$section])
+            ->andReturn($submissionSectionData);
+
+        $mockRestHelper = m::mock('RestHelper');
+        $mockRestHelper->shouldReceive('makeRestCall')->with(
+            'Submission',
+            'PUT',
+            [
+                'id' => $submissionId,
+                'version' => $submissionData['version'],
+                'dataSnapshot' => json_encode([$section => ['data' => ['data' => 'bar']]])
+            ],
+            ""
+        )->andReturnNull();
+
+        $mockParams = $mockPluginManager->get('params', '');
+        $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
+        $mockParams->shouldReceive('fromRoute')->with('submission')->andReturn($submissionId);
+        $mockParams->shouldReceive('fromRoute')->with('section')->andReturn($section);
+        $mockParams->shouldReceive('fromPost')->with('formAction')->andReturn('refresh-table');
+
+        $mockRedirect = $mockPluginManager->get('redirect', '');
+        $mockRedirect->shouldReceive('toRoute')->with(
+            'submission',
+            ['action' => 'details', 'submission' => $submissionId],
+            [],
+            true
+        )->andReturn($mockResponse);
+
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('config')->andReturn($mockConfig);
+        $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\Submission')
+            ->andReturn($mockSubmissionService);
+        $mockPluginManager->shouldReceive('get')->with('redirect')->andReturn($mockRedirect);
+
+        $sut = new \Olcs\Controller\Cases\Submission\SubmissionController();
+
+        $event = $this->routeMatchHelper->getMockRouteMatch(
+            array('controller' => 'submission','action' => 'refresh')
+        );
+        $sut->setEvent($event);
+
+        $sut->getEvent()->getRouteMatch()->setParam('case', $caseId);
+        $sut->getEvent()->getRouteMatch()->setParam('submission', $submissionId);
+        $sut->getEvent()->getRouteMatch()->setParam('section', $section);
+
+        $sut->setServiceLocator($mockServiceManager);
+        $sut->setPluginManager($mockPluginManager);
+
+        $result = $sut->updateTableAction();
 
         $this->assertEquals($result, $mockResponse);
     }

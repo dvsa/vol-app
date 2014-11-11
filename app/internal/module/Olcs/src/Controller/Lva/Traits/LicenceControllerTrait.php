@@ -14,6 +14,7 @@ use Common\View\Model\Section;
 use Olcs\View\Model\Licence\SectionLayout;
 use Olcs\View\Model\Licence\Layout;
 use Olcs\View\Model\Licence\LicenceLayout;
+use Common\Service\Entity\LicenceEntityService;
 
 /**
  * Internal Abstract Licence Controller
@@ -103,6 +104,10 @@ trait LicenceControllerTrait
     protected function getHeaderParams()
     {
         $data = $this->getServiceLocator()->get('Entity\Licence')->getHeaderParams($this->getLicenceId());
+
+        if ($data['goodsOrPsv']['id'] === LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE) {
+            $this->getServiceLocator()->get('Navigation')->findOneBy('id', 'licence_bus')->setVisible(0);
+        }
 
         return array(
             'licNo' => $data['licNo'],

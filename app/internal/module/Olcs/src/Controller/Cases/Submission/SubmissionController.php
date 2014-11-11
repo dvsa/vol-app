@@ -115,7 +115,7 @@ class SubmissionController extends OlcsController\CrudAbstract
 
     public function alterFormBeforeValidation($form)
     {
-        $postData = $this->getFromPost('fields');
+        $postData = $this->params()->fromPost('fields');
         $formData = $this->getDataForForm();
 
         // Intercept Submission type submit button to prevent saving
@@ -131,14 +131,42 @@ class SubmissionController extends OlcsController\CrudAbstract
     }
 
     /**
-     * Refreshes a single section within the dataSnapshot field of a submission with the latest data
-     * from the rest of the database. Redirects back to details page.
+     * Updates a section table, to either refresh the data or delete rows
      *
      * @return \Zend\Http\Response
      */
-    public function refreshAction()
+    public function updateTableAction()
     {
-        $params = $this->getParams(array('case', 'section', 'submission'));
+        $params['case'] = $this->params()->fromRoute('case');
+        $params['section'] = $this->params()->fromRoute('section');
+        $params['submission'] = $this->params()->fromRoute('submission');
+        $formAction = strtolower($this->params()->fromPost('formAction'));
+
+        if ($formAction == 'refresh-table') {
+            $this->refreshTable();
+        } elseif ($formAction == 'delete-row') {
+            $this->deleteTableRows();
+        }
+
+        return $this->redirect()->toRoute(
+            'submission',
+            ['action' => 'details','submission' => $params['submission']],
+            [],
+            true
+        );
+    }
+
+    /**
+     * Refreshes a single section within the dataSnapshot field of a submission with the latest data
+     * from the rest of the database. Redirects back to details page.
+     *
+     * @return void
+     */
+    public function refreshTable()
+    {
+        $params['case'] = $this->params()->fromRoute('case');
+        $params['section'] = $this->params()->fromRoute('section');
+        $params['submission'] = $this->params()->fromRoute('submission');
         $submissionService = $this->getServiceLocator()->get('Olcs\Service\Data\Submission');
 
         $configService = $this->getServiceLocator()->get('config');
@@ -153,20 +181,44 @@ class SubmissionController extends OlcsController\CrudAbstract
                 $params['section'],
                 $submissionConfig['sections'][$params['section']]
             );
+            $data['id'] = $params['submission'];
+            $data['version'] = $submission['version'];
+            $data['dataSnapshot'] = json_encode($snapshotData);
         }
-        $data['id'] = $params['submission'];
-        $data['version'] = $submission['version'];
-        $data['dataSnapshot'] = json_encode($snapshotData);
 
         $this->callParentSave($data);
+    }
 
-        return $this->redirect()->toRoute(
-            'submission',
-            ['action' => 'details','submission' => $params['submission']],
-            [],
-            true
-        );
+    /**
+     * Deletes a single row from a section's list data, reassigns and persists the new data back to dataSnapshot field
+     * from the rest of the database. Redirects back to details page.
+     *
+     * @return \Zend\Http\Response
+     */
+    public function deleteTableRows()
+    {
+        $params['case'] = $this->params()->fromRoute('case');
+        $params['section'] = $this->params()->fromRoute('section');
+        $params['submission'] = $this->params()->fromRoute('submission');
+        $rowsToDelete = $this->params()->fromPost('id');
+        $submissionService = $this->getServiceLocator()->get('Olcs\Service\Data\Submission');
 
+        $submission = $submissionService->fetchSubmissionData($params['submission']);
+        $snapshotData = json_decode($submission['dataSnapshot'], true);
+        if (array_key_exists($params['section'], $snapshotData) &&
+        is_array($snapshotData[$params['section']]['data'])) {
+            foreach ($snapshotData[$params['section']]['data'] as $key => $dataRow) {
+                if (in_array($dataRow['id'], $rowsToDelete)) {
+                    unset($snapshotData[$params['section']]['data'][$key]);
+                }
+            }
+            ksort($snapshotData[$params['section']]['data']);
+            $data['id'] = $params['submission'];
+            $data['version'] = $submission['version'];
+            $data['dataSnapshot'] = json_encode($snapshotData);
+
+            $this->callParentSave($data);
+        }
     }
 
     /**
@@ -182,8 +234,8 @@ class SubmissionController extends OlcsController\CrudAbstract
         // modify $data
         $submissionService = $this->getServiceLocator()->get('Olcs\Service\Data\Submission');
         $commentService = $this->getServiceLocator()->get('Olcs\Service\Data\SubmissionSectionComment');
-        $params = $this->getParams(array('case', 'submission'));
-
+        $params['case'] = $this->params()->fromRoute('case');
+        $params['submission'] = $this->params()->fromRoute('submission');
         $caseId = $params['case'];
         $snapshotData = $submissionService->generateSnapshotData($caseId, $data);
 
@@ -355,5 +407,11 @@ class SubmissionController extends OlcsController\CrudAbstract
     {
         $this->getServiceLocator()->get('Script')->loadFile('forms/submission');
         return parent::addAction();
+    }
+
+    public function editAction()
+    {
+        $this->getServiceLocator()->get('Script')->loadFile('forms/submission');
+        return parent::editAction();
     }
 }

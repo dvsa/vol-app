@@ -355,10 +355,42 @@ $routes = [
             ]
         ]
     ],
+    'submission_action_recommendation' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/case/:case/submission/:submission/action/recommendation[/:action[/:id]]',
+            'constraints' => [
+                'case' => '[0-9]+',
+                'action' => '(add|edit)',
+                'submission' => '[0-9]+',
+                'id' => '[0-9]+',
+            ],
+            'defaults' => [
+                'controller' => 'CaseSubmissionRecommendationController',
+                'action' => 'add'
+            ]
+        ]
+    ],
+    'submission_action_decision' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/case/:case/submission/:submission/action/decision[/:action[/:id]]',
+            'constraints' => [
+                'case' => '[0-9]+',
+                'action' => '(add|edit)',
+                'submission' => '[0-9]+',
+                'id' => '[0-9]+',
+            ],
+            'defaults' => [
+                'controller' => 'CaseSubmissionDecisionController',
+                'action' => 'add'
+            ]
+        ]
+    ],
     'submission' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/case/:case/submission/:action[/:submission]',
+            'route' => '/case/:case/submission/:action[/:submission][/:section][/:rowId]',
             'constraints' => [
                 'case' => '[0-9]+',
                 'submission' => '[0-9]+',
@@ -370,17 +402,18 @@ $routes = [
             ]
         ]
     ],
-    'submission_refresh_section' => [
+    'submission_update_table' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/case/:case/submission/:submission/refresh/:section',
+            'route' => '/case/:case/submission/:submission/update-table/:section',
             'constraints' => [
                 'case' => '[0-9]+',
-                'submission' => '[0-9]+'
+                'submission' => '[0-9]+',
+                'action' => '(index|add|edit|details|update-table)'
             ],
             'defaults' => [
                 'controller' => 'CaseSubmissionController',
-                'action' => 'refresh'
+                'action' => 'update-table'
             ]
         ]
     ],
