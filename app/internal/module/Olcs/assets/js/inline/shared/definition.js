@@ -1,6 +1,6 @@
 OLCS.ready(function() {
-  var select   = "[name='fields[definition][]']";
-  var textarea = "[name='fields[decisionNotes]']";
+  var select   = ".js-definition-source";
+  var textarea = ".js-definition-target";
 
   function updateText(index) {
     var str = $(select)

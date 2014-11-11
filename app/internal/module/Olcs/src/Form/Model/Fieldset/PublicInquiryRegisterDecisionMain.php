@@ -165,7 +165,7 @@ class PublicInquiryRegisterDecisionMain
     public $notificationDate = null;
 
     /**
-     * @Form\Attributes({"id":"","placeholder":"","class":"extra-long tall", "multiple":true})
+     * @Form\Attributes({"id":"","placeholder":"","class":"extra-long tall  js-definition-source", "multiple":true})
      * @Form\Options({
      *     "label": "Definition",
      *     "disable_inarray_validator": false,
@@ -179,7 +179,7 @@ class PublicInquiryRegisterDecisionMain
     public $definition = null;
 
     /**
-     * @Form\Attributes({"id":"","class":"extra-long"})
+     * @Form\Attributes({"id":"","class":"extra-long    js-definition-target"})
      * @Form\Options({
      *     "label": "Details to be published",
      *     "label_attributes": {
