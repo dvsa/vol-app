@@ -34,10 +34,9 @@ trait LicenceControllerTrait
 
         $view = $this->getView($variables);
 
-        $this->pageTitle = $view->licence['licNo'];
-        $this->pageSubTitle = $view->licence['goodsOrPsv']['description'] . ', ' .
-            $view->licence['licenceType']['description']
-            . ', ' . $view->licence['status']['description'];
+        $this->pageTitle = $licence['licNo'];
+        $this->pageSubTitle = $licence['organisation']['name']
+            . ' ' . $licence['status']['description'];
 
         return $view;
     }
@@ -51,7 +50,7 @@ trait LicenceControllerTrait
     protected function getLicence($id = null)
     {
         if (is_null($id)) {
-            $id = $this->getFromRoute('licence');
+            $id = $this->params('licence');
         }
 
         /** @var \Olcs\Service\Data\Licence $dataService */

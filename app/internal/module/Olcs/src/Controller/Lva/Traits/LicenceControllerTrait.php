@@ -15,6 +15,7 @@ use Olcs\View\Model\Licence\SectionLayout;
 use Olcs\View\Model\Licence\Layout;
 use Olcs\View\Model\Licence\LicenceLayout;
 use Common\Service\Entity\LicenceEntityService;
+use Olcs\Controller\Traits;
 
 /**
  * Internal Abstract Licence Controller
@@ -23,7 +24,8 @@ use Common\Service\Entity\LicenceEntityService;
  */
 trait LicenceControllerTrait
 {
-    use InternalControllerTrait;
+    use InternalControllerTrait,
+        Traits\LicenceControllerTrait;
 
     /**
      * Hook into the dispatch before the controller action is executed
@@ -92,6 +94,11 @@ trait LicenceControllerTrait
         $licenceLayout->addChild($sectionLayout, 'content');
 
         $params = $this->getHeaderParams();
+
+        $licenceLayout->setVariable(
+            'markers',
+            $this->setupMarkers($this->getLicence())
+        );
 
         return new Layout($licenceLayout, $params);
     }
