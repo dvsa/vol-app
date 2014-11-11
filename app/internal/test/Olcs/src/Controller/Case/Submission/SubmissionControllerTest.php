@@ -71,6 +71,29 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $this->controller->addAction();
     }
 
+    public function testEditLoadsScripts()
+    {
+        $scriptMock = $this->getMock('\stdClass', ['loadFile']);
+        $scriptMock->expects($this->once())
+            ->method('loadFile')
+            ->with('forms/submission');
+
+        $sm = $this->getMock('\stdClass', ['get']);
+        $sm->expects($this->once())
+            ->method('get')
+            ->with('Script')
+            ->willReturn($scriptMock);
+
+        $this->controller->expects($this->any())
+            ->method('getServiceLocator')
+            ->willReturn($sm);
+
+        $this->controller->expects($this->once())
+            ->method('saveThis');
+
+        $this->controller->editAction();
+    }
+
     /**
      * Test process save of new submissions
      *
