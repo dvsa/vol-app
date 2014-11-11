@@ -171,7 +171,8 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
         $allSections = $this->getSections()->getValueOptions();
         foreach ($allSections as $key => $title) {
             if (in_array($key, $postedSections) && !in_array($key, $newDefaultSections)) {
-                $allSections[$key] = ['label' => $title, 'label_attributes' => ['class' => 'pre-selected']];
+                $allSections[$key] = ['label' => $title, 'value' => $key, 'label_attributes' => ['class' =>
+                    'pre-selected']];
             }
         }
         $this->getSections()->setValueOptions($allSections);
