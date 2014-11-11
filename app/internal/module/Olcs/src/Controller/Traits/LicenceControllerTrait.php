@@ -86,6 +86,7 @@ trait LicenceControllerTrait
                 $markers[] = $caseMarkers;
             }
         }
+
         return $markers;
     }
 }

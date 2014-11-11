@@ -16,6 +16,7 @@ use Olcs\View\Model\Licence\Layout;
 use Olcs\View\Model\Licence\LicenceLayout;
 use Common\Service\Entity\LicenceEntityService;
 use Olcs\Controller\Traits;
+use Zend\Session\Container;
 
 /**
  * Internal Abstract Licence Controller
@@ -26,6 +27,8 @@ trait LicenceControllerTrait
 {
     use InternalControllerTrait,
         Traits\LicenceControllerTrait;
+
+    private $searchForm;
 
     /**
      * Hook into the dispatch before the controller action is executed
@@ -100,7 +103,26 @@ trait LicenceControllerTrait
             $this->setupMarkers($this->getLicence())
         );
 
-        return new Layout($licenceLayout, $params);
+        $view = new Layout($licenceLayout, $params);
+        $view->setVariable('searchForm', $this->getSearchForm());
+        return $view;
+    }
+
+    /**
+     * Gets the search form for the header, it is cached on the object so that the search query is maintained
+     */
+    public function getSearchForm()
+    {
+        if ($this->searchForm === null) {
+            $this->searchForm = $this->getServiceLocator()
+                ->get('Helper\Form')
+                ->createForm('HeaderSearch', false, false);
+
+            $container = new Container('search');
+            $this->searchForm->bind($container);
+        }
+
+        return $this->searchForm;
     }
 
     /**

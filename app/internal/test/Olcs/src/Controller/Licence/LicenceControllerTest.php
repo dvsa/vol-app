@@ -200,9 +200,8 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
                 'id' => LicenceEntityService::LICENCE_CATEGORY_PSV,
                 'description' => 'PSV'
             ),
-            'licenceType' => array(
-                'id' => 'L1',
-                'description' => 'L1'
+            'organisation' => array(
+                'name' => 'O1'
             ),
             'status' => array(
                 'id' => 'S1',
@@ -323,9 +322,8 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
                 'id' => LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE,
                 'description' => 'Goods'
             ),
-            'licenceType' => array(
-                'id' => 'L1',
-                'description' => 'L1'
+            'organisation' => array(
+                'name' => 'O1'
             ),
             'status' => array(
                 'id' => 'S1',
