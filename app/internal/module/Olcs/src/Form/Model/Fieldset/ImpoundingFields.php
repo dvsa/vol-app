@@ -87,11 +87,13 @@ class ImpoundingFields
      * })
      * @Form\Required(false)
      * @Form\Type("DateTimeSelect")
+     * @Form\AllowEmpty(true)
      * @Form\Filter({"name": "DateTimeSelectNullifier"})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "impoundingType",
      *          "context_values": {"impt_hearing"},
+     *          "allow_empty" : true,
      *          "validators": {
      *              {"name": "Date", "options": {"format": "Y-m-d H:i:s"}},
      *              {
