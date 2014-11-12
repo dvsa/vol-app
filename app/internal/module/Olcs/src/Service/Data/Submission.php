@@ -89,7 +89,6 @@ class Submission extends AbstractData implements CloseableInterface
     public function fetchData($id = null, $bundle = null)
     {
         $id = is_null($id) ? $this->getId() : $id;
-
         if (is_null($this->getData($id))) {
             $bundle = is_null($bundle) ? $this->getBundle() : $bundle;
             $data =  $this->getRestClient()->get(sprintf('/%d', $id), ['bundle' => json_encode($bundle)]);
@@ -512,6 +511,41 @@ class Submission extends AbstractData implements CloseableInterface
         return $sectionData;
     }
 
+    public function closeEntity($id)
+    {
+        $data = $this->fetchData($id);
+        $now = date('Y-m-d h:i:s');
+
+        $this->getRestClient()->update(
+            $data['id'],
+            [
+                'data' => json_encode(
+                    [
+                        'version' => $data['version'],
+                        'closedDate' => $now
+                    ]
+                )
+            ]
+        );
+    }
+
+    public function reopenEntity($id)
+    {
+        $data = $this->fetchData($id);
+        $now = null;
+
+        $this->getRestClient()->update(
+            $data['id'],
+            [
+                'data' => json_encode(
+                    [
+                        'version' => $data['version'],
+                        'closedDate' => $now
+                    ]
+                )
+            ]
+        );
+    }
 
     /**
      * Can this entity be closed
