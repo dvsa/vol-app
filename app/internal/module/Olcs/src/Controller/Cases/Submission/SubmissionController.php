@@ -20,6 +20,7 @@ use Olcs\Controller\Traits as ControllerTraits;
 class SubmissionController extends OlcsController\CrudAbstract
 {
     use ControllerTraits\CaseControllerTrait;
+    use ControllerTraits\CloseActionTrait;
 
     /**
      * Identifier name
@@ -397,6 +398,7 @@ class SubmissionController extends OlcsController\CrudAbstract
         $view = $this->getView([]);
         $view->setVariable('allSections', $submissionService->getAllSectionsRefData());
         $view->setVariable('submissionConfig', $this->submissionConfig['sections']);
+        $view->setVariable('closeAction', $this->generateCloseActionButtonArray($submission));
 
         $view->setTemplate($this->detailsView);
 
