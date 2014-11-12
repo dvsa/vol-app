@@ -86,7 +86,7 @@ class Submission extends AbstractData implements CloseableInterface
      * @param array|null $bundle
      * @return array
      */
-    public function fetchSubmissionData($id = null, $bundle = null)
+    public function fetchData($id = null, $bundle = null)
     {
         $id = is_null($id) ? $this->getId() : $id;
 
@@ -530,7 +530,7 @@ class Submission extends AbstractData implements CloseableInterface
      */
     public function isClosed($id)
     {
-        $submission = $this->fetchSubmissionData($id);
+        $submission = $this->fetchData($id);
         return (bool) isset($submission['closedDate']);
     }
 

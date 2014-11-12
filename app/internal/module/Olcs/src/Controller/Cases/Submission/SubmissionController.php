@@ -175,7 +175,7 @@ class SubmissionController extends OlcsController\CrudAbstract
         $configService = $this->getServiceLocator()->get('config');
         $submissionConfig = $configService['submission_config'];
 
-        $submission = $submissionService->fetchSubmissionData($params['submission']);
+        $submission = $submissionService->fetchData($params['submission']);
         $snapshotData = json_decode($submission['dataSnapshot'], true);
 
         if (array_key_exists($params['section'], $snapshotData)) {
@@ -206,7 +206,7 @@ class SubmissionController extends OlcsController\CrudAbstract
         $rowsToDelete = $this->params()->fromPost('id');
         $submissionService = $this->getServiceLocator()->get('Olcs\Service\Data\Submission');
 
-        $submission = $submissionService->fetchSubmissionData($params['submission']);
+        $submission = $submissionService->fetchData($params['submission']);
         $snapshotData = json_decode($submission['dataSnapshot'], true);
         if (array_key_exists($params['section'], $snapshotData) &&
         is_array($snapshotData[$params['section']]['data'])) {
@@ -375,7 +375,7 @@ class SubmissionController extends OlcsController\CrudAbstract
         $submissionService = $this->getServiceLocator()
             ->get('Olcs\Service\Data\Submission');
 
-        $submission = $submissionService->fetchSubmissionData($submissionId);
+        $submission = $submissionService->fetchData($submissionId);
 
         $submission['submissionTypeTitle'] =
             $submissionService->getSubmissionTypeTitle(

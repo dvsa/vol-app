@@ -22,9 +22,25 @@ trait CloseActionTrait
     {
         $identifierName = $this->getIdentifierName();
         $id = $this->params()->fromRoute($identifierName);
-        //$this->makeRestCall($this->getDeleteServiceName(), 'DELETE', ['id' => $id]);
 
-        $this->addErrorMessage('Closed sucessfully');
+        $dataService = $this->getServiceLocator()
+            ->get('Olcs\Service\Data\\' . $this->getDataServiceName());
+
+        if ($dataService instanceof CloseableInterface) {
+            $data = $dataService->fetchData($id);
+        }
+
+        $this->makeRestCall(
+            $this->getDataServiceName(),
+            'PUT',
+            [
+                'id' => $id,
+                'version' => $data['version'],
+                'closedDate' => date('Y-m-d h:i:s')
+            ]
+        );
+
+        $this->addErrorMessage('Closed successfully');
 
         $this->redirectToIndex();
     }
@@ -39,17 +55,17 @@ trait CloseActionTrait
     public function generateCloseActionButtonArray()
     {
         $identifierName = $this->getIdentifierName();
-        $entityId = $this->params()->fromRoute($identifierName);
+        $id = $this->params()->fromRoute($identifierName);
 
         $dataService = $this->getServiceLocator()
             ->get('Olcs\Service\Data\\' . $this->getDataServiceName());
 
         if ($dataService instanceof CloseableInterface) {
-            if ($dataService->canReopen($entityId)) {
-                return $dataService->getReopenButton($entityId);
+            if ($dataService->canReopen($id)) {
+                return $dataService->getReopenButton($id);
             }
-            if ($dataService->canClose($entityId)) {
-                return $dataService->getCloseButton($entityId);
+            if ($dataService->canClose($id)) {
+                return $dataService->getCloseButton($id);
             }
         }
         return null;
