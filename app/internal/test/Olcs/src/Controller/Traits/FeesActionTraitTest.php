@@ -18,6 +18,7 @@ use OlcsTest\Bootstrap;
 class FeesActionTraitTest extends AbstractHttpControllerTestCase
 {
     protected $post = [];
+
     /**
      * Set up
      */
@@ -300,6 +301,11 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
         $mockServiceLocator->setAllowOverride(true);
         $mockServiceLocator->setService('Olcs\Service\Data\Fee', $mockFeeService);
 
+        $mockFeeEntityService = $this->getMock('\stdClass', ['save']);
+        $mockFeeEntityService->expects($this->any())
+            ->method('save');
+        $mockServiceLocator->setService('Entity\Fee', $mockFeeEntityService);
+
         $this->controller->expects($this->any())
             ->method('getServiceLocator')
             ->will($this->returnValue($mockServiceLocator));
@@ -428,7 +434,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
                     ]
                 ],
                 '\Olcs\Controller\Application\ApplicationController',
-                'applicaitonId',
+                'application',
                 'licence',
                 true
             ],
@@ -447,7 +453,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
                     ]
                 ],
                 '\Olcs\Controller\Application\ApplicationController',
-                'applicaitonId',
+                'application',
                 'licence',
                 true
             ],
@@ -466,7 +472,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
                     ]
                 ],
                 '\Olcs\Controller\Application\ApplicationController',
-                'applicaitonId',
+                'application',
                 'licence',
                 true
             ],
@@ -485,7 +491,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
                     ]
                 ],
                 '\Olcs\Controller\Application\ApplicationController',
-                'applicaitonId',
+                'application',
                 'licence',
                 true
             ],
@@ -504,7 +510,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
                     ]
                 ],
                 '\Olcs\Controller\Application\ApplicationController',
-                'applicaitonId',
+                'application',
                 'licence',
                 false
             ],
