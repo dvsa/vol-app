@@ -5,13 +5,15 @@ namespace Olcs\Service\Data;
 use Common\Service\Data\AbstractData;
 use Zend\Filter\Word\DashToCamelCase;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Common\Service\Data\CloseableInterface;
 
 /**
  * Class Submission
  * @package Olcs\Service
  */
-class Submission extends AbstractData
+class Submission extends AbstractData implements CloseableInterface
 {
+    use CloseButtonTrait;
 
     /**
      * @var integer
@@ -509,6 +511,41 @@ class Submission extends AbstractData
 
         return $sectionData;
     }
+
+
+    /**
+     * Can this entity be closed
+     * @param $id
+     * @return bool
+     */
+    public function canClose($id)
+    {
+        $submission = $this->fetchSubmissionData($id);
+
+        return !$this->isClosed($id);
+    }
+
+    /**
+     * Is this entity closed
+     * @param $id
+     * @return bool
+     */
+    public function isClosed($id)
+    {
+        $submission = $this->fetchSubmissionData($id);
+        return (bool) isset($submission['closedDate']);
+    }
+
+    /**
+     * Can this entity be reopened
+     * @param $id
+     * @return bool
+     */
+    public function canReopen($id)
+    {
+        return true;
+    }
+
 
     /**
      * Set refData service
