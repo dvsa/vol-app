@@ -9,6 +9,7 @@ namespace Olcs\Controller\Licence;
 
 use Olcs\Controller\AbstractController;
 use Olcs\Controller\Traits;
+use Olcs\Controller\Lva;
 
 /**
  * Licence Controller
@@ -17,7 +18,7 @@ use Olcs\Controller\Traits;
  */
 class LicenceController extends AbstractController
 {
-    use Traits\LicenceControllerTrait,
+    use Lva\Traits\LicenceControllerTrait,
         Traits\TaskSearchTrait,
         Traits\DocumentSearchTrait,
         Traits\FeesActionTrait;
