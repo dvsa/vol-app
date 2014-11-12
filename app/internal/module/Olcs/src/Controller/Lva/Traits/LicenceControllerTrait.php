@@ -143,7 +143,7 @@ trait LicenceControllerTrait
         return array(
             'licNo' => $data['licNo'],
             'companyName' => $data['organisation']['name'],
-            'status' => $data['status']['id']
+            'description' => $data['status']['description']
         );
     }
 
