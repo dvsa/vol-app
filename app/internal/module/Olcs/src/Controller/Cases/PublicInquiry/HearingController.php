@@ -119,6 +119,8 @@ class HearingController extends OlcsController\CrudAbstract
         ]
     ];
 
+    protected $inlineScripts = ['forms/pi-hearing', 'shared/definition'];
+
     public function redirectToIndex()
     {
         return $this->redirectToRoute(
