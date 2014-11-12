@@ -14,6 +14,9 @@ use OlcsTest\Bootstrap;
  * Fees action trait tests
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
+ *
+ * @todo These tests need sorting out, this doesn't fully cover the trait and the testEditFeeActionWithPost method
+ *  with it's provider doesn't cover all scenarios
  */
 class FeesActionTraitTest extends AbstractHttpControllerTestCase
 {
