@@ -65,7 +65,7 @@ echo $this->render('partials/read-only/main',
     <?php foreach ($submission['submissionActions'] as $sa): ?>
     <li class="submission-item">
 
-        <h4><?php echo $sa['isDecision'] == 'Y' ? 'Descision' : 'Recommendation'; ?>:
+        <h4><?php echo $sa['isDecision'] == 'Y' ? 'Decision' : 'Recommendation'; ?>:
             <?php echo $sa['submissionActionStatus']['description']; ?></h4>
 
 

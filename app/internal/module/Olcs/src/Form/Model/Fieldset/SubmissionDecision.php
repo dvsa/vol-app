@@ -23,6 +23,19 @@ class SubmissionDecision extends Base
     public $submissionActionStatus = null;
 
     /**
+     * @Form\Attributes({"id":"","placeholder":"","class":"long tall js-sub-legislation", "multiple" : true})
+     * @Form\Options({
+     *     "label": "Legislation",
+     *     "service_name": "Olcs\Service\Data\SubmissionLegislation",
+     *     "disable_inarray_validator": false,
+     *     "help-block": "Please select a category",
+     *     "use_groups":true
+     * })
+     * @Form\Type("DynamicSelect")
+     */
+    public $reasons = null;
+
+    /**
      * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
      *     "label": "Send to",
