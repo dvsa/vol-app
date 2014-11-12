@@ -498,6 +498,84 @@ return array(
                             'use_route_match' => true
                         ),
                     )
+                ),
+                array(
+                    'id' => 'transport_manager',
+                    'label' => 'internal-navigation-transport-manager',
+                    'route' => 'transport-manager',
+                    'use_route_match' => true,
+                    'pages' => array(
+                        array(
+                            'id' => 'transport_manager_details',
+                            'label' => 'internal-navigation-transport-manager-details',
+                            'route' => 'transport-manager/details',
+                            'use_route_match' => true,
+                            'pages' => array (
+                                array(
+                                    'id' => 'transport_manager_details_details',
+                                    'label' => 'internal-navigation-transport-manager-details-details',
+                                    'route' => 'transport-manager/details/details',
+                                    'use_route_match' => true,
+                                ),
+                                array(
+                                    'id' => 'transport_manager_details_competences',
+                                    'label' => 'internal-navigation-transport-manager-details-competences',
+                                    'route' => 'transport-manager/details/competences',
+                                    'use_route_match' => true,
+                                ),
+                                array(
+                                    'id' => 'transport_manager_details_application_licence',
+                                    'label' => 'internal-navigation-transport-manager-details-applications-licences',
+                                    'route' => 'transport-manager/details/applications-licences',
+                                    'use_route_match' => true,
+                                )
+                            )
+                        ),
+                        array(
+                            'id' => 'transport_manager_cases',
+                            'label' => 'internal-navigation-transport-manager-cases',
+                            'route' => 'transport-manager/cases',
+                            'use_route_match' => true,
+                        ),
+                        array(
+                            'id' => 'transport_manager_documents',
+                            'label' => 'internal-navigation-transport-manager-documents',
+                            'route' => 'transport-manager/documents',
+                            'use_route_match' => true,
+                        ),
+                        array(
+                            'id' => 'transport_manager_processing',
+                            'label' => 'internal-navigation-transport-manager-processing',
+                            'route' => 'transport-manager/processing',
+                            'use_route_match' => true,
+                            'pages' => array (
+                                array(
+                                    'id' => 'transport_manager_processing_notes',
+                                    'label' => 'internal-navigation-transport-manager-processing-notes',
+                                    'route' => 'transport-manager/processing/notes',
+                                    'use_route_match' => true,
+                                ),
+                                array(
+                                    'id' => 'transport_manager_processing_tasks',
+                                    'label' => 'internal-navigation-transport-manager-processing-tasks',
+                                    'route' => 'transport-manager/processing/tasks',
+                                    'use_route_match' => true,
+                                ),
+                                array(
+                                    'id' => 'transport_manager_processing_decisions',
+                                    'label' => 'internal-navigation-transport-manager-processing-decisions',
+                                    'route' => 'transport-manager/processing/decisions',
+                                    'use_route_match' => true,
+                                ),
+                                array(
+                                    'id' => 'transport_manager_processing_history',
+                                    'label' => 'internal-navigation-transport-manager-processing-history',
+                                    'route' => 'transport-manager/processing/history',
+                                    'use_route_match' => true,
+                                ),
+                            )
+                        ),
+                    )
                 )
             )
         ),

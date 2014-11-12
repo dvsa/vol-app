@@ -201,7 +201,7 @@ class PublicInquiryHearingFields extends Base
 
     /**
      * @Form\Required(false)
-     * @Form\Attributes({"id":"","placeholder":"","class":"extra-long tall", "multiple":true})
+     * @Form\Attributes({"id":"","placeholder":"","class":"extra-long tall  js-definition-source", "multiple":true})
      * @Form\Options({
      *     "label": "Definition",
      *     "disable_inarray_validator": false,
@@ -214,7 +214,7 @@ class PublicInquiryHearingFields extends Base
     public $definition = null;
 
     /**
-     * @Form\Attributes({"class":"extra-long","id":""})
+     * @Form\Attributes({"class":"extra-long    js-definition-target","id":""})
      * @Form\Options({"label":"Details to be published"})
      * @Form\Required(false)
      * @Form\Type("TextArea")

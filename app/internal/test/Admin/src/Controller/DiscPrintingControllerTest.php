@@ -34,7 +34,9 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
     ];
     protected $discPrefixes = [
         1 => 'OK',
-        2 => 'OB'
+        2 => 'OB',
+        3 => 'AB',
+        4 => 'ZY'
     ];
 
     protected $discsToPrint = [
@@ -403,8 +405,17 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
         $this->assertInstanceOf('Zend\View\Model\JsonModel', $response);
         $result = json_decode($response->serialize(), true);
         $this->assertEquals(is_array($result), true);
-        $this->assertEquals(count($result), 2);
-        $this->assertEquals($result, [['value' => 1, 'label' => 'OK'], ['value' => 2, 'label' => 'OB']]);
+        $this->assertEquals(count($result), 4);
+        // result should be sorted alphabetically by label with keys preserved
+        $this->assertEquals(
+            $result,
+            [
+                ['value' => 3, 'label' => 'AB'],
+                ['value' => 2, 'label' => 'OB'],
+                ['value' => 1, 'label' => 'OK'],
+                ['value' => 4, 'label' => 'ZY']
+            ]
+        );
     }
 
     /**

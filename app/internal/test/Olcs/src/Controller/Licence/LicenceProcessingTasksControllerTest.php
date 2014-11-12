@@ -9,6 +9,7 @@
 namespace OlcsTest\Controller\Licence\Processing;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
+use Common\Service\Entity\LicenceEntityService;
 
 /**
  * Licence controller tests
@@ -146,12 +147,11 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
         $licenceData = array(
             'licNo' => 'TEST1234',
             'goodsOrPsv' => array(
-                'id' => 'PSV',
+                'id' => LicenceEntityService::LICENCE_CATEGORY_PSV,
                 'description' => 'PSV'
             ),
-            'licenceType' => array(
-                'id' => 'L1',
-                'description' => 'L1'
+            'organisation' => array(
+                'name' => 'O1'
             ),
             'status' => array(
                 'id' => 'S1',
@@ -212,7 +212,7 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
         list($header, $content) = $view->getChildren();
 
         $this->assertEquals('TEST1234', $header->getVariable('pageTitle'));
-        $this->assertEquals('PSV, L1, S1', $header->getVariable('pageSubTitle'));
+        $this->assertEquals('O1 S1', $header->getVariable('pageSubTitle'));
     }
 
     /**

@@ -14,6 +14,9 @@ use Common\View\Model\Section;
 use Olcs\View\Model\Licence\SectionLayout;
 use Olcs\View\Model\Licence\Layout;
 use Olcs\View\Model\Licence\LicenceLayout;
+use Common\Service\Entity\LicenceEntityService;
+use Olcs\Controller\Traits;
+use Zend\Session\Container;
 
 /**
  * Internal Abstract Licence Controller
@@ -22,7 +25,12 @@ use Olcs\View\Model\Licence\LicenceLayout;
  */
 trait LicenceControllerTrait
 {
-    use InternalControllerTrait;
+    use InternalControllerTrait,
+        // @TODO: the LVA trait importing the old, generic licence trait
+        // should be a temporary measure; they need consolidating into one
+        Traits\LicenceControllerTrait;
+
+    private $searchForm;
 
     /**
      * Hook into the dispatch before the controller action is executed
@@ -92,7 +100,31 @@ trait LicenceControllerTrait
 
         $params = $this->getHeaderParams();
 
-        return new Layout($licenceLayout, $params);
+        $licenceLayout->setVariable(
+            'markers',
+            $this->setupMarkers($this->getLicence())
+        );
+
+        $view = new Layout($licenceLayout, $params);
+        $view->setVariable('searchForm', $this->getSearchForm());
+        return $view;
+    }
+
+    /**
+     * Gets the search form for the header, it is cached on the object so that the search query is maintained
+     */
+    public function getSearchForm()
+    {
+        if ($this->searchForm === null) {
+            $this->searchForm = $this->getServiceLocator()
+                ->get('Helper\Form')
+                ->createForm('HeaderSearch', false, false);
+
+            $container = new Container('search');
+            $this->searchForm->bind($container);
+        }
+
+        return $this->searchForm;
     }
 
     /**
@@ -104,10 +136,14 @@ trait LicenceControllerTrait
     {
         $data = $this->getServiceLocator()->get('Entity\Licence')->getHeaderParams($this->getLicenceId());
 
+        if ($data['goodsOrPsv']['id'] === LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE) {
+            $this->getServiceLocator()->get('Navigation')->findOneBy('id', 'licence_bus')->setVisible(0);
+        }
+
         return array(
             'licNo' => $data['licNo'],
             'companyName' => $data['organisation']['name'],
-            'status' => $data['status']['id']
+            'description' => $data['status']['description']
         );
     }
 

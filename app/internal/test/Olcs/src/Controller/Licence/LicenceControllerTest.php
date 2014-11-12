@@ -8,6 +8,7 @@
 namespace OlcsTest\Controller\Licence;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
+use Common\Service\Entity\LicenceEntityService;
 
 /**
  * Licence controller tests
@@ -196,12 +197,11 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
         $licenceData = array(
             'licNo' => 'TEST1234',
             'goodsOrPsv' => array(
-                'id' => 'PSV',
+                'id' => LicenceEntityService::LICENCE_CATEGORY_PSV,
                 'description' => 'PSV'
             ),
-            'licenceType' => array(
-                'id' => 'L1',
-                'description' => 'L1'
+            'organisation' => array(
+                'name' => 'O1'
             ),
             'status' => array(
                 'id' => 'S1',
@@ -312,6 +312,51 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
 
         $this->assertTrue($view->terminate());
 
+    }
+
+    public function testDetailsActionWithGoodsLicenceRemovesBusNavLink()
+    {
+        $licenceData = array(
+            'licNo' => 'TEST1234',
+            'goodsOrPsv' => array(
+                'id' => LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE,
+                'description' => 'Goods'
+            ),
+            'organisation' => array(
+                'name' => 'O1'
+            ),
+            'status' => array(
+                'id' => 'S1',
+                'description' => 'S1'
+            )
+        );
+
+        $this->controller->expects($this->any())
+            ->method('getLicence')
+            ->will($this->returnValue($licenceData));
+
+        $navItem = $this->getMock('\stdClass', ['setVisible']);
+        $navItem->expects($this->once())
+            ->method('setVisible')
+            ->with(0);
+
+        $navMock = $this->getMock('\stdClass', ['findOneBy']);
+        $navMock->expects($this->once())
+            ->method('findOneBy')
+            ->with('id', 'licence_bus')
+            ->willReturn($navItem);
+
+        $slMock = $this->getMock('\stdClass', ['get']);
+        $slMock->expects($this->once())
+            ->method('get')
+            ->with('Navigation')
+            ->willReturn($navMock);
+
+        $this->controller->expects($this->any())
+            ->method('getServiceLocator')
+            ->willReturn($slMock);
+
+        $this->controller->detailsAction();
     }
 
     /**

@@ -26,6 +26,10 @@ return array(
             'CaseSubmissionController' => 'Olcs\Controller\Cases\Submission\SubmissionController',
             'CaseSubmissionSectionCommentController'
                 => 'Olcs\Controller\Cases\Submission\SubmissionSectionCommentController',
+            'CaseSubmissionRecommendationController'
+                => 'Olcs\Controller\Cases\Submission\RecommendationController',
+            'CaseSubmissionDecisionController'
+                => 'Olcs\Controller\Cases\Submission\DecisionController',
             'CaseStayController' => 'Olcs\Controller\Cases\Hearing\StayController',
             'CasePenaltyController' => 'Olcs\Controller\Cases\Penalty\PenaltyController',
             'CaseAppliedPenaltyController' => 'Olcs\Controller\Cases\Penalty\AppliedPenaltyController',
@@ -147,6 +151,24 @@ return array(
             'LvaVariation/TaxiPhv' => 'Olcs\Controller\Lva\Variation\TaxiPhvController',
             'LvaVariation/Discs' => 'Olcs\Controller\Lva\Variation\DiscsController',
             'LvaVariation/ConditionsUndertakings' => 'Olcs\Controller\Lva\Variation\ConditionsUndertakingsController',
+            'TMController' => 'Olcs\Controller\TransportManager\TransportManagerController',
+            'TMDetailsDetailController' =>
+                'Olcs\Controller\TransportManager\Details\TransportManagerDetailsDetailController',
+            'TMDetailsCompetenceController' =>
+                'Olcs\Controller\TransportManager\Details\TransportManagerDetailsCompetenceController',
+            'TMDetailsApplicationLicenceController' =>
+                'Olcs\Controller\TransportManager\Details\TransportManagerDetailsApplicationLicenceController',
+            'TMProcessingDecisionController' =>
+                'Olcs\Controller\TransportManager\Processing\TransportManagerProcessingDecisionController',
+            'TMProcessingHistoryController' =>
+                'Olcs\Controller\TransportManager\Processing\TransportManagerProcessingHistoryController',
+            'TMProcessingNoteController' =>
+                'Olcs\Controller\TransportManager\Processing\TransportManagerProcessingNoteController',
+            'TMProcessingTaskController' =>
+                'Olcs\Controller\TransportManager\Processing\TransportManagerProcessingTaskController',
+            'TMCaseController' =>
+                'Olcs\Controller\TransportManager\TransportManagerCaseController',
+            'TMDocumentController' => 'Olcs\Controller\TransportManager\TransportManagerDocumentController'
         )
     ),
     'view_manager' => array(
