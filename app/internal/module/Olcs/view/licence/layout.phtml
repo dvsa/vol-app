@@ -1,9 +1,9 @@
 <div class="four-fifths--left">
-    <?php
-    echo $this->navigation('navigation')
-        ->menu($this->navigation()->findOneBy('id', 'licence'))
-        ->setPartial('layout/partials/tabs');
-    ?>
+  <?php
+  echo $this->navigation('navigation')
+  ->menu($this->navigation()->findOneBy('id', 'licence'))
+  ->setPartial('layout/partials/tabs');
+  ?>
   <div class="content">
       <?php echo $this->content; ?>
   </div>
@@ -12,4 +12,11 @@
   <div class="record-actions">
     <?php echo $this->actions; ?>
   </div>
+
+  <?php if (is_array($markers)): ?>
+    <?php foreach($markers as $marker): ?>
+      <?php echo $this->markers($marker, 'appeal') ?>
+      <?php echo $this->markers($marker, 'stay') ?>
+    <?php endforeach; ?>
+  <?php endif; ?>
 </div>

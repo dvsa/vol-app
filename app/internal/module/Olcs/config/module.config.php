@@ -151,6 +151,24 @@ return array(
             'LvaVariation/TaxiPhv' => 'Olcs\Controller\Lva\Variation\TaxiPhvController',
             'LvaVariation/Discs' => 'Olcs\Controller\Lva\Variation\DiscsController',
             'LvaVariation/ConditionsUndertakings' => 'Olcs\Controller\Lva\Variation\ConditionsUndertakingsController',
+            'TMController' => 'Olcs\Controller\TransportManager\TransportManagerController',
+            'TMDetailsDetailController' =>
+                'Olcs\Controller\TransportManager\Details\TransportManagerDetailsDetailController',
+            'TMDetailsCompetenceController' =>
+                'Olcs\Controller\TransportManager\Details\TransportManagerDetailsCompetenceController',
+            'TMDetailsApplicationLicenceController' =>
+                'Olcs\Controller\TransportManager\Details\TransportManagerDetailsApplicationLicenceController',
+            'TMProcessingDecisionController' =>
+                'Olcs\Controller\TransportManager\Processing\TransportManagerProcessingDecisionController',
+            'TMProcessingHistoryController' =>
+                'Olcs\Controller\TransportManager\Processing\TransportManagerProcessingHistoryController',
+            'TMProcessingNoteController' =>
+                'Olcs\Controller\TransportManager\Processing\TransportManagerProcessingNoteController',
+            'TMProcessingTaskController' =>
+                'Olcs\Controller\TransportManager\Processing\TransportManagerProcessingTaskController',
+            'TMCaseController' =>
+                'Olcs\Controller\TransportManager\TransportManagerCaseController',
+            'TMDocumentController' => 'Olcs\Controller\TransportManager\TransportManagerDocumentController'
         )
     ),
     'view_manager' => array(
@@ -262,6 +280,7 @@ return array(
     ],
     'data_services' => [
         'factories' => [
+            'Olcs\Service\Data\SubmissionLegislation' => 'Olcs\Service\Data\SubmissionLegislation',
             'Olcs\Service\Data\PublicInquiryReason' => 'Olcs\Service\Data\PublicInquiryReason',
             'Olcs\Service\Data\PublicInquiryDecision' => 'Olcs\Service\Data\PublicInquiryDecision',
             'Olcs\Service\Data\PublicInquiryDefinition' => 'Olcs\Service\Data\PublicInquiryDefinition',
