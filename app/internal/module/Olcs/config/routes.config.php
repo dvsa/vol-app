@@ -1185,6 +1185,52 @@ $routes = [
             ],
         ]
     ],
+    'operator' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/operator/:operator',
+            'constraints' => [
+                'operator' => '[0-9]+'
+            ],
+            'defaults' => [
+                'controller' => 'OperatorController',
+                'action' => 'index-jump',
+            ]
+        ],
+        'may_terminate' => true,
+        'child_routes' => [
+            'business-details' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/business-details',
+                    'defaults' => [
+                        'controller' => 'OperatorController',
+                        'action' => 'business-details',
+                    ]
+                ]
+            ],
+            'people' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/people',
+                    'defaults' => [
+                        'controller' => 'OperatorController',
+                        'action' => 'people',
+                    ]
+                ]
+            ],
+            'licence-application' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/licence-appliction',
+                    'defaults' => [
+                        'controller' => 'OperatorController',
+                        'action' => 'licence-application',
+                    ]
+                ]
+            ],
+        ]
+    ],
     'create_variation' => [
         'type' => 'segment',
         'options' => [

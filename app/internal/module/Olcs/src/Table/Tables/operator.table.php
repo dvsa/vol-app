@@ -9,7 +9,12 @@ return array(
             'limit' => array(
                 'options' => array(10, 25, 50)
             )
-        )
+        ),
+        'crud' => array(
+            'actions' => array(
+                'createOperator' => array('class' => 'primary', 'value' => 'Create operator')
+            )
+        ),
     ),
     'attributes' => array(
     ),
