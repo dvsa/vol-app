@@ -52,7 +52,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($mockRefDataService, $service->getRefDataService());
     }
 
-    public function testFetchSubmissionData()
+    public function testFetchData()
     {
         $submission = ['id' => 24];
 
@@ -64,9 +64,9 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
 
         $this->sut->setRestClient($mockRestClient);
 
-        $this->assertEquals($submission, $this->sut->fetchSubmissionData(24));
+        $this->assertEquals($submission, $this->sut->fetchData(24));
         //test data is cached
-        $this->assertEquals($submission, $this->sut->fetchSubmissionData(24));
+        $this->assertEquals($submission, $this->sut->fetchData(24));
 
     }
 

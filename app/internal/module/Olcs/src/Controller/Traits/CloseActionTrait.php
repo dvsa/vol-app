@@ -1,6 +1,6 @@
 <?php
-
 namespace Olcs\Controller\Traits;
+
 use Common\Service\Data\CloseableInterface;
 use Zend\View\Model\ViewModel;
 

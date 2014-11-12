@@ -51,8 +51,7 @@ trait CloseButtonTrait
      */
     public function getEntityName()
     {
-        if (empty($this->entityName))
-        {
+        if (empty($this->entityName)) {
             $this->setEntityName(strtolower($this->getServiceName()));
         }
         return $this->entityName;
@@ -68,5 +67,4 @@ trait CloseButtonTrait
         $this->entityName = $entityName;
         return $this;
     }
-
 }

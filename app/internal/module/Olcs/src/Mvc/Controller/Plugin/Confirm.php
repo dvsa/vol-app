@@ -4,6 +4,11 @@ namespace Olcs\Mvc\Controller\Plugin;
 use Zend\Mvc\Controller\Plugin\AbstractPlugin;
 use Zend\View\Model\ViewModel;
 
+/**
+ * Class Confirm - Generates validates and processes the confirm form
+ *
+ * @package Olcs\Mvc\Controller\Plugin
+ */
 class Confirm extends AbstractPlugin
 {
     public function __invoke($label)
