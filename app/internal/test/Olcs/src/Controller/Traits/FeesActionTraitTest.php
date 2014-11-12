@@ -318,7 +318,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
     public function feePostProvider()
     {
         return [
-            [
+            0 => [
                 'lfs_ot',
                 'Outstanding',
                 [
@@ -337,7 +337,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
                 'application',
                 true
             ],
-            [
+            1 => [
                 'lfs_wr',
                 'Waive recommended',
                 [
@@ -356,7 +356,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
                 'application',
                 true
             ],
-            [
+            2 => [
                 'lfs_wr',
                 'Waive recommended',
                 [
@@ -375,7 +375,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
                 'application',
                 true
             ],
-            [
+            3 => [
                 'lfs_wr',
                 'Waive recommended',
                 [
@@ -394,7 +394,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
                 'application',
                 true
             ],
-            [
+            4 => [
                 'lfs_ot',
                 'Outstanding',
                 [
@@ -413,7 +413,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
                 'application',
                 true
             ],
-            [
+            5 => [
                 'lfs_ot',
                 'Outstanding',
                 [
@@ -432,7 +432,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
                 'licence',
                 true
             ],
-            [
+            6 => [
                 'lfs_wr',
                 'Waive recommended',
                 [
@@ -451,7 +451,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
                 'licence',
                 true
             ],
-            [
+            7 => [
                 'lfs_wr',
                 'Waive recommended',
                 [
@@ -470,7 +470,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
                 'licence',
                 true
             ],
-            [
+            8 => [
                 'lfs_wr',
                 'Waive recommended',
                 [
@@ -489,7 +489,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
                 'licence',
                 true
             ],
-            [
+            9 => [
                 'lfs_ot',
                 'Outstanding',
                 [
