@@ -26,17 +26,64 @@ class PenaltyControllerTest extends \PHPUnit_Framework_TestCase
      */
     protected $routeMatchHelper;
 
-    public function __construct()
-    {
-        $this->pluginManagerHelper = new ControllerPluginManagerHelper();
-        $this->routeMatchHelper = new ControllerRouteMatchHelper();
-    }
-
     public function setUp()
     {
         $this->sut = new PenaltyController();
-
+        $this->pluginManagerHelper = new ControllerPluginManagerHelper();
+        $this->routeMatchHelper = new ControllerRouteMatchHelper();
         parent::setUp();
+    }
+
+    /**
+     * Tests the redirects to applied penalty controller work correctly
+     *
+     * @dataProvider redirectProvider
+     * @param $postedVars
+     */
+    public function testIndexActionWithRedirect($postedVars)
+    {
+        $caseId = 29;
+        $seriousInfringementId = 1;
+
+        $mockRestData = ['Results' => [0 => ['id' => $seriousInfringementId, 'imposedErrus' => [0 => []]]], 'Count' => 1];
+        $this->sut->setListData($mockRestData);
+
+        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
+            ['params' => 'Params', 'redirect' => 'Redirect']
+        );
+
+        $mockParams = $mockPluginManager->get('params', '');
+        $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
+        $mockParams->shouldReceive('fromPost')->andReturn($postedVars);
+
+        $mockRedirect = $mockPluginManager->get('redirect', '');
+        $mockRedirect->shouldReceive('toRoute')->with(
+            'case_penalty_edit',
+            [
+                'action' => $postedVars['action'],
+                'seriousInfringement' => $seriousInfringementId,
+                'id' => $postedVars['id']
+            ],
+            ['code' => '303'], true
+        )->andReturn('redirectResponse');
+
+        $this->sut->setPluginManager($mockPluginManager);
+
+        $this->assertEquals('redirectResponse', $this->sut->indexAction());
+    }
+
+    /**
+     * Mocked post data expected by index action redirects
+     *
+     * @return array
+     */
+    public function redirectProvider()
+    {
+        return [
+            [['id' => null, 'action' => 'Add']],
+            [['id' => 1, 'action' => 'Edit']],
+            [['id' => 1, 'action' => 'Delete']]
+        ];
     }
 
     public function testRedirectToIndex()
@@ -64,6 +111,9 @@ class PenaltyControllerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('redirectResponse', $this->sut->redirectToIndex());
     }
 
+    /**
+     * Tests the index action
+     */
     public function testIndexAction()
     {
         $caseId = 29;
@@ -94,13 +144,14 @@ class PenaltyControllerTest extends \PHPUnit_Framework_TestCase
         //route params
         $mockParams = $mockPluginManager->get('params', '');
         $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
+        $mockParams->shouldReceive('fromPost')->andReturn([]);
 
         //mock url helper
         $mockPluginManager->shouldReceive('get')->with('url')->andReturnSelf();
 
         $this->sut->setPluginManager($mockPluginManager);
 
-        //rest call to return prohibition data
+        //rest call to return penalty data
         $mockRestHelper = m::mock('RestHelper');
         $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn($mockRestData);
 
