@@ -45,7 +45,7 @@ class PenaltyControllerTest extends \PHPUnit_Framework_TestCase
         $caseId = 29;
         $seriousInfringementId = 1;
 
-        $mockRestData = ['Results' => [0 => ['id' => $seriousInfringementId, 'imposedErrus' => [0 => []]]], 'Count' => 1];
+        $mockRestData = ['Results' => [0 => ['id' => $seriousInfringementId]]];
         $this->sut->setListData($mockRestData);
 
         $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
