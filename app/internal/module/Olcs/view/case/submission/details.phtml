@@ -27,38 +27,32 @@ foreach ($allSections as $sectionId => $sectionDescription) {
         }
     }
 }
-
-$actions = [
-    [
-        'label' => 'Return to list',
-        'url' => $this->url(
-            'submission', [
-                'case' => $case['id'],
-                'action' => 'index'
-            ]
-        )
-    ],
-    [
-        'label' => 'Edit submission',
-        'url' => $this->url(
-                'submission', [
-                    'case' => $case['id'],
-                    'action' => 'edit',
-                    'submission' => $submission['id']
-                ]
-            )
-    ]
-];
-
+$actions = [];
 if (isset($closeAction) && is_array($closeAction)) {
-    array_push($actions, $closeAction);
+    $closeActionUrl = [
+        'label' => $closeAction['label'],
+        'url' => $this->url(
+                $closeAction['route'], $closeAction['params']
+            )
+    ];
+    array_push($actions, $closeActionUrl);
 }
 array_push($actions, [
     'label' => 'Return to list',
     'url' => $this->url(
+        'submission', [
+            'case' => $case['id'],
+            'action' => 'index'
+        ]
+    )
+]);
+array_push($actions, [
+    'label' => 'Edit submission',
+    'url' => $this->url(
             'submission', [
                 'case' => $case['id'],
-                'action' => 'index'
+                'action' => 'edit',
+                'submission' => $submission['id']
             ]
         )
 ]);
