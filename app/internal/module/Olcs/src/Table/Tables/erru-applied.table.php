@@ -23,7 +23,11 @@ return array(
             'title' => 'Penalty ID',
             'formatter' => function ($data) {
                 return '<a href="' . $this->generateUrl(
-                    array('action' => 'edit', 'seriousInfringement' => $data['seriousInfringement']['id'], 'id' => $data['id']),
+                    array(
+                        'action' => 'edit',
+                        'seriousInfringement' => $data['seriousInfringement']['id'],
+                        'id' => $data['id']
+                    ),
                     'case_penalty_edit',
                     true
                 ) . '">' . $data['id'] . '</a>';
