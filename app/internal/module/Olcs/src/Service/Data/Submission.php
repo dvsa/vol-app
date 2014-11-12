@@ -467,6 +467,9 @@ class Submission extends AbstractData
                         ),
                         'submissionActionStatus' => array(
                             'properties' => 'ALL'
+                        ),
+                        'reasons' => array(
+                            'properties' => 'ALL',
                         )
                     )
                 )

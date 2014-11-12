@@ -12,7 +12,7 @@ use Zend\Form\Annotation as Form;
 class SubmissionDecision extends Base
 {
     /**
-     * @Form\Attributes({"id":"","placeholder":"", "class":"", "multiple":false})
+     * @Form\Attributes({"id":"","placeholder":"", "class":"js-sub_st_rec", "multiple":false})
      * @Form\Options({
      *     "label": "Recommendation type",
      *     "category": "sub_st_dec",
