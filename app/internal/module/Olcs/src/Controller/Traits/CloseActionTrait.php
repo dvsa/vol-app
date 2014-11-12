@@ -13,6 +13,7 @@ trait CloseActionTrait
     abstract public function getServiceLocator();
     abstract public function addErrorMessage($message);
     abstract public function redirectToIndex();
+    abstract public function getDataServiceName();
 
     /**
      * Performs a close action and redirects to the index
@@ -41,14 +42,11 @@ trait CloseActionTrait
         $entityId = $this->params()->fromRoute($identifierName);
 
         $dataService = $this->getServiceLocator()
-            ->get('Olcs\Service\Data\\' . $this->getIdentifierName());
+            ->get('Olcs\Service\Data\\' . $this->getDataServiceName());
 
         if ($dataService instanceof CloseableInterface) {
-            if ($dataService->isClosed($entityId)) {
-                if ($dataService->canReopen($entityId)) {
-                    return $dataService->getReopenButton($entityId);
-                }
-                return null;
+            if ($dataService->canReopen($entityId)) {
+                return $dataService->getReopenButton($entityId);
             }
             if ($dataService->canClose($entityId)) {
                 return $dataService->getCloseButton($entityId);

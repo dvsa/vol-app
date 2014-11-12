@@ -114,6 +114,8 @@ class SubmissionController extends OlcsController\CrudAbstract
      */
     protected $submissionSectionRefData = array();
 
+    protected $dataServiceName = 'submission';
+
     public function alterFormBeforeValidation($form)
     {
         $postData = $this->params()->fromPost('fields');

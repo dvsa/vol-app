@@ -95,6 +95,33 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     protected $listData = null;
 
     /**
+     * dataServiceName used to identify the name of the data service. Used for close buttons
+     * @var null
+     */
+    protected $dataServiceName = null;
+
+    /**
+     * Sets the dataServiceName
+     * @param $dataServiceName
+     * @return $this
+     */
+    public function setDataServiceName($dataServiceName)
+    {
+        $this->dataServiceName = $dataServiceName;
+        return $this;
+    }
+
+    /**
+     * Gets the dataServiceName
+     * @param $dataServiceName
+     * @return null
+     */
+    public function getDataServiceName()
+    {
+        return $this->dataServiceName;
+    }
+
+    /**
      *
      * @param string $placeholderName
      * @return $this

@@ -520,8 +520,6 @@ class Submission extends AbstractData implements CloseableInterface
      */
     public function canClose($id)
     {
-        $submission = $this->fetchSubmissionData($id);
-
         return !$this->isClosed($id);
     }
 
@@ -543,7 +541,7 @@ class Submission extends AbstractData implements CloseableInterface
      */
     public function canReopen($id)
     {
-        return true;
+        return $this->isClosed($id);
     }
 
 
