@@ -26,6 +26,8 @@ use Zend\Session\Container;
 trait LicenceControllerTrait
 {
     use InternalControllerTrait,
+        // @TODO: the LVA trait importing the old, generic licence trait
+        // should be a temporary measure; they need consolidating into one
         Traits\LicenceControllerTrait;
 
     private $searchForm;
