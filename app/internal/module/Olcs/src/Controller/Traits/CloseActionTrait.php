@@ -20,6 +20,57 @@ trait CloseActionTrait
      */
     public function closeAction()
     {
+        $form = $this->generateFormWithData('Confirm', 'closeEntity', $this->getDataForForm());
+
+        $view = $this->getView();
+
+        $view->setVariable('form', $form);
+        $view->setVariable('label', 'Please confirm you wish to close this submission?');
+
+        $view->setTemplate('crud/confirm');
+
+        return $this->renderView($view);
+    }
+
+    /**
+     * Reopens an entity and redirects to the index
+     */
+    public function reopenAction()
+    {
+        $form = $this->generateFormWithData('Confirm', 'reopenEntity', $this->getDataForForm());
+
+        $view = $this->getView();
+
+        $view->setVariable('form', $form);
+        $view->setVariable('label', 'Please confirm you wish to reopen this submission?');
+
+        $view->setTemplate('crud/confirm');
+
+        return $this->renderView($view);
+    }
+
+    protected function reopenEntity()
+    {
+        $data = $this->getEntityData();
+        $this->updateClosedDate($data);
+        $this->addErrorMessage('Reopened successful');
+        $this->redirectToIndex();
+    }
+
+    protected function closeEntity()
+    {
+        $data = $this->getEntityData();
+        $now = date('Y-m-d h:i:s');
+
+        $this->updateClosedDate($data, $now);
+
+        $this->addErrorMessage('Closed successfully');
+
+        $this->redirectToIndex();
+    }
+
+    protected function getEntityData()
+    {
         $identifierName = $this->getIdentifierName();
         $id = $this->params()->fromRoute($identifierName);
 
@@ -27,22 +78,22 @@ trait CloseActionTrait
             ->get('Olcs\Service\Data\\' . $this->getDataServiceName());
 
         if ($dataService instanceof CloseableInterface) {
-            $data = $dataService->fetchData($id);
+            return $dataService->fetchData($id);
         }
+        return array();
+    }
 
-        $this->makeRestCall(
+    protected function updateClosedDate($data, $date = null)
+    {
+        return $this->makeRestCall(
             $this->getDataServiceName(),
             'PUT',
             [
-                'id' => $id,
+                'id' => $data['id'],
                 'version' => $data['version'],
-                'closedDate' => date('Y-m-d h:i:s')
+                'closedDate' => $date
             ]
         );
-
-        $this->addErrorMessage('Closed successfully');
-
-        $this->redirectToIndex();
     }
 
     /**
