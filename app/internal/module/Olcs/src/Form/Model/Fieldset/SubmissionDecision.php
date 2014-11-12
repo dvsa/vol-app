@@ -12,7 +12,7 @@ use Zend\Form\Annotation as Form;
 class SubmissionDecision extends Base
 {
     /**
-     * @Form\Attributes({"id":"","placeholder":"", "class":"", "multiple":false})
+     * @Form\Attributes({"id":"","placeholder":"", "class":"js-sub_st_rec", "multiple":false})
      * @Form\Options({
      *     "label": "Recommendation type",
      *     "category": "sub_st_dec",
@@ -21,6 +21,19 @@ class SubmissionDecision extends Base
      * @Form\Type("DynamicSelect")
      */
     public $submissionActionStatus = null;
+
+    /**
+     * @Form\Attributes({"id":"","placeholder":"","class":"long tall js-sub-legislation", "multiple" : true})
+     * @Form\Options({
+     *     "label": "Legislation",
+     *     "service_name": "Olcs\Service\Data\SubmissionLegislation",
+     *     "disable_inarray_validator": false,
+     *     "help-block": "Please select a category",
+     *     "use_groups":true
+     * })
+     * @Form\Type("DynamicSelect")
+     */
+    public $reasons = null;
 
     /**
      * @Form\Attributes({"id":"","placeholder":""})

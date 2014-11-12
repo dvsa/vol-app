@@ -114,6 +114,9 @@ class DecisionController extends OlcsController\CrudAbstract
             ),
             'senderUser' => array(
                 'properties' => 'ALL',
+            ),
+            'reasons' => array(
+                'properties' => 'ALL',
             )
         )
     );
@@ -121,7 +124,7 @@ class DecisionController extends OlcsController\CrudAbstract
     /**
      * @var array
      */
-    protected $inlineScripts = [];
+    protected $inlineScripts = ['submission-rec-dec'];
 
     /**
      * Simple redirect to index.
