@@ -16,6 +16,7 @@ class SubmissionRecommendation extends Base
      * @Form\Options({
      *     "label": "Recommendation type",
      *     "category": "sub_st_rec",
+     *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      * })
      * @Form\Type("DynamicSelect")
@@ -77,7 +78,7 @@ class SubmissionRecommendation extends Base
      * })
      * @Form\Type("TextArea")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5,"max":4000}})
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5,"max":10000}})
      */
     public $comment = null;
 
