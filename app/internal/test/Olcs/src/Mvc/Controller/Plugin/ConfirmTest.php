@@ -24,7 +24,6 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
         $result = $plugin->__invoke('some message');
 
         $this->assertInstanceOf('\Zend\View\Model\ViewModel', $result);
-
     }
 
     public function testInvokeProcessForm()
