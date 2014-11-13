@@ -1,6 +1,6 @@
 <?php
-
 namespace OlcsTest\Controller\Traits;
+
 use Mockery as m;
 use Olcs\TestHelpers\ControllerRouteMatchHelper;
 use Olcs\TestHelpers\ControllerPluginManagerHelper;
@@ -61,7 +61,7 @@ class CloseActionTraitTest extends \PHPUnit_Framework_TestCase
 
         $mockRedirect = $mockPluginManager->get('redirect', '');
         $mockRedirect->shouldReceive('toRoute')->with(
-           '',
+            '',
             m::type('array'),
             ['code' => '303'],
             true
