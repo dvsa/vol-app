@@ -56,7 +56,7 @@ class RecommendationController extends OlcsController\CrudAbstract
      */
     protected $pageLayout = 'case';
 
-    protected $pageLayoutInner = 'case/inner-layout';
+    protected $pageLayoutInner = null;
 
     protected $defaultTableSortField = '';
 
