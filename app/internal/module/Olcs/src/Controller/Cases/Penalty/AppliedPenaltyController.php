@@ -55,7 +55,7 @@ class AppliedPenaltyController extends OlcsController\CrudAbstract
      * required when an entire controller is
      * represented by a single navigation id.
      */
-    //protected $navigationId = 'case_penalty_applied';
+    protected $navigationId = 'case_details_penalties';
 
     /**
      * Data map
@@ -77,6 +77,44 @@ class AppliedPenaltyController extends OlcsController\CrudAbstract
      * @var array
      */
     protected $dataBundle = array(
-
+        'properties' => 'ALL',
+        'children' => array(
+            'siPenaltyType' => array(
+                'properties' => array(
+                    'id'
+                )
+            ),
+            'seriousInfringement' => array(
+                'properties' => array(
+                    'id'
+                )
+            )
+        )
     );
+
+    /**
+     * Simple redirect to index.
+     */
+    public function redirectToIndex()
+    {
+        return $this->redirectToRoute(
+            'case_penalty',
+            ['action'=>'index', 'case' => $this->params()->fromRoute('case')],
+            ['code' => '303'], // Why? No cache is set with a 303 :)
+            false
+        );
+    }
+
+    /**
+     * Adds the serious infringement id into the form data
+     *
+     * @return array
+     */
+    public function getDataForForm()
+    {
+        $data = parent::getDataForForm();
+        $data['fields']['seriousInfringement'] = $this->params()->fromRoute('seriousInfringement');
+
+        return $data;
+    }
 }

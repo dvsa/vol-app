@@ -468,6 +468,9 @@ class Submission extends AbstractData implements CloseableInterface
                         ),
                         'submissionActionStatus' => array(
                             'properties' => 'ALL'
+                        ),
+                        'reasons' => array(
+                            'properties' => 'ALL',
                         )
                     )
                 )
