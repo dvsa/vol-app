@@ -16,12 +16,16 @@ trait CloseActionTrait
     abstract public function redirectToIndex();
     abstract public function getDataServiceName();
 
+    /**
+     * Close the entity (calls data service closeEntity())
+     * @return mixed
+     */
     public function closeAction()
     {
         $identifierName = $this->getIdentifierName();
         $id = $this->params()->fromRoute($identifierName);
 
-        $response = $this->confirm('Please confirm you wish to close this ' . $this->getIdentifierName() . '?');
+        $response = $this->confirm('Are you sure you wish to close this ' . $this->getIdentifierName() . '?');
 
         if ($response instanceof ViewModel) {
             return $this->renderView($response);
@@ -33,7 +37,8 @@ trait CloseActionTrait
         if ($dataService instanceof CloseableInterface) {
             $dataService->closeEntity($id);
         }
-        $this->redirectToIndex();
+
+        return $this->redirectToIndex();
     }
 
     /**
@@ -44,7 +49,7 @@ trait CloseActionTrait
         $identifierName = $this->getIdentifierName();
         $id = $this->params()->fromRoute($identifierName);
 
-        $response = $this->confirm('Please confirm you wish to reopen this ' . $this->getIdentifierName() . '?');
+        $response = $this->confirm('Are you sure you wish to reopen this ' . $this->getIdentifierName() . '?');
 
         if ($response instanceof ViewModel) {
             return $this->renderView($response);
@@ -57,7 +62,7 @@ trait CloseActionTrait
             $dataService->reopenEntity($id);
         }
 
-        $this->redirectToIndex();
+        return $this->redirectToIndex();
     }
 
     /**
