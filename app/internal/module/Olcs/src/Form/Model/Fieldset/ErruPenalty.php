@@ -57,7 +57,9 @@ class ErruPenalty
      *          "N":"No",
      *          "Y":"Yes"
      *      },
-     *      "fieldset-class" : "inline"
+     *      "fieldset-attributes" : {
+     *          "class":"inline"
+     *      }
      * })
      */
     public $imposed;

@@ -14,11 +14,13 @@ class BusRegQuality extends Base
      * @Form\Type("Radio")
      * @Form\Options({
      *      "label": "Operate on part of a Quality Partnership Scheme current or future",
-     *      "value_options":
-     *          {
-     *              "N":"No",
-     *              "Y":"Yes"
-     *          }
+     *      "value_options":{
+     *          "N":"No",
+     *          "Y":"Yes"
+     *      },
+     *      "fieldset-attributes" : {
+     *          "class":"inline"
+     *      }
      * })
      * @Form\Attributes({
      *      "id":"isQualityPartnership",
@@ -61,11 +63,13 @@ class BusRegQuality extends Base
      * @Form\Type("Radio")
      * @Form\Options({
      *      "label": "Will Quality Partnership Scheme facilities be used",
-     *      "value_options":
-     *          {
-     *              "N":"No",
-     *              "Y":"Yes"
-     *          }
+     *      "value_options":{
+     *          "N":"No",
+     *          "Y":"Yes"
+     *      },
+     *      "fieldset-attributes" : {
+     *          "class":"inline"
+     *      }
      * })
      * @Form\Attributes({
      *      "id":"qualityPartnershipFacilitiesUsed",
@@ -77,11 +81,13 @@ class BusRegQuality extends Base
      * @Form\Type("Radio")
      * @Form\Options({
      *      "label": "Operate on part of a Quality Partnership Scheme current or future",
-     *      "value_options":
-     *          {
-     *              "N":"No",
-     *              "Y":"Yes"
-     *          }
+     *      "value_options":{
+     *          "N":"No",
+     *          "Y":"Yes"
+     *      },
+     *      "fieldset-attributes" : {
+     *          "class":"inline"
+     *      }
      * })
 
      * @Form\Attributes({

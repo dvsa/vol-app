@@ -17,6 +17,9 @@ class BusShortNotice extends Base
      *      "value_options":{
      *          "N":"No",
      *          "Y":"Yes"
+     *      },
+     *      "fieldset-attributes" : {
+     *          "class":"inline"
      *      }
      * })
      * @Form\Attributes({"value": "N"})
@@ -30,6 +33,9 @@ class BusShortNotice extends Base
      *      "value_options":{
      *          "N":"No",
      *          "Y":"Yes"
+     *      },
+     *      "fieldset-attributes" : {
+     *          "class":"inline"
      *      }
      * })
      * @Form\Attributes({"value": "N"})
@@ -67,6 +73,9 @@ class BusShortNotice extends Base
      *      "value_options":{
      *          "N":"No",
      *          "Y":"Yes"
+     *      },
+     *      "fieldset-attributes" : {
+     *          "class":"inline"
      *      }
      * })
      * @Form\Attributes({"value": "N"})
@@ -104,6 +113,9 @@ class BusShortNotice extends Base
      *      "value_options":{
      *          "N":"No",
      *          "Y":"Yes"
+     *      },
+     *      "fieldset-attributes" : {
+     *          "class":"inline"
      *      }
      * })
      * @Form\Attributes({"value": "N"})
@@ -141,6 +153,9 @@ class BusShortNotice extends Base
      *      "value_options":{
      *          "N":"No",
      *          "Y":"Yes"
+     *      },
+     *      "fieldset-attributes" : {
+     *          "class":"inline"
      *      }
      * })
      * @Form\Attributes({"value": "N"})
@@ -178,6 +193,9 @@ class BusShortNotice extends Base
      *      "value_options":{
      *          "N":"No",
      *          "Y":"Yes"
+     *      },
+     *      "fieldset-attributes" : {
+     *          "class":"inline"
      *      }
      * })
      * @Form\Attributes({"value": "N"})
@@ -215,6 +233,9 @@ class BusShortNotice extends Base
      *      "value_options":{
      *          "N":"No",
      *          "Y":"Yes"
+     *      },
+     *      "fieldset-attributes" : {
+     *          "class":"inline"
      *      }
      * })
      * @Form\Attributes({"value": "N"})
@@ -252,6 +273,9 @@ class BusShortNotice extends Base
      *      "value_options":{
      *          "N":"No",
      *          "Y":"Yes"
+     *      },
+     *      "fieldset-attributes" : {
+     *          "class":"inline"
      *      }
      * })
      * @Form\Attributes({"value": "N"})
@@ -289,6 +313,9 @@ class BusShortNotice extends Base
      *      "value_options":{
      *          "N":"No",
      *          "Y":"Yes"
+     *      },
+     *      "fieldset-attributes" : {
+     *          "class":"inline"
      *      }
      * })
      * @Form\Attributes({"value": "N"})
@@ -326,6 +353,9 @@ class BusShortNotice extends Base
      *      "value_options":{
      *          "N":"No",
      *          "Y":"Yes"
+     *      },
+     *      "fieldset-attributes" : {
+     *          "class":"inline"
      *      }
      * })
      * @Form\Attributes({"value": "N"})
