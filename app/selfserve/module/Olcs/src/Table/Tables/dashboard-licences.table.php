@@ -16,7 +16,7 @@ return array(
                 return '<a href="' . $this->url->fromRoute(
                     'lva-licence',
                     array('licence' => $row['id'])
-                ) . '">'.$row['id'].'</a>';
+                ) . '">'.$row['licNo'].'</a>';
             }
         ),
         array(
