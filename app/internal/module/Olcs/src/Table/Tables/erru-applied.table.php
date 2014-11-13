@@ -4,6 +4,15 @@ return array(
     'variables' => array(
         'title' => 'Applied penalties'
     ),
+    'settings' => array(
+        'crud' => array(
+            'actions' => array(
+                'add' => array('class' => 'primary'),
+                'edit' => array('requireRows' => true),
+                'delete' => array('class' => 'secondary', 'requireRows' => true)
+            )
+        )
+    ),
     'columns' => array(
         array(
             'title' => '',
@@ -14,8 +23,12 @@ return array(
             'title' => 'Penalty ID',
             'formatter' => function ($data) {
                 return '<a href="' . $this->generateUrl(
-                    array('action' => 'edit', 'id' => $data['id']),
-                    'case_penalty',
+                    array(
+                        'action' => 'edit',
+                        'seriousInfringement' => $data['seriousInfringement']['id'],
+                        'id' => $data['id']
+                    ),
+                    'case_penalty_edit',
                     true
                 ) . '">' . $data['id'] . '</a>';
             },

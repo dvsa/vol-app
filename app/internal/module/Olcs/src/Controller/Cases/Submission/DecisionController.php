@@ -56,7 +56,7 @@ class DecisionController extends OlcsController\CrudAbstract
      */
     protected $pageLayout = 'case';
 
-    protected $pageLayoutInner = 'case/inner-layout';
+    protected $pageLayoutInner = null;
 
     protected $defaultTableSortField = '';
 
@@ -114,6 +114,9 @@ class DecisionController extends OlcsController\CrudAbstract
             ),
             'senderUser' => array(
                 'properties' => 'ALL',
+            ),
+            'reasons' => array(
+                'properties' => 'ALL',
             )
         )
     );
@@ -121,7 +124,7 @@ class DecisionController extends OlcsController\CrudAbstract
     /**
      * @var array
      */
-    protected $inlineScripts = [];
+    protected $inlineScripts = ['submission-rec-dec'];
 
     /**
      * Simple redirect to index.
