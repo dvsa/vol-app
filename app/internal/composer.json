@@ -47,7 +47,8 @@
     },
     "autoload": {
         "classmap": [
-            "module",
+            "module/Admin/src",
+            "module/Olcs/src",
             "vendor/olcs/OlcsCommon/Common/src/Common"
         ],
         "psr-4": {
