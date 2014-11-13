@@ -17,6 +17,10 @@
         {
             "type": "vcs",
             "url": "https://github.com/MajorCaiger/phpcov.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.clb.npm:olcs/olcs-autoload.git"
         }
     ],
     "require": {
@@ -26,7 +30,8 @@
         "olcs/OlcsCommon": "dev-develop",
         "olcs/olcs-logging": "dev-develop",
         "dvsa/jackrabbit": "v1.1.0",
-        "symfony/Filesystem": "~2.6.0-dev"
+        "symfony/Filesystem": "~2.6.0-dev",
+        "olcs/autoload": "dev-develop"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "~1.5.3",
@@ -37,6 +42,10 @@
         "mikey179/vfsStream": "~1.4.0"
     },
     "autoload": {
+        "classmap": [
+            "module/Olcs/src",
+            "vendor/olcs/OlcsCommon/Common/src/Common"
+        ],
         "psr-4": {
             "Common\\": "vendor/olcs/OlcsCommon/Common/src/Common"
         }
