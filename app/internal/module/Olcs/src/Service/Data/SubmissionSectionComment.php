@@ -119,7 +119,7 @@ class SubmissionSectionComment extends AbstractData
         $commentDataToRemove = [];
         $commentDataToKeep = [];
         $submissionConfig = $this->getSubmissionConfig();
-        $submission = $this->getSubmissionService()->fetchSubmissionData($data['id']);
+        $submission = $this->getSubmissionService()->fetchData($data['id']);
         $existingComments = $submission['submissionSectionComments'];
 
         // first remove any existing comments no longer required
