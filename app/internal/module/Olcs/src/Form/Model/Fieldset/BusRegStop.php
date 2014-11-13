@@ -17,6 +17,9 @@ class BusRegStop extends Base
      *      "value_options":{
      *          "N":"No",
      *          "Y":"Yes"
+     *      },
+     *      "fieldset-attributes" : {
+     *          "class":"inline"
      *      }
      * })
      * @Form\Attributes({"value": "N"})
@@ -30,6 +33,9 @@ class BusRegStop extends Base
      *      "value_options":{
      *          "N":"No",
      *          "Y":"Yes"
+     *      },
+     *      "fieldset-attributes" : {
+     *          "class":"inline"
      *      }
      * })
      * @Form\Attributes({"value": "N"})
@@ -70,6 +76,9 @@ class BusRegStop extends Base
      *      "value_options":{
      *          "N":"No",
      *          "Y":"Yes"
+     *      },
+     *      "fieldset-attributes" : {
+     *          "class":"inline"
      *      }
      * })
      * @Form\Attributes({"value": "N"})
@@ -110,6 +119,9 @@ class BusRegStop extends Base
      *      "value_options":{
      *          "N":"No",
      *          "Y":"Yes"
+     *      },
+     *      "fieldset-attributes" : {
+     *          "class":"inline"
      *      }
      * })
      * @Form\Attributes({"value": "N"})

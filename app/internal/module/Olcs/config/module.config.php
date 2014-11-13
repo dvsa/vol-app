@@ -245,6 +245,7 @@ return array(
             'Olcs\Service\Data\Licence' => 'Olcs\Service\Data\Licence',
             'Olcs\Service\Data\User' => 'Olcs\Service\Data\User',
             'Olcs\Service\Data\PresidingTc' => 'Olcs\Service\Data\PresidingTc',
+            'Olcs\Service\Data\SiPenaltyType' => 'Olcs\Service\Data\SiPenaltyType',
             'Olcs\Service\Data\Submission' => 'Olcs\Service\Data\Submission',
             'Olcs\Service\Data\SubmissionSectionComment' => 'Olcs\Service\Data\SubmissionSectionComment',
             'Olcs\Service\Data\Fee' => 'Olcs\Service\Data\Fee',
