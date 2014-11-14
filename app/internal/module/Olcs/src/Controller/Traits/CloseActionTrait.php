@@ -14,7 +14,7 @@ trait CloseActionTrait
     abstract public function addErrorMessage($message);
     abstract public function redirectToIndex();
     abstract public function getDataService();
-    abstract public function renderView($view, $pageTitle = NULL, $pageSubTitle = NULL);
+    abstract public function renderView($view, $pageTitle = null, $pageSubTitle = null);
 
     /**
      * Gets the id of the entity to close from the route
