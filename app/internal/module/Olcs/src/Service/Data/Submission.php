@@ -13,7 +13,7 @@ use Common\Service\Data\CloseableInterface;
  */
 class Submission extends AbstractData implements CloseableInterface
 {
-    use CloseButtonTrait;
+    use CloseableTrait;
 
     /**
      * @var integer

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Close Button Trait
+ * Closeable Trait
  */
 namespace Olcs\Service\Data;
 
@@ -10,7 +10,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 /**
  * Close Button Trait
  */
-trait CloseButtonTrait
+trait CloseableTrait
 {
 
     protected $entityName;

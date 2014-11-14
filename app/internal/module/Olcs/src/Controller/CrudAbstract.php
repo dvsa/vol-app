@@ -101,6 +101,12 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     protected $dataServiceName = null;
 
     /**
+     * dataService object. Used for close buttons
+     * @var null
+     */
+    protected $dataService = null;
+
+    /**
      * Sets the dataServiceName
      * @param $dataServiceName
      * @return $this
@@ -113,12 +119,35 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
 
     /**
      * Gets the dataServiceName
-     * @param $dataServiceName
+     *
      * @return null
      */
     public function getDataServiceName()
     {
         return $this->dataServiceName;
+    }
+
+    /**
+     * Get DataService, look up if not set
+     * @return object
+     */
+    public function getDataService()
+    {
+        if (isset($this->dataService)) {
+            return $this->dataService;
+        }
+        $dataService = $this->getServiceLocator()->get('Olcs\Service\Data\\' . $this->getDataServiceName());
+        $this->setDataService($dataService);
+        return $this->dataService;
+    }
+
+    /**
+     * Set dataService
+     * @param $dataService
+     */
+    public function setDataService($dataService)
+    {
+        $this->dataService = $dataService;
     }
 
     /**
