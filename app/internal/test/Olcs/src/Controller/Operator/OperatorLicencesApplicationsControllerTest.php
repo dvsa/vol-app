@@ -7,14 +7,14 @@
  */
 namespace OlcsTest\Controller\Operator;
 
-use OlcsTest\Controller\Operator\AbstractOperatorControllerTest;
+use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
 /**
  * Operator licences & applications controller tests
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class OperatorLicaencesApplicationsControllerTest extends AbstractOperatorControllerTest
+class OperatorLicaencesApplicationsControllerTest extends AbstractHttpControllerTestCase
 {
     /**
      * @var string
@@ -32,6 +32,11 @@ class OperatorLicaencesApplicationsControllerTest extends AbstractOperatorContro
     public function setUp()
     {
         parent::setUp();
+        $this->setApplicationConfig(
+            include __DIR__.'/../../../../../config/application.config.php'
+        );
+
+        $this->controller = $this->getMock($this->controllerName, $this->mockMethods);
     }
 
     /**

@@ -7,7 +7,7 @@
  */
 namespace OlcsTest\Controller\Operator;
 
-use OlcsTest\Controller\Operator\AbstractOperatorControllerTest;
+use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use OlcsTest\Bootstrap;
 
 /**
@@ -15,7 +15,7 @@ use OlcsTest\Bootstrap;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class OperatorBusinessDetailsControllerTest extends AbstractOperatorControllerTest
+class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCase
 {
     /**
      * @var array
@@ -61,6 +61,12 @@ class OperatorBusinessDetailsControllerTest extends AbstractOperatorControllerTe
      */
     public function setUpAction($operator, $isPost = false, $isButtonCancelPressed = false)
     {
+        $this->setApplicationConfig(
+            include __DIR__.'/../../../../../config/application.config.php'
+        );
+
+        $this->controller = $this->getMock($this->controllerName, $this->mockMethods);
+
         $organisation = [
             'name' => 'name',
             'id' => 1,
