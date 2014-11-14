@@ -41,7 +41,7 @@ class LicenceController extends AbstractController
         $table = $this->getFeesTable($licenceId, $status);
 
         $view = $this->getViewWithLicence(['table' => $table, 'form'  => $this->getFeeFilterForm($filters)]);
-        $view->setTemplate('licence/fees');
+        $view->setTemplate('licence/fees/layout');
 
         return $this->renderView($view);
     }
@@ -56,9 +56,10 @@ class LicenceController extends AbstractController
 
     public function casesAction()
     {
-        $this->checkForCrudAction('case', [], 'case');
 
+        $this->checkForCrudAction('case', [], 'case');
         $view = $this->getViewWithLicence();
+        $this->pageLayout = 'licence';
 
         $params = [
             'licence' => $this->params()->fromRoute('licence'),
@@ -88,7 +89,8 @@ class LicenceController extends AbstractController
     public function oppositionAction()
     {
         $view = $this->getViewWithLicence();
-        $view->setTemplate('licence/index');
+        $this->pageLayout = 'licence';
+        $view->setTemplate('licence/opposition');
 
         return $this->renderView($view);
     }
@@ -126,7 +128,7 @@ class LicenceController extends AbstractController
 
         $this->loadScripts(['documents', 'table-actions']);
 
-        $view->setTemplate('licence/documents');
+        $view->setTemplate('licence/docs-attachments');
         $view->setTerminal(
             $this->getRequest()->isXmlHttpRequest()
         );
@@ -136,7 +138,7 @@ class LicenceController extends AbstractController
 
     public function busAction()
     {
-        $this->pageLayout = 'bus-list';
+        $this->pageLayout = 'licence';
 
         $searchData = array(
             'licence' => $this->getFromRoute('licence'),
@@ -192,7 +194,7 @@ class LicenceController extends AbstractController
             )
         );
 
-        $view->setTemplate('licence/processing');
+        $view->setTemplate('licence/bus-registration');
 
         $view->setTerminal(
             $this->getRequest()->isXmlHttpRequest()

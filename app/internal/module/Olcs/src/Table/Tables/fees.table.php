@@ -1,7 +1,9 @@
 <?php
 
 return array(
-    'variables' => array(),
+    'variables' => array(
+        'title' => 'Fees'
+    ),
     'settings' => array(
         'paginate' => array(
             'limit' => array(
