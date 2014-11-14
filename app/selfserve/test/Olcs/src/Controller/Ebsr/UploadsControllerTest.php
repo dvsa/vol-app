@@ -35,6 +35,7 @@ class UploadsControllerTest extends \PHPUnit_Framework_TestCase
         $mockDataService->shouldReceive('fetchPackList')->withNoArgs()->andReturn($fakeData);
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
+        $mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
         $mockSl->shouldReceive('get')->with('Table')->andReturn($mockTable);
         $mockSl->shouldReceive('get')->with('Olcs\Service\Data\EbsrPack')->andReturn($mockDataService);
 

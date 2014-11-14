@@ -70,9 +70,12 @@ class EbsrPack extends AbstractData
         ];
     }
 
+    /**
+     * @param $data
+     * @return bool|int
+     */
     public function processPackUpload($data)
     {
-        // put this stuff into a factory possibly; add more validators as needed.
         $validator = $this->getValidationChain();
 
         $dir = new \FilesystemIterator(
@@ -96,16 +99,23 @@ class EbsrPack extends AbstractData
         return false;
     }
 
+    /**
+     * @param $packs
+     * @return bool
+     */
     public function sendPackList($packs)
     {
-        //notify ebsr service about packs
+        $this->getRestClient()->post('notify', ['operatorId' => 1, 'packs' => $packs]);
         return true;
     }
 
+    /**
+     * @param ServiceLocatorInterface $serviceLocator
+     * @return $this
+     */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        parent::createService($serviceLocator);
-
+        $serviceLocator = $serviceLocator->getServiceLocator();
         $this->setValidationChain($serviceLocator->get('Olcs\InputFilter\EbsrPackInput'));
 
         return $this;
