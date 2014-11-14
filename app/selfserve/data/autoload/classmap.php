@@ -406,7 +406,6 @@ return array(
     'Common\Service\Common\Form\Elements\Types\HtmlService' => false,
     'Common\Service\commonformelementstypeshtml' => false,
     'Zend\Filter\Word\DashToCamelCase' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Filter/Word/DashToCamelCase.php',
-    'Common\Service\\Common\Form\Elements\Types\HtmlService' => false,
     'Common\Service\\Common\Form\Elements\InputFilters\ActionButtonService' => false,
     'Common\Service\\Zend\Form\Element\ButtonService' => false,
 );
