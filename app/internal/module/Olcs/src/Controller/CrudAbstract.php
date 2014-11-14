@@ -134,7 +134,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     public function getDataService()
     {
         if (isset($this->dataService)) {
-            return $this->getDataService();
+            return $this->dataService;
         }
         $dataService = $this->getServiceLocator()->get('Olcs\Service\Data\\' . $this->getDataServiceName());
         $this->setDataService($dataService);

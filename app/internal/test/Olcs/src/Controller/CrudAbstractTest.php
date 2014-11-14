@@ -1041,4 +1041,39 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
 
         return array_unique($traits);
     }
+
+    /**
+     * Tests Get DataService
+     */
+    public function testGetDataService()
+    {
+        $dataServiceName = 'foo';
+
+        $mockDataService = m::mock('Olcs\Service\Data\\' . $dataServiceName);
+
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\\' . $dataServiceName)
+            ->andReturn($mockDataService);
+
+        $sut = $this->getSutForIsolatedTest(['getDataServiceName']);
+        $sut->expects($this->once())->method('getDataServiceName')->willReturn($dataServiceName);
+        $sut->setServiceLocator($mockServiceManager);
+
+        $this->assertEquals($mockDataService, $sut->getDataService());
+        $this->assertEquals($mockDataService, $sut->getDataService()); // duplicated to test branch
+    }
+
+
+    /**
+     * Tests Get DataService
+     */
+    public function testGetDataServiceName()
+    {
+        $dataServiceName = 'foo';
+
+        $sut = $this->getSutForIsolatedTest();
+        $result = $sut->setDataServiceName($dataServiceName);
+        $this->assertSame($sut, $result);
+        $this->assertEquals($dataServiceName, $sut->getDataServiceName());
+    }
 }
