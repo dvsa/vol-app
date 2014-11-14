@@ -148,8 +148,12 @@ return array(
     ),
     'service_manager' => array(
         'factories' => array(
-            'Olcs\Service\Data\EbsrPack' => 'Olcs\Service\Data\EbsrPack',
             'Olcs\InputFilter\EbsrPackInput' => 'Olcs\InputFilter\EbsrPackFactory'
+        )
+    ),
+    'data_services' => array(
+        'factories' => array(
+            'Olcs\Service\Data\EbsrPack' => 'Olcs\Service\Data\EbsrPack',
         )
     ),
     'controller_plugins' => array(

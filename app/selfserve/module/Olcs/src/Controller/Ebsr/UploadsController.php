@@ -55,7 +55,7 @@ class UploadsController extends AbstractActionController
     public function getEbsrDataService()
     {
         /** @var \Olcs\Service\Data\EbsrPack $dataService */
-        $dataService = $this->getServiceLocator()->get('Olcs\Service\Data\EbsrPack');
+        $dataService = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\EbsrPack');
         return $dataService;
     }
 }
