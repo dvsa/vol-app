@@ -24,6 +24,7 @@ class PublicInquiryController extends OlcsController\CrudAbstract
 {
     use ControllerTraits\CaseControllerTrait;
     use SlaServiceAwareTrait;
+    use ControllerTraits\CloseActionTrait;
 
     /**
      * Identifier name
@@ -169,6 +170,7 @@ class PublicInquiryController extends OlcsController\CrudAbstract
     protected $isListResult = true;
     protected $identifierKey = 'case';
     protected $placeholderName = 'pi';
+    protected $dataServiceName = 'PublicInquiry';
 
     public function redirectToIndex()
     {
@@ -192,7 +194,6 @@ class PublicInquiryController extends OlcsController\CrudAbstract
     public function detailsAction()
     {
         $pi = $this->loadCurrent();
-
         if (!empty($pi)) {
 
             $pi = $this->setupSla($pi);
@@ -237,6 +238,8 @@ class PublicInquiryController extends OlcsController\CrudAbstract
             ->get('placeholder')
             ->getContainer('details')
             ->set($pi);
+
+        $view->setVariable('closeAction', $this->generateCloseActionButtonArray($pi));
 
         $view->setTemplate('case/page/pi');
 
