@@ -11,7 +11,7 @@ return array(
         array(
             'title' => 'Penalty type',
             'formatter' => function ($data) {
-                return $data['siPenaltyRequestedType']['description'];
+                return $data['siPenaltyRequestedType']['id'] . ' - ' . $data['siPenaltyRequestedType']['description'];
             },
         ),
         array(
