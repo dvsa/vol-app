@@ -255,8 +255,9 @@ class PublicInquiryController extends OlcsController\CrudAbstract
             ->getContainer('details')
             ->set($pi);
 
-        $view->setVariable('closeAction', $this->generateCloseActionButtonArray($pi['id']));
-
+        if (isset($pi['id'])) {
+            $view->setVariable('closeAction', $this->generateCloseActionButtonArray($pi['id']));
+        }
         $view->setTemplate('case/page/pi');
 
         return $this->renderView($view);

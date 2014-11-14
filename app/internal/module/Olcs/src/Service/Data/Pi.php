@@ -14,7 +14,7 @@ use Common\Service\Data\CloseableInterface;
 class Pi extends AbstractData implements CloseableInterface
 {
     use CloseableTrait;
-    
+
     /**
      * @var integer
      */
@@ -89,7 +89,7 @@ class Pi extends AbstractData implements CloseableInterface
     public function isClosed($id)
     {
         $pi = $this->fetchData($id);
-        return (bool) isset($pi['decisionDate']);
+        return (bool) isset($pi['closedDate']);
     }
 
     /**

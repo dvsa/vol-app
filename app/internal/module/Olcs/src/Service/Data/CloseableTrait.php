@@ -15,7 +15,7 @@ trait CloseableTrait
     public function closeEntity($id)
     {
         $data = $this->fetchData($id);
-        $now = date('Y-m-d h:i:s');
+        $now = date('Y-m-d H:i:s');
 
         $this->getRestClient()->update(
             $data['id'],
