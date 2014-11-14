@@ -323,7 +323,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $mockParams->shouldReceive('fromRoute')->with('submission')->andReturn($submissionId);
         $mockParams->shouldReceive('fromRoute')->with('section')->andReturn($section);
 
-        $mockSubmissionService->shouldReceive('fetchSubmissionData')
+        $mockSubmissionService->shouldReceive('fetchData')
             ->with($submissionId)
             ->andReturn($submissionData);
         $mockSubmissionService->shouldReceive('createSubmissionSection')
@@ -385,7 +385,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $mockParams->shouldReceive('fromRoute')->with('submission')->andReturn($submissionId);
         $mockParams->shouldReceive('fromRoute')->with('section')->andReturn($section);
 
-        $mockSubmissionService->shouldReceive('fetchSubmissionData')
+        $mockSubmissionService->shouldReceive('fetchData')
             ->with($submissionId)
             ->andReturn($submissionData);
         $mockSubmissionService->shouldReceive('createSubmissionSection')
@@ -437,7 +437,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         );
         $mockResponse = m::mock('\Zend\Http\Response');
         $mockSubmissionService = m::mock('Olcs\Service\Data\Submission');
-        $mockSubmissionService->shouldReceive('fetchSubmissionData')
+        $mockSubmissionService->shouldReceive('fetchData')
             ->with($submissionId)
             ->andReturn($submissionData);
         $mockSubmissionService->shouldReceive('createSubmissionSection')
@@ -518,7 +518,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         );
         $mockResponse = m::mock('\Zend\Http\Response');
         $mockSubmissionService = m::mock('Olcs\Service\Data\Submission');
-        $mockSubmissionService->shouldReceive('fetchSubmissionData')
+        $mockSubmissionService->shouldReceive('fetchData')
             ->with($submissionId)
             ->andReturn($submissionData);
         $mockSubmissionService->shouldReceive('createSubmissionSection')
@@ -699,20 +699,21 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $sut->getEvent()->getRouteMatch()->setParam('submission', $submissionId);
 
         $mockSubmissionService = m::mock('Olcs\Service\Data\Submission');
-        $mockSubmissionService->shouldReceive('fetchSubmissionData')
+        $mockSubmissionService->shouldReceive('fetchData')
             ->with($submissionId)
             ->andReturn($mockSubmission);
-
         $mockSubmissionService->shouldReceive('getSubmissionTypeTitle')
             ->with($mockSubmission['submissionType']['id'])
             ->andReturn($mockSubmissionTitle);
-
         $mockSubmissionService->shouldReceive('extractSelectedSubmissionSectionsData')
             ->with(array_merge($mockSubmission, ['submissionTypeTitle' => $mockSubmissionTitle]))
             ->andReturn($mockSelectedSectionArray);
-
         $mockSubmissionService->shouldReceive('getAllSectionsRefData')
             ->andReturn($mockSelectedSectionArray);
+        $mockSubmissionService->shouldReceive('canReopen')
+            ->andReturn(false);
+        $mockSubmissionService->shouldReceive('canClose')
+            ->andReturn(false);
 
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
 

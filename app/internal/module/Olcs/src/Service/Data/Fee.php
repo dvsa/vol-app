@@ -1,10 +1,10 @@
 <?php
+
 /**
  * Fee Service
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-
 namespace Olcs\Service\Data;
 
 use Common\Service\Data\AbstractData;
@@ -26,7 +26,7 @@ class Fee extends AbstractData
 
     /**
      * Get fee data
-     * 
+     *
      * @param array $params
      * @param array $bundle
      * @return array
@@ -37,10 +37,9 @@ class Fee extends AbstractData
         return $fees;
     }
 
-
     /**
      * Fetch fee data
-     * 
+     *
      * @param array $params
      * @param array $bundle
      * @return array
@@ -59,7 +58,7 @@ class Fee extends AbstractData
 
     /**
      * Get single fee by id
-     * 
+     *
      * @param int $id
      * @return array
      */
@@ -72,18 +71,6 @@ class Fee extends AbstractData
             $this->setData('Fee' . $id, $result);
         }
         return $this->getData('Fee' . $id);
-    }
-
-    /**
-     * Update fee
-     * 
-     * @param array $params
-     */
-    public function updateFee($params = [])
-    {
-        $id = $params['id'];
-        unset($params['id']);
-        $this->getRestClient()->put('/' . $id, ['data' => json_encode($params)]);
     }
 
     /**

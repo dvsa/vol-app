@@ -268,6 +268,20 @@ $routes = [
             ]
         ],
     ],
+    'case_penalty_edit' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/case/:case/penalty/:seriousInfringement/:action[/:id]',
+            'constraints' => [
+                'case' => '[0-9]+',
+                'seriousInfringement' => '[0-9]+',
+                'id' => '[0-9]+',
+            ],
+            'defaults' => [
+                'controller' => 'CaseAppliedPenaltyController'
+            ]
+        ],
+    ],
     'case_complaint' => [
         'type' => 'segment',
         'options' => [
@@ -394,7 +408,7 @@ $routes = [
             'constraints' => [
                 'case' => '[0-9]+',
                 'submission' => '[0-9]+',
-                'action' => '(index|add|edit|details)'
+                'action' => '(index|add|edit|details|close|reopen)'
             ],
             'defaults' => [
                 'controller' => 'CaseSubmissionController',
@@ -1494,7 +1508,7 @@ $routes['lva-application']['child_routes'] = array_merge(
                 'fee_action' => array(
                     'type' => 'segment',
                     'options' => array(
-                        'route' => '/:action/:fee',
+                        'route' => ':action/:fee',
                         'constraints' => array(
                             'fee' => '[0-9-]+',
                         ),

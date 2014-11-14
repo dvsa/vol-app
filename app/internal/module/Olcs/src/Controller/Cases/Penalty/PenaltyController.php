@@ -109,7 +109,13 @@ class PenaltyController extends OlcsController\CrudAbstract
                 'children' => array(
                     'siPenaltyType' => array(
                         'properties' => array(
+                            'id',
                             'description'
+                        )
+                    ),
+                    'seriousInfringement' => array(
+                        'properties' => array(
+                            'id'
                         )
                     )
                 )
@@ -124,6 +130,7 @@ class PenaltyController extends OlcsController\CrudAbstract
                 'children' => array(
                     'siPenaltyImposedType' => array(
                         'properties' => array(
+                            'id',
                             'description'
                         )
                     )
@@ -134,6 +141,7 @@ class PenaltyController extends OlcsController\CrudAbstract
                 'children' => array(
                     'siPenaltyRequestedType' => array(
                         'properties' => array(
+                            'id',
                             'description'
                         )
                     )
@@ -161,7 +169,7 @@ class PenaltyController extends OlcsController\CrudAbstract
     {
         return $this->redirectToRoute(
             null,
-            ['action'=>'index', $this->getIdentifierName() => $this->fromRoute($this->getIdentifierName())],
+            ['action'=>'index', $this->getIdentifierName() => $this->params()->fromRoute($this->getIdentifierName())],
             ['code' => '303'], // Why? No cache is set with a 303 :)
             true
         );
@@ -175,7 +183,24 @@ class PenaltyController extends OlcsController\CrudAbstract
     public function indexAction()
     {
         //using loadListData so can use the case id in parameters, but we'll only ever have one result
-        $data = $this->loadListData(['case' => $this->fromRoute('case')]);
+        $data = $this->loadListData(['case' => $this->params()->fromRoute('case')]);
+
+        //if a table crud button has been clicked then
+        //we need to intercept the post and redirect to AppliedPenaltyController
+        $postedVars = $this->params()->fromPost();
+
+        if (isset($postedVars['action'])) {
+            return $this->redirectToRoute(
+                'case_penalty_edit',
+                [
+                    'action' => $postedVars['action'],
+                    'seriousInfringement' => $data['Results'][0]['id'],
+                    'id' => isset($postedVars['id']) ? $postedVars['id'] : null
+                ],
+                ['code' => '303'], // Why? No cache is set with a 303 :)
+                true
+            );
+        }
 
         $view = $this->getView([]);
 

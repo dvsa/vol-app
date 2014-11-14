@@ -15,6 +15,8 @@ use Olcs\View\Model\Licence\SectionLayout;
 use Olcs\View\Model\Licence\Layout;
 use Olcs\View\Model\Licence\LicenceLayout;
 use Common\Service\Entity\LicenceEntityService;
+use Olcs\Controller\Traits;
+use Zend\Session\Container;
 
 /**
  * Internal Abstract Licence Controller
@@ -23,7 +25,12 @@ use Common\Service\Entity\LicenceEntityService;
  */
 trait LicenceControllerTrait
 {
-    use InternalControllerTrait;
+    use InternalControllerTrait,
+        // @TODO: the LVA trait importing the old, generic licence trait
+        // should be a temporary measure; they need consolidating into one
+        Traits\LicenceControllerTrait;
+
+    private $searchForm;
 
     /**
      * Hook into the dispatch before the controller action is executed
@@ -88,12 +95,35 @@ trait LicenceControllerTrait
 
         $licenceLayout = new LicenceLayout();
 
-        $licenceLayout->addChild($this->getQuickActions(), 'actions');
         $licenceLayout->addChild($sectionLayout, 'content');
 
         $params = $this->getHeaderParams();
 
-        return new Layout($licenceLayout, $params);
+        $licenceLayout->setVariable(
+            'markers',
+            $this->setupMarkers($this->getLicence())
+        );
+
+        $view = new Layout($licenceLayout, $params);
+        $view->setVariable('searchForm', $this->getSearchForm());
+        return $view;
+    }
+
+    /**
+     * Gets the search form for the header, it is cached on the object so that the search query is maintained
+     */
+    public function getSearchForm()
+    {
+        if ($this->searchForm === null) {
+            $this->searchForm = $this->getServiceLocator()
+                ->get('Helper\Form')
+                ->createForm('HeaderSearch', false, false);
+
+            $container = new Container('search');
+            $this->searchForm->bind($container);
+        }
+
+        return $this->searchForm;
     }
 
     /**
@@ -112,21 +142,8 @@ trait LicenceControllerTrait
         return array(
             'licNo' => $data['licNo'],
             'companyName' => $data['organisation']['name'],
-            'status' => $data['status']['id']
+            'description' => $data['status']['description']
         );
-    }
-
-    /**
-     * Quick action view model
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
-    protected function getQuickActions()
-    {
-        $viewModel = new ViewModel();
-        $viewModel->setTemplate('licence/quick-actions');
-
-        return $viewModel;
     }
 
     /**

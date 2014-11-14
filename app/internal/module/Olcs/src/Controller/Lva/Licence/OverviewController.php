@@ -29,7 +29,7 @@ class OverviewController extends AbstractController
     public function indexAction()
     {
         $content = new ViewModel();
-        $content->setTemplate('licence/overview');
+        $content->setTemplate('licence/licence-details/overview');
 
         return $this->render($content);
     }
