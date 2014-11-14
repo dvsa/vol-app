@@ -52,7 +52,7 @@ class LicenceProcessingTasksController extends AbstractLicenceProcessingControll
             )
         );
 
-        $view->setTemplate('licence/processing');
+        $view->setTemplate('licence/processing/layout');
         $view->setTerminal(
             $this->getRequest()->isXmlHttpRequest()
         );
