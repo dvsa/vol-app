@@ -114,7 +114,11 @@ class SubmissionController extends OlcsController\CrudAbstract
      */
     protected $submissionSectionRefData = array();
 
-    protected $dataServiceName = 'Submission';
+    /**
+     * Entity display name
+     * @var string
+     */
+    protected $entityDisplayName = 'Submission';
 
     public function alterFormBeforeValidation($form)
     {
@@ -400,7 +404,7 @@ class SubmissionController extends OlcsController\CrudAbstract
         $view = $this->getView([]);
         $view->setVariable('allSections', $submissionService->getAllSectionsRefData());
         $view->setVariable('submissionConfig', $this->submissionConfig['sections']);
-        $view->setVariable('closeAction', $this->generateCloseActionButtonArray($submission));
+        $view->setVariable('closeAction', $this->generateCloseActionButtonArray($submission['id']));
 
         $view->setTemplate($this->detailsView);
 

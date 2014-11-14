@@ -106,25 +106,26 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
      */
     protected $dataService = null;
 
+    protected $entityDisplayName = null;
+
     /**
-     * Sets the dataServiceName
-     * @param $dataServiceName
-     * @return $this
+     * Get Entity name
+     * @return string
      */
-    public function setDataServiceName($dataServiceName)
+    public function getEntityDisplayName()
     {
-        $this->dataServiceName = $dataServiceName;
-        return $this;
+        return $this->entityDisplayName;
     }
 
     /**
-     * Gets the dataServiceName
-     *
-     * @return null
+     * Set entityName
+     * @param string $entityName
+     * @return $this
      */
-    public function getDataServiceName()
+    public function setEntityDisplayName($entityDisplayName)
     {
-        return $this->dataServiceName;
+        $this->entityDisplayName = $entityDisplayName;
+        return $this;
     }
 
     /**
@@ -136,7 +137,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
         if (isset($this->dataService)) {
             return $this->dataService;
         }
-        $dataService = $this->getServiceLocator()->get('Olcs\Service\Data\\' . $this->getDataServiceName());
+        $dataService = $this->getServiceLocator()->get('Olcs\Service\Data\\' . $this->getService());
         $this->setDataService($dataService);
         return $this->dataService;
     }

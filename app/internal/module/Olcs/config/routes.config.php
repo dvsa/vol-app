@@ -300,10 +300,10 @@ $routes = [
     'case_pi' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/case/:case/pi',
+            'route' => '/case/:case/pi[/:action]',
             'constraints' => [
                 'case' => '[0-9]+',
-                'action' => '[a-z]+',
+                'action' => '(close|reopen)',
             ],
             'defaults' => [
                 'controller' => 'CasePublicInquiryController',

@@ -170,7 +170,9 @@ class PublicInquiryController extends OlcsController\CrudAbstract
     protected $isListResult = true;
     protected $identifierKey = 'case';
     protected $placeholderName = 'pi';
-    protected $dataServiceName = 'PublicInquiry';
+    protected $dataServiceName = 'pi';
+
+    protected $entityDisplayName = 'Public inquiry';
 
     public function redirectToIndex()
     {
@@ -239,7 +241,7 @@ class PublicInquiryController extends OlcsController\CrudAbstract
             ->getContainer('details')
             ->set($pi);
 
-        $view->setVariable('closeAction', $this->generateCloseActionButtonArray($pi));
+        $view->setVariable('closeAction', $this->generateCloseActionButtonArray($pi['id']));
 
         $view->setTemplate('case/page/pi');
 

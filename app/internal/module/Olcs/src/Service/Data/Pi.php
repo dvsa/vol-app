@@ -11,9 +11,9 @@ use Common\Service\Data\CloseableInterface;
  * Class PublicInquiry
  * @package Olcs\Service
  */
-class PublicInquiry extends AbstractData //implements CloseableInterface
+class Pi extends AbstractData implements CloseableInterface
 {
-    use CloseButtonTrait;
+    use CloseableTrait;
 
     /**
      * @var integer
@@ -23,7 +23,7 @@ class PublicInquiry extends AbstractData //implements CloseableInterface
     /**
      * @var string
      */
-    protected $serviceName = 'PublicInquiry';
+    protected $serviceName = 'Pi';
 
     /**
      * Create PublicInquiry service with injected ref data service
@@ -58,7 +58,7 @@ class PublicInquiry extends AbstractData //implements CloseableInterface
     }
 
     /**
-     * Returns the bundle required to get a submission
+     * Returns the bundle required to get a pi
      * @return array
      */
     public function getBundle()
@@ -124,8 +124,8 @@ class PublicInquiry extends AbstractData //implements CloseableInterface
      */
     public function isClosed($id)
     {
-        $submission = $this->fetchData($id);
-        return (bool) isset($submission['closedDate']);
+        $pi = $this->fetchData($id);
+        return (bool) isset($pi['decisionDate']);
     }
 
     /**

@@ -20,10 +20,12 @@ trait CloseActionTrait
      * Gets the id of the entity to close from the route
      * @return integer
      */
-    public function getIdToClose()
+    public function getIdToClose($id = null)
     {
-        $identifierName = $this->getIdentifierName();
-        $id = $this->params()->fromRoute($identifierName);
+        if (empty($id)) {
+            $identifierName = $this->getIdentifierName();
+            $id = $this->params()->fromRoute($identifierName);
+        }
         return $id;
     }
 
@@ -31,9 +33,9 @@ trait CloseActionTrait
      * Close the entity (calls data service closeEntity())
      * @return mixed
      */
-    public function closeAction()
+    public function closeAction($id = null)
     {
-        $id = $this->getIdToClose();
+        $id = $this->getIdToClose($id);
 
         $response = $this->confirm('Are you sure you wish to close this ' . $this->getIdentifierName() . '?');
 
@@ -53,9 +55,9 @@ trait CloseActionTrait
     /**
      * Reopens an entity and redirects to the index
      */
-    public function reopenAction()
+    public function reopenAction($id = null)
     {
-        $id = $this->getIdToClose();
+        $id = $this->getIdToClose($id);
 
         $response = $this->confirm('Are you sure you wish to reopen this ' . $this->getIdentifierName() . '?');
 
@@ -77,19 +79,36 @@ trait CloseActionTrait
      *
      * @return array|null
      */
-    public function generateCloseActionButtonArray()
+    public function generateCloseActionButtonArray($id = null)
     {
-        $id = $this->getIdToClose();
+
+        $id = $this->getIdToClose($id);
+
         $dataService = $this->getDataService();
 
         if ($dataService instanceof CloseableInterface) {
             if ($dataService->canReopen($id)) {
-                return $dataService->getReopenButton($id);
+                return $this->generateButton('reopen');
             }
             if ($dataService->canClose($id)) {
-                return $dataService->getCloseButton($id);
+                return $this->generateButton('close');
             }
         }
         return null;
+    }
+
+    protected $entityName;
+
+    public function generateButton($action)
+    {
+        $routeMatch = $this->getServiceLocator()->get('Application')->getMvcEvent()->getRouteMatch();
+        $routeParams = $routeMatch->getParams();
+        $routeParams['action'] = $action;
+
+        return [
+            'label' => ucfirst($action) . ' ' . strtolower($this->getEntityDisplayName()),
+            'route' => $routeMatch->getMatchedRouteName(),
+            'params' => $routeParams
+        ];
     }
 }
