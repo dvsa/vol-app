@@ -11,10 +11,10 @@ use Zend\View\Model\ViewModel;
 trait CloseActionTrait
 {
     abstract public function getIdentifierName();
-    abstract public function getServiceLocator();
     abstract public function addErrorMessage($message);
     abstract public function redirectToIndex();
-    abstract public function getDataServiceName();
+    abstract public function getDataService();
+    abstract public function renderView($view, $pageTitle = NULL, $pageSubTitle = NULL);
 
     /**
      * Gets the id of the entity to close from the route
