@@ -1,17 +1,18 @@
 <div class="four-fiths--left">
     <div class="content">
         <div class="one-fifth--left">
-            <h4><?php echo $operatorName; ?></h4>
+            <h4><?php echo $this->translate('internal-navigation-operator-profile'); ?></h4>
                 <?php
+                    $layout = 'layout/partials/vertical-navigation' . ($this->disable ? '-disabled' : '');
                     echo $this->navigation('navigation')
                               ->menu($this->navigation()->findOneBy('id', 'operator'))
                               ->setUlClass('vertical-navigation')
                               ->setAddClassToListItem(true)
-                              ->setPartial('layout/partials/tabs');
+                              ->setPartial($layout);
                 ?>
-            ?>
         </div>
         <div class="three-fifths">
+            <h4><?php echo $this->translate('internal-navigation-operator-' . $section); ?></h4>
           <?php echo $this->flashMessengerAll(); ?>
           <?php echo $this->content; ?>
         </div>
@@ -21,5 +22,9 @@
 <div class="one-fifth--right">
   <div class="record-actions">
     <h5><?php echo $this->translate('internal-operator-quick-actions'); ?></h5>
-  </div>
+    <ul class="record-actions__group">
+        <li class="record-actions__item">
+            <a class="action--secondary<?php echo $this->disable ? ' disabled' : ''; ?>" href=""><?php echo $this->translate('internal-operator-new-application'); ?></a>
+        </li>
+    </ul>    
 </div>

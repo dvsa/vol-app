@@ -7,6 +7,7 @@ return array(
     'settings' => array(
         'paginate' => array(
             'limit' => array(
+                'default' => 10,
                 'options' => array(10, 25, 50)
             )
         ),
@@ -37,7 +38,10 @@ return array(
         array(
             'title' => 'Op/trading name',
             'formatter' => function ($data) {
-                return /*$data['trading_as'] ? : */$data['name'];
+                return '<a href="' . $this->generateUrl(
+                    array('operator' => $data['organisation_id']),
+                    'operator/business-details'
+                ) . '">' . $data['name'] . '</a><br/>' . $data['status'];
             },
             'sort' => 'operatorName'
         ),

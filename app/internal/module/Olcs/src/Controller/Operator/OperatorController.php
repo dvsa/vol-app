@@ -29,48 +29,34 @@ class OperatorController extends AbstractController
      */
     public function indexJumpAction()
     {
-        return $this->redirect()->toRoute('operator/busines-details', [], [], true);
-    }
-    
-    public function businessDetailsAction()
-    {
-        $view = $this->getViewWithTm();
-        $view->setTemplate('operator/index');
-        return $this->renderView($view);
-    }
-
-    public function peopleAction()
-    {
-        $view = $this->getViewWithTm();
-        $view->setTemplate('operator/index');
-        return $this->renderView($view);
-    }
-
-    public function licenceApplicationAction()
-    {
-        $view = $this->getViewWithTm();
-        $view->setTemplate('operator/index');
-        return $this->renderView($view);
+        return $this->redirect()->toRoute('operator/business-details', [], [], true);
     }
 
     /**
-     * Get view with TM
+     * Get view with Operator
      *
      * @param array $variables
      * @return \Zend\View\Model\ViewModel
      */
-    protected function getViewWithTm($variables = [])
+    protected function getViewWithOrganisation($variables = [])
     {
-        // implement later
-        $transportManager = null;
+        $organisationService = $this->getServiceLocator()->get('Olcs\Service\Data\Organisation');
+        $organisationId = $this->params()->fromRoute('operator');
 
-        $variables['transportManager'] = $transportManager;
+        if ($organisationId) {
+            $organisation = $organisationService->getOrganisation($organisationId, false);
+            $this->pageTitle = isset($organisation['name']) ? $organisation['name'] : '';
+            $variables['disable'] = false;
+        } else {
+            $organisation = null;
+            $translator = $this->getServiceLocator()->get('translator');
+            $this->pageTitle = $translator->translate('internal-operator-create-new-operator');
+            $variables['disable'] = true;
+        }
+        $variables['organisation'] = $organisation;
         $variables['section'] = $this->section;
 
         $view = $this->getView($variables);
-
-        // implement later
-        $this->pageTitle = 'Dave Watson';
 
         return $view;
     }

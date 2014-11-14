@@ -1204,8 +1204,8 @@ $routes = [
                 'options' => [
                     'route' => '/business-details',
                     'defaults' => [
-                        'controller' => 'OperatorController',
-                        'action' => 'business-details',
+                        'controller' => 'OperatorBusinessDetailsController',
+                        'action' => 'index',
                     ]
                 ]
             ],
@@ -1214,22 +1214,33 @@ $routes = [
                 'options' => [
                     'route' => '/people',
                     'defaults' => [
-                        'controller' => 'OperatorController',
-                        'action' => 'people',
+                        'controller' => 'OperatorPeopleController',
+                        'action' => 'index',
                     ]
                 ]
             ],
-            'licence-application' => [
+            'licences-applications' => [
                 'type' => 'literal',
                 'options' => [
-                    'route' => '/licence-appliction',
+                    'route' => '/licences-applications',
                     'defaults' => [
-                        'controller' => 'OperatorController',
-                        'action' => 'licence-application',
+                        'controller' => 'OperatorLicencesApplicationsController',
+                        'action' => 'index',
                     ]
                 ]
             ],
         ]
+    ],
+    'create_operator' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/operator/create',
+            'defaults' => [
+                'controller' => 'OperatorBusinessDetailsController',
+                'action' => 'index',
+            ],
+        ],
+        'may_terminate' => true,
     ],
     'create_variation' => [
         'type' => 'segment',

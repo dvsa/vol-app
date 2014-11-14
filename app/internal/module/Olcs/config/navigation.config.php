@@ -576,7 +576,33 @@ return array(
                             )
                         ),
                     )
-                )
+                ),
+                array(
+                    'id' => 'operator',
+                    'label' => 'internal-navigation-operator',
+                    'route' => 'operator',
+                    'use_route_match' => true,
+                    'pages' => array(
+                        array(
+                            'id' => 'operator_business_details',
+                            'label' => 'internal-navigation-operator-business_details',
+                            'route' => 'operator/business-details',
+                            'use_route_match' => true,
+                        ),
+                        array(
+                            'id' => 'operator_people',
+                            'label' => 'internal-navigation-operator-people',
+                            'route' => 'operator/people',
+                            'use_route_match' => true,
+                        ),
+                        array(
+                            'id' => 'operator_licences_applications',
+                            'label' => 'internal-navigation-operator-licences_applications',
+                            'route' => 'operator/licences-applications',
+                            'use_route_match' => true,
+                        ),
+                    )
+                ),
             )
         ),
         array(
