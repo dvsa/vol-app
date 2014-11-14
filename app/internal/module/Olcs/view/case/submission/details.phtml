@@ -27,32 +27,41 @@ foreach ($allSections as $sectionId => $sectionDescription) {
         }
     }
 }
+$actions = [];
+if (isset($closeAction) && is_array($closeAction)) {
+    $closeActionUrl = [
+        'label' => $closeAction['label'],
+        'url' => $this->url(
+                $closeAction['route'], $closeAction['params']
+            )
+    ];
+    array_push($actions, $closeActionUrl);
+}
+array_push($actions, [
+    'label' => 'Return to list',
+    'url' => $this->url(
+        'submission', [
+            'case' => $case['id'],
+            'action' => 'index'
+        ]
+    )
+]);
+array_push($actions, [
+    'label' => 'Edit submission',
+    'url' => $this->url(
+            'submission', [
+                'case' => $case['id'],
+                'action' => 'edit',
+                'submission' => $submission['id']
+            ]
+        )
+]);
 
 //last submission
 echo $this->render('partials/read-only/main',
     [
         'header' => $submission['submissionTypeTitle'],
-        'actions' => [
-            [
-                'label' => 'Return to list',
-                'url' => $this->url(
-                    'submission', [
-                        'case' => $case['id'],
-                        'action' => 'index'
-                    ]
-                )
-            ],
-            [
-                'label' => 'Edit submission',
-                'url' => $this->url(
-                    'submission', [
-                        'case' => $case['id'],
-                        'action' => 'edit',
-                        'submission' => $submission['id']
-                    ]
-                )
-            ]
-        ],
+        'actions' => $actions,
         'freetext' => $freetext
     ]
 );
