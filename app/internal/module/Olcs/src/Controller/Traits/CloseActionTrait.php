@@ -31,13 +31,17 @@ trait CloseActionTrait
 
     /**
      * Close the entity (calls data service closeEntity())
+     *
+     * @param integer $id
      * @return mixed
      */
     public function closeAction($id = null)
     {
         $id = $this->getIdToClose($id);
 
-        $response = $this->confirm('Are you sure you wish to close this ' . $this->getIdentifierName() . '?');
+        $response = $this->confirm('Are you sure you wish to close this ' . strtolower($this->getEntityDisplayName())
+            .
+    '?');
 
         if ($response instanceof ViewModel) {
             return $this->renderView($response);
@@ -59,7 +63,8 @@ trait CloseActionTrait
     {
         $id = $this->getIdToClose($id);
 
-        $response = $this->confirm('Are you sure you wish to reopen this ' . $this->getIdentifierName() . '?');
+        $response = $this->confirm('Are you sure you wish to reopen this ' .
+            strtolower($this->getEntityDisplayName()) . '?');
 
         if ($response instanceof ViewModel) {
             return $this->renderView($response);

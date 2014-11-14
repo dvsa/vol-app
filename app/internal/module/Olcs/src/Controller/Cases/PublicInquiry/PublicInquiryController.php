@@ -193,6 +193,20 @@ class PublicInquiryController extends OlcsController\CrudAbstract
         return $data;
     }
 
+    /**
+     * Gets the id of the entity to close
+     *
+     * @return integer
+     */
+    public function getIdToClose($id = null)
+    {
+        if (empty($id)) {
+            $pi = $this->loadCurrent();
+            $id = $pi['id'];
+        }
+        return $id;
+    }
+
     public function detailsAction()
     {
         $pi = $this->loadCurrent();

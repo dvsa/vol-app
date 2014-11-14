@@ -14,7 +14,7 @@ use Common\Service\Data\CloseableInterface;
 class Pi extends AbstractData implements CloseableInterface
 {
     use CloseableTrait;
-
+    
     /**
      * @var integer
      */
@@ -70,42 +70,6 @@ class Pi extends AbstractData implements CloseableInterface
         return $bundle;
     }
 
-
-    public function closeEntity($id)
-    {
-        $data = $this->fetchData($id);
-        $now = date('Y-m-d h:i:s');
-
-        $this->getRestClient()->update(
-            $data['id'],
-            [
-                'data' => json_encode(
-                    [
-                        'version' => $data['version'],
-                        'closedDate' => $now
-                    ]
-                )
-            ]
-        );
-    }
-
-    public function reopenEntity($id)
-    {
-        $data = $this->fetchData($id);
-        $now = null;
-
-        $this->getRestClient()->update(
-            $data['id'],
-            [
-                'data' => json_encode(
-                    [
-                        'version' => $data['version'],
-                        'closedDate' => $now
-                    ]
-                )
-            ]
-        );
-    }
 
     /**
      * Can this entity be closed
