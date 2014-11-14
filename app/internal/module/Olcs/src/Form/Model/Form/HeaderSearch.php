@@ -20,9 +20,7 @@ class HeaderSearch
 
     /**
      * @Form\Attributes({
-     *      "class": "search__select",
-     *      "id": "search-select",
-     *      "style": "position:absolute; top:3px; right:40px"
+     *      "id": "search-select"
      * })
      * @Form\Type("DynamicSelect")
      * @Form\Options({
