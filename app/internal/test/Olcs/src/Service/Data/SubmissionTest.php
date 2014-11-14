@@ -3,6 +3,7 @@
 namespace OlcsTest\Service\Data;
 
 use Olcs\Service\Data\Submission;
+use Mockery as m;
 
 /**
  * Class SubmissionTest
@@ -52,7 +53,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($mockRefDataService, $service->getRefDataService());
     }
 
-    public function testFetchSubmissionData()
+    public function testFetchData()
     {
         $submission = ['id' => 24];
 
@@ -64,9 +65,9 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
 
         $this->sut->setRestClient($mockRestClient);
 
-        $this->assertEquals($submission, $this->sut->fetchSubmissionData(24));
+        $this->assertEquals($submission, $this->sut->fetchData(24));
         //test data is cached
-        $this->assertEquals($submission, $this->sut->fetchSubmissionData(24));
+        $this->assertEquals($submission, $this->sut->fetchData(24));
 
     }
 
@@ -319,6 +320,83 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         );
+    }
+
+    public function testCloseEntity()
+    {
+        $id = 99;
+        $mockData = [
+            'id' => $id,
+            'version' => 1
+        ];
+        $mockRestClient = m::mock('Common\Util\RestClient');
+        $mockRestClient->shouldReceive('get')->once()->withAnyArgs()->andReturn($mockData);
+        $mockRestClient->shouldReceive('update')->once()->with(
+            $mockData['id'],
+            m::type('array')
+        )->andReturn($mockData);
+
+        $sut = new Submission();
+        $sut->setRestClient($mockRestClient);
+
+        $this->assertNull($sut->closeEntity($id));
+    }
+
+    public function testReopenEntity()
+    {
+        $id = 99;
+        $mockData = [
+            'id' => $id,
+            'version' => 1
+        ];
+        $mockRestClient = m::mock('Common\Util\RestClient');
+        $mockRestClient->shouldReceive('get')->once()->withAnyArgs()->andReturn($mockData);
+        $mockRestClient->shouldReceive('update')->once()->with(
+            $mockData['id'],
+            [
+                'data' => json_encode(
+                    [
+                        'version' => $mockData['version'],
+                        'closedDate' => null
+                    ]
+                )
+            ]
+        )->andReturnNull();
+
+        $sut = new Submission();
+        $sut->setRestClient($mockRestClient);
+
+        $this->assertNull($sut->reopenEntity($id));
+    }
+
+    public function testCanClose()
+    {
+        $id = 99;
+        $mockData = [
+            'closedDate' => null
+        ];
+        $mockRestClient = m::mock('Common\Util\RestClient');
+        $mockRestClient->shouldReceive('get')->once()->withAnyArgs()->andReturn($mockData);
+
+        $sut = new Submission();
+        $sut->setRestClient($mockRestClient);
+
+        $this->assertTrue($sut->canClose($id));
+    }
+
+    public function testCanReopen()
+    {
+        $id = 99;
+        $mockData = [
+            'closedDate' => null
+        ];
+        $mockRestClient = m::mock('Common\Util\RestClient');
+        $mockRestClient->shouldReceive('get')->once()->withAnyArgs()->andReturn($mockData);
+
+        $sut = new Submission();
+        $sut->setRestClient($mockRestClient);
+
+        $this->assertFalse($sut->canReopen($id));
     }
 
     public function providerSubmissionTitles()

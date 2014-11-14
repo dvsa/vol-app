@@ -171,6 +171,14 @@ return array(
             'TMDocumentController' => 'Olcs\Controller\TransportManager\TransportManagerDocumentController'
         )
     ),
+    'controller_plugins' => array(
+        'invokables' => array(
+            'Olcs\Mvc\Controller\Plugin\Confirm' => 'Olcs\Mvc\Controller\Plugin\Confirm'
+        ),
+        'aliases' => array(
+            'confirm' => 'Olcs\Mvc\Controller\Plugin\Confirm'
+        )
+    ),
     'view_manager' => array(
         'display_not_found_reason' => true,
         'display_exceptions' => true,
