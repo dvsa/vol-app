@@ -9,6 +9,7 @@ namespace Olcs\Controller\Traits;
 
 use Zend\View\Model\ViewModel;
 use Zend\Json\Json;
+use Common\Service\Listener\FeeListenerService;
 
 /**
  * Fees action trait
@@ -171,10 +172,7 @@ trait FeesActionTrait
             'version' => $data['fee-details']['version'],
             'waiveReason' => $data['fee-details']['waiveReason'],
             // changing fee status to waive recommended
-            'feeStatus' => 'lfs_wr',
-            // @TODO change to the current user name when implemented
-            'lastModifiedBy' => 2,
-            'lastModifiedOn' => date('d-m-Y H:i:s')
+            'feeStatus' => 'lfs_wr'
         ];
         $this->updateFeeAndRedirectToList($params);
     }
@@ -208,13 +206,19 @@ trait FeesActionTrait
             'version' => $data['fee-details']['version'],
             'waiveReason' => $data['fee-details']['waiveReason'],
             // changing fee status to waived
-            'feeStatus' => 'lfs_w',
-            // @TODO change to the current user name when implemented
-            'lastModifiedBy' => 2,
-            'lastModifiedOn' => date('d-m-Y H:i:s')
+            'feeStatus' => 'lfs_w'
         ];
-        $message = 'The selected fee has been waived';
-        $this->updateFeeAndRedirectToList($params, $message);
+
+        $this->getServiceLocator()->get('Entity\Fee')->save($params);
+        $this->getServiceLocator()->get('Helper\FlashMessenger')
+            ->addSuccessMessage('The selected fee has been waived');
+
+        $this->getServiceLocator()->get('Listener\Fee')->trigger(
+            $data['fee-details']['id'],
+            FeeListenerService::EVENT_WAIVE
+        );
+
+        $this->redirectToList();
     }
 
     /**
@@ -225,8 +229,7 @@ trait FeesActionTrait
      */
     protected function updateFeeAndRedirectToList($data, $message = '')
     {
-        $feesService = $this->getServiceLocator()->get('Olcs\Service\Data\Fee');
-        $feesService->updateFee($data);
+        $this->getServiceLocator()->get('Entity\Fee')->save($data);
         if ($message) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage($message);
         }

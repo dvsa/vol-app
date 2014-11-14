@@ -14,6 +14,7 @@ use Common\Service\Entity\LicenceEntityService;
 use Common\Service\Data\CategoryDataService;
 use Common\Service\Data\FeeTypeDataService;
 use Common\Service\Entity\FeeEntityService;
+use CommonTest\Traits\MockDateTrait;
 
 /**
  * Application Controller Test
@@ -22,6 +23,8 @@ use Common\Service\Entity\FeeEntityService;
  */
 class ApplicationControllerTest extends PHPUnit_Framework_TestCase
 {
+    use MockDateTrait;
+
     private $sut;
     private $sm;
     private $mockParams;
@@ -431,6 +434,7 @@ class ApplicationControllerTest extends PHPUnit_Framework_TestCase
 
     /**
      * Helper method
+     * @todo when these helper methods are required in more than 1 place, we need to abstract them away
      */
     protected function mockRouteParam($name, $value)
     {
@@ -479,18 +483,5 @@ class ApplicationControllerTest extends PHPUnit_Framework_TestCase
         $mockRedirect = $this->getMock('\Zend\Mvc\Controller\Plugin\Redirect', array('toRoute'));
         $this->pluginManager->setService('Redirect', $mockRedirect);
         return $mockRedirect;
-    }
-
-    /**
-     * Helper method
-     */
-    protected function mockDate($date)
-    {
-        $mockDateHelper = $this->getMock('\stdClass', ['getDate']);
-        $mockDateHelper->expects($this->any())
-            ->method('getDate')
-            ->will($this->returnValue($date));
-
-        $this->sm->setService('Helper\Date', $mockDateHelper);
     }
 }

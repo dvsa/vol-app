@@ -14,10 +14,14 @@ use OlcsTest\Bootstrap;
  * Fees action trait tests
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
+ *
+ * @todo These tests need sorting out, this doesn't fully cover the trait and the testEditFeeActionWithPost method
+ *  with it's provider doesn't cover all scenarios
  */
 class FeesActionTraitTest extends AbstractHttpControllerTestCase
 {
     protected $post = [];
+
     /**
      * Set up
      */
@@ -149,7 +153,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
             ->method('params')
             ->will($this->returnValue($mockParams));
 
-        $mockFeeService = $this->getMock('\StdClass', ['getFee', 'updateFee']);
+        $mockFeeService = $this->getMock('\StdClass', ['getFee']);
         $mockFeeService->expects($this->once())
             ->method('getFee')
             ->with($feeId)
@@ -290,7 +294,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
             ->method('params')
             ->will($this->returnValue($mockParams));
 
-        $mockFeeService = $this->getMock('\StdClass', ['getFee', 'updateFee']);
+        $mockFeeService = $this->getMock('\StdClass', ['getFee']);
         $mockFeeService->expects($this->once())
             ->method('getFee')
             ->with($feeId)
@@ -299,6 +303,11 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
         $mockServiceLocator = Bootstrap::getServiceManager();
         $mockServiceLocator->setAllowOverride(true);
         $mockServiceLocator->setService('Olcs\Service\Data\Fee', $mockFeeService);
+
+        $mockFeeEntityService = $this->getMock('\stdClass', ['save']);
+        $mockFeeEntityService->expects($this->any())
+            ->method('save');
+        $mockServiceLocator->setService('Entity\Fee', $mockFeeEntityService);
 
         $this->controller->expects($this->any())
             ->method('getServiceLocator')
@@ -318,7 +327,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
     public function feePostProvider()
     {
         return [
-            [
+            0 => [
                 'lfs_ot',
                 'Outstanding',
                 [
@@ -337,7 +346,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
                 'application',
                 true
             ],
-            [
+            1 => [
                 'lfs_wr',
                 'Waive recommended',
                 [
@@ -356,7 +365,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
                 'application',
                 true
             ],
-            [
+            2 => [
                 'lfs_wr',
                 'Waive recommended',
                 [
@@ -375,7 +384,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
                 'application',
                 true
             ],
-            [
+            3 => [
                 'lfs_wr',
                 'Waive recommended',
                 [
@@ -394,7 +403,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
                 'application',
                 true
             ],
-            [
+            4 => [
                 'lfs_ot',
                 'Outstanding',
                 [
@@ -413,7 +422,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
                 'application',
                 true
             ],
-            [
+            5 => [
                 'lfs_ot',
                 'Outstanding',
                 [
@@ -428,11 +437,11 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
                     ]
                 ],
                 '\Olcs\Controller\Application\ApplicationController',
-                'applicaitonId',
+                'application',
                 'licence',
                 true
             ],
-            [
+            6 => [
                 'lfs_wr',
                 'Waive recommended',
                 [
@@ -447,11 +456,11 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
                     ]
                 ],
                 '\Olcs\Controller\Application\ApplicationController',
-                'applicaitonId',
+                'application',
                 'licence',
                 true
             ],
-            [
+            7 => [
                 'lfs_wr',
                 'Waive recommended',
                 [
@@ -466,11 +475,11 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
                     ]
                 ],
                 '\Olcs\Controller\Application\ApplicationController',
-                'applicaitonId',
+                'application',
                 'licence',
                 true
             ],
-            [
+            8 => [
                 'lfs_wr',
                 'Waive recommended',
                 [
@@ -485,11 +494,11 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
                     ]
                 ],
                 '\Olcs\Controller\Application\ApplicationController',
-                'applicaitonId',
+                'application',
                 'licence',
                 true
             ],
-            [
+            9 => [
                 'lfs_ot',
                 'Outstanding',
                 [
@@ -504,7 +513,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
                     ]
                 ],
                 '\Olcs\Controller\Application\ApplicationController',
-                'applicaitonId',
+                'application',
                 'licence',
                 false
             ],

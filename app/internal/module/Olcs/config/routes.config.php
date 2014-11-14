@@ -268,6 +268,20 @@ $routes = [
             ]
         ],
     ],
+    'case_penalty_edit' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/case/:case/penalty/:seriousInfringement/:action[/:id]',
+            'constraints' => [
+                'case' => '[0-9]+',
+                'seriousInfringement' => '[0-9]+',
+                'id' => '[0-9]+',
+            ],
+            'defaults' => [
+                'controller' => 'CaseAppliedPenaltyController'
+            ]
+        ],
+    ],
     'case_complaint' => [
         'type' => 'segment',
         'options' => [
@@ -1197,6 +1211,136 @@ $routes = [
                 'action' => 'createVariation'
             ]
         ]
+    ],
+    // Transport Manager routes
+    'transport-manager' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/transport-manager/:transportManager',
+            'constraints' => [
+                'transportManager' => '[0-9]+'
+            ],
+            'defaults' => [
+                'controller' => 'TMController',
+                'action' => 'index-jump',
+            ]
+        ],
+        'may_terminate' => true,
+        'child_routes' => [
+            'details' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/details'
+                ],
+                'may_terminate' => true,
+                'child_routes' => [
+                    'details' => [
+                        'type' => 'literal',
+                        'options' => [
+                            'route' => '/details',
+                            'defaults' => [
+                                'controller' => 'TMDetailsDetailController',
+                                'action' => 'index',
+                            ]
+                        ],
+                        'may_terminate' => true
+                    ],
+                    'competences' => [
+                        'type' => 'literal',
+                        'options' => [
+                            'route' => '/competences',
+                            'defaults' => [
+                                'controller' => 'TMDetailsCompetenceController',
+                                'action' => 'index',
+                            ]
+                        ]
+                    ],
+                    'applications-licences' => [
+                        'type' => 'literal',
+                        'options' => [
+                            'route' => '/applications-licences',
+                            'defaults' => [
+                                'controller' => 'TMDetailsApplicationLicenceController',
+                                'action' => 'index',
+                            ]
+                        ]
+                    ],
+                ],
+            ],
+            'processing' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/processing',
+                    'defaults' => [
+                        'controller' => 'TMController',
+                        'action' => 'index-processing-jump',
+                    ],
+                ],
+                'may_terminate' => true,
+                'child_routes' => [
+                    'decisions' => [
+                        'type' => 'literal',
+                        'options' => [
+                            'route' => '/decisions',
+                            'defaults' => [
+                                'controller' => 'TMProcessingDecisionController',
+                                'action' => 'index',
+                            ]
+                        ]
+                    ],
+                    'history' => [
+                        'type' => 'literal',
+                        'options' => [
+                            'route' => '/history',
+                            'defaults' => [
+                                'controller' => 'TMProcessingHistoryController',
+                                'action' => 'index',
+                            ]
+                        ]
+                    ],
+                    'notes' => [
+                        'type' => 'literal',
+                        'options' => [
+                            'route' => '/notes',
+                            'defaults' => [
+                                'controller' => 'TMProcessingNoteController',
+                                'action' => 'index',
+                            ]
+                        ]
+                    ],
+                    'tasks' => [
+                        'type' => 'literal',
+                        'options' => [
+                            'route' => '/tasks',
+                            'defaults' => [
+                                'controller' => 'TMProcessingTaskController',
+                                'action' => 'index',
+                            ]
+                        ]
+                    ],
+                ],
+            ],
+            'cases' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/cases',
+                    'defaults' => [
+                        'controller' => 'TMCaseController',
+                        'action' => 'index',
+                    ]
+                ]
+            ],
+            'documents' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/documents',
+                    'defaults' => [
+                        'controller' => 'TMDocumentController',
+                        'action' => 'index',
+                    ]
+                ]
+            ],
+        ],
     ]
 ];
 
@@ -1307,7 +1451,7 @@ $routes['lva-application']['child_routes'] = array_merge(
                 'fee_action' => array(
                     'type' => 'segment',
                     'options' => array(
-                        'route' => '/:action/:fee',
+                        'route' => ':action/:fee',
                         'constraints' => array(
                             'fee' => '[0-9-]+',
                         ),

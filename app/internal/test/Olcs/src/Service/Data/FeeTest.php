@@ -100,22 +100,5 @@ class FeeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($fee, $this->service->getFee($id));
         //test data is cached
         $this->assertEquals($fee, $this->service->getFee($id));
-
-    }
-
-    /**
-     * Test update fee method
-     * @group feeService
-     */
-    public function testUpdateFee()
-    {
-        $fee = ['key' => 'value', 'id' => 1];
-
-        $this->mockRestClient->expects($this->once())
-            ->method('put')
-            ->with($this->equalTo('/1'), $this->isType('array'))
-            ->willReturn($this->returnValue(null));
-
-        $this->assertEquals(null, $this->service->updateFee($fee));
     }
 }

@@ -16,9 +16,8 @@ class Markers extends AbstractHelper
      */
     public function __invoke($markers, $markerType, $convertNewLines = true)
     {
-
         $markup = '';
-        if (isset($markers[$markerType]) && is_array($markers[$markerType])) {
+        if (isset($markers[$markerType]) && is_array($markers[$markerType]) && !empty($markers[$markerType])) {
             $markup = '<div class="notice-container">';
             foreach ($markers[$markerType] as $marker) {
                 $markup .= '<div class="notice--warning">';
