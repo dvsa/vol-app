@@ -70,6 +70,10 @@ class EbsrPack extends AbstractData
         ];
     }
 
+    /**
+     * @param $data
+     * @return bool|int
+     */
     public function processPackUpload($data)
     {
         $validator = $this->getValidationChain();
@@ -95,12 +99,20 @@ class EbsrPack extends AbstractData
         return false;
     }
 
+    /**
+     * @param $packs
+     * @return bool
+     */
     public function sendPackList($packs)
     {
         $this->getRestClient()->post('notify', ['operatorId' => 1, 'packs' => $packs]);
         return true;
     }
 
+    /**
+     * @param ServiceLocatorInterface $serviceLocator
+     * @return $this
+     */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $serviceLocator = $serviceLocator->getServiceLocator();
