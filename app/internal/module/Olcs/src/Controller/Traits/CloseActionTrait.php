@@ -17,13 +17,23 @@ trait CloseActionTrait
     abstract public function getDataServiceName();
 
     /**
+     * Gets the id of the entity to close from the route
+     * @return integer
+     */
+    public function getIdToClose()
+    {
+        $identifierName = $this->getIdentifierName();
+        $id = $this->params()->fromRoute($identifierName);
+        return $id;
+    }
+
+    /**
      * Close the entity (calls data service closeEntity())
      * @return mixed
      */
     public function closeAction()
     {
-        $identifierName = $this->getIdentifierName();
-        $id = $this->params()->fromRoute($identifierName);
+        $id = $this->getIdToClose();
 
         $response = $this->confirm('Are you sure you wish to close this ' . $this->getIdentifierName() . '?');
 
@@ -31,8 +41,7 @@ trait CloseActionTrait
             return $this->renderView($response);
         }
 
-        $dataService = $this->getServiceLocator()
-            ->get('Olcs\Service\Data\\' . $this->getDataServiceName());
+        $dataService = $this->getDataService();
 
         if ($dataService instanceof CloseableInterface) {
             $dataService->closeEntity($id);
@@ -46,8 +55,7 @@ trait CloseActionTrait
      */
     public function reopenAction()
     {
-        $identifierName = $this->getIdentifierName();
-        $id = $this->params()->fromRoute($identifierName);
+        $id = $this->getIdToClose();
 
         $response = $this->confirm('Are you sure you wish to reopen this ' . $this->getIdentifierName() . '?');
 
@@ -55,8 +63,7 @@ trait CloseActionTrait
             return $this->renderView($response);
         }
 
-        $dataService = $this->getServiceLocator()
-            ->get('Olcs\Service\Data\\' . $this->getDataServiceName());
+        $dataService = $this->getDataService();
 
         if ($dataService instanceof CloseableInterface) {
             $dataService->reopenEntity($id);
@@ -66,19 +73,14 @@ trait CloseActionTrait
     }
 
     /**
-     * returns the action array to generate the close/reopen button for a given entity
+     * Returns the action array to generate the close/reopen button for a given entity
      *
-     * @param $entity
-     * @param $case
      * @return array|null
      */
     public function generateCloseActionButtonArray()
     {
-        $identifierName = $this->getIdentifierName();
-        $id = $this->params()->fromRoute($identifierName);
-
-        $dataService = $this->getServiceLocator()
-            ->get('Olcs\Service\Data\\' . $this->getDataServiceName());
+        $id = $this->getIdToClose();
+        $dataService = $this->getDataService();
 
         if ($dataService instanceof CloseableInterface) {
             if ($dataService->canReopen($id)) {
