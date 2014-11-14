@@ -1451,7 +1451,7 @@ $routes['lva-application']['child_routes'] = array_merge(
                 'fee_action' => array(
                     'type' => 'segment',
                     'options' => array(
-                        'route' => '/:action/:fee',
+                        'route' => ':action/:fee',
                         'constraints' => array(
                             'fee' => '[0-9-]+',
                         ),

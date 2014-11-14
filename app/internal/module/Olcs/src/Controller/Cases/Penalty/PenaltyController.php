@@ -109,6 +109,7 @@ class PenaltyController extends OlcsController\CrudAbstract
                 'children' => array(
                     'siPenaltyType' => array(
                         'properties' => array(
+                            'id',
                             'description'
                         )
                     ),
@@ -129,6 +130,7 @@ class PenaltyController extends OlcsController\CrudAbstract
                 'children' => array(
                     'siPenaltyImposedType' => array(
                         'properties' => array(
+                            'id',
                             'description'
                         )
                     )
@@ -139,6 +141,7 @@ class PenaltyController extends OlcsController\CrudAbstract
                 'children' => array(
                     'siPenaltyRequestedType' => array(
                         'properties' => array(
+                            'id',
                             'description'
                         )
                     )
