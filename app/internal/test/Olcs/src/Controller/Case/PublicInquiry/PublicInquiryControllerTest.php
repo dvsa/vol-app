@@ -309,4 +309,30 @@ class PublicInquiryControllerTest extends AbstractHttpControllerTestCase
             'redirectResponse'
         );
     }
+
+    public function testGetIdToClose()
+    {
+        $id = 99;
+        $caseId = 99;
+
+        $mockPi = ['Results' => [0 => ['id' => $id]], 'Count' => 1];
+
+        $mockRestHelper = m::mock('RestHelper');
+        $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn($mockPi);
+
+        $this->assertEquals($id, $this->sut->getIdToClose($id));
+
+        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(['params' => 'Params']);
+        $mockParams = $mockPluginManager->get('params', '');
+        $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
+
+        $this->sut->setPluginManager($mockPluginManager);
+
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
+        $this->sut->setServiceLocator($mockServiceManager);
+
+        $this->assertEquals($id, $this->sut->getIdToClose());
+
+    }
 }
