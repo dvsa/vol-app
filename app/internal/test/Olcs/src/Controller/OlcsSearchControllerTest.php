@@ -16,24 +16,27 @@ use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
  */
 class OlcsSearchControllerTest extends AbstractHttpControllerTestCase
 {
-    public function setUp()
+    public function setUpAction($needMockRequest = false)
     {
         $this->setApplicationConfig(include __DIR__.'/../../../../config/application.config.php');
 
+        $methods = [
+            'getServiceLocator',
+            'setBreadcrumb',
+            'generateFormWithData',
+            'getPluginManager',
+            'redirect',
+            'params',
+            'makeRestCall',
+            'url',
+            'getTable',
+            'getSearchForm'
+        ];
+        if ($needMockRequest) {
+            $methods[] = 'getRequest';
+        }
         $this->controller = $this->getMock(
-            '\Olcs\Controller\SearchController',
-            array(
-                'getServiceLocator',
-                'setBreadcrumb',
-                'generateFormWithData',
-                'getPluginManager',
-                'redirect',
-                'params',
-                'makeRestCall',
-                'url',
-                'getTable',
-                'getSearchForm'
-            )
+            '\Olcs\Controller\SearchController', $methods
         );
         $this->serviceLocator = $this->getMock('\stdClass', array('get'));
         $this->pluginManager = $this->getMock('\stdClass', array('get'));
@@ -43,6 +46,7 @@ class OlcsSearchControllerTest extends AbstractHttpControllerTestCase
 
     public function testIndexAction()
     {
+        $this->setUpAction();
         $this->controller->expects($this->once())
             ->method('setBreadcrumb')
             ->with(array('search' => array()));
@@ -57,6 +61,7 @@ class OlcsSearchControllerTest extends AbstractHttpControllerTestCase
 
     public function testProcessSearchAction()
     {
+        $this->setUpAction();
         $data = array(
             'search' => [
                 'licNo' => '',
@@ -93,6 +98,7 @@ class OlcsSearchControllerTest extends AbstractHttpControllerTestCase
 
     public function testOperatorAction()
     {
+        $this->setUpAction();
         $data = array ('controller' => 'SearchController',
             'action' => 'operator',
             'page' => 1,
@@ -131,6 +137,41 @@ class OlcsSearchControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue($configServiceLocator));
 
         $this->controller->operatorAction();
+    }
+
+    /**
+     * Test operator action with redirect
+     */
+    public function testOperatorWithRedirectAction()
+    {
+        $this->setUpAction(true);
+
+        $mockRequest = $this->getMock('\StdClass', ['getPost']);
+        $mockRequest->expects($this->once())
+            ->method('getPost')
+            ->will(
+                $this->returnValue(
+                    [
+                        'action' => 'Create operator'
+                    ]
+                )
+            );
+
+        $mockRedirect = $this->getMock('\StdClass', ['toRoute']);
+        $mockRedirect->expects($this->once())
+            ->method('toRoute')
+            ->will($this->returnValue('response'));
+
+        $this->controller->expects($this->once())
+             ->method('redirect')
+             ->will($this->returnValue($mockRedirect));
+
+        $this->controller->expects($this->once())
+             ->method('getRequest')
+             ->will($this->returnValue($mockRequest));
+
+        $response = $this->controller->operatorAction();
+        $this->assertEquals('response', $response);
     }
 
     private function getStaticEntityTypes()
