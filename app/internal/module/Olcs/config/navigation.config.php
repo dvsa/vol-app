@@ -177,7 +177,7 @@ return array(
                             'id' => 'case_hearings_appeals_public_inquiry',
                             'label' => 'Public Inquiry',
                             'route' => 'case_pi',
-                            'action' => 'index',
+                            'action' => '',
                             'use_route_match' => true,
                             'pages' => array(
                                 array(
