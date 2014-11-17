@@ -130,6 +130,9 @@ class PublicInquiryControllerTest extends AbstractHttpControllerTestCase
         $mockRestHelper = m::mock('RestHelper');
         $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn($mockPi);
 
+        $mockPiService = m::mock('Common\Service\Data\Pi');
+        $mockPiService->shouldReceive('canReopen')->with(1)->andReturn(false);
+
         $mockSlaService = m::mock('Common\Service\Data\Sla');
         $mockSlaService->shouldReceive('setContext')->withAnyArgs();
         $mockSlaService->shouldReceive('fetchBusRules')->withAnyArgs()->andReturn([]);
@@ -137,6 +140,7 @@ class PublicInquiryControllerTest extends AbstractHttpControllerTestCase
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
         $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
         $mockServiceManager->shouldReceive('get')->with('Common\Service\Data\Sla')->andReturn($mockSlaService);
+        $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\Pi')->andReturn($mockPiService);
 
         $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
             [
