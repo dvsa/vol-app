@@ -256,7 +256,8 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                     'local-licence-history',
                     'maintenance-tachographs-hours',
                     'objections',
-                    'financial-information'
+                    'financial-information',
+                    'oppositions'
                 ];
                 break;
             case 'submission_type_o_clo_psv':
@@ -273,7 +274,8 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                     'registration-details',
                     'maintenance-tachographs-hours',
                     'objections',
-                    'financial-information'
+                    'financial-information',
+                    'oppositions'
                 ];
                 break;
             case 'submission_type_o_env':
@@ -297,7 +299,8 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                     'environmental-complaints',
                     'objections',
                     'financial-information',
-                    'maps'
+                    'maps',
+                    'oppositions'
                 ];
                 break;
             case 'submission_type_o_irfo':
