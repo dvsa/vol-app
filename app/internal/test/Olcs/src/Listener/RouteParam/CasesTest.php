@@ -86,7 +86,7 @@ class CasesTest extends TestCase
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
         $mockViewHelperManager->shouldReceive('get')->with('headTitle')->andReturn($mockContainer);
 
-        $mockLicenceService = m::mock('Olcs\Service\Data\Licence');
+        $mockLicenceService = m::mock('Common\Service\Data\Licence');
         $mockLicenceService->shouldReceive('setData')->with(4, ['id' => 4]);
 
         $sut = new Cases();
@@ -124,7 +124,7 @@ class CasesTest extends TestCase
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
         $mockViewHelperManager->shouldReceive('get')->with('headTitle')->andReturn($mockContainer);
 
-        $mockLicenceService = m::mock('Olcs\Service\Data\Licence');
+        $mockLicenceService = m::mock('Common\Service\Data\Licence');
         $mockLicenceService->shouldReceive('setData')->with(4, ['id' => 4]);
 
         $sut = new Cases();
@@ -137,14 +137,14 @@ class CasesTest extends TestCase
     public function testCreateService()
     {
         $mockCaseService = m::mock('Olcs\Service\Data\Cases');
-        $mockLicenceService = m::mock('Olcs\Service\Data\Licence');
+        $mockLicenceService = m::mock('Common\Service\Data\Licence');
         $mockViewHelperManager = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
         $mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
         $mockSl->shouldReceive('get')->with('Olcs\Service\Data\Cases')->andReturn($mockCaseService);
-        $mockSl->shouldReceive('get')->with('Olcs\Service\Data\Licence')->andReturn($mockLicenceService);
+        $mockSl->shouldReceive('get')->with('Common\Service\Data\Licence')->andReturn($mockLicenceService);
 
         $sut = new Cases();
         $service = $sut->createService($mockSl);

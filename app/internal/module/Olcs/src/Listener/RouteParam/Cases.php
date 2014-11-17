@@ -10,7 +10,7 @@ use Zend\EventManager\ListenerAggregateTrait;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\View\Helper\Navigation\PluginManager as ViewHelperManager;
-use Olcs\Service\Data\Licence as LicenceService;
+use Common\Service\Data\Licence as LicenceService;
 use Olcs\Service\Data\Cases as CaseService;
 
 /**
@@ -71,7 +71,7 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * @param \Olcs\Service\Data\Licence $licenceService
+     * @param \Common\Service\Data\Licence $licenceService
      */
     public function setLicenceService($licenceService)
     {
@@ -79,7 +79,7 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * @return \Olcs\Service\Data\Licence
+     * @return \Common\Service\Data\Licence
      */
     public function getLicenceService()
     {
@@ -137,7 +137,7 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
     {
         $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
         $this->setCaseService($serviceLocator->get('DataServiceManager')->get('Olcs\Service\Data\Cases'));
-        $this->setLicenceService($serviceLocator->get('DataServiceManager')->get('Olcs\Service\Data\Licence'));
+        $this->setLicenceService($serviceLocator->get('DataServiceManager')->get('Common\Service\Data\Licence'));
 
         return $this;
     }
