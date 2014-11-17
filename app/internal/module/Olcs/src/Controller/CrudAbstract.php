@@ -143,6 +143,23 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     }
 
     /**
+     * @param null $dataServiceName
+     */
+    public function setDataServiceName($dataServiceName)
+    {
+        $this->dataServiceName = $dataServiceName;
+        return $this;
+    }
+
+    /**
+     * @return null
+     */
+    public function getDataServiceName()
+    {
+        return $this->dataServiceName;
+    }
+
+    /**
      * Set dataService
      * @param $dataService
      */

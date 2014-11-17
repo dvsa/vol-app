@@ -101,5 +101,4 @@ class Pi extends AbstractData implements CloseableInterface
     {
         return $this->isClosed($id);
     }
-
 }

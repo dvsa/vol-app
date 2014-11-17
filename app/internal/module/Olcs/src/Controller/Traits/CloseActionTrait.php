@@ -39,9 +39,9 @@ trait CloseActionTrait
     {
         $id = $this->getIdToClose($id);
 
-        $response = $this->confirm('Are you sure you wish to close this ' . strtolower($this->getEntityDisplayName())
-            .
-    '?');
+        $response = $this->confirm(
+            'Are you sure you wish to close this ' . strtolower($this->getEntityDisplayName()) . '?'
+        );
 
         if ($response instanceof ViewModel) {
             return $this->renderView($response);
@@ -63,8 +63,9 @@ trait CloseActionTrait
     {
         $id = $this->getIdToClose($id);
 
-        $response = $this->confirm('Are you sure you wish to reopen this ' .
-            strtolower($this->getEntityDisplayName()) . '?');
+        $response = $this->confirm(
+            'Are you sure you wish to reopen this ' . strtolower($this->getEntityDisplayName()) . '?'
+        );
 
         if ($response instanceof ViewModel) {
             return $this->renderView($response);
