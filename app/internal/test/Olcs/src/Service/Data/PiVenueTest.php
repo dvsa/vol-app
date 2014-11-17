@@ -35,7 +35,7 @@ class PiVenueTest extends \PHPUnit_Framework_TestCase
      */
     public function testFetchListOptions($input, $expected)
     {
-        $mockLicenceService = $this->getMock('\Olcs\Service\Data\Licence');
+        $mockLicenceService = $this->getMock('\Common\Service\Data\Licence');
         $mockLicenceService->expects($this->once())
             ->method('fetchLicenceData')
             ->willReturn(['niFlag'=> true, 'goodsOrPsv' => ['id'=>'lcat_gv'], 'trafficArea' => ['id' => 'B']]);
