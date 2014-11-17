@@ -1199,6 +1199,63 @@ $routes = [
             ],
         ]
     ],
+    'operator' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/operator/:operator',
+            'constraints' => [
+                'operator' => '[0-9]+'
+            ],
+            'defaults' => [
+                'controller' => 'OperatorController',
+                'action' => 'index-jump',
+            ]
+        ],
+        'may_terminate' => true,
+        'child_routes' => [
+            'business-details' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/business-details',
+                    'defaults' => [
+                        'controller' => 'OperatorBusinessDetailsController',
+                        'action' => 'index',
+                    ]
+                ]
+            ],
+            'people' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/people',
+                    'defaults' => [
+                        'controller' => 'OperatorPeopleController',
+                        'action' => 'index',
+                    ]
+                ]
+            ],
+            'licences-applications' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/licences-applications',
+                    'defaults' => [
+                        'controller' => 'OperatorLicencesApplicationsController',
+                        'action' => 'index',
+                    ]
+                ]
+            ],
+        ]
+    ],
+    'create_operator' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/operator/create',
+            'defaults' => [
+                'controller' => 'OperatorBusinessDetailsController',
+                'action' => 'index',
+            ],
+        ],
+        'may_terminate' => true,
+    ],
     'create_variation' => [
         'type' => 'segment',
         'options' => [
