@@ -461,7 +461,8 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
             'startNumber' => 2,
             'discsToPrint' => 2,
             'endNumber' => 7,
-            'originalEndNumber' => 4,
+            'originalEndNumber' => 3,
+            'endNumberIncreased' => 3,
             'totalPages' => 1
         ];
         $this->setUpAction();
@@ -481,8 +482,9 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
         $expectedNumbering = [
             'startNumber' => 3,
             'discsToPrint' => 2,
-            'endNumber' => 8,
-            'originalEndNumber' => 4,
+            'endNumber' => 7,
+            'endNumberIncreased' => 4,
+            'originalEndNumber' => 3,
             'totalPages' => 1
         ];
         $this->allParams['startNumberEntered'] = 3;
