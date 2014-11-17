@@ -17,27 +17,25 @@ trait CloseActionTrait
     abstract public function renderView($view, $pageTitle = null, $pageSubTitle = null);
 
     /**
-     * Gets the id of the entity to close from the route
+     * Fetches the id of the entity to close from the route based on identifierName
      * @return integer
      */
-    public function getIdToClose($id = null)
+    public function getIdToClose()
     {
-        if (empty($id)) {
-            $identifierName = $this->getIdentifierName();
-            $id = $this->params()->fromRoute($identifierName);
-        }
+        $identifierName = $this->getIdentifierName();
+        $id = $this->params()->fromRoute($identifierName);
         return $id;
     }
 
     /**
      * Close the entity (calls data service closeEntity())
      *
-     * @param integer $id
+     * @param integer $id|null
      * @return mixed
      */
     public function closeAction($id = null)
     {
-        $id = $this->getIdToClose($id);
+        $id = empty($id) ? $this->getIdToClose($id) : $id;
 
         $response = $this->confirm(
             'Are you sure you wish to close this ' . $this->getEntityDisplayName() . '?'
@@ -58,10 +56,13 @@ trait CloseActionTrait
 
     /**
      * Reopens an entity and redirects to the index
+     *
+     * @param integer $id|null
+     * @return mixed
      */
     public function reopenAction($id = null)
     {
-        $id = $this->getIdToClose($id);
+        $id = empty($id) ? $this->getIdToClose($id) : $id;
 
         $response = $this->confirm(
             'Are you sure you wish to reopen this ' . $this->getEntityDisplayName() . '?'
@@ -83,13 +84,12 @@ trait CloseActionTrait
     /**
      * Returns the action array to generate the close/reopen button for a given entity
      *
+     * @param integer $id|null
      * @return array|null
      */
     public function generateCloseActionButtonArray($id = null)
     {
-
-        $id = $this->getIdToClose($id);
-
+        $id = empty($id) ? $this->getIdToClose($id) : $id;
         $dataService = $this->getDataService();
 
         if ($dataService instanceof CloseableInterface) {
@@ -103,8 +103,11 @@ trait CloseActionTrait
         return null;
     }
 
-    protected $entityName;
-
+    /**
+     * Generate the button array
+     * @param string $action
+     * @return array
+     */
     public function generateButton($action)
     {
         $routeMatch = $this->getServiceLocator()->get('Application')->getMvcEvent()->getRouteMatch();

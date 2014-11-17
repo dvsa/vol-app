@@ -63,9 +63,68 @@ class Pi extends AbstractData implements CloseableInterface
      */
     public function getBundle()
     {
-        $bundle =  array(
+        $bundle =  [
             'properties' => 'ALL',
-        );
+            'children' => [
+                'piStatus' => [
+                    'properties' => 'ALL',
+                ],
+                'piTypes' => [
+                    'properties' => 'ALL',
+                ],
+                'presidingTc' => [
+                    'properties' =>
+                        [
+                            'id',
+                            'name'
+                        ]
+                ],
+                'reasons' => [
+                    'properties' => 'ALL',
+                    'children' => [
+                        'reason' => [
+                            'properties' => 'ALL',
+                        ]
+                    ],
+                ],
+                'piHearings' => array(
+                    'properties' => 'ALL',
+                    'children' => [
+                        'presidingTc' => [
+                            'properties' => 'ALL',
+                        ],
+                        'presidedByRole' => [
+                            'properties' => 'ALL',
+                        ],
+                    ],
+                ),
+                'writtenOutcome' => array(
+                    'properties' => 'ALL'
+                ),
+                'decidedByTc' => array(
+                    'properties' => 'ALL'
+                ),
+                'agreedByTc' => array(
+                    'properties' => 'ALL'
+                ),
+                'decidedByTcRole' => array(
+                    'properties' => 'ALL'
+                ),
+                'agreedByTcRole' => array(
+                    'properties' => 'ALL'
+                ),
+                'decisions' => array(
+                    'properties' => 'ALL'
+                ),
+                'assignedTo' => array(
+                    'properties' => 'ALL'
+                ),
+                'case' => array(
+                    'properties' => ['id']
+                ),
+
+            ]
+        ];
 
         return $bundle;
     }
@@ -78,7 +137,37 @@ class Pi extends AbstractData implements CloseableInterface
      */
     public function canClose($id)
     {
-        return !$this->isClosed($id);
+        $data = $this->fetchData($id);
+
+        if (isset($data['piHearings'][0])) {
+            if (!empty($data['piHearings'][0]['cancelledDate'])) {
+                return !$this->isClosed($id);
+            }
+        }
+
+        switch($data['writtenOutcome']['id']) {
+            case 'piwo_none':
+
+                if (empty($data['decSentAfterWrittenDecDate'])) {
+                    return false;
+                }
+                return !$this->isClosed($id);
+            case 'piwo_reason':
+                if (empty($data['tcWrittenReasonDate']) ||
+                    empty($data['writtenReasonLetterDate'])
+                ) {
+                    return false;
+                }
+                return !$this->isClosed($id);
+            case 'piwo_decision':
+                if (empty($data['tcWrittenDecisionDate']) ||
+                    empty($data['decisionLetterSentDate'])
+                ) {
+                    return false;
+                }
+                return !$this->isClosed($id);
+        }
+        return false;
     }
 
     /**
@@ -88,7 +177,6 @@ class Pi extends AbstractData implements CloseableInterface
      */
     public function isClosed($id)
     {
-        $pi = $this->fetchData($id);
         return (bool) isset($pi['closedDate']);
     }
 
