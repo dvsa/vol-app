@@ -303,7 +303,7 @@ $routes = [
             'route' => '/case/:case/pi[/:action]',
             'constraints' => [
                 'case' => '[0-9]+',
-                'action' => '(close|reopen)',
+                'action' => '(close|reopen|details)',
             ],
             'defaults' => [
                 'controller' => 'CasePublicInquiryController',

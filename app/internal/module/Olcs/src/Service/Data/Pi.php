@@ -145,27 +145,28 @@ class Pi extends AbstractData implements CloseableInterface
             }
         }
 
-        switch($data['writtenOutcome']['id']) {
-            case 'piwo_none':
-
-                if (empty($data['decSentAfterWrittenDecDate'])) {
-                    return false;
-                }
-                return !$this->isClosed($id);
-            case 'piwo_reason':
-                if (empty($data['tcWrittenReasonDate']) ||
-                    empty($data['writtenReasonLetterDate'])
-                ) {
-                    return false;
-                }
-                return !$this->isClosed($id);
-            case 'piwo_decision':
-                if (empty($data['tcWrittenDecisionDate']) ||
-                    empty($data['decisionLetterSentDate'])
-                ) {
-                    return false;
-                }
-                return !$this->isClosed($id);
+        if (isset($data['writtenOutcome']['id'])) {
+            switch($data['writtenOutcome']['id']) {
+                case 'piwo_none':
+                    if (empty($data['decSentAfterWrittenDecDate'])) {
+                        return false;
+                    }
+                    return !$this->isClosed($id);
+                case 'piwo_reason':
+                    if (empty($data['tcWrittenReasonDate']) ||
+                        empty($data['writtenReasonLetterDate'])
+                    ) {
+                        return false;
+                    }
+                    return !$this->isClosed($id);
+                case 'piwo_decision':
+                    if (empty($data['tcWrittenDecisionDate']) ||
+                        empty($data['decisionLetterSentDate'])
+                    ) {
+                        return false;
+                    }
+                    return !$this->isClosed($id);
+            }
         }
         return false;
     }

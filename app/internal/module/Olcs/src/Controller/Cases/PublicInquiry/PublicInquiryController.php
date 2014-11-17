@@ -215,7 +215,7 @@ class PublicInquiryController extends OlcsController\CrudAbstract
             $pi = $this->setupSla($pi);
 
             if ($this->getRequest()->isPost()) {
-                $action = strtolower($this->getFromPost('action'));
+                $action = strtolower($this->getFromPost('formAction'));
                 $id = $this->getFromPost('id');
 
                 if (!($action == 'edit' && !is_numeric($id))) {
