@@ -130,6 +130,10 @@ class SearchController extends AbstractController
      */
     public function operatorAction()
     {
+        $postData = (array)$this->getRequest()->getPost();
+        if (isset($postData['action']) && $postData['action'] == 'Create operator') {
+            return $this->redirectToRoute('create_operator');
+        }
         $data = $this->params()->fromRoute();
         $results = $this->makeRestCall('OperatorSearch', 'GET', $data);
 
