@@ -40,7 +40,7 @@ trait CloseActionTrait
         $id = $this->getIdToClose($id);
 
         $response = $this->confirm(
-            'Are you sure you wish to close this ' . strtolower($this->getEntityDisplayName()) . '?'
+            'Are you sure you wish to close this ' . $this->getEntityDisplayName() . '?'
         );
 
         if ($response instanceof ViewModel) {
@@ -64,7 +64,7 @@ trait CloseActionTrait
         $id = $this->getIdToClose($id);
 
         $response = $this->confirm(
-            'Are you sure you wish to reopen this ' . strtolower($this->getEntityDisplayName()) . '?'
+            'Are you sure you wish to reopen this ' . $this->getEntityDisplayName() . '?'
         );
 
         if ($response instanceof ViewModel) {
@@ -112,7 +112,7 @@ trait CloseActionTrait
         $routeParams['action'] = $action;
 
         return [
-            'label' => ucfirst($action) . ' ' . strtolower($this->getEntityDisplayName()),
+            'label' => ucfirst($action) . ' ' . $this->getEntityDisplayName(),
             'route' => $routeMatch->getMatchedRouteName(),
             'params' => $routeParams
         ];

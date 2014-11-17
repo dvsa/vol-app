@@ -172,7 +172,7 @@ class PublicInquiryController extends OlcsController\CrudAbstract
     protected $placeholderName = 'pi';
     protected $dataServiceName = 'pi';
 
-    protected $entityDisplayName = 'Public inquiry';
+    protected $entityDisplayName = 'Public Inquiry';
 
     public function redirectToIndex()
     {
