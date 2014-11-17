@@ -62,6 +62,4 @@ class CloseableTraitTest extends \PHPUnit_Framework_TestCase
 
         $this->assertNull($this->sut->reopenEntity($id));
     }
-
-
 }

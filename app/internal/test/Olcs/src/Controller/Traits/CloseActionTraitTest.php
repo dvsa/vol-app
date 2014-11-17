@@ -185,7 +185,6 @@ class CloseActionTraitTest extends \PHPUnit_Framework_TestCase
         $mockApplication->shouldReceive('getMvcEvent')
             ->andReturn($mockEvent);
 
-
         $mockDataService->shouldReceive('canReopen')
             ->with($id)
             ->andReturn(true);

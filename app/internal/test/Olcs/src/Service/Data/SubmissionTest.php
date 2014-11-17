@@ -109,9 +109,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
         $mockSectionRefData = $this->getMockSectionRefData();
         $mockRefDataService->expects(
             $this->once()
-        )->method(
-                'fetchListOptions'
-            )->with('submission_section')
+        )->method('fetchListOptions')->with('submission_section')
             ->willReturn($mockSectionRefData);
 
         $this->sut->setRefDataService($mockRefDataService);
