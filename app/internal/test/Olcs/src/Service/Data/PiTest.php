@@ -74,18 +74,109 @@ class PiTest extends \PHPUnit_Framework_TestCase
     }
 
 
-    public function testCanClose()
+    /**
+     * @dataProvider provideCloseData
+     * @param $input
+     * @param $expected
+     */
+    public function testCanClose($input, $expected)
     {
         $id = 99;
-        $mockData = [
-            'closedDate' => null
-        ];
+        $mockData = $input;
+
         $mockRestClient = m::mock('Common\Util\RestClient');
         $mockRestClient->shouldReceive('get')->once()->withAnyArgs()->andReturn($mockData);
 
         $this->sut->setRestClient($mockRestClient);
 
-        $this->assertTrue($this->sut->canClose($id));
+        $this->assertEquals($expected, $this->sut->canClose($id));
+    }
+
+    public function provideCloseData() {
+        return [
+            [
+                [],
+                false
+            ],
+            [
+                [
+                    'closedDate' => null,
+                    'piHearings' => [0 => ['cancelledDate' => 'foo']]
+                ],
+                true
+            ],
+            [
+                [
+                    'closedDate' => 'foo',
+                    'piHearings' => [0 => ['cancelledDate' => 'foo']]
+                ],
+                false
+            ],
+            [
+                [
+                    'closedDate' => 'foo',
+                    'piHearings' => [0 => ['cancelledDate' => null]]
+                ],
+                false
+            ],
+            [
+                [
+                    'closedDate' => null,
+                    'writtenOutcome' => ['id' => 'piwo_none'],
+                    'decSentAfterWrittenDecDate' => 'foo'
+                ],
+                true
+            ],
+            [
+                [
+                    'closedDate' => null,
+                    'writtenOutcome' => ['id' => 'piwo_none'],
+                    'decSentAfterWrittenDecDate' => null
+                ],
+                false
+            ],
+            [
+                [
+                    'closedDate' => null,
+                    'writtenOutcome' => ['id' => 'piwo_reason'],
+                    'tcWrittenReasonDate' => 'foo',
+                    'writtenReasonLetterDate' => 'bar'
+                ],
+                true
+            ],
+            [
+                [
+                    'closedDate' => null,
+                    'writtenOutcome' => ['id' => 'piwo_reason'],
+                    'tcWrittenReasonDate' => null
+                ],
+                false
+            ],
+            [
+                [
+                    'closedDate' => null,
+                    'writtenOutcome' => ['id' => 'piwo_decision'],
+                    'tcWrittenDecisionDate' => 'foo',
+                    'decisionLetterSentDate' => 'bar'
+                ],
+                true
+            ],
+            [
+                [
+                    'closedDate' => null,
+                    'writtenOutcome' => ['id' => 'piwo_decision'],
+                    'tcWrittenDecisionDate' => null
+                ],
+                false
+            ],
+            [
+                [
+                    'closedDate' => null,
+                    'writtenOutcome' => ['id' => 'somethingelse']
+                ],
+                false
+            ]
+        ];
     }
 
     public function testCanReopen()

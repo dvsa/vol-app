@@ -211,7 +211,7 @@ class PublicInquiryControllerTest extends AbstractHttpControllerTestCase
         );
         $mockParams = $mockPluginManager->get('params', '');
         $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
-        $mockParams->shouldReceive('fromPost')->with('action')->andReturn($action);
+        $mockParams->shouldReceive('fromPost')->with('formAction')->andReturn($action);
         $mockParams->shouldReceive('fromPost')->with('id')->andReturn($postId);
 
         $mockRedirect = $mockPluginManager->get('redirect', '');
@@ -277,7 +277,7 @@ class PublicInquiryControllerTest extends AbstractHttpControllerTestCase
         );
         $mockParams = $mockPluginManager->get('params', '');
         $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
-        $mockParams->shouldReceive('fromPost')->with('action')->andReturn($action);
+        $mockParams->shouldReceive('fromPost')->with('formAction')->andReturn($action);
         $mockParams->shouldReceive('fromPost')->with('id')->andReturn($postId);
 
         $mockRedirect = $mockPluginManager->get('redirect', '');

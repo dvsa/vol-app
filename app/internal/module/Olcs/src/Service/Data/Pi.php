@@ -178,7 +178,9 @@ class Pi extends AbstractData implements CloseableInterface
      */
     public function isClosed($id)
     {
-        return (bool) isset($pi['closedDate']);
+        $data = $this->fetchData($id);
+
+        return (bool) isset($data['closedDate']);
     }
 
     /**
