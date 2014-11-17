@@ -118,7 +118,7 @@ class SubmissionController extends OlcsController\CrudAbstract
      * Entity display name
      * @var string
      */
-    protected $entityDisplayName = 'Submission';
+    protected $entityDisplayName = 'submission';
 
     public function alterFormBeforeValidation($form)
     {
