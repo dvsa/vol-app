@@ -55,7 +55,7 @@ class PublicInquiryReasonTest extends \PHPUnit_Framework_TestCase
 
     public function testFetchListOptions()
     {
-        $mockLicenceService = $this->getMock('\Olcs\Service\Data\Licence');
+        $mockLicenceService = $this->getMock('\Common\Service\Data\Licence');
         $mockLicenceService->expects($this->once())
             ->method('fetchLicenceData')
             ->willReturn(['niFlag'=> true, 'goodsOrPsv' => ['id'=>'lcat_gv'], 'trafficArea' => ['id' => 'B']]);
@@ -69,7 +69,7 @@ class PublicInquiryReasonTest extends \PHPUnit_Framework_TestCase
 
     public function testFetchListOptionsWoithGroups()
     {
-        $mockLicenceService = $this->getMock('\Olcs\Service\Data\Licence');
+        $mockLicenceService = $this->getMock('\Common\Service\Data\Licence');
         $mockLicenceService->expects($this->once())
             ->method('fetchLicenceData')
             ->willReturn(['niFlag'=> true, 'goodsOrPsv' => ['id'=>'lcat_gv'], 'trafficArea' => ['id' => 'B']]);
@@ -94,7 +94,7 @@ class PublicInquiryReasonTest extends \PHPUnit_Framework_TestCase
 
     public function testFetchListOptionsEmpty()
     {
-        $mockLicenceService = $this->getMock('\Olcs\Service\Data\Licence');
+        $mockLicenceService = $this->getMock('\Common\Service\Data\Licence');
         $mockLicenceService->expects($this->once())
             ->method('fetchLicenceData')
             ->willReturn(['niFlag'=> true, 'goodsOrPsv' => ['id'=>'lcat_gv'], 'trafficArea' => ['id' => 'B']]);
@@ -108,12 +108,12 @@ class PublicInquiryReasonTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateService()
     {
-        $mockLicenceService = $this->getMock('\Olcs\Service\Data\Licence');
+        $mockLicenceService = $this->getMock('\Common\Service\Data\Licence');
 
         $mockSl = $this->getMock('\Zend\ServiceManager\ServiceManager');
         $mockSl->expects($this->once())
             ->method('get')
-            ->with('Olcs\Service\Data\Licence')
+            ->with('\Common\Service\Data\Licence')
             ->willReturn($mockLicenceService);
 
         $sut = new PublicInquiryReason();

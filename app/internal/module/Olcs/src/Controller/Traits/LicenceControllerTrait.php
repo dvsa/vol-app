@@ -53,8 +53,8 @@ trait LicenceControllerTrait
             $id = $this->params('licence');
         }
 
-        /** @var \Olcs\Service\Data\Licence $dataService */
-        $dataService = $this->getServiceLocator()->get('Olcs\Service\Data\Licence');
+        /** @var \Common\Service\Data\Licence $dataService */
+        $dataService = $this->getServiceLocator()->get('Common\Service\Data\Licence');
         return $dataService->fetchLicenceData($id);
     }
 

@@ -36,7 +36,7 @@ class LicenceTest extends TestCase
         $event = new RouteParam();
         $event->setValue($licenceId);
 
-        $mockLicenceService = m::mock('Olcs\Service\Data\Licence');
+        $mockLicenceService = m::mock('Common\Service\Data\Licence');
         $mockLicenceService->shouldReceive('fetchLicenceData')->with($licenceId)->andReturn($licence);
         $mockLicenceService->shouldReceive('setId')->with($licenceId);
 
@@ -64,14 +64,14 @@ class LicenceTest extends TestCase
 
     public function testCreateService()
     {
-        $mockLicenceService = m::mock('Olcs\Service\Data\Licence');
+        $mockLicenceService = m::mock('Common\Service\Data\Licence');
         $mockViewHelperManager = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockRouter = m::mock('Zend\Mvc\Router\RouteStackInterface');
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
         $mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
-        $mockSl->shouldReceive('get')->with('Olcs\Service\Data\Licence')->andReturn($mockLicenceService);
+        $mockSl->shouldReceive('get')->with('Common\Service\Data\Licence')->andReturn($mockLicenceService);
         $mockSl->shouldReceive('get')->with('Router')->andReturn($mockRouter);
 
         $sut = new Licence();
