@@ -100,7 +100,6 @@ return array(
             'BusFeesPlaceholderController' => 'Olcs\Controller\Bus\Fees\BusFeesPlaceholderController',
             'CaseProcessingController' => 'Olcs\Controller\Cases\Processing\ProcessingController',
             'CaseNoteController' => 'Olcs\Controller\Cases\Processing\NoteController',
-            'CaseDecisionsController' => 'Olcs\Controller\Cases\Processing\DecisionsController',
             'CaseRevokeController' => 'Olcs\Controller\Cases\Processing\RevokeController',
             'LvaApplication' => 'Olcs\Controller\Lva\Application\OverviewController',
             'LvaApplication/TypeOfLicence' => 'Olcs\Controller\Lva\Application\TypeOfLicenceController',
