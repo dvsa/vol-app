@@ -17,7 +17,7 @@ trait CloseActionTrait
     abstract public function renderView($view, $pageTitle = null, $pageSubTitle = null);
 
     /**
-     * Gets the id of the entity to close from the route
+     * Fetches the id of the entity to close from the route based on identifierName
      * @return integer
      */
     public function getIdToClose()
@@ -29,13 +29,17 @@ trait CloseActionTrait
 
     /**
      * Close the entity (calls data service closeEntity())
+     *
+     * @param integer $id|null
      * @return mixed
      */
-    public function closeAction()
+    public function closeAction($id = null)
     {
-        $id = $this->getIdToClose();
+        $id = empty($id) ? $this->getIdToClose($id) : $id;
 
-        $response = $this->confirm('Are you sure you wish to close this ' . $this->getIdentifierName() . '?');
+        $response = $this->confirm(
+            'Are you sure you wish to close this ' . $this->getEntityDisplayName() . '?'
+        );
 
         if ($response instanceof ViewModel) {
             return $this->renderView($response);
@@ -52,12 +56,17 @@ trait CloseActionTrait
 
     /**
      * Reopens an entity and redirects to the index
+     *
+     * @param integer $id|null
+     * @return mixed
      */
-    public function reopenAction()
+    public function reopenAction($id = null)
     {
-        $id = $this->getIdToClose();
+        $id = empty($id) ? $this->getIdToClose($id) : $id;
 
-        $response = $this->confirm('Are you sure you wish to reopen this ' . $this->getIdentifierName() . '?');
+        $response = $this->confirm(
+            'Are you sure you wish to reopen this ' . $this->getEntityDisplayName() . '?'
+        );
 
         if ($response instanceof ViewModel) {
             return $this->renderView($response);
@@ -75,21 +84,40 @@ trait CloseActionTrait
     /**
      * Returns the action array to generate the close/reopen button for a given entity
      *
+     * @param integer $id|null
      * @return array|null
      */
-    public function generateCloseActionButtonArray()
+    public function generateCloseActionButtonArray($id = null)
     {
-        $id = $this->getIdToClose();
+        $id = empty($id) ? $this->getIdToClose($id) : $id;
         $dataService = $this->getDataService();
 
         if ($dataService instanceof CloseableInterface) {
             if ($dataService->canReopen($id)) {
-                return $dataService->getReopenButton($id);
+                return $this->generateButton('reopen');
             }
             if ($dataService->canClose($id)) {
-                return $dataService->getCloseButton($id);
+                return $this->generateButton('close');
             }
         }
         return null;
+    }
+
+    /**
+     * Generate the button array
+     * @param string $action
+     * @return array
+     */
+    public function generateButton($action)
+    {
+        $routeMatch = $this->getServiceLocator()->get('Application')->getMvcEvent()->getRouteMatch();
+        $routeParams = $routeMatch->getParams();
+        $routeParams['action'] = $action;
+
+        return [
+            'label' => ucfirst($action) . ' ' . $this->getEntityDisplayName(),
+            'route' => $routeMatch->getMatchedRouteName(),
+            'params' => $routeParams
+        ];
     }
 }
