@@ -92,7 +92,8 @@ class PiTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->sut->canClose($id));
     }
 
-    public function provideCloseData() {
+    public function provideCloseData()
+    {
         return [
             [
                 [],
