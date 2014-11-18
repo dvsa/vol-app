@@ -8,63 +8,43 @@ namespace Olcs\Service\Data;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * Close Button Trait
+ * Close Entity Trait - contains methods to update the closedField of an entity
  */
 trait CloseableTrait
 {
-
-    protected $entityName;
-
-    public function getCloseButton($id)
+    public function closeEntity($id)
     {
-        $entity = $this->getData($id);
+        $data = $this->fetchData($id);
+        $now = date('Y-m-d H:i:s');
 
-        return [
-            'label' => 'Close ' . $this->getEntityName(),
-            'route' => $this->getEntityName(),
-            'params' => [
-                'case' => $entity['case']['id'],
-                'action' => 'close',
-                $this->getEntityName() => $entity['id']
+        $this->getRestClient()->update(
+            $data['id'],
+            [
+                'data' => json_encode(
+                    [
+                        'version' => $data['version'],
+                        'closedDate' => $now
+                    ]
+                )
             ]
-        ];
+        );
     }
 
-    public function getReopenButton($id)
+    public function reopenEntity($id)
     {
-        $entity = $this->getData($id);
+        $data = $this->fetchData($id);
+        $now = null;
 
-        return [
-            'label' => 'Reopen ' . $this->getEntityName(),
-            'route' => $this->getEntityName(),
-            'params' => [
-                'case' => $entity['case']['id'],
-                'action' => 'reopen',
-                $this->getEntityName() => $entity['id']
+        $this->getRestClient()->update(
+            $data['id'],
+            [
+                'data' => json_encode(
+                    [
+                        'version' => $data['version'],
+                        'closedDate' => $now
+                    ]
+                )
             ]
-        ];
-    }
-
-    /**
-     * Get Entity name
-     * @return string
-     */
-    public function getEntityName()
-    {
-        if (empty($this->entityName)) {
-            $this->setEntityName(strtolower($this->getServiceName()));
-        }
-        return $this->entityName;
-    }
-
-    /**
-     * Set entityName
-     * @param string $entityName
-     * @return $this
-     */
-    public function setEntityName($entityName)
-    {
-        $this->entityName = $entityName;
-        return $this;
+        );
     }
 }

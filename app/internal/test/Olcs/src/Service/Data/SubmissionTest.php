@@ -97,6 +97,39 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
 
     }
 
+    /**
+     *
+     * @dataProvider providerSubmissions
+     * @param $input
+     */
+    public function testExtractSelectedTextOnlySubmissionSectionsData($input)
+    {
+        $mockRefDataService = $this->getMock('Common\Service\Data\RefData');
+
+        $mockSectionRefData = $this->getMockSectionRefData();
+        $mockRefDataService->expects(
+            $this->once()
+        )->method('fetchListOptions')->with('submission_section')
+            ->willReturn($mockSectionRefData);
+
+        $this->sut->setRefDataService($mockRefDataService);
+        $this->sut->setSubmissionConfig(
+            [
+                'sections' => [
+                    'introduction' => [
+                        'section_type' => ['text']
+                    ]
+                ]
+            ]
+        );
+        $result = $this->sut->extractSelectedSubmissionSectionsData($input);
+
+        $this->assertArrayHasKey('introduction', $result);
+        $this->assertArrayHasKey('data', $result['introduction']);
+        $this->assertEmpty($result['introduction']['data']);
+
+    }
+
     public function testGetAllSectionsRefData()
     {
         $mockRefDataService = $this->getMock('Common\Service\Data\RefData');
@@ -186,6 +219,43 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
         $result = $this->sut->createSubmissionSection($input['caseId'], $input['sectionId'], $input['sectionConfig']);
 
         $this->assertEquals($result, $expected['filteredSectionData']);
+    }
+
+    /**
+     *
+     * @dataProvider providerSubmissionSnapshotData
+     * @param $input
+     * @param $expected
+     */
+    public function testGenerateSnapshotData($input, $expected)
+    {
+
+        $result = $this->sut->generateSnapshotData($input['caseId'], $input['data']);
+
+        $this->assertEquals($result, $expected);
+    }
+
+    public function providerSubmissionSnapshotData()
+    {
+        return [
+            [
+                [
+                    'caseId' => 24,
+                    'data' => [
+                        'submissionSections' => [
+                            'sections' => [
+                                'introduction' => 'introduction'
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    'introduction' => [
+                        'data' => []
+                    ]
+                ]
+            ]
+        ];
     }
 
     /**
@@ -320,53 +390,6 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         );
-    }
-
-    public function testCloseEntity()
-    {
-        $id = 99;
-        $mockData = [
-            'id' => $id,
-            'version' => 1
-        ];
-        $mockRestClient = m::mock('Common\Util\RestClient');
-        $mockRestClient->shouldReceive('get')->once()->withAnyArgs()->andReturn($mockData);
-        $mockRestClient->shouldReceive('update')->once()->with(
-            $mockData['id'],
-            m::type('array')
-        )->andReturn($mockData);
-
-        $sut = new Submission();
-        $sut->setRestClient($mockRestClient);
-
-        $this->assertNull($sut->closeEntity($id));
-    }
-
-    public function testReopenEntity()
-    {
-        $id = 99;
-        $mockData = [
-            'id' => $id,
-            'version' => 1
-        ];
-        $mockRestClient = m::mock('Common\Util\RestClient');
-        $mockRestClient->shouldReceive('get')->once()->withAnyArgs()->andReturn($mockData);
-        $mockRestClient->shouldReceive('update')->once()->with(
-            $mockData['id'],
-            [
-                'data' => json_encode(
-                    [
-                        'version' => $mockData['version'],
-                        'closedDate' => null
-                    ]
-                )
-            ]
-        )->andReturnNull();
-
-        $sut = new Submission();
-        $sut->setRestClient($mockRestClient);
-
-        $this->assertNull($sut->reopenEntity($id));
     }
 
     public function testCanClose()

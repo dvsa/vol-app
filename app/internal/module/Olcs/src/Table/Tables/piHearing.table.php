@@ -2,15 +2,20 @@
 
 return array(
     'variables' => array(
-        'title' => 'Hearings'
+        'action_route' => [
+            'route' => 'case_pi',
+            'params' => ['action' => 'details'],
+            'title' => 'Hearings',
+        ],
     ),
     'settings' => array(
         'crud' => array(
             'formName' => 'PublicInquiryHearing',
             'actions' => array(
-                'addHearing' => array('class' => 'primary', 'value' => 'Add'),
-                'editHearing' => array('requireRows' => true, 'value' => 'Edit')
-            )
+                'addHearing' => array('class' => 'primary', 'value' => 'add', 'label' => 'Add'),
+                'editHearing' => array('requireRows' => true, 'value' => 'edit', 'label' => 'Edit')
+            ),
+            'action_field_name' => 'formAction'
         ),
         'paginate' => array(
             'limit' => array(

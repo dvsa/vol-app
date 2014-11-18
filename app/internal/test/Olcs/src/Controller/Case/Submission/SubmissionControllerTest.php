@@ -665,7 +665,9 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $sut = new \Olcs\Controller\Cases\Submission\SubmissionController();
 
         $submissionId = 99;
-        $mockSubmission = ['submissionType' =>
+        $mockSubmission = [
+            'id' => $submissionId,
+            'submissionType' =>
             [
                 'id' => 'foo'
             ]
