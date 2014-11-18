@@ -58,7 +58,7 @@ class SubmissionSectionDetails extends AbstractHelper
         'visibility-access-egress-size'   => 'Olcs\View\Helper\SubmissionSectionOverview',
         'compliance-complaints'   => 'Olcs\View\Helper\SubmissionSectionOverview',
         'environmental-complaints'   => 'Olcs\View\Helper\SubmissionSectionOverview',
-        'oppositions'   => 'Olcs\View\Helper\SubmissionSectionOverview',
+        'oppositions'   => 'SubmissionSectionTable',
         'financial-information'   => 'Olcs\View\Helper\SubmissionSectionOverview',
         'maps'   => 'Olcs\View\Helper\SubmissionSectionOverview',
         'waive-fee-late-fee'   => 'Olcs\View\Helper\SubmissionSectionOverview',

@@ -292,14 +292,19 @@ class Submission extends AbstractData implements CloseableInterface
     {
         $dataToReturnArray = array();
         foreach ($data['application']['oppositions'] as $opposition) {
-
             $thisOpposition['id'] = $opposition['id'];
             $thisOpposition['version'] = $opposition['version'];
             $thisOpposition['dateReceived'] = $opposition['raisedDate'];
+            $thisOpposition['oppositionType'] = $opposition['opposer']['opposerType']['description'];
             $thisOpposition['contactName']['forename'] =
                 $opposition['opposer']['contactDetails']['person']['forename'];
             $thisOpposition['contactName']['familyName'] =
                 $opposition['opposer']['contactDetails']['person']['familyName'];
+
+            foreach ($opposition['grounds'] as $ground) {
+                $thisOpposition['grounds'][] = $ground['grounds']['description'];
+            }
+
             $thisOpposition['isValid'] = $opposition['isValid'];
             $thisOpposition['isCopied'] = $opposition['isCopied'];
             $thisOpposition['isInTime'] = $opposition['isInTime'];

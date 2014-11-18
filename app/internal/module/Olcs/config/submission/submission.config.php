@@ -300,6 +300,11 @@ return array(
                                 'children' => array(
                                     'opposer' => array(
                                         'children' => array(
+                                            'opposerType' => array(
+                                                'properties' => array(
+                                                    'description'
+                                                )
+                                            ),
                                             'contactDetails' => array(
                                                 'children' => array(
                                                     'person' => array(
