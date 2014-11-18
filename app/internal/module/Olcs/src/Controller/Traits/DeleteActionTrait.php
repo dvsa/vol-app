@@ -18,7 +18,7 @@ trait DeleteActionTrait
         $id = $this->params()->fromRoute($identifierName);
 
         $response = $this->confirm(
-            'Are you sure you wish to delete this ' . $this->getEntityDisplayName() . '?'
+            'Are you sure you want to permanently delete this record?'
         );
 
         if ($response instanceof ViewModel) {
