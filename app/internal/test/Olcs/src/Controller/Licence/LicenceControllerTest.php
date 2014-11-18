@@ -523,11 +523,6 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
-     * @NOTE this test mirrors the controller which so far doesn't actually
-     * care about the action; it always redirects to generate. Update the
-     * name of it when/if it cares
-     */
-    /**
      * @group licenceController
      */
     public function testDocumentsActionWithGenerateRedirectsToGenerate()
@@ -545,7 +540,7 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
         $params->expects($this->once())
             ->method('fromPost')
             ->with('action')
-            ->will($this->returnValue('generate'));
+            ->will($this->returnValue('new letter'));
 
         $this->controller->expects($this->once())
             ->method('params')
@@ -570,9 +565,6 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
-     * @NOTE this test mirrors the controller which so far doesn't actually
-     * care about the action; it always redirects to generate. Update the
-     * name of it when/if it cares
      * @group licenceController
      */
     public function testDocumentsActionWithUploadRedirectsToUpload()
