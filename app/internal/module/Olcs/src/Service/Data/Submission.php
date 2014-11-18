@@ -244,14 +244,12 @@ class Submission extends AbstractData implements CloseableInterface
 
         if (isset($sectionConfig['bundle'])) {
             if (is_string($sectionConfig['bundle'])) {
-
                 $rawData = $this->loadCaseSectionData(
                     $caseId,
                     $sectionConfig['bundle'],
                     $this->getSubmissionConfig()['sections'][$sectionConfig['bundle']]
                 );
             } elseif (isset($sectionConfig['service']) && is_array($sectionConfig['bundle'])) {
-
                 $rawData = $this->getApiResolver()->getClient(
                     $sectionConfig['service']
                 )->get(
@@ -260,10 +258,8 @@ class Submission extends AbstractData implements CloseableInterface
                     'bundle' => json_encode($sectionConfig['bundle'])
                     )
                 );
-                return $rawData;
             }
         }
-
         return $rawData;
     }
 
@@ -287,6 +283,33 @@ class Submission extends AbstractData implements CloseableInterface
     private function getFilter()
     {
         return new DashToCamelCase();
+    }
+
+    /**
+     * section oppositions
+     */
+    protected function filterOppositionsData(array $data = array())
+    {
+        $dataToReturnArray = array();
+        foreach ($data['application']['oppositions'] as $opposition) {
+
+            $thisOpposition['id'] = $opposition['id'];
+            $thisOpposition['version'] = $opposition['version'];
+            $thisOpposition['dateReceived'] = $opposition['raisedDate'];
+            $thisOpposition['contactName']['forename'] =
+                $opposition['opposer']['contactDetails']['person']['forename'];
+            $thisOpposition['contactName']['familyName'] =
+                $opposition['opposer']['contactDetails']['person']['familyName'];
+            $thisOpposition['isValid'] = $opposition['isValid'];
+            $thisOpposition['isCopied'] = $opposition['isCopied'];
+            $thisOpposition['isInTime'] = $opposition['isInTime'];
+            $thisOpposition['isPublicInquiry'] = $opposition['isPublicInquiry'];
+            $thisOpposition['isWithdrawn'] = $opposition['isWithdrawn'];
+
+            $dataToReturnArray[] = $thisOpposition;
+        }
+
+        return $dataToReturnArray;
     }
 
     /**
