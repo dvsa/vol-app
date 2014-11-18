@@ -12,12 +12,11 @@
 <div class="dashboard two-thirds">
     <?php echo $this->flashMessengerAll(); ?>
     <?php echo $licences->render(); ?>
-    <div class="actions-container">
+    <div class="actions-container" style="margin-bottom: 3em;">
         <a href="<?php echo $this->url('create_application'); ?>" class="action--primary">
             <?php echo $this->translate('application.new.button'); ?>
         </a>
     </div>
-    <hr />
     <?php echo $variations->render(); ?>
     <?php echo $applications->render(); ?>
 </div>
