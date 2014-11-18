@@ -9,18 +9,43 @@
 ?>
 
 
-<div class="dashboard three-quarters">
+<div class="dashboard two-thirds">
     <?php echo $this->flashMessengerAll(); ?>
     <?php echo $licences->render(); ?>
     <div class="actions-container">
-        <a href="<?php echo $this->url('create_application'); ?>" class="action--primary large">
+        <a href="<?php echo $this->url('create_application'); ?>" class="action--primary">
             <?php echo $this->translate('application.new.button'); ?>
         </a>
     </div>
+    <hr />
     <?php echo $variations->render(); ?>
     <?php echo $applications->render(); ?>
 </div>
 
-<div class="one-quarter">
-    <h3>Notifications</h3>
-</div>
+
+<div class="one-third sidebar">
+
+  <div class="links">
+    <h3>Useful information for operators</h3>
+    <ul class="links-list">
+      <li class="links-list__item"><a href="">Complete your applications for a goods vehicle operator's licence</a></li>
+      <li class="links-list__item"><a href="">Advertise your application for a licence</a></li>
+      <li class="links-list__item"><a href="">Financial information</a></li>
+      <li class="links-list__item"><a href="">A guide to operator fees</a></li>
+      <li class="links-list__item"><a href="">How to draw up a maintenance contract</a></li>
+    </ul>
+  </div><!-- links -->
+
+  <div class="support">
+    <h3>Support</h3>
+    <b>Call: 0113 254 3200</b>
+    <p>Mon to Thurs: 8:30am – 5pm<br />
+       Fri: 8:30am – 4pm
+    </p>
+    <p>Closed at weekend and on public and bank holidays</p>
+    <p>Or email our support team at:<br/>
+    <a href="">operatorlicensing@otc.gov.uk</a>
+    </p>
+  </div><!-- .support -->
+
+</div><!-- .one-third.sidebar -->
