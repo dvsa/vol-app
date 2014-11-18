@@ -1,6 +1,7 @@
 <?php
 
 namespace Olcs\Controller\Traits;
+use Zend\View\Model\ViewModel;
 
 /**
  * Class DeleteActionTrait
@@ -15,9 +16,18 @@ trait DeleteActionTrait
     {
         $identifierName = $this->getIdentifierName();
         $id = $this->params()->fromRoute($identifierName);
+
+        $response = $this->confirm(
+            'Are you sure you wish to delete this ' . $this->getEntityDisplayName() . '?'
+        );
+
+        if ($response instanceof ViewModel) {
+            return $this->renderView($response);
+        }
+
         $this->makeRestCall($this->getDeleteServiceName(), 'DELETE', ['id' => $id]);
 
-        $this->addErrorMessage('Deleted sucessfully');
+        $this->addErrorMessage('Deleted successfully');
 
         $this->redirectToIndex();
     }
