@@ -13,7 +13,7 @@ class DeleteActionTraitTest extends \PHPUnit_Framework_TestCase
     {
         $mockBuilder = $this->getMockBuilder('Olcs\Controller\Traits\DeleteActionTrait');
         $mockBuilder->setMethods(
-            ['params', 'confirm', 'getEntityDisplayName', 'renderView', 'makeRestCall', 'redirectToIndex',
+            ['params', 'confirm', 'renderView', 'makeRestCall', 'redirectToIndex',
         'getDeleteServiceName',
         'addErrorMessage']
         );
@@ -26,7 +26,6 @@ class DeleteActionTraitTest extends \PHPUnit_Framework_TestCase
 
         $sut->expects($this->once())->method('params')->willReturn($mockParams);
         $sut->expects($this->once())->method('confirm')->willReturn($view);
-        $sut->expects($this->once())->method('getEntityDisplayName')->willReturn('test');
         $sut->expects($this->once())->method('renderView')->willReturn('confirm-page');
 
         $this->assertEquals('confirm-page', $sut->deleteAction());
@@ -36,7 +35,7 @@ class DeleteActionTraitTest extends \PHPUnit_Framework_TestCase
     {
         $mockBuilder = $this->getMockBuilder('Olcs\Controller\Traits\DeleteActionTrait');
         $mockBuilder->setMethods(
-            ['params', 'confirm', 'getEntityDisplayName', 'renderView', 'makeRestCall', 'redirectToIndex',
+            ['params', 'confirm', 'renderView', 'makeRestCall', 'redirectToIndex',
                 'getDeleteServiceName',
                 'addErrorMessage']
         );
@@ -52,7 +51,6 @@ class DeleteActionTraitTest extends \PHPUnit_Framework_TestCase
         $sut->expects($this->once())->method('addErrorMessage')->with('Deleted successfully');
         $sut->expects($this->once())->method('redirectToIndex')->willReturn($this->returnValue(null));
         $sut->expects($this->once())->method('confirm')->willReturn($confirmed);
-        $sut->expects($this->once())->method('getEntityDisplayName')->willReturn('test');
         $sut->expects($this->once())
             ->method('makeRestCall')
             ->with($this->equalTo('test'), $this->equalTo('DELETE'), $this->equalTo(['id' => 27]));
