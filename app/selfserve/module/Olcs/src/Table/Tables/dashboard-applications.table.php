@@ -1,19 +1,25 @@
 <?php
 
+$translationPrefix = 'dashboard-table-applications';
+
 return array(
     'variables' => array(
-        'title' => 'Applications'
+        'title' => $translationPrefix
     ),
     'settings' => array(),
     'attributes' => array(),
     'columns' => array(
         array(
-            'title' => '',
-            'width' => 'checkbox',
-            'format' => '{{[elements/radio]}}'
+            'title' => $translationPrefix . '-appId',
+            'formatter' => function ($row) {
+                return '<a href="' . $this->url->fromRoute(
+                    'lva-application',
+                    array('application' => $row['id'])
+                ) . '">'.$row['id'].'</a>';
+            }
         ),
         array(
-            'title' => 'Lic/App number',
+            'title' => $translationPrefix . '-licNo',
             'formatter' => function ($row, $col, $sm) {
                 if (!empty($row['licNo'])) {
                     return $row['licNo'];
@@ -22,26 +28,17 @@ return array(
             }
         ),
         array(
-            'title' => 'App ID',
-            'formatter' => function ($row) {
-                return '<a href="' . $this->url->fromRoute(
-                    'Application',
-                    ['applicationId' => $row['id']]
-                ) . '">'.$row['id'].'</a>';
-            }
-        ),
-        array(
-            'title' => 'Date created',
+            'title' => $translationPrefix . '-createdDate',
             'name' => 'createdOn',
             'formatter' => 'Date'
         ),
         array(
-            'title' => 'Date submitted',
+            'title' => $translationPrefix  . '-submittedDate',
             'name' => 'receivedDate',
             'formatter' => 'Date'
         ),
         array(
-            'title' => 'Status',
+            'title' => $translationPrefix . '-status',
             'name' => 'status',
             'formatter' => 'Translate'
         )

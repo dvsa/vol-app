@@ -3,8 +3,6 @@
 namespace Olcs\Controller\Ebsr;
 
 use Common\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
-use Zend\Http\Response;
 
 /**
  * Class UploadsController
@@ -29,6 +27,7 @@ class UploadsController extends AbstractActionController
 
     public function uploadAction()
     {
+        $this->fieldValues = $this->params()->fromFiles();
         $form = $this->generateFormWithData('EbsrPackUpload', 'processSave');
 
         return $this->getView(['form' => $form]);
@@ -37,11 +36,12 @@ class UploadsController extends AbstractActionController
     public function processSave($data)
     {
         $dataService = $this->getEbsrDataService();
-        $validPacks = $dataService->processPackUpload($data['validData']);
+        $validPacks = $dataService->processPackUpload($data);
 
         if ($validPacks) {
-            $this->addSuccessMessage($validPacks . 'successfully submitted for processing');
-            $this->redirectToIndex();
+            $this->addSuccessMessage(
+                $validPacks . (($validPacks > 1)? ' packs': ' pack'). ' successfully submitted for processing'
+            );
         } else {
             $this->addErrorMessage(
                 'No valid packs were found in your upload, please verify your file and try again'
@@ -55,7 +55,7 @@ class UploadsController extends AbstractActionController
     public function getEbsrDataService()
     {
         /** @var \Olcs\Service\Data\EbsrPack $dataService */
-        $dataService = $this->getServiceLocator()->get('Olcs\Service\Data\EbsrPack');
+        $dataService = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\EbsrPack');
         return $dataService;
     }
 }

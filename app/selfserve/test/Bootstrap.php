@@ -17,32 +17,21 @@ date_default_timezone_set('Europe/London');
  */
 class Bootstrap
 {
-
-    protected static $serviceManager;
+    protected static $config = array();
     protected static $di;
 
     public static function init()
     {
         // Setup the autloader
         $loader = static::initAutoloader();
-        $loader->addPsr4('OlcsTest\\', __DIR__ . '/Olcs');
-        $loader->addPsr4('CommonTest\\', __DIR__ . '/../vendor/olcs/OlcsCommon/application_test/Common/src/Common/');
+        $loader->addPsr4('OlcsTest\\', __DIR__ . '/Olcs/src');
 
         // Grab the application config
         $config = include dirname(__DIR__) . '/config/application.config.php';
 
-        $serviceManager = new ServiceManager(new ServiceManagerConfig());
-        $serviceManager->setService('ApplicationConfig', $config);
-        $serviceManager->get('ModuleManager')->loadModules();
+        self::$config = $config;
 
-        // Mess up the backend, so any real rest calls will fail
-        $config = $serviceManager->get('Config');
-        $serviceManager->setAllowOverride(true);
-        $config['service_api_mapping']['endpoints']['backend'] = 'http://some-fake-backend/';
-        $serviceManager->setService('Config', $config);
-        $serviceManager->setAllowOverride(false);
-
-        static::$serviceManager = $serviceManager;
+        self::getServiceManager();
 
         // Setup Di
         $di = new Di();
@@ -65,7 +54,18 @@ class Bootstrap
 
     public static function getServiceManager()
     {
-        return static::$serviceManager;
+        $serviceManager = new ServiceManager(new ServiceManagerConfig());
+        $serviceManager->setService('ApplicationConfig', self::$config);
+        $serviceManager->get('ModuleManager')->loadModules();
+
+        // Mess up the backend, so any real rest calls will fail
+        $config = $serviceManager->get('Config');
+        $serviceManager->setAllowOverride(true);
+        $config['service_api_mapping']['endpoints']['backend'] = 'http://some-fake-backend/';
+        $serviceManager->setService('Config', $config);
+        $serviceManager->setAllowOverride(false);
+
+        return $serviceManager;
     }
 
     protected static function initAutoloader()
