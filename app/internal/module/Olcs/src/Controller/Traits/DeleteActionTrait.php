@@ -1,6 +1,6 @@
 <?php
-
 namespace Olcs\Controller\Traits;
+
 use Zend\View\Model\ViewModel;
 
 /**
