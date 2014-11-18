@@ -1,8 +1,8 @@
 <?php
-
 namespace OlcsTest\Controller\Traits;
 
 use Zend\View\Model\ViewModel;
+
 /**
  * Class DeleteActionTraitTest
  * @package OlcsTest\Controller\Traits
