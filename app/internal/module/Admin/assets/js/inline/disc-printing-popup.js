@@ -12,7 +12,7 @@ $(function() {
   var discSequence = F('prefix', 'discSequence');
   var startNumber = F('discs-numbering', 'startNumber');
   var endNumber = F('discs-numbering', 'endNumber');
-  var originalEndNumber = F('discs-numbering', 'originalEndNumber');
+  var endNumberIncreased = F('discs-numbering', 'endNumberIncreased');
   var niFlagText = niFlag.filter(':checked').parent().text();
   var operatorTypeText = operatorType.filter(':checked').parent().text();
   var licenceTypeText = licenceType.filter(':checked').parent().text();
@@ -21,10 +21,10 @@ $(function() {
  
   // two variations for the message
   var discsVoided;
-  if (originalEndNumber.val() === endNumber.val()) {
+  if (endNumberIncreased.val() === endNumber.val()) {
       discsVoided = ' with no discs voided.</p>';
   } else {
-      discsVoided = ' with discs ' + originalEndNumber.val() + ' to ' + endNumber.val() + ' voided.</p>';
+      discsVoided = ' with discs ' + (parseInt(endNumberIncreased.val()) + 1) + ' to ' + endNumber.val() + ' voided.</p>';
   }
   
   // custom confirmation modal window, we need separate component for this, ideally
