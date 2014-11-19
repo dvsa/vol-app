@@ -12,21 +12,11 @@ use Common\Service\Table\TableFactory;
  * View helper to render the submission section
  *
  */
-class SubmissionSectionTable extends AbstractHelper
+class SubmissionSectionMultipleTables extends AbstractHelper
 {
-
-    const DEFAULT_VIEW = '/case/submission/section/table';
 
     private $tableBuilder;
 
-    /**
-     * View map
-     *
-     * @var array
-     */
-    protected $viewMap = array(
-        'conviction-fpn-offence-history'
-    );
 
     /**
      * Table config map
@@ -36,7 +26,12 @@ class SubmissionSectionTable extends AbstractHelper
     protected $tableMap = array();
 
     /**
-     * Renders the data for a SubmissionSection details
+     * Renders the data for a SubmissionSection details $data expected consists of multidimentional array:
+     * [
+     * <tableName> => <tableData>,
+     * <tableName> => <tableData>
+     * ...
+     * ]
      *
      * @param  String $submissionSection
      * @param Array $data
@@ -54,23 +49,27 @@ class SubmissionSectionTable extends AbstractHelper
 
     public function render($submissionSection, $data)
     {
-        $params = [];
-        var_dump($data);
+        $html = '';
+        foreach($data['data'] as $subSection => $tableData)
+        {
+            $html .= $this->renderHelper('SubmissionSectionTable', $subSection, ['data' => $tableData]);
+        }
+        var_dump($html);exit;
 
-        $viewTemplate = isset($this->viewMap[$submissionSection]) ?
-            $this->viewMap[$submissionSection] : self::DEFAULT_VIEW;
+        return $html;
+    }
 
-        $tableConfig = isset($this->tableMap[$submissionSection]) ?
-            $this->tableMap[$submissionSection] : 'SubmissionSections/' . $submissionSection;
-var_dump($tableConfig);
-        $data['table'] = $this->getTableBuilder()->buildTable(
-            $tableConfig,
-            ['Results' => $data['data']],
-            $params,
-            false
-        );
-        $data['sectionId'] = $submissionSection;
-        return $this->getView()->render($viewTemplate, ['data' => $data]);
+    /**
+     * Render element by helper name
+     *
+     * @param string $name
+     * @param ElementInterface $element
+     * @return string
+     */
+    protected function renderHelper($name, $submissionSection, $data)
+    {
+        $helper = $this->getView()->plugin($name);
+        return $helper($submissionSection, $data);
     }
 
     public function setTableBuilder(TableFactory $tableBuilder)

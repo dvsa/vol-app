@@ -590,7 +590,7 @@ class Submission extends AbstractData implements CloseableInterface
                     return strtotime($b['createdOn']) - strtotime($a['createdOn']);
                 }
             );
-            //var_dump($data);
+
             foreach ($data['conditionUndertakings'] as $entity) {
                 $thisEntity = array();
                 $thisEntity['id'] = $entity['id'];

@@ -27,7 +27,7 @@ class SubmissionSectionDetails extends AbstractHelper
         'most-serious-infringement'   => 'Olcs\View\Helper\SubmissionSectionOverview',
         'persons'   => 'SubmissionSectionTable',
         'operating-centres'   => 'Olcs\View\Helper\SubmissionSectionOverview',
-        'conditions-and-undertakings'   => 'Olcs\View\Helper\SubmissionSectionOverview',
+        'conditions-and-undertakings'   => 'SubmissionSectionMultipleTables',
         'intelligence-unit-check'   => 'Olcs\View\Helper\SubmissionSectionOverview',
         'interim'   => 'Olcs\View\Helper\SubmissionSectionOverview',
         'advertisement'   => 'Olcs\View\Helper\SubmissionSectionOverview',
