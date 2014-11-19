@@ -218,7 +218,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
 
         $result = $this->sut->createSubmissionSection($input['caseId'], $input['sectionId'], $input['sectionConfig']);
 
-        $this->assertEquals($result, $expected['filteredSectionData']);
+        $this->assertEquals($result, $expected['expected']);
     }
 
     /**
@@ -488,7 +488,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                             ]
                         ]
                     ],
-                    'filteredSectionData' => [
+                    'expected' => [
                         0 => [
                             'id' => 1,
                             'offenceDate' => '2012-03-10T00:00:00+0000',
@@ -537,7 +537,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                     'loadedCaseSectionData' => [
                         'description' => 'test description'
                     ],
-                    'filteredSectionData' => [
+                    'expected' => [
                         'outline' => 'test description',
                     ]
                 ]
@@ -553,7 +553,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                 ],
                 [ // expected
                     'loadedCaseSectionData' => $this->getCaseSummaryMockData(),
-                    'filteredSectionData' => [
+                    'expected' => [
                         'id' => 24,
                         'organisationName' => 'John Smith Haulage Ltd.',
                         'isMlh' => 'Y',
@@ -572,6 +572,72 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                         'vehiclesInPossession' => 4,
                         'trailersInPossession' => 4,
 
+                    ]
+                ]
+            ],
+            [   // opposition section
+                [
+                    'caseId' => 24,
+                    'sectionId' => 'oppositions',
+                    'sectionConfig' => [
+                        'service' => 'Cases',
+                        'bundle' => ['some_bundle'],
+                    ]
+                ],
+                [
+                    'loadedCaseSectionData' => [
+                        'application' => [
+                            'oppositions' => [
+                                0 => [
+                                    'id' => 1,
+                                    'version' => 1,
+                                    'raisedDate' => '2012-03-10T00:00:00+0000',
+                                    'opposer' => [
+                                        'opposerType' => [
+                                            'description' => 'foo'
+                                        ],
+                                        'contactDetails' => [
+                                            'person' => [
+                                                'forename' => 'John',
+                                                'familyName' => 'Smith'
+                                            ]
+                                        ]
+                                    ],
+                                    'grounds' => [
+                                        0 => [
+                                            'grounds' => [
+                                                'description' => 'bar'
+                                            ]
+                                        ]
+                                    ],
+                                    'isValid' => 'Y',
+                                    'isCopied' => 'Y',
+                                    'isInTime' => 'Y',
+                                    'isPublicInquiry' => 'Y',
+                                    'isWithdrawn' => 'N'
+                                ]
+                            ]
+                        ]
+                    ],
+                    'expected' => [
+                        0 => [
+                            'id' => 1,
+                            'version' => 1,
+                            'dateReceived' => '2012-03-10T00:00:00+0000',
+                            'oppositionType' => 'foo',
+                            'contactName' => [
+                                'forename' => 'John',
+                                'familyName' => 'Smith'
+                            ],
+                            'grounds' => [
+                                'bar'
+                            ],
+                            'isValid' => 'Y',
+                            'isCopied' => 'Y',
+                            'isInTime' => 'Y',
+                            'isPublicInquiry' => 'Y',
+                            'isWithdrawn' => 'N'
+                        ]
                     ]
                 ]
             ]
