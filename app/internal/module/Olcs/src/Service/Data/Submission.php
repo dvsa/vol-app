@@ -315,7 +315,7 @@ class Submission extends AbstractData implements CloseableInterface
                 $dataToReturnArray[] = $thisOpposition;
             }
         }
-        
+
         return $dataToReturnArray;
     }
 
