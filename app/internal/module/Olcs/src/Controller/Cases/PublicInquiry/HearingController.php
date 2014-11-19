@@ -4,6 +4,7 @@ namespace Olcs\Controller\Cases\PublicInquiry;
 
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
+use Common\Data\Object\Publication as PublicationObject;
 
 use Zend\View\Model\ViewModel;
 
@@ -168,7 +169,30 @@ class HearingController extends OlcsController\CrudAbstract
 
         $this->addTask($data);
 
-        return parent::processSave($data);
+        $savedData = parent::processSave($data, false);
+
+        $hearingData = $data['fields'];
+
+        //if this was an add we need the id of the new record
+        if (!isset($hearingData['id'])) {
+            $hearingData['id'] = $savedData['id'];
+        }
+
+        $this->publish($hearingData);
+
+        return $this->redirectToIndex();
+    }
+
+    private function publish($hearingData)
+    {
+        $service = $this->getServiceLocator()->get('Common\Service\Data\PublicationLink');
+        $publicationLink = $service->createEmpty();
+        $publicationLink->exchangeArray(
+            array_merge((array)$publicationLink->getArrayCopy(), ['pi' => $hearingData['pi']])
+        );
+        $publicationLink->offsetSet('hearingData', $hearingData);
+
+        return $service->createPublicationLink($publicationLink, 'HearingPublicationFilter');
     }
 
     public function addTask(array $data)
