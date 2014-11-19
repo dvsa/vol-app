@@ -106,6 +106,58 @@ return array(
             'section_type' => ['list'],
             'section_editable' => false,
             'allow_comments' => true,
+            'service' => 'Cases',
+            'bundle' => array(
+                'properties' => array('id'),
+                'children' => array(
+                    'conditionUndertakings' => array(
+                        'properties' => 'ALL',
+                        'children' => array(
+                            'case' => array(
+                                'properties' => array('id')
+                            ),
+                            'prohibitionType' => array(
+                                'properties' => array(
+                                    'id',
+                                    'description'
+                                )
+                            ),
+                            'attachedTo' => array(
+                                'properties' => array('id', 'description')
+                            ),
+                            'conditionType' => array(
+                                'properties' => array('id', 'description')
+                            ),
+                            'operatingCentre' => array(
+                                'properties' => array('id'),
+                                'children' => array(
+                                    'address' => array(
+                                        'properties' => array(
+
+                                            'addressLine1',
+                                            'addressLine2',
+                                            'addressLine3',
+                                            'addressLine4',
+                                            'town',
+                                            'postcode'
+                                        ),
+                                        'children' => array(
+                                            'countryCode' => array(
+                                                'properties' => array(
+                                                    'id'
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            ),
+                            'addedVia' => array(
+                                'properties' => array('id', 'description')
+                            ),
+                        )
+                    )
+                )
+            )
         ),
         'intelligence-unit-check'   => array(
             'section_type' => [],

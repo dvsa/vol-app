@@ -576,6 +576,55 @@ class Submission extends AbstractData implements CloseableInterface
     }
 
     /**
+     * section oppositions
+     */
+    protected function filterConditionsAndUndertakingsData(array $data = array())
+    {
+
+        $dataToReturnArray = array();
+        if (isset($data['conditionUndertakings']) && is_array($data['conditionUndertakings'])) {
+
+            usort(
+                $data['conditionUndertakings'],
+                function ($a, $b) {
+                    return strtotime($b['createdOn']) - strtotime($a['createdOn']);
+                }
+            );
+            //var_dump($data);
+            foreach ($data['conditionUndertakings'] as $entity) {
+                $thisEntity = array();
+                $thisEntity['id'] = $entity['id'];
+                $thisEntity['version'] = $entity['version'];
+                $thisEntity['addedVia'] = $entity['addedVia']['description'] . ' ' . $entity['case']['id'];
+                $thisEntity['isFulfilled'] = $entity['isFulfilled'];
+                $thisEntity['status'] = $entity['isApproved'];
+                $thisEntity['attachedTo'] = $entity['attachedTo']['description'];
+
+                if (empty($thisEntity['operatingCentre'])) {
+                    $thisEntity['OcAddress'] = '';
+                } else {
+                    $thisEntity['OcAddress'] = implode(
+                        ',',
+                        [
+                            $entity['operatingCentre']['address']['address']['addressLine1'],
+                            $entity['operatingCentre']['address']['address']['addressLine2'],
+                            $entity['operatingCentre']['address']['address']['addressLine3'],
+                            $entity['operatingCentre']['address']['address']['addressLine4'],
+                            $entity['operatingCentre']['address']['address']['town'],
+                            $entity['operatingCentre']['address']['address']['postcode'],
+                            $entity['operatingCentre']['address']['address']['countryCode']['id']
+                        ]
+                    );
+                }
+                $tableName = $entity['conditionType']['id'] == 'cdt_und' ? 'undertakings' : 'conditions';
+                $dataToReturnArray[$tableName][] = $thisEntity;
+            }
+        }
+
+        return $dataToReturnArray;
+    }
+
+    /**
      * Can this entity be closed
      * @param $id
      * @return bool
