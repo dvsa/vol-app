@@ -244,14 +244,12 @@ class Submission extends AbstractData implements CloseableInterface
 
         if (isset($sectionConfig['bundle'])) {
             if (is_string($sectionConfig['bundle'])) {
-
                 $rawData = $this->loadCaseSectionData(
                     $caseId,
                     $sectionConfig['bundle'],
                     $this->getSubmissionConfig()['sections'][$sectionConfig['bundle']]
                 );
             } elseif (isset($sectionConfig['service']) && is_array($sectionConfig['bundle'])) {
-
                 $rawData = $this->getApiResolver()->getClient(
                     $sectionConfig['service']
                 )->get(
@@ -260,10 +258,8 @@ class Submission extends AbstractData implements CloseableInterface
                     'bundle' => json_encode($sectionConfig['bundle'])
                     )
                 );
-                return $rawData;
             }
         }
-
         return $rawData;
     }
 
@@ -287,6 +283,55 @@ class Submission extends AbstractData implements CloseableInterface
     private function getFilter()
     {
         return new DashToCamelCase();
+    }
+
+    /**
+     * section oppositions
+     */
+    protected function filterOppositionsData(array $data = array())
+    {
+        $dataToReturnArray = array();
+        if (isset($data['application']['oppositions']) && is_array($data['application']['oppositions'])) {
+
+            usort(
+                $data['application']['oppositions'],
+                function ($a, $b) {
+                    return strnatcmp($b['oppositionType']['description'], $a['oppositionType']['description']);
+                }
+            );
+            usort(
+                $data['application']['oppositions'],
+                function ($a, $b) {
+                    return strtotime($b['raisedDate']) - strtotime($a['raisedDate']);
+                }
+            );
+
+            foreach ($data['application']['oppositions'] as $opposition) {
+                $thisOpposition = array();
+                $thisOpposition['id'] = $opposition['id'];
+                $thisOpposition['version'] = $opposition['version'];
+                $thisOpposition['dateReceived'] = $opposition['raisedDate'];
+                $thisOpposition['oppositionType'] = $opposition['oppositionType']['description'];
+                $thisOpposition['contactName']['forename'] =
+                    $opposition['opposer']['contactDetails']['person']['forename'];
+                $thisOpposition['contactName']['familyName'] =
+                    $opposition['opposer']['contactDetails']['person']['familyName'];
+
+                foreach ($opposition['grounds'] as $ground) {
+                    $thisOpposition['grounds'][] = $ground['grounds']['description'];
+                }
+
+                $thisOpposition['isValid'] = $opposition['isValid'];
+                $thisOpposition['isCopied'] = $opposition['isCopied'];
+                $thisOpposition['isInTime'] = $opposition['isInTime'];
+                $thisOpposition['isPublicInquiry'] = $opposition['isPublicInquiry'];
+                $thisOpposition['isWithdrawn'] = $opposition['isWithdrawn'];
+
+                $dataToReturnArray[] = $thisOpposition;
+            }
+        }
+
+        return $dataToReturnArray;
     }
 
     /**
@@ -337,31 +382,40 @@ class Submission extends AbstractData implements CloseableInterface
      */
     protected function filterConvictionFpnOffenceHistoryData($data = array())
     {
-        $dataToReturnArray = array();
+        if (isset($data['convictions'])) {
+            usort(
+                $data['convictions'],
+                function ($a, $b) {
+                    return strtotime($b['convictionDate']) - strtotime($a['convictionDate']);
+                }
+            );
 
-        foreach ($data['convictions'] as $conviction) {
-            $thisConviction['id'] = $conviction['id'];
-            $thisConviction['offenceDate'] = $conviction['offenceDate'];
-            $thisConviction['convictionDate'] = $conviction['convictionDate'];
-            $thisConviction['defendantType'] = $conviction['defendantType'];
+            $dataToReturnArray = array();
 
-            if ($conviction['defendantType']['id'] == 'def_t_op') {
-                $thisConviction['name'] = $conviction['operatorName'];
-            } else {
-                $thisConviction['name'] = $conviction['personFirstname'] . ' ' . $conviction['personLastname'];
+            foreach ($data['convictions'] as $conviction) {
+                $thisConviction = array();
+                $thisConviction['id'] = $conviction['id'];
+                $thisConviction['offenceDate'] = $conviction['offenceDate'];
+                $thisConviction['convictionDate'] = $conviction['convictionDate'];
+                $thisConviction['defendantType'] = $conviction['defendantType'];
+
+                if ($conviction['defendantType']['id'] == 'def_t_op') {
+                    $thisConviction['name'] = $conviction['operatorName'];
+                } else {
+                    $thisConviction['name'] = $conviction['personFirstname'] . ' ' . $conviction['personLastname'];
+                }
+
+                $thisConviction['categoryText'] = $conviction['categoryText'];
+                $thisConviction['court'] = $conviction['court'];
+                $thisConviction['penalty'] = $conviction['penalty'];
+                $thisConviction['msi'] = $conviction['msi'];
+                $thisConviction['isDeclared'] = !empty($conviction['isDeclared']) ?
+                    $conviction['isDeclared'] : 'N';
+                $thisConviction['isDealtWith'] = !empty($conviction['isDealtWith']) ?
+                    $conviction['isDealtWith'] : 'N';
+                $dataToReturnArray[] = $thisConviction;
             }
-
-            $thisConviction['categoryText'] = $conviction['categoryText'];
-            $thisConviction['court'] = $conviction['court'];
-            $thisConviction['penalty'] = $conviction['penalty'];
-            $thisConviction['msi'] = $conviction['msi'];
-            $thisConviction['isDeclared'] = !empty($conviction['isDeclared']) ?
-                $conviction['isDeclared'] : 'N';
-            $thisConviction['isDealtWith'] = !empty($conviction['isDealtWith']) ?
-                $conviction['isDealtWith'] : 'N';
-            $dataToReturnArray[] = $thisConviction;
         }
-
         return $dataToReturnArray;
     }
 
@@ -374,16 +428,23 @@ class Submission extends AbstractData implements CloseableInterface
     {
         $dataToReturnArray = array();
 
-        foreach ($data['licence']['organisation']['organisationPersons'] as $organisationOwner) {
-            $thisOrganisationOwner['id'] = $organisationOwner['person']['id'];
-            $thisOrganisationOwner['title'] = $organisationOwner['person']['title'];
-            $thisOrganisationOwner['familyName'] = $organisationOwner['person']['familyName'];
-            $thisOrganisationOwner['forename'] = $organisationOwner['person']['forename'];
-            $thisOrganisationOwner['birthDate'] = $organisationOwner['person']['birthDate'];
-            $dataToReturnArray[] = $thisOrganisationOwner;
+        if ($data['licence']['organisation']['organisationPersons']) {
+            usort(
+                $data['licence']['organisation']['organisationPersons'],
+                function ($a, $b) {
+                    return strnatcmp($a['person']['forename'], $b['person']['forename']);
+                }
+            );
+            foreach ($data['licence']['organisation']['organisationPersons'] as $organisationOwner) {
+                $thisOrganisationOwner['id'] = $organisationOwner['person']['id'];
+                $thisOrganisationOwner['title'] = $organisationOwner['person']['title'];
+                $thisOrganisationOwner['familyName'] = $organisationOwner['person']['familyName'];
+                $thisOrganisationOwner['forename'] = $organisationOwner['person']['forename'];
+                $thisOrganisationOwner['birthDate'] = $organisationOwner['person']['birthDate'];
+                $dataToReturnArray[] = $thisOrganisationOwner;
 
+            }
         }
-
         return $dataToReturnArray;
     }
 
@@ -396,7 +457,7 @@ class Submission extends AbstractData implements CloseableInterface
         $dataToReturnArray = array();
 
         foreach ($data['licence']['transportManagerLicences'] as $TmLicence) {
-
+            $thisTmLicence = array();
             $thisTmLicence['familyName'] = $TmLicence['transportManager']['contactDetails']['person']['familyName'];
             $thisTmLicence['forename'] = $TmLicence['transportManager']['contactDetails']['person']['forename'];
             $thisTmLicence['tmType'] = $TmLicence['transportManager']['tmType'];
