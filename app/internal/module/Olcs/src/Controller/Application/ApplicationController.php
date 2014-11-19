@@ -97,10 +97,8 @@ class ApplicationController extends AbstractController
      */
     public function processingAction()
     {
-        $view = new ViewModel();
-        $view->setTemplate('application/index');
-
-        return $this->render($view);
+        // only page in processing for now, which is tasks
+        $this->redirectToRoute('lva-application/processing/tasks', [], [], true);
     }
 
     public function grantAction()

@@ -100,4 +100,46 @@ trait ApplicationControllerTrait
             'status' => $data['status']['id']
         );
     }
+
+    /**
+     * Gets the application by ID.
+     *
+     * @param integer $id
+     * @return array
+     */
+    protected function getApplication($id = null)
+    {
+        if (is_null($id)) {
+            $id = $this->params('application');
+        }
+
+        /** @var \Common\Service\Data\Licence $dataService */
+        $dataService = $this->getServiceLocator()->get('Common\Service\Data\Application');
+        return $dataService->fetchApplicationData($id);
+    }
+
+    /**
+     * Get view with application
+     *
+     * @param array $variables
+     * @return \Zend\View\Model\ViewModel
+     */
+    protected function getViewWithApplication($variables = array())
+    {
+        $application = $this->getApplication();
+        // if ($application['goodsOrPsv']['id'] == LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE) {
+        //     $this->getServiceLocator()->get('Navigation')->findOneBy('id', 'licence_bus')->setVisible(0);
+        // }
+
+        $variables['application'] = $application;
+        $view = $this->getView($variables);
+
+        $titlePrefix = $this->getServiceLocator()->get('Helper\Translation')
+            ->translate('internal-application.application-no');
+        $this->pageTitle = $titlePrefix . ' ' . $application['id'];
+        $this->pageSubTitle = $application['status']['description'];
+
+        return $view;
+    }
+
 }

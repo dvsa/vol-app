@@ -76,6 +76,7 @@ return array(
             'Olcs\Controller\Licence\Details\ConditionUndertakingController',
             'LicenceDetailsTaxiPhvController' => 'Olcs\Controller\Licence\Details\TaxiPhvController',
             'ApplicationController' => 'Olcs\Controller\Application\ApplicationController',
+            'ApplicationProcessingTasksController' => 'Olcs\Controller\Application\Processing\ApplicationProcessingTasksController',
             'LicenceProcessingOverviewController' =>
             'Olcs\Controller\Licence\Processing\LicenceProcessingOverviewController',
             'LicenceProcessingTasksController' => 'Olcs\Controller\Licence\Processing\LicenceProcessingTasksController',
