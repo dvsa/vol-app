@@ -490,22 +490,6 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                     ],
                     'expected' => [
                         0 => [
-                            'id' => 1,
-                            'offenceDate' => '2012-03-10T00:00:00+0000',
-                            'convictionDate' => '2012-06-15T00:00:00+0100',
-                            'name' => 'John Smith Haulage Ltd.',
-                            'categoryText' => null,
-                            'court' => 'FPN',
-                            'penalty' => '3 points on licence',
-                            'msi' => 'N',
-                            'isDeclared' => 'N',
-                            'isDealtWith' => 'N',
-                            'defendantType' => [
-                                'id' => 'def_t_op',
-                                'description' => 'Operator'
-                            ],
-                        ],
-                        1 => [
                             'id' => 2,
                             'offenceDate' => '2012-03-10T00:00:00+0000',
                             'convictionDate' => '2012-06-15T00:00:00+0100',
@@ -519,6 +503,22 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                             'defendantType' => [
                                 'id' => 'def_t_owner',
                                 'description' => 'Owner'
+                            ],
+                        ],
+                        1 => [
+                            'id' => 1,
+                            'offenceDate' => '2012-03-10T00:00:00+0000',
+                            'convictionDate' => '2012-06-15T00:00:00+0100',
+                            'name' => 'John Smith Haulage Ltd.',
+                            'categoryText' => null,
+                            'court' => 'FPN',
+                            'penalty' => '3 points on licence',
+                            'msi' => 'N',
+                            'isDeclared' => 'N',
+                            'isDealtWith' => 'N',
+                            'defendantType' => [
+                                'id' => 'def_t_op',
+                                'description' => 'Operator'
                             ],
                         ]
                     ]
@@ -659,14 +659,14 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                 [
                     'loadedCaseSectionData' => $this->getCaseSummaryMockData(),
                     'filteredSectionData' => [
-                        0 => [
+                        1 => [
                             'id' => 1,
                             'title' => '',
                             'forename' => 'Tom',
                             'familyName' => 'Jones',
                             'birthDate' => '1972-02-15T00:00:00+0100',
                         ],
-                        1 => [
+                        0 => [
                             'id' => 2,
                             'title' => '',
                             'forename' => 'Keith',
