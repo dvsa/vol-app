@@ -307,6 +307,7 @@ class Submission extends AbstractData implements CloseableInterface
             );
 
             foreach ($data['application']['oppositions'] as $opposition) {
+                $thisOpposition = array();
                 $thisOpposition['id'] = $opposition['id'];
                 $thisOpposition['version'] = $opposition['version'];
                 $thisOpposition['dateReceived'] = $opposition['raisedDate'];
@@ -392,6 +393,7 @@ class Submission extends AbstractData implements CloseableInterface
             $dataToReturnArray = array();
 
             foreach ($data['convictions'] as $conviction) {
+                $thisConviction = array();
                 $thisConviction['id'] = $conviction['id'];
                 $thisConviction['offenceDate'] = $conviction['offenceDate'];
                 $thisConviction['convictionDate'] = $conviction['convictionDate'];
@@ -455,7 +457,7 @@ class Submission extends AbstractData implements CloseableInterface
         $dataToReturnArray = array();
 
         foreach ($data['licence']['transportManagerLicences'] as $TmLicence) {
-
+            $thisTmLicence = array();
             $thisTmLicence['familyName'] = $TmLicence['transportManager']['contactDetails']['person']['familyName'];
             $thisTmLicence['forename'] = $TmLicence['transportManager']['contactDetails']['person']['forename'];
             $thisTmLicence['tmType'] = $TmLicence['transportManager']['tmType'];

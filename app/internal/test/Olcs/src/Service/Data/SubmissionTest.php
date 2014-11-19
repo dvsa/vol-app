@@ -606,7 +606,35 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                                     'grounds' => [
                                         0 => [
                                             'grounds' => [
-                                                'description' => 'bar'
+                                                'description' => 'bar1'
+                                            ]
+                                        ]
+                                    ],
+                                    'isValid' => 'Y',
+                                    'isCopied' => 'Y',
+                                    'isInTime' => 'Y',
+                                    'isPublicInquiry' => 'Y',
+                                    'isWithdrawn' => 'N'
+                                ],
+                                1 => [
+                                    'id' => 2,
+                                    'version' => 1,
+                                    'raisedDate' => '2012-02-10T00:00:00+0000',
+                                    'oppositionType' => [
+                                        'description' => 'foo'
+                                    ],
+                                    'opposer' => [
+                                        'contactDetails' => [
+                                            'person' => [
+                                                'forename' => 'Bob',
+                                                'familyName' => 'Smith'
+                                            ]
+                                        ]
+                                    ],
+                                    'grounds' => [
+                                        0 => [
+                                            'grounds' => [
+                                                'description' => 'bar2'
                                             ]
                                         ]
                                     ],
@@ -630,7 +658,25 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                                 'familyName' => 'Smith'
                             ],
                             'grounds' => [
-                                'bar'
+                                'bar1'
+                            ],
+                            'isValid' => 'Y',
+                            'isCopied' => 'Y',
+                            'isInTime' => 'Y',
+                            'isPublicInquiry' => 'Y',
+                            'isWithdrawn' => 'N'
+                        ],
+                        1 => [
+                            'id' => 2,
+                            'version' => 1,
+                            'dateReceived' => '2012-02-10T00:00:00+0000',
+                            'oppositionType' => 'foo',
+                            'contactName' => [
+                                'forename' => 'Bob',
+                                'familyName' => 'Smith'
+                            ],
+                            'grounds' => [
+                                'bar2'
                             ],
                             'isValid' => 'Y',
                             'isCopied' => 'Y',

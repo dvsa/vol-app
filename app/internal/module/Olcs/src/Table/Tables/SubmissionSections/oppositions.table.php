@@ -57,7 +57,7 @@ return array(
         ),
         array(
             'title' => 'Copied',
-            'name' => 'copied'
+            'name' => 'isCopied'
         ),
         array(
             'title' => 'In time',
