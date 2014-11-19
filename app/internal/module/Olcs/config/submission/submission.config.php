@@ -298,13 +298,13 @@ return array(
                         'children' => array(
                             'oppositions' => array(
                                 'children' => array(
+                                    'oppositionType' => array(
+                                        'properties' => array(
+                                            'description'
+                                        )
+                                    ),
                                     'opposer' => array(
                                         'children' => array(
-                                            'opposerType' => array(
-                                                'properties' => array(
-                                                    'description'
-                                                )
-                                            ),
                                             'contactDetails' => array(
                                                 'children' => array(
                                                     'person' => array(

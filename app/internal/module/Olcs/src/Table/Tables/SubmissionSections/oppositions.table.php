@@ -38,7 +38,6 @@ return array(
                     true
                 ) . '">' . $this->callFormatter($column, $data) . '</a>';
             },
-            'sort' => 'raisedDate',
         ),
         array(
             'title' => 'Contact name',
