@@ -592,10 +592,10 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                                     'id' => 1,
                                     'version' => 1,
                                     'raisedDate' => '2012-03-10T00:00:00+0000',
+                                    'oppositionType' => [
+                                        'description' => 'foo'
+                                    ],
                                     'opposer' => [
-                                        'opposerType' => [
-                                            'description' => 'foo'
-                                        ],
                                         'contactDetails' => [
                                             'person' => [
                                                 'forename' => 'John',

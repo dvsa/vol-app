@@ -293,12 +293,18 @@ class Submission extends AbstractData implements CloseableInterface
         $dataToReturnArray = array();
         if (isset($data['application']['oppositions']) && is_array($data['application']['oppositions'])) {
 
-            usort($data['application']['oppositions'], function($a, $b) {
-                return strnatcmp($b['oppositionType']['description'], $a['oppositionType']['description']);
-            });
-            usort($data['application']['oppositions'], function($a, $b) {
-                return strtotime($b['raisedDate']) - strtotime($a['raisedDate']);
-            });
+            usort(
+                $data['application']['oppositions'],
+                function ($a, $b) {
+                    return strnatcmp($b['oppositionType']['description'], $a['oppositionType']['description']);
+                }
+            );
+            usort(
+                $data['application']['oppositions'],
+                function ($a, $b) {
+                    return strtotime($b['raisedDate']) - strtotime($a['raisedDate']);
+                }
+            );
 
             foreach ($data['application']['oppositions'] as $opposition) {
                 $thisOpposition['id'] = $opposition['id'];
@@ -376,9 +382,12 @@ class Submission extends AbstractData implements CloseableInterface
     protected function filterConvictionFpnOffenceHistoryData($data = array())
     {
         if (isset($data['convictions'])) {
-            usort($data['convictions'], function($a, $b) {
-                return strtotime($b['convictionDate']) - strtotime($a['convictionDate']);
-            });
+            usort(
+                $data['convictions'],
+                function ($a, $b) {
+                    return strtotime($b['convictionDate']) - strtotime($a['convictionDate']);
+                }
+            );
 
             $dataToReturnArray = array();
 
@@ -418,9 +427,12 @@ class Submission extends AbstractData implements CloseableInterface
         $dataToReturnArray = array();
 
         if ($data['licence']['organisation']['organisationPersons']) {
-            usort($data['licence']['organisation']['organisationPersons'], function($a, $b) {
-                return strnatcmp($a['person']['forename'], $b['person']['forename']);
-            });
+            usort(
+                $data['licence']['organisation']['organisationPersons'],
+                function ($a, $b) {
+                    return strnatcmp($a['person']['forename'], $b['person']['forename']);
+                }
+            );
             foreach ($data['licence']['organisation']['organisationPersons'] as $organisationOwner) {
                 $thisOrganisationOwner['id'] = $organisationOwner['person']['id'];
                 $thisOrganisationOwner['title'] = $organisationOwner['person']['title'];
