@@ -113,7 +113,8 @@ class HearingController extends OlcsController\CrudAbstract
             ],
             'pi' => [
                 'properties' => [
-                    'id'
+                    'id',
+                    'agreedDate'
                 ],
             ],
         ]
@@ -140,6 +141,19 @@ class HearingController extends OlcsController\CrudAbstract
     {
         $data = parent::getDataForForm();
         $data['fields']['pi'] = $this->getFromRoute('pi');
+
+        return $data;
+    }
+
+    public function processLoad($data)
+    {
+
+        $data['piDate'] = $data['pi']['agreedDate'];
+
+        $data = parent::processLoad($data);
+        //die('<pre>' . print_r($data, 1));
+
+        $this->getServiceLocator()->get('Common\Service\Data\Sla')->setContext('pi_hearing', $data);
 
         return $data;
     }
