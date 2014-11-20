@@ -370,9 +370,10 @@ class DiscPrintingController extends AbstractController
          */
         $retv['endNumberIncreased'] = $retv['endNumber'];
         if ($retv['endNumber']) {
-            while (($retv['endNumber'] - $originalStartNumber + 1) % self::DISCS_ON_PAGE) {
-                $retv['endNumber']++;
-            }
+            $retv['endNumber'] =
+                $retv['startNumber'] +
+                $retv['discsToPrint'] +
+                ((6 - $retv['discsToPrint'] % self::DISCS_ON_PAGE) % 6) - 1;
         }
         $retv['totalPages'] = $retv['discsToPrint'] ?
             (ceil(($retv['endNumber'] - $originalStartNumber) / self::DISCS_ON_PAGE)) -

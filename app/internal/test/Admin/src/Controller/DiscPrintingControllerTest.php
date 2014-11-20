@@ -482,7 +482,7 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
         $expectedNumbering = [
             'startNumber' => 3,
             'discsToPrint' => 2,
-            'endNumber' => 7,
+            'endNumber' => 8,
             'endNumberIncreased' => 4,
             'originalEndNumber' => 3,
             'totalPages' => 1
