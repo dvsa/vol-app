@@ -2,10 +2,9 @@
 
 return array(
     'variables' => array(
-        'title' => 'Conditions',
         'action_route' => [
             'route' => 'submission_update_table',
-            'params' => ['section' => 'conditions']
+            'params' => ['section' => 'conditions-and-undertakings', 'subSection' => 'conditions']
         ],
     ),
     'settings' => array(
