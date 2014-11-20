@@ -10,7 +10,7 @@ use Olcs\Helper\ApplicationProcessingHelper;
 use Zend\Navigation\Navigation;
 
 /**
- * Abstract Applcation Processing Controller
+ * Abstract Application Processing Controller
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */

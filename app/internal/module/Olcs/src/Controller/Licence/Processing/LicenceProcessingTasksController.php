@@ -28,8 +28,8 @@ class LicenceProcessingTasksController extends AbstractLicenceProcessingControll
 
         $filters = $this->mapTaskFilters(
             array(
-                'linkId' => $this->getFromRoute('licence'),
-                'linkType' => 'Licence',
+                'linkId'         => $this->getFromRoute('licence'),
+                'linkType'       => 'Licence',
                 'assignedToTeam' => '',
                 'assignedToUser' => ''
             )
@@ -37,8 +37,7 @@ class LicenceProcessingTasksController extends AbstractLicenceProcessingControll
 
         $table = $this->getTaskTable($filters, false);
 
-        // the table's nearly all good except we don't want
-        // a couple of columns
+        // the table's nearly all good except we don't want a couple of columns
         $table->removeColumn('name');
         $table->removeColumn('link');
 
@@ -46,16 +45,10 @@ class LicenceProcessingTasksController extends AbstractLicenceProcessingControll
 
         $this->loadScripts(['tasks', 'table-actions']);
 
-        $view = new ViewModel(
-            array(
-                'table' => $table->render()
-            )
-        );
+        $view = new ViewModel(['table' => $table->render()];
 
         $view->setTemplate('licence/processing/layout');
-        $view->setTerminal(
-            $this->getRequest()->isXmlHttpRequest()
-        );
+        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
 
         return $this->renderView($view);
     }

@@ -113,9 +113,8 @@ trait ApplicationControllerTrait
             $id = $this->params('application');
         }
 
-        /** @var \Common\Service\Data\Licence $dataService */
-        $dataService = $this->getServiceLocator()->get('Common\Service\Data\Application');
-        return $dataService->fetchApplicationData($id);
+        return $this->getServiceLocator()->get('Entity\Application')
+            ->getDataForProcessing($id);
     }
 
     /**
@@ -127,17 +126,17 @@ trait ApplicationControllerTrait
     protected function getViewWithApplication($variables = array())
     {
         $application = $this->getApplication();
-        // if ($application['goodsOrPsv']['id'] == LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE) {
-        //     $this->getServiceLocator()->get('Navigation')->findOneBy('id', 'licence_bus')->setVisible(0);
-        // }
+
+        if ($application['licence']['goodsOrPsv']['id'] == LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE) {
+            $this->getServiceLocator()->get('Navigation')->findOneBy('id', 'licence_bus')->setVisible(0);
+        }
 
         $variables['application'] = $application;
         $view = $this->getView($variables);
 
-        $titlePrefix = $this->getServiceLocator()->get('Helper\Translation')
-            ->translate('internal-application.application-no');
-        $this->pageTitle = $titlePrefix . ' ' . $application['id'];
-        $this->pageSubTitle = $application['status']['description'];
+        $this->pageTitle = $application['id'];
+        $this->pageSubTitle = $application['licence']['organisation']['name']
+            . ' ' . $application['status']['description'];
 
         return $view;
     }

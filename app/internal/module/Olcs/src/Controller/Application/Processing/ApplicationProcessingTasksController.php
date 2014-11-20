@@ -26,10 +26,13 @@ class ApplicationProcessingTasksController extends AbstractApplicationProcessing
             return $redirect;
         }
 
+        // we want all tasks related to the licence, not just this application
+        $applicationId = $this->params('application');
+        $linkId = $this->getServiceLocator()->get('Entity\Application')->getLicenceIdForApplication($applicationId);
         $filters = $this->mapTaskFilters(
             array(
-                'linkId' => $this->getFromRoute('lva-application'),
-                'linkType' => 'Application',
+                'linkId'         => $linkId,
+                'linkType'       => 'Licence',
                 'assignedToTeam' => '',
                 'assignedToUser' => ''
             )
@@ -37,8 +40,7 @@ class ApplicationProcessingTasksController extends AbstractApplicationProcessing
 
         $table = $this->getTaskTable($filters, false);
 
-        // the table's nearly all good except we don't want
-        // a couple of columns
+        // the table's nearly all good except we don't want a couple of columns
         $table->removeColumn('name');
         $table->removeColumn('link');
 
@@ -46,16 +48,10 @@ class ApplicationProcessingTasksController extends AbstractApplicationProcessing
 
         $this->loadScripts(['tasks', 'table-actions']);
 
-        $view = new ViewModel(
-            array(
-                'table' => $table->render()
-            )
-        );
+        $view = new ViewModel(['table' => $table->render()] );
 
         $view->setTemplate('application/processing/layout');
-        $view->setTerminal(
-            $this->getRequest()->isXmlHttpRequest()
-        );
+        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
 
         return $this->renderView($view);
     }
