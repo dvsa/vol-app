@@ -14,7 +14,7 @@ class PublicInquiryHearingFields extends Base
      * @Form\Attributes({"id":"piVenue","placeholder":"","class":"medium"})
      * @Form\Options({
      *     "label": "Venue",
-     *     "service_name": "Olcs\Service\Data\PiVenue",
+     *     "service_name": "Common\Service\Data\PiVenue",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a category",
