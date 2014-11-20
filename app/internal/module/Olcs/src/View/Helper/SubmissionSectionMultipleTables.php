@@ -51,8 +51,11 @@ class SubmissionSectionMultipleTables extends AbstractHelper
     {
         $html = '';
         foreach ($data['data'] as $subSection => $tableData) {
-            $html .= $this->renderHelper('SubmissionSectionTable', $subSection,
-                ['description' => $subSection, 'data' => $tableData]);
+            $html .= $this->renderHelper(
+                'SubmissionSectionTable',
+                $subSection,
+                ['description' => $subSection, 'data' => $tableData]
+            );
         }
 
         return $html;
