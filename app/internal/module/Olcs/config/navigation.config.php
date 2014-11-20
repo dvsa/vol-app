@@ -306,7 +306,7 @@ return array(
         ),
         array(
             'label' => 'Search',
-            'route' => 'search',
+            'route' => 'advancedsearch',
             'use_route_match' => true,
             'pages' => array(
                 array(
