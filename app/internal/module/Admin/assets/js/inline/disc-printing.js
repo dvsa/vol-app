@@ -13,6 +13,7 @@ OLCS.ready(function() {
   var startNumber = F("discs-numbering", "startNumber");
   var endNumber = F("discs-numbering", "endNumber");
   var originalEndNumber = F("discs-numbering", "originalEndNumber");
+  var endNumberIncreased = F("discs-numbering", "endNumberIncreased");
   var totalPages = F("discs-numbering", "totalPages");
   var discPrefixesUrl = "/admin/disc-printing/disc-prefixes-list";
   var discNumberingUrl = "/admin/disc-printing/disc-numbering";
@@ -77,6 +78,9 @@ OLCS.ready(function() {
         if ("originalEndNumber" in result) {
           originalEndNumber.val(result.originalEndNumber);
         }
+        if ("enddNumberIncreased" in result) {
+          endNumberIncreased.val(result.endNumberIncreased);
+        }
         if ("totalPages" in result) {
           totalPages.val(result.totalPages);
         }
@@ -112,6 +116,9 @@ OLCS.ready(function() {
       }
       if ("totalPages" in result) {
         totalPages.val(result.totalPages);
+      }
+      if ("endNumberIncreased" in result) {
+        endNumberIncreased.val(result.endNumberIncreased);
       }
     });
   });

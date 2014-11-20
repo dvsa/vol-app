@@ -256,6 +256,9 @@ class DiscPrintingController extends AbstractController
         if (isset($numbering['endNumber'])) {
             $form->get('discs-numbering')->get('endNumber')->setValue($numbering['endNumber']);
         }
+        if (isset($numbering['endNumberIncreased'])) {
+            $form->get('discs-numbering')->get('endNumberIncreased')->setValue($numbering['endNumberIncreased']);
+        }
         if (isset($numbering['totalPages'])) {
             $form->get('discs-numbering')->get('totalPages')->setValue($numbering['totalPages']);
         }
@@ -345,20 +348,9 @@ class DiscPrintingController extends AbstractController
                 $goodsDiscService->getDiscsToPrint($niFlag, $operatorType, $licenceType, $discPrefix)
             );
         }
-        $retv['endNumber'] = (int) ($retv['discsToPrint'] ? $retv['startNumber'] + $retv['discsToPrint'] : 0);
-        /*
-         * we have two end numbers, one original, which calculated based on start number entered by user
-         * and another one calculated by rounding up to nearest integer divided by 6. that's because
-         * there are numbers already printed on the discs pages, 6 discs pere page, and even we need to print
-         * only one disc, other numbers will be used and voided.
-         */
+        $retv['endNumber'] = (int) ($retv['discsToPrint'] ? $retv['startNumber'] + $retv['discsToPrint'] - 1 : 0);
         $retv['originalEndNumber'] = $retv['endNumber'];
-        if ($retv['endNumber']) {
-            while (($retv['endNumber'] - $retv['startNumber'] + 1) % self::DISCS_ON_PAGE) {
-                $retv['endNumber']++;
-            }
-        }
-        $retv['totalPages'] = $retv['discsToPrint'] ? ceil($retv['discsToPrint'] / self::DISCS_ON_PAGE) : 0;
+        $originalStartNumber = $retv['startNumber'];
 
         // if we received start number this means that user changed this value and we need to validate it
         // do not allow to decrease start number
@@ -370,6 +362,23 @@ class DiscPrintingController extends AbstractController
             $retv['startNumber'] = $startNumberEntered;
             $retv['endNumber'] += $delta;
         }
+        /*
+         * we have two end numbers, one original, which calculated based on start number entered by user
+         * and another one calculated by rounding up to nearest integer divided by 6. that's because
+         * there are numbers already printed on the discs pages, 6 discs pere page, and even we need to print
+         * only one disc, other numbers will be used voided.
+         */
+        $retv['endNumberIncreased'] = $retv['endNumber'];
+        if ($retv['endNumber']) {
+            while (($retv['endNumber'] - $originalStartNumber + 1) % self::DISCS_ON_PAGE) {
+                $retv['endNumber']++;
+            }
+        }
+        $retv['totalPages'] = $retv['discsToPrint'] ?
+            (ceil(($retv['endNumber'] - $originalStartNumber) / self::DISCS_ON_PAGE)) -
+            (floor(($retv['startNumber'] - $originalStartNumber) / self::DISCS_ON_PAGE)) :
+            0;
+
         return $retv;
     }
 

@@ -210,6 +210,8 @@ return array(
             'piListData' => 'Olcs\View\Helper\PiListData',
             'formSubmissionSections' => 'Olcs\Form\View\Helper\SubmissionSections',
             'submissionSectionDetails' => 'Olcs\View\Helper\SubmissionSectionDetails',
+            'submissionSectionOverview' => 'Olcs\View\Helper\SubmissionSectionOverview',
+            'SubmissionSectionMultipleTables' => 'Olcs\View\Helper\SubmissionSectionMultipleTables',
             'markers' => 'Olcs\View\Helper\Markers',
         ),
         'delegators' => array(
@@ -298,7 +300,6 @@ return array(
             'Olcs\Service\Data\PublicInquiryDecision' => 'Olcs\Service\Data\PublicInquiryDecision',
             'Olcs\Service\Data\PublicInquiryDefinition' => 'Olcs\Service\Data\PublicInquiryDefinition',
             'Olcs\Service\Data\ImpoundingLegislation' => 'Olcs\Service\Data\ImpoundingLegislation',
-            'Olcs\Service\Data\PiVenue' => 'Olcs\Service\Data\PiVenue',
         ]
     ]
 );

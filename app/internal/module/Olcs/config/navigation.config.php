@@ -91,6 +91,20 @@ return array(
                             'use_route_match' => true,
                         ),
                         array(
+                            'id' => 'case_details_statements',
+                            'label' => 'Statements',
+                            'route' => 'case_statement',
+                            'action' => 'index',
+                            'use_route_match' => true,
+                        ),
+                        array(
+                            'id' => 'case_details_complaints',
+                            'label' => 'Complaints',
+                            'route' => 'case_complaint',
+                            'action' => 'index',
+                            'use_route_match' => true,
+                        ),
+                        array(
                             'id' => 'case_details_conditions_undertakings',
                             'label' => 'Conditions & Undertakings',
                             'route' => 'case_conditions_undertakings',
@@ -292,7 +306,7 @@ return array(
         ),
         array(
             'label' => 'Search',
-            'route' => 'search',
+            'route' => 'advancedsearch',
             'use_route_match' => true,
             'pages' => array(
                 array(
