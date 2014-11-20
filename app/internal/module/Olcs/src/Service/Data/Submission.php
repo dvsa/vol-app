@@ -260,6 +260,7 @@ class Submission extends AbstractData implements CloseableInterface
                 );
             }
         }
+
         return $rawData;
     }
 
@@ -594,6 +595,7 @@ class Submission extends AbstractData implements CloseableInterface
                 $thisEntity = array();
                 $thisEntity['id'] = $entity['id'];
                 $thisEntity['version'] = $entity['version'];
+                $thisEntity['createdOn'] = $entity['createdOn'];
                 $thisEntity['caseId'] = $entity['case']['id'];
                 $thisEntity['addedVia'] = $entity['addedVia'];
                 $thisEntity['isFulfilled'] = $entity['isFulfilled'];
@@ -609,6 +611,7 @@ class Submission extends AbstractData implements CloseableInterface
                 $dataToReturnArray[$tableName][] = $thisEntity;
             }
         }
+
         return $dataToReturnArray;
     }
 
