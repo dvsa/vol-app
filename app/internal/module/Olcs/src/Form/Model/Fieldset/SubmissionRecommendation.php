@@ -61,6 +61,9 @@ class SubmissionRecommendation extends Base
      *      "value_options":{
      *          "N":"No",
      *          "Y":"Yes"
+     *      },
+     *      "fieldset-attributes" : {
+     *          "class":"inline"
      *      }
      * })
      * @Form\Attributes({"value": "N"})
