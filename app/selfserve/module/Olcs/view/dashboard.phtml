@@ -1,24 +1,23 @@
-<?php
-    echo $this->render(
-        '/partials/page-header.phtml',
-        array(
-            'pageTitle' => $this->translate('dashboard.title'),
-            'pageSubTitle'=> $this->translate('dashboard.subtitle'),
-        )
-    );
-?>
+
+
+<div class="page-header">
+  <div class="page-header__wrapper">
+  <h3 class="page-header__subtitle"><?php echo $this->translate('dashboard.subtitle'); ?></h3>
+  <h1><?php echo $this->translate('dashboard.title'); ?></h1>
+  </div><!-- .page-header__wrapper -->
+</div><!-- .page-header-->
 
 
 <div class="dashboard two-thirds">
-    <?php echo $this->flashMessengerAll(); ?>
-    <?php echo $licences->render(); ?>
-    <div class="actions-container" style="margin-bottom: 3em;">
-        <a href="<?php echo $this->url('create_application'); ?>" class="action--primary">
-            <?php echo $this->translate('application.new.button'); ?>
-        </a>
-    </div>
-    <?php echo $variations->render(); ?>
-    <?php echo $applications->render(); ?>
+  <?php echo $this->flashMessengerAll(); ?>
+  <?php echo $licences->render(); ?>
+  <div class="actions-container" style="margin-bottom: 3em;">
+    <a href="<?php echo $this->url('create_application'); ?>" class="action--primary">
+      <?php echo $this->translate('application.new.button'); ?>
+    </a>
+  </div>
+  <?php echo $variations->render(); ?>
+  <?php echo $applications->render(); ?>
 </div>
 
 
