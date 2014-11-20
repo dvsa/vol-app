@@ -2,6 +2,7 @@
 
 return array(
     'variables' => array(
+        'title' => 'Undertakings',
         'action_route' => [
             'route' => 'submission_update_table',
             'params' => ['section' => 'conditions-and-undertakings']
@@ -42,8 +43,8 @@ return array(
         array(
             'title' => 'Fulfilled',
             'formatter' => function ($data, $column) {
-                    return $data['isFulfilled'] == 'Y' ? 'Yes' : 'No';
-                },
+                return $data['isFulfilled'] == 'Y' ? 'Yes' : 'No';
+            },
         ),
         array(
             'title' => 'Status',
@@ -61,7 +62,7 @@ return array(
         array(
             'title' => 'S4',
             'formatter' => function ($data, $column) {
-                return 'ToDo'; // todo S4 clarification
+                return 'ToDo';
             }
         ),
         array(

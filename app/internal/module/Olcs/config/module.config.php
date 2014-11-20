@@ -210,6 +210,7 @@ return array(
             'piListData' => 'Olcs\View\Helper\PiListData',
             'formSubmissionSections' => 'Olcs\Form\View\Helper\SubmissionSections',
             'submissionSectionDetails' => 'Olcs\View\Helper\SubmissionSectionDetails',
+            'submissionSectionOverview' => 'Olcs\View\Helper\SubmissionSectionOverview',
             'SubmissionSectionMultipleTables' => 'Olcs\View\Helper\SubmissionSectionMultipleTables',
             'markers' => 'Olcs\View\Helper\Markers',
         ),

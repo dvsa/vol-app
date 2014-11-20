@@ -2,6 +2,7 @@
 
 return array(
     'variables' => array(
+        'title' => 'Conditions',
         'action_route' => [
             'route' => 'submission_update_table',
             'params' => ['section' => 'conditions']
@@ -42,8 +43,8 @@ return array(
         array(
             'title' => 'Fulfilled',
             'formatter' => function ($data, $column) {
-                    return $data['isFulfilled'] == 'Y' ? 'Yes' : 'No';
-                },
+                return $data['isFulfilled'] == 'Y' ? 'Yes' : 'No';
+            },
         ),
         array(
             'title' => 'Status',
