@@ -6,7 +6,7 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore No methods
- * @Form\Name("opertor")
+ * @Form\Name("operator")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
  * @Form\Options({"prefer_form_input_filter": true})
@@ -14,10 +14,22 @@ use Zend\Form\Annotation as Form;
 class Operator
 {
     /**
+     * @Form\Name("operator-business-type")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\OperatorBusinessType")
+     */
+    public $operatorBusinessType = null;
+
+    /**
      * @Form\Name("operator-details")
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\OperatorDetails")
      */
     public $operatorDetails = null;
+
+    /**
+     * @Form\Options({"label": "Registered address"})
+     * @Form\ComposedObject("Common\Form\Model\Form\Lva\Fieldset\RegisteredAddress")
+     */
+    public $registeredAddress = null;
 
     /**
      * @Form\Name("form-actions")
