@@ -98,7 +98,7 @@ class ApplicationController extends AbstractController
     public function processingAction()
     {
         // only page in processing for now, which is tasks
-        $this->redirectToRoute('lva-application/processing/tasks', [], [], true);
+        return $this->redirectToRoute('lva-application/processing/tasks', [], [], true);
     }
 
     public function grantAction()
