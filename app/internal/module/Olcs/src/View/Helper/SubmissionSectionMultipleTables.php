@@ -50,38 +50,15 @@ class SubmissionSectionMultipleTables extends AbstractHelper
     public function render($submissionSection, $data)
     {
         $html = '';
+        $tableViewHelper = $this->getView()->plugin('SubmissionSectionTable');
+
         foreach ($data['data'] as $subSection => $tableData) {
-            $html .= $this->renderHelper(
-                'SubmissionSectionTable',
+            $html .= $tableViewHelper(
                 $subSection,
                 ['description' => $subSection, 'data' => $tableData]
             );
         }
 
         return $html;
-    }
-
-    /**
-     * Render element by helper name
-     *
-     * @param string $name
-     * @param ElementInterface $element
-     * @return string
-     */
-    protected function renderHelper($name, $submissionSection, $data)
-    {
-        $helper = $this->getView()->plugin($name);
-        return $helper($submissionSection, $data);
-    }
-
-    public function setTableBuilder(TableFactory $tableBuilder)
-    {
-        $this->tableBuilder = $tableBuilder;
-        return $this;
-    }
-
-    public function getTableBuilder()
-    {
-        return $this->tableBuilder;
     }
 }
