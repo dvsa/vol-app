@@ -55,14 +55,13 @@ class SubmissionSectionTable extends AbstractHelper
     public function render($submissionSection, $data)
     {
         $params = [];
-        var_dump($data);
 
         $viewTemplate = isset($this->viewMap[$submissionSection]) ?
             $this->viewMap[$submissionSection] : self::DEFAULT_VIEW;
 
         $tableConfig = isset($this->tableMap[$submissionSection]) ?
             $this->tableMap[$submissionSection] : 'SubmissionSections/' . $submissionSection;
-var_dump($tableConfig);
+
         $data['table'] = $this->getTableBuilder()->buildTable(
             $tableConfig,
             ['Results' => $data['data']],

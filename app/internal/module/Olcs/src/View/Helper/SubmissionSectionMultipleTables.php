@@ -54,7 +54,6 @@ class SubmissionSectionMultipleTables extends AbstractHelper
         {
             $html .= $this->renderHelper('SubmissionSectionTable', $subSection, ['data' => $tableData]);
         }
-        var_dump($html);exit;
 
         return $html;
     }

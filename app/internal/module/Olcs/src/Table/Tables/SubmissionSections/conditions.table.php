@@ -34,22 +34,16 @@ return array(
             'name' => 'id'
         ),
         array(
-            'title' => 'Type',
-            'formatter' => function ($data, $column, $sl) {
-                return $sl->get('translator')->translate($data['conditionType']['description']);
-            },
-        ),
-        array(
             'title' => 'Added via',
             'formatter' => function ($data, $column, $sl) {
-                return $sl->get('translator')->translate($data['addedVia']['description']);
+                return $sl->get('translator')->translate($data['addedVia']['description']) . $data['caseId'];
             },
         ),
         array(
             'title' => 'Fulfilled',
             'formatter' => function ($data, $column) {
-                return $data['isFulfilled'] == 'Y' ? 'Yes' : 'No';
-            },
+                    return $data['isFulfilled'] == 'Y' ? 'Yes' : 'No';
+                },
         ),
         array(
             'title' => 'Status',
@@ -60,8 +54,9 @@ return array(
         array(
             'title' => 'Attached to',
             'formatter' => function ($data, $column, $sm) {
-                return $sm->get('translator')->translate($data['attachedTo']['description']);
-            },
+                $attachedTo = $data['attachedTo']['id'] == 'cat_oc' ? 'OC' : 'Licence';
+                return $sm->get('translator')->translate($attachedTo);
+            }
         ),
         array(
             'title' => 'S4',
@@ -71,14 +66,9 @@ return array(
         ),
         array(
             'title' => 'OC Address',
-            'width' => '300px',
-            'formatter' => function ($data, $column, $sm) {
-                if (isset($data['operatingCentre']['address'])) {
-                    $column['formatter'] = 'Address';
-                    return $this->callFormatter($column, $data['operatingCentre']['address']);
-                }
-                return 'N/a';
-            }
+            'width' => '350px',
+            'formatter' => 'Address',
+            'name' => 'OcAddress'
         ),
         array(
             'title' => '',

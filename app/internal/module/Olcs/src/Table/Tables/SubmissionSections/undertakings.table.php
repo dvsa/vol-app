@@ -27,7 +27,7 @@ return array(
             'formatter' => function ($data, $column) {
                 return '<a href="' . $this->generateUrl(
                     array('action' => 'edit', 'id' => $data['id'], 'type' => 'undertakings'),
-                    'undertakings',
+                    'case_conditions_undertakings',
                     true
                 ) . '">' . $data['id'] . '</a>';
             },
@@ -35,16 +35,15 @@ return array(
         ),
         array(
             'title' => 'Added via',
-            'formatter' => function ($data, $column) {
-                return 'Case ' . $data['caseId'];
+            'formatter' => function ($data, $column, $sl) {
+                return $sl->get('translator')->translate($data['addedVia']['description']) . $data['caseId'];
             },
-            'name' => 'caseId'
         ),
         array(
             'title' => 'Fulfilled',
             'formatter' => function ($data, $column) {
-                return $data['isFulfilled'] == 'Y' ? 'Yes' : 'No';
-            },
+                    return $data['isFulfilled'] == 'Y' ? 'Yes' : 'No';
+                },
         ),
         array(
             'title' => 'Status',
@@ -55,7 +54,8 @@ return array(
         array(
             'title' => 'Attached to',
             'formatter' => function ($data, $column, $sm) {
-                return $sm->get('translator')->translate($data['attachedTo']['id']);
+                $attachedTo = $data['attachedTo']['id'] == 'cat_oc' ? 'OC' : 'Licence';
+                return $sm->get('translator')->translate($attachedTo);
             }
         ),
         array(
@@ -68,7 +68,7 @@ return array(
             'title' => 'OC Address',
             'width' => '350px',
             'formatter' => 'Address',
-            'name' => 'operatingCentreAddress'
+            'name' => 'OcAddress'
         ),
         array(
             'title' => '',
