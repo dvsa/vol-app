@@ -285,6 +285,55 @@ return array(
             'section_type' => ['list'],
             'data_field' => '',
             'allow_comments' => true,
+            'service' => 'Cases',
+            'bundle' => array(
+                'children' => array(
+                    'properties' => array(
+                        'id'
+                    ),
+                    'application' => array(
+                        'properties' => array(
+                            'id'
+                        ),
+                        'children' => array(
+                            'oppositions' => array(
+                                'children' => array(
+                                    'oppositionType' => array(
+                                        'properties' => array(
+                                            'description'
+                                        )
+                                    ),
+                                    'opposer' => array(
+                                        'children' => array(
+                                            'contactDetails' => array(
+                                                'children' => array(
+                                                    'person' => array(
+                                                        'properties' => array(
+                                                            'forename',
+                                                            'familyName'
+                                                        )
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    ),
+                                    'grounds' => array(
+                                        'children' => array(
+                                            'grounds' => array(
+                                                'properties' => array(
+                                                    'id',
+                                                    'description'
+                                                )
+
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
         ),
         'financial-information'   => array(
             'section_type' => [],

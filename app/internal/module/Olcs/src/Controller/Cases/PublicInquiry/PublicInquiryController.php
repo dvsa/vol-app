@@ -24,6 +24,7 @@ class PublicInquiryController extends OlcsController\CrudAbstract
 {
     use ControllerTraits\CaseControllerTrait;
     use SlaServiceAwareTrait;
+    use ControllerTraits\CloseActionTrait;
 
     /**
      * Identifier name
@@ -169,6 +170,9 @@ class PublicInquiryController extends OlcsController\CrudAbstract
     protected $isListResult = true;
     protected $identifierKey = 'case';
     protected $placeholderName = 'pi';
+    protected $dataServiceName = 'pi';
+
+    protected $entityDisplayName = 'Public Inquiry';
 
     public function redirectToIndex()
     {
@@ -189,16 +193,29 @@ class PublicInquiryController extends OlcsController\CrudAbstract
         return $data;
     }
 
+    /**
+     * Gets the id of the entity to close
+     *
+     * @return integer
+     */
+    public function getIdToClose($id = null)
+    {
+        if (empty($id)) {
+            $pi = $this->loadCurrent();
+            $id = $pi['id'];
+        }
+        return $id;
+    }
+
     public function detailsAction()
     {
         $pi = $this->loadCurrent();
-
         if (!empty($pi)) {
 
             $pi = $this->setupSla($pi);
 
             if ($this->getRequest()->isPost()) {
-                $action = strtolower($this->getFromPost('action'));
+                $action = strtolower($this->getFromPost('formAction'));
                 $id = $this->getFromPost('id');
 
                 if (!($action == 'edit' && !is_numeric($id))) {
@@ -238,6 +255,9 @@ class PublicInquiryController extends OlcsController\CrudAbstract
             ->getContainer('details')
             ->set($pi);
 
+        if (isset($pi['id'])) {
+            $view->setVariable('closeAction', $this->generateCloseActionButtonArray($pi['id']));
+        }
         $view->setTemplate('case/page/pi');
 
         return $this->renderView($view);

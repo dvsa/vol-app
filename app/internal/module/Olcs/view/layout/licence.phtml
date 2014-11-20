@@ -46,7 +46,7 @@
     <a class="latest-note__link">View all 13 notes</a>
   </div><!-- end .small-details -->
 
-  <?php if (is_array($markers)): ?>
+  <?php if (isset($markers) && is_array($markers)): ?>
     <?php foreach($markers as $marker): ?>
       <?php echo $this->markers($marker, 'appeal') ?>
       <?php echo $this->markers($marker, 'stay') ?>

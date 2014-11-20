@@ -97,6 +97,39 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
 
     }
 
+    /**
+     *
+     * @dataProvider providerSubmissions
+     * @param $input
+     */
+    public function testExtractSelectedTextOnlySubmissionSectionsData($input)
+    {
+        $mockRefDataService = $this->getMock('Common\Service\Data\RefData');
+
+        $mockSectionRefData = $this->getMockSectionRefData();
+        $mockRefDataService->expects(
+            $this->once()
+        )->method('fetchListOptions')->with('submission_section')
+            ->willReturn($mockSectionRefData);
+
+        $this->sut->setRefDataService($mockRefDataService);
+        $this->sut->setSubmissionConfig(
+            [
+                'sections' => [
+                    'introduction' => [
+                        'section_type' => ['text']
+                    ]
+                ]
+            ]
+        );
+        $result = $this->sut->extractSelectedSubmissionSectionsData($input);
+
+        $this->assertArrayHasKey('introduction', $result);
+        $this->assertArrayHasKey('data', $result['introduction']);
+        $this->assertEmpty($result['introduction']['data']);
+
+    }
+
     public function testGetAllSectionsRefData()
     {
         $mockRefDataService = $this->getMock('Common\Service\Data\RefData');
@@ -185,7 +218,44 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
 
         $result = $this->sut->createSubmissionSection($input['caseId'], $input['sectionId'], $input['sectionConfig']);
 
-        $this->assertEquals($result, $expected['filteredSectionData']);
+        $this->assertEquals($result, $expected['expected']);
+    }
+
+    /**
+     *
+     * @dataProvider providerSubmissionSnapshotData
+     * @param $input
+     * @param $expected
+     */
+    public function testGenerateSnapshotData($input, $expected)
+    {
+
+        $result = $this->sut->generateSnapshotData($input['caseId'], $input['data']);
+
+        $this->assertEquals($result, $expected);
+    }
+
+    public function providerSubmissionSnapshotData()
+    {
+        return [
+            [
+                [
+                    'caseId' => 24,
+                    'data' => [
+                        'submissionSections' => [
+                            'sections' => [
+                                'introduction' => 'introduction'
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    'introduction' => [
+                        'data' => []
+                    ]
+                ]
+            ]
+        ];
     }
 
     /**
@@ -322,53 +392,6 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testCloseEntity()
-    {
-        $id = 99;
-        $mockData = [
-            'id' => $id,
-            'version' => 1
-        ];
-        $mockRestClient = m::mock('Common\Util\RestClient');
-        $mockRestClient->shouldReceive('get')->once()->withAnyArgs()->andReturn($mockData);
-        $mockRestClient->shouldReceive('update')->once()->with(
-            $mockData['id'],
-            m::type('array')
-        )->andReturn($mockData);
-
-        $sut = new Submission();
-        $sut->setRestClient($mockRestClient);
-
-        $this->assertNull($sut->closeEntity($id));
-    }
-
-    public function testReopenEntity()
-    {
-        $id = 99;
-        $mockData = [
-            'id' => $id,
-            'version' => 1
-        ];
-        $mockRestClient = m::mock('Common\Util\RestClient');
-        $mockRestClient->shouldReceive('get')->once()->withAnyArgs()->andReturn($mockData);
-        $mockRestClient->shouldReceive('update')->once()->with(
-            $mockData['id'],
-            [
-                'data' => json_encode(
-                    [
-                        'version' => $mockData['version'],
-                        'closedDate' => null
-                    ]
-                )
-            ]
-        )->andReturnNull();
-
-        $sut = new Submission();
-        $sut->setRestClient($mockRestClient);
-
-        $this->assertNull($sut->reopenEntity($id));
-    }
-
     public function testCanClose()
     {
         $id = 99;
@@ -465,24 +488,8 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                             ]
                         ]
                     ],
-                    'filteredSectionData' => [
+                    'expected' => [
                         0 => [
-                            'id' => 1,
-                            'offenceDate' => '2012-03-10T00:00:00+0000',
-                            'convictionDate' => '2012-06-15T00:00:00+0100',
-                            'name' => 'John Smith Haulage Ltd.',
-                            'categoryText' => null,
-                            'court' => 'FPN',
-                            'penalty' => '3 points on licence',
-                            'msi' => 'N',
-                            'isDeclared' => 'N',
-                            'isDealtWith' => 'N',
-                            'defendantType' => [
-                                'id' => 'def_t_op',
-                                'description' => 'Operator'
-                            ],
-                        ],
-                        1 => [
                             'id' => 2,
                             'offenceDate' => '2012-03-10T00:00:00+0000',
                             'convictionDate' => '2012-06-15T00:00:00+0100',
@@ -496,6 +503,22 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                             'defendantType' => [
                                 'id' => 'def_t_owner',
                                 'description' => 'Owner'
+                            ],
+                        ],
+                        1 => [
+                            'id' => 1,
+                            'offenceDate' => '2012-03-10T00:00:00+0000',
+                            'convictionDate' => '2012-06-15T00:00:00+0100',
+                            'name' => 'John Smith Haulage Ltd.',
+                            'categoryText' => null,
+                            'court' => 'FPN',
+                            'penalty' => '3 points on licence',
+                            'msi' => 'N',
+                            'isDeclared' => 'N',
+                            'isDealtWith' => 'N',
+                            'defendantType' => [
+                                'id' => 'def_t_op',
+                                'description' => 'Operator'
                             ],
                         ]
                     ]
@@ -514,7 +537,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                     'loadedCaseSectionData' => [
                         'description' => 'test description'
                     ],
-                    'filteredSectionData' => [
+                    'expected' => [
                         'outline' => 'test description',
                     ]
                 ]
@@ -530,7 +553,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                 ],
                 [ // expected
                     'loadedCaseSectionData' => $this->getCaseSummaryMockData(),
-                    'filteredSectionData' => [
+                    'expected' => [
                         'id' => 24,
                         'organisationName' => 'John Smith Haulage Ltd.',
                         'isMlh' => 'Y',
@@ -549,6 +572,118 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                         'vehiclesInPossession' => 4,
                         'trailersInPossession' => 4,
 
+                    ]
+                ]
+            ],
+            [   // opposition section
+                [
+                    'caseId' => 24,
+                    'sectionId' => 'oppositions',
+                    'sectionConfig' => [
+                        'service' => 'Cases',
+                        'bundle' => ['some_bundle'],
+                    ]
+                ],
+                [
+                    'loadedCaseSectionData' => [
+                        'application' => [
+                            'oppositions' => [
+                                0 => [
+                                    'id' => 1,
+                                    'version' => 1,
+                                    'raisedDate' => '2012-03-10T00:00:00+0000',
+                                    'oppositionType' => [
+                                        'description' => 'foo'
+                                    ],
+                                    'opposer' => [
+                                        'contactDetails' => [
+                                            'person' => [
+                                                'forename' => 'John',
+                                                'familyName' => 'Smith'
+                                            ]
+                                        ]
+                                    ],
+                                    'grounds' => [
+                                        0 => [
+                                            'grounds' => [
+                                                'description' => 'bar1'
+                                            ]
+                                        ]
+                                    ],
+                                    'isValid' => 'Y',
+                                    'isCopied' => 'Y',
+                                    'isInTime' => 'Y',
+                                    'isPublicInquiry' => 'Y',
+                                    'isWithdrawn' => 'N'
+                                ],
+                                1 => [
+                                    'id' => 2,
+                                    'version' => 1,
+                                    'raisedDate' => '2012-02-10T00:00:00+0000',
+                                    'oppositionType' => [
+                                        'description' => 'foo'
+                                    ],
+                                    'opposer' => [
+                                        'contactDetails' => [
+                                            'person' => [
+                                                'forename' => 'Bob',
+                                                'familyName' => 'Smith'
+                                            ]
+                                        ]
+                                    ],
+                                    'grounds' => [
+                                        0 => [
+                                            'grounds' => [
+                                                'description' => 'bar2'
+                                            ]
+                                        ]
+                                    ],
+                                    'isValid' => 'Y',
+                                    'isCopied' => 'Y',
+                                    'isInTime' => 'Y',
+                                    'isPublicInquiry' => 'Y',
+                                    'isWithdrawn' => 'N'
+                                ]
+                            ]
+                        ]
+                    ],
+                    'expected' => [
+                        0 => [
+                            'id' => 1,
+                            'version' => 1,
+                            'dateReceived' => '2012-03-10T00:00:00+0000',
+                            'oppositionType' => 'foo',
+                            'contactName' => [
+                                'forename' => 'John',
+                                'familyName' => 'Smith'
+                            ],
+                            'grounds' => [
+                                'bar1'
+                            ],
+                            'isValid' => 'Y',
+                            'isCopied' => 'Y',
+                            'isInTime' => 'Y',
+                            'isPublicInquiry' => 'Y',
+                            'isWithdrawn' => 'N'
+                        ],
+                        1 => [
+                            'id' => 2,
+                            'version' => 1,
+                            'dateReceived' => '2012-02-10T00:00:00+0000',
+                            'oppositionType' => 'foo',
+                            'contactName' => [
+                                'forename' => 'Bob',
+                                'familyName' => 'Smith'
+                            ],
+                            'grounds' => [
+                                'bar2'
+                            ],
+                            'isValid' => 'Y',
+                            'isCopied' => 'Y',
+                            'isInTime' => 'Y',
+                            'isPublicInquiry' => 'Y',
+                            'isWithdrawn' => 'N'
+                        ]
                     ]
                 ]
             ]
@@ -570,14 +705,14 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                 [
                     'loadedCaseSectionData' => $this->getCaseSummaryMockData(),
                     'filteredSectionData' => [
-                        0 => [
+                        1 => [
                             'id' => 1,
                             'title' => '',
                             'forename' => 'Tom',
                             'familyName' => 'Jones',
                             'birthDate' => '1972-02-15T00:00:00+0100',
                         ],
-                        1 => [
+                        0 => [
                             'id' => 2,
                             'title' => '',
                             'forename' => 'Keith',

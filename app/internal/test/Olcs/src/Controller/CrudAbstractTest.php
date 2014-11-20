@@ -1055,12 +1055,24 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
         $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\\' . $dataServiceName)
             ->andReturn($mockDataService);
 
-        $sut = $this->getSutForIsolatedTest(['getDataServiceName']);
-        $sut->expects($this->once())->method('getDataServiceName')->willReturn($dataServiceName);
+        $sut = $this->getSutForIsolatedTest(['getService']);
+        $sut->expects($this->once())->method('getService')->willReturn($dataServiceName);
         $sut->setServiceLocator($mockServiceManager);
 
         $this->assertEquals($mockDataService, $sut->getDataService());
         $this->assertEquals($mockDataService, $sut->getDataService()); // duplicated to test branch
+    }
+
+    /**
+     * Tests Get DataService
+     */
+    public function testGetEntityDisplayName()
+    {
+        $entityDisplayName = 'foo';
+
+        $sut = $this->getSutForIsolatedTest();
+        $sut->setEntityDisplayName($entityDisplayName);
+        $this->assertEquals($entityDisplayName, $sut->getEntityDisplayName());
     }
 
 

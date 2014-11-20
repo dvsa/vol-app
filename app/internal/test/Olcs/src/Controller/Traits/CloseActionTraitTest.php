@@ -173,7 +173,18 @@ class CloseActionTraitTest extends \PHPUnit_Framework_TestCase
         $mockParams->shouldReceive('fromRoute')->with($identifier)->andReturn($id);
         $mockPluginManager->shouldReceive('get')->with('params')->andReturn($mockParams);
 
+        $mockRouteMatch = m::mock('Zend\Mvc\RouteMatch');
+        $mockRouteMatch->shouldReceive('getParams')->andReturn(['action' => 'foo']);
+        $mockRouteMatch->shouldReceive('getMatchedRouteName')->andReturn('bar');
+
+        $mockEvent = m::mock('Zend\Mvc\MvcEvent');
+        $mockEvent->shouldReceive('getRouteMatch')->andReturn($mockRouteMatch);
+
         $mockDataService = m::mock('Olcs\Service\Data\Submission');
+        $mockApplication = m::mock('Zend\Mvc\Application');
+        $mockApplication->shouldReceive('getMvcEvent')
+            ->andReturn($mockEvent);
+
         $mockDataService->shouldReceive('canReopen')
             ->with($id)
             ->andReturn(true);
@@ -185,11 +196,17 @@ class CloseActionTraitTest extends \PHPUnit_Framework_TestCase
         $mockServiceManager->shouldReceive('get')
             ->with('Olcs\Service\Data\Submission')
             ->andReturn($mockDataService);
+        $mockServiceManager->shouldReceive('get')
+            ->with('Application')
+            ->andReturn($mockApplication);
 
         $this->sut->setPluginManager($mockPluginManager);
         $this->sut->setServiceLocator($mockServiceManager);
 
-        $this->assertEquals('reopenButton', $this->sut->generateCloseActionButtonArray());
+        $result = $this->sut->generateCloseActionButtonArray();
+        $this->assertArrayHasKey('label', $result);
+        $this->assertArrayHasKey('route', $result);
+        $this->assertArrayHasKey('params', $result);
     }
 
     public function testGenerateCloseActionButtonArrayForCloseButton()
@@ -207,6 +224,16 @@ class CloseActionTraitTest extends \PHPUnit_Framework_TestCase
         $mockParams->shouldReceive('fromRoute')->with($identifier)->andReturn($id);
         $mockPluginManager->shouldReceive('get')->with('params')->andReturn($mockParams);
 
+        $mockRouteMatch = m::mock('Zend\Mvc\RouteMatch');
+        $mockRouteMatch->shouldReceive('getParams')->andReturn(['action' => 'foo']);
+        $mockRouteMatch->shouldReceive('getMatchedRouteName')->andReturn('bar');
+
+        $mockEvent = m::mock('Zend\Mvc\MvcEvent');
+        $mockEvent->shouldReceive('getRouteMatch')->andReturn($mockRouteMatch);
+        $mockApplication = m::mock('Zend\Mvc\Application');
+        $mockApplication->shouldReceive('getMvcEvent')
+            ->andReturn($mockEvent);
+
         $mockDataService = m::mock('Olcs\Service\Data\Submission');
         $mockDataService->shouldReceive('canReopen')
             ->with($id)
@@ -222,11 +249,17 @@ class CloseActionTraitTest extends \PHPUnit_Framework_TestCase
         $mockServiceManager->shouldReceive('get')
             ->with('Olcs\Service\Data\Submission')
             ->andReturn($mockDataService);
+        $mockServiceManager->shouldReceive('get')
+            ->with('Application')
+            ->andReturn($mockApplication);
 
         $this->sut->setPluginManager($mockPluginManager);
         $this->sut->setServiceLocator($mockServiceManager);
 
-        $this->assertEquals('closeButton', $this->sut->generateCloseActionButtonArray());
+        $result = $this->sut->generateCloseActionButtonArray();
+        $this->assertArrayHasKey('label', $result);
+        $this->assertArrayHasKey('route', $result);
+        $this->assertArrayHasKey('params', $result);
     }
 
     /**
