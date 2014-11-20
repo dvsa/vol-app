@@ -91,6 +91,9 @@ class OperatorBusinessDetailsController extends OperatorController
 
         if ($this->getRequest()->isPost() && $validateAndSave) {
 
+            if (!$this->getEnabledCsrf()) {
+                $this->getServiceLocator()->get('Helper\Form')->remove($form, 'csrf');
+            }
             if ($form->isValid()) {
 
                 $action = $operator ? 'edit' : 'add';
@@ -128,10 +131,10 @@ class OperatorBusinessDetailsController extends OperatorController
         ];
         $person = $this->getServiceLocator()->get('Entity\Person')->getFirstForOrganisation($data['id']);
         if (count($person)) {
-            $data['firstName'] = $person['forename'];
-            $data['lastName'] = $person['familyName'];
-            $data['personId'] = $person['id'];
-            $data['personVersion'] = $person['version'];
+            $data['firstName'] = isset($person['forename']) ? $person['forename'] : '';
+            $data['lastName'] = isset($person['familyName']) ? $person['familyName'] : '';
+            $data['personId'] = isset($person['id']) ? $person['id'] : '';
+            $data['personVersion'] = isset($person['version']) ? $person['version'] : '';
         }
         $data['registeredAddress'] = $this->extractRegisteredAddress($fetchedData);
         return $data;

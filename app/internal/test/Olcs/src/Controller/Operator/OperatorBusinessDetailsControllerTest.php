@@ -62,6 +62,16 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
     protected $newPerson = false;
 
     /**
+     * @var array
+     */
+    protected $person = [
+        'forename' => 'John',
+        'familyName' => 'Doo',
+        'id' => 1,
+        'version' => 1
+    ];
+
+    /**
      * @var string
      */
     protected $organisatioType = OrganisationEntityService::ORG_TYPE_REGISTERED_COMPANY;
@@ -74,10 +84,13 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
             'id' => 1,
             'version' => 1,
             'name' => 'name',
-            'companyOrLlpNo' => '12345678',
+            'companyNumber' => [
+                'company_number' => '12345678'
+            ],
             'firstName' => 'first',
             'lastName' => 'last',
-            'person'
+            'personId' => '1',
+            'personVersion' => '1'
         ],
         'operator-business-type' => [
             'type' => OrganisationEntityService::ORG_TYPE_REGISTERED_COMPANY,
@@ -89,6 +102,8 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
             'addressLine4' => 'addressLine4',
             'town' => 'town',
             'postcode' => 'postocde',
+            'postcode' => 'id',
+            'version' => '1'
         ],
         'form-actions' => ['save' => '']
     ];
@@ -129,13 +144,6 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
             ]
         ];
 
-        $person = [
-            'forename' => 'John',
-            'familyName' => 'Doo',
-            'id' => 1,
-            'version' => 1
-        ];
-
         $mockOrganisation = $this->getMock('\StdClass', ['getBusinessDetailsData', 'save']);
         $mockOrganisation->expects($this->any())
             ->method('getBusinessDetailsData')
@@ -152,7 +160,7 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
         $mockPerson->expects($this->any())
             ->method('getFirstForOrganisation')
             ->with($this->equalTo(1))
-            ->will($this->returnValue($person));
+            ->will($this->returnValue($this->person));
 
         if ($this->newPerson) {
             $mockPerson->expects($this->any())
@@ -169,6 +177,11 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
 
         $mockContactDetails = $this->getMock('\StdClass', ['save']);
         $mockOrganisationPerson = $this->getMock('\StdClass', ['save']);
+
+        $mockCompaniesHouse = $this->getMock('\StdClass', ['search']);
+        $mockCompaniesHouse->expects($this->any())
+            ->method('search')
+            ->will($this->returnValue(['Results' => [['CompanyName' => 'Company Name']], 'Count' => 1]));
 
         $mockTranslator = $this->getMock('\StdClass', ['translate']);
         $mockTranslator->expects($this->any())
@@ -224,8 +237,9 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
         $this->serviceManager->setService('Entity\Organisation', $mockOrganisation);
         $this->serviceManager->setService('Entity\Person', $mockPerson);
         $this->serviceManager->setService('Entity\Address', $mockAddress);
-        $this->serviceManager->setService('Entity\ContactDetail', $mockContactDetails);
+        $this->serviceManager->setService('Entity\ContactDetails', $mockContactDetails);
         $this->serviceManager->setService('Entity\OrganisationPerson', $mockOrganisationPerson);
+        $this->serviceManager->setService('Data\CompaniesHouse', $mockCompaniesHouse);
 
         $this->controller->expects($this->any())
             ->method('getResponse')
@@ -256,7 +270,7 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
      * Test index action with edit operator
      *
      * @dataProvider organisationTypesProvider
-     * @group operatorBusinessDetailsController1
+     * @group operatorBusinessDetailsController
      */
     public function testIndexActionWithEditOperator($organisationType)
     {
@@ -274,7 +288,6 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
         return [
             [OrganisationEntityService::ORG_TYPE_REGISTERED_COMPANY],
             [OrganisationEntityService::ORG_TYPE_SOLE_TRADER],
-            [OrganisationEntityService::ORG_TYPE_SOLE_TRADER],
             [OrganisationEntityService::ORG_TYPE_PARTNERSHIP],
             [OrganisationEntityService::ORG_TYPE_LLP],
             [OrganisationEntityService::ORG_TYPE_OTHER]
@@ -285,7 +298,7 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
      * Test index action with add operator
      *
      * @dataProvider organisationTypesProvider
-     * @group operatorBusinessDetailsController1
+     * @group operatorBusinessDetailsController
      */
     public function testIndexActionWithAddOperator($organisationType)
     {
@@ -298,11 +311,13 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
     /**
      * Test index action with post add operator
      *
-     * @group operatorBusinessDetailsController2
+     * @dataProvider organisationTypesProvider
+     * @group operatorBusinessDetailsController
      */
-    public function testIndexActionWithPostAddOperator()
+    public function testIndexActionWithPostAddOperator($organisationType)
     {
-        $this->organisationType = OrganisationEntityService::ORG_TYPE_REGISTERED_COMPANY;
+        $this->organisationType = $organisationType;
+        $this->post['operator-business-type']['type'] = $organisationType;
         $this->statusCode = 302;
         $this->setUpAction(null, true);
         $response = $this->controller->indexAction();
@@ -312,11 +327,73 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
     /**
      * Test index action with post edit operator
      *
-     * @group operatorBusinessDetailsControllers
+     * @dataProvider organisationTypesProvider
+     * @group operatorBusinessDetailsController
      */
-    public function testIndexActionWithPostEditOperator()
+    public function testIndexActionWithPostEditOperator($organisationType)
+    {
+        $this->organisationType = $organisationType;
+        $this->post['operator-business-type']['type'] = $organisationType;
+        $this->setUpAction(1, true);
+        $response = $this->controller->indexAction();
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+    }
+
+    /**
+     * Test index action with post edit operator - testing new person / organisation record for Sole Trader
+     *
+     * @group operatorBusinessDetailsController
+     */
+    public function testIndexActionWithPostEditOperatorSoleTraderNewPerson()
+    {
+        $this->organisationType = OrganisationEntityService::ORG_TYPE_SOLE_TRADER;
+        $this->post['operator-business-type']['type'] = OrganisationEntityService::ORG_TYPE_SOLE_TRADER;
+        unset($this->post['operator-details']['personId']);
+        $this->setUpAction(1, true);
+        $response = $this->controller->indexAction();
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+    }
+
+    /**
+     * Test index action with change business type (js-enabled form)
+     *
+     * @group operatorBusinessDetailsController
+     */
+    public function testIndexActionWithChangeBusinessTypeJs()
     {
         $this->organisationType = OrganisationEntityService::ORG_TYPE_REGISTERED_COMPANY;
+        $this->post['operator-business-type']['type'] = OrganisationEntityService::ORG_TYPE_REGISTERED_COMPANY;
+        $this->post['operator-business-type']['typeChanged'] = 1;
+        $this->setUpAction(1, true);
+        $response = $this->controller->indexAction();
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+    }
+
+    /**
+     * Test index action with change business type (js-disabled form)
+     *
+     * @group operatorBusinessDetailsController
+     */
+    public function testIndexActionWithChangeBusinessTypeNoJs()
+    {
+        $this->organisationType = OrganisationEntityService::ORG_TYPE_REGISTERED_COMPANY;
+        $this->post['operator-business-type']['type'] = OrganisationEntityService::ORG_TYPE_REGISTERED_COMPANY;
+        $this->post['operator-business-type']['refresh'] = 'refresh';
+        $this->setUpAction(1, true);
+        $response = $this->controller->indexAction();
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+    }
+
+    /**
+     * Test company lookup
+     *
+     * @group operatorBusinessDetailsController
+     */
+    public function testIndexActionCompanyLookup()
+    {
+        $this->organisationType = OrganisationEntityService::ORG_TYPE_REGISTERED_COMPANY;
+        $this->post['operator-business-type']['type'] = OrganisationEntityService::ORG_TYPE_REGISTERED_COMPANY;
+        $this->post['operator-details']['companyNumber']['submit_lookup_company'] = 'lookup';
         $this->setUpAction(1, true);
         $response = $this->controller->indexAction();
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
@@ -325,10 +402,12 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
     /**
      * Test index action with add operator and cancel button pressed
      *
+     * @dataProvider organisationTypesProvider
      * @group operatorBusinessDetailsController
      */
-    public function testIndexActionWithAddOperatorAndCancelButtonPressed()
+    public function testIndexActionWithAddOperatorAndCancelButtonPressed($organisationType)
     {
+        $this->organisationType = $organisationType;
         $this->setUpAction(null, true, true);
         $response = $this->controller->indexAction();
         $this->assertInstanceOf('Zend\Http\Response', $response);
@@ -337,10 +416,12 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
     /**
      * Test index action with edit operator and cancel button pressed
      *
+     * @dataProvider organisationTypesProvider
      * @group operatorBusinessDetailsController
      */
-    public function testIndexActionWithEditOperatorAndCancelButtonPressed()
+    public function testIndexActionWithEditOperatorAndCancelButtonPressed($organisationType)
     {
+        $this->organisationType = $organisationType;
         $this->setUpAction(1, true, true);
         $response = $this->controller->indexAction();
         $this->assertInstanceOf('Zend\Http\Response', $response);
