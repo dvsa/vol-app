@@ -12,49 +12,16 @@ namespace Olcs\Helper;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class ApplicationProcessingHelper
+class ApplicationProcessingHelper extends AbstractProcessingHelper
 {
-    /**
-     * Holds the section config
-     *
-     * @var array
-     */
-    protected $sections = array(
-        'notes' => array(),
-        'tasks' => array()
-    );
-
-    /**
-     * Gets sections
-     *
-     * @return array
-     */
-    public function getSections()
-    {
-        return $this->sections;
-    }
-
-    /**
-     * Sets sections
-     *
-     * @param array $sections
-     * @return $this
-     */
-    public function setSections($sections)
-    {
-        $this->sections = $sections;
-
-        return $this;
-    }
-
     /**
      * Gets navigation
      *
-     * @param int $applicationId
+     * @param int $id application ID
      * @param string $activeSection
      * @return array
      */
-    public function getNavigation($applicationId, $activeSection = null)
+    public function getNavigation($id, $activeSection = null)
     {
         $sections = $this->getSections();
 
@@ -66,9 +33,7 @@ class ApplicationProcessingHelper
                 'title' => 'internal-application-processing-' . $section . '-title',
                 'route' => 'lva-application/processing/' . $section,
                 'use_route_match' => true,
-                'params' => array(
-                    'application' => $applicationId
-                ),
+                'params' => ['application' => $id],
                 'active' => $section == $activeSection
             );
         }
