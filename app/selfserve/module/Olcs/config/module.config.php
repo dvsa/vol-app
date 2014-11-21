@@ -186,5 +186,10 @@ return array(
         'endpoints' => array(
             'ebsr' => 'http://olcs-ebsr/'
         )
+    ),
+    'rest_services' => array(
+        'delegators' => [
+            'Olcs\RestService\ebsr\pack' => ['Olcs\Service\Rest\EbsrPackDelegatorFactory']
+        ]
     )
 );
