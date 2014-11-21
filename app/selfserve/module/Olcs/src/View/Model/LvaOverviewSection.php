@@ -32,7 +32,7 @@ abstract class LvaOverviewSection extends AbstractViewModel
      *
      * @var string
      */
-    protected $template = 'overview_section';
+    protected $template = 'partials/overview_section';
 
     protected $type;
 

@@ -9,8 +9,10 @@ use Common\Controller\AbstractActionController;
  */
 class UploadsController extends AbstractActionController
 {
+
     public function indexAction()
     {
+
         /** @var \Common\Service\Table\TableBuilder $tableBuilder */
         $tableBuilder = $this->getServiceLocator()->get('Table');
         $dataService = $this->getEbsrDataService();
@@ -36,16 +38,36 @@ class UploadsController extends AbstractActionController
     public function processSave($data)
     {
         $dataService = $this->getEbsrDataService();
-        $validPacks = $dataService->processPackUpload($data);
+        $result = $dataService->processPackUpload($data);
 
-        if ($validPacks) {
+        if (is_array($result)) {
+            $packs = $result['valid'] + $result['errors'];
+
+            $message = sprintf('%d %s successfully submitted for processing', $packs, ($packs > 1)? ' packs': ' pack');
+
+            $validMessage = sprintf(
+                '<br />%d %s validated successfully',
+                $result['valid'],
+                ($result['valid'] > 1)? 'packs' : 'pack'
+            );
+
+            $errorMessage = sprintf(
+                '<br />%d %s contained errors',
+                $result['errors'],
+                ($result['errors'] > 1)? ' packs': ' pack'
+            );
+
             $this->addSuccessMessage(
-                $validPacks . (($validPacks > 1)? ' packs': ' pack'). ' successfully submitted for processing'
+                $message .
+                ($result['valid'] ? $validMessage : '') .
+                ($result['errors'] ? $errorMessage : '')
             );
+
+            foreach ($result['messages'] as $pack => $errors) {
+                $this->addErrorMessage($pack . ': ' . implode(' ', $errors));
+            }
         } else {
-            $this->addErrorMessage(
-                'No valid packs were found in your upload, please verify your file and try again'
-            );
+            $this->addErrorMessage($result);
         }
     }
 
