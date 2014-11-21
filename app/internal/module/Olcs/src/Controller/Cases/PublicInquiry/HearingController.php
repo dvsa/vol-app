@@ -152,6 +152,8 @@ class HearingController extends OlcsController\CrudAbstract
      */
     public function processSave($data)
     {
+        //$pi = $this->loadCurrent();
+
         if ($data['fields']['piVenue'] != 'other') {
             $data['fields']['piVenueOther'] = null;
         }
@@ -165,6 +167,11 @@ class HearingController extends OlcsController\CrudAbstract
             $data['fields']['adjournedReason'] = null;
             $data['fields']['adjournedDate'] = null;
         }
+
+        $data['fields']['pi'] = [
+            'id' =>$data['fields']['pi'],
+            'piStatus' => 'pi_s_schedule',
+        ];
 
         $this->addTask($data);
 
