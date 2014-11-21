@@ -24,6 +24,6 @@ class EbsrPackDelegatorFactoryTest extends TestCase
         };
 
         $sut = new EbsrPackDelegatorFactory();
-        $sut->createDelegatorWithName($mockSl,'', '', $callable);
+        $sut->createDelegatorWithName($mockSl, '', '', $callable);
     }
 }

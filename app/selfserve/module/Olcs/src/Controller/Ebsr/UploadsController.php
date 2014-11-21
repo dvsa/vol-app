@@ -61,7 +61,7 @@ class UploadsController extends AbstractActionController
                 ($result['errors'] ? $errorMessage : '')
             );
 
-            foreach ($result['messages'] as  $pack => $errors) {
+            foreach ($result['messages'] as $pack => $errors) {
                 $this->addErrorMessage($pack . ': ' . implode(' ', $errors));
             }
         } else {

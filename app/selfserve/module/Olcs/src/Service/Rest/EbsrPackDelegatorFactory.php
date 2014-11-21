@@ -6,6 +6,10 @@ use Zend\ServiceManager\DelegatorFactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Common\Util\MultiResponseHelper;
 
+/**
+ * Class EbsrPackDelegatorFactory
+ * @package Olcs\Service\Rest
+ */
 class EbsrPackDelegatorFactory implements DelegatorFactoryInterface
 {
     /**
@@ -26,5 +30,4 @@ class EbsrPackDelegatorFactory implements DelegatorFactoryInterface
 
         return $service;
     }
-
 }
