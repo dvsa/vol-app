@@ -54,9 +54,11 @@ class PublicInquiryHearingFields extends Base
      *     "create_empty_option": true,
      *     "max_year": 2016,
      *     "render_delimiters": true,
-     *     "pattern": "d MMMM y '</div><div class=""field""><label for=hearingDate>Time of PI</label>'HH:mm:ss"
+     *     "pattern": "d MMMM y '</div><div class=""field""><label for=hearingDate>Time of PI</label>'HH:mm:ss",
+     *     "category": "pi_hearing",
+     *     "field": "hearingDate"
      * })
-     * @Form\Type("DateTimeSelect")
+     * @Form\Type("SlaDateTimeSelect")
      * @Form\Filter({"name": "DateTimeSelectNullifier"})
      * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d H:i:s"}})
      */
