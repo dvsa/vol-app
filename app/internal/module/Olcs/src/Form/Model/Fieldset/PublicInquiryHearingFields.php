@@ -100,7 +100,7 @@ class PublicInquiryHearingFields extends Base
     public $witnesses;
 
     /**
-     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Cancelled"})
+     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Cancelled / Withdrawn"})
      * @Form\Type("checkbox")
      */
     public $isCancelled;
