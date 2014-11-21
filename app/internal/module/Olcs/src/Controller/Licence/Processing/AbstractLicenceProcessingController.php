@@ -29,7 +29,8 @@ abstract class AbstractLicenceProcessingController extends LicenceController
 
     protected $helperClass = '\Olcs\Helper\LicenceProcessingHelper';
 
-    protected function getNavigationConfig() {
+    protected function getNavigationConfig()
+    {
         $licence = $this->getLicence();
 
         return $this->getProcessingHelper()->getNavigation(
@@ -38,7 +39,8 @@ abstract class AbstractLicenceProcessingController extends LicenceController
         );
     }
 
-    protected function getProcessingLayout($view, $variables) {
+    protected function getProcessingLayout($view, $variables)
+    {
         $layout = $this->getViewWithLicence(
             array_merge($variables, (array)$view->getVariables())
         );
@@ -49,5 +51,4 @@ abstract class AbstractLicenceProcessingController extends LicenceController
         return $layout;
 
     }
-
 }

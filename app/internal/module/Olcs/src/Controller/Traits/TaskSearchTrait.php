@@ -132,16 +132,17 @@ trait TaskSearchTrait
      */
     protected function processTasksActions($type = '')
     {
-        $action = strtolower($this->params()->fromPost('action'));
-        if ($action === 're-assign task') {
-            $action = 'reassign';
-        } elseif ($action === 'create task') {
-            $action = 'add';
-        } elseif ($action === 'close task') {
-            $action = 'close';
-        }
-
         if ($this->getRequest()->isPost()) {
+
+            $action = strtolower($this->params()->fromPost('action'));
+            if ($action === 're-assign task') {
+                $action = 'reassign';
+            } elseif ($action === 'create task') {
+                $action = 'add';
+            } elseif ($action === 'close task') {
+                $action = 'close';
+            }
+
             if ($action !== 'add') {
                 $id = $this->params()->fromPost('id');
 

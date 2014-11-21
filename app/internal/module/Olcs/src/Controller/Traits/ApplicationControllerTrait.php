@@ -141,5 +141,4 @@ trait ApplicationControllerTrait
 
         return $view;
     }
-
 }

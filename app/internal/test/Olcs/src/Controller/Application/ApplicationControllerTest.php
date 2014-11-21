@@ -80,25 +80,6 @@ class ApplicationControllerTest extends PHPUnit_Framework_TestCase
     /**
      * @group application_controller
      */
-    public function testProcessingAction()
-    {
-        // /processing should redirect to processing/tasks
-
-        $id = 7;
-        $this->mockRouteParam('application', $id);
-
-        $redirect = $this->mockRedirect();
-        $redirect->expects($this->once())
-            ->method('toRoute')
-            ->with('lva-application/processing/tasks', [], [], true) // last param (reuseMatchedParams) is important
-            ->will($this->returnValue('REDIRECT'));
-
-        $this->assertEquals('REDIRECT', $this->sut->processingAction());
-    }
-
-    /**
-     * @group application_controller
-     */
     public function testGrantActionWithGet()
     {
         $id = 7;

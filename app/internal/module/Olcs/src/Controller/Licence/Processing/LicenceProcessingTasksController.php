@@ -30,12 +30,14 @@ class LicenceProcessingTasksController extends AbstractLicenceProcessingControll
             return $redirect;
         }
 
-        $filters = $this->mapTaskFilters( array(
-            'linkId'         => $this->getFromRoute('licence'),
-            'linkType'       => 'Licence',
-            'assignedToTeam' => '',
-            'assignedToUser' => ''
-        ));
+        $filters = $this->mapTaskFilters(
+            [
+                'linkId'         => $this->getFromRoute('licence'),
+                'linkType'       => 'Licence',
+                'assignedToTeam' => '',
+                'assignedToUser' => ''
+            ]
+        );
 
         $table = $this->getTaskTable($filters, false);
 

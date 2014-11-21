@@ -366,9 +366,21 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
-     * Test edit action post
+     * @dataProvider closeTaskProvider
      */
-    public function testEditActionPost()
+    public function editActionPostDp()
+    {
+        return [
+            ['licence', 'licence/processing'],
+            ['application', 'lva-application/processing']
+        ];
+    }
+    /**
+     * Test edit action post
+     *
+     * @dataProvider editActionPostDp
+     */
+    public function testEditActionPost($entity, $expectedRoute)
     {
         $form = $this->getMock(
             '\stdClass',
@@ -413,7 +425,7 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
             ->will(
                 $this->returnValueMap(
                     array(
-                        array('type', 'licence'),
+                        array('type', $entity),
                         array('typeId', 123),
                         array('task', 456),
                     )
@@ -433,19 +445,48 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
             ->method('isPost')
             ->will($this->returnValue(true));
 
-        $params = ['licence' => 123];
+        $params = [$entity => 123];
 
         $mockRoute = $this->getMock('\stdClass', ['toRoute']);
         $mockRoute->expects($this->once())
             ->method('toRoute')
-            ->with('licence/processing', $params)
+            ->with($expectedRoute, $params)
             ->will($this->returnValue('mockResponse'));
+
+        $this->mockApplicationLicenceLookups();
 
         $this->controller->expects($this->any())
             ->method('redirect')
             ->will($this->returnValue($mockRoute));
 
         $this->controller->editAction();
+    }
+
+    protected function mockApplicationLicenceLookups()
+    {
+        // mock the calls to look up licence id and data for the application
+        ////////
+        $mockApplicationService = $this->getMock(
+            '\StdClass',
+            ['getLicenceIdForApplication','getDataForTasks']
+        );
+        $mockApplicationService->expects($this->any())
+            ->method('getLicenceIdForApplication')
+            ->with($this->equalTo(123))
+            ->will($this->returnValue(987));
+        $mockApplicationService->expects($this->any())
+            ->method('getDataForTasks')
+            ->with($this->equalTo(123))
+            ->will($this->returnValue(['id'=>123, 'licence'=>['id'=>987, 'licNo'=>'AB123']]));
+        $mockServiceLocator = $this->getMock('\StdClass', ['get']);
+        $mockServiceLocator->expects($this->any())
+            ->method('get')
+            ->with($this->equalTo('Entity\Application'))
+            ->will($this->returnValue($mockApplicationService));
+        $this->controller->expects($this->any())
+             ->method('getServiceLocator')
+             ->will($this->returnValue($mockServiceLocator));
+        ////////
     }
 
     /**
@@ -1107,29 +1148,7 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
                 )
             );
 
-        // mock the calls to look up licence id and data for the application
-        ////////
-        $mockApplicationService = $this->getMock(
-            '\StdClass',
-            ['getLicenceIdForApplication', 'getDataForTasks']
-        );
-        $mockApplicationService->expects($this->once())
-            ->method('getLicenceIdForApplication')
-            ->with($this->equalTo(123))
-            ->will($this->returnValue(987));
-        $mockApplicationService->expects($this->once())
-            ->method('getDataForTasks')
-            ->with($this->equalTo(123))
-            ->will($this->returnValue(['id'=>123, 'licence'=>['id'=>987, 'licNo'=>'AB123']]));
-        $mockServiceLocator = $this->getMock('\StdClass', ['get']);
-        $mockServiceLocator->expects($this->any())
-            ->method('get')
-            ->with($this->equalTo('Entity\Application'))
-            ->will($this->returnValue($mockApplicationService));
-        $this->controller->expects($this->any())
-             ->method('getServiceLocator')
-             ->will($this->returnValue($mockServiceLocator));
-        ////////
+        $this->mockApplicationLicenceLookups();
 
         $this->url->expects($this->at(0))
                 ->method('fromRoute')

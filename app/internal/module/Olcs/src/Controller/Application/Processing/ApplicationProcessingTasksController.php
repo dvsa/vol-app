@@ -51,7 +51,7 @@ class ApplicationProcessingTasksController extends AbstractApplicationProcessing
 
         $this->loadScripts(['tasks', 'table-actions']);
 
-        $view = new ViewModel(['table' => $table->render()] );
+        $view = new ViewModel(['table' => $table->render()]);
 
         $view->setTemplate('application/processing/layout');
         $view->setTerminal($this->getRequest()->isXmlHttpRequest());

@@ -28,7 +28,8 @@ abstract class AbstractApplicationProcessingController extends ApplicationContro
 
     protected $helperClass = '\Olcs\Helper\ApplicationProcessingHelper';
 
-    protected function getNavigationConfig() {
+    protected function getNavigationConfig()
+    {
         $application = $this->getApplication();
 
         return $this->getProcessingHelper()->getNavigation(
@@ -37,7 +38,8 @@ abstract class AbstractApplicationProcessingController extends ApplicationContro
         );
     }
 
-    protected function getProcessingLayout($view, $variables) {
+    protected function getProcessingLayout($view, $variables)
+    {
         $layout = $this->getViewWithApplication(
             array_merge($variables, (array)$view->getVariables())
         );
