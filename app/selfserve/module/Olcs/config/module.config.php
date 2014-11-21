@@ -182,17 +182,14 @@ return array(
         'default' => array()
     ),
     'asset_path' => '//dvsa-static.olcsdv-ap01.olcs.npm',
-    'filters' => [
-        'factories' => [
-            'Olcs\Filter\DecompressUploadToTmp' => 'Olcs\Filter\DecompressUploadToTmpFactory',
-        ],
-        'aliases' => [
-            'DecompressUploadToTmp' => 'Olcs\Filter\DecompressUploadToTmp'
-        ]
-    ],
     'service_api_mapping' => array(
         'endpoints' => array(
             'ebsr' => 'http://olcs-ebsr/'
         )
+    ),
+    'rest_services' => array(
+        'delegators' => [
+            'Olcs\RestService\ebsr\pack' => ['Olcs\Service\Rest\EbsrPackDelegatorFactory']
+        ]
     )
 );

@@ -37,7 +37,7 @@ class EbsrPackTest extends \PHPUnit_Framework_TestCase
         $mockValidator->shouldReceive('isValid')->andReturn(true);
 
         $mockRestClient = m::mock('Common\Util\RestClient');
-        $mockRestClient->shouldReceive('post')->andReturnNull();
+        $mockRestClient->shouldReceive('post')->andReturn(false);
 
         $data['fields']['file']['extracted_dir'] = vfsStream::url('tmp');
 
@@ -45,6 +45,20 @@ class EbsrPackTest extends \PHPUnit_Framework_TestCase
         $sut->setValidationChain($mockValidator);
         $sut->setRestClient($mockRestClient);
 
-        $this->assertEquals(1, $sut->processPackUpload($data));
+        $this->assertEquals('Failed to submit packs for processing, please try again', $sut->processPackUpload($data));
+    }
+
+    public function testProcessPackUploadNoPacks()
+    {
+        vfsStream::setup('tmp');
+
+        $data['fields']['file']['extracted_dir'] = vfsStream::url('tmp');
+
+        $sut = new EbsrPack();
+
+        $this->assertEquals(
+            'No packs were found in your upload, please verify your file and try again',
+            $sut->processPackUpload($data)
+        );
     }
 }
