@@ -396,6 +396,10 @@ class TaskController extends AbstractController
                 $route = 'licence/processing';
                 $params = ['licence' => $taskTypeId];
                 break;
+            case 'application':
+                $route = 'lva-application/processing';
+                $params = ['application' => $taskTypeId];
+                break;
             default:
                 // no type - call from the home page, need to redirect back after action
                 $route = 'dashboard';
@@ -525,6 +529,10 @@ class TaskController extends AbstractController
         switch ($taskType) {
             case 'licence':
                 $data['licence'] = $taskTypeId;
+                break;
+            case 'application':
+                $data['application'] = $taskTypeId;
+                // need licenceid too?
                 break;
             default:
                 break;

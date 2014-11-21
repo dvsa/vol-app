@@ -90,17 +90,6 @@ class ApplicationController extends AbstractController
         return $this->render($view);
     }
 
-    /**
-     * Placeholder stub
-     *
-     * @return ViewModel
-     */
-    public function processingAction()
-    {
-        // only page in processing for now, which is tasks
-        return $this->redirectToRoute('lva-application/processing/tasks', [], [], true);
-    }
-
     public function grantAction()
     {
         $request = $this->getRequest();

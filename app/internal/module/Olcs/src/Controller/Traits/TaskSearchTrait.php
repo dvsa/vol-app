@@ -166,6 +166,12 @@ trait TaskSearchTrait
                         'typeId' => $this->getFromRoute('licence'),
                     ];
                     break;
+                case 'application':
+                    $params = [
+                        'type' => 'application',
+                        'typeId' => $this->getFromRoute('lva-application'),
+                    ];
+                    break;
                 default:
                     // no type - call from the home page
                     break;

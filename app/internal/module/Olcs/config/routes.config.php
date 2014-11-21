@@ -1489,8 +1489,8 @@ $routes['lva-application']['child_routes'] = array_merge(
             'options' => array(
                 'route' => 'processing[/]',
                 'defaults' => array(
-                    'controller' => 'ApplicationController',
-                    'action' => 'processing'
+                    'controller' => 'ApplicationProcessingOverviewController',
+                    'action' => 'index'
                 )
             ),
             'may_terminate' => true,
