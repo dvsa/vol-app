@@ -17,6 +17,9 @@ class ApplicationProcessingTasksController extends AbstractApplicationProcessing
 {
     use TaskSearchTrait;
 
+    /**
+     * @var string
+     */
     protected $section = 'tasks';
 
     public function indexAction()

@@ -12,11 +12,15 @@ use \Olcs\Controller\Traits\TaskSearchTrait;
  * Licence Processing Tasks Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ * @author Dan Eggleston <dan@stolenegg.com>
  */
 class LicenceProcessingTasksController extends AbstractLicenceProcessingController
 {
     use TaskSearchTrait;
 
+    /**
+     * @var string
+     */
     protected $section = 'tasks';
 
     public function indexAction()
@@ -26,14 +30,12 @@ class LicenceProcessingTasksController extends AbstractLicenceProcessingControll
             return $redirect;
         }
 
-        $filters = $this->mapTaskFilters(
-            array(
-                'linkId'         => $this->getFromRoute('licence'),
-                'linkType'       => 'Licence',
-                'assignedToTeam' => '',
-                'assignedToUser' => ''
-            )
-        );
+        $filters = $this->mapTaskFilters( array(
+            'linkId'         => $this->getFromRoute('licence'),
+            'linkType'       => 'Licence',
+            'assignedToTeam' => '',
+            'assignedToUser' => ''
+        ));
 
         $table = $this->getTaskTable($filters, false);
 
