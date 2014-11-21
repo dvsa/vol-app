@@ -24,7 +24,8 @@ class SubmissionDecision extends Base
     public $submissionActionStatus = null;
 
     /**
-     * @Form\Attributes({"id":"","placeholder":"","class":"long tall js-sub-legislation", "multiple" : true})
+     * @Form\Attributes({"id":"","placeholder":"","class":"chosen-select-medium js-sub-legislation",
+     * "multiple" : true})
      * @Form\Options({
      *     "label": "Legislation",
      *     "service_name": "Olcs\Service\Data\SubmissionLegislation",

@@ -203,7 +203,8 @@ class PublicInquiryHearingFields extends Base
 
     /**
      * @Form\Required(false)
-     * @Form\Attributes({"id":"","placeholder":"","class":"extra-long tall  js-definition-source", "multiple":true})
+     * @Form\Attributes({"id":"","placeholder":"","class":"chosen-select-large  js-definition-source",
+     * "multiple":true})
      * @Form\Options({
      *     "label": "Definition",
      *     "disable_inarray_validator": false,
