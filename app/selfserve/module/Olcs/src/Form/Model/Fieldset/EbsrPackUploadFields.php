@@ -11,7 +11,7 @@ use Zend\Form\Annotation as Form;
 class EbsrPackUploadFields
 {
     /**
-     * @Form\Options({"label": "Choose File"})
+     * @Form\Options({"label": "Choose file"})
      * @Form\Type("File")
      * @Form\Input("Zend\InputFilter\FileInput")
      * @Form\Filter({"name": "DecompressUploadToTmp"})

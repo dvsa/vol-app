@@ -90,7 +90,7 @@ class PaymentSubmissionController extends AbstractController
             ->createForm('Lva\PaymentSummary');
 
         $view = new ViewModel(['form' => $form]);
-        $view->setTemplate('application/summary');
+        $view->setTemplate('summary-application');
 
         return $this->render($view);
     }

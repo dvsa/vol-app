@@ -9,8 +9,10 @@ use Common\Controller\AbstractActionController;
  */
 class UploadsController extends AbstractActionController
 {
+
     public function indexAction()
     {
+
         /** @var \Common\Service\Table\TableBuilder $tableBuilder */
         $tableBuilder = $this->getServiceLocator()->get('Table');
         $dataService = $this->getEbsrDataService();

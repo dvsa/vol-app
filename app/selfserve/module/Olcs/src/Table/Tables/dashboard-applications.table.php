@@ -12,10 +12,10 @@ return array(
         array(
             'title' => $translationPrefix . '-appId',
             'formatter' => function ($row) {
-                return '<a href="' . $this->url->fromRoute(
+                return '<b><a href="' . $this->url->fromRoute(
                     'lva-application',
                     array('application' => $row['id'])
-                ) . '">'.$row['id'].'</a>';
+                ) . '">'.$row['id'].'</a></b>';
             }
         ),
         array(
