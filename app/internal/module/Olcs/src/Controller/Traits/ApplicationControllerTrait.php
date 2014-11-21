@@ -134,6 +134,7 @@ trait ApplicationControllerTrait
         $variables['application'] = $application;
         $view = $this->getView($variables);
 
+        // @TODO add link to Licence No in heading, as per other controllers?
         $this->pageTitle = $application['id'];
         $this->pageSubTitle = $application['licence']['organisation']['name']
             . ' ' . $application['status']['description'];
