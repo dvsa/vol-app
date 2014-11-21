@@ -257,10 +257,10 @@ $routes = [
     'case_penalty' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/case/:case/penalty[/:action][/:id]',
+            'route' => '/case/:case/penalty[/:action][/:penalty]',
             'constraints' => [
                 'case' => '[0-9]+',
-                'id' => '[0-9]+',
+                'penalty' => '[0-9]+',
             ],
             'defaults' => [
                 'controller' => 'CasePenaltyController',
