@@ -686,6 +686,134 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                         ]
                     ]
                 ]
+            ],
+            [   // conditions-undertaking section
+                [
+                    'caseId' => 24,
+                    'sectionId' => 'conditions-and-undertakings',
+                    'sectionConfig' => [
+                        'service' => 'Cases',
+                        'bundle' => ['some_bundle'],
+                    ]
+                ],
+                [
+                    'loadedCaseSectionData' => [
+                        'id' => 24,
+                        'conditionUndertakings' => [
+                            0 => [
+                                'isDraft' => 'N',
+                                'isFulfilled' => 'N',
+                                'isApproved' => 'N',
+                                'id' => 1,
+                                'version' => 1,
+                                'createdOn' => '2012-03-10T00:00:00+0000',
+                                'attachedTo' => [
+                                    'description' => 'Operating Centre',
+                                    'id' => 'cat_oc',
+                                ],
+                                'conditionType' => [
+                                    'description' => 'Condition',
+                                    'id' => 'cdt_con',
+                                ],
+                                'case' => [
+                                    'id' => 24,
+                                ],
+                                'addedVia' => [
+                                    'description' => 'Case',
+                                    'id' => 'cav_case',
+                                ],
+                                'operatingCentre' => [
+                                    'id' => 16,
+                                    'address' => [
+                                        'addressLine2' => '12 Albert Street',
+                                        'addressLine1' => 'Unit 5',
+                                        'addressLine3' => 'Westpoint',
+                                        'addressLine4' => '',
+                                        'town' => 'Leeds',
+                                        'postcode' => 'LS9 6NA',
+                                        'countryCode' => [
+                                            'id' => 'GB',
+                                        ],
+                                     ],
+                                ],
+                            ],
+                            1 => [
+                                'isDraft' => 'N',
+                                'isFulfilled' => 'N',
+                                'isApproved' => 'N',
+                                'id' => 1,
+                                'version' => 1,
+                                'createdOn' => '2011-03-10T00:00:00+0000',
+                                'attachedTo' => [
+                                    'description' => 'Operating Centre',
+                                    'id' => 'cat_oc',
+                                ],
+                                'conditionType' => [
+                                    'description' => 'Condition',
+                                    'id' => 'cdt_con',
+                                ],
+                                'case' => [
+                                    'id' => 24,
+                                ],
+                                'addedVia' => [
+                                    'description' => 'Case',
+                                    'id' => 'cav_case',
+                                ],
+                                'operatingCentre' => [
+                                    // empty address branch test
+                                ],
+                            ]
+                        ]
+                    ],
+                    'expected' => [
+                        'conditions' => [
+                            0 => [
+                                'id' => 1,
+                                'version' => 1,
+                                'createdOn' => '2012-03-10T00:00:00+0000',
+                                'caseId' => 24,
+                                'addedVia' => [
+                                    'description' => 'Case',
+                                    'id' => 'cav_case',
+                                ],
+                                'isFulfilled' => 'N',
+                                'isDraft' => 'N',
+                                'attachedTo' => [
+                                    'description' => 'Operating Centre',
+                                    'id' => 'cat_oc',
+                                ],
+                                'OcAddress' => [
+                                    'addressLine2' => '12 Albert Street',
+                                    'addressLine1' => 'Unit 5',
+                                    'addressLine3' => 'Westpoint',
+                                    'addressLine4' => '',
+                                    'town' => 'Leeds',
+                                    'postcode' => 'LS9 6NA',
+                                    'countryCode' => [
+                                        'id' => 'GB',
+                                    ]
+                                ]
+                            ],
+                            1 => [
+                                'id' => 1,
+                                'version' => 1,
+                                'createdOn' => '2011-03-10T00:00:00+0000',
+                                'caseId' => 24,
+                                'addedVia' => [
+                                    'description' => 'Case',
+                                    'id' => 'cav_case',
+                                ],
+                                'isFulfilled' => 'N',
+                                'isDraft' => 'N',
+                                'attachedTo' => [
+                                    'description' => 'Operating Centre',
+                                    'id' => 'cat_oc',
+                                ],
+                                'OcAddress' => []
+                            ]
+                        ]
+                    ]
+                ]
             ]
         ];
     }

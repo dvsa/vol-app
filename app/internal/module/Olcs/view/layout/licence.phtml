@@ -26,6 +26,13 @@
       Valid</p>
   </div><!-- end .small-details -->
 
+  <?php if (isset($markers) && is_array($markers)): ?>
+    <?php foreach($markers as $marker): ?>
+      <?php echo $this->markers($marker, 'appeal') ?>
+      <?php echo $this->markers($marker, 'stay') ?>
+    <?php endforeach; ?>
+  <?php endif; ?>
+
   <div class="record-actions">
     <h5>Quick actions</h5>
     <ul class="record-actions__group">
@@ -45,11 +52,4 @@
     <p class="latest-note__details">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incidid...</p>
     <a class="latest-note__link">View all 13 notes</a>
   </div><!-- end .small-details -->
-
-  <?php if (isset($markers) && is_array($markers)): ?>
-    <?php foreach($markers as $marker): ?>
-      <?php echo $this->markers($marker, 'appeal') ?>
-      <?php echo $this->markers($marker, 'stay') ?>
-    <?php endforeach; ?>
-  <?php endif; ?>
 </div><!-- one-fifth-right -->
