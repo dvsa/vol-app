@@ -586,10 +586,10 @@ $routes = [
     'case_details_impounding' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/case/[:case]/impounding[/:action][/:id]',
+            'route' => '/case/[:case]/impounding[/:action][/:impounding]',
             'constraints' => [
                 'case' => '[0-9]+',
-                'id' => '[0-9]+'
+                'impounding' => '[0-9]+'
             ],
             'defaults' => [
                 'controller' => 'CaseImpoundingController',
