@@ -22,7 +22,9 @@ use Common\Controller\Lva\Traits\LicenceOperatingCentresControllerTrait;
 class OperatingCentresController extends Lva\AbstractOperatingCentresController
 {
     use LicenceControllerTrait,
-        LicenceOperatingCentresControllerTrait;
+        LicenceOperatingCentresControllerTrait {
+            LicenceOperatingCentresControllerTrait::formatCrudDataForSave as commonFormatCrudDataForSave;
+        }
 
     protected $lva = 'licence';
     protected $location = 'internal';
@@ -37,15 +39,20 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController
     /**
      * Alter the form
      *
-     * @TODO should live in the licence trait, but calls parent... so needs refactoring
-     * Therefore currently duped across internal and external
-     *
      * @param \Zend\Form\Form $form
      * @return \Zend\Form\Form
      */
     public function alterForm(Form $form)
     {
-        $form = parent::alterForm($form);
-        return $this->commonAlterForm($form);
+        return $this->commonAlterForm(
+            parent::alterForm($form)
+        );
+    }
+
+    protected function formatCrudDataForSave($data)
+    {
+        return $this->commonFormatCrudDataForSave(
+            parent::formatCrudDataForSave($data)
+        );
     }
 }
