@@ -271,10 +271,12 @@ return array(
         'factories' => [
             'PublicInquiryReason' => 'Olcs\Form\Element\PublicInquiryReasonFactory',
             'SubmissionSections' => 'Olcs\Form\Element\SubmissionSectionsFactory',
-            'Olcs\Form\Element\SlaDateSelect' => 'Olcs\Form\Element\SlaDateSelectFactory'
+            'Olcs\Form\Element\SlaDateSelect' => 'Olcs\Form\Element\SlaDateSelectFactory',
+            'Olcs\Form\Element\SlaDateTimeSelect' => 'Olcs\Form\Element\SlaDateTimeSelectFactory'
         ],
         'aliases' => [
-            'SlaDateSelect' => 'Olcs\Form\Element\SlaDateSelect'
+            'SlaDateSelect' => 'Olcs\Form\Element\SlaDateSelect',
+            'SlaDateTimeSelect' => 'Olcs\Form\Element\SlaDateTimeSelect'
         ]
     ],
     'search' => [
