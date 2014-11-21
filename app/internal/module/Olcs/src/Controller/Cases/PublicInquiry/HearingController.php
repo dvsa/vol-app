@@ -151,7 +151,6 @@ class HearingController extends OlcsController\CrudAbstract
         $data['piDate'] = $data['pi']['agreedDate'];
 
         $data = parent::processLoad($data);
-        //die('<pre>' . print_r($data, 1));
 
         $this->getServiceLocator()->get('Common\Service\Data\Sla')->setContext('pi_hearing', $data);
 
