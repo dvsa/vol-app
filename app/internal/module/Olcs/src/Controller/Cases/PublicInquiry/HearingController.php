@@ -147,8 +147,12 @@ class HearingController extends OlcsController\CrudAbstract
 
     public function processLoad($data)
     {
+        // get pi as not set when adding first hearing.
+        // Should really alter bundle to query pi table, not hearings.
+        $piId = $this->getFromRoute('pi');
+        $pi = $this->makeRestCall('Pi', 'GET', $piId);
 
-        $data['piDate'] = $data['pi']['agreedDate'];
+        $data['piDate'] = $pi['agreedDate'];
 
         $data = parent::processLoad($data);
 
@@ -165,8 +169,6 @@ class HearingController extends OlcsController\CrudAbstract
      */
     public function processSave($data)
     {
-        //$pi = $this->loadCurrent();
-
         if ($data['fields']['piVenue'] != 'other') {
             $data['fields']['piVenueOther'] = null;
         }
