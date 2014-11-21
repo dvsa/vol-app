@@ -31,7 +31,7 @@ class OperatorDetails
 
     /**
      * @Form\Attributes({"class":"long","id":""})
-     * @Form\Options({"label":"Operator name"})
+     * @Form\Options({"label":"internal-operator-profile-name"})
      * @Form\Validator({"name": "Zend\Validator\NotEmpty"})
      * @Form\Name("name")
      * @Form\Type("Text")
@@ -39,16 +39,36 @@ class OperatorDetails
     public $name = null;
 
     /**
-     * @Form\Attributes({"class":"long","id":""})
-     * @Form\Options({"label":"First name"})
+     * @Form\Attributes({"data-placeholder":"Please select a nature of business"})
+     * @Form\Options({
+     *     "label": "internal-operator-profile-nature-of-business",
+     *     "category": "SIC_CODE",
+     *     "chosen-size": "medium",
+     * })
      * @Form\Validator({"name": "Zend\Validator\NotEmpty"})
+     * @Form\Type("DynamicMultiSelect")
+     */
+    public $natureOfBusiness = null;
+
+    /**
+     * @Form\Type("Common\Form\Elements\Types\Html")
+     * @Form\Attributes({
+     *      "value":
+     *      "Please enter your business type. You can find a list of business types at Companies House 
+     *      <a href=""http://www.companieshouse.gov.uk/infoAndGuide/faq/sicCode.shtml"" target=""_blank"">here</a>"})
+     */
+    public $information = null;
+
+    /**
+     * @Form\Attributes({"chosen-size":"long","id":""})
+     * @Form\Options({"label":"'internal-operator-profile-first-name'"})
      * @Form\Type("Text")
      */
     public $firstName = null;
 
     /**
      * @Form\Attributes({"class":"long","id":""})
-     * @Form\Options({"label":"Last name"})
+     * @Form\Options({"label":"'internal-operator-profile-first-name'"})
      * @Form\Validator({"name": "Zend\Validator\NotEmpty"})
      * @Form\Type("Text")
      */

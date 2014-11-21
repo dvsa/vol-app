@@ -90,7 +90,8 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
             'firstName' => 'first',
             'lastName' => 'last',
             'personId' => '1',
-            'personVersion' => '1'
+            'personVersion' => '1',
+            'natureOfBusiness' => [1]
         ],
         'operator-business-type' => [
             'type' => OrganisationEntityService::ORG_TYPE_REGISTERED_COMPANY,
@@ -183,6 +184,25 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
             ->method('search')
             ->will($this->returnValue(['Results' => [['CompanyName' => 'Company Name']], 'Count' => 1]));
 
+        $mockOrgNob = $this->getMock(
+            '\StdClass',
+            ['getAllForOrganisationForSelect', 'getAllForOrganisation', 'deleteByOrganisationAndIds', 'save']
+        );
+
+        $nob = [[
+            'id' => 1,
+            'version' => 1,
+            'organisation' => ['id' => 1],
+            'refData' => ['id' => '1', 'description' => 'desc1']
+        ]];
+        $mockOrgNob->expects($this->any())
+            ->method('getAllForOrganisation')
+            ->will($this->returnValue($nob));
+
+        $mockOrgNob->expects($this->any())
+            ->method('getAllForOrganisationForSelect')
+            ->will($this->returnValue([1]));
+
         $mockTranslator = $this->getMock('\StdClass', ['translate']);
         $mockTranslator->expects($this->any())
             ->method('translate')
@@ -240,6 +260,7 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
         $this->serviceManager->setService('Entity\ContactDetails', $mockContactDetails);
         $this->serviceManager->setService('Entity\OrganisationPerson', $mockOrganisationPerson);
         $this->serviceManager->setService('Data\CompaniesHouse', $mockCompaniesHouse);
+        $this->serviceManager->setService('Entity\OrganisationNatureOfBusiness', $mockOrgNob);
 
         $this->controller->expects($this->any())
             ->method('getResponse')
@@ -425,5 +446,20 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
         $this->setUpAction(1, true, true);
         $response = $this->controller->indexAction();
         $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+
+    /**
+     * Test index action with nature of business added
+     *
+     * @group operatorBusinessDetailsController1
+     */
+    public function testIndexActionWithNatureOfBusinessAdded()
+    {
+        $this->organisationType = OrganisationEntityService::ORG_TYPE_REGISTERED_COMPANY;
+        $this->post['operator-business-type']['type'] = OrganisationEntityService::ORG_TYPE_REGISTERED_COMPANY;
+        $this->post['operator-details']['natureOfBusiness'] = [1,2];
+        $this->setUpAction(1, true);
+        $response = $this->controller->indexAction();
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
     }
 }

@@ -14,7 +14,7 @@ class OperatorBusinessType
     /**
      * @Form\Attributes({"id":"businessType","class":"inline"})
      * @Form\Options({
-     *     "label": "Business type",
+     *     "label": "internal-operator-profile-business-type",
      *     "value": "defendant_type.operator",
      *     "disable_inarray_validator": false,
      *     "service_name": "staticList",
@@ -28,7 +28,7 @@ class OperatorBusinessType
     /**
      * @Form\Attributes({"type":"submit","class":"action--secondary","id":"refresh"})
      * @Form\Options({
-     *     "label": "Refresh",
+     *     "label": "internal-operator-profile-business-type-refresh",
      *     "label_attributes": {
      *         "class": "col-sm-2"
      *     },

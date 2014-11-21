@@ -90,7 +90,6 @@ class OperatorBusinessDetailsController extends OperatorController
         }
 
         if ($this->getRequest()->isPost() && $validateAndSave) {
-
             if (!$this->getEnabledCsrf()) {
                 $this->getServiceLocator()->get('Helper\Form')->remove($form, 'csrf');
             }
@@ -137,6 +136,11 @@ class OperatorBusinessDetailsController extends OperatorController
             $data['personVersion'] = isset($person['version']) ? $person['version'] : '';
         }
         $data['registeredAddress'] = $this->extractRegisteredAddress($fetchedData);
+
+        $natureOfBusiness = $this->getServiceLocator()
+            ->get('Entity\OrganisationNatureOfBusiness')
+            ->getAllForOrganisationForSelect($data['id']);
+        $data['natureOfBusiness'] = $natureOfBusiness;
         return $data;
     }
 
@@ -153,6 +157,7 @@ class OperatorBusinessDetailsController extends OperatorController
             $operatorDetails = [
                 'id' => $data['id'],
                 'version' => $data['version'],
+                'natureOfBusiness' => $data['natureOfBusiness']
             ];
             $registeredAddress = [];
             switch ($data['type']) {
@@ -225,6 +230,8 @@ class OperatorBusinessDetailsController extends OperatorController
             $this->savePerson($orgId, $data['operator-details']);
         }
 
+        $this->saveNatureOfBusiness($orgId, $params['natureOfBusiness']);
+
         $this->flashMessenger()->addSuccessMessage($message);
         if ($action == 'add') {
             $retv = $this->redirectToRoute('operator/business-details', ['operator' => $orgId]);
@@ -251,6 +258,36 @@ class OperatorBusinessDetailsController extends OperatorController
             );
 
             $this->getServiceLocator()->get('Entity\ContactDetails')->save($contactDetailsData);
+        }
+    }
+
+    /**
+     * Save the nature of business
+     *
+     * @param int $orgId
+     * @param array $natureOfBusiness
+     */
+    private function saveNatureOfBusiness($orgId, $natureOfBusiness = [])
+    {
+        $organisationNatureOfBusinessService = $this->getServiceLocator()->get('Entity\OrganisationNatureOfBusiness');
+        $existingRecords = $organisationNatureOfBusinessService->getAllForOrganisation($orgId);
+        $formattedExistingRecords = [];
+        foreach ($existingRecords as $record) {
+            $formattedExistingRecords[] = $record['refData']['id'];
+        }
+        $recordsToInsert = array_diff($natureOfBusiness, $formattedExistingRecords);
+        $recordsToDelete = array_diff($formattedExistingRecords, $natureOfBusiness);
+
+        $organisationNatureOfBusinessService->deleteByOrganisationAndIds($orgId, $recordsToDelete);
+
+        foreach ($recordsToInsert as $id) {
+            $natureOfBusiness = [
+                'organisation' => $orgId,
+                'refData' => $id,
+                'createdBy' => $this->getLoggedInUser(),
+                'createdOn' => date('d-m-Y H:s:i')
+            ];
+            $organisationNatureOfBusinessService->save($natureOfBusiness);
         }
     }
 
