@@ -169,7 +169,7 @@ trait TaskSearchTrait
                 case 'application':
                     $params = [
                         'type' => 'application',
-                        'typeId' => $this->getFromRoute('lva-application'),
+                        'typeId' => $this->getFromRoute('application'),
                     ];
                     break;
                 default:

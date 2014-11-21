@@ -532,7 +532,9 @@ class TaskController extends AbstractController
                 break;
             case 'application':
                 $data['application'] = $taskTypeId;
-                // need licenceid too?
+                // bit ugly, but we need the licenceId too to properly link the task
+                $data['licence'] = $this->getServiceLocator()
+                    ->get('Entity\Application')->getLicenceIdForApplication($taskTypeId);
                 break;
             default:
                 break;
