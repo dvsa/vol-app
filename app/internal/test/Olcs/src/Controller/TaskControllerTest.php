@@ -5,6 +5,7 @@
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
+ * @author Dan Eggleston <dan@stolenegg.com>
  */
 
 namespace OlcsTest\Controller;
@@ -91,7 +92,8 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
                 'processAdd',
                 'processEdit',
                 'getFromRoute',
-                'getSearchForm'
+                'getSearchForm',
+                'getServiceLocator'
             )
         );
 
@@ -1105,12 +1107,41 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
                 )
             );
 
-        $this->url->expects($this->once())
+        // mock the calls to look up licence id and data for the application
+        ////////
+        $mockApplicationService = $this->getMock(
+            '\StdClass',
+            ['getLicenceIdForApplication', 'getDataForTasks']
+        );
+        $mockApplicationService->expects($this->once())
+            ->method('getLicenceIdForApplication')
+            ->with($this->equalTo(123))
+            ->will($this->returnValue(987));
+        $mockApplicationService->expects($this->once())
+            ->method('getDataForTasks')
+            ->with($this->equalTo(123))
+            ->will($this->returnValue(['id'=>123, 'licence'=>['id'=>987, 'licNo'=>'AB123']]));
+        $mockServiceLocator = $this->getMock('\StdClass', ['get']);
+        $mockServiceLocator->expects($this->any())
+            ->method('get')
+            ->with($this->equalTo('Entity\Application'))
+            ->will($this->returnValue($mockApplicationService));
+        $this->controller->expects($this->any())
+             ->method('getServiceLocator')
+             ->will($this->returnValue($mockServiceLocator));
+        ////////
+
+        $this->url->expects($this->at(0))
+                ->method('fromRoute')
+                ->with('lva-licence', array('licence' => 987))
+                ->will($this->returnValue(''));
+
+        $this->url->expects($this->at(1))
                 ->method('fromRoute')
                 ->with('lva-application', array('application' => 123))
                 ->will($this->returnValue(''));
 
-        $this->controller->expects($this->once())
+        $this->controller->expects($this->any())
                 ->method('url')
                 ->will($this->returnValue($this->url));
 
