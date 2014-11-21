@@ -25,7 +25,8 @@
         "doctrine/doctrine-orm-module": "0.*",
         "olcs/OlcsCommon": "dev-develop",
         "olcs/olcs-logging": "dev-develop",
-        "dvsa/jackrabbit": "v1.1.0"
+        "dvsa/jackrabbit": "v1.1.0",
+        "symfony/Filesystem": "~2.6.0-dev"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "~1.5.3",
