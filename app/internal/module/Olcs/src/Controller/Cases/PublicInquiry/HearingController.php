@@ -122,6 +122,9 @@ class HearingController extends OlcsController\CrudAbstract
 
     protected $inlineScripts = ['forms/pi-hearing', 'shared/definition'];
 
+    /**
+     * @return mixed|\Zend\Http\Response
+     */
     public function redirectToIndex()
     {
         return $this->redirectToRoute(
@@ -145,6 +148,10 @@ class HearingController extends OlcsController\CrudAbstract
         return $data;
     }
 
+    /**
+     * @param array $data
+     * @return array
+     */
     public function processLoad($data)
     {
         // get pi as not set when adding first hearing.
@@ -210,6 +217,10 @@ class HearingController extends OlcsController\CrudAbstract
         return $this->redirectToIndex();
     }
 
+    /**
+     * @param array $hearingData
+     * @return \Common\Data\Object\Publication
+     */
     private function publish($hearingData)
     {
         $service = $this->getServiceLocator()->get('Common\Service\Data\PublicationLink');
@@ -223,6 +234,9 @@ class HearingController extends OlcsController\CrudAbstract
         return $service->createPublicationLink($publicationLink, 'HearingPublicationFilter');
     }
 
+    /**
+     * @param array $data
+     */
     public function addTask(array $data)
     {
         if (isset($data['fields']) && is_array($data['fields'])) {
