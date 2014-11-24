@@ -247,7 +247,7 @@ class Offence extends CaseBase
 
     /**
      * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Dealt with"})
-     * @Form\Type("checkbox")
+     * @Form\Type("\Common\Form\Elements\InputFilters\Checkbox")
      */
     public $isDealtWith = null;
 }

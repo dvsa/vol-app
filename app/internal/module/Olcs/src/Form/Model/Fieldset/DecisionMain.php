@@ -60,7 +60,7 @@ class DecisionMain
 
     /**
      * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Urgent"})
-     * @Form\Type("checkbox")
+     * @Form\Type("\Common\Form\Elements\InputFilters\Checkbox")
      */
     public $urgent = null;
 }

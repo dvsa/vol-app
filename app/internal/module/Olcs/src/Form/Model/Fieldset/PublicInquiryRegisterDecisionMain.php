@@ -128,19 +128,19 @@ class PublicInquiryRegisterDecisionMain
 
     /**
      * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Licence revoked at PI"})
-     * @Form\Type("checkbox")
+     * @Form\Type("\Common\Form\Elements\InputFilters\Checkbox")
      */
     public $licenceRevokedAtPi = null;
 
     /**
      * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Licence suspended at PI"})
-     * @Form\Type("checkbox")
+     * @Form\Type("\Common\Form\Elements\InputFilters\Checkbox")
      */
     public $licenceSuspendedAtPi = null;
 
     /**
      * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Licence curtailed at PI"})
-     * @Form\Type("checkbox")
+     * @Form\Type("\Common\Form\Elements\InputFilters\Checkbox")
      */
     public $licenceCurtailedAtPi = null;
 

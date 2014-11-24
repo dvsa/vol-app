@@ -155,8 +155,8 @@ class Appeal extends CaseBase
     public $comment = null;
 
     /**
-     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Withdrawn?"})
-     * @Form\Type("checkbox")
+     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Cancelled / Withdrawn?"})
+     * @Form\Type("\Common\Form\Elements\InputFilters\Checkbox")
      */
     public $isWithdrawn = null;
 
