@@ -152,7 +152,7 @@ class HearingController extends OlcsController\CrudAbstract
         $piId = $this->getFromRoute('pi');
         $pi = $this->makeRestCall('Pi', 'GET', $piId);
 
-        $data['piDate'] = $pi['agreedDate'];
+        $data['agreedDate'] = $pi['agreedDate'];
 
         $data = parent::processLoad($data);
 
