@@ -4,7 +4,6 @@ namespace Olcs\Controller\Cases\PublicInquiry;
 
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
-use Common\Data\Object\Publication as PublicationObject;
 
 use Zend\View\Model\ViewModel;
 
@@ -171,14 +170,20 @@ class HearingController extends OlcsController\CrudAbstract
 
         $savedData = parent::processSave($data, false);
 
-        $hearingData = $data['fields'];
+        //check whether we need to publish
+        $post = $this->params()->fromPost();
 
-        //if this was an add we need the id of the new record
-        if (!isset($hearingData['id'])) {
-            $hearingData['id'] = $savedData['id'];
+        if (isset($post['form-actions']['publish'])) {
+            $hearingData = $data['fields'];
+            $hearingData['text2'] = $hearingData['details'];
+
+            //if this was an add we need the id of the new record
+            if (empty($hearingData['id'])) {
+                $hearingData['id'] = $savedData['id'];
+            }
+
+            $this->publish($hearingData);
         }
-
-        $this->publish($hearingData);
 
         return $this->redirectToIndex();
     }
@@ -191,6 +196,7 @@ class HearingController extends OlcsController\CrudAbstract
             array_merge((array)$publicationLink->getArrayCopy(), ['pi' => $hearingData['pi']])
         );
         $publicationLink->offsetSet('hearingData', $hearingData);
+        $publicationLink->offsetSet('text2', $hearingData['text2']);
 
         return $service->createPublicationLink($publicationLink, 'HearingPublicationFilter');
     }
