@@ -18,6 +18,8 @@ class Bootstrap
 
     public static function init()
     {
+        ini_set('memory_limit', '512M');
+
         // Setup the autloader
         $loader = static::initAutoloader();
 
