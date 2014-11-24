@@ -18,7 +18,6 @@ class Stay extends CaseBase
 
     /**
      * @Form\Attributes({"id":"dob","class":"extra-long"})
-     * @Form\Required(true)
      * @Form\Options({
      *     "label": "Date of request",
      *     "create_empty_option": true,
@@ -86,7 +85,6 @@ class Stay extends CaseBase
     public $isWithdrawn = null;
 
     /**
-     * @Form\Attributes({"id":"dob"})
      * @Form\Options({
      *     "label": "Withdrawn date",
      *     "create_empty_option": true,
@@ -96,6 +94,7 @@ class Stay extends CaseBase
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Required(true)
      * @Form\Type("DateSelect")
+     * @Form\Attributes({"required":false})
      * @Form\Filter({"name": "DateSelectNullifier"})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
