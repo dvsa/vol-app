@@ -101,7 +101,7 @@ class PublicInquiryHearingFields extends Base
 
     /**
      * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Cancelled / Withdrawn"})
-     * @Form\Type("\Common\Form\Elements\InputFilters\Checkbox")
+     * @Form\Type("OlcsCheckbox")
      */
     public $isCancelled;
 
@@ -152,7 +152,7 @@ class PublicInquiryHearingFields extends Base
 
     /**
      * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Adjourned"})
-     * @Form\Type("\Common\Form\Elements\InputFilters\Checkbox")
+     * @Form\Type("OlcsCheckbox")
      */
     public $isAdjourned;
 

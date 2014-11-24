@@ -65,7 +65,7 @@ class ConditionUndertaking extends CaseBase
      *     "label": "Fulfilled",
      *     "help-block": "Please choose"
      * })
-     * @Form\Type("\Common\Form\Elements\InputFilters\Checkbox")
+     * @Form\Type("OlcsCheckbox")
      */
     public $isFulfilled = null;
 
