@@ -95,7 +95,6 @@ trait LicenceControllerTrait
 
         $licenceLayout = new LicenceLayout();
 
-        $licenceLayout->addChild($this->getQuickActions(), 'actions');
         $licenceLayout->addChild($sectionLayout, 'content');
 
         $params = $this->getHeaderParams();
@@ -145,19 +144,6 @@ trait LicenceControllerTrait
             'companyName' => $data['organisation']['name'],
             'description' => $data['status']['description']
         );
-    }
-
-    /**
-     * Quick action view model
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
-    protected function getQuickActions()
-    {
-        $viewModel = new ViewModel();
-        $viewModel->setTemplate('licence/quick-actions');
-
-        return $viewModel;
     }
 
     /**

@@ -1,32 +1,55 @@
-<?php
-$allCaseMarkers = isset($markers) ? $markers : [];
-?>
-<div class="four-fiths--left">
-    <?php
-        echo $this->navigation('navigation')
-                  ->menu($this->navigation()->findOneBy('id', 'licence'))
-                  ->setUlClass('horizontal-navigation')
-                  ->setAddClassToListItem(true)
-                  ->setPartial('layout/partials/tabs');
-    ?>
-    <div class="content">
-      <?php echo $this->content ?>
-    </div>
+<div class="four-fifths--left">
+  <?php
+  echo $this->navigation('navigation')
+  ->menu($this->navigation()->findOneBy('id', 'licence'))
+  ->setPartial('layout/partials/tabs');
+  ?>
+  <div class="content">
+      <?php echo $this->content; ?>
+  </div>
 </div>
 
 <div class="one-fifth--right">
+  <div class="small-module">
+  <h4 class="small-module__title">Operator details</h4>
+    <p class="small-module__details">
+      <a href="">Don Tarmacadam Ltd</a><br>
+      Limited Company<br>
+      North East England</p>
+  </div><!-- end .small-details -->
+
+  <div class="small-module">
+    <h4 class="small-module__title">Licence details</h4>
+    <p class="small-module__details">
+      <a href="">OB1625270</a><br>
+      Standard National<br>
+      Valid</p>
+  </div><!-- end .small-details -->
+
+  <?php if (isset($markers) && is_array($markers)): ?>
+    <?php foreach($markers as $marker): ?>
+      <?php echo $this->markers($marker, 'appeal') ?>
+      <?php echo $this->markers($marker, 'stay') ?>
+    <?php endforeach; ?>
+  <?php endif; ?>
+
   <div class="record-actions">
     <h5>Quick actions</h5>
     <ul class="record-actions__group">
-      <li class="record-actions__item"><a class="action--secondary" href="">Create case</a></li>
+      <li class="record-actions__item"><a href="" class="action--secondary">Create case</a></li>
+      <li class="record-actions__item"><a href="" class="action--secondary">Create variation</a></li>
+      <li class="record-actions__item"><a href="" class="action--secondary">Print licence</a></li>
+    </ul>
+    <h5>Decisions</h5>
+    <ul class="record-actions__group">
+      <li class="record-actions__item"><a href="" class="action--secondary">Surrender</a></li>
+      <li class="record-actions__item"><a href="" class="action--secondary">Curtail</a></li>
+      <li class="record-actions__item"><a href="" class="action--secondary">Revoke</a></li>
     </ul>
   </div>
-    <?php
-    if (is_array($allCaseMarkers)) {
-        foreach($allCaseMarkers as $markers) {
-            echo $this->markers($markers, 'appeal');
-            echo $this->markers($markers, 'stay');
-        }
-    }
-    ?>
-</div>
+
+  <div class="latest-note">
+    <p class="latest-note__details">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incidid...</p>
+    <a class="latest-note__link">View all 13 notes</a>
+  </div><!-- end .small-details -->
+</div><!-- one-fifth-right -->

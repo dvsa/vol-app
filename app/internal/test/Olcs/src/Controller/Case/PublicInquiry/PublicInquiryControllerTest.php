@@ -130,6 +130,9 @@ class PublicInquiryControllerTest extends AbstractHttpControllerTestCase
         $mockRestHelper = m::mock('RestHelper');
         $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn($mockPi);
 
+        $mockPiService = m::mock('Common\Service\Data\Pi');
+        $mockPiService->shouldReceive('canReopen')->with(1)->andReturn(false);
+
         $mockSlaService = m::mock('Common\Service\Data\Sla');
         $mockSlaService->shouldReceive('setContext')->withAnyArgs();
         $mockSlaService->shouldReceive('fetchBusRules')->withAnyArgs()->andReturn([]);
@@ -137,6 +140,7 @@ class PublicInquiryControllerTest extends AbstractHttpControllerTestCase
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
         $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
         $mockServiceManager->shouldReceive('get')->with('Common\Service\Data\Sla')->andReturn($mockSlaService);
+        $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\Pi')->andReturn($mockPiService);
 
         $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
             [
@@ -207,7 +211,7 @@ class PublicInquiryControllerTest extends AbstractHttpControllerTestCase
         );
         $mockParams = $mockPluginManager->get('params', '');
         $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
-        $mockParams->shouldReceive('fromPost')->with('action')->andReturn($action);
+        $mockParams->shouldReceive('fromPost')->with('formAction')->andReturn($action);
         $mockParams->shouldReceive('fromPost')->with('id')->andReturn($postId);
 
         $mockRedirect = $mockPluginManager->get('redirect', '');
@@ -273,7 +277,7 @@ class PublicInquiryControllerTest extends AbstractHttpControllerTestCase
         );
         $mockParams = $mockPluginManager->get('params', '');
         $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
-        $mockParams->shouldReceive('fromPost')->with('action')->andReturn($action);
+        $mockParams->shouldReceive('fromPost')->with('formAction')->andReturn($action);
         $mockParams->shouldReceive('fromPost')->with('id')->andReturn($postId);
 
         $mockRedirect = $mockPluginManager->get('redirect', '');
@@ -304,5 +308,31 @@ class PublicInquiryControllerTest extends AbstractHttpControllerTestCase
             $result,
             'redirectResponse'
         );
+    }
+
+    public function testGetIdToClose()
+    {
+        $id = 99;
+        $caseId = 99;
+
+        $mockPi = ['Results' => [0 => ['id' => $id]], 'Count' => 1];
+
+        $mockRestHelper = m::mock('RestHelper');
+        $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn($mockPi);
+
+        $this->assertEquals($id, $this->sut->getIdToClose($id));
+
+        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(['params' => 'Params']);
+        $mockParams = $mockPluginManager->get('params', '');
+        $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
+
+        $this->sut->setPluginManager($mockPluginManager);
+
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
+        $this->sut->setServiceLocator($mockServiceManager);
+
+        $this->assertEquals($id, $this->sut->getIdToClose());
+
     }
 }

@@ -100,7 +100,6 @@ return array(
             'BusFeesPlaceholderController' => 'Olcs\Controller\Bus\Fees\BusFeesPlaceholderController',
             'CaseProcessingController' => 'Olcs\Controller\Cases\Processing\ProcessingController',
             'CaseNoteController' => 'Olcs\Controller\Cases\Processing\NoteController',
-            'CaseDecisionsController' => 'Olcs\Controller\Cases\Processing\DecisionsController',
             'CaseRevokeController' => 'Olcs\Controller\Cases\Processing\RevokeController',
             'LvaApplication' => 'Olcs\Controller\Lva\Application\OverviewController',
             'LvaApplication/TypeOfLicence' => 'Olcs\Controller\Lva\Application\TypeOfLicenceController',
@@ -151,6 +150,11 @@ return array(
             'LvaVariation/TaxiPhv' => 'Olcs\Controller\Lva\Variation\TaxiPhvController',
             'LvaVariation/Discs' => 'Olcs\Controller\Lva\Variation\DiscsController',
             'LvaVariation/ConditionsUndertakings' => 'Olcs\Controller\Lva\Variation\ConditionsUndertakingsController',
+            'OperatorController' => 'Olcs\Controller\Operator\OperatorController',
+            'OperatorBusinessDetailsController' => 'Olcs\Controller\Operator\OperatorBusinessDetailsController',
+            'OperatorPeopleController' => 'Olcs\Controller\Operator\OperatorPeopleController',
+            'OperatorLicencesApplicationsController' =>
+                'Olcs\Controller\Operator\OperatorLicencesApplicationsController',
             'TMController' => 'Olcs\Controller\TransportManager\TransportManagerController',
             'TMDetailsDetailController' =>
                 'Olcs\Controller\TransportManager\Details\TransportManagerDetailsDetailController',
@@ -206,6 +210,8 @@ return array(
             'piListData' => 'Olcs\View\Helper\PiListData',
             'formSubmissionSections' => 'Olcs\Form\View\Helper\SubmissionSections',
             'submissionSectionDetails' => 'Olcs\View\Helper\SubmissionSectionDetails',
+            'submissionSectionOverview' => 'Olcs\View\Helper\SubmissionSectionOverview',
+            'SubmissionSectionMultipleTables' => 'Olcs\View\Helper\SubmissionSectionMultipleTables',
             'markers' => 'Olcs\View\Helper\Markers',
         ),
         'delegators' => array(
@@ -250,24 +256,27 @@ return array(
             'Olcs\Listener\RouteParam\Marker' => 'Olcs\Listener\RouteParam\Marker',
             'Olcs\Service\Data\BusNoticePeriod' => 'Olcs\Service\Data\BusNoticePeriod',
             'Olcs\Service\Data\BusServiceType' => 'Olcs\Service\Data\BusServiceType',
-            'Olcs\Service\Data\Licence' => 'Olcs\Service\Data\Licence',
             'Olcs\Service\Data\User' => 'Olcs\Service\Data\User',
             'Olcs\Service\Data\PresidingTc' => 'Olcs\Service\Data\PresidingTc',
             'Olcs\Service\Data\SiPenaltyType' => 'Olcs\Service\Data\SiPenaltyType',
             'Olcs\Service\Data\Submission' => 'Olcs\Service\Data\Submission',
             'Olcs\Service\Data\SubmissionSectionComment' => 'Olcs\Service\Data\SubmissionSectionComment',
             'Olcs\Service\Data\Fee' => 'Olcs\Service\Data\Fee',
-            'Olcs\Service\Data\Search\SearchTypeManager' => 'Olcs\Service\Data\Search\SearchTypeManagerFactory'
+            'Olcs\Service\Data\Organisation' => 'Olcs\Service\Data\Organisation',
+            'Olcs\Service\Data\Search\SearchTypeManager' => 'Olcs\Service\Data\Search\SearchTypeManagerFactory',
+            'Olcs\Service\Data\Pi' => 'Olcs\Service\Data\Pi',
         )
     ),
     'form_elements' => [
         'factories' => [
             'PublicInquiryReason' => 'Olcs\Form\Element\PublicInquiryReasonFactory',
             'SubmissionSections' => 'Olcs\Form\Element\SubmissionSectionsFactory',
-            'Olcs\Form\Element\SlaDateSelect' => 'Olcs\Form\Element\SlaDateSelectFactory'
+            'Olcs\Form\Element\SlaDateSelect' => 'Olcs\Form\Element\SlaDateSelectFactory',
+            'Olcs\Form\Element\SlaDateTimeSelect' => 'Olcs\Form\Element\SlaDateTimeSelectFactory'
         ],
         'aliases' => [
-            'SlaDateSelect' => 'Olcs\Form\Element\SlaDateSelect'
+            'SlaDateSelect' => 'Olcs\Form\Element\SlaDateSelect',
+            'SlaDateTimeSelect' => 'Olcs\Form\Element\SlaDateTimeSelect'
         ]
     ],
     'search' => [
@@ -293,7 +302,6 @@ return array(
             'Olcs\Service\Data\PublicInquiryDecision' => 'Olcs\Service\Data\PublicInquiryDecision',
             'Olcs\Service\Data\PublicInquiryDefinition' => 'Olcs\Service\Data\PublicInquiryDefinition',
             'Olcs\Service\Data\ImpoundingLegislation' => 'Olcs\Service\Data\ImpoundingLegislation',
-            'Olcs\Service\Data\PiVenue' => 'Olcs\Service\Data\PiVenue',
         ]
     ]
 );

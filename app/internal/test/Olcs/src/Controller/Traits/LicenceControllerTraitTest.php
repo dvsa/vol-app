@@ -5,7 +5,7 @@ namespace OlcsTest\Controller\Traits;
 use Mockery as m;
 use Zend\View\HelperPluginManager as HelperPluginManager;
 use Zend\ServiceManager\ServiceManager as ServiceLocator;
-use Olcs\Service\Data\Licence as LicenceService;
+use Common\Service\Data\Licence as LicenceService;
 
 /**
  * Class LicenceControllerTraitTest

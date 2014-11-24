@@ -1,0 +1,14 @@
+<div class="one-fifth--left">
+    <h4><?php echo $this->translate('internal-licence-bus'); ?></h4>
+    <?php
+        $tableFilters = $this->placeholder('tableFilters')->getValue();
+        if($tableFilters instanceof \Zend\Form\Form) {
+            echo $this->form($tableFilters);
+        }
+    ?>
+</div><!-- one-fifth-left -->
+<div class="three-fifths">
+    <div class="content">
+        <?php echo $this->table ?>
+    </div>
+</div><!-- three-fifths -->

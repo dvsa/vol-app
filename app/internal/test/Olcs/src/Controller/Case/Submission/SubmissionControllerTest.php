@@ -384,6 +384,83 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
         $mockParams->shouldReceive('fromRoute')->with('submission')->andReturn($submissionId);
         $mockParams->shouldReceive('fromRoute')->with('section')->andReturn($section);
+        $mockParams->shouldReceive('fromRoute')->with('subSection')->andReturn('');
+
+        $mockSubmissionService->shouldReceive('fetchData')
+            ->with($submissionId)
+            ->andReturn($submissionData);
+        $mockSubmissionService->shouldReceive('createSubmissionSection')
+            ->with($caseId, $section, $mockConfig['submission_config']['sections'][$section])
+            ->andReturn($submissionSectionData);
+
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('config')->andReturn($mockConfig);
+        $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Data\Submission')
+            ->andReturn($mockSubmissionService);
+
+        $sut = new \Olcs\Controller\Cases\Submission\SubmissionController();
+
+        $event = $this->routeMatchHelper->getMockRouteMatch(
+            array('controller' => 'submission_updateTable','action' => 'update-table')
+        );
+        $sut->setEvent($event);
+
+        $sut->getEvent()->getRouteMatch()->setParam('case', $caseId);
+        $sut->getEvent()->getRouteMatch()->setParam('submission', $submissionId);
+        $sut->getEvent()->getRouteMatch()->setParam('section', $section);
+
+        $sut->setServiceLocator($mockServiceManager);
+        $sut->setPluginManager($mockPluginManager);
+
+        $result = $sut->deleteTableRows();
+
+        $this->assertNull($result);
+    }
+
+    public function testDeleteTableRowsMultipleTables()
+    {
+        $submissionId = 99;
+        $caseId = 24;
+        $section = 'conditions-and-undertakings';
+        $subSection = 'conditions';
+        $mockConfig = ['submission_config'=>['sections' => [$section => 'foo']]];
+
+        $submissionData = [
+            'version' => 1,
+            'dataSnapshot' => '{"' . $section . '":{"data":{"' . $subSection . '":[{"id":"77"}]}}}'
+        ];
+
+        $submissionSectionData = ['data' => 'bar'];
+        $pluginManagerHelper = new ControllerPluginManagerHelper();
+
+        $mockPluginManager = $pluginManagerHelper->getMockPluginManager(
+            [
+                'params' => 'Params',
+                'redirect' => 'Redirect'
+            ]
+        );
+
+        $mockSubmissionService = m::mock('Olcs\Service\Data\Submission');
+        $mockRestHelper = m::mock('RestHelper');
+
+        $mockRestHelper->shouldReceive('makeRestCall')->with(
+            'Submission',
+            'PUT',
+            [
+                'id' => $submissionId,
+                'version' => $submissionData['version'],
+                'dataSnapshot' => json_encode([$section => ['data' => [$subSection => []]]])
+            ],
+            ''
+        )->andReturnNull();
+
+        $mockParams = $mockPluginManager->get('params', '');
+        $mockParams->shouldReceive('fromPost')->with('id')->andReturn([0 => 77]);
+        $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
+        $mockParams->shouldReceive('fromRoute')->with('submission')->andReturn($submissionId);
+        $mockParams->shouldReceive('fromRoute')->with('section')->andReturn($section);
+        $mockParams->shouldReceive('fromRoute')->with('subSection')->andReturn($subSection);
 
         $mockSubmissionService->shouldReceive('fetchData')
             ->with($submissionId)
@@ -460,6 +537,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
         $mockParams->shouldReceive('fromRoute')->with('submission')->andReturn($submissionId);
         $mockParams->shouldReceive('fromRoute')->with('section')->andReturn($section);
+        $mockParams->shouldReceive('fromRoute')->with('subSection')->andReturn('');
         $mockParams->shouldReceive('fromPost')->with('formAction')->andReturn('delete-row');
         $mockParams->shouldReceive('fromPost')->with('id')->andReturn([0 => 77]);
 
@@ -665,7 +743,9 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $sut = new \Olcs\Controller\Cases\Submission\SubmissionController();
 
         $submissionId = 99;
-        $mockSubmission = ['submissionType' =>
+        $mockSubmission = [
+            'id' => $submissionId,
+            'submissionType' =>
             [
                 'id' => 'foo'
             ]

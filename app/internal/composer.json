@@ -35,7 +35,8 @@
         "zendframework/zend-developer-tools": "dev-master",
         "dvsa/jackrabbit": "v1.1.0",
         "olcs/olcs-logging": "dev-develop",
-        "olcs/autoload": "dev-develop"
+        "olcs/autoload": "dev-develop",
+        "symfony/Filesystem": "~2.6.0-dev"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "~1.5.3",
@@ -56,9 +57,9 @@
         }
     },
     "config": {
-      "preferred-install": "dist",
+        "preferred-install": "dist",
         "github-oauth": {
-          "github.com": "5cdf40f8d81a7675fdaa5fc92e9381526ef4db7f"
-      }
+            "github.com": "5cdf40f8d81a7675fdaa5fc92e9381526ef4db7f"
+        }
     }
 }

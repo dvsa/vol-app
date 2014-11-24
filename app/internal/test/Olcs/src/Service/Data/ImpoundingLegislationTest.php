@@ -20,7 +20,7 @@ class ImpoundingLegislationTest extends \PHPUnit_Framework_TestCase
      */
     public function testFetchListOptions($niFlag, $goodsOrPsv, $expectedList)
     {
-        $mockLicenceService = $this->getMock('\Olcs\Service\Data\Licence');
+        $mockLicenceService = $this->getMock('\Common\Service\Data\Licence');
         $mockLicenceService->expects($this->once())
             ->method('fetchLicenceData')
             ->willReturn(['niFlag'=> $niFlag, 'goodsOrPsv' => ['id'=> $goodsOrPsv], 'trafficArea' => ['id'=> 'B']]);
@@ -40,7 +40,7 @@ class ImpoundingLegislationTest extends \PHPUnit_Framework_TestCase
      */
     public function testFetchListOptionsNoData()
     {
-        $mockLicenceService = $this->getMock('\Olcs\Service\Data\Licence');
+        $mockLicenceService = $this->getMock('\Common\Service\Data\Licence');
         $mockLicenceService->expects($this->once())
             ->method('fetchLicenceData')
             ->willReturn(['niFlag'=> true, 'goodsOrPsv' => ['id'=> 'lcat_gv'], 'trafficArea' => ['id'=> 'B']]);

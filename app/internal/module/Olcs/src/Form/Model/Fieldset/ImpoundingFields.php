@@ -65,7 +65,8 @@ class ImpoundingFields
     public $vrm = null;
 
     /**
-     * @Form\Attributes({"id":"impoundingLegislationTypes","placeholder":"","multiple":"multiple","class":"extra-long"})
+     * @Form\Attributes({"id":"impoundingLegislationTypes","placeholder":"","multiple":"multiple",
+     *     "class":"chosen-select-large"})
      * @Form\Options({
      *     "label": "Select legislation",
      *     "disable_inarray_validator": false,
@@ -115,7 +116,7 @@ class ImpoundingFields
      * @Form\Attributes({"id":"piVenue","placeholder":"","class":"medium", "required":false})
      * @Form\Options({
      *     "label": "Hearing location",
-     *     "service_name": "Olcs\Service\Data\PiVenue",
+     *     "service_name": "Common\Service\Data\PiVenue",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a category",

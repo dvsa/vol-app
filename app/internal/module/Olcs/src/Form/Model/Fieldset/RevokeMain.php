@@ -12,7 +12,7 @@ use Zend\Form\Annotation as Form;
 class RevokeMain extends CaseBase
 {
     /**
-     * @Form\Attributes({"id":"","placeholder":"","class":"long tall", "multiple" : true})
+     * @Form\Attributes({"id":"","placeholder":"","class":"chosen-select-medium", "multiple" : true})
      * @Form\Options({
      *     "label": "Select legislation",
      *     "service_name": "Olcs\Service\Data\PublicInquiryReason",

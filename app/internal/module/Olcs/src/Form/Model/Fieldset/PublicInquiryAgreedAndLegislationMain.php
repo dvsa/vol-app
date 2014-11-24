@@ -51,7 +51,7 @@ class PublicInquiryAgreedAndLegislationMain
     public $agreedByTcRole = null;
 
     /**
-     * @Form\Attributes({"id":"","placeholder":"", "class":"long tall", "multiple":true})
+     * @Form\Attributes({"id":"","placeholder":"", "class":"chosen-select-medium", "multiple":true})
      * @Form\Options({
      *     "label": "Type of PI",
      *     "category": "pi_type",
@@ -64,7 +64,7 @@ class PublicInquiryAgreedAndLegislationMain
     public $piTypes = null;
 
     /**
-     * @Form\Attributes({"id":"","placeholder":"","class":"long tall", "multiple" : true})
+     * @Form\Attributes({"id":"","placeholder":"","class":"chosen-select-medium", "multiple" : true})
      * @Form\Options({
      *     "label": "Legislation",
      *     "service_name": "Olcs\Service\Data\PublicInquiryReason",
