@@ -5,7 +5,6 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-
 namespace Olcs\Controller\Cases;
 
 use Zend\View\Model\ViewModel;
@@ -79,12 +78,15 @@ class CaseController extends OlcsController\CrudAbstract
      */
     protected $dataBundle = array(
         'children' => array(
+            /**
+             * @todo [OLCS-5306] check this, it appears to be an invalid part of the bundle
             'submissionSections' => array(
                 'properties' => array(
                     'id',
                     'description'
                 )
             ),
+             */
             'legacyOffences' => array(
                 'properties' => 'ALL',
             ),

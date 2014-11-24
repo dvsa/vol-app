@@ -25,7 +25,7 @@ $markers = $this->placeholder('markers')->getValue();
     <?php endif; ?>
 
     <h3>Licence</h3>
-    <p><a href="<?php echo $this->url('licence/details/overview', ['licence' => $case['licence']['id']], [], false); ?>"><?php echo $case['licence']['licNo']; ?></a></p>
+    <p><a href="<?php echo $this->url('lva-licence', ['licence' => $case['licence']['id']], [], false); ?>"><?php echo $case['licence']['licNo']; ?></a></p>
     <p><?php echo $this->translate($case['licence']['licenceType']['id']); ?><br/><?php echo $this->translate($case['licence']['status']['id']); ?></p>
     <?php endif; ?>
 

@@ -5,15 +5,10 @@
  *
  * @author S Lizzio <shaun.lizzio@valtech.co.uk>
  */
-
 namespace Olcs\Controller\Cases\ConditionUndertaking;
 
-// Olcs
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
-
-use Olcs\Controller\Traits\DeleteActionTrait;
-use Zend\View\Model\ViewModel;
 use Common\Service\Table\Formatter\Address;
 
 /**
@@ -123,12 +118,15 @@ class ConditionUndertakingController extends OlcsController\CrudAbstract
             'case' => array(
                 'properties' => array('id')
             ),
+            /**
+             * @todo [OLCS-5306] check this, it appears to be an invalid part of the bundle
             'prohibitionType' => array(
                 'properties' => array(
                     'id',
                     'description'
                 )
             ),
+             */
             'attachedTo' => array(
                 'properties' => array('id', 'description')
             ),
