@@ -100,7 +100,8 @@ class PublicInquiryRegisterDecisionMain
 
     /**
      * @Form\Required(true)
-     * @Form\Attributes({"id":"","placeholder":"","class":"extra-long tall",  "multiple" : true, "required": false})
+     * @Form\Attributes({"id":"","placeholder":"","class":"chosen-select-large",  "multiple" : true,
+     *     "required": false})
      * @Form\Options({
      *     "label": "Decisions",
      *     "service_name": "Olcs\Service\Data\PublicInquiryDecision",
@@ -124,6 +125,24 @@ class PublicInquiryRegisterDecisionMain
      * })
      */
     public $decisions = null;
+
+    /**
+     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Licence revoked at PI"})
+     * @Form\Type("checkbox")
+     */
+    public $licenceRevokedAtPi = null;
+
+    /**
+     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Licence suspended at PI"})
+     * @Form\Type("checkbox")
+     */
+    public $licenceSuspendedAtPi = null;
+
+    /**
+     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Licence curtailed at PI"})
+     * @Form\Type("checkbox")
+     */
+    public $licenceCurtailedAtPi = null;
 
     /**
      * @Form\Attributes({"id":"","placeholder":"","class":"small"})
@@ -165,7 +184,8 @@ class PublicInquiryRegisterDecisionMain
     public $notificationDate = null;
 
     /**
-     * @Form\Attributes({"id":"","placeholder":"","class":"extra-long tall  js-definition-source", "multiple":true})
+     * @Form\Attributes({"id":"","placeholder":"","class":"chosen-select-large js-definition-source",
+     *     "multiple":true})
      * @Form\Options({
      *     "label": "Definition",
      *     "disable_inarray_validator": false,

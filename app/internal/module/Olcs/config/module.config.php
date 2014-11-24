@@ -210,6 +210,8 @@ return array(
             'piListData' => 'Olcs\View\Helper\PiListData',
             'formSubmissionSections' => 'Olcs\Form\View\Helper\SubmissionSections',
             'submissionSectionDetails' => 'Olcs\View\Helper\SubmissionSectionDetails',
+            'submissionSectionOverview' => 'Olcs\View\Helper\SubmissionSectionOverview',
+            'SubmissionSectionMultipleTables' => 'Olcs\View\Helper\SubmissionSectionMultipleTables',
             'markers' => 'Olcs\View\Helper\Markers',
         ),
         'delegators' => array(
@@ -260,19 +262,20 @@ return array(
             'Olcs\Service\Data\Submission' => 'Olcs\Service\Data\Submission',
             'Olcs\Service\Data\SubmissionSectionComment' => 'Olcs\Service\Data\SubmissionSectionComment',
             'Olcs\Service\Data\Fee' => 'Olcs\Service\Data\Fee',
-            'Olcs\Service\Data\Organisation' => 'Olcs\Service\Data\Organisation',
             'Olcs\Service\Data\Search\SearchTypeManager' => 'Olcs\Service\Data\Search\SearchTypeManagerFactory',
-            'Olcs\Service\Data\Pi' => 'Olcs\Service\Data\Pi',
+            'Olcs\Service\Data\Pi' => 'Olcs\Service\Data\Pi'
         )
     ),
     'form_elements' => [
         'factories' => [
             'PublicInquiryReason' => 'Olcs\Form\Element\PublicInquiryReasonFactory',
             'SubmissionSections' => 'Olcs\Form\Element\SubmissionSectionsFactory',
-            'Olcs\Form\Element\SlaDateSelect' => 'Olcs\Form\Element\SlaDateSelectFactory'
+            'Olcs\Form\Element\SlaDateSelect' => 'Olcs\Form\Element\SlaDateSelectFactory',
+            'Olcs\Form\Element\SlaDateTimeSelect' => 'Olcs\Form\Element\SlaDateTimeSelectFactory'
         ],
         'aliases' => [
-            'SlaDateSelect' => 'Olcs\Form\Element\SlaDateSelect'
+            'SlaDateSelect' => 'Olcs\Form\Element\SlaDateSelect',
+            'SlaDateTimeSelect' => 'Olcs\Form\Element\SlaDateTimeSelect'
         ]
     ],
     'search' => [
@@ -298,7 +301,6 @@ return array(
             'Olcs\Service\Data\PublicInquiryDecision' => 'Olcs\Service\Data\PublicInquiryDecision',
             'Olcs\Service\Data\PublicInquiryDefinition' => 'Olcs\Service\Data\PublicInquiryDefinition',
             'Olcs\Service\Data\ImpoundingLegislation' => 'Olcs\Service\Data\ImpoundingLegislation',
-            'Olcs\Service\Data\PiVenue' => 'Olcs\Service\Data\PiVenue',
         ]
     ]
 );

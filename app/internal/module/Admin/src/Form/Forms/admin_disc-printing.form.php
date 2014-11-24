@@ -93,6 +93,9 @@ return [
                     'originalEndNumber' => [
                         'type' => 'hidden'
                     ],
+                    'endNumberIncreased' => [
+                        'type' => 'hidden'
+                    ],
                 ]
             ],
             [

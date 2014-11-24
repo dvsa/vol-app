@@ -206,7 +206,9 @@ class SubmissionController extends OlcsController\CrudAbstract
     {
         $params['case'] = $this->params()->fromRoute('case');
         $params['section'] = $this->params()->fromRoute('section');
+        $params['subSection'] = $this->params()->fromRoute('subSection');
         $params['submission'] = $this->params()->fromRoute('submission');
+
         $rowsToDelete = $this->params()->fromPost('id');
         $submissionService = $this->getServiceLocator()->get('Olcs\Service\Data\Submission');
 
@@ -214,12 +216,21 @@ class SubmissionController extends OlcsController\CrudAbstract
         $snapshotData = json_decode($submission['dataSnapshot'], true);
         if (array_key_exists($params['section'], $snapshotData) &&
         is_array($snapshotData[$params['section']]['data'])) {
-            foreach ($snapshotData[$params['section']]['data'] as $key => $dataRow) {
-                if (in_array($dataRow['id'], $rowsToDelete)) {
-                    unset($snapshotData[$params['section']]['data'][$key]);
+            if (!empty($params['subSection'])) {
+                foreach ($snapshotData[$params['section']]['data'][$params['subSection']] as $key => $dataRow) {
+                    if (in_array($dataRow['id'], $rowsToDelete)) {
+                        unset($snapshotData[$params['section']]['data'][$params['subSection']][$key]);
+                    }
                 }
+                ksort($snapshotData[$params['section']]['data'][$params['subSection']]);
+            } else {
+                foreach ($snapshotData[$params['section']]['data'] as $key => $dataRow) {
+                    if (in_array($dataRow['id'], $rowsToDelete)) {
+                        unset($snapshotData[$params['section']]['data'][$key]);
+                    }
+                }
+                ksort($snapshotData[$params['section']]['data']);
             }
-            ksort($snapshotData[$params['section']]['data']);
             $data['id'] = $params['submission'];
             $data['version'] = $submission['version'];
             $data['dataSnapshot'] = json_encode($snapshotData);
