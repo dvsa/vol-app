@@ -148,8 +148,12 @@ return array(
     ),
     'service_manager' => array(
         'factories' => array(
-            'Olcs\Service\Data\EbsrPack' => 'Olcs\Service\Data\EbsrPack',
             'Olcs\InputFilter\EbsrPackInput' => 'Olcs\InputFilter\EbsrPackFactory'
+        )
+    ),
+    'data_services' => array(
+        'factories' => array(
+            'Olcs\Service\Data\EbsrPack' => 'Olcs\Service\Data\EbsrPack',
         )
     ),
     'controller_plugins' => array(
@@ -165,7 +169,7 @@ return array(
         'not_found_template' => 'error/404',
         'exception_template' => 'error/index',
         'template_map' => array(
-            'layout/layout' => __DIR__ . '/../view/layout/base.phtml',
+            'layout/layout' => __DIR__ . '/../view/layouts/base.phtml',
             'error/404' => __DIR__ . '/../view/error/404.phtml',
             'error/index' => __DIR__ . '/../view/error/index.phtml'
         ),
@@ -178,17 +182,14 @@ return array(
         'default' => array()
     ),
     'asset_path' => '//dvsa-static.olcsdv-ap01.olcs.npm',
-    'filters' => [
-        'factories' => [
-            'Olcs\Filter\DecompressUploadToTmp' => 'Olcs\Filter\DecompressUploadToTmpFactory',
-        ],
-        'aliases' => [
-            'DecompressUploadToTmp' => 'Olcs\Filter\DecompressUploadToTmp'
-        ]
-    ],
     'service_api_mapping' => array(
         'endpoints' => array(
             'ebsr' => 'http://olcs-ebsr/'
         )
+    ),
+    'rest_services' => array(
+        'delegators' => [
+            'Olcs\RestService\ebsr\pack' => ['Olcs\Service\Rest\EbsrPackDelegatorFactory']
+        ]
     )
 );

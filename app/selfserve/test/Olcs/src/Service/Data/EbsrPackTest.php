@@ -14,23 +14,10 @@ class EbsrPackTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreateService()
     {
-        $mockTranslator = m::mock('Zend\I18n\TranslatorInterface');
-        $mockTranslator->shouldReceive('getLocale')->andReturn('en_GB');
-
-        $mockRestClient = m::mock('\Common\Util\RestClient');
-        $mockRestClient->shouldReceive('setLanguage')->with('en_GB');
-
-        $mockApiResolver = m::mock('\Common\Util\ResolveApi');
-        $mockApiResolver
-            ->shouldReceive('getClient')
-            ->with('ebsr\pack')
-            ->andReturn($mockRestClient);
-
         $mockValidationChain = m::mock('Zend\InputFilter\Input');
 
         $mockSl = m::mock('\Zend\ServiceManager\ServiceManager');
-        $mockSl->shouldReceive('get')->with('translator')->andReturn($mockTranslator);
-        $mockSl->shouldReceive('get')->with('ServiceApiResolver')->andReturn($mockApiResolver);
+        $mockSl->shouldReceive('getServiceLocator')->andReturnSelf();
         $mockSl->shouldReceive('get')->with('Olcs\InputFilter\EbsrPackInput')->andReturn($mockValidationChain);
 
         $sut = new EbsrPack();
@@ -49,11 +36,29 @@ class EbsrPackTest extends \PHPUnit_Framework_TestCase
         $mockValidator->shouldReceive('setValue')->with(vfsStream::url('tmp/pack.zip'));
         $mockValidator->shouldReceive('isValid')->andReturn(true);
 
+        $mockRestClient = m::mock('Common\Util\RestClient');
+        $mockRestClient->shouldReceive('post')->andReturn(false);
+
         $data['fields']['file']['extracted_dir'] = vfsStream::url('tmp');
 
         $sut = new EbsrPack();
         $sut->setValidationChain($mockValidator);
+        $sut->setRestClient($mockRestClient);
 
-        $this->assertEquals(1, $sut->processPackUpload($data));
+        $this->assertEquals('Failed to submit packs for processing, please try again', $sut->processPackUpload($data));
+    }
+
+    public function testProcessPackUploadNoPacks()
+    {
+        vfsStream::setup('tmp');
+
+        $data['fields']['file']['extracted_dir'] = vfsStream::url('tmp');
+
+        $sut = new EbsrPack();
+
+        $this->assertEquals(
+            'No packs were found in your upload, please verify your file and try again',
+            $sut->processPackUpload($data)
+        );
     }
 }
