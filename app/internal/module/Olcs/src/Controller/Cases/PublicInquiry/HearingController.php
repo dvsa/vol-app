@@ -168,6 +168,11 @@ class HearingController extends OlcsController\CrudAbstract
         return $data;
     }
 
+    public function onInvalidPost($form)
+    {
+        $this->processLoad($this->loadCurrent());
+    }
+
     /**
      * Overrides the parent, make sure there's nothing there shouldn't be in the optional fields
      *
