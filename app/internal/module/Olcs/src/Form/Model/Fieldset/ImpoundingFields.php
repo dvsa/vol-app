@@ -65,7 +65,8 @@ class ImpoundingFields
     public $vrm = null;
 
     /**
-     * @Form\Attributes({"id":"impoundingLegislationTypes","placeholder":"","multiple":"multiple","class":"extra-long"})
+     * @Form\Attributes({"id":"impoundingLegislationTypes","placeholder":"","multiple":"multiple",
+     *     "class":"chosen-select-large"})
      * @Form\Options({
      *     "label": "Select legislation",
      *     "disable_inarray_validator": false,

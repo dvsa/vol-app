@@ -25,7 +25,7 @@ class ImpoundingController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $identifierName = 'id';
+    protected $identifierName = 'impounding';
 
     /**
      * Table name string
