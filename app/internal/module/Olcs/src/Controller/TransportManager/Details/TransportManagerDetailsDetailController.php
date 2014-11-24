@@ -22,14 +22,15 @@ class TransportManagerDetailsDetailController extends AbstractTransportManagerDe
     protected $section = 'details-details';
 
     /**
-     * Placeholder stub
+     * Index action
      *
      * @return ViewModel
      */
     public function indexAction()
     {
-        $view = $this->getViewWithTm();
-        $view->setTemplate('transport-manager/index');
+        $form = $this->getForm('TransportManager');
+        $view = $this->getViewWithTm(['form' => $form]);
+        $view->setTemplate('transport-manager/details/tm-details');
         return $this->renderView($view);
     }
 }
