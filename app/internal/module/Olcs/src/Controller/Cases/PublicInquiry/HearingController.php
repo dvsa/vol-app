@@ -190,13 +190,6 @@ class HearingController extends OlcsController\CrudAbstract
             $data['fields']['adjournedDate'] = null;
         }
 
-        $data['fields']['pi'] = [
-            'id' =>$data['fields']['pi'],
-            'piStatus' => 'pi_s_schedule',
-        ];
-
-        $this->addTask($data);
-
         $savedData = parent::processSave($data, false);
 
         //check whether we need to publish
@@ -213,6 +206,13 @@ class HearingController extends OlcsController\CrudAbstract
 
             $this->publish($hearingData);
         }
+
+        $data['fields']['pi'] = [
+            'id' =>$data['fields']['pi'],
+            'piStatus' => 'pi_s_schedule',
+        ];
+
+        $this->addTask($data);
 
         return $this->redirectToIndex();
     }
