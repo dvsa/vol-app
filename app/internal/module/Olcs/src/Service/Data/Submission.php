@@ -260,6 +260,7 @@ class Submission extends AbstractData implements CloseableInterface
                 );
             }
         }
+
         return $rawData;
     }
 
@@ -573,6 +574,45 @@ class Submission extends AbstractData implements CloseableInterface
         }
 
         return $sectionData;
+    }
+
+    /**
+     * section oppositions
+     */
+    protected function filterConditionsAndUndertakingsData(array $data = array())
+    {
+        $dataToReturnArray = array();
+        if (isset($data['conditionUndertakings']) && is_array($data['conditionUndertakings'])) {
+
+            usort(
+                $data['conditionUndertakings'],
+                function ($a, $b) {
+                    return strtotime($b['createdOn']) - strtotime($a['createdOn']);
+                }
+            );
+
+            foreach ($data['conditionUndertakings'] as $entity) {
+                $thisEntity = array();
+                $thisEntity['id'] = $entity['id'];
+                $thisEntity['version'] = $entity['version'];
+                $thisEntity['createdOn'] = $entity['createdOn'];
+                $thisEntity['caseId'] = $entity['case']['id'];
+                $thisEntity['addedVia'] = $entity['addedVia'];
+                $thisEntity['isFulfilled'] = $entity['isFulfilled'];
+                $thisEntity['isDraft'] = $entity['isDraft'];
+                $thisEntity['attachedTo'] = $entity['attachedTo'];
+
+                if (empty($entity['operatingCentre'])) {
+                    $thisEntity['OcAddress'] = [];
+                } else {
+                    $thisEntity['OcAddress'] = $entity['operatingCentre']['address'];
+                }
+                $tableName = $entity['conditionType']['id'] == 'cdt_und' ? 'undertakings' : 'conditions';
+                $dataToReturnArray[$tableName][] = $thisEntity;
+            }
+        }
+
+        return $dataToReturnArray;
     }
 
     /**

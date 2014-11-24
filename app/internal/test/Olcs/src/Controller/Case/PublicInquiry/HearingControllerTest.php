@@ -32,6 +32,7 @@ class HearingControllerTest extends AbstractHttpControllerTestCase
                 'isAdjourned' => 'N',
                 'adjournedReason' => 'this data will be made null',
                 'adjournedDate' => 'this data will be made null',
+                'pi' => 1
             ]
         ];
 
@@ -45,7 +46,10 @@ class HearingControllerTest extends AbstractHttpControllerTestCase
                 'isAdjourned' => 'N',
                 'adjournedReason' => null,
                 'adjournedDate' => null,
-
+                'pi' => [
+                    'id' => 1,
+                    'piStatus' => 'pi_s_schedule'
+                ]
             ]
         ];
 

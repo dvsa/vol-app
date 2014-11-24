@@ -113,7 +113,8 @@ class HearingController extends OlcsController\CrudAbstract
             ],
             'pi' => [
                 'properties' => [
-                    'id'
+                    'id',
+                    'agreedDate'
                 ],
             ],
         ]
@@ -144,6 +145,22 @@ class HearingController extends OlcsController\CrudAbstract
         return $data;
     }
 
+    public function processLoad($data)
+    {
+        // get pi as not set when adding first hearing.
+        // Should really alter bundle to query pi table, not hearings.
+        $piId = $this->getFromRoute('pi');
+        $pi = $this->makeRestCall('Pi', 'GET', $piId);
+
+        $data['agreedDate'] = $pi['agreedDate'];
+
+        $data = parent::processLoad($data);
+
+        $this->getServiceLocator()->get('Common\Service\Data\Sla')->setContext('pi_hearing', $data);
+
+        return $data;
+    }
+
     /**
      * Overrides the parent, make sure there's nothing there shouldn't be in the optional fields
      *
@@ -165,6 +182,11 @@ class HearingController extends OlcsController\CrudAbstract
             $data['fields']['adjournedReason'] = null;
             $data['fields']['adjournedDate'] = null;
         }
+
+        $data['fields']['pi'] = [
+            'id' =>$data['fields']['pi'],
+            'piStatus' => 'pi_s_schedule',
+        ];
 
         $this->addTask($data);
 

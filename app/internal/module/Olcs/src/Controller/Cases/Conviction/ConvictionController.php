@@ -141,6 +141,12 @@ class ConvictionController extends OlcsController\CrudAbstract
     protected $inlineScripts = ['showhideinput', 'conviction'];
 
     /**
+     * Entity display name (used by confirm plugin via deleteActionTrait)
+     * @var string
+     */
+    protected $entityDisplayName = 'conviction';
+
+    /**
      * Override Save data to set the operator name field if defendant type is operator
      *
      * @param array $data
