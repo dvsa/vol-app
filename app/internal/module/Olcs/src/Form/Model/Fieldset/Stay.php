@@ -79,8 +79,8 @@ class Stay extends CaseBase
     public $notes = null;
 
     /**
-     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Is withdrawn?"})
-     * @Form\Type("checkbox")
+     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Cancelled / Withdrawn?"})
+     * @Form\Type("OlcsCheckbox")
      */
     public $isWithdrawn = null;
 
