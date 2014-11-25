@@ -1,5 +1,21 @@
 <?php
 $pi = current($this->placeholder('pi')->getArrayCopy());
+$actions = [];
+if (isset($closeAction) && is_array($closeAction)) {
+    $closeActionUrl = [
+        'label' => $closeAction['label'],
+        'url' => $this->url(
+                $closeAction['route'], $closeAction['params']
+            )
+    ];
+    array_push($actions, $closeActionUrl);
+}
+echo $this->render('partials/read-only/main',
+    [
+        'header' => 'Public Inquiry',
+        'actions' => $actions
+    ]
+);
 
 if (isset($pi['agreedDate'])):
     echo $this->render('case/page/partials/pi-agreed.phtml', array('pi' => $pi));

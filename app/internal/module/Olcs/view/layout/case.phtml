@@ -46,6 +46,15 @@ $markers = $this->placeholder('markers')->getValue();
 
 
   <div class="record-actions">
+    <h5>Quick actions</h5>
+    <ul class="record-actions__group">
+        <li class="record-actions__item">
+            <a href="<?php echo $this->url('submission', ['action' => 'add'], [], true); ?>" class="action--secondary">Create submission</a>
+        </li>
+        <li class="record-actions__item">
+            <a href="<?php echo $this->url('case_statement', ['action' => 'add'], [], true); ?>" class="action--secondary">Generate statement</a>
+        </li>
+    </ul>
     <h5>Decisions</h5>
     <ul class="record-actions__group">
       <li class="record-actions__item"><a href="" class="action--secondary">Surrender</a></li>
@@ -59,5 +68,3 @@ $markers = $this->placeholder('markers')->getValue();
   <a class="latest-note__link">View all 13 notes</a>
   </div><!-- end .small-details -->
 </div><!-- one-fifth-right -->
-
-

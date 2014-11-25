@@ -257,10 +257,10 @@ $routes = [
     'case_penalty' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/case/:case/penalty[/:action][/:id]',
+            'route' => '/case/:case/penalty[/:action][/:penalty]',
             'constraints' => [
                 'case' => '[0-9]+',
-                'id' => '[0-9]+',
+                'penalty' => '[0-9]+',
             ],
             'defaults' => [
                 'controller' => 'CasePenaltyController',
@@ -300,10 +300,10 @@ $routes = [
     'case_pi' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/case/:case/pi',
+            'route' => '/case/:case/pi[/:action]',
             'constraints' => [
                 'case' => '[0-9]+',
-                'action' => '[a-z]+',
+                'action' => '(close|reopen|details)',
             ],
             'defaults' => [
                 'controller' => 'CasePublicInquiryController',
@@ -408,7 +408,7 @@ $routes = [
             'constraints' => [
                 'case' => '[0-9]+',
                 'submission' => '[0-9]+',
-                'action' => '(index|add|edit|details)'
+                'action' => '(index|add|edit|details|close|reopen)'
             ],
             'defaults' => [
                 'controller' => 'CaseSubmissionController',
@@ -419,7 +419,7 @@ $routes = [
     'submission_update_table' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/case/:case/submission/:submission/update-table/:section',
+            'route' => '/case/:case/submission/:submission/update-table/:section[/:subSection]',
             'constraints' => [
                 'case' => '[0-9]+',
                 'submission' => '[0-9]+',
@@ -586,10 +586,10 @@ $routes = [
     'case_details_impounding' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/case/[:case]/impounding[/:action][/:id]',
+            'route' => '/case/[:case]/impounding[/:action][/:impounding]',
             'constraints' => [
                 'case' => '[0-9]+',
-                'id' => '[0-9]+'
+                'impounding' => '[0-9]+'
             ],
             'defaults' => [
                 'controller' => 'CaseImpoundingController',
@@ -1198,6 +1198,63 @@ $routes = [
                 ]
             ],
         ]
+    ],
+    'operator' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/operator/:operator',
+            'constraints' => [
+                'operator' => '[0-9]+'
+            ],
+            'defaults' => [
+                'controller' => 'OperatorController',
+                'action' => 'index-jump',
+            ]
+        ],
+        'may_terminate' => true,
+        'child_routes' => [
+            'business-details' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/business-details',
+                    'defaults' => [
+                        'controller' => 'OperatorBusinessDetailsController',
+                        'action' => 'index',
+                    ]
+                ]
+            ],
+            'people' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/people',
+                    'defaults' => [
+                        'controller' => 'OperatorPeopleController',
+                        'action' => 'index',
+                    ]
+                ]
+            ],
+            'licences-applications' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/licences-applications',
+                    'defaults' => [
+                        'controller' => 'OperatorLicencesApplicationsController',
+                        'action' => 'index',
+                    ]
+                ]
+            ],
+        ]
+    ],
+    'create_operator' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/operator/create',
+            'defaults' => [
+                'controller' => 'OperatorBusinessDetailsController',
+                'action' => 'index',
+            ],
+        ],
+        'may_terminate' => true,
     ],
     'create_variation' => [
         'type' => 'segment',

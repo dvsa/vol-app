@@ -246,12 +246,8 @@ class Offence extends CaseBase
     public $isDeclared = null;
 
     /**
-     * @Form\Options({
-     *      "checked_value":"Y",
-     *      "unchecked_value":"N",
-     *      "label":"Dealt with it"
-     * })
-     * @Form\Type("\Common\Form\Elements\InputFilters\SingleCheckbox")
+     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Dealt with"})
+     * @Form\Type("OlcsCheckbox")
      */
     public $isDealtWith = null;
 }

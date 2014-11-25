@@ -161,7 +161,7 @@ class SubmissionSectionCommentController extends OlcsController\CrudAbstract
 
         $formLabel = $submissionSectionRefData[$sectionId];
 
-        $form->setOptions(['label' => $formLabel]);
+        $form->setOptions(['label' => $formLabel, 'alter_label' => false]);
         return $form;
     }
 

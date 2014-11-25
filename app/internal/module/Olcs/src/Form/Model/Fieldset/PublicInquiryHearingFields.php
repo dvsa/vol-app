@@ -14,7 +14,7 @@ class PublicInquiryHearingFields extends Base
      * @Form\Attributes({"id":"piVenue","placeholder":"","class":"medium"})
      * @Form\Options({
      *     "label": "Venue",
-     *     "service_name": "Olcs\Service\Data\PiVenue",
+     *     "service_name": "Common\Service\Data\PiVenue",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a category",
@@ -53,9 +53,11 @@ class PublicInquiryHearingFields extends Base
      *     "create_empty_option": true,
      *     "max_year": 2016,
      *     "render_delimiters": true,
-     *     "pattern": "d MMMM y '</div><div class=""field""><label for=hearingDate>Time of PI</label>'HH:mm:ss"
+     *     "pattern": "d MMMM y '</div><div class=""field""><label for=hearingDate>Time of PI</label>'HH:mm:ss",
+     *     "category": "pi_hearing",
+     *     "field": "hearingDate"
      * })
-     * @Form\Type("DateTimeSelect")
+     * @Form\Type("SlaDateTimeSelect")
      * @Form\Filter({"name": "DateTimeSelectNullifier"})
      * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d H:i:s"}})
      */
@@ -97,8 +99,8 @@ class PublicInquiryHearingFields extends Base
     public $witnesses;
 
     /**
-     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Cancelled / withdrawn"})
-     * @Form\Type("\Common\Form\Elements\InputFilters\SingleCheckbox")
+     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Cancelled / Withdrawn"})
+     * @Form\Type("OlcsCheckbox")
      */
     public $isCancelled;
 
@@ -149,7 +151,11 @@ class PublicInquiryHearingFields extends Base
 
     /**
      * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Adjourned"})
+<<<<<<< HEAD
      * @Form\Type("\Common\Form\Elements\InputFilters\SingleCheckbox")
+=======
+     * @Form\Type("OlcsCheckbox")
+>>>>>>> 72493c4965c21afd6938f79e5f66aa72400efe33
      */
     public $isAdjourned;
 
@@ -200,7 +206,8 @@ class PublicInquiryHearingFields extends Base
 
     /**
      * @Form\Required(false)
-     * @Form\Attributes({"id":"","placeholder":"","class":"extra-long tall  js-definition-source", "multiple":true})
+     * @Form\Attributes({"id":"","placeholder":"","class":"chosen-select-large  js-definition-source",
+     * "multiple":true})
      * @Form\Options({
      *     "label": "Definition",
      *     "disable_inarray_validator": false,

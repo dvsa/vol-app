@@ -113,7 +113,8 @@ class HearingController extends OlcsController\CrudAbstract
             ],
             'pi' => [
                 'properties' => [
-                    'id'
+                    'id',
+                    'agreedDate'
                 ],
             ],
         ]
@@ -121,6 +122,9 @@ class HearingController extends OlcsController\CrudAbstract
 
     protected $inlineScripts = ['forms/pi-hearing', 'shared/definition'];
 
+    /**
+     * @return mixed|\Zend\Http\Response
+     */
     public function redirectToIndex()
     {
         return $this->redirectToRoute(
@@ -145,6 +149,31 @@ class HearingController extends OlcsController\CrudAbstract
     }
 
     /**
+     * @param array $data
+     * @return array
+     */
+    public function processLoad($data)
+    {
+        // get pi as not set when adding first hearing.
+        // Should really alter bundle to query pi table, not hearings.
+        $piId = $this->getFromRoute('pi');
+        $pi = $this->makeRestCall('Pi', 'GET', $piId);
+
+        $data['agreedDate'] = $pi['agreedDate'];
+
+        $data = parent::processLoad($data);
+
+        $this->getServiceLocator()->get('Common\Service\Data\Sla')->setContext('pi_hearing', $data);
+
+        return $data;
+    }
+
+    public function onInvalidPost($form)
+    {
+        $this->processLoad($this->loadCurrent());
+    }
+
+    /**
      * Overrides the parent, make sure there's nothing there shouldn't be in the optional fields
      *
      * @param array $data
@@ -166,11 +195,53 @@ class HearingController extends OlcsController\CrudAbstract
             $data['fields']['adjournedDate'] = null;
         }
 
+        $savedData = parent::processSave($data, false);
+
+        //check whether we need to publish
+        $post = $this->params()->fromPost();
+
+        if (isset($post['form-actions']['publish'])) {
+            $hearingData = $data['fields'];
+            $hearingData['text2'] = $hearingData['details'];
+
+            //if this was an add we need the id of the new record
+            if (empty($hearingData['id'])) {
+                $hearingData['id'] = $savedData['id'];
+            }
+
+            $this->publish($hearingData);
+        }
+
+        $data['fields']['pi'] = [
+            'id' =>$data['fields']['pi'],
+            'piStatus' => 'pi_s_schedule',
+        ];
+
         $this->addTask($data);
 
-        return parent::processSave($data);
+        return $this->redirectToIndex();
     }
 
+    /**
+     * @param array $hearingData
+     * @return \Common\Data\Object\Publication
+     */
+    private function publish($hearingData)
+    {
+        $service = $this->getServiceLocator()->get('Common\Service\Data\PublicationLink');
+        $publicationLink = $service->createEmpty();
+        $publicationLink->exchangeArray(
+            array_merge((array)$publicationLink->getArrayCopy(), ['pi' => $hearingData['pi']])
+        );
+        $publicationLink->offsetSet('hearingData', $hearingData);
+        $publicationLink->offsetSet('text2', $hearingData['text2']);
+
+        return $service->createPublicationLink($publicationLink, 'HearingPublicationFilter');
+    }
+
+    /**
+     * @param array $data
+     */
     public function addTask(array $data)
     {
         if (isset($data['fields']) && is_array($data['fields'])) {

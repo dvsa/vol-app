@@ -10,7 +10,7 @@ use Zend\EventManager\ListenerAggregateTrait;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\View\Helper\Navigation\PluginManager as ViewHelperManager;
-use Olcs\Service\Data\Licence as LicenceService;
+use Common\Service\Data\Licence as LicenceService;
 use Zend\Mvc\Router\RouteStackInterface;
 
 /**
@@ -37,7 +37,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
     protected $router;
 
     /**
-     * @param \Olcs\Service\Data\Licence $licenceService
+     * @param \Common\Service\Data\Licence $licenceService
      * @return $this
      */
     public function setLicenceService($licenceService)
@@ -47,7 +47,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * @return \Olcs\Service\Data\Licence
+     * @return \Common\Service\Data\Licence
      */
     public function getLicenceService()
     {
@@ -128,7 +128,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
-        $this->setLicenceService($serviceLocator->get('DataServiceManager')->get('Olcs\Service\Data\Licence'));
+        $this->setLicenceService($serviceLocator->get('DataServiceManager')->get('Common\Service\Data\Licence'));
         $this->setRouter($serviceLocator->get('Router'));
 
         return $this;

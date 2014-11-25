@@ -45,8 +45,8 @@ class ApplicationController extends AbstractController
 
         $table = $this->getFeesTable($licenceId, $status);
 
-        $view = $this->getViewWithLicence(['table' => $table, 'form'  => $this->getFeeFilterForm($filters)]);
-        $view->setTemplate('licence/fees');
+        $view = new ViewModel(['table' => $table, 'form'  => $this->getFeeFilterForm($filters)]);
+        $view->setTemplate('licence/fees/layout');
 
         return $this->render($view);
     }

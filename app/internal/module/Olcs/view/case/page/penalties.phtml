@@ -49,4 +49,10 @@
         echo $this->placeholder('erru-applied')->getValue() . '<br />';
 
         echo $this->render('widget/comments');
+    } else {
+        echo $this->render('/placeholder/placeholder',
+            [
+                'header' => 'ERRU Penalties',
+            ]
+        );
     }

@@ -45,7 +45,7 @@ class ProhibitionFields
 
     /**
      * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Trailer"})
-     * @Form\Type("\Common\Form\Elements\InputFilters\SingleCheckbox")
+     * @Form\Type("OlcsCheckbox")
      */
     public $isTrailer = null;
 

@@ -91,6 +91,20 @@ return array(
                             'use_route_match' => true,
                         ),
                         array(
+                            'id' => 'case_details_statements',
+                            'label' => 'Statements',
+                            'route' => 'case_statement',
+                            'action' => 'index',
+                            'use_route_match' => true,
+                        ),
+                        array(
+                            'id' => 'case_details_complaints',
+                            'label' => 'Complaints',
+                            'route' => 'case_complaint',
+                            'action' => 'index',
+                            'use_route_match' => true,
+                        ),
+                        array(
                             'id' => 'case_details_conditions_undertakings',
                             'label' => 'Conditions & Undertakings',
                             'route' => 'case_conditions_undertakings',
@@ -177,7 +191,7 @@ return array(
                             'id' => 'case_hearings_appeals_public_inquiry',
                             'label' => 'Public Inquiry',
                             'route' => 'case_pi',
-                            'action' => 'index',
+                            'action' => '',
                             'use_route_match' => true,
                             'pages' => array(
                                 array(
@@ -292,7 +306,7 @@ return array(
         ),
         array(
             'label' => 'Search',
-            'route' => 'search',
+            'route' => 'advancedsearch',
             'use_route_match' => true,
             'pages' => array(
                 array(
@@ -576,7 +590,33 @@ return array(
                             )
                         ),
                     )
-                )
+                ),
+                array(
+                    'id' => 'operator',
+                    'label' => 'internal-navigation-operator',
+                    'route' => 'operator',
+                    'use_route_match' => true,
+                    'pages' => array(
+                        array(
+                            'id' => 'operator_business_details',
+                            'label' => 'internal-navigation-operator-business_details',
+                            'route' => 'operator/business-details',
+                            'use_route_match' => true,
+                        ),
+                        array(
+                            'id' => 'operator_people',
+                            'label' => 'internal-navigation-operator-people',
+                            'route' => 'operator/people',
+                            'use_route_match' => true,
+                        ),
+                        array(
+                            'id' => 'operator_licences_applications',
+                            'label' => 'internal-navigation-operator-licences_applications',
+                            'route' => 'operator/licences-applications',
+                            'use_route_match' => true,
+                        ),
+                    )
+                ),
             )
         ),
         array(

@@ -97,11 +97,12 @@ class LicenceController extends AbstractController
 
     public function documentsAction()
     {
-        // @NOTE only supported action thus far is to
-        // generate a document, so no need to check anything
-        // other than post as there's no other action to take
         if ($this->getRequest()->isPost()) {
             $action = strtolower($this->params()->fromPost('action'));
+
+            if ($action === 'new letter') {
+                $action = 'generate';
+            }
 
             $params = [
                 'licence' => $this->getFromRoute('licence')
