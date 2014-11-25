@@ -2,7 +2,7 @@
 
 return array(
     'variables' => array(
-        'title' => 'List of oppositions'
+        'title' => 'Oppositions'
     ),
     'settings' => array(
         'crud' => array(
