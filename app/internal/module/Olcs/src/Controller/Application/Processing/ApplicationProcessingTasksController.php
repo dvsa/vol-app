@@ -31,11 +31,10 @@ class ApplicationProcessingTasksController extends AbstractApplicationProcessing
 
         // we want all tasks related to the licence, not just this application
         $applicationId = $this->params('application');
-        $linkId = $this->getServiceLocator()->get('Entity\Application')->getLicenceIdForApplication($applicationId);
+        $licenceId = $this->getServiceLocator()->get('Entity\Application')->getLicenceIdForApplication($applicationId);
         $filters = $this->mapTaskFilters(
             array(
-                'linkId'         => $linkId,
-                'linkType'       => 'Licence',
+                'licenceId'      => $licenceId,
                 'assignedToTeam' => '',
                 'assignedToUser' => ''
             )
