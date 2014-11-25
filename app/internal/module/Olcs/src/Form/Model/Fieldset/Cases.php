@@ -26,7 +26,7 @@ class Cases extends Base
      * @Form\Attributes({"id":"","placeholder":"","class":"chosen-select-medium", "multiple": "true"})
      * @Form\Options({
      *     "label": "Case category",
-     *     "disable_inarray_validator": false,
+     *     "disable_inarray_validator": true,
      *     "help-block": "Please select a case category",
      *     "category": "case_category",
      *     "use_groups": true
