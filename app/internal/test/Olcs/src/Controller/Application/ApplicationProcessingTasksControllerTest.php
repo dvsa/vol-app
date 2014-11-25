@@ -27,8 +27,7 @@ class ApplicationProcessingTasksControllerTest extends AbstractHttpControllerTes
         'page' => 1,
         'limit' => 10,
         'actionDate' => '',
-        'linkId' => 1234,
-        'linkType' => 'Licence',
+        'licenceId' => 1234,
         'isClosed' => false
     ];
     private $standardListData = [
@@ -139,7 +138,7 @@ class ApplicationProcessingTasksControllerTest extends AbstractHttpControllerTes
     {
         $mock = $this->getMock(
             '\StdClass',
-            ['getLicenceIdForApplication','getDataForProcessing']
+            ['getLicenceIdForApplication','getDataForProcessing','getHeaderData']
         );
         $mock->expects($this->any())
             ->method('getLicenceIdForApplication')
@@ -148,7 +147,7 @@ class ApplicationProcessingTasksControllerTest extends AbstractHttpControllerTes
         $applicationData = [
             'id' => 7,
             'status' => [
-                'id' => 'S1',
+                'id' => 'AS1',
                 'description' => 'appstatus'
             ],
             'licence' => [
@@ -162,13 +161,17 @@ class ApplicationProcessingTasksControllerTest extends AbstractHttpControllerTes
                     'name' => 'O1'
                 ],
                 'status' => [
-                    'id' => 'S1',
-                    'description' => 'S1'
+                    'id' => 'LS1',
+                    'description' => 'licstatus'
                 ]
             ]
         ];
         $mock->expects($this->any())
             ->method('getDataForProcessing')
+            ->will($this->returnValue($applicationData));
+
+        $mock->expects($this->any())
+            ->method('getHeaderData')
             ->will($this->returnValue($applicationData));
 
         return $mock;
@@ -247,11 +250,11 @@ class ApplicationProcessingTasksControllerTest extends AbstractHttpControllerTes
         $view = $this->controller->indexAction();
         list($header, $content) = $view->getChildren();
 
-        // @TODO, should page title contain Licence No??
-        $this->assertEquals('7', $header->getVariable('pageTitle'));
+        // check that view has all data needed for new-style header
+        $this->assertEquals('7', $header->getVariable('applicationId'));
+        $this->assertEquals('1234', $header->getVariable('licenceId'));
+        $this->assertEquals('O1', $header->getVariable('companyName'));
 
-        // should show the application status, not licence status
-        $this->assertEquals('O1 appstatus', $header->getVariable('pageSubTitle'));
     }
 
      /**
