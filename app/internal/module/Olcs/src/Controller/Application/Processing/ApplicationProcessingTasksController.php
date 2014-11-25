@@ -17,6 +17,8 @@ class ApplicationProcessingTasksController extends AbstractApplicationProcessing
 {
     use TaskSearchTrait;
 
+    protected $headerViewTemplate = 'application/header';
+
     /**
      * @var string
      */

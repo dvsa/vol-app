@@ -131,13 +131,12 @@ trait ApplicationControllerTrait
             $this->getServiceLocator()->get('Navigation')->findOneBy('id', 'licence_bus')->setVisible(0);
         }
 
-        $variables['application'] = $application;
-        $view = $this->getView($variables);
+        $variables = array_merge(
+            $variables,
+            $this->getHeaderParams()
+        );
 
-        // @TODO add link to Licence No in heading, as per other controllers?
-        $this->pageTitle = $application['id'];
-        $this->pageSubTitle = $application['licence']['organisation']['name']
-            . ' ' . $application['status']['description'];
+        $view = $this->getView($variables);
 
         return $view;
     }
