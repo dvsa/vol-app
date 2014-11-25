@@ -61,14 +61,14 @@ class OperatorDetails
 
     /**
      * @Form\Attributes({"chosen-size":"long","id":""})
-     * @Form\Options({"label":"'internal-operator-profile-first-name'"})
+     * @Form\Options({"label":"internal-operator-profile-first-name"})
      * @Form\Type("Text")
      */
     public $firstName = null;
 
     /**
      * @Form\Attributes({"class":"long","id":""})
-     * @Form\Options({"label":"'internal-operator-profile-first-name'"})
+     * @Form\Options({"label":"internal-operator-profile-last-name"})
      * @Form\Validator({"name": "Zend\Validator\NotEmpty"})
      * @Form\Type("Text")
      */
