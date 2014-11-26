@@ -359,14 +359,31 @@ class Submission extends AbstractData implements CloseableInterface
             'totAuthorisedVehicles' => $data['licence']['totAuthVehicles'],
             'totAuthorisedTrailers' => $data['licence']['totAuthTrailers'],
             'vehiclesInPossession' => $vehiclesInPossession,
-            'trailersInPossession' => $data['licence']['totAuthTrailers']
+            'trailersInPossession' => $data['licence']['totAuthTrailers'],
+            'businessType' =>
+                isset($data['licence']['organisation']['organisationNatureOfBusinesss']) ?
+                    $this->getNatureOfBusinessAsaString(
+                        $data['licence']['organisation']['organisationNatureOfBusinesss']
+                    )
+                    : ''
         );
 
-        if (isset($data['licence']['organisation']['sicCode']['description'])) {
-            $filteredData['businessType'] = $data['licence']['organisation']['sicCode']['description'];
-        }
-
         return $filteredData;
+    }
+
+    /**
+     * Get nature of business as a string
+     * 
+     * @params array $natureOfBusiness
+     * @return string
+     */
+    protected function getNatureOfBusinessAsaString($natureOfBusiness = [])
+    {
+        $nob = [];
+        foreach ($natureOfBusiness as $element) {
+            $nob[] = $element['refData']['description'];
+        }
+        return implode(', ', $nob);
     }
 
     /**

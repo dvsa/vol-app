@@ -14,9 +14,6 @@ $entity = (isset($this->data['data']['organisationType']) ?
 $ecmsNo = (isset($this->data['data']['ecmsNo']) ?
     $this->data['data']['ecmsNo'] : '');
 
-$businessType = (isset($this->data['data']['businessType']) ?
-    $this->data['data']['businessType'] : '');
-
 $licenceItems = [
     ['label' => 'Licence number', 'value' => $this->data['data']['licNo']],
     ['label' => 'Licence start date', 'date' => $this->data['data']['licenceStartDate']],
@@ -37,7 +34,8 @@ echo $this->render('partials/read-only/main',
                 ['label' => 'Is MLH?', 'value' => $isMlh],
                 ['label' => 'Entity', 'value' => $entity],
                 ['label' => 'ECMS', 'value' => $ecmsNo],
-                ['label' => 'Business type', 'value' => $businessType]
+                ['label' => 'Nature of business', 'value' =>
+                    isset($this->data['data']['businessType']) ? $this->data['data']['businessType'] : '']
             ],
             1 => $licenceItems,
             2 => [

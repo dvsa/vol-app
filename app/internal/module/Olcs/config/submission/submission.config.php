@@ -74,6 +74,15 @@ return array(
                                                 'properties' => 'ALL'
                                             )
                                         )
+                                    ),
+                                    'organisationNatureOfBusinesss' => array(
+                                        'properties' => 'ALL',
+                                        'children' => array(
+                                            'refData' => array(
+                                                'id',
+                                                'description'
+                                            )
+                                        )
                                     )
                                 )
                             )
