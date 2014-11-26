@@ -21,7 +21,7 @@ class LicenceOverview extends LvaOverview
      *
      * @var string
      */
-    protected $template = 'licence/overview';
+    protected $template = 'overview-licence';
 
     protected $sectionModel = 'Licence\\LicenceOverviewSection';
 

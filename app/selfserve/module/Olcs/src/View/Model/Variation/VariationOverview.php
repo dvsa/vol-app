@@ -21,7 +21,7 @@ class VariationOverview extends LvaOverview
      *
      * @var string
      */
-    protected $template = 'variation/overview';
+    protected $template = 'overview-variation';
 
     protected $sectionModel = 'Variation\\VariationOverviewSection';
 

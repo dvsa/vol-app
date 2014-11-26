@@ -43,7 +43,7 @@ class Dashboard extends AbstractViewModel
      *
      * @var string
      */
-    protected $template = 'dashboard/index';
+    protected $template = 'dashboard';
 
     /**
      * Restrict the types of licence we display

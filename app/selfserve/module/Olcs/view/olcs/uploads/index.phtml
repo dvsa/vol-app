@@ -2,13 +2,13 @@
 echo $this->render(
     '/partials/page-header.phtml',
     array(
-        'pageTitle' => $this->translate('Ebsr Packs'),
+        'pageTitle' => $this->translate('Ebsr packs'),
         'pageSubTitle'=> $this->translate('These are all the EBSR pack files you have uploaded.'),
     )
 );
 ?>
 
-<div class="two-thirds">
+<div class="three-quarters">
 <?php echo $this->flashMessengerAll();?>
 
 <?php echo $this->table; ?>

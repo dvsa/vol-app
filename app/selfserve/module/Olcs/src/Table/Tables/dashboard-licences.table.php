@@ -13,10 +13,10 @@ return array(
             'title' => $translationPrefix . '-licNo',
             'name' => 'licNo',
             'formatter' => function ($row) {
-                return '<a href="' . $this->url->fromRoute(
+                return '<b><a href="' . $this->url->fromRoute(
                     'lva-licence',
                     array('licence' => $row['id'])
-                ) . '">'.$row['licNo'].'</a>';
+                ) . '">'.$row['licNo'].'</a></b>';
             }
         ),
         array(

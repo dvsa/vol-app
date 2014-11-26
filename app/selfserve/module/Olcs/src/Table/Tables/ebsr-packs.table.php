@@ -5,11 +5,6 @@ return array(
     'attributes' => array(),
     'columns' => array(
         array(
-            'title' => '',
-            'width' => 'checkbox',
-            'format' => '{{[elements/radio]}}'
-        ),
-        array(
             'title' => 'Pack name',
             'name' => 'filename',
         ),
@@ -22,6 +17,11 @@ return array(
             'title' => 'Status',
             'name' => 'status',
             'formatter' => 'Translate'
+        ),
+         array(
+            'title' => '',
+            'width' => 'checkbox',
+            'format' => '{{[elements/radio]}}'
         )
     )
 );

@@ -21,7 +21,7 @@ class ApplicationOverview extends LvaOverview
      *
      * @var string
      */
-    protected $template = 'application/overview';
+    protected $template = 'overview-application';
 
     protected $sectionModel = 'Application\\ApplicationOverviewSection';
 
