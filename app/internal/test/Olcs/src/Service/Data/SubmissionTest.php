@@ -225,8 +225,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with(
                 $this->equalTo(
-                    'Olcs/Filter/SubmissionSection/' . ucfirst($wordFilter->filter($input['sectionId'])
-                    )
+                    'Olcs/Filter/SubmissionSection/' . ucfirst($wordFilter->filter($input['sectionId']))
                 )
             )
             ->willReturn($sectionFilter);

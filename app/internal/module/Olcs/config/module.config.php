@@ -313,7 +313,8 @@ return array(
                 'Olcs\Filter\SubmissionSection\ConvictionFpnOffenceHistory',
             'Olcs\Filter\SubmissionSection\CaseSummary' => 'Olcs\Filter\SubmissionSection\CaseSummary',
             'Olcs\Filter\SubmissionSection\CaseOutline' => 'Olcs\Filter\SubmissionSection\CaseOutline',
-            'Olcs\Filter\SubmissionSection\Persons' => 'Olcs\Filter\SubmissionSection\Persons'
+            'Olcs\Filter\SubmissionSection\Persons' => 'Olcs\Filter\SubmissionSection\Persons',
+            'Olcs\Filter\SubmissionSection\Oppositions' => 'Olcs\Filter\SubmissionSection\Oppositions'
         ],
         'aliases' => [
             'ComplianceComplaints' => 'Olcs\Filter\SubmissionSection\ComplianceComplaints',
@@ -321,7 +322,8 @@ return array(
             'ConvictionFpnOffenceHistory' => 'Olcs\Filter\SubmissionSection\ConvictionFpnOffenceHistory',
             'CaseSummary' => 'Olcs\Filter\SubmissionSection\CaseSummary',
             'CaseOutline' => 'Olcs\Filter\SubmissionSection\CaseOutline',
-            'Persons' => 'Olcs\Filter\SubmissionSection\Persons'
+            'Persons' => 'Olcs\Filter\SubmissionSection\Persons',
+            'Oppositions' => 'Olcs\Filter\SubmissionSection\Oppositions'
 
 
         ]

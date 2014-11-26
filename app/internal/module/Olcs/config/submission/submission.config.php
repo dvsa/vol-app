@@ -386,6 +386,7 @@ return array(
             'section_type' => ['list'],
             'data_field' => '',
             'allow_comments' => true,
+            'filter' => true,
             'service' => 'Cases',
             'bundle' => array(
                 'children' => array(
