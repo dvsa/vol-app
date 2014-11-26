@@ -254,13 +254,7 @@ class Submission extends AbstractData implements CloseableInterface
         $rawData = [];
 
         if (isset($sectionConfig['bundle'])) {
-            if (is_string($sectionConfig['bundle'])) {
-                $rawData = $this->loadCaseSectionData(
-                    $caseId,
-                    $sectionConfig['bundle'],
-                    $this->getSubmissionConfig()['sections'][$sectionConfig['bundle']]
-                );
-            } elseif (isset($sectionConfig['service']) && is_array($sectionConfig['bundle'])) {
+            if (isset($sectionConfig['service']) && is_array($sectionConfig['bundle'])) {
                 $identifier = isset($sectionConfig['identifier']) ? $sectionConfig['identifier'] : 'id';
                 $results = $this->getApiResolver()->getClient(
                     $sectionConfig['service']

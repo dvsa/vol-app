@@ -213,12 +213,44 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
             ->method('getClient')
             ->with($this->equalTo($input['sectionConfig']['service']))
             ->willReturn($mockRestClient);
-
         $this->sut->setApiResolver($mockApiResolver);
+
+        $wordFilter = new \Zend\Filter\Word\DashToCamelCase();
+
+        $mockFilterManager = $this->getMock('stdClass', ['get']);
+        $filterClass = 'Olcs\Filter\SubmissionSection\\' . ucfirst($wordFilter->filter($input['sectionId']));
+        $sectionFilter = new $filterClass;
+        $mockFilterManager
+            ->expects($this->once())
+            ->method('get')
+            ->with(
+                $this->equalTo(
+                    'Olcs/Filter/SubmissionSection/' . ucfirst($wordFilter->filter($input['sectionId'])
+                    )
+                )
+            )
+            ->willReturn($sectionFilter);
+        $this->sut->setFilterManager($mockFilterManager);
 
         $result = $this->sut->createSubmissionSection($input['caseId'], $input['sectionId'], $input['sectionConfig']);
 
         $this->assertEquals($result, $expected['expected']);
+    }
+
+    /**
+     * Tests for submission sections where the data has already been extracted
+     *
+     * @dataProvider providerSubmissionSectionPrebuiltData
+     * @param $input
+     * @param $expected
+     */
+    public function testCreateSubmissionSectionUsingPrebuiltData($input, $expected)
+    {
+        $this->sut->setLoadedSectionDataForSection('bar', ['foo']);
+
+        $result = $this->sut->loadCaseSectionData($input['caseId'], 'bar', $input['sectionConfig']);
+
+        $this->assertEquals($result, ['foo']);
     }
 
     /**
@@ -256,22 +288,6 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         ];
-    }
-
-    /**
-     * Tests for submission sections where the data has already been extracted
-     *
-     * @dataProvider providerSubmissionSectionPrebuiltData
-     * @param $input
-     * @param $expected
-     */
-    public function testCreateSubmissionSectionUsingPrebuiltData($input, $expected)
-    {
-        $this->sut->setLoadedSectionDataForSection($input['sectionId'], $expected['loadedCaseSectionData']);
-
-        $result = $this->sut->createSubmissionSection($input['caseId'], $input['sectionId'], $input['sectionConfig']);
-
-        $this->assertEquals($result, $expected['filteredSectionData']);
     }
 
     public function testCreateSubmissionSectionEmptyConfig()
@@ -442,6 +458,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                     'sectionId' => 'conviction-fpn-offence-history',
                     'sectionConfig' => [
                         'service' => 'Cases',
+                        'filter' => true,
                         'bundle' => ['some_bundle'],
                     ]
                 ],
@@ -530,6 +547,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                     'sectionId' => 'case-outline',
                     'sectionConfig' => [
                         'service' => 'Cases',
+                        'filter' => true,
                         'bundle' => ['some_bundle'],
                     ]
                 ],
@@ -548,6 +566,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                     'sectionId' => 'case-summary',
                     'sectionConfig' => [
                         'service' => 'Cases',
+                        'filter' => true,
                         'bundle' => ['some_bundle'],
                     ]
                 ],
@@ -581,6 +600,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                     'sectionId' => 'oppositions',
                     'sectionConfig' => [
                         'service' => 'Cases',
+                        'filter' => true,
                         'bundle' => ['some_bundle'],
                     ]
                 ],
@@ -693,6 +713,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                     'sectionId' => 'conditions-and-undertakings',
                     'sectionConfig' => [
                         'service' => 'Cases',
+                        'filter' => true,
                         'bundle' => ['some_bundle'],
                     ]
                 ],

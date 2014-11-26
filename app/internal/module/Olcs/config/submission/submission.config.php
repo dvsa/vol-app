@@ -88,7 +88,10 @@ return array(
             'data_field' => 'outline',
             'allow_comments' => true,
             'filter' => true,
-            'bundle' => 'case-summary'
+            'service' => 'Cases',
+            'bundle' => array(
+                'properties' => array('description')
+            )
         ),
         'most-serious-infringement'   => array(
             'section_type' => ['text','overview'],
@@ -99,7 +102,28 @@ return array(
             'section_type' => ['list'],
             'allow_comments' => true,
             'filter' => true,
-            'bundle' => 'case-summary'
+            'service' => 'Cases',
+            'bundle' => array(
+                'properties' => 'ALL',
+                'children' => array(
+                    'licence' => array(
+                        'children' => array(
+                            'organisation' => array(
+                                'children' => array(
+                                    'organisationPersons' => array(
+                                        'properties' => 'ALL',
+                                        'children' => array(
+                                            'person' => array(
+                                                'properties' => 'ALL'
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
         ),
         'operating-centres'   => array(
             'section_type' => ['list'],
