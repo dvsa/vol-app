@@ -38,6 +38,9 @@ abstract class AbstractApplicationProcessingController extends ApplicationContro
         );
     }
 
+    /**
+     * @return \Zend\View\Model\ViewModel
+     */
     protected function getProcessingLayout($view, $variables)
     {
         $layout = $this->getViewWithApplication(

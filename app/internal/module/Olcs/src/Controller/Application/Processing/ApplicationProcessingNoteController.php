@@ -32,7 +32,7 @@ class ApplicationProcessingNoteController extends AbstractApplicationProcessingC
     public function __construct()
     {
         $this->setTemplatePrefix('application/processing');
-        $this->setRoutePrefix('application/processing');
+        $this->setRoutePrefix('lva-application/processing');
         $this->setRedirectIndexRoute('/notes');
     }
 
@@ -50,14 +50,12 @@ class ApplicationProcessingNoteController extends AbstractApplicationProcessingC
         $action = $this->getFromPost('action');
         $id = $this->getFromPost('id');
 
-        $notesResult = $this->getNotesList($licenceId, $licenceId, 'note_t_app', $action, $id);
         // 'getNotesList' will return a ViewModel or a HttpResponse(!)
+        $notesResult = $this->getNotesList($licenceId, $licenceId, 'note_t_app', $action, $id);
 
         //if a ViewModel has been returned
         if ($notesResult instanceof ViewModel) {
-            $view = $this->getView(['table' => 'notes table here']); // insert $notesResult here
-            $view->setTemplate('application/processing/layout');
-            return $this->renderView($view);
+            return $this->renderView($notesResult);
         }
 
         //if a redirect has been returned
