@@ -229,7 +229,9 @@ class Submission extends AbstractData implements CloseableInterface
         );
         $this->setLoadedSectionDataForSection($sectionId, $loadedData);
 
-        $section = $this->filterSectionData($sectionId);
+        if (isset($sectionConfig['filter']) && $sectionConfig['filter']) {
+            $section = $this->filterSectionData($sectionId);
+        }
 
         return $section;
     }
@@ -291,185 +293,12 @@ class Submission extends AbstractData implements CloseableInterface
         $filter = $this->getFilter();
         $method = 'filter' . ucfirst($filter->filter($sectionId)) . 'Data';
 
-        if (method_exists($this, $method)) {
-            $filteredSectionData = call_user_func(array($this, $method), $this->getLoadedSectionData()[$sectionId]);
-        } else {
-            // load filter class
-            if ($sectionId == 'compliance-complaints') {
-                $filteredSectionData = $this->getFilterManager()
-                    ->get('Olcs/Filter/SubmissionSection/' . ucfirst($filter->filter($sectionId)))
-                    ->filter($this->getLoadedSectionData()[$sectionId]);
-            }
-        }
+        // load filter class
+        $filteredSectionData = $this->getFilterManager()
+            ->get('Olcs/Filter/SubmissionSection/' . ucfirst($filter->filter($sectionId)))
+            ->filter($this->getLoadedSectionData()[$sectionId]);
 
         return $filteredSectionData;
-    }
-
-    /**
-     * section oppositions
-     */
-    protected function filterOppositionsData(array $data = array())
-    {
-        $dataToReturnArray = array();
-        if (isset($data['application']['oppositions']) && is_array($data['application']['oppositions'])) {
-
-            usort(
-                $data['application']['oppositions'],
-                function ($a, $b) {
-                    return strnatcmp($b['oppositionType']['description'], $a['oppositionType']['description']);
-                }
-            );
-            usort(
-                $data['application']['oppositions'],
-                function ($a, $b) {
-                    return strtotime($b['raisedDate']) - strtotime($a['raisedDate']);
-                }
-            );
-
-            foreach ($data['application']['oppositions'] as $opposition) {
-                $thisOpposition = array();
-                $thisOpposition['id'] = $opposition['id'];
-                $thisOpposition['version'] = $opposition['version'];
-                $thisOpposition['dateReceived'] = $opposition['raisedDate'];
-                $thisOpposition['oppositionType'] = $opposition['oppositionType']['description'];
-                $thisOpposition['contactName']['forename'] =
-                    $opposition['opposer']['contactDetails']['person']['forename'];
-                $thisOpposition['contactName']['familyName'] =
-                    $opposition['opposer']['contactDetails']['person']['familyName'];
-
-                foreach ($opposition['grounds'] as $ground) {
-                    $thisOpposition['grounds'][] = $ground['grounds']['description'];
-                }
-
-                $thisOpposition['isValid'] = $opposition['isValid'];
-                $thisOpposition['isCopied'] = $opposition['isCopied'];
-                $thisOpposition['isInTime'] = $opposition['isInTime'];
-                $thisOpposition['isPublicInquiry'] = $opposition['isPublicInquiry'];
-                $thisOpposition['isWithdrawn'] = $opposition['isWithdrawn'];
-
-                $dataToReturnArray[] = $thisOpposition;
-            }
-        }
-
-        return $dataToReturnArray;
-    }
-
-    /**
-     * section case-summary
-     */
-    protected function filterCaseSummaryData(array $data = array())
-    {
-        $vehiclesInPossession = $this->calculateVehiclesInPossession($data['licence']);
-        $filteredData = array(
-            'id' => $data['id'],
-            'organisationName' => $data['licence']['organisation']['name'],
-            'isMlh' => $data['licence']['organisation']['isMlh'],
-            'organisationType' => $data['licence']['organisation']['type']['description'],
-            'caseType' => isset($data['caseType']['id']) ? $data['caseType']['id'] : null,
-            'ecmsNo' => $data['ecmsNo'],
-            'licNo' => $data['licence']['licNo'],
-            'licenceStartDate' => $data['licence']['inForceDate'],
-            'licenceType' => $data['licence']['licenceType']['description'],
-            'goodsOrPsv' => $data['licence']['goodsOrPsv']['description'],
-            'serviceStandardDate' =>
-                isset($data['application']['targetCompletionDate']) ?
-                    $data['application']['targetCompletionDate'] : null,
-            'licenceStatus' => $data['licence']['status']['description'],
-            'totAuthorisedVehicles' => $data['licence']['totAuthVehicles'],
-            'totAuthorisedTrailers' => $data['licence']['totAuthTrailers'],
-            'vehiclesInPossession' => $vehiclesInPossession,
-            'trailersInPossession' => $data['licence']['totAuthTrailers']
-        );
-
-        if (isset($data['licence']['organisation']['sicCode']['description'])) {
-            $filteredData['businessType'] = $data['licence']['organisation']['sicCode']['description'];
-        }
-
-        return $filteredData;
-    }
-
-    /**
-     * section case-outline
-     */
-    protected function filterCaseOutlineData($data = array())
-    {
-        return array(
-            'outline' => $data['description']
-        );
-    }
-
-    /**
-     * Conviction FPN Offence History section
-     *
-     * @param array $data
-     * @return array
-     */
-    protected function filterConvictionFpnOffenceHistoryData($data = array())
-    {
-        if (isset($data['convictions'])) {
-            usort(
-                $data['convictions'],
-                function ($a, $b) {
-                    return strtotime($b['convictionDate']) - strtotime($a['convictionDate']);
-                }
-            );
-
-            $dataToReturnArray = array();
-
-            foreach ($data['convictions'] as $conviction) {
-                $thisConviction = array();
-                $thisConviction['id'] = $conviction['id'];
-                $thisConviction['offenceDate'] = $conviction['offenceDate'];
-                $thisConviction['convictionDate'] = $conviction['convictionDate'];
-                $thisConviction['defendantType'] = $conviction['defendantType'];
-
-                if ($conviction['defendantType']['id'] == 'def_t_op') {
-                    $thisConviction['name'] = $conviction['operatorName'];
-                } else {
-                    $thisConviction['name'] = $conviction['personFirstname'] . ' ' . $conviction['personLastname'];
-                }
-
-                $thisConviction['categoryText'] = $conviction['categoryText'];
-                $thisConviction['court'] = $conviction['court'];
-                $thisConviction['penalty'] = $conviction['penalty'];
-                $thisConviction['msi'] = $conviction['msi'];
-                $thisConviction['isDeclared'] = !empty($conviction['isDeclared']) ?
-                    $conviction['isDeclared'] : 'N';
-                $thisConviction['isDealtWith'] = !empty($conviction['isDealtWith']) ?
-                    $conviction['isDealtWith'] : 'N';
-                $dataToReturnArray[] = $thisConviction;
-            }
-        }
-        return $dataToReturnArray;
-    }
-
-    /**
-     * Filters data for person section
-     * @param array $data
-     * @return array $dataToReturnArray
-     */
-    protected function filterPersonsData(array $data = array())
-    {
-        $dataToReturnArray = array();
-
-        if ($data['licence']['organisation']['organisationPersons']) {
-            usort(
-                $data['licence']['organisation']['organisationPersons'],
-                function ($a, $b) {
-                    return strnatcmp($a['person']['forename'], $b['person']['forename']);
-                }
-            );
-            foreach ($data['licence']['organisation']['organisationPersons'] as $organisationOwner) {
-                $thisOrganisationOwner['id'] = $organisationOwner['person']['id'];
-                $thisOrganisationOwner['title'] = $organisationOwner['person']['title'];
-                $thisOrganisationOwner['familyName'] = $organisationOwner['person']['familyName'];
-                $thisOrganisationOwner['forename'] = $organisationOwner['person']['forename'];
-                $thisOrganisationOwner['birthDate'] = $organisationOwner['person']['birthDate'];
-                $dataToReturnArray[] = $thisOrganisationOwner;
-
-            }
-        }
-        return $dataToReturnArray;
     }
 
     /**
@@ -496,64 +325,6 @@ class Submission extends AbstractData implements CloseableInterface
         }
 
         return $dataToReturnArray;
-    }
-
-    /**
-     * section conditions-undertakings
-     */
-    protected function filterConditionsAndUndertakingsData(array $data = array())
-    {
-        $dataToReturnArray = array();
-        if (isset($data['conditionUndertakings']) && is_array($data['conditionUndertakings'])) {
-
-            usort(
-                $data['conditionUndertakings'],
-                function ($a, $b) {
-                    return strtotime($b['createdOn']) - strtotime($a['createdOn']);
-                }
-            );
-
-            foreach ($data['conditionUndertakings'] as $entity) {
-                $thisEntity = array();
-                $thisEntity['id'] = $entity['id'];
-                $thisEntity['version'] = $entity['version'];
-                $thisEntity['createdOn'] = $entity['createdOn'];
-                $thisEntity['caseId'] = $entity['case']['id'];
-                $thisEntity['addedVia'] = $entity['addedVia'];
-                $thisEntity['isFulfilled'] = $entity['isFulfilled'];
-                $thisEntity['isDraft'] = $entity['isDraft'];
-                $thisEntity['attachedTo'] = $entity['attachedTo'];
-
-                if (empty($entity['operatingCentre'])) {
-                    $thisEntity['OcAddress'] = [];
-                } else {
-                    $thisEntity['OcAddress'] = $entity['operatingCentre']['address'];
-                }
-                $tableName = $entity['conditionType']['id'] == 'cdt_und' ? 'undertakings' : 'conditions';
-                $dataToReturnArray[$tableName][] = $thisEntity;
-            }
-        }
-
-        return $dataToReturnArray;
-    }
-
-    /**
-     * Calculates the vehicles in possession.
-     *
-     * @param array $licenceData
-     * @return int
-     */
-    private function calculateVehiclesInPossession($licenceData)
-    {
-        $vehiclesInPossession = 0;
-        if (isset($licenceData['licenceVehicles']) && is_array($licenceData['licenceVehicles'])) {
-            foreach ($licenceData['licenceVehicles'] as $vehicle) {
-                if (!empty($vehicle['specifiedDate']) && empty($vehicle['deletedDate'])) {
-                    $vehiclesInPossession++;
-                }
-            }
-        }
-        return $vehiclesInPossession;
     }
 
     /**

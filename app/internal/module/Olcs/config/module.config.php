@@ -306,10 +306,24 @@ return array(
     'filters' => [
         'invokables' => [
             'Olcs\Filter\SubmissionSection\ComplianceComplaints' =>
-                'Olcs\Filter\SubmissionSection\ComplianceComplaints'
+                'Olcs\Filter\SubmissionSection\ComplianceComplaints',
+            'Olcs\Filter\SubmissionSection\ConditionsAndUndertakings' =>
+                'Olcs\Filter\SubmissionSection\ConditionsAndUndertakings',
+            'Olcs\Filter\SubmissionSection\ConvictionFpnOffenceHistory' =>
+                'Olcs\Filter\SubmissionSection\ConvictionFpnOffenceHistory',
+            'Olcs\Filter\SubmissionSection\CaseSummary' => 'Olcs\Filter\SubmissionSection\CaseSummary',
+            'Olcs\Filter\SubmissionSection\CaseOutline' => 'Olcs\Filter\SubmissionSection\CaseOutline',
+            'Olcs\Filter\SubmissionSection\Persons' => 'Olcs\Filter\SubmissionSection\Persons'
         ],
         'aliases' => [
-            'ComplianceComplaints' => 'Olcs\Filter\SubmissionSection\ComplianceComplaints'
+            'ComplianceComplaints' => 'Olcs\Filter\SubmissionSection\ComplianceComplaints',
+            'ConditionsAndUndertakings' => 'Olcs\Filter\SubmissionSection\ConditionsAndUndertakings',
+            'ConvictionFpnOffenceHistory' => 'Olcs\Filter\SubmissionSection\ConvictionFpnOffenceHistory',
+            'CaseSummary' => 'Olcs\Filter\SubmissionSection\CaseSummary',
+            'CaseOutline' => 'Olcs\Filter\SubmissionSection\CaseOutline',
+            'Persons' => 'Olcs\Filter\SubmissionSection\Persons'
+
+
         ]
     ],
 );

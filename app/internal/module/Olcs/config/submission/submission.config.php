@@ -15,6 +15,7 @@ return array(
             'section_type' => ['overview'],
             'data_field' => '',
             'allow_comments' => true,
+            'filter' => true,
             'service' => 'Cases',
             'bundle' => array(
                 'properties' => 'ALL',
@@ -86,6 +87,7 @@ return array(
             'section_type' => ['text'],
             'data_field' => 'outline',
             'allow_comments' => true,
+            'filter' => true,
             'bundle' => 'case-summary'
         ),
         'most-serious-infringement'   => array(
@@ -96,6 +98,7 @@ return array(
         'persons' => array(
             'section_type' => ['list'],
             'allow_comments' => true,
+            'filter' => true,
             'bundle' => 'case-summary'
         ),
         'operating-centres'   => array(
@@ -106,6 +109,7 @@ return array(
             'section_type' => ['list'],
             'section_editable' => false,
             'allow_comments' => true,
+            'filter' => true,
             'service' => 'Cases',
             'bundle' => array(
                 'properties' => array('id'),
@@ -259,6 +263,7 @@ return array(
             'section_type' => ['list', 'text'],
             'data_field' => '',
             'allow_comments' => true,
+            'filter' => true,
             'service' => 'Cases',
             'bundle' => array(
                 'properties' => 'ALL',
@@ -329,6 +334,7 @@ return array(
             'service' => 'Complaint',
             'identifier' => 'case',
             'allow_comments' => true,
+            'filter' => true,
             'bundle' => array(
                 'properties' => array(
                     'id',
