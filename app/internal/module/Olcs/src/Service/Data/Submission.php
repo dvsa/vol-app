@@ -806,5 +806,4 @@ class Submission extends AbstractData implements CloseableInterface
     {
         return $this->filterManager;
     }
-
 }
