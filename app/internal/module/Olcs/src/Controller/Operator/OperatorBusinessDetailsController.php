@@ -182,6 +182,7 @@ class OperatorBusinessDetailsController extends OperatorController
                 case OrganisationEntityService::ORG_TYPE_LLP:
                     $operatorDetails['name'] = $data['name'];
                     $operatorDetails['companyNumber']['company_number'] = $data['companyNumber'];
+                    $registeredAddress = $data['registeredAddress'];
                     break;
                 case OrganisationEntityService::ORG_TYPE_OTHER:
                     $operatorDetails['name'] = $data['name'];
@@ -227,7 +228,10 @@ class OperatorBusinessDetailsController extends OperatorController
         $saved = $this->getServiceLocator()->get('Entity\Organisation')->save($params);
         $orgId = isset($saved['id']) ? $saved['id'] : $params['id'];
 
-        if ($params['type'] == OrganisationEntityService::ORG_TYPE_REGISTERED_COMPANY) {
+        if (
+            $params['type'] == OrganisationEntityService::ORG_TYPE_REGISTERED_COMPANY ||
+            $params['type'] == OrganisationEntityService::ORG_TYPE_LLP
+            ) {
             $this->saveRegisteredAddress($orgId, $data['registeredAddress']);
         }
         if ($params['type'] == OrganisationEntityService::ORG_TYPE_SOLE_TRADER) {
@@ -300,7 +304,6 @@ class OperatorBusinessDetailsController extends OperatorController
                 $formHelper->remove($form, 'operator-details->firstName');
                 $formHelper->remove($form, 'operator-details->lastName');
                 $formHelper->remove($form, 'operator-details->personId');
-                $formHelper->remove($form, 'registeredAddress');
                 break;
             case OrganisationEntityService::ORG_TYPE_OTHER:
                 $formHelper->remove($form, 'operator-details->companyNumber');
