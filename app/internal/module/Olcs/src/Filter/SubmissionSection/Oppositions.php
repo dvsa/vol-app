@@ -12,9 +12,9 @@ use Zend\Filter\AbstractFilter;
 class Oppositions extends AbstractFilter
 {
     /**
-     * @param \Zend\Stdlib\ArrayObject $data
-     * @return \Zend\Stdlib\ArrayObject
-     * @throws ResourceNotFoundException
+     * Filters data for oppositions section
+     * @param array $data
+     * @return array $dataToReturnArray
      */
     public function filter($data = array())
     {

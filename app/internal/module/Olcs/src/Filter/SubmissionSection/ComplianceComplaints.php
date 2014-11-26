@@ -12,9 +12,9 @@ use Zend\Filter\AbstractFilter;
 class ComplianceComplaints extends AbstractFilter
 {
     /**
-     * @param \Zend\Stdlib\ArrayObject $data
-     * @return \Zend\Stdlib\ArrayObject
-     * @throws ResourceNotFoundException
+     * Filters data for compliance-complaints section
+     * @param array $data
+     * @return array $data
      */
     public function filter($data = array())
     {

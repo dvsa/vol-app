@@ -12,9 +12,9 @@ use Zend\Filter\AbstractFilter;
 class CaseOutline extends AbstractFilter
 {
     /**
-     * @param \Zend\Stdlib\ArrayObject $data
-     * @return \Zend\Stdlib\ArrayObject
-     * @throws ResourceNotFoundException
+     * Filters data for case-outline section
+     * @param array $data
+     * @return array
      */
     public function filter($data = array())
     {

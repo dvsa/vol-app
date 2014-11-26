@@ -12,9 +12,9 @@ use Zend\Filter\AbstractFilter;
 class ConvictionFpnOffenceHistory extends AbstractFilter
 {
     /**
-     * @param \Zend\Stdlib\ArrayObject $data
-     * @return \Zend\Stdlib\ArrayObject
-     * @throws ResourceNotFoundException
+     * Filters data for conviction-fpn-offence-history section
+     * @param array $data
+     * @return array $dataToReturnArray
      */
     public function filter($data = array())
     {

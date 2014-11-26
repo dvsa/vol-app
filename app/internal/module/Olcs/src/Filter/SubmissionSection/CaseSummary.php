@@ -12,9 +12,9 @@ use Zend\Filter\AbstractFilter;
 class CaseSummary extends AbstractFilter
 {
     /**
-     * @param \Zend\Stdlib\ArrayObject $data
-     * @return \Zend\Stdlib\ArrayObject
-     * @throws ResourceNotFoundException
+     * Filters data for case-summary section
+     * @param array $data
+     * @return array $filteredData
      */
     public function filter($data = array())
     {

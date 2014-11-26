@@ -12,9 +12,9 @@ use Zend\Filter\AbstractFilter;
 class ConditionsAndUndertakings extends AbstractFilter
 {
     /**
-     * @param \Zend\Stdlib\ArrayObject $data
-     * @return \Zend\Stdlib\ArrayObject
-     * @throws ResourceNotFoundException
+     * Filters data for conditions-and-undertakings section
+     * @param array $data
+     * @return array $dataToReturnArray
      */
     public function filter($data = array())
     {
