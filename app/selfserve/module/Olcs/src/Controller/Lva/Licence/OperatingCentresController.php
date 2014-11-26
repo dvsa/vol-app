@@ -24,6 +24,7 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController
     use LicenceControllerTrait,
         LicenceOperatingCentresControllerTrait {
             LicenceOperatingCentresControllerTrait::alterActionForm as commonAlterActionForm;
+            LicenceOperatingCentresControllerTrait::formatCrudDataForSave as commonFormatCrudDataForSave;
         }
 
     protected $lva = 'licence';
@@ -78,8 +79,9 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController
      */
     public function alterForm(Form $form)
     {
-        $form = parent::alterForm($form);
-        return $this->commonAlterForm($form);
+        return $this->commonAlterForm(
+            parent::alterForm($form)
+        );
     }
 
     /**
@@ -95,5 +97,12 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController
             ->remove($form, 'advertisements')
             ->remove($form, 'data->sufficientParking')
             ->remove($form, 'data->permission');
+    }
+
+    protected function formatCrudDataForSave($data)
+    {
+        return $this->commonFormatCrudDataForSave(
+            parent::formatCrudDataForSave($data)
+        );
     }
 }
