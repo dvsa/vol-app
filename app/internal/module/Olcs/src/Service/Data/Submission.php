@@ -346,7 +346,6 @@ class Submission extends AbstractData implements CloseableInterface
             'organisationName' => $data['licence']['organisation']['name'],
             'isMlh' => $data['licence']['organisation']['isMlh'],
             'organisationType' => $data['licence']['organisation']['type']['description'],
-            'businessType' => $data['licence']['organisation']['sicCode']['description'],
             'caseType' => isset($data['caseType']['id']) ? $data['caseType']['id'] : null,
             'ecmsNo' => $data['ecmsNo'],
             'licNo' => $data['licence']['licNo'],
@@ -362,6 +361,11 @@ class Submission extends AbstractData implements CloseableInterface
             'vehiclesInPossession' => $vehiclesInPossession,
             'trailersInPossession' => $data['licence']['totAuthTrailers']
         );
+
+        if (isset($data['licence']['organisation']['sicCode']['description'])) {
+            $filteredData['businessType'] = $data['licence']['organisation']['sicCode']['description'];
+        }
+
         return $filteredData;
     }
 

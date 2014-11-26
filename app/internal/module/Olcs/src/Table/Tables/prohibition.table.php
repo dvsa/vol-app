@@ -60,7 +60,7 @@ return array(
             }
         ),
         array(
-            'title' => 'Imposed At',
+            'title' => 'Imposed at',
             'format' => '{{imposedAt}}'
         ),
         array(

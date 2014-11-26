@@ -30,7 +30,6 @@ class ImpoundingFields
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
-     * @Form\Required(true)
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
      * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})

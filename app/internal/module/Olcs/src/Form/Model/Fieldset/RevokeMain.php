@@ -45,8 +45,9 @@ class RevokeMain extends CaseBase
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
-     * @Form\Required(true)
-     * @Form\Type("\Common\Form\Elements\InputFilters\DateRequired")
+     * @Form\Type("DateSelect")
+     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
      */
     public $ptrAgreedDate = null;
 
@@ -58,7 +59,9 @@ class RevokeMain extends CaseBase
      *     "render_delimiters": false
      * })
      * @Form\Required(false)
-     * @Form\Type("Common\Form\Elements\Custom\DateSelect")
+     * @Form\Type("DateSelect")
+     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
      */
     public $closedDate = null;
 

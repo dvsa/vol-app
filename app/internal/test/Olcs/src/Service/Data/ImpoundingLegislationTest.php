@@ -43,7 +43,7 @@ class ImpoundingLegislationTest extends \PHPUnit_Framework_TestCase
         $mockLicenceService = $this->getMock('\Common\Service\Data\Licence');
         $mockLicenceService->expects($this->once())
             ->method('fetchLicenceData')
-            ->willReturn(['niFlag'=> true, 'goodsOrPsv' => ['id'=> 'lcat_gv'], 'trafficArea' => ['id'=> 'B']]);
+            ->willReturn(['niFlag'=> 1, 'goodsOrPsv' => ['id'=> 'lcat_gv'], 'trafficArea' => ['id'=> 'B']]);
 
         $sut = new ImpoundingLegislation();
         $sut->setLicenceService($mockLicenceService);
@@ -63,9 +63,9 @@ class ImpoundingLegislationTest extends \PHPUnit_Framework_TestCase
     public function provideFetchListOptions()
     {
         return [
-            [true, 'lcat_psv', 'impound_legislation_psv_gb'],
-            [true, 'lcat_gv', 'impound_legislation_goods_ni'],
-            [false, 'lcat_gv', 'impound_legislation_goods_gb']
+            [1, 'lcat_psv', 'impound_legislation_psv_gb'],
+            [1, 'lcat_gv', 'impound_legislation_goods_ni'],
+            [0, 'lcat_gv', 'impound_legislation_goods_gb']
         ];
     }
 
