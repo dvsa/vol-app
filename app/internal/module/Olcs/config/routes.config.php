@@ -1512,11 +1512,37 @@ $routes['lva-application']['child_routes'] = array_merge(
                     'options' => [
                         'route' => 'notes',
                         'defaults' => [
-                            'controller' => 'ApplicationController',
-                            'action' => 'notes'
+                            'controller' => 'ApplicationProcessingNoteController',
+                            'action' => 'index'
+                        ]
+                    ],
+                ],
+                'add-note' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => '/notes/:action/:noteType[/:linkedId]',
+                        'defaults' => [
+                            'constraints' => [
+                                'noteType' => '[A-Za-z]+',
+                                'linkedId' => '[0-9]+',
+                            ],
+                            'controller' => 'ApplicationProcessingNoteController',
+                            'action' => 'add'
                         ]
                     ]
                 ],
+                'modify-note' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => '/notes/:action[/:id]',
+                        'defaults' => [
+                            'constraints' => [
+                                'id' => '[0-9]+',
+                            ],
+                            'controller' => 'ApplicationProcessingNoteController',
+                        ]
+                    ]
+                ]
             ],
         ),
         'fees' => array(
