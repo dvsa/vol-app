@@ -21,6 +21,10 @@
         {
             "type": "vcs",
             "url": "git@gitlab.clb.npm:olcs/olcs-logging.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.clb.npm:olcs/olcs-autoload.git"
         }
     ],
     "require": {
@@ -31,6 +35,7 @@
         "zendframework/zend-developer-tools": "dev-master",
         "dvsa/jackrabbit": "v1.1.0",
         "olcs/olcs-logging": "dev-develop",
+        "olcs/autoload": "dev-develop",
         "symfony/Filesystem": "~2.6.0-dev"
     },
     "require-dev": {
@@ -43,14 +48,19 @@
         "johnkary/phpunit-speedtrap": "dev-master"
     },
     "autoload": {
+        "classmap": [
+            "module/Admin/src",
+            "module/Olcs/src",
+            "vendor/olcs/OlcsCommon/Common/src/Common"
+        ],
         "psr-4": {
             "Common\\": "vendor/olcs/OlcsCommon/Common/src/Common"
         }
     },
     "config": {
-      "preferred-install": "dist",
+        "preferred-install": "dist",
         "github-oauth": {
-          "github.com": "5cdf40f8d81a7675fdaa5fc92e9381526ef4db7f"
-      }
+            "github.com": "5cdf40f8d81a7675fdaa5fc92e9381526ef4db7f"
+        }
     }
 }
