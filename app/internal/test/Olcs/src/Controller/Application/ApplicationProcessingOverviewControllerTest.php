@@ -27,7 +27,7 @@ class ApplicationProcessingOverviewControllerTest extends AbstractHttpController
             ['redirectToRoute']
         );
 
-        $expectedRoute = 'lva-application/processing/tasks';
+        $expectedRoute = 'lva-application/processing/notes';
 
         // assert index action redirects to tasks (for now)
         $this->controller->expects($this->once())
