@@ -62,7 +62,7 @@ return array(
             'sort' => 'comment'
         ),
         array(
-            'title' => 'Note Type',
+            'title' => 'Note type',
             'formatter' => function ($data) {
                 return $data['noteType']['description'];
             },

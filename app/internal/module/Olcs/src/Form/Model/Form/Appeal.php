@@ -15,7 +15,6 @@ class Appeal
 {
     /**
      * @Form\Name("fields")
-     * @Form\Options({"label":"Appeal Details"})
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\Appeal")
      */
     public $fields = null;
