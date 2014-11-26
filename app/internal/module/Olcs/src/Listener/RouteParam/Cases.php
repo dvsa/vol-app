@@ -109,8 +109,6 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
         $context = $e->getContext();
         $case = $this->getCaseService()->fetchCaseData($e->getValue());
 
-        //die(print_r($case, 1));
-
         $this->getViewHelperManager()->get('headTitle')->prepend('Case ' . $case['id']);
 
         $placeholder = $this->getViewHelperManager()->get('placeholder');
@@ -123,10 +121,6 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
             'colour' => $case['closeDate'] !== null ? 'Grey' : 'Orange',
             'value' => $case['closeDate'] !== null ? 'Closed' : 'Open',
         ];
-
-        //print_r($status);
-
-        //die(print_r($case, 1));
 
         $placeholder->getContainer('status')->set($status);
 
