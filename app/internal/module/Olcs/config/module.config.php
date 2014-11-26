@@ -302,5 +302,14 @@ return array(
             'Olcs\Service\Data\PublicInquiryDefinition' => 'Olcs\Service\Data\PublicInquiryDefinition',
             'Olcs\Service\Data\ImpoundingLegislation' => 'Olcs\Service\Data\ImpoundingLegislation',
         ]
-    ]
+    ],
+    'filters' => [
+        'invokables' => [
+            'Olcs\Filter\SubmissionSection\ComplianceComplaints' =>
+                'Olcs\Filter\SubmissionSection\ComplianceComplaints'
+        ],
+        'aliases' => [
+            'ComplianceComplaints' => 'Olcs\Filter\SubmissionSection\ComplianceComplaints'
+        ]
+    ],
 );
