@@ -59,6 +59,12 @@ class Submission extends AbstractData implements CloseableInterface
     private $submissionConfig;
 
     /**
+     * FilterManager service
+     * @var object
+     */
+    protected $filterManager;
+
+    /**
      * Create Submission service with injected ref data service
      *
      * @param ServiceLocatorInterface $serviceLocator
@@ -75,6 +81,9 @@ class Submission extends AbstractData implements CloseableInterface
 
         $submissionConfig = $serviceLocator->get('config')['submission_config'];
         $this->setSubmissionConfig($submissionConfig);
+
+        $filterManager = $serviceLocator->get('FilterManager');
+        $this->setFilterManager($filterManager);
 
         return $this;
     }
@@ -250,17 +259,23 @@ class Submission extends AbstractData implements CloseableInterface
                     $this->getSubmissionConfig()['sections'][$sectionConfig['bundle']]
                 );
             } elseif (isset($sectionConfig['service']) && is_array($sectionConfig['bundle'])) {
-                $rawData = $this->getApiResolver()->getClient(
+                $identifier = isset($sectionConfig['identifier']) ? $sectionConfig['identifier'] : 'id';
+                $results = $this->getApiResolver()->getClient(
                     $sectionConfig['service']
                 )->get(
                     '',
-                    array('id' => $caseId,
-                    'bundle' => json_encode($sectionConfig['bundle'])
+                    array($identifier => $caseId,
+                        'bundle' => json_encode($sectionConfig['bundle'])
                     )
                 );
+
+                if (isset($results['Results'])) {
+                    $rawData = $results['Results'];
+                } else {
+                    $rawData = $results;
+                }
             }
         }
-
         return $rawData;
     }
 
@@ -275,15 +290,19 @@ class Submission extends AbstractData implements CloseableInterface
         $filteredSectionData = [];
         $filter = $this->getFilter();
         $method = 'filter' . ucfirst($filter->filter($sectionId)) . 'Data';
+
         if (method_exists($this, $method)) {
             $filteredSectionData = call_user_func(array($this, $method), $this->getLoadedSectionData()[$sectionId]);
+        } else {
+            // load filter class
+            if ($sectionId == 'compliance-complaints') {
+                $filteredSectionData = $this->getFilterManager()
+                    ->get('Olcs/Filter/SubmissionSection/' . ucfirst($filter->filter($sectionId)))
+                    ->filter($this->getLoadedSectionData()[$sectionId]);
+            }
         }
-        return $filteredSectionData;
-    }
 
-    private function getFilter()
-    {
-        return new DashToCamelCase();
+        return $filteredSectionData;
     }
 
     /**
@@ -480,6 +499,45 @@ class Submission extends AbstractData implements CloseableInterface
     }
 
     /**
+     * section conditions-undertakings
+     */
+    protected function filterConditionsAndUndertakingsData(array $data = array())
+    {
+        $dataToReturnArray = array();
+        if (isset($data['conditionUndertakings']) && is_array($data['conditionUndertakings'])) {
+
+            usort(
+                $data['conditionUndertakings'],
+                function ($a, $b) {
+                    return strtotime($b['createdOn']) - strtotime($a['createdOn']);
+                }
+            );
+
+            foreach ($data['conditionUndertakings'] as $entity) {
+                $thisEntity = array();
+                $thisEntity['id'] = $entity['id'];
+                $thisEntity['version'] = $entity['version'];
+                $thisEntity['createdOn'] = $entity['createdOn'];
+                $thisEntity['caseId'] = $entity['case']['id'];
+                $thisEntity['addedVia'] = $entity['addedVia'];
+                $thisEntity['isFulfilled'] = $entity['isFulfilled'];
+                $thisEntity['isDraft'] = $entity['isDraft'];
+                $thisEntity['attachedTo'] = $entity['attachedTo'];
+
+                if (empty($entity['operatingCentre'])) {
+                    $thisEntity['OcAddress'] = [];
+                } else {
+                    $thisEntity['OcAddress'] = $entity['operatingCentre']['address'];
+                }
+                $tableName = $entity['conditionType']['id'] == 'cdt_und' ? 'undertakings' : 'conditions';
+                $dataToReturnArray[$tableName][] = $thisEntity;
+            }
+        }
+
+        return $dataToReturnArray;
+    }
+
+    /**
      * Calculates the vehicles in possession.
      *
      * @param array $licenceData
@@ -578,45 +636,6 @@ class Submission extends AbstractData implements CloseableInterface
         }
 
         return $sectionData;
-    }
-
-    /**
-     * section oppositions
-     */
-    protected function filterConditionsAndUndertakingsData(array $data = array())
-    {
-        $dataToReturnArray = array();
-        if (isset($data['conditionUndertakings']) && is_array($data['conditionUndertakings'])) {
-
-            usort(
-                $data['conditionUndertakings'],
-                function ($a, $b) {
-                    return strtotime($b['createdOn']) - strtotime($a['createdOn']);
-                }
-            );
-
-            foreach ($data['conditionUndertakings'] as $entity) {
-                $thisEntity = array();
-                $thisEntity['id'] = $entity['id'];
-                $thisEntity['version'] = $entity['version'];
-                $thisEntity['createdOn'] = $entity['createdOn'];
-                $thisEntity['caseId'] = $entity['case']['id'];
-                $thisEntity['addedVia'] = $entity['addedVia'];
-                $thisEntity['isFulfilled'] = $entity['isFulfilled'];
-                $thisEntity['isDraft'] = $entity['isDraft'];
-                $thisEntity['attachedTo'] = $entity['attachedTo'];
-
-                if (empty($entity['operatingCentre'])) {
-                    $thisEntity['OcAddress'] = [];
-                } else {
-                    $thisEntity['OcAddress'] = $entity['operatingCentre']['address'];
-                }
-                $tableName = $entity['conditionType']['id'] == 'cdt_und' ? 'undertakings' : 'conditions';
-                $dataToReturnArray[$tableName][] = $thisEntity;
-            }
-        }
-
-        return $dataToReturnArray;
     }
 
     /**
@@ -766,4 +785,26 @@ class Submission extends AbstractData implements CloseableInterface
     {
         return $this->loadedSectionData;
     }
+
+    private function getFilter()
+    {
+        return new DashToCamelCase();
+    }
+
+    /**
+     * @param object $filterManager
+     */
+    public function setFilterManager($filterManager)
+    {
+        $this->filterManager = $filterManager;
+    }
+
+    /**
+     * @return object
+     */
+    public function getFilterManager()
+    {
+        return $this->filterManager;
+    }
+
 }
