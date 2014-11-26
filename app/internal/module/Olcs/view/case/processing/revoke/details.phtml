@@ -5,9 +5,9 @@ if (empty($revoke)) {
     echo $this->render('partials/read-only/empty',
         [
             'header' => $this->navigation('navigation')->findOneBy('active', 1)->getLabel(),
-            'helpText' => 'There is currently no in office revocation',
+            'helpText' => 'There is currently no in-office revocation',
             'url' => $this->url('processing_in_office_revocation', ['action' => 'add'], [], true),
-            'label' => 'Add in office revocation'
+            'label' => 'Add in-office revocation'
         ]
     );
 } else {
@@ -19,7 +19,7 @@ if (empty($revoke)) {
 
     echo $this->render('partials/read-only/main',
         [
-            'header' => 'In office revocation',
+            'header' => 'In-office revocation',
             'actions' => [
                 [
                     'label' => 'Edit',
