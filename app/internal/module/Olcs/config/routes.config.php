@@ -1190,7 +1190,7 @@ $routes = [
                         'options' => [
                             'route' => '/:action/:fee',
                             'constraints' => [
-                                'fee' => '[0-9-]+',
+                                'fee' => '[0-9-,]+',
                             ],
                         ],
                         'may_terminate' => true,

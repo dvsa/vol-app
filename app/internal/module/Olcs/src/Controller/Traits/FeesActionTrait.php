@@ -108,6 +108,50 @@ trait FeesActionTrait
         return $this->renderView($view, 'No # ' . $fee['id']);
     }
 
+    public function payFeesAction()
+    {
+        $ids = explode(',', $this->params('fee'));
+
+        $fees = [];
+        $maxAmount = 0;
+        foreach ($ids as $id) {
+            $fees[] = $fee = $this->getServiceLocator()
+                ->get('Entity\Fee')
+                ->getOverview($id);
+
+            $maxAmount += $fee['amount'];
+        }
+
+        $form = $this->getServiceLocator()
+            ->get('Helper\Form')
+            ->createForm('FeePayment');
+
+        $form->get('details')
+            ->get('maxAmount')
+            ->setValue('£' . $maxAmount);
+
+        $form->getInputFilter()
+            ->get('details')
+            ->get('received')
+            ->getValidatorChain()
+            ->addValidator(
+                new \Zend\Validator\LessThan(
+                    [
+                        'max' => $maxAmount,
+                        'inclusive' => true
+                    ]
+                )
+            );
+
+        $this->loadScripts(['forms/fee-payment']);
+
+        $this->formPost($form, 'processPayment');
+
+        $view = new ViewModel(['form' => $form]);
+        $view->setTemplate('form');
+        return $this->renderView($view);
+    }
+
     /**
      * Alter fee form
      *
@@ -254,7 +298,7 @@ trait FeesActionTrait
     }
 
     /**
-     * Redirect back to list of tasks
+     * Redirect back to list of fees
      *
      * @return redirect
      */
@@ -277,5 +321,10 @@ trait FeesActionTrait
             return;
         }
         $this->redirect()->toRoute($route, $params);
+    }
+
+    protected function processPayment($data)
+    {
+        // @TODO
     }
 }

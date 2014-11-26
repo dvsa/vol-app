@@ -28,6 +28,30 @@ class LicenceController extends AbstractController
      */
     public function feesAction()
     {
+        if ($this->getRequest()->isPost()) {
+
+            $data = $this->getRequest()->getPost();
+            if (!isset($data['id']) || empty($data['id'])) {
+                // @TODO handle error, return message about needing >= 1 fee
+                throw new \Exception('TODO');
+            }
+
+            // @NOTE: only one action supported at the moment, so no need to inspect
+            // it. Update logic as and when this needs to change...
+
+            $params = [
+                'action' => 'pay-fees',
+                'fee' => implode(',', $data['id'])
+            ];
+
+            return $this->redirect()->toRoute(
+                'licence/fees/fee_action',
+                $params,
+                null,
+                true
+            );
+        }
+
         $this->loadScripts(['forms/filter', 'table-actions']);
 
         $licenceId = $this->params()->fromRoute('licence');
