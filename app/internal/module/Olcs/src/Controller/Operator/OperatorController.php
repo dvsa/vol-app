@@ -40,20 +40,19 @@ class OperatorController extends AbstractController
      */
     protected function getViewWithOrganisation($variables = [])
     {
-        $organisationService = $this->getServiceLocator()->get('Olcs\Service\Data\Organisation');
         $organisationId = $this->params()->fromRoute('operator');
 
         if ($organisationId) {
-            $organisation = $organisationService->getOrganisation($organisationId, false);
-            $this->pageTitle = isset($organisation['name']) ? $organisation['name'] : '';
+            $org = $this->getServiceLocator()->get('Entity\Organisation')->getBusinessDetailsData($organisationId);
+            $this->pageTitle = isset($org['name']) ? $org['name'] : '';
             $variables['disable'] = false;
         } else {
-            $organisation = null;
+            $org = null;
             $translator = $this->getServiceLocator()->get('translator');
             $this->pageTitle = $translator->translate('internal-operator-create-new-operator');
             $variables['disable'] = true;
         }
-        $variables['organisation'] = $organisation;
+        $variables['organisation'] = $org;
         $variables['section'] = $this->section;
 
         $view = $this->getView($variables);

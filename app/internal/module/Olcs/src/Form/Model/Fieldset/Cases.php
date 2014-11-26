@@ -10,7 +10,6 @@ use Zend\Form\Annotation as Form;
 class Cases extends Base
 {
     /**
-     * @Form\Required(true)
      * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
      *     "label": "Case type",
@@ -24,11 +23,10 @@ class Cases extends Base
     public $caseType = null;
 
     /**
-     * @Form\Required(true)
      * @Form\Attributes({"id":"","placeholder":"","class":"chosen-select-medium", "multiple": "true"})
      * @Form\Options({
      *     "label": "Case category",
-     *     "disable_inarray_validator": false,
+     *     "disable_inarray_validator": true,
      *     "help-block": "Please select a case category",
      *     "category": "case_category",
      *     "use_groups": true
