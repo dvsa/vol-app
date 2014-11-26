@@ -452,6 +452,106 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
     public function providerSubmissionSectionData()
     {
         return [
+            [   // compliance-complaints section
+                [
+                    'caseId' => 24,
+                    'sectionId' => 'compliance-complaints',
+                    'sectionConfig' => [
+                        'service' => 'Complaints',
+                        'filter' => true,
+                        'bundle' => ['some_bundle'],
+                    ]
+                ],
+                [
+                    'loadedCaseSectionData' => [
+                        0 => [
+                            'id' => 1,
+                            'description' => 'test description 2',
+                            'complaintDate' => '2012-06-15T00:00:00+0100',
+                            'complainantForename' => 'John',
+                            'complainantFamilyName' => 'Smith',
+                        ],
+                        1 => [
+                            'id' => 1,
+                            'description' => 'test description 1',
+                            'complaintDate' => '2011-06-15T00:00:00+0100',
+                            'complainantForename' => 'John',
+                            'complainantFamilyName' => 'Smith',
+                        ],
+                    ],
+                    'expected' => [
+                        0 => [
+                            'id' => 1,
+                            'description' => 'test description 2',
+                            'complaintDate' => '2012-06-15T00:00:00+0100',
+                            'complainantForename' => 'John',
+                            'complainantFamilyName' => 'Smith',
+                        ],
+                        1 => [
+                            'id' => 1,
+                            'description' => 'test description 1',
+                            'complaintDate' => '2011-06-15T00:00:00+0100',
+                            'complainantForename' => 'John',
+                            'complainantFamilyName' => 'Smith',
+                        ]
+                    ]
+                ],
+            ],
+            [   // persons section
+                [
+                    'caseId' => 24,
+                    'sectionId' => 'persons',
+                    'sectionConfig' => [
+                        'service' => 'Cases',
+                        'filter' => true,
+                        'bundle' => ['some_bundle'],
+                    ]
+                ],
+                [
+                    'loadedCaseSectionData' => [
+                        'licence' => [
+                            'organisation' => [
+                                'organisationPersons' => [
+                                    0 => [
+                                        'person' => [
+                                            'id' => 2,
+                                            'title' => 'Mr',
+                                            'familyName' => 'Smith',
+                                            'forename' => 'John',
+                                            'birthDate' => '2012-06-15T00:00:00+0100',
+                                        ]
+                                    ],
+                                    1 => [
+                                        'person' => [
+                                            'id' => 1,
+                                            'title' => 'Mr',
+                                            'familyName' => 'Smith',
+                                            'forename' => 'Bob',
+                                            'birthDate' => '2012-06-15T00:00:00+0100',
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ],
+                    ],
+                    'expected' => [
+                        0 => [
+                            'id' => 1,
+                            'title' => 'Mr',
+                            'familyName' => 'Smith',
+                            'forename' => 'Bob',
+                            'birthDate' => '2012-06-15T00:00:00+0100'
+                        ],
+                        1 => [
+                            'id' => 2,
+                            'title' => 'Mr',
+                            'familyName' => 'Smith',
+                            'forename' => 'John',
+                            'birthDate' => '2012-06-15T00:00:00+0100',
+                        ]
+                    ]
+                ],
+            ],
             [   // conviction section
                 [
                     'caseId' => 24,
