@@ -14,10 +14,14 @@
                         ['label' => 'Notification number', 'value' => $data['notificationNumber']],
                     ],
                     2 => [
-                        ['label' => 'Category', 'value' => $data['siCategory']['description']],
-                        ['label' => 'Type', 'value' => $data['siCategoryType']['description']],
                         ['label' => 'Date of infringement', 'date' => $data['infringementDate']],
-                        ['label' => 'Date of check', 'date' => $data['checkDate']]
+                        ['label' => 'Date of check', 'date' => $data['checkDate']],
+                        ['label' => 'Category', 'value' => $data['siCategory']['description']],
+                        [
+                            'label' => 'Type', 
+                            'value' => $data['siCategoryType']['description'],
+                            'class' => 'full-width'
+                        ]
                     ],
                     3 => [
                         [

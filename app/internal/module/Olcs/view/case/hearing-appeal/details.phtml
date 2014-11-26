@@ -25,23 +25,29 @@ if (empty($appeal)){
                     )
                 ]
             ],
-            'items' => [
-                ['label' => 'Appeal number', 'value' => $appeal['appealNo']],
-                ['label' => 'Appeals deadline', 'date' => $appeal['deadlineDate']],
-                ['label' => 'Date of appeal', 'date' => $appeal['appealDate']],
-                ['label' => 'Reason', 'value' => (isset($appeal['reason']['description']) ?
-                    $appeal['reason']['description'] : '')],
-                ['label' => 'Outline ground', 'value' => $appeal['outlineGround'], 'class' => 'full-width'],
-                ['label' => 'Date of appeal hearing', 'date' => $appeal['hearingDate']],
-                ['label' => 'Date of decision', 'date' => $appeal['decisionDate']],
-                ['label' => 'Papers due at tribunal', 'date' => $appeal['papersDueDate']],
-                ['label' => 'Papers sent date', 'date' => $appeal['papersSentDate']],
-                ['label' => 'Outcome', 'value' => (isset($appeal['outcome']['description']) ?
-                    $appeal['outcome']['description'] : '')],
-                ['label' => 'Tm Case Id', 'value' => $appeal['tmCaseId']],
-                ['label' => 'Is withdrawn', 'value' => (empty($appeal['withdrawnDate']) ? 'N' : 'Y')],
-                ['label' => 'Withdrawn date', 'date' => $appeal['withdrawnDate']],
-                ['label' => 'Comments', 'value' => $appeal['comment'], 'class' => 'full-width'],
+            'multiItems' => [
+                0 => [
+                    ['label' => 'Appeal number', 'value' => $appeal['appealNo']],
+                    ['label' => 'Appeals deadline', 'date' => $appeal['deadlineDate']],
+                    ['label' => 'Date of appeal', 'date' => $appeal['appealDate']],
+                    ['label' => 'Reason', 'value' => (isset($appeal['reason']['description']) ?
+                        $appeal['reason']['description'] : '')],
+                    ['label' => 'Outline ground', 'value' => $appeal['outlineGround'], 'class' => 'full-width']
+                ],
+                1 => [
+                    ['label' => 'Date of appeal hearing', 'date' => $appeal['hearingDate']],
+                    ['label' => 'Date of decision', 'date' => $appeal['decisionDate']],
+                    ['label' => 'Papers due at tribunal', 'date' => $appeal['papersDueDate']],
+                    ['label' => 'Papers sent date', 'date' => $appeal['papersSentDate']],
+                    ['label' => 'Outcome', 'value' => (isset($appeal['outcome']['description']) ?
+                        $appeal['outcome']['description'] : '')],
+                    ['label' => 'TM case Id', 'value' => $appeal['tmCaseId']],
+                    ['label' => 'Is withdrawn', 'value' => (empty($appeal['withdrawnDate']) ? 'N' : 'Y')],
+                    ['label' => 'Withdrawn date', 'date' => $appeal['withdrawnDate']]
+                ],
+                2 => [
+                    ['label' => 'Comments', 'value' => $appeal['comment'], 'class' => 'full-width']
+                ]
             ]
         ]
     );
