@@ -151,11 +151,7 @@ class PublicInquiryHearingFields extends Base
 
     /**
      * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Adjourned"})
-<<<<<<< HEAD
-     * @Form\Type("\Common\Form\Elements\InputFilters\SingleCheckbox")
-=======
      * @Form\Type("OlcsCheckbox")
->>>>>>> 72493c4965c21afd6938f79e5f66aa72400efe33
      */
     public $isAdjourned;
 
