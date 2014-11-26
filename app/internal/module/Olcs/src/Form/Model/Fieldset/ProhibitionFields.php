@@ -78,7 +78,7 @@ class ProhibitionFields
     public $clearedDate = null;
 
     /**
-     * @Form\Attributes({"class":"","id":""})
+     * @Form\Attributes({"class":"medium","id":""})
      * @Form\Options({"label":"Location prohibition issued"})
      * @Form\Required(false)
      * @Form\Type("Text")

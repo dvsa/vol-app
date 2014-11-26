@@ -18,7 +18,7 @@ return [
                     ],
                     'priority' => [
                         'type' => 'checkbox-yn',
-                        'label' => 'Priority?',
+                        'label' => 'Priority?'
                     ],
                 ]
             ],
