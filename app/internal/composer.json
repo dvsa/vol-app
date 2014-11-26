@@ -44,7 +44,8 @@
         "sebastian/diff": "dev-master",
         "phpunit/phpcov": "dev-master",
         "mockery/mockery": "0.9.x-dev",
-        "olcs/olcs-testhelpers": "dev-develop"
+        "olcs/olcs-testhelpers": "dev-develop",
+        "johnkary/phpunit-speedtrap": "dev-master"
     },
     "autoload": {
         "classmap": [
