@@ -82,7 +82,6 @@ echo $this->render('partials/read-only/main',
 
         <a class="submission-item__edit" href="<?php echo $this->url($route, ['action' => 'edit', 'id' => $sa['id']], [], true); ?>">Edit</a>
         <p><?php echo $sa['comment']; ?></p>
-        <?php //die('<pre>' . print_r($sa['reasons'], 1));?>
         <p><strong>Legislation:</strong><br /><?php echo implode('<br />', array_map(function($item){return $item['sectionCode'] . ' - '. $item['description'];}, $sa['reasons'])); ?></p>
         <div class="submission-item__meta">
             <p><b>From</b> <?php echo $sa['senderUser']['name']; ?></p>
