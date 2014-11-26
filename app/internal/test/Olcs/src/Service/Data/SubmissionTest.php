@@ -193,6 +193,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
      * @dataProvider providerSubmissionSectionData
      * @param $input
      * @param $expected
+     * @group tteesstt
      */
     public function testCreateSubmissionSection($input, $expected)
     {
@@ -1037,7 +1038,6 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                 'organisation' => [
                     'isMlh' => 'Y',
                     'name' => 'John Smith Haulage Ltd.',
-                    'sicCode' => array('description' => 'Some whatever'),
                     'type' =>
                         [
                             'description' => 'Registered Company',
@@ -1060,6 +1060,14 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                                 'forename' => 'Keith',
                                 'familyName' => 'Winnard',
                                 'birthDate' => '1975-03-15T00:00:00+0100',
+                            ]
+                        ]
+                    ],
+                    'organisationNatureOfBusinesss' => [
+                        [
+                            'refData' => [
+                                'id' => '1',
+                                'description' => 'Some whatever'
                             ]
                         ]
                     ]
