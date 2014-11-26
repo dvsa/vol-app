@@ -326,7 +326,26 @@ return array(
         'compliance-complaints'   => array(
             'section_type' => ['list'],
             'data_field' => '',
+            'service' => 'Complaint',
+            'identifier' => 'case',
             'allow_comments' => true,
+            'bundle' => array(
+                'properties' => array(
+                    'id',
+                    'complainantForename',
+                    'complainantFamilyName',
+                    'complaintDate',
+                    'description',
+                    'case'
+                ),
+                'children' => array(
+                    'case' => array(
+                        'properties' => array(
+                            'id'
+                        )
+                    )
+                )
+            )
         ),
         'environmental-complaints'   => array(
             'section_type' => ['list'],
