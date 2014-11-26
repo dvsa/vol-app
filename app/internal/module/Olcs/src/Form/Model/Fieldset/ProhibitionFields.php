@@ -45,7 +45,7 @@ class ProhibitionFields
 
     /**
      * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Trailer"})
-     * @Form\Type("checkbox")
+     * @Form\Type("OlcsCheckbox")
      */
     public $isTrailer = null;
 
@@ -78,7 +78,7 @@ class ProhibitionFields
     public $clearedDate = null;
 
     /**
-     * @Form\Attributes({"class":"","id":""})
+     * @Form\Attributes({"class":"medium","id":""})
      * @Form\Options({"label":"Location prohibition issued"})
      * @Form\Required(false)
      * @Form\Type("Text")

@@ -43,7 +43,6 @@ class PublicInquiryHearingFields extends Base
      *          }
      *      }
      * })
-
      */
     public $piVenueOther;
 
@@ -91,7 +90,7 @@ class PublicInquiryHearingFields extends Base
     public $presidedByRole;
 
     /**
-     * @Form\Attributes({"id":"","placeholder":"","class":"small"})
+     * @Form\Attributes({"id":"","placeholder":"","class":"medium"})
      * @Form\Options({"label": "Witnesses"})
      * @Form\Type("Text")
      * @Form\Required(false)
@@ -101,7 +100,7 @@ class PublicInquiryHearingFields extends Base
 
     /**
      * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Cancelled / Withdrawn"})
-     * @Form\Type("checkbox")
+     * @Form\Type("OlcsCheckbox")
      */
     public $isCancelled;
 
@@ -152,7 +151,7 @@ class PublicInquiryHearingFields extends Base
 
     /**
      * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Adjourned"})
-     * @Form\Type("checkbox")
+     * @Form\Type("OlcsCheckbox")
      */
     public $isAdjourned;
 

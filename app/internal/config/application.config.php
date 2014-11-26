@@ -4,6 +4,7 @@ return array(
     'modules' => array(
         'ZendDeveloperTools',
         'Olcs\Logging',
+        'Dvsa\Jackrabbit',
         'Olcs',
         'Admin',
         'Common',

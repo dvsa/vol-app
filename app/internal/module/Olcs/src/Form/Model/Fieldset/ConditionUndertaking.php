@@ -19,7 +19,7 @@ class ConditionUndertaking extends CaseBase
     /**
      * @Form\Attributes({"id":""})
      * @Form\Options({
-     *     "label": "Condition / Undertaking Type",
+     *     "label": "Condition / Undertaking type",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select",
@@ -63,9 +63,9 @@ class ConditionUndertaking extends CaseBase
      *     "checked_value": "Y",
      *     "unchecked_value": "N",
      *     "label": "Fulfilled",
-     *     "help-block": "Please choose",
+     *     "help-block": "Please choose"
      * })
-     * @Form\Type("\Common\Form\Elements\InputFilters\SingleCheckbox")
+     * @Form\Type("OlcsCheckbox")
      */
     public $isFulfilled = null;
 
