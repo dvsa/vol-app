@@ -18,7 +18,7 @@ class ConditionsAndUndertakings extends AbstractFilter
      */
     public function filter($data = array())
     {
-        $dataToReturnArray = array();
+        $dataToReturnArray = array('conditions' => [], 'undertakings' => []);
         if (isset($data['conditionUndertakings']) && is_array($data['conditionUndertakings'])) {
 
             usort(
