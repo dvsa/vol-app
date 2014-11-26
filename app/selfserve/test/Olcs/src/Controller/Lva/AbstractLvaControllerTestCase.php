@@ -16,9 +16,8 @@ abstract class AbstractLvaControllerTestCase extends MockeryTestCase
 {
     use LvaControllerTestTrait;
 
-    public function setUp()
+    protected function getServiceManager()
     {
-        $this->sm = Bootstrap::getServiceManager();
-        $this->request = m::mock('\Zend\Http\Request')->makePartial();
+        return Bootstrap::getServiceManager();
     }
 }
