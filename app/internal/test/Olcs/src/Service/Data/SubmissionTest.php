@@ -931,7 +931,8 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                                 ],
                                 'OcAddress' => []
                             ]
-                        ]
+                        ],
+                        'undertakings' => []
                     ]
                 ]
             ]
