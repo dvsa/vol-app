@@ -40,7 +40,6 @@ class PaymentTypeTest extends \PHPUnit_Framework_TestCase
         $sut = new PaymentType();
         $sut->setRestClient($mockRestClient);
 
-
         $result = [
             [
                 'id' => 'fpm_cash',

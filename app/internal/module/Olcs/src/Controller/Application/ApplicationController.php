@@ -32,7 +32,7 @@ class ApplicationController extends AbstractController
      */
     public function feesAction()
     {
-        $response = $this->checkActionRedirect('application');
+        $response = $this->checkActionRedirect('lva-application');
         if ($response) {
             return $response;
         }

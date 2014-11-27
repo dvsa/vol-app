@@ -4,6 +4,9 @@ namespace Olcs\Form\Model\Fieldset;
 
 use Zend\Form\Annotation as Form;
 
+/**
+ * Fee Payment Details fieldset
+ */
 class FeePaymentDetails
 {
     /**
