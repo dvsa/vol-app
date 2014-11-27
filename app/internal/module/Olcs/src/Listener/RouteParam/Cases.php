@@ -117,6 +117,13 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
 
         $placeholder->getContainer('case')->set($case);
 
+        $status = [
+            'colour' => $case['closeDate'] !== null ? 'Grey' : 'Orange',
+            'value' => $case['closeDate'] !== null ? 'Closed' : 'Open',
+        ];
+
+        $placeholder->getContainer('status')->set($status);
+
         // if we already have licence data, no sense in getting it again.
         if (isset($case['licence']['id'])) {
             $this->getLicenceService()->setData($case['licence']['id'], $case['licence']);
