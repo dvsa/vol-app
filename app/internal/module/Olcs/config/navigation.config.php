@@ -189,7 +189,7 @@ return array(
                         ),
                         array(
                             'id' => 'case_hearings_appeals_public_inquiry',
-                            'label' => 'Public inquiry',
+                            'label' => 'Public Inquiry',
                             'route' => 'case_pi',
                             'action' => '',
                             'use_route_match' => true,
