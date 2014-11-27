@@ -190,9 +190,7 @@ trait FeesActionTrait
             $maxAmount += $fee['amount'];
         }
 
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
-
-        $form = $formHelper->createForm('FeePayment');
+        $form = $this->getForm('FeePayment');
 
         $form->get('details')
             ->get('maxAmount')
@@ -216,11 +214,17 @@ trait FeesActionTrait
         if ($this->getRequest()->isPost()) {
             $details = $this->getRequest()->getPost('details');
             if (isset($details['paymentType']) && in_array($details['paymentType'], $this->cardTypes)) {
-                $formHelper->remove($form, 'details->received');
+                $this->getServiceLocator()
+                    ->get('Helper\Form')
+                    ->remove($form, 'details->received');
             }
         }
 
         $this->formPost($form, 'processPayment');
+
+        if ($this->getResponse()->getContent() !== "") {
+            return $this->getResponse();
+        }
 
         $view = new ViewModel(['form' => $form]);
         $view->setTemplate('form');
