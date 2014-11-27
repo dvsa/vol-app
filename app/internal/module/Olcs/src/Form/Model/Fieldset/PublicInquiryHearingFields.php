@@ -43,7 +43,6 @@ class PublicInquiryHearingFields extends Base
      *          }
      *      }
      * })
-
      */
     public $piVenueOther;
 
@@ -91,7 +90,7 @@ class PublicInquiryHearingFields extends Base
     public $presidedByRole;
 
     /**
-     * @Form\Attributes({"id":"","placeholder":"","class":"small"})
+     * @Form\Attributes({"id":"","placeholder":"","class":"medium"})
      * @Form\Options({"label": "Witnesses"})
      * @Form\Type("Text")
      * @Form\Required(false)

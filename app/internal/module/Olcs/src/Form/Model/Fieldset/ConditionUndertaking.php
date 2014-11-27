@@ -19,7 +19,7 @@ class ConditionUndertaking extends CaseBase
     /**
      * @Form\Attributes({"id":""})
      * @Form\Options({
-     *     "label": "Condition / Undertaking Type",
+     *     "label": "Condition / Undertaking type",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select",

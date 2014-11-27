@@ -9,7 +9,7 @@ $piTypes = implode(', ', $types);
 
 echo $this->render('partials/read-only/main',
     [
-        'header' => 'Agreed and legislation',
+        'header' => 'Traffic Commissioner agreement and legislation',
         'actions' => [
             [
                 'label' => 'Edit',
@@ -21,20 +21,24 @@ echo $this->render('partials/read-only/main',
                 )
             ],
         ],
-        'items' => [
-            ['label' => 'Agreed date', 'date' => (isset($pi['agreedDate']) ? $pi['agreedDate'] : null)],
-            ['label' => 'Type of Public Inquiry', 'value' => $piTypes],
-            ['label' => 'Agreed by', 'value' => $pi['agreedByTc']['name']],
-            ['label' => 'Agreed by role', 'value' => $pi['agreedByTcRole']['description']],
-            ['label' => 'Legislation', 'class' => 'full-width', 'value' => is_array($pi['reasons']) ?
-                implode(
-                    ', ',
-                    array_map(
-                        function($item){return $item['sectionCode']. ' ' . $item['description'];},
-                        $pi['reasons']
-                    )
-                ) : 'None selected'],
-            ['label' => 'Comments', 'value' => $pi['comment'], 'class' => 'full-width'],
+        'multiItems' => [
+            0 => [
+                ['label' => 'Agreed by', 'value' => $pi['agreedByTc']['name']],
+                ['label' => 'Agreed date', 'date' => (isset($pi['agreedDate']) ? $pi['agreedDate'] : null)],
+                ['label' => 'Agreed by role', 'value' => $pi['agreedByTcRole']['description']]
+            ],
+            1 => [
+                ['label' => 'Type of Public Inquiry', 'value' => $piTypes],
+                ['label' => 'Legislation', 'class' => 'full-width', 'value' => is_array($pi['reasons']) ?
+                    implode(
+                        ', ',
+                        array_map(
+                            function($item){return $item['sectionCode']. ' ' . $item['description'];},
+                            $pi['reasons']
+                        )
+                    ) : 'None selected'],
+                ['label' => 'Comments', 'value' => $pi['comment'], 'class' => 'full-width']
+            ]
         ]
     ]
 );
