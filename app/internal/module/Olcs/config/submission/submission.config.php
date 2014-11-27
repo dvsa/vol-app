@@ -28,12 +28,6 @@ return array(
                     'caseType' => array(
                         'properties' => array('id')
                     ),
-                    'submissionSections' => array(
-                        'properties' => array(
-                            'id',
-                            'description'
-                        )
-                    ),
                     'legacyOffences' => array(
                         'properties' => 'ALL',
                     ),
@@ -65,14 +59,22 @@ return array(
                                     'type' => array(
                                         'properties' => array('id', 'description')
                                     ),
-                                    'sicCode' => array(
-                                        'properties' => array('id', 'description')
-                                    ),
                                     'organisationPersons' => array(
                                         'properties' => 'ALL',
                                         'children' => array(
                                             'person' => array(
                                                 'properties' => 'ALL'
+                                            )
+                                        )
+                                    ),
+                                    'natureOfBusinesss' => array(
+                                        'properties' => 'ALL',
+                                        'children' => array(
+                                            'refData' => array(
+                                                'properties' => array(
+                                                    'id',
+                                                    'description'
+                                                )
                                             )
                                         )
                                     )
@@ -143,12 +145,6 @@ return array(
                         'children' => array(
                             'case' => array(
                                 'properties' => array('id')
-                            ),
-                            'prohibitionType' => array(
-                                'properties' => array(
-                                    'id',
-                                    'description'
-                                )
                             ),
                             'attachedTo' => array(
                                 'properties' => array('id', 'description')
