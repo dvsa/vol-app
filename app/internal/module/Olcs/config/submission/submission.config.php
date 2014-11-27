@@ -211,6 +211,15 @@ return array(
                                 'children' => array(
                                     'licences' => array(
                                         'properties' => 'ALL',
+                                        'criteria' => array(
+                                            'status' => array(
+                                                'lsts_consideration',
+                                                'lsts_granted',
+                                                'lsts_curtailed',
+                                                'lsts_suspended',
+                                                'lsts_valid'
+                                            )
+                                        ),
                                         'children' => array(
                                             'status',
                                             'licenceType',
