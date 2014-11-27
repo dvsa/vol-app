@@ -24,6 +24,8 @@ trait FeesActionTrait
         'fpm_card_offline'
     ];
 
+    abstract protected function renderLayout($view);
+
     /**
      * Common logic when rendering the list of fees
      */
@@ -45,7 +47,7 @@ trait FeesActionTrait
             ]
         );
         $view->setTemplate('licence/fees/layout');
-        return $this->render($view);
+        return $this->renderLayout($view);
     }
 
     protected function checkActionRedirect($lvaType)

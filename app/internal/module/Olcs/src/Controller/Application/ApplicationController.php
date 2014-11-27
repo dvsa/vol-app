@@ -32,7 +32,7 @@ class ApplicationController extends AbstractController
      */
     public function feesAction()
     {
-        $response = $this->checkActionRedirect('licence');
+        $response = $this->checkActionRedirect('application');
         if ($response) {
             return $response;
         }
@@ -282,5 +282,10 @@ class ApplicationController extends AbstractController
             $date,
             ($data['niFlag'] === 'Y')
         );
+    }
+
+    protected function renderLayout($view)
+    {
+        return $this->render($view);
     }
 }
