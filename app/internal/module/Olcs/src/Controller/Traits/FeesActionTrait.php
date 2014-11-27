@@ -194,7 +194,7 @@ trait FeesActionTrait
 
         $form->get('details')
             ->get('maxAmount')
-            ->setValue('£' . $maxAmount);
+            ->setValue('£' . number_format($maxAmount, 2));
 
         $form->getInputFilter()
             ->get('details')

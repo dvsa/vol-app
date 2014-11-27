@@ -457,7 +457,6 @@ class ApplicationControllerTest extends MockeryTestCase
         $request->setMethod('POST');
         $request->setPost(new \Zend\Stdlib\Parameters($post));
 
-
         $routeParams = [
             'action' => 'pay-fees',
             'fee' => '1,2,3'
@@ -512,7 +511,7 @@ class ApplicationControllerTest extends MockeryTestCase
                 ->andReturn(
                     m::mock()
                     ->shouldReceive('setValue')
-                    ->with('£15.5') // @TODO FIX!!
+                    ->with('£15.50')
                     ->getMock()
                 )
                 ->getMock()
