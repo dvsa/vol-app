@@ -217,15 +217,17 @@ abstract class ProcessingNoteControllerTestAbstract extends AbstractHttpControll
 
     public function testAddAction()
     {
-        $licenceId = 7;
+        $mainId   = 7;
         $noteType = 'note_t_lic';
         $linkedId = 1;
-        $caseId = null;
+        $caseId   = null;
 
-        $this->getFromRoute(0, $this->mainIdRouteParam, $licenceId);
-        $this->getFromRoute(1, 'case', $caseId);
-        $this->getFromRoute(2, 'noteType', $noteType);
-        $this->getFromRoute(3, 'linkedId', $linkedId);
+        $routeParamMap = [
+            [$this->mainIdRouteParam, 'case', 'noteType', 'linkedId'],
+            [$mainId, $caseId, $noteType, $linkedId]
+        ];
+        $this->controller->method('getFromRoute')
+            ->will($this->returnValueMap($routeParamMap));
 
         $this->controller->expects($this->once())
             ->method('generateFormWithData');
