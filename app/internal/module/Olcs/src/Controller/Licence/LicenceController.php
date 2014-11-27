@@ -209,14 +209,6 @@ class LicenceController extends AbstractController
         return $this->redirect()->toRoute('licence/details/overview', [], [], true);
     }
 
-    /**
-     * I'm really not happy with this; we override our parent's
-     * render method and then actually call renderView... but it's
-     * all so our traits can just consistently call 'render'.
-     *
-     * In reality, we *should* just be able to consistently call
-     * render anyway...
-     */
     protected function renderLayout($view)
     {
         $tmp = $this->getViewWithLicence($view->getVariables());

@@ -297,8 +297,7 @@ trait FeesActionTrait
             'id' => $data['fee-details']['id'],
             'version' => $data['fee-details']['version'],
             'waiveReason' => $data['fee-details']['waiveReason'],
-            // changing fee status to waive recommended
-            'feeStatus' => 'lfs_wr'
+            'feeStatus' => FeeEntityService::STATUS_WAIVE_RECOMMENDED
         ];
         $this->updateFeeAndRedirectToList($params);
     }
@@ -313,8 +312,7 @@ trait FeesActionTrait
         $params = [
             'id' => $data['fee-details']['id'],
             'version' => $data['fee-details']['version'],
-            // changing fee status back to outstanding
-            'feeStatus' => 'lfs_ot',
+            'feeStatus' => FeeEntityService::STATUS_OUTSTANDING
         ];
         $message = 'The fee waive recommendation has been rejected';
         $this->updateFeeAndRedirectToList($params, $message);
@@ -331,13 +329,11 @@ trait FeesActionTrait
             'id' => $data['fee-details']['id'],
             'version' => $data['fee-details']['version'],
             'waiveReason' => $data['fee-details']['waiveReason'],
-            // changing fee status to waived
-            'feeStatus' => 'lfs_w'
+            'feeStatus' => FeeEntityService::STATUS_WAIVED
         ];
 
         $this->getServiceLocator()->get('Entity\Fee')->save($params);
-        $this->getServiceLocator()->get('Helper\FlashMessenger')
-            ->addSuccessMessage('The selected fee has been waived');
+        $this->addSuccessMessage('The selected fee has been waived');
 
         $this->getServiceLocator()->get('Listener\Fee')->trigger(
             $data['fee-details']['id'],
@@ -357,7 +353,7 @@ trait FeesActionTrait
     {
         $this->getServiceLocator()->get('Entity\Fee')->save($data);
         if ($message) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage($message);
+            $this->addSuccessMessage($message);
         }
         $this->redirectToList();
     }
