@@ -2,14 +2,11 @@
 
 namespace Olcs\Filter\SubmissionSection;
 
-use Common\Exception\ResourceNotFoundException;
-use Zend\Filter\AbstractFilter;
-
 /**
  * Class Oppositions
  * @package Olcs\Filter\SubmissionSection
  */
-class Oppositions extends AbstractFilter
+class Oppositions extends AbstractSubmissionSectionFilter
 {
     /**
      * Filters data for oppositions section

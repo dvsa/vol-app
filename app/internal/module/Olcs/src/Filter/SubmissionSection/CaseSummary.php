@@ -2,14 +2,11 @@
 
 namespace Olcs\Filter\SubmissionSection;
 
-use Common\Exception\ResourceNotFoundException;
-use Zend\Filter\AbstractFilter;
-
 /**
  * Class CaseSummary
  * @package Olcs\Filter\SubmissionSection
  */
-class CaseSummary extends AbstractFilter
+class CaseSummary extends AbstractSubmissionSectionFilter
 {
     /**
      * Filters data for case-summary section
@@ -18,7 +15,6 @@ class CaseSummary extends AbstractFilter
      */
     public function filter($data = array())
     {
-        $vehiclesInPossession = $this->calculateVehiclesInPossession($data['licence']);
         $filteredData = array(
             'id' => $data['id'],
             'organisationName' => $data['licence']['organisation']['name'],
@@ -36,33 +32,31 @@ class CaseSummary extends AbstractFilter
             'licenceStatus' => $data['licence']['status']['description'],
             'totAuthorisedVehicles' => $data['licence']['totAuthVehicles'],
             'totAuthorisedTrailers' => $data['licence']['totAuthTrailers'],
-            'vehiclesInPossession' => $vehiclesInPossession,
-            'trailersInPossession' => $data['licence']['totAuthTrailers']
+            'vehiclesInPossession' => $this->calculateVehiclesInPossession($data['licence']),
+            'trailersInPossession' =>  $this->calculateTrailersInPossession($data['licence']),
+            'businessType' =>
+                isset($data['licence']['organisation']['natureOfBusinesss']) ?
+                    $this->getNatureOfBusinessAsaString(
+                        $data['licence']['organisation']['natureOfBusinesss']
+                    )
+                    : ''
         );
-
-        if (isset($data['licence']['organisation']['sicCode']['description'])) {
-            $filteredData['businessType'] = $data['licence']['organisation']['sicCode']['description'];
-        }
 
         return $filteredData;
     }
 
     /**
-     * Calculates the vehicles in possession.
-     *
-     * @param array $licenceData
-     * @return int
+     * Get nature of business as a string
+     * 
+     * @params array $natureOfBusiness
+     * @return string
      */
-    private function calculateVehiclesInPossession($licenceData)
+    protected function getNatureOfBusinessAsaString($natureOfBusiness = [])
     {
-        $vehiclesInPossession = 0;
-        if (isset($licenceData['licenceVehicles']) && is_array($licenceData['licenceVehicles'])) {
-            foreach ($licenceData['licenceVehicles'] as $vehicle) {
-                if (!empty($vehicle['specifiedDate']) && empty($vehicle['deletedDate'])) {
-                    $vehiclesInPossession++;
-                }
-            }
+        $nob = [];
+        foreach ($natureOfBusiness as $element) {
+            $nob[] = $element['refData']['description'];
         }
-        return $vehiclesInPossession;
+        return implode(', ', $nob);
     }
 }

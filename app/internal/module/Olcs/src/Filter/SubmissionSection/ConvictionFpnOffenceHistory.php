@@ -2,14 +2,11 @@
 
 namespace Olcs\Filter\SubmissionSection;
 
-use Common\Exception\ResourceNotFoundException;
-use Zend\Filter\AbstractFilter;
-
 /**
  * Class ConvictionFpnOffenceHistory
  * @package Olcs\Filter\SubmissionSection
  */
-class ConvictionFpnOffenceHistory extends AbstractFilter
+class ConvictionFpnOffenceHistory extends AbstractSubmissionSectionFilter
 {
     /**
      * Filters data for conviction-fpn-offence-history section

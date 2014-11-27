@@ -935,6 +935,74 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                         'undertakings' => []
                     ]
                 ]
+            ],
+            [   // linked-licences-app-numbers section
+                [
+                    'caseId' => 24,
+                    'sectionId' => 'linked-licences-app-numbers',
+                    'sectionConfig' => [
+                        'service' => 'Cases',
+                        'filter' => true,
+                        'bundle' => ['some_bundle'],
+                    ]
+                ],
+                [
+                    'loadedCaseSectionData' => [
+                        'id' => 24,
+                        'licence' => [
+                            'id' => 24,
+                            'organisation' => [
+                                'licences' => [
+                                    0 => [
+                                        'id' => 24,
+                                        'version' => 1,
+                                        'licNo' => 'OB1234568',
+                                        'status' => ['description' => 'Valid'],
+                                        'licenceType' => ['description' => 'Standard National'],
+                                        'totAuthTrailers' => '4',
+                                        'totAuthVehicles' => '5',
+                                        'licenceVehicles' => [
+                                            0 => [
+                                                'specifiedDate' => '2012-03-10T00:00:00+0000',
+                                                'deletedDate' => '2012-03-10T00:00:00+0000'
+                                            ]
+                                        ],
+                                        'createdOn' => '2012-03-10T00:00:00+0000'
+                                    ],
+                                    1 => [
+                                        'id' => 22,
+                                        'version' => 1,
+                                        'licNo' => 'OB1234567',
+                                        'status' => ['description' => 'Curtailed'],
+                                        'licenceType' => ['description' => 'Standard National'],
+                                        'totAuthTrailers' => '4',
+                                        'totAuthVehicles' => '5',
+                                        'licenceVehicles' => [
+                                            0 => [
+                                                'specifiedDate' => '2012-03-10T00:00:00+0000',
+                                                'deletedDate' => '2012-03-10T00:00:00+0000',
+                                            ]
+                                        ],
+                                        'createdOn' => '2012-03-10T00:00:00+0000'
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ],
+                    'expected' => [
+                        0 => [
+                            'id' => 22,
+                            'version' => 1,
+                            'licNo' => 'OB1234567',
+                            'status' => 'Curtailed',
+                            'licenceType' => 'Standard National',
+                            'totAuthTrailers' => '4',
+                            'totAuthVehicles' => '5',
+                            'vehiclesInPossession' => 0,
+                            'trailersInPossession' => 4
+                        ]
+                    ]
+                ]
             ]
         ];
     }
@@ -1158,7 +1226,6 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                 'organisation' => [
                     'isMlh' => 'Y',
                     'name' => 'John Smith Haulage Ltd.',
-                    'sicCode' => array('description' => 'Some whatever'),
                     'type' =>
                         [
                             'description' => 'Registered Company',
@@ -1181,6 +1248,14 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                                 'forename' => 'Keith',
                                 'familyName' => 'Winnard',
                                 'birthDate' => '1975-03-15T00:00:00+0100',
+                            ]
+                        ]
+                    ],
+                    'natureOfBusinesss' => [
+                        [
+                            'refData' => [
+                                'id' => '1',
+                                'description' => 'Some whatever'
                             ]
                         ]
                     ]
