@@ -2,7 +2,6 @@
 
 namespace Olcs\Filter\SubmissionSection;
 
-use Common\Exception\ResourceNotFoundException;
 use Zend\Filter\AbstractFilter;
 
 /**

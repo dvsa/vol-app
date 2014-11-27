@@ -2,8 +2,6 @@
 
 namespace Olcs\Filter\SubmissionSection;
 
-use Common\Exception\ResourceNotFoundException;
-
 /**
  * Class CaseSummary
  * @package Olcs\Filter\SubmissionSection

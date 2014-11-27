@@ -2,8 +2,6 @@
 
 namespace Olcs\Filter\SubmissionSection;
 
-use Common\Exception\ResourceNotFoundException;
-
 /**
  * Class LinkedLicencesAppNumbers
  * @package Olcs\Filter\SubmissionSection
