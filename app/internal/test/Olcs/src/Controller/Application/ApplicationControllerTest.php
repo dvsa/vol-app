@@ -555,15 +555,57 @@ class ApplicationControllerTest extends MockeryTestCase
             ->shouldReceive('renderView')
             ->andReturn('renderView');
 
+        $fees = [
+            [
+                'amount' => 5.5,
+                'feeStatus' => [
+                    'id' => 'lfs_ot'
+                ]
+            ], [
+                'amount' => 10,
+                'feeStatus' => [
+                    'id' => 'lfs_ot'
+                ]
+            ]
+        ];
         $this->mockEntity('Fee', 'getOverview')
             ->with('1')
-            ->andReturn(['amount' => 5.5])
+            ->andReturn($fees[0])
             ->shouldReceive('getOverview')
             ->with('2')
-            ->andReturn(['amount' => 10]);
+            ->andReturn($fees[1]);
 
         $this->assertEquals(
             'renderView',
+            $this->sut->payFeesAction()
+        );
+    }
+
+    public function testPayFeesActionWithInvalidFeeStatuses()
+    {
+        $this->mockController(
+            '\Olcs\Controller\Application\ApplicationController'
+        );
+
+        $this->sut->shouldReceive('params')
+            ->with('fee')
+            ->andReturn('1')
+            ->shouldReceive('redirectToList')
+            ->andReturn('redirect')
+            ->shouldReceive('addErrorMessage');
+
+        $fee = [
+            'amount' => 5.5,
+            'feeStatus' => [
+                'id' => 'lfs_pd'
+            ]
+        ];
+        $this->mockEntity('Fee', 'getOverview')
+            ->with('1')
+            ->andReturn($fee);
+
+        $this->assertEquals(
+            'redirect',
             $this->sut->payFeesAction()
         );
     }

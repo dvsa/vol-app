@@ -187,6 +187,12 @@ trait FeesActionTrait
                 ->get('Entity\Fee')
                 ->getOverview($id);
 
+            // bail early if any of the fees prove to be the wrong status
+            if ($fee['feeStatus']['id'] !== FeeEntityService::STATUS_OUTSTANDING) {
+                $this->addErrorMessage('You can only pay outstanding fees');
+                return $this->redirectToList();
+            }
+
             $maxAmount += $fee['amount'];
         }
 
