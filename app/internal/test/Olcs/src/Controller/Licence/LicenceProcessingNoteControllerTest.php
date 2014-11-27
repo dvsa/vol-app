@@ -18,4 +18,5 @@ use OlcsTest\Controller\ProcessingNoteControllerTestAbstract;
 class LicenceProcessingNoteControllerTest extends ProcessingNoteControllerTestAbstract
 {
     protected $testClass = '\Olcs\Controller\Licence\Processing\LicenceProcessingNoteController';
+    protected $mainIdRouteParam = 'licence';
 }

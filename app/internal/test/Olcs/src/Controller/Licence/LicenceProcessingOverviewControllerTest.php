@@ -1,20 +1,23 @@
 <?php
 
 /**
- * Application Processing controller tests
+ * Licence Processing controller tests
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-namespace OlcsTest\Controller\Application\Processing;
+namespace OlcsTest\Controller\Licence\Processing;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
 /**
- * Application Processing controller tests
+ * Licence Processing controller tests
+ *
+ * If we add more to this controller it may be worth abstracting to reduce
+ * copypasta with ApplicationProcessingOverviewControllerTest
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class ApplicationProcessingOverviewControllerTest extends AbstractHttpControllerTestCase
+class LicenceProcessingOverviewControllerTest extends AbstractHttpControllerTestCase
 {
 
     public function testIndexAction()
@@ -23,13 +26,13 @@ class ApplicationProcessingOverviewControllerTest extends AbstractHttpController
             include __DIR__.'/../../../../../config/application.config.php'
         );
         $this->controller = $this->getMock(
-            '\Olcs\Controller\Application\Processing\ApplicationProcessingOverviewController',
+            '\Olcs\Controller\Licence\Processing\LicenceProcessingOverviewController',
             ['redirectToRoute']
         );
 
-        $expectedRoute = 'lva-application/processing/tasks';
+        $expectedRoute = 'licence/processing/tasks';
 
-        // assert index action redirects to tasks (for now)
+        // assert index action redirects to tasks
         $this->controller->expects($this->once())
             ->method('redirectToRoute')
             ->with($expectedRoute, [], [], true);

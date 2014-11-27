@@ -18,7 +18,9 @@ use Mockery as m;
  */
 abstract class ProcessingNoteControllerTestAbstract extends AbstractHttpControllerTestCase
 {
-    protected $testClass; //override this
+    // override these
+    protected $testClass;
+    protected $mainIdRouteParam;
 
     public function setUp()
     {
@@ -44,7 +46,8 @@ abstract class ProcessingNoteControllerTestAbstract extends AbstractHttpControll
                 'processEdit',
                 'setTableFilters',
                 'loadScripts',
-                'getRequest'
+                'getRequest',
+                'getServiceLocator'
             )
         );
 
@@ -63,7 +66,7 @@ abstract class ProcessingNoteControllerTestAbstract extends AbstractHttpControll
             )
         );
 
-        parent::setUp();
+        return parent::setUp();
     }
 
     public function testIndexAction()
@@ -92,7 +95,7 @@ abstract class ProcessingNoteControllerTestAbstract extends AbstractHttpControll
             ->method('getRequest')
             ->will($this->returnValue($mockRequest));
 
-        $this->getFromRoute(0, 'licence', $licenceId);
+        $this->getFromRoute(0, $this->mainIdRouteParam, $licenceId);
         $this->getFromPost(1, 'action', null);
         $this->getFromPost(2, 'id', null);
 
@@ -135,7 +138,9 @@ abstract class ProcessingNoteControllerTestAbstract extends AbstractHttpControll
 
         $this->controller->expects($this->once())
             ->method('renderView');
-
+        $this->controller->expects($this->any())
+            ->method('getServiceLocator')
+            ->will($this->returnValue("FOO"));
         $this->controller->indexAction();
     }
 
@@ -149,7 +154,7 @@ abstract class ProcessingNoteControllerTestAbstract extends AbstractHttpControll
         $id = null;
         $route = $this->controller->getRoutePrefix() . '/add-note';
 
-        $this->getFromRoute(0, 'licence', $licenceId);
+        $this->getFromRoute(0, $this->mainIdRouteParam, $licenceId);
         $this->getFromPost(1, 'action', $action);
         $this->getFromPost(2, 'id', $id);
 
@@ -187,7 +192,7 @@ abstract class ProcessingNoteControllerTestAbstract extends AbstractHttpControll
         $id = 1;
         $route = $this->controller->getRoutePrefix() . '/modify-note';
 
-        $this->getFromRoute(0, 'licence', $licenceId);
+        $this->getFromRoute(0, $this->mainIdRouteParam, $licenceId);
         $this->getFromPost(1, 'action', $action);
         $this->getFromPost(2, 'id', $id);
 
@@ -217,7 +222,7 @@ abstract class ProcessingNoteControllerTestAbstract extends AbstractHttpControll
         $linkedId = 1;
         $caseId = null;
 
-        $this->getFromRoute(0, 'licence', $licenceId);
+        $this->getFromRoute(0, $this->mainIdRouteParam, $licenceId);
         $this->getFromRoute(1, 'case', $caseId);
         $this->getFromRoute(2, 'noteType', $noteType);
         $this->getFromRoute(3, 'linkedId', $linkedId);
