@@ -11,4 +11,12 @@
 </div>
 <div class="three-fifths">
     <?php echo $this->table; ?>
+
+    <?php
+    // need to fix view hierarchy/composition
+    if (isset($form)) {
+        echo $this->formErrors($form);
+        echo $this->form($form);
+    }
+    ?>
 </div>
