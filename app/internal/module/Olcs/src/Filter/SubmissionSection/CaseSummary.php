@@ -35,13 +35,30 @@ class CaseSummary extends AbstractSubmissionSectionFilter
             'totAuthorisedVehicles' => $data['licence']['totAuthVehicles'],
             'totAuthorisedTrailers' => $data['licence']['totAuthTrailers'],
             'vehiclesInPossession' => $this->calculateVehiclesInPossession($data['licence']),
-            'trailersInPossession' =>  $this->calculateTrailersInPossession($data['licence'])
+            'trailersInPossession' =>  $this->calculateTrailersInPossession($data['licence']),
+            'businessType' =>
+                isset($data['licence']['organisation']['natureOfBusinesss']) ?
+                    $this->getNatureOfBusinessAsaString(
+                        $data['licence']['organisation']['natureOfBusinesss']
+                    )
+                    : ''
         );
 
-        if (isset($data['licence']['organisation']['sicCode']['description'])) {
-            $filteredData['businessType'] = $data['licence']['organisation']['sicCode']['description'];
-        }
-
         return $filteredData;
+    }
+
+    /**
+     * Get nature of business as a string
+     * 
+     * @params array $natureOfBusiness
+     * @return string
+     */
+    protected function getNatureOfBusinessAsaString($natureOfBusiness = [])
+    {
+        $nob = [];
+        foreach ($natureOfBusiness as $element) {
+            $nob[] = $element['refData']['description'];
+        }
+        return implode(', ', $nob);
     }
 }

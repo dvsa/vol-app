@@ -63,6 +63,17 @@ return array(
                                                 'properties' => 'ALL'
                                             )
                                         )
+                                    ),
+                                    'natureOfBusinesss' => array(
+                                        'properties' => 'ALL',
+                                        'children' => array(
+                                            'refData' => array(
+                                                'properties' => array(
+                                                    'id',
+                                                    'description'
+                                                )
+                                            )
+                                        )
                                     )
                                 )
                             )

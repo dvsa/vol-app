@@ -59,8 +59,8 @@ if (empty($appeal)){
         } else {
             echo $this->render('partials/read-only/empty',
                 [
-                    'header' => 'Traffic commissioner / transport regulator stay',
-                    'helpText' => 'There is currently no Traffic commissioner / transport regulator stay',
+                    'header' => 'Traffic Commissioner / Transport Regulator stay',
+                    'helpText' => 'There is currently no Traffic Commissioner / Transport Regulator stay',
                     'url' => $this->url(
                         'case_stay',
                         ['case' => $case['id'], 'action' => 'add', 'stayType' => 'stay_t_tc'],
@@ -78,7 +78,7 @@ if (empty($appeal)){
         } else {
             echo $this->render('partials/read-only/empty',
                 [
-                    'header' => 'Upper tribunal stay',
+                    'header' => 'Upper Tribunal stay',
                     'helpText' => 'There is currently no Upper tribunal stay',
                     'url' => $this->url(
                         'case_stay',
