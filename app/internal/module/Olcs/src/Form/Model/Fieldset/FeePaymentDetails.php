@@ -29,7 +29,7 @@ class FeePaymentDetails
     /**
      * @Form\Options({
      *     "label": "fees_payment_method",
-     *     "category":"fee_pay_method"
+     *     "service_name":"Olcs\Service\Data\PaymentType"
      * })
      * @Form\Type("DynamicSelect")
      * @Form\Validator({"name": "Zend\Validator\NotEmpty"})
