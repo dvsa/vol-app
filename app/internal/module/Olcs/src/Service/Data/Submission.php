@@ -361,9 +361,9 @@ class Submission extends AbstractData implements CloseableInterface
             'vehiclesInPossession' => $vehiclesInPossession,
             'trailersInPossession' => $data['licence']['totAuthTrailers'],
             'businessType' =>
-                isset($data['licence']['organisation']['organisationNatureOfBusinesss']) ?
+                isset($data['licence']['organisation']['natureOfBusinesss']) ?
                     $this->getNatureOfBusinessAsaString(
-                        $data['licence']['organisation']['organisationNatureOfBusinesss']
+                        $data['licence']['organisation']['natureOfBusinesss']
                     )
                     : ''
         );

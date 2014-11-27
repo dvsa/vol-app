@@ -193,7 +193,6 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
      * @dataProvider providerSubmissionSectionData
      * @param $input
      * @param $expected
-     * @group tteesstt
      */
     public function testCreateSubmissionSection($input, $expected)
     {

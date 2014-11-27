@@ -75,12 +75,14 @@ return array(
                                             )
                                         )
                                     ),
-                                    'organisationNatureOfBusinesss' => array(
+                                    'natureOfBusinesss' => array(
                                         'properties' => 'ALL',
                                         'children' => array(
                                             'refData' => array(
-                                                'id',
-                                                'description'
+                                                'properties' => array(
+                                                    'id',
+                                                    'description'
+                                                )
                                             )
                                         )
                                     )
