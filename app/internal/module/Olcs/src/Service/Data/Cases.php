@@ -38,12 +38,15 @@ class Cases extends AbstractData
     {
         $bundle = array(
             'children' => array(
+                /**
+                 * @todo [OLCS-5306] check this, it appears to be an invalid part of the bundle
                 'submissionSections' => array(
                     'properties' => array(
                         'id',
                         'description'
                     )
                 ),
+                 */
                 'appeals' => array(
                     'properties' => 'ALL',
                     'children' => array(

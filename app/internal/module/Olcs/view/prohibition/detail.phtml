@@ -3,14 +3,14 @@
 
     echo $this->render('partials/read-only/main',
         [
-            'header' => 'Prohibition Detail',
+            'header' => 'Prohibition detail',
             'actions' => [
                 [
                     'label' => 'Return to list',
                     'url' => $this->url('case_prohibition', ['action' => 'index', 'prohibition' => null], [], true),
                 ],
                 [
-                    'label' => 'Edit Prohibition',
+                    'label' => 'Edit prohibition',
                     'url' => $this->url('case_prohibition', ['action' => 'edit'], [], true),
                 ],
             ],

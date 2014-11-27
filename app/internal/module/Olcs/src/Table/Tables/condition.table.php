@@ -2,7 +2,7 @@
 
 return array(
     'variables' => array(
-        'title' => 'Conditions and Undertakings'
+        'title' => 'Conditions & Undertakings'
     ),
     'settings' => array(
         'crud' => array(
