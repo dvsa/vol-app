@@ -302,5 +302,30 @@ return array(
             'Olcs\Service\Data\PublicInquiryDefinition' => 'Olcs\Service\Data\PublicInquiryDefinition',
             'Olcs\Service\Data\ImpoundingLegislation' => 'Olcs\Service\Data\ImpoundingLegislation',
         ]
-    ]
+    ],
+    'filters' => [
+        'invokables' => [
+            'Olcs\Filter\SubmissionSection\ComplianceComplaints' =>
+                'Olcs\Filter\SubmissionSection\ComplianceComplaints',
+            'Olcs\Filter\SubmissionSection\ConditionsAndUndertakings' =>
+                'Olcs\Filter\SubmissionSection\ConditionsAndUndertakings',
+            'Olcs\Filter\SubmissionSection\ConvictionFpnOffenceHistory' =>
+                'Olcs\Filter\SubmissionSection\ConvictionFpnOffenceHistory',
+            'Olcs\Filter\SubmissionSection\CaseSummary' => 'Olcs\Filter\SubmissionSection\CaseSummary',
+            'Olcs\Filter\SubmissionSection\CaseOutline' => 'Olcs\Filter\SubmissionSection\CaseOutline',
+            'Olcs\Filter\SubmissionSection\Persons' => 'Olcs\Filter\SubmissionSection\Persons',
+            'Olcs\Filter\SubmissionSection\Oppositions' => 'Olcs\Filter\SubmissionSection\Oppositions'
+        ],
+        'aliases' => [
+            'ComplianceComplaints' => 'Olcs\Filter\SubmissionSection\ComplianceComplaints',
+            'ConditionsAndUndertakings' => 'Olcs\Filter\SubmissionSection\ConditionsAndUndertakings',
+            'ConvictionFpnOffenceHistory' => 'Olcs\Filter\SubmissionSection\ConvictionFpnOffenceHistory',
+            'CaseSummary' => 'Olcs\Filter\SubmissionSection\CaseSummary',
+            'CaseOutline' => 'Olcs\Filter\SubmissionSection\CaseOutline',
+            'Persons' => 'Olcs\Filter\SubmissionSection\Persons',
+            'Oppositions' => 'Olcs\Filter\SubmissionSection\Oppositions'
+
+
+        ]
+    ],
 );
