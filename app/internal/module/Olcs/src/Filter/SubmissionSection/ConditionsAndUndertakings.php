@@ -3,13 +3,12 @@
 namespace Olcs\Filter\SubmissionSection;
 
 use Common\Exception\ResourceNotFoundException;
-use Zend\Filter\AbstractFilter;
 
 /**
  * Class ConditionsAndUndertakings
  * @package Olcs\Filter\SubmissionSection
  */
-class ConditionsAndUndertakings extends AbstractFilter
+class ConditionsAndUndertakings extends AbstractSubmissionSectionFilter
 {
     /**
      * Filters data for conditions-and-undertakings section

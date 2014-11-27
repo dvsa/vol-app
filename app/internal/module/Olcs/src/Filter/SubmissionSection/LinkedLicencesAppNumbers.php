@@ -3,13 +3,12 @@
 namespace Olcs\Filter\SubmissionSection;
 
 use Common\Exception\ResourceNotFoundException;
-use Zend\Filter\AbstractFilter;
 
 /**
  * Class LinkedLicencesAppNumbers
  * @package Olcs\Filter\SubmissionSection
  */
-class LinkedLicencesAppNumbers extends AbstractFilter
+class LinkedLicencesAppNumbers extends AbstractSubmissionSectionFilter
 {
     /**
      * Filters data for linked-licences-app-numbers section
@@ -29,31 +28,12 @@ class LinkedLicencesAppNumbers extends AbstractFilter
                 $thisRow['licenceType'] = $licence['licenceType']['description'];
                 $thisRow['totAuthTrailers'] = $licence['totAuthTrailers'];
                 $thisRow['totAuthVehicles'] = $licence['totAuthVehicles'];
-                $thisRow['vehiclesInPosession'] = $this->calculateVehiclesInPossession($licence);
-                $thisRow['trailersInPossession'] = 0;
+                $thisRow['vehiclesInPossession'] = $this->calculateVehiclesInPossession($licence);
+                $thisRow['trailersInPossession'] = $this->calculateTrailersInPossession($data['licence']);
 
                 $dataToReturnArray[] = $thisRow;
             }
         }
         return $dataToReturnArray;
-    }
-
-    /**
-     * Calculates the vehicles in possession.
-     *
-     * @param array $licenceData
-     * @return int
-     */
-    private function calculateVehiclesInPossession($licenceData)
-    {
-        $vehiclesInPossession = 0;
-        if (isset($licenceData['licenceVehicles']) && is_array($licenceData['licenceVehicles'])) {
-            foreach ($licenceData['licenceVehicles'] as $vehicle) {
-                if (!empty($vehicle['specifiedDate']) && empty($vehicle['deletedDate'])) {
-                    $vehiclesInPossession++;
-                }
-            }
-        }
-        return $vehiclesInPossession;
     }
 }

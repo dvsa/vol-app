@@ -43,11 +43,11 @@ return array(
         ),
         array(
             'title' => 'Vehicles in possession',
-            'name' => 'vehiclesInPosession'
+            'name' => 'vehiclesInPossession'
         ),
         array(
             'title' => 'Trailers in possession',
-            'name' => 'trailersInPosession'
+            'name' => 'trailersInPossession'
         ),
         array(
             'title' => '',
