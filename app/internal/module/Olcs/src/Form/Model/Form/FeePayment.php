@@ -20,6 +20,7 @@ class FeePayment
     /**
      * @Form\Name("form-actions")
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\FeePaymentActions")
+     * @Form\Attributes({"class":"actions-container"})
      */
     public $formActions = null;
 }

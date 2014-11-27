@@ -29,7 +29,7 @@ trait FeesActionTrait
      */
     protected function commonFeesAction($licenceId)
     {
-        $this->loadScripts(['forms/filter', 'fees']);
+        $this->loadScripts(['forms/filter', 'table-actions', 'fees']);
 
         $status = $this->params()->fromQuery('status');
         $filters = [
@@ -45,7 +45,7 @@ trait FeesActionTrait
             ]
         );
         $view->setTemplate('licence/fees/layout');
-        return $this->renderView($view);
+        return $this->render($view);
     }
 
     protected function checkActionRedirect($lvaType)
@@ -222,7 +222,12 @@ trait FeesActionTrait
 
         $view = new ViewModel(['form' => $form]);
         $view->setTemplate('form');
-        return $this->renderView($view);
+
+        $title = 'Pay fee';
+        if (count($fees) !== 1) {
+            $title .= 's';
+        }
+        return $this->renderView($view, $title);
     }
 
     /**

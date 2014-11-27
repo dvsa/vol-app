@@ -1,7 +1,9 @@
 OLCS.ready(function() {
-  OLCS.tableSorter({
-    table: ".table__form",
-    container: ".table__form",
-    filter: ".table__form"
+  var buttonHandler = OLCS.conditionalButton({
+    form: ".table__form",
+    label: "Pay",
+    predicate: function(length, callback) {
+      callback(length < 1);
+    }
   });
 });
