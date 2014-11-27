@@ -1,6 +1,11 @@
 OLCS.ready(function() {
   "use strict";
 
+  var cardFields = [
+    "fpm_card_offline",
+    "fpm_card_online"
+  ];
+
   OLCS.cascadeForm({
     form: "form",
     rulesets: {
@@ -9,12 +14,7 @@ OLCS.ready(function() {
           return true;
         },
         "received": function() {
-          return [
-            "fpm_card_offline",
-            "fpm_card_online"
-          ].indexOf(
-            OLCS.formHelper("details", "paymentType").val()
-          ) === -1;
+          return cardFields.indexOf(OLCS.formHelper("details", "paymentType").val()) === -1;
         }
       }
     }

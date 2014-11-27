@@ -27,7 +27,6 @@ class FeePaymentDetails
     public $maxAmount = null;
 
     /**
-     * @Form\Filter({"name": "Int"})
      * @Form\Options({
      *     "label": "fees_payment_method",
      *     "category":"fee_pay_method"

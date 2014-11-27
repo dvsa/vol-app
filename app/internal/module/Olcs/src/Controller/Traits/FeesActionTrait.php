@@ -10,6 +10,7 @@ namespace Olcs\Controller\Traits;
 use Zend\View\Model\ViewModel;
 use Zend\Json\Json;
 use Common\Service\Listener\FeeListenerService;
+use Common\Service\Entity\FeeEntityService;
 
 /**
  * Fees action trait
@@ -18,6 +19,11 @@ use Common\Service\Listener\FeeListenerService;
  */
 trait FeesActionTrait
 {
+    protected $cardTypes = [
+        'fpm_card_online',
+        'fpm_card_offline'
+    ];
+
     /**
      * Get fee filter form
      *
@@ -44,14 +50,23 @@ trait FeesActionTrait
     {
         switch ($status) {
             case 'historical':
-                $feeStatus = 'IN ["lfs_pd","lfs_w","lfs_cn"]';
+                $feeStatus = sprintf(
+                    'IN ["%s","%s","%s"]',
+                    FeeEntityService::STATUS_PAID,
+                    FeeEntityService::STATUS_WAIVED,
+                    FeeEntityService::STATUS_CANCELLED
+                );
                 break;
             case 'all':
                 $feeStatus = "";
                 break;
             case 'current':
             default:
-                $feeStatus = 'IN ["lfs_ot","lfs_wr"]';
+                $feeStatus = sprintf(
+                    'IN ["%s","%s"]',
+                    FeeEntityService::STATUS_OUTSTANDING,
+                    FeeEntityService::STATUS_WAIVE_RECOMMENDED
+                );
         }
         $params = [
             'licence' => $licenceId,
@@ -122,9 +137,9 @@ trait FeesActionTrait
             $maxAmount += $fee['amount'];
         }
 
-        $form = $this->getServiceLocator()
-            ->get('Helper\Form')
-            ->createForm('FeePayment');
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+
+        $form = $formHelper->createForm('FeePayment');
 
         $form->get('details')
             ->get('maxAmount')
@@ -145,6 +160,13 @@ trait FeesActionTrait
 
         $this->loadScripts(['forms/fee-payment']);
 
+        if ($this->getRequest()->isPost()) {
+            $details = $this->getRequest()->getPost('details');
+            if (isset($details['paymentType']) && in_array($details['paymentType'], $this->cardTypes)) {
+                $formHelper->remove($form, 'details->received');
+            }
+        }
+
         $this->formPost($form, 'processPayment');
 
         $view = new ViewModel(['form' => $form]);
@@ -161,24 +183,22 @@ trait FeesActionTrait
     protected function alterFeeForm($form, $status)
     {
         switch ($status) {
-            case 'lfs_ot':
-                // outstanding
+            case FeeEntityService::STATUS_OUTSTANDING:
                 $form->get('form-actions')->remove('approve');
                 $form->get('form-actions')->remove('reject');
                 break;
-            case 'lfs_wr':
-                // waive recommended
+
+            case FeeEntityService::STATUS_WAIVE_RECOMMENDED:
                 $form->get('form-actions')->remove('recommend');
                 break;
-            case 'lfs_w':
-                // waived
+
+            case FeeEntityService::STATUS_WAIVED:
                 $form->remove('form-actions');
                 $form->get('fee-details')->get('waiveReason')->setAttribute('disabled', 'disabled');
                 break;
-            case 'lfs_pd':
-                // payed
-            case 'lfs_cn':
-                // cancelled
+
+            case FeeEntityService::STATUS_WAIVED:
+            case FeeEntityService::STATUS_CANCELLED:
                 $form = null;
                 break;
         }
@@ -325,6 +345,6 @@ trait FeesActionTrait
 
     protected function processPayment($data)
     {
-        // @TODO
+        return $this->redirectToList();
     }
 }

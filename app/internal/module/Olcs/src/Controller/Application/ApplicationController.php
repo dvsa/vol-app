@@ -32,7 +32,7 @@ class ApplicationController extends AbstractController
      */
     public function feesAction()
     {
-        $this->loadScripts(['forms/filter', 'table-actions']);
+        $this->loadScripts(['forms/filter']);
 
         $applicationId = $this->params()->fromRoute('application');
         $licenceId = $this->getServiceLocator()->get('Entity\Application')

@@ -28,6 +28,7 @@ class LicenceController extends AbstractController
      */
     public function feesAction()
     {
+        // @TODO apply across applications, abstract into trait
         if ($this->getRequest()->isPost()) {
 
             $data = $this->getRequest()->getPost();
@@ -52,7 +53,7 @@ class LicenceController extends AbstractController
             );
         }
 
-        $this->loadScripts(['forms/filter', 'table-actions']);
+        $this->loadScripts(['forms/filter', 'fees']);
 
         $licenceId = $this->params()->fromRoute('licence');
         $this->pageLayout = 'licence';
