@@ -478,6 +478,12 @@ return array(
                             'use_route_match' => true,
                             'pages' => array(
                                 array(
+                                    'id' => 'licence_processing_publications',
+                                    'label' => 'internal-licence-processing-publications',
+                                    'route' => 'licence/processing/publications',
+                                    'use_route_match' => true,
+                                ),
+                                array(
                                     'id' => 'licence_processing_tasks',
                                     'label' => 'internal-licence-processing-tasks',
                                     'route' => 'licence/processing/tasks',
