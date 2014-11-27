@@ -2,7 +2,7 @@
 
 return array(
     'variables' => array(
-        'title' => 'Submission list'
+        'title' => 'Submissions'
     ),
     'settings' => array(
         'crud' => array(
@@ -30,7 +30,7 @@ return array(
             'format' => '{{[elements/radio]}}'
         ),
         array(
-            'title' => 'Submission #',
+            'title' => 'Submission No.',
             'formatter' => function ($row) {
                 return '<a href="' . $this->generateUrl(
                     array('submission' => $row['id'], 'action' => 'details'),

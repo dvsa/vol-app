@@ -2,7 +2,7 @@
 
 return array(
     'variables' => array(
-        'title' => 'List of oppositions'
+        'title' => 'Oppositions'
     ),
     'settings' => array(
         'crud' => array(
@@ -91,7 +91,7 @@ return array(
             'sort' => 'isInTime'
         ),
         array(
-            'title' => 'Public inquiry',
+            'title' => 'Public Inquiry',
             'name' => 'isPublicInquiry',
             'sort' => 'isPublicInquiry'
         ),

@@ -7,7 +7,6 @@ use Zend\Form\Annotation as Form;
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("fields")
- * @Form\Options({"label":"Appeal Details"})
  */
 class Appeal extends CaseBase
 {

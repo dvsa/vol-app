@@ -25,5 +25,13 @@
     <h3 class="page-header__subtitle"><?php echo $this->placeholder('pageSubtitle'); ?></h3>
     <?php endif; ?>
 
+
+
+    <?php
+    $status = $this->placeholder('status')->getValue();
+    if (!empty($status)): ?>
+    <span class="status <?php echo strtolower($status['colour']); ?>"><?php echo strtoupper($status['value']); ?></span>
+    <?php endif; ?>
+
   </div><!-- end .page-header__wrapper-->
 </div><!-- end .page-header-->

@@ -2,7 +2,7 @@
 
 return array(
     'variables' => array(
-        'title' => 'Convictions list'
+        'title' => 'Convictions'
     ),
     'settings' => array(
         'crud' => array(

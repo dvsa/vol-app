@@ -64,7 +64,7 @@ return array(
                         ),
                         array(
                             'id' => 'case_details_legacy_offence',
-                            'label' => 'Legacy Offences',
+                            'label' => 'Legacy offences',
                             'route' => 'offence',
                             'action' => 'index',
                             'use_route_match' => true,
@@ -244,7 +244,7 @@ return array(
                         ),
                         array(
                             'id' => 'case_processing_in_office_revocation',
-                            'label' => 'In office revocation',
+                            'label' => 'In-office revocation',
                             'route' => 'processing_in_office_revocation',
                             'action' => 'index',
                             'use_route_match' => true,
