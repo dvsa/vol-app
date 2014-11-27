@@ -20,6 +20,9 @@ class LicenceProcessingHelper
      * @var array
      */
     protected $sections = array(
+        'publications' => array(
+
+        ),
         'notes' => array(
 
         ),
