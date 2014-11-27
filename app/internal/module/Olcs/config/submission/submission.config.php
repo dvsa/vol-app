@@ -339,10 +339,20 @@ return array(
             'data_field' => '',
             'allow_comments' => true,
         ),
-        'prohibition-history'   => array(
+        'prohibition-history' => array(
             'section_type' => ['list', 'text'],
             'data_field' => '',
             'allow_comments' => true,
+            'filter' => true,
+            'service' => 'Prohibition',
+            'identifier' => 'case',
+            'bundle' => array(
+                'children' => array(
+                    'prohibitionType' => array(
+                        'properties' => array('id', 'description')
+                    )
+                )
+            )
         ),
         'conviction-fpn-offence-history' => array(
             'section_type' => ['list', 'text'],

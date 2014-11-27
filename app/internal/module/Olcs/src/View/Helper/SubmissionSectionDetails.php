@@ -47,7 +47,7 @@ class SubmissionSectionDetails extends AbstractHelper
         'linked-mlh-history'                => 'SubmissionSectionOverview',
         'registration-details'              => 'SubmissionSectionOverview',
         'maintenance-tachographs-hours'     => 'SubmissionSectionOverview',
-        'prohibition-history'               => 'SubmissionSectionOverview',
+        'prohibition-history'               => 'SubmissionSectionTable',
         'conviction-fpn-offence-history'    => 'SubmissionSectionTable',
         'annual-test-history'               => 'SubmissionSectionOverview',
         'penalties'                         => 'SubmissionSectionOverview',
