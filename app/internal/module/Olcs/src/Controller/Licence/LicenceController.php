@@ -35,7 +35,7 @@ class LicenceController extends AbstractController
 
         $this->pageLayout = 'licence';
 
-        return $this->commonFeesAction($this->params('licence'));
+        return $this->commonFeesAction($this->params()->fromRoute('licence'));
     }
 
     public function detailsAction()

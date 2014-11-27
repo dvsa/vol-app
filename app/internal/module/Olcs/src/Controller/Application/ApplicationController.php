@@ -40,7 +40,7 @@ class ApplicationController extends AbstractController
         $licenceId = $this->getServiceLocator()
             ->get('Entity\Application')
             ->getLicenceIdForApplication(
-                $this->params('application')
+                $this->params()->fromRoute('application')
             );
 
         return $this->commonFeesAction($licenceId);
