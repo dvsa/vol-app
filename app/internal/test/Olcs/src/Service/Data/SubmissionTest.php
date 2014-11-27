@@ -1003,6 +1003,31 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                         ]
                     ]
                 ]
+            ],
+            [   // lead-tc-area section
+                [
+                    'caseId' => 24,
+                    'sectionId' => 'lead-tc-area',
+                    'sectionConfig' => [
+                        'service' => 'Cases',
+                        'filter' => true,
+                        'bundle' => ['some_bundle'],
+                    ]
+                ],
+                [
+                    'loadedCaseSectionData' => [
+                        'licence' => [
+                            'organisation' => [
+                                'leadTcArea' => [
+                                    'name' => 'North East of England'
+                                ]
+                            ]
+                        ]
+                    ],
+                    'expected' => [
+                        'leadTcAreaDescription' => 'North East of England',
+                    ]
+                ]
             ]
         ];
     }
