@@ -166,6 +166,7 @@ class OperatorBusinessDetailsController extends OperatorController
             $registeredAddress = [];
             switch ($data['type']) {
                 case OrganisationEntityService::ORG_TYPE_REGISTERED_COMPANY:
+                case OrganisationEntityService::ORG_TYPE_LLP:
                     $operatorDetails['name'] = $data['name'];
                     $operatorDetails['companyNumber']['company_number'] = $data['companyNumber'];
                     $registeredAddress = $data['registeredAddress'];
@@ -177,12 +178,6 @@ class OperatorBusinessDetailsController extends OperatorController
                     $operatorDetails['personVersion'] = isset($data['personVersion']) ? $data['personVersion'] : '';
                     break;
                 case OrganisationEntityService::ORG_TYPE_PARTNERSHIP:
-                    $operatorDetails['name'] = $data['name'];
-                    break;
-                case OrganisationEntityService::ORG_TYPE_LLP:
-                    $operatorDetails['name'] = $data['name'];
-                    $operatorDetails['companyNumber']['company_number'] = $data['companyNumber'];
-                    break;
                 case OrganisationEntityService::ORG_TYPE_OTHER:
                     $operatorDetails['name'] = $data['name'];
                     break;
@@ -227,7 +222,10 @@ class OperatorBusinessDetailsController extends OperatorController
         $saved = $this->getServiceLocator()->get('Entity\Organisation')->save($params);
         $orgId = isset($saved['id']) ? $saved['id'] : $params['id'];
 
-        if ($params['type'] == OrganisationEntityService::ORG_TYPE_REGISTERED_COMPANY) {
+        if (
+            $params['type'] == OrganisationEntityService::ORG_TYPE_REGISTERED_COMPANY ||
+            $params['type'] == OrganisationEntityService::ORG_TYPE_LLP
+            ) {
             $this->saveRegisteredAddress($orgId, $data['registeredAddress']);
         }
         if ($params['type'] == OrganisationEntityService::ORG_TYPE_SOLE_TRADER) {
@@ -280,6 +278,7 @@ class OperatorBusinessDetailsController extends OperatorController
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
         switch ($businessType) {
             case OrganisationEntityService::ORG_TYPE_REGISTERED_COMPANY:
+            case OrganisationEntityService::ORG_TYPE_LLP:
                 $formHelper->remove($form, 'operator-details->firstName');
                 $formHelper->remove($form, 'operator-details->lastName');
                 $formHelper->remove($form, 'operator-details->personId');
@@ -290,24 +289,12 @@ class OperatorBusinessDetailsController extends OperatorController
                 $formHelper->remove($form, 'registeredAddress');
                 break;
             case OrganisationEntityService::ORG_TYPE_PARTNERSHIP:
-                $formHelper->remove($form, 'operator-details->firstName');
-                $formHelper->remove($form, 'operator-details->lastName');
-                $formHelper->remove($form, 'operator-details->personId');
-                $formHelper->remove($form, 'registeredAddress');
-                $formHelper->remove($form, 'operator-details->companyNumber');
-                break;
-            case OrganisationEntityService::ORG_TYPE_LLP:
-                $formHelper->remove($form, 'operator-details->firstName');
-                $formHelper->remove($form, 'operator-details->lastName');
-                $formHelper->remove($form, 'operator-details->personId');
-                $formHelper->remove($form, 'registeredAddress');
-                break;
             case OrganisationEntityService::ORG_TYPE_OTHER:
-                $formHelper->remove($form, 'operator-details->companyNumber');
                 $formHelper->remove($form, 'operator-details->firstName');
                 $formHelper->remove($form, 'operator-details->lastName');
                 $formHelper->remove($form, 'operator-details->personId');
                 $formHelper->remove($form, 'registeredAddress');
+                $formHelper->remove($form, 'operator-details->companyNumber');
                 break;
         }
         return $form;

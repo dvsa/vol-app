@@ -8,16 +8,15 @@
  */
 namespace Olcs\Controller\Cases\Conviction;
 
-// Olcs
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
 
-    /**
-     * Case Prohibition Controller
-     *
-     * @author Ian Lindsay <ian@hemera-business-services.co.uk>
-     * @author Craig Reasbeck <Craig.Reasbeck@valtech.co.uk>
-     */
+/**
+ * Case Prohibition Controller
+ *
+ * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ * @author Craig Reasbeck <Craig.Reasbeck@valtech.co.uk>
+ */
 class OffenceController extends OlcsController\CrudAbstract
 {
     use ControllerTraits\CaseControllerTrait;
@@ -117,6 +116,8 @@ class OffenceController extends OlcsController\CrudAbstract
      * @var array
     */
     protected $dataBundle = array(
+        /**
+         * @todo [OLCS-5306] check this, it appears to be an invalid part of the bundle
         'children' => array(
             'case' => array(
                 'properties' => array(
@@ -130,6 +131,7 @@ class OffenceController extends OlcsController\CrudAbstract
                 )
             )
         )
+         */
     );
 
     /**

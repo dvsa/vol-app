@@ -23,14 +23,14 @@ $markers = $this->placeholder('markers')->getValue();
       <p class="small-module__details">
         <a href="#"><?php echo $case['licence']['organisation']['name']; ?></a><br>
         <?php echo $this->translate($case['licence']['organisation']['type']['id']); ?><br>
-      </p>  
+      </p>
     </div><!-- end .small-details -->
     <?php endif; ?>
 
     <div class="small-module">
       <h4 class="small-module__title">Licence details</h4>
         <p class="small-module__details">
-          <a href="<?php echo $this->url('licence/details/overview', ['licence' => $case['licence']['id']], [], false); ?>"><?php echo $case['licence']['licNo']; ?></a><br>
+          <a href="<?php echo $this->url('lva-licence', ['licence' => $case['licence']['id']], [], false); ?>"><?php echo $case['licence']['licNo']; ?></a><br>
           <?php echo $this->translate($case['licence']['licenceType']['id']); ?><br/>
           <?php echo $this->translate($case['licence']['status']['id']); ?>
         </p>
@@ -43,7 +43,6 @@ $markers = $this->placeholder('markers')->getValue();
     <?php echo $this->markers($marker, 'stay') ?>
   <?php endforeach; ?>
   <?php endif; ?>
-
 
   <div class="record-actions">
     <h5>Quick actions</h5>
