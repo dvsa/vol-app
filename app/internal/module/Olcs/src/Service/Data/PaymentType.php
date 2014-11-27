@@ -3,6 +3,15 @@ namespace Olcs\Service\Data;
 
 use Common\Service\Data\RefData;
 
+/**
+ * Payment Type data service
+ *
+ * Extends ref data and simply filters out some irrelevant choices
+ * when manually paying a fee internally, as well as tweaking how
+ * card choices are presented
+ *
+ * @author Nick Payne <nick.payne@valtech.co.uk>
+ */
 class PaymentType extends RefData
 {
     private $allowedTypes = [
@@ -16,7 +25,7 @@ class PaymentType extends RefData
         'fpm_card_offline' => 'Card Payment'
     ];
 
-    public function fetchListData($category)
+    public function fetchListData($category = null)
     {
         $category = 'fee_pay_method';
         $data = parent::fetchListData($category);
