@@ -6,10 +6,10 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
- * @Form\Name("Prohibition Defect")
+ * @Form\Name("Prohibition defect")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true, "label":"Prohibition Defect"})
+ * @Form\Options({"prefer_form_input_filter": true, "label":"Prohibition defect"})
  */
 class ProhibitionDefect
 {
