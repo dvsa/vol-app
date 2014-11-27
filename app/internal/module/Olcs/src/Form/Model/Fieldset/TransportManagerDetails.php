@@ -70,7 +70,7 @@ class TransportManagerDetails
      * @Form\Validator({"name":"Zend\Validator\EmailAddress"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5,"max":255}})
      */
-    public $email = null;
+    public $emailAddress = null;
 
     /**
      * @Form\Required(true)
@@ -86,7 +86,7 @@ class TransportManagerDetails
      * @Form\Validator({"name": "\Zend\Validator\NotEmpty"})
      * @Form\Validator({"name":"\Common\Form\Elements\Validators\DateNotInFuture"})
      */
-    public $dob = null;
+    public $birthDate = null;
 
     /**
      * @Form\Attributes({"id":"","class":"medium"})
@@ -94,22 +94,38 @@ class TransportManagerDetails
      * @Form\Validator({"name": "\Zend\Validator\NotEmpty"})
      * @Form\Type("Text")
      */
-    public $placeOfBirth = null;
+    public $birthPlace = null;
 
     /**
-     * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
      *     "label": "transport-manager-details-type",
-     *     "value_options": {
-     *         "Internal": "transport-manager-details-title-value-internal",
-     *         "External": "transport-manager-details-title-value-external",
-     *         "Both": "transport-manager-details-title-value-both"
-     *     },
-     *     "empty_option": "transport-manager-details-please-select",
-     *     "disable_inarray_validator": false,
+     *     "category": "tm_type",
      * })
-     * @Form\Validator({"name": "\Zend\Validator\NotEmpty"})
-     * @Form\Type("\Zend\Form\Element\Select")
+     * @Form\Type("DynamicRadio")
      */
     public $type = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $contactDetailsId = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $contactDetailsVersion = null;
+    
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $personId = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $personVersion = null;
 }

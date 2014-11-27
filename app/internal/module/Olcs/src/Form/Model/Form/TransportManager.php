@@ -20,11 +20,11 @@ class TransportManager
     public $transportManagerDetails = null;
 
     /**
-     * @Form\Name("address")
-     * @Form\Options({"label":"Address"})
-     * @Form\ComposedObject("Common\Form\Model\Fieldset\Address")
+     * @Form\Name("home-address")
+     * @Form\Options({"label":"transport-manager-details-home-address"})
+     * @Form\ComposedObject("Common\Form\Model\Form\Lva\Fieldset\RegisteredAddress")
      */
-    public $address = null;
+    public $homeAddress = null;
 
     /**
      * @Form\Name("form-actions")
