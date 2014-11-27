@@ -57,7 +57,7 @@ trait FeesActionTrait
             $data = (array)$this->getRequest()->getPost();
             if (!isset($data['id']) || empty($data['id'])) {
                 $this->addErrorMessage('Please select at least one item');
-                return $this->redirect()->toRoute(null, [], null, true);
+                return $this->redirectToList();
             }
 
             // @NOTE: only one action supported at the moment, so no need to inspect
@@ -402,7 +402,7 @@ trait FeesActionTrait
             $data = ['status' => 302, 'location' => $this->url()->fromRoute($route, $params)];
             $this->getResponse()->getHeaders()->addHeaders(['Content-Type' => 'application/json']);
             $this->getResponse()->setContent(Json::encode($data));
-            return;
+            return $this->getResponse();
         }
         $this->redirect()->toRoute($route, $params);
     }

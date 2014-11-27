@@ -45,7 +45,10 @@ class ApplicationControllerTest extends MockeryTestCase
     {
         $this->sm = Bootstrap::getServiceManager();
 
-        $this->sut = $this->getMock('\Olcs\Controller\Application\ApplicationController', array('render', 'addErrorMessage'));
+        $this->sut = $this->getMock(
+            '\Olcs\Controller\Application\ApplicationController',
+            array('render', 'addErrorMessage', 'redirectToList')
+        );
         $this->sut->setServiceLocator($this->sm);
         $this->pluginManager = $this->sut->getPluginManager();
     }
@@ -473,7 +476,7 @@ class ApplicationControllerTest extends MockeryTestCase
     /**
      * @group application_controller
      */
-    public function testFeesListActionWithInValidPostRedirectsCorrectly()
+    public function testFeesListActionWithInvalidPostRedirectsCorrectly()
     {
         $id = 7;
         $post = [];
@@ -484,10 +487,8 @@ class ApplicationControllerTest extends MockeryTestCase
         $request->setMethod('POST');
         $request->setPost(new \Zend\Stdlib\Parameters($post));
 
-        $redirect = $this->mockRedirect();
-        $redirect->expects($this->once())
-            ->method('toRoute')
-            ->with(null, [], null, true)
+        $this->sut->expects($this->once())
+            ->method('redirectToList')
             ->will($this->returnValue('REDIRECT'));
 
         $this->sut->expects($this->once())
