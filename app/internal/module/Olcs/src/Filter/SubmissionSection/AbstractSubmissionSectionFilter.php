@@ -20,6 +20,7 @@ class AbstractSubmissionSectionFilter extends AbstractFilter
     protected function calculateVehiclesInPossession($licenceData)
     {
         $vehiclesInPossession = 0;
+
         if (isset($licenceData['licenceVehicles']) && is_array($licenceData['licenceVehicles'])) {
             foreach ($licenceData['licenceVehicles'] as $vehicle) {
                 if (!empty($vehicle['specifiedDate']) && empty($vehicle['deletedDate'])) {
@@ -43,12 +44,12 @@ class AbstractSubmissionSectionFilter extends AbstractFilter
 
     /**
      * Method should be overridden
+     * @codeCoverageIgnore This method should be overridden
      *
      * @param mixed $value
      * @return mixed|void
      */
     public function filter($value)
     {
-
     }
 }
