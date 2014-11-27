@@ -25,6 +25,53 @@ trait FeesActionTrait
     ];
 
     /**
+     * Common logic when rendering the list of fees
+     */
+    protected function commonFeesAction($licenceId)
+    {
+        $this->loadScripts(['forms/filter', 'fees']);
+
+        $status = $this->params()->fromQuery('status');
+        $filters = [
+            'status' => $status
+        ];
+
+        $table = $this->getFeesTable($licenceId, $status);
+
+        return [
+            'table' => $table,
+            'form'  => $this->getFeeFilterForm($filters)
+        ];
+    }
+
+    protected function checkActionRedirect($lvaType)
+    {
+        if ($this->getRequest()->isPost()) {
+
+            $data = $this->getRequest()->getPost();
+            if (!isset($data['id']) || empty($data['id'])) {
+                // @TODO handle error, return message about needing >= 1 fee
+                throw new \Exception('TODO');
+            }
+
+            // @NOTE: only one action supported at the moment, so no need to inspect
+            // it. Update logic as and when this needs to change...
+
+            $params = [
+                'action' => 'pay-fees',
+                'fee' => implode(',', $data['id'])
+            ];
+
+            return $this->redirect()->toRoute(
+                $lvaType . '/fees/fee_action',
+                $params,
+                null,
+                true
+            );
+        }
+    }
+
+    /**
      * Get fee filter form
      *
      * @param array $filters

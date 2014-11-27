@@ -32,22 +32,21 @@ class ApplicationController extends AbstractController
      */
     public function feesAction()
     {
-        $this->loadScripts(['forms/filter']);
+        $response = $this->checkActionRedirect('licence');
+        if ($response) {
+            return $response;
+        }
 
-        $applicationId = $this->params()->fromRoute('application');
-        $licenceId = $this->getServiceLocator()->get('Entity\Application')
-            ->getLicenceIdForApplication($applicationId);
+        $licenceId = $this->getServiceLocator()
+            ->get('Entity\Application')
+            ->getLicenceIdForApplication(
+                $this->params('application')
+            );
 
-        $status = $this->params()->fromQuery('status');
-        $filters = [
-            'status' => $status
-        ];
-
-        $table = $this->getFeesTable($licenceId, $status);
-
-        $view = new ViewModel(['table' => $table, 'form'  => $this->getFeeFilterForm($filters)]);
+        $view = new ViewModel(
+            $this->commonFeesAction($licenceId)
+        );
         $view->setTemplate('licence/fees/layout');
-
         return $this->render($view);
     }
 

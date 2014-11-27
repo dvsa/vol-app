@@ -28,46 +28,17 @@ class LicenceController extends AbstractController
      */
     public function feesAction()
     {
-        // @TODO apply across applications, abstract into trait
-        if ($this->getRequest()->isPost()) {
-
-            $data = $this->getRequest()->getPost();
-            if (!isset($data['id']) || empty($data['id'])) {
-                // @TODO handle error, return message about needing >= 1 fee
-                throw new \Exception('TODO');
-            }
-
-            // @NOTE: only one action supported at the moment, so no need to inspect
-            // it. Update logic as and when this needs to change...
-
-            $params = [
-                'action' => 'pay-fees',
-                'fee' => implode(',', $data['id'])
-            ];
-
-            return $this->redirect()->toRoute(
-                'licence/fees/fee_action',
-                $params,
-                null,
-                true
-            );
+        $response = $this->checkActionRedirect('licence');
+        if ($response) {
+            return $response;
         }
 
-        $this->loadScripts(['forms/filter', 'fees']);
+        $view = $this->getViewWithLicence(
+            $this->commonFeesAction($this->params('licence'))
+        );
 
-        $licenceId = $this->params()->fromRoute('licence');
-        $this->pageLayout = 'licence';
-
-        $status = $this->params()->fromQuery('status');
-        $filters = [
-            'status' => $status
-        ];
-
-        $table = $this->getFeesTable($licenceId, $status);
-
-        $view = $this->getViewWithLicence(['table' => $table, 'form'  => $this->getFeeFilterForm($filters)]);
         $view->setTemplate('licence/fees/layout');
-
+        $this->pageLayout = 'licence';
         return $this->renderView($view);
     }
 
