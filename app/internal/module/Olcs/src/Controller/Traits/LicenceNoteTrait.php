@@ -216,6 +216,7 @@ trait LicenceNoteTrait
     {
         $licenceId = $this->getFromRoute('licence');
         $caseId = $this->getFromRoute('case');
+        $applicationId = $this->getFromRoute('application');
         $noteType = $this->getFromRoute('noteType');
         $linkedId = $this->getFromRoute('linkedId');
 
@@ -228,12 +229,22 @@ trait LicenceNoteTrait
             }
         }
 
+        //same for application
+        if (!is_null($applicationId)) {
+            $application = $this->getApplication($applicationId);
+
+            if (isset($application['licence']['id'])) {
+                $licenceId = $application['licence']['id'];
+            }
+        }
+
         $form = $this->generateFormWithData(
             'licence-notes',
             'processAddNotes',
             array(
                 'licence' => $licenceId,
                 'case' => $caseId,
+                'application' => $applicationId,
                 'noteType' => $noteType,
                 'linkedId' => $linkedId
             )
@@ -259,7 +270,7 @@ trait LicenceNoteTrait
         $data = array_merge($data, $data['main']);
         $data['createdBy'] = $user;
         $data['lastModifiedBy'] = $user;
-
+/*
         //checks which field to add in the linked id to
         $field = $this->getIdField($data['noteType']);
 
@@ -271,7 +282,7 @@ trait LicenceNoteTrait
 
             $data[$field['field']] = $data['linkedId'];
         }
-
+*/
         $result = $this->processAdd($data, 'Note');
 
         if (isset($result['id'])) {
