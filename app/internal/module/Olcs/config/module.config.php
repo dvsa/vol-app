@@ -315,7 +315,8 @@ return array(
             'Olcs\Filter\SubmissionSection\CaseOutline' => 'Olcs\Filter\SubmissionSection\CaseOutline',
             'Olcs\Filter\SubmissionSection\Persons' => 'Olcs\Filter\SubmissionSection\Persons',
             'Olcs\Filter\SubmissionSection\Oppositions' => 'Olcs\Filter\SubmissionSection\Oppositions',
-            'Olcs\Filter\SubmissionSection\LinkedLicencesAppNumbers' => 'Olcs\Filter\SubmissionSection\LinkedLicencesAppNumbers'
+            'Olcs\Filter\SubmissionSection\LinkedLicencesAppNumbers' =>
+                'Olcs\Filter\SubmissionSection\LinkedLicencesAppNumbers'
         ],
         'aliases' => [
             'ComplianceComplaints' => 'Olcs\Filter\SubmissionSection\ComplianceComplaints',
