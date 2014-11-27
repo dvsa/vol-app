@@ -24,14 +24,14 @@ class FeePaymentDetails
     /**
      * @Form\Type("Common\Form\Elements\Types\Html")
      * @Form\Options({
-     *     "label": "fees_max_amount",
+     *     "label": "fees.max_amount",
      * })
      */
     public $maxAmount = null;
 
     /**
      * @Form\Options({
-     *     "label": "fees_payment_method",
+     *     "label": "fees.payment_method",
      *     "service_name":"Olcs\Service\Data\PaymentType"
      * })
      * @Form\Type("DynamicSelect")
@@ -40,7 +40,7 @@ class FeePaymentDetails
     public $paymentType = null;
 
     /**
-     * @Form\Options({"label":"fees_received"})
+     * @Form\Options({"label":"fees.received"})
      * @Form\Type("Text")
      * @Form\Validator({
      *     "name": "Zend\Validator\GreaterThan",
