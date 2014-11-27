@@ -1183,7 +1183,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                             ]
                         ]
                     ],
-                    'organisationNatureOfBusinesss' => [
+                    'natureOfBusinesss' => [
                         [
                             'refData' => [
                                 'id' => '1',

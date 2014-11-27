@@ -28,12 +28,6 @@ return array(
                     'caseType' => array(
                         'properties' => array('id')
                     ),
-                    'submissionSections' => array(
-                        'properties' => array(
-                            'id',
-                            'description'
-                        )
-                    ),
                     'legacyOffences' => array(
                         'properties' => 'ALL',
                     ),
@@ -63,9 +57,6 @@ return array(
                                 'properties' => 'ALL',
                                 'children' => array(
                                     'type' => array(
-                                        'properties' => array('id', 'description')
-                                    ),
-                                    'sicCode' => array(
                                         'properties' => array('id', 'description')
                                     ),
                                     'organisationPersons' => array(
@@ -154,12 +145,6 @@ return array(
                         'children' => array(
                             'case' => array(
                                 'properties' => array('id')
-                            ),
-                            'prohibitionType' => array(
-                                'properties' => array(
-                                    'id',
-                                    'description'
-                                )
                             ),
                             'attachedTo' => array(
                                 'properties' => array('id', 'description')
