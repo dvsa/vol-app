@@ -28,9 +28,6 @@ return array(
                     'caseType' => array(
                         'properties' => array('id')
                     ),
-                    'legacyOffences' => array(
-                        'properties' => 'ALL',
-                    ),
                     'licence' => array(
                         'properties' => 'ALL',
                         'children' => array(
@@ -203,6 +200,49 @@ return array(
             'section_type' => ['list'],
             'data_field' => '',
             'allow_comments' => true,
+            'filter' => true,
+            'service' => 'Cases',
+            'bundle' => array(
+                'properties' => array(
+                    'id',
+                    'licence'
+                ),
+                'children' => array(
+                    'licence' => array(
+                        'properties' => array(
+                            'id',
+                            'organisation'
+                        ),
+                        'children' => array(
+                            'organisation' => array(
+                                'properties' => array(
+                                    'id',
+                                    'licences'
+                                ),
+                                'children' => array(
+                                    'licences' => array(
+                                        'properties' => 'ALL',
+                                        'criteria' => array(
+                                            'status' => array(
+                                                'lsts_consideration',
+                                                'lsts_granted',
+                                                'lsts_curtailed',
+                                                'lsts_suspended',
+                                                'lsts_valid'
+                                            )
+                                        ),
+                                        'children' => array(
+                                            'status',
+                                            'licenceType',
+                                            'licenceVehicles'
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
         ),
         'lead-tc-area'   => array(
             'section_type' => ['text'],
@@ -296,12 +336,6 @@ return array(
                                     'id',
                                     'description'
                                 )
-                            ),
-                            'category' => array(
-                                'properties' => array(
-                                    'id',
-                                    'description'
-                                )
                             )
                         )
                     )
@@ -386,9 +420,6 @@ return array(
             'service' => 'Cases',
             'bundle' => array(
                 'children' => array(
-                    'properties' => array(
-                        'id'
-                    ),
                     'application' => array(
                         'properties' => array(
                             'id'

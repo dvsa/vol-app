@@ -32,7 +32,7 @@ class SubmissionSectionDetails extends AbstractHelper
         'intelligence-unit-check'           => 'SubmissionSectionOverview',
         'interim'                           => 'SubmissionSectionOverview',
         'advertisement'                     => 'SubmissionSectionOverview',
-        'linked-licences-app-numbers'       => 'SubmissionSectionOverview',
+        'linked-licences-app-numbers'       => 'SubmissionSectionTable',
         'lead-tc-area'                      => 'SubmissionSectionOverview',
         'current-submissions'               => 'SubmissionSectionOverview',
         'auth-requested-applied-for'        => 'SubmissionSectionOverview',

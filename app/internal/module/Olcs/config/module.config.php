@@ -314,7 +314,9 @@ return array(
             'Olcs\Filter\SubmissionSection\CaseSummary' => 'Olcs\Filter\SubmissionSection\CaseSummary',
             'Olcs\Filter\SubmissionSection\CaseOutline' => 'Olcs\Filter\SubmissionSection\CaseOutline',
             'Olcs\Filter\SubmissionSection\Persons' => 'Olcs\Filter\SubmissionSection\Persons',
-            'Olcs\Filter\SubmissionSection\Oppositions' => 'Olcs\Filter\SubmissionSection\Oppositions'
+            'Olcs\Filter\SubmissionSection\Oppositions' => 'Olcs\Filter\SubmissionSection\Oppositions',
+            'Olcs\Filter\SubmissionSection\LinkedLicencesAppNumbers' =>
+                'Olcs\Filter\SubmissionSection\LinkedLicencesAppNumbers'
         ],
         'aliases' => [
             'ComplianceComplaints' => 'Olcs\Filter\SubmissionSection\ComplianceComplaints',
@@ -323,7 +325,8 @@ return array(
             'CaseSummary' => 'Olcs\Filter\SubmissionSection\CaseSummary',
             'CaseOutline' => 'Olcs\Filter\SubmissionSection\CaseOutline',
             'Persons' => 'Olcs\Filter\SubmissionSection\Persons',
-            'Oppositions' => 'Olcs\Filter\SubmissionSection\Oppositions'
+            'Oppositions' => 'Olcs\Filter\SubmissionSection\Oppositions',
+            'LinkedLicencesAppNumbers' => 'Olcs\Filter\SubmissionSection\LinkedLicencesAppNumbers'
 
 
         ]
