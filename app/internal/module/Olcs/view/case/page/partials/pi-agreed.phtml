@@ -9,7 +9,7 @@ $piTypes = implode(', ', $types);
 
 echo $this->render('partials/read-only/main',
     [
-        'header' => 'Agreed and legislation',
+        'header' => 'Traffic Commissioner agreement and legislation',
         'actions' => [
             [
                 'label' => 'Edit',
@@ -24,11 +24,11 @@ echo $this->render('partials/read-only/main',
         'multiItems' => [
             0 => [
                 ['label' => 'Agreed by', 'value' => $pi['agreedByTc']['name']],
-                ['label' => 'Agreed date', 'date' => (isset($pi['agreedDate']) ? $pi['agreedDate'] : null)],  
+                ['label' => 'Agreed date', 'date' => (isset($pi['agreedDate']) ? $pi['agreedDate'] : null)],
                 ['label' => 'Agreed by role', 'value' => $pi['agreedByTcRole']['description']]
             ],
             1 => [
-                ['label' => 'Type of Public Inquiry', 'value' => $piTypes],  
+                ['label' => 'Type of Public Inquiry', 'value' => $piTypes],
                 ['label' => 'Legislation', 'class' => 'full-width', 'value' => is_array($pi['reasons']) ?
                     implode(
                         ', ',
