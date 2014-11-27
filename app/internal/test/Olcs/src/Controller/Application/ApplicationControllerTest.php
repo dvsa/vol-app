@@ -45,7 +45,7 @@ class ApplicationControllerTest extends MockeryTestCase
     {
         $this->sm = Bootstrap::getServiceManager();
 
-        $this->sut = $this->getMock('\Olcs\Controller\Application\ApplicationController', array('render'));
+        $this->sut = $this->getMock('\Olcs\Controller\Application\ApplicationController', array('render', 'addErrorMessage'));
         $this->sut->setServiceLocator($this->sm);
         $this->pluginManager = $this->sut->getPluginManager();
     }
@@ -466,6 +466,32 @@ class ApplicationControllerTest extends MockeryTestCase
             ->method('toRoute')
             ->with('lva-application/fees/fee_action', $routeParams)
             ->will($this->returnValue('REDIRECT'));
+
+        $this->assertEquals('REDIRECT', $this->sut->feesAction());
+    }
+
+    /**
+     * @group application_controller
+     */
+    public function testFeesListActionWithInValidPostRedirectsCorrectly()
+    {
+        $id = 7;
+        $post = [];
+
+        $this->mockRouteParam('application', $id);
+
+        $request = $this->sut->getRequest();
+        $request->setMethod('POST');
+        $request->setPost(new \Zend\Stdlib\Parameters($post));
+
+        $redirect = $this->mockRedirect();
+        $redirect->expects($this->once())
+            ->method('toRoute')
+            ->with(null, [], null, true)
+            ->will($this->returnValue('REDIRECT'));
+
+        $this->sut->expects($this->once())
+            ->method('addErrorMessage');
 
         $this->assertEquals('REDIRECT', $this->sut->feesAction());
     }

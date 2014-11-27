@@ -54,10 +54,10 @@ trait FeesActionTrait
     {
         if ($this->getRequest()->isPost()) {
 
-            $data = $this->getRequest()->getPost();
+            $data = (array)$this->getRequest()->getPost();
             if (!isset($data['id']) || empty($data['id'])) {
-                // @TODO handle error, return message about needing >= 1 fee
-                throw new \Exception('TODO');
+                $this->addErrorMessage('Please select at least one item');
+                return $this->redirect()->toRoute(null, [], null, true);
             }
 
             // @NOTE: only one action supported at the moment, so no need to inspect
