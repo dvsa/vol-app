@@ -33,13 +33,9 @@ class LicenceController extends AbstractController
             return $response;
         }
 
-        $view = $this->getViewWithLicence(
-            $this->commonFeesAction($this->params('licence'))
-        );
-
-        $view->setTemplate('licence/fees/layout');
         $this->pageLayout = 'licence';
-        return $this->renderView($view);
+
+        return $this->commonFeesAction($this->params('licence'));
     }
 
     public function detailsAction()

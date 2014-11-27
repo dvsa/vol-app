@@ -43,11 +43,7 @@ class ApplicationController extends AbstractController
                 $this->params('application')
             );
 
-        $view = new ViewModel(
-            $this->commonFeesAction($licenceId)
-        );
-        $view->setTemplate('licence/fees/layout');
-        return $this->render($view);
+        return $this->commonFeesAction($licenceId);
     }
 
     /**

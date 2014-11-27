@@ -38,10 +38,14 @@ trait FeesActionTrait
 
         $table = $this->getFeesTable($licenceId, $status);
 
-        return [
-            'table' => $table,
-            'form'  => $this->getFeeFilterForm($filters)
-        ];
+        $view = new ViewModel(
+            [
+                'table' => $table,
+                'form'  => $this->getFeeFilterForm($filters)
+            ]
+        );
+        $view->setTemplate('licence/fees/layout');
+        return $this->renderView($view);
     }
 
     protected function checkActionRedirect($lvaType)
