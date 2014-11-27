@@ -317,7 +317,8 @@ return array(
             'Olcs\Filter\SubmissionSection\Oppositions' => 'Olcs\Filter\SubmissionSection\Oppositions',
             'Olcs\Filter\SubmissionSection\LinkedLicencesAppNumbers' =>
                 'Olcs\Filter\SubmissionSection\LinkedLicencesAppNumbers',
-            'Olcs\Filter\SubmissionSection\LeadTcArea' => 'Olcs\Filter\SubmissionSection\LeadTcArea'
+            'Olcs\Filter\SubmissionSection\LeadTcArea' => 'Olcs\Filter\SubmissionSection\LeadTcArea',
+            'Olcs\Filter\SubmissionSection\ProhibitionHistory' => 'Olcs\Filter\SubmissionSection\ProhibitionHistory'
         ],
         'aliases' => [
             'ComplianceComplaints' => 'Olcs\Filter\SubmissionSection\ComplianceComplaints',
@@ -328,9 +329,9 @@ return array(
             'Persons' => 'Olcs\Filter\SubmissionSection\Persons',
             'Oppositions' => 'Olcs\Filter\SubmissionSection\Oppositions',
             'LinkedLicencesAppNumbers' => 'Olcs\Filter\SubmissionSection\LinkedLicencesAppNumbers',
-            'LeadTcArea' => 'Olcs\Filter\SubmissionSection\LeadTcArea'
-
-
+            'LinkedLicencesAppNumbers' => 'Olcs\Filter\SubmissionSection\LinkedLicencesAppNumbers',
+            'LeadTcArea' => 'Olcs\Filter\SubmissionSection\LeadTcArea',
+            'ProhibitionHistory' => 'Olcs\Filter\SubmissionSection\ProhibitionHistory'
         ]
     ],
 );
