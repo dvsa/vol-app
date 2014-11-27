@@ -77,13 +77,6 @@ return array(
                             'use_route_match' => true,
                         ),
                         array(
-                            'id' => 'case_details_prohibitions',
-                            'label' => 'Prohibitions',
-                            'route' => 'case_prohibition',
-                            'action' => 'index',
-                            'use_route_match' => true,
-                        ),
-                        array(
                             'id' => 'case_details_penalties',
                             'label' => 'ERRU penalties',
                             'route' => 'case_penalty',
@@ -210,6 +203,13 @@ return array(
                                 ),
                             ),
                         ),
+                        array(
+                            'id' => 'case_details_prohibitions',
+                            'label' => 'Prohibitions',
+                            'route' => 'case_prohibition',
+                            'action' => 'index',
+                            'use_route_match' => true,
+                        )
                     )
                 ),
                 array(
