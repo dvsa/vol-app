@@ -6,10 +6,10 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
- * @Form\Name("erru-penalty")
+ * @Form\Name("ERRU penalty")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true, "label":"Erru Penalty"})
+ * @Form\Options({"prefer_form_input_filter": true, "label":"Erru penalty"})
  */
 class ErruPenalty
 {
