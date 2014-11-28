@@ -10,7 +10,6 @@ namespace OlcsTest\Controller\TransportManager\Details;
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use OlcsTest\Bootstrap;
 use Mockery as m;
-use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Common\Service\Entity\TransportManagerEntityService;
 
 /**
@@ -18,13 +17,13 @@ use Common\Service\Entity\TransportManagerEntityService;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class TransportManagerDetailsDetailControllerTest extends MockeryTestCase
+class TransportManagerDetailsDetailControllerTest extends AbstractHttpControllerTestCase
 {
     /**
      * @var ServiceManager
      */
     protected $sm;
-    
+
     /**
      * @var array
      */
@@ -42,7 +41,7 @@ class TransportManagerDetailsDetailControllerTest extends MockeryTestCase
                 'year' => '1972'
             ],
             'birthPlace' => 'Leeds',
-            'type' => ['id' => 'tm_t_B'],
+            'type' => 'tm_t_B',
             'contactDetailsId' => 104,
             'contactDetailsVersion' => 4,
             'personId' => 77,
@@ -61,7 +60,7 @@ class TransportManagerDetailsDetailControllerTest extends MockeryTestCase
         'form-actions' => [
             'save'
         ],
-        'js-submit' => 1    
+        'js-submit' => 1
     ];
 
     protected $tmDetails = [
@@ -90,7 +89,7 @@ class TransportManagerDetailsDetailControllerTest extends MockeryTestCase
                 'postcode' => 'PC'
             ],
             'contactType' => [
-                'id' => 'TYPE1'
+                'id' => 'ct_tm'
             ]
         ],
         'tmType' => [
@@ -109,11 +108,13 @@ class TransportManagerDetailsDetailControllerTest extends MockeryTestCase
 
         $this->sm = Bootstrap::getServiceManager();
         $this->sut->setServiceLocator($this->sm);
+        $this->sut->setEnabledCsrf(false);
     }
-    
+
     /**
      * Test index action with edit transport manager
-     *
+     * 
+     * @group transportManagerDetails
      */
     public function testIndexActionWithEditTransportManager()
     {
@@ -132,7 +133,7 @@ class TransportManagerDetailsDetailControllerTest extends MockeryTestCase
         $this->sut
             ->shouldReceive('isButtonPressed')
             ->andReturn(false);
-        
+
         $this->sut
             ->shouldReceive('getRequest')
             ->andReturn(
@@ -150,14 +151,14 @@ class TransportManagerDetailsDetailControllerTest extends MockeryTestCase
                 ->andReturn(false)
                 ->getMock()
             );
-        
+
         $mockTmDetails = m::mock()
             ->shouldReceive('getTmDetails')
             ->with(1)
             ->andReturn($this->tmDetails)
             ->getMock();
-        
-        $this->sm->setService('Entity\TransportManager', $mockTmDetails);        
+
+        $this->sm->setService('Entity\TransportManager', $mockTmDetails);
 
         $response = $this->sut->indexAction();
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
@@ -166,6 +167,7 @@ class TransportManagerDetailsDetailControllerTest extends MockeryTestCase
     /**
      * Test index action with post edit transport manager
      *
+     * @group transportManagerDetails
      */
     public function testIndexActionWithPostEditTransportManager()
     {
@@ -180,7 +182,7 @@ class TransportManagerDetailsDetailControllerTest extends MockeryTestCase
                 ->andReturn(1)
                 ->getMock()
             );
-        
+
         $this->sut
             ->shouldReceive('isButtonPressed')
             ->andReturn(false);
@@ -208,6 +210,17 @@ class TransportManagerDetailsDetailControllerTest extends MockeryTestCase
         $mockTmDetails = m::mock()
             ->shouldReceive('getTmDetails')
             ->andReturn($this->tmDetails)
+            ->shouldReceive('save')
+            ->with(
+                [
+                    'id' => $this->post['transport-manager-details']['id'],
+                    'version' => $this->post['transport-manager-details']['version'],
+                    'tmType' => $this->post['transport-manager-details']['type'],
+                    'contactDetails' => 1,
+                    'modifiedBy' => ''
+                ]
+            )
+            ->andReturn(['id' => 1])
             ->getMock();
 
         $mockRefDataService = m::mock('Common\Service\Data\RefData');
@@ -216,8 +229,61 @@ class TransportManagerDetailsDetailControllerTest extends MockeryTestCase
             ->andReturn(
                 ['tm_t_B' => 'Both', 'tm_t_E' => 'External', 'tm_t_I' => 'Internal']
             );
+
+        $mockAddressService = m::mock()
+            ->shouldReceive('save')
+            ->with($this->post['home-address'])
+            ->andReturn(['id' => 1])
+            ->getMock();
+
+        $mockPersonService = m::mock()
+            ->shouldReceive('save')
+            ->with(
+                [
+                    'id' => $this->post['transport-manager-details']['personId'],
+                    'version' => $this->post['transport-manager-details']['personVersion'],
+                    'title' => $this->post['transport-manager-details']['title'],
+                    'forename' => $this->post['transport-manager-details']['firstName'],
+                    'familyName' => $this->post['transport-manager-details']['lastName'],
+                    'birthDate' =>
+                        $this->post['transport-manager-details']['birthDate']['year'] . '-' .
+                        $this->post['transport-manager-details']['birthDate']['month'] . '-' .
+                        $this->post['transport-manager-details']['birthDate']['day'],
+                    'birthPlace' => $this->post['transport-manager-details']['birthPlace']
+                ]
+            )
+            ->andReturn(['id' => 1])
+            ->getMock();
+
+        $mockContactDetailsService = m::mock()
+            ->shouldReceive('save')
+            ->with(
+                [
+                    'id' => $this->post['transport-manager-details']['contactDetailsId'],
+                    'version' => $this->post['transport-manager-details']['contactDetailsVersion'],
+                    'person' => 1,
+                    'address' => 1,
+                    'emailAddress' => $this->post['transport-manager-details']['emailAddress'],
+                    'contactType' => 'ct_tm'
+                ]
+            )
+            ->andReturn(['id' => 1])
+            ->getMock();
+
         $this->sm->setService('Common\Service\Data\RefData', $mockRefDataService);
-        $this->sm->setService('Entity\TransportManager', $mockTmDetails);        
+        $this->sm->setService('Entity\TransportManager', $mockTmDetails);
+        $this->sm->setService('Entity\Address', $mockAddressService);
+        $this->sm->setService('Entity\Person', $mockPersonService);
+        $this->sm->setService('Entity\ContactDetails', $mockContactDetailsService);
+
+        $this->sut
+            ->shouldReceive('flashMessenger')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('addSuccessMessage')
+                ->with('The transport manager has been updated successfully')
+                ->getMock()
+            );
 
         $response = $this->sut->indexAction();
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
@@ -226,6 +292,7 @@ class TransportManagerDetailsDetailControllerTest extends MockeryTestCase
     /**
      * Test index action with edit transport manager and cancel button pressed
      *
+     * @group transportManagerDetails
      */
     public function testIndexActionWithEditTransportManagerAndCancelButtonPressed()
     {
@@ -253,7 +320,7 @@ class TransportManagerDetailsDetailControllerTest extends MockeryTestCase
                 ->with('Your changes have been discarded')
                 ->getMock()
             );
-        
+
         $this->sut
             ->shouldReceive('redirectToRoute')
             ->with('transport-manager/details', ['transportManager' => 1])

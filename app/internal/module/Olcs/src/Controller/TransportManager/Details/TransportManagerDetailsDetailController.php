@@ -169,7 +169,7 @@ class TransportManagerDetailsDetailController extends AbstractTransportManagerDe
         $contactDetailsId = isset($contactDetailsSaved['id']) ?
             $contactDetailsSaved['id'] : $data['transport-manager-details']['contactDetailsId'];
 
-        $userField = isset($data['id']) ? 'modifiedBy' : 'createdBy';
+        $userField = isset($data['transport-manager-details']['id']) ? 'modifiedBy' : 'createdBy';
 
         $transportManager = [
             'id' => $data['transport-manager-details']['id'],
