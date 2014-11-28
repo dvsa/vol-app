@@ -28,7 +28,6 @@ return array(
                     'licence/processing/publications',
                     true
                 ) . '">' . $this->callFormatter($column, $data) . '</a>';
-                return '';
             },
             'name' => 'createdOn',
             'sort' => 'createdOn'
@@ -75,7 +74,7 @@ return array(
             'formatter' => function ($data) {
                 $string = nl2br($data['text1']) . '<br />' . $data['text2'];
                 if (strlen($string) > 100) {
-                    return substr($string,0,100) . ' [...]';
+                    return substr($string, 0, 100) . ' [...]';
                 }
 
                 return $string;
