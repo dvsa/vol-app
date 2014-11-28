@@ -9,6 +9,7 @@ namespace Olcs\Controller\TransportManager\Details;
 
 use Olcs\Controller\TransportManager\Details\AbstractTransportManagerDetailsController;
 use Common\Service\Entity\ContactDetailsEntityService;
+use Common\Service\Entity\TransportManagerEntityService;
 
 /**
  * Transport Manager Details Detail Controller
@@ -37,8 +38,12 @@ class TransportManagerDetailsDetailController extends AbstractTransportManagerDe
         $tmId = $this->params()->fromRoute('transportManager');
 
         if ($this->isButtonPressed('cancel')) {
-            $this->flashMessenger()->addSuccessMessage('Your changes have been discarded');
-            return $this->redirectToRoute('transport-manager/details', ['transportManager' => $tmId]);
+            if ($tmId) {
+                $this->flashMessenger()->addSuccessMessage('Your changes have been discarded');
+                return $this->redirectToRoute('transport-manager/details', ['transportManager' => $tmId]);
+            } else {
+                return $this->redirectToRoute('operators/operators-params');
+            }
         }
 
         $form = $this->getForm('TransportManager');
@@ -86,7 +91,8 @@ class TransportManagerDetailsDetailController extends AbstractTransportManagerDe
         $tmDetails = [
             'id' => $tmId,
             'version' => isset($data['version']) ? $data['version'] : '',
-            'type' => isset($data['tmType']['id']) ? $data['tmType']['id'] : ''
+            'type' => isset($data['tmType']['id']) ? $data['tmType']['id'] : '',
+            'status' => isset($data['tmStatus']['id']) ? $data['tmStatus']['id'] : ''
         ];
         $homeAddress = [];
         if (
@@ -137,10 +143,12 @@ class TransportManagerDetailsDetailController extends AbstractTransportManagerDe
      * Save transport manager
      *
      * @param array $data
-     * @return array
+     * @return mixed
      */
     protected function processSave($data)
     {
+        $action = isset($data['transport-manager-details']['id']) && !empty($data['transport-manager-details']['id']) ?
+            'edit' : 'add';
         $addressSaved = $this->getServiceLocator()->get('Entity\Address')->save($data['home-address']);
         $addressId = isset($addressSaved['id']) ? $addressSaved['id'] : $data['home-address']['id'];
 
@@ -169,18 +177,30 @@ class TransportManagerDetailsDetailController extends AbstractTransportManagerDe
         $contactDetailsId = isset($contactDetailsSaved['id']) ?
             $contactDetailsSaved['id'] : $data['transport-manager-details']['contactDetailsId'];
 
-        $userField = isset($data['transport-manager-details']['id']) ? 'modifiedBy' : 'createdBy';
+        $userField = ($action == 'edit') ? 'modifiedBy' : 'createdBy';
 
         $transportManager = [
             'id' => $data['transport-manager-details']['id'],
             'version' => $data['transport-manager-details']['version'],
             'tmType' => $data['transport-manager-details']['type'],
+            'tmStatus' => isset($data['transport-manager-details']['status']) &&
+                !empty($data['transport-manager-details']['status']) ?
+                $data['transport-manager-details']['status'] :
+                TransportManagerEntityService::TRANSPORT_MANAGER_STATUS_ACTIVE,
             'contactDetails' => $contactDetailsId,
             $userField => $this->getLoggedInUser()
         ];
-        $this->getServiceLocator()->get('Entity\TransportManager')->save($transportManager);
+        $tmSaved = $this->getServiceLocator()->get('Entity\TransportManager')->save($transportManager);
 
         $this->saved = true;
-        $this->flashMessenger()->addSuccessMessage('The transport manager has been updated successfully');
+        if ($action == 'add') {
+            $message = 'The Transport Manager has been created successfully';
+        } else {
+            $message = 'The transport manager has been updated successfully';
+        }
+        $this->flashMessenger()->addSuccessMessage($message);
+        if ($action == 'add') {
+            $this->redirectToRoute('transport-manager/details/details', ['transportManager' => $tmSaved['id']]);
+        }
     }
 }

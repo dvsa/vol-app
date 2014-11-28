@@ -58,12 +58,13 @@ class TransportManagerController extends AbstractController
                 $transportManager['contactDetails']['person']['forename'] . ' ': '';
             $this->pageTitle .= isset($transportManager['contactDetails']['person']['familyName']) ?
                 $transportManager['contactDetails']['person']['familyName'] : '';
-
+            $variables['disable'] = false;
         } else {
             $transportManager = null;
             $this->pageTitle =
                 $this->getServiceLocator()
                 ->get('translator')->translate('internal-transport-manager-new-transport-manager');
+            $variables['disable'] = true;
         }
 
         $variables['transportManager'] = $transportManager;

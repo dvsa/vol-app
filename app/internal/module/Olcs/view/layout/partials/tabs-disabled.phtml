@@ -1,0 +1,9 @@
+<ul class="horizontal-navigation">
+<?php foreach ($this->container as $page): ?>
+    <?php if($page->isVisible(true)): ?>
+        <li class="horizontal-navigation__item<?php if ($page->isActive(true)) { ?> current<?php } ?>">
+        <span><?php echo $this->translate($page->getLabel()); ?></span>
+        </li>
+    <?php endif; ?>
+<?php endforeach; ?>
+</ul>

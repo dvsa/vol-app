@@ -128,4 +128,10 @@ class TransportManagerDetails
      * @Form\Type("Hidden")
      */
     public $personVersion = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $status = null;
 }

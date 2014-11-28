@@ -1126,6 +1126,7 @@ $routes = [
             'defaults' => [
                 'controller' => 'TMController',
                 'action' => 'index-jump',
+                'transportManager' => ''
             ]
         ],
         'may_terminate' => true,
@@ -1244,7 +1245,18 @@ $routes = [
                 ]
             ],
         ],
-    ]
+    ],
+    'create_transport_manager' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/transport-manager/create',
+            'defaults' => [
+                'controller' => 'TMDetailsDetailController',
+                'action' => 'index',
+            ],
+        ],
+        'may_terminate' => true,
+    ],
 ];
 
 $sectionConfig = new \Common\Service\Data\SectionConfig();

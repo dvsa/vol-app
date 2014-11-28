@@ -663,6 +663,8 @@ return array(
     'Common\Service\commonformelementdynamicradio' => false,
     'Zend\Validator\EmailAddress' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Validator/EmailAddress.php',
     'Common\Service\Entity\TransportManagerEntityService' => $rootPath . '/vendor/olcs/OlcsCommon/Common/src/Common/Service/Entity/TransportManagerEntityService.php',
+    'Zend\View\Exception\RuntimeException' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/View/Exception/RuntimeException.php',
+    'Zend\View\Exception\ExceptionInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/View/Exception/ExceptionInterface.php',
     'Common\Service\\Zend\Form\Element\SelectService' => false,
     'Common\Service\\Zend\Form\FieldsetService' => false,
     'Common\Service\\Common\Form\Elements\InputFilters\ActionButtonService' => false,
