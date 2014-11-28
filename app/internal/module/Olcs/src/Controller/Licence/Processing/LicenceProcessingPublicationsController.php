@@ -6,6 +6,9 @@
 namespace Olcs\Controller\Licence\Processing;
 
 use Zend\View\Model\ViewModel;
+use Common\Exception\ResourceNotFoundException;
+use Common\Exception\BadRequestException;
+use Common\Exception\DataServiceException;
 
 /**
  * Licence Processing Publications Controller
@@ -62,25 +65,21 @@ class LicenceProcessingPublicationsController extends AbstractLicenceProcessingC
 
     public function deleteAction()
     {
-        $params = ['id' => $this->params()->fromRoute('id')];
+        $id = $this->params()->fromRoute('id');
         $publication = $this->getService();
 
-        try{
-            $publication->delete($params, true);
+        try {
+            $publication->delete($id);
             $this->addErrorMessage('Record deleted successfully');
-        } catch (\Exception $e) {
-            switch (get_class($e)) {
-                case 'Common\Exception\DataServiceException':
-                case 'Common\Exception\BadRequestException':
-                    $this->addErrorMessage($e->getMessage());
-                    break;
-                default:
-                // Rethrow the Exception
-                throw $e;
-            }
+        } catch (DataServiceException $e) {
+            $this->addErrorMessage($e->getMessage());
+        } catch (BadRequestException $e) {
+            $this->addErrorMessage($e->getMessage());
+        } catch (ResourceNotFoundException $e) {
+            $this->addErrorMessage($e->getMessage());
         }
 
-        $this->redirectToIndex();
+        return $this->redirectToIndex();
     }
 
     /**
