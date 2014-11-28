@@ -1089,6 +1089,16 @@ $routes = [
                     ]
                 ]
             ],
+            'new-application' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/new-application',
+                    'defaults' => [
+                        'controller' => 'OperatorController',
+                        'action' => 'newApplication',
+                    ]
+                ]
+            ],
         ]
     ],
     'create_operator' => [

@@ -10,7 +10,6 @@
 namespace Olcs\Controller;
 
 use Zend\View\Model\ViewModel;
-use Zend\Json\Json;
 use Olcs\Controller\Traits\TaskSearchTrait;
 
 /**
@@ -403,25 +402,7 @@ class TaskController extends AbstractController
                 break;
         }
 
-        // @NOTE: at some point we'll probably want to abstract this behind a
-        // redirect helper, such that *all* redirects either set a location
-        // header or return JSON based on the request type. That way it can
-        // be totally transparent in concrete controllers like this one.
-        if ($this->getRequest()->isXmlHttpRequest()) {
-            $data = [
-                'status' => 302,
-                'location' => $this->url()->fromRoute($route, $params)
-            ];
-
-            $this->getResponse()->getHeaders()->addHeaders(
-                ['Content-Type' => 'application/json']
-            );
-            $this->getResponse()->setContent(Json::encode($data));
-            return;
-        }
-
-        // bog standard redirect
-        $this->redirect()->toRoute($route, $params);
+        return $this->redirect()->toRouteAjax($route, $params);
     }
 
     /**
