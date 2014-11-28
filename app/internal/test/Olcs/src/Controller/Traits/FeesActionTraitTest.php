@@ -9,6 +9,7 @@ namespace OlcsTest\Controller\Traits;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use OlcsTest\Bootstrap;
+use Mockery as m;
 
 /**
  * Fees action trait tests
@@ -16,7 +17,7 @@ use OlcsTest\Bootstrap;
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  *
  * @todo These tests need sorting out, this doesn't fully cover the trait and the testEditFeeActionWithPost method
- *  with it's provider doesn't cover all scenarios
+ *  with its provider doesn't cover all scenarios
  */
 class FeesActionTraitTest extends AbstractHttpControllerTestCase
 {

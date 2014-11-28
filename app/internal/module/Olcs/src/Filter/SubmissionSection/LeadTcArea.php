@@ -3,20 +3,20 @@
 namespace Olcs\Filter\SubmissionSection;
 
 /**
- * Class CaseOutline
+ * Class LeadTcArea
  * @package Olcs\Filter\SubmissionSection
  */
-class CaseOutline extends AbstractSubmissionSectionFilter
+class LeadTcArea extends AbstractSubmissionSectionFilter
 {
     /**
-     * Filters data for case-outline section
+     * Filters data for lead-tc-area section
      * @param array $data
      * @return array
      */
     public function filter($data = array())
     {
         return array(
-            'outline' => $data['description']
+            'leadTcAreaDescription' => $data['licence']['organisation']['leadTcArea']['name']
         );
     }
 }

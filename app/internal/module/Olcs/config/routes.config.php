@@ -1046,7 +1046,7 @@ $routes = [
                         'options' => [
                             'route' => '/:action/:fee',
                             'constraints' => [
-                                'fee' => '[0-9-]+',
+                                'fee' => '([0-9]+,?)+',
                             ],
                         ],
                         'may_terminate' => true,
@@ -1366,7 +1366,7 @@ $routes['lva-application']['child_routes'] = array_merge(
                     'options' => array(
                         'route' => ':action/:fee',
                         'constraints' => array(
-                            'fee' => '[0-9-]+',
+                            'fee' => '([0-9]+,?)+',
                         ),
                     ),
                     'may_terminate' => true,
