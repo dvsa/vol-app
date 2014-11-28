@@ -218,18 +218,54 @@ trait FeesActionTrait
         $this->loadScripts(['forms/fee-payment']);
 
         if ($this->getRequest()->isPost()) {
-            $details = $this->getRequest()->getPost('details');
+            $data = (array)$this->getRequest()->getPost();
+
+            $details = $data['details'];
+
             if (isset($details['paymentType']) && in_array($details['paymentType'], $this->cardTypes)) {
                 $this->getServiceLocator()
                     ->get('Helper\Form')
                     ->remove($form, 'details->received');
             }
-        }
 
-        $this->formPost($form, 'processPayment');
+            $form->setData($data);
 
-        if ($this->getResponse()->getContent() !== "") {
-            return $this->getResponse();
+            if ($form->isValid()) {
+
+                $client = $this->getCpmsRestClient();
+
+                $params = [
+                    'customer_reference' => 'customer_ref',
+                    'sales_reference' => 'sales_ref',
+                    // @TODO product ref shouldn't have to come from a whitelist...
+                    'product_reference' => 'GVR_APPLICATION_FEE',
+                    'scope' => 'CARD',
+                    'disable_redirection' => true,
+                    // @TODO dynamic URL here...
+                    'redirect_uri' => 'http://olcs-internal/payment',
+                    'payment_data' => [
+                        [
+                            'amount' => 123, // @TODO from form or $maxAmount
+                            'sales_reference' => 'sales_ref',
+                            'product_reference' => 'GVR_APPLICATION_FEE'
+                        ]
+                    ]
+                ];
+                $apiResponse = $client->post('/api/payment/card', 'CARD', $params);
+
+                // @TODO if all good, create a pending payment record with the
+                // 'redirection_data' key
+                $view = new ViewModel(
+                    [
+                        'gateway' => $apiResponse['gateway_url'],
+                        'data' => [
+                            'redirectionData' => $apiResponse['redirection_data']
+                        ]
+                    ]
+                );
+                $view->setTemplate('cpms/payment');
+                return $this->renderLayout($view);
+            }
         }
 
         $view = new ViewModel(['form' => $form]);
@@ -405,10 +441,5 @@ trait FeesActionTrait
             return $this->getResponse();
         }
         $this->redirect()->toRoute($route, $params);
-    }
-
-    protected function processPayment($data)
-    {
-        return $this->redirectToList();
     }
 }
