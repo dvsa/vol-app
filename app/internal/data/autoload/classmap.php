@@ -577,7 +577,6 @@ return array(
     'Zend\I18n\View\Helper\DateFormat' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/I18n/View/Helper/DateFormat.php',
     'Common\Service\TextArea' => false,
     'Common\Service\textarea' => false,
-    'Common\Service\\Zend\Form\Element\SelectService' => false,
-    'Common\Service\\Common\Form\Elements\InputFilters\CheckboxService' => false,
+    'Common\Service\\Common\Form\Elements\InputFilters\ActionButtonService' => false,
     'Common\Service\\Zend\Form\Element\ButtonService' => false,
 );
