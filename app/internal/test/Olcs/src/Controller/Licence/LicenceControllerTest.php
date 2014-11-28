@@ -44,7 +44,7 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
         );
 
         $query = new \Zend\Stdlib\Parameters();
-        $request = $this->getMock('\stdClass', ['getQuery', 'isXmlHttpRequest', 'isPost']);
+        $request = $this->getMock('\stdClass', ['getQuery', 'isXmlHttpRequest', 'isPost', 'getPost']);
         $request->expects($this->any())
             ->method('getQuery')
             ->will($this->returnValue($query));
@@ -604,5 +604,44 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue(1234));
 
         $response = $this->controller->documentsAction();
+    }
+
+    public function testFeesListActionWithValidPostRedirectsCorrectly()
+    {
+        $id = 7;
+        $post = [
+            'id' => [1,2,3]
+        ];
+
+        $this->request->expects($this->any())
+            ->method('getPost')
+            ->willReturn($post);
+
+        $this->request->expects($this->any())
+            ->method('isPost')
+            ->willReturn(true);
+
+        $routeParams = [
+            'action' => 'pay-fees',
+            'fee' => '1,2,3'
+        ];
+
+        $redirect = $this->getMock('\stdClass', ['toRoute']);
+
+        $routeParams = [
+            'action' => 'pay-fees',
+            'fee' => '1,2,3'
+        ];
+
+        $redirect->expects($this->once())
+            ->method('toRoute')
+            ->with('licence/fees/fee_action', $routeParams)
+            ->willReturn('REDIRECT');
+
+        $this->controller->expects($this->once())
+            ->method('redirect')
+            ->willReturn($redirect);
+
+        $this->assertEquals('REDIRECT', $this->controller->feesAction());
     }
 }
