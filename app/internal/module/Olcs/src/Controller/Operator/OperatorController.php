@@ -25,7 +25,6 @@ class OperatorController extends AbstractController
     /**
      * Redirect to the first menu section
      *
-     * @codeCoverageIgnore
      * @return \Zend\Http\Response
      */
     public function indexJumpAction()
@@ -70,7 +69,7 @@ class OperatorController extends AbstractController
         if ($request->isPost()) {
             $data = (array)$request->getPost();
         } else {
-            $data['receivedDate'] = new \DateTime();
+            $data['receivedDate'] = $this->getServiceLocator()->get('Helper\Date')->getDateObject();
         }
 
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
