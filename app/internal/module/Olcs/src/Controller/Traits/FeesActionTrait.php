@@ -220,9 +220,7 @@ trait FeesActionTrait
         if ($this->getRequest()->isPost()) {
             $data = (array)$this->getRequest()->getPost();
 
-            $details = $data['details'];
-
-            if (isset($details['paymentType']) && in_array($details['paymentType'], $this->cardTypes)) {
+            if ($this->isCardPayment($data)) {
                 $this->getServiceLocator()
                     ->get('Helper\Form')
                     ->remove($form, 'details->received');
@@ -232,39 +230,13 @@ trait FeesActionTrait
 
             if ($form->isValid()) {
 
-                $client = $this->getCpmsRestClient();
+                if ($this->isCardPayment($data)) {
+                    return $this->initiateCpmsRequest($maxAmount);
+                }
 
-                $params = [
-                    'customer_reference' => 'customer_ref',
-                    'sales_reference' => 'sales_ref',
-                    // @TODO product ref shouldn't have to come from a whitelist...
-                    'product_reference' => 'GVR_APPLICATION_FEE',
-                    'scope' => 'CARD',
-                    'disable_redirection' => true,
-                    // @TODO dynamic URL here...
-                    'redirect_uri' => 'http://olcs-internal/payment',
-                    'payment_data' => [
-                        [
-                            'amount' => 123, // @TODO from form or $maxAmount
-                            'sales_reference' => 'sales_ref',
-                            'product_reference' => 'GVR_APPLICATION_FEE'
-                        ]
-                    ]
-                ];
-                $apiResponse = $client->post('/api/payment/card', 'CARD', $params);
+                // @NOTE: not yet implemented, part of forthcoming stories
+                return $this->redirectToList();
 
-                // @TODO if all good, create a pending payment record with the
-                // 'redirection_data' key
-                $view = new ViewModel(
-                    [
-                        'gateway' => $apiResponse['gateway_url'],
-                        'data' => [
-                            'redirectionData' => $apiResponse['redirection_data']
-                        ]
-                    ]
-                );
-                $view->setTemplate('cpms/payment');
-                return $this->renderLayout($view);
             }
         }
 
@@ -441,5 +413,49 @@ trait FeesActionTrait
             return $this->getResponse();
         }
         $this->redirect()->toRoute($route, $params);
+    }
+
+    private function isCardPayment($data)
+    {
+        return (isset($data['details']['paymentType']) && in_array($data['details']['paymentType'], $this->cardTypes));
+    }
+
+    private function initiateCpmsRequest($amount)
+    {
+        $client = $this->getCpmsRestClient();
+
+        $params = [
+            'customer_reference' => 'customer_ref',
+            'sales_reference' => 'sales_ref',
+            // @TODO product ref shouldn't have to come from a whitelist...
+            'product_reference' => 'GVR_APPLICATION_FEE',
+            'scope' => 'CARD',
+            'disable_redirection' => true,
+            // @TODO dynamic URL here...
+            'redirect_uri' => 'http://olcs-internal/payment',
+            'payment_data' => [
+                [
+                    'amount' => $amount,
+                    'sales_reference' => 'sales_ref',
+                    'product_reference' => 'GVR_APPLICATION_FEE'
+                ]
+            ]
+        ];
+
+        $apiResponse = $client->post('/api/payment/card', 'CARD', $params);
+
+        // @TODO if all good, create a pending payment record with the
+        // 'redirection_data' key
+
+        $view = new ViewModel(
+            [
+                'gateway' => $apiResponse['gateway_url'],
+                'data' => [
+                    'redirectionData' => $apiResponse['redirection_data']
+                ]
+            ]
+        );
+        $view->setTemplate('cpms/payment');
+        return $this->renderLayout($view);
     }
 }
