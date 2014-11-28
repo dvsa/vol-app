@@ -50,7 +50,7 @@ trait LicenceControllerTrait
     protected function getLicence($id = null)
     {
         if (is_null($id)) {
-            $id = $this->params('licence');
+            $id = $this->params()->fromRoute('licence');
         }
 
         /** @var \Common\Service\Data\Licence $dataService */
