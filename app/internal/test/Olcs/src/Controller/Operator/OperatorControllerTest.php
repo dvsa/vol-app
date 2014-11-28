@@ -26,12 +26,7 @@ class OperatorControllerTest extends MockeryTestCase
 
     public function testNewApplicationActionWithGet()
     {
-        $mockRequest = m::mock();
-        $mockRequest->shouldReceive('isPost')
-            ->andReturn(false);
-
-        $this->sut->shouldReceive('getRequest')
-            ->andReturn($mockRequest);
+        $mockRequest = $this->mockRequest(false);
 
         $mockDateHelper = m::mock();
         $mockDateHelper->shouldReceive('getDateObject')
@@ -70,14 +65,9 @@ class OperatorControllerTest extends MockeryTestCase
     {
         $data = ['receivedDate' => 'DATE'];
 
-        $mockRequest = m::mock();
-        $mockRequest->shouldReceive('isPost')
-            ->andReturn(true)
-            ->shouldReceive('getPost')
+        $mockRequest = $this->mockRequest(true);
+        $mockRequest->shouldReceive('getPost')
             ->andReturn($data);
-
-        $this->sut->shouldReceive('getRequest')
-            ->andReturn($mockRequest);
 
         $mockForm = m::mock();
         $mockForm->shouldReceive('setData')
@@ -114,14 +104,9 @@ class OperatorControllerTest extends MockeryTestCase
         $data = ['receivedDate' => 'DATE'];
         $operator = 1;
 
-        $mockRequest = m::mock();
-        $mockRequest->shouldReceive('isPost')
-            ->andReturn(true)
-            ->shouldReceive('getPost')
+        $mockRequest = $this->mockRequest(true);
+        $mockRequest->shouldReceive('getPost')
             ->andReturn($data);
-
-        $this->sut->shouldReceive('getRequest')
-            ->andReturn($mockRequest);
 
         $mockForm = m::mock();
         $mockForm->shouldReceive('setData')
@@ -157,5 +142,14 @@ class OperatorControllerTest extends MockeryTestCase
         $return = $this->sut->newApplicationAction();
 
         $this->assertEquals('REDIRECT', $return);
+    }
+
+    protected function mockRequest($isPost)
+    {
+        $mockRequest = m::mock();
+        $mockRequest->shouldReceive('isPost')->andReturn($isPost);
+        $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
+
+        return $mockRequest;
     }
 }
