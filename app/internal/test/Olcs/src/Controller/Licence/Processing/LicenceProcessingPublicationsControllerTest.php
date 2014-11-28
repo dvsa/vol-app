@@ -154,43 +154,25 @@ class LicenceProcessingPublicationsControllerTest extends \PHPUnit_Framework_Tes
     {
         $id = 1;
 
-        $existingData = [
-            'publication' => [
-                'pubStatus' => [
-                    'id' => 'pub_s_new'
-                ]
-            ]
-        ];
-
         //mock plugin manager
         $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
             [
                 'params' => 'Params',
-                'DataServiceManager' => 'DataServiceManager',
                 'FlashMessenger' => 'FlashMessenger',
                 'redirect' => 'Redirect'
             ]
         );
 
-        //mock rest client
-        $mockRestClient = m::mock('Common\Util\RestClient');
-        $mockRestClient->shouldReceive('get')->once()->with($id)->andReturn([]);
-
         //publication link service
         $mockPublicationLink = m::mock('Common\Service\Data\PublicationLink');
-        $mockPublicationLink->shouldReceive('fetchList')->with(['id' => $id])->andReturn($existingData);
         $mockPublicationLink->shouldReceive('delete')->with($id)->andReturn([]);
-        $mockPublicationLink->shouldReceive('getRestClient')->andReturn($mockRestClient);
-
-        //data service manager
-        $mockDataServiceManager = $mockPluginManager->get('DataServiceManager', '');
-        $mockDataServiceManager->shouldReceive('get')
-            ->with('Common\Service\Data\PublicationLink')
-            ->andReturn($mockPublicationLink);
 
         //mock service manager
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
-        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturn($mockDataServiceManager);
+        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
+        $mockServiceManager->shouldReceive('get')
+            ->with('Common\Service\Data\PublicationLink')
+            ->andReturn($mockPublicationLink);
 
         //route params
         $mockParams = $mockPluginManager->get('params', '');
@@ -203,8 +185,6 @@ class LicenceProcessingPublicationsControllerTest extends \PHPUnit_Framework_Tes
         $mockRedirect = $mockPluginManager->get('redirect', '');
         $mockRedirect->shouldReceive('toRoute')->andReturn('redirectResponse');
 
-        $mockPluginManager->shouldReceive('get')->with('redirect')->andReturn($mockRedirect);
-
         $this->sut->setPluginManager($mockPluginManager);
         $this->sut->setServiceLocator($mockServiceManager);
 
@@ -214,22 +194,17 @@ class LicenceProcessingPublicationsControllerTest extends \PHPUnit_Framework_Tes
     /**
      * @dataProvider serviceAndResourceNotFoundProvider
      *
-     * @param $existingData
      * @param $expectedException
+     * @param $message
      */
-    public function testServiceAndResourceNotFoundExceptions($existingData, $expectedException)
+    public function testServiceAndResourceNotFoundExceptions($expectedException, $message)
     {
         $id = 1;
-
-        //mock rest client
-        $mockRestClient = m::mock('Common\Util\RestClient');
-        $mockRestClient->shouldReceive('get')->once()->with($id)->andReturn(false);
 
         //mock plugin manager
         $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
             [
                 'params' => 'Params',
-                'DataServiceManager' => 'DataServiceManager',
                 'FlashMessenger' => 'FlashMessenger',
                 'redirect' => 'Redirect'
             ]
@@ -237,21 +212,17 @@ class LicenceProcessingPublicationsControllerTest extends \PHPUnit_Framework_Tes
 
         //publication link service
         $mockPublicationLink = m::mock('Common\Service\Data\PublicationLink');
-        $mockPublicationLink->shouldReceive('fetchList')->with(['id' => $id])->andReturn($existingData);
 
         //publication link shouldn't try to delete
-        $mockPublicationLink->shouldReceive('delete')->andThrow('Common\Exception\\' . $expectedException);
-        $mockPublicationLink->shouldReceive('getRestClient')->andReturn($mockRestClient);
-
-        //data service manager
-        $mockDataServiceManager = $mockPluginManager->get('DataServiceManager', '');
-        $mockDataServiceManager->shouldReceive('get')
-            ->with('Common\Service\Data\PublicationLink')
-            ->andReturn($mockPublicationLink);
+        $class = 'Common\Exception\\' . $expectedException;
+        $mockPublicationLink->shouldReceive('delete')->andThrow(new $class($message));
 
         //mock service manager
         $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
-        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturn($mockDataServiceManager);
+        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
+        $mockServiceManager->shouldReceive('get')
+            ->with('Common\Service\Data\PublicationLink')
+            ->andReturn($mockPublicationLink);
 
         //route params
         $mockParams = $mockPluginManager->get('params', '');
@@ -259,7 +230,7 @@ class LicenceProcessingPublicationsControllerTest extends \PHPUnit_Framework_Tes
 
         //flash messenger
         $mockFlashMessenger = $mockPluginManager->get('FlashMessenger', '');
-        $mockFlashMessenger->shouldReceive('addErrorMessage')->once();
+        $mockFlashMessenger->shouldReceive('addErrorMessage')->with($message)->once();
 
         $mockRedirect = $mockPluginManager->get('redirect', '');
         $mockRedirect->shouldReceive('toRoute')->andReturn('redirectResponse');
@@ -276,23 +247,16 @@ class LicenceProcessingPublicationsControllerTest extends \PHPUnit_Framework_Tes
     {
         return [
             [
-                [
-                    'publication' => [
-                        'pubStatus' => [
-                            'id' => 'pub_s_printed'
-                        ]
-                    ]
-                ],
-                'DataServiceException'
-
+                'DataServiceException',
+                'Error message'
             ],
             [
-                [],
-                'ResourceNotFoundException'
+                'ResourceNotFoundException',
+                'Error message'
             ],
             [
-                [],
-                'BadRequestException'
+                'BadRequestException',
+                'Error message'
             ]
         ];
     }
