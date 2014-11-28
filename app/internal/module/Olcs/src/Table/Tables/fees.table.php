@@ -22,11 +22,6 @@ return array(
     ),
     'columns' => array(
         array(
-            'title' => '',
-            'width' => 'checkbox',
-            'format' => '{{[elements/checkbox]}}'
-        ),
-        array(
             'title' => 'No',
             'sort' => 'id',
             'name' => 'id',
@@ -109,5 +104,10 @@ return array(
             'formatter' => 'Date',
             'sort' => 'receivedDate'
         ),
+        array(
+            'title' => '',
+            'width' => 'checkbox',
+            'format' => '{{[elements/checkbox]}}'
+        )
     )
 );

@@ -32,23 +32,18 @@ class ApplicationController extends AbstractController
      */
     public function feesAction()
     {
-        $this->loadScripts(['forms/filter', 'table-actions']);
+        $response = $this->checkActionRedirect('lva-application');
+        if ($response) {
+            return $response;
+        }
 
-        $applicationId = $this->params()->fromRoute('application');
-        $licenceId = $this->getServiceLocator()->get('Entity\Application')
-            ->getLicenceIdForApplication($applicationId);
+        $licenceId = $this->getServiceLocator()
+            ->get('Entity\Application')
+            ->getLicenceIdForApplication(
+                $this->params()->fromRoute('application')
+            );
 
-        $status = $this->params()->fromQuery('status');
-        $filters = [
-            'status' => $status
-        ];
-
-        $table = $this->getFeesTable($licenceId, $status);
-
-        $view = new ViewModel(['table' => $table, 'form'  => $this->getFeeFilterForm($filters)]);
-        $view->setTemplate('licence/fees/layout');
-
-        return $this->render($view);
+        return $this->commonFeesAction($licenceId);
     }
 
     /**
@@ -287,5 +282,10 @@ class ApplicationController extends AbstractController
             $date,
             ($data['niFlag'] === 'Y')
         );
+    }
+
+    protected function renderLayout($view)
+    {
+        return $this->render($view);
     }
 }

@@ -28,9 +28,6 @@ return array(
                     'caseType' => array(
                         'properties' => array('id')
                     ),
-                    'legacyOffences' => array(
-                        'properties' => 'ALL',
-                    ),
                     'licence' => array(
                         'properties' => 'ALL',
                         'children' => array(
@@ -157,7 +154,6 @@ return array(
                                 'children' => array(
                                     'address' => array(
                                         'properties' => array(
-
                                             'addressLine1',
                                             'addressLine2',
                                             'addressLine3',
@@ -203,11 +199,80 @@ return array(
             'section_type' => ['list'],
             'data_field' => '',
             'allow_comments' => true,
+            'filter' => true,
+            'service' => 'Cases',
+            'bundle' => array(
+                'properties' => array(
+                    'id',
+                    'licence'
+                ),
+                'children' => array(
+                    'licence' => array(
+                        'properties' => array(
+                            'id',
+                            'organisation'
+                        ),
+                        'children' => array(
+                            'organisation' => array(
+                                'properties' => array(
+                                    'id',
+                                    'licences'
+                                ),
+                                'children' => array(
+                                    'licences' => array(
+                                        'properties' => 'ALL',
+                                        'criteria' => array(
+                                            'status' => array(
+                                                'lsts_consideration',
+                                                'lsts_granted',
+                                                'lsts_curtailed',
+                                                'lsts_suspended',
+                                                'lsts_valid'
+                                            )
+                                        ),
+                                        'children' => array(
+                                            'status',
+                                            'licenceType',
+                                            'licenceVehicles'
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
         ),
         'lead-tc-area'   => array(
             'section_type' => ['text'],
-            'data_field' => '',
+            'data_field' => 'leadTcAreaDescription',
             'allow_comments' => true,
+            'filter' => true,
+            'service' => 'Cases',
+            'bundle' => array(
+                'properties' => array(
+                    'licence'
+                ),
+                'children' => array(
+                    'licence' => array(
+                        'properties' => array(
+                            'organisation'
+                        ),
+                        'children' => array(
+                            'organisation' => array(
+                                'properties' => array(
+                                    'leadTcArea'
+                                ),
+                                'children' => array(
+                                    'leadTcArea' => array(
+                                        'name'
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
         ),
         'current-submissions'   => array(
             'section_type' => [],
@@ -274,10 +339,20 @@ return array(
             'data_field' => '',
             'allow_comments' => true,
         ),
-        'prohibition-history'   => array(
+        'prohibition-history' => array(
             'section_type' => ['list', 'text'],
             'data_field' => '',
             'allow_comments' => true,
+            'filter' => true,
+            'service' => 'Prohibition',
+            'identifier' => 'case',
+            'bundle' => array(
+                'children' => array(
+                    'prohibitionType' => array(
+                        'properties' => array('id', 'description')
+                    )
+                )
+            )
         ),
         'conviction-fpn-offence-history' => array(
             'section_type' => ['list', 'text'],
@@ -292,12 +367,6 @@ return array(
                         'properties' => 'ALL',
                         'children' => array(
                             'defendantType' => array(
-                                'properties' => array(
-                                    'id',
-                                    'description'
-                                )
-                            ),
-                            'category' => array(
                                 'properties' => array(
                                     'id',
                                     'description'
@@ -386,9 +455,6 @@ return array(
             'service' => 'Cases',
             'bundle' => array(
                 'children' => array(
-                    'properties' => array(
-                        'id'
-                    ),
                     'application' => array(
                         'properties' => array(
                             'id'

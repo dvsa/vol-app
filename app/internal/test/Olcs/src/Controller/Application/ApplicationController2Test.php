@@ -66,7 +66,7 @@ class ApplicationController2Test extends AbstractHttpControllerTestCase
         $params->expects($this->once())
             ->method('fromRoute')
             ->with('application')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
         $params->expects($this->any())->method('fromQuery')
             ->will(
@@ -126,7 +126,6 @@ class ApplicationController2Test extends AbstractHttpControllerTestCase
         $mockScriptService = $this->getMock('\stdClass', array('loadFiles'));
 
         $sm = \OlcsTest\Bootstrap::getServiceManager();
-        $sm->setAllowOverride(true);
         $sm->setService('Entity\Application', $mockApplicationService);
         $sm->setService('Script', $mockScriptService);
 
