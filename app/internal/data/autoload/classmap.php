@@ -581,4 +581,11 @@ return array(
     'SelfServe\Form\Model\Form\LicenceNotes' => false,
     'Common\Form\Model\Form\LicenceNotes' => false,
     'Common\Exception\DataServiceException' => $rootPath . '/vendor/olcs/OlcsCommon/Common/src/Common/Exception/DataServiceException.php',
+    'Zend\EventManager\EventManagerAwareTrait' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/EventManager/EventManagerAwareTrait.php',
+    'Common\Service\Olcs\Service\Data\CasesOlcsService' => false,
+    'Zend\I18n\View\Helper\DateFormat' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/I18n/View/Helper/DateFormat.php',
+    'Common\Service\TextArea' => false,
+    'Common\Service\textarea' => false,
+    'Common\Service\\Common\Form\Elements\InputFilters\ActionButtonService' => false,
+    'Common\Service\\Zend\Form\Element\ButtonService' => false,
 );
