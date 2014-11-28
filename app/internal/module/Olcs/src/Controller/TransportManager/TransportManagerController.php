@@ -51,16 +51,25 @@ class TransportManagerController extends AbstractController
      */
     protected function getViewWithTm($variables = [])
     {
-        // implement later
-        $transportManager = null;
+        $tmId = $this->params()->fromRoute('transportManager');
+        if ($tmId) {
+            $transportManager = $this->getServiceLocator()->get('Entity\TransportManager')->getTmDetails($tmId);
+            $this->pageTitle = isset($transportManager['contactDetails']['person']['forename']) ?
+                $transportManager['contactDetails']['person']['forename'] . ' ': '';
+            $this->pageTitle .= isset($transportManager['contactDetails']['person']['familyName']) ?
+                $transportManager['contactDetails']['person']['familyName'] : '';
+
+        } else {
+            $transportManager = null;
+            $this->pageTitle =
+                $this->getServiceLocator()
+                ->get('translator')->translate('internal-transport-manager-new-transport-manager');
+        }
 
         $variables['transportManager'] = $transportManager;
         $variables['section'] = $this->section;
 
         $view = $this->getView($variables);
-
-        // implement later
-        $this->pageTitle = 'Dave Watson';
 
         return $view;
     }

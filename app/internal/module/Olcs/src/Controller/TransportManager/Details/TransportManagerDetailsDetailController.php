@@ -21,7 +21,12 @@ class TransportManagerDetailsDetailController extends AbstractTransportManagerDe
      * @var string
      */
     protected $section = 'details-details';
-    
+
+    /**
+     * @var bool
+     */
+    protected $saved = false;
+
     /**
      * Index action
      *
@@ -30,26 +35,45 @@ class TransportManagerDetailsDetailController extends AbstractTransportManagerDe
     public function indexAction()
     {
         $tmId = $this->params()->fromRoute('transportManager');
-        
+
         if ($this->isButtonPressed('cancel')) {
             $this->flashMessenger()->addSuccessMessage('Your changes have been discarded');
             return $this->redirectToRoute('transport-manager/details', ['transportManager' => $tmId]);
         }
-        
+
         $form = $this->getForm('TransportManager');
         if (!$this->getRequest()->isPost()) {
-            $tmData = $this->getServiceLocator()->get('Entity\TransportManager')->getTmDetails($tmId);
-            $data = $this->formatDataForForm($tmData, $tmId);
-            $form->setData($data);
+            // need to populate form with original data if we are in the edit mode or user pressed cancel
+            $form = $this->populateFormWithData($form, $tmId);
         }
 
         $this->formPost($form, 'processSave');
+
+        if ($this->saved) {
+            // need to re-populate form again, if data was saved, to avoid version conflict
+            $form = $this->populateFormWithData($form, $tmId);
+        }
 
         $view = $this->getViewWithTm(['form' => $form]);
         $view->setTemplate('transport-manager/details/tm-details');
         return $this->renderView($view);
     }
-    
+
+    /**
+     * Populate form with original data
+     *
+     * @param Zend\Form\Form
+     * @param int $tmId
+     * @return Zend\Form\Form
+     */
+    protected function populateFormWithData($form, $tmId)
+    {
+        $tmData = $this->getServiceLocator()->get('Entity\TransportManager')->getTmDetails($tmId);
+        $data = $this->formatDataForForm($tmData, $tmId);
+        $form->setData($data);
+        return $form;
+    }
+
     /**
      * Format data for form
      *
@@ -71,9 +95,9 @@ class TransportManagerDetailsDetailController extends AbstractTransportManagerDe
             $data['contactDetails']['contactType']['id'] == ContactDetailsEntityService::CONTACT_TYPE_TRANSPORT_MANAGER
             ) {
 
-            $tmDetails['contactedTypeId'] =
+            $tmDetails['contactDetailsId'] =
                isset($data['contactDetails']['id']) ? $data['contactDetails']['id'] : '';
-            $tmDetails['contactedTypeVersion'] =
+            $tmDetails['contactDetailsVersion'] =
                isset($data['contactDetails']['version']) ? $data['contactDetails']['version'] : '';
             $tmDetails['emailAddress'] =
                isset($data['contactDetails']['emailAddress']) ? $data['contactDetails']['emailAddress'] : '';
@@ -81,7 +105,7 @@ class TransportManagerDetailsDetailController extends AbstractTransportManagerDe
             if (isset($data['contactDetails']['person'])) {
                 $person = $data['contactDetails']['person'];
                 $tmDetails['personId'] = isset($person['id']) ? $person['id'] : '';
-                $tmDetails['personVersion'] = isset($person['id']) ? $person['id'] : '';
+                $tmDetails['personVersion'] = isset($person['id']) ? $person['version'] : '';
                 $tmDetails['title'] = isset($person['title']) ? $person['title'] : '';
                 $tmDetails['firstName'] = isset($person['forename']) ? $person['forename'] : '';
                 $tmDetails['lastName'] = isset($person['familyName']) ? $person['familyName'] : '';
@@ -101,14 +125,14 @@ class TransportManagerDetailsDetailController extends AbstractTransportManagerDe
                 $homeAddress['postcode'] = isset($address['postcode']) ? $address['postcode'] : '';
             }
         }
-        
+
         $formattedData = [
             'transport-manager-details' => $tmDetails,
             'home-address' => $homeAddress
         ];
         return $formattedData;
     }
-    
+
     /**
      * Save transport manager
      *
@@ -118,25 +142,19 @@ class TransportManagerDetailsDetailController extends AbstractTransportManagerDe
     protected function processSave($data)
     {
         $addressSaved = $this->getServiceLocator()->get('Entity\Address')->save($data['home-address']);
-        
         $addressId = isset($addressSaved['id']) ? $addressSaved['id'] : $data['home-address']['id'];
 
         $person = [
             'id' => $data['transport-manager-details']['personId'],
             'version' => $data['transport-manager-details']['personVersion'],
             'title' => $data['transport-manager-details']['title'],
-            'forename' => $data['transport-manager-details']['lastName'],
-            'familyName' => $data['transport-manager-details']['firstName'],
-            'birthDate' => sprintf(
-                '%s-%s-%s',
-                $data['transport-manager-details']['birthDate']['year'],
-                $data['transport-manager-details']['birthDate']['month'],
-                $data['transport-manager-details']['birthDate']['day']
-            ),
+            'forename' => $data['transport-manager-details']['firstName'],
+            'familyName' => $data['transport-manager-details']['lastName'],
+            'birthDate' => $data['transport-manager-details']['birthDate'],
             'birthPlace' => $data['transport-manager-details']['birthPlace']
         ];
         $personSaved = $this->getServiceLocator()->get('Entity\Person')->save($person);
-        $personId = isset($personSaved['id']) ? $personSaved['id'] : $data['personId'];
+        $personId = isset($personSaved['id']) ? $personSaved['id'] : $data['transport-manager-details']['personId'];
 
         $contactDetails = [
             'id' => $data['transport-manager-details']['contactDetailsId'],
@@ -150,16 +168,19 @@ class TransportManagerDetailsDetailController extends AbstractTransportManagerDe
         $contactDetailsSaved = $this->getServiceLocator()->get('Entity\ContactDetails')->save($contactDetails);
         $contactDetailsId = isset($contactDetailsSaved['id']) ?
             $contactDetailsSaved['id'] : $data['transport-manager-details']['contactDetailsId'];
-        
+
         $userField = isset($data['id']) ? 'modifiedBy' : 'createdBy';
-                
+
         $transportManager = [
+            'id' => $data['transport-manager-details']['id'],
+            'version' => $data['transport-manager-details']['version'],
             'tmType' => $data['transport-manager-details']['type'],
-            'contactDetail' => $contactDetailsId,
+            'contactDetails' => $contactDetailsId,
             $userField => $this->getLoggedInUser()
         ];
         $this->getServiceLocator()->get('Entity\TransportManager')->save($transportManager);
 
-        $this->flashMessenger()->addSuccessMessage('The transport manager has been updated successfully');   
+        $this->saved = true;
+        $this->flashMessenger()->addSuccessMessage('The transport manager has been updated successfully');
     }
 }

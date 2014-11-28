@@ -116,7 +116,7 @@ class TransportManagerDetails
      * @Form\Type("Hidden")
      */
     public $contactDetailsVersion = null;
-    
+
     /**
      * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
