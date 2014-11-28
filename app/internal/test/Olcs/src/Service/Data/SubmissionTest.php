@@ -1003,6 +1003,71 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                         ]
                     ]
                 ]
+            ],
+            [   // lead-tc-area section
+                [
+                    'caseId' => 24,
+                    'sectionId' => 'lead-tc-area',
+                    'sectionConfig' => [
+                        'service' => 'Cases',
+                        'filter' => true,
+                        'bundle' => ['some_bundle'],
+                    ]
+                ],
+                [
+                    'loadedCaseSectionData' => [
+                        'licence' => [
+                            'organisation' => [
+                                'leadTcArea' => [
+                                    'name' => 'North East of England'
+                                ]
+                            ]
+                        ]
+                    ],
+                    'expected' => [
+                        'leadTcAreaDescription' => 'North East of England',
+                    ]
+                ]
+            ],
+            [
+                // prohibition-history section
+                [
+                    'caseId' => 24,
+                    'sectionId' => 'prohibition-history',
+                    'sectionConfig' => [
+                        'service' => 'Prohibition',
+                        'filter' => true,
+                        'bundle' => ['some_bundle'],
+                    ]
+                ],
+                [
+                    'loadedCaseSectionData' => [
+                        0 => [
+                            'id' => 1,
+                            'version' => 2,
+                            'prohibitionDate' => '2012-03-10T00:00:00+0000',
+                            'clearedDate' => '2013-03-10T00:00:00+0000',
+                            'vrm' => 'AB123DEF',
+                            'isTrailer' => 1,
+                            'imposedAt' => 'foo bar',
+                            'prohibitionType' => [
+                                'description' => 'foo',
+                            ]
+                        ]
+                    ],
+                    'expected' => [
+                        0 => [
+                            'id' => 1,
+                            'version' => 2,
+                            'prohibitionDate' => '2012-03-10T00:00:00+0000',
+                            'clearedDate' => '2013-03-10T00:00:00+0000',
+                            'vehicle' => 'AB123DEF',
+                            'trailer' => 1,
+                            'imposedAt' => 'foo bar',
+                            'prohibitionType' => 'foo'
+                        ]
+                    ]
+                ]
             ]
         ];
     }

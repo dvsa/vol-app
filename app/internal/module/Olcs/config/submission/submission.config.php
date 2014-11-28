@@ -154,7 +154,6 @@ return array(
                                 'children' => array(
                                     'address' => array(
                                         'properties' => array(
-
                                             'addressLine1',
                                             'addressLine2',
                                             'addressLine3',
@@ -246,8 +245,34 @@ return array(
         ),
         'lead-tc-area'   => array(
             'section_type' => ['text'],
-            'data_field' => '',
+            'data_field' => 'leadTcAreaDescription',
             'allow_comments' => true,
+            'filter' => true,
+            'service' => 'Cases',
+            'bundle' => array(
+                'properties' => array(
+                    'licence'
+                ),
+                'children' => array(
+                    'licence' => array(
+                        'properties' => array(
+                            'organisation'
+                        ),
+                        'children' => array(
+                            'organisation' => array(
+                                'properties' => array(
+                                    'leadTcArea'
+                                ),
+                                'children' => array(
+                                    'leadTcArea' => array(
+                                        'name'
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
         ),
         'current-submissions'   => array(
             'section_type' => [],
@@ -314,10 +339,20 @@ return array(
             'data_field' => '',
             'allow_comments' => true,
         ),
-        'prohibition-history'   => array(
+        'prohibition-history' => array(
             'section_type' => ['list', 'text'],
             'data_field' => '',
             'allow_comments' => true,
+            'filter' => true,
+            'service' => 'Prohibition',
+            'identifier' => 'case',
+            'bundle' => array(
+                'children' => array(
+                    'prohibitionType' => array(
+                        'properties' => array('id', 'description')
+                    )
+                )
+            )
         ),
         'conviction-fpn-offence-history' => array(
             'section_type' => ['list', 'text'],
