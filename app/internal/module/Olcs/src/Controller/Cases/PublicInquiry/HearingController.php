@@ -228,7 +228,7 @@ class HearingController extends OlcsController\CrudAbstract
      */
     private function publish($hearingData)
     {
-        $service = $this->getServiceLocator()->get('Common\Service\Data\PublicationLink');
+        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\PublicationLink');
         $publicationLink = $service->createEmpty();
         $publicationLink->exchangeArray(
             array_merge((array)$publicationLink->getArrayCopy(), ['pi' => $hearingData['pi']])
