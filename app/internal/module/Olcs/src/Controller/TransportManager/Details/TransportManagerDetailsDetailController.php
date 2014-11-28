@@ -47,12 +47,15 @@ class TransportManagerDetailsDetailController extends AbstractTransportManagerDe
         }
 
         $form = $this->getForm('TransportManager');
-        if (!$this->getRequest()->isPost()) {
+        if (!$this->getRequest()->isPost() && $tmId) {
             // need to populate form with original data if we are in the edit mode or user pressed cancel
             $form = $this->populateFormWithData($form, $tmId);
         }
 
         $this->formPost($form, 'processSave');
+        if ($this->getResponse()->getStatusCode() == 302) {
+            return $this->getResponse();
+        }
 
         if ($this->saved) {
             // need to re-populate form again, if data was saved, to avoid version conflict

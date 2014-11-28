@@ -42,6 +42,7 @@ class TransportManagerDetailsDetailControllerTest extends AbstractHttpController
             ],
             'birthPlace' => 'Leeds',
             'type' => 'tm_t_B',
+            'status' => 'tm_st_A',
             'contactDetailsId' => 104,
             'contactDetailsVersion' => 4,
             'personId' => 77,
@@ -94,6 +95,9 @@ class TransportManagerDetailsDetailControllerTest extends AbstractHttpController
         ],
         'tmType' => [
             'id' => 'tm_t_B'
+        ],
+        'tmStatus' => [
+            'id' => 'tm_st_A'
         ]
     ];
 
@@ -216,6 +220,7 @@ class TransportManagerDetailsDetailControllerTest extends AbstractHttpController
                     'id' => $this->post['transport-manager-details']['id'],
                     'version' => $this->post['transport-manager-details']['version'],
                     'tmType' => $this->post['transport-manager-details']['type'],
+                    'tmStatus' => $this->post['transport-manager-details']['status'],
                     'contactDetails' => 1,
                     'modifiedBy' => ''
                 ]
@@ -329,4 +334,222 @@ class TransportManagerDetailsDetailControllerTest extends AbstractHttpController
         $response = $this->sut->indexAction();
         $this->assertInstanceOf('Zend\Http\Response', $response);
     }
+    
+    /**
+     * Test index action with add transport manager and cancel button pressed
+     *
+     * @group transportManagerDetails
+     */
+    public function testIndexActionWithAddTransportManagerAndCancelButtonPressed()
+    {
+        $this->setUpAction();
+
+        $this->sut
+            ->shouldReceive('params')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('fromRoute')
+                ->with('transportManager')
+                ->andReturn(false)
+                ->getMock()
+            );
+
+        $this->sut
+            ->shouldReceive('isButtonPressed')
+            ->andReturn(true);
+
+        $this->sut
+            ->shouldReceive('redirectToRoute')
+            ->with('operators/operators-params')
+            ->andReturn(new \Zend\Http\Response());
+
+        $response = $this->sut->indexAction();
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }
+    
+    /**
+     * Test index action with add transport manager
+     * 
+     * @group transportManagerDetails
+     */
+    public function testIndexActionWithAddTransportManager()
+    {
+        $this->setUpAction();
+
+        $this->sut
+            ->shouldReceive('params')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('fromRoute')
+                ->with('transportManager')
+                ->andReturn(false)
+                ->getMock()
+            );
+
+        $this->sut
+            ->shouldReceive('isButtonPressed')
+            ->andReturn(false);
+
+        $this->sut
+            ->shouldReceive('getRequest')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('isPost')
+                ->andReturn(false)
+                ->shouldReceive('getUri')
+                ->andReturn(
+                    m::mock()
+                    ->shouldReceive('getPath')
+                    ->andReturn('/')
+                    ->getMock()
+                )
+                ->shouldReceive('isXmlHttpRequest')
+                ->andReturn(false)
+                ->getMock()
+            );
+
+        $response = $this->sut->indexAction();
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+    }
+
+    /**
+     * Test index action with post add transport manager
+     *
+     * @group transportManagerDetails1
+     */
+    public function testIndexActionWithPostAddTransportManager()
+    {
+        $this->setUpAction();
+        $this->post['transport-manager-details']['id'] = '';
+
+        $this->sut
+            ->shouldReceive('params')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('fromRoute')
+                ->with('transportManager')
+                ->andReturn(1)
+                ->getMock()
+            );
+
+        $this->sut
+            ->shouldReceive('isButtonPressed')
+            ->andReturn(false);
+
+        $this->sut
+            ->shouldReceive('getRequest')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('isPost')
+                ->andReturn(true)
+                ->shouldReceive('getUri')
+                ->andReturn(
+                    m::mock()
+                    ->shouldReceive('getPath')
+                    ->andReturn('/')
+                    ->getMock()
+                )
+                ->shouldReceive('getPost')
+                ->andReturn($this->post)
+                ->shouldReceive('isXmlHttpRequest')
+                ->andReturn(false)
+                ->getMock()
+            );
+
+        $mockTmDetails = m::mock()
+            ->shouldReceive('save')
+            ->with(
+                [
+                    'id' => $this->post['transport-manager-details']['id'],
+                    'version' => $this->post['transport-manager-details']['version'],
+                    'tmType' => $this->post['transport-manager-details']['type'],
+                    'tmStatus' => $this->post['transport-manager-details']['status'],
+                    'contactDetails' => 1,
+                    'createdBy' => ''
+                ]
+            )
+            ->andReturn(['id' => 1])
+            ->getMock();
+
+        $mockRefDataService = m::mock('Common\Service\Data\RefData');
+        $mockRefDataService->shouldReceive('fetchListOptions')
+            ->with('tm_type', false)
+            ->andReturn(
+                ['tm_t_B' => 'Both', 'tm_t_E' => 'External', 'tm_t_I' => 'Internal']
+            );
+
+        $mockAddressService = m::mock()
+            ->shouldReceive('save')
+            ->with($this->post['home-address'])
+            ->andReturn(['id' => 1])
+            ->getMock();
+
+        $mockPersonService = m::mock()
+            ->shouldReceive('save')
+            ->with(
+                [
+                    'id' => $this->post['transport-manager-details']['personId'],
+                    'version' => $this->post['transport-manager-details']['personVersion'],
+                    'title' => $this->post['transport-manager-details']['title'],
+                    'forename' => $this->post['transport-manager-details']['firstName'],
+                    'familyName' => $this->post['transport-manager-details']['lastName'],
+                    'birthDate' =>
+                        $this->post['transport-manager-details']['birthDate']['year'] . '-' .
+                        $this->post['transport-manager-details']['birthDate']['month'] . '-' .
+                        $this->post['transport-manager-details']['birthDate']['day'],
+                    'birthPlace' => $this->post['transport-manager-details']['birthPlace']
+                ]
+            )
+            ->andReturn(['id' => 1])
+            ->getMock();
+
+        $mockContactDetailsService = m::mock()
+            ->shouldReceive('save')
+            ->with(
+                [
+                    'id' => $this->post['transport-manager-details']['contactDetailsId'],
+                    'version' => $this->post['transport-manager-details']['contactDetailsVersion'],
+                    'person' => 1,
+                    'address' => 1,
+                    'emailAddress' => $this->post['transport-manager-details']['emailAddress'],
+                    'contactType' => 'ct_tm'
+                ]
+            )
+            ->andReturn(['id' => 1])
+            ->getMock();
+
+        $this->sm->setService('Common\Service\Data\RefData', $mockRefDataService);
+        $this->sm->setService('Entity\TransportManager', $mockTmDetails);
+        $this->sm->setService('Entity\Address', $mockAddressService);
+        $this->sm->setService('Entity\Person', $mockPersonService);
+        $this->sm->setService('Entity\ContactDetails', $mockContactDetailsService);
+
+        $this->sut
+            ->shouldReceive('flashMessenger')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('addSuccessMessage')
+                ->with('The Transport Manager has been created successfully')
+                ->getMock()
+            );
+
+        $this->sut
+            ->shouldReceive('redirectToRoute')
+            ->with('transport-manager/details/details', ['transportManager' => 1])
+            ->andReturn(new \Zend\Http\Response());
+        
+        $this->sut
+            ->shouldReceive('getResponse')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('getStatusCode')
+                ->andReturn(302)
+                // fix this
+                //->shouldReceive()
+                //->andReturn(new \Zend\Http\Response())
+            );
+
+        $response = $this->sut->indexAction();
+        $this->assertInstanceOf('Zend\Http\Response', $response);
+    }    
 }
