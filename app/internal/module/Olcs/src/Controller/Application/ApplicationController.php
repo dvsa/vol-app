@@ -264,7 +264,7 @@ class ApplicationController extends AbstractController
     /**
      * Get the latest fee type for a licence
      *
-     * @todo Maybe move this so it can be re-used
+     * @to-do Maybe move this so it can be re-used
      *
      * @param int $licenceId
      * @return int

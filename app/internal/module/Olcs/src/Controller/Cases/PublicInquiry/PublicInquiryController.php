@@ -110,7 +110,7 @@ class PublicInquiryController extends OlcsController\CrudAbstract
                 'properties' => 'ALL',
             ],
             /**
-             * @todo [OLCS-5306] check this, it appears to be an invalid part of the bundle
+             * @to-do [OLCS-5306] check this, it appears to be an invalid part of the bundle
             'presidingTc' => [
                 'properties' =>
                     [
@@ -122,7 +122,7 @@ class PublicInquiryController extends OlcsController\CrudAbstract
             'reasons' => [
                 'properties' => 'ALL',
                 /**
-                 * @todo [OLCS-5306] check this, it appears to be an invalid part of the bundle
+                 * @to-do [OLCS-5306] check this, it appears to be an invalid part of the bundle
                 'children' => [
                     'reason' => [
                         'properties' => 'ALL',

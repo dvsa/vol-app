@@ -613,7 +613,7 @@ class ApplicationControllerTest extends MockeryTestCase
 
     /**
      * Helper method
-     * @todo when these helper methods are required in more than 1 place, we need to abstract them away
+     * @to-do when these helper methods are required in more than 1 place, we need to abstract them away
      */
     protected function mockRouteParam($name, $value)
     {
