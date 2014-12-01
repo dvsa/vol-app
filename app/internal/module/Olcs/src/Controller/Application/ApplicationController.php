@@ -53,8 +53,28 @@ class ApplicationController extends AbstractController
      */
     public function caseAction()
     {
+        /*echo $this->identifier;
+        die(print_r($this->params()->fromRoute(), 1));*/
+
         $view = new ViewModel();
-        $view->setTemplate('application/index');
+
+        $this->checkForCrudAction('case', [], 'case');
+
+        $params = [
+            'application' => $this->params()->fromRoute('application', null),
+            'page'    => $this->params()->fromRoute('page', 1),
+            'sort'    => $this->params()->fromRoute('sort', 'id'),
+            'order'   => $this->params()->fromRoute('order', 'desc'),
+            'limit'   => $this->params()->fromRoute('limit', 10),
+        ];
+
+        $results = $this->getServiceLocator()
+                        ->get('DataServiceManager')
+                        ->get('Olcs\Service\Data\Cases')->fetchList($params);
+
+        $view->{'table'} = $this->getTable('case', $results, $params);
+
+        $view->setTemplate('licence/cases');
 
         return $this->render($view);
     }
