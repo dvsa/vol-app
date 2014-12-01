@@ -415,7 +415,7 @@ class TransportManagerDetailsDetailControllerTest extends AbstractHttpController
     /**
      * Test index action with post add transport manager
      *
-     * @group transportManagerDetails1
+     * @group transportManagerDetails
      */
     public function testIndexActionWithPostAddTransportManager()
     {
@@ -538,16 +538,14 @@ class TransportManagerDetailsDetailControllerTest extends AbstractHttpController
             ->with('transport-manager/details/details', ['transportManager' => 1])
             ->andReturn(new \Zend\Http\Response());
         
+        $responseMock = m::mock('\Zend\Http\Response')
+            ->shouldReceive('getStatusCode')
+            ->andReturn(302)
+            ->getMock();
+        
         $this->sut
             ->shouldReceive('getResponse')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('getStatusCode')
-                ->andReturn(302)
-                // fix this
-                //->shouldReceive()
-                //->andReturn(new \Zend\Http\Response())
-            );
+            ->andReturn($responseMock);
 
         $response = $this->sut->indexAction();
         $this->assertInstanceOf('Zend\Http\Response', $response);
