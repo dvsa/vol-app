@@ -53,9 +53,6 @@ class ApplicationController extends AbstractController
      */
     public function caseAction()
     {
-        /*echo $this->identifier;
-        die(print_r($this->params()->fromRoute(), 1));*/
-
         $view = new ViewModel();
 
         $this->checkForCrudAction('case', [], 'case');
