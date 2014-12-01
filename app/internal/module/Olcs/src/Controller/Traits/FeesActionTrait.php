@@ -11,6 +11,7 @@ use Zend\View\Model\ViewModel;
 use Zend\Json\Json;
 use Common\Service\Listener\FeeListenerService;
 use Common\Service\Entity\FeeEntityService;
+use Common\Service\Entity\PaymentEntityService;
 
 /**
  * Fees action trait
@@ -178,15 +179,10 @@ trait FeesActionTrait
 
     public function payFeesAction()
     {
-        $ids = explode(',', $this->params('fee'));
-
-        $fees = [];
+        $fees = $this->getFeesFromParams();
         $maxAmount = 0;
-        foreach ($ids as $id) {
-            $fees[] = $fee = $this->getServiceLocator()
-                ->get('Entity\Fee')
-                ->getOverview($id);
 
+        foreach ($fees as $fee) {
             // bail early if any of the fees prove to be the wrong status
             if ($fee['feeStatus']['id'] !== FeeEntityService::STATUS_OUTSTANDING) {
                 $this->addErrorMessage('You can only pay outstanding fees');
@@ -424,15 +420,23 @@ trait FeesActionTrait
     {
         $client = $this->getCpmsRestClient();
 
+        $redirectUrl = $this->url()->fromRoute(
+            'licence/fees/fee_action',
+            ['action' => 'payment-result'],
+            ['force_canonical' => true],
+            true
+        );
+
         $params = [
+            // @TODO needs to be operator ID
             'customer_reference' => 'customer_ref',
+            // @TODO imploded list of fee IDs
             'sales_reference' => 'sales_ref',
             // @TODO product ref shouldn't have to come from a whitelist...
             'product_reference' => 'GVR_APPLICATION_FEE',
             'scope' => 'CARD',
             'disable_redirection' => true,
-            // @TODO dynamic URL here...
-            'redirect_uri' => 'http://olcs-internal/payment',
+            'redirect_uri' => $redirectUrl,
             'payment_data' => [
                 [
                     'amount' => $amount,
@@ -444,8 +448,15 @@ trait FeesActionTrait
 
         $apiResponse = $client->post('/api/payment/card', 'CARD', $params);
 
-        // @TODO if all good, create a pending payment record with the
-        // 'redirection_data' key
+        $payment = $this->getServiceLocator()
+            ->get('Entity\Payment')
+            ->save(
+                [
+                    // yes, this is really what the key is called...
+                    'guid' => $apiResponse['redirection_data'],
+                    'status' => PaymentEntityService::STATUS_OUTSTANDING
+                ]
+            );
 
         $view = new ViewModel(
             [
@@ -457,5 +468,72 @@ trait FeesActionTrait
         );
         $view->setTemplate('cpms/payment');
         return $this->renderLayout($view);
+    }
+
+    public function paymentResultAction()
+    {
+        $fees = $this->getFeesFromParams();
+
+        $reference = $this->getRequest()->getQuery('receipt_reference');
+
+        /*
+         * 1) Check what status we think this payment is currently in
+         */
+        $payment = $this->getServiceLocator()
+            ->get('Entity\Payment')
+            ->getDetails($reference);
+
+        if (!$payment || $payment['status']['id'] !== PaymentEntityService::STATUS_OUTSTANDING) {
+            // @TODO: talk to steve, what should we do here?
+            throw new \Exception("TODO");
+        }
+
+        /*
+         * 2) Let CPMS know the response from the payment gateway
+         *
+         * We have to bundle up the response data verbatim as it can
+         * vary per gateway implementation
+         */
+
+        $data = (array)$this->getRequest()->getQuery();
+
+        $apiResponse = $this->getCpmsRestClient()
+            ->put('/api/gateway/' . $reference . '/complete', 'CARD', $data);
+
+        // code "000" message "Success"
+
+        /**
+         * 3) Now actually look up the status of the transaction and
+         * update our payment record & fee(s) accordingly
+         */
+        $apiResponse = $this->getCpmsRestClient()
+            ->get('/api/payment/' . $reference, 'QUERY_TXN');
+
+        // @TODO nothing in the $apiResponse tells us whether the transaction
+        // was successful or not... so... er...
+
+        foreach ($fees as $fee) {
+            $data = ['feeStatus' => FeeEntityService::STATUS_PAID];
+            $this->getServiceLocator()
+                ->get('Entity\Fee')
+                ->forceUpdate($fee['id'], $data);
+        }
+        $this->addSuccessMessage('The fee(s) have been paid successfully');
+        return $this->redirectToList();
+    }
+
+    private function getFeesFromParams()
+    {
+        $ids = explode(',', $this->params('fee'));
+
+        $fees = [];
+
+        foreach ($ids as $id) {
+            $fees[] = $this->getServiceLocator()
+                ->get('Entity\Fee')
+                ->getOverview($id);
+        }
+
+        return $fees;
     }
 }
