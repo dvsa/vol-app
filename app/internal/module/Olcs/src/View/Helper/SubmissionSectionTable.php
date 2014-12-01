@@ -64,7 +64,7 @@ class SubmissionSectionTable extends AbstractHelper
 
         $data['table'] = $this->getTableBuilder()->buildTable(
             $tableConfig,
-            ['Results' => $data['data']],
+            ['Results' => $data['data']['tables'][$submissionSection]],
             $params,
             false
         );
