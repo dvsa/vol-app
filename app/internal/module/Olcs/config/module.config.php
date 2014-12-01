@@ -78,6 +78,8 @@ return array(
             'ApplicationController' => 'Olcs\Controller\Application\ApplicationController',
             'LicenceProcessingOverviewController' =>
             'Olcs\Controller\Licence\Processing\LicenceProcessingOverviewController',
+            'LicenceProcessingPublicationsController' =>
+             'Olcs\Controller\Licence\Processing\LicenceProcessingPublicationsController',
             'LicenceProcessingTasksController' => 'Olcs\Controller\Licence\Processing\LicenceProcessingTasksController',
             'LicenceProcessingNoteController' => 'Olcs\Controller\Licence\Processing\LicenceProcessingNoteController',
             'BusController' => 'Olcs\Controller\Bus\BusController',

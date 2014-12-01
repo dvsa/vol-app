@@ -973,6 +973,16 @@ $routes = [
                 ],
                 'may_terminate' => true,
                 'child_routes' => [
+                    'publications' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/publications[/:action][/:id]',
+                            'defaults' => [
+                                'controller' => 'LicenceProcessingPublicationsController',
+                                'action' => 'index'
+                            ]
+                        ],
+                    ],
                     'tasks' => [
                         'type' => 'segment',
                         'options' => [

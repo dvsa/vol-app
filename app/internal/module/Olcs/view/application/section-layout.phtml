@@ -13,7 +13,7 @@
                 <?php if (!$current && $details['enabled']) : ?>
                     <a href="<?php echo $this->url($details['route'], ['application' => $lvaId]); ?>">
                 <?php endif; ?>
-                <span><?php echo $this->translate('section.name.' . $reference); ?></span>
+                <?php echo $this->translate('section.name.' . $reference); ?>
                 <?php if (!$current && $details['enabled']) : ?>
                     </a>
                 <?php endif; ?>
