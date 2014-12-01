@@ -334,7 +334,7 @@ class TransportManagerDetailsDetailControllerTest extends AbstractHttpController
         $response = $this->sut->indexAction();
         $this->assertInstanceOf('Zend\Http\Response', $response);
     }
-    
+
     /**
      * Test index action with add transport manager and cancel button pressed
      *
@@ -366,7 +366,7 @@ class TransportManagerDetailsDetailControllerTest extends AbstractHttpController
         $response = $this->sut->indexAction();
         $this->assertInstanceOf('Zend\Http\Response', $response);
     }
-    
+
     /**
      * Test index action with add transport manager
      * 
@@ -537,17 +537,17 @@ class TransportManagerDetailsDetailControllerTest extends AbstractHttpController
             ->shouldReceive('redirectToRoute')
             ->with('transport-manager/details/details', ['transportManager' => 1])
             ->andReturn(new \Zend\Http\Response());
-        
+
         $responseMock = m::mock('\Zend\Http\Response')
             ->shouldReceive('getStatusCode')
             ->andReturn(302)
             ->getMock();
-        
+
         $this->sut
             ->shouldReceive('getResponse')
             ->andReturn($responseMock);
 
         $response = $this->sut->indexAction();
         $this->assertInstanceOf('Zend\Http\Response', $response);
-    }    
+    }
 }
