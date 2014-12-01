@@ -603,5 +603,8 @@ return array(
     'Zend\Filter\Word\CamelCaseToUnderscore' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Filter/Word/CamelCaseToUnderscore.php',
     'Olcs\Form\Model\Form\GenericConfirmation' => false,
     'Common\Service\\Common\Form\Elements\InputFilters\ActionButtonService' => false,
+    'Common\Service\submissionsections' => false,
+    'Common\Service\DynamicMultiCheckbox' => false,
+    'Common\Service\commonformelementdynamicmulticheckbox' => false,
     'Common\Service\\Zend\Form\Element\ButtonService' => false,
 );

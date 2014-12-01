@@ -72,19 +72,12 @@ class Pi extends AbstractData implements CloseableInterface
                 'piTypes' => [
                     'properties' => 'ALL',
                 ],
-                'presidingTc' => [
-                    'properties' =>
-                        [
-                            'id',
-                            'name'
-                        ]
-                ],
                 'reasons' => [
                     'properties' => 'ALL',
                     'children' => [
-                        'reason' => [
+                        /*'reason' => [
                             'properties' => 'ALL',
-                        ]
+                        ]*/
                     ],
                 ],
                 'piHearings' => array(

@@ -9,6 +9,7 @@ namespace OlcsTest\Controller\Application;
 
 use OlcsTest\Bootstrap;
 use CommonTest\Traits\MockDateTrait;
+use Olcs\TestHelpers\ControllerPluginManagerHelper;
 use Olcs\TestHelpers\Lva\Traits\LvaControllerTestTrait;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
@@ -54,9 +55,47 @@ class ApplicationControllerTest extends MockeryTestCase
     {
         $this->mockRender();
 
-        $view = $this->sut->caseAction();
+        $serviceName = 'Olcs\Service\Data\Cases';
+        $results = ['id' => '1'];
 
-        $this->assertEquals('application/index', $view->getTemplate());
+        $pluginManagerHelper = new ControllerPluginManagerHelper();
+        $mockPluginManager = $pluginManagerHelper->getMockPluginManager(['params' => 'Params', 'url' => 'Url']);
+
+        $params = [
+            'application' => 1,
+            'page'    => 1,
+            'sort'    => 'id',
+            'order'   => 'desc',
+            'limit'   => 10,
+            'url'     => $mockPluginManager->get('url')
+        ];
+
+        $mockPluginManager->get('params', '')->shouldReceive('fromRoute')->with('application', '')->andReturn(1);
+        $mockPluginManager->get('params', '')->shouldReceive('fromRoute')->with('page', 1)->andReturn(1);
+        $mockPluginManager->get('params', '')->shouldReceive('fromRoute')->with('sort', 'id')->andReturn('id');
+        $mockPluginManager->get('params', '')->shouldReceive('fromRoute')->with('order', 'desc')->andReturn('desc');
+        $mockPluginManager->get('params', '')->shouldReceive('fromRoute')->with('limit', 10)->andReturn(10);
+
+        // deals with getCrudActionFromPost
+        $mockPluginManager->get('params', '')->shouldReceive('fromPost')->with('action')->andReturn(null);
+
+        $dataService = m::mock($serviceName);
+        $dataService->shouldReceive('fetchList')->andReturn($results);
+
+        $serviceLocator = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
+        $serviceLocator->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
+        $serviceLocator->shouldReceive('get')->with($serviceName)->andReturn($dataService);
+
+        $tableBuilder = m::mock('Common\Service\Table\TableBuilder');
+        $tableBuilder->shouldReceive('buildTable')->with('case', $results, $params, false)->andReturn('tableContent');
+
+        $serviceLocator->shouldReceive('get')->with('Table')->andReturn($tableBuilder);
+
+        $sut = $this->sut;
+        $sut->setPluginManager($mockPluginManager);
+        $sut->setServiceLocator($serviceLocator);
+
+        $this->assertEquals('licence/cases', $sut->caseAction()->getTemplate());
     }
 
     /**
@@ -451,7 +490,7 @@ class ApplicationControllerTest extends MockeryTestCase
 
     /**
      * Helper method
-     * @todo when these helper methods are required in more than 1 place, we need to abstract them away
+     * @to-do when these helper methods are required in more than 1 place, we need to abstract them away
      */
     protected function mockRouteParam($name, $value)
     {
