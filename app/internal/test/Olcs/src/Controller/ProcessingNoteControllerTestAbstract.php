@@ -71,7 +71,7 @@ abstract class ProcessingNoteControllerTestAbstract extends AbstractHttpControll
 
     public function testIndexAction()
     {
-        $licenceId = 7;
+        $mainId = 7;
 
         $requestArray = array(
             'page' => 1,
@@ -95,9 +95,10 @@ abstract class ProcessingNoteControllerTestAbstract extends AbstractHttpControll
             ->method('getRequest')
             ->will($this->returnValue($mockRequest));
 
-        $this->getFromRoute(0, $this->mainIdRouteParam, $licenceId);
-        $this->getFromPost(1, 'action', null);
-        $this->getFromPost(2, 'id', null);
+        $this->getFromRoute(0, $this->mainIdRouteParam, $mainId);
+
+        $postMap = [ ['action', null], ['id', null] ];
+        $this->controller->method('getFromPost')->will($this->returnValueMap($postMap));
 
         $this->controller->expects($this->once())
             ->method('makeRestCall')
@@ -145,41 +146,6 @@ abstract class ProcessingNoteControllerTestAbstract extends AbstractHttpControll
     }
 
     /**
-     * Tests for a crud add redirect from index action
-     */
-    public function testIndexActionAddRedirect()
-    {
-        $licenceId = 7;
-        $action = 'Add';
-        $id = null;
-        $route = $this->controller->getRoutePrefix() . '/add-note';
-
-        $this->getFromRoute(0, $this->mainIdRouteParam, $licenceId);
-        $this->getFromPost(1, 'action', $action);
-        $this->getFromPost(2, 'id', $id);
-
-        $this->controller->expects($this->once())
-            ->method('redirectToRoute')
-            ->with(
-                $this->equalTo($route),
-                $this->equalTo(
-                    [
-                        'action' => strtolower($action),
-                        'licence' => $licenceId,
-                        'noteType' => 'note_t_lic',
-                        'linkedId' => $licenceId,
-                        'case' => null
-
-                    ]
-                ),
-                $this->equalTo([]),
-                $this->equalTo(true)
-            );
-
-        $this->controller->indexAction();
-    }
-
-    /**
      * Tests for a crud edit/delete redirect from index action
      *
      * @dataProvider indexActionModifyRedirectProvider
@@ -193,8 +159,9 @@ abstract class ProcessingNoteControllerTestAbstract extends AbstractHttpControll
         $route = $this->controller->getRoutePrefix() . '/modify-note';
 
         $this->getFromRoute(0, $this->mainIdRouteParam, $licenceId);
-        $this->getFromPost(1, 'action', $action);
-        $this->getFromPost(2, 'id', $id);
+
+        $postMap = [ ['action', $action], ['id', $id] ];
+        $this->controller->method('getFromPost')->will($this->returnValueMap($postMap));
 
         $this->controller->expects($this->once())
             ->method('redirectToRoute')
@@ -213,38 +180,6 @@ abstract class ProcessingNoteControllerTestAbstract extends AbstractHttpControll
         return [
             ['Edit', 'Delete']
         ];
-    }
-
-    public function testAddAction()
-    {
-        $mainId   = 7;
-        $noteType = 'note_t_lic';
-        $linkedId = 1;
-        $caseId   = null;
-
-        $routeParamMap = [
-            [$this->mainIdRouteParam, 'case', 'noteType', 'linkedId'],
-            [$mainId, $caseId, $noteType, $linkedId]
-        ];
-        $this->controller->method('getFromRoute')
-            ->will($this->returnValueMap($routeParamMap));
-
-        $this->controller->expects($this->once())
-            ->method('generateFormWithData');
-
-        $this->controller->expects($this->once())
-            ->method('getView')
-            ->will($this->returnValue($this->view));
-
-        $this->view->expects($this->once())
-            ->method('setTemplate')
-            ->with($this->controller->getTemplatePrefix() . '/notes/form');
-
-        $this->controller->expects($this->once())
-            ->method('renderView')
-            ->with($this->equalTo($this->view));
-
-        $this->controller->addAction();
     }
 
     public function testEditAction()
@@ -574,7 +509,7 @@ abstract class ProcessingNoteControllerTestAbstract extends AbstractHttpControll
      * @param mixed $with
      * @param mixed $will
      */
-    private function getFromRoute($at, $with, $will = false)
+    protected function getFromRoute($at, $with, $will = false)
     {
         if ($will) {
             $this->controller->expects($this->at($at))
@@ -595,7 +530,7 @@ abstract class ProcessingNoteControllerTestAbstract extends AbstractHttpControll
      * @param mixed $with
      * @param mixed $will
      */
-    private function getFromPost($at, $with, $will = false)
+    protected function getFromPost($at, $with, $will = false)
     {
         if ($will) {
             $this->controller->expects($this->at($at))

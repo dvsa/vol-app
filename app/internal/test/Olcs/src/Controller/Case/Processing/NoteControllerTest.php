@@ -260,7 +260,8 @@ class NoteControllerTest extends AbstractHttpControllerTestCase
                         'licence' => $licenceId,
                         'noteType' => 'note_t_case',
                         'linkedId' => $caseId,
-                        'case' => $caseId
+                        'case' => $caseId,
+                        'application' => null
 
                     ]
                 ),

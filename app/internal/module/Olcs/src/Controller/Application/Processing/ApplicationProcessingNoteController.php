@@ -44,14 +44,15 @@ class ApplicationProcessingNoteController extends AbstractApplicationProcessingC
     public function indexAction()
     {
         $applicationId = $this->getFromRoute('application');
-        $licenceId = $this->getServiceLocator()->get('Entity\Application')->getLicenceIdForApplication($applicationId);
+        $licenceId = $this->getServiceLocator()->get('Entity\Application')
+            ->getLicenceIdForApplication($applicationId);
 
         //unable to use checkForCrudAction() as add and edit/delete require different routes
         $action = $this->getFromPost('action');
         $id = $this->getFromPost('id');
 
         // 'getNotesList' will return a ViewModel or a HttpResponse(!)
-        $notesResult = $this->getNotesList($licenceId, $licenceId, 'note_t_app', $action, $id);
+        $notesResult = $this->getNotesList($licenceId, $licenceId, 'note_t_app', $action, $id, null, $applicationId);
 
         //if a ViewModel has been returned
         if ($notesResult instanceof ViewModel) {

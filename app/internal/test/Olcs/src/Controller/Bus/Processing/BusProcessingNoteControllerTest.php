@@ -143,7 +143,8 @@ class BusProcessingNoteControllerTest extends AbstractHttpControllerTestCase
                         'licence' => $licenceId,
                         'noteType' => 'note_t_bus',
                         'linkedId' => $linkedId,
-                        'case' => null
+                        'case' => null,
+                        'application' => null
                     ]
                 ),
                 $this->equalTo([]),

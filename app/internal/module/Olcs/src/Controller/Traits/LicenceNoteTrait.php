@@ -112,7 +112,8 @@ trait LicenceNoteTrait
         $noteType = 'note_t_lic',
         $action = null,
         $id = null,
-        $caseId = null
+        $caseId = null,
+        $applicationId = null
     ) {
         $routePrefix  = $this->getRoutePrefix();
 
@@ -125,7 +126,8 @@ trait LicenceNoteTrait
                         'noteType' => $noteType,
                         'linkedId' => $linkedId,
                         'licence' => $licenceId,
-                        'case' => $caseId
+                        'case' => $caseId,
+                        'application' => $applicationId
                     ],
                     [],
                     true
@@ -216,9 +218,9 @@ trait LicenceNoteTrait
     {
         $licenceId = $this->getFromRoute('licence');
         $caseId = $this->getFromRoute('case');
-        $applicationId = $this->getFromRoute('application');
         $noteType = $this->getFromRoute('noteType');
         $linkedId = $this->getFromRoute('linkedId');
+        $applicationId = $this->getFromRoute('application');
 
         //if this is from a case, we also need to populate a licence id, which won't be in the route
         if (!is_null($caseId)) {
@@ -229,14 +231,14 @@ trait LicenceNoteTrait
             }
         }
 
-        //same for application
-        if (!is_null($applicationId)) {
-            $application = $this->getApplication($applicationId);
+        // //same for application
+        // if (!is_null($applicationId)) {
+        //     $application = $this->getApplication($applicationId);
 
-            if (isset($application['licence']['id'])) {
-                $licenceId = $application['licence']['id'];
-            }
-        }
+        //     if (isset($application['licence']['id'])) {
+        //         $licenceId = $application['licence']['id'];
+        //     }
+        // }
 
         $form = $this->generateFormWithData(
             'licence-notes',
@@ -270,19 +272,19 @@ trait LicenceNoteTrait
         $data = array_merge($data, $data['main']);
         $data['createdBy'] = $user;
         $data['lastModifiedBy'] = $user;
-/*
+
         //checks which field to add in the linked id to
         $field = $this->getIdField($data['noteType']);
 
         //if this is a licence note this isn't needed, for other types of note it is expected
-        if (!empty($field)) {
+        if (!empty($field) && empty($data[$field['field']])) {
             if (!(int)$data['linkedId']) {
                 throw new BadRequestException('Unable to link your note to the correct record');
             }
 
             $data[$field['field']] = $data['linkedId'];
         }
-*/
+
         $result = $this->processAdd($data, 'Note');
 
         if (isset($result['id'])) {
