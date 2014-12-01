@@ -111,7 +111,11 @@ class ApplicationController extends AbstractController
             return $this->redirect()->toRouteAjax('lva-application', array('application' => $id));
         }
 
-        $form = $this->getServiceLocator()->get('Helper\Form')->createForm('GenericConfirmation');
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+
+        $form = $formHelper->createForm('GenericConfirmation');
+
+        $formHelper->setFormActionFromRequest($form, $request);
 
         $view = new ViewModel(array('form' => $form));
         $view->setTemplate('application/grant');
@@ -137,7 +141,11 @@ class ApplicationController extends AbstractController
             return $this->redirect()->toRouteAjax('lva-application', array('application' => $id));
         }
 
-        $form = $this->getServiceLocator()->get('Helper\Form')->createForm('GenericConfirmation');
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+
+        $form = $formHelper->createForm('GenericConfirmation');
+
+        $formHelper->setFormActionFromRequest($form, $request);
 
         $view = new ViewModel(array('form' => $form));
         $view->setTemplate('application/undo-grant');
