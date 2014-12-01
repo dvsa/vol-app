@@ -386,6 +386,86 @@ return array(
             'section_type' => ['list', 'text'],
             'data_field' => '',
             'allow_comments' => true,
+            'identifier' => 'case',
+            'data_field' => 'penaltyNote',
+            'service' => 'SeriousInfringement',
+            'allow_comments' => true,
+            'filter' => true,
+            'bundle' => array(
+                'properties' => array(
+                    'id',
+                    'penaltiesNote'
+                ),
+                'children' => array(
+                    'siCategory' => array(
+                        'properties' => array(
+                            'description'
+                        )
+                    ),
+                    'siCategoryType' => array(
+                        'properties' => array(
+                            'description'
+                        )
+                    ),
+                    'appliedPenalties' => array(
+                        'properties' => 'ALL',
+                        'children' => array(
+                            'siPenaltyType' => array(
+                                'properties' => array(
+                                    'id',
+                                    'description'
+                                )
+                            ),
+                            'seriousInfringement' => array(
+                                'properties' => array(
+                                    'id'
+                                )
+                            )
+                        )
+                    ),
+                    'imposedErrus' => array(
+                        'properties' => array(
+                            'finalDecisionDate',
+                            'startDate',
+                            'endDate',
+                            'executed'
+                        ),
+                        'children' => array(
+                            'siPenaltyImposedType' => array(
+                                'properties' => array(
+                                    'id',
+                                    'description'
+                                )
+                            )
+                        )
+                    ),
+                    'requestedErrus' => array(
+                        'properties' => 'ALL',
+                        'children' => array(
+                            'siPenaltyRequestedType' => array(
+                                'properties' => array(
+                                    'id',
+                                    'description'
+                                )
+                            )
+                        )
+                    ),
+                    'case' => array(
+                        'properties' => array(
+                            'id',
+                            'penaltiesNote',
+                            'erruOriginatingAuthority',
+                            'erruTransportUndertakingName',
+                            'erruVrm'
+                        )
+                    ),
+                    'memberStateCode' => array(
+                        'properties' => array(
+                            'countryDesc'
+                        )
+                    )
+                )
+            )
         ),
         'other-issues'   => array(
             'section_type' => [],

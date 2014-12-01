@@ -50,7 +50,7 @@ class SubmissionSectionDetails extends AbstractHelper
         'prohibition-history'               => 'SubmissionSectionTable',
         'conviction-fpn-offence-history'    => 'SubmissionSectionTable',
         'annual-test-history'               => 'SubmissionSectionOverview',
-        'penalties'                         => 'SubmissionSectionOverview',
+        'penalties'                         => 'SubmissionSectionMultipleTables',
         'other-issues'                      => 'SubmissionSectionOverview',
         'te-reports'                        => 'SubmissionSectionOverview',
         'site-plans'                        => 'SubmissionSectionOverview',
