@@ -29,7 +29,27 @@ class TransportManagerCaseController extends TransportManagerController
     public function indexAction()
     {
         $view = $this->getViewWithTm();
-        $view->setTemplate('transport-manager/index');
+
+        $this->checkForCrudAction('case', [], 'case');
+
+        $view = $this->getViewWithTm();
+
+        $params = [
+            'transportManager' => $this->params()->fromRoute('transportManager', null),
+            'page'    => $this->params()->fromRoute('page', 1),
+            'sort'    => $this->params()->fromRoute('sort', 'id'),
+            'order'   => $this->params()->fromRoute('order', 'desc'),
+            'limit'   => $this->params()->fromRoute('limit', 10),
+        ];
+
+        $results = $this->getServiceLocator()
+                        ->get('DataServiceManager')
+                        ->get('Olcs\Service\Data\Cases')->fetchList($params);
+
+        $view->{'table'} = $this->getTable('case', $results, $params);
+
+        $view->setTemplate('licence/cases');
+
         return $this->renderView($view);
     }
 }
