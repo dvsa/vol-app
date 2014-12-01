@@ -189,6 +189,11 @@ trait FeesActionTrait
                 return $this->redirectToList();
             }
 
+            if (!empty($fee['feePayments'])) {
+                $this->addErrorMessage('The fee selected has a pending payment. Please contact your adminstrator');
+                return $this->redirectToList();
+            }
+
             $maxAmount += $fee['amount'];
         }
 
@@ -227,7 +232,7 @@ trait FeesActionTrait
             if ($form->isValid()) {
 
                 if ($this->isCardPayment($data)) {
-                    return $this->initiateCpmsRequest($maxAmount);
+                    return $this->initiateCpmsRequest($maxAmount, $fees);
                 }
 
                 // @NOTE: not yet implemented, part of forthcoming stories
@@ -410,7 +415,7 @@ trait FeesActionTrait
         return (isset($data['details']['paymentType']) && in_array($data['details']['paymentType'], $this->cardTypes));
     }
 
-    private function initiateCpmsRequest($amount)
+    private function initiateCpmsRequest($amount, $fees)
     {
         $client = $this->getCpmsRestClient();
 
@@ -447,7 +452,7 @@ trait FeesActionTrait
 
         $apiResponse = $client->post('/api/payment/card', 'CARD', $params);
 
-        $this->getServiceLocator()
+        $payment = $this->getServiceLocator()
             ->get('Entity\Payment')
             ->save(
                 [
@@ -456,6 +461,18 @@ trait FeesActionTrait
                     'status' => PaymentEntityService::STATUS_OUTSTANDING
                 ]
             );
+
+        foreach ($fees as $fee) {
+            $this->getServiceLocator()
+                ->get('Entity\FeePayment')
+                ->save(
+                    [
+                        'payment' => $payment['id'],
+                        'fee' => $fee['id'],
+                        'feeValue' => $fee['amount']
+                    ]
+                );
+        }
 
         $view = new ViewModel(
             [
@@ -509,7 +526,7 @@ trait FeesActionTrait
             ->get('/api/payment/' . $reference, 'QUERY_TXN');
 
         // @TODO nothing in the $apiResponse tells us whether the transaction
-        // was successful or not... so... er...
+        // was successful or not, so, erm... we can't currently tell what happened
 
         foreach ($fees as $fee) {
             $data = [
