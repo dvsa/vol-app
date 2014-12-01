@@ -55,16 +55,4 @@ trait ApplicationControllerTrait
 
         return $doesBelong;
     }
-
-    /**
-     * Get type of licence data
-     *
-     * @return array
-     */
-    protected function getTypeOfLicenceData()
-    {
-        $licenceId = $this->getLicenceId($this->getApplicationId());
-
-        return $this->getServiceLocator()->get('Entity\Licence')->getTypeOfLicenceData($licenceId);
-    }
 }
