@@ -12,6 +12,7 @@ use Zend\Json\Json;
 use Common\Service\Listener\FeeListenerService;
 use Common\Service\Entity\FeeEntityService;
 use Common\Service\Entity\PaymentEntityService;
+use Common\Service\Entity\FeePaymentEntityService;
 
 /**
  * Fees action trait
@@ -21,8 +22,8 @@ use Common\Service\Entity\PaymentEntityService;
 trait FeesActionTrait
 {
     protected $cardTypes = [
-        'fpm_card_online',
-        'fpm_card_offline'
+        FeePaymentEntityService::METHOD_CARD_ONLINE,
+        FeePaymentEntityService::METHOD_CARD_OFFLINE
     ];
 
     abstract protected function renderLayout($view);
@@ -427,28 +428,33 @@ trait FeesActionTrait
             true
         );
 
+        $licence = $this->getLicence();
+
+        // @TODO product ref shouldn't have to come from a whitelist...
+        $productReference  = 'GVR_APPLICATION_FEE';
+        // @TODO CPMS rejects ints as 'missing', so we have to force a string...
+        $customerReference = (string)$licence['organisation']['id'];
+        $salesReference    = $this->params('fee');
+
         $params = [
-            // @TODO needs to be operator ID
-            'customer_reference' => 'customer_ref',
-            // @TODO imploded list of fee IDs
-            'sales_reference' => 'sales_ref',
-            // @TODO product ref shouldn't have to come from a whitelist...
-            'product_reference' => 'GVR_APPLICATION_FEE',
+            'customer_reference' => $customerReference,
+            'sales_reference' => $salesReference,
+            'product_reference' => $productReference,
             'scope' => 'CARD',
             'disable_redirection' => true,
             'redirect_uri' => $redirectUrl,
             'payment_data' => [
                 [
                     'amount' => $amount,
-                    'sales_reference' => 'sales_ref',
-                    'product_reference' => 'GVR_APPLICATION_FEE'
+                    'sales_reference' => $salesReference,
+                    'product_reference' => $productReference
                 ]
             ]
         ];
 
         $apiResponse = $client->post('/api/payment/card', 'CARD', $params);
 
-        $payment = $this->getServiceLocator()
+        $this->getServiceLocator()
             ->get('Entity\Payment')
             ->save(
                 [
@@ -513,11 +519,19 @@ trait FeesActionTrait
         // was successful or not... so... er...
 
         foreach ($fees as $fee) {
-            $data = ['feeStatus' => FeeEntityService::STATUS_PAID];
+            $data = [
+                'feeStatus' => FeeEntityService::STATUS_PAID,
+                'receivedDate' => $this->getServiceLocator()->get('Helper\Date')->getDate('Y-m-d H:i:s'),
+                'receiptNo' => $reference,
+                'paymentMethod' => FeePaymentEntityService::METHOD_CARD_OFFLINE,
+                'receivedAmount' => $fee['amount']
+            ];
+
             $this->getServiceLocator()
                 ->get('Entity\Fee')
                 ->forceUpdate($fee['id'], $data);
         }
+
         $this->addSuccessMessage('The fee(s) have been paid successfully');
         return $this->redirectToList();
     }
