@@ -150,7 +150,7 @@ class ApplicationController extends AbstractController
         $view = new ViewModel(array('form' => $form));
         $view->setTemplate('application/undo-grant');
 
-        return $this->render($view);
+        return $this->renderView($view, 'Undo grant application');
     }
 
     protected function renderLayout($view)
