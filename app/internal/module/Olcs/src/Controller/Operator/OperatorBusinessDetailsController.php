@@ -112,7 +112,7 @@ class OperatorBusinessDetailsController extends OperatorController
         }
 
         $view = $this->getViewWithOrganisation(['form' => $form]);
-        $view->setTemplate('operator/business-details/index');
+        $view->setTemplate('form-simple');
         return $this->renderView($view);
     }
 
@@ -194,7 +194,7 @@ class OperatorBusinessDetailsController extends OperatorController
 
     /**
      * Save form
-     * 
+     *
      * @param Zend\Form\Form $form
      * @param strring $action
      * @return mixed

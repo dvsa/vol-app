@@ -8,7 +8,6 @@
 namespace Olcs\Controller\Traits;
 
 use Zend\View\Model\ViewModel;
-use Zend\Json\Json;
 use Common\Service\Listener\FeeListenerService;
 use Common\Service\Entity\FeeEntityService;
 
@@ -398,13 +397,7 @@ trait FeesActionTrait
             $params = ['application' => $applicationId];
         }
 
-        if ($this->getRequest()->isXmlHttpRequest()) {
-            $data = ['status' => 302, 'location' => $this->url()->fromRoute($route, $params)];
-            $this->getResponse()->getHeaders()->addHeaders(['Content-Type' => 'application/json']);
-            $this->getResponse()->setContent(Json::encode($data));
-            return $this->getResponse();
-        }
-        $this->redirect()->toRoute($route, $params);
+        return $this->redirect()->toRouteAjax($route, $params);
     }
 
     protected function processPayment($data)
