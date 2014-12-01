@@ -427,8 +427,6 @@ return array(
             'bundle' => array(
                 'properties' => array(
                     'id',
-                    'complainantForename',
-                    'complainantFamilyName',
                     'complaintDate',
                     'description',
                     'case'
@@ -438,6 +436,9 @@ return array(
                         'properties' => array(
                             'id'
                         )
+                    ),
+                    'complainantContactDetails' => array(
+                        'properties' => 'ALL'
                     )
                 )
             )

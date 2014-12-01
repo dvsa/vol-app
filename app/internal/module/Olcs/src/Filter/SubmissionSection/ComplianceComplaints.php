@@ -21,6 +21,20 @@ class ComplianceComplaints extends AbstractSubmissionSectionFilter
                 return strtotime($b['complaintDate']) - strtotime($a['complaintDate']);
             }
         );
-        return $data;
+
+        $dataToReturnArray = [];
+
+        foreach ($data as $complainant) {
+            $thisComplaint['id'] = $complainant['id'];
+            $thisComplaint['version'] = $complainant['version'];
+            $thisComplaint['complainantForename'] = $complainant['complainantContactDetails']['forename'];
+            $thisComplaint['complainantFamilyName'] = $complainant['complainantContactDetails']['familyName'];
+            $thisComplaint['description'] = $complainant['description'];
+            $thisComplaint['complaintDate'] = $complainant['complaintDate'];
+
+            $dataToReturnArray[] = $thisComplaint;
+        }
+
+        return $dataToReturnArray;
     }
 }
