@@ -433,9 +433,9 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
 
         $params = ['licence' => 123];
 
-        $mockRoute = $this->getMock('\stdClass', ['toRoute']);
+        $mockRoute = $this->getMock('\stdClass', ['toRouteAjax']);
         $mockRoute->expects($this->once())
-            ->method('toRoute')
+            ->method('toRouteAjax')
             ->with('licence/processing', $params)
             ->will($this->returnValue('mockResponse'));
 
@@ -514,9 +514,9 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
 
         $params = ['licence' => 1];
 
-        $mockRoute = $this->getMock('\stdClass', ['toRoute']);
+        $mockRoute = $this->getMock('\stdClass', ['toRouteAjax']);
         $mockRoute->expects($this->once())
-            ->method('toRoute')
+            ->method('toRouteAjax')
             ->with('licence/processing', $params)
             ->will($this->returnValue('mockResponse'));
 
@@ -633,9 +633,9 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
 
         $params = ['licence' => 123];
 
-        $mockRoute = $this->getMock('\stdClass', ['toRoute']);
+        $mockRoute = $this->getMock('\stdClass', ['toRouteAjax']);
         $mockRoute->expects($this->once())
-            ->method('toRoute')
+            ->method('toRouteAjax')
             ->with('licence/processing', $params)
             ->will($this->returnValue('mockResponse'));
 
@@ -705,9 +705,17 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
             ->method('isPost')
             ->will($this->returnValue(true));
 
-        $this->request->expects($this->any())
-            ->method('isXmlHttpRequest')
-            ->will($this->returnValue(true));
+        $params = [];
+
+        $mockRoute = $this->getMock('\stdClass', ['toRouteAjax']);
+        $mockRoute->expects($this->once())
+            ->method('toRouteAjax')
+            ->with('dashboard', $params)
+            ->will($this->returnValue('mockResponse'));
+
+        $this->controller->expects($this->any())
+            ->method('redirect')
+            ->will($this->returnValue($mockRoute));
 
         $this->controller->reassignAction();
     }
@@ -778,9 +786,17 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
             ->method('isPost')
             ->will($this->returnValue(true));
 
-        $this->request->expects($this->any())
-            ->method('isXmlHttpRequest')
-            ->will($this->returnValue(true));
+        $params = [];
+
+        $mockRoute = $this->getMock('\stdClass', ['toRouteAjax']);
+        $mockRoute->expects($this->once())
+            ->method('toRouteAjax')
+            ->with('dashboard', $params)
+            ->will($this->returnValue('mockResponse'));
+
+        $this->controller->expects($this->any())
+            ->method('redirect')
+            ->will($this->returnValue($mockRoute));
 
         $this->controller->editAction();
     }
@@ -904,9 +920,9 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
 
         $params = ['licence' => 123];
 
-        $mockRoute = $this->getMock('\stdClass', ['toRoute']);
+        $mockRoute = $this->getMock('\stdClass', ['toRouteAjax']);
         $mockRoute->expects($this->once())
-            ->method('toRoute')
+            ->method('toRouteAjax')
             ->with('licence/processing', $params)
             ->will($this->returnValue('mockResponse'));
 
@@ -979,9 +995,17 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
             ->method('isPost')
             ->will($this->returnValue(true));
 
-        $this->request->expects($this->any())
-            ->method('isXmlHttpRequest')
-            ->will($this->returnValue(true));
+        $params = [];
+
+        $mockRoute = $this->getMock('\stdClass', ['toRouteAjax']);
+        $mockRoute->expects($this->once())
+            ->method('toRouteAjax')
+            ->with('dashboard', $params)
+            ->will($this->returnValue('mockResponse'));
+
+        $this->controller->expects($this->any())
+            ->method('redirect')
+            ->will($this->returnValue($mockRoute));
 
         $this->controller->closeAction();
     }
@@ -1052,9 +1076,9 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
 
         $params = ['licence' => 123];
 
-        $mockRoute = $this->getMock('\stdClass', ['toRoute']);
+        $mockRoute = $this->getMock('\stdClass', ['toRouteAjax']);
         $mockRoute->expects($this->once())
-            ->method('toRoute')
+            ->method('toRouteAjax')
             ->with('licence/processing', $params)
             ->will($this->returnValue('mockResponse'));
 
