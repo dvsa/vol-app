@@ -320,7 +320,8 @@ return array(
             'Olcs\Filter\SubmissionSection\LinkedLicencesAppNumbers' =>
                 'Olcs\Filter\SubmissionSection\LinkedLicencesAppNumbers',
             'Olcs\Filter\SubmissionSection\LeadTcArea' => 'Olcs\Filter\SubmissionSection\LeadTcArea',
-            'Olcs\Filter\SubmissionSection\ProhibitionHistory' => 'Olcs\Filter\SubmissionSection\ProhibitionHistory'
+            'Olcs\Filter\SubmissionSection\ProhibitionHistory' => 'Olcs\Filter\SubmissionSection\ProhibitionHistory',
+            'Olcs\Filter\SubmissionSection\AnnualTestHistory' => 'Olcs\Filter\SubmissionSection\AnnualTestHistory'
         ],
         'aliases' => [
             'ComplianceComplaints' => 'Olcs\Filter\SubmissionSection\ComplianceComplaints',
@@ -333,7 +334,8 @@ return array(
             'LinkedLicencesAppNumbers' => 'Olcs\Filter\SubmissionSection\LinkedLicencesAppNumbers',
             'LinkedLicencesAppNumbers' => 'Olcs\Filter\SubmissionSection\LinkedLicencesAppNumbers',
             'LeadTcArea' => 'Olcs\Filter\SubmissionSection\LeadTcArea',
-            'ProhibitionHistory' => 'Olcs\Filter\SubmissionSection\ProhibitionHistory'
+            'ProhibitionHistory' => 'Olcs\Filter\SubmissionSection\ProhibitionHistory',
+            'AnnualTestHistory' => 'Olcs\Filter\SubmissionSection\AnnualTestHistory'
         ]
     ],
 );

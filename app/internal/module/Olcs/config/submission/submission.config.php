@@ -379,8 +379,13 @@ return array(
         ),
         'annual-test-history'   => array(
             'section_type' => ['text'],
-            'data_field' => '',
+            'data_field' => 'annualTestHistory',
+            'filter' => true,
             'allow_comments' => true,
+            'service' => 'Cases',
+            'bundle' => array(
+                'properties' => array('annualTestHistory')
+            ),
         ),
         'penalties'   => array(
             'section_type' => ['list', 'text'],
