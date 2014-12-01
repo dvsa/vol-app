@@ -6,7 +6,6 @@
 */
 namespace OlcsTest\Controller\Document;
 
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use Olcs\Controller\TransportManager\TransportManagerCaseController as Sut;
 use Olcs\TestHelpers\ControllerPluginManagerHelper;
 use Mockery as m;
