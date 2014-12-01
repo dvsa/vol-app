@@ -973,6 +973,16 @@ $routes = [
                 ],
                 'may_terminate' => true,
                 'child_routes' => [
+                    'publications' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/publications[/:action][/:id]',
+                            'defaults' => [
+                                'controller' => 'LicenceProcessingPublicationsController',
+                                'action' => 'index'
+                            ]
+                        ],
+                    ],
                     'tasks' => [
                         'type' => 'segment',
                         'options' => [
@@ -1086,6 +1096,16 @@ $routes = [
                     'defaults' => [
                         'controller' => 'OperatorLicencesApplicationsController',
                         'action' => 'index',
+                    ]
+                ]
+            ],
+            'new-application' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/new-application',
+                    'defaults' => [
+                        'controller' => 'OperatorController',
+                        'action' => 'newApplication',
                     ]
                 ]
             ],
