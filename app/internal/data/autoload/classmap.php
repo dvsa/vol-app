@@ -603,5 +603,5 @@ return array(
     'Common\Service\submissionsections' => false,
     'Common\Service\DynamicMultiCheckbox' => false,
     'Common\Service\commonformelementdynamicmulticheckbox' => false,
-    'Common\Service\\Common\Form\Elements\InputFilters\ActionButtonService' => false,
+    'Common\Service\\Zend\Form\Element\ButtonService' => false,
 );
