@@ -575,5 +575,12 @@ return array(
     'Olcs\Form\Model\Form\LicenceNotes' => false,
     'SelfServe\Form\Model\Form\LicenceNotes' => false,
     'Common\Form\Model\Form\LicenceNotes' => false,
+    'Olcs\Form\Model\Form\LicenceEditNotes' => false,
+    'SelfServe\Form\Model\Form\LicenceEditNotes' => false,
+    'Common\Form\Model\Form\LicenceEditNotes' => false,
+    'Zend\Mvc\Router\Exception\RuntimeException' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Mvc/Router/Exception/RuntimeException.php',
+    'Zend\Mvc\Exception\RuntimeException' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Mvc/Exception/RuntimeException.php',
+    'Zend\Mvc\Exception\ExceptionInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Mvc/Exception/ExceptionInterface.php',
+    'Zend\Mvc\Router\Exception\ExceptionInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Mvc/Router/Exception/ExceptionInterface.php',
     'Common\Service\\Zend\Form\Element\ButtonService' => false,
 );

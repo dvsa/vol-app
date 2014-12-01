@@ -231,15 +231,6 @@ trait LicenceNoteTrait
             }
         }
 
-        // //same for application
-        // if (!is_null($applicationId)) {
-        //     $application = $this->getApplication($applicationId);
-
-        //     if (isset($application['licence']['id'])) {
-        //         $licenceId = $application['licence']['id'];
-        //     }
-        // }
-
         $form = $this->generateFormWithData(
             'licence-notes',
             'processAddNotes',
@@ -253,7 +244,9 @@ trait LicenceNoteTrait
         );
 
         $view = $this->getView(['form' => $form]);
-        $view->setTemplate($this->getTemplatePrefix() . '/notes/form');
+        $view->setTemplate('form');
+
+        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
 
         return $this->renderView($view);
     }
@@ -327,6 +320,8 @@ trait LicenceNoteTrait
 
         $view = $this->getView(['form' => $form]);
         $view->setTemplate($this->getTemplatePrefix() . '/notes/form');
+
+        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
 
         return $this->renderView($view);
     }
