@@ -48,8 +48,6 @@ class ApplicationController extends AbstractController
      */
     public function caseAction()
     {
-        $view = new ViewModel();
-
         $this->checkForCrudAction('case', [], 'case');
 
         $params = [
@@ -61,11 +59,10 @@ class ApplicationController extends AbstractController
         ];
 
         $results = $this->getServiceLocator()
-                        ->get('DataServiceManager')
-                        ->get('Olcs\Service\Data\Cases')->fetchList($params);
+            ->get('DataServiceManager')
+            ->get('Olcs\Service\Data\Cases')->fetchList($params);
 
-        $view->{'table'} = $this->getTable('case', $results, $params);
-
+        $view = new ViewModel(['table' => $this->getTable('case', $results, $params)]);
         $view->setTemplate('licence/cases');
 
         return $this->render($view);
