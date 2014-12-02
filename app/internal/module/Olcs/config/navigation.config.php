@@ -184,22 +184,20 @@ return array(
                             'id' => 'case_hearings_appeals_public_inquiry',
                             'label' => 'Public Inquiry',
                             'route' => 'case_pi',
-                            'action' => '',
+                            'action' => 'details',
                             'use_route_match' => true,
                             'pages' => array(
                                 array(
                                     'id' => 'case_hearings_appeals_public_inquiry_add',
                                     'label' => 'internal-pi-hearing-add',
                                     'route' => 'case_pi_hearing',
-                                    'action' => 'add',
-                                    'use_route_match' => true
+                                    'action' => 'add'
                                 ),
                                 array(
                                     'id' => 'case_hearings_appeals_public_inquiry_edit',
                                     'label' => 'internal-pi-hearing-edit',
                                     'route' => 'case_pi_hearing',
-                                    'action' => 'edit',
-                                    'use_route_match' => true
+                                    'action' => 'edit'
                                 ),
                             ),
                         ),
