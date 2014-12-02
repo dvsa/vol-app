@@ -286,7 +286,7 @@ class TransportManagerDetailsDetailControllerTest extends AbstractHttpController
             ->andReturn(
                 m::mock()
                 ->shouldReceive('addSuccessMessage')
-                ->with('The transport manager has been updated successfully')
+                ->with('The Transport Manager has been updated successfully')
                 ->getMock()
             );
 

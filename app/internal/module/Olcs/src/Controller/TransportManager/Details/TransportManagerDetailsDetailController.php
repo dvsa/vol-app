@@ -199,7 +199,7 @@ class TransportManagerDetailsDetailController extends AbstractTransportManagerDe
         if ($action == 'add') {
             $message = 'The Transport Manager has been created successfully';
         } else {
-            $message = 'The Transport manager has been updated successfully';
+            $message = 'The Transport Manager has been updated successfully';
         }
         $this->flashMessenger()->addSuccessMessage($message);
         if ($action == 'add') {
