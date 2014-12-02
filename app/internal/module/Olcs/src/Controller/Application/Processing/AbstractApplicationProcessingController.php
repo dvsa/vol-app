@@ -1,21 +1,20 @@
 <?php
 
 /**
- * Abstract Licence Processing Controller
+ * Abstract Application Processing Controller
  */
-namespace Olcs\Controller\Licence\Processing;
+namespace Olcs\Controller\Application\Processing;
 
-use Olcs\Controller\Licence\LicenceController;
-use Olcs\Helper\LicenceProcessingHelper;
+use Olcs\Controller\Application\ApplicationController;
+use Olcs\Helper\ApplicationProcessingHelper;
 use Olcs\Controller\Traits\ProcessingControllerTrait;
 
 /**
- * Abstract Licence Processing Controller
+ * Abstract Application Processing Controller
  *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-abstract class AbstractLicenceProcessingController extends LicenceController
+abstract class AbstractApplicationProcessingController extends ApplicationController
 {
     use ProcessingControllerTrait;
 
@@ -25,26 +24,26 @@ abstract class AbstractLicenceProcessingController extends LicenceController
      *
      * @var string
      */
-    protected $pageLayout = 'licence';
+    protected $pageLayout = 'application';
 
-    protected $helperClass = '\Olcs\Helper\LicenceProcessingHelper';
+    protected $helperClass = '\Olcs\Helper\ApplicationProcessingHelper';
 
     protected function getNavigationConfig()
     {
-        $licence = $this->getLicence();
+        $application = $this->getApplication();
 
         return $this->getProcessingHelper()->getNavigation(
-            $licence['id'],
+            $application['id'],
             $this->section
         );
     }
 
     protected function getProcessingLayout($view, $variables)
     {
-        $layout = $this->getViewWithLicence(
+        $layout = $this->getViewWithApplication(
             array_merge($variables, (array)$view->getVariables())
         );
-        $layout->setTemplate('licence/processing/layout');
+        $layout->setTemplate('application/processing/layout');
 
         $layout->addChild($view, 'content');
 

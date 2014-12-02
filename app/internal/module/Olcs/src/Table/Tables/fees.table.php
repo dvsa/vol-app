@@ -22,7 +22,7 @@ return array(
     ),
     'columns' => array(
         array(
-            'title' => 'No',
+            'title' => 'Fee No.',
             'sort' => 'id',
             'name' => 'id',
             'formatter' => function ($row, $column, $serviceLocator) {
@@ -94,7 +94,7 @@ return array(
             'sort' => 'invoicedDate'
         ),
         array(
-            'title' => 'Receipt No',
+            'title' => 'Receipt No.',
             'name' => 'receiptNo',
             'sort' => 'receiptNo'
         ),
