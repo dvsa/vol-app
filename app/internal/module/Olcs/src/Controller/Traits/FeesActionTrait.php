@@ -427,11 +427,12 @@ trait FeesActionTrait
             true
         );
 
+        // @TODO doesn't yet work for applications
         $licence = $this->getLicence();
 
         // @TODO product ref shouldn't have to come from a whitelist...
         $productReference  = 'GVR_APPLICATION_FEE';
-        // @TODO CPMS rejects ints as 'missing', so we have to force a string...
+        // @NOTE CPMS rejects ints as 'missing', so we have to force a string...
         $customerReference = (string)$licence['organisation']['id'];
         $salesReference    = $this->params('fee');
 
@@ -517,33 +518,64 @@ trait FeesActionTrait
         $apiResponse = $this->getCpmsRestClient()
             ->put('/api/gateway/' . $reference . '/complete', 'CARD', $data);
 
-        // code "000" message "Success"
+        // @TODO handle an unexpected response here?
 
         /**
          * 3) Now actually look up the status of the transaction and
          * update our payment record & fee(s) accordingly
          */
+        $params = [
+            'required_fields' => [
+                'payment' => [
+                    //'created_on',
+                    'receipt_reference',
+                    //'scope',
+                    'total_amount',
+                    'payment_details',
+                    'payment_status',
+                    //'customer_reference',
+                    //'created_by'
+                ]
+            ]
+        ];
         $apiResponse = $this->getCpmsRestClient()
-            ->get('/api/payment/' . $reference, 'QUERY_TXN');
+            ->get('/api/payment/' . $reference, 'QUERY_TXN', $params);
 
-        // @TODO nothing in the $apiResponse tells us whether the transaction
-        // was successful or not, so, erm... we can't currently tell what happened
+        // @TODO stick these statuses in constants somewhere
+        switch ($apiResponse['payment_status']['code']) {
+            case 801:
+                foreach ($fees as $fee) {
+                    $data = [
+                        'feeStatus' => FeeEntityService::STATUS_PAID,
+                        'receivedDate' => $this->getServiceLocator()->get('Helper\Date')->getDate('Y-m-d H:i:s'),
+                        'receiptNo' => $reference,
+                        'paymentMethod' => FeePaymentEntityService::METHOD_CARD_OFFLINE,
+                        'receivedAmount' => $fee['amount']
+                    ];
 
-        foreach ($fees as $fee) {
-            $data = [
-                'feeStatus' => FeeEntityService::STATUS_PAID,
-                'receivedDate' => $this->getServiceLocator()->get('Helper\Date')->getDate('Y-m-d H:i:s'),
-                'receiptNo' => $reference,
-                'paymentMethod' => FeePaymentEntityService::METHOD_CARD_OFFLINE,
-                'receivedAmount' => $fee['amount']
-            ];
+                    $this->getServiceLocator()
+                        ->get('Entity\Fee')
+                        ->forceUpdate($fee['id'], $data);
+                }
 
-            $this->getServiceLocator()
-                ->get('Entity\Fee')
-                ->forceUpdate($fee['id'], $data);
+                $this->getServiceLocator()
+                    ->get('Entity\Payment')
+                    ->forceUpdate($payment['id'], ['status' => PaymentEntityService::STATUS_PAID]);
+
+                $this->addSuccessMessage('The fee(s) have been paid successfully');
+                break;
+
+            case 807:
+                $this->getServiceLocator()
+                    ->get('Entity\Payment')
+                    ->forceUpdate($payment['id'], ['status' => PaymentEntityService::STATUS_CANCELLED]);
+                break;
+
+            case 802:
+                $this->addErrorMessage('The fee payment failed');
+                break;
         }
 
-        $this->addSuccessMessage('The fee(s) have been paid successfully');
         return $this->redirectToList();
     }
 
