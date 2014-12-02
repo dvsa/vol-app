@@ -490,9 +490,9 @@ trait FeesActionTrait
 
     public function paymentResultAction()
     {
-        $fees = $this->getFeesFromParams();
-
         $reference = $this->getRequest()->getQuery('receipt_reference');
+
+        $fees = $this->getFeesFromParams();
 
         /*
          * 1) Check what status we think this payment is currently in
@@ -501,9 +501,14 @@ trait FeesActionTrait
             ->get('Entity\Payment')
             ->getDetails($reference);
 
-        if (!$payment || $payment['status']['id'] !== PaymentEntityService::STATUS_OUTSTANDING) {
-            // @TODO: talk to steve, what should we do here?
-            throw new \Exception("TODO");
+        if (!$payment) {
+            $this->addErrorMessage('CPMS reference does not match valid payment record');
+            return $this->redirectToList();
+        }
+
+        if ($payment['status']['id'] !== PaymentEntityService::STATUS_OUTSTANDING) {
+            $this->addErrorMessage('Invalid payment state');
+            return $this->redirectToList();
         }
 
         /*
@@ -513,10 +518,12 @@ trait FeesActionTrait
          * vary per gateway implementation
          */
 
-        $data = (array)$this->getRequest()->getQuery();
-
         $apiResponse = $this->getCpmsRestClient()
-            ->put('/api/gateway/' . $reference . '/complete', 'CARD', $data);
+            ->put(
+                '/api/gateway/' . $reference . '/complete',
+                'CARD',
+                (array)$this->getRequest()->getQuery()
+            );
 
         // @TODO handle an unexpected response here?
 
@@ -528,10 +535,10 @@ trait FeesActionTrait
             'required_fields' => [
                 'payment' => [
                     //'created_on',
-                    'receipt_reference',
+                    //'receipt_reference',
                     //'scope',
-                    'total_amount',
-                    'payment_details',
+                    //'total_amount',
+                    //'payment_details',
                     'payment_status',
                     //'customer_reference',
                     //'created_by'
@@ -572,7 +579,16 @@ trait FeesActionTrait
                 break;
 
             case 802:
+                $this->getServiceLocator()
+                    ->get('Entity\Payment')
+                    ->forceUpdate($payment['id'], ['status' => PaymentEntityService::STATUS_FAILED]);
+
                 $this->addErrorMessage('The fee payment failed');
+                break;
+
+            default:
+                // @TODO log
+                $this->addErrorMessage('An unexpected error occured');
                 break;
         }
 
