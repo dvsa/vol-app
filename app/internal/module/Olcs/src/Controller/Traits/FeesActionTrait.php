@@ -21,11 +21,10 @@ use Common\Form\Elements\Validators\FeeAmountValidator;
  */
 trait FeesActionTrait
 {
-    protected $cardTypes = [
-        FeePaymentEntityService::METHOD_CARD_ONLINE,
-        FeePaymentEntityService::METHOD_CARD_OFFLINE
-    ];
-
+    /**
+     * Must be declared by implementing classes in an attempt to
+     * try and sanitise template nuances between apps & licences
+     */
     abstract protected function renderLayout($view);
 
     /**
@@ -112,9 +111,11 @@ trait FeesActionTrait
                     FeeEntityService::STATUS_CANCELLED
                 );
                 break;
+
             case 'all':
-                $feeStatus = "";
+                $feeStatus = '';
                 break;
+
             case 'current':
             default:
                 $feeStatus = sprintf(
@@ -155,7 +156,7 @@ trait FeesActionTrait
         $form = $this->setDataFeeForm($fee, $form);
 
         $this->processForm($form);
-        if ($this->getResponse()->getContent() !== "") {
+        if ($this->getResponse()->getContent() !== '') {
             return $this->getResponse();
         }
 
@@ -178,7 +179,7 @@ trait FeesActionTrait
         return $this->renderView($view, 'No # ' . $fee['id']);
     }
 
-    public function payFeesAction()
+    protected function commonPayFeesAction($lvaType, $licenceId)
     {
         $fees = $this->getFeesFromParams();
         $maxAmount = 0;
@@ -233,7 +234,7 @@ trait FeesActionTrait
             if ($form->isValid()) {
 
                 if ($this->isCardPayment($data)) {
-                    return $this->initiateCpmsRequest($maxAmount, $fees);
+                    return $this->initiateCpmsRequest($lvaType, $licenceId, $maxAmount, $fees);
                 }
 
                 // @NOTE: not yet implemented, part of forthcoming stories
@@ -416,29 +417,31 @@ trait FeesActionTrait
      */
     private function isCardPayment($data)
     {
-        return (isset($data['details']['paymentType']) && in_array($data['details']['paymentType'], $this->cardTypes));
+        return (isset($data['details']['paymentType']))
+            && ($data['details']['paymentType'] === FeePaymentEntityService::METHOD_CARD_OFFLINE);
     }
 
     /**
      * Kick off the CPMS payment process for a given amount
      * relating to a given array of fees
      *
-     * @param float $amount
-     * @param array $fees
+     * @param string $lvaType
+     * @param int    $licenceId
+     * @param float  $amount
+     * @param array  $fees
      */
-    private function initiateCpmsRequest($amount, $fees)
+    private function initiateCpmsRequest($lvaType, $licenceId, $amount, $fees)
     {
         $client = $this->getCpmsRestClient();
 
         $redirectUrl = $this->url()->fromRoute(
-            'licence/fees/fee_action',
+            $lvaType . '/fees/fee_action',
             ['action' => 'payment-result'],
             ['force_canonical' => true],
             true
         );
 
-        // @TODO doesn't yet work for applications
-        $licence = $this->getLicence();
+        $licence = $this->getLicence($licenceId);
 
         // @TODO product ref shouldn't have to come from a whitelist...
         $productReference  = 'GVR_APPLICATION_FEE';
@@ -498,7 +501,7 @@ trait FeesActionTrait
             ]
         );
         $view->setTemplate('cpms/payment');
-        return $this->renderLayout($view);
+        return $this->renderView($view);
     }
 
     /**
@@ -506,8 +509,8 @@ trait FeesActionTrait
      */
     public function paymentResultAction()
     {
-        $reference = $this->getRequest()->getQuery('receipt_reference');
-        $fees = $this->getFeesFromParams();
+        $fees           = $this->getFeesFromParams();
+        $reference      = $this->getRequest()->getQuery('receipt_reference');
         $paymentService = $this->getServiceLocator()->get('Entity\Payment');
 
         /**
@@ -515,7 +518,7 @@ trait FeesActionTrait
          */
         $payment = $paymentService->getDetails($reference);
 
-        if (!$payment) {
+        if ($payment === false) {
             $this->addErrorMessage('CPMS reference does not match valid payment record');
             return $this->redirectToList();
         }
