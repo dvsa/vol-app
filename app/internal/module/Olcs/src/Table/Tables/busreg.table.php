@@ -21,12 +21,7 @@ return array(
     ),
     'columns' => array(
         array(
-            'title' => '',
-            'width' => 'checkbox',
-            'format' => '{{[elements/radio]}}'
-        ),
-        array(
-            'title' => 'Reg No',
+            'title' => 'Reg No.',
             'formatter' => function ($data) {
                 return '<a href="' . $this->generateUrl(
                     array('action' => 'index', 'busRegId' => $data['id']),
@@ -37,12 +32,12 @@ return array(
             'sort' => 'regNo'
         ),
         array(
-            'title' => 'Var No',
+            'title' => 'Var No.',
             'name' => 'routeSeq',
             'sort' => 'routeSeq'
         ),
         array(
-            'title' => 'Service No',
+            'title' => 'Service No.',
             'formatter' => function ($data) {
                 $serviceNo = $data['serviceNo'];
                 $otherService = [];
@@ -66,7 +61,7 @@ return array(
             'sort' => 'serviceNo'
         ),
         array(
-            'title' => 'Date 1st Registered / Date Cancelled',
+            'title' => 'Date 1st registered / cancelled',
             'formatter' => function () {
                 return 'TBC / TBC';
             },
@@ -80,6 +75,11 @@ return array(
             'title' => 'Finishing point',
             'name' => 'finishPoint',
             'sort' => 'finishPoint'
+        ),
+        array(
+            'title' => '',
+            'width' => 'checkbox',
+            'format' => '{{[elements/radio]}}'
         )
     )
 );

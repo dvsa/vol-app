@@ -8,14 +8,8 @@
 namespace OlcsTest\Controller\Application;
 
 use OlcsTest\Bootstrap;
-use Common\Service\Entity\ApplicationEntityService;
-use Common\Service\Entity\LicenceEntityService;
-use Common\Service\Data\CategoryDataService;
-use Common\Service\Data\FeeTypeDataService;
-use Common\Service\Entity\FeeEntityService;
 use CommonTest\Traits\MockDateTrait;
 use Olcs\TestHelpers\ControllerPluginManagerHelper;
-
 use Olcs\TestHelpers\Lva\Traits\LvaControllerTestTrait;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
@@ -48,7 +42,7 @@ class ApplicationControllerTest extends MockeryTestCase
 
         $this->sut = $this->getMock(
             '\Olcs\Controller\Application\ApplicationController',
-            array('render', 'addErrorMessage', 'redirectToList')
+            array('render', 'renderView', 'addErrorMessage', 'redirectToList')
         );
         $this->sut->setServiceLocator($this->sm);
         $this->pluginManager = $this->sut->getPluginManager();
@@ -131,34 +125,26 @@ class ApplicationControllerTest extends MockeryTestCase
     /**
      * @group application_controller
      */
-    public function testProcessingAction()
-    {
-        $this->mockRender();
-
-        $view = $this->sut->processingAction();
-
-        $this->assertEquals('application/index', $view->getTemplate());
-    }
-
-    /**
-     * @group application_controller
-     */
     public function testGrantActionWithGet()
     {
         $id = 7;
 
         $this->mockRouteParam('application', $id);
 
-        $this->mockRender();
+        $this->mockRender('renderView');
 
         $request = $this->sut->getRequest();
         $request->setMethod('GET');
 
-        $formHelper = $this->getMock('\stdClass', ['createForm']);
+        $formHelper = $this->getMock('\stdClass', ['createForm', 'setFormActionFromRequest']);
         $formHelper->expects($this->once())
             ->method('createForm')
             ->with('GenericConfirmation')
             ->will($this->returnValue('FORM'));
+
+        $formHelper->expects($this->once())
+            ->method('setFormActionFromRequest');
+
         $this->sm->setService('Helper\Form', $formHelper);
 
         $view = $this->sut->grantAction();
@@ -186,7 +172,7 @@ class ApplicationControllerTest extends MockeryTestCase
 
         $redirect = $this->mockRedirect();
         $redirect->expects($this->once())
-            ->method('toRoute')
+            ->method('toRouteAjax')
             ->with('lva-application', array('application' => 7))
             ->will($this->returnValue('REDIRECT'));
 
@@ -199,14 +185,6 @@ class ApplicationControllerTest extends MockeryTestCase
     public function testGrantActionWithPost()
     {
         $id = 7;
-        $licenceId = 8;
-        $userId = 6;
-        $teamId = 1;
-        $taskId = 9;
-        $feeTypeId = 700;
-        $fixedValue = '0.00';
-        $fiveYearValue = '10.00';
-        $appDate = '2012-01-01';
         $date = date('Y-m-d');
         $this->mockDate($date);
 
@@ -218,128 +196,21 @@ class ApplicationControllerTest extends MockeryTestCase
         $request->setMethod('POST');
         $request->setPost(new \Zend\Stdlib\Parameters($post));
 
-        $mockApplicationService = $this->getMock(
-            '\stdClass',
-            [
-                'getLicenceIdForApplication',
-                'forceUpdate',
-                'getApplicationDate'
-            ]
-        );
-        $mockApplicationService->expects($this->once())
-            ->method('getLicenceIdForApplication')
-            ->with($id)
-            ->will($this->returnValue($licenceId));
-        $mockApplicationService->expects($this->once())
-            ->method('forceUpdate')
-            ->with(
-                $id,
-                array(
-                    'status' => ApplicationEntityService::APPLICATION_STATUS_GRANTED,
-                    'grantedDate' => $date
-                )
-            );
-        $this->sm->setService('Entity\Application', $mockApplicationService);
-
-        $mockLicenceService = $this->getMock('\stdClass', ['forceUpdate', 'getTypeOfLicenceData']);
-        $mockLicenceService->expects($this->once())
-            ->method('forceUpdate')
-            ->with(
-                $licenceId,
-                array(
-                    'status' => LicenceEntityService::LICENCE_STATUS_GRANTED,
-                    'grantedDate' => $date
-                )
-            );
-        $this->sm->setService('Entity\Licence', $mockLicenceService);
-
-        $mockUserService = $this->getMock('\stdClass', ['getCurrentUser']);
-        $mockUserService->expects($this->once())
-            ->method('getCurrentUser')
-            ->will($this->returnValue(array('id' => $userId, 'team' => array('id' => $teamId))));
-        $this->sm->setService('Entity\User', $mockUserService);
-
-        $expectedTask = array(
-            'category' => CategoryDataService::CATEGORY_APPLICATION,
-            'taskSubCategory' => CategoryDataService::TASK_SUB_CATEGORY_APPLICATION_GRANT_FEE_DUE,
-            'description' => 'Grant fee due',
-            'actionDate' => $date,
-            'assignedToUser' => $userId,
-            'assignedToTeam' => $teamId,
-            'isClosed' => 'N',
-            'urgent' => 'N',
-            'application' => $id,
-            'licence' => $licenceId,
-        );
-
-        $mockTaskService = $this->getMock('\stdClass', ['save']);
-        $mockTaskService->expects($this->once())
-            ->method('save')
-            ->with($expectedTask)
-            ->will($this->returnValue(array('id' => $taskId)));
-        $this->sm->setService('Entity\Task', $mockTaskService);
-
-        $mockApplicationService->expects($this->once())
-            ->method('getApplicationDate')
-            ->will($this->returnValue($appDate));
-
-        $typeOfLicenceData = array(
-            'goodsOrPsv' => LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE,
-            'licenceType' => LicenceEntityService::LICENCE_TYPE_STANDARD_NATIONAL,
-            'niFlag' => 'N'
-        );
-
-        $mockLicenceService->expects($this->once())
-            ->method('getTypeOfLicenceData')
-            ->with($licenceId)
-            ->will($this->returnValue($typeOfLicenceData));
-
-        $feeType = array(
-            'id' => $feeTypeId,
-            'fixedValue' => $fixedValue,
-            'fiveYearValue' => $fiveYearValue,
-            'description' => 'fee'
-        );
-
-        $mockFeeType = $this->getMock('\stdClass', ['getLatest']);
-        $mockFeeType->expects($this->once())
-            ->method('getLatest')
-            ->with(
-                FeeTypeDataService::FEE_TYPE_GRANT,
-                LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE,
-                LicenceEntityService::LICENCE_TYPE_STANDARD_NATIONAL,
-                $appDate,
-                false
-            )
-            ->will($this->returnValue($feeType));
-        $this->sm->setService('Data\FeeType', $mockFeeType);
-
-        $feeData = array(
-            'amount' => $fiveYearValue,
-            'application' => $id,
-            'licence' => $licenceId,
-            'invoicedDate' => $date,
-            'feeType' => $feeTypeId,
-            'description' => 'fee for application ' . $id,
-            'feeStatus' => FeeEntityService::STATUS_OUTSTANDING,
-            'task' => $taskId
-        );
-
-        $mockFeeService = $this->getMock('\stdClass', ['save']);
-        $mockFeeService->expects($this->once())
-            ->method('save')
-            ->with($feeData);
-        $this->sm->setService('Entity\Fee', $mockFeeService);
-
         $mockFlashMessenger = $this->getMock('\stdClass', ['addSuccessMessage']);
         $mockFlashMessenger->expects($this->once())
             ->method('addSuccessMessage')
             ->with('The application was granted successfully');
         $this->sm->setService('Helper\FlashMessenger', $mockFlashMessenger);
 
+        $mockProcessingApplication = $this->getMock('\stdClass', ['processGrantApplication']);
+        $mockProcessingApplication->expects($this->once())
+            ->method('processGrantApplication')
+            ->with($id);
+        $this->sm->setService('Processing\Application', $mockProcessingApplication);
+
         $redirect = $this->mockRedirect();
         $redirect->expects($this->once())
-            ->method('toRoute')
+            ->method('toRouteAjax')
             ->with('lva-application', array('application' => 7))
             ->will($this->returnValue('REDIRECT'));
 
@@ -355,16 +226,20 @@ class ApplicationControllerTest extends MockeryTestCase
 
         $this->mockRouteParam('application', $id);
 
-        $this->mockRender();
+        $this->mockRender('renderView');
 
         $request = $this->sut->getRequest();
         $request->setMethod('GET');
 
-        $formHelper = $this->getMock('\stdClass', ['createForm']);
+        $formHelper = $this->getMock('\stdClass', ['createForm', 'setFormActionFromRequest']);
         $formHelper->expects($this->once())
             ->method('createForm')
             ->with('GenericConfirmation')
             ->will($this->returnValue('FORM'));
+
+        $formHelper->expects($this->once())
+            ->method('setFormActionFromRequest');
+
         $this->sm->setService('Helper\Form', $formHelper);
 
         $view = $this->sut->undoGrantAction();
@@ -392,7 +267,7 @@ class ApplicationControllerTest extends MockeryTestCase
 
         $redirect = $this->mockRedirect();
         $redirect->expects($this->once())
-            ->method('toRoute')
+            ->method('toRouteAjax')
             ->with('lva-application', array('application' => 7))
             ->will($this->returnValue('REDIRECT'));
 
@@ -405,7 +280,6 @@ class ApplicationControllerTest extends MockeryTestCase
     public function testUndoGrantActionWithPost()
     {
         $id = 7;
-        $licenceId = 8;
         $post = array();
 
         $this->mockRouteParam('application', $id);
@@ -414,69 +288,21 @@ class ApplicationControllerTest extends MockeryTestCase
         $request->setMethod('POST');
         $request->setPost(new \Zend\Stdlib\Parameters($post));
 
-        $mockApplicationService = $this->getMock(
-            '\stdClass',
-            [
-                'getLicenceIdForApplication',
-                'forceUpdate',
-                'getApplicationDate'
-            ]
-        );
-        $mockApplicationService->expects($this->once())
-            ->method('getLicenceIdForApplication')
-            ->with($id)
-            ->will($this->returnValue($licenceId));
-        $mockApplicationService->expects($this->once())
-            ->method('forceUpdate')
-            ->with(
-                $id,
-                array(
-                    'status' => ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION,
-                    'grantedDate' => null
-                )
-            );
-        $this->sm->setService('Entity\Application', $mockApplicationService);
-
-        $mockLicenceService = $this->getMock('\stdClass', ['forceUpdate', 'getTypeOfLicenceData']);
-        $mockLicenceService->expects($this->once())
-            ->method('forceUpdate')
-            ->with(
-                $licenceId,
-                array(
-                    'status' => LicenceEntityService::LICENCE_STATUS_UNDER_CONSIDERATION,
-                    'grantedDate' => null
-                )
-            );
-        $this->sm->setService('Entity\Licence', $mockLicenceService);
-
-        $mockFeeService = $this->getMock('\stdClass', ['cancelForLicence']);
-        $mockFeeService->expects($this->once())
-            ->method('cancelForLicence')
-            ->with($licenceId);
-        $this->sm->setService('Entity\Fee', $mockFeeService);
-
-        $taskQuery = array(
-            'category' => CategoryDataService::CATEGORY_APPLICATION,
-            'taskSubCategory' => CategoryDataService::TASK_SUB_CATEGORY_APPLICATION_GRANT_FEE_DUE,
-            'licence' => $licenceId,
-            'application' => $id
-        );
-
-        $mockTaskService = $this->getMock('\stdClass', ['closeByQuery']);
-        $mockTaskService->expects($this->once())
-            ->method('closeByQuery')
-            ->with($taskQuery);
-        $this->sm->setService('Entity\Task', $mockTaskService);
-
         $mockFlashMessenger = $this->getMock('\stdClass', ['addSuccessMessage']);
         $mockFlashMessenger->expects($this->once())
             ->method('addSuccessMessage')
             ->with('The application grant has been undone successfully');
         $this->sm->setService('Helper\FlashMessenger', $mockFlashMessenger);
 
+        $mockProcessingApplication = $this->getMock('\stdClass', ['processUnGrantApplication']);
+        $mockProcessingApplication->expects($this->once())
+            ->method('processUnGrantApplication')
+            ->with($id);
+        $this->sm->setService('Processing\Application', $mockProcessingApplication);
+
         $redirect = $this->mockRedirect();
         $redirect->expects($this->once())
-            ->method('toRoute')
+            ->method('toRouteAjax')
             ->with('lva-application', array('application' => 7))
             ->will($this->returnValue('REDIRECT'));
 
@@ -680,10 +506,10 @@ class ApplicationControllerTest extends MockeryTestCase
     /**
      * Helper method
      */
-    protected function mockRender()
+    protected function mockRender($renderMethod = 'render')
     {
         $this->sut->expects($this->once())
-            ->method('render')
+            ->method($renderMethod)
             ->will(
                 $this->returnCallback(
                     function ($view) {
@@ -698,7 +524,7 @@ class ApplicationControllerTest extends MockeryTestCase
      */
     protected function mockRedirect()
     {
-        $mockRedirect = $this->getMock('\Zend\Mvc\Controller\Plugin\Redirect', array('toRoute'));
+        $mockRedirect = $this->getMock('\Zend\Mvc\Controller\Plugin\Redirect', array('toRoute', 'toRouteAjax'));
         $this->pluginManager->setService('Redirect', $mockRedirect);
         return $mockRedirect;
     }
