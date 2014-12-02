@@ -45,9 +45,9 @@ class SubmissionSectionOverview extends AbstractHelper
 
     public function render($submissionSection, $data)
     {
+        $data['data']['overview'] = isset($data['data']['overview']) ? $data['data']['overview'] : [];
         $viewTemplate = isset($this->typeViewMap[$submissionSection]) ?
             $this->typeViewMap[$submissionSection] : self::DEFAULT_VIEW;
-
-        return $this->getView()->render($viewTemplate, ['data' => $data]);
+       return $this->getView()->render($viewTemplate, ['data' => $data]);
     }
 }

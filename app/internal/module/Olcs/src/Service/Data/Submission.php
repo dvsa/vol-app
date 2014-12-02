@@ -216,7 +216,7 @@ class Submission extends AbstractData implements CloseableInterface
      */
     public function createSubmissionSection($caseId, $sectionId, $sectionConfig = array())
     {
-        $section['data'] = array();
+        $section = array();
 
         if (empty($sectionConfig)) {
             return [];

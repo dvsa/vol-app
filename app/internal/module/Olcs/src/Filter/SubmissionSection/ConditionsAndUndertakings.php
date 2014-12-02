@@ -15,7 +15,7 @@ class ConditionsAndUndertakings extends AbstractSubmissionSectionFilter
      */
     public function filter($data = array())
     {
-        $dataToReturnArray = array('conditions' => [], 'undertakings' => []);
+        $dataToReturnArray = array('tables' => array('conditions' => [], 'undertakings' => []));
         if (isset($data['conditionUndertakings']) && is_array($data['conditionUndertakings'])) {
 
             usort(
@@ -42,7 +42,7 @@ class ConditionsAndUndertakings extends AbstractSubmissionSectionFilter
                     $thisEntity['OcAddress'] = $entity['operatingCentre']['address'];
                 }
                 $tableName = $entity['conditionType']['id'] == 'cdt_und' ? 'undertakings' : 'conditions';
-                $dataToReturnArray[$tableName][] = $thisEntity;
+                $dataToReturnArray['tables'][$tableName][] = $thisEntity;
             }
         }
 

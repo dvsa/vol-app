@@ -51,11 +51,12 @@ class SubmissionSectionMultipleTables extends AbstractHelper
     {
         $html = '';
         $tableViewHelper = $this->getView()->plugin('SubmissionSectionTable');
-
-        foreach ($data['data'] as $subSection => $tableData) {
+        $tables = isset($data['data']['tables']) ?
+            $data['data']['tables'] : [];
+        foreach ($tables as $subSection => $tableData) {
             $html .= $tableViewHelper(
                 $subSection,
-                ['description' => $subSection, 'data' => $tableData]
+                ['description' => $subSection, 'data' => $data['data']]
             );
         }
 

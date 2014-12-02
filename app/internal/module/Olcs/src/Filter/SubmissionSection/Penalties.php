@@ -15,9 +15,8 @@ class Penalties extends AbstractSubmissionSectionFilter
      */
     public function filter($data = array())
     {
-        var_dump($data);exit;
         return array(
-            'outline' => $data['description']
+            'text' => $data['description']
         );
     }
 }
