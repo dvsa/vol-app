@@ -201,7 +201,7 @@ trait LicenceNoteTrait
             true
         );
 
-        $this->loadScripts(['forms/filter']);
+        $this->loadScripts(['forms/filter','table-actions']);
 
         $view = $this->getView(['table' => $table]);
         $view->setTemplate($this->getTemplatePrefix() . '/notes/index');
@@ -244,9 +244,7 @@ trait LicenceNoteTrait
         );
 
         $view = $this->getView(['form' => $form]);
-        $view->setTemplate('form');
-
-        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
+        $view->setTemplate($this->getTemplatePrefix() . '/notes/form');
 
         return $this->renderView($view);
     }
@@ -320,8 +318,6 @@ trait LicenceNoteTrait
 
         $view = $this->getView(['form' => $form]);
         $view->setTemplate($this->getTemplatePrefix() . '/notes/form');
-
-        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
 
         return $this->renderView($view);
     }
