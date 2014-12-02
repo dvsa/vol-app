@@ -6,7 +6,7 @@ ini_set('intl.default_locale', 'en_GB');
 date_default_timezone_set('Europe/London');
 set_error_handler(
     function ($errno, $errstr, $errfile, $errline) {
-        throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
+    	throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
     }
 );
 

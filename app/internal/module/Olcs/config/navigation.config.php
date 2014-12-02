@@ -324,7 +324,7 @@ return array(
                         ),
                         array(
                             'id' => 'licence_bus',
-                            'label' => 'Bus reg',
+                            'label' => 'Bus registrations',
                             'route' => 'licence/bus',
                             'use_route_match' => true,
                             'pages' => array (
