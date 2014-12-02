@@ -1,22 +1,23 @@
 <?php
 
 /**
- * Licence Processing Tasks Controller
+ * Application Processing Tasks Controller
  */
-namespace Olcs\Controller\Licence\Processing;
+namespace Olcs\Controller\Application\Processing;
 
 use Zend\View\Model\ViewModel;
 use \Olcs\Controller\Traits\TaskSearchTrait;
 
 /**
- * Licence Processing Tasks Controller
+ * Application Processing Tasks Controller
  *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class LicenceProcessingTasksController extends AbstractLicenceProcessingController
+class ApplicationProcessingTasksController extends AbstractApplicationProcessingController
 {
     use TaskSearchTrait;
+
+    protected $headerViewTemplate = 'application/header';
 
     /**
      * @var string
@@ -25,17 +26,20 @@ class LicenceProcessingTasksController extends AbstractLicenceProcessingControll
 
     public function indexAction()
     {
-        $redirect = $this->processTasksActions('licence');
+        $redirect = $this->processTasksActions('application');
         if ($redirect) {
             return $redirect;
         }
 
+        // we want all tasks related to the licence, not just this application
+        $applicationId = $this->params('application');
+        $licenceId = $this->getServiceLocator()->get('Entity\Application')->getLicenceIdForApplication($applicationId);
         $filters = $this->mapTaskFilters(
-            [
-                'licenceId'      => $this->getFromRoute('licence'),
+            array(
+                'licenceId'      => $licenceId,
                 'assignedToTeam' => '',
                 'assignedToUser' => ''
-            ]
+            )
         );
 
         $table = $this->getTaskTable($filters, false);
@@ -50,7 +54,7 @@ class LicenceProcessingTasksController extends AbstractLicenceProcessingControll
 
         $view = new ViewModel(['table' => $table->render()]);
 
-        $view->setTemplate('licence/processing/layout');
+        $view->setTemplate('application/processing/layout');
         $view->setTerminal($this->getRequest()->isXmlHttpRequest());
 
         return $this->renderView($view);

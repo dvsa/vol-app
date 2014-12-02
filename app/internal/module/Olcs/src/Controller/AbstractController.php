@@ -40,11 +40,13 @@ class AbstractController extends AbstractActionController
             $final = array();
         }
 
-        foreach ($response['Results'] as $result) {
-            $key = $result[$primaryKey];
-            $value = $result[$titleKey];
+        if (isset($response['Results']) && is_array($response['Results'])) {
+            foreach ($response['Results'] as $result) {
+                $key = $result[$primaryKey];
+                $value = $result[$titleKey];
 
-            $final[$key] = $value;
+                $final[$key] = $value;
+            }
         }
         return $final;
     }
