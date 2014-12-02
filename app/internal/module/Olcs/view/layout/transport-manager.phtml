@@ -1,4 +1,5 @@
-<div class="four-fiths--left">
+<div class="four-fifths--left">
+    <?php if (!$this->disable): ?>
     <?php
         echo $this->navigation('navigation')
                   ->menu($this->navigation()->findOneBy('id', 'transport_manager'))
@@ -6,12 +7,25 @@
                   ->setAddClassToListItem(true)
                   ->setPartial('layout/partials/tabs');
     ?>
+    <?php else: ?>
+        <ul class="horizontal-navigation">
+            <li class="horizontal-navigation__item current">
+                <span><?php echo $this->translate('internal-transport-manager-tm-details'); ?></span>
+            </li>    
+        </ul>
+    <?php endif; ?>
     <?php
         $verticalNavigation = null;
         if (substr($section, 0, 7) == 'details') {
-            $verticalNavigation = $this->navigation('navigation')->menu($this->navigation()->findOneBy('id', 'transport_manager_details'));
+            $verticalNavigation = $this->navigation('navigation')
+                ->menu($this->navigation()
+                ->findOneBy('id', 'transport_manager_details'));
+            $layout = 'layout/partials/vertical-navigation' . ($this->disable ? '-disabled' : '');
         } elseif (substr($section, 0, 10) == 'processing') {
-            $verticalNavigation = $this->navigation('navigation')->menu($this->navigation()->findOneBy('id', 'transport_manager_processing'));
+            $verticalNavigation = $this->navigation('navigation')
+                ->menu($this->navigation()
+                ->findOneBy('id', 'transport_manager_processing'));
+            $layout = 'layout/partials/vertical-navigation';
         }
     ?>
     <div class="content">
@@ -22,7 +36,7 @@
                 <h4><?php echo $this->translate('internal-navigation-transport-manager-' . $section); ?></h4>
                 <?php echo $verticalNavigation->setUlClass('verical-navigation')
                                               ->setAddClassToListItem(true)
-                                              ->setPartial('layout/partials/vertical-navigation');
+                                              ->setPartial($layout);
                 ?>
             </div>
         <?php endif; ?>

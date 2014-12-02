@@ -23,7 +23,9 @@ class TransportManagerCaseControllerTest extends \Mockery\Adapter\Phpunit\Mocker
         $results = ['id' => '1'];
 
         $pluginManagerHelper = new ControllerPluginManagerHelper();
-        $mockPluginManager = $pluginManagerHelper->getMockPluginManager(['params' => 'Params', 'url' => 'Url']);
+        $mockPluginManager = $pluginManagerHelper->getMockPluginManager(
+            ['params' => 'Params', 'url' => 'Url', 'translator' => 'Translator']
+        );
 
         $params = [
             'transportManager' => 1,
@@ -33,8 +35,9 @@ class TransportManagerCaseControllerTest extends \Mockery\Adapter\Phpunit\Mocker
             'limit'   => 10,
             'url'     => $mockPluginManager->get('url')
         ];
+        $mockPluginManager->get('params', '')->shouldReceive('fromRoute')->with('transportManager')->andReturn(null);
 
-        $mockPluginManager->get('params', '')->shouldReceive('fromRoute')->with('transportManager', '')->andReturn(1);
+        $mockPluginManager->get('params', '')->shouldReceive('fromRoute')->with('transportManager', null)->andReturn(1);
         $mockPluginManager->get('params', '')->shouldReceive('fromRoute')->with('page', 1)->andReturn(1);
         $mockPluginManager->get('params', '')->shouldReceive('fromRoute')->with('sort', 'id')->andReturn('id');
         $mockPluginManager->get('params', '')->shouldReceive('fromRoute')->with('order', 'desc')->andReturn('desc');
@@ -46,6 +49,16 @@ class TransportManagerCaseControllerTest extends \Mockery\Adapter\Phpunit\Mocker
         $dataService->shouldReceive('fetchList')->andReturn($results);
 
         $serviceLocator = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
+        $serviceLocator->shouldReceive('get')
+            ->with('translator')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('translate')
+                ->with('transportManager')
+                ->with('internal-transport-manager-new-transport-manager')
+                ->getMock()
+            );
+
         $serviceLocator->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
         $serviceLocator->shouldReceive('get')->with($serviceName)->andReturn($dataService);
 
