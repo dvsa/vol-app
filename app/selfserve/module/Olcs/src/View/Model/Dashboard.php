@@ -9,6 +9,7 @@ namespace Olcs\View\Model;
 
 use Common\View\AbstractViewModel;
 use Common\Service\Entity\LicenceEntityService;
+use Common\Service\Entity\ApplicationEntityService;
 
 /**
  * Dashboard View Model
@@ -81,10 +82,16 @@ class Dashboard extends AbstractViewModel
                     $newRow['licNo'] = $licence['licNo'];
                     $newRow['status'] = (string)$application['status']['id'];
 
-                    if ($application['isVariation']) {
-                        $this->variations[$newRow['id']] = $newRow;
-                    } else {
-                        $this->applications[$newRow['id']] = $newRow;
+                    $skipStatuses = [
+                        ApplicationEntityService::APPLICATION_STATUS_VALID
+                    ];
+
+                    if (!in_array($newRow['status'], $skipStatuses)) {
+                        if ($application['isVariation']) {
+                            $this->variations[$newRow['id']] = $newRow;
+                        } else {
+                            $this->applications[$newRow['id']] = $newRow;
+                        }
                     }
                 }
             }
