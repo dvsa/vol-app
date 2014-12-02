@@ -366,11 +366,14 @@ return array(
             'allow_comments' => true,
             'filter' => true,
             'bundle' => array(
-                'properties' => array(
-                    'id',
-                    'penaltiesNote'
-                ),
+                'properties' => 'All',
                 'children' => array(
+                    'case' => array(
+                        'properties' => array(
+                            'id',
+                            'penaltiesNote'
+                        )
+                    ),
                     'siCategory' => array(
                         'properties' => array(
                             'description'
