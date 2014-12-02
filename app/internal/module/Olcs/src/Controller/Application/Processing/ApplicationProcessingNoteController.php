@@ -56,7 +56,7 @@ class ApplicationProcessingNoteController extends AbstractApplicationProcessingC
 
         //if a ViewModel has been returned
         if ($notesResult instanceof ViewModel) {
-            $this->loadScripts(['table-actions']);
+            $this->loadScripts(['table-actions-notes']);
             return $this->renderView($notesResult);
         }
 

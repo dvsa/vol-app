@@ -246,9 +246,7 @@ trait LicenceNoteTrait
         $view = $this->getView(['form' => $form]);
         $view->setTemplate('form');
 
-        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
-
-        return $this->renderView($view);
+        return $this->renderView($view, 'Add note');
     }
 
     /**
@@ -321,9 +319,7 @@ trait LicenceNoteTrait
         $view = $this->getView(['form' => $form]);
         $view->setTemplate($this->getTemplatePrefix() . '/notes/form');
 
-        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
-
-        return $this->renderView($view);
+        return $this->renderView($view, 'Edit note');
     }
 
     /**
