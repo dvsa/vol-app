@@ -46,7 +46,7 @@ abstract class AbstractApplicationProcessingController extends ApplicationContro
         $layout = $this->getViewWithApplication(
             array_merge($variables, (array)$view->getVariables())
         );
-        $layout->setTemplate('application/processing/layout');
+        $layout->setTemplate('licence/processing/layout');
 
         $layout->addChild($view, 'content');
 
