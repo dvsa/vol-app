@@ -65,7 +65,7 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
     public function setUp()
     {
         $this->setApplicationConfig(
-            include __DIR__.'/../../../../../config/application.config.php'
+            include __DIR__ . '/../../../../../../config/application.config.php'
         );
         $this->controller = $this->getMock(
             '\Olcs\Controller\Licence\Processing\LicenceProcessingTasksController',

@@ -660,160 +660,6 @@ $routes = [
         ],
         'may_terminate' => true,
         'child_routes' => [
-            'details' => [
-                'type' => 'literal',
-                'options' => [
-                    'route' => '/details'
-                ],
-                'may_terminate' => false,
-                'child_routes' => [
-                    'overview' => [
-                        'type' => 'literal',
-                        'options' => [
-                            'route' => '/overview',
-                            'defaults' => [
-                                'controller' => 'LicenceDetailsOverviewController',
-                                'action' => 'index',
-                            ]
-                        ]
-                    ],
-                    'type_of_licence' => [
-                        'type' => 'literal',
-                        'options' => [
-                            'route' => '/type_of_licence',
-                            'defaults' => [
-                                'controller' => 'LicenceDetailsTypeOfLicenceController',
-                                'action' => 'index',
-                            ]
-                        ]
-                    ],
-                    'business_details' => [
-                        'type' => 'literal',
-                        'options' => [
-                            'route' => '/business_details',
-                            'defaults' => [
-                                'controller' => 'LicenceDetailsBusinessDetailsController',
-                                'action' => 'index',
-                            ]
-                        ]
-                    ],
-                    'address' => [
-                        'type' => 'literal',
-                        'options' => [
-                            'route' => '/addresses',
-                            'defaults' => [
-                                'controller' => 'LicenceDetailsAddressController',
-                                'action' => 'index',
-                            ]
-                        ]
-                    ],
-                    'people' => [
-                        'type' => 'literal',
-                        'options' => [
-                            'route' => '/people',
-                            'defaults' => [
-                                'controller' => 'LicenceDetailsPeopleController',
-                                'action' => 'index',
-                            ]
-                        ]
-                    ],
-                    'operating_centre' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => '/operating_centres[/:action][/:id]',
-                            'contraints' => [
-                                'id' => '[0-9]+'
-                            ],
-                            'defaults' => [
-                                'controller' => 'LicenceDetailsOperatingCentreController',
-                                'action' => 'index',
-                            ]
-                        ]
-                    ],
-                    'transport_manager' => [
-                        'type' => 'literal',
-                        'options' => [
-                            'route' => '/transport_managers',
-                            'defaults' => [
-                                'controller' => 'LicenceDetailsTransportManagerController',
-                                'action' => 'index',
-                            ]
-                        ]
-                    ],
-                    'vehicle' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => '/vehicles[/:action][/:id]',
-                            'contraints' => [
-                                'id' => '[0-9]+'
-                            ],
-                            'defaults' => [
-                                'controller' => 'LicenceDetailsVehicleController',
-                                'action' => 'index',
-                            ]
-                        ]
-                    ],
-                    'vehicle_psv' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => '/vehicles_psv[/:action][/:id]',
-                            'contraints' => [
-                                'id' => '[0-9]+'
-                            ],
-                            'defaults' => [
-                                'controller' => 'LicenceDetailsVehiclePsvController',
-                                'action' => 'index',
-                            ]
-                        ]
-                    ],
-                    'discs_psv' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => '/discs[/:action][/:id]',
-                            'contraints' => [
-                                'id' => '[0-9]+'
-                            ],
-                            'defaults' => [
-                                'controller' => 'LicenceDetailsDiscsPsvController',
-                                'action' => 'index',
-                            ]
-                        ]
-                    ],
-                    'safety' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => '/safety[/:action][/:id]',
-                            'contraints' => [
-                                'id' => '[0-9]+'
-                            ],
-                            'defaults' => [
-                                'controller' => 'LicenceDetailsSafetyController',
-                                'action' => 'index',
-                            ]
-                        ]
-                    ],
-                    'condition_undertaking' => [
-                        'type' => 'literal',
-                        'options' => [
-                            'route' => '/condition_undertaking',
-                            'defaults' => [
-                                'controller' => 'LicenceDetailsConditionUndertakingController',
-                                'action' => 'index',
-                            ]
-                        ]
-                    ],
-                    'taxi_phv' => [
-                        'type' => 'literal',
-                        'options' => [
-                            'route' => '/taxi_phv',
-                            'defaults' => [
-                                'controller' => 'LicenceDetailsTaxiPhvController',
-                                'action' => 'index',
-                            ]
-                        ]
-                    ]
-                ]
-            ],
             'bus' => [
                 'type' => 'literal',
                 'options' => [
@@ -1127,6 +973,16 @@ $routes = [
                 ],
                 'may_terminate' => true,
                 'child_routes' => [
+                    'publications' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/publications[/:action][/:id]',
+                            'defaults' => [
+                                'controller' => 'LicenceProcessingPublicationsController',
+                                'action' => 'index'
+                            ]
+                        ],
+                    ],
                     'tasks' => [
                         'type' => 'segment',
                         'options' => [
@@ -1190,7 +1046,7 @@ $routes = [
                         'options' => [
                             'route' => '/:action/:fee',
                             'constraints' => [
-                                'fee' => '[0-9-]+',
+                                'fee' => '([0-9]+,?)+',
                             ],
                         ],
                         'may_terminate' => true,
@@ -1240,6 +1096,16 @@ $routes = [
                     'defaults' => [
                         'controller' => 'OperatorLicencesApplicationsController',
                         'action' => 'index',
+                    ]
+                ]
+            ],
+            'new-application' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/new-application',
+                    'defaults' => [
+                        'controller' => 'OperatorController',
+                        'action' => 'newApplication',
                     ]
                 ]
             ],
@@ -1535,7 +1401,7 @@ $routes['lva-application']['child_routes'] = array_merge(
                     'options' => array(
                         'route' => ':action/:fee',
                         'constraints' => array(
-                            'fee' => '[0-9-]+',
+                            'fee' => '([0-9]+,?)+',
                         ),
                     ),
                     'may_terminate' => true,

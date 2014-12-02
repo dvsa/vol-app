@@ -32,23 +32,18 @@ class ApplicationController extends AbstractController
      */
     public function feesAction()
     {
-        $this->loadScripts(['forms/filter', 'table-actions']);
+        $response = $this->checkActionRedirect('lva-application');
+        if ($response) {
+            return $response;
+        }
 
-        $applicationId = $this->params()->fromRoute('application');
-        $licenceId = $this->getServiceLocator()->get('Entity\Application')
-            ->getLicenceIdForApplication($applicationId);
+        $licenceId = $this->getServiceLocator()
+            ->get('Entity\Application')
+            ->getLicenceIdForApplication(
+                $this->params()->fromRoute('application')
+            );
 
-        $status = $this->params()->fromQuery('status');
-        $filters = [
-            'status' => $status
-        ];
-
-        $table = $this->getFeesTable($licenceId, $status);
-
-        $view = new ViewModel(['table' => $table, 'form'  => $this->getFeeFilterForm($filters)]);
-        $view->setTemplate('licence/fees/layout');
-
-        return $this->render($view);
+        return $this->commonFeesAction($licenceId);
     }
 
     /**
@@ -59,7 +54,24 @@ class ApplicationController extends AbstractController
     public function caseAction()
     {
         $view = new ViewModel();
-        $view->setTemplate('application/index');
+
+        $this->checkForCrudAction('case', [], 'case');
+
+        $params = [
+            'application' => $this->params()->fromRoute('application', null),
+            'page'    => $this->params()->fromRoute('page', 1),
+            'sort'    => $this->params()->fromRoute('sort', 'id'),
+            'order'   => $this->params()->fromRoute('order', 'desc'),
+            'limit'   => $this->params()->fromRoute('limit', 10),
+        ];
+
+        $results = $this->getServiceLocator()
+                        ->get('DataServiceManager')
+                        ->get('Olcs\Service\Data\Cases')->fetchList($params);
+
+        $view->{'table'} = $this->getTable('case', $results, $params);
+
+        $view->setTemplate('licence/cases');
 
         return $this->render($view);
     }
@@ -256,7 +268,7 @@ class ApplicationController extends AbstractController
     /**
      * Get the latest fee type for a licence
      *
-     * @todo Maybe move this so it can be re-used
+     * @to-do Maybe move this so it can be re-used
      *
      * @param int $licenceId
      * @return int
@@ -274,5 +286,10 @@ class ApplicationController extends AbstractController
             $date,
             ($data['niFlag'] === 'Y')
         );
+    }
+
+    protected function renderLayout($view)
+    {
+        return $this->render($view);
     }
 }

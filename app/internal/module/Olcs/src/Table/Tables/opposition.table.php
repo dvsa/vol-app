@@ -91,7 +91,7 @@ return array(
             'sort' => 'isInTime'
         ),
         array(
-            'title' => 'Public inquiry',
+            'title' => 'Public Inquiry',
             'name' => 'isPublicInquiry',
             'sort' => 'isPublicInquiry'
         ),

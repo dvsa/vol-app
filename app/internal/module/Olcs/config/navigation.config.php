@@ -77,13 +77,6 @@ return array(
                             'use_route_match' => true,
                         ),
                         array(
-                            'id' => 'case_details_prohibitions',
-                            'label' => 'Prohibitions',
-                            'route' => 'case_prohibition',
-                            'action' => 'index',
-                            'use_route_match' => true,
-                        ),
-                        array(
                             'id' => 'case_details_penalties',
                             'label' => 'ERRU penalties',
                             'route' => 'case_penalty',
@@ -210,6 +203,13 @@ return array(
                                 ),
                             ),
                         ),
+                        array(
+                            'id' => 'case_details_prohibitions',
+                            'label' => 'Prohibitions',
+                            'route' => 'case_prohibition',
+                            'action' => 'index',
+                            'use_route_match' => true,
+                        )
                     )
                 ),
                 array(
@@ -477,6 +477,12 @@ return array(
                             'route' => 'licence/processing',
                             'use_route_match' => true,
                             'pages' => array(
+                                array(
+                                    'id' => 'licence_processing_publications',
+                                    'label' => 'internal-licence-processing-publications',
+                                    'route' => 'licence/processing/publications',
+                                    'use_route_match' => true,
+                                ),
                                 array(
                                     'id' => 'licence_processing_tasks',
                                     'label' => 'internal-licence-processing-tasks',

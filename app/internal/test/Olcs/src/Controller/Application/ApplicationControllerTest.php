@@ -7,7 +7,6 @@
  */
 namespace OlcsTest\Controller\Application;
 
-use PHPUnit_Framework_TestCase;
 use OlcsTest\Bootstrap;
 use Common\Service\Entity\ApplicationEntityService;
 use Common\Service\Entity\LicenceEntityService;
@@ -15,28 +14,42 @@ use Common\Service\Data\CategoryDataService;
 use Common\Service\Data\FeeTypeDataService;
 use Common\Service\Entity\FeeEntityService;
 use CommonTest\Traits\MockDateTrait;
+use Olcs\TestHelpers\ControllerPluginManagerHelper;
+
+use Olcs\TestHelpers\Lva\Traits\LvaControllerTestTrait;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Mockery as m;
 
 /**
  * Application Controller Test
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ApplicationControllerTest extends PHPUnit_Framework_TestCase
+class ApplicationControllerTest extends MockeryTestCase
 {
-    use MockDateTrait;
+    use LvaControllerTestTrait,
+        MockDateTrait;
 
-    private $sut;
-    private $sm;
     private $mockParams;
     private $mockRouteParams;
     private $pluginManager;
 
+    /**
+     * Required by trait
+     */
+    protected function getServiceManager()
+    {
+        return Bootstrap::getServiceManager();
+    }
+
     protected function setUp()
     {
         $this->sm = Bootstrap::getServiceManager();
-        $this->sm->setAllowOverride(true);
 
-        $this->sut = $this->getMock('\Olcs\Controller\Application\ApplicationController', array('render'));
+        $this->sut = $this->getMock(
+            '\Olcs\Controller\Application\ApplicationController',
+            array('render', 'addErrorMessage', 'redirectToList')
+        );
         $this->sut->setServiceLocator($this->sm);
         $this->pluginManager = $this->sut->getPluginManager();
     }
@@ -48,9 +61,47 @@ class ApplicationControllerTest extends PHPUnit_Framework_TestCase
     {
         $this->mockRender();
 
-        $view = $this->sut->caseAction();
+        $serviceName = 'Olcs\Service\Data\Cases';
+        $results = ['id' => '1'];
 
-        $this->assertEquals('application/index', $view->getTemplate());
+        $pluginManagerHelper = new ControllerPluginManagerHelper();
+        $mockPluginManager = $pluginManagerHelper->getMockPluginManager(['params' => 'Params', 'url' => 'Url']);
+
+        $params = [
+            'application' => 1,
+            'page'    => 1,
+            'sort'    => 'id',
+            'order'   => 'desc',
+            'limit'   => 10,
+            'url'     => $mockPluginManager->get('url')
+        ];
+
+        $mockPluginManager->get('params', '')->shouldReceive('fromRoute')->with('application', '')->andReturn(1);
+        $mockPluginManager->get('params', '')->shouldReceive('fromRoute')->with('page', 1)->andReturn(1);
+        $mockPluginManager->get('params', '')->shouldReceive('fromRoute')->with('sort', 'id')->andReturn('id');
+        $mockPluginManager->get('params', '')->shouldReceive('fromRoute')->with('order', 'desc')->andReturn('desc');
+        $mockPluginManager->get('params', '')->shouldReceive('fromRoute')->with('limit', 10)->andReturn(10);
+
+        // deals with getCrudActionFromPost
+        $mockPluginManager->get('params', '')->shouldReceive('fromPost')->with('action')->andReturn(null);
+
+        $dataService = m::mock($serviceName);
+        $dataService->shouldReceive('fetchList')->andReturn($results);
+
+        $serviceLocator = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
+        $serviceLocator->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
+        $serviceLocator->shouldReceive('get')->with($serviceName)->andReturn($dataService);
+
+        $tableBuilder = m::mock('Common\Service\Table\TableBuilder');
+        $tableBuilder->shouldReceive('buildTable')->with('case', $results, $params, false)->andReturn('tableContent');
+
+        $serviceLocator->shouldReceive('get')->with('Table')->andReturn($tableBuilder);
+
+        $sut = $this->sut;
+        $sut->setPluginManager($mockPluginManager);
+        $sut->setServiceLocator($serviceLocator);
+
+        $this->assertEquals('licence/cases', $sut->caseAction()->getTemplate());
     }
 
     /**
@@ -421,8 +472,175 @@ class ApplicationControllerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @group application_controller
+     */
+    public function testFeesListActionWithValidPostRedirectsCorrectly()
+    {
+        $id = 7;
+        $post = [
+            'id' => [1,2,3]
+        ];
+
+        $this->mockRouteParam('application', $id);
+
+        $request = $this->sut->getRequest();
+        $request->setMethod('POST');
+        $request->setPost(new \Zend\Stdlib\Parameters($post));
+
+        $routeParams = [
+            'action' => 'pay-fees',
+            'fee' => '1,2,3'
+        ];
+        $redirect = $this->mockRedirect();
+        $redirect->expects($this->once())
+            ->method('toRoute')
+            ->with('lva-application/fees/fee_action', $routeParams)
+            ->will($this->returnValue('REDIRECT'));
+
+        $this->assertEquals('REDIRECT', $this->sut->feesAction());
+    }
+
+    /**
+     * @group application_controller
+     */
+    public function testFeesListActionWithInvalidPostRedirectsCorrectly()
+    {
+        $id = 7;
+        $post = [];
+
+        $this->mockRouteParam('application', $id);
+
+        $request = $this->sut->getRequest();
+        $request->setMethod('POST');
+        $request->setPost(new \Zend\Stdlib\Parameters($post));
+
+        $this->sut->expects($this->once())
+            ->method('redirectToList')
+            ->will($this->returnValue('REDIRECT'));
+
+        $this->sut->expects($this->once())
+            ->method('addErrorMessage');
+
+        $this->assertEquals('REDIRECT', $this->sut->feesAction());
+    }
+
+    public function testPayFeesActionWithGet()
+    {
+        $this->mockController(
+            '\Olcs\Controller\Application\ApplicationController'
+        );
+
+        $validatorClosure = function ($input) {
+            $this->assertEquals(15.5, $input->getMax());
+            $this->assertEquals(true, $input->getInclusive());
+        };
+
+        $inputFilter = m::mock()
+            ->shouldReceive(['get' => 'details'])
+            ->andReturn(
+                m::mock()
+                ->shouldReceive(['get' => 'received'])
+                ->andReturn(
+                    m::mock()
+                    ->shouldReceive('getValidatorChain')
+                    ->andReturn(
+                        m::mock()
+                        ->shouldReceive('addValidator')
+                        ->andReturnUsing($validatorClosure)
+                        ->getMock()
+                    )
+                    ->getMock()
+                )
+                ->getMock()
+            )
+            ->getMock();
+
+        $form = m::mock()
+            ->shouldReceive('get')
+            ->with('details')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('get')
+                ->with('maxAmount')
+                ->andReturn(
+                    m::mock()
+                    ->shouldReceive('setValue')
+                    ->with('£15.50')
+                    ->getMock()
+                )
+                ->getMock()
+            )
+            ->shouldReceive('getInputFilter')
+            ->andReturn($inputFilter)
+            ->getMock();
+
+        $this->sut->shouldReceive('params')
+            ->with('fee')
+            ->andReturn('1,2')
+            ->shouldReceive('getForm')
+            ->with('FeePayment')
+            ->andReturn($form)
+            ->shouldReceive('renderView')
+            ->andReturn('renderView');
+
+        $fees = [
+            [
+                'amount' => 5.5,
+                'feeStatus' => [
+                    'id' => 'lfs_ot'
+                ]
+            ], [
+                'amount' => 10,
+                'feeStatus' => [
+                    'id' => 'lfs_ot'
+                ]
+            ]
+        ];
+        $this->mockEntity('Fee', 'getOverview')
+            ->with('1')
+            ->andReturn($fees[0])
+            ->shouldReceive('getOverview')
+            ->with('2')
+            ->andReturn($fees[1]);
+
+        $this->assertEquals(
+            'renderView',
+            $this->sut->payFeesAction()
+        );
+    }
+
+    public function testPayFeesActionWithInvalidFeeStatuses()
+    {
+        $this->mockController(
+            '\Olcs\Controller\Application\ApplicationController'
+        );
+
+        $this->sut->shouldReceive('params')
+            ->with('fee')
+            ->andReturn('1')
+            ->shouldReceive('redirectToList')
+            ->andReturn('redirect')
+            ->shouldReceive('addErrorMessage');
+
+        $fee = [
+            'amount' => 5.5,
+            'feeStatus' => [
+                'id' => 'lfs_pd'
+            ]
+        ];
+        $this->mockEntity('Fee', 'getOverview')
+            ->with('1')
+            ->andReturn($fee);
+
+        $this->assertEquals(
+            'redirect',
+            $this->sut->payFeesAction()
+        );
+    }
+
+    /**
      * Helper method
-     * @todo when these helper methods are required in more than 1 place, we need to abstract them away
+     * @to-do when these helper methods are required in more than 1 place, we need to abstract them away
      */
     protected function mockRouteParam($name, $value)
     {

@@ -667,6 +667,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
      * @param string $param
      * @param mixed $default
      * @return type
+     * @deprecated
      */
     public function fromRoute($param, $default = null)
     {
@@ -679,6 +680,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
      * @param string $param
      * @param mixed $default
      * @return type
+     * @deprecated
      */
     public function fromPost($param, $default = null)
     {
@@ -697,7 +699,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     {
         foreach ($array as $key => $value) {
             if (in_array($key, $ids)) {
-                if (array_key_exists('id', $value)) {
+                if (is_array($value) && array_key_exists('id', $value)) {
                     $array[$key] = $value['id'];
                 }
             }
