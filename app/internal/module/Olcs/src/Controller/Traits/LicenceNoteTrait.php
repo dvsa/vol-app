@@ -87,12 +87,11 @@ trait LicenceNoteTrait
      */
     public function redirectToIndex()
     {
-        return $this->redirect()->toRouteAjax(
-            $this->getRoutePrefix() . $this->getRedirectIndexRoute(),
-            ['action'=>'index', $this->getIdentifierName() => null],
-            ['code' => '303'], // Why? No cache is set with a 303 :)
-            true
-        );
+        $id      = $this->getFromRoute($this->getIdentifierName());
+        $route   = $this->getRoutePrefix() . $this->getRedirectIndexRoute();
+        $params  = ['action'=>'index', $this->getIdentifierName() => $id];
+        // @TODO make this work
+        return $this->redirect()->toRouteAjax($route, $params);
     }
 
     /**

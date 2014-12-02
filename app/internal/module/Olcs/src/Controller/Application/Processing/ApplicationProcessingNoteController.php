@@ -29,6 +29,13 @@ class ApplicationProcessingNoteController extends AbstractApplicationProcessingC
     protected $section = 'notes';
     protected $service = 'Note';
 
+    /**
+     * Identifier name
+     *
+     * @var string
+     */
+    protected $identifierName = 'application';
+
     public function __construct()
     {
         $this->setTemplatePrefix('application/processing');

@@ -26,6 +26,13 @@ class LicenceProcessingNoteController extends AbstractLicenceProcessingControlle
     protected $section = 'notes';
     protected $service = 'Note';
 
+    /**
+     * Identifier name
+     *
+     * @var string
+     */
+    protected $identifierName = 'licence';
+
     public function __construct()
     {
         $this->setTemplatePrefix('licence/processing');
