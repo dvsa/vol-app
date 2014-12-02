@@ -16,7 +16,7 @@ class Penalties extends AbstractSubmissionSectionFilter
     public function filter($data = array())
     {
         $data = $data[0];
-        $dataToReturnArray = ['overview', 'tables'];
+        $dataToReturnArray = [];
 
         $dataToReturnArray['overview']['vrm'] = $data['case']['erruVrm'];
         $dataToReturnArray['overview']['infringementId'] = $data['id'];

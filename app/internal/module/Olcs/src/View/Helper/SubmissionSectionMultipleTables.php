@@ -56,7 +56,7 @@ class SubmissionSectionMultipleTables extends AbstractHelper
         foreach ($tables as $subSection => $tableData) {
             $html .= $tableViewHelper(
                 $subSection,
-                ['description' => $subSection, 'data' => $data['data']]
+                ['description' => ucfirst(str_replace('-', ' ',$subSection)), 'data' => $data['data']]
             );
         }
 
