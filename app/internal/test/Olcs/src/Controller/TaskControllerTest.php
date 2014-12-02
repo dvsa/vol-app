@@ -450,7 +450,7 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
         $mockRoute = $this->getMock('\stdClass', ['toRouteAjax']);
         $mockRoute->expects($this->once())
             ->method('toRouteAjax')
-            ->with('licence/processing', $params)
+            ->with($expectedRoute, $params)
             ->will($this->returnValue('mockResponse'));
 
         $this->mockApplicationLicenceLookups();

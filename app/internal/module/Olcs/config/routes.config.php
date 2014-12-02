@@ -1361,6 +1361,16 @@ $routes['lva-application']['child_routes'] = array_merge(
             ),
             'may_terminate' => true,
             'child_routes' => [
+                'publications' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => '/publications[/:action][/:id]',
+                        'defaults' => [
+                            'controller' => 'ApplicationController',
+                            'action' => 'publications'
+                        ]
+                    ],
+                ],
                 'tasks' => [
                     'type' => 'segment',
                     'may_terminate' => true,

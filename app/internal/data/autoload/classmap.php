@@ -603,5 +603,9 @@ return array(
     'Common\Service\submissionsections' => false,
     'Common\Service\DynamicMultiCheckbox' => false,
     'Common\Service\commonformelementdynamicmulticheckbox' => false,
+    'Zend\View\Exception\RuntimeException' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/View/Exception/RuntimeException.php',
+    'Zend\View\Exception\ExceptionInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/View/Exception/ExceptionInterface.php',
+    'Common\Service\\Zend\Form\Element\SelectService' => false,
+    'Common\Service\\Common\Form\Elements\InputFilters\CheckboxService' => false,
     'Common\Service\\Zend\Form\Element\ButtonService' => false,
 );
