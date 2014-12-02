@@ -9,9 +9,6 @@ return [
         'fieldsets' => [
             [
                 'name' => 'details',
-                'options' => [
-                    'label' => 'tasks.details'
-                ],
                 'elements' => [
                     'link' => [
                         'type' => 'html',
