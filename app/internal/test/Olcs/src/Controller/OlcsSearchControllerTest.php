@@ -174,6 +174,41 @@ class OlcsSearchControllerTest extends AbstractHttpControllerTestCase
         $this->assertEquals('response', $response);
     }
 
+    /**
+     * Test operator action with redirect to create TM
+     */
+    public function testOperatorWithRedirectToTmAction()
+    {
+        $this->setUpAction(true);
+
+        $mockRequest = $this->getMock('\StdClass', ['getPost']);
+        $mockRequest->expects($this->once())
+            ->method('getPost')
+            ->will(
+                $this->returnValue(
+                    [
+                        'action' => 'Create transport manager'
+                    ]
+                )
+            );
+
+        $mockRedirect = $this->getMock('\StdClass', ['toRoute']);
+        $mockRedirect->expects($this->once())
+            ->method('toRoute')
+            ->will($this->returnValue('response'));
+
+        $this->controller->expects($this->once())
+             ->method('redirect')
+             ->will($this->returnValue($mockRedirect));
+
+        $this->controller->expects($this->once())
+             ->method('getRequest')
+             ->will($this->returnValue($mockRequest));
+
+        $response = $this->controller->operatorAction();
+        $this->assertEquals('response', $response);
+    }
+
     private function getStaticEntityTypes()
     {
         return array(
