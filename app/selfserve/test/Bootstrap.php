@@ -66,7 +66,9 @@ class Bootstrap
 
     protected static function initAutoloader()
     {
-        return require('vendor/autoload.php');
+        require('init_autoloader.php');
+
+        return $loader;
     }
 
     public static function getDi()
