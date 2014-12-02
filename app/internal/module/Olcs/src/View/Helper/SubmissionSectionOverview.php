@@ -23,6 +23,7 @@ class SubmissionSectionOverview extends AbstractHelper
     protected $typeViewMap = array(
         'case-summary'   => '/case/submission/section/case-summary',
         'case-outline'   => '/case/submission/section/case-outline',
+        'penalties'      => '/case/submission/section/penalties',
         'conviction-fpn-offence-history'   => '/case/submission/section/table',
     );
 
