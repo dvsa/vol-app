@@ -190,7 +190,7 @@ trait FeesActionTrait
                 return $this->redirectToList();
             }
 
-            if (!empty($fee['feePayments'])) {
+            if ($this->hasOutstandingPayment($fee)) {
                 $this->addErrorMessage('The fee selected has a pending payment. Please contact your adminstrator');
                 return $this->redirectToList();
             }
@@ -609,4 +609,17 @@ trait FeesActionTrait
 
         return $fees;
     }
+
+    private function hasOutstandingPayment($fee)
+    {
+        foreach ($fee['feePayments'] as $fp) {
+            if (isset($fp['payment']['status']['id'])
+                && $fp['payment']['status']['id'] === PaymentEntityService::STATUS_OUTSTANDING
+            ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
