@@ -649,6 +649,6 @@ return array(
     'CpmsClient\Data\AccessToken' => $rootPath . '/vendor/cpms/client/src/CpmsClient/Data/AccessToken.php',
     'Zend\Http\Header\Authorization' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Http/Header/Authorization.php',
     'Common\Service\Entity\PaymentEntityService' => $rootPath . '/vendor/olcs/OlcsCommon/Common/src/Common/Service/Entity/PaymentEntityService.php',
-    'Common\Service\\Zend\Form\Element\SelectService' => false,
-    'Common\Service\\Zend\Form\Element\ButtonService' => false,
+    'Common\Form\Elements\Validators\FeeAmountValidator' => $rootPath . '/vendor/olcs/OlcsCommon/Common/src/Common/Form/Elements/Validators/FeeAmountValidator.php',
+    'Common\Service\\Common\Form\Elements\InputFilters\ActionButtonService' => false,
 );

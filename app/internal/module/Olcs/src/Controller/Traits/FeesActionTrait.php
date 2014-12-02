@@ -12,6 +12,7 @@ use Common\Service\Listener\FeeListenerService;
 use Common\Service\Entity\FeeEntityService;
 use Common\Service\Entity\PaymentEntityService;
 use Common\Service\Entity\FeePaymentEntityService;
+use Common\Form\Elements\Validators\FeeAmountValidator;
 
 /**
  * Fees action trait
@@ -208,7 +209,7 @@ trait FeesActionTrait
             ->get('received')
             ->getValidatorChain()
             ->addValidator(
-                new \Zend\Validator\LessThan(
+                new FeeAmountValidator(
                     [
                         'max' => $maxAmount,
                         'inclusive' => true
