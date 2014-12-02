@@ -25,7 +25,8 @@ class Penalties extends AbstractSubmissionSectionFilter
             $seriousInfringement['notificationNumber'] : '';
         $dataToReturnArray['overview']['infringementDate'] = isset($seriousInfringement['infringementDate']) ?
             $seriousInfringement['infringementDate'] : '';
-        $dataToReturnArray['overview']['checkDate'] = isset($seriousInfringement['checkDate']) ? $seriousInfringement['checkDate'] : '';
+        $dataToReturnArray['overview']['checkDate'] =
+            isset($seriousInfringement['checkDate']) ? $seriousInfringement['checkDate'] : '';
         $dataToReturnArray['overview']['category'] = isset($seriousInfringement['siCategory']['description']) ?
             $seriousInfringement['siCategory']['description'] : '';
         $dataToReturnArray['overview']['categoryType'] = isset($seriousInfringement['siCategoryType']['description']) ?

@@ -110,7 +110,7 @@ class SubmissionSectionDetails extends AbstractHelper
         if (isset($this->typeMap[$submissionSection])) {
 
             if (is_array($this->typeMap[$submissionSection])) {
-                foreach($this->typeMap[$submissionSection] as $type) {
+                foreach ($this->typeMap[$submissionSection] as $type) {
                     $markup .= $this->renderHelper($type, $submissionSection, $data);
                 }
             } else {
