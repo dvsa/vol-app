@@ -622,5 +622,9 @@ return array(
     'Zend\InputFilter\FileInput' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/InputFilter/FileInput.php',
     'Zend\Form\View\Helper\FormFile' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form/View/Helper/FormFile.php',
     'Common\Service\\Zend\Form\Element\SelectService' => false,
+    'Zend\View\Exception\RuntimeException' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/View/Exception/RuntimeException.php',
+    'Zend\View\Exception\ExceptionInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/View/Exception/ExceptionInterface.php',
+    'Common\Service\\Zend\Form\Element\SelectService' => false,
+    'Common\Service\\Common\Form\Elements\InputFilters\CheckboxService' => false,
     'Common\Service\\Zend\Form\Element\ButtonService' => false,
 );
