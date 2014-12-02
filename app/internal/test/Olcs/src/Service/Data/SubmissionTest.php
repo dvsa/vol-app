@@ -479,19 +479,23 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                         ],
                     ],
                     'expected' => [
-                        0 => [
-                            'id' => 1,
-                            'description' => 'test description 2',
-                            'complaintDate' => '2012-06-15T00:00:00+0100',
-                            'complainantForename' => 'John',
-                            'complainantFamilyName' => 'Smith',
-                        ],
-                        1 => [
-                            'id' => 1,
-                            'description' => 'test description 1',
-                            'complaintDate' => '2011-06-15T00:00:00+0100',
-                            'complainantForename' => 'John',
-                            'complainantFamilyName' => 'Smith',
+                        'tables' => [
+                            'compliance-complaints' => [
+                                0 => [
+                                    'id' => 1,
+                                    'description' => 'test description 2',
+                                    'complaintDate' => '2012-06-15T00:00:00+0100',
+                                    'complainantForename' => 'John',
+                                    'complainantFamilyName' => 'Smith',
+                                ],
+                                1 => [
+                                    'id' => 1,
+                                    'description' => 'test description 1',
+                                    'complaintDate' => '2011-06-15T00:00:00+0100',
+                                    'complainantForename' => 'John',
+                                    'complainantFamilyName' => 'Smith',
+                                ]
+                            ]
                         ]
                     ]
                 ],
@@ -534,19 +538,23 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                         ],
                     ],
                     'expected' => [
-                        0 => [
-                            'id' => 1,
-                            'title' => 'Mr',
-                            'familyName' => 'Smith',
-                            'forename' => 'Bob',
-                            'birthDate' => '2012-06-15T00:00:00+0100'
-                        ],
-                        1 => [
-                            'id' => 2,
-                            'title' => 'Mr',
-                            'familyName' => 'Smith',
-                            'forename' => 'John',
-                            'birthDate' => '2012-06-15T00:00:00+0100',
+                        'tables' => [
+                            'persons' => [
+                                0 => [
+                                    'id' => 1,
+                                    'title' => 'Mr',
+                                    'familyName' => 'Smith',
+                                    'forename' => 'Bob',
+                                    'birthDate' => '2012-06-15T00:00:00+0100'
+                                ],
+                                1 => [
+                                    'id' => 2,
+                                    'title' => 'Mr',
+                                    'familyName' => 'Smith',
+                                    'forename' => 'John',
+                                    'birthDate' => '2012-06-15T00:00:00+0100',
+                                ]
+                            ]
                         ]
                     ]
                 ],
@@ -605,37 +613,41 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                         ]
                     ],
                     'expected' => [
-                        0 => [
-                            'id' => 2,
-                            'offenceDate' => '2012-03-10T00:00:00+0000',
-                            'convictionDate' => '2012-06-15T00:00:00+0100',
-                            'name' => 'Bob Smith',
-                            'categoryText' => null,
-                            'court' => 'FPN',
-                            'penalty' => '3 points on licence',
-                            'msi' => 'N',
-                            'isDeclared' => 'N',
-                            'isDealtWith' => 'N',
-                            'defendantType' => [
-                                'id' => 'def_t_owner',
-                                'description' => 'Owner'
-                            ],
-                        ],
-                        1 => [
-                            'id' => 1,
-                            'offenceDate' => '2012-03-10T00:00:00+0000',
-                            'convictionDate' => '2012-06-15T00:00:00+0100',
-                            'name' => 'John Smith Haulage Ltd.',
-                            'categoryText' => null,
-                            'court' => 'FPN',
-                            'penalty' => '3 points on licence',
-                            'msi' => 'N',
-                            'isDeclared' => 'N',
-                            'isDealtWith' => 'N',
-                            'defendantType' => [
-                                'id' => 'def_t_op',
-                                'description' => 'Operator'
-                            ],
+                        'tables' => [
+                            'conviction-fpn-offence-history' => [
+                                0 => [
+                                    'id' => 2,
+                                    'offenceDate' => '2012-03-10T00:00:00+0000',
+                                    'convictionDate' => '2012-06-15T00:00:00+0100',
+                                    'name' => 'Bob Smith',
+                                    'categoryText' => null,
+                                    'court' => 'FPN',
+                                    'penalty' => '3 points on licence',
+                                    'msi' => 'N',
+                                    'isDeclared' => 'N',
+                                    'isDealtWith' => 'N',
+                                    'defendantType' => [
+                                        'id' => 'def_t_owner',
+                                        'description' => 'Owner'
+                                    ],
+                                ],
+                                1 => [
+                                    'id' => 1,
+                                    'offenceDate' => '2012-03-10T00:00:00+0000',
+                                    'convictionDate' => '2012-06-15T00:00:00+0100',
+                                    'name' => 'John Smith Haulage Ltd.',
+                                    'categoryText' => null,
+                                    'court' => 'FPN',
+                                    'penalty' => '3 points on licence',
+                                    'msi' => 'N',
+                                    'isDeclared' => 'N',
+                                    'isDealtWith' => 'N',
+                                    'defendantType' => [
+                                        'id' => 'def_t_op',
+                                        'description' => 'Operator'
+                                    ],
+                                ]
+                            ]
                         ]
                     ]
                 ],
@@ -655,7 +667,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                         'description' => 'test description'
                     ],
                     'expected' => [
-                        'outline' => 'test description',
+                        'text' => 'test description',
                     ]
                 ]
             ],
@@ -672,24 +684,25 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                 [ // expected
                     'loadedCaseSectionData' => $this->getCaseSummaryMockData(),
                     'expected' => [
-                        'id' => 24,
-                        'organisationName' => 'John Smith Haulage Ltd.',
-                        'isMlh' => 'Y',
-                        'organisationType' => 'Registered Company',
-                        'businessType' => 'Some whatever',
-                        'caseType' => 'case_t_lic',
-                        'ecmsNo' => 'E123456',
-                        'licNo' => 'OB1234567',
-                        'licenceStartDate' => '2010-01-12T00:00:00+0000',
-                        'licenceType' => 'Standard National',
-                        'goodsOrPsv' => 'Goods Vehicle',
-                        'serviceStandardDate' => null,
-                        'licenceStatus' => 'New',
-                        'totAuthorisedVehicles' => 12,
-                        'totAuthorisedTrailers' => 4,
-                        'vehiclesInPossession' => 4,
-                        'trailersInPossession' => 4,
-
+                        'overview' => [
+                            'id' => 24,
+                            'organisationName' => 'John Smith Haulage Ltd.',
+                            'isMlh' => 'Y',
+                            'organisationType' => 'Registered Company',
+                            'businessType' => 'Some whatever',
+                            'caseType' => 'case_t_lic',
+                            'ecmsNo' => 'E123456',
+                            'licNo' => 'OB1234567',
+                            'licenceStartDate' => '2010-01-12T00:00:00+0000',
+                            'licenceType' => 'Standard National',
+                            'goodsOrPsv' => 'Goods Vehicle',
+                            'serviceStandardDate' => null,
+                            'licenceStatus' => 'New',
+                            'totAuthorisedVehicles' => 12,
+                            'totAuthorisedTrailers' => 4,
+                            'vehiclesInPossession' => 4,
+                            'trailersInPossession' => 4,
+                        ]
                     ]
                 ]
             ],
@@ -767,41 +780,46 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                         ]
                     ],
                     'expected' => [
-                        0 => [
-                            'id' => 1,
-                            'version' => 1,
-                            'dateReceived' => '2012-03-10T00:00:00+0000',
-                            'oppositionType' => 'foo',
-                            'contactName' => [
-                                'forename' => 'John',
-                                'familyName' => 'Smith'
-                            ],
-                            'grounds' => [
-                                'bar1'
-                            ],
-                            'isValid' => 'Y',
-                            'isCopied' => 'Y',
-                            'isInTime' => 'Y',
-                            'isPublicInquiry' => 'Y',
-                            'isWithdrawn' => 'N'
-                        ],
-                        1 => [
-                            'id' => 2,
-                            'version' => 1,
-                            'dateReceived' => '2012-02-10T00:00:00+0000',
-                            'oppositionType' => 'foo',
-                            'contactName' => [
-                                'forename' => 'Bob',
-                                'familyName' => 'Smith'
-                            ],
-                            'grounds' => [
-                                'bar2'
-                            ],
-                            'isValid' => 'Y',
-                            'isCopied' => 'Y',
-                            'isInTime' => 'Y',
-                            'isPublicInquiry' => 'Y',
-                            'isWithdrawn' => 'N'
+                        'tables' => [
+                            'oppositions' => [
+
+                                0 => [
+                                    'id' => 1,
+                                    'version' => 1,
+                                    'dateReceived' => '2012-03-10T00:00:00+0000',
+                                    'oppositionType' => 'foo',
+                                    'contactName' => [
+                                        'forename' => 'John',
+                                        'familyName' => 'Smith'
+                                    ],
+                                    'grounds' => [
+                                        'bar1'
+                                    ],
+                                    'isValid' => 'Y',
+                                    'isCopied' => 'Y',
+                                    'isInTime' => 'Y',
+                                    'isPublicInquiry' => 'Y',
+                                    'isWithdrawn' => 'N'
+                                ],
+                                1 => [
+                                    'id' => 2,
+                                    'version' => 1,
+                                    'dateReceived' => '2012-02-10T00:00:00+0000',
+                                    'oppositionType' => 'foo',
+                                    'contactName' => [
+                                        'forename' => 'Bob',
+                                        'familyName' => 'Smith'
+                                    ],
+                                    'grounds' => [
+                                        'bar2'
+                                    ],
+                                    'isValid' => 'Y',
+                                    'isCopied' => 'Y',
+                                    'isInTime' => 'Y',
+                                    'isPublicInquiry' => 'Y',
+                                    'isWithdrawn' => 'N'
+                                ]
+                            ]
                         ]
                     ]
                 ]
@@ -886,53 +904,55 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                         ]
                     ],
                     'expected' => [
-                        'conditions' => [
-                            0 => [
-                                'id' => 1,
-                                'version' => 1,
-                                'createdOn' => '2012-03-10T00:00:00+0000',
-                                'caseId' => 24,
-                                'addedVia' => [
-                                    'description' => 'Case',
-                                    'id' => 'cav_case',
-                                ],
-                                'isFulfilled' => 'N',
-                                'isDraft' => 'N',
-                                'attachedTo' => [
-                                    'description' => 'Operating Centre',
-                                    'id' => 'cat_oc',
-                                ],
-                                'OcAddress' => [
-                                    'addressLine2' => '12 Albert Street',
-                                    'addressLine1' => 'Unit 5',
-                                    'addressLine3' => 'Westpoint',
-                                    'addressLine4' => '',
-                                    'town' => 'Leeds',
-                                    'postcode' => 'LS9 6NA',
-                                    'countryCode' => [
-                                        'id' => 'GB',
+                        'tables' => [
+                            'conditions' => [
+                                0 => [
+                                    'id' => 1,
+                                    'version' => 1,
+                                    'createdOn' => '2012-03-10T00:00:00+0000',
+                                    'caseId' => 24,
+                                    'addedVia' => [
+                                        'description' => 'Case',
+                                        'id' => 'cav_case',
+                                    ],
+                                    'isFulfilled' => 'N',
+                                    'isDraft' => 'N',
+                                    'attachedTo' => [
+                                        'description' => 'Operating Centre',
+                                        'id' => 'cat_oc',
+                                    ],
+                                    'OcAddress' => [
+                                        'addressLine2' => '12 Albert Street',
+                                        'addressLine1' => 'Unit 5',
+                                        'addressLine3' => 'Westpoint',
+                                        'addressLine4' => '',
+                                        'town' => 'Leeds',
+                                        'postcode' => 'LS9 6NA',
+                                        'countryCode' => [
+                                            'id' => 'GB',
+                                        ]
                                     ]
+                                ],
+                                1 => [
+                                    'id' => 1,
+                                    'version' => 1,
+                                    'createdOn' => '2011-03-10T00:00:00+0000',
+                                    'caseId' => 24,
+                                    'addedVia' => [
+                                        'description' => 'Case',
+                                        'id' => 'cav_case',
+                                    ],
+                                    'isFulfilled' => 'N',
+                                    'isDraft' => 'N',
+                                    'attachedTo' => [
+                                        'description' => 'Operating Centre',
+                                        'id' => 'cat_oc',
+                                    ],
+                                    'OcAddress' => []
                                 ]
                             ],
-                            1 => [
-                                'id' => 1,
-                                'version' => 1,
-                                'createdOn' => '2011-03-10T00:00:00+0000',
-                                'caseId' => 24,
-                                'addedVia' => [
-                                    'description' => 'Case',
-                                    'id' => 'cav_case',
-                                ],
-                                'isFulfilled' => 'N',
-                                'isDraft' => 'N',
-                                'attachedTo' => [
-                                    'description' => 'Operating Centre',
-                                    'id' => 'cat_oc',
-                                ],
-                                'OcAddress' => []
-                            ]
-                        ],
-                        'undertakings' => []
+                            'undertakings' => []
+                        ]
                     ]
                 ]
             ],
@@ -990,16 +1010,20 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                         ]
                     ],
                     'expected' => [
-                        0 => [
-                            'id' => 22,
-                            'version' => 1,
-                            'licNo' => 'OB1234567',
-                            'status' => 'Curtailed',
-                            'licenceType' => 'Standard National',
-                            'totAuthTrailers' => '4',
-                            'totAuthVehicles' => '5',
-                            'vehiclesInPossession' => 0,
-                            'trailersInPossession' => 4
+                        'tables' => [
+                            'linked-licences-app-numbers' => [
+                                0 => [
+                                    'id' => 22,
+                                    'version' => 1,
+                                    'licNo' => 'OB1234567',
+                                    'status' => 'Curtailed',
+                                    'licenceType' => 'Standard National',
+                                    'totAuthTrailers' => '4',
+                                    'totAuthVehicles' => '5',
+                                    'vehiclesInPossession' => 0,
+                                    'trailersInPossession' => 4
+                                ]
+                            ]
                         ]
                     ]
                 ]
@@ -1025,7 +1049,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                         ]
                     ],
                     'expected' => [
-                        'leadTcAreaDescription' => 'North East of England',
+                        'text' => 'North East of England',
                     ]
                 ]
             ],
@@ -1056,15 +1080,19 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                         ]
                     ],
                     'expected' => [
-                        0 => [
-                            'id' => 1,
-                            'version' => 2,
-                            'prohibitionDate' => '2012-03-10T00:00:00+0000',
-                            'clearedDate' => '2013-03-10T00:00:00+0000',
-                            'vehicle' => 'AB123DEF',
-                            'trailer' => 1,
-                            'imposedAt' => 'foo bar',
-                            'prohibitionType' => 'foo'
+                        'tables' => [
+                            'prohibition-history' => [
+                                0 => [
+                                    'id' => 1,
+                                    'version' => 2,
+                                    'prohibitionDate' => '2012-03-10T00:00:00+0000',
+                                    'clearedDate' => '2013-03-10T00:00:00+0000',
+                                    'vehicle' => 'AB123DEF',
+                                    'trailer' => 1,
+                                    'imposedAt' => 'foo bar',
+                                    'prohibitionType' => 'foo'
+                                ]
+                            ]
                         ]
                     ]
                 ]
@@ -1087,7 +1115,79 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                         'annualTestHistory' => 'test history',
                     ]
                 ]
-            ]
+            ],
+            /*[   // penalties section
+                [
+                    'caseId' => 24,
+                    'sectionId' => 'penalties',
+                    'sectionConfig' => [
+                        'service' => 'Cases',
+                        'filter' => true,
+                        'bundle' => ['some_bundle'],
+                    ]
+                ],
+                [
+                    'loadedCaseSectionData' => [
+                        'id' => 24,
+                        'licence' => [
+                            'id' => 24,
+                            'organisation' => [
+                                'licences' => [
+                                    0 => [
+                                        'id' => 24,
+                                        'version' => 1,
+                                        'licNo' => 'OB1234568',
+                                        'status' => ['description' => 'Valid'],
+                                        'licenceType' => ['description' => 'Standard National'],
+                                        'totAuthTrailers' => '4',
+                                        'totAuthVehicles' => '5',
+                                        'licenceVehicles' => [
+                                            0 => [
+                                                'specifiedDate' => '2012-03-10T00:00:00+0000',
+                                                'deletedDate' => '2012-03-10T00:00:00+0000'
+                                            ]
+                                        ],
+                                        'createdOn' => '2012-03-10T00:00:00+0000'
+                                    ],
+                                    1 => [
+                                        'id' => 22,
+                                        'version' => 1,
+                                        'licNo' => 'OB1234567',
+                                        'status' => ['description' => 'Curtailed'],
+                                        'licenceType' => ['description' => 'Standard National'],
+                                        'totAuthTrailers' => '4',
+                                        'totAuthVehicles' => '5',
+                                        'licenceVehicles' => [
+                                            0 => [
+                                                'specifiedDate' => '2012-03-10T00:00:00+0000',
+                                                'deletedDate' => '2012-03-10T00:00:00+0000',
+                                            ]
+                                        ],
+                                        'createdOn' => '2012-03-10T00:00:00+0000'
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ],
+                    'expected' => [
+                        'tables' => [
+                            'linked-licences-app-numbers' => [
+                                0 => [
+                                    'id' => 22,
+                                    'version' => 1,
+                                    'licNo' => 'OB1234567',
+                                    'status' => 'Curtailed',
+                                    'licenceType' => 'Standard National',
+                                    'totAuthTrailers' => '4',
+                                    'totAuthVehicles' => '5',
+                                    'vehiclesInPossession' => 0,
+                                    'trailersInPossession' => 4
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]*/
         ];
     }
 
