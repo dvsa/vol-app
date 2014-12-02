@@ -99,7 +99,7 @@ class BusProcessingNoteControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->once())
             ->method('loadScripts')
-            ->with(['forms/filter','table-actions']);
+            ->with(['forms/filter','table-actions-notes']);
 
         $this->controller->expects($this->once())
             ->method('getView')

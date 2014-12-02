@@ -87,7 +87,7 @@ trait LicenceNoteTrait
      */
     public function redirectToIndex()
     {
-        return $this->redirectToRoute(
+        return $this->redirect()->toRouteAjax(
             $this->getRoutePrefix() . $this->getRedirectIndexRoute(),
             ['action'=>'index', $this->getIdentifierName() => null],
             ['code' => '303'], // Why? No cache is set with a 303 :)
@@ -201,7 +201,7 @@ trait LicenceNoteTrait
             true
         );
 
-        $this->loadScripts(['forms/filter','table-actions']);
+        $this->loadScripts(['forms/filter','table-actions-notes']);
 
         $view = $this->getView(['table' => $table]);
         $view->setTemplate($this->getTemplatePrefix() . '/notes/index');
@@ -231,6 +231,15 @@ trait LicenceNoteTrait
             }
         }
 
+        //same for application
+        if (!is_null($applicationId)) {
+            $application = $this->getApplication($applicationId);
+
+            if (isset($application['licence']['id'])) {
+                $licenceId = $application['licence']['id'];
+            }
+        }
+
         $form = $this->generateFormWithData(
             'licence-notes',
             'processAddNotes',
@@ -247,7 +256,8 @@ trait LicenceNoteTrait
 
         $view->setTemplate($this->getTemplatePrefix() . '/notes/form');
 
-        return $this->renderView($view, $this->translate('internal-licence-processing-notes-add-title');
+        // @TODO should this use translatable string, e.g. 'internal-licence-processing-notes-add-title'?
+        return $this->renderView($view, 'Add Note');
     }
 
     /**
@@ -320,7 +330,8 @@ trait LicenceNoteTrait
         $view = $this->getView(['form' => $form]);
         $view->setTemplate($this->getTemplatePrefix() . '/notes/form');
 
-        return $this->renderView($view, $this->translate('internal-licence-processing-notes-modify-title'));
+        // @TODO should this use translatable string, e.g. 'internal-licence-processing-notes-modify-title'?
+        return $this->renderView($view, 'Edit Note');
     }
 
     /**

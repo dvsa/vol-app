@@ -49,7 +49,6 @@ class LicenceProcessingNoteController extends AbstractLicenceProcessingControlle
         $notesResult = $this->getNotesList($licenceId, $licenceId, 'note_t_lic', $action, $id);
 
         if ($notesResult instanceof \Zend\View\Model\ViewModel) {
-            $this->loadScripts(['table-actions-notes']);
             return $this->renderView($notesResult);
         }
 

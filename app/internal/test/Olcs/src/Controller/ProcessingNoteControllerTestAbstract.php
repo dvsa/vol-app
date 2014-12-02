@@ -47,7 +47,7 @@ abstract class ProcessingNoteControllerTestAbstract extends AbstractHttpControll
                 'setTableFilters',
                 'loadScripts',
                 'getRequest',
-                'getServiceLocator'
+                'getServiceLocator',
             )
         );
 
@@ -126,7 +126,7 @@ abstract class ProcessingNoteControllerTestAbstract extends AbstractHttpControll
 
         $this->controller->expects($this->once())
             ->method('loadScripts')
-            ->with(['forms/filter','table-actions']);
+            ->with(['forms/filter','table-actions-notes']);
 
         $this->controller->expects($this->once())
             ->method('getView')
