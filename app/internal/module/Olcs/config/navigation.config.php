@@ -682,7 +682,35 @@ return array(
                     'id' => 'application_processing',
                     'label' => 'Processing',
                     'route' => 'lva-application/processing',
-                    'use_route_match' => true
+                    'use_route_match' => true,
+                    'pages' => array(
+                        array(
+                            'id' => 'application_processing_tasks',
+                            'label' => 'internal-application-processing-tasks',
+                            'route' => 'lva-application/processing/tasks',
+                            'use_route_match' => true,
+                        ),
+                        array(
+                            'id' => 'application_processing_notes',
+                            'label' => 'internal-application-processing-notes',
+                            'route' => 'lva-application/processing/notes',
+                            'use_route_match' => true,
+                            'pages' => array(
+                                array(
+                                    'id' => 'application_processing_notes_add',
+                                    'label' => 'internal-application-processing-notes-add',
+                                    'route' => 'lva-application/processing/add-note',
+                                    'use_route_match' => true
+                                ),
+                                array(
+                                    'id' => 'application_processing_notes_modify',
+                                    'label' => 'internal-application-processing-notes-modify',
+                                    'route' => 'lva-application/processing/modify-note',
+                                    'use_route_match' => true
+                                )
+                            )
+                        )
+                    )
                 ),
                 array(
                     'id' => 'application_fee',
