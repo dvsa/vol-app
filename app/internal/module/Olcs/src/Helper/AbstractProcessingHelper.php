@@ -20,6 +20,7 @@ abstract class AbstractProcessingHelper
      * @var array
      */
     protected $sections = array(
+        'publications' => array(),
         'notes' => array(),
         'tasks' => array()
     );

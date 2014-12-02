@@ -24,7 +24,9 @@
     <h5><?php echo $this->translate('internal-operator-quick-actions'); ?></h5>
     <ul class="record-actions__group">
         <li class="record-actions__item">
-            <a class="action--secondary<?php echo $this->disable ? ' disabled' : ''; ?>" href=""><?php echo $this->translate('internal-operator-new-application'); ?></a>
+            <a class="action--secondary<?php echo $this->disable ? ' disabled' : ''; ?> js-modal-ajax" href="<?php echo $this->url('operator/new-application', [], [], true); ?>">
+                <?php echo $this->translate('internal-operator-new-application'); ?>
+            </a>
         </li>
-    </ul>    
+    </ul>
 </div>

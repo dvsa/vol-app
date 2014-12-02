@@ -184,22 +184,20 @@ return array(
                             'id' => 'case_hearings_appeals_public_inquiry',
                             'label' => 'Public Inquiry',
                             'route' => 'case_pi',
-                            'action' => '',
+                            'action' => 'details',
                             'use_route_match' => true,
                             'pages' => array(
                                 array(
                                     'id' => 'case_hearings_appeals_public_inquiry_add',
                                     'label' => 'internal-pi-hearing-add',
                                     'route' => 'case_pi_hearing',
-                                    'action' => 'add',
-                                    'use_route_match' => true
+                                    'action' => 'add'
                                 ),
                                 array(
                                     'id' => 'case_hearings_appeals_public_inquiry_edit',
                                     'label' => 'internal-pi-hearing-edit',
                                     'route' => 'case_pi_hearing',
-                                    'action' => 'edit',
-                                    'use_route_match' => true
+                                    'action' => 'edit'
                                 ),
                             ),
                         ),
@@ -324,7 +322,7 @@ return array(
                         ),
                         array(
                             'id' => 'licence_bus',
-                            'label' => 'Bus reg',
+                            'label' => 'Bus registrations',
                             'route' => 'licence/bus',
                             'use_route_match' => true,
                             'pages' => array (
@@ -477,6 +475,12 @@ return array(
                             'route' => 'licence/processing',
                             'use_route_match' => true,
                             'pages' => array(
+                                array(
+                                    'id' => 'licence_processing_publications',
+                                    'label' => 'internal-licence-processing-publications',
+                                    'route' => 'licence/processing/publications',
+                                    'use_route_match' => true,
+                                ),
                                 array(
                                     'id' => 'licence_processing_tasks',
                                     'label' => 'internal-licence-processing-tasks',

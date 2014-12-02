@@ -2,7 +2,7 @@
         <?php foreach ($this->container as $key => $page) : ?>
             <li class="vertical-navigation__item <?php echo $page->isActive(true) ? 'current' : ''; ?>">
                 <?php if (!$page->isActive(true)) : ?>
-                    <?php echo $this->navigation()->menu()->htmlify($page) . PHP_EOL; ?>
+                    <?php echo $this->navigation()->menu()->htmlify($page); ?>
                 <?php else: ?>
                     <span><?php echo $this->translate($page->getLabel()); ?></span>
                 <?php endif; ?>

@@ -935,6 +935,158 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                         'undertakings' => []
                     ]
                 ]
+            ],
+            [   // linked-licences-app-numbers section
+                [
+                    'caseId' => 24,
+                    'sectionId' => 'linked-licences-app-numbers',
+                    'sectionConfig' => [
+                        'service' => 'Cases',
+                        'filter' => true,
+                        'bundle' => ['some_bundle'],
+                    ]
+                ],
+                [
+                    'loadedCaseSectionData' => [
+                        'id' => 24,
+                        'licence' => [
+                            'id' => 24,
+                            'organisation' => [
+                                'licences' => [
+                                    0 => [
+                                        'id' => 24,
+                                        'version' => 1,
+                                        'licNo' => 'OB1234568',
+                                        'status' => ['description' => 'Valid'],
+                                        'licenceType' => ['description' => 'Standard National'],
+                                        'totAuthTrailers' => '4',
+                                        'totAuthVehicles' => '5',
+                                        'licenceVehicles' => [
+                                            0 => [
+                                                'specifiedDate' => '2012-03-10T00:00:00+0000',
+                                                'deletedDate' => '2012-03-10T00:00:00+0000'
+                                            ]
+                                        ],
+                                        'createdOn' => '2012-03-10T00:00:00+0000'
+                                    ],
+                                    1 => [
+                                        'id' => 22,
+                                        'version' => 1,
+                                        'licNo' => 'OB1234567',
+                                        'status' => ['description' => 'Curtailed'],
+                                        'licenceType' => ['description' => 'Standard National'],
+                                        'totAuthTrailers' => '4',
+                                        'totAuthVehicles' => '5',
+                                        'licenceVehicles' => [
+                                            0 => [
+                                                'specifiedDate' => '2012-03-10T00:00:00+0000',
+                                                'deletedDate' => '2012-03-10T00:00:00+0000',
+                                            ]
+                                        ],
+                                        'createdOn' => '2012-03-10T00:00:00+0000'
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ],
+                    'expected' => [
+                        0 => [
+                            'id' => 22,
+                            'version' => 1,
+                            'licNo' => 'OB1234567',
+                            'status' => 'Curtailed',
+                            'licenceType' => 'Standard National',
+                            'totAuthTrailers' => '4',
+                            'totAuthVehicles' => '5',
+                            'vehiclesInPossession' => 0,
+                            'trailersInPossession' => 4
+                        ]
+                    ]
+                ]
+            ],
+            [   // lead-tc-area section
+                [
+                    'caseId' => 24,
+                    'sectionId' => 'lead-tc-area',
+                    'sectionConfig' => [
+                        'service' => 'Cases',
+                        'filter' => true,
+                        'bundle' => ['some_bundle'],
+                    ]
+                ],
+                [
+                    'loadedCaseSectionData' => [
+                        'licence' => [
+                            'organisation' => [
+                                'leadTcArea' => [
+                                    'name' => 'North East of England'
+                                ]
+                            ]
+                        ]
+                    ],
+                    'expected' => [
+                        'leadTcAreaDescription' => 'North East of England',
+                    ]
+                ]
+            ],
+            [
+                // prohibition-history section
+                [
+                    'caseId' => 24,
+                    'sectionId' => 'prohibition-history',
+                    'sectionConfig' => [
+                        'service' => 'Prohibition',
+                        'filter' => true,
+                        'bundle' => ['some_bundle'],
+                    ]
+                ],
+                [
+                    'loadedCaseSectionData' => [
+                        0 => [
+                            'id' => 1,
+                            'version' => 2,
+                            'prohibitionDate' => '2012-03-10T00:00:00+0000',
+                            'clearedDate' => '2013-03-10T00:00:00+0000',
+                            'vrm' => 'AB123DEF',
+                            'isTrailer' => 1,
+                            'imposedAt' => 'foo bar',
+                            'prohibitionType' => [
+                                'description' => 'foo',
+                            ]
+                        ]
+                    ],
+                    'expected' => [
+                        0 => [
+                            'id' => 1,
+                            'version' => 2,
+                            'prohibitionDate' => '2012-03-10T00:00:00+0000',
+                            'clearedDate' => '2013-03-10T00:00:00+0000',
+                            'vehicle' => 'AB123DEF',
+                            'trailer' => 1,
+                            'imposedAt' => 'foo bar',
+                            'prohibitionType' => 'foo'
+                        ]
+                    ]
+                ]
+            ],
+            [   // annual-test-history
+                [ // input
+                    'caseId' => 24,
+                    'sectionId' => 'annual-test-history',
+                    'sectionConfig' => [
+                        'service' => 'Cases',
+                        'filter' => true,
+                        'bundle' => ['some_bundle'],
+                    ]
+                ],
+                [ // expected
+                    'loadedCaseSectionData' => [
+                        'annualTestHistory' => 'test history'
+                    ],
+                    'expected' => [
+                        'annualTestHistory' => 'test history',
+                    ]
+                ]
             ]
         ];
     }

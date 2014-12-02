@@ -53,16 +53,6 @@ trait LicenceControllerTrait
     }
 
     /**
-     * Get type of licence data
-     *
-     * @return array
-     */
-    protected function getTypeOfLicenceData()
-    {
-        return $this->getServiceLocator()->get('Entity\Licence')->getTypeOfLicenceData($this->getLicenceId());
-    }
-
-    /**
      * Render the section
      *
      * @param string|ViewModel $content

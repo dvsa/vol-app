@@ -973,6 +973,16 @@ $routes = [
                 ],
                 'may_terminate' => true,
                 'child_routes' => [
+                    'publications' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/publications[/:action][/:id]',
+                            'defaults' => [
+                                'controller' => 'LicenceProcessingPublicationsController',
+                                'action' => 'index'
+                            ]
+                        ],
+                    ],
                     'tasks' => [
                         'type' => 'segment',
                         'options' => [
@@ -1036,7 +1046,7 @@ $routes = [
                         'options' => [
                             'route' => '/:action/:fee',
                             'constraints' => [
-                                'fee' => '[0-9-]+',
+                                'fee' => '([0-9]+,?)+',
                             ],
                         ],
                         'may_terminate' => true,
@@ -1086,6 +1096,16 @@ $routes = [
                     'defaults' => [
                         'controller' => 'OperatorLicencesApplicationsController',
                         'action' => 'index',
+                    ]
+                ]
+            ],
+            'new-application' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/new-application',
+                    'defaults' => [
+                        'controller' => 'OperatorController',
+                        'action' => 'newApplication',
                     ]
                 ]
             ],
@@ -1341,6 +1361,16 @@ $routes['lva-application']['child_routes'] = array_merge(
             ),
             'may_terminate' => true,
             'child_routes' => [
+                'publications' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => '/publications[/:action][/:id]',
+                        'defaults' => [
+                            'controller' => 'ApplicationController',
+                            'action' => 'publications'
+                        ]
+                    ],
+                ],
                 'tasks' => [
                     'type' => 'segment',
                     'may_terminate' => true,
@@ -1407,7 +1437,7 @@ $routes['lva-application']['child_routes'] = array_merge(
                     'options' => array(
                         'route' => ':action/:fee',
                         'constraints' => array(
-                            'fee' => '[0-9-]+',
+                            'fee' => '([0-9]+,?)+',
                         ),
                     ),
                     'may_terminate' => true,

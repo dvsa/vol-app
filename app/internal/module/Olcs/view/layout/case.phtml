@@ -38,10 +38,8 @@ $markers = $this->placeholder('markers')->getValue();
   <?php endif; ?>
 
   <?php if (isset($markers) && is_array($markers)): ?>
-  <?php foreach($markers as $marker): ?>
-    <?php echo $this->markers($marker, 'appeal') ?>
-    <?php echo $this->markers($marker, 'stay') ?>
-  <?php endforeach; ?>
+    <?php echo $this->markers($markers, 'appeal') ?>
+    <?php echo $this->markers($markers, 'stay') ?>
   <?php endif; ?>
 
   <div class="record-actions">
