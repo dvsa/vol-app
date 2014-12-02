@@ -15,33 +15,34 @@ class Penalties extends AbstractSubmissionSectionFilter
      */
     public function filter($data = array())
     {
-        $data = isset($data[0]) ? $data[0] : [];
         $dataToReturnArray = [];
+        $seriousInfringement = isset($data['seriousInfringements'][0]) ? $data['seriousInfringements'][0] : [];
 
-        $dataToReturnArray['overview']['vrm'] = isset($data['case']['erruVrm']) ? $data['case']['erruVrm'] : '';
-        $dataToReturnArray['overview']['infringementId'] = isset($data['id']) ? $data['id'] : '';
-        $dataToReturnArray['overview']['notificationNumber'] = isset($data['notificationNumber']) ?
-            $data['notificationNumber'] : '';
-        $dataToReturnArray['overview']['infringementDate'] = isset($data['infringementDate']) ?
-            $data['infringementDate'] : '';
-        $dataToReturnArray['overview']['checkDate'] = isset($data['checkDate']) ? $data['checkDate'] : '';
-        $dataToReturnArray['overview']['category'] = isset($data['siCategory']['description']) ?
-            $data['siCategory']['description'] : '';
-        $dataToReturnArray['overview']['categoryType'] = isset($data['siCategoryType']['description']) ?
-            $data['siCategoryType']['description'] : '';
+        $dataToReturnArray['overview']['vrm'] = isset($data['erruVrm']) ? $data['erruVrm'] : '';
+        $dataToReturnArray['overview']['infringementId'] = isset($seriousInfringement['id']) ?
+            $seriousInfringement['id'] : '';
+        $dataToReturnArray['overview']['notificationNumber'] = isset($seriousInfringement['notificationNumber']) ?
+            $seriousInfringement['notificationNumber'] : '';
+        $dataToReturnArray['overview']['infringementDate'] = isset($seriousInfringement['infringementDate']) ?
+            $seriousInfringement['infringementDate'] : '';
+        $dataToReturnArray['overview']['checkDate'] = isset($seriousInfringement['checkDate']) ? $seriousInfringement['checkDate'] : '';
+        $dataToReturnArray['overview']['category'] = isset($seriousInfringement['siCategory']['description']) ?
+            $seriousInfringement['siCategory']['description'] : '';
+        $dataToReturnArray['overview']['categoryType'] = isset($seriousInfringement['siCategoryType']['description']) ?
+            $seriousInfringement['siCategoryType']['description'] : '';
         $dataToReturnArray['overview']['transportUndertakingName'] = isset
-        ($data['case']['erruTransportUndertakingName']) ? $data['case']['erruTransportUndertakingName'] : '';
-        $dataToReturnArray['overview']['memberState'] = isset($data['memberStateCode']['countryDesc']) ?
-            $data['memberStateCode']['countryDesc'] : '';
-        $dataToReturnArray['overview']['originatingAuthority'] = isset($data['case']['erruOriginatingAuthority']) ?
-            $data['case']['erruOriginatingAuthority'] : '';
+        ($data['erruTransportUndertakingName']) ? $data['erruTransportUndertakingName'] : '';
+        $dataToReturnArray['overview']['memberState'] = isset($seriousInfringement['memberStateCode']['countryDesc']) ?
+            $seriousInfringement['memberStateCode']['countryDesc'] : '';
+        $dataToReturnArray['overview']['originatingAuthority'] = isset($data['erruOriginatingAuthority']) ?
+            $data['erruOriginatingAuthority'] : '';
 
         $dataToReturnArray['tables']['applied-penalties'] = [];
         $dataToReturnArray['tables']['imposed-penalties'] = [];
         $dataToReturnArray['tables']['requested-penalties'] = [];
 
-        if (isset($data['appliedPenalties'])) {
-            foreach ($data['appliedPenalties'] as $appliedPenalty) {
+        if (isset($seriousInfringement['appliedPenalties'])) {
+            foreach ($seriousInfringement['appliedPenalties'] as $appliedPenalty) {
                 $thisAppliedPenalty = array();
                 $thisAppliedPenalty['id'] = $appliedPenalty['id'];
                 $thisAppliedPenalty['version'] = $appliedPenalty['version'];
@@ -52,8 +53,8 @@ class Penalties extends AbstractSubmissionSectionFilter
                 $dataToReturnArray['tables']['applied-penalties'][] = $thisAppliedPenalty;
             }
         }
-        if (isset($data['imposedErrus'])) {
-            foreach ($data['imposedErrus'] as $imposedPenalty) {
+        if (isset($seriousInfringement['imposedErrus'])) {
+            foreach ($seriousInfringement['imposedErrus'] as $imposedPenalty) {
                 $thisImposedPenalty = array();
                 $thisImposedPenalty['id'] = $imposedPenalty['id'];
                 $thisImposedPenalty['version'] = $imposedPenalty['version'];
@@ -65,8 +66,8 @@ class Penalties extends AbstractSubmissionSectionFilter
                 $dataToReturnArray['tables']['imposed-penalties'][] = $thisImposedPenalty;
             }
         }
-        if (isset($data['requestedErrus'])) {
-            foreach ($data['requestedErrus'] as $requestedPenalty) {
+        if (isset($seriousInfringement['requestedErrus'])) {
+            foreach ($seriousInfringement['requestedErrus'] as $requestedPenalty) {
                 $thisRequestedPenalty = array();
                 $thisRequestedPenalty['id'] = $requestedPenalty['id'];
                 $thisRequestedPenalty['version'] = $requestedPenalty['version'];
@@ -75,8 +76,7 @@ class Penalties extends AbstractSubmissionSectionFilter
                 $dataToReturnArray['tables']['requested-penalties'][] = $thisRequestedPenalty;
             }
         }
-        $dataToReturnArray['text'] = isset($data['case']['penaltiesNote']) ? $data['case']['penaltiesNote'] : '';
-
+        $dataToReturnArray['text'] = isset($data['penaltiesNote']) ? $data['penaltiesNote'] : '';
         return $dataToReturnArray;
     }
 }
