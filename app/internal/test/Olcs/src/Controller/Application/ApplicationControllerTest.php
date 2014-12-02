@@ -125,18 +125,6 @@ class ApplicationControllerTest extends MockeryTestCase
     /**
      * @group application_controller
      */
-    public function testProcessingAction()
-    {
-        $this->mockRender();
-
-        $view = $this->sut->processingAction();
-
-        $this->assertEquals('application/index', $view->getTemplate());
-    }
-
-    /**
-     * @group application_controller
-     */
     public function testGrantActionWithGet()
     {
         $id = 7;

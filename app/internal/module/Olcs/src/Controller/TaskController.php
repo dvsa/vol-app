@@ -305,14 +305,15 @@ class TaskController extends AbstractController
                 );
                 break;
             case 'application':
+                $licence = $this->getServiceLocator()
+                    ->get('Entity\Application')->getDataForTasks($taskTypeId)['licence'];
+
                 $url = sprintf(
-                    '<a href="%s">%s</a>',
-                    $this->url()->fromRoute(
-                        'lva-application',
-                        array(
-                            'application' => $taskTypeId
-                        )
-                    ), $linkDisplay
+                    '<a href="%s">%s</a> / <a href="%s">%s</a>',
+                    $this->url()->fromRoute('lva-licence', ['licence' => $licence['id']]),
+                    $licence['licNo'],
+                    $this->url()->fromRoute('lva-application', ['application' => $taskTypeId]),
+                    $taskTypeId
                 );
                 break;
             default:
@@ -394,6 +395,10 @@ class TaskController extends AbstractController
             case 'licence':
                 $route = 'licence/processing';
                 $params = ['licence' => $taskTypeId];
+                break;
+            case 'application':
+                $route = 'lva-application/processing';
+                $params = ['application' => $taskTypeId];
                 break;
             default:
                 // no type - call from the home page, need to redirect back after action
@@ -507,6 +512,12 @@ class TaskController extends AbstractController
             case 'licence':
                 $data['licence'] = $taskTypeId;
                 break;
+            case 'application':
+                $data['application'] = $taskTypeId;
+                // bit ugly, but we need the licenceId too to properly link the task
+                $data['licence'] = $this->getServiceLocator()
+                    ->get('Entity\Application')->getLicenceIdForApplication($taskTypeId);
+                break;
             default:
                 break;
         }
@@ -613,5 +624,18 @@ class TaskController extends AbstractController
         $licence = $this->makeRestCall('Licence', 'GET', array('id' => $id));
 
         return $licence;
+    }
+
+    /**
+     * Gets the application by ID.
+     *
+     * @param int $id
+     * @return array
+     */
+    protected function getApplication($id)
+    {
+        $application = $this->makeRestCall('Application', 'GET', array('id' => $id));
+
+        return $application;
     }
 }

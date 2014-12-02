@@ -94,19 +94,6 @@ class ApplicationController extends AbstractController
         return $this->render($view);
     }
 
-    /**
-     * Placeholder stub
-     *
-     * @return ViewModel
-     */
-    public function processingAction()
-    {
-        $view = new ViewModel();
-        $view->setTemplate('application/index');
-
-        return $this->render($view);
-    }
-
     public function grantAction()
     {
         $request = $this->getRequest();

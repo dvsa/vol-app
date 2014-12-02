@@ -1353,12 +1353,47 @@ $routes['lva-application']['child_routes'] = array_merge(
         'processing' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => 'processing/',
+                'route' => 'processing[/]',
                 'defaults' => array(
-                    'controller' => 'ApplicationController',
-                    'action' => 'processing'
+                    'controller' => 'ApplicationProcessingOverviewController',
+                    'action' => 'index'
                 )
-            )
+            ),
+            'may_terminate' => true,
+            'child_routes' => [
+                'publications' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => '/publications[/:action][/:id]',
+                        'defaults' => [
+                            'controller' => 'ApplicationController',
+                            'action' => 'publications'
+                        ]
+                    ],
+                ],
+                'tasks' => [
+                    'type' => 'segment',
+                    'may_terminate' => true,
+                    'options' => [
+                        'route' => 'tasks',
+                        'defaults' => [
+                            'controller' => 'ApplicationProcessingTasksController',
+                            'action' => 'index'
+                        ]
+                    ]
+                ],
+                'notes' => [
+                    'type' => 'segment',
+                    'may_terminate' => true,
+                    'options' => [
+                        'route' => 'notes',
+                        'defaults' => [
+                            'controller' => 'ApplicationController',
+                            'action' => 'notes'
+                        ]
+                    ]
+                ],
+            ],
         ),
         'fees' => array(
             'type' => 'segment',
