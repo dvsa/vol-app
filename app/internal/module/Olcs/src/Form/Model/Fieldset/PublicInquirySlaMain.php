@@ -67,7 +67,7 @@ class PublicInquirySlaMain extends CaseBase
      *     "field": "tcWrittenDecisionDate"
      * })
      * @Form\Required(true)
-     * @Form\Attributes({"required": false"})
+     * @Form\Attributes({"required": false})
      * @Form\AllowEmpty(true)
      * @Form\Input("\Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("SlaDateSelect")
@@ -96,7 +96,7 @@ class PublicInquirySlaMain extends CaseBase
      *     "field": "decisionLetterSentDate"
      * })
      * @Form\Required(true)
-     * @Form\Attributes({"required": false"})
+     * @Form\Attributes({"required": false})
      * @Form\AllowEmpty(true)
      * @Form\Input("\Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("SlaDateSelect")
@@ -125,7 +125,7 @@ class PublicInquirySlaMain extends CaseBase
      *     "field": "tcWrittenReasonDate"
      * })
      * @Form\Required(true)
-     * @Form\Attributes({"required": false"})
+     * @Form\Attributes({"required": false})
      * @Form\AllowEmpty(true)
      * @Form\Input("\Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("SlaDateSelect")
@@ -154,7 +154,7 @@ class PublicInquirySlaMain extends CaseBase
      *     "field": "writtenReasonLetterDate"
      * })
      * @Form\Required(true)
-     * @Form\Attributes({"required": false"})
+     * @Form\Attributes({"required": false})
      * @Form\AllowEmpty(true)
      * @Form\Input("\Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("SlaDateSelect")
