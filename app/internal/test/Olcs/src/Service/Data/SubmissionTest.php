@@ -1068,6 +1068,25 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                         ]
                     ]
                 ]
+            ],
+            [   // annual-test-history
+                [ // input
+                    'caseId' => 24,
+                    'sectionId' => 'annual-test-history',
+                    'sectionConfig' => [
+                        'service' => 'Cases',
+                        'filter' => true,
+                        'bundle' => ['some_bundle'],
+                    ]
+                ],
+                [ // expected
+                    'loadedCaseSectionData' => [
+                        'annualTestHistory' => 'test history'
+                    ],
+                    'expected' => [
+                        'annualTestHistory' => 'test history',
+                    ]
+                ]
             ]
         ];
     }

@@ -44,7 +44,7 @@ class DocumentUploadController extends AbstractDocumentController
         $view = new ViewModel(['form' => $form]);
 
         $view->setTemplate('form-simple');
-        return $this->renderView($view, 'Upload Document');
+        return $this->renderView($view, 'Upload document');
     }
 
     public function processUpload($data)
