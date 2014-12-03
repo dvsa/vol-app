@@ -2,7 +2,7 @@
 
 return array(
     'variables' => array(
-        'title' => 'Case list'
+        'title' => 'Cases'
     ),
     'settings' => array(
         'crud' => array(
@@ -23,12 +23,7 @@ return array(
     ),
     'columns' => array(
         array(
-            'title' => '',
-            'width' => 'checkbox',
-            'format' => '{{[elements/radio]}}'
-        ),
-        array(
-            'title' => 'Case Number',
+            'title' => 'Case No.',
             'formatter' => function ($row) {
                 return '<a href="' . $this->generateUrl(
                     array('case' => $row['id'], 'action' => 'details'),
@@ -72,6 +67,11 @@ return array(
         array(
             'title' => 'ECMS',
             'name' => 'ecmsNo'
-        )
+        ),
+        array(
+            'title' => '',
+            'width' => 'checkbox',
+            'format' => '{{[elements/radio]}}'
+        ),
     )
 );

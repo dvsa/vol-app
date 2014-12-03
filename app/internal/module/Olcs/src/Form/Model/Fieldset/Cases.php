@@ -65,5 +65,17 @@ class Cases extends Base
      * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
      */
+    public $application = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
     public $licence = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $transportManager = null;
 }

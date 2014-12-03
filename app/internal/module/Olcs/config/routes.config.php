@@ -75,11 +75,14 @@ $routes = [
     'case' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/case/:action[/:case][/licence/:licence]',
+            'route' =>
+            '/case/:action[/:case][/licence/:licence][/transportManager/:transportManager][/application/:application]',
             'constraints' => [
-                //'case' => '[0-9]+',
+                'case' => '|[0-9]+',
                 'action' => '[a-z]+',
-                'licence' => '[0-9]+'
+                'licence' => '|[0-9]+',
+                'transportManager' => '|[0-9]+',
+                'application' => '|[0-9]+'
             ],
             'defaults' => [
                 'controller' => 'CaseController',
@@ -1146,6 +1149,7 @@ $routes = [
             'defaults' => [
                 'controller' => 'TMController',
                 'action' => 'index-jump',
+                'transportManager' => ''
             ]
         ],
         'may_terminate' => true,
@@ -1264,7 +1268,18 @@ $routes = [
                 ]
             ],
         ],
-    ]
+    ],
+    'create_transport_manager' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/transport-manager/create',
+            'defaults' => [
+                'controller' => 'TMDetailsDetailController',
+                'action' => 'index',
+            ],
+        ],
+        'may_terminate' => true,
+    ],
 ];
 
 $sectionConfig = new \Common\Service\Data\SectionConfig();
@@ -1353,12 +1368,47 @@ $routes['lva-application']['child_routes'] = array_merge(
         'processing' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => 'processing/',
+                'route' => 'processing[/]',
                 'defaults' => array(
-                    'controller' => 'ApplicationController',
-                    'action' => 'processing'
+                    'controller' => 'ApplicationProcessingOverviewController',
+                    'action' => 'index'
                 )
-            )
+            ),
+            'may_terminate' => true,
+            'child_routes' => [
+                'publications' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => '/publications[/:action][/:id]',
+                        'defaults' => [
+                            'controller' => 'ApplicationController',
+                            'action' => 'publications'
+                        ]
+                    ],
+                ],
+                'tasks' => [
+                    'type' => 'segment',
+                    'may_terminate' => true,
+                    'options' => [
+                        'route' => 'tasks',
+                        'defaults' => [
+                            'controller' => 'ApplicationProcessingTasksController',
+                            'action' => 'index'
+                        ]
+                    ]
+                ],
+                'notes' => [
+                    'type' => 'segment',
+                    'may_terminate' => true,
+                    'options' => [
+                        'route' => 'notes',
+                        'defaults' => [
+                            'controller' => 'ApplicationController',
+                            'action' => 'notes'
+                        ]
+                    ]
+                ],
+            ],
         ),
         'fees' => array(
             'type' => 'segment',
