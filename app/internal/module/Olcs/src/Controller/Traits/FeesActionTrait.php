@@ -12,6 +12,8 @@ use Common\Service\Listener\FeeListenerService;
 use Common\Service\Entity\FeeEntityService;
 use Common\Service\Entity\PaymentEntityService;
 use Common\Service\Entity\FeePaymentEntityService;
+use Common\Service\Cpms\PaymentNotFoundException;
+use Common\Service\Cpms\PaymentInvalidStatusException;
 use Common\Form\Elements\Validators\FeeAmountValidator;
 
 /**
@@ -224,6 +226,7 @@ trait FeesActionTrait
             $data = (array)$this->getRequest()->getPost();
 
             if ($this->isCardPayment($data)) {
+
                 $this->getServiceLocator()
                     ->get('Helper\Form')
                     ->remove($form, 'details->received');
@@ -234,10 +237,10 @@ trait FeesActionTrait
             if ($form->isValid()) {
 
                 if ($this->isCardPayment($data)) {
-                    return $this->initiateCpmsRequest($lvaType, $licenceId, $maxAmount, $fees);
+                    return $this->initiateCpmsRequest($lvaType, $licenceId, $fees);
                 }
 
-                // @NOTE: not yet implemented, part of forthcoming stories
+                // @NOTE: no other result is yet implemented; part of forthcoming stories
                 return $this->redirectToList();
 
             }
@@ -413,90 +416,43 @@ trait FeesActionTrait
     }
 
     /**
-     * Tiny helper to determine if we're making a card payment
-     */
-    private function isCardPayment($data)
-    {
-        return (isset($data['details']['paymentType']))
-            && ($data['details']['paymentType'] === FeePaymentEntityService::METHOD_CARD_OFFLINE);
-    }
-
-    /**
      * Kick off the CPMS payment process for a given amount
      * relating to a given array of fees
      *
      * @param string $lvaType
      * @param int    $licenceId
-     * @param float  $amount
      * @param array  $fees
      */
-    private function initiateCpmsRequest($lvaType, $licenceId, $amount, $fees)
+    private function initiateCpmsRequest($lvaType, $licenceId, $fees)
     {
-        $client = $this->getCpmsRestClient();
-
         $redirectUrl = $this->url()->fromRoute(
             $lvaType . '/fees/fee_action',
             ['action' => 'payment-result'],
             ['force_canonical' => true],
             true
         );
-
         $licence = $this->getLicence($licenceId);
 
-        // @TODO product ref shouldn't have to come from a whitelist...
-        $productReference  = 'GVR_APPLICATION_FEE';
-        // @NOTE CPMS rejects ints as 'missing', so we have to force a string...
-        $customerReference = (string)$licence['organisation']['id'];
+        $customerReference = $licence['organisation']['id'];
         $salesReference    = $this->params('fee');
 
-        $params = [
-            'customer_reference' => $customerReference,
-            'sales_reference' => $salesReference,
-            'product_reference' => $productReference,
-            'scope' => 'CARD',
-            'disable_redirection' => true,
-            'redirect_uri' => $redirectUrl,
-            'payment_data' => [
-                [
-                    'amount' => $amount,
-                    'sales_reference' => $salesReference,
-                    'product_reference' => $productReference
-                ]
-            ]
-        ];
-
-        $apiResponse = $client->post('/api/payment/card', 'CARD', $params);
-
-        $payment = $this->getServiceLocator()
-            ->get('Entity\Payment')
-            ->save(
-                [
-                    // yes, this is really what the key is called...
-                    'guid' => $apiResponse['redirection_data'],
-                    'status' => PaymentEntityService::STATUS_OUTSTANDING
-                ]
+        $response = $this->getServiceLocator()
+            ->get('Cpms\FeePayment')
+            ->initiateRequest(
+                $customerReference,
+                $salesReference,
+                $redirectUrl,
+                $fees
             );
-
-        foreach ($fees as $fee) {
-            $this->getServiceLocator()
-                ->get('Entity\FeePayment')
-                ->save(
-                    [
-                        'payment' => $payment['id'],
-                        'fee' => $fee['id'],
-                        'feeValue' => $fee['amount']
-                    ]
-                );
-        }
 
         $view = new ViewModel(
             [
-                'gateway' => $apiResponse['gateway_url'],
+                'gateway' => $response['gateway_url'],
                 // we bundle the data up in such a way that the view doesn't have
                 // to know what keys/values the gateway expects; it'll just loop
                 // through this array and insert the data as hidden fields
                 'data' => [
-                    'redirectionData' => $apiResponse['redirection_data']
+                    'redirectionData' => $response['redirection_data']
                 ]
             ]
         );
@@ -509,86 +465,40 @@ trait FeesActionTrait
      */
     public function paymentResultAction()
     {
-        $fees           = $this->getFeesFromParams();
-        $reference      = $this->getRequest()->getQuery('receipt_reference');
-        $paymentService = $this->getServiceLocator()->get('Entity\Payment');
+        try {
 
-        /**
-         * 1) Check what status we think this payment is currently in
-         */
-        $payment = $paymentService->getDetails($reference);
+            $resultStatus = $this->getServiceLocator()
+                ->get('Cpms\FeePayment')
+                ->handleResponse(
+                    (array)$this->getRequest()->getQuery(),
+                    $this->getFeesFromParams()
+                );
 
-        if ($payment === false) {
+        } catch (PaymentNotFoundException $ex) {
+
             $this->addErrorMessage('CPMS reference does not match valid payment record');
             return $this->redirectToList();
-        }
 
-        if ($payment['status']['id'] !== PaymentEntityService::STATUS_OUTSTANDING) {
+        } catch (PaymentInvalidStatusException $ex) {
+
             $this->addErrorMessage('Invalid payment state');
             return $this->redirectToList();
+
         }
 
-        /**
-         * 2) Let CPMS know the response from the payment gateway
-         *
-         * We have to bundle up the response data verbatim as it can
-         * vary per gateway implementation
-         */
-        $apiResponse = $this->getCpmsRestClient()
-            ->put(
-                '/api/gateway/' . $reference . '/complete',
-                'CARD',
-                (array)$this->getRequest()->getQuery()
-            );
-
-        // @TODO handle an unexpected response here?
-
-        /**
-         * 3) Now actually look up the status of the transaction and
-         * update our payment record & fee(s) accordingly
-         */
-        $params = [
-            'required_fields' => [
-                'payment' => [
-                    'payment_status',
-                ]
-            ]
-        ];
-        $apiResponse = $this->getCpmsRestClient()
-            ->get('/api/payment/' . $reference, 'QUERY_TXN', $params);
-
-        // @TODO stick these statuses in constants somewhere
-        switch ($apiResponse['payment_status']['code']) {
-            case 801:
-                foreach ($fees as $fee) {
-                    $data = [
-                        'feeStatus'      => FeeEntityService::STATUS_PAID,
-                        'receivedDate'   => $this->getServiceLocator()->get('Helper\Date')->getDate('Y-m-d H:i:s'),
-                        'receiptNo'      => $reference,
-                        'paymentMethod'  => FeePaymentEntityService::METHOD_CARD_OFFLINE,
-                        'receivedAmount' => $fee['amount']
-                    ];
-
-                    $this->getServiceLocator()
-                        ->get('Entity\Fee')
-                        ->forceUpdate($fee['id'], $data);
-                }
-
-                $paymentService->setStatus($payment['id'], PaymentEntityService::STATUS_PAID);
+        switch ($resultStatus) {
+            case PaymentEntityService::STATUS_PAID:
                 $this->addSuccessMessage('The fee(s) have been paid successfully');
                 break;
 
-            case 807:
-                $paymentService->setStatus($payment['id'], PaymentEntityService::STATUS_CANCELLED);
-                break;
-
-            case 802:
-                $paymentService->setStatus($payment['id'], PaymentEntityService::STATUS_FAILED);
+            case PaymentEntityService::STATUS_FAILED:
                 $this->addErrorMessage('The fee payment failed');
                 break;
 
+            case PaymentEntityService::STATUS_CANCELLED:
+                // no-op, don't want a flash message
+                break;
             default:
-                // @TODO log?
                 $this->addErrorMessage('An unexpected error occured');
                 break;
         }
@@ -628,5 +538,14 @@ trait FeesActionTrait
             }
         }
         return false;
+    }
+
+    /**
+     * Tiny helper to determine if we're making a card payment
+     */
+    private function isCardPayment($data)
+    {
+        return (isset($data['details']['paymentType']))
+            && ($data['details']['paymentType'] === FeePaymentEntityService::METHOD_CARD_OFFLINE);
     }
 }
