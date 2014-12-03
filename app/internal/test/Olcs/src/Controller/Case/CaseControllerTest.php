@@ -223,7 +223,7 @@ class CaseControllerTest extends ControllerTestAbstract
         $caseId = 28;
         $licence = 7;
         $mockResult = [];
-        $pageLayout = 'licence';
+        $pageLayout = 'simple';
         $pageLayoutInner = null;
         $action = 'add';
 
