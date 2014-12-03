@@ -136,7 +136,7 @@ class OperatorControllerTest extends MockeryTestCase
             ->andReturn($operator);
 
         $this->sut->shouldReceive('redirect->toRouteAjax')
-            ->with('lva-application', ['application' => 3])
+            ->with('lva-application/type_of_licence', ['application' => 3])
             ->andReturn('REDIRECT');
 
         $return = $this->sut->newApplicationAction();
