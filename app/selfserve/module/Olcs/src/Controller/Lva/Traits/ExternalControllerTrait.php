@@ -83,16 +83,22 @@ trait ExternalControllerTrait
      *
      * @param string $titleSuffix
      * @param \Zend\Form\Form $form
+     * @param $variables array
      * @return \Common\View\Model\Section
      */
-    protected function render($titleSuffix, Form $form = null)
+    protected function render($titleSuffix, Form $form = null, $variables = array())
     {
         $this->attachCurrentMessages();
 
         if ($titleSuffix instanceof ViewModel) {
             return $titleSuffix;
         }
+        
+        $params = array_merge(
+            array('title' => 'lva.section.title.' . $titleSuffix, 'form' => $form),
+            $variables
+        );
 
-        return new Section(array('title' => 'lva.section.title.' . $titleSuffix, 'form' => $form));
+        return new Section($params);
     }
 }
