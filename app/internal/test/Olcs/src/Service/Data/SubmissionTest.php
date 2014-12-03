@@ -311,7 +311,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
 
     public function testGetId()
     {
-        $this->assertNull($this->sut->getId());
+        $this->assertnull($this->sut->getId());
     }
 
     public function testSetApiResolver()
@@ -323,7 +323,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
 
     public function testGetApiResolver()
     {
-        $this->assertNull($this->sut->getApiResolver());
+        $this->assertnull($this->sut->getApiResolver());
     }
 
     public function testGetLoadedSectionData()
@@ -346,7 +346,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSubmissionConfig()
     {
-        $this->assertNull($this->sut->getSubmissionConfig());
+        $this->assertnull($this->sut->getSubmissionConfig());
     }
 
     /**
@@ -1116,7 +1116,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                     ]
                 ]
             ],
-            /*[   // penalties section
+            [   // penalties section
                 [
                     'caseId' => 24,
                     'sectionId' => 'penalties',
@@ -1128,69 +1128,277 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                 ],
                 [
                     'loadedCaseSectionData' => [
-                        'id' => 24,
-                        'licence' => [
-                            'id' => 24,
-                            'organisation' => [
-                                'licences' => [
+                        'ecmsNo' => '',
+                        'openDate' => '2014-02-11T00:00:00+0000',
+                        'description' => '1213213',
+                        'isImpounding' => 'N',
+                        'erruOriginatingAuthority' => 'Polish Transport Authority',
+                        'erruTransportUndertakingName' => 'Polish Transport Authority',
+                        'erruVrm' => 'GH52 ABC',
+                        'annualTestHistory' => null,
+                        'prohibitionNote' => null,
+                        'penaltiesNote' => 'comment',
+                        'convictionNote' => null,
+                        'id' => 29,
+                        'closeDate' => null,
+                        'deletedDate' => null,
+                        'createdOn' => '2014-01-11T11:11:11+0000',
+                        'lastModifiedOn' => '2014-11-07T12:47:07+0000',
+                        'version' => 3,
+                        'seriousInfringements' => [
+                            0 => [
+                                'checkDate' => '2014-04-04',
+                                'erruResponseSent' => 'N',
+                                'erruResponseTime' => null,
+                                'infringementDate' => '2014-04-05',
+                                'notificationNumber' => '123456',
+                                'reason' => null,
+                                'id' => 1,
+                                'deletedDate' => null,
+                                'createdOn' => '2014-05-04T17:50:06+0100',
+                                'lastModifiedOn' => '2014-05-04T17:50:06+0100',
+                                'version' => 1,
+                                'siCategory' => [
+                                    'id' => 'MSI',
+                                    'description' => 'MSI',
+                                    'deletedDate' => null,
+                                    'createdOn' => '2011-11-04T17:50:06+0000',
+                                    'lastModifiedOn' => '2011-11-04T17:50:06+0000',
+                                    'version' => 1,
+                                ],
+                                'siCategoryType' => [
+                                    'id' => '101',
+                                    'description' => 'Exceeding the maximum six-day or fortnightly driving time limits',
+                                    'deletedDate' => null,
+                                    'createdOn' => '2011-11-04T17:50:06+0000',
+                                    'lastModifiedOn' => '2011-11-04T17:50:06+0000',
+                                    'version' => 1,
+                                ],
+                                'appliedPenalties' => [
                                     0 => [
-                                        'id' => 24,
+                                        'imposed' => 'Y',
+                                        'reasonNotImposed' => null,
+                                        'id' => 1,
+                                        'startDate' => '2014-06-01',
+                                        'endDate' => '2015-01-31',
+                                        'deletedDate' => null,
+                                        'createdOn' => '2014-05-21T12:22:09+0100',
+                                        'lastModifiedOn' => '2014-05-21T12:22:09+0100',
                                         'version' => 1,
-                                        'licNo' => 'OB1234568',
-                                        'status' => ['description' => 'Valid'],
-                                        'licenceType' => ['description' => 'Standard National'],
-                                        'totAuthTrailers' => '4',
-                                        'totAuthVehicles' => '5',
-                                        'licenceVehicles' => [
-                                            0 => [
-                                                'specifiedDate' => '2012-03-10T00:00:00+0000',
-                                                'deletedDate' => '2012-03-10T00:00:00+0000'
-                                            ]
+                                        'siPenaltyType' => [
+                                            'id' => '101',
+                                            'description' => 'Warning',
+                                            'deletedDate' => null,
+                                            'createdOn' => '2013-03-22T17:30:05+0000',
+                                            'lastModifiedOn' => '2013-03-22T17:30:05+0000',
+                                            'version' => 1,
                                         ],
-                                        'createdOn' => '2012-03-10T00:00:00+0000'
+                                        'seriousInfringement' => [
+                                            'checkDate' => '2014-04-04',
+                                            'erruResponseSent' => 'N',
+                                            'erruResponseTime' => null,
+                                            'infringementDate' => '2014-04-05',
+                                            'notificationNumber' => '123456',
+                                            'reason' => null,
+                                            'id' => 1,
+                                            'deletedDate' => null,
+                                            'createdOn' => '2014-05-04T17:50:06+0100',
+                                            'lastModifiedOn' => '2014-05-04T17:50:06+0100',
+                                            'version' => 1,
+                                        ],
                                     ],
                                     1 => [
-                                        'id' => 22,
+                                        'imposed' => 'N',
+                                        'reasonNotImposed' => 'Reason the penalty was not imposed',
+                                        'id' => 2,
+                                        'startDate' => '2014-06-01',
+                                        'endDate' => '2015-01-31',
+                                        'deletedDate' => null,
+                                        'createdOn' => '2014-05-21T12:22:09+0100',
+                                        'lastModifiedOn' => '2014-05-21T12:22:09+0100',
                                         'version' => 1,
-                                        'licNo' => 'OB1234567',
-                                        'status' => ['description' => 'Curtailed'],
-                                        'licenceType' => ['description' => 'Standard National'],
-                                        'totAuthTrailers' => '4',
-                                        'totAuthVehicles' => '5',
-                                        'licenceVehicles' => [
-                                            0 => [
-                                                'specifiedDate' => '2012-03-10T00:00:00+0000',
-                                                'deletedDate' => '2012-03-10T00:00:00+0000',
-                                            ]
+                                        'siPenaltyType' => [
+                                            'id' => '306',
+                                            'description' => 'Withdrawal of driver attestations ',
+                                            'deletedDate' => null,
+                                            'createdOn' => '2013-03-22T17:30:05+0000',
+                                            'lastModifiedOn' => '2013-03-22T17:30:05+0000',
+                                            'version' => 1,
                                         ],
-                                        'createdOn' => '2012-03-10T00:00:00+0000'
-                                    ]
-                                ]
-                            ]
-                        ]
+                                        'seriousInfringement' => [
+                                            'checkDate' => '2014-04-04',
+                                            'erruResponseSent' => 'N',
+                                            'erruResponseTime' => null,
+                                            'infringementDate' => '2014-04-05',
+                                            'notificationNumber' => '123456',
+                                            'reason' => null,
+                                            'id' => 1,
+                                            'deletedDate' => null,
+                                            'createdOn' => '2014-05-04T17:50:06+0100',
+                                            'lastModifiedOn' => '2014-05-04T17:50:06+0100',
+                                            'version' => 1,
+                                        ],
+                                    ],
+                                ],
+                                'imposedErrus' => [
+                                    0 => [
+                                        'finalDecisionDate' => '2014-10-02',
+                                        'executed' => true,
+                                        'id' => 1,
+                                        'startDate' => '2014-11-01',
+                                        'endDate' => '2015-12-01',
+                                        'deletedDate' => null,
+                                        'createdOn' => '2014-05-21T12:22:09+0100',
+                                        'lastModifiedOn' => '2014-05-21T12:22:09+0100',
+                                        'version' => 1,
+                                        'siPenaltyImposedType' => [
+                                            'deletedDate' => null,
+                                            'id' => '204',
+                                            'description' => 'Immobilisation',
+                                            'createdOn' => '2013-03-22T17:30:05+0000',
+                                            'lastModifiedOn' => '2013-03-22T17:30:05+0000',
+                                            'version' => 1,
+                                        ],
+                                    ],
+                                    1 => [
+                                        'finalDecisionDate' => '2014-10-02',
+                                        'executed' => true,
+                                        'id' => 2,
+                                        'startDate' => '2014-11-01',
+                                        'endDate' => '2015-12-01',
+                                        'deletedDate' => null,
+                                        'createdOn' => '2014-05-21T12:22:09+0100',
+                                        'lastModifiedOn' => '2014-05-21T12:22:09+0100',
+                                        'version' => 1,
+                                        'siPenaltyImposedType' => [
+                                            'deletedDate' => null,
+                                            'id' => '202',
+                                            'description' => 'Fine',
+                                            'createdOn' => '2013-03-22T17:30:05+0000',
+                                            'lastModifiedOn' => '2013-03-22T17:30:05+0000',
+                                            'version' => 1,
+                                        ],
+                                    ],
+                                ],
+                                'requestedErrus' => [
+                                     0 => [
+                                        'duration' => 12,
+                                        'id' => 1,
+                                        'deletedDate' => null,
+                                        'createdOn' => '2014-05-21T12:22:09+0100',
+                                        'lastModifiedOn' => '2014-05-21T12:22:09+0100',
+                                        'version' => 1,
+                                        'siPenaltyRequestedType' => [
+                                            'id' => '305',
+                                            'description' => 'Suspension of the issue of driver attestations',
+                                            'deletedDate' => null,
+                                            'createdOn' => '2013-03-22T17:30:05+0000',
+                                            'lastModifiedOn' => '2013-03-22T17:30:05+0000',
+                                            'version' => 1,
+                                        ],
+                                     ],
+                                    1 => [
+                                        'duration' => 36,
+                                        'id' => 2,
+                                        'deletedDate' => null,
+                                        'createdOn' => '2014-05-21T12:22:09+0100',
+                                        'lastModifiedOn' => '2014-05-21T12:22:09+0100',
+                                        'version' => 1,
+                                        'siPenaltyRequestedType' => [
+                                            'id' => '302',
+                                            'description' => 'foo bar',
+                                            'deletedDate' => null,
+                                            'createdOn' => '2013-03-22T17:30:05+0000',
+                                            'lastModifiedOn' => '2013-03-22T17:30:05+0000',
+                                            'version' => 1,
+                                        ],
+                                    ],
+                                ],
+                                'memberStateCode' => [
+                                    'countryDesc' => 'Poland',
+                                    'isMemberState' => 'N',
+                                    'id' => 'PL',
+                                    'createdOn' => null,
+                                    'lastModifiedOn' => null,
+                                    'version' => 1,
+                                ],
+                            ],
+                        ],
                     ],
                     'expected' => [
+                        'overview' => [
+                            'vrm' => 'GH52 ABC',
+                            'infringementId' => 1,
+                            'notificationNumber' => '123456',
+                            'infringementDate' => '2014-04-05',
+                            'checkDate' => '2014-04-04',
+                            'category' => 'MSI',
+                            'categoryType' =>
+                                'Exceeding the maximum six-day or fortnightly driving time limits',
+                            'transportUndertakingName' => 'Polish Transport Authority',
+                            'memberState' => 'Poland',
+                            'originatingAuthority' => 'Polish Transport Authority',
+                        ],
                         'tables' => [
-                            'linked-licences-app-numbers' => [
+                            'applied-penalties' => [
                                 0 => [
-                                    'id' => 22,
+                                    'id' => 1,
                                     'version' => 1,
-                                    'licNo' => 'OB1234567',
-                                    'status' => 'Curtailed',
-                                    'licenceType' => 'Standard National',
-                                    'totAuthTrailers' => '4',
-                                    'totAuthVehicles' => '5',
-                                    'vehiclesInPossession' => 0,
-                                    'trailersInPossession' => 4
+                                    'penaltyType' => 'Warning',
+                                    'startDate' => '2014-06-01',
+                                    'endDate' => '2015-01-31',
+                                    'imposed' => 'Y',
+                                ],
+                                1 => [
+                                    'id' => 2,
+                                    'version' => 1,
+                                    'penaltyType' => 'Withdrawal of driver attestations ',
+                                    'startDate' => '2014-06-01',
+                                    'endDate' => '2015-01-31',
+                                    'imposed' => 'N',
+                                ],
+                            ],
+                            'imposed-penalties' => [
+                                0 => [
+                                    'id' => 1,
+                                    'version' => 1,
+                                    'finalDecisionDate' => '2014-10-02',
+                                    'penaltyType' => 'Immobilisation',
+                                    'startDate' => '2014-11-01',
+                                    'endDate' => '2015-12-01',
+                                    'executed' => true,
+                                ],
+                                1 => [
+                                    'id' => 2,
+                                    'version' => 1,
+                                    'finalDecisionDate' => '2014-10-02',
+                                    'penaltyType' => 'Fine',
+                                    'startDate' => '2014-11-01',
+                                    'endDate' => '2015-12-01',
+                                    'executed' => true,
+                                ],
+                            ],
+                            'requested-penalties' => [
+                                0 => [
+                                    'id' => 1,
+                                    'version' => 1,
+                                    'penaltyType' => 'Suspension of the issue of driver attestations',
+                                    'duration' => 12,
+                                ],
+                                1 => [
+                                    'id' => 2,
+                                    'version' => 1,
+                                    'penaltyType' => 'foo bar',
+                                    'duration' => 36,
                                 ]
                             ]
-                        ]
+                        ],
+                        'text' => 'comment',
                     ]
                 ]
-            ]*/
+            ]
         ];
     }
-
 
     public function providerSubmissionSectionPrebuiltData()
     {
@@ -1390,90 +1598,92 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
     private function getCaseSummaryMockData()
     {
         return [
-            'ecmsNo' => 'E123456',
-            'description' => 'Case for convictions against company directors',
-            'id' => 24,
-            'caseType' =>
-                [
-                    'id' => 'case_t_lic',
-                ],
-            'licence' => [
-                'licNo' => 'OB1234567',
-                'trailersInPossession' => null,
-                'totAuthTrailers' => 4,
-                'totAuthVehicles' => 12,
-                'inForceDate' => '2010-01-12T00:00:00+0000',
-                'status' => [
-                    'description' => 'New',
-                    'id' => 'lsts_consideration',
-                ],
-                'organisation' => [
-                    'isMlh' => 'Y',
-                    'name' => 'John Smith Haulage Ltd.',
-                    'type' =>
-                        [
-                            'description' => 'Registered Company',
-                            'id' => 'org_t_rc',
-                        ],
-                    'organisationPersons' => [
-                        0 => [
-                            'person' => [
-                                'id' => 1,
-                                'title' => '',
-                                'forename' => 'Tom',
-                                'familyName' => 'Jones',
-                                'birthDate' => '1972-02-15T00:00:00+0100',
+            'Results' => [ // branch test
+                'ecmsNo' => 'E123456',
+                'description' => 'Case for convictions against company directors',
+                'id' => 24,
+                'caseType' =>
+                    [
+                        'id' => 'case_t_lic',
+                    ],
+                'licence' => [
+                    'licNo' => 'OB1234567',
+                    'trailersInPossession' => null,
+                    'totAuthTrailers' => 4,
+                    'totAuthVehicles' => 12,
+                    'inForceDate' => '2010-01-12T00:00:00+0000',
+                    'status' => [
+                        'description' => 'New',
+                        'id' => 'lsts_consideration',
+                    ],
+                    'organisation' => [
+                        'isMlh' => 'Y',
+                        'name' => 'John Smith Haulage Ltd.',
+                        'type' =>
+                            [
+                                'description' => 'Registered Company',
+                                'id' => 'org_t_rc',
                             ],
+                        'organisationPersons' => [
+                            0 => [
+                                'person' => [
+                                    'id' => 1,
+                                    'title' => '',
+                                    'forename' => 'Tom',
+                                    'familyName' => 'Jones',
+                                    'birthDate' => '1972-02-15T00:00:00+0100',
+                                ],
+                            ],
+                            1 => [
+                                'person' => [
+                                    'id' => 2,
+                                    'title' => '',
+                                    'forename' => 'Keith',
+                                    'familyName' => 'Winnard',
+                                    'birthDate' => '1975-03-15T00:00:00+0100',
+                                ]
+                            ]
+                        ],
+                        'natureOfBusinesss' => [
+                            [
+                                'refData' => [
+                                    'id' => '1',
+                                    'description' => 'Some whatever'
+                                ]
+                            ]
+                        ]
+                    ],
+                    'licenceVehicles' => [
+                        0 => [
+                            'id' => 1,
+                            'deletedDate' => null,
+                            'specifiedDate' => '2014-02-20T00:00:00+0000',
                         ],
                         1 => [
-                            'person' => [
-                                'id' => 2,
-                                'title' => '',
-                                'forename' => 'Keith',
-                                'familyName' => 'Winnard',
-                                'birthDate' => '1975-03-15T00:00:00+0100',
-                            ]
-                        ]
+                            'id' => 2,
+                            'deletedDate' => null,
+                            'specifiedDate' => '2014-02-20T00:00:00+0000',
+                        ],
+                        2 => [
+                            'id' => 3,
+                            'deletedDate' => null,
+                            'specifiedDate' => '2014-02-20T00:00:00+0000',
+                        ],
+                        3 => [
+                            'id' => 4,
+                            'deletedDate' => null,
+                            'specifiedDate' => '2014-02-20T00:00:00+0000',
+                        ],
                     ],
-                    'natureOfBusinesss' => [
-                        [
-                            'refData' => [
-                                'id' => '1',
-                                'description' => 'Some whatever'
-                            ]
-                        ]
-                    ]
-                ],
-                'licenceVehicles' => [
-                    0 => [
-                        'id' => 1,
-                        'deletedDate' => null,
-                        'specifiedDate' => '2014-02-20T00:00:00+0000',
+                    'licenceType' => [
+                        'description' => 'Standard National',
+                        'id' => 'ltyp_sn',
                     ],
-                    1 => [
-                        'id' => 2,
-                        'deletedDate' => null,
-                        'specifiedDate' => '2014-02-20T00:00:00+0000',
-                    ],
-                    2 => [
-                        'id' => 3,
-                        'deletedDate' => null,
-                        'specifiedDate' => '2014-02-20T00:00:00+0000',
-                    ],
-                    3 => [
-                        'id' => 4,
-                        'deletedDate' => null,
-                        'specifiedDate' => '2014-02-20T00:00:00+0000',
+                    'goodsOrPsv' => [
+                        'description' => 'Goods Vehicle',
                     ],
                 ],
-                'licenceType' => [
-                    'description' => 'Standard National',
-                    'id' => 'ltyp_sn',
-                ],
-                'goodsOrPsv' => [
-                    'description' => 'Goods Vehicle',
-                ],
-            ],
+            ]
         ];
     }
 }
