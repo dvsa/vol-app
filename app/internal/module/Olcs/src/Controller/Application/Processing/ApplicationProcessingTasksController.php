@@ -54,7 +54,7 @@ class ApplicationProcessingTasksController extends AbstractApplicationProcessing
 
         $view = new ViewModel(['table' => $table->render()]);
 
-        $view->setTemplate('licence/processing/layout');
+        $view->setTemplate('licence/processing/tasks/index');
         $view->setTerminal($this->getRequest()->isXmlHttpRequest());
 
         return $this->renderView($view);

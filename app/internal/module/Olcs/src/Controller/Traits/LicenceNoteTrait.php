@@ -87,11 +87,10 @@ trait LicenceNoteTrait
      */
     public function redirectToIndex()
     {
-        $id      = $this->getFromRoute($this->getIdentifierName());
+        $id      = $this->getFromRoute($this->getEntityName());
         $route   = $this->getRoutePrefix() . $this->getRedirectIndexRoute();
-        $params  = ['action'=>'index', $this->getIdentifierName() => $id];
-        // @TODO make this work
-        return $this->redirect()->toRouteAjax($route, $params);
+        $params  = ['action'=>'index', $this->getEntityName() => $id];
+        return $this->redirectToRouteAjax($route, $params);
     }
 
     /**

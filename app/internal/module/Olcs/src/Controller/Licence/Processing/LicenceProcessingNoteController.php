@@ -26,12 +26,7 @@ class LicenceProcessingNoteController extends AbstractLicenceProcessingControlle
     protected $section = 'notes';
     protected $service = 'Note';
 
-    /**
-     * Identifier name
-     *
-     * @var string
-     */
-    protected $identifierName = 'licence';
+    protected $entity = 'licence';
 
     public function __construct()
     {

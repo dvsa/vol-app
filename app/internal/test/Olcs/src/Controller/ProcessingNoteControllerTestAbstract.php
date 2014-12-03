@@ -42,6 +42,7 @@ abstract class ProcessingNoteControllerTestAbstract extends AbstractHttpControll
                 'url',
                 'renderView',
                 'redirectToRoute',
+                'redirectToRouteAjax',
                 'processAdd',
                 'processEdit',
                 'setTableFilters',
@@ -426,13 +427,12 @@ abstract class ProcessingNoteControllerTestAbstract extends AbstractHttpControll
 
     public function getRedirectToIndex()
     {
+        $id = null; // comes from route params - need to update tests
         $this->controller->expects($this->once())
-            ->method('redirectToRoute')
+            ->method('redirectToRouteAjax')
             ->with(
                 $this->equalTo($this->controller->getRoutePrefix() . $this->controller->getRedirectIndexRoute()),
-                $this->equalTo(['action'=>'index', 'id' => null]),
-                $this->equalTo(['code' => '303']),
-                $this->equalTo(true)
+                $this->equalTo(['action'=>'index', $this->controller->getEntityName() => $id])
             );
     }
 
@@ -448,7 +448,7 @@ abstract class ProcessingNoteControllerTestAbstract extends AbstractHttpControll
             'noteType' => $refDataNoteType,
             'linkedId' => $linkedId,
             'case' => 28,
-            'version' => $version
+            'version' => $version,
         ];
     }
 

@@ -28,6 +28,21 @@ trait ProcessingControllerTrait
     protected $processingHelper;
 
     /**
+     * Holds the 'parent' entity name, e.g. licence/application/case
+     * rather than note/task
+     *
+     * @var string
+     */
+    protected $entity;
+
+    /**
+     * @return string
+     */
+    public function getEntityName() {
+        return $this->entity;
+    }
+
+    /**
      * Get the processing helper
      *
      * @return \Olcs\Helper\AbstractProcessingHelper
