@@ -51,8 +51,6 @@ return array(
     'Common\Service\Zend\ModuleManager\ModuleManagerZendService' => false,
     'Common\Service\Zend\Stdlib\Hydrator\ArraySerializableZendService' => false,
     'Common\Service\\Common\Form\Elements\InputFilters\ActionButtonService' => false,
-    'Common\Service\\Common\Form\Elements\InputFilters\FeeWaiveNoteService' => false,
-    'Common\Service\\Zend\Form\FieldsetService' => false,
     'Common\Service\commonformelementdynamicselect' => false,
     'Common\Service\commonformelementscustomolcscheckbox' => false,
     'Common\Service\commonformelementsinputfiltersactionbutton' => false,
@@ -263,6 +261,7 @@ return array(
         . '/StubApplicationController.php',
     'OlcsTest\Data\Object\Search\SearchAbstractTest' => $rootPath . '/test/Olcs/src/Data/Object/Search'
         . '/SearchAbstractTest.php',
+    'Olcs\Controller\Lva\Application' => false,
     'Olcs\Form\Model\Form\AdminDiscPrinting' => false,
     'Olcs\Form\Model\Form\Lva\BusinessType' => false,
     'Olcs\Form\Model\Form\Lva\TypeOfLicence' => false,
