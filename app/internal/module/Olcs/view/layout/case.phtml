@@ -23,6 +23,7 @@ $markers = $this->placeholder('markers')->getValue();
       <p class="small-module__details">
         <a href="#"><?php echo $case['licence']['organisation']['name']; ?></a><br>
         <?php echo $this->translate($case['licence']['organisation']['type']['id']); ?><br>
+          <?php echo $this->translate($case['licence']['trafficArea']['name']); ?><br>
       </p>
     </div><!-- end .small-details -->
     <?php endif; ?>

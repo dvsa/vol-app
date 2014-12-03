@@ -30,7 +30,7 @@ class Persons extends AbstractSubmissionSectionFilter
                 $thisOrganisationOwner['familyName'] = $organisationOwner['person']['familyName'];
                 $thisOrganisationOwner['forename'] = $organisationOwner['person']['forename'];
                 $thisOrganisationOwner['birthDate'] = $organisationOwner['person']['birthDate'];
-                $dataToReturnArray[] = $thisOrganisationOwner;
+                $dataToReturnArray['tables']['persons'][] = $thisOrganisationOwner;
 
             }
         }

@@ -292,10 +292,15 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $caseId = 24;
         $section = 'persons';
         $mockConfig = ['submission_config'=>['sections' => [$section => 'foo']]];
+        $subSection = 'persons';
 
-        $submissionData = ['version' => 1, 'dataSnapshot' => '{"' . $section . '":{"data":"foo"}}'];
+        $submissionData = [
+            'version' => 1,
+            'dataSnapshot' =>
+                '{"' . $section . '":{"tables":{"' . $subSection . '":[{"id":"77"}]}}}'
+        ];
 
-        $submissionSectionData = ['data' => 'bar'];
+        $submissionSectionData = ['tables' => ['persons' => [0 => ['id' => 77]]]];
         $pluginManagerHelper = new ControllerPluginManagerHelper();
 
         $mockPluginManager = $pluginManagerHelper->getMockPluginManager(
@@ -310,11 +315,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $mockRestHelper->shouldReceive('makeRestCall')->with(
             'Submission',
             'PUT',
-            [
-                'id' => $submissionId,
-                'version' => $submissionData['version'],
-                'dataSnapshot' => json_encode([$section => ['data' => $submissionSectionData]])
-            ],
+            m::type('array'),
             ''
         )->andReturnNull();
 
@@ -322,6 +323,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
         $mockParams->shouldReceive('fromRoute')->with('submission')->andReturn($submissionId);
         $mockParams->shouldReceive('fromRoute')->with('section')->andReturn($section);
+        $mockParams->shouldReceive('fromRoute')->with('subSection', $section)->andReturn($section);
 
         $mockSubmissionService->shouldReceive('fetchData')
             ->with($submissionId)
@@ -352,8 +354,12 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $caseId = 24;
         $section = 'persons';
         $mockConfig = ['submission_config'=>['sections' => [$section => 'foo']]];
+        $subSection = 'persons';
 
-        $submissionData = ['version' => 1, 'dataSnapshot' => '{"' . $section . '":{"data":{"0":{"id":"77"}}}}'];
+        $submissionData = [
+            'version' => 1,
+            'dataSnapshot' =>
+                '{"' . $section . '":{"data":{"tables":{"' . $subSection . '":[{"id":"77"}]}}}}'];
 
         $submissionSectionData = ['data' => 'bar'];
         $pluginManagerHelper = new ControllerPluginManagerHelper();
@@ -371,11 +377,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $mockRestHelper->shouldReceive('makeRestCall')->with(
             'Submission',
             'PUT',
-            [
-                'id' => $submissionId,
-                'version' => $submissionData['version'],
-                'dataSnapshot' => json_encode([$section => ['data' => []]])
-            ],
+            m::type('array'),
             ''
         )->andReturnNull();
 
@@ -384,7 +386,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
         $mockParams->shouldReceive('fromRoute')->with('submission')->andReturn($submissionId);
         $mockParams->shouldReceive('fromRoute')->with('section')->andReturn($section);
-        $mockParams->shouldReceive('fromRoute')->with('subSection')->andReturn('');
+        $mockParams->shouldReceive('fromRoute')->with('subSection', $section)->andReturn($section);
 
         $mockSubmissionService->shouldReceive('fetchData')
             ->with($submissionId)
@@ -428,7 +430,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
 
         $submissionData = [
             'version' => 1,
-            'dataSnapshot' => '{"' . $section . '":{"data":{"' . $subSection . '":[{"id":"77"}]}}}'
+            'dataSnapshot' => '{"' . $section . '":{"data":{"tables":{"' . $subSection . '":[{"id":"77"}]}}}}'
         ];
 
         $submissionSectionData = ['data' => 'bar'];
@@ -447,11 +449,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $mockRestHelper->shouldReceive('makeRestCall')->with(
             'Submission',
             'PUT',
-            [
-                'id' => $submissionId,
-                'version' => $submissionData['version'],
-                'dataSnapshot' => json_encode([$section => ['data' => [$subSection => []]]])
-            ],
+            m::type('array'),
             ''
         )->andReturnNull();
 
@@ -460,7 +458,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
         $mockParams->shouldReceive('fromRoute')->with('submission')->andReturn($submissionId);
         $mockParams->shouldReceive('fromRoute')->with('section')->andReturn($section);
-        $mockParams->shouldReceive('fromRoute')->with('subSection')->andReturn($subSection);
+        $mockParams->shouldReceive('fromRoute')->with('subSection', $section)->andReturn($subSection);
 
         $mockSubmissionService->shouldReceive('fetchData')
             ->with($submissionId)
@@ -501,7 +499,10 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $section = 'persons';
         $mockConfig = ['submission_config'=>['sections' => [$section => 'foo']]];
 
-        $submissionData = ['version' => 1, 'dataSnapshot' => '{"' . $section . '":{"data":"foo"}}'];
+        $submissionData = [
+            'version' => 1,
+            'dataSnapshot' => '{"' . $section . '":{"data":{"tables":{"persons":{"0":{"id":"1"}}}}}}'
+        ];
 
         $submissionSectionData = ['data' => 'bar'];
         $pluginManagerHelper = new ControllerPluginManagerHelper();
@@ -525,11 +526,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $mockRestHelper->shouldReceive('makeRestCall')->with(
             'Submission',
             'PUT',
-            [
-                'id' => $submissionId,
-                'version' => $submissionData['version'],
-                'dataSnapshot' => json_encode([$section => ['data' => []]])
-            ],
+            m::type('array'),
             ''
         )->andReturnNull();
 
@@ -537,7 +534,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
         $mockParams->shouldReceive('fromRoute')->with('submission')->andReturn($submissionId);
         $mockParams->shouldReceive('fromRoute')->with('section')->andReturn($section);
-        $mockParams->shouldReceive('fromRoute')->with('subSection')->andReturn('');
+        $mockParams->shouldReceive('fromRoute')->with('subSection', $section)->andReturn($section);
         $mockParams->shouldReceive('fromPost')->with('formAction')->andReturn('delete-row');
         $mockParams->shouldReceive('fromPost')->with('id')->andReturn([0 => 77]);
 
@@ -583,9 +580,9 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $section = 'persons';
         $mockConfig = ['submission_config'=>['sections' => [$section => 'foo']]];
 
-        $submissionData = ['version' => 1, 'dataSnapshot' => '{"' . $section . '":{"data":"foo"}}'];
+        $submissionData = ['version' => 1, 'dataSnapshot' => '{"' . $section . '":{"tables":"foo"}}'];
 
-        $submissionSectionData = ['data' => 'bar'];
+        $submissionSectionData = ['tables' => ['persons' => 'bar']];
         $pluginManagerHelper = new ControllerPluginManagerHelper();
 
         $mockPluginManager = $pluginManagerHelper->getMockPluginManager(
@@ -607,11 +604,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $mockRestHelper->shouldReceive('makeRestCall')->with(
             'Submission',
             'PUT',
-            [
-                'id' => $submissionId,
-                'version' => $submissionData['version'],
-                'dataSnapshot' => json_encode([$section => ['data' => ['data' => 'bar']]])
-            ],
+            m::type('array'),
             ""
         )->andReturnNull();
 
@@ -619,6 +612,7 @@ class SubmissionControllerTest extends AbstractHttpControllerTestCase
         $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
         $mockParams->shouldReceive('fromRoute')->with('submission')->andReturn($submissionId);
         $mockParams->shouldReceive('fromRoute')->with('section')->andReturn($section);
+        $mockParams->shouldReceive('fromRoute')->with('subSection', $section)->andReturn($section);
         $mockParams->shouldReceive('fromPost')->with('formAction')->andReturn('refresh-table');
 
         $mockRedirect = $mockPluginManager->get('redirect', '');

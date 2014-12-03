@@ -46,7 +46,7 @@ class ConvictionFpnOffenceHistory extends AbstractSubmissionSectionFilter
                     $conviction['isDeclared'] : 'N';
                 $thisConviction['isDealtWith'] = !empty($conviction['isDealtWith']) ?
                     $conviction['isDealtWith'] : 'N';
-                $dataToReturnArray[] = $thisConviction;
+                $dataToReturnArray['tables']['conviction-fpn-offence-history'][] = $thisConviction;
             }
         }
         return $dataToReturnArray;

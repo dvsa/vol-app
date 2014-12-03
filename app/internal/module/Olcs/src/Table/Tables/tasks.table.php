@@ -34,7 +34,7 @@ return array(
             'sort' => 'categoryName',
         ),
         array(
-            'title' => 'Subcategory',
+            'title' => 'Sub category',
             'name' => 'taskSubCategoryName',
             'sort' => 'taskSubCategoryName',
         ),
