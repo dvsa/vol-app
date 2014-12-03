@@ -264,6 +264,7 @@ return array(
     'OlcsTest\Data\Object\Search\SearchAbstractTest' => $rootPath . '/test/Olcs/src/Data/Object/Search'
         . '/SearchAbstractTest.php',
     'Olcs\Form\Model\Form\AdminDiscPrinting' => false,
+    'Olcs\Form\Model\Form\Lva\BusinessType' => false,
     'Olcs\Form\Model\Form\Lva\TypeOfLicence' => false,
     'Olcs\Form\Model\Form\name' => false,
     'Olcs\Logging\Helper\LogError' => $rootPath . '/vendor/olcs/olcs-logging/src/Helper/LogError.php',
@@ -393,6 +394,8 @@ return array(
         . '/CamelCaseToDash.php',
     'Zend\Filter\Word\CamelCaseToSeparator' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Filter'
         . '/Word/CamelCaseToSeparator.php',
+    'Zend\Filter\Word\CamelCaseToUnderscore' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Filter'
+        . '/Word/CamelCaseToUnderscore.php',
     'Zend\Filter\Word\DashToCamelCase' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Filter/Word'
         . '/DashToCamelCase.php',
     'Zend\Filter\Word\SeparatorToCamelCase' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Filter'
