@@ -415,23 +415,31 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->sut->shouldReceive('params')
             ->with('fee')
             ->andReturn('1,2')
+            ->shouldReceive('params')
+            ->with('application')
+            ->andReturn(1)
             ->shouldReceive('getForm')
             ->with('FeePayment')
             ->andReturn($form)
             ->shouldReceive('renderView')
             ->andReturn('renderView');
 
+        $this->mockEntity('Application', 'getLicenceIdForApplication')
+            ->andReturn(7);
+
         $fees = [
             [
                 'amount' => 5.5,
                 'feeStatus' => [
                     'id' => 'lfs_ot'
-                ]
+                ],
+                'feePayments' => []
             ], [
                 'amount' => 10,
                 'feeStatus' => [
                     'id' => 'lfs_ot'
-                ]
+                ],
+                'feePayments' => []
             ]
         ];
         $this->mockEntity('Fee', 'getOverview')
@@ -456,9 +464,15 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->sut->shouldReceive('params')
             ->with('fee')
             ->andReturn('1')
+            ->shouldReceive('params')
+            ->with('application')
+            ->andReturn(1)
             ->shouldReceive('redirectToList')
             ->andReturn('redirect')
             ->shouldReceive('addErrorMessage');
+
+        $this->mockEntity('Application', 'getLicenceIdForApplication')
+            ->andReturn(7);
 
         $fee = [
             'amount' => 5.5,
