@@ -4,35 +4,56 @@ $rootPath = realpath(__DIR__ . '/../../');
 
 return array(
     'Annotation' => false,
+    'Common\Controller\Lva\Traits\VehicleFilterTrait' => $rootPath . '/vendor/olcs/OlcsCommon/Common/src/Common'
+        . '/Controller/Lva/Traits/VehicleFilterTrait.php',
+    'Common\Form\Model\Form\Lva\VehicleFilter' => $rootPath . '/vendor/olcs/OlcsCommon/Common/src/Common/Form/Model'
+        . '/Form/Lva/VehicleFilter.php',
     'Common\Service\Common\Form\Element\DynamicMultiCheckboxCommonService' => false,
     'Common\Service\Common\Form\Element\DynamicRadioCommonService' => false,
     'Common\Service\Common\Form\Element\DynamicSelectCommonService' => false,
+    'Common\Service\Common\Form\Elements\Custom\DateSelectCommonService' => false,
     'Common\Service\Common\Form\Elements\Custom\OlcsCheckboxCommonService' => false,
     'Common\Service\Common\Form\Elements\InputFilters\ActionButtonService' => false,
     'Common\Service\Common\Form\Elements\InputFilters\CheckboxService' => false,
     'Common\Service\Common\Form\Elements\InputFilters\NoRenderService' => false,
+    'Common\Service\Common\Form\Elements\Types\HtmlService' => false,
     'Common\Service\Common\Form\Elements\Types\TableService' => false,
     'Common\Service\Common\Form\FormCommonService' => false,
     'Common\Service\DoctrineModule\Form\Element\ObjectMultiCheckboxDoctrineModuleService' => false,
     'Common\Service\DoctrineModule\Form\Element\ObjectRadioDoctrineModuleService' => false,
     'Common\Service\DoctrineModule\Form\Element\ObjectSelectDoctrineModuleService' => false,
+    'Common\Service\DynamicSelect' => false,
     'Common\Service\ExceptionLogger' => false,
     'Common\Service\Hidden' => false,
     'Common\Service\Logger' => false,
+    'Common\Service\Radio' => false,
+    'Common\Service\Text' => false,
     'Common\Service\Zend\Form\Element\ButtonService' => false,
     'Common\Service\Zend\Form\Element\CsrfZendService' => false,
+    'Common\Service\Zend\Form\Element\RadioService' => false,
     'Common\Service\Zend\Form\Element\SelectService' => false,
     'Common\Service\Zend\Form\FieldsetZendService' => false,
     'Common\Service\Zend\I18n\Translator\TranslatorInterfaceZendService' => false,
     'Common\Service\Zend\ModuleManager\ModuleManagerZendService' => false,
+    'Common\Service\\Common\Form\Elements\InputFilters\ActionButtonService' => false,
+    'Common\Service\\Common\Form\Elements\InputFilters\NoRenderService' => false,
+    'Common\Service\\Common\Form\Elements\Types\TableService' => false,
+    'Common\Service\\Zend\Form\Element\ButtonService' => false,
+    'Common\Service\\Zend\Form\Element\RadioService' => false,
+    'Common\Service\commonformelementdynamicselect' => false,
+    'Common\Service\commonformelementscustomdateselect' => false,
     'Common\Service\commonformelementsinputfiltersactionbutton' => false,
     'Common\Service\commonformelementsinputfilterscheckbox' => false,
     'Common\Service\commonformelementsinputfiltersnorender' => false,
+    'Common\Service\commonformelementstypeshtml' => false,
     'Common\Service\commonformelementstypestable' => false,
     'Common\Service\commonformform' => false,
     'Common\Service\hidden' => false,
+    'Common\Service\radio' => false,
+    'Common\Service\text' => false,
     'Common\Service\zendformelementbutton' => false,
     'Common\Service\zendformelementcsrf' => false,
+    'Common\Service\zendformelementradio' => false,
     'Common\Service\zendformelementselect' => false,
     'Common\Service\zendformfieldset' => false,
     'DoctrineModule\Module' => $rootPath . '/vendor/doctrine/doctrine-module/src/DoctrineModule/Module.php',
@@ -107,7 +128,12 @@ return array(
     'Mockery\ReceivedMethodCalls' => $rootPath . '/vendor/mockery/mockery/library/Mockery/ReceivedMethodCalls.php',
     'OlcsTest\Controller\Lva\AbstractLvaControllerTestCase' => $rootPath . '/test/Olcs/src/Controller/Lva'
         . '/AbstractLvaControllerTestCase.php',
+    'Olcs\Form\Model\Form\Lva\BusinessType' => false,
     'Olcs\Form\Model\Form\Lva\GoodsVehicles' => false,
+    'Olcs\Form\Model\Form\Lva\PaymentSubmission' => false,
+    'Olcs\Form\Model\Form\Lva\PsvVehicles' => false,
+    'Olcs\Form\Model\Form\Lva\PsvVehiclesVehicle' => false,
+    'Olcs\Form\Model\Form\Lva\TypeOfLicence' => false,
     'Olcs\Form\Model\Form\Lva\VehicleFilter' => false,
     'Olcs\Logging\Helper\LogError' => $rootPath . '/vendor/olcs/olcs-logging/src/Helper/LogError.php',
     'Olcs\Logging\Helper\LogException' => $rootPath . '/vendor/olcs/olcs-logging/src/Helper/LogException.php',
@@ -202,11 +228,16 @@ return array(
         . '/EventManager/StaticEventManager.php',
     'Zend\Filter\AbstractFilter' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Filter'
         . '/AbstractFilter.php',
+    'Zend\Filter\AbstractUnicode' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Filter'
+        . '/AbstractUnicode.php',
     'Zend\Filter\FilterChain' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Filter/FilterChain.php',
     'Zend\Filter\FilterInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Filter'
         . '/FilterInterface.php',
     'Zend\Filter\FilterPluginManager' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Filter'
         . '/FilterPluginManager.php',
+    'Zend\Filter\PregReplace' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Filter/PregReplace.php',
+    'Zend\Filter\StringToUpper' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Filter'
+        . '/StringToUpper.php',
     'Zend\Filter\StringTrim' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Filter/StringTrim.php',
     'Zend\Filter\Word\AbstractSeparator' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Filter/Word'
         . '/AbstractSeparator.php',
@@ -214,6 +245,10 @@ return array(
         . '/CamelCaseToDash.php',
     'Zend\Filter\Word\CamelCaseToSeparator' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Filter'
         . '/Word/CamelCaseToSeparator.php',
+    'Zend\Filter\Word\CamelCaseToUnderscore' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Filter'
+        . '/Word/CamelCaseToUnderscore.php',
+    'Zend\Filter\Word\DashToCamelCase' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Filter/Word'
+        . '/DashToCamelCase.php',
     'Zend\Filter\Word\SeparatorToCamelCase' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Filter'
         . '/Word/SeparatorToCamelCase.php',
     'Zend\Filter\Word\SeparatorToSeparator' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Filter'
@@ -238,14 +273,20 @@ return array(
         . '/Annotation/ComposedObject.php',
     'Zend\Form\Annotation\ElementAnnotationsListener' => $rootPath . '/vendor/zendframework/zendframework/library/Zend'
         . '/Form/Annotation/ElementAnnotationsListener.php',
+    'Zend\Form\Annotation\Filter' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form/Annotation'
+        . '/Filter.php',
     'Zend\Form\Annotation\FormAnnotationsListener' => $rootPath . '/vendor/zendframework/zendframework/library/Zend'
         . '/Form/Annotation/FormAnnotationsListener.php',
     'Zend\Form\Annotation\Name' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form/Annotation'
         . '/Name.php',
     'Zend\Form\Annotation\Options' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form/Annotation'
         . '/Options.php',
+    'Zend\Form\Annotation\Required' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form/Annotation'
+        . '/Required.php',
     'Zend\Form\Annotation\Type' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form/Annotation'
         . '/Type.php',
+    'Zend\Form\Annotation\Validator' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form/Annotation'
+        . '/Validator.php',
     'Zend\Form\Element' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form/Element.php',
     'Zend\Form\ElementAttributeRemovalInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form'
         . '/ElementAttributeRemovalInterface.php',
@@ -258,10 +299,18 @@ return array(
     'Zend\Form\Element\Checkbox' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form/Element'
         . '/Checkbox.php',
     'Zend\Form\Element\Csrf' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form/Element/Csrf.php',
+    'Zend\Form\Element\DateSelect' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form/Element'
+        . '/DateSelect.php',
     'Zend\Form\Element\Hidden' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form/Element'
         . '/Hidden.php',
+    'Zend\Form\Element\MonthSelect' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form/Element'
+        . '/MonthSelect.php',
+    'Zend\Form\Element\MultiCheckbox' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form/Element'
+        . '/MultiCheckbox.php',
+    'Zend\Form\Element\Radio' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form/Element/Radio.php',
     'Zend\Form\Element\Select' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form/Element'
         . '/Select.php',
+    'Zend\Form\Element\Text' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form/Element/Text.php',
     'Zend\Form\Factory' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form/Factory.php',
     'Zend\Form\Fieldset' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form/Fieldset.php',
     'Zend\Form\FieldsetInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form'
@@ -288,6 +337,8 @@ return array(
         . '/Helper/FormCheckbox.php',
     'Zend\Form\View\Helper\FormCollection' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form/View'
         . '/Helper/FormCollection.php',
+    'Zend\Form\View\Helper\FormDateSelect' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form/View'
+        . '/Helper/FormDateSelect.php',
     'Zend\Form\View\Helper\FormElement' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form/View'
         . '/Helper/FormElement.php',
     'Zend\Form\View\Helper\FormElementErrors' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form'
@@ -298,10 +349,18 @@ return array(
         . '/FormInput.php',
     'Zend\Form\View\Helper\FormLabel' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form/View/Helper'
         . '/FormLabel.php',
+    'Zend\Form\View\Helper\FormMonthSelect' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form/View'
+        . '/Helper/FormMonthSelect.php',
+    'Zend\Form\View\Helper\FormMultiCheckbox' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form'
+        . '/View/Helper/FormMultiCheckbox.php',
+    'Zend\Form\View\Helper\FormRadio' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form/View/Helper'
+        . '/FormRadio.php',
     'Zend\Form\View\Helper\FormRow' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form/View/Helper'
         . '/FormRow.php',
     'Zend\Form\View\Helper\FormSelect' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form/View'
         . '/Helper/FormSelect.php',
+    'Zend\Form\View\Helper\FormText' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form/View/Helper'
+        . '/FormText.php',
     'Zend\Http\AbstractMessage' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Http'
         . '/AbstractMessage.php',
     'Zend\Http\Client' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Http/Client.php',
@@ -368,6 +427,8 @@ return array(
         . '/I18n/Translator/TranslatorAwareInterface.php',
     'Zend\I18n\Translator\TranslatorInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/I18n'
         . '/Translator/TranslatorInterface.php',
+    'Zend\I18n\Validator\Alnum' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/I18n/Validator'
+        . '/Alnum.php',
     'Zend\I18n\View\HelperConfig' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/I18n/View'
         . '/HelperConfig.php',
     'Zend\I18n\View\Helper\AbstractTranslatorHelper' => $rootPath . '/vendor/zendframework/zendframework/library/Zend'
@@ -727,6 +788,9 @@ return array(
     'Zend\Validator\Hostname' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Validator/Hostname.php',
     'Zend\Validator\InArray' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Validator/InArray.php',
     'Zend\Validator\Ip' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Validator/Ip.php',
+    'Zend\Validator\NotEmpty' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Validator/NotEmpty.php',
+    'Zend\Validator\StringLength' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Validator'
+        . '/StringLength.php',
     'Zend\Validator\Translator\TranslatorAwareInterface' => $rootPath . '/vendor/zendframework/zendframework/library'
         . '/Zend/Validator/Translator/TranslatorAwareInterface.php',
     'Zend\Validator\Translator\TranslatorInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend'

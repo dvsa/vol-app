@@ -93,7 +93,7 @@ trait ExternalControllerTrait
         if ($titleSuffix instanceof ViewModel) {
             return $titleSuffix;
         }
-        
+
         $params = array_merge(
             array('title' => 'lva.section.title.' . $titleSuffix, 'form' => $form),
             $variables
