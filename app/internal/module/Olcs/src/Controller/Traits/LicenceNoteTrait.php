@@ -255,7 +255,7 @@ trait LicenceNoteTrait
 
         $view->setTemplate('form-simple');
 
-        return $this->renderView($view, 'Add Note');
+        return $this->renderView($view, 'internal-application-processing-notes-add-title');
     }
 
     /**
@@ -332,7 +332,7 @@ trait LicenceNoteTrait
         $view = $this->getView(['form' => $form]);
         $view->setTemplate('form-simple');
 
-        return $this->renderView($view, 'Edit Note');
+        return $this->renderView($view, 'internal-application-processing-notes-modify-title');
     }
 
     /**
