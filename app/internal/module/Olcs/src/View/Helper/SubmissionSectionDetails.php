@@ -50,7 +50,7 @@ class SubmissionSectionDetails extends AbstractHelper
         'prohibition-history'               => 'SubmissionSectionTable',
         'conviction-fpn-offence-history'    => 'SubmissionSectionTable',
         'annual-test-history'               => 'SubmissionSectionOverview',
-        'penalties'                         => 'SubmissionSectionOverview',
+        'penalties'                         => ['SubmissionSectionOverview', 'SubmissionSectionMultipleTables'],
         'other-issues'                      => 'SubmissionSectionOverview',
         'te-reports'                        => 'SubmissionSectionOverview',
         'site-plans'                        => 'SubmissionSectionOverview',
@@ -106,9 +106,17 @@ class SubmissionSectionDetails extends AbstractHelper
             // Bail early if renderer is not pluggable
             return '';
         }
-
+        $markup = '';
         if (isset($this->typeMap[$submissionSection])) {
-            return $this->renderHelper($this->typeMap[$submissionSection], $submissionSection, $data);
+
+            if (is_array($this->typeMap[$submissionSection])) {
+                foreach ($this->typeMap[$submissionSection] as $type) {
+                    $markup .= $this->renderHelper($type, $submissionSection, $data);
+                }
+            } else {
+                $markup .= $this->renderHelper($this->typeMap[$submissionSection], $submissionSection, $data);
+            }
+            return $markup;
         }
         return null;
     }

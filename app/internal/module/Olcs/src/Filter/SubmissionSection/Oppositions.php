@@ -52,7 +52,7 @@ class Oppositions extends AbstractSubmissionSectionFilter
                 $thisOpposition['isPublicInquiry'] = $opposition['isPublicInquiry'];
                 $thisOpposition['isWithdrawn'] = $opposition['isWithdrawn'];
 
-                $dataToReturnArray[] = $thisOpposition;
+                $dataToReturnArray['tables']['oppositions'][] = $thisOpposition;
             }
         }
 

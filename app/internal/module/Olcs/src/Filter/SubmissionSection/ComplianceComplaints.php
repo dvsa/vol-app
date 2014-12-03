@@ -15,12 +15,15 @@ class ComplianceComplaints extends AbstractSubmissionSectionFilter
      */
     public function filter($data = array())
     {
+        $filteredData = array();
+
         usort(
             $data,
             function ($a, $b) {
                 return strtotime($b['complaintDate']) - strtotime($a['complaintDate']);
             }
         );
-        return $data;
+        $filteredData['tables']['compliance-complaints'] = $data;
+        return $filteredData;
     }
 }
