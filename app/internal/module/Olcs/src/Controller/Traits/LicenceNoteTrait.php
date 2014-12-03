@@ -251,6 +251,10 @@ trait LicenceNoteTrait
             )
         );
 
+        if ($this->getResponse()->getContent() !== '') {
+            return $this->getResponse();
+        }
+
         $view = $this->getView(['form' => $form]);
 
         $view->setTemplate($this->getTemplatePrefix() . '/notes/form');
@@ -321,6 +325,10 @@ trait LicenceNoteTrait
             'processEditNotes',
             $data
         );
+
+        if ($this->getResponse()->getContent() !== '') {
+            return $this->getResponse();
+        }
 
         $form->get('main')
             ->get('comment')
