@@ -15,7 +15,8 @@ class CaseSummary extends AbstractSubmissionSectionFilter
      */
     public function filter($data = array())
     {
-        $filteredData = array(
+        $filterdData = array();
+        $filteredData['overview'] = array(
             'id' => $data['id'],
             'organisationName' => $data['licence']['organisation']['name'],
             'isMlh' => $data['licence']['organisation']['isMlh'],

@@ -411,7 +411,7 @@ $routes = [
             'constraints' => [
                 'case' => '[0-9]+',
                 'submission' => '[0-9]+',
-                'action' => '(index|add|edit|details|close|reopen)'
+                'action' => '(index|add|edit|details|close|reopen|delete)'
             ],
             'defaults' => [
                 'controller' => 'CaseSubmissionController',

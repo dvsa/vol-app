@@ -27,7 +27,7 @@ class ProhibitionHistory extends AbstractSubmissionSectionFilter
                 $thisRow['trailer'] = $prohibition['isTrailer'];
                 $thisRow['imposedAt'] = $prohibition['imposedAt'];
                 $thisRow['prohibitionType'] = $prohibition['prohibitionType']['description'];
-                $dataToReturnArray[] = $thisRow;
+                $dataToReturnArray['tables']['prohibition-history'][] = $thisRow;
             }
         }
         return $dataToReturnArray;

@@ -16,7 +16,7 @@ class CaseOutline extends AbstractSubmissionSectionFilter
     public function filter($data = array())
     {
         return array(
-            'outline' => $data['description']
+            'text' => $data['description']
         );
     }
 }

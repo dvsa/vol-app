@@ -174,12 +174,10 @@ class SubmissionSectionComment extends AbstractData
      */
     private function getDefaultComment($sectionId, $sectionConfig, $sectionData)
     {
-        $dataField = $sectionConfig['data_field'];
-
-        if (empty($dataField) || !isset($sectionData[$dataField])) {
+        if (!isset($sectionData['text'])) {
             $defaultComment = 'Placeholder for ' . $sectionId;
         } else {
-            $defaultComment = $sectionData[$dataField];
+            $defaultComment = $sectionData['text'];
         }
         return $defaultComment;
     }
