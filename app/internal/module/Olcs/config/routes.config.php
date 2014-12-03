@@ -76,11 +76,13 @@ $routes = [
         'type' => 'segment',
         'options' => [
             'route' =>
-                '/case/:action[/:case][/licence/:licence][/transportManager/:transportManager][/application/:application]',
+            '/case/:action[/:case][/licence/:licence][/transportManager/:transportManager][/application/:application]',
             'constraints' => [
-                //'case' => '[0-9]+',
+                'case' => '|[0-9]+',
                 'action' => '[a-z]+',
-                //'licence' => '[0-9]+'
+                'licence' => '|[0-9]+',
+                'transportManager' => '|[0-9]+',
+                'application' => '|[0-9]+'
             ],
             'defaults' => [
                 'controller' => 'CaseController',
