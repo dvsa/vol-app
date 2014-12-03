@@ -66,14 +66,18 @@ class ApplicationProcessingNoteControllerTest extends ProcessingNoteControllerTe
 
     public function testAddAction()
     {
+        $this->mockApplicationEntityService();
+
         $applicationId = 16;
         $noteType  = 'note_t_app';
         $linkedId  = 7;
         $caseId    = null;
 
         $routeParamMap = [
-            ['application', 'case', 'noteType', 'linkedId'],
-            [$applicationId, $caseId, $noteType, $linkedId]
+            ['application', $applicationId],
+            ['case', $caseId],
+            ['noteType', $noteType],
+            ['linkedId', $linkedId]
         ];
         $this->controller->method('getFromRoute')
             ->will($this->returnValueMap($routeParamMap));

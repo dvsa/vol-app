@@ -427,7 +427,7 @@ abstract class ProcessingNoteControllerTestAbstract extends AbstractHttpControll
 
     public function getRedirectToIndex()
     {
-        $id = null; // comes from route params - need to update tests
+        $id = null; // comes from route params
         $this->controller->expects($this->once())
             ->method('redirectToRouteAjax')
             ->with(

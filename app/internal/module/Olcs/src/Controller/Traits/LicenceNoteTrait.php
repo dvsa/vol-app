@@ -231,11 +231,8 @@ trait LicenceNoteTrait
 
         //same for application
         if (!is_null($applicationId)) {
-            $application = $this->getApplication($applicationId);
-
-            if (isset($application['licence']['id'])) {
-                $licenceId = $application['licence']['id'];
-            }
+            $licenceId = $this->getServiceLocator()->get('Entity\Application')
+                ->getLicenceIdForApplication($applicationId);
         }
 
         $form = $this->generateFormWithData(
