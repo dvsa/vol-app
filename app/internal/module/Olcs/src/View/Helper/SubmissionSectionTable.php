@@ -61,10 +61,12 @@ class SubmissionSectionTable extends AbstractHelper
 
         $tableConfig = isset($this->tableMap[$submissionSection]) ?
             $this->tableMap[$submissionSection] : 'SubmissionSections/' . $submissionSection;
+        $tableData = isset($data['data']['tables'][$submissionSection]) ?
+            $data['data']['tables'][$submissionSection] : [];
 
         $data['table'] = $this->getTableBuilder()->buildTable(
             $tableConfig,
-            ['Results' => $data['data']],
+            ['Results' => $tableData],
             $params,
             false
         );
