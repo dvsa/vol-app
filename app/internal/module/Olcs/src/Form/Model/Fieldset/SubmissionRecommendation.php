@@ -24,14 +24,27 @@ class SubmissionRecommendation extends Base
     public $submissionActionStatus = null;
 
     /**
+     * @Form\Required(true)
      * @Form\Attributes({"id":"","placeholder":"","class":"chosen-select-medium js-sub-legislation",
-     * "multiple" : true})
+     * "multiple" : true, "required":false})
      * @Form\Options({
      *     "label": "Legislation",
      *     "service_name": "Olcs\Service\Data\SubmissionLegislation",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a category",
      *     "use_groups":true
+     * })
+     * @Form\AllowEmpty(true)
+     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
+     * @Form\Validator({"name": "ValidateIf",
+     *      "options":{
+     *          "context_field": "submissionActionStatus",
+     *          "context_values": {"sub_st_rec_ptr", "sub_st_rec_pi"},
+     *          "allow_empty": false,
+     *          "validators": {
+     *              {"name":"Zend\Validator\NotEmpty"}
+     *          }
+     *      }
      * })
      * @Form\Type("DynamicSelect")
      */
