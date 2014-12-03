@@ -563,22 +563,6 @@ class ApplicationControllerTest extends MockeryTestCase
             ->shouldReceive('remove')
             ->with($form, 'details->received');
 
-        $params = [
-            'customer_reference' => '123',
-            'sales_reference' => '1',
-            'product_reference' => 'GVR_APPLICATION_FEE',
-            'scope' => 'CARD',
-            'disable_redirection' => true,
-            'redirect_uri' => 'http://return-url',
-            'payment_data' => [
-                [
-                    'amount' => 5.5,
-                    'sales_reference' => '1',
-                    'product_reference' => 'GVR_APPLICATION_FEE'
-                ]
-            ]
-        ];
-
         $this->sut->shouldReceive('params')
             ->with('fee')
             ->andReturn('1')
@@ -752,7 +736,59 @@ class ApplicationControllerTest extends MockeryTestCase
 
     public function testPostPayFeesActionWithNonCard()
     {
-        $this->markTestIncomplete('Not implemented');
+        $this->mockController(
+            '\Olcs\Controller\Application\ApplicationController'
+        );
+
+        $post = [
+            'details' => [
+                'paymentType' => 'fpm_cash',
+                'received' => 123.45
+            ]
+        ];
+        $this->setPost($post);
+
+        $form = m::mock()
+            ->shouldReceive('setData')
+            ->shouldReceive('isValid')
+            ->andReturn(true)
+            ->getMock();
+
+        // we've asserted these in details elsewhere, for now we just want
+        // to pass through with as little detail as possible
+        $form->shouldReceive('get->get->setValue');
+        $form->shouldReceive('getInputFilter->get->get->getValidatorChain->addValidator');
+
+        $this->sut->shouldReceive('params')
+            ->with('fee')
+            ->andReturn('1')
+            ->shouldReceive('params')
+            ->with('application')
+            ->andReturn(1)
+            ->shouldReceive('getForm')
+            ->with('FeePayment')
+            ->andReturn($form)
+            ->shouldReceive('redirectToList')
+            ->andReturn('redirect');
+
+        $this->mockEntity('Application', 'getLicenceIdForApplication')
+            ->andReturn(7);
+
+        $fee = [
+            'amount' => 5.5,
+            'feeStatus' => [
+                'id' => 'lfs_ot'
+            ],
+            'feePayments' => []
+        ];
+        $this->mockEntity('Fee', 'getOverview')
+            ->with('1')
+            ->andReturn($fee);
+
+        $this->assertEquals(
+            'redirect',
+            $this->sut->payFeesAction()
+        );
     }
 
     /**
