@@ -3,6 +3,7 @@
 namespace OlcsTest\Service\Data;
 
 use Olcs\Service\Data\SubmissionSectionComment;
+use Mockery as m;
 
 /**
  * Class SubmissionSectionCommentTest
@@ -79,5 +80,84 @@ class SubmissionSectionCommentTest extends \PHPUnit_Framework_TestCase
     public function testGetId()
     {
         $this->assertNull($this->sut->getId());
+    }
+
+    public function testGenerateCommentsSupplied()
+    {
+        $caseId = 24;
+        $data = [
+            'submissionSections' => [
+                'sections' => [
+                    'section1',
+                    'section2'
+                ]
+            ]
+        ];
+        $mockConfig = [
+            'sections' => [
+                'section1' => [
+                    'section_type' => ['text']
+                ],
+                'section2' => [
+                    'section_type' => ['not_text']
+                ],
+            ]
+        ];
+
+        $submissionSectionData = ['text' => 'some text'];
+        $this->sut->setSubmissionConfig($mockConfig);
+        $mockSubmissionService = m::mock('Olcs\Service\Data\Submission');
+        $mockSubmissionService->shouldReceive('createSubmissionSection')
+            ->with($caseId, m::type('string'), m::type('array'))
+            ->andReturn($submissionSectionData);
+
+        $this->sut->setSubmissionService($mockSubmissionService);
+
+        $result = $this->sut->generateComments($caseId, $data);
+
+        $this->assertNotEmpty($result);
+        $this->assertArrayHasKey('id', $result[0]);
+        $this->assertArrayHasKey('submissionSection', $result[0]);
+        $this->assertArrayHasKey('comment', $result[0]);
+        $this->assertEquals($result[0]['comment'], $submissionSectionData['text']);
+    }
+
+    public function testGenerateCommentsDefault()
+    {
+        $caseId = 24;
+        $data = [
+            'submissionSections' => [
+                'sections' => [
+                    'section1',
+                    'section2'
+                ]
+            ]
+        ];
+        $mockConfig = [
+            'sections' => [
+                'section1' => [
+                    'section_type' => ['text']
+                ],
+                'section2' => [
+                    'section_type' => ['not_text']
+                ],
+            ]
+        ];
+
+        $submissionSectionData = ['not_text' => 'some text'];
+        $this->sut->setSubmissionConfig($mockConfig);
+        $mockSubmissionService = m::mock('Olcs\Service\Data\Submission');
+        $mockSubmissionService->shouldReceive('createSubmissionSection')
+            ->with($caseId, m::type('string'), m::type('array'))
+            ->andReturn($submissionSectionData);
+
+        $this->sut->setSubmissionService($mockSubmissionService);
+
+        $result = $this->sut->generateComments($caseId, $data);
+
+        $this->assertNotEmpty($result);
+        $this->assertArrayHasKey('id', $result[0]);
+        $this->assertArrayHasKey('submissionSection', $result[0]);
+        $this->assertArrayHasKey('comment', $result[0]);
     }
 }
