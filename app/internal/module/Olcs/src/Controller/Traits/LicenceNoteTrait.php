@@ -258,7 +258,6 @@ trait LicenceNoteTrait
 
         $view->setTemplate($this->getTemplatePrefix() . '/notes/form');
 
-        // @TODO should this use translatable string, e.g. 'internal-licence-processing-notes-add-title'?
         return $this->renderView($view, 'Add Note');
     }
 
@@ -336,7 +335,6 @@ trait LicenceNoteTrait
         $view = $this->getView(['form' => $form]);
         $view->setTemplate($this->getTemplatePrefix() . '/notes/form');
 
-        // @TODO should this use translatable string, e.g. 'internal-licence-processing-notes-modify-title'?
         return $this->renderView($view, 'Edit Note');
     }
 

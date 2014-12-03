@@ -195,7 +195,7 @@ class CaseController extends OlcsController\CrudAbstract
      */
     public function addAction()
     {
-        $this->setPageLayout('licence');
+        $this->setPageLayout('simple');
         $this->setPageLayoutInner(null);
 
         return parent::addAction();
@@ -216,6 +216,16 @@ class CaseController extends OlcsController\CrudAbstract
         if ($licence = $this->getQueryOrRouteParam('licence', null)) {
             $data['licence'] = $licence;
             $data['fields']['licence'] = $licence;
+        }
+
+        if ($application = $this->getQueryOrRouteParam('application', null)) {
+            $data['application'] = $application;
+            $data['fields']['application'] = $application;
+        }
+
+        if ($transportManager = $this->getQueryOrRouteParam('transportManager', null)) {
+            $data['transportManager'] = $transportManager;
+            $data['fields']['transportManager'] = $transportManager;
         }
 
         return $data;

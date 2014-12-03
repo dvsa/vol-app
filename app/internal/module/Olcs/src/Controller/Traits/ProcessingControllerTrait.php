@@ -38,7 +38,8 @@ trait ProcessingControllerTrait
     /**
      * @return string
      */
-    public function getEntityName() {
+    public function getEntityName()
+    {
         return $this->entity;
     }
 
