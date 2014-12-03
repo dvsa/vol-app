@@ -202,7 +202,7 @@ trait LicenceNoteTrait
         $this->loadScripts(['forms/filter','table-actions-notes']);
 
         $view = $this->getView(['table' => $table]);
-        $view->setTemplate($this->getTemplatePrefix() . '/notes/index');
+        $view->setTemplate('table');
 
         return $view;
     }
@@ -253,7 +253,7 @@ trait LicenceNoteTrait
 
         $view = $this->getView(['form' => $form]);
 
-        $view->setTemplate($this->getTemplatePrefix() . '/notes/form');
+        $view->setTemplate('form-simple');
 
         return $this->renderView($view, 'Add Note');
     }
@@ -330,7 +330,7 @@ trait LicenceNoteTrait
             ->setAttribute('disabled', 'disabled');
 
         $view = $this->getView(['form' => $form]);
-        $view->setTemplate($this->getTemplatePrefix() . '/notes/form');
+        $view->setTemplate('form-simple');
 
         return $this->renderView($view, 'Edit Note');
     }
