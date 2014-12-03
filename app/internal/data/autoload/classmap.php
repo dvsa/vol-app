@@ -51,6 +51,8 @@ return array(
     'Common\Service\Zend\ModuleManager\ModuleManagerZendService' => false,
     'Common\Service\Zend\Stdlib\Hydrator\ArraySerializableZendService' => false,
     'Common\Service\\Common\Form\Elements\InputFilters\ActionButtonService' => false,
+    'Common\Service\\Common\Form\Elements\InputFilters\FeeWaiveNoteService' => false,
+    'Common\Service\\Zend\Form\FieldsetService' => false,
     'Common\Service\commonformelementdynamicselect' => false,
     'Common\Service\commonformelementscustomolcscheckbox' => false,
     'Common\Service\commonformelementsinputfiltersactionbutton' => false,
