@@ -98,7 +98,7 @@ trait LicenceControllerTrait
             $this->setupMarkers($this->getLicence())
         );
         $params = array_merge($params, $variables);
-        
+
         $view = new Layout($licenceLayout, $params);
         $view->setVariable('searchForm', $this->getSearchForm());
         return $view;
