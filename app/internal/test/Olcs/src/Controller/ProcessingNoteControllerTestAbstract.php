@@ -48,6 +48,7 @@ abstract class ProcessingNoteControllerTestAbstract extends AbstractHttpControll
                 'setTableFilters',
                 'loadScripts',
                 'getRequest',
+                'getResponse',
                 'getServiceLocator',
             )
         );
@@ -215,7 +216,45 @@ abstract class ProcessingNoteControllerTestAbstract extends AbstractHttpControll
             ->method('renderView')
             ->with($this->equalTo($this->view));
 
+        $this->mockResponseContent('');
         $this->controller->editAction();
+    }
+
+    /**
+     * If processEditNotes callback returns some content, edit action behaviour
+     * is changed and shouldn't render a view and instead return the response
+     */
+    public function testEditActionPost()
+    {
+        $response = $this->mockResponseContent('{"somejson"}');
+        $this->controller->expects($this->never())
+            ->method('renderView');
+        $result = $this->controller->editAction();
+        $this->assertSame($response, $result);
+    }
+    /**
+     * If processAddNotes callback returns some content, add action behaviour
+     * is changed and shouldn't render a view and instead return the response
+     */
+    public function testAddActionPost()
+    {
+        $response = $this->mockResponseContent('{"somejson"}');
+        $this->controller->expects($this->never())
+            ->method('renderView');
+        $result = $this->controller->addAction();
+        $this->assertSame($response, $result);
+    }
+
+    protected function mockResponseContent($content)
+    {
+        $mockResponse = $this->getMock('\StdClass', ['getContent']);
+        $mockResponse->expects($this->once())
+            ->method('getContent')
+            ->will($this->returnValue($content));
+        $this->controller->expects($this->any())
+            ->method('getResponse')
+            ->will($this->returnValue($mockResponse));
+        return $mockResponse;
     }
 
     /**

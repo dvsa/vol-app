@@ -97,6 +97,7 @@ class ApplicationProcessingNoteControllerTest extends ProcessingNoteControllerTe
             ->method('renderView')
             ->with($this->equalTo($this->view));
 
+        $this->mockResponseContent('');
         $this->controller->addAction();
     }
 

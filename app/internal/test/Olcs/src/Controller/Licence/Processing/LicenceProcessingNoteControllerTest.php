@@ -49,6 +49,8 @@ class LicenceProcessingNoteControllerTest extends ProcessingNoteControllerTestAb
             ->method('renderView')
             ->with($this->equalTo($this->view));
 
+        $this->mockResponseContent('');
+
         $this->controller->addAction();
     }
 
