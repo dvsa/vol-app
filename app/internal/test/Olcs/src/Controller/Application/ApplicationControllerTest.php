@@ -630,6 +630,126 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->sut->payFeesAction();
     }
 
+    public function testPaymentResultActionWithNoPaymentFound()
+    {
+        $this->mockController(
+            '\Olcs\Controller\Application\ApplicationController'
+        );
+        $this->mockService('Cpms\FeePayment', 'handleResponse')
+            ->andThrow(new \Common\Service\Cpms\PaymentNotFoundException);
+
+        $this->sut->shouldReceive('addErrorMessage')
+            ->shouldReceive('redirectToList')
+            ->andReturn('redirect')
+            ->shouldReceive('params')
+            ->with('fee')
+            ->andReturn('1')
+            ->shouldReceive('getRequest->getQuery')
+            ->andReturn([]);
+
+        $fee = [
+            'amount' => 5.5,
+            'feeStatus' => [
+                'id' => 'lfs_pd'
+            ]
+        ];
+        $this->mockEntity('Fee', 'getOverview')
+            ->with('1')
+            ->andReturn($fee);
+
+        $this->assertEquals(
+            'redirect',
+            $this->sut->paymentResultAction()
+        );
+    }
+
+    public function testPaymentResultActionWithInvalidPayment()
+    {
+        $this->mockController(
+            '\Olcs\Controller\Application\ApplicationController'
+        );
+
+        $this->mockService('Cpms\FeePayment', 'handleResponse')
+            ->andThrow(new \Common\Service\Cpms\PaymentInvalidStatusException);
+
+        $this->sut->shouldReceive('addErrorMessage')
+            ->shouldReceive('redirectToList')
+            ->andReturn('redirect')
+            ->shouldReceive('params')
+            ->with('fee')
+            ->andReturn('1')
+            ->shouldReceive('getRequest->getQuery')
+            ->andReturn([]);
+
+        $fee = [
+            'amount' => 5.5,
+            'feeStatus' => [
+                'id' => 'lfs_pd'
+            ]
+        ];
+        $this->mockEntity('Fee', 'getOverview')
+            ->with('1')
+            ->andReturn($fee);
+
+        $this->assertEquals(
+            'redirect',
+            $this->sut->paymentResultAction()
+        );
+    }
+
+    /**
+     * @dataProvider paymentResultProvider
+     */
+    public function testPaymentResultActionWithValidStatus($status, $flash)
+    {
+        $this->mockController(
+            '\Olcs\Controller\Application\ApplicationController'
+        );
+
+        $this->mockService('Cpms\FeePayment', 'handleResponse')
+            ->andReturn($status);
+
+        $this->sut
+            ->shouldReceive('redirectToList')
+            ->andReturn('redirect')
+            ->shouldReceive('params')
+            ->with('fee')
+            ->andReturn('1')
+            ->shouldReceive('getRequest->getQuery')
+            ->andReturn([]);
+
+        if ($flash !== null) {
+            $this->sut->shouldReceive($flash);
+        }
+
+        $fee = [
+            'amount' => 5.5,
+            'feeStatus' => [
+                'id' => 'lfs_pd'
+            ]
+        ];
+        $this->mockEntity('Fee', 'getOverview')
+            ->with('1')
+            ->andReturn($fee);
+
+        $this->assertEquals(
+            'redirect',
+            $this->sut->paymentResultAction()
+        );
+    }
+
+    public function paymentResultProvider()
+    {
+        return [
+            [PaymentEntityService::STATUS_PAID, 'addSuccessMessage'],
+            [PaymentEntityService::STATUS_FAILED, 'addErrorMessage'],
+            // no flash at all for cancelled
+            [PaymentEntityService::STATUS_CANCELLED, null],
+            // duff payment status
+            [null, 'addErrorMessage']
+        ];
+    }
+
     public function testPostPayFeesActionWithNonCard()
     {
         $this->markTestIncomplete('Not implemented');
