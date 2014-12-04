@@ -99,6 +99,23 @@ class BusRegisterService extends Base
     public $operatorNotified;
 
     /**
+     * @Form\Attributes({
+     *      "id":"correspondenceAddress",
+     *      "placeholder":"",
+     *      "class":"chosen-select-medium"
+     * })
+     * @Form\Required(false)
+     * @Form\Options({
+     *     "label": "Correspondence address",
+     *     "disable_inarray_validator": false,
+     *     "service_name": "Common\Service\Data\AddressListDataService",
+     *     "use_groups": "false"
+     * })
+     * @Form\Type("DynamicSelect")
+     */
+    public $correspondenceAddress = null;
+
+    /**
      * @Form\Attributes({"id":"dob"})
      * @Form\Options({
      *     "label": "Date completed",
