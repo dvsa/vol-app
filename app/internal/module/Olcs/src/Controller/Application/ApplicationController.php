@@ -94,6 +94,23 @@ class ApplicationController extends AbstractController
     // @TODO DocumentActionTrait? shared with LicenceController
     public function documentsAction()
     {
+        if ($this->getRequest()->isPost()) {
+            $action = strtolower($this->params()->fromPost('action'));
+
+            if ($action === 'new letter') {
+                $action = 'generate';
+            }
+
+            $params = [
+                'application' => $this->getFromRoute('application')
+            ];
+
+            return $this->redirect()->toRoute(
+                'lva-application/documents/'.$action,
+                $params
+            );
+        }
+
         $this->pageLayout = 'application';
 
         $applicationId = $this->params()->fromRoute('application');

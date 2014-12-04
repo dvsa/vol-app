@@ -22,15 +22,23 @@ use Common\Service\File\Exception as FileException;
 class DocumentUploadController extends AbstractDocumentController
 {
     /**
-     * how to map route param types to category names
+     * how to map route param types to category IDs (see category db table)
      */
     private $categoryMap = [
-        'licence' => 1
+        'licence'     => 1,
+        //'application' => 9,
+        'application' => 1, // @TODO - there are no subcategories defined for application yet!
+    ];
+
+    private $documentRouteMap = [
+        'licence' => 'licence/documents',
+        'application' => 'lva-application/documents',
     ];
 
     public function uploadAction()
     {
-        $category = $this->categoryMap[$this->params()->fromRoute('type')];
+        $type = $this->params()->fromRoute('type');
+        $category = $this->categoryMap[$type];
         $this->getServiceLocator()
              ->get('DataServiceManager')
              ->get('Olcs\Service\Data\DocumentSubCategory')
@@ -50,6 +58,7 @@ class DocumentUploadController extends AbstractDocumentController
     public function processUpload($data)
     {
         $routeParams = $this->params()->fromRoute();
+//var_dump($routeParams);
         $type = $routeParams['type'];
 
         $files = $this->getRequest()->getFiles()->toArray();
@@ -59,10 +68,8 @@ class DocumentUploadController extends AbstractDocumentController
             // @TODO this needs to be handled better; by the time we get here we
             // should *know* that our files are valid
             $this->addErrorMessage('Sorry; there was a problem uploading the file. Please try again.');
-            return $this->redirect()->toRoute(
-                $type . '/documents/upload',
-                $routeParams
-            );
+            $route = $this->documentRouteMap[$type].'/upload';
+            return $this->redirect()->toRoute($route, $routeParams);
         }
         $uploader = $this->getUploader();
         $uploader->setFile($files['file']);
@@ -71,10 +78,8 @@ class DocumentUploadController extends AbstractDocumentController
             $file = $uploader->upload();
         } catch (FileException $ex) {
             $this->addErrorMessage('The document store is unavailable. Please try again later');
-            return $this->redirect()->toRoute(
-                $type . '/documents/upload',
-                $routeParams
-            );
+            $route = $this->documentRouteMap[$type].'/upload';
+            return $this->redirect()->toRoute($route, $routeParams);
         }
 
         // we don't know what params are needed to satisfy this type's
@@ -105,6 +110,17 @@ class DocumentUploadController extends AbstractDocumentController
 
         $data[$type] = $routeParams[$type];
 
+        // we need to link certain documents to multiple IDs
+        // ... this will be expanded for future stories
+        switch ($type) {
+            case 'application':
+                $data['licence'] = $this->getServiceLocator()->get('Entity\Application')
+                    ->getLicenceIdForApplication($routeParams[$type]);
+                break;
+            default:
+                break;
+        }
+
         $this->makeRestCall(
             'Document',
             'POST',
@@ -113,10 +129,7 @@ class DocumentUploadController extends AbstractDocumentController
 
         $this->removeTmpData();
 
-        return $this->redirect()->toRoute(
-            $type . '/documents',
-            $routeParams
-        );
-
+        $route = $this->documentRouteMap[$type];
+        return $this->redirect()->toRoute($route, $routeParams);
     }
 }

@@ -1393,7 +1393,7 @@ $routes['lva-application']['child_routes'] = array_merge(
                     'options' => [
                         'route' => '/upload',
                         'defaults' => [
-                            'type' => 'licence',
+                            'type' => 'application',
                             'controller' => 'DocumentUploadController',
                             'action' => 'upload'
                         ]
