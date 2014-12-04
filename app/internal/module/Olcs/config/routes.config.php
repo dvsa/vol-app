@@ -750,6 +750,17 @@ $routes = [
                     ],
                 ]
             ],
+            'bus-service' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/bus/:busRegId/register-service',
+                    'defaults' => [
+                        'controller' => 'BusServiceController',
+                        'action' => 'edit',
+                    ]
+                ],
+                'may_terminate' => true
+            ],
             'bus-route' => [
                 'type' => 'segment',
                 'options' => [
