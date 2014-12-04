@@ -15,9 +15,18 @@ return array(
     'Common\Service\Common\Form\Elements\Custom\OlcsCheckboxCommonService' => false,
     'Common\Service\Common\Form\Elements\InputFilters\ActionButtonService' => false,
     'Common\Service\Common\Form\Elements\InputFilters\CheckboxService' => false,
+    'Common\Service\Common\Form\Elements\InputFilters\DateNotRequiredNotInFutureService' => false,
     'Common\Service\Common\Form\Elements\InputFilters\FeeWaiveNoteService' => false,
+    'Common\Service\Common\Form\Elements\InputFilters\NoRenderService' => false,
+    'Common\Service\Common\Form\Elements\InputFilters\OperatingCentreCommunityLicencesService' => false,
+    'Common\Service\Common\Form\Elements\InputFilters\OperatingCentreTotalVehicleAuthorisationsService' => false,
+    'Common\Service\Common\Form\Elements\InputFilters\OperatingCentreTrailerAuthorisationsService' => false,
+    'Common\Service\Common\Form\Elements\InputFilters\OperatingCentreVehicleAuthorisationsService' => false,
     'Common\Service\Common\Form\Elements\Types\CompanyNumberCommonService' => false,
     'Common\Service\Common\Form\Elements\Types\HtmlCommonService' => false,
+    'Common\Service\Common\Form\Elements\Types\HtmlService' => false,
+    'Common\Service\Common\Form\Elements\Types\HtmlTranslatedService' => false,
+    'Common\Service\Common\Form\Elements\Types\TableService' => false,
     'Common\Service\Common\Form\FormCommonService' => false,
     'Common\Service\Common\Service\Data\PublicHolidayCommonService' => false,
     'Common\Service\Csrf' => false,
@@ -26,6 +35,7 @@ return array(
     'Common\Service\DoctrineModule\Form\Element\ObjectMultiCheckboxDoctrineModuleService' => false,
     'Common\Service\DoctrineModule\Form\Element\ObjectRadioDoctrineModuleService' => false,
     'Common\Service\DoctrineModule\Form\Element\ObjectSelectDoctrineModuleService' => false,
+    'Common\Service\DynamicRadio' => false,
     'Common\Service\DynamicSelect' => false,
     'Common\Service\ExceptionLogger' => false,
     'Common\Service\Hidden' => false,
@@ -39,11 +49,13 @@ return array(
     'Common\Service\SlaDateTimeSelect' => false,
     'Common\Service\SubmissionSections' => false,
     'Common\Service\Submit' => false,
+    'Common\Service\Table\Type\application' => false,
     'Common\Service\Text' => false,
     'Common\Service\TextArea' => false,
     'Common\Service\Zend\Form\Element\ButtonService' => false,
     'Common\Service\Zend\Form\Element\CsrfZendService' => false,
     'Common\Service\Zend\Form\Element\SelectService' => false,
+    'Common\Service\Zend\Form\Element\TextareaService' => false,
     'Common\Service\Zend\Form\FieldsetService' => false,
     'Common\Service\Zend\Form\FieldsetZendService' => false,
     'Common\Service\Zend\Form\FormZendService' => false,
@@ -52,14 +64,24 @@ return array(
     'Common\Service\Zend\Stdlib\Hydrator\ArraySerializableZendService' => false,
     'Common\Service\\Common\Form\Elements\InputFilters\ActionButtonService' => false,
     'Common\Service\\Common\Form\Elements\InputFilters\FeeWaiveNoteService' => false,
+    'Common\Service\\Zend\Form\Element\SelectService' => false,
     'Common\Service\\Zend\Form\FieldsetService' => false,
+    'Common\Service\commonformelementdynamicradio' => false,
     'Common\Service\commonformelementdynamicselect' => false,
     'Common\Service\commonformelementscustomolcscheckbox' => false,
     'Common\Service\commonformelementsinputfiltersactionbutton' => false,
     'Common\Service\commonformelementsinputfilterscheckbox' => false,
+    'Common\Service\commonformelementsinputfiltersdatenotrequirednotinfuture' => false,
     'Common\Service\commonformelementsinputfiltersfeewaivenote' => false,
+    'Common\Service\commonformelementsinputfiltersnorender' => false,
+    'Common\Service\commonformelementsinputfiltersoperatingcentrecommunitylicences' => false,
+    'Common\Service\commonformelementsinputfiltersoperatingcentretotalvehicleauthorisations' => false,
+    'Common\Service\commonformelementsinputfiltersoperatingcentretrailerauthorisations' => false,
+    'Common\Service\commonformelementsinputfiltersoperatingcentrevehicleauthorisations' => false,
     'Common\Service\commonformelementstypescompanynumber' => false,
     'Common\Service\commonformelementstypeshtml' => false,
+    'Common\Service\commonformelementstypeshtmltranslated' => false,
+    'Common\Service\commonformelementstypestable' => false,
     'Common\Service\commonformform' => false,
     'Common\Service\csrf' => false,
     'Common\Service\dateselect' => false,
@@ -73,6 +95,7 @@ return array(
     'Common\Service\zendformelementbutton' => false,
     'Common\Service\zendformelementcsrf' => false,
     'Common\Service\zendformelementselect' => false,
+    'Common\Service\zendformelementtextarea' => false,
     'Common\Service\zendformfieldset' => false,
     'Common\Service\zendformform' => false,
     'DataHelper' => false,
@@ -264,9 +287,13 @@ return array(
     'OlcsTest\Data\Object\Search\SearchAbstractTest' => $rootPath . '/test/Olcs/src/Data/Object/Search'
         . '/SearchAbstractTest.php',
     'Olcs\Controller\Lva\Application' => false,
+    'Olcs\Form\Model\Fieldset\TransportManagerActions' => false,
+    'Olcs\Form\Model\Fieldset\TransportManagerDetails' => false,
     'Olcs\Form\Model\Form\AdminDiscPrinting' => false,
     'Olcs\Form\Model\Form\Lva\BusinessType' => false,
+    'Olcs\Form\Model\Form\Lva\OperatingCentres' => false,
     'Olcs\Form\Model\Form\Lva\TypeOfLicence' => false,
+    'Olcs\Form\Model\Form\TransportManager' => false,
     'Olcs\Form\Model\Form\name' => false,
     'Olcs\Logging\Helper\LogError' => $rootPath . '/vendor/olcs/olcs-logging/src/Helper/LogError.php',
     'Olcs\Logging\Helper\LogException' => $rootPath . '/vendor/olcs/olcs-logging/src/Helper/LogException.php',
@@ -382,12 +409,16 @@ return array(
         . '/EventManager/StaticEventManager.php',
     'Zend\Filter\AbstractFilter' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Filter'
         . '/AbstractFilter.php',
+    'Zend\Filter\AbstractUnicode' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Filter'
+        . '/AbstractUnicode.php',
     'Zend\Filter\Digits' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Filter/Digits.php',
     'Zend\Filter\FilterChain' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Filter/FilterChain.php',
     'Zend\Filter\FilterInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Filter'
         . '/FilterInterface.php',
     'Zend\Filter\FilterPluginManager' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Filter'
         . '/FilterPluginManager.php',
+    'Zend\Filter\StringToLower' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Filter'
+        . '/StringToLower.php',
     'Zend\Filter\StringTrim' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Filter/StringTrim.php',
     'Zend\Filter\Word\AbstractSeparator' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Filter/Word'
         . '/AbstractSeparator.php',
@@ -525,6 +556,8 @@ return array(
         . '/Helper/FormSubmit.php',
     'Zend\Form\View\Helper\FormText' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form/View/Helper'
         . '/FormText.php',
+    'Zend\Form\View\Helper\FormTextarea' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form/View'
+        . '/Helper/FormTextarea.php',
     'Zend\Http\AbstractMessage' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Http'
         . '/AbstractMessage.php',
     'Zend\Http\Client' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Http/Client.php',
@@ -745,12 +778,15 @@ return array(
         . '/Controller/Plugin/PluginInterface.php',
     'Zend\Mvc\Controller\Plugin\Redirect' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Mvc'
         . '/Controller/Plugin/Redirect.php',
+    'Zend\Mvc\Controller\Plugin\Translator' => false,
     'Zend\Mvc\Controller\Plugin\Url' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Mvc/Controller'
         . '/Plugin/Url.php',
     'Zend\Mvc\DispatchListener' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Mvc'
         . '/DispatchListener.php',
     'Zend\Mvc\Exception\ExceptionInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Mvc'
         . '/Exception/ExceptionInterface.php',
+    'Zend\Mvc\Exception\InvalidArgumentException' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Mvc'
+        . '/Exception/InvalidArgumentException.php',
     'Zend\Mvc\Exception\RuntimeException' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Mvc'
         . '/Exception/RuntimeException.php',
     'Zend\Mvc\I18n\Translator' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Mvc/I18n'
@@ -780,6 +816,8 @@ return array(
         . '/Router/Console/SimpleRouteStack.php',
     'Zend\Mvc\Router\Exception\ExceptionInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Mvc'
         . '/Router/Exception/ExceptionInterface.php',
+    'Zend\Mvc\Router\Exception\InvalidArgumentException' => $rootPath . '/vendor/zendframework/zendframework/library'
+        . '/Zend/Mvc/Router/Exception/InvalidArgumentException.php',
     'Zend\Mvc\Router\Exception\RuntimeException' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Mvc'
         . '/Router/Exception/RuntimeException.php',
     'Zend\Mvc\Router\Http\Literal' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Mvc/Router/Http'
@@ -794,6 +832,8 @@ return array(
         . '/Segment.php',
     'Zend\Mvc\Router\Http\TreeRouteStack' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Mvc/Router'
         . '/Http/TreeRouteStack.php',
+    'Zend\Mvc\Router\Http\Wildcard' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Mvc/Router/Http'
+        . '/Wildcard.php',
     'Zend\Mvc\Router\PriorityList' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Mvc/Router'
         . '/PriorityList.php',
     'Zend\Mvc\Router\RouteInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Mvc/Router'
@@ -1042,9 +1082,12 @@ return array(
     'Zend\Uri\UriInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Uri/UriInterface.php',
     'Zend\Validator\AbstractValidator' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Validator'
         . '/AbstractValidator.php',
+    'Zend\Validator\Between' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Validator/Between.php',
     'Zend\Validator\Csrf' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Validator/Csrf.php',
     'Zend\Validator\Date' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Validator/Date.php',
     'Zend\Validator\Digits' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Validator/Digits.php',
+    'Zend\Validator\EmailAddress' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Validator'
+        . '/EmailAddress.php',
     'Zend\Validator\Explode' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Validator/Explode.php',
     'Zend\Validator\Hostname' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Validator/Hostname.php',
     'Zend\Validator\InArray' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Validator/InArray.php',

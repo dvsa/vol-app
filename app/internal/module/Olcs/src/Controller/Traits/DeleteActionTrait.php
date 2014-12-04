@@ -9,6 +9,8 @@ use Zend\View\Model\ViewModel;
  */
 trait DeleteActionTrait
 {
+
+    abstract protected function redirectToIndex();
     /**
      * Performs a delete action and redirects to the index
      */
@@ -29,7 +31,7 @@ trait DeleteActionTrait
 
         $this->addErrorMessage('Deleted successfully');
 
-        $this->redirectToIndex();
+        return $this->redirectToIndex();
     }
 
     /**

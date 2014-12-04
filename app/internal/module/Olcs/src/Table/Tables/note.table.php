@@ -21,11 +21,6 @@ return array(
     ),
     'columns' => array(
         array(
-            'title' => '',
-            'width' => 'checkbox',
-            'format' => '{{[elements/radio]}}'
-        ),
-        array(
             'title' => 'Created',
             'formatter' => function ($data) {
                 $routeParams = array('action' => 'edit', 'id' => $data['id']);
@@ -72,6 +67,11 @@ return array(
             'title' => 'Priority',
             'name' => 'priority',
             'sort' => 'priority'
-        )
+        ),
+        array(
+            'title' => '',
+            'width' => 'checkbox',
+            'format' => '{{[elements/radio]}}'
+        ),
     )
 );

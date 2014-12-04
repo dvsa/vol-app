@@ -32,6 +32,11 @@ class NoteController extends OlcsController\CrudAbstract
     protected $pageLayout = 'case';
 
     /**
+     * @var string needed for LicenceNoteTrait magic
+     */
+    protected $entity = 'case';
+
+    /**
      * For most case crud controllers, we use the case/inner-layout
      * layout file. Except submissions.
      *
