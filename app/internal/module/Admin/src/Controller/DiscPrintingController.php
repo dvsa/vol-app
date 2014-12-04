@@ -41,7 +41,7 @@ class DiscPrintingController extends AbstractController
     const STORAGE_FILE = 'GVDiscTemplate.rtf';
 
     /*
-     * Discs on page
+     * PSV operator type
      */
     const OPERATOR_TYPE_PSV = 'lcat_psv';
 

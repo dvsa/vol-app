@@ -94,7 +94,8 @@ class PsvDisc extends AbstractData
                 }
             }
 
-        } while (count($results['Results']));
+        } while (count($results['Results']) === self::PAGE_SIZE);
+
         return $discsToPrint;
     }
 
