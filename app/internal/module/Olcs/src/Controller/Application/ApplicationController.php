@@ -19,10 +19,12 @@ use Olcs\Controller\Traits;
 class ApplicationController extends AbstractController
 {
     protected $headerViewTemplate = 'application/header';
+    protected $pageLayout = 'application';
 
     use Traits\LicenceControllerTrait,
         Traits\FeesActionTrait,
         Traits\DocumentSearchTrait,
+        Traits\DocumentActionTrait,
         Traits\ApplicationControllerTrait;
 
     /**
@@ -91,51 +93,7 @@ class ApplicationController extends AbstractController
         return $this->render($view);
     }
 
-    // @TODO DocumentActionTrait? shared with LicenceController
-    public function documentsAction()
-    {
-        if ($this->getRequest()->isPost()) {
-            $action = strtolower($this->params()->fromPost('action'));
 
-            if ($action === 'new letter') {
-                $action = 'generate';
-            }
-
-            $params = [
-                'application' => $this->getFromRoute('application')
-            ];
-
-            return $this->redirect()->toRoute(
-                'lva-application/documents/'.$action,
-                $params
-            );
-        }
-
-        $this->pageLayout = 'application';
-
-        $applicationId = $this->params()->fromRoute('application');
-        $licenceId = $this->getLicenceIdForApplication($applicationId);
-
-        $filters = $this->mapDocumentFilters(
-            array('licenceId' => $licenceId)
-        );
-
-        $view = $this->getViewWithApplication(
-            array(
-                'table' => $this->getDocumentsTable($filters),
-                'form'  => $this->getDocumentForm($filters)
-            )
-        );
-
-        $this->loadScripts(['documents', 'table-actions']);
-
-        $view->setTemplate('licence/docs-attachments');
-        $view->setTerminal(
-            $this->getRequest()->isXmlHttpRequest()
-        );
-
-        return $this->renderView($view);
-    }
 
     public function grantAction()
     {
@@ -209,5 +167,51 @@ class ApplicationController extends AbstractController
         return $this->getServiceLocator()
             ->get('Entity\Application')
             ->getLicenceIdForApplication($applicationId);
+    }
+
+    /**
+     * Route (prefix) for document action redirects
+     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @return string
+     */
+    protected function getDocumentRoute()
+    {
+        return 'lva-application/documents';
+    }
+
+    /**
+     * Route params for document action redirects
+     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @return array
+     */
+    protected function getDocumentRouteParams()
+    {
+        return array(
+            'application' => $this->getFromRoute('application')
+        );
+    }
+
+    /**
+     * Get view model for document action
+     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @return ViewModel
+     */
+    protected function getDocumentView()
+    {
+        $applicationId = $this->params()->fromRoute('application');
+        $licenceId = $this->getLicenceIdForApplication($applicationId);
+
+        $filters = $this->mapDocumentFilters(
+            array('licenceId' => $licenceId)
+        );
+
+        $view = $this->getViewWithApplication(
+            array(
+                'table' => $this->getDocumentsTable($filters),
+                'form'  => $this->getDocumentForm($filters)
+            )
+        );
+
+        return $view;
     }
 }

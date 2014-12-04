@@ -58,7 +58,6 @@ class DocumentUploadController extends AbstractDocumentController
     public function processUpload($data)
     {
         $routeParams = $this->params()->fromRoute();
-//var_dump($routeParams);
         $type = $routeParams['type'];
 
         $files = $this->getRequest()->getFiles()->toArray();
