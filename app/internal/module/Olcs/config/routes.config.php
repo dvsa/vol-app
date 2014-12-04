@@ -1355,16 +1355,52 @@ $routes['lva-application']['child_routes'] = array_merge(
                 )
             )
         ),
-        'document' => array(
-            'type' => 'segment',
-            'options' => array(
-                'route' => 'document/',
-                'defaults' => array(
+       'documents' => [
+            'type' => 'literal',
+            'options' => [
+                'route' => 'documents',
+                'defaults' => [
                     'controller' => 'ApplicationController',
-                    'action' => 'document'
-                )
-            )
-        ),
+                    'action' => 'documents',
+                ]
+            ],
+            'may_terminate' => true,
+            'child_routes' => [
+                'generate' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => '/generate[/:tmpId]',
+                        'defaults' => [
+                            'type' => 'licence',
+                            'controller' => 'DocumentGenerationController',
+                            'action' => 'generate'
+                        ]
+                    ],
+                ],
+                'finalise' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => '/finalise/:tmpId',
+                        'defaults' => [
+                            'type' => 'licence',
+                            'controller' => 'DocumentFinaliseController',
+                            'action' => 'finalise'
+                        ]
+                    ],
+                ],
+                'upload' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => '/upload',
+                        'defaults' => [
+                            'type' => 'licence',
+                            'controller' => 'DocumentUploadController',
+                            'action' => 'upload'
+                        ]
+                    ],
+                ],
+            ],
+        ],
         'processing' => array(
             'type' => 'segment',
             'options' => array(

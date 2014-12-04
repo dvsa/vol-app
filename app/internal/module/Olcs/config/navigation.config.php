@@ -673,7 +673,7 @@ return array(
                 array(
                     'id' => 'application_document',
                     'label' => 'Docs & attachments',
-                    'route' => 'lva-application/document',
+                    'route' => 'lva-application/documents',
                     'use_route_match' => true
                 ),
                 array(
