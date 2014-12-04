@@ -115,9 +115,33 @@ class ApplicationControllerTest extends MockeryTestCase
      * @TODO - write test
      * @group application_controller
      */
-    public function testDocumentAction()
+    public function testDocumentsAction()
     {
-        $this->markTestIncomplete();
+        $this->mockController(
+            '\Olcs\Controller\Application\ApplicationController'
+        );
+
+        $this->sut->shouldReceive('getFromRoute')
+            ->with('application')
+            ->andReturn(1);
+
+        $this->mockEntity('Application', 'getLicenceIdForApplication')
+            ->andReturn(7);
+
+        $expectedFilters = [
+            'sort' => "issuedDate",
+            'order' =>"DESC",
+            'page' => 1,
+            'limit' => 10,
+            'licenceId' => 7,
+        ];
+
+        $this->sut->shouldReceive('makeRestCall')
+            ->with('DocumentSearchView', 'GET', $expectedFilters)
+            ->andReturn([]);
+//
+        $view = $this->sut->documentsAction();
+        $this->assertTrue($view->terminate());
     }
 
     /**

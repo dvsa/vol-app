@@ -160,7 +160,8 @@ class ApplicationController extends AbstractController
         return $this->render($view);
     }
 
-    protected function getLicenceIdForApplication($applicationId = null) {
+    protected function getLicenceIdForApplication($applicationId = null)
+    {
         if (is_null($applicationId)) {
             $applicationId = $this->params()->fromRoute('application');
         }
@@ -198,17 +199,20 @@ class ApplicationController extends AbstractController
      */
     protected function getDocumentView()
     {
-        $applicationId = $this->params()->fromRoute('application');
+        $applicationId = $this->getFromRoute('application');
         $licenceId = $this->getLicenceIdForApplication($applicationId);
 
         $filters = $this->mapDocumentFilters(
             array('licenceId' => $licenceId)
         );
 
+        $table = $this->getDocumentsTable($filters);
+        $form  = $this->getDocumentForm($filters);
+
         $view = $this->getViewWithApplication(
             array(
-                'table' => $this->getDocumentsTable($filters),
-                'form'  => $this->getDocumentForm($filters)
+                'table' => $table,
+                'form'  => $form
             )
         );
 
