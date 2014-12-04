@@ -37,7 +37,7 @@ return array(
                         break;
                 }
 
-                return '<a href="' . $this->generateUrl(
+                return '<a class="js-modal-ajax" href="' . $this->generateUrl(
                     $routeParams,
                     $data['routePrefix'] . '/modify-note',
                     true

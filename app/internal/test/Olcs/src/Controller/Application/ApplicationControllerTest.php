@@ -13,6 +13,7 @@ use Olcs\TestHelpers\ControllerPluginManagerHelper;
 use Olcs\TestHelpers\Lva\Traits\LvaControllerTestTrait;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
+use Common\Service\Entity\PaymentEntityService;
 
 /**
  * Application Controller Test
@@ -415,23 +416,31 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->sut->shouldReceive('params')
             ->with('fee')
             ->andReturn('1,2')
+            ->shouldReceive('params')
+            ->with('application')
+            ->andReturn(1)
             ->shouldReceive('getForm')
             ->with('FeePayment')
             ->andReturn($form)
             ->shouldReceive('renderView')
             ->andReturn('renderView');
 
+        $this->mockEntity('Application', 'getLicenceIdForApplication')
+            ->andReturn(7);
+
         $fees = [
             [
                 'amount' => 5.5,
                 'feeStatus' => [
                     'id' => 'lfs_ot'
-                ]
+                ],
+                'feePayments' => []
             ], [
                 'amount' => 10,
                 'feeStatus' => [
                     'id' => 'lfs_ot'
-                ]
+                ],
+                'feePayments' => []
             ]
         ];
         $this->mockEntity('Fee', 'getOverview')
@@ -456,15 +465,321 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->sut->shouldReceive('params')
             ->with('fee')
             ->andReturn('1')
+            ->shouldReceive('params')
+            ->with('application')
+            ->andReturn(1)
             ->shouldReceive('redirectToList')
             ->andReturn('redirect')
             ->shouldReceive('addErrorMessage');
+
+        $this->mockEntity('Application', 'getLicenceIdForApplication')
+            ->andReturn(7);
 
         $fee = [
             'amount' => 5.5,
             'feeStatus' => [
                 'id' => 'lfs_pd'
             ]
+        ];
+        $this->mockEntity('Fee', 'getOverview')
+            ->with('1')
+            ->andReturn($fee);
+
+        $this->assertEquals(
+            'redirect',
+            $this->sut->payFeesAction()
+        );
+    }
+
+    public function testPayFeesActionWithOutstandingPayment()
+    {
+        $this->mockController(
+            '\Olcs\Controller\Application\ApplicationController'
+        );
+
+        $this->sut->shouldReceive('params')
+            ->with('fee')
+            ->andReturn('1')
+            ->shouldReceive('params')
+            ->with('application')
+            ->andReturn(1)
+            ->shouldReceive('redirectToList')
+            ->andReturn('redirect')
+            ->shouldReceive('addErrorMessage');
+
+        $this->mockEntity('Application', 'getLicenceIdForApplication')
+            ->andReturn(7);
+
+        $fee = [
+            'amount' => 5.5,
+            'feeStatus' => [
+                'id' => 'lfs_ot'
+            ],
+            'feePayments' => [
+                [
+                    'payment' => [
+                        'status' => [
+                            'id' => PaymentEntityService::STATUS_OUTSTANDING
+                        ]
+                    ]
+                ]
+            ]
+        ];
+        $this->mockEntity('Fee', 'getOverview')
+            ->with('1')
+            ->andReturn($fee);
+
+        $this->assertEquals(
+            'redirect',
+            $this->sut->payFeesAction()
+        );
+    }
+
+    public function testPostPayFeesActionWithCard()
+    {
+        $this->mockController(
+            '\Olcs\Controller\Application\ApplicationController'
+        );
+
+        $post = [
+            'details' => [
+                'paymentType' => 'fpm_card_offline'
+            ]
+        ];
+        $this->setPost($post);
+
+        $form = m::mock()
+            ->shouldReceive('setData')
+            ->shouldReceive('isValid')
+            ->andReturn(true)
+            ->getMock();
+
+        // we've asserted these in details elsewhere, for now we just want
+        // to pass through with as little detail as possible
+        $form->shouldReceive('get->get->setValue');
+        $form->shouldReceive('getInputFilter->get->get->getValidatorChain->addValidator');
+
+        $this->getMockFormHelper()
+            ->shouldReceive('remove')
+            ->with($form, 'details->received');
+
+        $this->sut->shouldReceive('params')
+            ->with('fee')
+            ->andReturn('1')
+            ->shouldReceive('params')
+            ->with('application')
+            ->andReturn(1)
+            ->shouldReceive('getForm')
+            ->with('FeePayment')
+            ->andReturn($form)
+            ->shouldReceive('url')
+            ->andReturn(
+                m::mock()
+                ->shouldreceive('fromRoute')
+                ->andReturn('http://return-url')
+                ->getMock()
+            )
+            ->shouldReceive('getLicence')
+            ->andReturn(
+                [
+                    'organisation' => [
+                        'id' => 123
+                    ]
+                ]
+            );
+
+        $this->mockEntity('Application', 'getLicenceIdForApplication')
+            ->andReturn(7);
+
+        $fee = [
+            'amount' => 5.5,
+            'feeStatus' => [
+                'id' => 'lfs_ot'
+            ],
+            'feePayments' => []
+        ];
+        $this->mockEntity('Fee', 'getOverview')
+            ->with('1')
+            ->andReturn($fee);
+
+        $this->mockService('Cpms\FeePayment', 'initiateRequest')
+            ->with(123, '1', 'http://return-url', [$fee])
+            ->andReturn(
+                [
+                    'gateway_url' => 'http://gateway',
+                    'redirection_data' => 'foo-bar'
+                ]
+            );
+
+        $this->sut->payFeesAction();
+    }
+
+    public function testPaymentResultActionWithNoPaymentFound()
+    {
+        $this->mockController(
+            '\Olcs\Controller\Application\ApplicationController'
+        );
+        $this->mockService('Cpms\FeePayment', 'handleResponse')
+            ->andThrow(new \Common\Service\Cpms\PaymentNotFoundException);
+
+        $this->sut->shouldReceive('addErrorMessage')
+            ->shouldReceive('redirectToList')
+            ->andReturn('redirect')
+            ->shouldReceive('params')
+            ->with('fee')
+            ->andReturn('1')
+            ->shouldReceive('getRequest->getQuery')
+            ->andReturn([]);
+
+        $fee = [
+            'amount' => 5.5,
+            'feeStatus' => [
+                'id' => 'lfs_pd'
+            ]
+        ];
+        $this->mockEntity('Fee', 'getOverview')
+            ->with('1')
+            ->andReturn($fee);
+
+        $this->assertEquals(
+            'redirect',
+            $this->sut->paymentResultAction()
+        );
+    }
+
+    public function testPaymentResultActionWithInvalidPayment()
+    {
+        $this->mockController(
+            '\Olcs\Controller\Application\ApplicationController'
+        );
+
+        $this->mockService('Cpms\FeePayment', 'handleResponse')
+            ->andThrow(new \Common\Service\Cpms\PaymentInvalidStatusException);
+
+        $this->sut->shouldReceive('addErrorMessage')
+            ->shouldReceive('redirectToList')
+            ->andReturn('redirect')
+            ->shouldReceive('params')
+            ->with('fee')
+            ->andReturn('1')
+            ->shouldReceive('getRequest->getQuery')
+            ->andReturn([]);
+
+        $fee = [
+            'amount' => 5.5,
+            'feeStatus' => [
+                'id' => 'lfs_pd'
+            ]
+        ];
+        $this->mockEntity('Fee', 'getOverview')
+            ->with('1')
+            ->andReturn($fee);
+
+        $this->assertEquals(
+            'redirect',
+            $this->sut->paymentResultAction()
+        );
+    }
+
+    /**
+     * @dataProvider paymentResultProvider
+     */
+    public function testPaymentResultActionWithValidStatus($status, $flash)
+    {
+        $this->mockController(
+            '\Olcs\Controller\Application\ApplicationController'
+        );
+
+        $this->mockService('Cpms\FeePayment', 'handleResponse')
+            ->andReturn($status);
+
+        $this->sut
+            ->shouldReceive('redirectToList')
+            ->andReturn('redirect')
+            ->shouldReceive('params')
+            ->with('fee')
+            ->andReturn('1')
+            ->shouldReceive('getRequest->getQuery')
+            ->andReturn([]);
+
+        if ($flash !== null) {
+            $this->sut->shouldReceive($flash);
+        }
+
+        $fee = [
+            'amount' => 5.5,
+            'feeStatus' => [
+                'id' => 'lfs_pd'
+            ]
+        ];
+        $this->mockEntity('Fee', 'getOverview')
+            ->with('1')
+            ->andReturn($fee);
+
+        $this->assertEquals(
+            'redirect',
+            $this->sut->paymentResultAction()
+        );
+    }
+
+    public function paymentResultProvider()
+    {
+        return [
+            [PaymentEntityService::STATUS_PAID, 'addSuccessMessage'],
+            [PaymentEntityService::STATUS_FAILED, 'addErrorMessage'],
+            // no flash at all for cancelled
+            [PaymentEntityService::STATUS_CANCELLED, null],
+            // duff payment status
+            [null, 'addErrorMessage']
+        ];
+    }
+
+    public function testPostPayFeesActionWithNonCard()
+    {
+        $this->mockController(
+            '\Olcs\Controller\Application\ApplicationController'
+        );
+
+        $post = [
+            'details' => [
+                'paymentType' => 'fpm_cash',
+                'received' => 123.45
+            ]
+        ];
+        $this->setPost($post);
+
+        $form = m::mock()
+            ->shouldReceive('setData')
+            ->shouldReceive('isValid')
+            ->andReturn(true)
+            ->getMock();
+
+        // we've asserted these in details elsewhere, for now we just want
+        // to pass through with as little detail as possible
+        $form->shouldReceive('get->get->setValue');
+        $form->shouldReceive('getInputFilter->get->get->getValidatorChain->addValidator');
+
+        $this->sut->shouldReceive('params')
+            ->with('fee')
+            ->andReturn('1')
+            ->shouldReceive('params')
+            ->with('application')
+            ->andReturn(1)
+            ->shouldReceive('getForm')
+            ->with('FeePayment')
+            ->andReturn($form)
+            ->shouldReceive('redirectToList')
+            ->andReturn('redirect');
+
+        $this->mockEntity('Application', 'getLicenceIdForApplication')
+            ->andReturn(7);
+
+        $fee = [
+            'amount' => 5.5,
+            'feeStatus' => [
+                'id' => 'lfs_ot'
+            ],
+            'feePayments' => []
         ];
         $this->mockEntity('Fee', 'getOverview')
             ->with('1')

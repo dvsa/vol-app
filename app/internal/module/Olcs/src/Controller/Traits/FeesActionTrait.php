@@ -10,6 +10,11 @@ namespace Olcs\Controller\Traits;
 use Zend\View\Model\ViewModel;
 use Common\Service\Listener\FeeListenerService;
 use Common\Service\Entity\FeeEntityService;
+use Common\Service\Entity\PaymentEntityService;
+use Common\Service\Entity\FeePaymentEntityService;
+use Common\Service\Cpms\PaymentNotFoundException;
+use Common\Service\Cpms\PaymentInvalidStatusException;
+use Common\Form\Elements\Validators\FeeAmountValidator;
 
 /**
  * Fees action trait
@@ -18,11 +23,10 @@ use Common\Service\Entity\FeeEntityService;
  */
 trait FeesActionTrait
 {
-    protected $cardTypes = [
-        'fpm_card_online',
-        'fpm_card_offline'
-    ];
-
+    /**
+     * Must be declared by implementing classes in an attempt to
+     * try and sanitise template nuances between apps & licences
+     */
     abstract protected function renderLayout($view);
 
     /**
@@ -109,9 +113,11 @@ trait FeesActionTrait
                     FeeEntityService::STATUS_CANCELLED
                 );
                 break;
+
             case 'all':
-                $feeStatus = "";
+                $feeStatus = '';
                 break;
+
             case 'current':
             default:
                 $feeStatus = sprintf(
@@ -152,7 +158,7 @@ trait FeesActionTrait
         $form = $this->setDataFeeForm($fee, $form);
 
         $this->processForm($form);
-        if ($this->getResponse()->getContent() !== "") {
+        if ($this->getResponse()->getContent() !== '') {
             return $this->getResponse();
         }
 
@@ -175,20 +181,20 @@ trait FeesActionTrait
         return $this->renderView($view, 'No # ' . $fee['id']);
     }
 
-    public function payFeesAction()
+    protected function commonPayFeesAction($lvaType, $licenceId)
     {
-        $ids = explode(',', $this->params('fee'));
-
-        $fees = [];
+        $fees = $this->getFeesFromParams();
         $maxAmount = 0;
-        foreach ($ids as $id) {
-            $fees[] = $fee = $this->getServiceLocator()
-                ->get('Entity\Fee')
-                ->getOverview($id);
 
+        foreach ($fees as $fee) {
             // bail early if any of the fees prove to be the wrong status
             if ($fee['feeStatus']['id'] !== FeeEntityService::STATUS_OUTSTANDING) {
                 $this->addErrorMessage('You can only pay outstanding fees');
+                return $this->redirectToList();
+            }
+
+            if ($this->hasOutstandingPayment($fee)) {
+                $this->addErrorMessage('The fee selected has a pending payment. Please contact your adminstrator');
                 return $this->redirectToList();
             }
 
@@ -206,7 +212,7 @@ trait FeesActionTrait
             ->get('received')
             ->getValidatorChain()
             ->addValidator(
-                new \Zend\Validator\LessThan(
+                new FeeAmountValidator(
                     [
                         'max' => $maxAmount,
                         'inclusive' => true
@@ -217,18 +223,27 @@ trait FeesActionTrait
         $this->loadScripts(['forms/fee-payment']);
 
         if ($this->getRequest()->isPost()) {
-            $details = $this->getRequest()->getPost('details');
-            if (isset($details['paymentType']) && in_array($details['paymentType'], $this->cardTypes)) {
+            $data = (array)$this->getRequest()->getPost();
+
+            if ($this->isCardPayment($data)) {
+
                 $this->getServiceLocator()
                     ->get('Helper\Form')
                     ->remove($form, 'details->received');
             }
-        }
 
-        $this->formPost($form, 'processPayment');
+            $form->setData($data);
 
-        if ($this->getResponse()->getContent() !== "") {
-            return $this->getResponse();
+            if ($form->isValid()) {
+
+                if ($this->isCardPayment($data)) {
+                    return $this->initiateCpmsRequest($lvaType, $licenceId, $fees);
+                }
+
+                // @NOTE: no other result is yet implemented; part of forthcoming stories
+                return $this->redirectToList();
+
+            }
         }
 
         $view = new ViewModel(['form' => $form]);
@@ -400,8 +415,137 @@ trait FeesActionTrait
         return $this->redirect()->toRouteAjax($route, $params);
     }
 
-    protected function processPayment($data)
+    /**
+     * Kick off the CPMS payment process for a given amount
+     * relating to a given array of fees
+     *
+     * @param string $lvaType
+     * @param int    $licenceId
+     * @param array  $fees
+     */
+    private function initiateCpmsRequest($lvaType, $licenceId, $fees)
     {
+        $redirectUrl = $this->url()->fromRoute(
+            $lvaType . '/fees/fee_action',
+            ['action' => 'payment-result'],
+            ['force_canonical' => true],
+            true
+        );
+        $licence = $this->getLicence($licenceId);
+
+        $customerReference = $licence['organisation']['id'];
+        $salesReference    = $this->params('fee');
+
+        $response = $this->getServiceLocator()
+            ->get('Cpms\FeePayment')
+            ->initiateRequest(
+                $customerReference,
+                $salesReference,
+                $redirectUrl,
+                $fees
+            );
+
+        $view = new ViewModel(
+            [
+                'gateway' => $response['gateway_url'],
+                // we bundle the data up in such a way that the view doesn't have
+                // to know what keys/values the gateway expects; it'll just loop
+                // through this array and insert the data as hidden fields
+                'data' => [
+                    'redirectionData' => $response['redirection_data']
+                ]
+            ]
+        );
+        $view->setTemplate('cpms/payment');
+        return $this->renderView($view);
+    }
+
+    /**
+     * Handle response from third-party payment gateway
+     */
+    public function paymentResultAction()
+    {
+        try {
+
+            $resultStatus = $this->getServiceLocator()
+                ->get('Cpms\FeePayment')
+                ->handleResponse(
+                    (array)$this->getRequest()->getQuery(),
+                    $this->getFeesFromParams()
+                );
+
+        } catch (PaymentNotFoundException $ex) {
+
+            $this->addErrorMessage('CPMS reference does not match valid payment record');
+            return $this->redirectToList();
+
+        } catch (PaymentInvalidStatusException $ex) {
+
+            $this->addErrorMessage('Invalid payment state');
+            return $this->redirectToList();
+
+        }
+
+        switch ($resultStatus) {
+            case PaymentEntityService::STATUS_PAID:
+                $this->addSuccessMessage('The fee(s) have been paid successfully');
+                break;
+
+            case PaymentEntityService::STATUS_FAILED:
+                $this->addErrorMessage('The fee payment failed');
+                break;
+
+            case PaymentEntityService::STATUS_CANCELLED:
+                // no-op, don't want a flash message
+                break;
+            default:
+                $this->addErrorMessage('An unexpected error occured');
+                break;
+        }
+
         return $this->redirectToList();
+    }
+
+    /**
+     * Helper to retrieve fee objects from parameters
+     */
+    private function getFeesFromParams()
+    {
+        $ids = explode(',', $this->params('fee'));
+
+        $fees = [];
+
+        foreach ($ids as $id) {
+            $fees[] = $this->getServiceLocator()
+                ->get('Entity\Fee')
+                ->getOverview($id);
+        }
+
+        return $fees;
+    }
+
+    /**
+     * Loop through a fee's payment records and check if any
+     * are outstanding
+     */
+    private function hasOutstandingPayment($fee)
+    {
+        foreach ($fee['feePayments'] as $fp) {
+            if (isset($fp['payment']['status']['id'])
+                && $fp['payment']['status']['id'] === PaymentEntityService::STATUS_OUTSTANDING
+            ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Tiny helper to determine if we're making a card payment
+     */
+    private function isCardPayment($data)
+    {
+        return (isset($data['details']['paymentType']))
+            && ($data['details']['paymentType'] === FeePaymentEntityService::METHOD_CARD_OFFLINE);
     }
 }

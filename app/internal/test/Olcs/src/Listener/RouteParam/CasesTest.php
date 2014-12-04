@@ -54,7 +54,7 @@ class CasesTest extends TestCase
 
         $mockPlaceholder->shouldReceive('getContainer')->with('status')->andReturn($mockContainer);
 
-        $mockViewHelperManager = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
+        $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
         $mockViewHelperManager->shouldReceive('get')->with('headTitle')->andReturn($mockContainer);
 
@@ -89,7 +89,7 @@ class CasesTest extends TestCase
         $mockPlaceholder = m::mock('Zend\View\Helper\Placeholder');
         $mockPlaceholder->shouldReceive('getContainer')->withAnyArgs()->andReturn($mockContainer);
 
-        $mockViewHelperManager = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
+        $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
         $mockViewHelperManager->shouldReceive('get')->with('headTitle')->andReturn($mockContainer);
 
@@ -128,7 +128,7 @@ class CasesTest extends TestCase
         $mockPlaceholder = m::mock('Zend\View\Helper\Placeholder');
         $mockPlaceholder->shouldReceive('getContainer')->withAnyArgs()->andReturn($mockContainer);
 
-        $mockViewHelperManager = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
+        $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
         $mockViewHelperManager->shouldReceive('get')->with('headTitle')->andReturn($mockContainer);
 
@@ -146,7 +146,7 @@ class CasesTest extends TestCase
     {
         $mockCaseService = m::mock('Olcs\Service\Data\Cases');
         $mockLicenceService = m::mock('Common\Service\Data\Licence');
-        $mockViewHelperManager = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
+        $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
