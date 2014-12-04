@@ -1,9 +1,11 @@
 <?php
+$action = $this->placeholder('action')->getValue();
+
 $form = $this->placeholder('form')->getValue();
 ?>
 <?php if (count($form) > 0): ?>
 
-    <h3><?php echo 'Add / Edit ' . lcfirst($this->translate($form->getOption('label'))); ?></h3>
+    <h3><?php echo ucfirst($action); ?> <?php echo lcfirst($this->translate($form->getOption('label'))); ?></h3>
 
 <?php echo $this->formErrors($form); ?>
 <?php echo $this->form($form); ?>
