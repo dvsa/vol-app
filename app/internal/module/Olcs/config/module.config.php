@@ -256,6 +256,7 @@ return array(
             'Olcs\Listener\RouteParams' => 'Olcs\Listener\RouteParams',
         ],
         'factories' => array(
+            'Olcs\Listener\RouteParam\Action' => 'Olcs\Listener\RouteParam\Action',
             'Olcs\Listener\RouteParam\TransportManager' => 'Olcs\Listener\RouteParam\TransportManager',
             'Olcs\Listener\RouteParam\Application' => 'Olcs\Listener\RouteParam\Application',
             'Olcs\Listener\RouteParam\Cases' => 'Olcs\Listener\RouteParam\Cases',
@@ -300,7 +301,8 @@ return array(
             'Olcs\Listener\RouteParam\Licence',
             'Olcs\Listener\RouteParam\Marker',
             'Olcs\Listener\RouteParam\Application',
-            'Olcs\Listener\RouteParam\TransportManager'
+            'Olcs\Listener\RouteParam\TransportManager',
+            'Olcs\Listener\RouteParam\Action'
         ]
     ],
     'data_services' => [
