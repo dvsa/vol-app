@@ -121,7 +121,7 @@ class NoteControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->once())
             ->method('loadScripts')
-            ->with(['forms/filter','table-actions-notes']);
+            ->with(['forms/filter','table-actions']);
 
         $this->controller->expects($this->once())
             ->method('getView')
@@ -208,7 +208,7 @@ class NoteControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->once())
             ->method('loadScripts')
-            ->with(['forms/filter','table-actions-notes']);
+            ->with(['forms/filter','table-actions']);
 
         $this->controller->expects($this->once())
             ->method('getView')
@@ -335,6 +335,11 @@ class NoteControllerTest extends AbstractHttpControllerTestCase
             ->with($this->equalTo($this->view));
 
         $this->controller->addAction();
+    }
+
+    public function testGetEntityName()
+    {
+        $this->assertEquals('case', $this->controller->getEntityName());
     }
 
     public function indexActionModifyRedirectProvider()
