@@ -20,6 +20,7 @@ class ApplicationController extends AbstractController
 {
     use Traits\LicenceControllerTrait,
         Traits\FeesActionTrait,
+        Traits\DocumentSearchTrait,
         Traits\ApplicationControllerTrait;
 
     /**
@@ -32,11 +33,7 @@ class ApplicationController extends AbstractController
             return $response;
         }
 
-        $licenceId = $this->getServiceLocator()
-            ->get('Entity\Application')
-            ->getLicenceIdForApplication(
-                $this->params()->fromRoute('application')
-            );
+        $licenceId = $this->getLicenceIdForApplication();
 
         return $this->commonFeesAction($licenceId);
     }
@@ -92,17 +89,51 @@ class ApplicationController extends AbstractController
         return $this->render($view);
     }
 
-    /**
-     * Placeholder stub
-     *
-     * @return ViewModel
-     */
-    public function documentAction()
+    // @TODO DocumentActionTrait? shared with LicenceController
+    public function documentsAction()
     {
-        $view = new ViewModel();
-        $view->setTemplate('application/index');
+        // if ($this->getRequest()->isPost()) {
+        //     $action = strtolower($this->params()->fromPost('action'));
 
-        return $this->render($view);
+        //     if ($action === 'new letter') {
+        //         $action = 'generate';
+        //     }
+
+        //     $params = [
+        //         'licence' => $this->getFromRoute('licence')
+        //     ];
+
+        //     return $this->redirect()->toRoute(
+        //         'licence/documents/'.$action,
+        //         $params
+        //     );
+        // }
+
+        $this->pageLayout = 'application';
+
+        $applicationId = $this->params()->fromRoute('application');
+        $licenceId = $this->getLicenceIdForApplication($applicationId);
+
+        $filters = $this->mapDocumentFilters(
+            array('licenceId' => $licenceId)
+        );
+
+        $view = $this->getViewWithApplication(
+            array(
+                'table' => $this->getDocumentsTable($filters),
+                'form'  => $this->getDocumentForm($filters)
+            )
+        );
+
+        $this->loadScripts(['documents', 'table-actions']);
+
+        $view->setTemplate('licence/docs-attachments');
+        $view->setTerminal(
+            $this->getRequest()->isXmlHttpRequest()
+        );
+
+//        return $this->renderLayout($view);
+        return $this->renderView($view);
     }
 
     public function grantAction()
@@ -168,5 +199,14 @@ class ApplicationController extends AbstractController
     protected function renderLayout($view)
     {
         return $this->render($view);
+    }
+
+    protected function getLicenceIdForApplication($applicationId = null) {
+        if (is_null($applicationId)) {
+            $applicationId = $this->params()->fromRoute('application');
+        }
+        return $this->getServiceLocator()
+            ->get('Entity\Application')
+            ->getLicenceIdForApplication($applicationId);
     }
 }
