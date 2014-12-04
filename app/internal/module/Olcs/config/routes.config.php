@@ -750,7 +750,7 @@ $routes = [
                     ],
                 ]
             ],
-            'bus-service' => [
+            'bus-register-service' => [
                 'type' => 'segment',
                 'options' => [
                     'route' => '/bus/:busRegId/register-service',
