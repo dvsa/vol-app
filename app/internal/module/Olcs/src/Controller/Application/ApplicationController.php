@@ -18,6 +18,8 @@ use Olcs\Controller\Traits;
  */
 class ApplicationController extends AbstractController
 {
+    protected $headerViewTemplate = 'application/header';
+
     use Traits\LicenceControllerTrait,
         Traits\FeesActionTrait,
         Traits\DocumentSearchTrait,
@@ -92,23 +94,6 @@ class ApplicationController extends AbstractController
     // @TODO DocumentActionTrait? shared with LicenceController
     public function documentsAction()
     {
-        // if ($this->getRequest()->isPost()) {
-        //     $action = strtolower($this->params()->fromPost('action'));
-
-        //     if ($action === 'new letter') {
-        //         $action = 'generate';
-        //     }
-
-        //     $params = [
-        //         'licence' => $this->getFromRoute('licence')
-        //     ];
-
-        //     return $this->redirect()->toRoute(
-        //         'licence/documents/'.$action,
-        //         $params
-        //     );
-        // }
-
         $this->pageLayout = 'application';
 
         $applicationId = $this->params()->fromRoute('application');
@@ -132,7 +117,6 @@ class ApplicationController extends AbstractController
             $this->getRequest()->isXmlHttpRequest()
         );
 
-//        return $this->renderLayout($view);
         return $this->renderView($view);
     }
 
