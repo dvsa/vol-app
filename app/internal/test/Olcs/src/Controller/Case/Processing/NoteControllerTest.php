@@ -39,7 +39,6 @@ class NoteControllerTest extends AbstractHttpControllerTestCase
                 'loadScripts',
                 'getCase',
                 'getRequest'
-
             )
         );
 
@@ -122,7 +121,7 @@ class NoteControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->once())
             ->method('loadScripts')
-            ->with(['forms/filter']);
+            ->with(['forms/filter','table-actions-notes']);
 
         $this->controller->expects($this->once())
             ->method('getView')
@@ -131,7 +130,7 @@ class NoteControllerTest extends AbstractHttpControllerTestCase
 
         $this->view->expects($this->once())
             ->method('setTemplate')
-            ->with($this->controller->getTemplatePrefix() . '/notes/index');
+            ->with('table');
 
         $this->controller->expects($this->once())
             ->method('renderView');
@@ -209,7 +208,7 @@ class NoteControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->once())
             ->method('loadScripts')
-            ->with(['forms/filter']);
+            ->with(['forms/filter','table-actions-notes']);
 
         $this->controller->expects($this->once())
             ->method('getView')
@@ -218,7 +217,7 @@ class NoteControllerTest extends AbstractHttpControllerTestCase
 
         $this->view->expects($this->once())
             ->method('setTemplate')
-            ->with($this->controller->getTemplatePrefix() . '/notes/index');
+            ->with('table');
 
         $this->controller->expects($this->once())
             ->method('renderView');
@@ -260,7 +259,8 @@ class NoteControllerTest extends AbstractHttpControllerTestCase
                         'licence' => $licenceId,
                         'noteType' => 'note_t_case',
                         'linkedId' => $caseId,
-                        'case' => $caseId
+                        'case' => $caseId,
+                        'application' => null
 
                     ]
                 ),
@@ -328,7 +328,7 @@ class NoteControllerTest extends AbstractHttpControllerTestCase
 
         $this->view->expects($this->once())
             ->method('setTemplate')
-            ->with($this->controller->getTemplatePrefix() . '/notes/form');
+            ->with('form-simple');
 
         $this->controller->expects($this->once())
             ->method('renderView')

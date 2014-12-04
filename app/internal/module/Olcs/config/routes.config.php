@@ -1368,7 +1368,7 @@ $routes['lva-application']['child_routes'] = array_merge(
         'processing' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => 'processing[/]',
+                'route' => 'processing',
                 'defaults' => array(
                     'controller' => 'ApplicationProcessingOverviewController',
                     'action' => 'index'
@@ -1390,7 +1390,7 @@ $routes['lva-application']['child_routes'] = array_merge(
                     'type' => 'segment',
                     'may_terminate' => true,
                     'options' => [
-                        'route' => 'tasks',
+                        'route' => '/tasks',
                         'defaults' => [
                             'controller' => 'ApplicationProcessingTasksController',
                             'action' => 'index'
@@ -1401,13 +1401,39 @@ $routes['lva-application']['child_routes'] = array_merge(
                     'type' => 'segment',
                     'may_terminate' => true,
                     'options' => [
-                        'route' => 'notes',
+                        'route' => '/notes',
                         'defaults' => [
-                            'controller' => 'ApplicationController',
-                            'action' => 'notes'
+                            'controller' => 'ApplicationProcessingNoteController',
+                            'action' => 'index'
+                        ]
+                    ],
+                ],
+                'add-note' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => '/notes/:action/:noteType[/:linkedId]',
+                        'defaults' => [
+                            'constraints' => [
+                                'noteType' => '[A-Za-z]+',
+                                'linkedId' => '[0-9]+',
+                            ],
+                            'controller' => 'ApplicationProcessingNoteController',
+                            'action' => 'add'
                         ]
                     ]
                 ],
+                'modify-note' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => '/notes/:action[/:id]',
+                        'defaults' => [
+                            'constraints' => [
+                                'id' => '[0-9]+',
+                            ],
+                            'controller' => 'ApplicationProcessingNoteController',
+                        ]
+                    ]
+                ]
             ],
         ),
         'fees' => array(

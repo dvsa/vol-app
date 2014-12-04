@@ -53,6 +53,9 @@ return [
             'licence' => [
                 'type' => 'hidden'
             ],
+            'application' => [
+                'type' => 'hidden'
+            ],
             'noteType' => [
                 'type' => 'hidden'
             ],
