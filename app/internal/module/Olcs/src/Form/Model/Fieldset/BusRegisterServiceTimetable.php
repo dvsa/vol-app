@@ -24,6 +24,7 @@ class BusRegisterServiceTimetable extends Base
      * })
      * @Form\Attributes({
      *      "id":"isAcceptable",
+     *      "value":"N"
      * })
      */
     public $isAcceptable;
@@ -42,6 +43,7 @@ class BusRegisterServiceTimetable extends Base
      * })
      * @Form\Attributes({
      *      "id":"mapsSupplied",
+     *      "value":"N"
      * })
      */
     public $mapsSupplied;

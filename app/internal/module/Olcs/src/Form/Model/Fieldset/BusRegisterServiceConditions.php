@@ -11,6 +11,12 @@ use Zend\Form\Annotation as Form;
 class BusRegisterServiceConditions extends Base
 {
     /**
+     * @Form\Name("table")
+     * @Form\ComposedObject("Common\Form\Model\Fieldset\Table")
+     */
+    public $table = null;
+
+    /**
      * @Form\Type("Radio")
      * @Form\Options({
      *      "label": "Conditions satisfactory",
@@ -24,6 +30,7 @@ class BusRegisterServiceConditions extends Base
      * })
      * @Form\Attributes({
      *      "id":"conditionsSatisfactory",
+     *      "value":"N"
      * })
      */
     public $conditionsSatisfactory;
