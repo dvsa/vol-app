@@ -2,6 +2,9 @@
 
 $case = $this->placeholder('case')->getValue();
 $markers = $this->placeholder('markers')->getValue();
+
+$application = $this->placeholder('application')->getValue();
+
 ?>
 
 <div class="four-fifths--left">
@@ -16,7 +19,7 @@ $markers = $this->placeholder('markers')->getValue();
 </div>
 
 <div class="one-fifth--right">
-  <?php if (isset($case['licence'])): ?>
+  <?php if (isset($case['licence']) && !empty($case['licence'])): ?>
     <?php if ($case['licence']['organisation']): ?>
     <div class="small-module">
       <h4 class="small-module__title">Operator details</h4>
