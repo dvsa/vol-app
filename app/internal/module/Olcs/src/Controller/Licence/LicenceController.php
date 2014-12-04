@@ -38,6 +38,11 @@ class LicenceController extends AbstractController
         return $this->commonFeesAction($this->params()->fromRoute('licence'));
     }
 
+    public function payFeesAction()
+    {
+        return $this->commonPayFeesAction('licence', $this->params('licence'));
+    }
+
     public function detailsAction()
     {
         $view = $this->getViewWithLicence();

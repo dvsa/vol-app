@@ -25,6 +25,10 @@
         {
             "type": "vcs",
             "url": "git@gitlab.clb.npm:olcs/olcs-autoload.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.clb.npm:cpms/cpms-client.git"
         }
     ],
     "require": {
@@ -36,7 +40,8 @@
         "dvsa/jackrabbit": "v1.1.0",
         "olcs/olcs-logging": "dev-develop",
         "olcs/autoload": "dev-develop",
-        "symfony/Filesystem": "~2.6.0-dev"
+        "symfony/Filesystem": "~2.6.0-dev",
+        "cpms/client": "0.1.x-dev"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "~1.5.3",
