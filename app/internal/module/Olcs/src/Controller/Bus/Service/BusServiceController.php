@@ -40,31 +40,15 @@ class BusServiceController extends BusController
     );
 
     /**
-     * Override to ensure any form submit redirects to alternative controller
-     * details action.
-     *
-     * @return mixed|\Zend\Http\Response
-     */
-    public function indexAction()
-    {
-        return $this->redirectToIndex();
-    }
-
-    /**
-     * Override to ensure any form submit redirects to alternative controller
-     * details action.
+     * Override to ensure params are set in route
      *
      * @return mixed|\Zend\Http\Response
      */
     public function redirectToIndex()
     {
-        return $this->redirectToRoute(
-            'licence/bus-register-service',
-            ['action' => 'edit'],
-            [],
-            true
-        );
+        return $this->redirectToRoute('licence/bus-details', [], [], true);
     }
+    
     /**
      * Map the data on load
      *
@@ -73,7 +57,6 @@ class BusServiceController extends BusController
      */
     public function processLoad($data)
     {
-
         $data['timetable']['timetableAcceptable'] = $data['timetableAcceptable'];
         $data['timetable']['mapSupplied'] = $data['mapSupplied'];
         $data['timetable']['routeDescription'] = $data['routeDescription'];
@@ -93,16 +76,9 @@ class BusServiceController extends BusController
     {
         $form = $this->getRegisterServiceForm();
 
-        // The vast majority of forms thus far don't have actions, but
-        // that means when rendered out of context (e.g. in a JS modal) they
-        // submit the parent page.
-        // Adding an explicit attribute should be completely backwards compatible
-        // because browsers interpret no action as submit the current page
         if (!$form->hasAttribute('action')) {
             $form->setAttribute('action', $this->getRequest()->getUri()->getPath());
         }
-
-        $form = $this->processPostcodeLookup($form);
 
         return $form;
     }
