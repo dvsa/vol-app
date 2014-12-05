@@ -12,6 +12,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\View\Helper\Navigation\PluginManager as ViewHelperManager;
 use Common\Service\Data\Licence as LicenceService;
 use Olcs\Service\Data\Cases as CaseService;
+use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 
 /**
  * Class Cases
@@ -20,11 +21,7 @@ use Olcs\Service\Data\Cases as CaseService;
 class Cases implements ListenerAggregateInterface, FactoryInterface
 {
     use ListenerAggregateTrait;
-
-    /**
-     * @var ViewHelperManager
-     */
-    protected $viewHelperManager;
+    use ViewHelperManagerAwareTrait;
 
     /**
      * @var LicenceService
@@ -35,24 +32,6 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
      * @var CaseService
      */
     protected $caseService;
-
-    /**
-     * @param \Zend\View\Helper\Navigation\PluginManager $viewHelperManager
-     * @return $this
-     */
-    public function setViewHelperManager($viewHelperManager)
-    {
-        $this->viewHelperManager = $viewHelperManager;
-        return $this;
-    }
-
-    /**
-     * @return \Zend\View\Helper\Navigation\PluginManager
-     */
-    public function getViewHelperManager()
-    {
-        return $this->viewHelperManager;
-    }
 
     /**
      * @param \Olcs\Service\Data\Cases $caseService

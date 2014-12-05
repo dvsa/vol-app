@@ -51,7 +51,7 @@ class LicenceTest extends TestCase
         $mockPlaceholder = m::mock('Zend\View\Helper\Placeholder');
         $mockPlaceholder->shouldReceive('getContainer')->with('pageTitle')->andReturn($mockContainer);
 
-        $mockViewHelperManager = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
+        $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
 
         $sut = new Licence();
@@ -65,7 +65,7 @@ class LicenceTest extends TestCase
     public function testCreateService()
     {
         $mockLicenceService = m::mock('Common\Service\Data\Licence');
-        $mockViewHelperManager = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
+        $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
         $mockRouter = m::mock('Zend\Mvc\Router\RouteStackInterface');
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');

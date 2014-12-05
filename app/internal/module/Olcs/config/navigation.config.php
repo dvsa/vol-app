@@ -84,6 +84,13 @@ return array(
                             'use_route_match' => true,
                         ),
                         array(
+                            'id' => 'case_details_prohibitions',
+                            'label' => 'Prohibitions',
+                            'route' => 'case_prohibition',
+                            'action' => 'index',
+                            'use_route_match' => true,
+                        ),
+                        array(
                             'id' => 'case_details_statements',
                             'label' => 'Statements',
                             'route' => 'case_statement',
@@ -101,13 +108,6 @@ return array(
                             'id' => 'case_details_conditions_undertakings',
                             'label' => 'Conditions & Undertakings',
                             'route' => 'case_conditions_undertakings',
-                            'action' => 'index',
-                            'use_route_match' => true,
-                        ),
-                        array(
-                            'id' => 'case_details_impounding',
-                            'label' => 'Impoundings',
-                            'route' => 'case_details_impounding',
                             'action' => 'index',
                             'use_route_match' => true,
                         ),
@@ -202,9 +202,9 @@ return array(
                             ),
                         ),
                         array(
-                            'id' => 'case_details_prohibitions',
-                            'label' => 'Prohibitions',
-                            'route' => 'case_prohibition',
+                            'id' => 'case_details_impounding',
+                            'label' => 'Impoundings',
+                            'route' => 'case_details_impounding',
                             'action' => 'index',
                             'use_route_match' => true,
                         )

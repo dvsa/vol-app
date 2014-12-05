@@ -322,12 +322,15 @@ return array(
             'section_type' => ['list', 'text'],
             'allow_comments' => true,
             'filter' => true,
-            'service' => 'Prohibition',
-            'identifier' => 'case',
+            'service' => 'Cases',
             'bundle' => array(
                 'children' => array(
-                    'prohibitionType' => array(
-                        'properties' => array('id', 'description')
+                    'prohibitions' => array(
+                        'children' => array(
+                            'prohibitionType' => array(
+                                'properties' => array('id', 'description')
+                            )
+                        )
                     )
                 )
             )
