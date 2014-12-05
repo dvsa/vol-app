@@ -8,6 +8,7 @@
 namespace Admin\Service\Data;
 
 use Common\Service\Data\AbstractData;
+use Common\Service\Entity\LicenceEntityService;
 
 /**
  * Service to get / update disk to print
@@ -28,11 +29,6 @@ class PsvDisc extends AbstractData
      * Northern Ireland traffic area code
      */
     const NI_TRAFFIC_AREA_CODE = 'N';
-
-    /**
-     * Operator Type PSV
-     */
-    const OPERSTOR_TYPE_PSV = 'lcat_psv';
 
     /**
      * Default page size for rest call
@@ -87,7 +83,7 @@ class PsvDisc extends AbstractData
                         isset($result['licence']['trafficArea']['id']) &&
                         $result['licence']['trafficArea']['id'] !== self::NI_TRAFFIC_AREA_CODE &&
                         isset($result['licence']['goodsOrPsv']['id']) &&
-                        $result['licence']['goodsOrPsv']['id'] == self::OPERSTOR_TYPE_PSV
+                        $result['licence']['goodsOrPsv']['id'] == LicenceEntityService::LICENCE_CATEGORY_PSV
                         ) {
                         $discsToPrint[] = $result;
                     }

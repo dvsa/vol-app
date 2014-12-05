@@ -10,6 +10,7 @@ namespace Admin\Controller;
 use Admin\Controller\AbstractController;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
+use Common\Service\Entity\LicenceEntityService;
 
 /**
  * Disc Printing Controller
@@ -26,34 +27,22 @@ class DiscPrintingController extends AbstractController
     const DISCS_ON_PAGE = 6;
 
     /**
-     * Goods Discs Jackrabbit template
-     */
-    const DISC_TEMPLATE_GOODS = '/templates/GVDiscTemplate.rtf';
-
-    /**
-     * PSV Discs Jackrabbit template
-     */
-    const DISC_TEMPLATE_PSV = '/templates/PSVDiscTemplate.rtf';
-
-    /**
      * Where we store generated lists of discs in JR
      */
     const STORAGE_PATH = 'discs';
 
-    /**
-     * What we store the generated Goods file as
-     */
-    const STORAGE_FILE_GOODS = 'GVDiscTemplate.rtf';
-
-    /**
-     * What we store the generated PSV file as
-     */
-    const STORAGE_FILE_PSV = 'PSVDiscTemplate.rtf';
-
-    /*
-     * PSV operator type
-     */
-    const OPERATOR_TYPE_PSV = 'lcat_psv';
+    private $templateParams = [
+        'PSV' => [
+            'template' => '/templates/PSVDiscTemplate.rtf',
+            'filename' => 'PSVDiscTemplate.rtf',
+            'bookmark' => 'Psv_Disc_Page'
+        ],
+        'Goods' => [
+            'template' => '/templates/GVDiscTemplate.rtf',
+            'filename' => 'GVDiscTemplate.rtf',
+            'bookmark' => 'Disc_List'
+        ]
+    ];
 
     /**
      * Index action
@@ -98,7 +87,7 @@ class DiscPrintingController extends AbstractController
         $discPrefix = $discSequenceService->getDiscPrefix($params['discSequence'], $params['licenceType']);
 
         // get discs to print
-        if ($params['niFlag'] == 'N' && $params['operatorType'] == self::OPERATOR_TYPE_PSV) {
+        if ($params['operatorType'] === LicenceEntityService::LICENCE_CATEGORY_PSV) {
 
             $this->printDiscsPsv(
                 $params['licenceType'],
@@ -127,10 +116,7 @@ class DiscPrintingController extends AbstractController
 
         $this->printDiscs(
             'PSV',
-            self::DISC_TEMPLATE_PSV,
-            self::STORAGE_FILE_PSV,
             $startNo,
-            'Psv_Disc_Page',
             $discsToPrint
         );
 
@@ -149,10 +135,7 @@ class DiscPrintingController extends AbstractController
 
         $this->printDiscs(
             'Goods',
-            self::DISC_TEMPLATE_GOODS,
-            self::STORAGE_FILE_GOODS,
             $startNo,
-            'Disc_List',
             $discsToPrint
         );
 
@@ -173,8 +156,12 @@ class DiscPrintingController extends AbstractController
         $discService->setIsPrintingOn($discsToPrint);
     }
 
-    protected function printDiscs($prefix, $template, $fileName, $startNo, $bookmark, $discsToPrint)
+    protected function printDiscs($type, $startNo, $discsToPrint)
     {
+        $bookmark = $this->templateParams[$type]['bookmark'];
+        $filename = $this->templateParams[$type]['filename'];
+        $template = $this->templateParams[$type]['template'];
+
         foreach ($discsToPrint as $disc) {
             $queryData[] = $disc['id'];
         }
@@ -206,7 +193,7 @@ class DiscPrintingController extends AbstractController
 
         $filePath = $this->getServiceLocator()
             ->get('Helper\Date')
-            ->getDate('YmdHis') . '_' . $fileName;
+            ->getDate('YmdHis') . '_' . $filename;
 
         $storedFile = $uploader->upload(
             // @TODO: must swap these back, see note below
@@ -226,8 +213,8 @@ class DiscPrintingController extends AbstractController
          */
         $data = [
             'identifier'          => $storedFile->getIdentifier(),
-            'description'         => $prefix . ' Disc List',
-            'filename'            => $prefix . '_Disc_List.rtf',
+            'description'         => $type . ' Disc List',
+            'filename'            => $type . '_Disc_List.rtf',
             'fileExtension'       => 'doc_rtf',
             'licence'             => 7, // hard coded simply so we can demo against *something*
             'category'            => 1, // ditto
@@ -394,7 +381,8 @@ class DiscPrintingController extends AbstractController
 
         // calculate start and end numbers, number of pages
         $retv['startNumber'] = $discSequenceService->getDiscNumber($discSequence, $licenceType);
-        if ($niFlag == 'N' && $operatorType == self::OPERATOR_TYPE_PSV) {
+
+        if ($operatorType === LicenceEntityService::LICENCE_CATEGORY_PSV) {
             $psvDiscService = $this->getServiceLocator()->get('Admin\Service\Data\PsvDisc');
             $retv['discsToPrint'] = count(
                 $psvDiscService->getDiscsToPrint($licenceType, $discPrefix)
@@ -405,6 +393,7 @@ class DiscPrintingController extends AbstractController
                 $goodsDiscService->getDiscsToPrint($niFlag, $operatorType, $licenceType, $discPrefix)
             );
         }
+
         $retv['endNumber'] = (int) ($retv['discsToPrint'] ? $retv['startNumber'] + $retv['discsToPrint'] - 1 : 0);
         $retv['originalEndNumber'] = $retv['endNumber'];
         $originalStartNumber = $retv['startNumber'];
@@ -529,7 +518,8 @@ class DiscPrintingController extends AbstractController
         $params = $this->getFlattenParams();
         $retv = [];
         $discSequenceService = $this->getServiceLocator()->get('Admin\Service\Data\DiscSequence');
-        if ($params['niFlag'] == 'N' && $params['operatorType'] == self::OPERATOR_TYPE_PSV) {
+
+        if ($params['operatorType'] === LicenceEntityService::LICENCE_CATEGORY_PSV) {
             $discService = $this->getServiceLocator()->get('Admin\Service\Data\PsvDisc');
             $discsToPrint = $discService->getDiscsToPrint(
                 $params['licenceType'],
@@ -544,6 +534,7 @@ class DiscPrintingController extends AbstractController
                 $params['discPrefix']
             );
         }
+
         try {
             if ($params['isSuccessfull']) {
                 $discService->setIsPrintingOffAndAssignNumber($discsToPrint, $params['startNumber']);
