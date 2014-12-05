@@ -25,6 +25,63 @@ class BusServiceController extends BusController
     protected $formName = 'BusRegisterService';
 
     /**
+     * Data map
+     *
+     * @var array
+     */
+    protected $dataMap = array(
+        'main' => array(
+            'mapFrom' => array(
+                'timetable',
+                'conditions',
+                'fields'
+            )
+        )
+    );
+
+    /**
+     * Override to ensure any form submit redirects to alternative controller
+     * details action.
+     *
+     * @return mixed|\Zend\Http\Response
+     */
+    public function indexAction()
+    {
+        return $this->redirectToIndex();
+    }
+
+    /**
+     * Override to ensure any form submit redirects to alternative controller
+     * details action.
+     *
+     * @return mixed|\Zend\Http\Response
+     */
+    public function redirectToIndex()
+    {
+        return $this->redirectToRoute(
+            'licence/bus-register-service',
+            ['action' => 'edit'],
+            [],
+            true
+        );
+    }
+    /**
+     * Map the data on load
+     *
+     * @param array $data
+     * @return array
+     */
+    public function processLoad($data)
+    {
+        return parent::processLoad($data);
+    }
+
+    public function processSave($data)
+    {
+        return parent::processSave($data);
+    }
+
+    /**
      * Gets a from from either a built or custom form config.
      * @param type $type
      * @return type
@@ -82,18 +139,6 @@ class BusServiceController extends BusController
         return $data['Results'];
     }
 
-    /**
-     * Index action
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
-    public function indexAction()
-    {
-        $view = $this->getViewWithBusReg();
-
-        $view->setTemplate('licence/bus/index');
-        return $this->renderView($view);
-    }
 
     /**
      * Holds the Conditions Bundle

@@ -8,7 +8,7 @@ use Zend\Form\Annotation as Form;
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("bus-service-number-and-type")
  */
-class BusRegisterServiceTimetable extends Base
+class BusRegisterServiceTimetable
 {
     /**
      * @Form\Type("Radio")

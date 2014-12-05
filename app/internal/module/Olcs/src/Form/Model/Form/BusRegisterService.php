@@ -15,6 +15,12 @@ class BusRegisterService
 {
 
     /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $routeNo = null;
+
+    /**
      * @Form\Options({"label":"Timetable route","class":""})
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\BusRegisterServiceTimetable")
      */
@@ -27,10 +33,11 @@ class BusRegisterService
     public $conditions = null;
 
     /**
-     * @Form\Options({"label":"Timetable route","class":""})
+     * @Form\Name("fields")
+     * @Form\Options({"label":"Register service","class":""})
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\BusRegisterService")
      */
-    public $registerService = null;
+    public $fields = null;
 
     /**
      * @Form\Name("form-actions")
