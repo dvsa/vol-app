@@ -73,6 +73,13 @@ class BusServiceController extends BusController
      */
     public function processLoad($data)
     {
+
+        $data['timetable']['timetableAcceptable'] = $data['timetableAcceptable'];
+        $data['timetable']['mapSupplied'] = $data['mapSupplied'];
+        $data['timetable']['routeDescription'] = $data['routeDescription'];
+        $data['conditions']['trcConditionChecked'] = $data['trcConditionChecked'];
+        $data['conditions']['trcNotes'] = $data['trcNotes'];
+
         return parent::processLoad($data);
     }
 

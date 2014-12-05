@@ -23,11 +23,11 @@ class BusRegisterService extends Base
      *      }
      * })
      * @Form\Attributes({
-     *      "id":"applicationCopiedToLaPte",
+     *      "id":"conditions[copiedToLaPte]",
      *      "value":"N"
      * })
      */
-    public $applicationCopiedToLaPte;
+    public $copiedToLaPte;
 
     /**
      * @Form\Type("Radio")
@@ -42,11 +42,11 @@ class BusRegisterService extends Base
      *      }
      * })
      * @Form\Attributes({
-     *      "id":"shortNoticeSupported",
+     *      "id":"registerService[isShortNotice]",
      *      "value":"N"
      * })
      */
-    public $shortNoticeSupported;
+    public $isShortNotice;
 
     /**
      * @Form\Type("Radio")
@@ -61,7 +61,7 @@ class BusRegisterService extends Base
      *      }
      * })
      * @Form\Attributes({
-     *      "id":"applicationSigned",
+     *      "id":"registerService[applicationSigned]",
      *      "value":"N"
      * })
      */
@@ -80,25 +80,6 @@ class BusRegisterService extends Base
     public $variationDetails = null;
 
     /**
-     * @Form\Type("Radio")
-     * @Form\Options({
-     *      "label": "Operator notified LA/PTE 14 days prior",
-     *      "value_options":{
-     *          "N":"No",
-     *          "Y":"Yes"
-     *      },
-     *      "fieldset-attributes" : {
-     *          "class":"inline"
-     *      }
-     * })
-     * @Form\Attributes({
-     *      "id":"operatorNotified",
-     *      "value":"N"
-     * })
-     */
-    public $operatorNotified;
-
-    /**
      * @Form\Attributes({
      *      "id":"correspondenceAddress",
      *      "placeholder":"",
@@ -114,6 +95,25 @@ class BusRegisterService extends Base
      * @Form\Type("DynamicSelect")
      */
     public $correspondenceAddress = null;
+
+    /**
+     * @Form\Type("Radio")
+     * @Form\Options({
+     *      "label": "Operator notified LA/PTE 14 days prior",
+     *      "value_options":{
+     *          "N":"No",
+     *          "Y":"Yes"
+     *      },
+     *      "fieldset-attributes" : {
+     *          "class":"inline"
+     *      }
+     * })
+     * @Form\Attributes({
+     *      "id":"registerService[opNotifiedLaPte]",
+     *      "value":"N"
+     * })
+     */
+    public $opNotifiedLaPte;
 
     /**
      * @Form\Attributes({"id":"dob"})

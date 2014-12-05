@@ -23,11 +23,11 @@ class BusRegisterServiceTimetable
      *      }
      * })
      * @Form\Attributes({
-     *      "id":"isAcceptable",
+     *      "id":"timetable[timetableAcceptable]",
      *      "value":"N"
      * })
      */
-    public $isAcceptable;
+    public $timetableAcceptable;
 
     /**
      * @Form\Type("Radio")
@@ -42,14 +42,14 @@ class BusRegisterServiceTimetable
      *      }
      * })
      * @Form\Attributes({
-     *      "id":"mapsSupplied",
+     *      "id":"mapSupplied",
      *      "value":"N"
      * })
      */
-    public $mapsSupplied;
+    public $mapSupplied;
 
     /**
-     * @Form\Attributes({"class":"extra-long","id":"otherDetails"})
+     * @Form\Attributes({"class":"extra-long","id":"timetable[routeDescription]"})
      * @Form\Options({"label":"Route description"})
      * @Form\Required(false)
      * @Form\Type("TextArea")

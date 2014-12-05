@@ -19,7 +19,7 @@ class BusRegisterServiceConditions
     /**
      * @Form\Type("Radio")
      * @Form\Options({
-     *      "label": "Conditions satisfactory",
+     *      "label": "TRC's / Conditions satisfactory",
      *      "value_options":{
      *          "N":"No",
      *          "Y":"Yes"
@@ -29,19 +29,19 @@ class BusRegisterServiceConditions
      *      }
      * })
      * @Form\Attributes({
-     *      "id":"conditionsSatisfactory",
+     *      "id":"conditions[trcConditionChecked]",
      *      "value":"N"
      * })
      */
-    public $conditionsSatisfactory;
+    public $trcConditionChecked;
 
     /**
-     * @Form\Attributes({"class":"extra-long","id":"notes"})
+     * @Form\Attributes({"class":"extra-long","id":"conditions[trcNotes]"})
      * @Form\Options({"label":"Notes"})
      * @Form\Required(false)
      * @Form\Type("TextArea")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":800}})
      */
-    public $notes = null;
+    public $trcNotes = null;
 }
