@@ -30,7 +30,7 @@ class LinkedLicencesAppNumbers extends AbstractSubmissionSectionFilter
                     $thisRow['totAuthVehicles'] = $licence['totAuthVehicles'];
                     $thisRow['vehiclesInPossession'] = $this->calculateVehiclesInPossession($licence);
                     $thisRow['trailersInPossession'] = $this->calculateTrailersInPossession($licence);
-                    $dataToReturnArray[] = $thisRow;
+                    $dataToReturnArray['tables']['linked-licences-app-numbers'][] = $thisRow;
                 }
             }
         }

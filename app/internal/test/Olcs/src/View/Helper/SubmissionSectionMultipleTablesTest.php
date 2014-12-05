@@ -57,7 +57,20 @@ class SubmissionSectionMultipleTablesTest extends \PHPUnit_Framework_TestCase
                 ['submissionSection' => '', 'data' => ['data' => []]], ''
             ],
             [
-                ['submissionSection' => 'condition-and-undertakings', 'data' => ['data' => ['conditions' => []]]], null
+                [
+                    'submissionSection' => 'condition-and-undertakings',
+                    'data' => [
+                        'data' => [
+                            'tables' => [
+                                'conditions' => [
+                                    0 => ['id' => 1],
+                                    1 => ['id' => 2]
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                null
             ],
         ];
     }

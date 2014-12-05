@@ -16,7 +16,7 @@ class LeadTcArea extends AbstractSubmissionSectionFilter
     public function filter($data = array())
     {
         return array(
-            'leadTcAreaDescription' => $data['licence']['organisation']['leadTcArea']['name']
+            'text' => $data['licence']['organisation']['leadTcArea']['name']
         );
     }
 }

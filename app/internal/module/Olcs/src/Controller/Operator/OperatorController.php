@@ -51,6 +51,7 @@ class OperatorController extends AbstractController
             $translator = $this->getServiceLocator()->get('translator');
             $this->pageTitle = $translator->translate('internal-operator-create-new-operator');
             $variables['disable'] = true;
+            $variables['hideQuickActions'] = true;
         }
         $variables['organisation'] = $org;
         $variables['section'] = $this->section;

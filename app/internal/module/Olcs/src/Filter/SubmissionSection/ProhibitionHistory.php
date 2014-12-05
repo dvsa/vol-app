@@ -16,8 +16,8 @@ class ProhibitionHistory extends AbstractSubmissionSectionFilter
     public function filter($data = array())
     {
         $dataToReturnArray = array();
-        if (!empty($data)) {
-            foreach ($data as $prohibition) {
+        if (!empty($data['prohibitions'])) {
+            foreach ($data['prohibitions'] as $prohibition) {
                 $thisRow = array();
                 $thisRow['id'] = $prohibition['id'];
                 $thisRow['version'] = $prohibition['version'];
@@ -27,9 +27,10 @@ class ProhibitionHistory extends AbstractSubmissionSectionFilter
                 $thisRow['trailer'] = $prohibition['isTrailer'];
                 $thisRow['imposedAt'] = $prohibition['imposedAt'];
                 $thisRow['prohibitionType'] = $prohibition['prohibitionType']['description'];
-                $dataToReturnArray[] = $thisRow;
+                $dataToReturnArray['tables']['prohibition-history'][] = $thisRow;
             }
         }
+        $dataToReturnArray['text'] = isset($data['prohibitionNote']) ? $data['prohibitionNote'] : '';
         return $dataToReturnArray;
     }
 }
