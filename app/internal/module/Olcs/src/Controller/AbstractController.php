@@ -98,6 +98,9 @@ class AbstractController extends AbstractActionController
     {
         if ($this->searchForm === null) {
             $this->searchForm = $this->getFormClass('HeaderSearch');
+            if ($this->searchForm->has('csrf')) {
+                $this->searchForm->remove('csrf');
+            }
 
             $container = new Container('search');
             $this->searchForm->bind($container);
