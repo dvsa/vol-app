@@ -209,7 +209,14 @@ class HearingController extends OlcsController\CrudAbstract
                 $hearingData['id'] = $savedData['id'];
             }
 
-            $this->publish($hearingData);
+            $publishData = [
+                'pi' => $hearingData['pi'],
+                'text2' => $hearingData['text2'],
+                'hearingData' => $hearingData,
+                'publicationSectionConst' => 'hearingSectionId'
+            ];
+
+            $this->publish($publishData);
         }
 
         $data['fields']['pi'] = [
@@ -223,18 +230,13 @@ class HearingController extends OlcsController\CrudAbstract
     }
 
     /**
-     * @param array $hearingData
+     * @param array $publishData
      * @return \Common\Data\Object\Publication
      */
-    private function publish($hearingData)
+    private function publish($publishData)
     {
         $service = $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\PublicationLink');
-        $publicationLink = $service->createEmpty();
-        $publicationLink->exchangeArray(
-            array_merge((array)$publicationLink->getArrayCopy(), ['pi' => $hearingData['pi']])
-        );
-        $publicationLink->offsetSet('hearingData', $hearingData);
-        $publicationLink->offsetSet('text2', $hearingData['text2']);
+        $publicationLink = $service->createWithData($publishData);
 
         return $service->createPublicationLink($publicationLink, 'HearingPublicationFilter');
     }
