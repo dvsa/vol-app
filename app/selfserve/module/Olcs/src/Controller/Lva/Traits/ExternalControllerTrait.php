@@ -83,7 +83,7 @@ trait ExternalControllerTrait
      *
      * @param string $titleSuffix
      * @param \Zend\Form\Form $form
-     * @param $variables array
+     * @param array $variables
      * @return \Common\View\Model\Section
      */
     protected function render($titleSuffix, Form $form = null, $variables = array())
