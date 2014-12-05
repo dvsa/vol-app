@@ -133,8 +133,9 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
         $type = 'foo';
         $this->controller->expects($this->any())
             ->method('makeRestCall')
-            ->will($this->returnCallback(
-                    function($service, $method, $data, $bundle) use ($docType, $test) {
+            ->will(
+                $this->returnCallback(
+                    function ($service, $method, $data, $bundle) use ($docType, $test) {
                         // pass an extra param to makeRestCall so we can use correct document mock
                         return $test->mockRestCall($service, $method, $data, $bundle, $docType);
                     }
@@ -447,7 +448,7 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
      * @param array $data
      * @param array $bundle
      */
-    public function mockRestCall($service, $method, $data = array(), $bundle = array(), $type)
+    public function mockRestCall($service, $method, $data = array(), $bundle = array(), $type = null)
     {
         switch ($service) {
             case 'Category':
@@ -462,6 +463,7 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
                     default:
                         return $this->mockLicenceDocument($data);
                 }
+                break;
             default:
                 throw new \Exception("Service call " . $service . " not mocked");
         }
