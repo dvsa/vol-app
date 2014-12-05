@@ -80,6 +80,8 @@ return array(
                 => 'Olcs\Controller\Application\Processing\ApplicationProcessingTasksController',
             'ApplicationProcessingOverviewController' =>
                 'Olcs\Controller\Application\Processing\ApplicationProcessingOverviewController',
+            'ApplicationProcessingNoteController' =>
+                'Olcs\Controller\Application\Processing\ApplicationProcessingNoteController',
             'LicenceProcessingOverviewController' =>
             'Olcs\Controller\Licence\Processing\LicenceProcessingOverviewController',
             'LicenceProcessingPublicationsController' =>
@@ -254,6 +256,9 @@ return array(
             'Olcs\Listener\RouteParams' => 'Olcs\Listener\RouteParams',
         ],
         'factories' => array(
+            'Olcs\Listener\RouteParam\Action' => 'Olcs\Listener\RouteParam\Action',
+            'Olcs\Listener\RouteParam\TransportManager' => 'Olcs\Listener\RouteParam\TransportManager',
+            'Olcs\Listener\RouteParam\Application' => 'Olcs\Listener\RouteParam\Application',
             'Olcs\Listener\RouteParam\Cases' => 'Olcs\Listener\RouteParam\Cases',
             'Olcs\Listener\RouteParam\Licence' => 'Olcs\Listener\RouteParam\Licence',
             'Olcs\Listener\RouteParam\Marker' => 'Olcs\Listener\RouteParam\Marker',
@@ -294,7 +299,10 @@ return array(
         'case_controllers' => [
             'Olcs\Listener\RouteParam\Cases',
             'Olcs\Listener\RouteParam\Licence',
-            'Olcs\Listener\RouteParam\Marker'
+            'Olcs\Listener\RouteParam\Marker',
+            'Olcs\Listener\RouteParam\Application',
+            'Olcs\Listener\RouteParam\TransportManager',
+            'Olcs\Listener\RouteParam\Action'
         ]
     ],
     'data_services' => [

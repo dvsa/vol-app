@@ -20,7 +20,7 @@ class FeePaymentActions
      * })
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
-    public $recommend = null;
+    public $pay = null;
 
     /**
      * @Form\Attributes({"type":"submit","class":"action--secondary","id":"cancel"})

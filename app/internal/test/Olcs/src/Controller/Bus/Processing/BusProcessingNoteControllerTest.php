@@ -99,7 +99,7 @@ class BusProcessingNoteControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->once())
             ->method('loadScripts')
-            ->with(['forms/filter']);
+            ->with(['forms/filter','table-actions']);
 
         $this->controller->expects($this->once())
             ->method('getView')
@@ -108,7 +108,7 @@ class BusProcessingNoteControllerTest extends AbstractHttpControllerTestCase
 
         $this->view->expects($this->once())
             ->method('setTemplate')
-            ->with($this->controller->getTemplatePrefix() . '/notes/index');
+            ->with('table');
 
         $this->controller->expects($this->once())
             ->method('renderView');
@@ -143,7 +143,8 @@ class BusProcessingNoteControllerTest extends AbstractHttpControllerTestCase
                         'licence' => $licenceId,
                         'noteType' => 'note_t_bus',
                         'linkedId' => $linkedId,
-                        'case' => null
+                        'case' => null,
+                        'application' => null
                     ]
                 ),
                 $this->equalTo([]),

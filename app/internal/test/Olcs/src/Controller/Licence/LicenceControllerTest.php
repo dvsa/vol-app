@@ -9,6 +9,8 @@ namespace OlcsTest\Controller\Licence;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use Common\Service\Entity\LicenceEntityService;
+use Olcs\TestHelpers\Lva\Traits\LvaControllerTestTrait;
+use OlcsTest\Bootstrap;
 
 /**
  * Licence controller tests
@@ -17,6 +19,16 @@ use Common\Service\Entity\LicenceEntityService;
  */
 class LicenceControllerTest extends AbstractHttpControllerTestCase
 {
+    use LvaControllerTestTrait;
+
+    /**
+     * Required by trait
+     */
+    protected function getServiceManager()
+    {
+        return Bootstrap::getServiceManager();
+    }
+
     public function setUp()
     {
         $this->setApplicationConfig(
@@ -39,7 +51,8 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
                 'url',
                 'setTableFilters',
                 'getSearchForm',
-                'setupMarkers'
+                'setupMarkers',
+                'commonPayFeesAction'
             )
         );
 
@@ -643,5 +656,23 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             ->willReturn($redirect);
 
         $this->assertEquals('REDIRECT', $this->controller->feesAction());
+    }
+
+    public function testPayFeesActionWithGet()
+    {
+        $this->controller->expects($this->once())
+            ->method('params')
+            ->with('licence')
+            ->willReturn(5);
+
+        $this->controller->expects($this->once())
+            ->method('commonPayFeesAction')
+            ->with('licence', 5)
+            ->willReturn('stubResponse');
+
+        $this->assertEquals(
+            'stubResponse',
+            $this->controller->payFeesAction()
+        );
     }
 }
