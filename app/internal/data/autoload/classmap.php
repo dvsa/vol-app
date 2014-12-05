@@ -10,8 +10,10 @@ return array(
     'Common\Controller\Lva\Traits\VehicleFilterTrait' => $rootPath . '/vendor/olcs/OlcsCommon/Common/src/Common'
         . '/Controller/Lva/Traits/VehicleFilterTrait.php',
     'Common\Form\Model\Form\AdminDiscPrinting' => false,
+    'Common\Form\Model\Form\DocumentsHome' => false,
     'Common\Form\Model\Form\Lva\VehicleFilter' => $rootPath . '/vendor/olcs/OlcsCommon/Common/src/Common/Form/Model'
         . '/Form/Lva/VehicleFilter.php',
+    'Common\Form\Model\Form\Opposition' => false,
     'Common\Form\Model\Form\name' => false,
     'Common\Service\Common\Form\Element\DynamicMultiCheckboxCommonService' => false,
     'Common\Service\Common\Form\Element\DynamicMultiSelectCommonService' => false,
@@ -28,13 +30,16 @@ return array(
     'Common\Service\Common\Form\Elements\InputFilters\OperatingCentreTotalVehicleAuthorisationsService' => false,
     'Common\Service\Common\Form\Elements\InputFilters\OperatingCentreTrailerAuthorisationsService' => false,
     'Common\Service\Common\Form\Elements\InputFilters\OperatingCentreVehicleAuthorisationsService' => false,
+    'Common\Service\Common\Form\Elements\InputFilters\SingleCheckboxService' => false,
     'Common\Service\Common\Form\Elements\Types\CompanyNumberCommonService' => false,
     'Common\Service\Common\Form\Elements\Types\HtmlCommonService' => false,
     'Common\Service\Common\Form\Elements\Types\HtmlService' => false,
     'Common\Service\Common\Form\Elements\Types\HtmlTranslatedService' => false,
     'Common\Service\Common\Form\Elements\Types\TableService' => false,
     'Common\Service\Common\Form\FormCommonService' => false,
+    'Common\Service\Common\Service\Data\ApplicationCommonService' => false,
     'Common\Service\Common\Service\Data\PublicHolidayCommonService' => false,
+    'Common\Service\Common\Service\Data\TransportManagerCommonService' => false,
     'Common\Service\Csrf' => false,
     'Common\Service\Data\Pi' => false,
     'Common\Service\DateSelect' => false,
@@ -49,6 +54,7 @@ return array(
     'Common\Service\OlcsCheckbox' => false,
     'Common\Service\Olcs\Form\Element\SlaDateSelectOlcsService' => false,
     'Common\Service\Olcs\Form\Element\SlaDateTimeSelectOlcsService' => false,
+    'Common\Service\Olcs\Service\Data\CasesOlcsService' => false,
     'Common\Service\Olcs\Service\Data\Search\SearchOlcsService' => false,
     'Common\Service\PublicInquiryReason' => false,
     'Common\Service\Radio' => false,
@@ -88,6 +94,7 @@ return array(
     'Common\Service\commonformelementsinputfiltersoperatingcentretotalvehicleauthorisations' => false,
     'Common\Service\commonformelementsinputfiltersoperatingcentretrailerauthorisations' => false,
     'Common\Service\commonformelementsinputfiltersoperatingcentrevehicleauthorisations' => false,
+    'Common\Service\commonformelementsinputfilterssinglecheckbox' => false,
     'Common\Service\commonformelementstypescompanynumber' => false,
     'Common\Service\commonformelementstypeshtml' => false,
     'Common\Service\commonformelementstypeshtmltranslated' => false,
@@ -302,12 +309,16 @@ return array(
     'Olcs\Form\Model\Fieldset\TransportManagerActions' => false,
     'Olcs\Form\Model\Fieldset\TransportManagerDetails' => false,
     'Olcs\Form\Model\Form\AdminDiscPrinting' => false,
+    'Olcs\Form\Model\Form\DocumentsHome' => false,
     'Olcs\Form\Model\Form\Lva\BusinessType' => false,
     'Olcs\Form\Model\Form\Lva\GoodsVehicles' => false,
     'Olcs\Form\Model\Form\Lva\OperatingCentres' => false,
     'Olcs\Form\Model\Form\Lva\PsvVehicles' => false,
+    'Olcs\Form\Model\Form\Lva\Safety' => false,
+    'Olcs\Form\Model\Form\Lva\TransportManagers' => false,
     'Olcs\Form\Model\Form\Lva\TypeOfLicence' => false,
     'Olcs\Form\Model\Form\Lva\VehicleFilter' => false,
+    'Olcs\Form\Model\Form\Opposition' => false,
     'Olcs\Form\Model\Form\TransportManager' => false,
     'Olcs\Form\Model\Form\name' => false,
     'Olcs\Logging\Helper\LogError' => $rootPath . '/vendor/olcs/olcs-logging/src/Helper/LogError.php',
@@ -349,6 +360,8 @@ return array(
     'PHP_Invoker' => false,
     'RestHelper' => false,
     'SelfServe\Form\Model\Form\AdminDiscPrinting' => false,
+    'SelfServe\Form\Model\Form\DocumentsHome' => false,
+    'SelfServe\Form\Model\Form\Opposition' => false,
     'SelfServe\Form\Model\Form\name' => false,
     'StdClas' => false,
     'Symfony\Component\Yaml\Yaml' => $rootPath . '/vendor/symfony/yaml/Symfony/Component/Yaml/Yaml.php',
@@ -358,6 +371,8 @@ return array(
         . '/Report.php',
     'ZendDeveloperTools\ReportInterface' => $rootPath . '/vendor/zendframework/zend-developer-tools/src'
         . '/ZendDeveloperTools/ReportInterface.php',
+    'Zend\Cache\Service\StorageCacheAbstractServiceFactory' => $rootPath . '/vendor/zendframework/zendframework/library'
+        . '/Zend/Cache/Service/StorageCacheAbstractServiceFactory.php',
     'Zend\Code\Annotation\AnnotationCollection' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Code'
         . '/Annotation/AnnotationCollection.php',
     'Zend\Code\Annotation\AnnotationManager' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Code'
@@ -668,6 +683,8 @@ return array(
         . '/HelperConfig.php',
     'Zend\I18n\View\Helper\AbstractTranslatorHelper' => $rootPath . '/vendor/zendframework/zendframework/library/Zend'
         . '/I18n/View/Helper/AbstractTranslatorHelper.php',
+    'Zend\I18n\View\Helper\DateFormat' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/I18n/View'
+        . '/Helper/DateFormat.php',
     'Zend\I18n\View\Helper\Translate' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/I18n/View/Helper'
         . '/Translate.php',
     'Zend\InputFilter\BaseInputFilter' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/InputFilter'
@@ -1121,6 +1138,8 @@ return array(
         . '/EmailAddress.php',
     'Zend\Validator\Explode' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Validator/Explode.php',
     'Zend\Validator\Hostname' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Validator/Hostname.php',
+    'Zend\Validator\Identical' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Validator'
+        . '/Identical.php',
     'Zend\Validator\InArray' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Validator/InArray.php',
     'Zend\Validator\Ip' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Validator/Ip.php',
     'Zend\Validator\LessThan' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Validator/LessThan.php',
