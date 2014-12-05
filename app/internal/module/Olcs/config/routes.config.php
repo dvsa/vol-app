@@ -1371,7 +1371,7 @@ $routes['lva-application']['child_routes'] = array_merge(
                     'options' => [
                         'route' => '/generate[/:tmpId]',
                         'defaults' => [
-                            'type' => 'licence',
+                            'type' => 'application',
                             'controller' => 'DocumentGenerationController',
                             'action' => 'generate'
                         ]
@@ -1382,7 +1382,7 @@ $routes['lva-application']['child_routes'] = array_merge(
                     'options' => [
                         'route' => '/finalise/:tmpId',
                         'defaults' => [
-                            'type' => 'licence',
+                            'type' => 'application',
                             'controller' => 'DocumentFinaliseController',
                             'action' => 'finalise'
                         ]

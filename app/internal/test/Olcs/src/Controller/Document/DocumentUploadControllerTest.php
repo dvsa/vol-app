@@ -119,7 +119,8 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
     }
 
 
-    public function processUploadProvider() {
+    public function processUploadProvider()
+    {
         return [
             ['licence', 'licence/documents'],
             //['application', 'lva-application/documents'],
