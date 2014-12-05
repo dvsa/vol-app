@@ -20,6 +20,9 @@
             </li>
         <?php endforeach; ?>
     </ul><!-- end .progress -->
+    <?php if ($currentRoute == 'lva-application/vehicles' && isset($filterForm)): ?>
+        <?php echo $this->form($filterForm); ?>
+    <?php endif; ?>
 </div>
 <div class="three-fifths">
   <?php echo $this->flashMessengerAll(); ?>

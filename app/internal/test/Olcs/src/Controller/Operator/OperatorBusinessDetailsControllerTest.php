@@ -28,7 +28,12 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
         'getRequest',
         'isButtonPressed',
         'redirectToRoute',
-        'getResponse'
+        'getResponse',
+        'getViewWithOrganisation',
+        'renderView',
+        'getForm',
+        'loadScripts',
+        'processCompanyLookup'
     ];
 
     /**
@@ -103,8 +108,8 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
             'addressLine4' => 'addressLine4',
             'town' => 'town',
             'postcode' => 'postocde',
-            'postcode' => 'id',
-            'version' => '1'
+            'id' => 1,
+            'version' => 1
         ],
         'form-actions' => ['save' => '']
     ];
@@ -144,6 +149,19 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
                 'id' => $this->organisationType
             ]
         ];
+
+        $mockForm = $this->getMock('\StdClass', ['setData', 'isValid', 'getData']);
+        $mockForm->expects($this->any())
+            ->method('isValid')
+            ->will($this->returnValue(true));
+
+        $mockForm->expects($this->any())
+            ->method('setData')
+            ->will($this->returnValue(null));
+
+        $mockForm->expects($this->any())
+            ->method('getData')
+            ->will($this->returnValue($this->post));
 
         $mockOrganisation = $this->getMock('\StdClass', ['getBusinessDetailsData', 'save']);
         $mockOrganisation->expects($this->any())
@@ -251,6 +269,39 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
             ->method('getRequest')
             ->will($this->returnValue($this->request));
 
+        $mockFormHelper = $this->getMock('\StdClass', ['remove', 'processCompanyNumberLookupForm']);
+        $mockFormHelper->expects($this->any())
+            ->method('remove')
+            ->will($this->returnValue(null));
+
+        $mockFormHelper->expects($this->any())
+            ->method('processCompanyNumberLookupForm')
+            ->will($this->returnValue(null));
+
+        $mockView = $this->getMock('\StdClass', ['setTemplate']);
+        $mockView->expects($this->any())
+            ->method('setTemplate')
+            ->with('form-simple')
+            ->will($this->returnValue(null));
+
+        $this->controller->expects($this->any())
+            ->method('getViewWithOrganisation')
+            ->will($this->returnValue($mockView));
+
+        $this->controller->expects($this->any())
+            ->method('renderView')
+            ->will($this->returnValue('view'));
+
+        $this->controller->expects($this->any())
+            ->method('getForm')
+            ->with('operator')
+            ->will($this->returnValue($mockForm));
+
+        $this->controller->expects($this->once())
+            ->method('loadScripts')
+            ->with(['operator-profile'])
+            ->will($this->returnValue(null));
+
         $this->serviceManager = Bootstrap::getServiceManager();
         $this->serviceManager->setAllowOverride(true);
         $this->serviceManager->setService('translator', $mockTranslator);
@@ -261,6 +312,7 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
         $this->serviceManager->setService('Entity\OrganisationPerson', $mockOrganisationPerson);
         $this->serviceManager->setService('Data\CompaniesHouse', $mockCompaniesHouse);
         $this->serviceManager->setService('Entity\OrganisationNatureOfBusiness', $mockOrgNob);
+        $this->serviceManager->setService('Helper\Form', $mockFormHelper);
 
         $this->controller->expects($this->any())
             ->method('getResponse')
@@ -298,7 +350,7 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
         $this->organisationType = $organisationType;
         $this->setUpAction(1);
         $response = $this->controller->indexAction();
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+        $this->assertEquals('view', $response);
     }
 
     /**
@@ -326,7 +378,7 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
         $this->organisationType = $organisationType;
         $this->setUpAction(null);
         $response = $this->controller->indexAction();
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+        $this->assertEquals('view', $response);
     }
 
     /**
@@ -357,7 +409,7 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
         $this->post['operator-business-type']['type'] = $organisationType;
         $this->setUpAction(1, true);
         $response = $this->controller->indexAction();
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+        $this->assertEquals('view', $response);
     }
 
     /**
@@ -369,10 +421,10 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
     {
         $this->organisationType = OrganisationEntityService::ORG_TYPE_SOLE_TRADER;
         $this->post['operator-business-type']['type'] = OrganisationEntityService::ORG_TYPE_SOLE_TRADER;
-        unset($this->post['operator-details']['personId']);
+        $this->post['operator-details']['personId'] = '';
         $this->setUpAction(1, true);
         $response = $this->controller->indexAction();
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+        $this->assertEquals('view', $response);
     }
 
     /**
@@ -387,7 +439,7 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
         $this->post['operator-business-type']['typeChanged'] = 1;
         $this->setUpAction(1, true);
         $response = $this->controller->indexAction();
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+        $this->assertEquals('view', $response);
     }
 
     /**
@@ -402,7 +454,7 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
         $this->post['operator-business-type']['refresh'] = 'refresh';
         $this->setUpAction(1, true);
         $response = $this->controller->indexAction();
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+        $this->assertEquals('view', $response);
     }
 
     /**
@@ -417,7 +469,7 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
         $this->post['operator-details']['companyNumber']['submit_lookup_company'] = 'lookup';
         $this->setUpAction(1, true);
         $response = $this->controller->indexAction();
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+        $this->assertEquals('view', $response);
     }
 
     /**
@@ -451,7 +503,7 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
     /**
      * Test index action with nature of business added
      *
-     * @group operatorBusinessDetailsController1
+     * @group operatorBusinessDetailsController
      */
     public function testIndexActionWithNatureOfBusinessAdded()
     {
@@ -460,6 +512,6 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
         $this->post['operator-details']['natureOfBusiness'] = [1,2];
         $this->setUpAction(1, true);
         $response = $this->controller->indexAction();
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
+        $this->assertEquals('view', $response);
     }
 }

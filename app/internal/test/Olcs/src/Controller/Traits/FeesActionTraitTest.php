@@ -9,6 +9,7 @@ namespace OlcsTest\Controller\Traits;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use OlcsTest\Bootstrap;
+use Mockery as m;
 
 /**
  * Fees action trait tests
@@ -26,84 +27,15 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
     /**
      * Set up
      */
-    public function setUpAction(
-        $controllerName = '\Olcs\Controller\Licence\LicenceController',
-        $mockGetForm = true
-    ) {
-        $this->setApplicationConfig(
-            include __DIR__.'/../../../../../config/application.config.php'
-        );
+    public function setUpAction()
+    {
+        $this->sut = m::mock('\Olcs\Controller\Licence\LicenceController')
+            ->makePartial()
+            ->shouldAllowMockingProtectedMethods();
 
-        $methods = [
-            'makeRestCall',
-            'getLoggedInUser',
-            'getLicence',
-            'getRequest',
-            'loadScripts',
-            'getFromRoute',
-            'params',
-            'redirect',
-            'getServiceLocator',
-            'getTable',
-            'url',
-            'setTableFilters',
-            'getSearchForm',
-            'setupMarkers',
-            'getResponse',
-        ];
-        if ($mockGetForm) {
-            $methods[] = 'getForm';
-        }
-        $this->controller = $this->getMock(
-            $controllerName,
-            $methods
-        );
-
-        $this->mockRedirect = $this->getMock('\StdClass', ['toRoute', 'toRouteAjax']);
-        $this->mockRedirect->expects($this->any())
-            ->method('toRoute')
-            ->will($this->returnValue('redirect'));
-
-        $this->controller->expects($this->any())
-            ->method('redirect')
-            ->will($this->returnValue($this->mockRedirect));
-
-        $mockResponse = $this->getMock('\StdClass', ['getContent']);
-        $mockResponse->expects($this->any())
-            ->method('getContent')
-            ->will($this->returnValue(''));
-
-        $this->controller->expects($this->any())
-            ->method('getResponse')
-            ->will($this->returnValue($mockResponse));
-
-        $query = new \Zend\Stdlib\Parameters();
-        $request = $this->getMock('\stdClass', ['getQuery', 'isXmlHttpRequest', 'isPost', 'getUri', 'getPost']);
-        $request->expects($this->any())
-            ->method('getQuery')
-            ->will($this->returnValue($query));
-
-        $request->expects($this->any())
-            ->method('getPost')
-            ->will($this->returnValue($this->post));
-
-        $mockUri = $this->getMock('\StdClass', ['getPath']);
-        $mockUri->expects($this->any())
-            ->method('getPath')
-            ->will($this->returnValue('/'));
-
-        $request->expects($this->any())
-            ->method('getUri')
-            ->will($this->returnValue($mockUri));
-
-        $this->query = $query;
-        $this->request = $request;
-
-        $this->controller->expects($this->any())
-            ->method('getRequest')
-            ->will($this->returnValue($request));
-
-        parent::setUp();
+        $this->sm = Bootstrap::getServiceManager();
+        $this->sut->setServiceLocator($this->sm);
+        $this->sut->setEnabledCsrf(false);
     }
 
     /**
@@ -115,7 +47,7 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
      */
     public function testEditFeeActionWithFormAlteration($statusId, $statusDescription)
     {
-        $this->setUpAction('\Olcs\Controller\Licence\LicenceController', false);
+        $this->setUpAction();
 
         $feeId = 1;
         $feeDetails = [
@@ -142,31 +74,192 @@ class FeesActionTraitTest extends AbstractHttpControllerTestCase
             ]
         ];
 
-        $mockParams = $this->getMock('\StdClass', ['fromRoute']);
-        $mockParams->expects($this->any())
-            ->method('fromRoute')
-            ->with('fee', null)
-            ->will($this->returnValue($feeId));
+        $this->sut
+            ->shouldReceive('params')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('fromRoute')
+                ->with('fee', null)
+                ->andReturn($feeId)
+                ->getMock()
+            );
 
-        $this->controller->expects($this->once())
-            ->method('params')
-            ->will($this->returnValue($mockParams));
-
-        $mockFeeService = $this->getMock('\StdClass', ['getFee']);
-        $mockFeeService->expects($this->once())
-            ->method('getFee')
+        $mockFeeService = m::mock()
+            ->shouldReceive('getFee')
             ->with($feeId)
-            ->will($this->returnValue($feeDetails));
+            ->andReturn($feeDetails)
+            ->getMock();
 
-        $mockServiceLocator = Bootstrap::getServiceManager();
-        $mockServiceLocator->setAllowOverride(true);
-        $mockServiceLocator->setService('Olcs\Service\Data\Fee', $mockFeeService);
+        switch ($statusId) {
+            case 'lfs_ot':
+                $mockFeeForm = m::mock()
+                    ->shouldReceive('remove')
+                    ->andReturn(null)
+                    ->shouldReceive('get')
+                    ->with('form-actions')
+                    ->andReturn(
+                        m::mock()
+                            ->shouldReceive('remove')
+                            ->with('approve')
+                            ->andReturn(null)
+                            ->shouldReceive('remove')
+                            ->with('reject')
+                            ->andReturn(null)
+                            ->getMock()
+                    )
+                    ->shouldReceive('get')
+                    ->with('fee-details')
+                    ->andReturn(
+                        m::mock()
+                            ->shouldReceive('get')
+                            ->with('waiveReason')
+                            ->andReturn(
+                                m::mock()
+                                    ->shouldReceive('setAttribute')
+                                    ->with('disabled', 'disabled')
+                                    ->andReturn(null)
+                                    ->getMock()
+                                    ->shouldReceive('setValue')
+                                    ->with($feeDetails['waiveReason'])
+                                    ->andReturn(null)
+                                    ->getMock()
+                            )
+                            ->shouldReceive('get')
+                            ->with('id')
+                            ->andReturn(
+                                m::mock()
+                                    ->shouldReceive('setValue')
+                                    ->with($feeDetails['id'])
+                                    ->andReturn(null)
+                                    ->getMock()
+                            )
+                            ->shouldReceive('get')
+                            ->with('version')
+                            ->andReturn(
+                                m::mock()
+                                    ->shouldReceive('setValue')
+                                    ->with($feeDetails['version'])
+                                    ->andReturn(null)
+                                    ->getMock()
+                            )
+                            ->getMock()
+                    )
+                    ->getMock();
+                break;
+            case 'lfs_wr':
+                $mockFeeForm = m::mock()
+                    ->shouldReceive('remove')
+                    ->andReturn(null)
+                    ->shouldReceive('get')
+                    ->with('form-actions')
+                    ->andReturn(
+                        m::mock()
+                            ->shouldReceive('remove')
+                            ->with('recommend')
+                            ->andReturn(null)
+                            ->getMock()
+                    )
+                    ->shouldReceive('get')
+                    ->with('fee-details')
+                    ->andReturn(
+                        m::mock()
+                            ->shouldReceive('get')
+                            ->with('waiveReason')
+                            ->andReturn(
+                                m::mock()
+                                    ->shouldReceive('setAttribute')
+                                    ->with('disabled', 'disabled')
+                                    ->andReturn(null)
+                                    ->getMock()
+                                    ->shouldReceive('setValue')
+                                    ->with($feeDetails['waiveReason'])
+                                    ->andReturn(null)
+                                    ->getMock()
+                            )
+                            ->shouldReceive('get')
+                            ->with('id')
+                            ->andReturn(
+                                m::mock()
+                                    ->shouldReceive('setValue')
+                                    ->with($feeDetails['id'])
+                                    ->andReturn(null)
+                                    ->getMock()
+                            )
+                            ->shouldReceive('get')
+                            ->with('version')
+                            ->andReturn(
+                                m::mock()
+                                    ->shouldReceive('setValue')
+                                    ->with($feeDetails['version'])
+                                    ->andReturn(null)
+                                    ->getMock()
+                            )
+                            ->getMock()
+                    )
+                    ->getMock();
+                break;
+            case 'lfs_w':
+                $mockFeeForm = m::mock()
+                    ->shouldReceive('remove')
+                    ->andReturn(null)
+                    ->shouldReceive('remove')
+                    ->with('form-actions')
+                    ->andReturn(null)
+                    ->shouldReceive('get')
+                    ->with('fee-details')
+                    ->andReturn(
+                        m::mock()
+                            ->shouldReceive('get')
+                            ->with('waiveReason')
+                            ->andReturn(
+                                m::mock()
+                                    ->shouldReceive('setAttribute')
+                                    ->with('disabled', 'disabled')
+                                    ->andReturn(null)
+                                    ->getMock()
+                                    ->shouldReceive('setValue')
+                                    ->with($feeDetails['waiveReason'])
+                                    ->andReturn(null)
+                                    ->getMock()
+                            )
+                            ->shouldReceive('get')
+                            ->with('id')
+                            ->andReturn(
+                                m::mock()
+                                    ->shouldReceive('setValue')
+                                    ->with($feeDetails['id'])
+                                    ->andReturn(null)
+                                    ->getMock()
+                            )
+                            ->shouldReceive('get')
+                            ->with('version')
+                            ->andReturn(
+                                m::mock()
+                                    ->shouldReceive('setValue')
+                                    ->with($feeDetails['version'])
+                                    ->andReturn(null)
+                                    ->getMock()
+                            )
+                            ->getMock()
+                    )
+                    ->getMock();
+                break;
+            case 'lfs_pd':
+            case 'lfs_cn': // no form for paid and cancelled statues
+                $mockFeeForm = null;
+                break;
+            default:
+                break;
+        }
 
-        $this->controller->expects($this->any())
-            ->method('getServiceLocator')
-            ->will($this->returnValue($mockServiceLocator));
+        $this->sut
+            ->shouldReceive('getForm')
+            ->with('fee')
+            ->andReturn($mockFeeForm);
 
-        $response = $this->controller->editFeeAction();
+        $this->sm->setService('Olcs\Service\Data\Fee', $mockFeeService);
+
+        $response = $this->sut->editFeeAction();
 
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $response);
     }
