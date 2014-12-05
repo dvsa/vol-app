@@ -75,11 +75,14 @@ $routes = [
     'case' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/case/:action[/:case][/licence/:licence]',
+            'route' =>
+            '/case/:action[/:case][/licence/:licence][/transportManager/:transportManager][/application/:application]',
             'constraints' => [
-                //'case' => '[0-9]+',
+                'case' => '|[0-9]+',
                 'action' => '[a-z]+',
-                'licence' => '[0-9]+'
+                'licence' => '|[0-9]+',
+                'transportManager' => '|[0-9]+',
+                'application' => '|[0-9]+'
             ],
             'defaults' => [
                 'controller' => 'CaseController',
@@ -408,7 +411,7 @@ $routes = [
             'constraints' => [
                 'case' => '[0-9]+',
                 'submission' => '[0-9]+',
-                'action' => '(index|add|edit|details|close|reopen)'
+                'action' => '(index|add|edit|details|close|reopen|delete)'
             ],
             'defaults' => [
                 'controller' => 'CaseSubmissionController',
@@ -660,160 +663,6 @@ $routes = [
         ],
         'may_terminate' => true,
         'child_routes' => [
-            'details' => [
-                'type' => 'literal',
-                'options' => [
-                    'route' => '/details'
-                ],
-                'may_terminate' => false,
-                'child_routes' => [
-                    'overview' => [
-                        'type' => 'literal',
-                        'options' => [
-                            'route' => '/overview',
-                            'defaults' => [
-                                'controller' => 'LicenceDetailsOverviewController',
-                                'action' => 'index',
-                            ]
-                        ]
-                    ],
-                    'type_of_licence' => [
-                        'type' => 'literal',
-                        'options' => [
-                            'route' => '/type_of_licence',
-                            'defaults' => [
-                                'controller' => 'LicenceDetailsTypeOfLicenceController',
-                                'action' => 'index',
-                            ]
-                        ]
-                    ],
-                    'business_details' => [
-                        'type' => 'literal',
-                        'options' => [
-                            'route' => '/business_details',
-                            'defaults' => [
-                                'controller' => 'LicenceDetailsBusinessDetailsController',
-                                'action' => 'index',
-                            ]
-                        ]
-                    ],
-                    'address' => [
-                        'type' => 'literal',
-                        'options' => [
-                            'route' => '/addresses',
-                            'defaults' => [
-                                'controller' => 'LicenceDetailsAddressController',
-                                'action' => 'index',
-                            ]
-                        ]
-                    ],
-                    'people' => [
-                        'type' => 'literal',
-                        'options' => [
-                            'route' => '/people',
-                            'defaults' => [
-                                'controller' => 'LicenceDetailsPeopleController',
-                                'action' => 'index',
-                            ]
-                        ]
-                    ],
-                    'operating_centre' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => '/operating_centres[/:action][/:id]',
-                            'contraints' => [
-                                'id' => '[0-9]+'
-                            ],
-                            'defaults' => [
-                                'controller' => 'LicenceDetailsOperatingCentreController',
-                                'action' => 'index',
-                            ]
-                        ]
-                    ],
-                    'transport_manager' => [
-                        'type' => 'literal',
-                        'options' => [
-                            'route' => '/transport_managers',
-                            'defaults' => [
-                                'controller' => 'LicenceDetailsTransportManagerController',
-                                'action' => 'index',
-                            ]
-                        ]
-                    ],
-                    'vehicle' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => '/vehicles[/:action][/:id]',
-                            'contraints' => [
-                                'id' => '[0-9]+'
-                            ],
-                            'defaults' => [
-                                'controller' => 'LicenceDetailsVehicleController',
-                                'action' => 'index',
-                            ]
-                        ]
-                    ],
-                    'vehicle_psv' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => '/vehicles_psv[/:action][/:id]',
-                            'contraints' => [
-                                'id' => '[0-9]+'
-                            ],
-                            'defaults' => [
-                                'controller' => 'LicenceDetailsVehiclePsvController',
-                                'action' => 'index',
-                            ]
-                        ]
-                    ],
-                    'discs_psv' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => '/discs[/:action][/:id]',
-                            'contraints' => [
-                                'id' => '[0-9]+'
-                            ],
-                            'defaults' => [
-                                'controller' => 'LicenceDetailsDiscsPsvController',
-                                'action' => 'index',
-                            ]
-                        ]
-                    ],
-                    'safety' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => '/safety[/:action][/:id]',
-                            'contraints' => [
-                                'id' => '[0-9]+'
-                            ],
-                            'defaults' => [
-                                'controller' => 'LicenceDetailsSafetyController',
-                                'action' => 'index',
-                            ]
-                        ]
-                    ],
-                    'condition_undertaking' => [
-                        'type' => 'literal',
-                        'options' => [
-                            'route' => '/condition_undertaking',
-                            'defaults' => [
-                                'controller' => 'LicenceDetailsConditionUndertakingController',
-                                'action' => 'index',
-                            ]
-                        ]
-                    ],
-                    'taxi_phv' => [
-                        'type' => 'literal',
-                        'options' => [
-                            'route' => '/taxi_phv',
-                            'defaults' => [
-                                'controller' => 'LicenceDetailsTaxiPhvController',
-                                'action' => 'index',
-                            ]
-                        ]
-                    ]
-                ]
-            ],
             'bus' => [
                 'type' => 'literal',
                 'options' => [
@@ -1127,6 +976,16 @@ $routes = [
                 ],
                 'may_terminate' => true,
                 'child_routes' => [
+                    'publications' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/publications[/:action][/:id]',
+                            'defaults' => [
+                                'controller' => 'LicenceProcessingPublicationsController',
+                                'action' => 'index'
+                            ]
+                        ],
+                    ],
                     'tasks' => [
                         'type' => 'segment',
                         'options' => [
@@ -1190,7 +1049,7 @@ $routes = [
                         'options' => [
                             'route' => '/:action/:fee',
                             'constraints' => [
-                                'fee' => '[0-9-]+',
+                                'fee' => '([0-9]+,?)+',
                             ],
                         ],
                         'may_terminate' => true,
@@ -1243,6 +1102,16 @@ $routes = [
                     ]
                 ]
             ],
+            'new-application' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/new-application',
+                    'defaults' => [
+                        'controller' => 'OperatorController',
+                        'action' => 'newApplication',
+                    ]
+                ]
+            ],
         ]
     ],
     'create_operator' => [
@@ -1280,6 +1149,7 @@ $routes = [
             'defaults' => [
                 'controller' => 'TMController',
                 'action' => 'index-jump',
+                'transportManager' => ''
             ]
         ],
         'may_terminate' => true,
@@ -1398,7 +1268,18 @@ $routes = [
                 ]
             ],
         ],
-    ]
+    ],
+    'create_transport_manager' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/transport-manager/create',
+            'defaults' => [
+                'controller' => 'TMDetailsDetailController',
+                'action' => 'index',
+            ],
+        ],
+        'may_terminate' => true,
+    ],
 ];
 
 $sectionConfig = new \Common\Service\Data\SectionConfig();
@@ -1487,12 +1368,73 @@ $routes['lva-application']['child_routes'] = array_merge(
         'processing' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => 'processing/',
+                'route' => 'processing',
                 'defaults' => array(
-                    'controller' => 'ApplicationController',
-                    'action' => 'processing'
+                    'controller' => 'ApplicationProcessingOverviewController',
+                    'action' => 'index'
                 )
-            )
+            ),
+            'may_terminate' => true,
+            'child_routes' => [
+                'publications' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => '/publications[/:action][/:id]',
+                        'defaults' => [
+                            'controller' => 'ApplicationController',
+                            'action' => 'publications'
+                        ]
+                    ],
+                ],
+                'tasks' => [
+                    'type' => 'segment',
+                    'may_terminate' => true,
+                    'options' => [
+                        'route' => '/tasks',
+                        'defaults' => [
+                            'controller' => 'ApplicationProcessingTasksController',
+                            'action' => 'index'
+                        ]
+                    ]
+                ],
+                'notes' => [
+                    'type' => 'segment',
+                    'may_terminate' => true,
+                    'options' => [
+                        'route' => '/notes',
+                        'defaults' => [
+                            'controller' => 'ApplicationProcessingNoteController',
+                            'action' => 'index'
+                        ]
+                    ],
+                ],
+                'add-note' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => '/notes/:action/:noteType[/:linkedId]',
+                        'defaults' => [
+                            'constraints' => [
+                                'noteType' => '[A-Za-z]+',
+                                'linkedId' => '[0-9]+',
+                            ],
+                            'controller' => 'ApplicationProcessingNoteController',
+                            'action' => 'add'
+                        ]
+                    ]
+                ],
+                'modify-note' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => '/notes/:action[/:id]',
+                        'defaults' => [
+                            'constraints' => [
+                                'id' => '[0-9]+',
+                            ],
+                            'controller' => 'ApplicationProcessingNoteController',
+                        ]
+                    ]
+                ]
+            ],
         ),
         'fees' => array(
             'type' => 'segment',
@@ -1510,7 +1452,7 @@ $routes['lva-application']['child_routes'] = array_merge(
                     'options' => array(
                         'route' => ':action/:fee',
                         'constraints' => array(
-                            'fee' => '[0-9-]+',
+                            'fee' => '([0-9]+,?)+',
                         ),
                     ),
                     'may_terminate' => true,

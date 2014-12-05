@@ -16,7 +16,7 @@ class Cases extends AbstractData
     protected $serviceName = 'Cases';
 
     /**
-     * @param integer|null $id
+     * @param integer $id
      * @param array|null $bundle
      * @return array
      */
@@ -31,6 +31,16 @@ class Cases extends AbstractData
         return $this->getData($id);
     }
 
+    public function fetchList($params = [], $bundle = null)
+    {
+        if (null === $bundle) {
+            $bundle = $this->getBundle();
+        }
+        $params['bundle'] = json_encode($bundle);
+
+        return $this->getRestClient()->get('', $params);
+    }
+
     /**
      * @return array
      */
@@ -38,12 +48,15 @@ class Cases extends AbstractData
     {
         $bundle = array(
             'children' => array(
+                /**
+                 * @note [OLCS-5306] check this, it appears to be an invalid part of the bundle
                 'submissionSections' => array(
                     'properties' => array(
                         'id',
                         'description'
                     )
                 ),
+                 */
                 'appeals' => array(
                     'properties' => 'ALL',
                     'children' => array(

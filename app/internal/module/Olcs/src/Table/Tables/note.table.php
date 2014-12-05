@@ -21,11 +21,6 @@ return array(
     ),
     'columns' => array(
         array(
-            'title' => '',
-            'width' => 'checkbox',
-            'format' => '{{[elements/radio]}}'
-        ),
-        array(
             'title' => 'Created',
             'formatter' => function ($data) {
                 $routeParams = array('action' => 'edit', 'id' => $data['id']);
@@ -42,7 +37,7 @@ return array(
                         break;
                 }
 
-                return '<a href="' . $this->generateUrl(
+                return '<a class="js-modal-ajax" href="' . $this->generateUrl(
                     $routeParams,
                     $data['routePrefix'] . '/modify-note',
                     true
@@ -62,7 +57,7 @@ return array(
             'sort' => 'comment'
         ),
         array(
-            'title' => 'Note Type',
+            'title' => 'Note type',
             'formatter' => function ($data) {
                 return $data['noteType']['description'];
             },
@@ -72,6 +67,11 @@ return array(
             'title' => 'Priority',
             'name' => 'priority',
             'sort' => 'priority'
-        )
+        ),
+        array(
+            'title' => '',
+            'width' => 'checkbox',
+            'format' => '{{[elements/radio]}}'
+        ),
     )
 );

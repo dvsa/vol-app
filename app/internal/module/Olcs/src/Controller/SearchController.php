@@ -134,6 +134,9 @@ class SearchController extends AbstractController
         if (isset($postData['action']) && $postData['action'] == 'Create operator') {
             return $this->redirectToRoute('create_operator');
         }
+        if (isset($postData['action']) && $postData['action'] == 'Create transport manager') {
+            return $this->redirectToRoute('create_transport_manager');
+        }
         $data = $this->params()->fromRoute();
         $results = $this->makeRestCall('OperatorSearch', 'GET', $data);
 

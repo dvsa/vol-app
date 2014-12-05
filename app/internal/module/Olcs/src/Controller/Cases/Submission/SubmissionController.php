@@ -173,7 +173,9 @@ class SubmissionController extends OlcsController\CrudAbstract
     {
         $params['case'] = $this->params()->fromRoute('case');
         $params['section'] = $this->params()->fromRoute('section');
+        $params['subSection'] = $this->params()->fromRoute('subSection', $params['section']);
         $params['submission'] = $this->params()->fromRoute('submission');
+
         $submissionService = $this->getServiceLocator()->get('Olcs\Service\Data\Submission');
 
         $configService = $this->getServiceLocator()->get('config');
@@ -183,11 +185,15 @@ class SubmissionController extends OlcsController\CrudAbstract
         $snapshotData = json_decode($submission['dataSnapshot'], true);
 
         if (array_key_exists($params['section'], $snapshotData)) {
-            $snapshotData[$params['section']]['data'] = $submissionService->createSubmissionSection(
+            // get fresh data
+            $refreshData = $submissionService->createSubmissionSection(
                 $params['case'],
                 $params['section'],
                 $submissionConfig['sections'][$params['section']]
             );
+            // replace snapshot data
+            $snapshotData[$params['section']]['data']['tables'][$params['subSection']] =
+                $refreshData['tables'][$params['subSection']];
             $data['id'] = $params['submission'];
             $data['version'] = $submission['version'];
             $data['dataSnapshot'] = json_encode($snapshotData);
@@ -206,7 +212,7 @@ class SubmissionController extends OlcsController\CrudAbstract
     {
         $params['case'] = $this->params()->fromRoute('case');
         $params['section'] = $this->params()->fromRoute('section');
-        $params['subSection'] = $this->params()->fromRoute('subSection');
+        $params['subSection'] = $this->params()->fromRoute('subSection', $params['section']);
         $params['submission'] = $this->params()->fromRoute('submission');
 
         $rowsToDelete = $this->params()->fromPost('id');
@@ -214,23 +220,16 @@ class SubmissionController extends OlcsController\CrudAbstract
 
         $submission = $submissionService->fetchData($params['submission']);
         $snapshotData = json_decode($submission['dataSnapshot'], true);
+
         if (array_key_exists($params['section'], $snapshotData) &&
-        is_array($snapshotData[$params['section']]['data'])) {
-            if (!empty($params['subSection'])) {
-                foreach ($snapshotData[$params['section']]['data'][$params['subSection']] as $key => $dataRow) {
-                    if (in_array($dataRow['id'], $rowsToDelete)) {
-                        unset($snapshotData[$params['section']]['data'][$params['subSection']][$key]);
-                    }
+        is_array($snapshotData[$params['section']]['data']['tables'][$params['subSection']])) {
+            foreach ($snapshotData[$params['section']]['data']['tables'][$params['subSection']] as $key => $dataRow) {
+                if (in_array($dataRow['id'], $rowsToDelete)) {
+                    unset($snapshotData[$params['section']]['data']['tables'][$params['subSection']][$key]);
                 }
-                ksort($snapshotData[$params['section']]['data'][$params['subSection']]);
-            } else {
-                foreach ($snapshotData[$params['section']]['data'] as $key => $dataRow) {
-                    if (in_array($dataRow['id'], $rowsToDelete)) {
-                        unset($snapshotData[$params['section']]['data'][$key]);
-                    }
-                }
-                ksort($snapshotData[$params['section']]['data']);
             }
+            ksort($snapshotData[$params['section']]['data']['tables'][$params['subSection']]);
+
             $data['id'] = $params['submission'];
             $data['version'] = $submission['version'];
             $data['dataSnapshot'] = json_encode($snapshotData);

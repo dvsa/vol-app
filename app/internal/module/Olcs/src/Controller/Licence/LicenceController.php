@@ -28,22 +28,19 @@ class LicenceController extends AbstractController
      */
     public function feesAction()
     {
-        $this->loadScripts(['forms/filter', 'table-actions']);
+        $response = $this->checkActionRedirect('licence');
+        if ($response) {
+            return $response;
+        }
 
-        $licenceId = $this->params()->fromRoute('licence');
         $this->pageLayout = 'licence';
 
-        $status = $this->params()->fromQuery('status');
-        $filters = [
-            'status' => $status
-        ];
+        return $this->commonFeesAction($this->params()->fromRoute('licence'));
+    }
 
-        $table = $this->getFeesTable($licenceId, $status);
-
-        $view = $this->getViewWithLicence(['table' => $table, 'form'  => $this->getFeeFilterForm($filters)]);
-        $view->setTemplate('licence/fees/layout');
-
-        return $this->renderView($view);
+    public function payFeesAction()
+    {
+        return $this->commonPayFeesAction('licence', $this->params('licence'));
     }
 
     public function detailsAction()
@@ -215,5 +212,13 @@ class LicenceController extends AbstractController
     public function indexJumpAction()
     {
         return $this->redirect()->toRoute('licence/details/overview', [], [], true);
+    }
+
+    protected function renderLayout($view)
+    {
+        $tmp = $this->getViewWithLicence($view->getVariables());
+        $view->setVariables($tmp->getVariables());
+
+        return $this->renderView($view);
     }
 }

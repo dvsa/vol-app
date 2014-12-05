@@ -5,7 +5,6 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-
 namespace Olcs\Controller\Cases;
 
 use Zend\View\Model\ViewModel;
@@ -79,12 +78,15 @@ class CaseController extends OlcsController\CrudAbstract
      */
     protected $dataBundle = array(
         'children' => array(
+            /**
+             * @todo [OLCS-5306] check this, it appears to be an invalid part of the bundle
             'submissionSections' => array(
                 'properties' => array(
                     'id',
                     'description'
                 )
             ),
+             */
             'legacyOffences' => array(
                 'properties' => 'ALL',
             ),
@@ -193,7 +195,7 @@ class CaseController extends OlcsController\CrudAbstract
      */
     public function addAction()
     {
-        $this->setPageLayout('licence');
+        $this->setPageLayout('simple');
         $this->setPageLayoutInner(null);
 
         return parent::addAction();
@@ -214,6 +216,16 @@ class CaseController extends OlcsController\CrudAbstract
         if ($licence = $this->getQueryOrRouteParam('licence', null)) {
             $data['licence'] = $licence;
             $data['fields']['licence'] = $licence;
+        }
+
+        if ($application = $this->getQueryOrRouteParam('application', null)) {
+            $data['application'] = $application;
+            $data['fields']['application'] = $application;
+        }
+
+        if ($transportManager = $this->getQueryOrRouteParam('transportManager', null)) {
+            $data['transportManager'] = $transportManager;
+            $data['fields']['transportManager'] = $transportManager;
         }
 
         return $data;

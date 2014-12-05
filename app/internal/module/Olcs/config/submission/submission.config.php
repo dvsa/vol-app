@@ -13,8 +13,8 @@ return array(
         ),
         'case-summary' => array(
             'section_type' => ['overview'],
-            'data_field' => '',
             'allow_comments' => true,
+            'filter' => true,
             'service' => 'Cases',
             'bundle' => array(
                 'properties' => 'ALL',
@@ -26,15 +26,6 @@ return array(
                     ),
                     'caseType' => array(
                         'properties' => array('id')
-                    ),
-                    'submissionSections' => array(
-                        'properties' => array(
-                            'id',
-                            'description'
-                        )
-                    ),
-                    'legacyOffences' => array(
-                        'properties' => 'ALL',
                     ),
                     'licence' => array(
                         'properties' => 'ALL',
@@ -64,9 +55,57 @@ return array(
                                     'type' => array(
                                         'properties' => array('id', 'description')
                                     ),
-                                    'sicCode' => array(
-                                        'properties' => array('id', 'description')
+                                    'organisationPersons' => array(
+                                        'properties' => 'ALL',
+                                        'children' => array(
+                                            'person' => array(
+                                                'properties' => 'ALL'
+                                            )
+                                        )
                                     ),
+                                    'natureOfBusinesss' => array(
+                                        'properties' => 'ALL',
+                                        'children' => array(
+                                            'refData' => array(
+                                                'properties' => array(
+                                                    'id',
+                                                    'description'
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        ),
+        'case-outline' => array(
+            'section_type' => ['text'],
+            'allow_comments' => true,
+            'filter' => true,
+            'service' => 'Cases',
+            'bundle' => array(
+                'properties' => array('description')
+            )
+        ),
+        'most-serious-infringement'   => array(
+            'section_type' => ['text','overview'],
+            'allow_comments' => true,
+        ),
+        'persons' => array(
+            'section_type' => ['list'],
+            'allow_comments' => true,
+            'filter' => true,
+            'service' => 'Cases',
+            'bundle' => array(
+                'properties' => 'ALL',
+                'children' => array(
+                    'licence' => array(
+                        'children' => array(
+                            'organisation' => array(
+                                'children' => array(
                                     'organisationPersons' => array(
                                         'properties' => 'ALL',
                                         'children' => array(
@@ -82,22 +121,6 @@ return array(
                 )
             )
         ),
-        'case-outline' => array(
-            'section_type' => ['text'],
-            'data_field' => 'outline',
-            'allow_comments' => true,
-            'bundle' => 'case-summary'
-        ),
-        'most-serious-infringement'   => array(
-            'section_type' => ['text','overview'],
-            'data_field' => '',
-            'allow_comments' => true,
-        ),
-        'persons' => array(
-            'section_type' => ['list'],
-            'allow_comments' => true,
-            'bundle' => 'case-summary'
-        ),
         'operating-centres'   => array(
             'section_type' => ['list'],
             'allow_comments' => true,
@@ -106,6 +129,7 @@ return array(
             'section_type' => ['list'],
             'section_editable' => false,
             'allow_comments' => true,
+            'filter' => true,
             'service' => 'Cases',
             'bundle' => array(
                 'properties' => array('id'),
@@ -115,12 +139,6 @@ return array(
                         'children' => array(
                             'case' => array(
                                 'properties' => array('id')
-                            ),
-                            'prohibitionType' => array(
-                                'properties' => array(
-                                    'id',
-                                    'description'
-                                )
                             ),
                             'attachedTo' => array(
                                 'properties' => array('id', 'description')
@@ -133,7 +151,6 @@ return array(
                                 'children' => array(
                                     'address' => array(
                                         'properties' => array(
-
                                             'addressLine1',
                                             'addressLine2',
                                             'addressLine3',
@@ -161,104 +178,167 @@ return array(
         ),
         'intelligence-unit-check'   => array(
             'section_type' => [],
-            'data_field' => '',
             'section_editable' => false,
             'allow_comments' => true,
         ),
         'interim'   => array(
             'section_type' => [],
-            'data_field' => '',
             'allow_comments' => true,
         ),
         'advertisement'   => array(
             'section_type' => [],
-            'data_field' => '',
             'allow_comments' => true,
         ),
         'linked-licences-app-numbers'   => array(
             'section_type' => ['list'],
-            'data_field' => '',
             'allow_comments' => true,
+            'filter' => true,
+            'service' => 'Cases',
+            'bundle' => array(
+                'properties' => array(
+                    'id',
+                    'licence'
+                ),
+                'children' => array(
+                    'licence' => array(
+                        'properties' => array(
+                            'id',
+                            'organisation'
+                        ),
+                        'children' => array(
+                            'organisation' => array(
+                                'properties' => array(
+                                    'id',
+                                    'licences'
+                                ),
+                                'children' => array(
+                                    'licences' => array(
+                                        'properties' => 'ALL',
+                                        'criteria' => array(
+                                            'status' => array(
+                                                'lsts_consideration',
+                                                'lsts_granted',
+                                                'lsts_curtailed',
+                                                'lsts_suspended',
+                                                'lsts_valid'
+                                            )
+                                        ),
+                                        'children' => array(
+                                            'status',
+                                            'licenceType',
+                                            'licenceVehicles'
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
         ),
         'lead-tc-area'   => array(
             'section_type' => ['text'],
-            'data_field' => '',
             'allow_comments' => true,
+            'filter' => true,
+            'service' => 'Cases',
+            'bundle' => array(
+                'properties' => array(
+                    'licence'
+                ),
+                'children' => array(
+                    'licence' => array(
+                        'properties' => array(
+                            'organisation'
+                        ),
+                        'children' => array(
+                            'organisation' => array(
+                                'properties' => array(
+                                    'leadTcArea'
+                                ),
+                                'children' => array(
+                                    'leadTcArea' => array(
+                                        'name'
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
         ),
         'current-submissions'   => array(
             'section_type' => [],
-            'data_field' => '',
             'allow_comments' => true,
         ),
         'auth-requested-applied-for'   => array(
             'section_type' => ['text'],
-            'data_field' => '',
             'allow_comments' => true,
         ),
         'transport-managers'   => array(
             'section_type' => ['list'],
-            'data_field' => '',
             'allow_comments' => true,
         ),
         'continuous-effective-control'   => array(
             'section_type' => [],
-            'data_field' => '',
             'allow_comments' => true,
         ),
         'fitness-and-repute'   => array(
             'section_type' => [],
-            'data_field' => '',
             'allow_comments' => true,
         ),
         'previous-history'   => array(
             'section_type' => [],
-            'data_field' => '',
             'allow_comments' => true,
         ),
         'bus-reg-app-details'   => array(
             'section_type' => [],
-            'data_field' => '',
             'allow_comments' => true,
         ),
         'transport-authority-comments'   => array(
             'section_type' => [],
-            'data_field' => '',
             'allow_comments' => true,
         ),
         'total-bus-registrations'   => array(
             'section_type' => [],
-            'data_field' => '',
             'allow_comments' => true,
         ),
         'local-licence-history'   => array(
             'section_type' => [],
-            'data_field' => '',
             'allow_comments' => true,
         ),
         'linked-mlh-history'   => array(
             'section_type' => [],
-            'data_field' => '',
             'allow_comments' => true,
         ),
         'registration-details'   => array(
             'section_type' => [],
-            'data_field' => '',
             'allow_comments' => true,
         ),
         'maintenance-tachographs-hours'   => array(
             'section_type' => [],
-            'data_field' => '',
             'allow_comments' => true,
         ),
-        'prohibition-history'   => array(
+        'prohibition-history' => array(
             'section_type' => ['list', 'text'],
-            'data_field' => '',
             'allow_comments' => true,
+            'filter' => true,
+            'service' => 'Cases',
+            'bundle' => array(
+                'children' => array(
+                    'prohibitions' => array(
+                        'children' => array(
+                            'prohibitionType' => array(
+                                'properties' => array('id', 'description')
+                            )
+                        )
+                    )
+                )
+            )
         ),
         'conviction-fpn-offence-history' => array(
             'section_type' => ['list', 'text'],
-            'data_field' => '',
             'allow_comments' => true,
+            'filter' => true,
             'service' => 'Cases',
             'bundle' => array(
                 'properties' => 'ALL',
@@ -271,12 +351,6 @@ return array(
                                     'id',
                                     'description'
                                 )
-                            ),
-                            'category' => array(
-                                'properties' => array(
-                                    'id',
-                                    'description'
-                                )
                             )
                         )
                     )
@@ -285,64 +359,146 @@ return array(
         ),
         'annual-test-history'   => array(
             'section_type' => ['text'],
-            'data_field' => '',
+            'filter' => true,
             'allow_comments' => true,
+            'service' => 'Cases',
+            'bundle' => array(
+                'properties' => array('annualTestHistory')
+            ),
         ),
         'penalties'   => array(
             'section_type' => ['list', 'text'],
-            'data_field' => '',
             'allow_comments' => true,
+            'service' => 'Cases',
+            'allow_comments' => true,
+            'filter' => true,
+            'bundle' => array(
+                'properties' => 'All',
+                'children' => array(
+                    'seriousInfringements' => array(
+                        'children' => array(
+                            'siCategory' => array(
+                                'properties' => array(
+                                    'description'
+                                )
+                            ),
+                            'siCategoryType' => array(
+                                'properties' => array(
+                                    'description'
+                                )
+                            ),
+                            'appliedPenalties' => array(
+                                'properties' => 'ALL',
+                                'children' => array(
+                                    'siPenaltyType' => array(
+                                        'properties' => array(
+                                            'id',
+                                            'description'
+                                        )
+                                    ),
+                                    'seriousInfringement' => array(
+                                        'properties' => array(
+                                            'id'
+                                        )
+                                    )
+                                )
+                            ),
+                            'imposedErrus' => array(
+                                'properties' => array(
+                                    'finalDecisionDate',
+                                    'startDate',
+                                    'endDate',
+                                    'executed'
+                                ),
+                                'children' => array(
+                                    'siPenaltyImposedType' => array(
+                                        'properties' => array(
+                                            'id',
+                                            'description'
+                                        )
+                                    )
+                                )
+                            ),
+                            'requestedErrus' => array(
+                                'properties' => 'ALL',
+                                'children' => array(
+                                    'siPenaltyRequestedType' => array(
+                                        'properties' => array(
+                                            'id',
+                                            'description'
+                                        )
+                                    )
+                                )
+                            ),
+                            'memberStateCode' => array(
+                                'properties' => array(
+                                    'countryDesc'
+                                )
+                            )
+                        )
+                    )
+                )
+            )
         ),
         'other-issues'   => array(
             'section_type' => [],
-            'data_field' => '',
             'allow_comments' => true,
         ),
         'te-reports'   => array(
             'section_type' => [],
-            'data_field' => '',
             'allow_comments' => true,
         ),
         'site-plans'   => array(
             'section_type' => [],
-            'data_field' => '',
             'allow_comments' => true,
         ),
         'planning-permission'   => array(
             'section_type' => [],
-            'data_field' => '',
             'allow_comments' => true,
         ),
         'applicants-comments'   => array(
             'section_type' => [],
-            'data_field' => '',
             'allow_comments' => true,
         ),
         'visibility-access-egress-size'   => array(
             'section_type' => [],
-            'data_field' => '',
             'allow_comments' => true,
         ),
         'compliance-complaints'   => array(
             'section_type' => ['list'],
-            'data_field' => '',
+            'service' => 'Complaint',
+            'identifier' => 'case',
             'allow_comments' => true,
+            'filter' => true,
+            'bundle' => array(
+                'properties' => array(
+                    'id',
+                    'complainantForename',
+                    'complainantFamilyName',
+                    'complaintDate',
+                    'description',
+                    'case'
+                ),
+                'children' => array(
+                    'case' => array(
+                        'properties' => array(
+                            'id'
+                        )
+                    )
+                )
+            )
         ),
         'environmental-complaints'   => array(
             'section_type' => ['list'],
-            'data_field' => '',
             'allow_comments' => true,
         ),
         'oppositions'   => array(
             'section_type' => ['list'],
-            'data_field' => '',
             'allow_comments' => true,
+            'filter' => true,
             'service' => 'Cases',
             'bundle' => array(
                 'children' => array(
-                    'properties' => array(
-                        'id'
-                    ),
                     'application' => array(
                         'properties' => array(
                             'id'
@@ -389,27 +545,22 @@ return array(
         ),
         'financial-information'   => array(
             'section_type' => [],
-            'data_field' => '',
             'allow_comments' => true,
         ),
         'maps'   => array(
             'section_type' => ['file'],
-            'data_field' => '',
             'allow_comments' => true,
         ),
         'waive-fee-late-fee'   => array(
             'section_type' => [],
-            'data_field' => '',
             'allow_comments' => true,
         ),
         'surrender'   => array(
             'section_type' => [],
-            'data_field' => '',
             'allow_comments' => true,
         ),
         'annex'   => array(
             'section_type' => ['file'],
-            'data_field' => '',
             'allow_comments' => true,
         )
     )

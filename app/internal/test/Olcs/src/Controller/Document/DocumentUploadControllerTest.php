@@ -369,7 +369,7 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
 
         $variables = $response->getVariables();
 
-        $this->assertEquals('Upload Document', $variables['pageTitle']);
+        $this->assertEquals('Upload document', $variables['pageTitle']);
     }
 
     public function testUploadActionWithPostInvokesProcessUpload()

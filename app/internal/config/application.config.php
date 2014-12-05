@@ -4,11 +4,13 @@ return array(
     'modules' => array(
         'ZendDeveloperTools',
         'Olcs\Logging',
+        'Dvsa\Jackrabbit',
         'Olcs',
         'Admin',
         'Common',
         'DoctrineModule',
         'DoctrineORMModule',
+        'CpmsClient'
     ),
 
     // These are various options for the listeners attached to the ModuleManager

@@ -2,7 +2,7 @@
 
 return array(
     'variables' => array(
-        'title' => 'Conditions and undertakings'
+        'title' => 'Conditions & Undertakings'
     ),
     'settings' => array(
         'crud' => array(
@@ -71,7 +71,7 @@ return array(
             }
         ),
         array(
-            'title' => 'OC Address',
+            'title' => 'OC address',
             'width' => '300px',
             'formatter' => function ($data, $column, $sm) {
 

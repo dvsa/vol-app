@@ -27,8 +27,7 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
         'page' => 1,
         'limit' => 10,
         'actionDate' => '',
-        'linkId' => 1234,
-        'linkType' => 'Licence',
+        'licenceId' => 1234,
         'isClosed' => false
     ];
     private $standardListData = [
@@ -66,7 +65,7 @@ class LicenceProcessingTasksControllerTest extends AbstractHttpControllerTestCas
     public function setUp()
     {
         $this->setApplicationConfig(
-            include __DIR__.'/../../../../../config/application.config.php'
+            include __DIR__ . '/../../../../../../config/application.config.php'
         );
         $this->controller = $this->getMock(
             '\Olcs\Controller\Licence\Processing\LicenceProcessingTasksController',

@@ -50,7 +50,7 @@ class HearingControllerTest extends AbstractHttpControllerTestCase
                 'adjournedReason' => null,
                 'adjournedDate' => null,
                 'pi' => [
-                    'id' => 1,
+                    'id' => '1',
                     'piStatus' => 'pi_s_schedule'
                 ]
             ]

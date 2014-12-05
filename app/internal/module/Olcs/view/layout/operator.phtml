@@ -21,10 +21,18 @@
 
 <div class="one-fifth--right">
   <div class="record-actions">
-    <h5><?php echo $this->translate('internal-operator-quick-actions'); ?></h5>
-    <ul class="record-actions__group">
-        <li class="record-actions__item">
-            <a class="action--secondary<?php echo $this->disable ? ' disabled' : ''; ?>" href=""><?php echo $this->translate('internal-operator-new-application'); ?></a>
-        </li>
-    </ul>    
+    <?php
+    if (!isset($this->hideQuickActions) || $this->hideQuickActions === false) {
+        ?>
+        <h5><?php echo $this->translate('internal-operator-quick-actions'); ?></h5>
+        <ul class="record-actions__group">
+            <li class="record-actions__item">
+                <a class="action--secondary<?php echo $this->disable ? ' disabled' : ''; ?> js-modal-ajax" href="<?php echo $this->url('operator/new-application', [], [], true); ?>">
+                    <?php echo $this->translate('internal-operator-new-application'); ?>
+                </a>
+            </li>
+        </ul>
+        <?php
+    }
+    ?>
 </div>

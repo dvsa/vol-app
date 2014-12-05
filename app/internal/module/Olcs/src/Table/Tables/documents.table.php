@@ -2,7 +2,7 @@
 
 return array(
     'variables' => array(
-        'title' => 'Documents & Attachments'
+        'title' => 'Docs & attachments'
     ),
     'settings' => array(
         'crud' => array(
@@ -44,7 +44,7 @@ return array(
             'sort' => 'categoryName'
         ),
         array(
-            'title' => 'Sub category',
+            'title' => 'Subcategory',
             'name' => 'documentSubCategoryName',
             'sort' => 'documentSubCategoryName',
             'formatter' => function ($data, $column) {

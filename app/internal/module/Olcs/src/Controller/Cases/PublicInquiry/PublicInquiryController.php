@@ -5,15 +5,11 @@
  *
  * @author S Lizzio <shaun.lizzio@valtech.co.uk>
  */
-
 namespace Olcs\Controller\Cases\PublicInquiry;
 
-// Olcs
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
 use Common\Service\Data\SlaServiceAwareTrait;
-
-use Zend\View\Model\ViewModel;
 
 /**
  * Case Complaint Controller
@@ -113,20 +109,16 @@ class PublicInquiryController extends OlcsController\CrudAbstract
             'piTypes' => [
                 'properties' => 'ALL',
             ],
-            'presidingTc' => [
-                'properties' =>
-                    [
-                        'id',
-                        'name'
-                    ]
-            ],
             'reasons' => [
                 'properties' => 'ALL',
+                /**
+                 * @todo [OLCS-5306] check this, it appears to be an invalid part of the bundle
                 'children' => [
                     'reason' => [
                         'properties' => 'ALL',
                     ]
                 ],
+                 */
             ],
             'piHearings' => array(
                 'properties' => 'ALL',

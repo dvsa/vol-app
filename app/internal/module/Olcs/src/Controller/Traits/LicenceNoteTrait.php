@@ -87,12 +87,10 @@ trait LicenceNoteTrait
      */
     public function redirectToIndex()
     {
-        return $this->redirectToRoute(
-            $this->getRoutePrefix() . $this->getRedirectIndexRoute(),
-            ['action'=>'index', $this->getIdentifierName() => null],
-            ['code' => '303'], // Why? No cache is set with a 303 :)
-            true
-        );
+        $id      = $this->getFromRoute($this->getEntityName());
+        $route   = $this->getRoutePrefix() . $this->getRedirectIndexRoute();
+        $params  = ['action'=>'index', $this->getEntityName() => $id];
+        return $this->redirectToRouteAjax($route, $params);
     }
 
     /**
@@ -112,7 +110,8 @@ trait LicenceNoteTrait
         $noteType = 'note_t_lic',
         $action = null,
         $id = null,
-        $caseId = null
+        $caseId = null,
+        $applicationId = null
     ) {
         $routePrefix  = $this->getRoutePrefix();
 
@@ -125,7 +124,8 @@ trait LicenceNoteTrait
                         'noteType' => $noteType,
                         'linkedId' => $linkedId,
                         'licence' => $licenceId,
-                        'case' => $caseId
+                        'case' => $caseId,
+                        'application' => $applicationId
                     ],
                     [],
                     true
@@ -199,10 +199,10 @@ trait LicenceNoteTrait
             true
         );
 
-        $this->loadScripts(['forms/filter']);
+        $this->loadScripts(['forms/filter','table-actions']);
 
         $view = $this->getView(['table' => $table]);
-        $view->setTemplate($this->getTemplatePrefix() . '/notes/index');
+        $view->setTemplate('table');
 
         return $view;
     }
@@ -218,6 +218,7 @@ trait LicenceNoteTrait
         $caseId = $this->getFromRoute('case');
         $noteType = $this->getFromRoute('noteType');
         $linkedId = $this->getFromRoute('linkedId');
+        $applicationId = $this->getFromRoute('application');
 
         //if this is from a case, we also need to populate a licence id, which won't be in the route
         if (!is_null($caseId)) {
@@ -228,21 +229,33 @@ trait LicenceNoteTrait
             }
         }
 
+        //same for application
+        if (!is_null($applicationId)) {
+            $licenceId = $this->getServiceLocator()->get('Entity\Application')
+                ->getLicenceIdForApplication($applicationId);
+        }
+
         $form = $this->generateFormWithData(
             'licence-notes',
             'processAddNotes',
             array(
                 'licence' => $licenceId,
                 'case' => $caseId,
+                'application' => $applicationId,
                 'noteType' => $noteType,
                 'linkedId' => $linkedId
             )
         );
 
-        $view = $this->getView(['form' => $form]);
-        $view->setTemplate($this->getTemplatePrefix() . '/notes/form');
+        if ($this->getResponse()->getContent() !== '') {
+            return $this->getResponse();
+        }
 
-        return $this->renderView($view);
+        $view = $this->getView(['form' => $form]);
+
+        $view->setTemplate('form-simple');
+
+        return $this->renderView($view, 'internal-application-processing-notes-add-title');
     }
 
     /**
@@ -264,7 +277,7 @@ trait LicenceNoteTrait
         $field = $this->getIdField($data['noteType']);
 
         //if this is a licence note this isn't needed, for other types of note it is expected
-        if (!empty($field)) {
+        if (!empty($field) && empty($data[$field['field']])) {
             if (!(int)$data['linkedId']) {
                 throw new BadRequestException('Unable to link your note to the correct record');
             }
@@ -308,14 +321,18 @@ trait LicenceNoteTrait
             $data
         );
 
+        if ($this->getResponse()->getContent() !== '') {
+            return $this->getResponse();
+        }
+
         $form->get('main')
             ->get('comment')
             ->setAttribute('disabled', 'disabled');
 
         $view = $this->getView(['form' => $form]);
-        $view->setTemplate($this->getTemplatePrefix() . '/notes/form');
+        $view->setTemplate('form-simple');
 
-        return $this->renderView($view);
+        return $this->renderView($view, 'internal-application-processing-notes-modify-title');
     }
 
     /**

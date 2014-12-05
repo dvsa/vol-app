@@ -18,6 +18,8 @@ class Bootstrap
 
     public static function init()
     {
+        ini_set('memory_limit', '512M');
+
         // Setup the autloader
         $loader = static::initAutoloader();
 
@@ -37,20 +39,21 @@ class Bootstrap
         $serviceManager = new ServiceManager(new ServiceManagerConfig());
         $serviceManager->setService('ApplicationConfig', self::$config);
         $serviceManager->get('ModuleManager')->loadModules();
+        $serviceManager->setAllowOverride(true);
 
         // Mess up the backend, so any real rest calls will fail
         $config = $serviceManager->get('Config');
-        $serviceManager->setAllowOverride(true);
         $config['service_api_mapping']['endpoints']['backend'] = 'http://some-fake-backend/';
         $serviceManager->setService('Config', $config);
-        $serviceManager->setAllowOverride(false);
 
         return $serviceManager;
     }
 
     protected static function initAutoloader()
     {
-        return require('vendor/autoload.php');
+        require('init_autoloader.php');
+
+        return $loader;
     }
 }
 

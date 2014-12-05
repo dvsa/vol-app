@@ -7,13 +7,16 @@
                 <?php if (!$current) : ?>
                     <a href="<?php echo $this->url($details['route'], ['licence' => $lvaId]); ?>">
                 <?php endif; ?>
-                <span><?php echo $this->translate('section.name.' . $reference); ?></span>
+                <?php echo $this->translate('section.name.' . $reference); ?>
                 <?php if (!$current) : ?>
                     </a>
                 <?php endif; ?>
             </li>
         <?php endforeach; ?>
     </ul><!-- end .progress -->
+    <?php if ($currentRoute == 'lva-licence/vehicles' && isset($filterForm)):?>
+        <?php echo $this->form($filterForm); ?>
+    <?php endif; ?>
 </div>
 <div class="three-fifths">
   <?php echo $this->flashMessengerAll(); ?>

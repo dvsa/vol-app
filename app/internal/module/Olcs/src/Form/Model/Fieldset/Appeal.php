@@ -7,7 +7,6 @@ use Zend\Form\Annotation as Form;
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("fields")
- * @Form\Options({"label":"Appeal Details"})
  */
 class Appeal extends CaseBase
 {
@@ -154,8 +153,8 @@ class Appeal extends CaseBase
     public $comment = null;
 
     /**
-     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Withdrawn?"})
-     * @Form\Type("checkbox")
+     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Cancelled / Withdrawn?"})
+     * @Form\Type("OlcsCheckbox")
      */
     public $isWithdrawn = null;
 

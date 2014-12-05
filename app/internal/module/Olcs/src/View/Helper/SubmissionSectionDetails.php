@@ -32,7 +32,7 @@ class SubmissionSectionDetails extends AbstractHelper
         'intelligence-unit-check'           => 'SubmissionSectionOverview',
         'interim'                           => 'SubmissionSectionOverview',
         'advertisement'                     => 'SubmissionSectionOverview',
-        'linked-licences-app-numbers'       => 'SubmissionSectionOverview',
+        'linked-licences-app-numbers'       => 'SubmissionSectionTable',
         'lead-tc-area'                      => 'SubmissionSectionOverview',
         'current-submissions'               => 'SubmissionSectionOverview',
         'auth-requested-applied-for'        => 'SubmissionSectionOverview',
@@ -47,17 +47,17 @@ class SubmissionSectionDetails extends AbstractHelper
         'linked-mlh-history'                => 'SubmissionSectionOverview',
         'registration-details'              => 'SubmissionSectionOverview',
         'maintenance-tachographs-hours'     => 'SubmissionSectionOverview',
-        'prohibition-history'               => 'SubmissionSectionOverview',
+        'prohibition-history'               => 'SubmissionSectionTable',
         'conviction-fpn-offence-history'    => 'SubmissionSectionTable',
         'annual-test-history'               => 'SubmissionSectionOverview',
-        'penalties'                         => 'SubmissionSectionOverview',
+        'penalties'                         => ['SubmissionSectionOverview', 'SubmissionSectionMultipleTables'],
         'other-issues'                      => 'SubmissionSectionOverview',
         'te-reports'                        => 'SubmissionSectionOverview',
         'site-plans'                        => 'SubmissionSectionOverview',
         'planning-permission'               => 'SubmissionSectionOverview',
         'applicants-comments'               => 'SubmissionSectionOverview',
         'visibility-access-egress-size'     => 'SubmissionSectionOverview',
-        'compliance-complaints'             => 'SubmissionSectionOverview',
+        'compliance-complaints'             => 'SubmissionSectionTable',
         'environmental-complaints'          => 'SubmissionSectionOverview',
         'oppositions'                       => 'SubmissionSectionTable',
         'financial-information'             => 'SubmissionSectionOverview',
@@ -106,9 +106,17 @@ class SubmissionSectionDetails extends AbstractHelper
             // Bail early if renderer is not pluggable
             return '';
         }
-
+        $markup = '';
         if (isset($this->typeMap[$submissionSection])) {
-            return $this->renderHelper($this->typeMap[$submissionSection], $submissionSection, $data);
+
+            if (is_array($this->typeMap[$submissionSection])) {
+                foreach ($this->typeMap[$submissionSection] as $type) {
+                    $markup .= $this->renderHelper($type, $submissionSection, $data);
+                }
+            } else {
+                $markup .= $this->renderHelper($this->typeMap[$submissionSection], $submissionSection, $data);
+            }
+            return $markup;
         }
         return null;
     }

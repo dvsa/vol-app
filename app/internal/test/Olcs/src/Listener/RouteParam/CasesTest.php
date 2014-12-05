@@ -29,7 +29,9 @@ class CasesTest extends TestCase
     public function testOnCase()
     {
         $caseId = 1;
-        $case = ['id' => $caseId];
+        $case = ['id' => $caseId, 'closeDate' => '2014-01-01'];
+
+        $status = ['colour' => 'Grey', 'value' => 'Closed'];
 
         $event = new RouteParam();
         $event->setValue($caseId);
@@ -43,12 +45,16 @@ class CasesTest extends TestCase
         $mockContainer->shouldReceive('append')->with('Case subtitle');
         $mockContainer->shouldReceive('set')->with($case);
 
+        $mockContainer->shouldReceive('set')->with($status);
+
         $mockPlaceholder = m::mock('Zend\View\Helper\Placeholder');
         $mockPlaceholder->shouldReceive('getContainer')->with('pageTitle')->andReturn($mockContainer);
         $mockPlaceholder->shouldReceive('getContainer')->with('pageSubtitle')->andReturn($mockContainer);
         $mockPlaceholder->shouldReceive('getContainer')->with('case')->andReturn($mockContainer);
 
-        $mockViewHelperManager = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
+        $mockPlaceholder->shouldReceive('getContainer')->with('status')->andReturn($mockContainer);
+
+        $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
         $mockViewHelperManager->shouldReceive('get')->with('headTitle')->andReturn($mockContainer);
 
@@ -63,7 +69,8 @@ class CasesTest extends TestCase
         $caseId = 1;
         $case = [
             'id' => $caseId,
-            'licence' => ['id' => 4]
+            'licence' => ['id' => 4],
+            'closeDate' => null
         ];
 
         $mockTarget = m::mock('Olcs\Listener\RouteParams');
@@ -82,7 +89,7 @@ class CasesTest extends TestCase
         $mockPlaceholder = m::mock('Zend\View\Helper\Placeholder');
         $mockPlaceholder->shouldReceive('getContainer')->withAnyArgs()->andReturn($mockContainer);
 
-        $mockViewHelperManager = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
+        $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
         $mockViewHelperManager->shouldReceive('get')->with('headTitle')->andReturn($mockContainer);
 
@@ -101,7 +108,8 @@ class CasesTest extends TestCase
         $caseId = 1;
         $case = [
             'id' => $caseId,
-            'licence' => ['id' => 4]
+            'licence' => ['id' => 4],
+            'closeDate' => null
         ];
 
         $mockTarget = m::mock('Olcs\Listener\RouteParams');
@@ -120,7 +128,7 @@ class CasesTest extends TestCase
         $mockPlaceholder = m::mock('Zend\View\Helper\Placeholder');
         $mockPlaceholder->shouldReceive('getContainer')->withAnyArgs()->andReturn($mockContainer);
 
-        $mockViewHelperManager = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
+        $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
         $mockViewHelperManager->shouldReceive('get')->with('headTitle')->andReturn($mockContainer);
 
@@ -138,7 +146,7 @@ class CasesTest extends TestCase
     {
         $mockCaseService = m::mock('Olcs\Service\Data\Cases');
         $mockLicenceService = m::mock('Common\Service\Data\Licence');
-        $mockViewHelperManager = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
+        $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);

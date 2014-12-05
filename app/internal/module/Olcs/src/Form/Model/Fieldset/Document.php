@@ -23,7 +23,7 @@ class Document
      *     "must_be_checked": false,
      *     "label": "Generate document"
      * })
-     * @Form\Type("\Common\Form\Elements\InputFilters\Checkbox")
+     * @Form\Type("OlcsCheckbox")
      */
     public $generate = null;
 

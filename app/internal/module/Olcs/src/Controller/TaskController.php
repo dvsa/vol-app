@@ -10,7 +10,6 @@
 namespace Olcs\Controller;
 
 use Zend\View\Model\ViewModel;
-use Zend\Json\Json;
 use Olcs\Controller\Traits\TaskSearchTrait;
 
 /**
@@ -306,14 +305,15 @@ class TaskController extends AbstractController
                 );
                 break;
             case 'application':
+                $licence = $this->getServiceLocator()
+                    ->get('Entity\Application')->getDataForTasks($taskTypeId)['licence'];
+
                 $url = sprintf(
-                    '<a href="%s">%s</a>',
-                    $this->url()->fromRoute(
-                        'lva-application',
-                        array(
-                            'application' => $taskTypeId
-                        )
-                    ), $linkDisplay
+                    '<a href="%s">%s</a> / <a href="%s">%s</a>',
+                    $this->url()->fromRoute('lva-licence', ['licence' => $licence['id']]),
+                    $licence['licNo'],
+                    $this->url()->fromRoute('lva-application', ['application' => $taskTypeId]),
+                    $taskTypeId
                 );
                 break;
             default:
@@ -396,6 +396,10 @@ class TaskController extends AbstractController
                 $route = 'licence/processing';
                 $params = ['licence' => $taskTypeId];
                 break;
+            case 'application':
+                $route = 'lva-application/processing';
+                $params = ['application' => $taskTypeId];
+                break;
             default:
                 // no type - call from the home page, need to redirect back after action
                 $route = 'dashboard';
@@ -403,25 +407,7 @@ class TaskController extends AbstractController
                 break;
         }
 
-        // @NOTE: at some point we'll probably want to abstract this behind a
-        // redirect helper, such that *all* redirects either set a location
-        // header or return JSON based on the request type. That way it can
-        // be totally transparent in concrete controllers like this one.
-        if ($this->getRequest()->isXmlHttpRequest()) {
-            $data = [
-                'status' => 302,
-                'location' => $this->url()->fromRoute($route, $params)
-            ];
-
-            $this->getResponse()->getHeaders()->addHeaders(
-                ['Content-Type' => 'application/json']
-            );
-            $this->getResponse()->setContent(Json::encode($data));
-            return;
-        }
-
-        // bog standard redirect
-        $this->redirect()->toRoute($route, $params);
+        return $this->redirect()->toRouteAjax($route, $params);
     }
 
     /**
@@ -525,6 +511,12 @@ class TaskController extends AbstractController
         switch ($taskType) {
             case 'licence':
                 $data['licence'] = $taskTypeId;
+                break;
+            case 'application':
+                $data['application'] = $taskTypeId;
+                // bit ugly, but we need the licenceId too to properly link the task
+                $data['licence'] = $this->getServiceLocator()
+                    ->get('Entity\Application')->getLicenceIdForApplication($taskTypeId);
                 break;
             default:
                 break;
@@ -632,5 +624,18 @@ class TaskController extends AbstractController
         $licence = $this->makeRestCall('Licence', 'GET', array('id' => $id));
 
         return $licence;
+    }
+
+    /**
+     * Gets the application by ID.
+     *
+     * @param int $id
+     * @return array
+     */
+    protected function getApplication($id)
+    {
+        $application = $this->makeRestCall('Application', 'GET', array('id' => $id));
+
+        return $application;
     }
 }
