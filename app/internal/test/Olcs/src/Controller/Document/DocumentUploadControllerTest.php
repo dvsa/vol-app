@@ -118,7 +118,17 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
         parent::setUp();
     }
 
-    public function testProcessUpload()
+
+    public function processUploadProvider() {
+        return [
+            ['licence', 'licence/documents'],
+            //['application', 'lva-application/documents'],
+        ];
+    }
+    /**
+     * @dataProvider processUploadProvider
+     */
+    public function testProcessUpload($docType, $redirectRoute)
     {
         $fromRoute = $this->getMock('\stdClass', ['fromRoute']);
         $fromRoute->expects($this->any())
@@ -126,8 +136,8 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
             ->will(
                 $this->returnValue(
                     array(
-                        'type' => 'licence',
-                        'licence' => 1234,
+                        'type' => $docType,
+                        $docType => 1234,
                         'tmpId' => 'full-filename'
                     )
                 )
@@ -203,7 +213,7 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
 
         $redirect->expects($this->once())
             ->method('toRoute')
-            ->with('licence/documents', ['type' => 'licence', 'tmpId' => 'full-filename', 'licence' => 1234]);
+            ->with($redirectRoute, ['type' => $docType, 'tmpId' => 'full-filename', $docType => 1234]);
 
         $this->controller->expects($this->once())
             ->method('redirect')
@@ -453,6 +463,12 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
                 return $this->servicelocatorMock;
             case 'Olcs\Service\Data\DocumentSubCategory':
                 return $this->getMock('Olcs\Service\Data\DocumentSubCategory');
+            case 'Entity\Application':
+                $eaMock = $this->getMock('\StdClass', ['getLicenceIdForApplication']);
+                $eaMock->expects($this->any())
+                    ->method('getLicenceIdForApplication')
+                    ->will($this->returnValue(7));
+                return $eaMock;
             default:
                 throw new \Exception("Service Locator " . $service . " not mocked");
         }
