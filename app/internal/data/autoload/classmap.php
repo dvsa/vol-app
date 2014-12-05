@@ -7,11 +7,19 @@ return array(
     'Annotation' => false,
     'CommonTest\Traits\MockDateTrait' => $rootPath . '/test/../vendor/olcs/OlcsCommon/test/Common/src/Common/Traits'
         . '/MockDateTrait.php',
+    'Common\Controller\Lva\Traits\VehicleFilterTrait' => $rootPath . '/vendor/olcs/OlcsCommon/Common/src/Common'
+        . '/Controller/Lva/Traits/VehicleFilterTrait.php',
     'Common\Form\Model\Form\AdminDiscPrinting' => false,
+    'Common\Form\Model\Form\DocumentsHome' => false,
+    'Common\Form\Model\Form\Lva\VehicleFilter' => $rootPath . '/vendor/olcs/OlcsCommon/Common/src/Common/Form/Model'
+        . '/Form/Lva/VehicleFilter.php',
     'Common\Form\Model\Form\name' => false,
+    'Common\Module' => false,
     'Common\Service\Common\Form\Element\DynamicMultiCheckboxCommonService' => false,
+    'Common\Service\Common\Form\Element\DynamicMultiSelectCommonService' => false,
     'Common\Service\Common\Form\Element\DynamicRadioCommonService' => false,
     'Common\Service\Common\Form\Element\DynamicSelectCommonService' => false,
+    'Common\Service\Common\Form\Elements\Custom\DateSelectCommonService' => false,
     'Common\Service\Common\Form\Elements\Custom\OlcsCheckboxCommonService' => false,
     'Common\Service\Common\Form\Elements\InputFilters\ActionButtonService' => false,
     'Common\Service\Common\Form\Elements\InputFilters\CheckboxService' => false,
@@ -29,8 +37,16 @@ return array(
     'Common\Service\Common\Form\Elements\Types\TableService' => false,
     'Common\Service\Common\Form\FormCommonService' => false,
     'Common\Service\Common\Service\Data\PublicHolidayCommonService' => false,
+    'Common\Service\Cpms\PaymentInvalidStatusException' => $rootPath . '/vendor/olcs/OlcsCommon/Common/src/Common'
+        . '/Service/Cpms/PaymentInvalidStatusException.php',
+    'Common\Service\Cpms\PaymentNotFoundException' => $rootPath . '/vendor/olcs/OlcsCommon/Common/src/Common/Service'
+        . '/Cpms/PaymentNotFoundException.php',
     'Common\Service\Csrf' => false,
+    'Common\Service\Data\ApplicationAwareTrait' => $rootPath . '/vendor/olcs/OlcsCommon/Common/src/Common/Service/Data'
+        . '/ApplicationAwareTrait.php',
     'Common\Service\Data\Pi' => false,
+    'Common\Service\Data\TransportManagerAwareTrait' => $rootPath . '/vendor/olcs/OlcsCommon/Common/src/Common/Service'
+        . '/Data/TransportManagerAwareTrait.php',
     'Common\Service\DateSelect' => false,
     'Common\Service\DoctrineModule\Form\Element\ObjectMultiCheckboxDoctrineModuleService' => false,
     'Common\Service\DoctrineModule\Form\Element\ObjectRadioDoctrineModuleService' => false,
@@ -54,6 +70,7 @@ return array(
     'Common\Service\TextArea' => false,
     'Common\Service\Zend\Form\Element\ButtonService' => false,
     'Common\Service\Zend\Form\Element\CsrfZendService' => false,
+    'Common\Service\Zend\Form\Element\RadioService' => false,
     'Common\Service\Zend\Form\Element\SelectService' => false,
     'Common\Service\Zend\Form\Element\TextareaService' => false,
     'Common\Service\Zend\Form\FieldsetService' => false,
@@ -63,11 +80,14 @@ return array(
     'Common\Service\Zend\ModuleManager\ModuleManagerZendService' => false,
     'Common\Service\Zend\Stdlib\Hydrator\ArraySerializableZendService' => false,
     'Common\Service\\Common\Form\Elements\InputFilters\ActionButtonService' => false,
-    'Common\Service\\Common\Form\Elements\InputFilters\FeeWaiveNoteService' => false,
+    'Common\Service\\Common\Form\Elements\InputFilters\CheckboxService' => false,
+    'Common\Service\\Common\Form\Elements\InputFilters\NoRenderService' => false,
+    'Common\Service\\Common\Form\Elements\Types\TableService' => false,
+    'Common\Service\\Zend\Form\Element\ButtonService' => false,
     'Common\Service\\Zend\Form\Element\SelectService' => false,
-    'Common\Service\\Zend\Form\FieldsetService' => false,
     'Common\Service\commonformelementdynamicradio' => false,
     'Common\Service\commonformelementdynamicselect' => false,
+    'Common\Service\commonformelementscustomdateselect' => false,
     'Common\Service\commonformelementscustomolcscheckbox' => false,
     'Common\Service\commonformelementsinputfiltersactionbutton' => false,
     'Common\Service\commonformelementsinputfilterscheckbox' => false,
@@ -94,10 +114,13 @@ return array(
     'Common\Service\textarea' => false,
     'Common\Service\zendformelementbutton' => false,
     'Common\Service\zendformelementcsrf' => false,
+    'Common\Service\zendformelementradio' => false,
     'Common\Service\zendformelementselect' => false,
     'Common\Service\zendformelementtextarea' => false,
     'Common\Service\zendformfieldset' => false,
     'Common\Service\zendformform' => false,
+    'Common\View\Helper\PluginManagerAwareTrait' => $rootPath . '/vendor/olcs/OlcsCommon/Common/src/Common/View/Helper'
+        . '/PluginManagerAwareTrait.php',
     'DataHelper' => false,
     'DoctrineModule\Module' => $rootPath . '/vendor/doctrine/doctrine-module/src/DoctrineModule/Module.php',
     'DoctrineModule\Options\Cache' => $rootPath . '/vendor/doctrine/doctrine-module/src/DoctrineModule/Options'
@@ -282,19 +305,28 @@ return array(
     'OlcsTest\Controller\ControllerTestAbstract' => $rootPath . '/test/Olcs/src/Controller/ControllerTestAbstract.php',
     'OlcsTest\Controller\Lva\AbstractLvaControllerTestCase' => $rootPath . '/test/Olcs/src/Controller/Lva'
         . '/AbstractLvaControllerTestCase.php',
+    'OlcsTest\Controller\ProcessingNoteControllerTestAbstract' => $rootPath . '/test/Olcs/src/Controller'
+        . '/ProcessingNoteControllerTestAbstract.php',
     'OlcsTest\Controller\Traits\Stub\StubApplicationController' => $rootPath . '/test/Olcs/src/Controller/Traits/Stub'
         . '/StubApplicationController.php',
     'OlcsTest\Data\Object\Search\SearchAbstractTest' => $rootPath . '/test/Olcs/src/Data/Object/Search'
         . '/SearchAbstractTest.php',
+    'Olcs\Controller\Application\Processing\ApplicationProcessingNoteController' => false,
     'Olcs\Controller\Lva\Application' => false,
+    'Olcs\Filter\SubmissionSection\Penalties' => false,
     'Olcs\Form\Model\Fieldset\TransportManagerActions' => false,
     'Olcs\Form\Model\Fieldset\TransportManagerDetails' => false,
     'Olcs\Form\Model\Form\AdminDiscPrinting' => false,
+    'Olcs\Form\Model\Form\DocumentsHome' => false,
     'Olcs\Form\Model\Form\Lva\BusinessType' => false,
+    'Olcs\Form\Model\Form\Lva\GoodsVehicles' => false,
     'Olcs\Form\Model\Form\Lva\OperatingCentres' => false,
+    'Olcs\Form\Model\Form\Lva\PsvVehicles' => false,
     'Olcs\Form\Model\Form\Lva\TypeOfLicence' => false,
+    'Olcs\Form\Model\Form\Lva\VehicleFilter' => false,
     'Olcs\Form\Model\Form\TransportManager' => false,
     'Olcs\Form\Model\Form\name' => false,
+    'Olcs\Listener\RouteParam\Action' => false,
     'Olcs\Logging\Helper\LogError' => $rootPath . '/vendor/olcs/olcs-logging/src/Helper/LogError.php',
     'Olcs\Logging\Helper\LogException' => $rootPath . '/vendor/olcs/olcs-logging/src/Helper/LogException.php',
     'Olcs\Logging\Listener\LogError' => $rootPath . '/vendor/olcs/olcs-logging/src/Listener/LogError.php',
@@ -334,6 +366,7 @@ return array(
     'PHP_Invoker' => false,
     'RestHelper' => false,
     'SelfServe\Form\Model\Form\AdminDiscPrinting' => false,
+    'SelfServe\Form\Model\Form\DocumentsHome' => false,
     'SelfServe\Form\Model\Form\name' => false,
     'StdClas' => false,
     'Symfony\Component\Yaml\Yaml' => $rootPath . '/vendor/symfony/yaml/Symfony/Component/Yaml/Yaml.php',
@@ -343,6 +376,8 @@ return array(
         . '/Report.php',
     'ZendDeveloperTools\ReportInterface' => $rootPath . '/vendor/zendframework/zend-developer-tools/src'
         . '/ZendDeveloperTools/ReportInterface.php',
+    'Zend\Cache\Service\StorageCacheAbstractServiceFactory' => $rootPath . '/vendor/zendframework/zendframework/library'
+        . '/Zend/Cache/Service/StorageCacheAbstractServiceFactory.php',
     'Zend\Code\Annotation\AnnotationCollection' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Code'
         . '/Annotation/AnnotationCollection.php',
     'Zend\Code\Annotation\AnnotationManager' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Code'
@@ -563,10 +598,22 @@ return array(
     'Zend\Http\Client' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Http/Client.php',
     'Zend\Http\Client\Adapter\AdapterInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Http'
         . '/Client/Adapter/AdapterInterface.php',
+    'Zend\Http\Client\Adapter\Exception\ExceptionInterface' => $rootPath . '/vendor/zendframework/zendframework/library'
+        . '/Zend/Http/Client/Adapter/Exception/ExceptionInterface.php',
+    'Zend\Http\Client\Adapter\Exception\RuntimeException' => $rootPath . '/vendor/zendframework/zendframework/library'
+        . '/Zend/Http/Client/Adapter/Exception/RuntimeException.php',
     'Zend\Http\Client\Adapter\Socket' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Http/Client'
         . '/Adapter/Socket.php',
     'Zend\Http\Client\Adapter\StreamInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Http'
         . '/Client/Adapter/StreamInterface.php',
+    'Zend\Http\Client\Exception\ExceptionInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend'
+        . '/Http/Client/Exception/ExceptionInterface.php',
+    'Zend\Http\Client\Exception\RuntimeException' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Http'
+        . '/Client/Exception/RuntimeException.php',
+    'Zend\Http\Exception\ExceptionInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Http'
+        . '/Exception/ExceptionInterface.php',
+    'Zend\Http\Exception\RuntimeException' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Http'
+        . '/Exception/RuntimeException.php',
     'Zend\Http\HeaderLoader' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Http/HeaderLoader.php',
     'Zend\Http\Header\AbstractAccept' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Http/Header'
         . '/AbstractAccept.php',
@@ -587,6 +634,8 @@ return array(
         . '/CacheControl.php',
     'Zend\Http\Header\Connection' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Http/Header'
         . '/Connection.php',
+    'Zend\Http\Header\ContentDisposition' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Http/Header'
+        . '/ContentDisposition.php',
     'Zend\Http\Header\ContentEncoding' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Http/Header'
         . '/ContentEncoding.php',
     'Zend\Http\Header\ContentLength' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Http/Header'
@@ -607,6 +656,8 @@ return array(
         . '/Header/MultipleHeaderInterface.php',
     'Zend\Http\Header\SetCookie' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Http/Header'
         . '/SetCookie.php',
+    'Zend\Http\Header\TransferEncoding' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Http/Header'
+        . '/TransferEncoding.php',
     'Zend\Http\Headers' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Http/Headers.php',
     'Zend\Http\PhpEnvironment\RemoteAddress' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Http'
         . '/PhpEnvironment/RemoteAddress.php',
@@ -970,8 +1021,12 @@ return array(
         . '/ServiceManager/DelegatorFactoryInterface.php',
     'Zend\ServiceManager\Exception\ExceptionInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend'
         . '/ServiceManager/Exception/ExceptionInterface.php',
+    'Zend\ServiceManager\Exception\InvalidArgumentException' => $rootPath . '/vendor/zendframework/zendframework'
+        . '/library/Zend/ServiceManager/Exception/InvalidArgumentException.php',
     'Zend\ServiceManager\Exception\RuntimeException' => $rootPath . '/vendor/zendframework/zendframework/library/Zend'
         . '/ServiceManager/Exception/RuntimeException.php',
+    'Zend\ServiceManager\Exception\ServiceNotFoundException' => $rootPath . '/vendor/zendframework/zendframework'
+        . '/library/Zend/ServiceManager/Exception/ServiceNotFoundException.php',
     'Zend\ServiceManager\FactoryInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend'
         . '/ServiceManager/FactoryInterface.php',
     'Zend\ServiceManager\ServiceLocatorAwareInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend'
@@ -1175,6 +1230,7 @@ return array(
         . '/ModelInterface.php',
     'Zend\View\Model\RetrievableChildrenInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend'
         . '/View/Model/RetrievableChildrenInterface.php',
+    'Zend\View\Model\ViewMode' => false,
     'Zend\View\Model\ViewModel' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/View/Model'
         . '/ViewModel.php',
     'Zend\View\Renderer\JsonRenderer' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/View/Renderer'
@@ -1200,7 +1256,12 @@ return array(
     'Zend\View\Variables' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/View/Variables.php',
     'Zend\View\View' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/View/View.php',
     'Zend\View\ViewEvent' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/View/ViewEvent.php',
+    'demeter_get' => false,
     'demeter_getEventManager' => false,
+    'demeter_getInputFilter' => false,
     'demeter_getRouteMatch' => false,
+    'demeter_getValidatorChain' => false,
     'demeter_redirect' => false,
+    'microtime' => false,
+    'view' => false,
 );

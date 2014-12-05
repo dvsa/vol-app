@@ -327,7 +327,7 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
         $contentStoreMock = $this->getMock('\stdClass', ['read']);
         $contentStoreMock->expects($this->once())
             ->method('read')
-            ->with('/templates/GVDiscTemplate.rtf')
+            ->with('/templates/PSVDiscTemplate.rtf')
             ->will($this->returnValue($file));
 
         // disc IDs we expect to query against
@@ -338,7 +338,7 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
             ->with($file, $queryData);
 
         $resultData = array(
-            'Disc_List' => array(
+            'Psv_Disc_Page' => array(
                 array(
                     'foo' => 'bar',
                     'discNo' => 2
@@ -617,6 +617,13 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
     {
         switch ($service) {
             case 'BookmarkSearch':
+                if ($this->isPsv) {
+                    return [
+                        'Psv_Disc_Page' => [
+                            ['foo' => 'bar']
+                        ]
+                    ];
+                }
                 return [
                     'Disc_List' => [
                         ['foo' => 'bar']
