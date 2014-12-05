@@ -4,9 +4,9 @@ return array(
     'variables' => array(
         'action_route' => [
             'route' => 'case_pi',
-            'params' => ['action' => 'details'],
-            'title' => 'Hearings',
+            'params' => ['action' => 'details']
         ],
+        'title' => 'Hearings',
     ),
     'settings' => array(
         'crud' => array(
