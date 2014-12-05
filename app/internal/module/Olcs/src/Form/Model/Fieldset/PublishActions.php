@@ -9,7 +9,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("form-actions")
  * @Form\Attributes({"class":"actions-container"})
  */
-class HearingPublishActions
+class PublishActions
 {
     /**
      * @Form\Attributes({"type":"submit","class":"action--primary large"})
