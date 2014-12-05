@@ -5,6 +5,7 @@
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
+ * @author Dan Eggleston <dan@stolenegg.com>
  */
 
 namespace OlcsTest\Controller;
@@ -91,7 +92,8 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
                 'processAdd',
                 'processEdit',
                 'getFromRoute',
-                'getSearchForm'
+                'getSearchForm',
+                'getServiceLocator'
             )
         );
 
@@ -364,9 +366,21 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
-     * Test edit action post
+     * @dataProvider closeTaskProvider
      */
-    public function testEditActionPost()
+    public function editActionPostDp()
+    {
+        return [
+            ['licence', 'licence/processing'],
+            ['application', 'lva-application/processing']
+        ];
+    }
+    /**
+     * Test edit action post
+     *
+     * @dataProvider editActionPostDp
+     */
+    public function testEditActionPost($entity, $expectedRoute)
     {
         $form = $this->getMock(
             '\stdClass',
@@ -411,7 +425,7 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
             ->will(
                 $this->returnValueMap(
                     array(
-                        array('type', 'licence'),
+                        array('type', $entity),
                         array('typeId', 123),
                         array('task', 456),
                     )
@@ -431,19 +445,48 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
             ->method('isPost')
             ->will($this->returnValue(true));
 
-        $params = ['licence' => 123];
+        $params = [$entity => 123];
 
         $mockRoute = $this->getMock('\stdClass', ['toRouteAjax']);
         $mockRoute->expects($this->once())
             ->method('toRouteAjax')
-            ->with('licence/processing', $params)
+            ->with($expectedRoute, $params)
             ->will($this->returnValue('mockResponse'));
+
+        $this->mockApplicationLicenceLookups();
 
         $this->controller->expects($this->any())
             ->method('redirect')
             ->will($this->returnValue($mockRoute));
 
         $this->controller->editAction();
+    }
+
+    protected function mockApplicationLicenceLookups()
+    {
+        // mock the calls to look up licence id and data for the application
+        ////////
+        $mockApplicationService = $this->getMock(
+            '\StdClass',
+            ['getLicenceIdForApplication','getDataForTasks']
+        );
+        $mockApplicationService->expects($this->any())
+            ->method('getLicenceIdForApplication')
+            ->with($this->equalTo(123))
+            ->will($this->returnValue(987));
+        $mockApplicationService->expects($this->any())
+            ->method('getDataForTasks')
+            ->with($this->equalTo(123))
+            ->will($this->returnValue(['id'=>123, 'licence'=>['id'=>987, 'licNo'=>'AB123']]));
+        $mockServiceLocator = $this->getMock('\StdClass', ['get']);
+        $mockServiceLocator->expects($this->any())
+            ->method('get')
+            ->with($this->equalTo('Entity\Application'))
+            ->will($this->returnValue($mockApplicationService));
+        $this->controller->expects($this->any())
+             ->method('getServiceLocator')
+             ->will($this->returnValue($mockServiceLocator));
+        ////////
     }
 
     /**
@@ -1129,12 +1172,19 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
                 )
             );
 
-        $this->url->expects($this->once())
+        $this->mockApplicationLicenceLookups();
+
+        $this->url->expects($this->at(0))
+                ->method('fromRoute')
+                ->with('lva-licence', array('licence' => 987))
+                ->will($this->returnValue(''));
+
+        $this->url->expects($this->at(1))
                 ->method('fromRoute')
                 ->with('lva-application', array('application' => 123))
                 ->will($this->returnValue(''));
 
-        $this->controller->expects($this->once())
+        $this->controller->expects($this->any())
                 ->method('url')
                 ->will($this->returnValue($this->url));
 

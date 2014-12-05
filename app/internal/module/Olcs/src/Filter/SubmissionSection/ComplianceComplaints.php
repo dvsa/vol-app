@@ -15,6 +15,8 @@ class ComplianceComplaints extends AbstractSubmissionSectionFilter
      */
     public function filter($data = array())
     {
+        $filteredData = array();
+
         usort(
             $data,
             function ($a, $b) {
@@ -34,7 +36,8 @@ class ComplianceComplaints extends AbstractSubmissionSectionFilter
 
             $dataToReturnArray[] = $thisComplaint;
         }
-
-        return $dataToReturnArray;
+        
+        $filteredData['tables']['compliance-complaints'] = $dataToReturnArray;
+        return $filteredData;
     }
 }

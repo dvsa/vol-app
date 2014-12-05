@@ -51,6 +51,7 @@ class OperatorController extends AbstractController
             $translator = $this->getServiceLocator()->get('translator');
             $this->pageTitle = $translator->translate('internal-operator-create-new-operator');
             $variables['disable'] = true;
+            $variables['hideQuickActions'] = true;
         }
         $variables['organisation'] = $org;
         $variables['section'] = $this->section;
@@ -86,7 +87,10 @@ class OperatorController extends AbstractController
             $created = $this->getServiceLocator()->get('Entity\Application')
                 ->createNew($this->params('operator'), array('receivedDate' => $data['receivedDate']));
 
-            return $this->redirect()->toRouteAjax('lva-application', ['application' => $created['application']]);
+            return $this->redirect()->toRouteAjax(
+                'lva-application/type_of_licence',
+                ['application' => $created['application']]
+            );
         }
 
         $view = new ViewModel(['form' => $form]);

@@ -24,8 +24,9 @@ class SubmissionRecommendation extends Base
     public $submissionActionStatus = null;
 
     /**
+     * @Form\Required(false)
      * @Form\Attributes({"id":"","placeholder":"","class":"chosen-select-medium js-sub-legislation",
-     * "multiple" : true})
+     * "multiple" : true, "required":false})
      * @Form\Options({
      *     "label": "Legislation",
      *     "service_name": "Olcs\Service\Data\SubmissionLegislation",
@@ -33,6 +34,8 @@ class SubmissionRecommendation extends Base
      *     "help-block": "Please select a category",
      *     "use_groups":true
      * })
+     * @Form\AllowEmpty(true)
+     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("DynamicSelect")
      */
     public $reasons = null;

@@ -311,7 +311,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
 
     public function testGetId()
     {
-        $this->assertNull($this->sut->getId());
+        $this->assertnull($this->sut->getId());
     }
 
     public function testSetApiResolver()
@@ -323,7 +323,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
 
     public function testGetApiResolver()
     {
-        $this->assertNull($this->sut->getApiResolver());
+        $this->assertnull($this->sut->getApiResolver());
     }
 
     public function testGetLoadedSectionData()
@@ -346,7 +346,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSubmissionConfig()
     {
-        $this->assertNull($this->sut->getSubmissionConfig());
+        $this->assertnull($this->sut->getSubmissionConfig());
     }
 
     /**
@@ -479,19 +479,23 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                         ],
                     ],
                     'expected' => [
-                        0 => [
-                            'id' => 1,
-                            'description' => 'test description 2',
-                            'complaintDate' => '2012-06-15T00:00:00+0100',
-                            'complainantForename' => 'John',
-                            'complainantFamilyName' => 'Smith',
-                        ],
-                        1 => [
-                            'id' => 1,
-                            'description' => 'test description 1',
-                            'complaintDate' => '2011-06-15T00:00:00+0100',
-                            'complainantForename' => 'John',
-                            'complainantFamilyName' => 'Smith',
+                        'tables' => [
+                            'compliance-complaints' => [
+                                0 => [
+                                    'id' => 1,
+                                    'description' => 'test description 2',
+                                    'complaintDate' => '2012-06-15T00:00:00+0100',
+                                    'complainantForename' => 'John',
+                                    'complainantFamilyName' => 'Smith',
+                                ],
+                                1 => [
+                                    'id' => 1,
+                                    'description' => 'test description 1',
+                                    'complaintDate' => '2011-06-15T00:00:00+0100',
+                                    'complainantForename' => 'John',
+                                    'complainantFamilyName' => 'Smith',
+                                ]
+                            ]
                         ]
                     ]
                 ],
@@ -534,19 +538,23 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                         ],
                     ],
                     'expected' => [
-                        0 => [
-                            'id' => 1,
-                            'title' => 'Mr',
-                            'familyName' => 'Smith',
-                            'forename' => 'Bob',
-                            'birthDate' => '2012-06-15T00:00:00+0100'
-                        ],
-                        1 => [
-                            'id' => 2,
-                            'title' => 'Mr',
-                            'familyName' => 'Smith',
-                            'forename' => 'John',
-                            'birthDate' => '2012-06-15T00:00:00+0100',
+                        'tables' => [
+                            'persons' => [
+                                0 => [
+                                    'id' => 1,
+                                    'title' => 'Mr',
+                                    'familyName' => 'Smith',
+                                    'forename' => 'Bob',
+                                    'birthDate' => '2012-06-15T00:00:00+0100'
+                                ],
+                                1 => [
+                                    'id' => 2,
+                                    'title' => 'Mr',
+                                    'familyName' => 'Smith',
+                                    'forename' => 'John',
+                                    'birthDate' => '2012-06-15T00:00:00+0100',
+                                ]
+                            ]
                         ]
                     ]
                 ],
@@ -605,37 +613,41 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                         ]
                     ],
                     'expected' => [
-                        0 => [
-                            'id' => 2,
-                            'offenceDate' => '2012-03-10T00:00:00+0000',
-                            'convictionDate' => '2012-06-15T00:00:00+0100',
-                            'name' => 'Bob Smith',
-                            'categoryText' => null,
-                            'court' => 'FPN',
-                            'penalty' => '3 points on licence',
-                            'msi' => 'N',
-                            'isDeclared' => 'N',
-                            'isDealtWith' => 'N',
-                            'defendantType' => [
-                                'id' => 'def_t_owner',
-                                'description' => 'Owner'
-                            ],
-                        ],
-                        1 => [
-                            'id' => 1,
-                            'offenceDate' => '2012-03-10T00:00:00+0000',
-                            'convictionDate' => '2012-06-15T00:00:00+0100',
-                            'name' => 'John Smith Haulage Ltd.',
-                            'categoryText' => null,
-                            'court' => 'FPN',
-                            'penalty' => '3 points on licence',
-                            'msi' => 'N',
-                            'isDeclared' => 'N',
-                            'isDealtWith' => 'N',
-                            'defendantType' => [
-                                'id' => 'def_t_op',
-                                'description' => 'Operator'
-                            ],
+                        'tables' => [
+                            'conviction-fpn-offence-history' => [
+                                0 => [
+                                    'id' => 2,
+                                    'offenceDate' => '2012-03-10T00:00:00+0000',
+                                    'convictionDate' => '2012-06-15T00:00:00+0100',
+                                    'name' => 'Bob Smith',
+                                    'categoryText' => null,
+                                    'court' => 'FPN',
+                                    'penalty' => '3 points on licence',
+                                    'msi' => 'N',
+                                    'isDeclared' => 'N',
+                                    'isDealtWith' => 'N',
+                                    'defendantType' => [
+                                        'id' => 'def_t_owner',
+                                        'description' => 'Owner'
+                                    ],
+                                ],
+                                1 => [
+                                    'id' => 1,
+                                    'offenceDate' => '2012-03-10T00:00:00+0000',
+                                    'convictionDate' => '2012-06-15T00:00:00+0100',
+                                    'name' => 'John Smith Haulage Ltd.',
+                                    'categoryText' => null,
+                                    'court' => 'FPN',
+                                    'penalty' => '3 points on licence',
+                                    'msi' => 'N',
+                                    'isDeclared' => 'N',
+                                    'isDealtWith' => 'N',
+                                    'defendantType' => [
+                                        'id' => 'def_t_op',
+                                        'description' => 'Operator'
+                                    ],
+                                ]
+                            ]
                         ]
                     ]
                 ],
@@ -655,7 +667,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                         'description' => 'test description'
                     ],
                     'expected' => [
-                        'outline' => 'test description',
+                        'text' => 'test description',
                     ]
                 ]
             ],
@@ -672,24 +684,25 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                 [ // expected
                     'loadedCaseSectionData' => $this->getCaseSummaryMockData(),
                     'expected' => [
-                        'id' => 24,
-                        'organisationName' => 'John Smith Haulage Ltd.',
-                        'isMlh' => 'Y',
-                        'organisationType' => 'Registered Company',
-                        'businessType' => 'Some whatever',
-                        'caseType' => 'case_t_lic',
-                        'ecmsNo' => 'E123456',
-                        'licNo' => 'OB1234567',
-                        'licenceStartDate' => '2010-01-12T00:00:00+0000',
-                        'licenceType' => 'Standard National',
-                        'goodsOrPsv' => 'Goods Vehicle',
-                        'serviceStandardDate' => null,
-                        'licenceStatus' => 'New',
-                        'totAuthorisedVehicles' => 12,
-                        'totAuthorisedTrailers' => 4,
-                        'vehiclesInPossession' => 4,
-                        'trailersInPossession' => 4,
-
+                        'overview' => [
+                            'id' => 24,
+                            'organisationName' => 'John Smith Haulage Ltd.',
+                            'isMlh' => 'Y',
+                            'organisationType' => 'Registered Company',
+                            'businessType' => 'Some whatever',
+                            'caseType' => 'case_t_lic',
+                            'ecmsNo' => 'E123456',
+                            'licNo' => 'OB1234567',
+                            'licenceStartDate' => '2010-01-12T00:00:00+0000',
+                            'licenceType' => 'Standard National',
+                            'goodsOrPsv' => 'Goods Vehicle',
+                            'serviceStandardDate' => null,
+                            'licenceStatus' => 'New',
+                            'totAuthorisedVehicles' => 12,
+                            'totAuthorisedTrailers' => 4,
+                            'vehiclesInPossession' => 4,
+                            'trailersInPossession' => 4,
+                        ]
                     ]
                 ]
             ],
@@ -767,41 +780,46 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                         ]
                     ],
                     'expected' => [
-                        0 => [
-                            'id' => 1,
-                            'version' => 1,
-                            'dateReceived' => '2012-03-10T00:00:00+0000',
-                            'oppositionType' => 'foo',
-                            'contactName' => [
-                                'forename' => 'John',
-                                'familyName' => 'Smith'
-                            ],
-                            'grounds' => [
-                                'bar1'
-                            ],
-                            'isValid' => 'Y',
-                            'isCopied' => 'Y',
-                            'isInTime' => 'Y',
-                            'isPublicInquiry' => 'Y',
-                            'isWithdrawn' => 'N'
-                        ],
-                        1 => [
-                            'id' => 2,
-                            'version' => 1,
-                            'dateReceived' => '2012-02-10T00:00:00+0000',
-                            'oppositionType' => 'foo',
-                            'contactName' => [
-                                'forename' => 'Bob',
-                                'familyName' => 'Smith'
-                            ],
-                            'grounds' => [
-                                'bar2'
-                            ],
-                            'isValid' => 'Y',
-                            'isCopied' => 'Y',
-                            'isInTime' => 'Y',
-                            'isPublicInquiry' => 'Y',
-                            'isWithdrawn' => 'N'
+                        'tables' => [
+                            'oppositions' => [
+
+                                0 => [
+                                    'id' => 1,
+                                    'version' => 1,
+                                    'dateReceived' => '2012-03-10T00:00:00+0000',
+                                    'oppositionType' => 'foo',
+                                    'contactName' => [
+                                        'forename' => 'John',
+                                        'familyName' => 'Smith'
+                                    ],
+                                    'grounds' => [
+                                        'bar1'
+                                    ],
+                                    'isValid' => 'Y',
+                                    'isCopied' => 'Y',
+                                    'isInTime' => 'Y',
+                                    'isPublicInquiry' => 'Y',
+                                    'isWithdrawn' => 'N'
+                                ],
+                                1 => [
+                                    'id' => 2,
+                                    'version' => 1,
+                                    'dateReceived' => '2012-02-10T00:00:00+0000',
+                                    'oppositionType' => 'foo',
+                                    'contactName' => [
+                                        'forename' => 'Bob',
+                                        'familyName' => 'Smith'
+                                    ],
+                                    'grounds' => [
+                                        'bar2'
+                                    ],
+                                    'isValid' => 'Y',
+                                    'isCopied' => 'Y',
+                                    'isInTime' => 'Y',
+                                    'isPublicInquiry' => 'Y',
+                                    'isWithdrawn' => 'N'
+                                ]
+                            ]
                         ]
                     ]
                 ]
@@ -886,53 +904,55 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                         ]
                     ],
                     'expected' => [
-                        'conditions' => [
-                            0 => [
-                                'id' => 1,
-                                'version' => 1,
-                                'createdOn' => '2012-03-10T00:00:00+0000',
-                                'caseId' => 24,
-                                'addedVia' => [
-                                    'description' => 'Case',
-                                    'id' => 'cav_case',
-                                ],
-                                'isFulfilled' => 'N',
-                                'isDraft' => 'N',
-                                'attachedTo' => [
-                                    'description' => 'Operating Centre',
-                                    'id' => 'cat_oc',
-                                ],
-                                'OcAddress' => [
-                                    'addressLine2' => '12 Albert Street',
-                                    'addressLine1' => 'Unit 5',
-                                    'addressLine3' => 'Westpoint',
-                                    'addressLine4' => '',
-                                    'town' => 'Leeds',
-                                    'postcode' => 'LS9 6NA',
-                                    'countryCode' => [
-                                        'id' => 'GB',
+                        'tables' => [
+                            'conditions' => [
+                                0 => [
+                                    'id' => 1,
+                                    'version' => 1,
+                                    'createdOn' => '2012-03-10T00:00:00+0000',
+                                    'caseId' => 24,
+                                    'addedVia' => [
+                                        'description' => 'Case',
+                                        'id' => 'cav_case',
+                                    ],
+                                    'isFulfilled' => 'N',
+                                    'isDraft' => 'N',
+                                    'attachedTo' => [
+                                        'description' => 'Operating Centre',
+                                        'id' => 'cat_oc',
+                                    ],
+                                    'OcAddress' => [
+                                        'addressLine2' => '12 Albert Street',
+                                        'addressLine1' => 'Unit 5',
+                                        'addressLine3' => 'Westpoint',
+                                        'addressLine4' => '',
+                                        'town' => 'Leeds',
+                                        'postcode' => 'LS9 6NA',
+                                        'countryCode' => [
+                                            'id' => 'GB',
+                                        ]
                                     ]
+                                ],
+                                1 => [
+                                    'id' => 1,
+                                    'version' => 1,
+                                    'createdOn' => '2011-03-10T00:00:00+0000',
+                                    'caseId' => 24,
+                                    'addedVia' => [
+                                        'description' => 'Case',
+                                        'id' => 'cav_case',
+                                    ],
+                                    'isFulfilled' => 'N',
+                                    'isDraft' => 'N',
+                                    'attachedTo' => [
+                                        'description' => 'Operating Centre',
+                                        'id' => 'cat_oc',
+                                    ],
+                                    'OcAddress' => []
                                 ]
                             ],
-                            1 => [
-                                'id' => 1,
-                                'version' => 1,
-                                'createdOn' => '2011-03-10T00:00:00+0000',
-                                'caseId' => 24,
-                                'addedVia' => [
-                                    'description' => 'Case',
-                                    'id' => 'cav_case',
-                                ],
-                                'isFulfilled' => 'N',
-                                'isDraft' => 'N',
-                                'attachedTo' => [
-                                    'description' => 'Operating Centre',
-                                    'id' => 'cat_oc',
-                                ],
-                                'OcAddress' => []
-                            ]
-                        ],
-                        'undertakings' => []
+                            'undertakings' => []
+                        ]
                     ]
                 ]
             ],
@@ -990,16 +1010,20 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                         ]
                     ],
                     'expected' => [
-                        0 => [
-                            'id' => 22,
-                            'version' => 1,
-                            'licNo' => 'OB1234567',
-                            'status' => 'Curtailed',
-                            'licenceType' => 'Standard National',
-                            'totAuthTrailers' => '4',
-                            'totAuthVehicles' => '5',
-                            'vehiclesInPossession' => 0,
-                            'trailersInPossession' => 4
+                        'tables' => [
+                            'linked-licences-app-numbers' => [
+                                0 => [
+                                    'id' => 22,
+                                    'version' => 1,
+                                    'licNo' => 'OB1234567',
+                                    'status' => 'Curtailed',
+                                    'licenceType' => 'Standard National',
+                                    'totAuthTrailers' => '4',
+                                    'totAuthVehicles' => '5',
+                                    'vehiclesInPossession' => 0,
+                                    'trailersInPossession' => 4
+                                ]
+                            ]
                         ]
                     ]
                 ]
@@ -1025,7 +1049,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                         ]
                     ],
                     'expected' => [
-                        'leadTcAreaDescription' => 'North East of England',
+                        'text' => 'North East of England',
                     ]
                 ]
             ],
@@ -1035,43 +1059,350 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                     'caseId' => 24,
                     'sectionId' => 'prohibition-history',
                     'sectionConfig' => [
-                        'service' => 'Prohibition',
+                        'service' => 'Cases',
                         'filter' => true,
                         'bundle' => ['some_bundle'],
                     ]
                 ],
                 [
                     'loadedCaseSectionData' => [
-                        0 => [
-                            'id' => 1,
-                            'version' => 2,
-                            'prohibitionDate' => '2012-03-10T00:00:00+0000',
-                            'clearedDate' => '2013-03-10T00:00:00+0000',
-                            'vrm' => 'AB123DEF',
-                            'isTrailer' => 1,
-                            'imposedAt' => 'foo bar',
-                            'prohibitionType' => [
-                                'description' => 'foo',
+                        'prohibitionNote' => 'test prohibition_note',
+                        'prohibitions' => [
+                            0 => [
+                                'id' => 1,
+                                'version' => 2,
+                                'prohibitionDate' => '2012-03-10T00:00:00+0000',
+                                'clearedDate' => '2013-03-10T00:00:00+0000',
+                                'vrm' => 'AB123DEF',
+                                'isTrailer' => 1,
+                                'imposedAt' => 'foo bar',
+                                'prohibitionType' => [
+                                    'description' => 'foo',
+                                ]
                             ]
                         ]
                     ],
                     'expected' => [
-                        0 => [
-                            'id' => 1,
-                            'version' => 2,
-                            'prohibitionDate' => '2012-03-10T00:00:00+0000',
-                            'clearedDate' => '2013-03-10T00:00:00+0000',
-                            'vehicle' => 'AB123DEF',
-                            'trailer' => 1,
-                            'imposedAt' => 'foo bar',
-                            'prohibitionType' => 'foo'
-                        ]
+                        'tables' => [
+                            'prohibition-history' => [
+                                0 => [
+                                    'id' => 1,
+                                    'version' => 2,
+                                    'prohibitionDate' => '2012-03-10T00:00:00+0000',
+                                    'clearedDate' => '2013-03-10T00:00:00+0000',
+                                    'vehicle' => 'AB123DEF',
+                                    'trailer' => 1,
+                                    'imposedAt' => 'foo bar',
+                                    'prohibitionType' => 'foo'
+                                ]
+                            ]
+                        ],
+                        'text' => 'test prohibition_note'
+                    ]
+                ]
+            ],
+            [   // annual-test-history
+                [ // input
+                    'caseId' => 24,
+                    'sectionId' => 'annual-test-history',
+                    'sectionConfig' => [
+                        'service' => 'Cases',
+                        'filter' => true,
+                        'bundle' => ['some_bundle'],
+                    ]
+                ],
+                [ // expected
+                    'loadedCaseSectionData' => [
+                        'annualTestHistory' => 'test history'
+                    ],
+                    'expected' => [
+                        'annualTestHistory' => 'test history',
+                    ]
+                ]
+            ],
+            [   // penalties section
+                [
+                    'caseId' => 24,
+                    'sectionId' => 'penalties',
+                    'sectionConfig' => [
+                        'service' => 'Cases',
+                        'filter' => true,
+                        'bundle' => ['some_bundle'],
+                    ]
+                ],
+                [
+                    'loadedCaseSectionData' => [
+                        'ecmsNo' => '',
+                        'openDate' => '2014-02-11T00:00:00+0000',
+                        'description' => '1213213',
+                        'isImpounding' => 'N',
+                        'erruOriginatingAuthority' => 'Polish Transport Authority',
+                        'erruTransportUndertakingName' => 'Polish Transport Authority',
+                        'erruVrm' => 'GH52 ABC',
+                        'annualTestHistory' => null,
+                        'prohibitionNote' => null,
+                        'penaltiesNote' => 'comment',
+                        'convictionNote' => null,
+                        'id' => 29,
+                        'closeDate' => null,
+                        'deletedDate' => null,
+                        'createdOn' => '2014-01-11T11:11:11+0000',
+                        'lastModifiedOn' => '2014-11-07T12:47:07+0000',
+                        'version' => 3,
+                        'seriousInfringements' => [
+                            0 => [
+                                'checkDate' => '2014-04-04',
+                                'erruResponseSent' => 'N',
+                                'erruResponseTime' => null,
+                                'infringementDate' => '2014-04-05',
+                                'notificationNumber' => '123456',
+                                'reason' => null,
+                                'id' => 1,
+                                'deletedDate' => null,
+                                'createdOn' => '2014-05-04T17:50:06+0100',
+                                'lastModifiedOn' => '2014-05-04T17:50:06+0100',
+                                'version' => 1,
+                                'siCategory' => [
+                                    'id' => 'MSI',
+                                    'description' => 'MSI',
+                                    'deletedDate' => null,
+                                    'createdOn' => '2011-11-04T17:50:06+0000',
+                                    'lastModifiedOn' => '2011-11-04T17:50:06+0000',
+                                    'version' => 1,
+                                ],
+                                'siCategoryType' => [
+                                    'id' => '101',
+                                    'description' => 'Exceeding the maximum six-day or fortnightly driving time limits',
+                                    'deletedDate' => null,
+                                    'createdOn' => '2011-11-04T17:50:06+0000',
+                                    'lastModifiedOn' => '2011-11-04T17:50:06+0000',
+                                    'version' => 1,
+                                ],
+                                'appliedPenalties' => [
+                                    0 => [
+                                        'imposed' => 'Y',
+                                        'reasonNotImposed' => null,
+                                        'id' => 1,
+                                        'startDate' => '2014-06-01',
+                                        'endDate' => '2015-01-31',
+                                        'deletedDate' => null,
+                                        'createdOn' => '2014-05-21T12:22:09+0100',
+                                        'lastModifiedOn' => '2014-05-21T12:22:09+0100',
+                                        'version' => 1,
+                                        'siPenaltyType' => [
+                                            'id' => '101',
+                                            'description' => 'Warning',
+                                            'deletedDate' => null,
+                                            'createdOn' => '2013-03-22T17:30:05+0000',
+                                            'lastModifiedOn' => '2013-03-22T17:30:05+0000',
+                                            'version' => 1,
+                                        ],
+                                        'seriousInfringement' => [
+                                            'checkDate' => '2014-04-04',
+                                            'erruResponseSent' => 'N',
+                                            'erruResponseTime' => null,
+                                            'infringementDate' => '2014-04-05',
+                                            'notificationNumber' => '123456',
+                                            'reason' => null,
+                                            'id' => 1,
+                                            'deletedDate' => null,
+                                            'createdOn' => '2014-05-04T17:50:06+0100',
+                                            'lastModifiedOn' => '2014-05-04T17:50:06+0100',
+                                            'version' => 1,
+                                        ],
+                                    ],
+                                    1 => [
+                                        'imposed' => 'N',
+                                        'reasonNotImposed' => 'Reason the penalty was not imposed',
+                                        'id' => 2,
+                                        'startDate' => '2014-06-01',
+                                        'endDate' => '2015-01-31',
+                                        'deletedDate' => null,
+                                        'createdOn' => '2014-05-21T12:22:09+0100',
+                                        'lastModifiedOn' => '2014-05-21T12:22:09+0100',
+                                        'version' => 1,
+                                        'siPenaltyType' => [
+                                            'id' => '306',
+                                            'description' => 'Withdrawal of driver attestations ',
+                                            'deletedDate' => null,
+                                            'createdOn' => '2013-03-22T17:30:05+0000',
+                                            'lastModifiedOn' => '2013-03-22T17:30:05+0000',
+                                            'version' => 1,
+                                        ],
+                                        'seriousInfringement' => [
+                                            'checkDate' => '2014-04-04',
+                                            'erruResponseSent' => 'N',
+                                            'erruResponseTime' => null,
+                                            'infringementDate' => '2014-04-05',
+                                            'notificationNumber' => '123456',
+                                            'reason' => null,
+                                            'id' => 1,
+                                            'deletedDate' => null,
+                                            'createdOn' => '2014-05-04T17:50:06+0100',
+                                            'lastModifiedOn' => '2014-05-04T17:50:06+0100',
+                                            'version' => 1,
+                                        ],
+                                    ],
+                                ],
+                                'imposedErrus' => [
+                                    0 => [
+                                        'finalDecisionDate' => '2014-10-02',
+                                        'executed' => true,
+                                        'id' => 1,
+                                        'startDate' => '2014-11-01',
+                                        'endDate' => '2015-12-01',
+                                        'deletedDate' => null,
+                                        'createdOn' => '2014-05-21T12:22:09+0100',
+                                        'lastModifiedOn' => '2014-05-21T12:22:09+0100',
+                                        'version' => 1,
+                                        'siPenaltyImposedType' => [
+                                            'deletedDate' => null,
+                                            'id' => '204',
+                                            'description' => 'Immobilisation',
+                                            'createdOn' => '2013-03-22T17:30:05+0000',
+                                            'lastModifiedOn' => '2013-03-22T17:30:05+0000',
+                                            'version' => 1,
+                                        ],
+                                    ],
+                                    1 => [
+                                        'finalDecisionDate' => '2014-10-02',
+                                        'executed' => true,
+                                        'id' => 2,
+                                        'startDate' => '2014-11-01',
+                                        'endDate' => '2015-12-01',
+                                        'deletedDate' => null,
+                                        'createdOn' => '2014-05-21T12:22:09+0100',
+                                        'lastModifiedOn' => '2014-05-21T12:22:09+0100',
+                                        'version' => 1,
+                                        'siPenaltyImposedType' => [
+                                            'deletedDate' => null,
+                                            'id' => '202',
+                                            'description' => 'Fine',
+                                            'createdOn' => '2013-03-22T17:30:05+0000',
+                                            'lastModifiedOn' => '2013-03-22T17:30:05+0000',
+                                            'version' => 1,
+                                        ],
+                                    ],
+                                ],
+                                'requestedErrus' => [
+                                     0 => [
+                                        'duration' => 12,
+                                        'id' => 1,
+                                        'deletedDate' => null,
+                                        'createdOn' => '2014-05-21T12:22:09+0100',
+                                        'lastModifiedOn' => '2014-05-21T12:22:09+0100',
+                                        'version' => 1,
+                                        'siPenaltyRequestedType' => [
+                                            'id' => '305',
+                                            'description' => 'Suspension of the issue of driver attestations',
+                                            'deletedDate' => null,
+                                            'createdOn' => '2013-03-22T17:30:05+0000',
+                                            'lastModifiedOn' => '2013-03-22T17:30:05+0000',
+                                            'version' => 1,
+                                        ],
+                                     ],
+                                    1 => [
+                                        'duration' => 36,
+                                        'id' => 2,
+                                        'deletedDate' => null,
+                                        'createdOn' => '2014-05-21T12:22:09+0100',
+                                        'lastModifiedOn' => '2014-05-21T12:22:09+0100',
+                                        'version' => 1,
+                                        'siPenaltyRequestedType' => [
+                                            'id' => '302',
+                                            'description' => 'foo bar',
+                                            'deletedDate' => null,
+                                            'createdOn' => '2013-03-22T17:30:05+0000',
+                                            'lastModifiedOn' => '2013-03-22T17:30:05+0000',
+                                            'version' => 1,
+                                        ],
+                                    ],
+                                ],
+                                'memberStateCode' => [
+                                    'countryDesc' => 'Poland',
+                                    'isMemberState' => 'N',
+                                    'id' => 'PL',
+                                    'createdOn' => null,
+                                    'lastModifiedOn' => null,
+                                    'version' => 1,
+                                ],
+                            ],
+                        ],
+                    ],
+                    'expected' => [
+                        'overview' => [
+                            'vrm' => 'GH52 ABC',
+                            'infringementId' => 1,
+                            'notificationNumber' => '123456',
+                            'infringementDate' => '2014-04-05',
+                            'checkDate' => '2014-04-04',
+                            'category' => 'MSI',
+                            'categoryType' =>
+                                'Exceeding the maximum six-day or fortnightly driving time limits',
+                            'transportUndertakingName' => 'Polish Transport Authority',
+                            'memberState' => 'Poland',
+                            'originatingAuthority' => 'Polish Transport Authority',
+                        ],
+                        'tables' => [
+                            'applied-penalties' => [
+                                0 => [
+                                    'id' => 1,
+                                    'version' => 1,
+                                    'penaltyType' => 'Warning',
+                                    'startDate' => '2014-06-01',
+                                    'endDate' => '2015-01-31',
+                                    'imposed' => 'Y',
+                                ],
+                                1 => [
+                                    'id' => 2,
+                                    'version' => 1,
+                                    'penaltyType' => 'Withdrawal of driver attestations ',
+                                    'startDate' => '2014-06-01',
+                                    'endDate' => '2015-01-31',
+                                    'imposed' => 'N',
+                                ],
+                            ],
+                            'imposed-penalties' => [
+                                0 => [
+                                    'id' => 1,
+                                    'version' => 1,
+                                    'finalDecisionDate' => '2014-10-02',
+                                    'penaltyType' => 'Immobilisation',
+                                    'startDate' => '2014-11-01',
+                                    'endDate' => '2015-12-01',
+                                    'executed' => true,
+                                ],
+                                1 => [
+                                    'id' => 2,
+                                    'version' => 1,
+                                    'finalDecisionDate' => '2014-10-02',
+                                    'penaltyType' => 'Fine',
+                                    'startDate' => '2014-11-01',
+                                    'endDate' => '2015-12-01',
+                                    'executed' => true,
+                                ],
+                            ],
+                            'requested-penalties' => [
+                                0 => [
+                                    'id' => 1,
+                                    'version' => 1,
+                                    'penaltyType' => 'Suspension of the issue of driver attestations',
+                                    'duration' => 12,
+                                ],
+                                1 => [
+                                    'id' => 2,
+                                    'version' => 1,
+                                    'penaltyType' => 'foo bar',
+                                    'duration' => 36,
+                                ]
+                            ]
+                        ],
+                        'text' => 'comment',
                     ]
                 ]
             ]
         ];
     }
-
 
     public function providerSubmissionSectionPrebuiltData()
     {
@@ -1271,90 +1602,92 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
     private function getCaseSummaryMockData()
     {
         return [
-            'ecmsNo' => 'E123456',
-            'description' => 'Case for convictions against company directors',
-            'id' => 24,
-            'caseType' =>
-                [
-                    'id' => 'case_t_lic',
-                ],
-            'licence' => [
-                'licNo' => 'OB1234567',
-                'trailersInPossession' => null,
-                'totAuthTrailers' => 4,
-                'totAuthVehicles' => 12,
-                'inForceDate' => '2010-01-12T00:00:00+0000',
-                'status' => [
-                    'description' => 'New',
-                    'id' => 'lsts_consideration',
-                ],
-                'organisation' => [
-                    'isMlh' => 'Y',
-                    'name' => 'John Smith Haulage Ltd.',
-                    'type' =>
-                        [
-                            'description' => 'Registered Company',
-                            'id' => 'org_t_rc',
-                        ],
-                    'organisationPersons' => [
-                        0 => [
-                            'person' => [
-                                'id' => 1,
-                                'title' => '',
-                                'forename' => 'Tom',
-                                'familyName' => 'Jones',
-                                'birthDate' => '1972-02-15T00:00:00+0100',
+            'Results' => [ // branch test
+                'ecmsNo' => 'E123456',
+                'description' => 'Case for convictions against company directors',
+                'id' => 24,
+                'caseType' =>
+                    [
+                        'id' => 'case_t_lic',
+                    ],
+                'licence' => [
+                    'licNo' => 'OB1234567',
+                    'trailersInPossession' => null,
+                    'totAuthTrailers' => 4,
+                    'totAuthVehicles' => 12,
+                    'inForceDate' => '2010-01-12T00:00:00+0000',
+                    'status' => [
+                        'description' => 'New',
+                        'id' => 'lsts_consideration',
+                    ],
+                    'organisation' => [
+                        'isMlh' => 'Y',
+                        'name' => 'John Smith Haulage Ltd.',
+                        'type' =>
+                            [
+                                'description' => 'Registered Company',
+                                'id' => 'org_t_rc',
                             ],
+                        'organisationPersons' => [
+                            0 => [
+                                'person' => [
+                                    'id' => 1,
+                                    'title' => '',
+                                    'forename' => 'Tom',
+                                    'familyName' => 'Jones',
+                                    'birthDate' => '1972-02-15T00:00:00+0100',
+                                ],
+                            ],
+                            1 => [
+                                'person' => [
+                                    'id' => 2,
+                                    'title' => '',
+                                    'forename' => 'Keith',
+                                    'familyName' => 'Winnard',
+                                    'birthDate' => '1975-03-15T00:00:00+0100',
+                                ]
+                            ]
+                        ],
+                        'natureOfBusinesss' => [
+                            [
+                                'refData' => [
+                                    'id' => '1',
+                                    'description' => 'Some whatever'
+                                ]
+                            ]
+                        ]
+                    ],
+                    'licenceVehicles' => [
+                        0 => [
+                            'id' => 1,
+                            'deletedDate' => null,
+                            'specifiedDate' => '2014-02-20T00:00:00+0000',
                         ],
                         1 => [
-                            'person' => [
-                                'id' => 2,
-                                'title' => '',
-                                'forename' => 'Keith',
-                                'familyName' => 'Winnard',
-                                'birthDate' => '1975-03-15T00:00:00+0100',
-                            ]
-                        ]
+                            'id' => 2,
+                            'deletedDate' => null,
+                            'specifiedDate' => '2014-02-20T00:00:00+0000',
+                        ],
+                        2 => [
+                            'id' => 3,
+                            'deletedDate' => null,
+                            'specifiedDate' => '2014-02-20T00:00:00+0000',
+                        ],
+                        3 => [
+                            'id' => 4,
+                            'deletedDate' => null,
+                            'specifiedDate' => '2014-02-20T00:00:00+0000',
+                        ],
                     ],
-                    'natureOfBusinesss' => [
-                        [
-                            'refData' => [
-                                'id' => '1',
-                                'description' => 'Some whatever'
-                            ]
-                        ]
-                    ]
-                ],
-                'licenceVehicles' => [
-                    0 => [
-                        'id' => 1,
-                        'deletedDate' => null,
-                        'specifiedDate' => '2014-02-20T00:00:00+0000',
+                    'licenceType' => [
+                        'description' => 'Standard National',
+                        'id' => 'ltyp_sn',
                     ],
-                    1 => [
-                        'id' => 2,
-                        'deletedDate' => null,
-                        'specifiedDate' => '2014-02-20T00:00:00+0000',
-                    ],
-                    2 => [
-                        'id' => 3,
-                        'deletedDate' => null,
-                        'specifiedDate' => '2014-02-20T00:00:00+0000',
-                    ],
-                    3 => [
-                        'id' => 4,
-                        'deletedDate' => null,
-                        'specifiedDate' => '2014-02-20T00:00:00+0000',
+                    'goodsOrPsv' => [
+                        'description' => 'Goods Vehicle',
                     ],
                 ],
-                'licenceType' => [
-                    'description' => 'Standard National',
-                    'id' => 'ltyp_sn',
-                ],
-                'goodsOrPsv' => [
-                    'description' => 'Goods Vehicle',
-                ],
-            ],
+            ]
         ];
     }
 }

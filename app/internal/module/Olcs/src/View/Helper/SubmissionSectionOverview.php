@@ -23,6 +23,7 @@ class SubmissionSectionOverview extends AbstractHelper
     protected $typeViewMap = array(
         'case-summary'   => '/case/submission/section/case-summary',
         'case-outline'   => '/case/submission/section/case-outline',
+        'penalties'      => '/case/submission/section/penalties',
         'conviction-fpn-offence-history'   => '/case/submission/section/table',
     );
 
@@ -45,9 +46,9 @@ class SubmissionSectionOverview extends AbstractHelper
 
     public function render($submissionSection, $data)
     {
+        $data['data']['overview'] = isset($data['data']['overview']) ? $data['data']['overview'] : [];
         $viewTemplate = isset($this->typeViewMap[$submissionSection]) ?
             $this->typeViewMap[$submissionSection] : self::DEFAULT_VIEW;
-
         return $this->getView()->render($viewTemplate, ['data' => $data]);
     }
 }

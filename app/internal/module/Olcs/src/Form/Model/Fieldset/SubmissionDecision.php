@@ -24,6 +24,7 @@ class SubmissionDecision extends Base
     public $submissionActionStatus = null;
 
     /**
+     * @Form\Required(false)
      * @Form\Attributes({"id":"","placeholder":"","class":"chosen-select-medium js-sub-legislation",
      * "multiple" : true})
      * @Form\Options({

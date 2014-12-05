@@ -84,6 +84,13 @@ return array(
                             'use_route_match' => true,
                         ),
                         array(
+                            'id' => 'case_details_prohibitions',
+                            'label' => 'Prohibitions',
+                            'route' => 'case_prohibition',
+                            'action' => 'index',
+                            'use_route_match' => true,
+                        ),
+                        array(
                             'id' => 'case_details_statements',
                             'label' => 'Statements',
                             'route' => 'case_statement',
@@ -101,13 +108,6 @@ return array(
                             'id' => 'case_details_conditions_undertakings',
                             'label' => 'Conditions & Undertakings',
                             'route' => 'case_conditions_undertakings',
-                            'action' => 'index',
-                            'use_route_match' => true,
-                        ),
-                        array(
-                            'id' => 'case_details_impounding',
-                            'label' => 'Impoundings',
-                            'route' => 'case_details_impounding',
                             'action' => 'index',
                             'use_route_match' => true,
                         ),
@@ -184,29 +184,27 @@ return array(
                             'id' => 'case_hearings_appeals_public_inquiry',
                             'label' => 'Public Inquiry',
                             'route' => 'case_pi',
-                            'action' => '',
+                            'action' => 'details',
                             'use_route_match' => true,
                             'pages' => array(
                                 array(
                                     'id' => 'case_hearings_appeals_public_inquiry_add',
                                     'label' => 'internal-pi-hearing-add',
                                     'route' => 'case_pi_hearing',
-                                    'action' => 'add',
-                                    'use_route_match' => true
+                                    'action' => 'add'
                                 ),
                                 array(
                                     'id' => 'case_hearings_appeals_public_inquiry_edit',
                                     'label' => 'internal-pi-hearing-edit',
                                     'route' => 'case_pi_hearing',
-                                    'action' => 'edit',
-                                    'use_route_match' => true
+                                    'action' => 'edit'
                                 ),
                             ),
                         ),
                         array(
-                            'id' => 'case_details_prohibitions',
-                            'label' => 'Prohibitions',
-                            'route' => 'case_prohibition',
+                            'id' => 'case_details_impounding',
+                            'label' => 'Impoundings',
+                            'route' => 'case_details_impounding',
                             'action' => 'index',
                             'use_route_match' => true,
                         )
@@ -324,7 +322,7 @@ return array(
                         ),
                         array(
                             'id' => 'licence_bus',
-                            'label' => 'Bus reg',
+                            'label' => 'Bus registrations',
                             'route' => 'licence/bus',
                             'use_route_match' => true,
                             'pages' => array (
@@ -682,7 +680,35 @@ return array(
                     'id' => 'application_processing',
                     'label' => 'Processing',
                     'route' => 'lva-application/processing',
-                    'use_route_match' => true
+                    'use_route_match' => true,
+                    'pages' => array(
+                        array(
+                            'id' => 'application_processing_tasks',
+                            'label' => 'internal-application-processing-tasks',
+                            'route' => 'lva-application/processing/tasks',
+                            'use_route_match' => true,
+                        ),
+                        array(
+                            'id' => 'application_processing_notes',
+                            'label' => 'internal-application-processing-notes',
+                            'route' => 'lva-application/processing/notes',
+                            'use_route_match' => true,
+                            'pages' => array(
+                                array(
+                                    'id' => 'application_processing_notes_add',
+                                    'label' => 'internal-application-processing-notes-add',
+                                    'route' => 'lva-application/processing/add-note',
+                                    'use_route_match' => true
+                                ),
+                                array(
+                                    'id' => 'application_processing_notes_modify',
+                                    'label' => 'internal-application-processing-notes-modify',
+                                    'route' => 'lva-application/processing/modify-note',
+                                    'use_route_match' => true
+                                )
+                            )
+                        )
+                    )
                 ),
                 array(
                     'id' => 'application_fee',
