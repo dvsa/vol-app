@@ -112,7 +112,6 @@ class ApplicationControllerTest extends MockeryTestCase
     }
 
     /**
-     * @TODO - write test
      * @group application_controller
      */
     public function testDocumentsAction()
@@ -139,9 +138,122 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->sut->shouldReceive('makeRestCall')
             ->with('DocumentSearchView', 'GET', $expectedFilters)
             ->andReturn([]);
-//
+
+        $this->sut->shouldReceive('getTable')
+            ->andReturn(
+                m::mock('\StdClass')
+                ->shouldReceive('render')
+                ->andReturn('tablecontent')
+                ->getMock()
+            );
+
+        $this->sut->shouldReceive('makeRestCall')
+            ->with('Category', 'GET', ['limit'=>100, 'sort'=>'description'])
+            ->andReturn(['cat1','cat2']);
+        $this->sut->shouldReceive('makeRestCall')
+            ->with(
+                'DocumentSubCategory',
+                'GET',
+                [
+                    'sort'      => "description",
+                    'order'     => "DESC",
+                    'page'      => 1,
+                    'limit'     => 100,
+                    'licenceId' => 7
+                ]
+            )
+            ->andReturn(['subcat1', 'subcat2']);
+        $this->sut->shouldReceive('makeRestCall')
+            ->with(
+                'RefData',
+                'GET',
+                [
+                    'refDataCategoryId' => "document_type",
+                    'limit'             => 100,
+                    'sort'              => "description"
+                ]
+            )
+            ->andReturn(['type1', 'type2']);
+
+        // needed for stub the calls used for view/header generation
+        $this->sut
+            ->shouldReceive('getApplication')
+                ->andReturn(
+                    [
+                        'id'=>1,
+                        'licence' => [
+                            'id' => 7,
+                            'goodsOrPsv' => ['id' => 'lcat_psv']
+                        ]
+                    ]
+                )
+            ->shouldReceive('getHeaderParams')
+                ->andReturn(
+                    [
+                        'licNo' => 'TEST1234',
+                        'companyName' => 'myco',
+                        'description' => 'foo'
+                    ]
+                );
+
         $view = $this->sut->documentsAction();
-        $this->assertTrue($view->terminate());
+
+    }
+
+    /**
+     * @group applicationController
+     */
+    public function testDocumentsActionWithUploadRedirectsToUpload()
+    {
+        $this->sut = $this->getMock(
+            '\Olcs\Controller\Application\ApplicationController',
+            array(
+                'getRequest',
+                'params',
+                'redirect',
+                'url',
+                'getFromRoute'
+            )
+        );
+        $request = $this->getMock('\stdClass', ['isPost', 'getPost']);
+        $request->expects($this->any())
+            ->method('isPost')
+            ->will($this->returnValue(true));
+        $this->sut->expects($this->any())
+            ->method('getRequest')
+            ->will($this->returnValue($request));
+
+        $params = $this->getMock('\stdClass', ['fromPost']);
+
+        $params->expects($this->once())
+            ->method('fromPost')
+            ->with('action')
+            ->will($this->returnValue('upload'));
+
+        $this->sut->expects($this->any())
+            ->method('params')
+            ->will($this->returnValue($params));
+
+        $this->sut->expects($this->any())
+            ->method('getFromRoute')
+            ->with('application')
+            ->will($this->returnValue(1234));
+        $redirect = $this->getMock('\stdClass', ['toRoute']);
+
+        $redirect->expects($this->once())
+            ->method('toRoute')
+            ->with('lva-application/documents/upload', ['application' => 1234]);
+
+        $this->sut->expects($this->once())
+            ->method('redirect')
+            ->will($this->returnValue($redirect));
+
+        $this->sut->expects($this->any())
+            ->method('getFromRoute')
+            ->with('application')
+            ->will($this->returnValue(1234));
+
+        $response = $this->sut->documentsAction();
     }
 
     /**
