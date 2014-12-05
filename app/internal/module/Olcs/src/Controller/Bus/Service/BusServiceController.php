@@ -83,10 +83,6 @@ class BusServiceController extends BusController
         return parent::processLoad($data);
     }
 
-    public function processSave($data)
-    {
-        return parent::processSave($data);
-    }
 
     /**
      * Gets a from from either a built or custom form config.
