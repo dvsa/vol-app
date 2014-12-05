@@ -36,7 +36,7 @@ class ComplianceComplaints extends AbstractSubmissionSectionFilter
 
             $dataToReturnArray[] = $thisComplaint;
         }
-        
+
         $filteredData['tables']['compliance-complaints'] = $dataToReturnArray;
         return $filteredData;
     }
