@@ -293,6 +293,8 @@ return array(
     'OlcsTest\Controller\ControllerTestAbstract' => $rootPath . '/test/Olcs/src/Controller/ControllerTestAbstract.php',
     'OlcsTest\Controller\Lva\AbstractLvaControllerTestCase' => $rootPath . '/test/Olcs/src/Controller/Lva'
         . '/AbstractLvaControllerTestCase.php',
+    'OlcsTest\Controller\ProcessingNoteControllerTestAbstract' => $rootPath . '/test/Olcs/src/Controller'
+        . '/ProcessingNoteControllerTestAbstract.php',
     'OlcsTest\Controller\Traits\Stub\StubApplicationController' => $rootPath . '/test/Olcs/src/Controller/Traits/Stub'
         . '/StubApplicationController.php',
     'OlcsTest\Data\Object\Search\SearchAbstractTest' => $rootPath . '/test/Olcs/src/Data/Object/Search'
@@ -358,6 +360,8 @@ return array(
         . '/Report.php',
     'ZendDeveloperTools\ReportInterface' => $rootPath . '/vendor/zendframework/zend-developer-tools/src'
         . '/ZendDeveloperTools/ReportInterface.php',
+    'Zend\Cache\Service\StorageCacheAbstractServiceFactory' => $rootPath . '/vendor/zendframework/zendframework/library'
+        . '/Zend/Cache/Service/StorageCacheAbstractServiceFactory.php',
     'Zend\Code\Annotation\AnnotationCollection' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Code'
         . '/Annotation/AnnotationCollection.php',
     'Zend\Code\Annotation\AnnotationManager' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Code'
@@ -1232,8 +1236,11 @@ return array(
     'Zend\View\Variables' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/View/Variables.php',
     'Zend\View\View' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/View/View.php',
     'Zend\View\ViewEvent' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/View/ViewEvent.php',
+    'demeter_get' => false,
     'demeter_getEventManager' => false,
+    'demeter_getInputFilter' => false,
     'demeter_getRouteMatch' => false,
+    'demeter_getValidatorChain' => false,
     'demeter_redirect' => false,
     'microtime' => false,
     'view' => false,
