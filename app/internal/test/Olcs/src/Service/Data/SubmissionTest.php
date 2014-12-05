@@ -1059,23 +1059,26 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                     'caseId' => 24,
                     'sectionId' => 'prohibition-history',
                     'sectionConfig' => [
-                        'service' => 'Prohibition',
+                        'service' => 'Cases',
                         'filter' => true,
                         'bundle' => ['some_bundle'],
                     ]
                 ],
                 [
                     'loadedCaseSectionData' => [
-                        0 => [
-                            'id' => 1,
-                            'version' => 2,
-                            'prohibitionDate' => '2012-03-10T00:00:00+0000',
-                            'clearedDate' => '2013-03-10T00:00:00+0000',
-                            'vrm' => 'AB123DEF',
-                            'isTrailer' => 1,
-                            'imposedAt' => 'foo bar',
-                            'prohibitionType' => [
-                                'description' => 'foo',
+                        'prohibitionNote' => 'test prohibition_note',
+                        'prohibitions' => [
+                            0 => [
+                                'id' => 1,
+                                'version' => 2,
+                                'prohibitionDate' => '2012-03-10T00:00:00+0000',
+                                'clearedDate' => '2013-03-10T00:00:00+0000',
+                                'vrm' => 'AB123DEF',
+                                'isTrailer' => 1,
+                                'imposedAt' => 'foo bar',
+                                'prohibitionType' => [
+                                    'description' => 'foo',
+                                ]
                             ]
                         ]
                     ],
@@ -1093,7 +1096,8 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                                     'prohibitionType' => 'foo'
                                 ]
                             ]
-                        ]
+                        ],
+                        'text' => 'test prohibition_note'
                     ]
                 ]
             ],
