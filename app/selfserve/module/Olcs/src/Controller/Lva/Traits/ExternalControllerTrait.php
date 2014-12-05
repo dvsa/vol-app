@@ -83,9 +83,10 @@ trait ExternalControllerTrait
      *
      * @param string $titleSuffix
      * @param \Zend\Form\Form $form
+     * @param array $variables
      * @return \Common\View\Model\Section
      */
-    protected function render($titleSuffix, Form $form = null)
+    protected function render($titleSuffix, Form $form = null, $variables = array())
     {
         $this->attachCurrentMessages();
 
@@ -93,6 +94,11 @@ trait ExternalControllerTrait
             return $titleSuffix;
         }
 
-        return new Section(array('title' => 'lva.section.title.' . $titleSuffix, 'form' => $form));
+        $params = array_merge(
+            array('title' => 'lva.section.title.' . $titleSuffix, 'form' => $form),
+            $variables
+        );
+
+        return new Section($params);
     }
 }

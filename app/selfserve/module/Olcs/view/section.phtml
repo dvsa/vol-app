@@ -8,6 +8,11 @@
   </div><!-- .page-header__wrapper -->
 </div><!-- .page-header-->
 
+<?php if (isset($filterForm)): ?>
+    <div class="one-quarter">
+       <?php echo $this->form($filterForm); ?>
+    </div>
+<?php endif; ?>
 <div class="three-quarters">
 
   <?php echo $this->flashMessengerAll(); ?>
