@@ -465,17 +465,23 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                     'loadedCaseSectionData' => [
                         0 => [
                             'id' => 1,
+                            'version' => 1,
                             'description' => 'test description 2',
                             'complaintDate' => '2012-06-15T00:00:00+0100',
-                            'complainantForename' => 'John',
-                            'complainantFamilyName' => 'Smith',
+                            'complainantContactDetails' => [
+                                'forename' => 'John',
+                                'familyName' => 'Smith',
+                            ]
                         ],
                         1 => [
                             'id' => 1,
+                            'version' => 1,
                             'description' => 'test description 1',
                             'complaintDate' => '2011-06-15T00:00:00+0100',
-                            'complainantForename' => 'John',
-                            'complainantFamilyName' => 'Smith',
+                            'complainantContactDetails' => [
+                                'forename' => 'John',
+                                'familyName' => 'Smith',
+                            ]
                         ],
                     ],
                     'expected' => [
@@ -483,6 +489,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                             'compliance-complaints' => [
                                 0 => [
                                     'id' => 1,
+                                    'version' => 1,
                                     'description' => 'test description 2',
                                     'complaintDate' => '2012-06-15T00:00:00+0100',
                                     'complainantForename' => 'John',
@@ -490,6 +497,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                                 ],
                                 1 => [
                                     'id' => 1,
+                                    'version' => 1,
                                     'description' => 'test description 1',
                                     'complaintDate' => '2011-06-15T00:00:00+0100',
                                     'complainantForename' => 'John',
