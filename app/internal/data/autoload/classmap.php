@@ -730,10 +730,10 @@ return array(
     'Olcs\Listener\RouteParam\Action' => false,
     'Common\View\Helper\PluginManagerAwareTrait' => $rootPath . '/vendor/olcs/OlcsCommon/Common/src/Common/View/Helper/PluginManagerAwareTrait.php',
     'Olcs\Filter\SubmissionSection\Penalties' => false,
+    'Common\Service\Data\ApplicationAwareTrait' => $rootPath . '/vendor/olcs/OlcsCommon/Common/src/Common/Service/Data/ApplicationAwareTrait.php',
+    'Common\Service\Data\TransportManagerAwareTrait' => $rootPath . '/vendor/olcs/OlcsCommon/Common/src/Common/Service/Data/TransportManagerAwareTrait.php',
     'Common\Service\\Common\Form\Elements\InputFilters\ActionButtonService' => false,
     'Common\Service\\Zend\Form\FieldsetService' => false,
     'Common\Service\\Common\Form\Elements\InputFilters\FeeWaiveNoteService' => false,
     'Common\Service\\Zend\Form\Element\SelectService' => false,
-    'Common\Service\Data\ApplicationAwareTrait' => $rootPath . '/vendor/olcs/OlcsCommon/Common/src/Common/Service/Data/ApplicationAwareTrait.php',
-    'Common\Service\Data\TransportManagerAwareTrait' => $rootPath . '/vendor/olcs/OlcsCommon/Common/src/Common/Service/Data/TransportManagerAwareTrait.php',
 );
