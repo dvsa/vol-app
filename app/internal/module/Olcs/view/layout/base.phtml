@@ -24,6 +24,7 @@
                   <?php echo $this->formSelect($this->searchForm->get('index')); ?>
                 </div><!-- .search__select -->
                 <?php echo $this->formSubmit($this->searchForm->get('submit')); ?>
+                  <?php echo $this->formElement($this->searchForm->get('csrf')) ?>
               </form>
             <?php endif?>
           </div>
