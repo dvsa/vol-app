@@ -35,9 +35,10 @@ trait ApplicationControllerTrait
      *
      * @param string|ViewModel $content
      * @param \Zend\Form\Form $form
+     * @param array $variables
      * @return \Zend\View\Model\ViewModel
      */
-    protected function render($content, Form $form = null)
+    protected function render($content, Form $form = null, $variables = array())
     {
         if (! ($content instanceof ViewModel)) {
             $content = new Section(array('title' => 'lva.section.title.' . $content, 'form' => $form));
@@ -45,13 +46,15 @@ trait ApplicationControllerTrait
 
         $routeName = $this->getEvent()->getRouteMatch()->getMatchedRouteName();
 
-        $sectionLayout = new SectionLayout(
+        $params = array_merge(
             array(
                 'sections'     => $this->getSectionsForView(),
                 'currentRoute' => $routeName,
                 'lvaId'        => $this->getIdentifier()
-            )
+            ),
+            $variables
         );
+        $sectionLayout = new SectionLayout($params);
         $sectionLayout->addChild($content, 'content');
 
         return $this->genericRender($sectionLayout);
