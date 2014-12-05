@@ -64,6 +64,35 @@ class TransportManagerDetailsDetailControllerTest extends AbstractHttpController
         'js-submit' => 1
     ];
 
+    protected $postFiltered = [
+        'transport-manager-details' => [
+            'id' => 1,
+            'version' => 1,
+            'type' => 'tm_t_B',
+            'status' => 'tm_st_A',
+            'contactDetailsId' => 1,
+            'contactDetailsVersion' => 1,
+            'emailAddress' => 'email@address.com',
+            'personId' => 1,
+            'personVersion' => 1,
+            'title' => 'Mr',
+            'firstName' => 'First',
+            'lastName' => 'Last',
+            'birthPlace' => 'London',
+            'birthDate' => '1973-01-01'
+        ],
+        'home-address' => [
+            'id' => 1,
+            'version' => 1,
+            'addressLine1' => 'addressLine1',
+            'addressLine2' => 'addressLine2',
+            'addressLine3' => 'addressLine3',
+            'addressLine4' => 'addressLine4',
+            'town' => 'Town',
+            'postcode' => 'PC'
+        ]
+    ];
+
     protected $tmDetails = [
         'version' => 1,
         'contactDetails' => [
@@ -139,6 +168,18 @@ class TransportManagerDetailsDetailControllerTest extends AbstractHttpController
             ->andReturn(false);
 
         $this->sut
+            ->shouldReceive('getForm')
+            ->with('TransportManager')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('setData')
+                ->andReturn(null)
+                ->shouldReceive('remove')
+                ->andReturn(null)
+                ->getMock()
+            );
+
+        $this->sut
             ->shouldReceive('getRequest')
             ->andReturn(
                 m::mock()
@@ -190,6 +231,26 @@ class TransportManagerDetailsDetailControllerTest extends AbstractHttpController
         $this->sut
             ->shouldReceive('isButtonPressed')
             ->andReturn(false);
+
+        $this->sut
+            ->shouldReceive('getForm')
+            ->with('TransportManager')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('remove')
+                ->getMock()
+                ->shouldReceive('setData')
+                ->with($this->post)
+                ->getMock()
+                ->shouldReceive('isValid')
+                ->andReturn(true)
+                ->shouldReceive('getData')
+                ->andReturn($this->post)
+                ->getMock()
+                ->shouldReceive('setData')
+                ->with($this->postFiltered)
+                ->getMock()
+            );
 
         $this->sut
             ->shouldReceive('getRequest')
@@ -250,10 +311,11 @@ class TransportManagerDetailsDetailControllerTest extends AbstractHttpController
                     'title' => $this->post['transport-manager-details']['title'],
                     'forename' => $this->post['transport-manager-details']['firstName'],
                     'familyName' => $this->post['transport-manager-details']['lastName'],
-                    'birthDate' =>
-                        $this->post['transport-manager-details']['birthDate']['year'] . '-' .
-                        $this->post['transport-manager-details']['birthDate']['month'] . '-' .
-                        $this->post['transport-manager-details']['birthDate']['day'],
+                    'birthDate' => [
+                        'year' => $this->post['transport-manager-details']['birthDate']['year'],
+                        'month' => $this->post['transport-manager-details']['birthDate']['month'],
+                        'day' => $this->post['transport-manager-details']['birthDate']['day'],
+                     ],
                     'birthPlace' => $this->post['transport-manager-details']['birthPlace']
                 ]
             )
@@ -391,6 +453,15 @@ class TransportManagerDetailsDetailControllerTest extends AbstractHttpController
             ->andReturn(false);
 
         $this->sut
+            ->shouldReceive('getForm')
+            ->with('TransportManager')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('remove')
+                ->getMock()
+            );
+
+        $this->sut
             ->shouldReceive('getRequest')
             ->andReturn(
                 m::mock()
@@ -456,6 +527,21 @@ class TransportManagerDetailsDetailControllerTest extends AbstractHttpController
                 ->getMock()
             );
 
+        $this->sut
+            ->shouldReceive('getForm')
+            ->with('TransportManager')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('remove')
+                ->shouldReceive('setData')
+                ->with($this->post)
+                ->shouldReceive('isValid')
+                ->andReturn(true)
+                ->shouldReceive('getData')
+                ->andReturn($this->post)
+                ->getMock()
+            );
+
         $mockTmDetails = m::mock()
             ->shouldReceive('save')
             ->with(
@@ -493,10 +579,11 @@ class TransportManagerDetailsDetailControllerTest extends AbstractHttpController
                     'title' => $this->post['transport-manager-details']['title'],
                     'forename' => $this->post['transport-manager-details']['firstName'],
                     'familyName' => $this->post['transport-manager-details']['lastName'],
-                    'birthDate' =>
-                        $this->post['transport-manager-details']['birthDate']['year'] . '-' .
-                        $this->post['transport-manager-details']['birthDate']['month'] . '-' .
-                        $this->post['transport-manager-details']['birthDate']['day'],
+                    'birthDate' => [
+                        'year' => $this->post['transport-manager-details']['birthDate']['year'],
+                        'month' => $this->post['transport-manager-details']['birthDate']['month'],
+                        'day' => $this->post['transport-manager-details']['birthDate']['day'],
+                     ],
                     'birthPlace' => $this->post['transport-manager-details']['birthPlace']
                 ]
             )

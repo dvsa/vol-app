@@ -68,9 +68,11 @@ return array(
     'Common\Service\Zend\ModuleManager\ModuleManagerZendService' => false,
     'Common\Service\Zend\Stdlib\Hydrator\ArraySerializableZendService' => false,
     'Common\Service\\Common\Form\Elements\InputFilters\ActionButtonService' => false,
-    'Common\Service\\Common\Form\Elements\InputFilters\FeeWaiveNoteService' => false,
+    'Common\Service\\Common\Form\Elements\InputFilters\CheckboxService' => false,
+    'Common\Service\\Common\Form\Elements\InputFilters\NoRenderService' => false,
+    'Common\Service\\Common\Form\Elements\Types\TableService' => false,
+    'Common\Service\\Zend\Form\Element\ButtonService' => false,
     'Common\Service\\Zend\Form\Element\SelectService' => false,
-    'Common\Service\\Zend\Form\FieldsetService' => false,
     'Common\Service\commonformelementdynamicradio' => false,
     'Common\Service\commonformelementdynamicselect' => false,
     'Common\Service\commonformelementscustomdateselect' => false,
@@ -292,12 +294,16 @@ return array(
     'OlcsTest\Data\Object\Search\SearchAbstractTest' => $rootPath . '/test/Olcs/src/Data/Object/Search'
         . '/SearchAbstractTest.php',
     'Olcs\Controller\Lva\Application' => false,
+    'Olcs\Filter\SubmissionSection\Penalties' => false,
     'Olcs\Form\Model\Fieldset\TransportManagerActions' => false,
     'Olcs\Form\Model\Fieldset\TransportManagerDetails' => false,
     'Olcs\Form\Model\Form\AdminDiscPrinting' => false,
     'Olcs\Form\Model\Form\Lva\BusinessType' => false,
+    'Olcs\Form\Model\Form\Lva\GoodsVehicles' => false,
     'Olcs\Form\Model\Form\Lva\OperatingCentres' => false,
+    'Olcs\Form\Model\Form\Lva\PsvVehicles' => false,
     'Olcs\Form\Model\Form\Lva\TypeOfLicence' => false,
+    'Olcs\Form\Model\Form\Lva\VehicleFilter' => false,
     'Olcs\Form\Model\Form\TransportManager' => false,
     'Olcs\Form\Model\Form\name' => false,
     'Olcs\Logging\Helper\LogError' => $rootPath . '/vendor/olcs/olcs-logging/src/Helper/LogError.php',
@@ -567,10 +573,22 @@ return array(
     'Zend\Http\Client' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Http/Client.php',
     'Zend\Http\Client\Adapter\AdapterInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Http'
         . '/Client/Adapter/AdapterInterface.php',
+    'Zend\Http\Client\Adapter\Exception\ExceptionInterface' => $rootPath . '/vendor/zendframework/zendframework/library'
+        . '/Zend/Http/Client/Adapter/Exception/ExceptionInterface.php',
+    'Zend\Http\Client\Adapter\Exception\RuntimeException' => $rootPath . '/vendor/zendframework/zendframework/library'
+        . '/Zend/Http/Client/Adapter/Exception/RuntimeException.php',
     'Zend\Http\Client\Adapter\Socket' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Http/Client'
         . '/Adapter/Socket.php',
     'Zend\Http\Client\Adapter\StreamInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Http'
         . '/Client/Adapter/StreamInterface.php',
+    'Zend\Http\Client\Exception\ExceptionInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend'
+        . '/Http/Client/Exception/ExceptionInterface.php',
+    'Zend\Http\Client\Exception\RuntimeException' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Http'
+        . '/Client/Exception/RuntimeException.php',
+    'Zend\Http\Exception\ExceptionInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Http'
+        . '/Exception/ExceptionInterface.php',
+    'Zend\Http\Exception\RuntimeException' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Http'
+        . '/Exception/RuntimeException.php',
     'Zend\Http\HeaderLoader' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Http/HeaderLoader.php',
     'Zend\Http\Header\AbstractAccept' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Http/Header'
         . '/AbstractAccept.php',
@@ -968,8 +986,12 @@ return array(
         . '/ServiceManager/DelegatorFactoryInterface.php',
     'Zend\ServiceManager\Exception\ExceptionInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend'
         . '/ServiceManager/Exception/ExceptionInterface.php',
+    'Zend\ServiceManager\Exception\InvalidArgumentException' => $rootPath . '/vendor/zendframework/zendframework'
+        . '/library/Zend/ServiceManager/Exception/InvalidArgumentException.php',
     'Zend\ServiceManager\Exception\RuntimeException' => $rootPath . '/vendor/zendframework/zendframework/library/Zend'
         . '/ServiceManager/Exception/RuntimeException.php',
+    'Zend\ServiceManager\Exception\ServiceNotFoundException' => $rootPath . '/vendor/zendframework/zendframework'
+        . '/library/Zend/ServiceManager/Exception/ServiceNotFoundException.php',
     'Zend\ServiceManager\FactoryInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend'
         . '/ServiceManager/FactoryInterface.php',
     'Zend\ServiceManager\ServiceLocatorAwareInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend'
@@ -1173,6 +1195,7 @@ return array(
         . '/ModelInterface.php',
     'Zend\View\Model\RetrievableChildrenInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend'
         . '/View/Model/RetrievableChildrenInterface.php',
+    'Zend\View\Model\ViewMode' => false,
     'Zend\View\Model\ViewModel' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/View/Model'
         . '/ViewModel.php',
     'Zend\View\Renderer\JsonRenderer' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/View/Renderer'
@@ -1201,4 +1224,6 @@ return array(
     'demeter_getEventManager' => false,
     'demeter_getRouteMatch' => false,
     'demeter_redirect' => false,
+    'microtime' => false,
+    'view' => false,
 );
