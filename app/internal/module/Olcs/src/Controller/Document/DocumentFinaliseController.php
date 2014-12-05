@@ -86,7 +86,7 @@ class DocumentFinaliseController extends AbstractDocumentController
             // @TODO this needs to be handled better; by the time we get here we
             // should *know* that our files are valid
             $this->addErrorMessage('Sorry; there was a problem uploading the file. Please try again.');
-            return $this->redirectToDocumentRoute($type, 'finalise',$routeParams);
+            return $this->redirectToDocumentRoute($type, 'finalise', $routeParams);
         }
 
         $uploader = $this->getUploader();

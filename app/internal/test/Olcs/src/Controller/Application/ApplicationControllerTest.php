@@ -196,6 +196,10 @@ class ApplicationControllerTest extends MockeryTestCase
                     ]
                 );
 
+        $this->sut->shouldReceive('loadScripts')
+            ->with(['documents', 'table-actions'])
+            ->andReturnSelf();
+
         $view = $this->sut->documentsAction();
 
     }
