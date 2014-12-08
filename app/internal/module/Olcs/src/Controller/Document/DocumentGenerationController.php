@@ -66,7 +66,7 @@ class DocumentGenerationController extends AbstractDocumentController
 
     protected function alterFormBeforeValidation($form)
     {
-        $categories = $this->getListData(
+        $categories = $this->getListDataFromBackend(
             'Category',
             ['isDocCategory' => true],
             'description',
@@ -97,14 +97,14 @@ class DocumentGenerationController extends AbstractDocumentController
 
         $filters['category'] = $details['category'];
 
-        $subCategories = $this->getListData(
+        $subCategories = $this->getListDataFromBackend(
             'DocumentSubCategory',
             $filters
         );
 
         if (isset($details['documentSubCategory'])) {
             $filters['documentSubCategory'] = $details['documentSubCategory'];
-            $docTemplates = $this->getListData(
+            $docTemplates = $this->getListDataFromBackend(
                 'DocTemplate',
                 $filters
             );
@@ -329,13 +329,13 @@ class DocumentGenerationController extends AbstractDocumentController
         return array_search($name, $categories);
     }
 
-    protected function getListData(
+    protected function getListDataFromBackend(
         $entity,
         $filters = array(),
         $titleField = '',
         $keyField = '',
         $showAll = self::EMPTY_LABEL
     ) {
-        return parent::getListData($entity, $filters, 'description', 'id', $showAll);
+        return parent::getListDataFromBackend($entity, $filters, 'description', 'id', $showAll);
     }
 }

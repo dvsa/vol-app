@@ -614,6 +614,20 @@ $routes = [
             ]
         ]
     ],
+    'case_licence_docs_attachments' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/case/[:case]/documents[/licence/:licence]',
+            'constraints' => [
+                'case' => '[0-9]+',
+                'licence' => '[0-9]+'
+            ],
+            'defaults' => [
+                'controller' => 'CaseController',
+                'action' => 'documents'
+            ]
+        ]
+    ],
     'entity_lists' => [
         'type' => 'segment',
         'options' => [

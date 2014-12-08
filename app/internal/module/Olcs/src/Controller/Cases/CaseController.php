@@ -19,6 +19,9 @@ use Olcs\Controller\Traits as ControllerTraits;
 class CaseController extends OlcsController\CrudAbstract
 {
     use ControllerTraits\CaseControllerTrait;
+    use ControllerTraits\DocumentActionTrait;
+    use ControllerTraits\DocumentSearchTrait;
+    use ControllerTraits\ListDataTrait;
 
     /**
      * Identifier name
@@ -229,5 +232,64 @@ class CaseController extends OlcsController\CrudAbstract
         }
 
         return $data;
+    }
+
+    /**
+     * Route (prefix) for document action redirects
+     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @return string
+     */
+    protected function getDocumentRoute()
+    {
+        return 'case_licence_docs_attachments';
+    }
+
+    /**
+     * Route params for document action redirects
+     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @return array
+     */
+    protected function getDocumentRouteParams()
+    {
+        return array(
+            'case' => $this->getFromRoute('case'),
+            'licence' => $this->getFromRoute('licence')
+        );
+    }
+
+    /**
+     * Get view model for document action
+     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @return ViewModel
+     */
+    protected function getDocumentView()
+    {
+        $licenceId = $this->getQueryOrRouteParam('licence');
+
+        if (empty($licenceId)) {
+            $case = $this->getCase();
+            $licenceId = $case['licence']['id'];
+        }
+
+        // caution, if $licenceId is empty we get ALL documents
+        // AC says this will be addressed in later stories
+
+        $filters = $this->mapDocumentFilters(
+            array('licenceId' => $licenceId)
+        );
+
+        $table = $this->getDocumentsTable($filters);
+        $form  = $this->getDocumentForm($filters);
+
+        $view = $this->getView(
+            array(
+                'table' => $table,
+                'form'  => $form
+            )
+        );
+
+        $this->setPageLayoutInner(null);
+
+        return $this->render($view);
     }
 }
