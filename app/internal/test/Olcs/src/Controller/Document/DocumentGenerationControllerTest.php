@@ -341,12 +341,14 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
                 $caseMock = $this->getMock('\StdClass', ['fetchCaseData']);
                 $caseMock->expects($this->any())
                     ->method('fetchCaseData')
-                    ->will($this->returnValue(
-                        [
-                            'id' => 1234,
-                            'licence' => [ 'id' => 7 ]
-                        ]
-                    ));
+                    ->will(
+                        $this->returnValue(
+                            [
+                                'id' => 1234,
+                                'licence' => [ 'id' => 7 ]
+                            ]
+                        )
+                    );
                 $dsMock = $this->getMock('\StdClass', ['get']);
                 $dsMock->expects($this->any())
                     ->method('get')

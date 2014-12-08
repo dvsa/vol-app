@@ -255,7 +255,8 @@ class CaseControllerTest extends ControllerTestAbstract
         $this->createAddEditAssertions('layout/' . $pageLayout, $view, $addEditHelper, $mockServiceManager);
     }
 
-    public function documentsActionProvider() {
+    public function documentsActionProvider()
+    {
         return [
             [7],
             [null] // tests if licence id is ommitted from url
@@ -371,7 +372,8 @@ class CaseControllerTest extends ControllerTestAbstract
             ->shouldDeferMissing();
     }
 
-    protected function getMockRestHelperForDocuments() {
+    protected function getMockRestHelperForDocuments()
+    {
         return m::mock('RestHelper')
             ->shouldReceive('makeRestCall')
             ->with(
@@ -421,6 +423,14 @@ class CaseControllerTest extends ControllerTestAbstract
                 m::any()
             )
             ->getMock();
+    }
+
+    /**
+     * @TODO write test for POST and redirect
+     */
+    public function testDocumentsActionWithUploadRedirectsToUpload()
+    {
+        $this->markTestIncomplete();
     }
 
     /**
