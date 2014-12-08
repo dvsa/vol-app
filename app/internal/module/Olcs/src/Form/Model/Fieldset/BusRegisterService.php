@@ -116,6 +116,15 @@ class BusRegisterService extends Base
     public $opNotifiedLaPte;
 
     /**
+     * @Form\Type("Hidden")
+     * @Form\Attributes({
+     *      "id":"registerService[opNotifiedLaPte]",
+     *      "value":"N"
+     * })
+     */
+    public $opNotifiedLaPteHidden;
+
+    /**
      * @Form\Attributes({"id":"dob"})
      * @Form\Options({
      *     "label": "Date completed",
