@@ -425,12 +425,67 @@ class CaseControllerTest extends ControllerTestAbstract
             ->getMock();
     }
 
-    /**
-     * @TODO write test for POST and redirect
-     */
     public function testDocumentsActionWithUploadRedirectsToUpload()
     {
-        $this->markTestIncomplete();
+        $this->sut = $this->getMock(
+            $this->testClass,
+            array(
+                'getRequest',
+                'params',
+                'redirect',
+                'url',
+                'getFromRoute',
+                'getCase'
+            )
+        );
+
+        $request = $this->getMock('\stdClass', ['isPost', 'getPost']);
+        $request->expects($this->any())
+            ->method('isPost')
+            ->will($this->returnValue(true));
+        $this->sut->expects($this->any())
+            ->method('getRequest')
+            ->will($this->returnValue($request));
+
+        $params = $this->getMock('\stdClass', ['fromPost', 'fromQuery', 'fromRoute']);
+        $params->expects($this->once())
+            ->method('fromPost')
+            ->with('action')
+            ->will($this->returnValue('upload'));
+        $this->sut->expects($this->any())
+            ->method('params')
+            ->will($this->returnValue($params));
+
+        $this->sut->expects($this->any())
+            ->method('getFromRoute')
+            ->with('case')
+            ->will($this->returnValue(1234));
+
+        $this->sut->expects($this->once())
+            ->method('getCase')
+            ->will(
+                $this->returnValue(
+                    [
+                        'id' => 1234,
+                        'licence' => [
+                            'id' => 7
+                        ]
+                    ]
+                )
+            );
+
+        $redirect = $this->getMock('\stdClass', ['toRoute']);
+        $redirect->expects($this->once())
+            ->method('toRoute')
+            ->with(
+                'case_licence_docs_attachments/upload',
+                ['case' => 1234, 'licence' => 7]
+            );
+        $this->sut->expects($this->once())
+            ->method('redirect')
+            ->will($this->returnValue($redirect));
+
+        $response = $this->sut->documentsAction();
     }
 
     /**
