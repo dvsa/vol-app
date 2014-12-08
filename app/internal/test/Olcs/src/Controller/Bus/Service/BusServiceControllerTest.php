@@ -125,5 +125,149 @@ class BusServiceControllerTest extends AbstractHttpControllerTestCase
 
         $result = $this->sut->getForm($type);
 
+        $this->assertSame($result, $mockForm);
+    }
+
+    public function testAlterFormNotCancelled()
+    {
+        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
+            [
+                'params' => 'Params'
+            ]
+        );
+
+        $mockData = [
+            'status' => [
+                'id' => 'breg_s_registered'
+            ],
+            'busNoticePeriod' => [
+                'id' => 1
+            ],
+        ];
+
+        $mockParamsPlugin = $mockPluginManager->get('params', '');
+        $mockParamsPlugin->shouldReceive('getParam')->with('case', "")->andReturn('');
+        $mockParamsPlugin->shouldReceive('fromRoute')->with('busRegId')->andReturn(2);
+
+        $this->sut->setPluginManager($mockPluginManager);
+
+        $mockFieldset = m::mock('\Zend\Form\Element');
+        $mockFieldset->shouldReceive('get')->with('fields')->andReturn($mockFieldset);
+        $mockFieldset->shouldReceive('remove')->with('opNotifiedLaPteHidden');
+
+        $mockForm = m::mock('\Zend\Form\Form');
+        $mockForm->shouldReceive('get')->with('fields')->andReturn($mockFieldset);
+
+        $mockRestHelper = m::mock('RestHelper');
+        $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn($mockData);
+
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
+
+        $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
+        $mockSl->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
+
+        $this->sut->setServiceLocator($mockSl);
+
+        $result = $this->sut->alterForm($mockForm);
+
+        $this->assertSame($result, $mockForm);
+
+    }
+
+    public function testAlterFormScotlandRules()
+    {
+        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
+            [
+                'params' => 'Params'
+            ]
+        );
+
+        $mockData = [
+            'status' => [
+                'id' => 'breg_s_cancelled'
+            ],
+            'busNoticePeriod' => [
+                'id' => 1
+            ],
+        ];
+
+        $mockParamsPlugin = $mockPluginManager->get('params', '');
+        $mockParamsPlugin->shouldReceive('getParam')->with('case', "")->andReturn('');
+        $mockParamsPlugin->shouldReceive('fromRoute')->with('busRegId')->andReturn(2);
+
+        $this->sut->setPluginManager($mockPluginManager);
+
+        $mockFieldset = m::mock('\Zend\Form\Element');
+        $mockFieldset->shouldReceive('get')->with('fields')->andReturn($mockFieldset);
+        $mockFieldset->shouldReceive('remove')->with('opNotifiedLaPteHidden');
+
+        $mockForm = m::mock('\Zend\Form\Form');
+        $mockForm->shouldReceive('remove')->with('timetable');
+        $mockForm->shouldReceive('get')->with('fields')->andReturn($mockFieldset);
+
+        $mockRestHelper = m::mock('RestHelper');
+        $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn($mockData);
+
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
+
+        $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
+        $mockSl->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
+
+        $this->sut->setServiceLocator($mockSl);
+
+        $result = $this->sut->alterForm($mockForm);
+
+        $this->assertSame($result, $mockForm);
+
+    }
+
+    public function testAlterFormNotScotland()
+    {
+        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
+            [
+                'params' => 'Params'
+            ]
+        );
+
+        $mockData = [
+            'status' => [
+                'id' => 'breg_s_cancelled'
+            ],
+            'busNoticePeriod' => [
+                'id' => 2
+            ],
+        ];
+
+        $mockParamsPlugin = $mockPluginManager->get('params', '');
+        $mockParamsPlugin->shouldReceive('getParam')->with('case', "")->andReturn('');
+        $mockParamsPlugin->shouldReceive('fromRoute')->with('busRegId')->andReturn(2);
+
+        $this->sut->setPluginManager($mockPluginManager);
+
+        $mockFieldset = m::mock('\Zend\Form\Element');
+        $mockFieldset->shouldReceive('get')->with('fields')->andReturn($mockFieldset);
+        $mockFieldset->shouldReceive('remove')->with('opNotifiedLaPte');
+
+        $mockForm = m::mock('\Zend\Form\Form');
+        $mockForm->shouldReceive('remove')->with('timetable');
+        $mockForm->shouldReceive('get')->with('fields')->andReturn($mockFieldset);
+
+        $mockRestHelper = m::mock('RestHelper');
+        $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn($mockData);
+
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
+
+        $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
+        $mockSl->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
+
+        $this->sut->setServiceLocator($mockSl);
+
+        $result = $this->sut->alterForm($mockForm);
+
+        $this->assertSame($result, $mockForm);
+
     }
 }

@@ -24,6 +24,24 @@ class BusServiceController extends BusController
     /* properties required by CrudAbstract */
     protected $formName = 'BusRegisterService';
 
+
+    /**
+     * Holds the Data Bundle
+     *
+     * @var array
+     */
+    protected $dataBundle = [
+        'properties' => 'ALL',
+        'children' => [
+            'busNoticePeriod' => [
+                'properties' => 'ALL'
+            ],
+            'status' => [
+                'properties' => 'ALL'
+            ]
+        ]
+    ];
+
     /**
      * Data map
      *
@@ -66,6 +84,22 @@ class BusServiceController extends BusController
         return parent::processLoad($data);
     }
 
+    public function alterForm($form)
+    {
+        $data = $this->loadCurrent();
+
+        if ($data['status']['id'] == 'breg_s_cancelled') {
+            $form->remove('timetable');
+        }
+
+        // If Scottish rules identified by busNoticePeriod = 1, remove radio and replace with hidden field
+        if ($data['busNoticePeriod']['id'] !== 1) {
+            $form->get('fields')->remove('opNotifiedLaPte');
+        } else {
+            $form->get('fields')->remove('opNotifiedLaPteHidden');
+        }
+        return $form;
+    }
 
     /**
      * Gets a from from either a built or custom form config.
