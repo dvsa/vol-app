@@ -11,7 +11,6 @@ use Zend\Form\Form;
 use Zend\View\Model\ViewModel;
 use Olcs\View\Model\Application\SectionLayout;
 use Common\View\Model\Section;
-use Common\Controller\Lva\Traits\EnabledSectionTrait;
 use Common\Controller\Lva\Traits\CommonApplicationControllerTrait;
 use Common\Service\Entity\ApplicationCompletionEntityService;
 use Olcs\Controller\Traits\ApplicationControllerTrait as GenericInternalApplicationControllerTrait;
@@ -25,7 +24,6 @@ trait ApplicationControllerTrait
 {
     use InternalControllerTrait,
         CommonApplicationControllerTrait,
-        EnabledSectionTrait,
         GenericInternalApplicationControllerTrait {
             GenericInternalApplicationControllerTrait::render as genericRender;
         }
