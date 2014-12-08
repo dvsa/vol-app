@@ -1116,7 +1116,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                         'annualTestHistory' => 'test history'
                     ],
                     'expected' => [
-                        'annualTestHistory' => 'test history',
+                        'text' => 'test history',
                     ]
                 ]
             ],
