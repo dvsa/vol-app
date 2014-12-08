@@ -24,6 +24,9 @@ trait VariationControllerTrait
     /**
      * Complete section
      *
+     * @todo this logic is the same as CommonApplicationControllerTrait, this could potentially be re-used however I am
+     *   not sure whether there would be any complications
+     *
      * @param string $section
      * @return \Zend\Http\Response
      */
