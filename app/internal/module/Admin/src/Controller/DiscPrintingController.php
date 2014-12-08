@@ -137,10 +137,8 @@ class DiscPrintingController extends AbstractController
             ];
         }
 
-        // generate vehicle list for all licences which are affected by new discs
         $this->getServiceLocator()
             ->get('VehicleList')
-            ->setLoggedInUser($this->getLoggedInUser())
             ->setQueryData($queries)
             ->setBookmarkData($bookmarks)
             ->setTemplate('PSVVehiclesList')
@@ -179,7 +177,6 @@ class DiscPrintingController extends AbstractController
 
         $this->getServiceLocator()
             ->get('VehicleList')
-            ->setLoggedInUser($this->getLoggedInUser())
             ->setQueryData($queries)
             ->setTemplate('GVVehiclesList')
             ->setDescription('Goods Vehicle List')
