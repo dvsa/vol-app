@@ -79,7 +79,7 @@ if (empty($appeal)){
             echo $this->render('partials/read-only/empty',
                 [
                     'header' => 'Upper Tribunal stay',
-                    'helpText' => 'There is currently no Upper tribunal stay',
+                    'helpText' => 'There is currently no Upper Tribunal stay',
                     'url' => $this->url(
                         'case_stay',
                         ['case' => $case['id'], 'action' => 'add', 'stayType' => 'stay_t_ut'],
