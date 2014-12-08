@@ -190,6 +190,7 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
         return [
             ['licence', 'licence/documents', []],
             ['application', 'lva-application/documents' , ['licence' => 7]],
+            ['case', 'case_licence_docs_attachments' , ['licence' => 7]],
         ];
     }
     /**
@@ -336,6 +337,22 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
                     ->method('getLicenceIdForApplication')
                     ->will($this->returnValue(7));
                 return $eaMock;
+            case 'DataServiceManager':
+                $caseMock = $this->getMock('\StdClass', ['fetchCaseData']);
+                $caseMock->expects($this->any())
+                    ->method('fetchCaseData')
+                    ->will($this->returnValue(
+                        [
+                            'id' => 1234,
+                            'licence' => [ 'id' => 7 ]
+                        ]
+                    ));
+                $dsMock = $this->getMock('\StdClass', ['get']);
+                $dsMock->expects($this->any())
+                    ->method('get')
+                    ->with('Olcs\Service\Data\Cases')
+                    ->will($this->returnValue($caseMock));
+                return $dsMock;
             default:
                 throw new \Exception("Service Locator " . $service . " not mocked");
         }

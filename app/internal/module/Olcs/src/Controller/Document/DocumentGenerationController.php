@@ -186,7 +186,7 @@ class DocumentGenerationController extends AbstractDocumentController
                 $queryData['licence'] = $this->getLicenceIdForApplication();
                 break;
             case 'case':
-                $data['licence'] = $this->getLicenceIdForCase();
+                $queryData['licence'] = $this->getLicenceIdForCase();
                 break;
             default:
                 break;
