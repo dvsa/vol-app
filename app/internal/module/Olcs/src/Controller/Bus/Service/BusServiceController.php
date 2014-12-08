@@ -48,7 +48,7 @@ class BusServiceController extends BusController
     {
         return $this->redirectToRoute('licence/bus-details', [], [], true);
     }
-    
+
     /**
      * Map the data on load
      *

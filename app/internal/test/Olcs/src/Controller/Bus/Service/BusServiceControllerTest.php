@@ -46,8 +46,12 @@ class BusServiceControllerTest extends AbstractHttpControllerTestCase
         );
 
         $mockRedirectPlugin = $mockPluginManager->get('redirect', '');
-        $mockRedirectPlugin->shouldReceive('toRoute')->with('licence/bus-details', [], [],
-            true)->andReturn('redirectResponse');
+        $mockRedirectPlugin->shouldReceive('toRoute')->with(
+            'licence/bus-details',
+            [],
+            [],
+            true
+        )->andReturn('redirectResponse');
 
         $this->sut->setPluginManager($mockPluginManager);
         $this->assertEquals('redirectResponse', $this->sut->redirectToIndex());
@@ -93,12 +97,16 @@ class BusServiceControllerTest extends AbstractHttpControllerTestCase
 
         $mockFormHelper = m::mock('Common\Form\View\Helper\Form');
         $mockFormHelper->shouldReceive('createForm')->with('BusRegisterService')->andReturn($mockForm);
-        $mockFormHelper->shouldReceive('populateFormTable')->with(m::type('string'),
-            m::type('array'))->andReturn($mockForm);
+        $mockFormHelper->shouldReceive('populateFormTable')->with(
+            m::type('string'),
+            m::type('array')
+        )->andReturn($mockForm);
 
         $mockTableService = m::mock('\Common\Service\Table\TableFactory');
-        $mockTableService->shouldReceive('prepareTable')->with(m::type('string'),
-            m::type('array'))->andReturn(['tabledata']);
+        $mockTableService->shouldReceive('prepareTable')->with(
+            m::type('string'),
+            m::type('array')
+        )->andReturn(['tabledata']);
 
         $mockRestHelper = m::mock('RestHelper');
         $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn(['Results' => []]);
