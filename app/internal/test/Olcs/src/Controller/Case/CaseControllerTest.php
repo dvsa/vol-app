@@ -19,6 +19,8 @@ use Olcs\TestHelpers\ControllerPluginManagerHelper;
  */
 class CaseControllerTest extends ControllerTestAbstract
 {
+    use \Mockery\Adapter\Phpunit\MockeryTestCaseTrait;
+
     protected $testClass = 'Olcs\Controller\Cases\CaseController';
 
     protected $proxyMethdods = [
@@ -251,6 +253,174 @@ class CaseControllerTest extends ControllerTestAbstract
 
         $view = $sut->addAction();
         $this->createAddEditAssertions('layout/' . $pageLayout, $view, $addEditHelper, $mockServiceManager);
+    }
+
+    public function documentsActionProvider() {
+        return [
+            [7],
+            [null] // tests if licence id is ommitted from url
+        ];
+    }
+    /**
+     * Tests the document list action
+     *
+     * @dataProvider documentsActionProvider
+     */
+    public function testDocumentsAction($licenceId)
+    {
+        $sut = $this->getSut();
+
+        $caseId = 28;
+
+        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
+            ['params' => 'Params', 'url' => 'Url']
+        );
+        $mockParams = $mockPluginManager->get('params', '');
+        $mockParams->shouldReceive('fromQuery')->with('case', m::any())->andReturn($caseId);
+        $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
+        $mockParams->shouldReceive('fromQuery')->with('licence', m::any())->andReturn($licenceId);
+        $mockParams->shouldReceive('fromRoute')->with('licence', m::any())->andReturn($licenceId);
+        $sut->setPluginManager($mockPluginManager);
+
+        // We can mock/stub all the service calls that generate the table and
+        // form content, this is all in the DocumentSearchTrait that is well
+        // tested elsewhere
+        ////////////////////////////////////////////////////////////////////////
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('Table')
+            ->andReturn(
+                m::mock('\Common\Service\Table')
+                    ->shouldReceive('buildTable')
+                    ->andReturn(
+                        m::mock('Table')
+                            ->shouldReceive('render')
+                            ->getMock()
+                    )
+                    ->getMock()
+            );
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')
+            ->andReturn($this->getMockRestHelperForDocuments());
+        $mockServiceManager->shouldReceive('get')->with('Script')
+            ->andReturn(
+                m::mock('\Common\Service\Script\ScriptHelper')
+                    ->shouldReceive('loadFiles')
+                    ->with(['documents', 'table-actions'])
+                    ->getMock()
+            );
+
+        $mockServiceManager->shouldReceive('get')->with('FormAnnotationBuilder');
+        $mockServiceManager->shouldReceive('get')->with('Helper\String')
+            ->andReturn(
+                m::mock('\StdClass')
+                    ->shouldReceive('dashToCamel')
+                    ->getMock()
+            );
+        $mockServiceManager->shouldReceive('get')->with('OlcsCustomForm')
+            ->andReturn(
+                m::mock('\StdClass')
+                    ->shouldReceive('createForm')
+                    ->with('documents-home')
+                    ->andReturn($this->getFormStub())
+                    ->getMock()
+            );
+
+        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')
+            ->andReturn(
+                m::mock('\StdClass')
+                    ->shouldReceive('get')
+                    ->with('Olcs\Service\Data\Cases')
+                    ->andReturn(
+                        m::mock('Olcs\Service\Data\Cases')
+                            ->shouldReceive('fetchCaseData')
+                            ->with($caseId)
+                            ->andReturn(
+                                [
+                                    'id' => $caseId,
+                                    'licence' => [
+                                        'id' => 7
+                                    ]
+                                ]
+                            )
+                            ->getMock()
+                    )
+                    ->getMock()
+            );
+
+        $sut->setServiceLocator($mockServiceManager);
+        ////////////////////////////////////////////////////////////////////////
+
+        $view = $sut->documentsAction();
+
+        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $view);
+    }
+
+    /**
+     * Return a form that will allow you to do pretty much anything
+     */
+    protected function getFormStub()
+    {
+        return m::mock('\Zend\Form\Form')
+            ->shouldReceive('get')
+            ->andReturn(
+                m::mock('\StdClass')
+                    ->shouldReceive('setValueOptions')
+                    ->andReturnSelf()
+                    ->getMock()
+            )
+            ->getMock()
+            ->shouldDeferMissing();
+    }
+
+    protected function getMockRestHelperForDocuments() {
+        return m::mock('RestHelper')
+            ->shouldReceive('makeRestCall')
+            ->with(
+                'DocumentSearchView',
+                'GET',
+                [
+                    'sort' => "issuedDate",
+                    'order' => "DESC",
+                    'page' => 1,
+                    'limit' => 10,
+                    'licenceId' => 7
+                ],
+                m::any() // last param is usually a blank bundle specifier
+            )
+            ->shouldReceive('makeRestCall')
+            ->with(
+                'Category',
+                'GET',
+                [
+                    'limit' => 100,
+                    'sort' => 'description'
+                ],
+                m::any()
+            )
+            ->shouldReceive('makeRestCall')
+            ->with(
+                'DocumentSubCategory',
+                'GET',
+                [
+                    'sort'      => "description",
+                    'order'     => "DESC",
+                    'page'      => 1,
+                    'limit'     => 100,
+                    'licenceId' => 7
+                ],
+                m::any()
+            )
+            ->shouldReceive('makeRestCall')
+            ->with(
+                'RefData',
+                'GET',
+                [
+                    'refDataCategoryId' => 'document_type',
+                    'limit'=>100,
+                    'sort'=>'description'
+                ],
+                m::any()
+            )
+            ->getMock();
     }
 
     /**
