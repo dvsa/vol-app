@@ -7,6 +7,12 @@ return array(
     'Annotation' => false,
     'CommonTest\Traits\MockDateTrait' => $rootPath . '/test/../vendor/olcs/OlcsCommon/test/Common/src/Common/Traits'
         . '/MockDateTrait.php',
+    'Common\Controller\Lva\AbstractControllerFactory' => $rootPath . '/vendor/olcs/OlcsCommon/Common/src/Common'
+        . '/Controller/Lva/AbstractControllerFactory.php',
+    'Common\Controller\Lva\Interfaces\TypeOfLicenceValidationAdaptorAwareInterface' => $rootPath . '/vendor/olcs'
+        . '/OlcsCommon/Common/src/Common/Controller/Lva/Interfaces/TypeOfLicenceValidationAdaptorAwareInterface.php',
+    'Common\Controller\Lva\Interfaces\TypeOfLicenceValidationAdaptorInterface' => $rootPath . '/vendor/olcs/OlcsCommon'
+        . '/Common/src/Common/Controller/Lva/Interfaces/TypeOfLicenceValidationAdaptorInterface.php',
     'Common\Controller\Lva\Traits\VehicleFilterTrait' => $rootPath . '/vendor/olcs/OlcsCommon/Common/src/Common'
         . '/Controller/Lva/Traits/VehicleFilterTrait.php',
     'Common\Form\Model\Form\AdminDiscPrinting' => false,
@@ -356,7 +362,9 @@ return array(
     'OlcsTest\Data\Object\Search\SearchAbstractTest' => $rootPath . '/test/Olcs/src/Data/Object/Search'
         . '/SearchAbstractTest.php',
     'Olcs\Controller\Application\Processing\ApplicationProcessingNoteController' => false,
+    'Olcs\Controller\Bus\Service\BusServiceController' => false,
     'Olcs\Controller\Lva\Application' => false,
+    'Olcs\Controller\Traits\DocumentActionTrait' => false,
     'Olcs\Filter\SubmissionSection\Penalties' => false,
     'Olcs\Form\Model\Fieldset\PublishActions' => false,
     'Olcs\Form\Model\Fieldset\TransportManagerActions' => false,
