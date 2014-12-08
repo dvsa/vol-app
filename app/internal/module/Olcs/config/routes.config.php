@@ -626,7 +626,43 @@ $routes = [
                 'controller' => 'CaseController',
                 'action' => 'documents'
             ]
-        ]
+        ],
+        'may_terminate' => true,
+        'child_routes' => [
+            'generate' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/generate[/:tmpId]',
+                    'defaults' => [
+                        'type' => 'case',
+                        'controller' => 'DocumentGenerationController',
+                        'action' => 'generate'
+                    ]
+                ],
+            ],
+            'finalise' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/finalise/:tmpId',
+                    'defaults' => [
+                        'type' => 'case',
+                        'controller' => 'DocumentFinaliseController',
+                        'action' => 'finalise'
+                    ]
+                ],
+            ],
+            'upload' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/upload',
+                    'defaults' => [
+                        'type' => 'case',
+                        'controller' => 'DocumentUploadController',
+                        'action' => 'upload'
+                    ]
+                ],
+            ],
+        ],
     ],
     'entity_lists' => [
         'type' => 'segment',

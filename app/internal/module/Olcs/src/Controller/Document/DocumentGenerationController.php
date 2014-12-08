@@ -28,7 +28,8 @@ class DocumentGenerationController extends AbstractDocumentController
      */
     private $categoryMap = [
         'licence' => 'Licensing',
-        'application' => 'Licensing'
+        'application' => 'Licensing',
+        'case' => 'Licensing',
     ];
 
     /**
@@ -183,6 +184,9 @@ class DocumentGenerationController extends AbstractDocumentController
         switch ($routeParams['type']) {
             case 'application':
                 $queryData['licence'] = $this->getLicenceIdForApplication();
+                break;
+            case 'case':
+                $data['licence'] = $this->getLicenceIdForCase();
                 break;
             default:
                 break;

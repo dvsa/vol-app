@@ -139,6 +139,11 @@ class CaseController extends OlcsController\CrudAbstract
         'transportManager'
     ];
 
+    /**
+     * @var int $licenceId cache of licence id for a given case
+     */
+    protected $licenceId;
+
     public function redirectAction()
     {
         return $this->redirectToRoute('case', ['action' => 'details'], [], true);
@@ -253,7 +258,7 @@ class CaseController extends OlcsController\CrudAbstract
     {
         return array(
             'case' => $this->getFromRoute('case'),
-            'licence' => $this->getFromRoute('licence')
+            'licence' => $this->getLicenceIdForCase()
         );
     }
 
@@ -264,12 +269,7 @@ class CaseController extends OlcsController\CrudAbstract
      */
     protected function getDocumentView()
     {
-        $licenceId = $this->getQueryOrRouteParam('licence');
-
-        if (empty($licenceId)) {
-            $case = $this->getCase();
-            $licenceId = $case['licence']['id'];
-        }
+        $licenceId = $this->getLicenceIdForCase();
 
         // caution, if $licenceId is empty we get ALL documents
         // AC says this will be addressed in later stories
@@ -291,5 +291,19 @@ class CaseController extends OlcsController\CrudAbstract
         $this->setPageLayoutInner(null);
 
         return $this->render($view);
+    }
+
+    /**
+     * Gets licence id from route or backend, caching it in member variable
+     */
+    protected function getLicenceIdForCase() {
+        if (is_null($this->licenceId)) {
+            $this->licenceId = $this->getQueryOrRouteParam('licence');
+            if (empty($this->licenceId)) {
+                $case = $this->getCase();
+                $this->licenceId = $case['licence']['id'];
+            }
+        }
+        return $this->licenceId;
     }
 }
