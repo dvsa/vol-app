@@ -118,6 +118,34 @@ class DiscPrintingController extends AbstractController
             $discsToPrint
         );
 
+        $queries = [];
+        $bookmarks = [];
+        foreach ($discsToPrint as $disc) {
+            $id = $disc['licence']['id'];
+
+            if (!isset($bookmarks[$id])) {
+                $bookmarks[$id] = [
+                    'NO_DISCS_PRINTED' => ['count' => 0]
+                ];
+            }
+
+            $bookmarks[$id]['NO_DISCS_PRINTED']['count'] ++;
+
+            $queries[$id] = [
+                'licence' => $id,
+                'user'    => $this->getLoggedInUser()
+            ];
+        }
+
+        // generate vehicle list for all licences which are affected by new discs
+        $this->getServiceLocator()
+            ->get('VehicleList')
+            ->setLoggedInUser($this->getLoggedInUser())
+            ->setQueryData($queries)
+            ->setBookmarkData($bookmarks)
+            ->setTemplate('PSVVehiclesList')
+            ->generateVehicleList();
+
         $discService->setIsPrintingOn($discsToPrint);
     }
 

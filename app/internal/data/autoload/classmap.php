@@ -53,6 +53,11 @@ return array(
     'Common\Service\DoctrineModule\Form\Element\ObjectMultiCheckboxDoctrineModuleService' => false,
     'Common\Service\DoctrineModule\Form\Element\ObjectRadioDoctrineModuleService' => false,
     'Common\Service\DoctrineModule\Form\Element\ObjectSelectDoctrineModuleService' => false,
+    'Common\Service\Document\Bookmark\LicMailAddress' => false,
+    'Common\Service\Document\Bookmark\LicenceNumber1' => false,
+    'Common\Service\Document\Bookmark\NoDiscsPrinted' => $rootPath . '/vendor/olcs/OlcsCommon/Common/src/Common/Service'
+        . '/Document/Bookmark/NoDiscsPrinted.php',
+    'Common\Service\Document\Bookmark\TradingAs' => false,
     'Common\Service\DynamicMultiCheckbox' => false,
     'Common\Service\DynamicRadio' => false,
     'Common\Service\DynamicSelect' => false,
@@ -83,7 +88,6 @@ return array(
     'Common\Service\Zend\I18n\Translator\TranslatorInterfaceZendService' => false,
     'Common\Service\Zend\ModuleManager\ModuleManagerZendService' => false,
     'Common\Service\Zend\Stdlib\Hydrator\ArraySerializableZendService' => false,
-    'Common\Service\\Common\Form\Elements\InputFilters\CheckboxService' => false,
     'Common\Service\\Zend\Form\Element\ButtonService' => false,
     'Common\Service\\Zend\Form\Element\SelectService' => false,
     'Common\Service\commonformelementdynamicmulticheckbox' => false,
@@ -124,6 +128,22 @@ return array(
     'Common\Service\zendformform' => false,
     'Common\View\Helper\PluginManagerAwareTrait' => $rootPath . '/vendor/olcs/OlcsCommon/Common/src/Common/View/Helper'
         . '/PluginManagerAwareTrait.php',
+    'CpmsClient\Authenticate\IdentityProviderInterface' => $rootPath . '/vendor/cpms/client/src/CpmsClient/Authenticate'
+        . '/IdentityProviderInterface.php',
+    'CpmsClient\Authenticate\IdentityProviderTrait' => $rootPath . '/vendor/cpms/client/src/CpmsClient/Authenticate'
+        . '/IdentityProviderTrait.php',
+    'CpmsClient\Client\ClientOptions' => $rootPath . '/vendor/cpms/client/src/CpmsClient/Client/ClientOptions.php',
+    'CpmsClient\Client\HttpRestJsonClient' => $rootPath . '/vendor/cpms/client/src/CpmsClient/Client'
+        . '/HttpRestJsonClient.php',
+    'CpmsClient\Client\RestClientFactory' => $rootPath . '/vendor/cpms/client/src/CpmsClient/Client'
+        . '/RestClientFactory.php',
+    'CpmsClient\Data\AccessToken' => $rootPath . '/vendor/cpms/client/src/CpmsClient/Data/AccessToken.php',
+    'CpmsClient\Service\ApiDomainServiceFactory' => $rootPath . '/vendor/cpms/client/src/CpmsClient/Service'
+        . '/ApiDomainServiceFactory.php',
+    'CpmsClient\Service\ApiService' => $rootPath . '/vendor/cpms/client/src/CpmsClient/Service/ApiService.php',
+    'CpmsClient\Service\ApiServiceFactory' => $rootPath . '/vendor/cpms/client/src/CpmsClient/Service'
+        . '/ApiServiceFactory.php',
+    'CpmsClient\Utility\Util' => $rootPath . '/vendor/cpms/client/src/CpmsClient/Utility/Util.php',
     'DataHelper' => false,
     'DoctrineModule\Module' => $rootPath . '/vendor/doctrine/doctrine-module/src/DoctrineModule/Module.php',
     'DoctrineModule\Options\Cache' => $rootPath . '/vendor/doctrine/doctrine-module/src/DoctrineModule/Options'
@@ -400,6 +420,52 @@ return array(
         . '/ZendDeveloperTools/ReportInterface.php',
     'Zend\Cache\Service\StorageCacheAbstractServiceFactory' => $rootPath . '/vendor/zendframework/zendframework/library'
         . '/Zend/Cache/Service/StorageCacheAbstractServiceFactory.php',
+    'Zend\Cache\StorageFactory' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Cache'
+        . '/StorageFactory.php',
+    'Zend\Cache\Storage\AdapterPluginManager' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Cache'
+        . '/Storage/AdapterPluginManager.php',
+    'Zend\Cache\Storage\Adapter\AbstractAdapter' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Cache'
+        . '/Storage/Adapter/AbstractAdapter.php',
+    'Zend\Cache\Storage\Adapter\AdapterOptions' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Cache'
+        . '/Storage/Adapter/AdapterOptions.php',
+    'Zend\Cache\Storage\Adapter\Filesystem' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Cache'
+        . '/Storage/Adapter/Filesystem.php',
+    'Zend\Cache\Storage\Adapter\FilesystemOptions' => $rootPath . '/vendor/zendframework/zendframework/library/Zend'
+        . '/Cache/Storage/Adapter/FilesystemOptions.php',
+    'Zend\Cache\Storage\AvailableSpaceCapableInterface' => $rootPath . '/vendor/zendframework/zendframework/library'
+        . '/Zend/Cache/Storage/AvailableSpaceCapableInterface.php',
+    'Zend\Cache\Storage\ClearByNamespaceInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend'
+        . '/Cache/Storage/ClearByNamespaceInterface.php',
+    'Zend\Cache\Storage\ClearByPrefixInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Cache'
+        . '/Storage/ClearByPrefixInterface.php',
+    'Zend\Cache\Storage\ClearExpiredInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Cache'
+        . '/Storage/ClearExpiredInterface.php',
+    'Zend\Cache\Storage\Event' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Cache/Storage'
+        . '/Event.php',
+    'Zend\Cache\Storage\FlushableInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Cache'
+        . '/Storage/FlushableInterface.php',
+    'Zend\Cache\Storage\IterableInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Cache'
+        . '/Storage/IterableInterface.php',
+    'Zend\Cache\Storage\OptimizableInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Cache'
+        . '/Storage/OptimizableInterface.php',
+    'Zend\Cache\Storage\PluginManager' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Cache/Storage'
+        . '/PluginManager.php',
+    'Zend\Cache\Storage\Plugin\AbstractPlugin' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Cache'
+        . '/Storage/Plugin/AbstractPlugin.php',
+    'Zend\Cache\Storage\Plugin\PluginInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Cache'
+        . '/Storage/Plugin/PluginInterface.php',
+    'Zend\Cache\Storage\Plugin\PluginOptions' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Cache'
+        . '/Storage/Plugin/PluginOptions.php',
+    'Zend\Cache\Storage\Plugin\Serializer' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Cache'
+        . '/Storage/Plugin/Serializer.php',
+    'Zend\Cache\Storage\PostEvent' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Cache/Storage'
+        . '/PostEvent.php',
+    'Zend\Cache\Storage\StorageInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Cache'
+        . '/Storage/StorageInterface.php',
+    'Zend\Cache\Storage\TaggableInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Cache'
+        . '/Storage/TaggableInterface.php',
+    'Zend\Cache\Storage\TotalSpaceCapableInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend'
+        . '/Cache/Storage/TotalSpaceCapableInterface.php',
     'Zend\Code\Annotation\AnnotationCollection' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Code'
         . '/Annotation/AnnotationCollection.php',
     'Zend\Code\Annotation\AnnotationManager' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Code'
@@ -621,10 +687,14 @@ return array(
     'Zend\Http\Client' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Http/Client.php',
     'Zend\Http\Client\Adapter\AdapterInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Http'
         . '/Client/Adapter/AdapterInterface.php',
+    'Zend\Http\Client\Adapter\Curl' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Http/Client'
+        . '/Adapter/Curl.php',
     'Zend\Http\Client\Adapter\Exception\ExceptionInterface' => $rootPath . '/vendor/zendframework/zendframework/library'
         . '/Zend/Http/Client/Adapter/Exception/ExceptionInterface.php',
     'Zend\Http\Client\Adapter\Exception\RuntimeException' => $rootPath . '/vendor/zendframework/zendframework/library'
         . '/Zend/Http/Client/Adapter/Exception/RuntimeException.php',
+    'Zend\Http\Client\Adapter\Exception\TimeoutException' => $rootPath . '/vendor/zendframework/zendframework/library'
+        . '/Zend/Http/Client/Adapter/Exception/TimeoutException.php',
     'Zend\Http\Client\Adapter\Socket' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Http/Client'
         . '/Adapter/Socket.php',
     'Zend\Http\Client\Adapter\StreamInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Http'
@@ -653,6 +723,8 @@ return array(
         . '/library/Zend/Http/Header/Accept/FieldValuePart/AcceptFieldValuePart.php',
     'Zend\Http\Header\Accept\FieldValuePart\LanguageFieldValuePart' => $rootPath . '/vendor/zendframework/zendframework'
         . '/library/Zend/Http/Header/Accept/FieldValuePart/LanguageFieldValuePart.php',
+    'Zend\Http\Header\Authorization' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Http/Header'
+        . '/Authorization.php',
     'Zend\Http\Header\CacheControl' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Http/Header'
         . '/CacheControl.php',
     'Zend\Http\Header\Connection' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Http/Header'
@@ -1034,6 +1106,14 @@ return array(
         . '/View/HelperConfig.php',
     'Zend\Serializer\AdapterPluginManager' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Serializer'
         . '/AdapterPluginManager.php',
+    'Zend\Serializer\Adapter\AbstractAdapter' => $rootPath . '/vendor/zendframework/zendframework/library/Zend'
+        . '/Serializer/Adapter/AbstractAdapter.php',
+    'Zend\Serializer\Adapter\AdapterInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend'
+        . '/Serializer/Adapter/AdapterInterface.php',
+    'Zend\Serializer\Adapter\PhpSerialize' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Serializer'
+        . '/Adapter/PhpSerialize.php',
+    'Zend\Serializer\Serializer' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Serializer'
+        . '/Serializer.php',
     'Zend\ServiceManager\AbstractFactoryInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend'
         . '/ServiceManager/AbstractFactoryInterface.php',
     'Zend\ServiceManager\AbstractPluginManager' => $rootPath . '/vendor/zendframework/zendframework/library/Zend'
@@ -1171,6 +1251,8 @@ return array(
     'Zend\Validator\EmailAddress' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Validator'
         . '/EmailAddress.php',
     'Zend\Validator\Explode' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Validator/Explode.php',
+    'Zend\Validator\GreaterThan' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Validator'
+        . '/GreaterThan.php',
     'Zend\Validator\Hostname' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Validator/Hostname.php',
     'Zend\Validator\InArray' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Validator/InArray.php',
     'Zend\Validator\Ip' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Validator/Ip.php',
