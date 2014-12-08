@@ -296,7 +296,8 @@ class CaseController extends OlcsController\CrudAbstract
     /**
      * Gets licence id from route or backend, caching it in member variable
      */
-    protected function getLicenceIdForCase() {
+    protected function getLicenceIdForCase()
+    {
         if (is_null($this->licenceId)) {
             $this->licenceId = $this->getQueryOrRouteParam('licence');
             if (empty($this->licenceId)) {

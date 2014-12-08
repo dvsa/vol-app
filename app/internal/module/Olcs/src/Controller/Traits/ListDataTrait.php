@@ -20,9 +20,13 @@ trait ListDataTrait
      * a select. Optionally provide some search data to filter the
      * returned data too.
      */
-    protected function getListDataFromBackend($entity, $data = array(),
-        $titleKey = 'name', $primaryKey = 'id', $showAll = 'All')
-    {
+    protected function getListDataFromBackend(
+        $entity,
+        $data = array(),
+        $titleKey = 'name',
+        $primaryKey = 'id',
+        $showAll = 'All'
+    ) {
         $data['limit'] = $this->max_list_data_limit;
         $data['sort'] = $titleKey;  // AC says always sort alphabetically
         $response = $this->makeRestCall($entity, 'GET', $data);

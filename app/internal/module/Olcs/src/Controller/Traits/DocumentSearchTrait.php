@@ -67,9 +67,6 @@ trait DocumentSearchTrait
 
         // insert relevant data into the corresponding form inputs
         foreach ($selects as $name => $options) {
-
-            if (empty($options)) continue;
-
             $form->get($name)
                 ->setValueOptions($options);
         }
