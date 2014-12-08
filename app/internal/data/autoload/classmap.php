@@ -79,12 +79,6 @@ return array(
     'Common\Service\Zend\I18n\Translator\TranslatorInterfaceZendService' => false,
     'Common\Service\Zend\ModuleManager\ModuleManagerZendService' => false,
     'Common\Service\Zend\Stdlib\Hydrator\ArraySerializableZendService' => false,
-    'Common\Service\\Common\Form\Elements\InputFilters\ActionButtonService' => false,
-    'Common\Service\\Common\Form\Elements\InputFilters\CheckboxService' => false,
-    'Common\Service\\Common\Form\Elements\InputFilters\NoRenderService' => false,
-    'Common\Service\\Common\Form\Elements\Types\TableService' => false,
-    'Common\Service\\Zend\Form\Element\ButtonService' => false,
-    'Common\Service\\Zend\Form\Element\SelectService' => false,
     'Common\Service\commonformelementdynamicradio' => false,
     'Common\Service\commonformelementdynamicselect' => false,
     'Common\Service\commonformelementscustomdateselect' => false,
@@ -539,6 +533,12 @@ return array(
     'Zend\Form\Element\Text' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form/Element/Text.php',
     'Zend\Form\Element\Textarea' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form/Element'
         . '/Textarea.php',
+    'Zend\Form\Exception\ExceptionInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form'
+        . '/Exception/ExceptionInterface.php',
+    'Zend\Form\Exception\InvalidArgumentException' => $rootPath . '/vendor/zendframework/zendframework/library/Zend'
+        . '/Form/Exception/InvalidArgumentException.php',
+    'Zend\Form\Exception\InvalidElementException' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form'
+        . '/Exception/InvalidElementException.php',
     'Zend\Form\Factory' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form/Factory.php',
     'Zend\Form\Fieldset' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form/Fieldset.php',
     'Zend\Form\FieldsetInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form'
@@ -834,6 +834,8 @@ return array(
         . '/Plugin/Url.php',
     'Zend\Mvc\DispatchListener' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Mvc'
         . '/DispatchListener.php',
+    'Zend\Mvc\Exception\DomainException' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Mvc/Exception'
+        . '/DomainException.php',
     'Zend\Mvc\Exception\ExceptionInterface' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Mvc'
         . '/Exception/ExceptionInterface.php',
     'Zend\Mvc\Exception\InvalidArgumentException' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Mvc'
