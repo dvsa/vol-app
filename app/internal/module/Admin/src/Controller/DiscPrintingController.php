@@ -144,6 +144,7 @@ class DiscPrintingController extends AbstractController
             ->setQueryData($queries)
             ->setBookmarkData($bookmarks)
             ->setTemplate('PSVVehiclesList')
+            ->setDescription('PSV Vehicle List')
             ->generateVehicleList();
 
         $discService->setIsPrintingOn($discsToPrint);
@@ -181,6 +182,7 @@ class DiscPrintingController extends AbstractController
             ->setLoggedInUser($this->getLoggedInUser())
             ->setQueryData($queries)
             ->setTemplate('GVVehiclesList')
+            ->setDescription('Goods Vehicle List')
             ->generateVehicleList();
 
         $discService->setIsPrintingOn($discsToPrint);
