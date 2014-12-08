@@ -27,7 +27,8 @@ class DocumentGenerationController extends AbstractDocumentController
      * how to map route param types to category names
      */
     private $categoryMap = [
-        'licence' => 'Licensing'
+        'licence' => 'Licensing',
+        'application' => 'Licensing'
     ];
 
     /**
@@ -178,6 +179,15 @@ class DocumentGenerationController extends AbstractDocumentController
             ]
         );
 
+        // we need to link certain documents to multiple IDs
+        switch ($routeParams['type']) {
+            case 'application':
+                $queryData['licence'] = $this->getLicenceIdForApplication();
+                break;
+            default:
+                break;
+        }
+
         /**
          * 1) read the template from the content store
          */
@@ -242,10 +252,7 @@ class DocumentGenerationController extends AbstractDocumentController
             ]
         );
 
-        return $this->redirect()->toRoute(
-            $routeParams['type'] . '/documents/finalise',
-            $redirectParams
-        );
+        return $this->redirectToDocumentRoute($routeParams['type'], 'finalise', $redirectParams);
     }
 
     public function listTemplateBookmarksAction()
