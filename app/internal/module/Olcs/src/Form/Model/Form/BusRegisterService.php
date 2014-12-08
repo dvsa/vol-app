@@ -9,7 +9,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("bus-register-service")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true, "label":"Register Service"})
+ * @Form\Options({"prefer_form_input_filter": true, "label":"Register service", "override_form_label": true})
  */
 class BusRegisterService
 {
