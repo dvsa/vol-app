@@ -58,7 +58,7 @@ class LicenceProcessingPublicationsController extends AbstractLicenceProcessingC
         );
 
         $view->setVariables(['table' => $table]);
-        $view->setTemplate('licence/processing/layout');
+        $view->setTemplate('table');
 
         return $this->renderView($view);
     }

@@ -21,10 +21,7 @@ class DocumentFinaliseController extends AbstractDocumentController
     {
         $routeParams = $this->params()->fromRoute();
         if ($this->isButtonPressed('back')) {
-            return $this->redirect()->toRoute(
-                $routeParams['type'] . '/documents/generate',
-                $routeParams
-            );
+            return $this->redirectToDocumentRoute($routeParams['type'], 'generate', $routeParams);
         }
         $data = $this->fetchTmpData();
 
@@ -89,10 +86,7 @@ class DocumentFinaliseController extends AbstractDocumentController
             // @TODO this needs to be handled better; by the time we get here we
             // should *know* that our files are valid
             $this->addErrorMessage('Sorry; there was a problem uploading the file. Please try again.');
-            return $this->redirect()->toRoute(
-                $type . '/documents/finalise',
-                $routeParams
-            );
+            return $this->redirectToDocumentRoute($type, 'finalise', $routeParams);
         }
 
         $uploader = $this->getUploader();
@@ -102,10 +96,7 @@ class DocumentFinaliseController extends AbstractDocumentController
             $file = $uploader->upload();
         } catch (FileException $ex) {
             $this->addErrorMessage('The document store is unavailable. Please try again later');
-            return $this->redirect()->toRoute(
-                $type . '/documents/finalise',
-                $routeParams
-            );
+            return $this->redirectToDocumentRoute($type, 'finalise', $routeParams);
         }
 
         $template = $this->makeRestCall(
@@ -135,6 +126,15 @@ class DocumentFinaliseController extends AbstractDocumentController
             'size'                => $file->getSize()
         ];
 
+        // we need to link certain documents to multiple IDs
+        switch ($type) {
+            case 'application':
+                $data['licence'] = $this->getLicenceIdForApplication();
+                break;
+            default:
+                break;
+        }
+
         $data[$type] = $routeParams[$type];
 
         $this->makeRestCall(
@@ -145,9 +145,6 @@ class DocumentFinaliseController extends AbstractDocumentController
 
         $this->removeTmpData();
 
-        return $this->redirect()->toRoute(
-            $type . '/documents',
-            $routeParams
-        );
+        return $this->redirectToDocumentRoute($type, null, $routeParams);
     }
 }

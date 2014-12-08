@@ -16,6 +16,14 @@ use Olcs\Controller\AbstractController;
 abstract class AbstractDocumentController extends AbstractController
 {
     /**
+     * For redirects
+     */
+    protected $documentRouteMap = [
+        'licence' => 'licence/documents',
+        'application' => 'lva-application/documents',
+    ];
+
+    /**
      * Where to store any temporarily generated documents
      */
     const TMP_STORAGE_PATH = 'tmp';
@@ -73,5 +81,22 @@ abstract class AbstractDocumentController extends AbstractController
     protected function formatFilename($input)
     {
         return str_replace([' ', '/'], '_', $input);
+    }
+
+    protected function redirectToDocumentRoute($type, $action, $routeParams)
+    {
+        if (!is_null($action)) {
+            $route = $this->documentRouteMap[$type].'/'.$action;
+        } else {
+            $route = $this->documentRouteMap[$type];
+        }
+        return $this->redirect()->toRoute($route, $routeParams);
+    }
+
+    protected function getLicenceIdForApplication()
+    {
+        $applicationId = $this->params()->fromRoute('application');
+        return $this->getServiceLocator()->get('Entity\Application')
+            ->getLicenceIdForApplication($applicationId);
     }
 }
