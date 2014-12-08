@@ -163,4 +163,15 @@ class ImpoundingController extends OlcsController\CrudAbstract
 
         return parent::processSave($data);
     }
+
+    public function processLoad($data)
+    {
+        $data = parent::processLoad($data);
+
+        if (isset($data['fields']['piVenueOther']) && $data['fields']['piVenueOther'] != '') {
+            $data['fields']['piVenue'] = 'other';
+        }
+
+        return $data;
+    }
 }

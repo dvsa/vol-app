@@ -113,6 +113,7 @@ class ComplaintController extends OlcsController\CrudAbstract
             'case' => [],
             'complaintType' => [],
             'status' => [],
+            'complainantContactDetails' => [],
         )
     );
 }
