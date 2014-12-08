@@ -94,11 +94,13 @@ class BusServiceControllerTest extends AbstractHttpControllerTestCase
 
         $mockForm = m::mock('\Zend\Form\Form');
         $mockForm->shouldReceive('get')->with('conditions')->andReturn($mockConditionsFieldset);
+        $mockForm->shouldReceive('hasAttribute')->with('action')->andReturnNull();
+        $mockForm->shouldReceive('setAttribute')->with('action', '');
 
         $mockFormHelper = m::mock('Common\Form\View\Helper\Form');
         $mockFormHelper->shouldReceive('createForm')->with('BusRegisterService')->andReturn($mockForm);
         $mockFormHelper->shouldReceive('populateFormTable')->with(
-            m::type('string'),
+            m::type('object'),
             m::type('array')
         )->andReturn($mockForm);
 
