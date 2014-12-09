@@ -19,7 +19,7 @@ use Olcs\TestHelpers\ControllerPluginManagerHelper;
  */
 class CaseControllerTest extends ControllerTestAbstract
 {
-    use \Mockery\Adapter\Phpunit\MockeryTestCaseTrait;
+    use \OlcsTest\Traits\MockeryTestCaseTrait;
 
     protected $testClass = 'Olcs\Controller\Cases\CaseController';
 
