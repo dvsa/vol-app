@@ -8,8 +8,8 @@ return array(
             'title' => 'Pack name',
             'name' => 'filename',
             'formatter' => function () {
-                    return 'pack.zip';
-                }
+                return 'pack.zip';
+            }
         ),
         array(
             'title' => 'Type',

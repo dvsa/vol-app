@@ -5,6 +5,10 @@ namespace Olcs\Service;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Class Ebsr
+ * @package Olcs\Service
+ */
 class Ebsr implements FactoryInterface
 {
     /**
@@ -141,7 +145,6 @@ class Ebsr implements FactoryInterface
             'success' =>
                 $message . ($packResults['valid'] ? $validMessage : '') . ($packResults['errors'] ? $errorMessage : '')
         ];
-
 
         foreach ($packResults['messages'] as $pack => $errors) {
             $result['errors'][] = $pack . ': ' . implode(' ', $errors);
