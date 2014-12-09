@@ -15,6 +15,8 @@ trait ListDataTrait
      */
     private $max_list_data_limit = 100;
 
+    abstract public function makeRestCall($service, $method, $data, array $bundle = null);
+
     /**
      * Retrieve some data from the backend and convert it for use in
      * a select. Optionally provide some search data to filter the

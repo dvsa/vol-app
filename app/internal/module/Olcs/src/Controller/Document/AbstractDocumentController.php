@@ -100,6 +100,7 @@ abstract class AbstractDocumentController extends AbstractController
         return $this->getServiceLocator()->get('Entity\Application')
             ->getLicenceIdForApplication($applicationId);
     }
+
     protected function getLicenceIdForCase()
     {
         $caseId = $this->params()->fromRoute('case');
