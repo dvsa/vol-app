@@ -11,6 +11,9 @@
                 <?php if (!$current) : ?>
                     </a>
                 <?php endif; ?>
+                <?php if ($current && isset($filterForm)): ?>
+                    <?php echo $this->form($filterForm); ?>
+                <?php endif;?>
             </li>
         <?php endforeach; ?>
     </ul><!-- end .progress -->
