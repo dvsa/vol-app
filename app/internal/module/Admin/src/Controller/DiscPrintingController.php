@@ -189,7 +189,7 @@ class DiscPrintingController extends AbstractController
     {
         $bookmark = $this->templateParams[$type]['bookmark'];
         $filename = $this->templateParams[$type]['template'] . '.rtf';
-        $template = '/templates/' . $this->templateParams[$type]['template'] . '.rtf';
+        $template = '/templates/' . $filename;
 
         foreach ($discsToPrint as $disc) {
             $queryData[] = $disc['id'];
