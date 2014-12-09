@@ -437,6 +437,12 @@ return array(
                                                     'use_route_match' => true
                                                 )
                                             )
+                                        ),
+                                        array(
+                                            'id' => 'licence_bus_processing_register_history',
+                                            'label' => 'internal-licence-bus-processing-registration-history',
+                                            'route' => 'licence/bus-processing/registration-history',
+                                            'use_route_match' => true,
                                         )
                                     )
                                 ),

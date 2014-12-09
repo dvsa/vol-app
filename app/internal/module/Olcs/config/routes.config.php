@@ -841,6 +841,20 @@ $routes = [
                 ],
                 'may_terminate' => true,
                 'child_routes' => [
+                    'registration-history' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/registration-history',
+                            'defaults' => [
+                                'controller' => 'BusProcessingRegistrationHistoryController',
+                                'action' => 'index',
+                                'page' => 1,
+                                'limit' => 10,
+                                'sort' => 'priority',
+                                'order' => 'DESC'
+                            ]
+                        ],
+                    ],
                     'notes' => [
                         'type' => 'segment',
                         'options' => [
