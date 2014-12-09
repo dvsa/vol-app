@@ -1,9 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
     ],
-    "hash": "e6af5b4e4d02efa3f8b6741d2d199498",
+    "hash": "dc8fca9290becc91c22e4db371ab696f",
     "packages": [
         {
             "name": "cpms/client",
@@ -774,11 +775,11 @@
         },
         {
             "name": "olcs/OlcsCommon",
-            "version": "dev-develop",
+            "version": "dev-release",
             "source": {
                 "type": "git",
                 "url": "git@gitlab.clb.npm:olcs/olcs-common.git",
-                "reference": "61efd8002a02844c1871a787b0760d60a5ac6155"
+                "reference": "aa18ecc3386369799956c178c3f234f91a735b98"
             },
             "require": {
                 "cpms/client": "0.1.x-dev",
@@ -807,7 +808,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2014-12-05 11:53:45"
+            "time": "2014-12-08 16:20:22"
         },
         {
             "name": "olcs/autoload",
@@ -815,14 +816,14 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.clb.npm:olcs/olcs-autoload.git",
-                "reference": "4fb89cd4249e135fb66f873e96271c4dfdf67cda"
+                "reference": "7b3646d0930394dca35cd98c2d87b230c6202f5a"
             },
             "bin": [
                 "bin/autoload"
             ],
             "type": "library",
             "description": "OLCS optimised autoloader",
-            "time": "2014-12-02 13:04:31"
+            "time": "2014-12-08 09:43:41"
         },
         {
             "name": "olcs/olcs-logging",
@@ -919,12 +920,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Filesystem.git",
-                "reference": "490abed3170111ca6bd846f3b2927cbf27afac04"
+                "reference": "6900b6532e7445bd2ea06a148ac1a51d1a14d125"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Filesystem/zipball/490abed3170111ca6bd846f3b2927cbf27afac04",
-                "reference": "490abed3170111ca6bd846f3b2927cbf27afac04",
+                "url": "https://api.github.com/repos/symfony/Filesystem/zipball/6900b6532e7445bd2ea06a148ac1a51d1a14d125",
+                "reference": "6900b6532e7445bd2ea06a148ac1a51d1a14d125",
                 "shasum": ""
             },
             "require": {
@@ -957,7 +958,7 @@
             ],
             "description": "Symfony Filesystem Component",
             "homepage": "http://symfony.com",
-            "time": "2014-12-05 12:00:15"
+            "time": "2014-12-07 18:23:39"
         },
         {
             "name": "zendframework/zend-developer-tools",
@@ -2389,6 +2390,7 @@
         "olcs/olcs-testhelpers": 20,
         "johnkary/phpunit-speedtrap": 20
     },
+    "prefer-stable": false,
     "platform": {
         "php": ">=5.4"
     },

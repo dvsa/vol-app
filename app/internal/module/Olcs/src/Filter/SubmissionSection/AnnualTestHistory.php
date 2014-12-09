@@ -16,7 +16,7 @@ class AnnualTestHistory extends AbstractSubmissionSectionFilter
     public function filter($data = array())
     {
         return array(
-            'annualTestHistory' => $data['annualTestHistory']
+            'text' => $data['annualTestHistory']
         );
     }
 }
