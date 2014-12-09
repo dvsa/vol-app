@@ -33,13 +33,11 @@ class DiscPrintingController extends AbstractController
 
     private $templateParams = [
         'PSV' => [
-            'template' => '/templates/PSVDiscTemplate.rtf',
-            'filename' => 'PSVDiscTemplate.rtf',
+            'template' => 'PSVDiscTemplate',
             'bookmark' => 'Psv_Disc_Page'
         ],
         'Goods' => [
-            'template' => '/templates/GVDiscTemplate.rtf',
-            'filename' => 'GVDiscTemplate.rtf',
+            'template' => 'GVDiscTemplate',
             'bookmark' => 'Disc_List'
         ]
     ];
@@ -120,6 +118,33 @@ class DiscPrintingController extends AbstractController
             $discsToPrint
         );
 
+        $queries = [];
+        $bookmarks = [];
+        foreach ($discsToPrint as $disc) {
+            $id = $disc['licence']['id'];
+
+            if (!isset($bookmarks[$id])) {
+                $bookmarks[$id] = [
+                    'NO_DISCS_PRINTED' => ['count' => 0]
+                ];
+            }
+
+            $bookmarks[$id]['NO_DISCS_PRINTED']['count'] ++;
+
+            $queries[$id] = [
+                'licence' => $id,
+                'user'    => $this->getLoggedInUser()
+            ];
+        }
+
+        $this->getServiceLocator()
+            ->get('VehicleList')
+            ->setQueryData($queries)
+            ->setBookmarkData($bookmarks)
+            ->setTemplate('PSVVehiclesList')
+            ->setDescription('PSV Vehicle List')
+            ->generateVehicleList();
+
         $discService->setIsPrintingOn($discsToPrint);
     }
 
@@ -139,19 +164,23 @@ class DiscPrintingController extends AbstractController
             $discsToPrint
         );
 
-        $licenceIds = [];
+        $queries = [];
         foreach ($discsToPrint as $disc) {
-            $licenceIds[] = $disc['licenceVehicle']['licence']['id'];
+            $id = $disc['licenceVehicle']['licence']['id'];
+            $queries[$id] = [
+                'licence' => $id,
+                'user' => $this->getLoggedInUser()
+            ];
         }
 
-        $licenceIds = array_unique($licenceIds);
-
-        $vehicleListService = $this->getServiceLocator()->get('vehicleList');
-
         // generate vehicle list for all licences which are affected by new discs
-        $vehicleListService->setLicenceIds($licenceIds);
-        $vehicleListService->setLoggedInUser($this->getLoggedInUser());
-        $vehicleListService->generateVehicleList();
+
+        $this->getServiceLocator()
+            ->get('VehicleList')
+            ->setQueryData($queries)
+            ->setTemplate('GVVehiclesList')
+            ->setDescription('Goods Vehicle List')
+            ->generateVehicleList();
 
         $discService->setIsPrintingOn($discsToPrint);
     }
@@ -159,8 +188,8 @@ class DiscPrintingController extends AbstractController
     protected function printDiscs($type, $startNo, $discsToPrint)
     {
         $bookmark = $this->templateParams[$type]['bookmark'];
-        $filename = $this->templateParams[$type]['filename'];
-        $template = $this->templateParams[$type]['template'];
+        $filename = $this->templateParams[$type]['template'] . '.rtf';
+        $template = '/templates/' . $filename;
 
         foreach ($discsToPrint as $disc) {
             $queryData[] = $disc['id'];
