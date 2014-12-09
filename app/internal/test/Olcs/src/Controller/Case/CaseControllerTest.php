@@ -287,67 +287,48 @@ class CaseControllerTest extends ControllerTestAbstract
         // form content, this is all in the DocumentSearchTrait that is well
         // tested elsewhere
         ////////////////////////////////////////////////////////////////////////
-        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
-        $mockServiceManager->shouldReceive('get')->with('Table')
+
+        $sm = \OlcsTest\Bootstrap::getServiceManager();
+
+        $tableServiceMock = m::mock('\Common\Service\Table')
+            ->shouldReceive('buildTable')
             ->andReturn(
-                m::mock('\Common\Service\Table')
-                    ->shouldReceive('buildTable')
+                m::mock('Table')
+                    ->shouldReceive('render')
+                    ->getMock()
+            )
+            ->getMock();
+        $sm->setService('Table', $tableServiceMock);
+
+        $scriptHelperMock = m::mock('\Common\Service\Script\ScriptHelper')
+            ->shouldReceive('loadFiles')
+            ->with(['documents', 'table-actions'])
+            ->getMock();
+        $sm->setService('Script', $scriptHelperMock);
+
+        $sm->setService('Helper\Rest', $this->getMockRestHelperForDocuments());
+
+        $dsm = m::mock('\StdClass')
+            ->shouldReceive('get')
+            ->with('Olcs\Service\Data\Cases')
+            ->andReturn(
+                m::mock('Olcs\Service\Data\Cases')
+                    ->shouldReceive('fetchCaseData')
+                    ->with($caseId)
                     ->andReturn(
-                        m::mock('Table')
-                            ->shouldReceive('render')
-                            ->getMock()
+                        [
+                            'id' => $caseId,
+                            'licence' => [
+                                'id' => 7
+                            ]
+                        ]
                     )
                     ->getMock()
-            );
-        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')
-            ->andReturn($this->getMockRestHelperForDocuments());
-        $mockServiceManager->shouldReceive('get')->with('Script')
-            ->andReturn(
-                m::mock('\Common\Service\Script\ScriptHelper')
-                    ->shouldReceive('loadFiles')
-                    ->with(['documents', 'table-actions'])
-                    ->getMock()
-            );
+            )
+            ->getMock();
+        $sm->setService('DataServiceManager', $dsm);
 
-        $mockServiceManager->shouldReceive('get')->with('FormAnnotationBuilder');
-        $mockServiceManager->shouldReceive('get')->with('Helper\String')
-            ->andReturn(
-                m::mock('\StdClass')
-                    ->shouldReceive('dashToCamel')
-                    ->getMock()
-            );
-        $mockServiceManager->shouldReceive('get')->with('OlcsCustomForm')
-            ->andReturn(
-                m::mock('\StdClass')
-                    ->shouldReceive('createForm')
-                    ->with('documents-home')
-                    ->andReturn($this->getFormStub())
-                    ->getMock()
-            );
-
-        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')
-            ->andReturn(
-                m::mock('\StdClass')
-                    ->shouldReceive('get')
-                    ->with('Olcs\Service\Data\Cases')
-                    ->andReturn(
-                        m::mock('Olcs\Service\Data\Cases')
-                            ->shouldReceive('fetchCaseData')
-                            ->with($caseId)
-                            ->andReturn(
-                                [
-                                    'id' => $caseId,
-                                    'licence' => [
-                                        'id' => 7
-                                    ]
-                                ]
-                            )
-                            ->getMock()
-                    )
-                    ->getMock()
-            );
-
-        $sut->setServiceLocator($mockServiceManager);
+        $sut->setServiceLocator($sm);
         ////////////////////////////////////////////////////////////////////////
 
         $view = $sut->documentsAction();
