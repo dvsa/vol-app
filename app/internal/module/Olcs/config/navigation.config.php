@@ -396,9 +396,9 @@ return array(
                                     'use_route_match' => true,
                                     'pages' => array(
                                         array(
-                                            'id' => 'licence_bus_docs-placeholder',
-                                            'label' => 'internal-licence-bus-docs-placeholder',
-                                            'route' => 'licence/bus-docs/placeholder',
+                                            'id' => 'licence_bus_docs',
+                                            'label' => 'internal-licence-bus-docs',
+                                            'route' => 'licence/bus-docs',
                                             'use_route_match' => true,
                                         ),
                                     )

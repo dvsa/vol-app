@@ -863,22 +863,11 @@ $routes = [
                     'route' => '/bus/:busRegId/docs',
                     'defaults' => [
                         'controller' => 'BusDocsController',
-                        'action' => 'index',
+                        'action' => 'documents',
                     ]
                 ],
                 'may_terminate' => true,
-                'child_routes' => [
-                    'placeholder' => [
-                        'type' => 'literal',
-                        'options' => [
-                            'route' => '/placeholder',
-                            'defaults' => [
-                                'controller' => 'BusDocsPlaceholderController',
-                                'action' => 'index',
-                            ]
-                        ],
-                    ],
-                ]
+                'child_routes' => []
             ],
             'bus-processing' => [
                 'type' => 'segment',
