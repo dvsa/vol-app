@@ -33,7 +33,7 @@ class BusDocsController extends BusController
      */
     protected function getDocumentRoute()
     {
-        return 'licence_bus_docs';
+        return 'licence/bus-docs';
     }
 
     /**

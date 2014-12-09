@@ -867,7 +867,41 @@ $routes = [
                     ]
                 ],
                 'may_terminate' => true,
-                'child_routes' => []
+                'child_routes' => [
+                    'generate' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/generate[/:tmpId]',
+                            'defaults' => [
+                                'type' => 'busReg',
+                                'controller' => 'DocumentGenerationController',
+                                'action' => 'generate'
+                            ]
+                        ],
+                    ],
+                    'finalise' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/finalise/:tmpId',
+                            'defaults' => [
+                                'type' => 'busReg',
+                                'controller' => 'DocumentFinaliseController',
+                                'action' => 'finalise'
+                            ]
+                        ],
+                    ],
+                    'upload' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/upload',
+                            'defaults' => [
+                                'type' => 'busReg',
+                                'controller' => 'DocumentUploadController',
+                                'action' => 'upload'
+                            ]
+                        ],
+                    ],
+                ],
             ],
             'bus-processing' => [
                 'type' => 'segment',

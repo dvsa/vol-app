@@ -22,6 +22,7 @@ abstract class AbstractDocumentController extends AbstractController
         'licence'     => 'licence/documents',
         'application' => 'lva-application/documents',
         'case'        => 'case_licence_docs_attachments',
+        'busReg'      => 'licence/bus-docs',
     ];
 
     /**

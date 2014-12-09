@@ -76,6 +76,8 @@ return array(
     'Common\Service\Olcs\Form\Element\SlaDateSelectOlcsService' => false,
     'Common\Service\Olcs\Form\Element\SlaDateTimeSelectOlcsService' => false,
     'Common\Service\Olcs\Service\Data\CasesOlcsService' => false,
+    'Common\Service\Olcs\Service\Data\CategoryOlcsService' => false,
+    'Common\Service\Olcs\Service\Data\DocumentSubCategoryOlcsService' => false,
     'Common\Service\Olcs\Service\Data\Search\SearchOlcsService' => false,
     'Common\Service\PublicInquiryReason' => false,
     'Common\Service\Radio' => false,
@@ -87,6 +89,7 @@ return array(
     'Common\Service\TextArea' => false,
     'Common\Service\Zend\Form\Element\ButtonService' => false,
     'Common\Service\Zend\Form\Element\CsrfZendService' => false,
+    'Common\Service\Zend\Form\Element\FileService' => false,
     'Common\Service\Zend\Form\Element\RadioService' => false,
     'Common\Service\Zend\Form\Element\SelectService' => false,
     'Common\Service\Zend\Form\Element\TextareaService' => false,
@@ -97,6 +100,7 @@ return array(
     'Common\Service\Zend\ModuleManager\ModuleManagerZendService' => false,
     'Common\Service\Zend\Stdlib\Hydrator\ArraySerializableZendService' => false,
     'Common\Service\\Common\Form\Elements\InputFilters\ActionButtonService' => false,
+    'Common\Service\\Zend\Form\Element\FileService' => false,
     'Common\Service\commonformelementdynamicmulticheckbox' => false,
     'Common\Service\commonformelementdynamicradio' => false,
     'Common\Service\commonformelementdynamicselect' => false,
@@ -129,6 +133,7 @@ return array(
     'Common\Service\textarea' => false,
     'Common\Service\zendformelementbutton' => false,
     'Common\Service\zendformelementcsrf' => false,
+    'Common\Service\zendformelementfile' => false,
     'Common\Service\zendformelementradio' => false,
     'Common\Service\zendformelementselect' => false,
     'Common\Service\zendformelementtextarea' => false,
@@ -629,6 +634,7 @@ return array(
         . '/DateSelect.php',
     'Zend\Form\Element\DateTimeSelect' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form/Element'
         . '/DateTimeSelect.php',
+    'Zend\Form\Element\File' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form/Element/File.php',
     'Zend\Form\Element\Hidden' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form/Element'
         . '/Hidden.php',
     'Zend\Form\Element\MonthSelect' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form/Element'
@@ -675,6 +681,8 @@ return array(
         . '/Helper/FormElement.php',
     'Zend\Form\View\Helper\FormElementErrors' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form'
         . '/View/Helper/FormElementErrors.php',
+    'Zend\Form\View\Helper\FormFile' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form/View/Helper'
+        . '/FormFile.php',
     'Zend\Form\View\Helper\FormHidden' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form/View'
         . '/Helper/FormHidden.php',
     'Zend\Form\View\Helper\FormInput' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/Form/View/Helper'
@@ -812,6 +820,8 @@ return array(
         . '/InputFilter/EmptyContextInterface.php',
     'Zend\InputFilter\Factory' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/InputFilter'
         . '/Factory.php',
+    'Zend\InputFilter\FileInput' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/InputFilter'
+        . '/FileInput.php',
     'Zend\InputFilter\Input' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/InputFilter/Input.php',
     'Zend\InputFilter\InputFilter' => $rootPath . '/vendor/zendframework/zendframework/library/Zend/InputFilter'
         . '/InputFilter.php',
