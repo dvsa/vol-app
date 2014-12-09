@@ -290,17 +290,14 @@ class CaseControllerTest extends ControllerTestAbstract
 
         $sm = \OlcsTest\Bootstrap::getServiceManager();
 
-        $tableServiceMock = m::mock('\Common\Service\Table')
+        $tableServiceMock = m::mock('\Common\Service\Table\TableBuilder')
             ->shouldReceive('buildTable')
-            ->andReturn(
-                m::mock('Table')
-                    ->shouldReceive('render')
-                    ->getMock()
-            )
+            ->andReturnSelf()
+            ->shouldReceive('render')
             ->getMock();
         $sm->setService('Table', $tableServiceMock);
 
-        $scriptHelperMock = m::mock('\Common\Service\Script\ScriptHelper')
+        $scriptHelperMock = m::mock('\Common\Service\Script\ScriptFactory')
             ->shouldReceive('loadFiles')
             ->with(['documents', 'table-actions'])
             ->getMock();
@@ -355,7 +352,7 @@ class CaseControllerTest extends ControllerTestAbstract
 
     protected function getMockRestHelperForDocuments()
     {
-        return m::mock('RestHelper')
+        return m::mock('Common\Service\Helper\RestHelperService')
             ->shouldReceive('makeRestCall')
             ->with(
                 'DocumentSearchView',

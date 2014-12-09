@@ -79,11 +79,9 @@ return array(
     'Common\Service\Olcs\Service\Data\Search\SearchOlcsService' => false,
     'Common\Service\PublicInquiryReason' => false,
     'Common\Service\Radio' => false,
-    'Common\Service\Script\ScriptHelper' => false,
     'Common\Service\SlaDateTimeSelect' => false,
     'Common\Service\SubmissionSections' => false,
     'Common\Service\Submit' => false,
-    'Common\Service\Table' => false,
     'Common\Service\Table\Type\application' => false,
     'Common\Service\Text' => false,
     'Common\Service\TextArea' => false,
@@ -431,7 +429,6 @@ return array(
     'SelfServe\Form\Model\Form\name' => false,
     'StdClas' => false,
     'Symfony\Component\Yaml\Yaml' => $rootPath . '/vendor/symfony/yaml/Symfony/Component/Yaml/Yaml.php',
-    'Table' => false,
     'ZendDeveloperTools\Options' => $rootPath . '/vendor/zendframework/zend-developer-tools/src/ZendDeveloperTools'
         . '/Options.php',
     'ZendDeveloperTools\Report' => $rootPath . '/vendor/zendframework/zend-developer-tools/src/ZendDeveloperTools'
