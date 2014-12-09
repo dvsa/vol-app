@@ -56,9 +56,9 @@ trait DocumentSearchTrait
         // grab all the relevant backend data needed to populate the
         // various dropdowns on the filter form
         $selects = array(
-            'category' => $this->getListData('Category', [], 'description'),
-            'documentSubCategory' => $this->getListData('DocumentSubCategory', $filters, 'description'),
-            'fileExtension' => $this->getListData(
+            'category' => $this->getListDataFromBackend('Category', [], 'description'),
+            'documentSubCategory' => $this->getListDataFromBackend('DocumentSubCategory', $filters, 'description'),
+            'fileExtension' => $this->getListDataFromBackend(
                 'RefData',
                 ['refDataCategoryId' => 'document_type'],
                 'description', 'id'

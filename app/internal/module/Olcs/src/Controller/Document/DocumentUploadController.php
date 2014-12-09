@@ -28,6 +28,7 @@ class DocumentUploadController extends AbstractDocumentController
         'licence'     => 1,
         //'application' => 9,
         'application' => 1, // @TODO - there are no subcategories defined for application yet!
+        'case'        => 1,
     ];
 
     public function uploadAction()
@@ -106,6 +107,9 @@ class DocumentUploadController extends AbstractDocumentController
         switch ($type) {
             case 'application':
                 $data['licence'] = $this->getLicenceIdForApplication();
+                break;
+            case 'case':
+                $data['licence'] = $this->getLicenceIdForCase();
                 break;
             default:
                 break;
