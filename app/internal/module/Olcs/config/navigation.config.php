@@ -320,7 +320,7 @@ return array(
                                 array(
                                     'id' => 'licence_bus_details',
                                     'label' => 'internal-licence-bus-details',
-                                    'route' => 'licence/bus-details',
+                                    'route' => 'licence/bus-details/service',
                                     'use_route_match' => true,
                                     'pages' => array(
                                         array(
