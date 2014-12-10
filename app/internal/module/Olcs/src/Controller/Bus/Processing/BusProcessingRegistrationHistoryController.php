@@ -19,7 +19,7 @@ use Olcs\Controller\Traits\DeleteActionTrait;
 class BusProcessingRegistrationHistoryController extends BusProcessingController implements CrudInterface
 {
 
-    protected $identifierName = 'id';
+    protected $identifierName = 'busRegId';
     protected $service = 'BusReg';
     protected $tableName = '/bus/registration-history';
 
@@ -40,21 +40,23 @@ class BusProcessingRegistrationHistoryController extends BusProcessingController
         ]
     ];
 
-    public function indexAction()
+
+    public function loadListData(array $params)
     {
-        $view = $this->getViewWithBusReg();
+        $listData = $this->getListData();
 
-        $view->setTemplate('licence/bus/index');
+        if ($listData == null) {
+            $params['sort'] = 'variationNo';
+            $params['order'] = 'DESC';
+            $data = $this->loadCurrent();
+            $params['routeNo'] = $data['routeNo'];
+            $listData = $this->makeRestCall($this->getService(), 'GET', $params, $this->getDataBundle());
 
-        $this->checkForCrudAction(null, [], $this->getIdentifierName());
+            $this->setListData($listData);
+            $listData = $this->getListData();
+        }
 
-        $this->buildTableIntoView();
-
-        $this->buildCommentsBoxIntoView();
-
-        $view->setTemplate('crud/index');
-
-        return $this->renderView($view);
-
+        return $listData;
     }
+
 }

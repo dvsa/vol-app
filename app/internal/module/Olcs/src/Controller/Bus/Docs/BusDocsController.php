@@ -19,16 +19,4 @@ class BusDocsController extends BusController
     protected $section = 'docs';
     protected $subNavRoute = 'licence_bus_docs';
 
-    /**
-     * Index action
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
-    public function indexAction()
-    {
-        $view = $this->getViewWithBusReg();
-
-        $view->setTemplate('licence/bus/index');
-        return $this->renderView($view);
-    }
 }

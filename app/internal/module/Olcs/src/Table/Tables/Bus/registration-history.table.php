@@ -1,6 +1,10 @@
 <?php
 
+$variationNo = 1;
 return array(
+    'variables' => array(
+        'title' => 'Registration history'
+    ),
     'columns' => array(
         array(
             'title' => 'Reg No.',
@@ -15,8 +19,7 @@ return array(
         ),
         array(
             'title' => 'Var No.',
-            'name' => 'routeSeq',
-            'sort' => 'routeSeq'
+            'name' => 'variationNo'
         ),
         array(
             'title' => 'Status',
@@ -28,7 +31,7 @@ return array(
             'title' => 'Application type',
             'formatter' => function ($data, $column, $sm) {
                 if ($data['isTxcApp'] == 'Y') {
-                    if (isset($data['ebsrRefresh']) && $data['ebsrRefresh']) {
+                    if ($data['ebsrRefresh'] == 'Y') {
                         return $sm->get('translator')->translate('EBSR Data Refresh');
                     } else {
                         return $sm->get('translator')->translate('EBSR');

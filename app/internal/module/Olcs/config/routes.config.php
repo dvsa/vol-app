@@ -850,7 +850,7 @@ $routes = [
                                 'action' => 'index',
                                 'page' => 1,
                                 'limit' => 10,
-                                'sort' => 'priority',
+                                'sort' => 'variationNo',
                                 'order' => 'DESC'
                             ]
                         ],

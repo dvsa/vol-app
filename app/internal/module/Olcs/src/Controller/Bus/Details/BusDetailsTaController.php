@@ -16,16 +16,4 @@ class BusDetailsTaController extends BusDetailsController
 {
     protected $item = 'ta';
 
-    /**
-     * Index action
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
-    public function indexAction()
-    {
-        $view = $this->getViewWithBusReg();
-
-        $view->setTemplate('licence/bus/index');
-        return $this->renderView($view);
-    }
 }
