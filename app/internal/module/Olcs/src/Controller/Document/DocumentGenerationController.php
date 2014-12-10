@@ -42,20 +42,14 @@ class DocumentGenerationController extends AbstractDocumentController
      * translates into a fairly nested bundle query
      */
     private $templateBundle = [
-        'properties' => ['docTemplateBookmarks'],
         'children' => [
             'docTemplateBookmarks' => [
-                'properties' => ['docBookmark'],
                 'children' => [
                     'docBookmark' => [
-                        'properties' => ['name', 'description'],
                         'children' => [
                             'docParagraphBookmarks' => [
-                                'properties' => ['docParagraph'],
                                 'children' => [
-                                    'docParagraph' => [
-                                        'properties' => ['id', 'paraTitle']
-                                    ]
+                                    'docParagraph' => []
                                 ]
                             ]
                         ]
@@ -97,14 +91,16 @@ class DocumentGenerationController extends AbstractDocumentController
         $details = isset($data['details']) ? $data['details'] : [];
 
         $filters['category'] = $details['category'];
+        $filters['isDoc'] = true;
 
         $subCategories = $this->getListDataFromBackend(
-            'DocumentSubCategory',
-            $filters
+            'SubCategory',
+            $filters,
+            'subCategoryName'
         );
 
         if (isset($details['documentSubCategory'])) {
-            $filters['documentSubCategory'] = $details['documentSubCategory'];
+            $filters['subCategory'] = $details['documentSubCategory'];
             $docTemplates = $this->getListDataFromBackend(
                 'DocTemplate',
                 $filters
@@ -336,10 +332,10 @@ class DocumentGenerationController extends AbstractDocumentController
     protected function getListDataFromBackend(
         $entity,
         $filters = array(),
-        $titleField = '',
-        $keyField = '',
+        $titleField = 'description',
+        $keyField = 'id',
         $showAll = self::EMPTY_LABEL
     ) {
-        return parent::getListDataFromBackend($entity, $filters, 'description', 'id', $showAll);
+        return parent::getListDataFromBackend($entity, $filters, $titleField, $keyField, $showAll);
     }
 }

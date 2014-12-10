@@ -56,6 +56,10 @@ trait DocumentSearchTrait
         // @see https://jira.i-env.net/browse/OLCS-6061
         $filters['isDoc'] = true;
 
+        // the way this method is being called this sometimes comes
+        // through as DESC; that's *never* right
+        $filters['order'] = 'ASC';
+
         // grab all the relevant backend data needed to populate the
         // various dropdowns on the filter form
         $selects = array(
