@@ -30,7 +30,7 @@ trait BusControllerTrait
 
         $this->pageTitle = $busReg['regNo'];
         $this->pageSubTitle = $busReg['licence']['organisation']['name'] . ', Variation ' .
-            $busReg['routeSeq']
+            $busReg['variationNo']
             . ', ' . $busReg['status']['description'];
 
         return $view;
