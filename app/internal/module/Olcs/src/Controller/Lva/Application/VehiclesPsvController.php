@@ -19,20 +19,9 @@ use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 class VehiclesPsvController extends AbstractVehiclesPsvController
 {
     use ApplicationControllerTrait,
+        Traits\PsvApplicationControllerTrait,
         Traits\ApplicationGenericVehiclesControllerTrait;
 
     protected $lva = 'application';
     protected $location = 'internal';
-
-    /**
-     * Whether to display the vehicle
-     *
-     * @param array $licenceVehicle
-     * @param array $filters
-     * @return boolean
-     */
-    protected function showVehicle(array $licenceVehicle, array $filters = [])
-    {
-        return empty($licenceVehicle['removalDate']);
-    }
 }
