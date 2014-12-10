@@ -123,23 +123,6 @@ class BusDetailsControllerTest extends AbstractHttpControllerTestCase
         $this->controller->alterFormBeforeValidation($form);
     }
 
-    /**
-     * Unit test for index action
-     */
-    public function testIndexAction()
-    {
-        $this->controller->expects($this->once())
-            ->method('redirectToRoute')
-            ->with(
-                $this->equalTo('licence/bus-details/service'),
-                $this->equalTo(['action'=>'edit']),
-                $this->equalTo(['code' => '303']),
-                $this->equalTo(true)
-            );
-
-        $this->controller->indexAction();
-    }
-
     public function testRedirectToIndex()
     {
         $this->controller->expects($this->once())
