@@ -11,6 +11,7 @@ use Zend\Form\Form;
 use Common\View\Model\Section;
 use Common\Controller\Lva;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
+use Zend\Stdlib\ResponseInterface;
 
 /**
  * External Type Of Licence Controller
@@ -39,7 +40,7 @@ class TypeOfLicenceController extends Lva\AbstractTypeOfLicenceController
     /**
      * Create application action
      */
-    protected function createApplicationAction()
+    public function createApplicationAction()
     {
         if ($this->isButtonPressed('cancel')) {
             return $this->redirect()->toRoute('dashboard');
@@ -70,7 +71,8 @@ class TypeOfLicenceController extends Lva\AbstractTypeOfLicenceController
 
                 $this->updateCompletionStatuses($ids['application'], 'type_of_licence');
 
-                $this->getServiceLocator()->get('FeeCommon')->generateFee('APP', $ids['application']);
+                $adapter = $this->getTypeOfLicenceAdapter();
+                $adapter->createFee($ids['application']);
 
                 return $this->goToOverview($ids['application']);
             }
@@ -79,5 +81,23 @@ class TypeOfLicenceController extends Lva\AbstractTypeOfLicenceController
         $this->getServiceLocator()->get('Script')->loadFile('type-of-licence');
 
         return $this->renderCreateApplication('type_of_licence', $form);
+    }
+
+    public function confirmationAction()
+    {
+        $adapter = $this->getTypeOfLicenceAdapter();
+
+        // @NOTE will either return a redirect, or a form
+        $response = $adapter->confirmationAction();
+
+        if ($response instanceof ResponseInterface) {
+            return $response;
+        }
+
+        return $this->render(
+            'type_of_licence_confirmation',
+            $response,
+            array('sectionText' => 'application_type_of_licence_confirmation_subtitle')
+        );
     }
 }
