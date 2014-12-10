@@ -41,6 +41,13 @@ class BusProcessingRegistrationHistoryController extends BusProcessingController
     ];
 
 
+    /**
+     * Loads list data by route number for the bus reg
+     * @todo Remove this method once the route number has been set in the route via attached listener
+     *
+     * @param array $params
+     * @return array
+     */
     public function loadListData(array $params)
     {
         $listData = $this->getListData();
