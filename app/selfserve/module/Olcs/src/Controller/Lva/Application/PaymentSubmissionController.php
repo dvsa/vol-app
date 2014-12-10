@@ -42,10 +42,7 @@ class PaymentSubmissionController extends AbstractController
         $categoryService = $this->getServiceLocator()->get('Category');
 
         $category = $categoryService->getCategoryByDescription('Application');
-        $subCategory = $this->filterCategory(
-            $categoryService->getCategoryByDescription('GV79 Application', 'Task'),
-            'GV79 Digital'
-        );
+        $subCategory = $categoryService->getCategoryByDescription('Fee Due', 'Task');
 
         // Create a task - OLCS-3297
         // This is set to dummy user account data for the moment
@@ -53,7 +50,7 @@ class PaymentSubmissionController extends AbstractController
         $actionDate = $this->getServiceLocator()->get('Helper\Date')->getDate();
         $task = array(
             'category' => $category['id'],
-            'taskSubCategory' => $subCategory['id'],
+            'subCategory' => $subCategory['id'],
             'description' => 'GV79 Application',
             'actionDate' => $actionDate,
             'assignedByUser' => 1,
@@ -93,14 +90,5 @@ class PaymentSubmissionController extends AbstractController
         $view->setTemplate('summary-application');
 
         return $this->render($view);
-    }
-
-    private function filterCategory($categories, $name)
-    {
-        foreach ($categories as $category) {
-            if ($category['name'] === $name) {
-                return $category;
-            }
-        }
     }
 }
