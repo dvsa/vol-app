@@ -322,12 +322,15 @@ return array(
             'section_type' => ['list', 'text'],
             'allow_comments' => true,
             'filter' => true,
-            'service' => 'Prohibition',
-            'identifier' => 'case',
+            'service' => 'Cases',
             'bundle' => array(
                 'children' => array(
-                    'prohibitionType' => array(
-                        'properties' => array('id', 'description')
+                    'prohibitions' => array(
+                        'children' => array(
+                            'prohibitionType' => array(
+                                'properties' => array('id', 'description')
+                            )
+                        )
                     )
                 )
             )
@@ -470,8 +473,6 @@ return array(
             'bundle' => array(
                 'properties' => array(
                     'id',
-                    'complainantForename',
-                    'complainantFamilyName',
                     'complaintDate',
                     'description',
                     'case'
@@ -481,6 +482,9 @@ return array(
                         'properties' => array(
                             'id'
                         )
+                    ),
+                    'complainantContactDetails' => array(
+                        'properties' => 'ALL'
                     )
                 )
             )

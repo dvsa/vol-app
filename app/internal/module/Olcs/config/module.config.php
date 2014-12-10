@@ -106,6 +106,7 @@ return array(
             'BusProcessingNoteController' => 'Olcs\Controller\Bus\Processing\BusProcessingNoteController',
             'BusFeesController' => 'Olcs\Controller\Bus\Fees\BusFeesController',
             'BusFeesPlaceholderController' => 'Olcs\Controller\Bus\Fees\BusFeesPlaceholderController',
+            'BusServiceController' => 'Olcs\Controller\Bus\Service\BusServiceController',
             'LvaApplication' => 'Olcs\Controller\Lva\Application\OverviewController',
             'LvaApplication/TypeOfLicence' => 'Olcs\Controller\Lva\Application\TypeOfLicenceController',
             'LvaApplication/BusinessType' => 'Olcs\Controller\Lva\Application\BusinessTypeController',
@@ -256,6 +257,7 @@ return array(
             'Olcs\Listener\RouteParams' => 'Olcs\Listener\RouteParams',
         ],
         'factories' => array(
+            'Olcs\Listener\RouteParam\Action' => 'Olcs\Listener\RouteParam\Action',
             'Olcs\Listener\RouteParam\TransportManager' => 'Olcs\Listener\RouteParam\TransportManager',
             'Olcs\Listener\RouteParam\Application' => 'Olcs\Listener\RouteParam\Application',
             'Olcs\Listener\RouteParam\Cases' => 'Olcs\Listener\RouteParam\Cases',
@@ -300,7 +302,8 @@ return array(
             'Olcs\Listener\RouteParam\Licence',
             'Olcs\Listener\RouteParam\Marker',
             'Olcs\Listener\RouteParam\Application',
-            'Olcs\Listener\RouteParam\TransportManager'
+            'Olcs\Listener\RouteParam\TransportManager',
+            'Olcs\Listener\RouteParam\Action'
         ]
     ],
     'data_services' => [

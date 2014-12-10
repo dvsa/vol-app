@@ -99,7 +99,7 @@ class IndexController extends AbstractController
 
         $titleKey = isset($lookup['title']) ? $lookup['title'] : 'name';
 
-        $results = $this->getListData($lookup['entity'], $search, $titleKey);
+        $results = $this->getListDataFromBackend($lookup['entity'], $search, $titleKey);
         $viewResults = array();
 
         // iterate over the list data and just convert it to a more

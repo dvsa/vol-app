@@ -614,6 +614,56 @@ $routes = [
             ]
         ]
     ],
+    'case_licence_docs_attachments' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/case/[:case]/documents[/licence/:licence]',
+            'constraints' => [
+                'case' => '[0-9]+',
+                'licence' => '[0-9]+'
+            ],
+            'defaults' => [
+                'controller' => 'CaseController',
+                'action' => 'documents'
+            ]
+        ],
+        'may_terminate' => true,
+        'child_routes' => [
+            'generate' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/generate[/:tmpId]',
+                    'defaults' => [
+                        'type' => 'case',
+                        'controller' => 'DocumentGenerationController',
+                        'action' => 'generate'
+                    ]
+                ],
+            ],
+            'finalise' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/finalise/:tmpId',
+                    'defaults' => [
+                        'type' => 'case',
+                        'controller' => 'DocumentFinaliseController',
+                        'action' => 'finalise'
+                    ]
+                ],
+            ],
+            'upload' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/upload',
+                    'defaults' => [
+                        'type' => 'case',
+                        'controller' => 'DocumentUploadController',
+                        'action' => 'upload'
+                    ]
+                ],
+            ],
+        ],
+    ],
     'entity_lists' => [
         'type' => 'segment',
         'options' => [
@@ -749,6 +799,17 @@ $routes = [
                         ],
                     ],
                 ]
+            ],
+            'bus-register-service' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/bus/:busRegId/register-service',
+                    'defaults' => [
+                        'controller' => 'BusServiceController',
+                        'action' => 'edit',
+                    ]
+                ],
+                'may_terminate' => true
             ],
             'bus-route' => [
                 'type' => 'segment',
@@ -1355,16 +1416,52 @@ $routes['lva-application']['child_routes'] = array_merge(
                 )
             )
         ),
-        'document' => array(
-            'type' => 'segment',
-            'options' => array(
-                'route' => 'document/',
-                'defaults' => array(
+       'documents' => [
+            'type' => 'literal',
+            'options' => [
+                'route' => 'documents',
+                'defaults' => [
                     'controller' => 'ApplicationController',
-                    'action' => 'document'
-                )
-            )
-        ),
+                    'action' => 'documents',
+                ]
+            ],
+            'may_terminate' => true,
+            'child_routes' => [
+                'generate' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => '/generate[/:tmpId]',
+                        'defaults' => [
+                            'type' => 'application',
+                            'controller' => 'DocumentGenerationController',
+                            'action' => 'generate'
+                        ]
+                    ],
+                ],
+                'finalise' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => '/finalise/:tmpId',
+                        'defaults' => [
+                            'type' => 'application',
+                            'controller' => 'DocumentFinaliseController',
+                            'action' => 'finalise'
+                        ]
+                    ],
+                ],
+                'upload' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => '/upload',
+                        'defaults' => [
+                            'type' => 'application',
+                            'controller' => 'DocumentUploadController',
+                            'action' => 'upload'
+                        ]
+                    ],
+                ],
+            ],
+        ],
         'processing' => array(
             'type' => 'segment',
             'options' => array(

@@ -27,7 +27,9 @@ class DocumentGenerationController extends AbstractDocumentController
      * how to map route param types to category names
      */
     private $categoryMap = [
-        'licence' => 'Licensing'
+        'licence' => 'Licensing',
+        'application' => 'Licensing',
+        'case' => 'Licensing',
     ];
 
     /**
@@ -65,7 +67,7 @@ class DocumentGenerationController extends AbstractDocumentController
 
     protected function alterFormBeforeValidation($form)
     {
-        $categories = $this->getListData(
+        $categories = $this->getListDataFromBackend(
             'Category',
             ['isDocCategory' => true],
             'description',
@@ -96,14 +98,14 @@ class DocumentGenerationController extends AbstractDocumentController
 
         $filters['category'] = $details['category'];
 
-        $subCategories = $this->getListData(
+        $subCategories = $this->getListDataFromBackend(
             'DocumentSubCategory',
             $filters
         );
 
         if (isset($details['documentSubCategory'])) {
             $filters['documentSubCategory'] = $details['documentSubCategory'];
-            $docTemplates = $this->getListData(
+            $docTemplates = $this->getListDataFromBackend(
                 'DocTemplate',
                 $filters
             );
@@ -178,6 +180,18 @@ class DocumentGenerationController extends AbstractDocumentController
             ]
         );
 
+        // we need to link certain documents to multiple IDs
+        switch ($routeParams['type']) {
+            case 'application':
+                $queryData['licence'] = $this->getLicenceIdForApplication();
+                break;
+            case 'case':
+                $queryData['licence'] = $this->getLicenceIdForCase();
+                break;
+            default:
+                break;
+        }
+
         /**
          * 1) read the template from the content store
          */
@@ -242,10 +256,7 @@ class DocumentGenerationController extends AbstractDocumentController
             ]
         );
 
-        return $this->redirect()->toRoute(
-            $routeParams['type'] . '/documents/finalise',
-            $redirectParams
-        );
+        return $this->redirectToDocumentRoute($routeParams['type'], 'finalise', $redirectParams);
     }
 
     public function listTemplateBookmarksAction()
@@ -322,13 +333,13 @@ class DocumentGenerationController extends AbstractDocumentController
         return array_search($name, $categories);
     }
 
-    protected function getListData(
+    protected function getListDataFromBackend(
         $entity,
         $filters = array(),
         $titleField = '',
         $keyField = '',
         $showAll = self::EMPTY_LABEL
     ) {
-        return parent::getListData($entity, $filters, 'description', 'id', $showAll);
+        return parent::getListDataFromBackend($entity, $filters, 'description', 'id', $showAll);
     }
 }

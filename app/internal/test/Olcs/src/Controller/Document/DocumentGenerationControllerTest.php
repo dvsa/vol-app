@@ -185,14 +185,25 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
         $this->controller->generateAction();
     }
 
-    public function testProcessGenerate()
+    public function processGenerateProvider()
+    {
+        return [
+            ['licence', 'licence/documents', []],
+            ['application', 'lva-application/documents' , ['licence' => 7]],
+            ['case', 'case_licence_docs_attachments' , ['licence' => 7]],
+        ];
+    }
+    /**
+     * @dataProvider processGenerateProvider
+     */
+    public function testProcessGenerate($docType, $redirectRoute, $extraQueryData)
     {
         $fromRoute = $this->getMock('\stdClass', ['fromRoute']);
         $fromRoute->expects($this->any())
             ->method('fromRoute')
-            ->will($this->returnValue(array('type' => 'licence')));
+            ->will($this->returnValue(array('type' => $docType)));
 
-        $this->controller->expects($this->once())
+        $this->controller->expects($this->any())
             ->method('params')
             ->will($this->returnValue($fromRoute));
 
@@ -225,9 +236,10 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
         $queryData = array_merge(
             $data,
             array(
-                'type' => 'licence',
+                'type' => $docType,
                 'user' => 123
-            )
+            ),
+            $extraQueryData
         );
         $this->documentMock->expects($this->once())
             ->method('getBookmarkQueries')
@@ -273,7 +285,7 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
 
         $redirect->expects($this->once())
             ->method('toRoute')
-            ->with('licence/documents/finalise', ['tmpId' => 'tmp-filename', 'type' => 'licence']);
+            ->with($redirectRoute.'/finalise', ['tmpId' => 'tmp-filename', 'type' => $docType]);
 
         $this->controller->expects($this->once())
             ->method('redirect')
@@ -319,6 +331,30 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
                 return $this->contentStoreMock;
             case 'Document':
                 return $this->documentMock;
+            case 'Entity\Application':
+                $eaMock = $this->getMock('\StdClass', ['getLicenceIdForApplication']);
+                $eaMock->expects($this->any())
+                    ->method('getLicenceIdForApplication')
+                    ->will($this->returnValue(7));
+                return $eaMock;
+            case 'DataServiceManager':
+                $caseMock = $this->getMock('\StdClass', ['fetchCaseData']);
+                $caseMock->expects($this->any())
+                    ->method('fetchCaseData')
+                    ->will(
+                        $this->returnValue(
+                            [
+                                'id' => 1234,
+                                'licence' => [ 'id' => 7 ]
+                            ]
+                        )
+                    );
+                $dsMock = $this->getMock('\StdClass', ['get']);
+                $dsMock->expects($this->any())
+                    ->method('get')
+                    ->with('Olcs\Service\Data\Cases')
+                    ->will($this->returnValue($caseMock));
+                return $dsMock;
             default:
                 throw new \Exception("Service Locator " . $service . " not mocked");
         }

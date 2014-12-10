@@ -37,7 +37,7 @@
         "doctrine/doctrine-orm-module": "0.*",
         "olcs/OlcsCommon": "dev-develop",
         "zendframework/zend-developer-tools": "dev-master",
-        "dvsa/jackrabbit": "v1.1.0",
+        "dvsa/jackrabbit": "~1.1.1",
         "olcs/olcs-logging": "dev-develop",
         "olcs/autoload": "dev-develop",
         "symfony/Filesystem": "~2.6.0-dev",

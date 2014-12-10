@@ -10,6 +10,7 @@ namespace Admin\Controller;
 use Admin\Controller\AbstractController;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
+use Common\Service\Entity\LicenceEntityService;
 
 /**
  * Disc Printing Controller
@@ -26,24 +27,20 @@ class DiscPrintingController extends AbstractController
     const DISCS_ON_PAGE = 6;
 
     /**
-     * Disc Jackrabbit template
-     */
-    const DISC_TEMPLATE = '/templates/GVDiscTemplate.rtf';
-
-    /**
      * Where we store generated lists of discs in JR
      */
     const STORAGE_PATH = 'discs';
 
-    /**
-     * What we store the generated file as
-     */
-    const STORAGE_FILE = 'GVDiscTemplate.rtf';
-
-    /*
-     * Discs on page
-     */
-    const OPERATOR_TYPE_PSV = 'lcat_psv';
+    private $templateParams = [
+        'PSV' => [
+            'template' => 'PSVDiscTemplate',
+            'bookmark' => 'Psv_Disc_Page'
+        ],
+        'Goods' => [
+            'template' => 'GVDiscTemplate',
+            'bookmark' => 'Disc_List'
+        ]
+    ];
 
     /**
      * Index action
@@ -88,21 +85,111 @@ class DiscPrintingController extends AbstractController
         $discPrefix = $discSequenceService->getDiscPrefix($params['discSequence'], $params['licenceType']);
 
         // get discs to print
-        if ($params['niFlag'] == 'N' && $params['operatorType'] == self::OPERATOR_TYPE_PSV) {
-            $discService = $this->getServiceLocator()->get('Admin\Service\Data\PsvDisc');
-            $discsToPrint = $discService->getDiscsToPrint(
+        if ($params['operatorType'] === LicenceEntityService::LICENCE_CATEGORY_PSV) {
+
+            $this->printDiscsPsv(
                 $params['licenceType'],
+                $params['startNumber'],
                 $discPrefix
             );
         } else {
-            $discService = $this->getServiceLocator()->get('Admin\Service\Data\GoodsDisc');
-            $discsToPrint = $discService->getDiscsToPrint(
+
+            $licenceIds = $this->printDiscsGoods(
                 $params['niFlag'],
                 $params['operatorType'],
                 $params['licenceType'],
+                $params['startNumber'],
                 $discPrefix
             );
         }
+    }
+
+    protected function printDiscsPsv($licenceType, $startNo, $discPrefix)
+    {
+        $discService = $this->getServiceLocator()->get('Admin\Service\Data\PsvDisc');
+        $discsToPrint = $discService->getDiscsToPrint(
+            $licenceType,
+            $discPrefix
+        );
+
+        $this->printDiscs(
+            'PSV',
+            $startNo,
+            $discsToPrint
+        );
+
+        $queries = [];
+        $bookmarks = [];
+        foreach ($discsToPrint as $disc) {
+            $id = $disc['licence']['id'];
+
+            if (!isset($bookmarks[$id])) {
+                $bookmarks[$id] = [
+                    'NO_DISCS_PRINTED' => ['count' => 0]
+                ];
+            }
+
+            $bookmarks[$id]['NO_DISCS_PRINTED']['count'] ++;
+
+            $queries[$id] = [
+                'licence' => $id,
+                'user'    => $this->getLoggedInUser()
+            ];
+        }
+
+        $this->getServiceLocator()
+            ->get('VehicleList')
+            ->setQueryData($queries)
+            ->setBookmarkData($bookmarks)
+            ->setTemplate('PSVVehiclesList')
+            ->setDescription('PSV Vehicle List')
+            ->generateVehicleList();
+
+        $discService->setIsPrintingOn($discsToPrint);
+    }
+
+    protected function printDiscsGoods($niFlag, $operatorType, $licenceType, $startNo, $discPrefix)
+    {
+        $discService = $this->getServiceLocator()->get('Admin\Service\Data\GoodsDisc');
+        $discsToPrint = $discService->getDiscsToPrint(
+            $niFlag,
+            $operatorType,
+            $licenceType,
+            $discPrefix
+        );
+
+        $this->printDiscs(
+            'Goods',
+            $startNo,
+            $discsToPrint
+        );
+
+        $queries = [];
+        foreach ($discsToPrint as $disc) {
+            $id = $disc['licenceVehicle']['licence']['id'];
+            $queries[$id] = [
+                'licence' => $id,
+                'user' => $this->getLoggedInUser()
+            ];
+        }
+
+        // generate vehicle list for all licences which are affected by new discs
+
+        $this->getServiceLocator()
+            ->get('VehicleList')
+            ->setQueryData($queries)
+            ->setTemplate('GVVehiclesList')
+            ->setDescription('Goods Vehicle List')
+            ->generateVehicleList();
+
+        $discService->setIsPrintingOn($discsToPrint);
+    }
+
+    protected function printDiscs($type, $startNo, $discsToPrint)
+    {
+        $bookmark = $this->templateParams[$type]['bookmark'];
+        $filename = $this->templateParams[$type]['template'] . '.rtf';
+        $template = '/templates/' . $filename;
 
         foreach ($discsToPrint as $disc) {
             $queryData[] = $disc['id'];
@@ -112,16 +199,16 @@ class DiscPrintingController extends AbstractController
 
         $file = $this->getServiceLocator()
             ->get('ContentStore')
-            ->read(self::DISC_TEMPLATE);
+            ->read($template);
 
         $query = $documentService->getBookmarkQueries($file, $queryData);
 
         $result = $this->makeRestCall('BookmarkSearch', 'GET', [], $query);
 
-        $discNumber = (int)$params['startNumber'];
+        $discNumber = (int)$startNo;
 
         // NB the loop-by-reference here
-        foreach ($result['Disc_List'] as &$row) {
+        foreach ($result[$bookmark] as &$row) {
             $row['discNo'] = $discNumber ++;
         }
 
@@ -133,7 +220,10 @@ class DiscPrintingController extends AbstractController
 
         $uploader->setFile(['content' => $content]);
 
-        $filePath = date('YmdHis') . '_' . self::STORAGE_FILE;
+        $filePath = $this->getServiceLocator()
+            ->get('Helper\Date')
+            ->getDate('YmdHis') . '_' . $filename;
+
         $storedFile = $uploader->upload(
             // @TODO: must swap these back, see note below
             //self::STORAGE_PATH,
@@ -152,15 +242,15 @@ class DiscPrintingController extends AbstractController
          */
         $data = [
             'identifier'          => $storedFile->getIdentifier(),
-            'description'         => 'Goods Disc List',
-            'filename'            => 'Goods_Disc_List.rtf',
+            'description'         => $type . ' Disc List',
+            'filename'            => $type . '_Disc_List.rtf',
             'fileExtension'       => 'doc_rtf',
             'licence'             => 7, // hard coded simply so we can demo against *something*
             'category'            => 1, // ditto
             'documentSubCategory' => 6, // ditto
             'isDigital'           => true,
             'isReadOnly'          => true,
-            'issuedDate'          => date('Y-m-d H:i:s'),
+            'issuedDate'          => $this->getServiceLocator()->get('Helper\Date')->getDate('Y-m-d H:i:s'),
             'size'                => $storedFile->getSize()
         ];
 
@@ -172,23 +262,6 @@ class DiscPrintingController extends AbstractController
         /**
          * End of temporary persistence logic
          */
-
-        $licenceIds = [];
-        foreach ($discsToPrint as $disc) {
-            $licenceIds[] = $disc['licenceVehicle']['licence']['id'];
-        }
-        $licenceIds = array_unique($licenceIds);
-
-        $vehicleListService = $this->getServiceLocator()->get('vehicleList');
-
-        // generate vehicle list for all licences which are affected by new Goods Discss
-        $vehicleListService->setLicenceIds($licenceIds);
-        $vehicleListService->setLoggedInUser($this->getLoggedInUser());
-        $vehicleListService->generateVehicleList();
-
-        // set printing status ON
-        $discService->setIsPrintingOn($discsToPrint);
-
     }
 
     /**
@@ -337,7 +410,8 @@ class DiscPrintingController extends AbstractController
 
         // calculate start and end numbers, number of pages
         $retv['startNumber'] = $discSequenceService->getDiscNumber($discSequence, $licenceType);
-        if ($niFlag == 'N' && $operatorType == self::OPERATOR_TYPE_PSV) {
+
+        if ($operatorType === LicenceEntityService::LICENCE_CATEGORY_PSV) {
             $psvDiscService = $this->getServiceLocator()->get('Admin\Service\Data\PsvDisc');
             $retv['discsToPrint'] = count(
                 $psvDiscService->getDiscsToPrint($licenceType, $discPrefix)
@@ -348,6 +422,7 @@ class DiscPrintingController extends AbstractController
                 $goodsDiscService->getDiscsToPrint($niFlag, $operatorType, $licenceType, $discPrefix)
             );
         }
+
         $retv['endNumber'] = (int) ($retv['discsToPrint'] ? $retv['startNumber'] + $retv['discsToPrint'] - 1 : 0);
         $retv['originalEndNumber'] = $retv['endNumber'];
         $originalStartNumber = $retv['startNumber'];
@@ -472,7 +547,8 @@ class DiscPrintingController extends AbstractController
         $params = $this->getFlattenParams();
         $retv = [];
         $discSequenceService = $this->getServiceLocator()->get('Admin\Service\Data\DiscSequence');
-        if ($params['niFlag'] == 'N' && $params['operatorType'] == self::OPERATOR_TYPE_PSV) {
+
+        if ($params['operatorType'] === LicenceEntityService::LICENCE_CATEGORY_PSV) {
             $discService = $this->getServiceLocator()->get('Admin\Service\Data\PsvDisc');
             $discsToPrint = $discService->getDiscsToPrint(
                 $params['licenceType'],
@@ -487,6 +563,7 @@ class DiscPrintingController extends AbstractController
                 $params['discPrefix']
             );
         }
+
         try {
             if ($params['isSuccessfull']) {
                 $discService->setIsPrintingOffAndAssignNumber($discsToPrint, $params['startNumber']);

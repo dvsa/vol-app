@@ -63,8 +63,8 @@ class TaskController extends AbstractController
         $form = $this->getForm('task');
         $form->remove('details');
         $inputs = array(
-            'assignedToTeam' => $this->getListData('Team'),
-            'assignedToUser' => $this->getListData('User', $filters, 'name', 'id', 'Unassigned')
+            'assignedToTeam' => $this->getListDataFromBackend('Team'),
+            'assignedToUser' => $this->getListDataFromBackend('User', $filters, 'name', 'id', 'Unassigned')
         );
         foreach ($inputs as $name => $options) {
             $form->get('assignment')
@@ -221,12 +221,12 @@ class TaskController extends AbstractController
 
         $selects = array(
             'details' => array(
-                'category' => $this->getListData('Category', [], 'description'),
-                'taskSubCategory' => $this->getListData('TaskSubCategory', $filters)
+                'category' => $this->getListDataFromBackend('Category', [], 'description'),
+                'taskSubCategory' => $this->getListDataFromBackend('TaskSubCategory', $filters)
             ),
             'assignment' => array(
-                'assignedToTeam' => $this->getListData('Team'),
-                'assignedToUser' => $this->getListData('User', $filters, 'name', 'id', 'Unassigned')
+                'assignedToTeam' => $this->getListDataFromBackend('Team'),
+                'assignedToUser' => $this->getListDataFromBackend('User', $filters, 'name', 'id', 'Unassigned')
             )
         );
 
@@ -323,17 +323,17 @@ class TaskController extends AbstractController
     }
 
     /**
-     * Override the parent getListData method simply to save us constantly having to
+     * Override the parent getListDataFromBackend method simply to save us constantly having to
      * supply the $showAll parameter as 'Please select'
      */
-    protected function getListData(
+    protected function getListDataFromBackend(
         $entity,
         $data = array(),
         $titleKey = 'name',
         $primaryKey = 'id',
         $showAll = 'Please select'
     ) {
-        return parent::getListData($entity, $data, $titleKey, $primaryKey, $showAll);
+        return parent::getListDataFromBackend($entity, $data, $titleKey, $primaryKey, $showAll);
     }
 
     /**

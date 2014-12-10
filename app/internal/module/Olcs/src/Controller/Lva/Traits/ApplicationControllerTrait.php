@@ -11,7 +11,6 @@ use Zend\Form\Form;
 use Zend\View\Model\ViewModel;
 use Olcs\View\Model\Application\SectionLayout;
 use Common\View\Model\Section;
-use Common\Controller\Lva\Traits\EnabledSectionTrait;
 use Common\Controller\Lva\Traits\CommonApplicationControllerTrait;
 use Common\Service\Entity\ApplicationCompletionEntityService;
 use Olcs\Controller\Traits\ApplicationControllerTrait as GenericInternalApplicationControllerTrait;
@@ -25,7 +24,6 @@ trait ApplicationControllerTrait
 {
     use InternalControllerTrait,
         CommonApplicationControllerTrait,
-        EnabledSectionTrait,
         GenericInternalApplicationControllerTrait {
             GenericInternalApplicationControllerTrait::render as genericRender;
         }
@@ -35,9 +33,10 @@ trait ApplicationControllerTrait
      *
      * @param string|ViewModel $content
      * @param \Zend\Form\Form $form
+     * @param array $variables
      * @return \Zend\View\Model\ViewModel
      */
-    protected function render($content, Form $form = null)
+    protected function render($content, Form $form = null, $variables = array())
     {
         if (! ($content instanceof ViewModel)) {
             $content = new Section(array('title' => 'lva.section.title.' . $content, 'form' => $form));
@@ -45,13 +44,15 @@ trait ApplicationControllerTrait
 
         $routeName = $this->getEvent()->getRouteMatch()->getMatchedRouteName();
 
-        $sectionLayout = new SectionLayout(
+        $params = array_merge(
             array(
                 'sections'     => $this->getSectionsForView(),
                 'currentRoute' => $routeName,
                 'lvaId'        => $this->getIdentifier()
-            )
+            ),
+            $variables
         );
+        $sectionLayout = new SectionLayout($params);
         $sectionLayout->addChild($content, 'content');
 
         return $this->genericRender($sectionLayout);

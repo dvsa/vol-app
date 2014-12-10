@@ -84,6 +84,13 @@ return array(
                             'use_route_match' => true,
                         ),
                         array(
+                            'id' => 'case_details_prohibitions',
+                            'label' => 'Prohibitions',
+                            'route' => 'case_prohibition',
+                            'action' => 'index',
+                            'use_route_match' => true,
+                        ),
+                        array(
                             'id' => 'case_details_statements',
                             'label' => 'Statements',
                             'route' => 'case_statement',
@@ -101,13 +108,6 @@ return array(
                             'id' => 'case_details_conditions_undertakings',
                             'label' => 'Conditions & Undertakings',
                             'route' => 'case_conditions_undertakings',
-                            'action' => 'index',
-                            'use_route_match' => true,
-                        ),
-                        array(
-                            'id' => 'case_details_impounding',
-                            'label' => 'Impoundings',
-                            'route' => 'case_details_impounding',
                             'action' => 'index',
                             'use_route_match' => true,
                         ),
@@ -202,9 +202,9 @@ return array(
                             ),
                         ),
                         array(
-                            'id' => 'case_details_prohibitions',
-                            'label' => 'Prohibitions',
-                            'route' => 'case_prohibition',
+                            'id' => 'case_details_impounding',
+                            'label' => 'Impoundings',
+                            'route' => 'case_details_impounding',
                             'action' => 'index',
                             'use_route_match' => true,
                         )
@@ -213,18 +213,9 @@ return array(
                 array(
                     'id' => 'case_docs_attachments',
                     'label' => 'Docs & attachments',
-                    'route' => 'case',
-                    'action' => 'docs',
+                    'route' => 'case_licence_docs_attachments',
+                    'action' => 'documents',
                     'use_route_match' => true,
-                    'pages' => array(
-                        array(
-                            'id' => 'case_docs_attachments_documents',
-                            'label' => 'Docs',
-                            'route' => 'case',
-                            'action' => 'docs',
-                            'use_route_match' => true,
-                        ),
-                    )
                 ),
                 array(
                     'id' => 'case_processing',
@@ -362,6 +353,12 @@ return array(
                                     'id' => 'licence_bus_short',
                                     'label' => 'internal-licence-bus-short',
                                     'route' => 'licence/bus-short',
+                                    'use_route_match' => true
+                                ),
+                                array(
+                                    'id' => 'licence_register_service',
+                                    'label' => 'internal-licence-register-service',
+                                    'route' => 'licence/bus-register-service',
                                     'use_route_match' => true
                                 ),
                                 array(
@@ -673,7 +670,7 @@ return array(
                 array(
                     'id' => 'application_document',
                     'label' => 'Docs & attachments',
-                    'route' => 'lva-application/document',
+                    'route' => 'lva-application/documents',
                     'use_route_match' => true
                 ),
                 array(
