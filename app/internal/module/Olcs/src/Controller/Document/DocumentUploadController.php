@@ -21,43 +21,10 @@ use Common\Service\File\Exception as FileException;
  */
 class DocumentUploadController extends AbstractDocumentController
 {
-    /**
-     * how to map route param types to category IDs (see category db table)
-     */
-    public function getCategoryForType($type)
-    {
-        switch ($type) {
-            case 'licence':
-            case 'application':
-                // @TODO - there are no subcategories defined for application yet!
-                //return 9
-            case 'case':
-            case 'busReg':
-                return 1;
-            default:
-                return null;
-        }
-    }
-
-    public function getRouteParamKeyForType($type)
-    {
-        switch ($type) {
-            // busReg routing is set up completely differently to everything else :(
-            case 'busReg':
-                return 'busRegId';
-            case 'licence':
-            case 'application':
-            case 'case':
-            case 'busReg':
-            default:
-                return $type;
-        }
-    }
-
     public function uploadAction()
     {
         $type = $this->params()->fromRoute('type');
-        $category = $this->getCategoryForType($type);
+        $category = $this->categoryMap[$type];
         $this->getServiceLocator()
              ->get('DataServiceManager')
              ->get('Olcs\Service\Data\DocumentSubCategory')

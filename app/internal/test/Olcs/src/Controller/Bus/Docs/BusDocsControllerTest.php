@@ -40,11 +40,9 @@ class BusDocsControllerTest extends AbstractHttpControllerTestCase
         parent::setUp();
     }
 
-    /**
-     * Placeholder unit test for index action
-     */
-    public function testIndexAction()
+    public function testDocumentsAction()
     {
+        $this->markTestIncomplete();
         $this->controller->expects($this->once())
             ->method('getViewWithBusReg')
             ->will($this->returnValue($this->view));
