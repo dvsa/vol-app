@@ -4,6 +4,7 @@
  * Bus Docs Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ * @author Dan Eggleston <dan@stolenegg.com>
  */
 namespace Olcs\Controller\Bus\Docs;
 
@@ -14,6 +15,7 @@ use Olcs\Controller\Traits;
  * Bus Docs Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ * @author Dan Eggleston <dan@stolenegg.com>
  */
 class BusDocsController extends BusController
 {
