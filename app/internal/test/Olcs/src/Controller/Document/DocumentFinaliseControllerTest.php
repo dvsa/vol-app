@@ -322,15 +322,45 @@ class DocumentFinaliseControllerTest extends AbstractHttpControllerTestCase
     public function processUploadProvider()
     {
         return [
-            ['licence', 'licence/documents'],
-            ['application', 'lva-application/documents'],
-            ['case', 'case_licence_docs_attachments'],
+            "Licence letter" => [
+                'licence',
+                [
+                    'type'    => 'licence',
+                    'licence' => 1234,
+                ],
+                'licence/documents',
+            ],
+            "Application letter" => [
+                'application',
+                [
+                    'type'        => 'application',
+                    'application' => 1234,
+                ],
+                'lva-application/documents',
+            ],
+            "Case letter" => [
+                'case',
+                [
+                    'type'  => 'case',
+                    'case'  => 1234,
+                ],
+                'case_licence_docs_attachments',
+            ],
+            "Bus Registration letter" => [
+                'busReg',
+                [
+                    'type'     => 'busReg',
+                    'busRegId' => 1234,
+                    'licence'  => 7,
+                ],
+                'licence/bus-docs',
+            ],
         ];
     }
     /**
      * @dataProvider processUploadProvider
      */
-    public function testProcessUpload($docType, $redirectRoute)
+    public function testProcessUpload($docType, $routeParams, $redirectRoute)
     {
         $test = $this;
         $this->controller->expects($this->any())
@@ -344,11 +374,10 @@ class DocumentFinaliseControllerTest extends AbstractHttpControllerTestCase
                 )
             );
 
-        $params = [
-            'tmpId'  => 'a-temp-file',
-            'type'   => $docType,
-            $docType => 1234
-        ];
+        $params = array_merge(
+            ['tmpId' => 'a-temp-file'],
+            $routeParams
+        );
         $fromRoute = $this->getMock('\stdClass', ['fromRoute']);
         $fromRoute->expects($this->any())
             ->method('fromRoute')
@@ -429,7 +458,10 @@ class DocumentFinaliseControllerTest extends AbstractHttpControllerTestCase
 
         $redirect->expects($this->once())
             ->method('toRoute')
-            ->with($redirectRoute, ['type' => $docType, 'tmpId' => 'a-temp-file', $docType => 1234]);
+            ->with(
+                $redirectRoute,
+                array_merge(['tmpId' => 'a-temp-file'], $routeParams)
+            );
 
         $this->controller->expects($this->once())
             ->method('redirect')
@@ -458,16 +490,7 @@ class DocumentFinaliseControllerTest extends AbstractHttpControllerTestCase
             case 'BookmarkSearch':
                 return $this->stubBookmarkSearch($data);
             case 'Document':
-                switch($type) {
-                    case 'application':
-                        return $this->mockApplicationDocument($data);
-                    case 'case':
-                        return $this->mockCaseDocument($data);
-                    case 'licence':
-                    default:
-                        return $this->mockLicenceDocument($data);
-                }
-                break; // cs insists on this
+                return $this->mockDocument($data, $type);
             case 'Entity\Application':
                 $eaMock = $this->getMock('\StdClass', ['getLicenceIdForApplication']);
                 $eaMock->expects($this->any())
@@ -551,8 +574,8 @@ class DocumentFinaliseControllerTest extends AbstractHttpControllerTestCase
         ];
     }
 
-    private function mockLicenceDocument($data)
-    {
+    private function mockDocument($data, $type) {
+
         $this->assertStringEndsWith('A_template.rtf', $data['filename']);
         $this->assertStringStartsWith(date('Y-m-d'), $data['issuedDate']);
 
@@ -562,7 +585,6 @@ class DocumentFinaliseControllerTest extends AbstractHttpControllerTestCase
         $expected = array(
             'identifier' => 'full-filename',
             'description' => 'A template',
-            'licence' => 1234,
             'fileExtension' => 'doc_rtf',
             'category' => 3,
             'documentSubCategory' => 2,
@@ -571,56 +593,25 @@ class DocumentFinaliseControllerTest extends AbstractHttpControllerTestCase
             'size' => 1234
         );
 
-         $this->assertEquals($expected, $data);
-    }
+        switch ($type) {
+            case 'licence':
+                $extra = ['licence' => 1234];
+                break;
+            case 'application':
+                $extra = ['licence' => 7, 'application' => 1234];
+                break;
+            case 'case':
+                $extra = ['licence' => 7, 'case' => 1234];
+                break;
+            case 'busReg':
+                $extra = ['licence' => 7, 'busReg' => 1234];
+                break;
+            default:
+                $extra = [];
+        }
+        $expected = array_merge($expected, $extra);
 
-
-    private function mockApplicationDocument($data)
-    {
-        $this->assertStringEndsWith('A_template.rtf', $data['filename']);
-        $this->assertStringStartsWith(date('Y-m-d'), $data['issuedDate']);
-
-        unset($data['filename']);
-        unset($data['issuedDate']);
-
-        $expected = array(
-            'identifier' => 'full-filename',
-            'description' => 'A template',
-            'application' => 1234,
-            'licence' => 7,
-            'fileExtension' => 'doc_rtf',
-            'category' => 3,
-            'documentSubCategory' => 2,
-            'isDigital' => true,
-            'isReadOnly' => true,
-            'size' => 1234
-        );
-
-         $this->assertEquals($expected, $data);
-    }
-
-
-    private function mockCaseDocument($data)
-    {
-        $this->assertStringEndsWith('A_template.rtf', $data['filename']);
-        $this->assertStringStartsWith(date('Y-m-d'), $data['issuedDate']);
-
-        unset($data['filename']);
-        unset($data['issuedDate']);
-
-        $expected = array(
-            'identifier' => 'full-filename',
-            'description' => 'A template',
-            'case' => 1234,
-            'licence' => 7,
-            'fileExtension' => 'doc_rtf',
-            'category' => 3,
-            'documentSubCategory' => 2,
-            'isDigital' => true,
-            'isReadOnly' => true,
-            'size' => 1234
-        );
-
-         $this->assertEquals($expected, $data);
+        $this->assertEquals($expected, $data);
+        return $data;
     }
 }
