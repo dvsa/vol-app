@@ -19,8 +19,9 @@ abstract class AbstractDocumentController extends AbstractController
      * For redirects
      */
     protected $documentRouteMap = [
-        'licence' => 'licence/documents',
+        'licence'     => 'licence/documents',
         'application' => 'lva-application/documents',
+        'case'        => 'case_licence_docs_attachments',
     ];
 
     /**
@@ -98,5 +99,13 @@ abstract class AbstractDocumentController extends AbstractController
         $applicationId = $this->params()->fromRoute('application');
         return $this->getServiceLocator()->get('Entity\Application')
             ->getLicenceIdForApplication($applicationId);
+    }
+
+    protected function getLicenceIdForCase()
+    {
+        $caseId = $this->params()->fromRoute('case');
+        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\Cases');
+        $case = $service->fetchCaseData($caseId);
+        return isset($case['licence']['id']) ? $case['licence']['id'] : null;
     }
 }

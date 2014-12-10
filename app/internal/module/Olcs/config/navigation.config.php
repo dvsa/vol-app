@@ -213,18 +213,9 @@ return array(
                 array(
                     'id' => 'case_docs_attachments',
                     'label' => 'Docs & attachments',
-                    'route' => 'case',
-                    'action' => 'docs',
+                    'route' => 'case_licence_docs_attachments',
+                    'action' => 'documents',
                     'use_route_match' => true,
-                    'pages' => array(
-                        array(
-                            'id' => 'case_docs_attachments_documents',
-                            'label' => 'Docs',
-                            'route' => 'case',
-                            'action' => 'docs',
-                            'use_route_match' => true,
-                        ),
-                    )
                 ),
                 array(
                     'id' => 'case_processing',

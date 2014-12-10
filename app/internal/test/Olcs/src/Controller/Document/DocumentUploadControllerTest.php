@@ -37,7 +37,8 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
                     'url',
                     'isButtonPressed',
                     'getSearchForm',
-                    'getLicenceIdForApplication'
+                    'getLicenceIdForApplication',
+                    'getLicenceIdForCase',
                 ),
                 $extraParams
             )
@@ -121,6 +122,7 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
         return [
             ['licence', 'licence/documents'],
             ['application', 'lva-application/documents'],
+            ['case', 'case_licence_docs_attachments'],
         ];
     }
     /**
@@ -130,7 +132,6 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
     {
 
         $test = $this;
-        $type = 'foo';
         $this->controller->expects($this->any())
             ->method('makeRestCall')
             ->will(
@@ -161,6 +162,9 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->any())
             ->method('getLicenceIdForApplication')
+            ->will($this->returnValue(7));
+        $this->controller->expects($this->any())
+            ->method('getLicenceIdForCase')
             ->will($this->returnValue(7));
 
         $files = $this->getMock('\stdClass', ['toArray']);
@@ -459,6 +463,8 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
                 switch($type) {
                     case 'application':
                         return $this->mockApplicationDocument($data);
+                    case 'case':
+                        return $this->mockCaseDocument($data);
                     case 'licence':
                     default:
                         return $this->mockLicenceDocument($data);
@@ -570,6 +576,31 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
             'description' => 'file description',
             'licence' => 7,
             'application' => 1234,
+            'fileExtension' => 'doc_rtf',
+            'category' => 3,
+            'documentSubCategory' => 2,
+            'isDigital' => true,
+            'isReadOnly' => true,
+            'size' => 1234
+        );
+
+        $this->assertEquals($expected, $data);
+        return $data;
+    }
+
+    private function mockCaseDocument($data)
+    {
+        $this->assertStringEndsWith('testfile.rtf', $data['filename']);
+        $this->assertStringStartsWith(date('Y-m-d'), $data['issuedDate']);
+
+        unset($data['filename']);
+        unset($data['issuedDate']);
+
+        $expected = array(
+            'identifier' => 'full-filename',
+            'description' => 'file description',
+            'licence' => 7,
+            'case' => 1234,
             'fileExtension' => 'doc_rtf',
             'category' => 3,
             'documentSubCategory' => 2,

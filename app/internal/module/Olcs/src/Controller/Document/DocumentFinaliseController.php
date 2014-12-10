@@ -131,6 +131,9 @@ class DocumentFinaliseController extends AbstractDocumentController
             case 'application':
                 $data['licence'] = $this->getLicenceIdForApplication();
                 break;
+            case 'case':
+                $data['licence'] = $this->getLicenceIdForCase();
+                break;
             default:
                 break;
         }

@@ -8,7 +8,8 @@
 
 namespace Olcs\Controller;
 
-use Common\Controller\Traits;
+use Common\Controller\Traits as CommonTraits;
+use Olcs\Controller\Traits as OlcsTraits;
 use Common\Controller\AbstractActionController;
 use Zend\Session\Container;
 
@@ -17,39 +18,10 @@ use Zend\Session\Container;
  */
 class AbstractController extends AbstractActionController
 {
-    use Traits\ViewHelperManagerAware;
-
-    const MAX_LIST_DATA_LIMIT = 100;
+    use CommonTraits\ViewHelperManagerAware;
+    use OlcsTraits\ListDataTrait;
 
     private $searchForm;
-
-    /**
-     * Retrieve some data from the backend and convert it for use in
-     * a select. Optionally provide some search data to filter the
-     * returned data too.
-     */
-    protected function getListData($entity, $data = array(), $titleKey = 'name', $primaryKey = 'id', $showAll = 'All')
-    {
-        $data['limit'] = self::MAX_LIST_DATA_LIMIT;
-        $data['sort'] = $titleKey;  // AC says always sort alphabetically
-        $response = $this->makeRestCall($entity, 'GET', $data);
-
-        if ($showAll !== false) {
-            $final = array('' => $showAll);
-        } else {
-            $final = array();
-        }
-
-        if (isset($response['Results']) && is_array($response['Results'])) {
-            foreach ($response['Results'] as $result) {
-                $key = $result[$primaryKey];
-                $value = $result[$titleKey];
-
-                $final[$key] = $value;
-            }
-        }
-        return $final;
-    }
 
     /**
      * Gets a variable from the route
