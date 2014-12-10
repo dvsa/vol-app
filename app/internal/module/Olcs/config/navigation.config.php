@@ -356,7 +356,7 @@ return array(
                                     'use_route_match' => true
                                 ),
                                 array(
-                                    'id' => 'licence_register_service',
+                                    'id' => 'licence_bus_register_service',
                                     'label' => 'internal-licence-register-service',
                                     'route' => 'licence/bus-register-service',
                                     'use_route_match' => true
