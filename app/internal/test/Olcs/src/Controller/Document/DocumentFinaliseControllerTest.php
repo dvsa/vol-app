@@ -574,7 +574,8 @@ class DocumentFinaliseControllerTest extends AbstractHttpControllerTestCase
         ];
     }
 
-    private function mockDocument($data, $type) {
+    private function mockDocument($data, $type)
+    {
 
         $this->assertStringEndsWith('A_template.rtf', $data['filename']);
         $this->assertStringStartsWith(date('Y-m-d'), $data['issuedDate']);
