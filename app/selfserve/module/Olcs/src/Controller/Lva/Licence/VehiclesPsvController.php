@@ -9,6 +9,7 @@ namespace Olcs\Controller\Lva\Licence;
 
 use Olcs\Controller\Lva\AbstractGenericVehiclesPsvController;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
+use Common\Controller\Lva\Traits\PsvLicenceControllerTrait;
 use Common\Controller\Lva\Traits\LicenceGenericVehiclesControllerTrait;
 
 /**
@@ -19,6 +20,7 @@ use Common\Controller\Lva\Traits\LicenceGenericVehiclesControllerTrait;
 class VehiclesPsvController extends AbstractGenericVehiclesPsvController
 {
     use LicenceControllerTrait,
+        PsvLicenceControllerTrait,
         LicenceGenericVehiclesControllerTrait;
 
     protected $lva = 'licence';
@@ -36,18 +38,5 @@ class VehiclesPsvController extends AbstractGenericVehiclesPsvController
             $this->preSaveVehicle($data, $mode),
             $mode
         );
-    }
-
-    /**
-     * We only want to show active vehicles which
-     * haven't been marked as removed
-     *
-     * @param array $licenceVehicle
-     * @param array $filters
-     * @return boolean
-     */
-    protected function showVehicle(array $licenceVehicle, array $filters = [])
-    {
-        return (!empty($licenceVehicle['specifiedDate']) && empty($licenceVehicle['removalDate']));
     }
 }

@@ -19,6 +19,7 @@ use Common\Controller\Lva\Traits;
 class VehiclesPsvController extends AbstractGenericVehiclesPsvController
 {
     use VariationControllerTrait,
+        Traits\PsvLicenceControllerTrait,
         // @NOTE: AC says variations behave exactly as per licences, so...
         Traits\LicenceGenericVehiclesControllerTrait;
 
