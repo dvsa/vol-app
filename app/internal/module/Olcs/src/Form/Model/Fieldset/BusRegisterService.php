@@ -90,7 +90,7 @@ class BusRegisterService extends Base
      *     "label": "Correspondence address",
      *     "disable_inarray_validator": false,
      *     "service_name": "Common\Service\Data\AddressListDataService",
-     *     "use_groups": "false"
+     *     "context": {"entities":{"licence"},"order":{"correspondence"}}
      * })
      * @Form\Type("DynamicSelect")
      */
