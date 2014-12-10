@@ -53,11 +53,14 @@ trait DocumentSearchTrait
     {
         $form = $this->getForm('documents-home');
 
+        // @see https://jira.i-env.net/browse/OLCS-6061
+        $filters['isDoc'] = true;
+
         // grab all the relevant backend data needed to populate the
         // various dropdowns on the filter form
         $selects = array(
             'category' => $this->getListDataFromBackend('Category', [], 'description'),
-            'documentSubCategory' => $this->getListDataFromBackend('DocumentSubCategory', $filters, 'description'),
+            'documentSubCategory' => $this->getListDataFromBackend('SubCategory', $filters, 'subCategoryName'),
             'fileExtension' => $this->getListDataFromBackend(
                 'RefData',
                 ['refDataCategoryId' => 'document_type'],

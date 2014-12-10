@@ -70,11 +70,11 @@ class IndexController extends AbstractController
                 'field' => 'team'
             ),
             'task-sub-categories' => array(
-                'entity' => 'TaskSubCategory',
+                'entity' => 'SubCategory',
                 'field' => 'category'
             ),
             'document-sub-categories' => array(
-                'entity' => 'DocumentSubCategory',
+                'entity' => 'SubCategory',
                 'field' => 'category',
                 'title' => 'description'
             ),
