@@ -65,7 +65,7 @@ class TransportManagerDocumentController extends TransportManagerController
         // check the TM exists, bail out if it doesn't otherwise we have an
         // empty filter and would show ALL documents
         $tm = $this->getTmDetails($transportManagerId);
-        if($tm == false) {
+        if ($tm == false) {
             throw new ResourceNotFoundException(
                 "Transport Manager with id [$transportManagerId] does not exist"
             );

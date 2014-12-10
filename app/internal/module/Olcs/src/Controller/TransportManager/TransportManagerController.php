@@ -81,7 +81,8 @@ class TransportManagerController extends AbstractController
         return $view;
     }
 
-    public function getTmDetails($tmId, $bypassCache = false) {
+    public function getTmDetails($tmId, $bypassCache = false)
+    {
         if ($bypassCache || !isset($this->tmDetailsCache[$tmId])) {
              $this->tmDetailsCache[$tmId] = $this->getServiceLocator()
                                                 ->get('Entity\TransportManager')
