@@ -66,7 +66,6 @@ abstract class AbstractDocumentController extends AbstractController
             case 'licence':
             case 'application':
             case 'case':
-            case 'busReg':
             default:
                 return $type;
         }

@@ -103,7 +103,7 @@ class DocumentUploadController extends AbstractDocumentController
                 $data['licence'] = $this->getLicenceIdForCase();
                 break;
             case 'busReg':
-                $data['licence'] = $this->getFromRoute('licence');
+                $data['licence'] = $routeParams['licence'];
                 break;
             default:
                 break;
