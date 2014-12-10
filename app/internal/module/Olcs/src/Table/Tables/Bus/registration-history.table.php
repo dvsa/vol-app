@@ -15,7 +15,6 @@ return array(
                         true
                     ) . '">' . $data['regNo'] . '</a>';
                 },
-            'sort' => 'regNo'
         ),
         array(
             'title' => 'Var No.',
