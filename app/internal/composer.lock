@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "dc8fca9290becc91c22e4db371ab696f",
+    "hash": "e6af5b4e4d02efa3f8b6741d2d199498",
     "packages": [
         {
             "name": "cpms/client",
@@ -234,7 +234,7 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "https://github.com/schmittjoh",
+                    "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -450,7 +450,7 @@
                 {
                     "name": "Marco Pivetta",
                     "email": "ocramius@gmail.com",
-                    "homepage": "http://ocramius.github.com/",
+                    "homepage": "http://marco-pivetta.com/",
                     "role": "Developer"
                 },
                 {
@@ -460,7 +460,7 @@
                 {
                     "name": "Michaël Gallego",
                     "email": "mic.gallego@gmail.com",
-                    "homepage": "http://michaelgallego.fr"
+                    "homepage": "http://www.michaelgallego.fr"
                 }
             ],
             "description": "Zend Framework 2 Module that provides Doctrine basic functionality required for ORM and ODM modules",
@@ -532,7 +532,7 @@
                 {
                     "name": "Marco Pivetta",
                     "email": "ocramius@gmail.com",
-                    "homepage": "http://ocramius.github.com/",
+                    "homepage": "http://marco-pivetta.com/",
                     "role": "Developer"
                 },
                 {
@@ -605,7 +605,7 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "https://github.com/schmittjoh",
+                    "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -659,7 +659,7 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "https://github.com/schmittjoh",
+                    "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -775,11 +775,11 @@
         },
         {
             "name": "olcs/OlcsCommon",
-            "version": "dev-release",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "git@gitlab.clb.npm:olcs/olcs-common.git",
-                "reference": "aa18ecc3386369799956c178c3f234f91a735b98"
+                "reference": "4a260920be33c0dacfc7bd80ff85c0b5a4331f4e"
             },
             "require": {
                 "cpms/client": "0.1.x-dev",
@@ -808,7 +808,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2014-12-08 16:20:22"
+            "time": "2014-12-10 08:53:45"
         },
         {
             "name": "olcs/autoload",

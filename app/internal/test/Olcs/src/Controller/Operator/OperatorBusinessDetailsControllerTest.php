@@ -242,7 +242,7 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
             ->method('getStatusCode')
             ->will($this->returnValue($this->statusCode));
 
-        $this->request = $this->getMock('\StdClas', ['isPost', 'getPost', 'getUri', 'isXmlHttpRequest']);
+        $this->request = $this->getMock('\StdClass', ['isPost', 'getPost', 'getUri', 'isXmlHttpRequest']);
 
         $mockUri = $this->getMock('\StdClass', ['getPath']);
         $mockUri->expects($this->any())
