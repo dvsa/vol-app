@@ -7,16 +7,24 @@ return array(
         array(
             'title' => 'Pack name',
             'name' => 'filename',
+            'formatter' => function () {
+                return 'pack.zip';
+            }
+        ),
+        array(
+            'title' => 'Type',
+            'name' => 'ebsrSubmissionType',
+            'formatter' => 'RefData'
         ),
         array(
             'title' => 'Submitted',
-            'name' => 'submitted',
+            'name' => 'submittedDate',
             'formatter' => 'Date'
         ),
         array(
             'title' => 'Status',
-            'name' => 'status',
-            'formatter' => 'Translate'
+            'name' => 'ebsrSubmissionStatus',
+            'formatter' => 'RefData'
         ),
          array(
             'title' => '',
