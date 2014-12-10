@@ -22,6 +22,12 @@ class TransportManagerController extends AbstractController
     protected $pageLayout = 'transport-manager';
 
     /**
+     * Memoize TM details to prevent multiple backend calls with same id
+     * @var array
+     */
+    protected $tmDetailsCache = [];
+
+    /**
      * Redirect to the first menu section
      *
      * @codeCoverageIgnore
@@ -53,7 +59,7 @@ class TransportManagerController extends AbstractController
     {
         $tmId = $this->params()->fromRoute('transportManager');
         if ($tmId) {
-            $transportManager = $this->getServiceLocator()->get('Entity\TransportManager')->getTmDetails($tmId);
+            $transportManager = $this->getTmDetails($tmId);
             $this->pageTitle = isset($transportManager['contactDetails']['person']['forename']) ?
                 $transportManager['contactDetails']['person']['forename'] . ' ': '';
             $this->pageTitle .= isset($transportManager['contactDetails']['person']['familyName']) ?
@@ -73,5 +79,14 @@ class TransportManagerController extends AbstractController
         $view = $this->getView($variables);
 
         return $view;
+    }
+
+    public function getTmDetails($tmId, $bypassCache = false) {
+        if ($bypassCache || !isset($this->tmDetailsCache[$tmId])) {
+             $this->tmDetailsCache[$tmId] = $this->getServiceLocator()
+                                                ->get('Entity\TransportManager')
+                                                ->getTmDetails($tmId);
+        }
+        return $this->tmDetailsCache[$tmId];
     }
 }

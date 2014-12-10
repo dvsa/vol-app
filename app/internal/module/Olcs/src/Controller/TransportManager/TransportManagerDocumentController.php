@@ -10,6 +10,7 @@ namespace Olcs\Controller\TransportManager;
 
 use Olcs\Controller\TransportManager\TransportManagerController;
 use Olcs\Controller\Traits;
+use Common\Exception\ResourceNotFoundException;
 
 /**
  * Transport Manager Document Controller
@@ -60,6 +61,15 @@ class TransportManagerDocumentController extends TransportManagerController
     protected function getDocumentView()
     {
         $transportManagerId = $this->getFromRoute('transportManager');
+
+        // check the TM exists, bail out if it doesn't otherwise we have an
+        // empty filter and would show ALL documents
+        $tm = $this->getTmDetails($transportManagerId);
+        if($tm == false) {
+            throw new ResourceNotFoundException(
+                "Transport Manager with id [$transportManagerId] does not exist"
+            );
+        }
 
         $filters = $this->mapDocumentFilters(
             array('tmId' => $transportManagerId)
