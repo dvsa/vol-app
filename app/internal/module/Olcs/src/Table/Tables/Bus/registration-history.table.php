@@ -11,7 +11,7 @@ return array(
             'formatter' => function ($data) {
                 return '<a href="' . $this->generateUrl(
                     array('action' => 'index', 'busRegId' => $data['id']),
-                    'licence/bus-details',
+                    'licence/bus-details/service',
                     true
                 ) . '">' . $data['regNo'] . '</a>';
             },
