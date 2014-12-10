@@ -47,7 +47,7 @@ class IndexController extends AbstractController
                 'form'  => $this->getTaskForm($filters),
             )
         );
-        $view->setTemplate('index/home');
+        $view->setTemplate('view-new/pages/index');
         $view->setTerminal($this->getRequest()->isXmlHttpRequest());
 
         return $this->renderView($view);

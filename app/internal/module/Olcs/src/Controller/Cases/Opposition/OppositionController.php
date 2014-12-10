@@ -161,7 +161,7 @@ class OppositionController extends OlcsController\CrudAbstract
         }
 
         $view->setVariables($viewVars);
-        $view->setTemplate('case/page/opposition');
+        $view->setTemplate('view-new/pages/case/opposition');
 
         return $this->renderView($view);
     }

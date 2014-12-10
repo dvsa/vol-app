@@ -12,7 +12,9 @@
                     </a>
                 <?php endif; ?>
                 <?php if ($current && isset($filterForm)): ?>
+                    <div class="filters">
                     <?php echo $this->form($filterForm); ?>
+                    </div>
                 <?php endif;?>
             </li>
         <?php endforeach; ?>

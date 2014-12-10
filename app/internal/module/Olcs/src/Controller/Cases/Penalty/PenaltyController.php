@@ -213,7 +213,7 @@ class PenaltyController extends OlcsController\CrudAbstract
             $this->getErruTable('erru-applied', 'appliedPenalties');
         }
 
-        $view->setTemplate('case/page/penalties');
+        $view->setTemplate('view-new/pages/case/penalties');
 
         return $this->renderView($view);
     }

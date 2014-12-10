@@ -152,7 +152,7 @@ class HearingAppealController extends OlcsController\CrudAbstract
      *
      * @return array|\Zend\Http\Response|\Zend\View\Model\ViewModel
      */
-    protected $detailsView = '/case/hearing-appeal/details';
+    protected $detailsView = 'view-new/pages/case/appeals-stays';
 
     /**
      * Ensure index action redirects to details action

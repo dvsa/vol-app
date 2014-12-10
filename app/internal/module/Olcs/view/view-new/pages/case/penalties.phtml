@@ -1,0 +1,58 @@
+<?php
+    $data = $this->placeholder('penalties')->getValue();
+
+    if (!empty($data)) {
+        echo $this->render('partials/read-only/main',
+            [
+                'header' => 'ERRU penalties',
+                'multiItems' => [
+                    0 => [
+                        ['label' => 'VRM', 'value' => $data['case']['erruVrm']],
+                    ],
+                    1 => [
+                        ['label' => 'Infringement ID', 'value' => $data['id']],
+                        ['label' => 'Notification number', 'value' => $data['notificationNumber']],
+                    ],
+                    2 => [
+                        ['label' => 'Date of infringement', 'date' => $data['infringementDate']],
+                        ['label' => 'Date of check', 'date' => $data['checkDate']],
+                        ['label' => 'Category', 'value' => $data['siCategory']['description']],
+                        [
+                            'label' => 'Type',
+                            'value' => $data['siCategoryType']['description'],
+                            'class' => 'full-width'
+                        ]
+                    ],
+                    3 => [
+                        [
+                            'label' => 'Transport undertaking name',
+                            'value' => $data['case']['erruTransportUndertakingName'],
+                            'class' => 'full-width'
+                        ],
+                        [
+                            'label' => 'Member state',
+                            'value' => $data['memberStateCode']['countryDesc'],
+                            'class' => 'full-width'
+                        ],
+                        [
+                            'label' => 'Originating authority',
+                            'value' => $data['case']['erruOriginatingAuthority'],
+                            'class' => 'full-width'
+                        ]
+                    ]
+                ]
+            ]
+        );
+
+        echo $this->placeholder('erru-imposed')->getValue() . '<br />';
+        echo $this->placeholder('erru-requested')->getValue() . '<br />';
+        echo $this->placeholder('erru-applied')->getValue() . '<br />';
+
+        echo $this->render('widget/comments');
+    } else {
+        echo $this->render('/placeholder/placeholder',
+            [
+                'header' => 'ERRU Penalties',
+            ]
+        );
+    }

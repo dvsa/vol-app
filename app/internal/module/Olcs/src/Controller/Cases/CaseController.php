@@ -127,7 +127,7 @@ class CaseController extends OlcsController\CrudAbstract
         )
     );
 
-    protected $detailsView = 'case/overview';
+    protected $detailsView = 'view-new/pages/case/overview';
 
     /**
      * Holds an array of variables for the default
