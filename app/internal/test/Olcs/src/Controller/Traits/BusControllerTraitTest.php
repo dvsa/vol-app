@@ -140,6 +140,7 @@ class BusControllerTraitTest extends \PHPUnit_Framework_TestCase
                 'description' => 'Bus reg status'
             ],
             'routeSeq' => '123456',
+            'variationNo' => 2,
             'regNo' => '1332432'
         ];
     }
