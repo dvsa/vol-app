@@ -181,7 +181,7 @@ class DocumentGenerationController extends AbstractDocumentController
                 $queryData['licence'] = $this->getLicenceIdForCase();
                 break;
             case 'busReg':
-                $queryData['licence'] = $this->getFromRoute('licence');
+                $queryData['licence'] = $routeParams['licence'];
                 break;
             default:
                 break;
