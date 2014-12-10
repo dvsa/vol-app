@@ -81,11 +81,7 @@ return array(
         'routes' => array_merge($routes, $configRoutes),
     ),
     'controllers' => array(
-        'invokables' => array(
-
-            'Olcs\Ebsr\Uploads' => 'Olcs\Controller\Ebsr\UploadsController',
-            'Dashboard' => 'Olcs\Controller\DashboardController',
-
+        'lva_controllers' => array(
             'LvaApplication'                        => 'Olcs\Controller\Lva\Application\OverviewController',
             'LvaApplication/TypeOfLicence'          => 'Olcs\Controller\Lva\Application\TypeOfLicenceController',
             'LvaApplication/BusinessType'           => 'Olcs\Controller\Lva\Application\BusinessTypeController',
@@ -105,7 +101,6 @@ return array(
             'LvaApplication/TaxiPhv'                => 'Olcs\Controller\Lva\Application\TaxiPhvController',
             'LvaApplication/VehiclesDeclarations'   => 'Olcs\Controller\Lva\Application\VehiclesDeclarationsController',
             'LvaApplication/PaymentSubmission'      => 'Olcs\Controller\Lva\Application\PaymentSubmissionController',
-
             'LvaLicence'                            => 'Olcs\Controller\Lva\Licence\OverviewController',
             'LvaLicence/TypeOfLicence'              => 'Olcs\Controller\Lva\Licence\TypeOfLicenceController',
             'LvaLicence/BusinessType'               => 'Olcs\Controller\Lva\Licence\BusinessTypeController',
@@ -121,7 +116,6 @@ return array(
             'LvaLicence/TaxiPhv'                    => 'Olcs\Controller\Lva\Licence\TaxiPhvController',
             'LvaLicence/Discs'                      => 'Olcs\Controller\Lva\Licence\DiscsController',
             'LvaLicence/ConditionsUndertakings'     => 'Olcs\Controller\Lva\Licence\ConditionsUndertakingsController',
-
             'LvaVariation'                          => 'Olcs\Controller\Lva\Variation\OverviewController',
             'LvaVariation/TypeOfLicence'            => 'Olcs\Controller\Lva\Variation\TypeOfLicenceController',
             'LvaVariation/BusinessType'             => 'Olcs\Controller\Lva\Variation\BusinessTypeController',
@@ -138,6 +132,10 @@ return array(
             'LvaVariation/Discs'                    => 'Olcs\Controller\Lva\Variation\DiscsController',
             'LvaVariation/ConditionsUndertakings'   => 'Olcs\Controller\Lva\Variation\ConditionsUndertakingsController',
             'LvaVariation/Undertakings'             => 'Olcs\Controller\Lva\Variation\UndertakingsController',
+        ),
+        'invokables' => array(
+            'Olcs\Ebsr\Uploads' => 'Olcs\Controller\Ebsr\UploadsController',
+            'Dashboard' => 'Olcs\Controller\DashboardController',
         )
     ),
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',
