@@ -147,7 +147,16 @@ class BusServiceController extends BusController
      */
     protected function getTableData()
     {
-        $data = $this->makeRestCall('ConditionUndertaking', 'GET', [], $this->conditionsBundle);
+        $licence = $this->params()->fromRoute('licence');
+        $data = $this->makeRestCall(
+            'ConditionUndertaking',
+            'GET',
+            [
+                'licence' => $licence,
+                'conditionType' => 'cdt_con'
+            ],
+            $this->conditionsBundle
+        );
 
         return $data['Results'];
     }
