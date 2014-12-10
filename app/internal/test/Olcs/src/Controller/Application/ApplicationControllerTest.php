@@ -149,17 +149,19 @@ class ApplicationControllerTest extends MockeryTestCase
 
         $this->sut->shouldReceive('makeRestCall')
             ->with('Category', 'GET', ['limit'=>100, 'sort'=>'description'])
-            ->andReturn(['cat1','cat2']);
+            ->andReturn(['cat1', 'cat2']);
+
         $this->sut->shouldReceive('makeRestCall')
             ->with(
-                'DocumentSubCategory',
+                'SubCategory',
                 'GET',
                 [
-                    'sort'      => "description",
-                    'order'     => "DESC",
+                    'sort'      => 'subCategoryName',
+                    'order'     => 'ASC',
                     'page'      => 1,
                     'limit'     => 100,
-                    'licenceId' => 7
+                    'licenceId' => 7,
+                    'isDoc'     => true
                 ]
             )
             ->andReturn(['subcat1', 'subcat2']);

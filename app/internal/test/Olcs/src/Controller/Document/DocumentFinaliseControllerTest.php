@@ -451,7 +451,7 @@ class DocumentFinaliseControllerTest extends AbstractHttpControllerTestCase
         switch ($service) {
             case 'Category':
                 return $this->stubCategory($data);
-            case 'DocumentSubCategory':
+            case 'SubCategory':
                 return $this->stubSubCategory($data);
             case 'DocTemplate':
                 return $this->stubDocTemplate($data);
@@ -516,6 +516,12 @@ class DocumentFinaliseControllerTest extends AbstractHttpControllerTestCase
                     ->with('Olcs\Service\Data\Cases')
                     ->will($this->returnValue($caseMock));
                 return $dsMock;
+            case 'Helper\Date':
+                $mock = $this->getMock('\stdClass', ['getDate']);
+                $mock->expects($this->any())
+                    ->method('getDate')
+                    ->willReturn('2014-01-01 00:00:00');
+                return $mock;
             default:
                 throw new \Exception("Service Locator " . $service . " not mocked");
         }
@@ -533,7 +539,7 @@ class DocumentFinaliseControllerTest extends AbstractHttpControllerTestCase
     {
         return [
             'id' => 2,
-            'description' => 'A Sub Category',
+            'subCategoryName' => 'A Sub Category',
         ];
     }
 
@@ -554,7 +560,7 @@ class DocumentFinaliseControllerTest extends AbstractHttpControllerTestCase
     private function mockLicenceDocument($data)
     {
         $this->assertStringEndsWith('A_template.rtf', $data['filename']);
-        $this->assertStringStartsWith(date('Y-m-d'), $data['issuedDate']);
+        $this->assertStringStartsWith('2014-01-01', $data['issuedDate']);
 
         unset($data['filename']);
         unset($data['issuedDate']);
@@ -565,7 +571,7 @@ class DocumentFinaliseControllerTest extends AbstractHttpControllerTestCase
             'licence' => 1234,
             'fileExtension' => 'doc_rtf',
             'category' => 3,
-            'documentSubCategory' => 2,
+            'subCategory' => 2,
             'isDigital' => true,
             'isReadOnly' => true,
             'size' => 1234
@@ -578,7 +584,7 @@ class DocumentFinaliseControllerTest extends AbstractHttpControllerTestCase
     private function mockApplicationDocument($data)
     {
         $this->assertStringEndsWith('A_template.rtf', $data['filename']);
-        $this->assertStringStartsWith(date('Y-m-d'), $data['issuedDate']);
+        $this->assertStringStartsWith('2014-01-01', $data['issuedDate']);
 
         unset($data['filename']);
         unset($data['issuedDate']);
@@ -590,7 +596,7 @@ class DocumentFinaliseControllerTest extends AbstractHttpControllerTestCase
             'licence' => 7,
             'fileExtension' => 'doc_rtf',
             'category' => 3,
-            'documentSubCategory' => 2,
+            'subCategory' => 2,
             'isDigital' => true,
             'isReadOnly' => true,
             'size' => 1234
@@ -603,7 +609,7 @@ class DocumentFinaliseControllerTest extends AbstractHttpControllerTestCase
     private function mockCaseDocument($data)
     {
         $this->assertStringEndsWith('A_template.rtf', $data['filename']);
-        $this->assertStringStartsWith(date('Y-m-d'), $data['issuedDate']);
+        $this->assertStringStartsWith('2014-01-01', $data['issuedDate']);
 
         unset($data['filename']);
         unset($data['issuedDate']);
@@ -615,7 +621,7 @@ class DocumentFinaliseControllerTest extends AbstractHttpControllerTestCase
             'licence' => 7,
             'fileExtension' => 'doc_rtf',
             'category' => 3,
-            'documentSubCategory' => 2,
+            'subCategory' => 2,
             'isDigital' => true,
             'isReadOnly' => true,
             'size' => 1234
