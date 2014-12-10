@@ -104,6 +104,8 @@ return array(
             'BusDocsPlaceholderController' => 'Olcs\Controller\Bus\Docs\BusDocsPlaceholderController',
             'BusProcessingController' => 'Olcs\Controller\Bus\Processing\BusProcessingController',
             'BusProcessingNoteController' => 'Olcs\Controller\Bus\Processing\BusProcessingNoteController',
+            'BusProcessingRegistrationHistoryController' =>
+                'Olcs\Controller\Bus\Processing\BusProcessingRegistrationHistoryController',
             'BusFeesController' => 'Olcs\Controller\Bus\Fees\BusFeesController',
             'BusFeesPlaceholderController' => 'Olcs\Controller\Bus\Fees\BusFeesPlaceholderController',
             'BusServiceController' => 'Olcs\Controller\Bus\Service\BusServiceController',

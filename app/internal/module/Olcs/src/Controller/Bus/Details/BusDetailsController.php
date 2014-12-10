@@ -19,20 +19,6 @@ class BusDetailsController extends BusController
     protected $section = 'details';
     protected $subNavRoute = 'licence_bus_details';
 
-    /**
-     * Index action
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
-    public function indexAction()
-    {
-        return $this->redirectToRoute(
-            'licence/bus-details/service',
-            ['action'=>'edit'],
-            ['code' => '303'], // Why? No cache is set with a 303 :)
-            true
-        );
-    }
 
     public function alterFormBeforeValidation($form)
     {
