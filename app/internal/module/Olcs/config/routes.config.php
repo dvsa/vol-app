@@ -1325,7 +1325,7 @@ $routes = [
                             'route' => '/tasks',
                             'defaults' => [
                                 'controller' => 'TMProcessingTaskController',
-                                'action' => 'index',
+                                'action' => 'documents',
                             ]
                         ]
                     ],
@@ -1342,12 +1342,13 @@ $routes = [
                 ]
             ],
             'documents' => [
-                'type' => 'literal',
+                'type' => 'segment',
+                'may_terminate' => true,
                 'options' => [
                     'route' => '/documents',
                     'defaults' => [
                         'controller' => 'TMDocumentController',
-                        'action' => 'index',
+                        'action' => 'documents',
                     ]
                 ]
             ],
