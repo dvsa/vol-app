@@ -18,5 +18,4 @@ class BusTrcController extends BusController
 {
     protected $section = 'trc';
     protected $subNavRoute = 'licence_bus_trc';
-
 }

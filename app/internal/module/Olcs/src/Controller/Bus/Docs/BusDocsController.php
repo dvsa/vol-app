@@ -18,5 +18,4 @@ class BusDocsController extends BusController
 {
     protected $section = 'docs';
     protected $subNavRoute = 'licence_bus_docs';
-
 }

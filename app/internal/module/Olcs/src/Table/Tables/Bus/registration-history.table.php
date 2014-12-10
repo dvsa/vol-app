@@ -9,12 +9,12 @@ return array(
         array(
             'title' => 'Reg No.',
             'formatter' => function ($data) {
-                    return '<a href="' . $this->generateUrl(
-                        array('action' => 'index', 'busRegId' => $data['id']),
-                        'licence/bus-details',
-                        true
-                    ) . '">' . $data['regNo'] . '</a>';
-                },
+                return '<a href="' . $this->generateUrl(
+                    array('action' => 'index', 'busRegId' => $data['id']),
+                    'licence/bus-details',
+                    true
+                ) . '">' . $data['regNo'] . '</a>';
+            },
         ),
         array(
             'title' => 'Var No.',

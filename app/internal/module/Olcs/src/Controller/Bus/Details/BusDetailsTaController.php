@@ -15,5 +15,4 @@ namespace Olcs\Controller\Bus\Details;
 class BusDetailsTaController extends BusDetailsController
 {
     protected $item = 'ta';
-
 }

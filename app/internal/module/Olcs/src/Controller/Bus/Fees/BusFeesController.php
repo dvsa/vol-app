@@ -18,5 +18,4 @@ class BusFeesController extends BusController
 {
     protected $section = 'fees';
     protected $subNavRoute = 'licence_bus_fees';
-
 }

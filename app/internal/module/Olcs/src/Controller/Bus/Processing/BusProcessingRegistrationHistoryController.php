@@ -58,5 +58,4 @@ class BusProcessingRegistrationHistoryController extends BusProcessingController
 
         return $listData;
     }
-
 }
