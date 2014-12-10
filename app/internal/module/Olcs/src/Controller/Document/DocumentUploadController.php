@@ -85,20 +85,21 @@ class DocumentUploadController extends AbstractDocumentController
         );
 
         // AC specifies this timestamp format...
-        $fileName = date('YmdHi')
+        $fileName = $this->getServiceLocator()->get('Helper\Date')->getDate('YmdHi')
             . '_' . $this->formatFilename($files['file']['name'])
             . '.' . $file->getExtension();
+
         $data = [
-            'identifier'          => $file->getIdentifier(),
-            'description'         => $data['details']['description'],
-            'filename'            => $fileName,
-            'fileExtension'       => 'doc_' . $file->getExtension(),
-            'category'            => $data['details']['category'],
-            'documentSubCategory' => $data['details']['documentSubCategory'],
-            'isDigital'           => true,
-            'isReadOnly'          => true,
-            'issuedDate'          => date('Y-m-d H:i:s'),
-            'size'                => $file->getSize()
+            'identifier'    => $file->getIdentifier(),
+            'description'   => $data['details']['description'],
+            'filename'      => $fileName,
+            'fileExtension' => 'doc_' . $file->getExtension(),
+            'category'      => $data['details']['category'],
+            'subCategory'   => $data['details']['documentSubCategory'],
+            'isDigital'     => true,
+            'isReadOnly'    => true,
+            'issuedDate'    => $this->getServiceLocator()->get('Helper\Date')->getDate('Y-m-d H:i:s'),
+            'size'          => $file->getSize()
         ];
 
         $data[$type] = $routeParams[$type];
@@ -108,9 +109,11 @@ class DocumentUploadController extends AbstractDocumentController
             case 'application':
                 $data['licence'] = $this->getLicenceIdForApplication();
                 break;
+
             case 'case':
                 $data['licence'] = $this->getLicenceIdForCase();
                 break;
+
             default:
                 break;
         }
