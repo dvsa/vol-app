@@ -30,7 +30,6 @@ class TransportManagerDocumentController extends TransportManagerController
      */
     protected $section = 'documents';
 
-
     /**
      * Route (prefix) for document action redirects
      * @see Olcs\Controller\Traits\DocumentActionTrait

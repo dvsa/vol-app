@@ -4,7 +4,7 @@
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-namespace OlcsTest\Controller\Document;
+namespace OlcsTest\Controller\TransportManager;
 
 use Olcs\Controller\TransportManager\TransportManagerDocumentController as Sut;
 use Olcs\TestHelpers\ControllerPluginManagerHelper;

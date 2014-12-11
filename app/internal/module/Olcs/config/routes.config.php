@@ -1339,7 +1339,7 @@ $routes = [
                             'route' => '/tasks',
                             'defaults' => [
                                 'controller' => 'TMProcessingTaskController',
-                                'action' => 'documents',
+                                'action' => 'index',
                             ]
                         ]
                     ],
