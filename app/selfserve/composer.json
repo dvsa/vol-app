@@ -37,7 +37,7 @@
         "doctrine/doctrine-orm-module": "0.*",
         "olcs/OlcsCommon": "dev-develop",
         "olcs/olcs-logging": "dev-develop",
-        "dvsa/jackrabbit": "v1.1.0",
+        "dvsa/jackrabbit": "~1.1.1",
         "symfony/Filesystem": "~2.6.0-dev",
         "olcs/autoload": "dev-develop",
         "cpms/client": "0.1.x-dev"

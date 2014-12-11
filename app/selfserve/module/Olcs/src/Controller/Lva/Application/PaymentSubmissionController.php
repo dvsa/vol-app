@@ -11,6 +11,7 @@ use Common\Controller\Lva\AbstractController;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 use Common\Service\Entity\ApplicationEntityService;
 use Zend\View\Model\ViewModel;
+use Common\Service\Data\CategoryDataService;
 
 /**
  * External Application Payment Submission Controller
@@ -39,21 +40,13 @@ class PaymentSubmissionController extends AbstractController
             ->get('Entity\Application')
             ->save($update);
 
-        $categoryService = $this->getServiceLocator()->get('Category');
-
-        $category = $categoryService->getCategoryByDescription('Application');
-        $subCategory = $this->filterCategory(
-            $categoryService->getCategoryByDescription('GV79 Application', 'Task'),
-            'GV79 Digital'
-        );
-
         // Create a task - OLCS-3297
         // This is set to dummy user account data for the moment
         // @todo Assign task based on traffic area and operator name
         $actionDate = $this->getServiceLocator()->get('Helper\Date')->getDate();
         $task = array(
-            'category' => $category['id'],
-            'taskSubCategory' => $subCategory['id'],
+            'category' => CategoryDataService::CATEGORY_APPLICATION,
+            'subCategory' => CategoryDataService::TASK_SUB_CATEGORY_APPLICATION_GRANT_FEE_DUE,
             'description' => 'GV79 Application',
             'actionDate' => $actionDate,
             'assignedByUser' => 1,
@@ -93,14 +86,5 @@ class PaymentSubmissionController extends AbstractController
         $view->setTemplate('summary-application');
 
         return $this->render($view);
-    }
-
-    private function filterCategory($categories, $name)
-    {
-        foreach ($categories as $category) {
-            if ($category['name'] === $name) {
-                return $category;
-            }
-        }
     }
 }
