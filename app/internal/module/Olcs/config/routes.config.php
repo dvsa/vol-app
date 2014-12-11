@@ -1356,14 +1356,50 @@ $routes = [
                 ]
             ],
             'documents' => [
-                'type' => 'literal',
+                'type' => 'segment',
+                'may_terminate' => true,
                 'options' => [
                     'route' => '/documents',
                     'defaults' => [
                         'controller' => 'TMDocumentController',
-                        'action' => 'index',
+                        'action' => 'documents',
                     ]
-                ]
+                ],
+                'child_routes' => [
+                    'generate' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/generate[/:tmpId]',
+                            'defaults' => [
+                                'type' => 'transportManager',
+                                'controller' => 'DocumentGenerationController',
+                                'action' => 'generate'
+                            ]
+                        ],
+                    ],
+                    'finalise' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/finalise/:tmpId',
+                            'defaults' => [
+                                'type' => 'transportManager',
+                                'controller' => 'DocumentFinaliseController',
+                                'action' => 'finalise'
+                            ]
+                        ],
+                    ],
+                    'upload' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/upload',
+                            'defaults' => [
+                                'type' => 'transportManager',
+                                'controller' => 'DocumentUploadController',
+                                'action' => 'upload'
+                            ]
+                        ],
+                    ],
+                ],
             ],
         ],
     ],

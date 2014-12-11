@@ -3,6 +3,7 @@
 /**
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
+ * @author Dan Eggleston <dan@stolenegg.com>
  */
 namespace Olcs\Controller\Document;
 
@@ -13,6 +14,7 @@ use Common\Service\Data\CategoryDataService as Category;
 /**
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
+ * @author Dan Eggleston <dan@stolenegg.com>
  */
 abstract class AbstractDocumentController extends AbstractController
 {
@@ -20,20 +22,22 @@ abstract class AbstractDocumentController extends AbstractController
      * For redirects
      */
     protected $documentRouteMap = [
-        'licence'     => 'licence/documents',
-        'application' => 'lva-application/documents',
-        'case'        => 'case_licence_docs_attachments',
-        'busReg'      => 'licence/bus-docs',
+        'licence'          => 'licence/documents',
+        'application'      => 'lva-application/documents',
+        'case'             => 'case_licence_docs_attachments',
+        'busReg'           => 'licence/bus-docs',
+        'transportManager' => 'transport-manager/documents',
     ];
 
     /**
      * How to map route param types to category IDs (see category db table)
      */
     protected $categoryMap = [
-        'licence'     => Category::CATEGORY_LICENSING,
-        'application' => Category::CATEGORY_LICENSING,
-        'case'        => Category::CATEGORY_LICENSING, // use Licensing for now
-        'busReg'      => Category::CATEGORY_BUS_REGISTRATION,
+        'licence'          => Category::CATEGORY_LICENSING,
+        'busReg'           => Category::CATEGORY_BUS_REGISTRATION,
+        'case'             => Category::CATEGORY_LICENSING, // use Licensing for now
+        'application'      => Category::CATEGORY_APPLICATION,
+        'transportManager' => Category::CATEGORY_TRANSPORT_MANAGER,
     ];
 
     /**
@@ -65,6 +69,7 @@ abstract class AbstractDocumentController extends AbstractController
             case 'licence':
             case 'application':
             case 'case':
+            case 'transportManager':
             default:
                 return $type;
         }
