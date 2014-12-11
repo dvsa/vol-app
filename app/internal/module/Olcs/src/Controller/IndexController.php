@@ -89,6 +89,11 @@ class IndexController extends AbstractController
                 'entity' => 'DocTemplate',
                 'field' => 'subCategory',
                 'title' => 'description'
+            ),
+            'sub-category-descriptions' => array(
+                'entity' => 'SubCategoryDescription',
+                'field' => 'subCategory',
+                'title' => 'description'
             )
         );
 
