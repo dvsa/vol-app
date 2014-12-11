@@ -31,7 +31,7 @@ abstract class AbstractDocumentController extends AbstractController
      */
     protected $categoryMap = [
         'licence'     => Category::CATEGORY_LICENSING,
-        'application' => Category::CATEGORY_APPLICATION,
+        'application' => Category::CATEGORY_LICENSING,
         'case'        => Category::CATEGORY_LICENSING, // use Licensing for now
         'busReg'      => Category::CATEGORY_BUS_REGISTRATION,
     ];
@@ -48,7 +48,6 @@ abstract class AbstractDocumentController extends AbstractController
     const METADATA_KEY = 'data';
 
     protected $tmpData = [];
-
 
     /**
      * Maps an entity type to the key needed to get the id from the route

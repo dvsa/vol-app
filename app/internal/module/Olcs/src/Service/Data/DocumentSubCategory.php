@@ -17,7 +17,7 @@ class DocumentSubCategory extends AbstractData implements ListDataInterface
     /**
      * @var string
      */
-    protected $serviceName = 'DocumentSubCategory';
+    protected $serviceName = 'SubCategory';
 
     /**
      * @var string
@@ -50,6 +50,8 @@ class DocumentSubCategory extends AbstractData implements ListDataInterface
      */
     public function fetchListData($params)
     {
+        $params['isDoc'] = true;
+
         $category = $this->getCategory();
         $key = 'all';
         if (!empty($category)) {
@@ -66,5 +68,20 @@ class DocumentSubCategory extends AbstractData implements ListDataInterface
         }
 
         return $this->getData($key);
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    public function formatData(array $data)
+    {
+        $optionData = [];
+
+        foreach ($data as $datum) {
+            $optionData[$datum['id']] = $datum['subCategoryName'];
+        }
+
+        return $optionData;
     }
 }

@@ -164,14 +164,15 @@ class BusDocsControllerTest extends AbstractHttpControllerTestCase
             )
             ->shouldReceive('makeRestCall')
             ->with(
-                'DocumentSubCategory',
+                'SubCategory',
                 'GET',
                 [
-                    'sort'      => "description",
-                    'order'     => "DESC",
+                    'sort'      => 'subCategoryName',
+                    'order'     => 'ASC',
                     'page'      => 1,
                     'limit'     => 100,
-                    'licenceId' => 7
+                    'licenceId' => 7,
+                    'isDoc'     => true
                 ],
                 m::any()
             )
