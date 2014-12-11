@@ -22,7 +22,7 @@ class EbsrPack extends AbstractData
      * @param null $bundle
      * @return array
      */
-    public function fetchList(array $params = [], $bundle = null)
+    public function fetchList($params = [], $bundle = null)
     {
         if ($this->getData('list') === null) {
 
