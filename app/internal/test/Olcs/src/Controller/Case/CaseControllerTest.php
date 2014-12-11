@@ -372,7 +372,8 @@ class CaseControllerTest extends ControllerTestAbstract
                 'GET',
                 [
                     'limit' => 100,
-                    'sort' => 'description'
+                    'sort' => 'description',
+                    'isDocCategory' => true,
                 ],
                 m::any()
             )

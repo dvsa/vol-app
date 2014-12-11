@@ -254,7 +254,8 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
 
         $altListData = [
             'limit' => 100,
-            'sort' => 'description'
+            'sort' => 'description',
+            'isDocCategory' => true,
         ];
 
         $altResponse = [
@@ -425,7 +426,8 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
         ];
         $altListData = [
             'limit' => 100,
-            'sort' => 'description'
+            'sort' => 'description',
+            'isDocCategory' => true,
         ];
 
         $altResponse = [
