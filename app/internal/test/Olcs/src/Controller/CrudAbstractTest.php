@@ -368,7 +368,7 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
         $this->assertInstanceOf('\Zend\View\Model\ViewModel', $innerView[0]);
 
         $this->assertEquals($view->getTemplate(), 'layout/base');
-        $this->assertEquals($headerView->getTemplate(), 'layout/partials/header');
+        $this->assertEquals($headerView->getTemplate(), 'view-new/partials/header');
         $this->assertEquals($layoutView->getTemplate(), $pageLayout);
         $this->assertEquals($innerView[0]->getTemplate(), 'crud/form');
 
@@ -825,7 +825,7 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
         $id = 1;
 
         $layout = 'layout/base';
-        $headerTemplate = 'layout/partials/header';
+        $headerTemplate = 'view-new/partials/header';
         $detailsTemplate = 'details/view';
         $scripts = ['scripts/script'];
         $pageLayoutInner = 'case/inner-layout';
@@ -912,7 +912,7 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
         $id = 1;
 
         $layout = 'layout/base';
-        $headerTemplate = 'layout/partials/header';
+        $headerTemplate = 'view-new/partials/header';
         $scripts = ['scripts/script'];
         $pageTitle = 'Page title';
         $pageLayoutInner = null;

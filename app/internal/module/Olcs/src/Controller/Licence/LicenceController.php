@@ -81,7 +81,7 @@ class LicenceController extends AbstractController
 
         $view->{'table'} = $this->getTable('case', $results, $params);
 
-        $view->setTemplate('licence/cases');
+        $view->setTemplate('view-new/partials/table');
 
         return $this->renderView($view);
     }

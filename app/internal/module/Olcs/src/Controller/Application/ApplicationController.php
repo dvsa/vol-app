@@ -75,7 +75,7 @@ class ApplicationController extends AbstractController
             ->get('Olcs\Service\Data\Cases')->fetchList($params);
 
         $view = new ViewModel(['table' => $this->getTable('case', $results, $params)]);
-        $view->setTemplate('licence/cases');
+        $view->setTemplate('view-new/partials/table');
 
         return $this->render($view);
     }

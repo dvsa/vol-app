@@ -3,7 +3,7 @@
         <div class="one-fifth--left">
             <h4><?php echo $this->translate('internal-navigation-operator-profile'); ?></h4>
                 <?php
-                    $layout = 'layout/partials/vertical-navigation' . ($this->disable ? '-disabled' : '');
+                    $layout = 'view-new/partials/vertical-navigation' . ($this->disable ? '-disabled' : '');
                     echo $this->navigation('navigation')
                               ->menu($this->navigation()->findOneBy('id', 'operator'))
                               ->setUlClass('vertical-navigation')

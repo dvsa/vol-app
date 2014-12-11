@@ -5,7 +5,7 @@
                   ->menu($this->navigation()->findOneBy('id', 'transport_manager'))
                   ->setUlClass('horizontal-navigation')
                   ->setAddClassToListItem(true)
-                  ->setPartial('layout/partials/tabs');
+                  ->setPartial('view-new/partials/horizontal-navigation');
     ?>
     <?php else: ?>
         <ul class="horizontal-navigation">
@@ -20,12 +20,12 @@
             $verticalNavigation = $this->navigation('navigation')
                 ->menu($this->navigation()
                 ->findOneBy('id', 'transport_manager_details'));
-            $layout = 'layout/partials/vertical-navigation' . ($this->disable ? '-disabled' : '');
+            $layout = 'view-new/partials/vertical-navigation' . ($this->disable ? '-disabled' : '');
         } elseif (substr($section, 0, 10) == 'processing') {
             $verticalNavigation = $this->navigation('navigation')
                 ->menu($this->navigation()
                 ->findOneBy('id', 'transport_manager_processing'));
-            $layout = 'layout/partials/vertical-navigation';
+            $layout = 'view-new/partials/vertical-navigation';
         }
     ?>
     <div class="content">

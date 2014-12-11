@@ -198,7 +198,7 @@ return array(
         'template_map' => array(
             'layout/layout' => __DIR__ . '/../view/layout/base.phtml',
             'view-new/pages/404' => __DIR__ . '/../view/view-new/pages/404.phtml',
-            'view-new/pages/500' => __DIR__ . '/../view-new/pages/500.phtml'
+            'view-new/pages/500' => __DIR__ . '/../view/view-new/pages/500.phtml'
         ),
         'template_path_stack' => array(
             'olcs' => dirname(__DIR__) . '/view',

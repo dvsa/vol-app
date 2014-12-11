@@ -176,7 +176,7 @@ trait FeesActionTrait
             'processedBy' => isset($fee['lastModifiedBy']['name']) ? $fee['lastModifiedBy']['name'] : ''
         ];
         $view = new ViewModel($viewParams);
-        $view->setTemplate('licence/fees/edit-fee');
+        $view->setTemplate('view-new/pages/licence/edit-fee.phtml');
 
         return $this->renderView($view, 'No # ' . $fee['id']);
     }

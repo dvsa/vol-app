@@ -28,7 +28,7 @@ class BusTrcController extends BusController
     {
         $view = $this->getViewWithBusReg();
 
-        $view->setTemplate('licence/bus/index');
+        $view->setTemplate('view-new/pages/placeholder');
         return $this->renderView($view);
     }
 }

@@ -76,7 +76,7 @@ class ProhibitionDefectControllerTest extends \PHPUnit_Framework_TestCase
         $mockRestData = ['Results' => [0 => ['id' => 1]], 'Count' => 1];
 
         $layout = 'layout/base';
-        $headerTemplate = 'layout/partials/header';
+        $headerTemplate = 'view-new/partials/header';
         $pageLayout = 'case';
         $pageTitle = 'Page title';
         $pageSubTitle = 'Page sub title';
