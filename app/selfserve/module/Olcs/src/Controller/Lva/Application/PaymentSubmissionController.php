@@ -11,6 +11,7 @@ use Common\Controller\Lva\AbstractController;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 use Common\Service\Entity\ApplicationEntityService;
 use Zend\View\Model\ViewModel;
+use Common\Service\Data\CategoryDataService;
 
 /**
  * External Application Payment Submission Controller
@@ -39,18 +40,13 @@ class PaymentSubmissionController extends AbstractController
             ->get('Entity\Application')
             ->save($update);
 
-        $categoryService = $this->getServiceLocator()->get('Category');
-
-        $category = $categoryService->getCategoryByDescription('Application');
-        $subCategory = $categoryService->getCategoryByDescription('Fee Due', 'Task');
-
         // Create a task - OLCS-3297
         // This is set to dummy user account data for the moment
         // @todo Assign task based on traffic area and operator name
         $actionDate = $this->getServiceLocator()->get('Helper\Date')->getDate();
         $task = array(
-            'category' => $category['id'],
-            'subCategory' => $subCategory['id'],
+            'category' => CategoryDataService::CATEGORY_APPLICATION,
+            'subCategory' => CategoryDataService::TASK_SUB_CATEGORY_APPLICATION_GRANT_FEE_DUE,
             'description' => 'GV79 Application',
             'actionDate' => $actionDate,
             'assignedByUser' => 1,
