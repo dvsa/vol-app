@@ -8,6 +8,7 @@ namespace Olcs\Controller\Document;
 
 use Zend\View\Model\ViewModel;
 use Olcs\Controller\AbstractController;
+use Common\Service\Data\CategoryDataService as Category;
 
 /**
  *
@@ -22,6 +23,17 @@ abstract class AbstractDocumentController extends AbstractController
         'licence'     => 'licence/documents',
         'application' => 'lva-application/documents',
         'case'        => 'case_licence_docs_attachments',
+        'busReg'      => 'licence/bus-docs',
+    ];
+
+    /**
+     * How to map route param types to category IDs (see category db table)
+     */
+    protected $categoryMap = [
+        'licence'     => Category::CATEGORY_LICENSING,
+        'application' => Category::CATEGORY_LICENSING,
+        'case'        => Category::CATEGORY_LICENSING, // use Licensing for now
+        'busReg'      => Category::CATEGORY_BUS_REGISTRATION,
     ];
 
     /**
@@ -36,6 +48,27 @@ abstract class AbstractDocumentController extends AbstractController
     const METADATA_KEY = 'data';
 
     protected $tmpData = [];
+
+    /**
+     * Maps an entity type to the key needed to get the id from the route
+     *
+     * Note: busReg routing is set up completely differently to everything else :(
+     *
+     * @param string $type
+     * @return string
+     */
+    public function getRouteParamKeyForType($type)
+    {
+        switch ($type) {
+            case 'busReg':
+                return 'busRegId';
+            case 'licence':
+            case 'application':
+            case 'case':
+            default:
+                return $type;
+        }
+    }
 
     protected function getContentStore()
     {

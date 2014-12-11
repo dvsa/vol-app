@@ -188,20 +188,41 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
     public function processGenerateProvider()
     {
         return [
-            ['licence', 'licence/documents', []],
-            ['application', 'lva-application/documents' , ['licence' => 7]],
-            ['case', 'case_licence_docs_attachments' , ['licence' => 7]],
+            "Licence letter" => [
+                'licence',
+                ['type' => 'licence'],
+                'licence/documents',
+                [],
+            ],
+            "Application letter" => [
+                'application',
+                ['type' => 'application'],
+                'lva-application/documents',
+                ['licence' => 7],
+            ],
+            "Case letter" => [
+                'case',
+                ['type' => 'case'],
+                'case_licence_docs_attachments',
+                ['licence' => 7],
+            ],
+            "Bus Registration letter" => [
+                'busReg',
+                ['type' => 'busReg', 'licence' => 7],
+                'licence/bus-docs',
+                ['licence' => 7],
+            ],
         ];
     }
     /**
      * @dataProvider processGenerateProvider
      */
-    public function testProcessGenerate($docType, $redirectRoute, $extraQueryData)
+    public function testProcessGenerate($docType, $routeParams, $redirectRoute, $extraQueryData)
     {
         $fromRoute = $this->getMock('\stdClass', ['fromRoute']);
         $fromRoute->expects($this->any())
             ->method('fromRoute')
-            ->will($this->returnValue(array('type' => $docType)));
+            ->will($this->returnValue($routeParams));
 
         $this->controller->expects($this->any())
             ->method('params')
@@ -285,7 +306,10 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
 
         $redirect->expects($this->once())
             ->method('toRoute')
-            ->with($redirectRoute.'/finalise', ['tmpId' => 'tmp-filename', 'type' => $docType]);
+            ->with(
+                $redirectRoute . '/finalise',
+                array_merge(['tmpId' => 'tmp-filename'], $routeParams)
+            );
 
         $this->controller->expects($this->once())
             ->method('redirect')
@@ -307,7 +331,7 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
         switch ($service) {
             case 'Category':
                 return $this->mockCategory($data);
-            case 'DocumentSubCategory':
+            case 'SubCategory':
                 return $this->mockSubCategory($data);
             case 'DocTemplate':
                 return $this->mockDocTemplate($data);
@@ -449,13 +473,13 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
             'Results' => [
                 [
                     'id' => 10,
-                    'description' => 'A Sub Category',
+                    'subCategoryName' => 'A Sub Category',
                 ], [
                     'id' => 20,
-                    'description' => 'Publishable Applications',
+                    'subCategoryName' => 'Publishable Applications',
                 ], [
                     'id' => 30,
-                    'description' => 'Another Sub Category',
+                    'subCategoryName' => 'Another Sub Category',
                 ],
             ]
         ];

@@ -21,27 +21,25 @@ use Common\Service\File\Exception as FileException;
  */
 class DocumentUploadController extends AbstractDocumentController
 {
-    /**
-     * how to map route param types to category IDs (see category db table)
-     */
-    private $categoryMap = [
-        'licence'     => 1,
-        //'application' => 9,
-        'application' => 1, // @TODO - there are no subcategories defined for application yet!
-        'case'        => 1,
-    ];
-
     public function uploadAction()
     {
-        $type = $this->params()->fromRoute('type');
-        $category = $this->categoryMap[$type];
-        $this->getServiceLocator()
-             ->get('DataServiceManager')
-             ->get('Olcs\Service\Data\DocumentSubCategory')
-             ->setCategory($category);
+        // @TODO the form does *not* re-populate properly. Previously it completely
+        // ignored POST data entirely; Steve L to raise a bug and DE to pick up (11/12/14)
+        if ($this->getRequest()->isPost()) {
+            $data = (array)$this->getRequest()->getPost();
+            $category = $data['details']['category'];
+        } else {
+            $type = $this->params()->fromRoute('type');
+            $category = $this->categoryMap[$type];
+            $data = ['details' => ['category' => $category]];
+        }
 
-        $defaults = ['details' => ['category' => $category]];
-        $form = $this->generateFormWithData('upload-document', 'processUpload', $defaults);
+        $this->getServiceLocator()
+            ->get('DataServiceManager')
+            ->get('Olcs\Service\Data\DocumentSubCategory')
+            ->setCategory($category);
+
+        $form = $this->generateFormWithData('upload-document', 'processUpload', $data);
 
         $this->loadScripts(['upload-document']);
 
@@ -85,32 +83,40 @@ class DocumentUploadController extends AbstractDocumentController
         );
 
         // AC specifies this timestamp format...
-        $fileName = date('YmdHi')
+        $fileName = $this->getServiceLocator()->get('Helper\Date')->getDate('YmdHi')
             . '_' . $this->formatFilename($files['file']['name'])
             . '.' . $file->getExtension();
+
         $data = [
-            'identifier'          => $file->getIdentifier(),
-            'description'         => $data['details']['description'],
-            'filename'            => $fileName,
-            'fileExtension'       => 'doc_' . $file->getExtension(),
-            'category'            => $data['details']['category'],
-            'documentSubCategory' => $data['details']['documentSubCategory'],
-            'isDigital'           => true,
-            'isReadOnly'          => true,
-            'issuedDate'          => date('Y-m-d H:i:s'),
-            'size'                => $file->getSize()
+            'identifier'    => $file->getIdentifier(),
+            'description'   => $data['details']['description'],
+            'filename'      => $fileName,
+            'fileExtension' => 'doc_' . $file->getExtension(),
+            'category'      => $data['details']['category'],
+            'subCategory'   => $data['details']['documentSubCategory'],
+            'isDigital'     => true,
+            'isReadOnly'    => true,
+            'issuedDate'    => $this->getServiceLocator()->get('Helper\Date')->getDate('Y-m-d H:i:s'),
+            'size'          => $file->getSize()
         ];
 
-        $data[$type] = $routeParams[$type];
+        $key = $this->getRouteParamKeyForType($type);
+        $data[$type] = $routeParams[$key];
 
         // we need to link certain documents to multiple IDs
         switch ($type) {
             case 'application':
                 $data['licence'] = $this->getLicenceIdForApplication();
                 break;
+
             case 'case':
                 $data['licence'] = $this->getLicenceIdForCase();
                 break;
+
+            case 'busReg':
+                $data['licence'] = $routeParams['licence'];
+                break;
+
             default:
                 break;
         }
