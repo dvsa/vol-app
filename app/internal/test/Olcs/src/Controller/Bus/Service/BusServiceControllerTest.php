@@ -87,6 +87,17 @@ class BusServiceControllerTest extends AbstractHttpControllerTestCase
     {
         $type = 'foo';
 
+        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
+            [
+                'params' => 'Params'
+            ]
+        );
+        $licenceId = 110;
+        $mockParamsPlugin = $mockPluginManager->get('params', '');
+        $mockParamsPlugin->shouldReceive('fromRoute')->with('licence')->andReturn($licenceId);
+
+        $this->sut->setPluginManager($mockPluginManager);
+
         $mockTableFieldset = m::mock('\Zend\Form\Fieldset');
 
         $mockConditionsFieldset = m::mock('\Zend\Form\Fieldset');
