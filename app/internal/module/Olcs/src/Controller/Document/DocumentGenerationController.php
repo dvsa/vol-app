@@ -24,15 +24,6 @@ class DocumentGenerationController extends AbstractDocumentController
     const EMPTY_LABEL = 'Please select';
 
     /**
-     * how to map route param types to category names
-     */
-    private $categoryMap = [
-        'licence' => 'Licensing',
-        'application' => 'Licensing',
-        'case' => 'Licensing',
-    ];
-
-    /**
      * Not the prettiest bundle, but what we ultimately want
      * are the all the DB paragraphs availabe for a given template,
      * grouped into bookmarks
@@ -75,9 +66,10 @@ class DocumentGenerationController extends AbstractDocumentController
             false
         );
 
+        $type = $this->params('type');
         $defaultData = [
             'details' => [
-                'category' => $this->getDefaultCategory($categories)
+                'category' => $this->categoryMap[$type]
             ]
         ];
         $data = [];
@@ -187,6 +179,9 @@ class DocumentGenerationController extends AbstractDocumentController
                 break;
             case 'case':
                 $queryData['licence'] = $this->getLicenceIdForCase();
+                break;
+            case 'busReg':
+                $queryData['licence'] = $routeParams['licence'];
                 break;
             default:
                 break;
@@ -325,12 +320,6 @@ class DocumentGenerationController extends AbstractDocumentController
 
             $fieldset->add($element);
         }
-    }
-
-    private function getDefaultCategory($categories)
-    {
-        $name = $this->categoryMap[$this->params('type')];
-        return array_search($name, $categories);
     }
 
     protected function getListDataFromBackend(
