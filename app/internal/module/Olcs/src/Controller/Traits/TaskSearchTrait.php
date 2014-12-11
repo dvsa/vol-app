@@ -67,7 +67,6 @@ trait TaskSearchTrait
             $filters['team'] = $filters['assignedToTeam'];
         }
 
-
         // @see https://jira.i-env.net/browse/OLCS-6061. Don't worry, filters are ignored
         // if the entity doesn't have the relevant field, so it's safe to cram this in here
         $filters['isTask'] = true;
