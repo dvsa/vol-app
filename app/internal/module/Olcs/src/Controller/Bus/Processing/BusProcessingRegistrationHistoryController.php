@@ -54,7 +54,7 @@ class BusProcessingRegistrationHistoryController extends BusProcessingController
 
         if ($listData == null) {
             $params['sort'] = 'variationNo';
-            $params['order'] = 'DESC';
+            $params['order'] = 'ASC';
             $data = $this->loadCurrent();
             $params['routeNo'] = $data['routeNo'];
             $listData = $this->makeRestCall($this->getService(), 'GET', $params, $this->getDataBundle());
