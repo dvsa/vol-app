@@ -49,7 +49,6 @@ abstract class AbstractDocumentController extends AbstractController
 
     protected $tmpData = [];
 
-
     /**
      * Maps an entity type to the key needed to get the id from the route
      *

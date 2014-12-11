@@ -23,12 +23,18 @@ class DocumentUploadController extends AbstractDocumentController
 {
     public function uploadAction()
     {
-        $type = $this->params()->fromRoute('type');
-        $category = $this->categoryMap[$type];
+        if ($this->getRequest()->isPost()) {
+            $data = (array)$this->getRequest()->getPost();
+            $category = $data['details']['category'];
+        } else {
+            $type = $this->params()->fromRoute('type');
+            $category = $this->categoryMap[$type];
+        }
+
         $this->getServiceLocator()
-             ->get('DataServiceManager')
-             ->get('Olcs\Service\Data\DocumentSubCategory')
-             ->setCategory($category);
+            ->get('DataServiceManager')
+            ->get('Olcs\Service\Data\DocumentSubCategory')
+            ->setCategory($category);
 
         $defaults = ['details' => ['category' => $category]];
         $form = $this->generateFormWithData('upload-document', 'processUpload', $defaults);
