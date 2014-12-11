@@ -222,7 +222,7 @@ class TaskController extends AbstractController
         $selects = array(
             'details' => array(
                 'category' => $this->getListDataFromBackend('Category', [], 'description'),
-                'taskSubCategory' => $this->getListDataFromBackend('TaskSubCategory', $filters)
+                'subCategory' => $this->getListDataFromBackend('SubCategory', $filters, 'subCategoryName')
             ),
             'assignment' => array(
                 'assignedToTeam' => $this->getListDataFromBackend('Team'),
@@ -251,9 +251,11 @@ class TaskController extends AbstractController
         $url = $this->getLinkForTaskForm();
         $details->get('link')->setValue($url);
         $details->get('status')->setValue('<b>' . $textStatus . '</b>');
+
         if ($this->isButtonPressed('close')) {
             $type = 'Close';
         }
+
         $form->setData($this->expandData($data));
         $this->formPost($form, 'process' . $type . 'Task');
 
@@ -425,7 +427,7 @@ class TaskController extends AbstractController
         $taskId = $this->getFromRoute('task');
         if ($taskId) {
             $childProperties = [
-                'category', 'taskSubCategory',
+                'category', 'subCategory',
                 'assignedToTeam', 'assignedToUser'
             ];
             $bundle = [
@@ -482,6 +484,8 @@ class TaskController extends AbstractController
         if (!empty($data['category'])) {
             $filters['category'] = $data['category'];
         }
+
+        $filters['isTask'] = true;
 
         return $filters;
     }

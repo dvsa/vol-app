@@ -331,7 +331,7 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
         switch ($service) {
             case 'Category':
                 return $this->mockCategory($data);
-            case 'DocumentSubCategory':
+            case 'SubCategory':
                 return $this->mockSubCategory($data);
             case 'DocTemplate':
                 return $this->mockDocTemplate($data);
@@ -473,13 +473,13 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
             'Results' => [
                 [
                     'id' => 10,
-                    'description' => 'A Sub Category',
+                    'subCategoryName' => 'A Sub Category',
                 ], [
                     'id' => 20,
-                    'description' => 'Publishable Applications',
+                    'subCategoryName' => 'Publishable Applications',
                 ], [
                     'id' => 30,
-                    'description' => 'Another Sub Category',
+                    'subCategoryName' => 'Another Sub Category',
                 ],
             ]
         ];

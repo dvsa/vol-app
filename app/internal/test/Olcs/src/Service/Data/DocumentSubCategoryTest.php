@@ -40,7 +40,11 @@ class DocumentSubCategoryTest extends TestCase
         ];
 
         $mockRestClient = m::mock('\Common\Util\RestClient');
-        $mockRestClient->shouldReceive('get')->once()->with('', ['category' => 'testing'])->andReturn($results);
+        $mockRestClient->shouldReceive('get')
+            ->once()
+            ->with('', ['isDoc' => true, 'category' => 'testing'])
+            ->andReturn($results);
+
         $sut = new DocumentSubCategory();
         $sut->setRestClient($mockRestClient);
         $sut->setCategory('testing');

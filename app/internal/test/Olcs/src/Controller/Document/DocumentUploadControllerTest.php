@@ -483,7 +483,7 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
         switch ($service) {
             case 'Category':
                 return $this->stubCategory($data);
-            case 'DocumentSubCategory':
+            case 'SubCategory':
                 return $this->stubSubCategory($data);
             case 'Document':
                 return $this->mockDocument($data, $type);
@@ -515,6 +515,12 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
                     ->method('getLicenceIdForApplication')
                     ->will($this->returnValue(7));
                 return $eaMock;
+            case 'Helper\Date':
+                $mock = $this->getMock('\stdClass', ['getDate']);
+                $mock->expects($this->any())
+                    ->method('getDate')
+                    ->willReturn('2014-01-01 00:00:00');
+                return $mock;
             default:
                 throw new \Exception("Service Locator " . $service . " not mocked");
         }
@@ -544,13 +550,13 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
             'Results' => [
                 [
                     'id' => 10,
-                    'description' => 'A Sub Category',
+                    'subCategoryName' => 'A Sub Category',
                 ], [
                     'id' => 20,
-                    'description' => 'Publishable Applications',
+                    'subCategoryName' => 'Publishable Applications',
                 ], [
                     'id' => 30,
-                    'description' => 'Another Sub Category',
+                    'subCategoryName' => 'Another Sub Category',
                 ],
             ]
         ];
@@ -559,7 +565,7 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
     private function mockDocument($data, $type)
     {
         $this->assertStringEndsWith('testfile.rtf', $data['filename']);
-        $this->assertStringStartsWith(date('Y-m-d'), $data['issuedDate']);
+        $this->assertStringStartsWith('2014-01-01', $data['issuedDate']);
 
         unset($data['filename']);
         unset($data['issuedDate']);
@@ -569,7 +575,7 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
             'description' => 'file description',
             'fileExtension' => 'doc_rtf',
             'category' => 3,
-            'documentSubCategory' => 2,
+            'subCategory' => 2,
             'isDigital' => true,
             'isReadOnly' => true,
             'size' => 1234
