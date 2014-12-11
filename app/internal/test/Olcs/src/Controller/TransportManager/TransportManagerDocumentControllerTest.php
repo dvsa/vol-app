@@ -202,14 +202,15 @@ class TransportManagerDocumentControllerTest extends \Mockery\Adapter\Phpunit\Mo
             )
             ->shouldReceive('makeRestCall')
             ->with(
-                'DocumentSubCategory',
+                'SubCategory',
                 'GET',
                 [
-                    'sort'      => "description",
-                    'order'     => "DESC",
+                    'sort'      => "subCategoryName",
+                    'order'     => "ASC",
                     'page'      => 1,
                     'limit'     => 100,
-                    'tmId'      => 69
+                    'tmId'      => 69,
+                    'isDoc'     => true
                 ],
                 m::any()
             )
