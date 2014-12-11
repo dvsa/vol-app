@@ -209,13 +209,11 @@ class ApplicationController extends AbstractController
         $table = $this->getDocumentsTable($filters);
         $form  = $this->getDocumentForm($filters);
 
-        $view = $this->getViewWithApplication(
+        return $this->getViewWithApplication(
             array(
                 'table' => $table,
                 'form'  => $form
             )
         );
-
-        return $view;
     }
 }

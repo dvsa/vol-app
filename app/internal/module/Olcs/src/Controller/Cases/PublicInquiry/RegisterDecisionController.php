@@ -35,21 +35,29 @@ class RegisterDecisionController extends PublicInquiryController
             $publishData['text2'] = $data['fields']['decisionNotes'];
             $publishData['publicationSectionConst'] = 'decisionSectionId';
 
-            $this->publish($publishData);
+            $this->publish(
+                $publishData,
+                'Common\Service\Data\PublicationLink',
+                'DecisionPublicationFilter'
+            );
         }
 
         return $this->redirectToIndex();
     }
 
     /**
-     * @param array $publishData
-     * @return \Common\Data\Object\Publication
+     * Creates or updates a record using a data service
+     *
+     * @param array $data
+     * @param string $service
+     * @param string $filter
+     * @return int
      */
-    private function publish($publishData)
+    private function publish($data, $service, $filter)
     {
-        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\PublicationLink');
-        $publicationLink = $service->createWithData($publishData);
+        $service = $this->getServiceLocator()->get('DataServiceManager')->get($service);
+        $publicationLink = $service->createWithData($data);
 
-        return $service->createPublicationLink($publicationLink, 'DecisionPublicationFilter');
+        return $service->createFromObject($publicationLink, $filter);
     }
 }
