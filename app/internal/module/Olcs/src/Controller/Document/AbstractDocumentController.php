@@ -31,16 +31,13 @@ abstract class AbstractDocumentController extends AbstractController
 
     /**
      * How to map route param types to category IDs (see category db table)
-     *
-     * @todo Update these when more subcategories are available. Currently, if
-     * there are no subcategories for the default category, the upload form breaks.
      */
     protected $categoryMap = [
         'licence'          => Category::CATEGORY_LICENSING,
         'busReg'           => Category::CATEGORY_BUS_REGISTRATION,
         'case'             => Category::CATEGORY_LICENSING, // use Licensing for now
-        'application'      => Category::CATEGORY_LICENSING, // will be Category::CATEGORY_APPLICATION,
-        'transportManager' => Category::CATEGORY_LICENSING, // will be Category::CATEGORY_TRANSPORT_MANAGER,
+        'application'      => Category::CATEGORY_APPLICATION,
+        'transportManager' => Category::CATEGORY_TRANSPORT_MANAGER,
     ];
 
     /**
