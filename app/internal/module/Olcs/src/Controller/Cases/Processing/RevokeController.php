@@ -133,7 +133,7 @@ class RevokeController extends OlcsController\CrudAbstract
      *
      * @return array|\Zend\Http\Response|\Zend\View\Model\ViewModel
      */
-    protected $detailsView = '/case/processing/revoke/details';
+    protected $detailsView = 'view-new/pages/case/in-office-revocation';
 
     /**
      * Is the result a result of REST call to getList. Set to true when

@@ -143,7 +143,7 @@ class ProhibitionDefectController extends OlcsController\CrudAbstract
 
         $this->buildTableIntoView();
 
-        $view->setTemplate('prohibition/defect');
+        $view->setTemplate('view-new/pages/case/prohibition-defect');
 
         return $this->renderView($view);
     }

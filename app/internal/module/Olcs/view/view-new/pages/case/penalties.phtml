@@ -50,9 +50,5 @@
 
         echo $this->render('widget/comments');
     } else {
-        echo $this->render('/placeholder/placeholder',
-            [
-                'header' => 'ERRU Penalties',
-            ]
-        );
+        echo $this->render('view-new/pages/placeholder');
     }

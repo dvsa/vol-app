@@ -27,7 +27,7 @@ class OperatorPeopleController extends OperatorController
     public function indexAction()
     {
         $view = $this->getViewWithOrganisation();
-        $view->setTemplate('operator/index');
+        $view->setTemplate('view-new/pages/placeholder');
         return $this->renderView($view);
     }
 }

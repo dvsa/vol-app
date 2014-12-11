@@ -90,7 +90,7 @@ class LicenceController extends AbstractController
     {
         $view = $this->getViewWithLicence();
         $this->pageLayout = 'licence';
-        $view->setTemplate('licence/opposition');
+        $view->setTemplate('view-new/pages/placeholder');
 
         return $this->renderView($view);
     }

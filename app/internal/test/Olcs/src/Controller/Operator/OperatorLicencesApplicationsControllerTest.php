@@ -49,7 +49,7 @@ class OperatorLicaencesApplicationsControllerTest extends AbstractHttpController
         $mockView = $this->getMock('Zend\View\Model\ViewModel', ['setTemplate']);
         $mockView->expects($this->once())
             ->method('setTemplate')
-            ->with('operator/index')
+            ->with('view-new/pages/placeholder')
             ->will($this->returnSelf());
 
         $this->controller->expects($this->once())
