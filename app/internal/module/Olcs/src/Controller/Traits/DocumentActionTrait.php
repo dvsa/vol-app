@@ -31,9 +31,6 @@ trait DocumentActionTrait
         $this->loadScripts(['documents', 'table-actions']);
 
         $view->setTemplate('licence/docs-attachments');
-        $view->setTerminal(
-            $this->getRequest()->isXmlHttpRequest()
-        );
 
         return $this->renderView($view);
     }

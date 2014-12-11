@@ -21,16 +21,6 @@ use Common\Service\File\Exception as FileException;
  */
 class DocumentUploadController extends AbstractDocumentController
 {
-    /**
-     * how to map route param types to category IDs (see category db table)
-     */
-    private $categoryMap = [
-        'licence'     => 1,
-        //'application' => 9,
-        'application' => 1, // @TODO - there are no subcategories defined for application yet!
-        'case'        => 1,
-    ];
-
     public function uploadAction()
     {
         $type = $this->params()->fromRoute('type');
@@ -102,7 +92,8 @@ class DocumentUploadController extends AbstractDocumentController
             'size'          => $file->getSize()
         ];
 
-        $data[$type] = $routeParams[$type];
+        $key = $this->getRouteParamKeyForType($type);
+        $data[$type] = $routeParams[$key];
 
         // we need to link certain documents to multiple IDs
         switch ($type) {
@@ -112,6 +103,10 @@ class DocumentUploadController extends AbstractDocumentController
 
             case 'case':
                 $data['licence'] = $this->getLicenceIdForCase();
+                break;
+
+            case 'busReg':
+                $data['licence'] = $routeParams['licence'];
                 break;
 
             default:

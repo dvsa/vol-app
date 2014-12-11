@@ -138,11 +138,15 @@ class DocumentFinaliseController extends AbstractDocumentController
                 $data['licence'] = $this->getLicenceIdForCase();
                 break;
 
+            case 'busReg':
+                $data['licence'] = $this->getFromRoute('licence');
+                break;
+
             default:
                 break;
         }
 
-        $data[$type] = $routeParams[$type];
+        $data[$type] = $routeParams[$this->getRouteParamKeyForType($type)];
 
         $this->makeRestCall(
             'Document',

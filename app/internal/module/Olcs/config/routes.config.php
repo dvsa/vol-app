@@ -863,22 +863,45 @@ $routes = [
                     'route' => '/bus/:busRegId/docs',
                     'defaults' => [
                         'controller' => 'BusDocsController',
-                        'action' => 'index',
+                        'action' => 'documents',
                     ]
                 ],
                 'may_terminate' => true,
                 'child_routes' => [
-                    'placeholder' => [
-                        'type' => 'literal',
+                    'generate' => [
+                        'type' => 'segment',
                         'options' => [
-                            'route' => '/placeholder',
+                            'route' => '/generate[/:tmpId]',
                             'defaults' => [
-                                'controller' => 'BusDocsPlaceholderController',
-                                'action' => 'index',
+                                'type' => 'busReg',
+                                'controller' => 'DocumentGenerationController',
+                                'action' => 'generate'
                             ]
                         ],
                     ],
-                ]
+                    'finalise' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/finalise/:tmpId',
+                            'defaults' => [
+                                'type' => 'busReg',
+                                'controller' => 'DocumentFinaliseController',
+                                'action' => 'finalise'
+                            ]
+                        ],
+                    ],
+                    'upload' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/upload',
+                            'defaults' => [
+                                'type' => 'busReg',
+                                'controller' => 'DocumentUploadController',
+                                'action' => 'upload'
+                            ]
+                        ],
+                    ],
+                ],
             ],
             'bus-processing' => [
                 'type' => 'segment',
