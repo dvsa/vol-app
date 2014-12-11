@@ -23,12 +23,15 @@ class DocumentUploadController extends AbstractDocumentController
 {
     public function uploadAction()
     {
+        // @TODO the form does *not* re-populate properly. Previously it completely
+        // ignored POST data entirely; Steve L to raise a bug and DE to pick up (11/12/14)
         if ($this->getRequest()->isPost()) {
             $data = (array)$this->getRequest()->getPost();
             $category = $data['details']['category'];
         } else {
             $type = $this->params()->fromRoute('type');
             $category = $this->categoryMap[$type];
+            $data = ['details' => ['category' => $category]];
         }
 
         $this->getServiceLocator()
@@ -36,8 +39,7 @@ class DocumentUploadController extends AbstractDocumentController
             ->get('Olcs\Service\Data\DocumentSubCategory')
             ->setCategory($category);
 
-        $defaults = ['details' => ['category' => $category]];
-        $form = $this->generateFormWithData('upload-document', 'processUpload', $defaults);
+        $form = $this->generateFormWithData('upload-document', 'processUpload', $data);
 
         $this->loadScripts(['upload-document']);
 
