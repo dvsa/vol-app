@@ -7,6 +7,7 @@ namespace Admin\Controller;
 
 use Common\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Common\Service\Data\CategoryDataService;
 
 /**
  * Scanning Controller
@@ -19,13 +20,12 @@ class ScanningController extends AbstractActionController
     public function indexAction()
     {
         if ($this->getRequest()->isPost()) {
-            // do some stuff
             $data = (array)$this->getRequest()->getPost();
         } else {
             $data = [
                 'details' => [
-                    'category' => 1,
-                    'subCategory' => 85
+                    'category' => CategoryDataService::CATEGORY_LICENSING,
+                    'subCategory' => CategoryDataService::SCAN_SUB_CATEGORY_CHANGE_OF_ENTITY
                 ]
             ];
         }
@@ -45,40 +45,58 @@ class ScanningController extends AbstractActionController
 
         $form = $this->getServiceLocator()
             ->get('Helper\Form')
-            ->createForm('Scanning');
+            ->createForm('Scanning')
+            ->setData($data);
 
         $this->getServiceLocator()->get('Script')->loadFile('forms/scanning');
 
         if ($this->getRequest()->isPost()) {
 
-            $form->setData($data);
+            $details = $data['details'];
+
+            if (isset($details['description'])) {
+                $this->getServiceLocator()
+                    ->get('Helper\Form')
+                    ->remove($form, 'details->otherDescription');
+            }
 
             if ($form->isValid()) {
+
                 $entity = $this->getServiceLocator()
                     ->get('Processing\Entity')
                     ->findEntityForCategory(
-                        $data['details']['category'],
-                        $data['details']['entityIdentifier']
+                        $details['category'],
+                        $details['entityIdentifier']
                     );
 
                 if ($entity === false) {
-                    // @TODO attach an error message to the entityIdentifier input
-                    $form->get('details')
-                        ->get('entityIdentifier')
-                        ->setMessages(['scanning.error.entity.' . $category]);
+                    $form->setMessages(
+                        [
+                            'details' => [
+                                'entityIdentifier' => ['scanning.error.entity.' . $category]
+                            ]
+                        ]
+                    );
                 } else {
                     $this->getServiceLocator()
                         ->get('Helper\FlashMessenger')
                         ->addSuccessMessage('scanning.message.success');
 
-                    // The AC says these should be reset to their defaults, but
+                    // The AC says sub cat & description dropdowns should be reset to their defaults, but
                     // this presents an issue; description depends on sub category,
                     // but we don't know what the "default" sub category is in order
                     // to re-fetch the correct list of descriptions...
-                    $data['details']['subCategory'] = null;
-                    $data['details']['description'] = null;
-                    $data['details']['otherDescription'] = null;
-                    $form->setData($data);
+                    $form = $this->getServiceLocator()
+                        ->get('Helper\Form')
+                        ->createForm('Scanning')
+                        ->setData(
+                            [
+                                'details' => [
+                                    'category' => $details['category'],
+                                    'entityIdentifier' => $details['entityIdentifier']
+                                ]
+                            ]
+                        );
 
                     // ... so we load in some extra JS which will fire off our cascade
                     // input, which in turn will populate the list of descriptions

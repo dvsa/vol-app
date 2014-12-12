@@ -53,7 +53,7 @@ class ScanningDetails
      *     "label": "scanning.data.description"
      * })
      * @Form\Type("Text")
-     * @Form\AllowEmpty(true)
+     * @Form\Validator({"name": "Zend\Validator\NotEmpty"})
      */
     public $otherDescription = null;
 
