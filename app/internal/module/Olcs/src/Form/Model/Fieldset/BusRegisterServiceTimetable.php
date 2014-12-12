@@ -54,7 +54,7 @@ class BusRegisterServiceTimetable
      * @Form\Required(false)
      * @Form\Type("TextArea")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":800}})
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":1000}})
      */
     public $routeDescription = null;
 }

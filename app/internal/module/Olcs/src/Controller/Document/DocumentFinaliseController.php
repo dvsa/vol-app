@@ -110,8 +110,7 @@ class DocumentFinaliseController extends AbstractDocumentController
 
         $templateName = $template['description'];
 
-        // AC specifies this timestamp format...
-        $fileName = $this->getServiceLocator()->get('Helper\Date')->getDate('YmdHi')
+        $fileName = $this->getDocumentTimestamp()
             . '_' . $this->formatFilename($templateName)
             . '.' . $file->getExtension();
 
