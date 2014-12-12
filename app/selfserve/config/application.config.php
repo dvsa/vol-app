@@ -3,6 +3,7 @@
 return array(
     'modules' => array(
         'Olcs\Logging',
+        'Dvsa\Jackrabbit',
         'Common',
         'DoctrineModule',
         'DoctrineORMModule',
