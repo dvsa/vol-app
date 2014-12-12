@@ -8,9 +8,7 @@
  */
 namespace Olcs\Controller\Bus\Processing;
 
-use Common\Controller\CrudInterface;
-use Olcs\Controller\Traits\DeleteActionTrait;
-use Olcs\Controller\Traits\LicenceNoteTrait;
+use Olcs\Controller\Traits;
 
 /**
  * Bus Processing Task controller
@@ -20,24 +18,46 @@ use Olcs\Controller\Traits\LicenceNoteTrait;
  */
 class BusProcessingTaskController extends BusProcessingController
 {
+    use Traits\TaskSearchTrait;
+    use Traits\ListDataTrait;
 
     protected $identifierName = 'id';
     protected $item = 'tasks';
     protected $service = 'Task';
 
     /**
-     * Brings back a list of tasks based on the search
+     * Render the tasks list or redirect if processing
      *
      * @return \Zend\View\Model\ViewModel
      */
     public function indexAction()
     {
-        $licenceId = $this->getFromRoute('licence');
-        $busReg = $this->getFromRoute('busRegId');
-        $action = $this->getFromPost('action');
+        $redirect = $this->processTasksActions('busReg');
+        if ($redirect) {
+            return $redirect;
+        }
 
-        $view = new \Zend\View\Model\ViewModel(['table'=>'']);
+        $licenceId = $this->getFromRoute('licence');
+
+        $filters = $this->mapTaskFilters(
+            array(
+                'licenceId'      => $licenceId,
+                'assignedToTeam' => '',
+                'assignedToUser' => '',
+            )
+        );
+
+        $table = $this->getTaskTable($filters, false);
+        $table->removeColumn('name');
+        $table->removeColumn('link');
+
+        $this->setTableFilters($this->getTaskForm($filters));
+
+        $this->loadScripts(['tasks', 'table-actions']);
+
+        $view = $this->getView(['table' => $table]);
         $view->setTemplate('table');
+
         return $this->renderView($view);
     }
 }

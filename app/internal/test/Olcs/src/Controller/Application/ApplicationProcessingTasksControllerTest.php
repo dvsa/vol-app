@@ -257,7 +257,7 @@ class ApplicationProcessingTasksControllerTest extends AbstractHttpControllerTes
 
     }
 
-     /**
+    /**
      * Test index action with add action submitted
      * @group task
      */
