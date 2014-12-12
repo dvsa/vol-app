@@ -9,6 +9,7 @@ namespace Olcs\Controller\Lva\Application;
 
 use Common\Controller\Lva;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
+use Zend\Stdlib\ResponseInterface;
 
 /**
  * Internal Type Of Licence Controller
@@ -17,8 +18,7 @@ use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
  */
 class TypeOfLicenceController extends Lva\AbstractTypeOfLicenceController
 {
-    use ApplicationControllerTrait,
-        Lva\Traits\ApplicationTypeOfLicenceTrait {
+    use ApplicationControllerTrait {
             ApplicationControllerTrait::getSectionsForView as genericGetSectionsForView;
         }
 
@@ -37,5 +37,23 @@ class TypeOfLicenceController extends Lva\AbstractTypeOfLicenceController
         }
 
         return $sections;
+    }
+
+    public function confirmationAction()
+    {
+        $adapter = $this->getTypeOfLicenceAdapter();
+
+        // @NOTE will either return a redirect, or a form
+        $response = $adapter->confirmationAction();
+
+        if ($response instanceof ResponseInterface) {
+            return $response;
+        }
+
+        return $this->render(
+            'type_of_licence_confirmation',
+            $response,
+            array('sectionText' => 'application_type_of_licence_confirmation_subtitle')
+        );
     }
 }
