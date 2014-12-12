@@ -56,6 +56,28 @@ return array(
                             'task_action'
                         );
                         break;
+                    case 'lva-application/processing/tasks':
+                        $url = $this->generateUrl(
+                            array(
+                                'task' => $row['id'],
+                                'action' => 'edit',
+                                'type' => 'application',
+                                'typeId' => $row['applicationId']
+                            ),
+                            'task_action'
+                        );
+                        break;
+                    case 'transport-manager/processing/tasks':
+                        $url = $this->generateUrl(
+                            array(
+                                'task' => $row['id'],
+                                'action' => 'edit',
+                                'type' => 'tm',
+                                'typeId' => $row['transportManagerId']
+                            ),
+                            'task_action'
+                        );
+                        break;
                     default:
                         $url = $this->generateUrl(
                             array('task' => $row['id'], 'action' => 'edit'),
