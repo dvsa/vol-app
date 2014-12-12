@@ -22,6 +22,11 @@ class Ebsr implements FactoryInterface
     protected $dataService;
 
     /**
+     * @var \Common\Service\File\FileUploaderInterface
+     */
+    protected $fileService;
+
+    /**
      * @param \Zend\InputFilter\Input $validationChain
      * @return $this
      */
@@ -58,6 +63,24 @@ class Ebsr implements FactoryInterface
     }
 
     /**
+     * @param \Common\Service\File\FileUploaderInterface $fileService
+     * @return $this
+     */
+    public function setFileService($fileService)
+    {
+        $this->fileService = $fileService;
+        return $this;
+    }
+
+    /**
+     * @return \Common\Service\File\FileUploaderInterface
+     */
+    public function getFileService()
+    {
+        return $this->fileService;
+    }
+
+    /**
      * @param $data
      * @return array
      */
@@ -88,6 +111,7 @@ class Ebsr implements FactoryInterface
     {
         $this->setValidationChain($serviceLocator->get('Olcs\InputFilter\EbsrPackInput'));
         $this->setDataService($serviceLocator->get('DataServiceManager')->get('Olcs\Service\Data\EbsrPack'));
+        $this->setFileService($serviceLocator->get('FileUploader')->getUploader());
 
         return $this;
     }
@@ -110,9 +134,9 @@ class Ebsr implements FactoryInterface
         foreach ($dir as $ebsrPack) {
             $validator->setValue($ebsrPack);
             if ($validator->isValid()) {
-                $newName = preg_replace('#/zip[a-z0-9]+/#i', '/ebsr/', $ebsrPack);
-                $packs[] = $newName;
-                rename($ebsrPack, $newName);
+                $this->getFileService()->setFile(['content' => file_get_contents($ebsrPack)]);
+                $file = $this->getFileService()->upload('ebsr');
+                $packs[] = $file->getPath();
             }
         }
 
