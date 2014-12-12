@@ -12,9 +12,8 @@ use Common\Service\Data\CategoryDataService;
 /**
  * Scanning Controller
  *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-
 class ScanningController extends AbstractActionController
 {
     public function indexAction()
