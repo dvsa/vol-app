@@ -157,6 +157,7 @@ return array(
             'BusProcessingNoteController' => 'Olcs\Controller\Bus\Processing\BusProcessingNoteController',
             'BusProcessingRegistrationHistoryController' =>
                 'Olcs\Controller\Bus\Processing\BusProcessingRegistrationHistoryController',
+            'BusProcessingTaskController' => 'Olcs\Controller\Bus\Processing\BusProcessingTaskController',
             'BusFeesController' => 'Olcs\Controller\Bus\Fees\BusFeesController',
             'BusFeesPlaceholderController' => 'Olcs\Controller\Bus\Fees\BusFeesPlaceholderController',
             'BusServiceController' => 'Olcs\Controller\Bus\Service\BusServiceController',
