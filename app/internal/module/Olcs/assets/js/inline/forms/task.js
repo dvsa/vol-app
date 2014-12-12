@@ -10,7 +10,7 @@ OLCS.ready(function() {
 
   OLCS.cascadeInput({
     source: form + " #category",
-    dest: form + " #taskSubCategory",
+    dest: form + " #subCategory",
     url: "/list/task-sub-categories",
     emptyLabel: "Please select"
   });

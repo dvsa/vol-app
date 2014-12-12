@@ -112,7 +112,7 @@ class Cases extends AbstractData
                         'trafficArea' => array(
                             'properties' => 'ALL'
                         ),
-                        'contactDetails' => array(
+                        'establishmentCd' => array(
                             'properties' => 'ALL',
                             'children' => array(
                                 'address' => array(

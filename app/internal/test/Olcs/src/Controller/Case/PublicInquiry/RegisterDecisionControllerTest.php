@@ -82,7 +82,7 @@ class RegisterDecisionControllerTest extends AbstractHttpControllerTestCase
         //publication link service
         $mockPublicationLink = m::mock('Common\Service\Data\PublicationLink');
         $mockPublicationLink->shouldReceive('createWithData')->with($publishData)->andReturn($publication);
-        $mockPublicationLink->shouldReceive('createPublicationLink')->with($publication, 'DecisionPublicationFilter');
+        $mockPublicationLink->shouldReceive('createFromObject')->with($publication, 'DecisionPublicationFilter');
 
         $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
         $mockServiceManager->shouldReceive('get')

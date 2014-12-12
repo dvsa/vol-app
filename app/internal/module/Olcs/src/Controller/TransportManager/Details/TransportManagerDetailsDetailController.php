@@ -2,7 +2,7 @@
 
 /**
  * Transport Manager Details Detail Controller
- * 
+ *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 namespace Olcs\Controller\TransportManager\Details;
@@ -13,7 +13,7 @@ use Common\Service\Entity\TransportManagerEntityService;
 
 /**
  * Transport Manager Details Detail Controller
- * 
+ *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 class TransportManagerDetailsDetailController extends AbstractTransportManagerDetailsController

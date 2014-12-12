@@ -1,8 +1,9 @@
 <?php
 $table = $this->placeholder('table')->getValue();
-if (count($table) > 0) {
+
+if (is_object($table)) {
     echo $table;
-} else {
+} elseif ($table !== []) {
     echo $this->render('/placeholder/placeholder',
         [
             'header' => 'Placeholder',

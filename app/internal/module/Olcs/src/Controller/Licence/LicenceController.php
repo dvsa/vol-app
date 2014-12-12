@@ -129,14 +129,12 @@ class LicenceController extends AbstractController
             array('licenceId' => $this->getFromRoute('licence'))
         );
 
-        $view = $this->getViewWithLicence(
+        return $this->getViewWithLicence(
             array(
                 'table' => $this->getDocumentsTable($filters),
                 'form'  => $this->getDocumentForm($filters)
             )
         );
-
-        return $view;
     }
 
     public function busAction()

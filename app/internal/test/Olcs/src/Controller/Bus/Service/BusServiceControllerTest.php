@@ -47,7 +47,7 @@ class BusServiceControllerTest extends AbstractHttpControllerTestCase
 
         $mockRedirectPlugin = $mockPluginManager->get('redirect', '');
         $mockRedirectPlugin->shouldReceive('toRoute')->with(
-            'licence/bus-details/service',
+            m::type('string'),
             [],
             [],
             true
@@ -86,6 +86,17 @@ class BusServiceControllerTest extends AbstractHttpControllerTestCase
     public function testGetForm()
     {
         $type = 'foo';
+
+        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
+            [
+                'params' => 'Params'
+            ]
+        );
+        $licenceId = 110;
+        $mockParamsPlugin = $mockPluginManager->get('params', '');
+        $mockParamsPlugin->shouldReceive('fromRoute')->with('licence')->andReturn($licenceId);
+
+        $this->sut->setPluginManager($mockPluginManager);
 
         $mockTableFieldset = m::mock('\Zend\Form\Fieldset');
 
