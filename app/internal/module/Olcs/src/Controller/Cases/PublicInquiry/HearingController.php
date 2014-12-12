@@ -4,7 +4,7 @@ namespace Olcs\Controller\Cases\PublicInquiry;
 
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
-
+use Common\Service\Data\CategoryDataService;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -285,8 +285,8 @@ class HearingController extends OlcsController\CrudAbstract
                 mktime(date("H"), date("i"), date("s"), date("n"), date("j")+7, date("Y"))
             );
             $task['urgent'] = 'Y';
-            $task['category'] = '2';
-            $task['taskSubCategory'] = '81';
+            $task['category'] = CategoryDataService::CATEGORY_COMPLIANCE;
+            $task['subCategory'] = CategoryDataService::COMPLIANCE_TASK_SUB_CATEGORY_HEARINGS_APPEALS;
 
             $service = $this->getTaskService();
             $service->create($task);
