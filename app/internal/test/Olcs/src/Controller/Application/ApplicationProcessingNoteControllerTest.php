@@ -91,7 +91,7 @@ class ApplicationProcessingNoteControllerTest extends ProcessingNoteControllerTe
 
         $this->view->expects($this->once())
             ->method('setTemplate')
-            ->with('form-simple');
+            ->with('view-new/partials/form');
 
         $this->controller->expects($this->once())
             ->method('renderView')

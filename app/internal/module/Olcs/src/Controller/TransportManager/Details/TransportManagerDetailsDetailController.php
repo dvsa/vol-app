@@ -63,7 +63,7 @@ class TransportManagerDetailsDetailController extends AbstractTransportManagerDe
         }
 
         $view = $this->getViewWithTm(['form' => $form]);
-        $view->setTemplate('transport-manager/details/tm-details');
+        $view->setTemplate('view-new/partials/form');
         return $this->renderView($view);
     }
 

@@ -7,11 +7,14 @@ $form = $this->placeholder('form')->getValue();
     if (count($form) > 0):
         if ($form->getOption('override_form_label')) {
 ?>
-    <h3><?php echo $this->translate($form->getOption('label')); ?></h3>
+	<div class="content__header">
+    	<h3><?php echo $this->translate($form->getOption('label')); ?></h3>
+    </div>
 <?php
         } else {
 ?>
-    <h3><?php echo is_string($action) ? ucfirst($action) : ''; ?> <?php echo lcfirst($this->translate($form->getOption('label'))); ?></h3>
+	<div class="content__header">
+    <h3><?php echo is_string($action) ? ucfirst($action) : ''; ?> <?php echo lcfirst($this->translate($form->getOption('label'))); ?></h3></div>
 <?php
         }
 ?>

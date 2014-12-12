@@ -18,7 +18,7 @@ use Olcs\Controller\Traits;
  */
 class ApplicationController extends AbstractController
 {
-    protected $headerViewTemplate = 'application/header';
+    protected $headerViewTemplate = 'view-new/partials/application-header.phtml';
     protected $pageLayout = 'application';
 
     use Traits\LicenceControllerTrait,
@@ -88,7 +88,7 @@ class ApplicationController extends AbstractController
     public function environmentalAction()
     {
         $view = new ViewModel();
-        $view->setTemplate('application/index');
+        $view->setTemplate('view-new/pages/placeholder');
 
         return $this->render($view);
     }

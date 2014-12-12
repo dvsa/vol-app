@@ -29,7 +29,7 @@ class TransportManagerProcessingHistoryController extends AbstractTransportManag
     public function indexAction()
     {
         $view = $this->getViewWithTm();
-        $view->setTemplate('transport-manager/index');
+        $view->setTemplate('view-new/pages/placeholder');
         return $this->renderView($view);
     }
 }

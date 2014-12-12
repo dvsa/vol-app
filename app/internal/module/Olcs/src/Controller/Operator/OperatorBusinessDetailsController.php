@@ -112,7 +112,7 @@ class OperatorBusinessDetailsController extends OperatorController
         }
 
         $view = $this->getViewWithOrganisation(['form' => $form]);
-        $view->setTemplate('form-simple');
+        $view->setTemplate('view-new/partials/form');
         return $this->renderView($view);
     }
 

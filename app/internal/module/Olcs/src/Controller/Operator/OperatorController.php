@@ -94,7 +94,7 @@ class OperatorController extends AbstractController
         }
 
         $view = new ViewModel(['form' => $form]);
-        $view->setTemplate('form-simple');
+        $view->setTemplate('view-new/partials/form');
 
         return $this->renderView($view, 'Create new application');
     }

@@ -69,7 +69,7 @@ class DocumentFinaliseController extends AbstractDocumentController
         );
 
         $view = new ViewModel(['form' => $form]);
-        $view->setTemplate('form-simple');
+        $view->setTemplate('view-new/partials/form');
         return $this->renderView($view, 'Amend letter');
     }
 

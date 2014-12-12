@@ -108,7 +108,7 @@ class ApplicationControllerTest extends MockeryTestCase
 
         $view = $this->sut->environmentalAction();
 
-        $this->assertEquals('application/index', $view->getTemplate());
+        $this->assertEquals('view-new/pages/placeholder', $view->getTemplate());
     }
 
     /**

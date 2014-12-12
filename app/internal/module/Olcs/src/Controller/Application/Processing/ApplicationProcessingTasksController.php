@@ -17,7 +17,7 @@ class ApplicationProcessingTasksController extends AbstractApplicationProcessing
 {
     use TaskSearchTrait;
 
-    protected $headerViewTemplate = 'application/header';
+    protected $headerViewTemplate = 'view-new/partials/application-header.phtml';
 
     /**
      * @var string
@@ -54,7 +54,7 @@ class ApplicationProcessingTasksController extends AbstractApplicationProcessing
 
         $view = new ViewModel(['table' => $table->render()]);
 
-        $view->setTemplate('table');
+        $view->setTemplate('view-new/partials/table');
         $view->setTerminal($this->getRequest()->isXmlHttpRequest());
 
         return $this->renderView($view);

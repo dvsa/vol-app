@@ -56,7 +56,7 @@ class OperatorControllerTest extends MockeryTestCase
         $return = $this->sut->newApplicationAction();
 
         $this->assertInstanceOf('\Zend\View\Model\ViewModel', $return[0]);
-        $this->assertEquals('form-simple', $return[0]->getTemplate());
+        $this->assertEquals('view-new/partials/form', $return[0]->getTemplate());
         $this->assertEquals($mockForm, $return[0]->getVariable('form'));
         $this->assertEquals('Create new application', $return[1]);
     }
@@ -94,7 +94,7 @@ class OperatorControllerTest extends MockeryTestCase
         $return = $this->sut->newApplicationAction();
 
         $this->assertInstanceOf('\Zend\View\Model\ViewModel', $return[0]);
-        $this->assertEquals('form-simple', $return[0]->getTemplate());
+        $this->assertEquals('view-new/partials/form', $return[0]->getTemplate());
         $this->assertEquals($mockForm, $return[0]->getVariable('form'));
         $this->assertEquals('Create new application', $return[1]);
     }

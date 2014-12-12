@@ -24,7 +24,7 @@ class Layout extends AbstractViewModel
     public function __construct($content, array $params = array())
     {
         $header = new ViewModel($params);
-        $header->setTemplate('application/header');
+        $header->setTemplate('view-new/partials/application-header.phtml');
 
         $this->addChild($header, 'header');
         $this->addChild($content, 'content');

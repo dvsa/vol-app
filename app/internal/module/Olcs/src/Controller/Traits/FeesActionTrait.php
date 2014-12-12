@@ -247,7 +247,7 @@ trait FeesActionTrait
         }
 
         $view = new ViewModel(['form' => $form]);
-        $view->setTemplate('form');
+        $view->setTemplate('view-new/partials/form');
 
         $title = 'Pay fee';
         if (count($fees) !== 1) {
