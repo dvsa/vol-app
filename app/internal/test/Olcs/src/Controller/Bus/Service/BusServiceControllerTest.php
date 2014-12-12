@@ -47,7 +47,7 @@ class BusServiceControllerTest extends AbstractHttpControllerTestCase
 
         $mockRedirectPlugin = $mockPluginManager->get('redirect', '');
         $mockRedirectPlugin->shouldReceive('toRoute')->with(
-            'licence/bus-details/service',
+            m::type('string'),
             [],
             [],
             true
