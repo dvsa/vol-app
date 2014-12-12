@@ -43,6 +43,7 @@ class ScanningDetails
      *     "context": {}
      * })
      * @Form\Type("DynamicSelect")
+     * @Form\AllowEmpty(true)
      */
     public $description = null;
 
@@ -52,6 +53,7 @@ class ScanningDetails
      *     "label": "scanning.data.description"
      * })
      * @Form\Type("Text")
+     * @Form\AllowEmpty(true)
      */
     public $otherDescription = null;
 
@@ -61,6 +63,7 @@ class ScanningDetails
      *     "label": "scanning.data.entity"
      * })
      * @Form\Type("Text")
+     * @Form\Validator({"name": "Zend\Validator\NotEmpty"})
      */
     public $entityIdentifier = null;
 }

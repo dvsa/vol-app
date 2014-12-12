@@ -30,7 +30,7 @@ class ScanningController extends AbstractActionController
             ];
         }
 
-        $category = $data['details']['category'];
+        $category    = $data['details']['category'];
         $subCategory = $data['details']['subCategory'];
 
         $this->getServiceLocator()
@@ -43,9 +43,11 @@ class ScanningController extends AbstractActionController
             ->get('Olcs\Service\Data\SubCategoryDescription')
             ->setSubCategory($subCategory);
 
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $form = $this->getServiceLocator()
+            ->get('Helper\Form')
+            ->createForm('Scanning');
 
-        $form = $formHelper->createForm('Scanning');
+        $this->getServiceLocator()->get('Script')->loadFile('forms/scanning');
 
         if ($this->getRequest()->isPost()) {
 
@@ -61,13 +63,29 @@ class ScanningController extends AbstractActionController
 
                 if ($entity === false) {
                     // @TODO attach an error message to the entityIdentifier input
+                    $form->get('details')
+                        ->get('entityIdentifier')
+                        ->setMessages(['scanning.error.entity.' . $category]);
                 } else {
-                    // all good
+                    $this->getServiceLocator()
+                        ->get('Helper\FlashMessenger')
+                        ->addSuccessMessage('scanning.message.success');
+
+                    // The AC says these should be reset to their defaults, but
+                    // this presents an issue; description depends on sub category,
+                    // but we don't know what the "default" sub category is in order
+                    // to re-fetch the correct list of descriptions...
+                    $data['details']['subCategory'] = null;
+                    $data['details']['description'] = null;
+                    $data['details']['otherDescription'] = null;
+                    $form->setData($data);
+
+                    // ... so we load in some extra JS which will fire off our cascade
+                    // input, which in turn will populate the list of descriptions
+                    $this->getServiceLocator()->get('Script')->loadFile('scanning-success');
                 }
             }
         }
-
-        $this->getServiceLocator()->get('Script')->loadFile('forms/scanning');
 
         $view = new ViewModel(['form' => $form]);
         $view->setTemplate('form');

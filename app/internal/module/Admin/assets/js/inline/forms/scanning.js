@@ -8,17 +8,20 @@ OLCS.ready(function() {
     8: "IRFO ID",
     9: "Licence No"
   };
-
-  $(document).on("change", "#category", function() {
-    var val = $(this).val();
+  function renderLabel(elem) {
+    var val = elem.val();
     var label = labelMap[val];
     $("label[for=entity_identifier]").text(label);
+  }
+
+  $(document).on("change", "#category", function() {
+    renderLabel($(this));
   });
 
   OLCS.cascadeInput({
     source: "#category",
     dest: "#subCategory",
-    process: process("/list/document-sub-categories")
+    process: process("/list/scanning-sub-categories")
   });
 
   OLCS.cascadeInput({
@@ -56,4 +59,6 @@ OLCS.ready(function() {
       }
     }
   });
+
+  renderLabel($("#category"));
 });
