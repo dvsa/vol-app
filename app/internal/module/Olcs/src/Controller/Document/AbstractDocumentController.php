@@ -18,6 +18,9 @@ use Common\Service\Data\CategoryDataService as Category;
  */
 abstract class AbstractDocumentController extends AbstractController
 {
+    // AC specifies this timestamp format...
+    const DOCUMENT_TIMESTAMP_FORMAT = 'YmdHi';
+
     /**
      * For redirects
      */
@@ -36,7 +39,7 @@ abstract class AbstractDocumentController extends AbstractController
         'licence'          => Category::CATEGORY_LICENSING,
         'busReg'           => Category::CATEGORY_BUS_REGISTRATION,
         'case'             => Category::CATEGORY_LICENSING, // use Licensing for now
-        'application'      => Category::CATEGORY_APPLICATION,
+        'application'      => Category::CATEGORY_LICENSING, // Application isn't a document category
         'transportManager' => Category::CATEGORY_TRANSPORT_MANAGER,
     ];
 
@@ -145,5 +148,12 @@ abstract class AbstractDocumentController extends AbstractController
         $service = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\Cases');
         $case = $service->fetchCaseData($caseId);
         return isset($case['licence']['id']) ? $case['licence']['id'] : null;
+    }
+
+    public function getDocumentTimestamp()
+    {
+        return $this->getServiceLocator()
+            ->get('Helper\Date')
+            ->getDate(self::DOCUMENT_TIMESTAMP_FORMAT);
     }
 }
