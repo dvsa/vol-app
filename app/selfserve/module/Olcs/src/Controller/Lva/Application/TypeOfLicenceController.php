@@ -11,6 +11,7 @@ use Zend\Form\Form;
 use Common\View\Model\Section;
 use Common\Controller\Lva;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
+use Zend\Stdlib\ResponseInterface;
 
 /**
  * External Type Of Licence Controller
@@ -19,8 +20,7 @@ use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
  */
 class TypeOfLicenceController extends Lva\AbstractTypeOfLicenceController
 {
-    use ApplicationControllerTrait,
-        Lva\Traits\ApplicationTypeOfLicenceTrait;
+    use ApplicationControllerTrait;
 
     protected $location = 'external';
     protected $lva = 'application';
@@ -35,5 +35,69 @@ class TypeOfLicenceController extends Lva\AbstractTypeOfLicenceController
     protected function renderCreateApplication($titleSuffix, Form $form = null)
     {
         return new Section(array('title' => 'lva.section.title.' . $titleSuffix, 'form' => $form));
+    }
+
+    /**
+     * Create application action
+     */
+    public function createApplicationAction()
+    {
+        if ($this->isButtonPressed('cancel')) {
+            return $this->redirect()->toRoute('dashboard');
+        }
+
+        $request = $this->getRequest();
+
+        $form = $this->getTypeOfLicenceForm();
+        $form->get('form-actions')->remove('saveAndContinue')
+            ->get('save')->setLabel('continue.button');
+
+        if ($request->isPost()) {
+            $data = (array)$request->getPost();
+
+            $form->setData($data);
+
+            if ($form->isValid()) {
+
+                $organisationId = $this->getCurrentOrganisationId();
+                $ids = $this->getServiceLocator()->get('Entity\Application')->createNew($organisationId);
+
+                $data = $this->formatDataForSave($data);
+
+                $data['id'] = $ids['application'];
+                $data['version'] = 1;
+
+                $this->getServiceLocator()->get('Entity\Application')->save($data);
+
+                $this->updateCompletionStatuses($ids['application'], 'type_of_licence');
+
+                $adapter = $this->getTypeOfLicenceAdapter();
+                $adapter->createFee($ids['application']);
+
+                return $this->goToOverview($ids['application']);
+            }
+        }
+
+        $this->getServiceLocator()->get('Script')->loadFile('type-of-licence');
+
+        return $this->renderCreateApplication('type_of_licence', $form);
+    }
+
+    public function confirmationAction()
+    {
+        $adapter = $this->getTypeOfLicenceAdapter();
+
+        // @NOTE will either return a redirect, or a form
+        $response = $adapter->confirmationAction();
+
+        if ($response instanceof ResponseInterface) {
+            return $response;
+        }
+
+        return $this->render(
+            'type_of_licence_confirmation',
+            $response,
+            array('sectionText' => 'application_type_of_licence_confirmation_subtitle')
+        );
     }
 }
