@@ -50,6 +50,8 @@ class ApplicationController extends AbstractController
                 $this->params('application')
             );
 
+        $this->pageLayout = null;
+
         return $this->commonPayFeesAction('lva-application', $licenceId);
     }
 
@@ -93,8 +95,6 @@ class ApplicationController extends AbstractController
         return $this->render($view);
     }
 
-
-
     public function grantAction()
     {
         $request = $this->getRequest();
@@ -118,6 +118,8 @@ class ApplicationController extends AbstractController
         $form = $formHelper->createForm('GenericConfirmation');
 
         $formHelper->setFormActionFromRequest($form, $request);
+
+        $this->pageLayout = null;
 
         $view = new ViewModel(array('form' => $form));
         $view->setTemplate('application/grant');
@@ -148,6 +150,8 @@ class ApplicationController extends AbstractController
         $form = $formHelper->createForm('GenericConfirmation');
 
         $formHelper->setFormActionFromRequest($form, $request);
+
+        $this->pageLayout = null;
 
         $view = new ViewModel(array('form' => $form));
         $view->setTemplate('application/undo-grant');
