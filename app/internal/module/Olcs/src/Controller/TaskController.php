@@ -406,6 +406,12 @@ class TaskController extends AbstractController
                 $route = 'transport-manager/processing/tasks';
                 $params = ['transportManager' => $taskTypeId];
                 break;
+            case 'busreg':
+                $route = 'licence/bus-processing/tasks';
+                $busReg = $this->getBusReg($taskTypeId);
+                $licenceId = $busReg['licence']['id'];
+                $params = ['busRegId' => $taskTypeId, 'licence' => $licenceId];
+                break;
             default:
                 // no type - call from the home page, need to redirect back after action
                 $route = 'dashboard';
@@ -529,6 +535,11 @@ class TaskController extends AbstractController
             case 'tm':
                 $data['transportManager'] = $taskTypeId;
                 break;
+            case 'busreg':
+                $data['busReg']  = $taskTypeId;
+                $busReg = $this->getBusReg($taskTypeId);
+                $data['licence'] = $busReg['licence']['id'];
+                break;
             default:
                 break;
         }
@@ -648,5 +659,25 @@ class TaskController extends AbstractController
         $application = $this->makeRestCall('Application', 'GET', array('id' => $id));
 
         return $application;
+    }
+
+    /**
+     * Gets the Bus Registration by ID.
+     *
+     * @param int $id
+     * @return array
+     */
+    protected function getBusReg($id)
+    {
+
+        $bundle = [
+            'children' => [
+                'licence' => [
+                    'properties' => ['id'],
+                ],
+            ]
+        ];
+
+        return $this->makeRestCall('BusReg', 'GET', array('id' => $id, 'bundle' => json_encode($bundle)));
     }
 }

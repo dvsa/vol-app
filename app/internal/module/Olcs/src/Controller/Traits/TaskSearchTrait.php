@@ -183,6 +183,13 @@ trait TaskSearchTrait
                         'typeId' => $this->getFromRoute('transportManager'),
                     ];
                     break;
+                    break;
+                case 'busReg':
+                    $params = [
+                        'type' => 'busreg',
+                        'typeId' => $this->getFromRoute('busRegId'),
+                    ];
+                    break;
                 default:
                     // no type - call from the home page
                     break;
