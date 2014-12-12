@@ -56,6 +56,4 @@ OLCS.ready(function() {
       }
     }
   });
-
-  $("#category").change();
 });

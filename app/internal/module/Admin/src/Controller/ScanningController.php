@@ -24,28 +24,30 @@ class ScanningController extends AbstractActionController
         } else {
             $data = [
                 'details' => [
-                    'category' => 1
+                    'category' => 1,
+                    'subCategory' => 85
                 ]
             ];
         }
 
         $category = $data['details']['category'];
+        $subCategory = $data['details']['subCategory'];
 
-        // @TODO seems to get a separate instance to the form,
-        // doesn't work
         $this->getServiceLocator()
             ->get('DataServiceManager')
-            ->get('Olcs\Service\Data\DocumentSubCategory')
+            ->get('Olcs\Service\Data\SubCategory')
             ->setCategory($category);
 
-        // @TODO set the SubCategoryDescription ->setSubCategory() too
+        $this->getServiceLocator()
+            ->get('DataServiceManager')
+            ->get('Olcs\Service\Data\SubCategoryDescription')
+            ->setSubCategory($subCategory);
 
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
         $form = $formHelper->createForm('Scanning');
 
         if ($this->getRequest()->isPost()) {
-            // do some stuff
 
             $form->setData($data);
 
