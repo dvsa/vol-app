@@ -47,6 +47,8 @@ class ApplicationControllerTest extends MockeryTestCase
         );
         $this->sut->setServiceLocator($this->sm);
         $this->pluginManager = $this->sut->getPluginManager();
+
+        return parent::setUp();
     }
 
     /**
@@ -148,7 +150,15 @@ class ApplicationControllerTest extends MockeryTestCase
             );
 
         $this->sut->shouldReceive('makeRestCall')
-            ->with('Category', 'GET', ['limit'=>100, 'sort'=>'description'])
+            ->with(
+                'Category',
+                'GET',
+                [
+                    'limit'         => 100,
+                    'sort'          => 'description',
+                    'isDocCategory' => true,
+                ]
+            )
             ->andReturn(['cat1', 'cat2']);
 
         $this->sut->shouldReceive('makeRestCall')

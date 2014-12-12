@@ -196,7 +196,8 @@ class TransportManagerDocumentControllerTest extends \Mockery\Adapter\Phpunit\Mo
                 'GET',
                 [
                     'limit' => 100,
-                    'sort' => 'description'
+                    'sort' => 'description',
+                    'isDocCategory' => true,
                 ],
                 m::any()
             )
