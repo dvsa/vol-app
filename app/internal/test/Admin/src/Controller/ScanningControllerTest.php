@@ -109,7 +109,6 @@ class ScanningControllerTest extends MockeryTestCase
 
         $this->setPost($post);
 
-
         $this->setService(
             'Processing\Entity',
             m::mock()
@@ -151,7 +150,6 @@ class ScanningControllerTest extends MockeryTestCase
         ];
 
         $this->setPost($post);
-
 
         $this->setService(
             'Processing\Entity',
