@@ -23,8 +23,6 @@ class DocumentUploadController extends AbstractDocumentController
 {
     public function uploadAction()
     {
-        // @TODO the form does *not* re-populate properly. Previously it completely
-        // ignored POST data entirely; Steve L to raise a bug and DE to pick up (11/12/14)
         if ($this->getRequest()->isPost()) {
             $data = (array)$this->getRequest()->getPost();
             $category = $data['details']['category'];
@@ -82,8 +80,7 @@ class DocumentUploadController extends AbstractDocumentController
             ]
         );
 
-        // AC specifies this timestamp format...
-        $fileName = $this->getServiceLocator()->get('Helper\Date')->getDate('YmdHi')
+        $fileName = $this->getDocumentTimestamp()
             . '_' . $this->formatFilename($files['file']['name'])
             . '.' . $file->getExtension();
 

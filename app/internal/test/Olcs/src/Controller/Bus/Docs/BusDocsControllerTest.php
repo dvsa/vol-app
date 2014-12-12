@@ -157,8 +157,9 @@ class BusDocsControllerTest extends AbstractHttpControllerTestCase
                 'Category',
                 'GET',
                 [
-                    'limit' => 100,
-                    'sort' => 'description'
+                    'limit'         => 100,
+                    'sort'          => 'description',
+                    'isDocCategory' => true,
                 ],
                 m::any()
             )
