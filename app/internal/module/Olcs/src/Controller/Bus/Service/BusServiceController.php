@@ -66,7 +66,7 @@ class BusServiceController extends BusController
      */
     public function redirectToIndex()
     {
-        return $this->redirectToRoute('licence/bus-details/service', [], [], true);
+        return $this->redirectToRoute('licence/bus-register-service', [], [], true);
     }
 
     /**

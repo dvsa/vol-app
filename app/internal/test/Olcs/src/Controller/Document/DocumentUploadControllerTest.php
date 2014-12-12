@@ -157,6 +157,15 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
                 ],
                 'licence/bus-docs'
             ],
+            "Transport manager document" => [
+                'transportManager',
+                [
+                    'type'    => 'transportManager',
+                    'transportManager' => 1234,
+                    'tmpId'   => 'full-filename',
+                ],
+                'transport-manager/documents'
+            ],
         ];
     }
     /**
@@ -593,6 +602,9 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
                 break;
             case 'busReg':
                 $extra = ['licence' => 7, 'busReg' => 1234];
+                break;
+            case 'transportManager':
+                $extra = ['transportManager' => 1234];
                 break;
             default:
                 $extra = [];

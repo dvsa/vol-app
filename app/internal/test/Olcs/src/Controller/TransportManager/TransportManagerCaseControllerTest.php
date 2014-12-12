@@ -4,7 +4,7 @@
 *
 * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
 */
-namespace OlcsTest\Controller\Document;
+namespace OlcsTest\Controller\TransportManager;
 
 use Olcs\Controller\TransportManager\TransportManagerCaseController as Sut;
 use Olcs\TestHelpers\ControllerPluginManagerHelper;
