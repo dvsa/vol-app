@@ -402,6 +402,10 @@ class TaskController extends AbstractController
                 $route = 'lva-application/processing';
                 $params = ['application' => $taskTypeId];
                 break;
+            case 'tm':
+                $route = 'transport-manager/processing/tasks';
+                $params = ['transportManager' => $taskTypeId];
+                break;
             default:
                 // no type - call from the home page, need to redirect back after action
                 $route = 'dashboard';
@@ -521,6 +525,9 @@ class TaskController extends AbstractController
                 // bit ugly, but we need the licenceId too to properly link the task
                 $data['licence'] = $this->getServiceLocator()
                     ->get('Entity\Application')->getLicenceIdForApplication($taskTypeId);
+                break;
+            case 'tm':
+                $data['transportManager'] = $taskTypeId;
                 break;
             default:
                 break;
