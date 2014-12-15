@@ -54,6 +54,9 @@ return array(
                     case 'transport-manager/processing/tasks':
                          $routeParams = ['type' => 'tm', 'typeId' => $row['transportManagerId']];
                         break;
+                    case 'licence/bus-processing/tasks':
+                         $routeParams = ['type' => 'busreg', 'typeId' => $row['busRegId'], 'licence' => $row['licenceId']];
+                        break;
                     default:
                         $routeParams = [];
                         break;

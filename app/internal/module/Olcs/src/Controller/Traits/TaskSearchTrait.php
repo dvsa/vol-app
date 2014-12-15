@@ -190,7 +190,6 @@ trait TaskSearchTrait
                         'typeId' => $this->getFromRoute('transportManager'),
                     ];
                     break;
-                    break;
                 case 'busReg':
                     $params = [
                         'type' => 'busreg',

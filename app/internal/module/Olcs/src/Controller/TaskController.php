@@ -668,10 +668,6 @@ class TaskController extends AbstractController
         return $licence;
     }
 
-    /**
-     * @todo optimise this to reuse getApplication data if we already called 
-     * the backend
-     */
     protected function getLicenceIdForApplication($applicationId = null)
     {
         $application = $this->getApplication($applicationId);
