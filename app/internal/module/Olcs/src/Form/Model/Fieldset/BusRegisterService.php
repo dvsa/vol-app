@@ -23,7 +23,7 @@ class BusRegisterService extends Base
      *      }
      * })
      * @Form\Attributes({
-     *      "id":"conditions[copiedToLaPte]",
+     *      "id":"registerService[copiedToLaPte]",
      *      "value":"N"
      * })
      */

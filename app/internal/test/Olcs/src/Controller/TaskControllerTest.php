@@ -365,14 +365,12 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
         $this->assertEquals('Edit task', $header->getVariable('pageTitle'));
     }
 
-    /**
-     * @dataProvider closeTaskProvider
-     */
     public function editActionPostDp()
     {
         return [
-            ['licence', 'licence/processing'],
-            ['application', 'lva-application/processing']
+            'Licence task'           => ['licence', 'licence', 'licence/processing'],
+            'Application task'       => ['application', 'application', 'lva-application/processing'],
+            'Transport manager task' => ['tm', 'transportManager', 'transport-manager/processing/tasks'],
         ];
     }
     /**
@@ -380,7 +378,7 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
      *
      * @dataProvider editActionPostDp
      */
-    public function testEditActionPost($entity, $expectedRoute)
+    public function testEditActionPost($type, $routeParam, $expectedRoute)
     {
         $form = $this->getMock(
             '\stdClass',
@@ -425,7 +423,7 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
             ->will(
                 $this->returnValueMap(
                     array(
-                        array('type', $entity),
+                        array('type', $type),
                         array('typeId', 123),
                         array('task', 456),
                     )
@@ -445,7 +443,7 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
             ->method('isPost')
             ->will($this->returnValue(true));
 
-        $params = [$entity => 123];
+        $params = [$routeParam => 123];
 
         $mockRoute = $this->getMock('\stdClass', ['toRouteAjax']);
         $mockRoute->expects($this->once())
