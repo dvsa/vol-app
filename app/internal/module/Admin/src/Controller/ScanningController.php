@@ -73,7 +73,7 @@ class ScanningController extends AbstractActionController
                         ]
                     );
                 } else {
-                    $licNo = isset($entity['licNo']) ? $entity['licNo'] : null;
+                    $licNo = isset($entity['licNo']) ? $entity['licNo'] : 'Unknown';
 
                     $categoryName = $this->getDataService('Category')
                         ->getDescriptionFromId($details['category']);
