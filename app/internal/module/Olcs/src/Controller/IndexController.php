@@ -85,8 +85,21 @@ class IndexController extends AbstractController
                     'isDoc' => true
                 )
             ),
+            'scanning-sub-categories' => array(
+                'entity' => 'SubCategory',
+                'field' => 'category',
+                'title' => 'subCategoryName',
+                'search' => array(
+                    'isScan' => true
+                )
+            ),
             'document-templates' => array(
                 'entity' => 'DocTemplate',
+                'field' => 'subCategory',
+                'title' => 'description'
+            ),
+            'sub-category-descriptions' => array(
+                'entity' => 'SubCategoryDescription',
                 'field' => 'subCategory',
                 'title' => 'description'
             )

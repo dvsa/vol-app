@@ -27,6 +27,8 @@ class Category extends AbstractData implements ListDataInterface
      */
     public function fetchListData($params)
     {
+        $params['sort'] = 'description';
+
         if (is_null($this->getData('categories'))) {
             $data = $this->getRestClient()->get('', $params);
             $this->setData('categories', false);
