@@ -319,6 +319,18 @@ class TaskController extends AbstractController
                     $linkDisplay
                 );
                 break;
+            case 'bus registration':
+                $taskId = $this->getFromRoute('task');
+                $taskDetails = $this->getTaskDetails($taskId);
+                $url = sprintf(
+                    '<a href="%s">%s</a>',
+                    $this->url()->fromRoute(
+                        'licence/bus-details',
+                        ['busRegId' => $taskTypeId, 'licence' => $taskDetails['licenceId']]
+                    ),
+                    $linkDisplay
+                );
+                break;
             default:
                 $url='';
         }
