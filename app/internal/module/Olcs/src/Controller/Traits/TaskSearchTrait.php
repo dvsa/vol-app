@@ -225,16 +225,17 @@ trait TaskSearchTrait
      */
     protected function getTaskDetails($id = null)
     {
-        $taskDetails = array();
-        if ($id) {
-            if (!isset($this->taskDetailsCache[$id])) {
-                $this->taskDetailsCache[$id] = $this->makeRestCall(
-                    'TaskSearchView',
-                    'GET',
-                    array('id' => $id),
-                    array('properties' => array('linkType', 'linkId', 'linkDisplay', 'licenceId'))
-                );
-            }
+        if (!$id) {
+            $id = $this->getFromRoute('task');
+        }
+
+        if (!isset($this->taskDetailsCache[$id])) {
+            $this->taskDetailsCache[$id] = $this->makeRestCall(
+                'TaskSearchView',
+                'GET',
+                array('id' => $id),
+                array('properties' => array('linkType', 'linkId', 'linkDisplay', 'licenceId'))
+            );
         }
         return $this->taskDetailsCache[$id];
     }

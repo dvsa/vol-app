@@ -13,6 +13,7 @@ namespace OlcsTest\Controller;
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use Zend\Form\Fieldset;
 use Zend\Form\Element\DateSelect;
+use Mockery as m;
 
 /**
  * Task controller tests
@@ -22,6 +23,7 @@ use Zend\Form\Element\DateSelect;
  */
 class TaskControllerTest extends AbstractHttpControllerTestCase
 {
+    use \OlcsTest\Traits\MockeryTestCaseTrait;
 
     private $altListData = [
         'limit' => 100,
@@ -93,7 +95,10 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
                 'processEdit',
                 'getFromRoute',
                 'getSearchForm',
-                'getServiceLocator'
+                'getServiceLocator',
+                'getLicenceIdForApplication',
+                'getApplication',
+                'getBusReg'
             )
         );
 
@@ -368,9 +373,10 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
     public function editActionPostDp()
     {
         return [
-            'Licence task'           => ['licence', 'licence', 'licence/processing'],
-            'Application task'       => ['application', 'application', 'lva-application/processing'],
-            'Transport manager task' => ['tm', 'transportManager', 'transport-manager/processing/tasks'],
+            'Licence task'           => ['licence', ['licence'=>123], 'licence/processing'],
+            'Application task'       => ['application', ['application'=>123], 'lva-application/processing'],
+            'Transport Manager task' => ['tm', ['transportManager'=>123], 'transport-manager/processing/tasks'],
+            'Bus Registration task'  => ['busreg', ['busRegId'=>123, 'licence'=>987], 'licence/bus-processing/tasks'],
         ];
     }
     /**
@@ -378,14 +384,14 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
      *
      * @dataProvider editActionPostDp
      */
-    public function testEditActionPost($type, $routeParam, $expectedRoute)
+    public function testEditActionPost($type, $routeParams, $expectedRoute)
     {
         $form = $this->getMock(
             '\stdClass',
             [
                 'get', 'setValue', 'setValueOptions',
                 'remove', 'setData', 'isValid',
-                'getData'
+                'getData',
             ]
         );
 
@@ -415,8 +421,7 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue($form));
 
         $this->controller->expects($this->once())
-            ->method('processEdit')
-            ->will($this->returnValue(['id' => 1234]));
+            ->method('processEdit');
 
         $this->controller->expects($this->any())
             ->method('getFromRoute')
@@ -443,48 +448,51 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
             ->method('isPost')
             ->will($this->returnValue(true));
 
-        $params = [$routeParam => 123];
-
         $mockRoute = $this->getMock('\stdClass', ['toRouteAjax']);
         $mockRoute->expects($this->once())
             ->method('toRouteAjax')
-            ->with($expectedRoute, $params)
+            ->with($expectedRoute, $routeParams)
             ->will($this->returnValue('mockResponse'));
 
-        $this->mockApplicationLicenceLookups();
+        $this->controller->expects($this->any())
+            ->method('getLicenceIdForApplication')
+            ->with(123)
+            ->will($this->returnValue(987));
+
+        $this->controller->expects($this->any())
+            ->method('getApplication')
+            ->with(123)
+            ->will(
+                $this->returnValue(
+                    [
+                        'id' => 123,
+                        'licence' => [
+                            'id' => 987,
+                            'licNo' => 'AB1234',
+                        ]
+                    ]
+                )
+            );
+        $this->controller->expects($this->any())
+            ->method('getBusReg')
+            ->with(123)
+            ->will(
+                $this->returnValue(
+                    [
+                        'id' => 123,
+                        'regNo' => 'BR1234',
+                        'licence' => [
+                            'id' => 987,
+                        ]
+                    ]
+                )
+            );
 
         $this->controller->expects($this->any())
             ->method('redirect')
             ->will($this->returnValue($mockRoute));
 
         $this->controller->editAction();
-    }
-
-    protected function mockApplicationLicenceLookups()
-    {
-        // mock the calls to look up licence id and data for the application
-        ////////
-        $mockApplicationService = $this->getMock(
-            '\StdClass',
-            ['getLicenceIdForApplication','getDataForTasks']
-        );
-        $mockApplicationService->expects($this->any())
-            ->method('getLicenceIdForApplication')
-            ->with($this->equalTo(123))
-            ->will($this->returnValue(987));
-        $mockApplicationService->expects($this->any())
-            ->method('getDataForTasks')
-            ->with($this->equalTo(123))
-            ->will($this->returnValue(['id'=>123, 'licence'=>['id'=>987, 'licNo'=>'AB123']]));
-        $mockServiceLocator = $this->getMock('\StdClass', ['get']);
-        $mockServiceLocator->expects($this->any())
-            ->method('get')
-            ->with($this->equalTo('Entity\Application'))
-            ->will($this->returnValue($mockApplicationService));
-        $this->controller->expects($this->any())
-             ->method('getServiceLocator')
-             ->will($this->returnValue($mockServiceLocator));
-        ////////
     }
 
     /**
@@ -1148,54 +1156,103 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
      */
     public function testEditActionForApplication()
     {
-        $form = $this->getMock('\Zend\Form\Form', ['get', 'setValue', 'setValueOptions', 'remove', 'setData']);
+        $sut = m::mock('\Olcs\Controller\TaskController')
+            ->makePartial()
+            ->shouldAllowMockingProtectedMethods();
 
-        $form->expects($this->any())
-            ->method('get')
-            ->will($this->returnSelf());
+        // mock form
+        $sut->shouldReceive('getForm')->andReturn(
+            m::mock('\Zend\Form\Form')
+                ->shouldReceive('get')
+                    ->andReturnSelf()
+                ->shouldReceive('setValue')
+                ->shouldReceive('setValueOptions')
+                ->shouldReceive('remove')
+                ->shouldReceive('setData')
+                ->getMock()
+        );
 
-        $this->controller->expects($this->once())
-            ->method('getForm')
-            ->will($this->returnValue($form));
+        // mock route params
+        $sut->shouldReceive('getFromRoute')
+            ->with('type')
+            ->andReturn('application');
+        $sut->shouldReceive('getFromRoute')
+            ->with('typeId')
+            ->andReturn(123);
+        $sut->shouldReceive('getFromRoute')
+            ->with('task')
+            ->andReturn(456);
 
-        $this->controller->expects($this->any())
-            ->method('getFromRoute')
-            ->will(
-                $this->returnValueMap(
-                    array(
-                        array('type', 'application'),
-                        array('typeId', 123),
-                        array('task', 456),
-                    )
-                )
+
+        // mock URL helper
+        $sut->shouldReceive('url')->andReturn(
+            m::mock('\StdClass')
+                ->shouldReceive('fromRoute')
+                    ->with('lva-licence', ['licence' => 987])
+                    ->andReturn('licenceURL987')
+                ->shouldReceive('fromRoute')
+                    ->with('lva-application', ['application' => 123])
+                    ->andReturn('applicationURL123')
+                ->getMock()
             );
 
-        $this->mockApplicationLicenceLookups();
+        // mock request (getPost->toArray())
+        $sut->shouldReceive('getRequest')->andReturn(
+            m::mock('\StdClass')
+                ->shouldReceive('isPost')
+                    ->andReturn(false)
+                ->shouldReceive('getPost')
+                    ->andReturn(
+                        m::mock('StdClass')->shouldReceive('toArray')->andReturn([])->getMock()
+                    )
+                ->shouldReceive('isXmlHttpRequest')
+                    ->andReturn(true)
+                ->getMock()
+        );
 
-        $this->url->expects($this->at(0))
-                ->method('fromRoute')
-                ->with('lva-licence', array('licence' => 987))
-                ->will($this->returnValue(''));
+        // mock REST calls for task details
+        $sut->shouldReceive('makeRestCall')
+            ->with(
+                'TaskSearchView',
+                'GET',
+                ['id' => 456],
+                ['properties' => ['linkType', 'linkId', 'linkDisplay', 'licenceId']]
+            )
+            ->andReturn(
+                [
+                    // task details, but we only need licence stuff
+                    'licenceId' => 987,
+                    'licenceNo' => 'AB1234',
+                ]
+            );
 
-        $this->url->expects($this->at(1))
-                ->method('fromRoute')
-                ->with('lva-application', array('application' => 123))
-                ->will($this->returnValue(''));
+        $sut->shouldReceive('makeRestCall')
+            ->with(
+                'Task',
+                'GET',
+                ['id' => 456],
+                m::any() // bundle
+            )
+            ->andReturn([]);
 
-        $this->controller->expects($this->any())
-                ->method('url')
-                ->will($this->returnValue($this->url));
+        // mock lookup licence details for application
+        $sut->shouldReceive('getApplication')->with('123')->andReturn(
+            [
+                'id' => 123,
+                'licence' => ['id' => 987, 'licNo' => 'AB1234'],
+            ]
+        );
 
-        $toArray = $this->getMock('\stdClass', ['toArray']);
-        $toArray->expects($this->any())
-            ->method('toArray')
-            ->will($this->returnValue([]));
+        // stub rest calls for dropdowns
+        $sut->shouldReceive('getListDataFromBackend')->andReturn([]);
 
-        $this->request->expects($this->any())
-            ->method('getPost')
-            ->will($this->returnValue($toArray));
+        // check scripts are loaded
+        $sut->shouldReceive('loadScripts')->with(['forms/task']);
 
-        $view = $this->controller->editAction();
+        $sm = \OlcsTest\Bootstrap::getServiceManager();
+        $sut->setServiceLocator($sm);
+
+        $view = $sut->editAction();
 
         list($header, $content) = $view->getChildren();
 

@@ -26,11 +26,6 @@ class TaskController extends AbstractController
     use TaskSearchTrait;
 
     /**
-     * Place to cache task type details
-     */
-    private $taskTypeDetails = null;
-
-    /**
      * Add a new task
      *
      * @return ViewModel
@@ -286,7 +281,7 @@ class TaskController extends AbstractController
     protected function getLinkForTaskForm()
     {
         $taskTypeDetails = $this->getTaskTypeDetails();
-        $taskType        = $taskTypeDetails['taskType'];
+        $taskType        = str_replace(' ', '', $taskTypeDetails['taskType']);
         $taskTypeId      = $taskTypeDetails['taskTypeId'];
         $linkDisplay     = $taskTypeDetails['linkDisplay'];
 
@@ -302,33 +297,35 @@ class TaskController extends AbstractController
                 );
                 break;
             case 'application':
-                $taskId = $this->getFromRoute('task');
-                $taskDetails = $this->getTaskDetails($taskId);
+                $application = $this->getApplication($taskTypeId);
+                $licenceId   = $application['licence']['id'];
+                $licNo       = $application['licence']['licNo'];
+
                 $url = sprintf(
                     '<a href="%s">%s</a> / <a href="%s">%s</a>',
-                    $this->url()->fromRoute('lva-licence', ['licence' => $taskDetails['licenceId']]),
-                    $taskDetails['licenceNo'],
+                    $this->url()->fromRoute('lva-licence', ['licence' => $licenceId]),
+                    $licNo,
                     $this->url()->fromRoute('lva-application', ['application' => $taskTypeId]),
                     $taskTypeId
                 );
                 break;
-            case 'transport manager':
+            case 'tm':
                 $url = sprintf(
                     '<a href="%s">%s</a>',
                     $this->url()->fromRoute('transport-manager', ['transportManager' => $taskTypeId]),
                     $linkDisplay
                 );
                 break;
-            case 'bus registration':
-                $taskId = $this->getFromRoute('task');
-                $taskDetails = $this->getTaskDetails($taskId);
+            case 'busreg':
+                $busReg = $this->getBusReg($taskTypeId);
+                $licenceId = $busReg['licence']['id'];
                 $url = sprintf(
                     '<a href="%s">%s</a>',
                     $this->url()->fromRoute(
                         'licence/bus-details',
-                        ['busRegId' => $taskTypeId, 'licence' => $taskDetails['licenceId']]
+                        ['busRegId' => $taskTypeId, 'licence' => $licenceId]
                     ),
-                    $linkDisplay
+                    $linkDisplay ? $linkDisplay : $busReg['regNo']
                 );
                 break;
             default:
@@ -542,8 +539,7 @@ class TaskController extends AbstractController
             case 'application':
                 $data['application'] = $taskTypeId;
                 // bit ugly, but we need the licenceId too to properly link the task
-                $data['licence'] = $this->getServiceLocator()
-                    ->get('Entity\Application')->getLicenceIdForApplication($taskTypeId);
+                $data['licence'] = $this->getLicenceIdForApplication($taskTypeId);
                 break;
             case 'tm':
                 $data['transportManager'] = $taskTypeId;
@@ -621,32 +617,42 @@ class TaskController extends AbstractController
      */
     public function getTaskTypeDetails()
     {
-        if (!$this->taskTypeDetails) {
-            $taskType = $this->getFromRoute('type');
-            $taskTypeId = $this->getFromRoute('typeId');
-            $linkDisplay = null;
-            /* if call was from home page we don't have a task type yet,
-             * need to get it and all details for url generation as well
-             */
-            if (!$taskType) {
-                $taskId = $this->getFromRoute('task');
-                if (!$taskId) {
-                    throw new \Exception('No task id provided');
-                }
+        $taskType    = $this->getFromRoute('type');
+        $taskTypeId  = $this->getFromRoute('typeId');
+        $linkDisplay = null;
 
-                $taskDetails = $this->getTaskDetails($taskId);
-                $taskType = strtolower($taskDetails['linkType']);
-                $taskTypeId = $taskDetails['linkId'];
-                $linkDisplay = $taskDetails['linkDisplay'];
+        /* if call was from home page we don't have a task type yet,
+         * need to get it and all details for url generation as well
+         */
+        if (!$taskType) {
+            $taskId = $this->getFromRoute('task');
+            if (!$taskId) {
+                throw new \Exception('No task id provided');
             }
-            $this->taskTypeDetails = [
-                'taskType' => $taskType,
-                'taskTypeId' => $taskTypeId,
-                'linkDisplay' => $linkDisplay,
-            ];
+
+            $taskDetails = $this->getTaskDetails($taskId);
+            $taskType = strtolower($taskDetails['linkType']);
+            $taskTypeId = $taskDetails['linkId'];
+            $linkDisplay = $taskDetails['linkDisplay'];
         }
 
-        return $this->taskTypeDetails;
+        // Normalise task type from backend with route param version. Ugh.
+        switch ($taskType) {
+            case 'transport manager':
+                $taskType = 'tm';
+                break;
+            case 'bus registration':
+                $taskType = 'busreg';
+                break;
+            default:
+                break;
+        }
+
+        return [
+            'taskType'    => $taskType,
+            'taskTypeId'  => $taskTypeId,
+            'linkDisplay' => $linkDisplay,
+        ];
     }
 
     /**
@@ -663,16 +669,23 @@ class TaskController extends AbstractController
     }
 
     /**
-     * Gets the application by ID.
-     *
-     * @param int $id
-     * @return array
+     * @todo optimise this to reuse getApplication data if we already called 
+     * the backend
      */
-    protected function getApplication($id)
+    protected function getLicenceIdForApplication($applicationId = null)
     {
-        $application = $this->makeRestCall('Application', 'GET', array('id' => $id));
+        $application = $this->getApplication($applicationId);
+        return $application['licence']['id'];
+    }
 
-        return $application;
+    protected function getApplication($applicationId = null)
+    {
+        if (is_null($applicationId)) {
+            $applicationId = $this->params()->fromRoute('application');
+        }
+        return $this->getServiceLocator()
+            ->get('Entity\Application')
+            ->getDataForTasks($applicationId);
     }
 
     /**
