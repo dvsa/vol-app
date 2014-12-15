@@ -52,4 +52,27 @@ class SubCategoryTest extends MockeryTestCase
         $this->assertEquals($results['Results'], $sut->fetchListData([]));
         $sut->fetchListData([]);
     }
+
+    public function testFormatData()
+    {
+        $sut = new SubCategory();
+
+        $this->assertEquals(
+            [
+                1 => 'foo',
+                2 => 'bar'
+            ],
+            $sut->formatData(
+                [
+                    [
+                        'id' => 1,
+                        'subCategoryName' => 'foo'
+                    ], [
+                        'id' => 2,
+                        'subCategoryName' => 'bar'
+                    ]
+                ]
+            )
+        );
+    }
 }
