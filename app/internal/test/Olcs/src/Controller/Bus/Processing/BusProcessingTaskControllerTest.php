@@ -96,7 +96,8 @@ class BusProcessingTaskControllerTest extends \Mockery\Adapter\Phpunit\MockeryTe
                 'GET',
                 [
                     'id' => 69,
-                    'bundle' => '{"children":{"licence":{"properties":"ALL","children":["organisation"]},"status":{"properties":"ALL"}}}'
+                    'bundle' => '{"children":{"licence":{"properties":"ALL",'
+                        . '"children":["organisation"]},"status":{"properties":"ALL"}}}'
                 ],
                 m::any()
             )

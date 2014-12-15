@@ -1167,9 +1167,11 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
 
         // mock route params
         $sut->shouldReceive('getFromRoute')
-            ->andReturnUsing(function($param) use ($routeParams) {
-                return isset($routeParams[$param]) ? $routeParams[$param] : null;
-            });
+            ->andReturnUsing(
+                function ($param) use ($routeParams) {
+                    return isset($routeParams[$param]) ? $routeParams[$param] : null;
+                }
+            );
 
         // mock URL helper
         $sut->shouldReceive('url')->andReturn(
@@ -1243,10 +1245,12 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
         list($header, $content) = $view->getChildren();
         $this->assertEquals('Edit task', $header->getVariable('pageTitle'));
     }
+
     /**
      * Tests both with and without additional context
      */
-    public function editApplicationProvider() {
+    public function editApplicationProvider()
+    {
         return [
             [['type' => 'application', 'typeId' => 123, 'task' => 456]],
             [['task' => 456]]
@@ -1268,9 +1272,11 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
 
         // mock route params
         $sut->shouldReceive('getFromRoute')
-            ->andReturnUsing(function($param) use ($routeParams) {
-                return isset($routeParams[$param]) ? $routeParams[$param] : null;
-            });
+            ->andReturnUsing(
+                function ($param) use ($routeParams) {
+                    return isset($routeParams[$param]) ? $routeParams[$param] : null;
+                }
+            );
 
         // mock URL helper
         $sut->shouldReceive('url')->andReturn(
@@ -1316,12 +1322,12 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
             //->once()
             ->with('BusReg', 'GET', m::any())
             ->andReturn(
-            [
-                'id' => 123,
-                'regNo' => 'BR1234',
-                'licence' => ['id' => 987, 'licNo' => 'AB1234'],
-            ]
-        );
+                [
+                    'id' => 123,
+                    'regNo' => 'BR1234',
+                    'licence' => ['id' => 987, 'licNo' => 'AB1234'],
+                ]
+            );
 
         // stub rest calls for dropdowns
         $sut->shouldReceive('getListDataFromBackend')->andReturn([]);
@@ -1336,10 +1342,12 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
         list($header, $content) = $view->getChildren();
         $this->assertEquals('Edit task', $header->getVariable('pageTitle'));
     }
+
     /**
      * Tests both with and without additional context
      */
-    public function editBusRegProvider() {
+    public function editBusRegProvider()
+    {
         return [
             [['type' => 'busreg', 'typeId' => 123, 'task' => 456]],
             [['task' => 456]]
@@ -1362,9 +1370,11 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
 
         // mock route params
         $sut->shouldReceive('getFromRoute')
-            ->andReturnUsing(function($param) use ($routeParams) {
-                return isset($routeParams[$param]) ? $routeParams[$param] : null;
-            });
+            ->andReturnUsing(
+                function ($param) use ($routeParams) {
+                    return isset($routeParams[$param]) ? $routeParams[$param] : null;
+                }
+            );
 
         // mock URL helper
         $sut->shouldReceive('url')->andReturn(
@@ -1419,10 +1429,12 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
         list($header, $content) = $view->getChildren();
         $this->assertEquals('Edit task', $header->getVariable('pageTitle'));
     }
+
     /**
      * Tests both with and without additional context
      */
-    public function editTmProvider() {
+    public function editTmProvider()
+    {
         return [
             [['type' => 'tm', 'typeId' => 123, 'task' => 456]],
             [['task' => 456]]
@@ -1432,7 +1444,8 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
     /**
      * Mock form
      */
-    protected function getMockForm() {
+    protected function getMockForm()
+    {
         return m::mock('\Zend\Form\Form')
                 ->shouldReceive('get')
                     ->andReturnSelf()
@@ -1442,10 +1455,12 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
                 ->shouldReceive('setData')
                 ->getMock();
     }
+
     /**
      * Mock request (getPost->toArray())
      */
-    protected  function getMockRequest() {
+    protected function getMockRequest()
+    {
         return m::mock('\StdClass')
             ->shouldReceive('isPost')
                 ->andReturn(false)

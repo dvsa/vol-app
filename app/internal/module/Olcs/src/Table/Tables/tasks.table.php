@@ -49,13 +49,17 @@ return array(
                         $routeParams = ['type' => 'licence', 'typeId' => $row['linkId']];
                         break;
                     case 'lva-application/processing/tasks':
-                         $routeParams = ['type' => 'application', 'typeId' => $row['applicationId']];
+                        $routeParams = ['type' => 'application', 'typeId' => $row['applicationId']];
                         break;
                     case 'transport-manager/processing/tasks':
-                         $routeParams = ['type' => 'tm', 'typeId' => $row['transportManagerId']];
+                        $routeParams = ['type' => 'tm', 'typeId' => $row['transportManagerId']];
                         break;
                     case 'licence/bus-processing/tasks':
-                         $routeParams = ['type' => 'busreg', 'typeId' => $row['busRegId'], 'licence' => $row['licenceId']];
+                        $routeParams = [
+                            'type' => 'busreg',
+                            'typeId' => $row['busRegId'],
+                            'licence' => $row['licenceId']
+                        ];
                         break;
                     default:
                         $routeParams = [];
