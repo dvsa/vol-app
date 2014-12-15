@@ -187,9 +187,6 @@ return [
         )
     ),
     'local_forms_path' => [__DIR__ . '/../src/Form/Forms/'],
-    'local_scripts_path' => array(
-        __DIR__ . '/../assets/js/inline/'
-    ),
     //-------- Start navigation -----------------
     'navigation' => [
         'default' => [
