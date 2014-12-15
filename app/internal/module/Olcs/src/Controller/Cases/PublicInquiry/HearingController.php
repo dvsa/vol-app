@@ -286,7 +286,7 @@ class HearingController extends OlcsController\CrudAbstract
             );
             $task['urgent'] = 'Y';
             $task['category'] = CategoryDataService::CATEGORY_COMPLIANCE;
-            $task['subCategory'] = CategoryDataService::COMPLIANCE_TASK_SUB_CATEGORY_HEARINGS_APPEALS;
+            $task['subCategory'] = CategoryDataService::TASK_SUB_CATEGORY_HEARINGS_APPEALS;
 
             $service = $this->getTaskService();
             $service->create($task);
