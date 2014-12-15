@@ -22,7 +22,7 @@ class BusController extends OlcsController\CrudAbstract
     use Traits\ViewHelperManagerAware;
 
     /* bus controller properties */
-    protected $layoutFile = 'licence/bus/layout';
+    protected $layoutFile = 'layout/bus-registrations';
     protected $subNavRoute;
     protected $section;
     protected $item;

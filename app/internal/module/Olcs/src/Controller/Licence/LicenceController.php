@@ -197,7 +197,7 @@ class LicenceController extends AbstractController
             )
         );
 
-        $view->setTemplate('licence/bus-registration');
+        $view->setTemplate('layout/bus-registrations-list');
 
         $view->setTerminal(
             $this->getRequest()->isXmlHttpRequest()

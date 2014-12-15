@@ -286,7 +286,7 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
         $id = 1;
         $mockResult = ['id' => $id];
         $action = 'edit';
-        $pageLayoutInner = 'case/inner-layout';
+        $pageLayoutInner = 'view-new/layouts/case-inner-layout';
 
         $sut = $this->getSutForIsolatedTest();
         $sut->setPageLayoutInner($pageLayoutInner);
@@ -320,7 +320,7 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
         $id = 1;
         $mockResult = [];
         $action = 'add';
-        $pageLayoutInner = 'case/inner-layout';
+        $pageLayoutInner = 'view-new/layouts/case-inner-layout';
 
         $sut = $this->getSutForIsolatedTest();
         $sut->setPageLayoutInner($pageLayoutInner);
@@ -828,7 +828,7 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
         $headerTemplate = 'view-new/partials/header';
         $detailsTemplate = 'details/view';
         $scripts = ['scripts/script'];
-        $pageLayoutInner = 'case/inner-layout';
+        $pageLayoutInner = 'view-new/layouts/case-inner-layout';
         $pageTitle = 'Page title';
         $pageSubTitle = 'Page sub title';
 

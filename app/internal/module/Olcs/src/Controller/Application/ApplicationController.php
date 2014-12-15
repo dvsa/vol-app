@@ -120,7 +120,7 @@ class ApplicationController extends AbstractController
         $formHelper->setFormActionFromRequest($form, $request);
 
         $view = new ViewModel(array('form' => $form));
-        $view->setTemplate('application/grant');
+        $view->setTemplate('view-new/partials/form');
 
         return $this->renderView($view, 'Grant application');
     }
@@ -150,7 +150,7 @@ class ApplicationController extends AbstractController
         $formHelper->setFormActionFromRequest($form, $request);
 
         $view = new ViewModel(array('form' => $form));
-        $view->setTemplate('application/undo-grant');
+        $view->setTemplate('view-new/partials/forms');
 
         return $this->renderView($view, 'Undo grant application');
     }

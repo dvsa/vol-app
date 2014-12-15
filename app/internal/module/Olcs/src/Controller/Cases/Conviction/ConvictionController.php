@@ -55,7 +55,7 @@ class ConvictionController extends OlcsController\CrudAbstract
      */
     protected $pageLayout = 'case';
 
-    protected $pageLayoutInner = 'case/inner-layout';
+    protected $pageLayoutInner = 'view-new/layouts/case-inner-layout';
 
     protected $defaultTableSortField = 'convictionDate';
 

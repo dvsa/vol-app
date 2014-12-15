@@ -30,7 +30,7 @@ trait DocumentActionTrait
 
         $this->loadScripts(['documents', 'table-actions']);
 
-        $view->setTemplate('licence/docs-attachments');
+        $view->setTemplate('view-new/layouts/docs-attachments-layout');
         $view->setTerminal(
             $this->getRequest()->isXmlHttpRequest()
         );

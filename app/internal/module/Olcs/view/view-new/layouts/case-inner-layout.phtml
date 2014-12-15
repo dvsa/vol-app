@@ -1,0 +1,25 @@
+<?php
+
+$currentSection = $this->navigation('navigation')->findOneBy('active', 1);
+$currentSectionParent = $currentSection->getParent();
+
+$case = $this->placeholder('case')->getValue();
+
+?>
+
+<div class="one-fifth--left">
+    <h4><?php echo $this->translate($currentSection->getParent()->getLabel()); ?></h4>
+    <?php
+        echo $this->navigation($currentSectionParent)->menu()->setPartial('view-new/partials/vertical-navigation');
+
+        $tableFilters = $this->placeholder('tableFilters')->getValue();
+
+        if($tableFilters instanceof \Zend\Form\Form) {
+            echo $this->form($tableFilters);
+        }
+    ?>
+</div>
+<div class="three-fifths     js-content--main">
+    <?php echo $this->flashMessengerAll(); ?>
+    <?php echo $this->content; ?>
+</div>

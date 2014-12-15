@@ -16,5 +16,5 @@ use Common\View\AbstractViewModel;
  */
 class SectionLayout extends AbstractViewModel
 {
-    protected $template = 'licence/licence-details/layout';
+    protected $template = 'view-new/layouts/licence-details-layout';
 }
