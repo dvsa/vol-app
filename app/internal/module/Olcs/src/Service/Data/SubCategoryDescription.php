@@ -68,4 +68,16 @@ class SubCategoryDescription extends AbstractData implements ListDataInterface
 
         return $this->getData($key);
     }
+
+    /**
+     * Look up an item's description by its ID
+     *
+     * @param int $id
+     *
+     * @return string
+     */
+    public function getDescriptionFromId($id)
+    {
+        return $this->getPropertyFromKey('id', 'description', $id);
+    }
 }

@@ -16,5 +16,8 @@ return array(
             'uuid' => 'uD12345',
             'workspace' => 'olcs'
         )
+    ),
+    'print_scheduler' => array(
+        'adapter' => 'DocumentStub'
     )
 );
