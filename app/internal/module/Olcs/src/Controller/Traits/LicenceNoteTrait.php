@@ -202,7 +202,7 @@ trait LicenceNoteTrait
         $this->loadScripts(['forms/filter','table-actions']);
 
         $view = $this->getView(['table' => $table]);
-        $view->setTemplate('view-new/partials/table');
+        $view->setTemplate('partials/table');
 
         return $view;
     }
@@ -253,7 +253,7 @@ trait LicenceNoteTrait
 
         $view = $this->getView(['form' => $form]);
 
-        $view->setTemplate('view-new/partials/form');
+        $view->setTemplate('partials/form');
 
         return $this->renderView($view, 'internal-application-processing-notes-add-title');
     }
@@ -330,7 +330,7 @@ trait LicenceNoteTrait
             ->setAttribute('disabled', 'disabled');
 
         $view = $this->getView(['form' => $form]);
-        $view->setTemplate('view-new/partials/form');
+        $view->setTemplate('partials/form');
 
         return $this->renderView($view, 'internal-application-processing-notes-modify-title');
     }

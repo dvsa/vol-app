@@ -286,7 +286,7 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
         $id = 1;
         $mockResult = ['id' => $id];
         $action = 'edit';
-        $pageLayoutInner = 'view-new/layouts/case-inner-layout';
+        $pageLayoutInner = 'layout/case-details-subsection';
 
         $sut = $this->getSutForIsolatedTest();
         $sut->setPageLayoutInner($pageLayoutInner);
@@ -320,7 +320,7 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
         $id = 1;
         $mockResult = [];
         $action = 'add';
-        $pageLayoutInner = 'view-new/layouts/case-inner-layout';
+        $pageLayoutInner = 'layout/case-details-subsection';
 
         $sut = $this->getSutForIsolatedTest();
         $sut->setPageLayoutInner($pageLayoutInner);
@@ -368,7 +368,7 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
         $this->assertInstanceOf('\Zend\View\Model\ViewModel', $innerView[0]);
 
         $this->assertEquals($view->getTemplate(), 'layout/base');
-        $this->assertEquals($headerView->getTemplate(), 'view-new/partials/header');
+        $this->assertEquals($headerView->getTemplate(), 'partials/header');
         $this->assertEquals($layoutView->getTemplate(), $pageLayout);
         $this->assertEquals($innerView[0]->getTemplate(), 'crud/form');
 
@@ -825,10 +825,10 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
         $id = 1;
 
         $layout = 'layout/base';
-        $headerTemplate = 'view-new/partials/header';
+        $headerTemplate = 'partials/header';
         $detailsTemplate = 'details/view';
         $scripts = ['scripts/script'];
-        $pageLayoutInner = 'view-new/layouts/case-inner-layout';
+        $pageLayoutInner = 'layout/case-details-subsection';
         $pageTitle = 'Page title';
         $pageSubTitle = 'Page sub title';
 
@@ -912,7 +912,7 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
         $id = 1;
 
         $layout = 'layout/base';
-        $headerTemplate = 'view-new/partials/header';
+        $headerTemplate = 'partials/header';
         $scripts = ['scripts/script'];
         $pageTitle = 'Page title';
         $pageLayoutInner = null;

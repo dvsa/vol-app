@@ -57,15 +57,15 @@ class OffenceController extends OlcsController\CrudAbstract
      */
     protected $pageLayout = 'case';
 
-    protected $detailsView = 'view-new/pages/case/offence';
+    protected $detailsView = 'pages/case/offence';
 
     /**
-     * For most case crud controllers, we use the view-new/layouts/case-inner-layout
+     * For most case crud controllers, we use the layout/case-details-subsection
      * layout file. Except submissions.
      *
      * @var string
      */
-    protected $pageLayoutInner = 'view-new/layouts/case-inner-layout';
+    protected $pageLayoutInner = 'layout/case-details-subsection';
 
     /**
      * Holds the service name

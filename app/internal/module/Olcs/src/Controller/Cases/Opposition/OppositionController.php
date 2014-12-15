@@ -43,7 +43,7 @@ class OppositionController extends OlcsController\CrudAbstract
      */
     protected $pageLayout = 'case';
 
-    protected $pageLayoutInner = 'view-new/layouts/wide-layout';
+    protected $pageLayoutInner = 'layout/wide-layout';
 
     /**
      * Holds the service name
@@ -161,7 +161,7 @@ class OppositionController extends OlcsController\CrudAbstract
         }
 
         $view->setVariables($viewVars);
-        $view->setTemplate('view-new/pages/case/opposition');
+        $view->setTemplate('pages/case/opposition');
 
         return $this->renderView($view);
     }

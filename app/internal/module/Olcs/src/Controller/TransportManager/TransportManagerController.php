@@ -19,7 +19,7 @@ class TransportManagerController extends AbstractController
     /**
      * @var string
      */
-    protected $pageLayout = 'transport-manager';
+    protected $pageLayout = 'transport-manager-section';
 
     /**
      * Redirect to the first menu section

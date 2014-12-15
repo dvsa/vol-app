@@ -20,7 +20,7 @@ class OperatorController extends AbstractController
     /**
      * @var string
      */
-    protected $pageLayout = 'operator';
+    protected $pageLayout = 'operator-section';
 
     /**
      * Redirect to the first menu section
@@ -94,7 +94,7 @@ class OperatorController extends AbstractController
         }
 
         $view = new ViewModel(['form' => $form]);
-        $view->setTemplate('view-new/partials/form');
+        $view->setTemplate('partials/form');
 
         return $this->renderView($view, 'Create new application');
     }

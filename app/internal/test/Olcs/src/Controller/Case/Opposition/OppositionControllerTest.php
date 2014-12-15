@@ -70,7 +70,7 @@ class OppositionControllerTest extends AbstractHttpControllerTestCase
         $view = $this->getMock('\Zend\View\View', ['setTemplate', 'setVariables']);
         $view->expects($this->once())
             ->method('setTemplate')
-            ->with('view-new/pages/case/opposition')
+            ->with('pages/case/opposition')
             ->will($this->returnSelf());
 
         $view->expects($this->once())

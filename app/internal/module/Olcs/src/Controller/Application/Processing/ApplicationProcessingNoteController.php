@@ -24,7 +24,7 @@ class ApplicationProcessingNoteController extends AbstractApplicationProcessingC
     use DeleteActionTrait;
     use LicenceNoteTrait;
 
-    protected $headerViewTemplate = 'view-new/partials/application-header.phtml';
+    protected $headerViewTemplate = 'partials/application-header.phtml';
 
     protected $section = 'notes';
     protected $service = 'Note';

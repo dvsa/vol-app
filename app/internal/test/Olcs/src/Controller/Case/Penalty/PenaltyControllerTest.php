@@ -121,7 +121,7 @@ class PenaltyControllerTest extends \PHPUnit_Framework_TestCase
         $mockRestData = ['Results' => [0 => ['id' => 1, 'imposedErrus' => [0 => []]]], 'Count' => 1];
 
         $layout = 'layout/base';
-        $headerTemplate = 'view-new/partials/header';
+        $headerTemplate = 'partials/header';
         $pageLayout = 'case';
         $pageTitle = 'Page title';
         $pageSubTitle = 'Page sub title';

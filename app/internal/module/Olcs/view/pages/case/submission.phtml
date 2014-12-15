@@ -16,7 +16,7 @@ foreach ($allSections as $sectionId => $sectionDescription) {
             $selectedSectionsArray[$sectionId]
         );
         if (isset($submissionConfig[$sectionId]['allow_comments']) && $submissionConfig[$sectionId]['allow_comments']) {
-            $freetext .= $this->partial('view-new/partials/submission-comments',
+            $freetext .= $this->partial('partials/submission-comments',
                 [
                     'sectionId' => $sectionId,
                     'section' => $selectedSectionsArray[$sectionId],

@@ -210,7 +210,7 @@ abstract class ProcessingNoteControllerTestAbstract extends AbstractHttpControll
 
         $this->view->expects($this->once())
             ->method('setTemplate')
-            ->with('view-new/partials/form');
+            ->with('partials/form');
 
         $this->controller->expects($this->once())
             ->method('renderView')

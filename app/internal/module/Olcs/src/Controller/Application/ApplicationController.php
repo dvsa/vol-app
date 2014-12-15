@@ -18,8 +18,8 @@ use Olcs\Controller\Traits;
  */
 class ApplicationController extends AbstractController
 {
-    protected $headerViewTemplate = 'view-new/partials/application-header.phtml';
-    protected $pageLayout = 'application';
+    protected $headerViewTemplate = 'partials/application-header.phtml';
+    protected $pageLayout = 'application-section';
 
     use Traits\LicenceControllerTrait,
         Traits\FeesActionTrait,
@@ -75,7 +75,7 @@ class ApplicationController extends AbstractController
             ->get('Olcs\Service\Data\Cases')->fetchList($params);
 
         $view = new ViewModel(['table' => $this->getTable('case', $results, $params)]);
-        $view->setTemplate('view-new/partials/table');
+        $view->setTemplate('partials/table');
 
         return $this->render($view);
     }
@@ -88,7 +88,7 @@ class ApplicationController extends AbstractController
     public function environmentalAction()
     {
         $view = new ViewModel();
-        $view->setTemplate('view-new/pages/placeholder');
+        $view->setTemplate('pages/placeholder');
 
         return $this->render($view);
     }
@@ -120,7 +120,7 @@ class ApplicationController extends AbstractController
         $formHelper->setFormActionFromRequest($form, $request);
 
         $view = new ViewModel(array('form' => $form));
-        $view->setTemplate('view-new/partials/form');
+        $view->setTemplate('partials/form');
 
         return $this->renderView($view, 'Grant application');
     }
@@ -150,7 +150,7 @@ class ApplicationController extends AbstractController
         $formHelper->setFormActionFromRequest($form, $request);
 
         $view = new ViewModel(array('form' => $form));
-        $view->setTemplate('view-new/partials/forms');
+        $view->setTemplate('partials/forms');
 
         return $this->renderView($view, 'Undo grant application');
     }

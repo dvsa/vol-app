@@ -50,7 +50,7 @@ class LicenceProcessingTasksController extends AbstractLicenceProcessingControll
 
         $view = new ViewModel(['table' => $table->render()]);
 
-        $view->setTemplate('view-new/partials/table');
+        $view->setTemplate('partials/table');
         $view->setTerminal($this->getRequest()->isXmlHttpRequest());
 
         return $this->renderView($view);

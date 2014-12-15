@@ -59,12 +59,12 @@ class PenaltyController extends OlcsController\CrudAbstract
     protected $pageLayout = 'case';
 
     /**
-     * For most case crud controllers, we use the view-new/layouts/case-inner-layout
+     * For most case crud controllers, we use the layout/case-details-subsection
      * layout file. Except submissions.
      *
      * @var string
      */
-    protected $pageLayoutInner = 'view-new/layouts/case-inner-layout';
+    protected $pageLayoutInner = 'layout/case-details-subsection';
 
     /**
      * Holds the service name
@@ -213,7 +213,7 @@ class PenaltyController extends OlcsController\CrudAbstract
             $this->getErruTable('erru-applied', 'appliedPenalties');
         }
 
-        $view->setTemplate('view-new/pages/case/penalties');
+        $view->setTemplate('pages/case/penalties');
 
         return $this->renderView($view);
     }

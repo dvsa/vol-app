@@ -2,7 +2,7 @@
   <?php
   echo $this->navigation('navigation')
   ->menu($this->navigation()->findOneBy('id', 'licence'))
-  ->setPartial('view-new/partials/horizontal-navigation');
+  ->setPartial('partials/horizontal-navigation');
   ?>
   <div class="content">
       <?php echo $this->content; ?>

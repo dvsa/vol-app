@@ -29,7 +29,7 @@ class TransportManagerDetailsApplicationLicenceController extends AbstractTransp
     public function indexAction()
     {
         $view = $this->getViewWithTm();
-        $view->setTemplate('view-new/pages/placeholder');
+        $view->setTemplate('pages/placeholder');
         return $this->renderView($view);
     }
 }

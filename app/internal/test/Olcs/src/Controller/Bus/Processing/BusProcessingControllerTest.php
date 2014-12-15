@@ -51,7 +51,7 @@ class BusProcessingControllerTest extends AbstractHttpControllerTestCase
 
         $this->view->expects($this->once())
             ->method('setTemplate')
-            ->with('view-new/pages/placeholder');
+            ->with('pages/placeholder');
 
         $this->controller->expects($this->once())
             ->method('renderView')

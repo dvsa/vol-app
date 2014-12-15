@@ -48,7 +48,7 @@ class TransportManagerCaseController extends TransportManagerController
 
         $view->{'table'} = $this->getTable('case', $results, $params);
 
-        $view->setTemplate('view-new/partials/table');
+        $view->setTemplate('partials/table');
 
         return $this->renderView($view);
     }

@@ -10,7 +10,7 @@ $case = $this->placeholder('case')->getValue();
 <div class="one-fifth--left">
     <h4><?php echo $this->translate($currentSection->getParent()->getLabel()); ?></h4>
     <?php
-        echo $this->navigation($currentSectionParent)->menu()->setPartial('view-new/partials/vertical-navigation');
+        echo $this->navigation($currentSectionParent)->menu()->setPartial('partials/vertical-navigation');
 
         $tableFilters = $this->placeholder('tableFilters')->getValue();
 

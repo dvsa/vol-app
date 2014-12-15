@@ -50,9 +50,9 @@ class CaseController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $pageLayout = 'case';
+    protected $pageLayout = 'case-section';
 
-    protected $pageLayoutInner = 'view-new/layouts/case-inner-layout';
+    protected $pageLayoutInner = 'layout/case-details-subsection';
 
     /**
      * Holds the service name
@@ -127,7 +127,7 @@ class CaseController extends OlcsController\CrudAbstract
         )
     );
 
-    protected $detailsView = 'view-new/pages/case/overview';
+    protected $detailsView = 'pages/case/overview';
 
     /**
      * Holds an array of variables for the default

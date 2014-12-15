@@ -16,5 +16,5 @@ use Common\View\AbstractViewModel;
  */
 class CreateApplicationLayout extends AbstractViewModel
 {
-    protected $template = 'view-new/layouts/create-application-layout';
+    protected $template = 'layout/application-create';
 }

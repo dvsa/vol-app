@@ -28,7 +28,7 @@ class BusDocsController extends BusController
     {
         $view = $this->getViewWithBusReg();
 
-        $view->setTemplate('view-new/pages/placeholder');
+        $view->setTemplate('pages/placeholder');
         return $this->renderView($view);
     }
 }

@@ -281,7 +281,7 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
         $mockView = $this->getMock('\StdClass', ['setTemplate']);
         $mockView->expects($this->any())
             ->method('setTemplate')
-            ->with('view-new/partials/form')
+            ->with('partials/form')
             ->will($this->returnValue(null));
 
         $this->controller->expects($this->any())

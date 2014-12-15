@@ -18,7 +18,7 @@ echo $this->render('partials/read-only/main',
 );
 
 if (isset($pi['agreedDate'])):
-    echo $this->render('view-new/partials/pi-agreed.phtml', array('pi' => $pi));
+    echo $this->render('partials/pi-agreed.phtml', array('pi' => $pi));
 
     //we have a Pi so a hearing can be added
     if (isset($pi['piHearings']) && !empty($pi['piHearings'])):
@@ -26,13 +26,13 @@ if (isset($pi['agreedDate'])):
 
         //we have a hearing, so decision can be added
         if (isset($pi['decidedByTc']) && !empty($pi['decidedByTc'])):
-            echo $this->render('view-new/partials/pi-decision.phtml', array('pi' => $pi));
+            echo $this->render('partials/pi-decision.phtml', array('pi' => $pi));
         else:
-            echo $this->render('view-new/partials/pi-empty.phtml',
+            echo $this->render('partials/pi-empty.phtml',
                 array('heading' => 'Decision', 'shortHeading' => 'decision', 'route' => 'case_pi_decision'));
         endif;
     else:
-        echo $this->render('view-new/partials/pi-empty.phtml',
+        echo $this->render('partials/pi-empty.phtml',
             array('heading' => 'Hearing',
                 'shortHeading' => 'hearing',
                 'route' => 'case_pi_hearing',
@@ -42,8 +42,8 @@ if (isset($pi['agreedDate'])):
         );
     endif;
 
-    echo $this->render('view-new/partials/pi-sla.phtml', array('pi' => $pi));
+    echo $this->render('partials/pi-sla.phtml', array('pi' => $pi));
 
 else:
-    echo $this->render('view-new/partials/pi-empty.phtml', array('heading' => 'Agreed and legislation', 'shortHeading' => 'Public inquiry', 'route' => 'case_pi_agreed'));
+    echo $this->render('partials/pi-empty.phtml', array('heading' => 'Agreed and legislation', 'shortHeading' => 'Public inquiry', 'route' => 'case_pi_agreed'));
 endif;

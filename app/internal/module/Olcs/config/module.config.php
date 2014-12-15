@@ -193,12 +193,12 @@ return array(
         'display_not_found_reason' => true,
         'display_exceptions' => true,
         'doctype' => 'HTML5',
-        'not_found_template' => 'view-new/pages/404',
-        'exception_template' => 'view-new/pages/500',
+        'not_found_template' => 'pages/404',
+        'exception_template' => 'pages/500',
         'template_map' => array(
             'layout/layout' => __DIR__ . '/../view/layout/base.phtml',
-            'view-new/pages/404' => __DIR__ . '/../view/view-new/pages/404.phtml',
-            'view-new/pages/500' => __DIR__ . '/../view/view-new/pages/500.phtml'
+            'pages/404' => __DIR__ . '/../view/pages/404.phtml',
+            'pages/500' => __DIR__ . '/../view/pages/500.phtml'
         ),
         'template_path_stack' => array(
             'olcs' => dirname(__DIR__) . '/view',

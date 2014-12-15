@@ -11,7 +11,7 @@ $application = $this->placeholder('application')->getValue();
   <?php
   echo $this->navigation('navigation')
   ->menu($this->navigation()->findOneBy('id', 'case'))
-  ->setPartial('view-new/partials/horizontal-navigation');
+  ->setPartial('partials/horizontal-navigation');
   ?>
   <div class="content">
     <?php echo $this->content; ?>

@@ -509,7 +509,7 @@ class CaseControllerTest extends ControllerTestAbstract
         $this->assertInstanceOf('\Zend\View\Model\ViewModel', $innerView[0]);
 
         $this->assertEquals($view->getTemplate(), 'layout/base');
-        $this->assertEquals($headerView->getTemplate(), 'view-new/partials/header');
+        $this->assertEquals($headerView->getTemplate(), 'partials/header');
         $this->assertEquals($layoutView->getTemplate(), $pageLayout);
         $this->assertEquals($innerView[0]->getTemplate(), 'crud/form');
 

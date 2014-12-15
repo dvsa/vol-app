@@ -1,4 +1,9 @@
 <div class="four-fifths--left">
+    <?php
+    echo $this->navigation('navigation')
+        ->menu($this->navigation()->findOneBy('id', 'variation'))
+        ->setPartial('partials/horizontal-navigation');
+    ?>
   <div class="content">
       <?php echo $this->content; ?>
   </div>

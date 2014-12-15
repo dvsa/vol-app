@@ -29,7 +29,7 @@ class OverviewController extends AbstractController
     public function indexAction()
     {
         $content = new ViewModel();
-        $content->setTemplate('view-new/pages/placeholder');
+        $content->setTemplate('pages/placeholder');
 
         return $this->render($content);
     }

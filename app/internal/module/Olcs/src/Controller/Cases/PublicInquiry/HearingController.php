@@ -59,12 +59,12 @@ class HearingController extends OlcsController\CrudAbstract
     protected $navigationId = 'case_hearings_appeals_public_inquiry';
 
     /**
-     * For most case crud controllers, we use the view-new/layouts/case-inner-layout
+     * For most case crud controllers, we use the layout/case-details-subsection
      * layout file. Except submissions.
      *
      * @var string
      */
-    protected $pageLayoutInner = 'view-new/layouts/case-inner-layout';
+    protected $pageLayoutInner = 'layout/case-details-subsection';
 
     /**
      * Holds an array of variables for the

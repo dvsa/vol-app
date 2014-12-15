@@ -55,7 +55,7 @@ if (empty($appeal)){
     if (empty($appeal['withdrawnDate'])) {
         if (!empty($stayRecords['stay_t_tc'][0]))
         {
-            echo $this->partial('view-new/partials/stay-details.phtml', $stayRecords['stay_t_tc'][0]);
+            echo $this->partial('partials/stay-details.phtml', $stayRecords['stay_t_tc'][0]);
         } else {
             echo $this->render('partials/read-only/empty',
                 [
@@ -74,7 +74,7 @@ if (empty($appeal)){
 
         if (!empty($stayRecords['stay_t_ut'][0]))
         {
-            echo $this->partial('view-new/partials/stay-details.phtml', $stayRecords['stay_t_ut'][0]);
+            echo $this->partial('partials/stay-details.phtml', $stayRecords['stay_t_ut'][0]);
         } else {
             echo $this->render('partials/read-only/empty',
                 [
