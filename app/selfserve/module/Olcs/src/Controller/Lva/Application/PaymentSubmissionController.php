@@ -33,7 +33,9 @@ class PaymentSubmissionController extends AbstractController
         $update = array(
             'id' => $applicationId,
             'status' => ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION,
-            'version' => $data['version']
+            'version' => $data['version'],
+            'receivedDate' => (new \DateTime())->format('y-m-d H:i:s'),
+            'targetCompletionDate' => (new \DateTime())->modify('+9 week')->format('y-m-d H:i:s')
         );
 
         $this->getServiceLocator()
