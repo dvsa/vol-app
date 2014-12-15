@@ -36,6 +36,15 @@ class CategoryTest extends TestCase
         $sut->setData('categories', [['handle' => 'test', 'id' => 4]]);
 
         $this->assertEquals(4, $sut->getIdFromHandle('test'));
-        $this->assertNull($sut->getIdFromHandle('none-existant'));
+        $this->assertNull($sut->getIdFromHandle('non-existant'));
+    }
+
+    public function testGetDescriptionFromId()
+    {
+        $sut = new Category();
+        $sut->setData('categories', [['description' => 'test', 'id' => 4]]);
+
+        $this->assertEquals('test', $sut->getDescriptionFromId(4));
+        $this->assertNull($sut->getDescriptionFromId(123));
     }
 }
