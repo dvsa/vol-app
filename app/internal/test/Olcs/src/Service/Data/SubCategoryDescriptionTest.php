@@ -2,15 +2,15 @@
 
 namespace OlcsTest\Service\Data;
 
-use PHPUnit_Framework_TestCase as TestCase;
 use Olcs\Service\Data\SubCategoryDescription;
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 /**
  * Class SubCategoryDescriptionTest
  * @package OlcsTest\Service\Data
  */
-class SubCategoryDescriptionTest extends TestCase
+class SubCategoryDescriptionTest extends MockeryTestCase
 {
     public function testFetchListData()
     {
