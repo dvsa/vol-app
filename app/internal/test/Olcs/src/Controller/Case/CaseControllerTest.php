@@ -511,7 +511,7 @@ class CaseControllerTest extends ControllerTestAbstract
         $this->assertEquals($view->getTemplate(), 'layout/base');
         $this->assertEquals($headerView->getTemplate(), 'partials/header');
         $this->assertEquals($layoutView->getTemplate(), $pageLayout);
-        $this->assertEquals($innerView[0]->getTemplate(), 'crud/form');
+        $this->assertEquals($innerView[0]->getTemplate(), 'pages/crud-form');
 
         $this->assertEquals(
             $addEditHelper->getForm(),

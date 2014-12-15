@@ -22,7 +22,7 @@ if (isset($pi['agreedDate'])):
 
     //we have a Pi so a hearing can be added
     if (isset($pi['piHearings']) && !empty($pi['piHearings'])):
-        echo $this->render('widget/table');
+        echo $this->render('partials/table');
 
         //we have a hearing, so decision can be added
         if (isset($pi['decidedByTc']) && !empty($pi['decidedByTc'])):

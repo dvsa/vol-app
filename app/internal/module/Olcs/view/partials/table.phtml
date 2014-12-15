@@ -1,2 +1,7 @@
 <?php
-	echo $table;
+    $table = $this->placeholder('table')->getValue();
+    if (count($table) > 0) {
+        echo $table;
+    } else {
+    echo $this->render('/pages/placeholder');
+    }

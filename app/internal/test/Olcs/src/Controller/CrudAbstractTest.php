@@ -142,7 +142,7 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
         $view = $this->getMock('\Zend\View\View', ['setTemplate']);
         $view->expects($this->once())
              ->method('setTemplate')
-             ->with('crud/index')
+             ->with('pages/table-comments')
              ->will($this->returnSelf());
 
         $sut = $this->getSutForIsolatedTest(
@@ -370,7 +370,7 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
         $this->assertEquals($view->getTemplate(), 'layout/base');
         $this->assertEquals($headerView->getTemplate(), 'partials/header');
         $this->assertEquals($layoutView->getTemplate(), $pageLayout);
-        $this->assertEquals($innerView[0]->getTemplate(), 'crud/form');
+        $this->assertEquals($innerView[0]->getTemplate(), 'pages/crud-form');
 
         $this->assertEquals(
             $addEditHelper->getForm(),
@@ -421,7 +421,7 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
 
         $view = $this->getMock('Zend\View\View', ['setTemplate']);
         $view->expects($this->once())->method('setTemplate')
-                                     ->with($this->equalTo('crud/form'))->will($this->returnSelf());
+                                     ->with($this->equalTo('pages/crud-form'))->will($this->returnSelf());
 
         $sut = $this->getSutForIsolatedTest(
             [
