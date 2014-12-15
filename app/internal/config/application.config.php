@@ -5,9 +5,9 @@ return array(
         'ZendDeveloperTools',
         'Olcs\Logging',
         'Dvsa\Jackrabbit',
+        'Common',
         'Olcs',
         'Admin',
-        'Common',
         'DoctrineModule',
         'DoctrineORMModule',
         'CpmsClient'
