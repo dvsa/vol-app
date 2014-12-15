@@ -41,7 +41,7 @@ class OppositionController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $pageLayout = 'case';
+    protected $pageLayout = 'case-section';
 
     protected $pageLayoutInner = 'layout/wide-layout';
 

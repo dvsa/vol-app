@@ -26,7 +26,7 @@ class AppliedPenaltyController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $pageLayout = 'case';
+    protected $pageLayout = 'case-section';
 
     /**
      * For most case crud controllers, we use the layout/case-details-subsection

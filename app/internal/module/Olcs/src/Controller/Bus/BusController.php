@@ -55,7 +55,7 @@ class BusController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $pageLayout = 'bus';
+    protected $pageLayout = 'bus-registrations-section';
 
     /**
      * Holds the service name
@@ -103,7 +103,7 @@ class BusController extends OlcsController\CrudAbstract
      */
     public function renderView($view, $pageTitle = null, $pageSubTitle = null)
     {
-        $this->pageLayout = 'bus-registrations';
+        $this->pageLayout = 'bus-registrations-section';
 
         $variables = array(
             'navigation' => $this->getSubNavigation(),

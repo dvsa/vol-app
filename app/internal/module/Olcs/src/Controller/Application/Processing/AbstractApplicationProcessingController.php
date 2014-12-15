@@ -24,7 +24,7 @@ abstract class AbstractApplicationProcessingController extends ApplicationContro
      *
      * @var string
      */
-    protected $pageLayout = 'application';
+    protected $pageLayout = 'application-section';
 
     protected $helperClass = '\Olcs\Helper\ApplicationProcessingHelper';
 

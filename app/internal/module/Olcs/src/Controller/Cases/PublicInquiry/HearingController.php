@@ -49,7 +49,7 @@ class HearingController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $pageLayout = 'case';
+    protected $pageLayout = 'case-section';
 
     /**
      * Holds the navigation ID,

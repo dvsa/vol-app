@@ -122,7 +122,7 @@ class PenaltyControllerTest extends \PHPUnit_Framework_TestCase
 
         $layout = 'layout/base';
         $headerTemplate = 'partials/header';
-        $pageLayout = 'case';
+        $pageLayout = 'case-section';
         $pageTitle = 'Page title';
         $pageSubTitle = 'Page sub title';
 

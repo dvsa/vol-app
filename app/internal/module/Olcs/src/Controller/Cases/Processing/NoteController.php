@@ -29,7 +29,7 @@ class NoteController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $pageLayout = 'case';
+    protected $pageLayout = 'case-section';
 
     /**
      * @var string needed for LicenceNoteTrait magic

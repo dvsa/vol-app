@@ -42,7 +42,7 @@ class PublicInquiryController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $pageLayout = 'case';
+    protected $pageLayout = 'case-section';
 
     protected $detailsView = 'pages/case/public-inquiry';
 

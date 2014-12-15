@@ -53,7 +53,7 @@ class ConvictionController extends OlcsController\CrudAbstract
      *
      * @var string
      */
-    protected $pageLayout = 'case';
+    protected $pageLayout = 'case-section';
 
     protected $pageLayoutInner = 'layout/case-details-subsection';
 
