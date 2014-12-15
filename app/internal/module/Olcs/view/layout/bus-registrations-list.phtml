@@ -1,15 +1,12 @@
 <div class="one-fifth--left">
-    <h4><?php echo $this->translate('internal-licence-bus-' . $this->section); ?></h4>
+    <h4>Filter by:</h4>
     <?php
-        echo $this->navigation($navigation)->menu()->setPartial('view-new/partials/vertical-navigation');
-
         $tableFilters = $this->placeholder('tableFilters')->getValue();
-
         if($tableFilters instanceof \Zend\Form\Form) {
             echo $this->form($tableFilters);
         }
     ?>
-</div>
+</div><!-- one-fifth-left -->
 <div class="three-fifths">
-    <?php echo $this->content; ?>
-</div>
+    <?php echo $this->table ?>
+</div><!-- three-fifths -->

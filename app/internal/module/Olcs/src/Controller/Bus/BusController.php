@@ -103,7 +103,7 @@ class BusController extends OlcsController\CrudAbstract
      */
     public function renderView($view, $pageTitle = null, $pageSubTitle = null)
     {
-        $this->pageLayout = 'bus';
+        $this->pageLayout = 'bus-registrations';
 
         $variables = array(
             'navigation' => $this->getSubNavigation(),
