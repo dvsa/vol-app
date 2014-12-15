@@ -10,6 +10,13 @@ trait TaskSearchTrait
 {
 
     /**
+     * Cache task details to eliminate duplicate REST calls in same request
+     *
+     * @var array
+     */
+    protected $taskDetailsCache = [];
+
+    /**
      * Inspect the request to see if we have any filters set, and
      * if necessary, filter them down to a valid subset
      *
@@ -220,13 +227,15 @@ trait TaskSearchTrait
     {
         $taskDetails = array();
         if ($id) {
-            $taskDetails = $this->makeRestCall(
-                'TaskSearchView',
-                'GET',
-                array('id' => $id),
-                array('properties' => array('linkType', 'linkId', 'linkDisplay'))
-            );
+            if (!isset($this->taskDetailsCache[$id])) {
+                $this->taskDetailsCache[$id] = $this->makeRestCall(
+                    'TaskSearchView',
+                    'GET',
+                    array('id' => $id),
+                    array('properties' => array('linkType', 'linkId', 'linkDisplay', 'licenceId'))
+                );
+            }
         }
-        return $taskDetails;
+        return $this->taskDetailsCache[$id];
     }
 }

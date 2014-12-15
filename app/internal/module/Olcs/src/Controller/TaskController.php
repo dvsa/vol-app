@@ -286,9 +286,9 @@ class TaskController extends AbstractController
     protected function getLinkForTaskForm()
     {
         $taskTypeDetails = $this->getTaskTypeDetails();
-        $taskType = $taskTypeDetails['taskType'];
-        $taskTypeId = $taskTypeDetails['taskTypeId'];
-        $linkDisplay = $taskTypeDetails['linkDisplay'];
+        $taskType        = $taskTypeDetails['taskType'];
+        $taskTypeId      = $taskTypeDetails['taskTypeId'];
+        $linkDisplay     = $taskTypeDetails['linkDisplay'];
 
         switch ($taskType) {
             case 'licence':
@@ -297,25 +297,26 @@ class TaskController extends AbstractController
                 }
                 $url = sprintf(
                     '<a href="%s">%s</a>',
-                    $this->url()->fromRoute(
-                        'lva-licence',
-                        array(
-                            'licence' => $taskTypeId
-                        )
-                    ),
+                    $this->url()->fromRoute('lva-licence', ['licence' => $taskTypeId]),
                     $linkDisplay ? $linkDisplay : $licence['licNo']
                 );
                 break;
             case 'application':
-                $licence = $this->getServiceLocator()
-                    ->get('Entity\Application')->getDataForTasks($taskTypeId)['licence'];
-
+                $taskId = $this->getFromRoute('task');
+                $taskDetails = $this->getTaskDetails($taskId);
                 $url = sprintf(
                     '<a href="%s">%s</a> / <a href="%s">%s</a>',
-                    $this->url()->fromRoute('lva-licence', ['licence' => $licence['id']]),
-                    $licence['licNo'],
+                    $this->url()->fromRoute('lva-licence', ['licence' => $taskDetails['licenceId']]),
+                    $taskDetails['licenceNo'],
                     $this->url()->fromRoute('lva-application', ['application' => $taskTypeId]),
                     $taskTypeId
+                );
+                break;
+            case 'transport manager':
+                $url = sprintf(
+                    '<a href="%s">%s</a>',
+                    $this->url()->fromRoute('transport-manager', ['transportManager' => $taskTypeId]),
+                    $linkDisplay
                 );
                 break;
             default:
@@ -632,6 +633,7 @@ class TaskController extends AbstractController
                 'linkDisplay' => $linkDisplay,
             ];
         }
+
         return $this->taskTypeDetails;
     }
 
