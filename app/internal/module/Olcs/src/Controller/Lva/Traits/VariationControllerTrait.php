@@ -38,7 +38,12 @@ trait VariationControllerTrait
     protected function render($content, Form $form = null, $variables = [])
     {
         if (!($content instanceof ViewModel)) {
-            $content = new Section(array('title' => 'lva.section.title.' . $content, 'form' => $form));
+            $sectionParams = array_merge(
+                array('title' => 'lva.section.title.' . $content, 'form' => $form),
+                $variables
+            );
+
+            $content = new Section($sectionParams);
         }
 
         $routeName = $this->getEvent()->getRouteMatch()->getMatchedRouteName();
