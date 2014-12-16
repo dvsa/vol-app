@@ -9,7 +9,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("ERRU penalty")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true, "label":"Erru penalty"})
+ * @Form\Options({"prefer_form_input_filter": true, "label":"ERRU penalty", "action_lcfirst":false})
  */
 class ErruPenalty
 {
