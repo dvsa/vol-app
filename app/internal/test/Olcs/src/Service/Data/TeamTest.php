@@ -35,7 +35,7 @@ class TeamTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->teams, $sut->fetchTeamListData([]));
     }
 
-    public function testFetchPublicInquiryReasonDataFailure()
+    public function testFetchTeamDataFailure()
     {
         $teams = [];
 
