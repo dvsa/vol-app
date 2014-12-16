@@ -8,7 +8,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("Cases")
  * @Form\Attributes({"method":"post","label":"Case"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true,"label": "Case"})
+ * @Form\Options({"prefer_form_input_filter": true,"label": "Case", "action_lcfirst": true})
  */
 class Cases
 {

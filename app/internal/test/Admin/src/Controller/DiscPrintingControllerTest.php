@@ -82,7 +82,7 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
     {
         parent::setUpAction('index', null, $data);
 
-        $mockUri = $this->getMock('\StdClass', ['getPath']);
+        $mockUri = $this->getMock('\stdClass', ['getPath']);
         $mockUri->expects($this->any())
             ->method('getPath')
             ->will($this->returnValue('/'));
@@ -119,7 +119,7 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
             ->will($this->returnValue($mockRequest));
 
         $mockDiscSequence = $this->getMock(
-            '\StdClass',
+            '\stdClass',
             ['fetchListOptions', 'getDiscNumber', 'setNewStartNumber', 'getDiscPrefix']
         );
         $mockDiscSequence->expects($this->any())
@@ -135,7 +135,7 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
             ->will($this->returnValue('OK'));
 
         $mockDiscService = $this->getMock(
-            '\StdClass',
+            '\stdClass',
             ['getDiscsToPrint', 'setIsPrintingOffAndAssignNumber', 'setIsPrintingOff', 'setIsPrintingOn']
         );
         $mockDiscService->expects($this->any())
@@ -162,7 +162,7 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
         }
 
         $mockVehicleList = $this->getMock(
-            '\StdClass',
+            '\stdClass',
             ['setQueryData', 'setTemplate', 'setBookmarkData', 'setDescription', 'generateVehicleList']
         );
 
@@ -228,7 +228,7 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
     {
         $this->setUpAction();
 
-        $mockParams = $this->getMock('\StdClass', ['fromRoute']);
+        $mockParams = $this->getMock('\stdClass', ['fromRoute']);
         $mockParams->expects($this->once())
             ->method('fromRoute')
             ->will($this->returnValue(null));
@@ -297,35 +297,23 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
             ->with($file, $resultData)
             ->will($this->returnValue('replaced content'));
 
-        $storeFile = $this->getMock('\stdClass', ['getIdentifier', 'getExtension', 'getSize']);
+        $mockDocGen = $this->getMock('\stdClass', ['uploadGeneratedContent']);
+        $mockDocGen->expects($this->once())
+            ->method('uploadGeneratedContent')
+            ->with('replaced content', 'documents', 'GVDiscTemplate.rtf')
+            ->willReturn('FakeFile');
 
-        $fileStoreMock = $this->getMock(
-            '\stdClass',
-            [
-                'setFile',
-                'upload'
-            ]
-        );
-
-        $fileStoreMock->expects($this->once())
-            ->method('upload')
-            ->will($this->returnValue($storeFile));
-
-        $mockFileUploader = $this->getMock('\stdClass', ['getUploader']);
-        $mockFileUploader->expects($this->any())
-            ->method('getUploader')
-            ->will($this->returnValue($fileStoreMock));
-
-        $fileData = ['content' => 'replaced content'];
-        $fileStoreMock->expects($this->once())
-            ->method('setFile')
-            ->with($fileData);
+        $mockPrinter = $this->getMock('\stdClass', ['enqueueFile']);
+        $mockPrinter->expects($this->once())
+            ->method('enqueueFile')
+            ->with('FakeFile', 'Goods Disc List');
 
         $this->serviceManager->setService('Document', $documentMock);
         $this->serviceManager->setService('ContentStore', $contentStoreMock);
-        $this->serviceManager->setService('FileUploader', $mockFileUploader);
+        $this->serviceManager->setService('Helper\DocumentGeneration', $mockDocGen);
+        $this->serviceManager->setService('PrintScheduler', $mockPrinter);
 
-        $mockParams = $this->getMock('\StdClass', ['fromRoute']);
+        $mockParams = $this->getMock('\stdClass', ['fromRoute']);
         $mockParams->expects($this->once())
             ->method('fromRoute')
             ->will($this->returnValue(null));
@@ -405,35 +393,23 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
             ->with($file, $resultData)
             ->will($this->returnValue('replaced content'));
 
-        $storeFile = $this->getMock('\stdClass', ['getIdentifier', 'getExtension', 'getSize']);
+        $mockDocGen = $this->getMock('\stdClass', ['uploadGeneratedContent']);
+        $mockDocGen->expects($this->once())
+            ->method('uploadGeneratedContent')
+            ->with('replaced content', 'documents', 'PSVDiscTemplate.rtf')
+            ->willReturn('FakeFile');
 
-        $fileStoreMock = $this->getMock(
-            '\stdClass',
-            [
-                'setFile',
-                'upload'
-            ]
-        );
-
-        $fileStoreMock->expects($this->once())
-            ->method('upload')
-            ->will($this->returnValue($storeFile));
-
-        $mockFileUploader = $this->getMock('\stdClass', ['getUploader']);
-        $mockFileUploader->expects($this->any())
-            ->method('getUploader')
-            ->will($this->returnValue($fileStoreMock));
-
-        $fileData = ['content' => 'replaced content'];
-        $fileStoreMock->expects($this->once())
-            ->method('setFile')
-            ->with($fileData);
+        $mockPrinter = $this->getMock('\stdClass', ['enqueueFile']);
+        $mockPrinter->expects($this->once())
+            ->method('enqueueFile')
+            ->with('FakeFile', 'PSV Disc List');
 
         $this->serviceManager->setService('Document', $documentMock);
         $this->serviceManager->setService('ContentStore', $contentStoreMock);
-        $this->serviceManager->setService('FileUploader', $mockFileUploader);
+        $this->serviceManager->setService('Helper\DocumentGeneration', $mockDocGen);
+        $this->serviceManager->setService('PrintScheduler', $mockPrinter);
 
-        $mockParams = $this->getMock('\StdClass', ['fromRoute']);
+        $mockParams = $this->getMock('\stdClass', ['fromRoute']);
         $mockParams->expects($this->once())
             ->method('fromRoute')
             ->will($this->returnValue(null));
@@ -644,7 +620,7 @@ class DiscPrintingControllerTest extends AbstractAdminControllerTest
 
         $this->controller->setEnabledCsrf(false);
 
-        $mockParams = $this->getMock('\StdClass', ['fromRoute']);
+        $mockParams = $this->getMock('\stdClass', ['fromRoute']);
         $mockParams->expects($this->once())
             ->method('fromRoute')
             ->will($this->returnValue(null));

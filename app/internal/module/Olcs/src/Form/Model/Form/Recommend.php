@@ -9,7 +9,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("recommend")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true, "label":"Recommendation"})
+ * @Form\Options({"prefer_form_input_filter": true, "label":"Recommendation", "action_lcfirst": true})
  */
 class Recommend
 {
