@@ -55,18 +55,20 @@ class TaskController extends AbstractController
         $data = $this->mapDefaultData();
         $filters = $this->mapFilters($data);
 
-        $form = $this->getForm('task');
-        $form->remove('details');
-        $inputs = array(
-            'assignedToTeam' => $this->getListDataFromBackend('Team'),
-            'assignedToUser' => $this->getListDataFromBackend('User', $filters, 'name', 'id', 'Unassigned')
-        );
-        foreach ($inputs as $name => $options) {
-            $form->get('assignment')
-                ->get($name)
-                ->setValueOptions($options);
+        // Set up the data services so that dynamic selects populate correctly if we already have data
+        if (isset($data['assignedToTeam'])) {
+            $this->getServiceLocator()->get('Olcs\Service\Data\User')
+                ->setTeam($data['assignedToTeam']);
         }
-        $form->setData($this->expandData($data));
+        if (isset($data['assignment']['assignedToTeam'])) {
+            $this->getServiceLocator()->get('Olcs\Service\Data\User')
+                ->setTeam($data['assignment']['assignedToTeam']);
+        }
+
+        $form = $this->getForm('task-reassign');
+
+        $formData = $this->expandData($data);
+        $form->setData($formData);
 
         $this->formPost($form, 'processAssignTask');
 
