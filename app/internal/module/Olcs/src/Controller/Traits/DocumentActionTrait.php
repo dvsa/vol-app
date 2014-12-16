@@ -30,7 +30,7 @@ trait DocumentActionTrait
 
         $this->loadScripts(['documents', 'table-actions']);
 
-        $view->setTemplate('licence/docs-attachments-list');
+        $view->setTemplate('layout/docs-attachments-list');
 
         return $this->renderView($view);
     }
