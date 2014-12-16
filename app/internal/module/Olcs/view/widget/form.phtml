@@ -9,7 +9,7 @@ $form = $this->placeholder('form')->getValue();
     <?php else: ?>
         <h3>
             <?php echo is_string($action) ? ucfirst($action) : ''; ?>
-            <?php if ($form->hasOption('action_lcfirst') && $form->getOption('action_lcfirst') === true): ?>
+            <?php if ($form->getOption('action_lcfirst') === true): ?>
                 <?php echo lcfirst($this->translate($form->getOption('label'))); ?>
             <?php else: ?>
                 <?php echo $this->translate($form->getOption('label')); ?>
