@@ -21,8 +21,24 @@ class VehiclesPsvController extends AbstractGenericVehiclesPsvController
     use VariationControllerTrait,
         Traits\PsvLicenceControllerTrait,
         // @NOTE: AC says variations behave exactly as per licences, so...
-        Traits\LicenceGenericVehiclesControllerTrait;
+        Traits\LicenceGenericVehiclesControllerTrait,
+        Traits\PsvGoodsLicenceVariationControllerTrait;
+
+    use Traits\PsvGoodsLicenceVariationControllerTrait {
+            Traits\PsvGoodsLicenceVariationControllerTrait::alterFormForLva as traitAlterFormForLva;
+        }
 
     protected $lva = 'variation';
     protected $location = 'external';
+
+    /**
+     * This method handles calling both the trait's alterFormForLva method, and it's parents
+     * 
+     * @param Zend\Form\Form $form
+     * @return $form
+     */
+    protected function alterFormForLva(Form $form)
+    {
+        return parent::alterFormForLva($this->traitAlterFormForLva($form));
+    }    
 }

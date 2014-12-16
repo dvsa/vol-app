@@ -22,10 +22,15 @@ class VehiclesController extends AbstractGenericVehiclesGoodsController
 {
     use VariationControllerTrait,
         Traits\ApplicationGenericVehiclesControllerTrait,
+        Traits\PsvGoodsLicenceVariationControllerTrait,
         Traits\ApplicationGoodsVehiclesControllerTrait {
             Traits\ApplicationGoodsVehiclesControllerTrait::alterTable as traitAlterTable;
         }
 
+    use Traits\PsvGoodsLicenceVariationControllerTrait {
+            Traits\PsvGoodsLicenceVariationControllerTrait::alterFormForLva as traitAlterFormForLva;
+        }
+        
     protected $lva = 'variation';
     protected $location = 'external';
 
@@ -36,4 +41,15 @@ class VehiclesController extends AbstractGenericVehiclesGoodsController
     {
         return parent::alterTable($this->traitAlterTable($table));
     }
+    
+    /**
+     * This method handles calling both the trait's alterFormForLva method, and it's parents
+     * 
+     * @param Zend\Form\Form $form
+     * @return $form
+     */
+    protected function alterFormForLva(Form $form)
+    {
+        return parent::alterFormForLva($this->traitAlterFormForLva($form));
+    }    
 }
