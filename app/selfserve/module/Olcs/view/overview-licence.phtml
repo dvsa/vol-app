@@ -29,10 +29,10 @@
 </div>
 <div class="one-third sidebar">
   <dl class="meta">
-    <dt><?php echo $this->translate('started'); ?></dt>
-    <dd><?php echo $grantedDate; ?></dd>
-    <dt><?php echo $this->translate('renewal'); ?></dt>
-    <dd><?php echo $expiryDate; ?></dd>
+    <dt><?php echo $this->translate('selfserve-dashboard-target-start-date'); ?></dt>
+    <dd><?php echo $startDate ? strftime("%d %B %G",strtotime($startDate)) : ''; ?></dd>
+    <dt><?php echo $this->translate('selfserve-dashboard-target-renewal-date'); ?></dt>
+    <dd><?php echo $renewalDate ? strftime("%d %B %G",strtotime($renewalDate)) : ''; ?></dd>
     <dt><?php echo $this->translate('status'); ?></dt>
     <dd><?php echo $this->translate($status); ?></dd>
   </dl>

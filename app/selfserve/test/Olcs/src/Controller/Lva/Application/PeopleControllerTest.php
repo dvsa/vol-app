@@ -22,7 +22,7 @@ class PeopleControllerTest extends AbstractLvaControllerTestCase
 
     /**
      * Test index action with edit and set operator name for sole trader
-     * 
+     *
      * @group peopleController
      */
     public function testIndexActionWithEditAndSetOperatorNameForSoleTrader()
@@ -51,6 +51,8 @@ class PeopleControllerTest extends AbstractLvaControllerTestCase
             ->shouldReceive('getCurrentOrganisationId')
             ->andReturn(1)
             ->shouldReceive('completeSection')
+            ->with('people')
+            ->shouldReceive('commonPostSave')
             ->with('people');
 
         $this->mockEntity('Organisation', 'getType')
@@ -87,7 +89,7 @@ class PeopleControllerTest extends AbstractLvaControllerTestCase
 
     /**
      * Test add action with edit and set operator name for partnership
-     * 
+     *
      * @group peopleController
      * @dataProvider personsProvider
      */
@@ -129,7 +131,9 @@ class PeopleControllerTest extends AbstractLvaControllerTestCase
                 ->with(null, ['id' => 1])
                 ->getMock()
             )
-            ->shouldReceive('params');
+            ->shouldReceive('params')
+            ->shouldReceive('commonPostSave')
+            ->with('people');
 
         $this->mockEntity('Organisation', 'getType')
             ->with(1)

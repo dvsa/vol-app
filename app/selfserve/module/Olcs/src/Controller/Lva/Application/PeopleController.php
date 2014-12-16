@@ -21,7 +21,9 @@ use Common\Service\Entity\OrganisationEntityService;
  */
 class PeopleController extends Lva\AbstractPeopleController
 {
-    use ApplicationControllerTrait;
+    use ApplicationControllerTrait {
+        ApplicationControllerTrait::postSave as commonPostSave;
+    }
 
     protected $lva = 'application';
     protected $location = 'external';
@@ -33,7 +35,7 @@ class PeopleController extends Lva\AbstractPeopleController
      */
     protected function postSave($section)
     {
-        parent::postSave($section);
+        $this->commonPostSave($section);
         $this->setOperatorName();
     }
 
