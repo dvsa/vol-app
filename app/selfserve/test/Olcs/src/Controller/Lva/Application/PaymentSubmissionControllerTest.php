@@ -66,8 +66,8 @@ class PaymentSubmissionControllerTest extends MockeryTestCase
             'id' => 1,
             'status' => ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION,
             'version' => 1,
-            'receivedDate' => (new \DateTime())->format('y-m-d H:i:s'),
-            'targetCompletionDate' => (new \DateTime())->modify('+9 week')->format('y-m-d H:i:s')
+            'receivedDate' => '2014-12-16 10:10:10',
+            'targetCompletionDate' => '2015-02-17 10:10:10'
         );
 
         $mockApplicationService = m::mock()
@@ -95,6 +95,8 @@ class PaymentSubmissionControllerTest extends MockeryTestCase
         $mockDateHelper = m::mock()
             ->shouldReceive('getDate')
             ->andReturn('2014-01-01')
+            ->shouldReceive('getDateObject')
+            ->andReturn(new \DateTime('2014-12-16 10:10:10'))
             ->getMock();
 
         $this->sm->setService('Entity\Application', $mockApplicationService);
