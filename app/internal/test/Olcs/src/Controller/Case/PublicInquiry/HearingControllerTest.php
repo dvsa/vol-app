@@ -10,6 +10,9 @@ namespace OlcsTest\Controller;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use Mockery as m;
+use Olcs\TestHelpers\ControllerPluginManagerHelper;
+use Olcs\Controller\Cases\PublicInquiry\HearingController;
+use Common\Data\Object\Publication;
 
 /**
  * Pi Hearing Test Controller
@@ -18,13 +21,38 @@ use Mockery as m;
  */
 class HearingControllerTest extends AbstractHttpControllerTestCase
 {
-    protected $testClass = 'Olcs\Controller\Cases\PublicInquiry\HearingController';
+    /**
+     * @var RegisterDecisionController
+     */
+    protected $sut;
+
+    /**
+     * @var ControllerPluginManagerHelper
+     */
+    protected $pluginManagerHelper;
+
+    public function setUp()
+    {
+        $this->pluginManagerHelper = new ControllerPluginManagerHelper();
+        $this->sut = new HearingController();
+
+        $this->setApplicationConfig(
+            include __DIR__ . '/../../../../../../' . 'config/application.config.php'
+        );
+
+        parent::setUp();
+    }
 
     public function testProcessSave()
     {
-        $inData = [
+        $pi = 1;
+        $caseId = 24;
+        $piVenue = 2;
+        $id = 3;
+        $hearingDetails = 'hearing details field';
+        $postData = [
             'fields' => [
-                'piVenue' => 1,
+                'piVenue' => $piVenue,
                 'piVenueOther' => 'this data will be made null',
                 'isCancelled' => 'N',
                 'cancelledReason' => 'this data will be made null',
@@ -33,15 +61,24 @@ class HearingControllerTest extends AbstractHttpControllerTestCase
                 'adjournedReason' => 'this data will be made null',
                 'adjournedDate' => 'this data will be made null',
                 'pi' => [
-                    'id' => 1,
+                    'id' => $pi,
                     'piStatus' => 'pi_s_schedule'
-                ]
+                ],
+                'details' => $hearingDetails
+            ],
+            'form-actions' => [
+                'publish' => true
             ]
         ];
 
-        $outData = [
-            'fields' => [
-                'piVenue' => 1,
+        $publishData = [
+            'pi' => [
+                'id' => $pi,
+                'piStatus' => 'pi_s_schedule'
+            ],
+            'text2' =>  $hearingDetails,
+            'hearingData' => [
+                'piVenue' => $piVenue,
                 'piVenueOther' => null,
                 'isCancelled' => 'N',
                 'cancelledReason' => null,
@@ -50,26 +87,73 @@ class HearingControllerTest extends AbstractHttpControllerTestCase
                 'adjournedReason' => null,
                 'adjournedDate' => null,
                 'pi' => [
-                    'id' => '1',
+                    'id' => $pi,
                     'piStatus' => 'pi_s_schedule'
-                ]
-            ]
+                ],
+                'details' => $hearingDetails,
+                'text2' => $hearingDetails,
+                'id' => $id
+            ],
+            'publicationSectionConst' => 'hearingSectionId'
         ];
 
-        $controller = $this->getMock(
-            'Olcs\Controller\Cases\PublicInquiry\HearingController',
-            ['addSuccessMessage', 'redirectToIndex', 'processDataMapForSave', 'save']
+        $savedData = [
+            'id' => $id
+        ];
+
+        $publication = new Publication();
+
+        $mockDataService = m::mock('Common\Service\Helper\DataHelperService');
+        $mockDataService->shouldReceive('processDataMap')->andReturn([]);
+
+        $mockRestHelper = m::mock('RestHelper');
+        $mockRestHelper->shouldReceive('makeRestCall')->withAnyArgs()->andReturn($savedData);
+
+        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockServiceManager->shouldReceive('get')->with('Helper\Rest')->andReturn($mockRestHelper);
+        $mockServiceManager->shouldReceive('get')->with('Helper\Data')->andReturn($mockDataService);
+
+        //publication link service
+        $mockPublicationLink = m::mock('Common\Service\Data\PublicationLink');
+        $mockPublicationLink->shouldReceive('createWithData')->with($publishData)->andReturn($publication);
+        $mockPublicationLink->shouldReceive('createFromObject')->with($publication, 'HearingPublicationFilter');
+
+        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
+        $mockServiceManager->shouldReceive('get')
+            ->with('Common\Service\Data\PublicationLink')
+            ->andReturn($mockPublicationLink);
+
+        $this->sut->setServiceLocator($mockServiceManager);
+
+        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
+            [
+                'redirect' => 'Redirect',
+                'FlashMessenger' => 'FlashMessenger',
+                'DataServiceManager' => 'DataServiceManager',
+                'params' => 'Params'
+            ]
         );
 
-        $controller->expects($this->once())->method('processDataMapForSave')
-            ->with($outData)->will($this->returnValue($outData));
+        $mockFlashMessenger = $mockPluginManager->get('FlashMessenger', '');
+        $mockFlashMessenger->shouldReceive('addSuccessMessage');
 
-        $controller->expects($this->once())->method('save')
-            ->with($outData)->will($this->returnValue(null));
+        $mockRedirect = $mockPluginManager->get('redirect', '');
+        $mockRedirect->shouldReceive('toRoute')->with(
+            'case_pi',
+            ['action'=>'details'],
+            ['code' => '303'],
+            true
+        )->andReturn('redirectResponse');
 
-        $controller->expects($this->once())->method('addSuccessMessage');
+        $mockPluginManager->shouldReceive('get')->with('redirect')->andReturn($mockRedirect);
 
-        $this->assertNull(null, $controller->processSave($inData));
+        $mockParams = $mockPluginManager->get('params', '');
+        $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
+        $mockParams->shouldReceive('fromPost')->andReturn($postData);
+
+        $this->sut->setPluginManager($mockPluginManager);
+
+        $this->assertEquals('redirectResponse', $this->sut->processSave($postData));
     }
 
     public function testGetDataForForm()
