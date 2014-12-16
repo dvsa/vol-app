@@ -10,7 +10,7 @@ use Zend\Form\Annotation as Form;
  * (form name is task so that js binding continues to work)
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true, "label":"Task"})
+ * @Form\Options({"prefer_form_input_filter": true, "label":"Re-assign Task"})
  */
 class TaskReassign
 {
