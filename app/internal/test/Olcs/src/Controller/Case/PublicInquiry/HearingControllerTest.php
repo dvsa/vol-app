@@ -8,7 +8,7 @@
 
 namespace OlcsTest\Controller;
 
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 use Olcs\TestHelpers\ControllerPluginManagerHelper;
 use Olcs\Controller\Cases\PublicInquiry\HearingController;
@@ -19,10 +19,10 @@ use Common\Data\Object\Publication;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class HearingControllerTest extends AbstractHttpControllerTestCase
+class HearingControllerTest extends MockeryTestCase
 {
     /**
-     * @var RegisterDecisionController
+     * @var HearingController
      */
     protected $sut;
 
@@ -35,10 +35,6 @@ class HearingControllerTest extends AbstractHttpControllerTestCase
     {
         $this->pluginManagerHelper = new ControllerPluginManagerHelper();
         $this->sut = new HearingController();
-
-        $this->setApplicationConfig(
-            include __DIR__ . '/../../../../../../' . 'config/application.config.php'
-        );
 
         parent::setUp();
     }
