@@ -80,23 +80,6 @@ class BusRegisterService extends Base
     public $variationDetails = null;
 
     /**
-     * @Form\Attributes({
-     *      "id":"correspondenceAddress",
-     *      "placeholder":"",
-     *      "class":"chosen-select-medium"
-     * })
-     * @Form\Required(false)
-     * @Form\Options({
-     *     "label": "Correspondence address",
-     *     "disable_inarray_validator": false,
-     *     "service_name": "Common\Service\Data\AddressListDataService",
-     *     "context": {"services":{"licence"},"order":{"correspondence"}}
-     * })
-     * @Form\Type("DynamicSelect")
-     */
-    public $correspondenceAddress = null;
-
-    /**
      * @Form\Type("Radio")
      * @Form\Options({
      *      "label": "Operator notified LA/PTE 14 days prior",
