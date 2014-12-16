@@ -152,11 +152,56 @@ class ScanningControllerTest extends MockeryTestCase
         $this->setPost($post);
 
         $this->setService(
+            'DataServiceManager',
+            m::mock()
+            ->shouldReceive('get')
+            ->with('Olcs\Service\Data\Category')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('getDescriptionFromId')
+                ->with(1)
+                ->andReturn('Category description')
+                ->getMock()
+            )
+            ->shouldReceive('get')
+            ->with('Olcs\Service\Data\SubCategory')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('setCategory')
+                ->with(1)
+                ->shouldReceive('getDescriptionFromId')
+                ->with(2)
+                ->andReturn('Subcategory description')
+                ->getMock()
+            )
+            ->shouldReceive('get')
+            ->with('Olcs\Service\Data\SubCategoryDescription')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('setSubCategory')
+                ->with(2)
+                ->shouldReceive('getDescriptionFromId')
+                ->with(3)
+                ->andReturn('A description')
+                ->getMock()
+            )
+            ->getMock()
+        );
+
+        $entity = [
+            'id' => 123,
+            'licNo' => 'L1234B'
+        ];
+
+        $this->setService(
             'Processing\Entity',
             m::mock()
             ->shouldReceive('findEntityForCategory')
             ->with(1, 'ABC123')
-            ->andReturn(true) // @NOTE: when this story is developed further, this test will need updating
+            ->andReturn($entity)
+            ->shouldReceive('findEntityNameForCategory')
+            ->with(1)
+            ->andReturn('Licence')
             ->getMock()
         );
 
@@ -165,6 +210,40 @@ class ScanningControllerTest extends MockeryTestCase
             m::mock()
             ->shouldReceive('addSuccessMessage')
             ->with('scanning.message.success')
+            ->getMock()
+        );
+
+        $values = [
+            'DOC_CATEGORY_ID_SCAN'        => 1,
+            'DOC_CATEGORY_NAME_SCAN'      => 'Category description',
+            'LICENCE_NUMBER_SCAN'         => 'L1234B',
+            'LICENCE_NUMBER_REPEAT_SCAN'  => 'L1234B',
+            'ENTITY_ID_TYPE_SCAN'         => 'Licence',
+            'ENTITY_ID_SCAN'              => 123,
+            'ENTITY_ID_REPEAT_SCAN'       => 123,
+            'DOC_SUBCATEGORY_ID_SCAN'     => 2,
+            'DOC_SUBCATEGORY_NAME_SCAN'   => 'Subcategory description',
+            'DOC_DESCRIPTION_SCAN'        => 'A description',
+            'DOC_DESCRIPTION_REPEAT_SCAN' => 'A description'
+        ];
+
+        $this->setService(
+            'Helper\DocumentGeneration',
+            m::mock()
+            ->shouldReceive('generateFromTemplate')
+            ->with('Scanning_SeparatorSheet', [], $values)
+            ->andReturn('content')
+            ->shouldReceive('uploadGeneratedContent')
+            ->with('content', 'documents', 'Scanning Separator Sheet')
+            ->andReturn('file')
+            ->getMock()
+        );
+
+        $this->setService(
+            'PrintScheduler',
+            m::mock()
+            ->shouldReceive('enqueueFile')
+            ->with('file', 'Scanning Separator Sheet')
             ->getMock()
         );
 
@@ -189,6 +268,135 @@ class ScanningControllerTest extends MockeryTestCase
         $this->getMockFormHelper()
             ->shouldReceive('remove')
             ->with($form, 'details->otherDescription');
+
+        $this->sut->indexAction();
+    }
+
+    public function testIndexActionWithValidPostMatchingEntityAndCustomDescription()
+    {
+        $this->mockController('\Admin\Controller\ScanningController');
+
+        $post = [
+            'details' => [
+                'category' => 1,
+                'subCategory' => 2,
+                'otherDescription' => 'custom description',
+                'entityIdentifier' => 'ABC123'
+            ]
+        ];
+
+        $this->setPost($post);
+
+        $this->setService(
+            'DataServiceManager',
+            m::mock()
+            ->shouldReceive('get')
+            ->with('Olcs\Service\Data\Category')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('getDescriptionFromId')
+                ->with(1)
+                ->andReturn('Category description')
+                ->getMock()
+            )
+            ->shouldReceive('get')
+            ->with('Olcs\Service\Data\SubCategory')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('setCategory')
+                ->with(1)
+                ->shouldReceive('getDescriptionFromId')
+                ->with(2)
+                ->andReturn('Subcategory description')
+                ->getMock()
+            )
+            ->shouldReceive('get')
+            ->with('Olcs\Service\Data\SubCategoryDescription')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('setSubCategory')
+                ->with(2)
+                ->getMock()
+            )
+            ->getMock()
+        );
+
+        $entity = [
+            'id' => 123,
+            'licNo' => 'L1234B'
+        ];
+
+        $this->setService(
+            'Processing\Entity',
+            m::mock()
+            ->shouldReceive('findEntityForCategory')
+            ->with(1, 'ABC123')
+            ->andReturn($entity)
+            ->shouldReceive('findEntityNameForCategory')
+            ->with(1)
+            ->andReturn('Licence')
+            ->getMock()
+        );
+
+        $this->setService(
+            'Helper\FlashMessenger',
+            m::mock()
+            ->shouldReceive('addSuccessMessage')
+            ->with('scanning.message.success')
+            ->getMock()
+        );
+
+        $values = [
+            'DOC_CATEGORY_ID_SCAN'        => 1,
+            'DOC_CATEGORY_NAME_SCAN'      => 'Category description',
+            'LICENCE_NUMBER_SCAN'         => 'L1234B',
+            'LICENCE_NUMBER_REPEAT_SCAN'  => 'L1234B',
+            'ENTITY_ID_TYPE_SCAN'         => 'Licence',
+            'ENTITY_ID_SCAN'              => 123,
+            'ENTITY_ID_REPEAT_SCAN'       => 123,
+            'DOC_SUBCATEGORY_ID_SCAN'     => 2,
+            'DOC_SUBCATEGORY_NAME_SCAN'   => 'Subcategory description',
+            'DOC_DESCRIPTION_SCAN'        => 'custom description',
+            'DOC_DESCRIPTION_REPEAT_SCAN' => 'custom description'
+        ];
+
+        $this->setService(
+            'Helper\DocumentGeneration',
+            m::mock()
+            ->shouldReceive('generateFromTemplate')
+            ->with('Scanning_SeparatorSheet', [], $values)
+            ->andReturn('content')
+            ->shouldReceive('uploadGeneratedContent')
+            ->with('content', 'documents', 'Scanning Separator Sheet')
+            ->andReturn('file')
+            ->getMock()
+        );
+
+        $this->setService(
+            'PrintScheduler',
+            m::mock()
+            ->shouldReceive('enqueueFile')
+            ->with('file', 'Scanning Separator Sheet')
+            ->getMock()
+        );
+
+        $form = $this->createMockForm('Scanning');
+
+        $form->shouldReceive('setData')
+            ->with($post)
+            ->andReturn($form)
+            ->shouldReceive('setData')
+            ->with(
+                [
+                    'details' => [
+                        'category' => 1,
+                        'entityIdentifier' => 'ABC123'
+                    ]
+                ]
+            )
+            ->andReturn($form)
+            ->shouldReceive('isValid')
+            ->andReturn(true);
 
         $this->sut->indexAction();
     }
