@@ -31,7 +31,7 @@ class VariationController extends AbstractController
         if ($request->isPost()) {
             $licenceId = $this->getIdentifier();
 
-            $varId = $applicationService = $this->getServiceLocator()->get('Entity\Application')
+            $varId = $this->getServiceLocator()->get('Entity\Application')
                 ->createVariation($licenceId);
 
             return $this->redirect()->toRouteAjax('lva-variation', ['application' => $varId]);
