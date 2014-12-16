@@ -46,13 +46,18 @@ class Category extends AbstractData implements ListDataInterface
      */
     public function getIdFromHandle($handle)
     {
-        $data = $this->fetchListData([]);
-        foreach ($data as $datum) {
-            if ($datum['handle'] == $handle) {
-                return $datum['id'];
-            }
-        }
+        return $this->getPropertyFromKey('handle', 'id', $handle);
+    }
 
-        return null;
+    /**
+     * Look up an item's description by its ID
+     *
+     * @param int $id
+     *
+     * @return string
+     */
+    public function getDescriptionFromId($id)
+    {
+        return $this->getPropertyFromKey('id', 'description', $id);
     }
 }

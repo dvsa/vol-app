@@ -75,4 +75,13 @@ class SubCategoryTest extends MockeryTestCase
             )
         );
     }
+
+    public function testGetDescriptionFromId()
+    {
+        $sut = new SubCategory();
+        $sut->setData('all', [['subCategoryName' => 'test', 'id' => 4]]);
+
+        $this->assertEquals('test', $sut->getDescriptionFromId(4));
+        $this->assertNull($sut->getDescriptionFromId(123));
+    }
 }
