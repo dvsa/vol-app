@@ -33,8 +33,8 @@ return array(
         ),
         array(
             'title' => 'Var No.',
-            'name' => 'routeSeq',
-            'sort' => 'routeSeq'
+            'name' => 'variationNo',
+            'sort' => 'variationNo'
         ),
         array(
             'title' => 'Service No.',
