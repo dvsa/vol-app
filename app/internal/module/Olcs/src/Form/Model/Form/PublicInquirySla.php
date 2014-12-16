@@ -9,7 +9,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("Service level agreement")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true, "label":"Service level agreement"})
+ * @Form\Options({"prefer_form_input_filter": true, "label":"Service level agreement", "action_lcfirst": true})
  */
 class PublicInquirySla
 {
