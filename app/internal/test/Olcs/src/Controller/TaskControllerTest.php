@@ -75,6 +75,11 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
 
     private $testClickedButton = false;
 
+    /**
+     * @var \Zend\ServiceManager\ServiceLocatorInterface
+     */
+    private $serviceLocator;
+
     public function setUp()
     {
         $this->setApplicationConfig(
@@ -95,7 +100,6 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
                 'processEdit',
                 'getFromRoute',
                 'getSearchForm',
-                'getServiceLocator',
                 'getLicenceIdForApplication',
                 'getApplication',
                 'getBusReg'
@@ -125,6 +129,18 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
         $this->controller->expects($this->any())
             ->method('makeRestCall')
             ->will($this->returnCallback(array($this, 'mockRestCall')));
+
+        // stub out the data services that we manipulate for dynamic selects
+        $sm = \OlcsTest\Bootstrap::getServiceManager();
+        $sm->setService(
+            'Olcs\Service\Data\TaskSubCategory',
+            m::mock('\StdClass')->shouldReceive('setCategory')->getMock()
+        );
+        $sm->setService(
+            'Olcs\Service\Data\User',
+            m::mock('\StdClass')->shouldReceive('setTeam')->getMock()
+        );
+        $this->controller->setServiceLocator($sm);
 
         parent::setUp();
     }

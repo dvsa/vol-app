@@ -18,6 +18,7 @@ class TaskAssignment
      * @Form\Options({
      *     "label": "tasks.data.team",
      *     "service_name": "Olcs\Service\Data\Team",
+     *     "empty_option": "Please select"
      * })
      * @Form\Type("DynamicSelect")
      */
@@ -28,6 +29,7 @@ class TaskAssignment
      * @Form\Options({
      *     "label": "tasks.data.owner",
      *     "service_name": "Olcs\Service\Data\User",
+     *     "empty_option": "Unassigned"
      * })
      * @Form\Type("DynamicSelect")
      */

@@ -53,7 +53,8 @@ class TaskDetails
      * @Form\Options({
      *     "label": "tasks.data.category",
      *     "service_name": "Olcs\Service\Data\Category",
-     *     "context": {"isTaskCategory": true }
+     *     "context": {"isTaskCategory": true },
+     *     "empty_option": "Please Select"
      * })
      * @Form\Type("DynamicSelect")
      */

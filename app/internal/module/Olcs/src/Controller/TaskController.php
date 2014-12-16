@@ -208,6 +208,16 @@ class TaskController extends AbstractController
 
         $filters = $this->mapFilters($data);
 
+        // Set up the data services so that dynamic selects populate correctly if we already have data
+        if (isset($data['category'])) {
+            $this->getServiceLocator()->get('Olcs\Service\Data\TaskSubCategory')
+                ->setCategory($data['category']);
+        }
+        if (isset($data['assignedToTeam'])) {
+            $this->getServiceLocator()->get('Olcs\Service\Data\User')
+                ->setTeam($data['assignedToTeam']);
+        }
+
         $form = $this->getForm('task');
 
         if (isset($data['isClosed']) && $data['isClosed'] === 'Y') {
