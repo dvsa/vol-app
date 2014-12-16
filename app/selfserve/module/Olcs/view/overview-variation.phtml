@@ -36,6 +36,10 @@
     <dd><?php echo sprintf($this->translate('application.progress'), 'X', 'Y'); ?></dd>
     <dt><?php echo $this->translate('status'); ?></dt>
     <dd><?php echo $this->translate($status); ?></dd>
+    <dt><?php echo $this->translate('selfserve-dashboard-submission-date'); ?></dt>
+    <dd><?php echo $receivedDate ? strftime("%d %B %G",strtotime($receivedDate)) : $this->translate('selfserve-dashboard-target-not-yet-submitted'); ?></dd>
+    <dt><?php echo $this->translate('selfserve-dashboard-target-completion-date'); ?></dt>
+    <dd><?php echo $completionDate ? strftime("%d %B %G",strtotime($completionDate)) : $this->translate('selfserve-dashboard-target-not-yet-submitted'); ?></dd>
   </dl>
 
   <div class="links">

@@ -37,6 +37,8 @@ class ApplicationOverview extends LvaOverview
         $this->setVariable('createdOn', date('d F Y', strtotime($data['createdOn'])));
         $this->setVariable('status', $data['status']['id']);
         $this->setVariable('submissionForm', $submissionForm);
+        $this->setVariable('receivedDate', $data['receivedDate']);
+        $this->setVariable('completionDate', $data['targetCompletionDate']);
 
         parent::__construct($data, $sections);
     }
