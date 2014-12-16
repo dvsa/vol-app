@@ -55,5 +55,4 @@ class Task
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\TaskFormActions")
      */
     public $formActions = null;
-
 }
