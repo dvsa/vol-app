@@ -76,6 +76,22 @@ $configRoutes['lva-application']['child_routes'] = array_merge(
     )
 );
 
+$configRoutes['lva-licence']['child_routes'] = array_merge(
+    $configRoutes['lva-licence']['child_routes'],
+    array(
+        'variation' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'variation[/]',
+                'defaults' => array(
+                    'controller' => 'LvaLicence/Variation',
+                    'action' => 'index'
+                )
+            )
+        )
+    )
+);
+
 return array(
     'router' => array(
         'routes' => array_merge($routes, $configRoutes),
@@ -102,6 +118,7 @@ return array(
             'LvaApplication/VehiclesDeclarations'   => 'Olcs\Controller\Lva\Application\VehiclesDeclarationsController',
             'LvaApplication/PaymentSubmission'      => 'Olcs\Controller\Lva\Application\PaymentSubmissionController',
             'LvaLicence'                            => 'Olcs\Controller\Lva\Licence\OverviewController',
+            'LvaLicence/Variation'                  => 'Olcs\Controller\Lva\Licence\VariationController',
             'LvaLicence/TypeOfLicence'              => 'Olcs\Controller\Lva\Licence\TypeOfLicenceController',
             'LvaLicence/BusinessType'               => 'Olcs\Controller\Lva\Licence\BusinessTypeController',
             'LvaLicence/BusinessDetails'            => 'Olcs\Controller\Lva\Licence\BusinessDetailsController',
