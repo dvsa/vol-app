@@ -76,11 +76,7 @@ class TaskController extends AbstractController
 
         $this->loadScripts(['forms/task']);
 
-        $view = new ViewModel(
-            [
-                'form' => $form
-            ]
-        );
+        $view = new ViewModel(['form' => $form]);
 
         $view->setTemplate('task/add-or-edit');
         $tasks = $this->getFromRoute('task');
@@ -214,25 +210,6 @@ class TaskController extends AbstractController
 
         $form = $this->getForm('task');
 
-        $selects = array(
-            'details' => array(
-                'category' => $this->getListDataFromBackend('Category', [], 'description'),
-                'subCategory' => $this->getListDataFromBackend('SubCategory', $filters, 'subCategoryName')
-            ),
-            'assignment' => array(
-                'assignedToTeam' => $this->getListDataFromBackend('Team'),
-                'assignedToUser' => $this->getListDataFromBackend('User', $filters, 'name', 'id', 'Unassigned')
-            )
-        );
-
-        foreach ($selects as $fieldset => $inputs) {
-            foreach ($inputs as $name => $options) {
-                $form->get($fieldset)
-                    ->get($name)
-                    ->setValueOptions($options);
-            }
-        }
-
         if (isset($data['isClosed']) && $data['isClosed'] === 'Y') {
             $this->disableFormElements($form, ['cancel']);
             $this->setValidateForm(false);
@@ -313,7 +290,7 @@ class TaskController extends AbstractController
                 $url = sprintf(
                     '<a href="%s">%s</a>',
                     $this->url()->fromRoute('transport-manager', ['transportManager' => $taskTypeId]),
-                    $linkDisplay
+                    $linkDisplay ? $linkDisplay : $taskTypeId
                 );
                 break;
             case 'busreg':
