@@ -23,7 +23,7 @@ class BusRegisterService extends Base
      *      }
      * })
      * @Form\Attributes({
-     *      "id":"conditions[copiedToLaPte]",
+     *      "id":"registerService[copiedToLaPte]",
      *      "value":"N"
      * })
      */
@@ -123,18 +123,4 @@ class BusRegisterService extends Base
      * })
      */
     public $opNotifiedLaPteHidden;
-
-    /**
-     * @Form\Attributes({"id":"dob"})
-     * @Form\Options({
-     *     "label": "Date completed",
-     *     "create_empty_option": true,
-     *     "render_delimiters": false
-     * })
-     * @Form\Type("DateSelect")
-     * @Form\Required(false)
-     * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
-     * @Form\Filter({"name": "DateSelectNullifier"})
-     */
-    public $completedDate = null;
 }

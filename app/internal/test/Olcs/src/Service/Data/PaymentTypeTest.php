@@ -3,19 +3,15 @@
 namespace OlcsTest\Service\Data;
 
 use Olcs\Service\Data\PaymentType;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 
 /**
  * Class PaymentTypeTest
  * @package OlcsTest\Service\Data
  */
-class PaymentTypeTest extends \PHPUnit_Framework_TestCase
+class PaymentTypeTest extends MockeryTestCase
 {
-    public function tearDown()
-    {
-        m::close();
-    }
-
     public function testFetchListData()
     {
         $data = [

@@ -31,7 +31,7 @@ return [
                         'type' => 'select-noempty',
                         'label' => 'tasks.data.category',
                     ],
-                    'taskSubCategory' => [
+                    'subCategory' => [
                         'type' => 'select-noempty',
                         'label' => 'tasks.data.sub_category'
                     ],

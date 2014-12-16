@@ -16,8 +16,10 @@ use Olcs\Controller\Bus\BusController;
  */
 class BusServiceController extends BusController
 {
+    protected $layoutFile = 'licence/bus/layout-wide';
+
     protected $section = 'service';
-    protected $subNavRoute = 'licence_bus_service';
+    protected $subNavRoute = 'licence_bus_register_service';
 
     protected $item = 'service';
 
@@ -64,7 +66,7 @@ class BusServiceController extends BusController
      */
     public function redirectToIndex()
     {
-        return $this->redirectToRoute('licence/bus-details', [], [], true);
+        return $this->redirectToRoute('licence/bus-register-service', [], [], true);
     }
 
     /**
@@ -147,7 +149,16 @@ class BusServiceController extends BusController
      */
     protected function getTableData()
     {
-        $data = $this->makeRestCall('ConditionUndertaking', 'GET', [], $this->conditionsBundle);
+        $licence = $this->params()->fromRoute('licence');
+        $data = $this->makeRestCall(
+            'ConditionUndertaking',
+            'GET',
+            [
+                'licence' => $licence,
+                'conditionType' => 'cdt_con'
+            ],
+            $this->conditionsBundle
+        );
 
         return $data['Results'];
     }

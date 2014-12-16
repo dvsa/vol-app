@@ -67,13 +67,17 @@ trait TaskSearchTrait
             $filters['team'] = $filters['assignedToTeam'];
         }
 
+        // @see https://jira.i-env.net/browse/OLCS-6061. Don't worry, filters are ignored
+        // if the entity doesn't have the relevant field, so it's safe to cram this in here
+        $filters['isTask'] = true;
+
         // grab all the relevant backend data needed to populate the
         // various dropdowns on the filter form
         $selects = array(
             'assignedToTeam' => $this->getListDataFromBackend('Team'),
             'assignedToUser' => $this->getListDataFromBackend('User', $filters),
             'category' => $this->getListDataFromBackend('Category', [], 'description'),
-            'taskSubCategory' => $this->getListDataFromBackend('TaskSubCategory', $filters)
+            'taskSubCategory' => $this->getListDataFromBackend('SubCategory', $filters, 'subCategoryName')
         );
 
         // bang the relevant data into the corresponding form inputs
@@ -171,6 +175,12 @@ trait TaskSearchTrait
                     $params = [
                         'type' => 'application',
                         'typeId' => $this->getFromRoute('application'),
+                    ];
+                    break;
+                case 'transportManager':
+                    $params = [
+                        'type' => 'tm',
+                        'typeId' => $this->getFromRoute('transportManager'),
                     ];
                     break;
                 default:

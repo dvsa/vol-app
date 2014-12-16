@@ -223,8 +223,8 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
         );
 
         $this->controller->expects($this->any())
-             ->method('getServiceLocator')
-             ->will($this->returnValue($this->getServiceLocatorTranslator()));
+            ->method('getServiceLocator')
+            ->will($this->returnValue($this->getServiceLocatorTranslator()));
 
         $this->controller->expects($this->any())
             ->method('getLicence')
@@ -254,7 +254,8 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
 
         $altListData = [
             'limit' => 100,
-            'sort' => 'description'
+            'sort' => 'description',
+            'isDocCategory' => true,
         ];
 
         $altResponse = [
@@ -266,12 +267,22 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             ]
         ];
 
+        $subResponse = [
+            'Results' => [
+                [
+                    'id' => 123,
+                    'subCategoryName' => 'foo'
+                ]
+            ]
+        ];
+
         $extendedListData = [
             'limit' => 100,
-            'sort' => 'description',
-            'order' => 'DESC',
+            'sort' => 'subCategoryName',
+            'order' => 'ASC',
             'page' => 1,
-            'licenceId' => 1234
+            'licenceId' => 1234,
+            'isDoc' => true
         ];
 
         $refDataList = [
@@ -287,8 +298,8 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->at(8))
             ->method('makeRestCall')
-            ->with('DocumentSubCategory', 'GET', $extendedListData)
-            ->will($this->returnValue($altResponse));
+            ->with('SubCategory', 'GET', $extendedListData)
+            ->will($this->returnValue($subResponse));
 
         $this->controller->expects($this->at(9))
             ->method('makeRestCall')
@@ -415,7 +426,8 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
         ];
         $altListData = [
             'limit' => 100,
-            'sort' => 'description'
+            'sort' => 'description',
+            'isDocCategory' => true,
         ];
 
         $altResponse = [
@@ -427,11 +439,21 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
             ]
         ];
 
+        $subResponse = [
+            'Results' => [
+                [
+                    'id' => 123,
+                    'subCategoryName' => 'foo'
+                ]
+            ]
+        ];
+
         $extendedListData = [
             'limit' => 100,
-            'sort' => 'description',
-            'order' => 'DESC',
-            'page' => 1
+            'sort' => 'subCategoryName',
+            'order' => 'ASC',
+            'page' => 1,
+            'isDoc' => true
         ];
 
         $refDataList = [
@@ -447,8 +469,8 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->at(8))
             ->method('makeRestCall')
-            ->with('DocumentSubCategory', 'GET', $extendedListData)
-            ->will($this->returnValue($altResponse));
+            ->with('SubCategory', 'GET', $extendedListData)
+            ->will($this->returnValue($subResponse));
 
         $this->controller->expects($this->at(9))
             ->method('makeRestCall')
@@ -541,8 +563,8 @@ class LicenceControllerTest extends AbstractHttpControllerTestCase
     public function testDocumentsActionWithGenerateRedirectsToGenerate()
     {
         $this->controller->expects($this->any())
-             ->method('getServiceLocator')
-             ->will($this->returnValue($this->getServiceLocatorTranslator()));
+            ->method('getServiceLocator')
+            ->will($this->returnValue($this->getServiceLocatorTranslator()));
 
         $this->request->expects($this->any())
             ->method('isPost')

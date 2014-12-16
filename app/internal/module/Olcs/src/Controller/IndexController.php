@@ -70,17 +70,37 @@ class IndexController extends AbstractController
                 'field' => 'team'
             ),
             'task-sub-categories' => array(
-                'entity' => 'TaskSubCategory',
-                'field' => 'category'
+                'entity' => 'SubCategory',
+                'field' => 'category',
+                'title' => 'subCategoryName',
+                'search' => array(
+                    'isTask' => true
+                )
             ),
             'document-sub-categories' => array(
-                'entity' => 'DocumentSubCategory',
+                'entity' => 'SubCategory',
                 'field' => 'category',
-                'title' => 'description'
+                'title' => 'subCategoryName',
+                'search' => array(
+                    'isDoc' => true
+                )
+            ),
+            'scanning-sub-categories' => array(
+                'entity' => 'SubCategory',
+                'field' => 'category',
+                'title' => 'subCategoryName',
+                'search' => array(
+                    'isScan' => true
+                )
             ),
             'document-templates' => array(
                 'entity' => 'DocTemplate',
-                'field' => 'documentSubCategory',
+                'field' => 'subCategory',
+                'title' => 'description'
+            ),
+            'sub-category-descriptions' => array(
+                'entity' => 'SubCategoryDescription',
+                'field' => 'subCategory',
                 'title' => 'description'
             )
         );
@@ -96,6 +116,10 @@ class IndexController extends AbstractController
         $search = array(
             $lookup['field'] => $value
         );
+
+        if (isset($lookup['search'])) {
+            $search = array_merge($search, $lookup['search']);
+        }
 
         $titleKey = isset($lookup['title']) ? $lookup['title'] : 'name';
 

@@ -222,7 +222,7 @@ class TaskController extends AbstractController
         $selects = array(
             'details' => array(
                 'category' => $this->getListDataFromBackend('Category', [], 'description'),
-                'taskSubCategory' => $this->getListDataFromBackend('TaskSubCategory', $filters)
+                'subCategory' => $this->getListDataFromBackend('SubCategory', $filters, 'subCategoryName')
             ),
             'assignment' => array(
                 'assignedToTeam' => $this->getListDataFromBackend('Team'),
@@ -251,9 +251,11 @@ class TaskController extends AbstractController
         $url = $this->getLinkForTaskForm();
         $details->get('link')->setValue($url);
         $details->get('status')->setValue('<b>' . $textStatus . '</b>');
+
         if ($this->isButtonPressed('close')) {
             $type = 'Close';
         }
+
         $form->setData($this->expandData($data));
         $this->formPost($form, 'process' . $type . 'Task');
 
@@ -400,6 +402,10 @@ class TaskController extends AbstractController
                 $route = 'lva-application/processing';
                 $params = ['application' => $taskTypeId];
                 break;
+            case 'tm':
+                $route = 'transport-manager/processing/tasks';
+                $params = ['transportManager' => $taskTypeId];
+                break;
             default:
                 // no type - call from the home page, need to redirect back after action
                 $route = 'dashboard';
@@ -425,7 +431,7 @@ class TaskController extends AbstractController
         $taskId = $this->getFromRoute('task');
         if ($taskId) {
             $childProperties = [
-                'category', 'taskSubCategory',
+                'category', 'subCategory',
                 'assignedToTeam', 'assignedToUser'
             ];
             $bundle = [
@@ -483,6 +489,8 @@ class TaskController extends AbstractController
             $filters['category'] = $data['category'];
         }
 
+        $filters['isTask'] = true;
+
         return $filters;
     }
 
@@ -517,6 +525,9 @@ class TaskController extends AbstractController
                 // bit ugly, but we need the licenceId too to properly link the task
                 $data['licence'] = $this->getServiceLocator()
                     ->get('Entity\Application')->getLicenceIdForApplication($taskTypeId);
+                break;
+            case 'tm':
+                $data['transportManager'] = $taskTypeId;
                 break;
             default:
                 break;

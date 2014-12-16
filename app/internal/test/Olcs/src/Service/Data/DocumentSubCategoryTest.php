@@ -2,15 +2,15 @@
 
 namespace OlcsTest\Service\Data;
 
-use PHPUnit_Framework_TestCase as TestCase;
 use Olcs\Service\Data\DocumentSubCategory;
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 /**
  * Class DocumentSubCategoryTest
  * @package OlcsTest\Service\Data
  */
-class DocumentSubCategoryTest extends TestCase
+class DocumentSubCategoryTest extends MockeryTestCase
 {
     public function testFetchListData()
     {
@@ -40,7 +40,11 @@ class DocumentSubCategoryTest extends TestCase
         ];
 
         $mockRestClient = m::mock('\Common\Util\RestClient');
-        $mockRestClient->shouldReceive('get')->once()->with('', ['category' => 'testing'])->andReturn($results);
+        $mockRestClient->shouldReceive('get')
+            ->once()
+            ->with('', ['isDoc' => true, 'category' => 'testing', 'sort' => 'subCategoryName'])
+            ->andReturn($results);
+
         $sut = new DocumentSubCategory();
         $sut->setRestClient($mockRestClient);
         $sut->setCategory('testing');

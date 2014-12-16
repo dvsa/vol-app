@@ -863,22 +863,45 @@ $routes = [
                     'route' => '/bus/:busRegId/docs',
                     'defaults' => [
                         'controller' => 'BusDocsController',
-                        'action' => 'index',
+                        'action' => 'documents',
                     ]
                 ],
                 'may_terminate' => true,
                 'child_routes' => [
-                    'placeholder' => [
-                        'type' => 'literal',
+                    'generate' => [
+                        'type' => 'segment',
                         'options' => [
-                            'route' => '/placeholder',
+                            'route' => '/generate[/:tmpId]',
                             'defaults' => [
-                                'controller' => 'BusDocsPlaceholderController',
-                                'action' => 'index',
+                                'type' => 'busReg',
+                                'controller' => 'DocumentGenerationController',
+                                'action' => 'generate'
                             ]
                         ],
                     ],
-                ]
+                    'finalise' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/finalise/:tmpId',
+                            'defaults' => [
+                                'type' => 'busReg',
+                                'controller' => 'DocumentFinaliseController',
+                                'action' => 'finalise'
+                            ]
+                        ],
+                    ],
+                    'upload' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/upload',
+                            'defaults' => [
+                                'type' => 'busReg',
+                                'controller' => 'DocumentUploadController',
+                                'action' => 'upload'
+                            ]
+                        ],
+                    ],
+                ],
             ],
             'bus-processing' => [
                 'type' => 'segment',
@@ -891,6 +914,20 @@ $routes = [
                 ],
                 'may_terminate' => true,
                 'child_routes' => [
+                    'registration-history' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/registration-history',
+                            'defaults' => [
+                                'controller' => 'BusProcessingRegistrationHistoryController',
+                                'action' => 'index',
+                                'page' => 1,
+                                'limit' => 10,
+                                'sort' => 'variationNo',
+                                'order' => 'DESC'
+                            ]
+                        ],
+                    ],
                     'notes' => [
                         'type' => 'segment',
                         'options' => [
@@ -1319,14 +1356,50 @@ $routes = [
                 ]
             ],
             'documents' => [
-                'type' => 'literal',
+                'type' => 'segment',
+                'may_terminate' => true,
                 'options' => [
                     'route' => '/documents',
                     'defaults' => [
                         'controller' => 'TMDocumentController',
-                        'action' => 'index',
+                        'action' => 'documents',
                     ]
-                ]
+                ],
+                'child_routes' => [
+                    'generate' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/generate[/:tmpId]',
+                            'defaults' => [
+                                'type' => 'transportManager',
+                                'controller' => 'DocumentGenerationController',
+                                'action' => 'generate'
+                            ]
+                        ],
+                    ],
+                    'finalise' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/finalise/:tmpId',
+                            'defaults' => [
+                                'type' => 'transportManager',
+                                'controller' => 'DocumentFinaliseController',
+                                'action' => 'finalise'
+                            ]
+                        ],
+                    ],
+                    'upload' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/upload',
+                            'defaults' => [
+                                'type' => 'transportManager',
+                                'controller' => 'DocumentUploadController',
+                                'action' => 'upload'
+                            ]
+                        ],
+                    ],
+                ],
             ],
         ],
     ],

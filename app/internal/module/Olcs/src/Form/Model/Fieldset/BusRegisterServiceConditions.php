@@ -41,7 +41,7 @@ class BusRegisterServiceConditions
      * @Form\Required(false)
      * @Form\Type("TextArea")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":800}})
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":255}})
      */
     public $trcNotes = null;
 }

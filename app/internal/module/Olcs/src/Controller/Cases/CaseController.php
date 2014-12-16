@@ -281,16 +281,14 @@ class CaseController extends OlcsController\CrudAbstract
         $table = $this->getDocumentsTable($filters);
         $form  = $this->getDocumentForm($filters);
 
-        $view = $this->getView(
+        $this->setPageLayoutInner(null);
+
+        return $this->getView(
             array(
                 'table' => $table,
                 'form'  => $form
             )
         );
-
-        $this->setPageLayoutInner(null);
-
-        return $this->render($view);
     }
 
     /**
