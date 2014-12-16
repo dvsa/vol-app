@@ -84,4 +84,16 @@ class SubCategory extends AbstractData implements ListDataInterface
 
         return $optionData;
     }
+
+    /**
+     * Look up an item's description by its ID
+     *
+     * @param int $id
+     *
+     * @return string
+     */
+    public function getDescriptionFromId($id)
+    {
+        return $this->getPropertyFromKey('id', 'subCategoryName', $id);
+    }
 }
