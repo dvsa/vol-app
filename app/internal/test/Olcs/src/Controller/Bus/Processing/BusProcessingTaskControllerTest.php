@@ -8,6 +8,7 @@ namespace OlcsTest\Controller\Bus\Processing;
 
 use Olcs\Controller\Bus\Processing\BusProcessingTaskController as Sut;
 use Olcs\TestHelpers\ControllerPluginManagerHelper;
+use CommonTest\Traits\MockDateTrait;
 use Mockery as m;
 
 /**
@@ -17,6 +18,8 @@ use Mockery as m;
  */
 class BusProcessingTaskControllerTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
+    use MockDateTrait;
+
     /**
      * @var m\MockInterface|\Zend\Mvc\Controller\PluginManager
      */
@@ -25,7 +28,7 @@ class BusProcessingTaskControllerTest extends \Mockery\Adapter\Phpunit\MockeryTe
     /**
      * @var Zend\ServiceManager\ServiceManager
      */
-    protected $serviceLocator;
+    protected $sm;
 
     public function setUp()
     {
@@ -33,7 +36,7 @@ class BusProcessingTaskControllerTest extends \Mockery\Adapter\Phpunit\MockeryTe
         $this->pluginManager = $pluginManagerHelper->getMockPluginManager(
             ['params' => 'Params', 'url' => 'Url']
         );
-        $this->serviceLocator = \OlcsTest\Bootstrap::getServiceManager();
+        $this->sm = \OlcsTest\Bootstrap::getServiceManager();
         return parent::setUp();
     }
 
@@ -51,8 +54,11 @@ class BusProcessingTaskControllerTest extends \Mockery\Adapter\Phpunit\MockeryTe
         $mockParams->shouldReceive('fromRoute')->with('busRegId')->andReturn($busRegId);
         $mockParams->shouldReceive('fromRoute')->with('licence')->andReturn($licenceId);
 
+        // mock date
+        $date = '2014-12-10';
+        $this->mockDate($date);
+
         // mock task REST calls
-        $today = $this->serviceLocator->get('Helper\Date')->getDate('Y-m-d');
         $defaultTaskSearchParams = [
             'date'       => 'tdt_today',
             'status'     => 'tst_open',
@@ -62,7 +68,7 @@ class BusProcessingTaskControllerTest extends \Mockery\Adapter\Phpunit\MockeryTe
             'limit'      => 10,
             'licenceId'  => $licenceId,
             'isClosed'   => false,
-            'actionDate' => '<= '.$today ,
+            'actionDate' => '<= 2014-12-10',
         ];
 
         $restHelperMock = m::mock('Common\Service\Helper\RestHelperService')
@@ -116,10 +122,10 @@ class BusProcessingTaskControllerTest extends \Mockery\Adapter\Phpunit\MockeryTe
             )
             ->getMock();
 
-        $this->serviceLocator->setService('Helper\Rest', $restHelperMock);
+        $this->sm->setService('Helper\Rest', $restHelperMock);
 
         // mock table service
-        $this->serviceLocator->setService(
+        $this->sm->setService(
             'Table',
             m::mock('\Common\Service\Table\TableBuilder')
                 ->shouldReceive('buildTable')
@@ -133,11 +139,11 @@ class BusProcessingTaskControllerTest extends \Mockery\Adapter\Phpunit\MockeryTe
             ->shouldReceive('findOneBy')
             ->with('id', 'licence_bus_processing')
             ->getMock();
-        $this->serviceLocator->setService('Navigation', $nav);
+        $this->sm->setService('Navigation', $nav);
 
         $sut = new Sut;
         $sut->setPluginManager($this->pluginManager);
-        $sut->setServiceLocator($this->serviceLocator);
+        $sut->setServiceLocator($this->sm);
 
         $view = $sut->indexAction();
 

@@ -35,7 +35,6 @@ class Team extends AbstractData implements ListDataInterface
         return $ret;
     }
 
-
     public function fetchTeamListData($bundle = null)
     {
         if (is_null($this->getData('teamlist'))) {

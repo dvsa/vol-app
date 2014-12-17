@@ -8,6 +8,7 @@ namespace OlcsTest\Controller\TransportManager\Processing;
 
 use Olcs\Controller\TransportManager\Processing\TransportManagerProcessingTaskController as Sut;
 use Olcs\TestHelpers\ControllerPluginManagerHelper;
+use CommonTest\Traits\MockDateTrait;
 use Mockery as m;
 
 /**
@@ -17,6 +18,8 @@ use Mockery as m;
  */
 class TransportManagerProcessingTaskControllerTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
+    use MockDateTrait;
+
     /**
      * @var m\MockInterface|\Zend\Mvc\Controller\PluginManager
      */
@@ -25,7 +28,7 @@ class TransportManagerProcessingTaskControllerTest extends \Mockery\Adapter\Phpu
     /**
      * @var Zend\ServiceManager\ServiceManager
      */
-    protected $serviceLocator;
+    protected $sm;
 
     public function setUp()
     {
@@ -33,7 +36,7 @@ class TransportManagerProcessingTaskControllerTest extends \Mockery\Adapter\Phpu
         $this->pluginManager = $pluginManagerHelper->getMockPluginManager(
             ['params' => 'Params', 'url' => 'Url']
         );
-        $this->serviceLocator = \OlcsTest\Bootstrap::getServiceManager();
+        $this->sm = \OlcsTest\Bootstrap::getServiceManager();
         return parent::setUp();
     }
 
@@ -49,8 +52,11 @@ class TransportManagerProcessingTaskControllerTest extends \Mockery\Adapter\Phpu
         $mockParams = $this->pluginManager->get('params', '');
         $mockParams->shouldReceive('fromRoute')->with('transportManager')->andReturn($tmId);
 
+        // mock date
+        $date = '2014-12-13';
+        $this->mockDate($date);
+
         // mock task REST calls
-        $today = $this->serviceLocator->get('Helper\Date')->getDate('Y-m-d');
         $defaultTaskSearchParams = [
             'date'               => 'tdt_today',
             'status'             => 'tst_open',
@@ -60,7 +66,7 @@ class TransportManagerProcessingTaskControllerTest extends \Mockery\Adapter\Phpu
             'limit'              => 10,
             'transportManagerId' => $tmId,
             'isClosed'           => false,
-            'actionDate'         => '<= '.$today ,
+            'actionDate'         => '<= 2014-12-13',
         ];
 
         $restHelperMock = m::mock('Common\Service\Helper\RestHelperService')
@@ -93,10 +99,10 @@ class TransportManagerProcessingTaskControllerTest extends \Mockery\Adapter\Phpu
             ->andReturn([])
             ->getMock();
 
-        $this->serviceLocator->setService('Helper\Rest', $restHelperMock);
+        $this->sm->setService('Helper\Rest', $restHelperMock);
 
         // mock table service
-        $this->serviceLocator->setService(
+        $this->sm->setService(
             'Table',
             m::mock('\Common\Service\Table\TableBuilder')
                 ->shouldReceive('buildTable')
@@ -107,7 +113,7 @@ class TransportManagerProcessingTaskControllerTest extends \Mockery\Adapter\Phpu
 
         $sut = new Sut;
         $sut->setPluginManager($this->pluginManager);
-        $sut->setServiceLocator($this->serviceLocator);
+        $sut->setServiceLocator($this->sm);
 
         $view = $sut->indexAction();
 

@@ -52,7 +52,8 @@ trait TaskSearchTrait
         }
 
         if (isset($filters['date']) && $filters['date'] === 'tdt_today') {
-            $filters['actionDate'] = '<= ' . date('Y-m-d');
+            $today = $this->getServiceLocator()->get('Helper\Date')->getDate('Y-m-d');
+            $filters['actionDate'] = '<= ' . $today;
         }
 
         // nuke any empty values too
