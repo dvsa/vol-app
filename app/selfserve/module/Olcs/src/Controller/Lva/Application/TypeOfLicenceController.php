@@ -49,7 +49,7 @@ class TypeOfLicenceController extends Lva\AbstractTypeOfLicenceController
 
         $form = $this->getTypeOfLicenceForm();
         $form->get('form-actions')->remove('saveAndContinue')
-            ->get('save')->setLabel('continue.button');
+            ->get('save')->setLabel('continue.button')->setAttribute('class', 'action--primary large');
 
         if ($request->isPost()) {
             $data = (array)$request->getPost();

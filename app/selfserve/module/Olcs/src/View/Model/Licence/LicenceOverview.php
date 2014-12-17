@@ -31,8 +31,10 @@ class LicenceOverview extends LvaOverview
      * @param array $data
      * @param array $sections
      */
-    public function __construct($data, array $sections = array())
+    public function __construct($data, array $sections = array(), $variables = array())
     {
+        $this->setVariables($variables);
+
         $this->setVariable('licenceId', $data['licNo']);
         $this->setVariable('startDate', $data['inForceDate']);
         $this->setVariable('renewalDate', $data['expiryDate']);

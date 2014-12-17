@@ -52,7 +52,7 @@ class PaymentSubmissionController extends AbstractController
         $actionDate = $this->getServiceLocator()->get('Helper\Date')->getDate();
         $task = array(
             'category' => CategoryDataService::CATEGORY_APPLICATION,
-            'subCategory' => CategoryDataService::TASK_SUB_CATEGORY_APPLICATION_GRANT_FEE_DUE,
+            'subCategory' => CategoryDataService::TASK_SUB_CATEGORY_APPLICATION_FORMS_DIGITAL,
             'description' => 'GV79 Application',
             'actionDate' => $actionDate,
             'assignedByUser' => 1,
