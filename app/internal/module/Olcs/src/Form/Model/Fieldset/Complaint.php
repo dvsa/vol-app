@@ -123,7 +123,7 @@ class Complaint extends CaseBase
 
     /**
      * @Form\Attributes({"placeholder":"","class":"medium","name":"driverFamilyName"})
-     * @Form\Options({"label":"Driver familty name"})
+     * @Form\Options({"label":"Driver family name"})
      * @Form\Required(false)
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
