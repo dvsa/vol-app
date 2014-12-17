@@ -975,10 +975,6 @@ $routes = [
                             'defaults' => [
                                 'controller' => 'BusProcessingTaskController',
                                 'action' => 'index',
-                                'page' => 1,
-                                'limit' => 10,
-                                'sort' => 'priority',
-                                'order' => 'DESC'
                             ]
                         ],
                     ],
