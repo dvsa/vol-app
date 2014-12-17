@@ -5,7 +5,6 @@ namespace Olcs\Form\Model\Fieldset;
 use Zend\Form\Annotation as Form;
 
 /**
- * @codeCoverageIgnore file with no methods
  * @Form\Name("form-actions")
  * @Form\Attributes({"class":"actions-container"})
  */

@@ -5,7 +5,6 @@ namespace Olcs\Form\Model\Fieldset;
 use Zend\Form\Annotation as Form;
 
 /**
- * @codeCoverageIgnore no methods
  * @Form\Name("assignment")
  * @Form\Options({
  *     "label": "tasks.assigment",
