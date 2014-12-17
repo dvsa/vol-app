@@ -60,7 +60,8 @@ class TaskController extends AbstractController
             $this->getServiceLocator()->get('Olcs\Service\Data\User')
                 ->setTeam($data['assignedToTeam']);
         }
-        if (isset($data['assignment']['assignedToTeam'])) { // on POST, the data is nested
+        if (isset($data['assignment']['assignedToTeam'])) {
+            // on POST, the data is nested
             $this->getServiceLocator()->get('Olcs\Service\Data\User')
                 ->setTeam($data['assignment']['assignedToTeam']);
         }
