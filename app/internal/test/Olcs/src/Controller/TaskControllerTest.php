@@ -637,6 +637,8 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
 
     /**
      * Test reassign action post
+     *
+     * @todo this isn't testing what it should be, i.e. POST data
      */
     public function testReassignActionPost()
     {

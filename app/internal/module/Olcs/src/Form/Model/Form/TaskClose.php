@@ -26,14 +26,15 @@ class TaskClose
     public $version = null;
 
     /**
+     * @Form\Name("details")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\TaskCloseDetails")
+     * @Form\Options({"label": "tasks.close.single"})
+     */
+    public $details = null;
+
+    /**
      * @Form\Name("form-actions")
      * @Form\Attributes({"class":"actions-container"})
-     * @Form\Options({
-     *     "label": "tasks.close.single",
-     *     "label_attributes": {
-     *         "class": "TODO fix presentation"
-     *     },
-     * })
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\TaskCloseFormActions")
      */
     public $formActions = null;
