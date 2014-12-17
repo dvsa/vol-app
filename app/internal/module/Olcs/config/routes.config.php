@@ -504,7 +504,7 @@ $routes = [
             ]
         ]
     ],
-    'case_processing_tasks' => [
+    'processing_tasks' => [
         'type' => 'segment',
         'options' => [
             'route' => '/case/:case/processing/tasks[/:action]',

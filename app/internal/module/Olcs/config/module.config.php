@@ -50,7 +50,6 @@ return array(
             'CaseNoteController' => 'Olcs\Controller\Cases\Processing\NoteController',
             'CaseDecisionsController' => 'Olcs\Controller\Cases\Processing\DecisionsController',
             'CaseRevokeController' => 'Olcs\Controller\Cases\Processing\RevokeController',
-            'CaseTaskController' => 'Olcs\Controller\Cases\Processing\TaskController',
         ),
         'lva_controllers' => array(
             'LvaApplication' => 'Olcs\Controller\Lva\Application\OverviewController',

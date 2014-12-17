@@ -10,6 +10,7 @@ namespace Olcs\Controller\Cases\Processing;
 
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
+use Olcs\Controller\Traits\LicenceNoteTrait;
 
 /**
  * Case note controller
@@ -19,7 +20,7 @@ use Olcs\Controller\Traits as ControllerTraits;
  */
 class NoteController extends OlcsController\CrudAbstract
 {
-    use ControllerTraits\LicenceNoteTrait;
+    use LicenceNoteTrait;
     use ControllerTraits\CaseControllerTrait;
 
     /**
