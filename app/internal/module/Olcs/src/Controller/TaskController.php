@@ -661,8 +661,9 @@ class TaskController extends AbstractController
 
     protected function getLicenceIdForApplication($applicationId)
     {
-        $application = $this->getApplication($applicationId);
-        return $application['licence']['id'];
+        return $this->getServiceLocator()
+            ->get('Entity\Application')
+            ->getLicenceIdForApplication($applicationId);
     }
 
     protected function getApplication($applicationId)

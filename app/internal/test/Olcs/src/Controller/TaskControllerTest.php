@@ -1250,13 +1250,16 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
             'Entity\Application',
             m::mock('\StdClass')
                 ->shouldReceive('getDataForTasks')
-                ->with('123')
-                ->andReturn(
-                    [
-                        'id' => 123,
-                        'licence' => ['id' => 987, 'licNo' => 'AB1234'],
-                    ]
-                )
+                    ->with('123')
+                    ->andReturn(
+                        [
+                            'id' => 123,
+                            'licence' => ['id' => 987, 'licNo' => 'AB1234'],
+                        ]
+                    )
+                ->shouldReceive('getLicenceIdForApplication')
+                    ->with('123')
+                    ->andReturn(987)
                 ->getMock()
         );
 
