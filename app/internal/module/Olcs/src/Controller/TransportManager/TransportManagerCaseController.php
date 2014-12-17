@@ -42,6 +42,11 @@ class TransportManagerCaseController extends TransportManagerController
             'limit'   => $this->params()->fromRoute('limit', 10),
         ];
 
+        $params = array_merge(
+            $params,
+            $this->getRequest()->getQuery()->toArray()
+        );
+
         $results = $this->getServiceLocator()
                         ->get('DataServiceManager')
                         ->get('Olcs\Service\Data\Cases')->fetchList($params);
