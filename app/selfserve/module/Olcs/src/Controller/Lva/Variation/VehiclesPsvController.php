@@ -10,6 +10,7 @@ namespace Olcs\Controller\Lva\Variation;
 use Olcs\Controller\Lva\AbstractGenericVehiclesPsvController;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
 use Common\Controller\Lva\Traits;
+use Zend\Form\Form;
 
 /**
  * External Variation Vehicles PSV Controller
@@ -21,8 +22,7 @@ class VehiclesPsvController extends AbstractGenericVehiclesPsvController
     use VariationControllerTrait,
         Traits\PsvLicenceControllerTrait,
         // @NOTE: AC says variations behave exactly as per licences, so...
-        Traits\LicenceGenericVehiclesControllerTrait,
-        Traits\PsvGoodsLicenceVariationControllerTrait;
+        Traits\LicenceGenericVehiclesControllerTrait;
 
     use Traits\PsvGoodsLicenceVariationControllerTrait {
             Traits\PsvGoodsLicenceVariationControllerTrait::alterFormForLva as traitAlterFormForLva;

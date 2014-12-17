@@ -11,6 +11,7 @@ namespace Olcs\Controller\Lva\Variation;
 use Olcs\Controller\Lva\AbstractGenericVehiclesGoodsController;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
 use Common\Controller\Lva\Traits;
+use Zend\Form\Form;
 
 /**
  * External Variation Vehicles Controller
@@ -22,7 +23,6 @@ class VehiclesController extends AbstractGenericVehiclesGoodsController
 {
     use VariationControllerTrait,
         Traits\ApplicationGenericVehiclesControllerTrait,
-        Traits\PsvGoodsLicenceVariationControllerTrait,
         Traits\ApplicationGoodsVehiclesControllerTrait {
             Traits\ApplicationGoodsVehiclesControllerTrait::alterTable as traitAlterTable;
         }
