@@ -637,8 +637,6 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
 
     /**
      * Test reassign action post
-     *
-     * @todo this isn't testing what it should be, i.e. POST data
      */
     public function testReassignActionPost()
     {
@@ -685,14 +683,23 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
                 )
             );
 
-        $toArray = $this->getMock('\stdClass', ['toArray']);
-        $toArray->expects($this->any())
+        $post = $this->getMock('\stdClass', ['toArray']);
+        $post->expects($this->any())
             ->method('toArray')
-            ->will($this->returnValue([]));
+            ->will(
+                $this->returnValue(
+                    [
+                        'assignment' => [
+                            'assignedToTeam' => 3,
+                            'assignedToUser' => 4
+                        ],
+                    ]
+                )
+            );
 
         $this->request->expects($this->any())
             ->method('getPost')
-            ->will($this->returnValue($toArray));
+            ->will($this->returnValue($post));
 
         $this->request->expects($this->any())
             ->method('isPost')
