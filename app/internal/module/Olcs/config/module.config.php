@@ -307,7 +307,8 @@ return array(
             'Olcs\Listener\RouteParam\Marker',
             'Olcs\Listener\RouteParam\Application',
             'Olcs\Listener\RouteParam\TransportManager',
-            'Olcs\Listener\RouteParam\Action'
+            'Olcs\Listener\RouteParam\Action',
+            'Olcs\Listener\RouteParam\BusRegId'
         ]
     ],
     'data_services' => [
