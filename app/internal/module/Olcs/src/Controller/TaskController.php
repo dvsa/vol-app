@@ -319,6 +319,18 @@ class TaskController extends AbstractController
                     $linkDisplay ? $linkDisplay : $busReg['regNo']
                 );
                 break;
+            case 'case':
+                $case = $this->getCase($taskTypeId);
+                $licenceId = $case['licence']['id'];
+                $url = sprintf(
+                    '<a href="%s">%s</a>',
+                    $this->url()->fromRoute(
+                        'case',
+                        ['case' => $taskTypeId]
+                    ),
+                    $linkDisplay ? $linkDisplay : $case['id']
+                );
+                break;
             default:
                 $url='';
         }
@@ -412,6 +424,10 @@ class TaskController extends AbstractController
                 $busReg = $this->getBusReg($taskTypeId);
                 $licenceId = $busReg['licence']['id'];
                 $params = ['busRegId' => $taskTypeId, 'licence' => $licenceId];
+                break;
+            case 'case':
+                $route = 'case_processing_tasks';
+                $params = ['case' => $taskTypeId];
                 break;
             default:
                 // no type - call from the home page, need to redirect back after action
@@ -539,6 +555,13 @@ class TaskController extends AbstractController
                 $data['busReg']  = $taskTypeId;
                 $busReg = $this->getBusReg($taskTypeId);
                 $data['licence'] = $busReg['licence']['id'];
+                break;
+            case 'case':
+                $data['case'] = $taskTypeId;
+                $case = $this->getCase($taskTypeId);
+                if (isset($case['licence']['id'])) {
+                    $data['licence'] = $case['licence']['id'];
+                }
                 break;
             default:
                 break;
@@ -685,4 +708,17 @@ class TaskController extends AbstractController
             ->get('Entity\BusReg')
             ->getDataForTasks($busRegId);
     }
+
+    /**
+     * Gets the case by ID.
+     *
+     * @param integer $id
+     * @return array
+     */
+    public function getCase($id)
+    {
+        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\Cases');
+        return $service->fetchCaseData($id);
+    }
+
 }
