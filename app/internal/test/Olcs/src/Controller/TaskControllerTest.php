@@ -1346,9 +1346,8 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
             ->andReturn([]);
 
         // mock lookup bus reg details
-        $sut->shouldReceive('makeRestCall')
-            //->once()
-            ->with('BusReg', 'GET', m::any())
+        $sut->shouldReceive('getBusReg')
+            ->with(123)
             ->andReturn(
                 [
                     'id' => 123,
