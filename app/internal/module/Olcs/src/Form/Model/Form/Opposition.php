@@ -9,7 +9,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("Opposition")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true, "label":"Opposition", "action_lcfirst": true})
+ * @Form\Options({"prefer_form_input_filter": true, "label":"Opposition", "action_lcfirst": false})
  */
 class Opposition
 {
@@ -19,12 +19,6 @@ class Opposition
      */
     public $fields = null;
 
-    /**
-     * @Form\Name("opposer-address")
-     * @Form\Options({"label":"opposer-address"})
-     * @Form\ComposedObject("Common\Form\Model\Form\Lva\Fieldset\RegisteredAddress")
-     */
-    public $opposerAddress = null;
 
     /**
      * @Form\Name("base")

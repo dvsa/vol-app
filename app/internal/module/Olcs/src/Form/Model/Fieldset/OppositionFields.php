@@ -64,9 +64,9 @@ class OppositionFields
      * @Form\Filter({"name":"DateSelectNullifier"})
      * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
-     */
+     *
     public $outOfRepresentationDate = null;
-
+*/
     /**
      * @Form\Options({
      *     "label": "Out of objection",
@@ -81,9 +81,9 @@ class OppositionFields
      * @Form\Filter({"name":"DateSelectNullifier"})
      * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
-     */
+     *
     public $outOfObjectionDate = null;
-
+*/
     /**
      * @Form\Attributes({"id":"opposerType","placeholder":"", "class":"chosen-select-medium"})
      * @Form\Required(true)
@@ -128,7 +128,7 @@ class OppositionFields
     public $copied;
 
     /**
-     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Copied"})
+     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Willing to attend PI"})
      * @Form\Type("OlcsCheckbox")
      */
     public $willingToAttendPi;
@@ -167,4 +167,76 @@ class OppositionFields
      */
     public $affectedCentre;
 
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $id = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $version = null;
+
+    /**
+     * @Form\Attributes({"value":"ct_obj"})
+     * @Form\Type("Hidden")
+     */
+    public $contactDetailsType = null;
+
+    /**
+     * @Form\Attributes({"placeholder":"","class":"medium"})
+     * @Form\Options({"label":"Contact first name"})
+     * @Form\Type("Text")
+     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":35}})
+     */
+    public $forename = null;
+
+    /**
+     * @Form\Attributes({"placeholder":"","class":"medium"})
+     * @Form\Options({"label":"Contact last name"})
+     * @Form\Type("Text")
+     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":35}})
+     */
+    public $familyName = null;
+
+    /**
+     * @Form\Attributes({"placeholder":"","class":"medium"})
+     * @Form\Options({"label":"Phone"})
+     * @Form\Type("Text")
+     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":35}})
+     */
+    public $phone = null;
+
+    /**
+     * @Form\Attributes({"class":"medium"})
+     * @Form\Options({"label":"Email"})
+     * @Form\Required(false)
+     * @Form\Type("Text")
+     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Validator({"name":"Zend\Validator\EmailAddress"})
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5,"max":255}})
+     */
+    public $emailAddress = null;
+
+    /**
+     * @Form\Name("opposerContactDetails")
+     * @Form\Options({"label":""})
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\RequestorsAddress")
+     */
+    public $opposerContactDetails = null;
+
+    /**
+     * @Form\Attributes({"class":"extra-long","id":""})
+     * @Form\Options({"label":"Notes"})
+     * @Form\Required(false)
+     * @Form\Type("TextArea")
+     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5,"max":4000}})
+     */
+    public $notes = null;
 }
