@@ -41,10 +41,11 @@ class TransportManagerCaseController extends TransportManagerController
             'order'   => $this->params()->fromRoute('order', 'desc'),
             'limit'   => $this->params()->fromRoute('limit', 10),
         ];
-
+        //die('<pre>' . print_r($this->getRequest()->getQuery()->toArray(), 1));
         $params = array_merge(
             $params,
-            $this->getRequest()->getQuery()->toArray()
+            $this->getRequest()->getQuery()->toArray(),
+            array('query' => $this->getRequest()->getQuery())
         );
 
         $results = $this->getServiceLocator()
@@ -56,5 +57,11 @@ class TransportManagerCaseController extends TransportManagerController
         $view->setTemplate('licence/cases');
 
         return $this->renderView($view);
+    }
+
+    public function setRequest(\Zend\Http\Request $request)
+    {
+        $this->request = $request;
+        return $this;
     }
 }
