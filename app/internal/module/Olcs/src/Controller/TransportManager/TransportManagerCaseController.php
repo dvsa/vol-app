@@ -41,7 +41,7 @@ class TransportManagerCaseController extends TransportManagerController
             'order'   => $this->params()->fromRoute('order', 'desc'),
             'limit'   => $this->params()->fromRoute('limit', 10),
         ];
-        //die('<pre>' . print_r($this->getRequest()->getQuery()->toArray(), 1));
+
         $params = array_merge(
             $params,
             $this->getRequest()->getQuery()->toArray(),
