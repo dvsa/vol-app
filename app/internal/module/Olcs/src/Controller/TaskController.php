@@ -676,20 +676,13 @@ class TaskController extends AbstractController
     /**
      * Gets the Bus Registration by ID.
      *
-     * @param int $id
+     * @param int $busRegId
      * @return array
      */
-    protected function getBusReg($id)
+    protected function getBusReg($busRegId)
     {
-
-        $bundle = [
-            'children' => [
-                'licence' => [
-                    'properties' => ['id'],
-                ],
-            ]
-        ];
-
-        return $this->makeRestCall('BusReg', 'GET', array('id' => $id, 'bundle' => json_encode($bundle)));
+        return $this->getServiceLocator()
+            ->get('Entity\BusReg')
+            ->getDataForTasks($busRegId);
     }
 }
