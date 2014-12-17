@@ -13,6 +13,13 @@
     <h1><?php echo $this->translate('licence.overview.title'); ?></h1>
   </div><!-- end .page-header__wrapper -->
   <ul class="page-header__actions">
+    <?php if (isset($this->shouldShowCreateVariation) && $this->shouldShowCreateVariation): ?>
+    <li>
+        <a href="<?php echo $this->url('lva-licence/variation', [], [], true); ?>" class="page-header__action js-modal-ajax">
+            <?php echo $this->translate('licence.variation'); ?>
+        </a>
+    </li>
+    <?php endif; ?>
     <li><a href="" class="page-header__action"><?php echo $this->translate('licence.print'); ?></a></li>
     <li><a href="" class="page-header__action"><?php echo $this->translate('licence.surrender'); ?></a></li>
   </ul>
