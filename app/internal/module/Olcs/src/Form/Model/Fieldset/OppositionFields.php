@@ -10,16 +10,15 @@ use Zend\Form\Annotation as Form;
  */
 class OppositionFields
 {
+
     /**
-     * @Form\Attributes({"id":"oppositionType","placeholder":"", "class":"chosen-select-medium"})
-     * @Form\Required(true)
+     * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
      *     "label": "Opposition type",
      *     "empty_option": "Please Select",
-     *     "help-block": "Please select a type",
      *     "disable_inarray_validator": false,
-     *     "category": "obj_type",
-     *     "use_groups": "false"
+     *     "help-block": "Please select an objector type",
+     *     "category": "obj_type"
      * })
      * @Form\Type("DynamicSelect")
      */
@@ -84,16 +83,15 @@ class OppositionFields
      *
     public $outOfObjectionDate = null;
 */
+
     /**
-     * @Form\Attributes({"id":"opposerType","placeholder":"", "class":"chosen-select-medium"})
-     * @Form\Required(true)
+     * @Form\Attributes({"id":"opposerType","placeholder":""})
      * @Form\Options({
      *     "label": "Objector type",
      *     "empty_option": "Please Select",
-     *     "help-block": "Please select a type",
      *     "disable_inarray_validator": false,
-     *     "category": "opposer_type",
-     *     "use_groups": "false"
+     *     "help-block": "Please select an objector type",
+     *     "category": "opposer_type"
      * })
      * @Form\Type("DynamicSelect")
      */
@@ -154,13 +152,14 @@ class OppositionFields
     public $oppositionStatus;
 
     /**
-     * @Form\Attributes({"id":"status","placeholder":"", "class":"chosen-select-medium","multiple":"multiple"})
+     * @Form\Attributes({"id":"affectedCentre","placeholder":"", "class":"chosen-select-medium","multiple":"multiple"})
      * @Form\Required(false)
      * @Form\Options({
      *     "label": "Affected centre",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "context": "",
+     *     "context": "operatingCentre",
+     *     "service_name": "Common/Service/Data/LicenceListDataService",
      *     "use_groups": "false"
      * })
      * @Form\Type("DynamicSelect")
