@@ -248,8 +248,8 @@ return array(
                         array(
                             'id' => 'case_processing_tasks',
                             'label' => 'Tasks',
-                            'route' => 'processing_tasks',
-                            'action' => 'redirect',
+                            'route' => 'case_processing_tasks',
+                            'action' => 'index',
                             'use_route_match' => true,
                         ),
                         array(
