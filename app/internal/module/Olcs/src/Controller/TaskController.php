@@ -338,20 +338,6 @@ class TaskController extends AbstractController
     }
 
     /**
-     * Override the parent getListDataFromBackend method simply to save us constantly having to
-     * supply the $showAll parameter as 'Please select'
-     */
-    protected function getListDataFromBackend(
-        $entity,
-        $data = array(),
-        $titleKey = 'name',
-        $primaryKey = 'id',
-        $showAll = 'Please select'
-    ) {
-        return parent::getListDataFromBackend($entity, $data, $titleKey, $primaryKey, $showAll);
-    }
-
-    /**
      * Callback invoked when the form is valid
      *
      * @param array $data

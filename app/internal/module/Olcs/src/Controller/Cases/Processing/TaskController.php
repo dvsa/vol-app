@@ -73,6 +73,7 @@ class TaskController extends OlcsController\CrudAbstract
 
         $licenceId = $this->getLicenceIdForCase();
 
+        // we want all tasks linked to licence, see https://jira.i-env.net/browse/OLCS-5842
         $filters = $this->mapTaskFilters(
             array(
                 'licenceId'      => $licenceId,
