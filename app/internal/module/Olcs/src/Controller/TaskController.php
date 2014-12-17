@@ -11,6 +11,7 @@ namespace Olcs\Controller;
 
 use Zend\View\Model\ViewModel;
 use Olcs\Controller\Traits\TaskSearchTrait;
+use Common\Exception\ResourceNotFoundException;
 
 /**
  * Task Controller
@@ -617,7 +618,7 @@ class TaskController extends AbstractController
         if (!$taskType) {
             $taskId = $this->getFromRoute('task');
             if (!$taskId) {
-                throw new \Exception('No task id provided');
+                throw new ResourceNotFoundException('No task id provided');
             }
 
             $taskDetails = $this->getTaskDetails($taskId);
