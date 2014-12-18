@@ -1,22 +1,22 @@
 <?php
 /**
- * Transport manager task controller tests
+ * Bus Registration task controller tests
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-namespace OlcsTest\Controller\TransportManager\Processing;
+namespace OlcsTest\Controller\Bus\Processing;
 
-use Olcs\Controller\TransportManager\Processing\TransportManagerProcessingTaskController as Sut;
+use Olcs\Controller\Bus\Processing\BusProcessingTaskController as Sut;
 use Olcs\TestHelpers\ControllerPluginManagerHelper;
 use CommonTest\Traits\MockDateTrait;
 use Mockery as m;
 
 /**
- * Transport manager task controller tests
+ * Bus Registration task controller tests
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class TransportManagerProcessingTaskControllerTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
+class BusProcessingTaskControllerTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     use MockDateTrait;
 
@@ -46,27 +46,29 @@ class TransportManagerProcessingTaskControllerTest extends \Mockery\Adapter\Phpu
      */
     public function testIndexActionWithDefaultParams()
     {
-        $tmId = 69;
+        $busRegId  = 69;
+        $licenceId = 110;
 
         // mock tmId route param
         $mockParams = $this->pluginManager->get('params', '');
-        $mockParams->shouldReceive('fromRoute')->with('transportManager')->andReturn($tmId);
+        $mockParams->shouldReceive('fromRoute')->with('busRegId')->andReturn($busRegId);
+        $mockParams->shouldReceive('fromRoute')->with('licence')->andReturn($licenceId);
 
         // mock date
-        $date = '2014-12-13';
+        $date = '2014-12-10';
         $this->mockDate($date);
 
         // mock task REST calls
         $defaultTaskSearchParams = [
-            'date'               => 'tdt_today',
-            'status'             => 'tst_open',
-            'sort'               => 'actionDate',
-            'order'              => 'ASC',
-            'page'               => 1,
-            'limit'              => 10,
-            'transportManagerId' => $tmId,
-            'isClosed'           => false,
-            'actionDate'         => '<= 2014-12-13',
+            'date'       => 'tdt_today',
+            'status'     => 'tst_open',
+            'sort'       => 'actionDate',
+            'order'      => 'ASC',
+            'page'       => 1,
+            'limit'      => 10,
+            'licenceId'  => $licenceId,
+            'isClosed'   => false,
+            'actionDate' => '<= 2014-12-10',
         ];
 
         $restHelperMock = m::mock('Common\Service\Helper\RestHelperService')
@@ -93,10 +95,31 @@ class TransportManagerProcessingTaskControllerTest extends \Mockery\Adapter\Phpu
                 ->andReturn([])
             ->getMock();
 
-        // mock TM details rest call
+        // mock Bus Reg details rest call
         $restHelperMock->shouldReceive('makeRestCall')
-            ->with('TransportManager', 'GET', $tmId, m::any())
-            ->andReturn([])
+            ->with(
+                'BusReg',
+                'GET',
+                [
+                    'id' => 69,
+                    'bundle' => '{"children":{"licence":{"properties":"ALL",'
+                        . '"children":["organisation"]},"status":{"properties":"ALL"}}}'
+                ],
+                m::any()
+            )
+            ->andReturn(
+                [
+                    'id' => 123,
+                    'regNo' => 'BR1234',
+                    'variationNo' => 99,
+                    'licence' => [
+                        'id' => 110,
+                        'licNo' => 'AB1234',
+                        'organisation' => ['name' => 'org1'],
+                    ],
+                    'status' => ['description' => 'status'],
+                ]
+            )
             ->getMock();
 
         $this->sm->setService('Helper\Rest', $restHelperMock);
@@ -110,6 +133,13 @@ class TransportManagerProcessingTaskControllerTest extends \Mockery\Adapter\Phpu
                 ->shouldReceive('removeColumn')->twice()
                 ->getMock()
         );
+
+        // mock nav helper
+        $nav = m::mock('\StdClass')
+            ->shouldReceive('findOneBy')
+            ->with('id', 'licence_bus_processing')
+            ->getMock();
+        $this->sm->setService('Navigation', $nav);
 
         $sut = new Sut;
         $sut->setPluginManager($this->pluginManager);
@@ -125,10 +155,10 @@ class TransportManagerProcessingTaskControllerTest extends \Mockery\Adapter\Phpu
      * @group task
      * @dataProvider actionDp
      */
-    public function testIndexActionWithActionSubmitted($tmId, $taskId, $action, $expectedRouteParams)
+    public function testIndexActionWithActionSubmitted($busRegId, $taskId, $action, $expectedRouteParams)
     {
 
-        $sut = m::mock('Olcs\Controller\TransportManager\Processing\TransportManagerProcessingTaskController')
+        $sut = m::mock('\Olcs\Controller\Bus\Processing\BusProcessingTaskController')
             ->makePartial();
 
         $sut->shouldReceive('getRequest')
@@ -152,8 +182,8 @@ class TransportManagerProcessingTaskControllerTest extends \Mockery\Adapter\Phpu
             );
 
         $sut->shouldReceive('getFromRoute')
-            ->with('transportManager')
-            ->andReturn($tmId);
+            ->with('busRegId')
+            ->andReturn($busRegId);
 
         $sut->shouldReceive('redirect')
             ->andReturn(
@@ -174,50 +204,51 @@ class TransportManagerProcessingTaskControllerTest extends \Mockery\Adapter\Phpu
      */
     public function actionDp()
     {
-        $tmId   = 69;
-        $taskId = 101;
+        $busRegId  = 69;
+        $licenceId = 110;
+        $taskId    = 101;
 
         return [
             [
-                $tmId,
+                $busRegId,
                 null,
                 'Create Task',
                 [
                     'action' => 'add',
-                    'type'   => 'tm',
-                    'typeId' => $tmId,
+                    'type'   => 'busreg',
+                    'typeId' => $busRegId,
                 ],
             ],
             [
-                $tmId,
+                $busRegId,
                 $taskId,
                 'Re-assign Task',
                 [
                     'action' => 'reassign',
-                    'type'   => 'tm',
-                    'typeId' => $tmId,
+                    'type'   => 'busreg',
+                    'typeId' => $busRegId,
                     'task'   => $taskId,
                 ],
             ],
             [
-                $tmId,
+                $busRegId,
                 $taskId,
                 'Edit',
                 [
                     'action' => 'edit',
-                    'type'   => 'tm',
-                    'typeId' => $tmId,
+                    'type'   => 'busreg',
+                    'typeId' => $busRegId,
                     'task'   => $taskId,
                 ],
             ],
             [
-                $tmId,
+                $busRegId,
                 $taskId,
                 'Close',
                 [
                     'action' => 'close',
-                    'type'   => 'tm',
-                    'typeId' => $tmId,
+                    'type'   => 'busreg',
+                    'typeId' => $busRegId,
                     'task'   => $taskId,
                 ],
             ],

@@ -46,44 +46,35 @@ return array(
                 $routeMatch = $router->match($request);
                 switch ($routeMatch->getMatchedRouteName()) {
                     case 'licence/processing/tasks':
-                        $url = $this->generateUrl(
-                            array(
-                                'task' => $row['id'],
-                                'action' => 'edit',
-                                'type' => 'licence',
-                                'typeId' => $row['linkId']
-                            ),
-                            'task_action'
-                        );
+                        $routeParams = ['type' => 'licence', 'typeId' => $row['linkId']];
                         break;
                     case 'lva-application/processing/tasks':
-                        $url = $this->generateUrl(
-                            array(
-                                'task' => $row['id'],
-                                'action' => 'edit',
-                                'type' => 'application',
-                                'typeId' => $row['applicationId']
-                            ),
-                            'task_action'
-                        );
+                        $routeParams = ['type' => 'application', 'typeId' => $row['applicationId']];
                         break;
                     case 'transport-manager/processing/tasks':
-                        $url = $this->generateUrl(
-                            array(
-                                'task' => $row['id'],
-                                'action' => 'edit',
-                                'type' => 'tm',
-                                'typeId' => $row['transportManagerId']
-                            ),
-                            'task_action'
-                        );
+                        $routeParams = ['type' => 'tm', 'typeId' => $row['transportManagerId']];
+                        break;
+                    case 'licence/bus-processing/tasks':
+                        $routeParams = [
+                            'type' => 'busreg',
+                            'typeId' => $row['busRegId'],
+                            'licence' => $row['licenceId']
+                        ];
                         break;
                     default:
-                        $url = $this->generateUrl(
-                            array('task' => $row['id'], 'action' => 'edit'),
-                            'task_action'
-                        );
+                        $routeParams = [];
+                        break;
                 }
+                $url = $this->generateUrl(
+                    array_merge(
+                        [
+                            'task' => $row['id'],
+                            'action' => 'edit',
+                        ],
+                        $routeParams
+                    ),
+                    'task_action'
+                );
                 return '<a href="'
                     . $url
                     . '" class=js-modal-ajax>'
