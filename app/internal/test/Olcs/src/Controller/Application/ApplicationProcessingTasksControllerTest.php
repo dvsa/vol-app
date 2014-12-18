@@ -9,6 +9,7 @@ namespace OlcsTest\Controller\Application\Processing;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use Common\Service\Entity\LicenceEntityService;
+use CommonTest\Traits\MockDateTrait;
 
 /**
  * Application Processing controller tests
@@ -17,7 +18,7 @@ use Common\Service\Entity\LicenceEntityService;
  */
 class ApplicationProcessingTasksControllerTest extends AbstractHttpControllerTestCase
 {
-    // (all this expected data is duplicated from LicenceProcessingTasksControllerTest)
+    use MockDateTrait;
 
     private $taskSearchViewExpectedData = [
         'date'  => 'tdt_today',
@@ -62,6 +63,11 @@ class ApplicationProcessingTasksControllerTest extends AbstractHttpControllerTes
         'sort' => 'description'
     ];
 
+    /**
+     * @var Zend\ServiceManager\ServiceManager
+     */
+    protected $sm;
+
     public function setUp()
     {
         $this->setApplicationConfig(
@@ -80,7 +86,6 @@ class ApplicationProcessingTasksControllerTest extends AbstractHttpControllerTes
                 'getFromRoute',
                 'params',
                 'redirect',
-                'getServiceLocator',
                 'setTableFilters',
                 'getSearchForm',
                 'setupMarkers'
@@ -100,21 +105,24 @@ class ApplicationProcessingTasksControllerTest extends AbstractHttpControllerTes
             ->method('getRequest')
             ->will($this->returnValue($request));
 
-        $mockServiceLocator = $this->getMock('\StdClass', ['get']);
-        $mockServiceLocator->expects($this->any())
-            ->method('get')
-            ->will($this->returnCallback([$this, 'getServiceCallback']));
-        $this->controller->expects($this->any())
-            ->method('getServiceLocator')
-            ->will($this->returnValue($mockServiceLocator));
-
         $this->controller->expects($this->any())
             ->method('makeRestCall')
             ->will($this->returnCallback(array($this, 'mockRestCall')));
 
-        $this->taskSearchViewExpectedData['actionDate'] = '<= ' . date('Y-m-d');
-        $this->extendedListData['actionDate'] = '<= ' . date('Y-m-d');
-        $this->extendedListDataVariation1['actionDate'] = '<= ' . date('Y-m-d');
+        $this->sm = \OlcsTest\Bootstrap::getServiceManager();
+
+        $this->controller->setServiceLocator($this->sm);
+
+        $this->sm->setService('Entity\Application', $this->getMockApplicationEntityService());
+        $this->sm->setService('router', $this->getMock('Zend\Mvc\Router\RouteStackInterface'));
+
+        // mock date
+        $date = '2014-12-11';
+        $this->mockDate($date);
+
+        $this->taskSearchViewExpectedData['actionDate'] = '<= 2014-12-11';
+        $this->extendedListData['actionDate'] = '<= 2014-12-11';
+        $this->extendedListDataVariation1['actionDate'] = '<= 2014-12-11';
 
         parent::setUp();
     }
@@ -257,7 +265,7 @@ class ApplicationProcessingTasksControllerTest extends AbstractHttpControllerTes
 
     }
 
-     /**
+    /**
      * Test index action with add action submitted
      * @group task
      */

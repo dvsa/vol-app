@@ -155,6 +155,7 @@ return array(
             'BusProcessingNoteController' => 'Olcs\Controller\Bus\Processing\BusProcessingNoteController',
             'BusProcessingRegistrationHistoryController' =>
                 'Olcs\Controller\Bus\Processing\BusProcessingRegistrationHistoryController',
+            'BusProcessingTaskController' => 'Olcs\Controller\Bus\Processing\BusProcessingTaskController',
             'BusFeesController' => 'Olcs\Controller\Bus\Fees\BusFeesController',
             'BusFeesPlaceholderController' => 'Olcs\Controller\Bus\Fees\BusFeesPlaceholderController',
             'BusServiceController' => 'Olcs\Controller\Bus\Service\BusServiceController',
@@ -270,13 +271,15 @@ return array(
             'Olcs\Service\Data\BusNoticePeriod' => 'Olcs\Service\Data\BusNoticePeriod',
             'Olcs\Service\Data\BusServiceType' => 'Olcs\Service\Data\BusServiceType',
             'Olcs\Service\Data\User' => 'Olcs\Service\Data\User',
+            'Olcs\Service\Data\Team' => 'Olcs\Service\Data\Team',
             'Olcs\Service\Data\PresidingTc' => 'Olcs\Service\Data\PresidingTc',
             'Olcs\Service\Data\SiPenaltyType' => 'Olcs\Service\Data\SiPenaltyType',
             'Olcs\Service\Data\Submission' => 'Olcs\Service\Data\Submission',
             'Olcs\Service\Data\SubmissionSectionComment' => 'Olcs\Service\Data\SubmissionSectionComment',
             'Olcs\Service\Data\Fee' => 'Olcs\Service\Data\Fee',
             'Olcs\Service\Data\Search\SearchTypeManager' => 'Olcs\Service\Data\Search\SearchTypeManagerFactory',
-            'Olcs\Service\Data\Pi' => 'Olcs\Service\Data\Pi'
+            'Olcs\Service\Data\Pi' => 'Olcs\Service\Data\Pi',
+            'Olcs\Service\Data\TaskSubCategory' => 'Olcs\Service\Data\TaskSubCategory',
         )
     ),
     'form_elements' => [
