@@ -320,15 +320,13 @@ class TaskController extends AbstractController
                 );
                 break;
             case 'case':
-                $case = $this->getCase($taskTypeId);
-                $licenceId = $case['licence']['id'];
                 $url = sprintf(
                     '<a href="%s">%s</a>',
                     $this->url()->fromRoute(
                         'case',
                         ['case' => $taskTypeId]
                     ),
-                    $linkDisplay ? $linkDisplay : $case['id']
+                    $linkDisplay ? $linkDisplay : $taskTypeId
                 );
                 break;
             default:
