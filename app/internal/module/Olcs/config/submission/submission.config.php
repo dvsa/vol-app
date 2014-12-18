@@ -484,7 +484,15 @@ return array(
                         )
                     ),
                     'complainantContactDetails' => array(
-                        'properties' => 'ALL'
+                        'properties' => 'ALL',
+                        'children' => array(
+                            'person' => array(
+                                'properties' => array(
+                                    'forename',
+                                    'familyName'
+                                )
+                            )
+                        )
                     )
                 )
             )
