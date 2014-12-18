@@ -154,10 +154,21 @@ trait FeesActionTrait
         $id = $this->params()->fromRoute('fee', null);
         $feesService = $this->getServiceLocator()->get('Olcs\Service\Data\Fee');
         $fee = $feesService->getFee($id);
-        $form = $this->alterFeeForm($this->getForm('fee'), $fee['feeStatus']['id']);
-        $form = $this->setDataFeeForm($fee, $form);
 
-        $this->processForm($form);
+        // The statuses for which to remove the form
+        $noFormStates = [
+            FeeEntityService::STATUS_PAID,
+            FeeEntityService::STATUS_CANCELLED
+        ];
+
+        $form = null;
+
+        if (!in_array($fee['feeStatus']['id'], $noFormStates)) {
+            $form = $this->alterFeeForm($this->getForm('fee'), $fee['feeStatus']['id']);
+            $form = $this->setDataFeeForm($fee, $form);
+            $this->processForm($form);
+        }
+
         if ($this->getResponse()->getContent() !== '') {
             return $this->getResponse();
         }
@@ -172,7 +183,7 @@ trait FeesActionTrait
             'receiptNo' => $fee['receiptNo'],
             'receivedAmount' => $fee['receivedAmount'],
             'receivedDate' => $fee['receivedDate'],
-            'paymentMethod' => isset($fee['paymentMethod']['description']) ? : '',
+            'paymentMethod' => isset($fee['paymentMethod']['description']) ? $fee['paymentMethod']['description'] : '',
             'processedBy' => isset($fee['lastModifiedBy']['name']) ? $fee['lastModifiedBy']['name'] : ''
         ];
         $view = new ViewModel($viewParams);
@@ -278,11 +289,6 @@ trait FeesActionTrait
                 $form->remove('form-actions');
                 $form->get('fee-details')->get('waiveReason')->setAttribute('disabled', 'disabled');
                 break;
-
-            case FeeEntityService::STATUS_WAIVED:
-            case FeeEntityService::STATUS_CANCELLED:
-                $form = null;
-                break;
         }
         return $form;
     }
@@ -349,6 +355,7 @@ trait FeesActionTrait
             'id' => $data['fee-details']['id'],
             'version' => $data['fee-details']['version'],
             'waiveReason' => $data['fee-details']['waiveReason'],
+            'paymentMethod'  => FeePaymentEntityService::METHOD_WAIVE,
             'feeStatus' => FeeEntityService::STATUS_WAIVED
         ];
 

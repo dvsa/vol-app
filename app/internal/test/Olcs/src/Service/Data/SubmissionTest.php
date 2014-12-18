@@ -469,8 +469,10 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                             'description' => 'test description 2',
                             'complaintDate' => '2012-06-15T00:00:00+0100',
                             'complainantContactDetails' => [
-                                'forename' => 'John',
-                                'familyName' => 'Smith',
+                                'person' => [
+                                    'forename' => 'John',
+                                    'familyName' => 'Smith'
+                                ]
                             ]
                         ],
                         1 => [
@@ -479,8 +481,10 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
                             'description' => 'test description 1',
                             'complaintDate' => '2011-06-15T00:00:00+0100',
                             'complainantContactDetails' => [
-                                'forename' => 'John',
-                                'familyName' => 'Smith',
+                                'person' => [
+                                    'forename' => 'John',
+                                    'familyName' => 'Smith'
+                                ]
                             ]
                         ],
                     ],
