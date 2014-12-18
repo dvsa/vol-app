@@ -172,7 +172,7 @@ trait FeesActionTrait
             'receiptNo' => $fee['receiptNo'],
             'receivedAmount' => $fee['receivedAmount'],
             'receivedDate' => $fee['receivedDate'],
-            'paymentMethod' => isset($fee['paymentMethod']['description']) ? : '',
+            'paymentMethod' => isset($fee['paymentMethod']['description']) ? $fee['paymentMethod']['description'] : '',
             'processedBy' => isset($fee['lastModifiedBy']['name']) ? $fee['lastModifiedBy']['name'] : ''
         ];
         $view = new ViewModel($viewParams);
@@ -349,6 +349,7 @@ trait FeesActionTrait
             'id' => $data['fee-details']['id'],
             'version' => $data['fee-details']['version'],
             'waiveReason' => $data['fee-details']['waiveReason'],
+            'paymentMethod'  => FeePaymentEntityService::METHOD_WAIVE,
             'feeStatus' => FeeEntityService::STATUS_WAIVED
         ];
 
