@@ -75,7 +75,7 @@ trait ApplicationControllerTrait
         $filter = $this->getServiceLocator()->get('Helper\String');
 
         $sections = array(
-            'overview' => array('class' => 'no-background', 'route' => 'lva-' . $this->lva, 'enabled' => true)
+            'overview' => array('class' => 'no-background', 'route' => 'lva-application', 'enabled' => true)
         );
 
         $accessibleSections = $this->setEnabledAndCompleteFlagOnSections(
@@ -99,7 +99,7 @@ trait ApplicationControllerTrait
 
             $sections[$section] = array_merge(
                 $settings,
-                array('class' => $class, 'route' => 'lva-' . $this->lva . '/' . $section)
+                array('class' => $class, 'route' => 'lva-application/' . $section)
             );
         }
 
