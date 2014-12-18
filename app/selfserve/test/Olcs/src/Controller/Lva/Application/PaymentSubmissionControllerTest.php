@@ -82,6 +82,7 @@ class PaymentSubmissionControllerTest extends MockeryTestCase
             'actionDate' => '2014-01-01',
             'assignedByUser' => 1,
             'assignedToUser' => 1,
+            'assignedToTeam' => 2,
             'isClosed' => 0,
             'application' => 1,
             'licence' => 1
