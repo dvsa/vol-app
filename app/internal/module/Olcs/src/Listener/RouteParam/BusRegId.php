@@ -24,6 +24,8 @@ class BusRegId implements ListenerAggregateInterface, FactoryInterface
     use ViewHelperManagerAwareTrait;
     use ServiceLocatorAwareTrait;
 
+    protected $busRegService;
+
     /**
      * Attach one or more listeners
      *
@@ -36,7 +38,6 @@ class BusRegId implements ListenerAggregateInterface, FactoryInterface
      */
     public function attach(EventManagerInterface $events)
     {
-        die('here');
         $this->listeners[] = $events->attach(RouteParams::EVENT_PARAM . 'busRegId', [$this, 'onBusRegId'], 1);
     }
 
@@ -47,7 +48,7 @@ class BusRegId implements ListenerAggregateInterface, FactoryInterface
     {
         $context = $e->getContext();
         $urlPlugin = $this->getViewHelperManager()->get('Url');
-        $busReg = $this->getBusReg($e);
+        $busReg = $this->getBusRegService()->fetchOne($e->getValue());
 
         $licUrl = $urlPlugin->__invoke('licence', ['licence' => $busReg['licence']['id']], [], true);
         $title = '<a href="' . $licUrl . '">' . $busReg['licence']['licNo'] . '</a>' . '/' . $busReg['routeNo'];
@@ -65,29 +66,20 @@ class BusRegId implements ListenerAggregateInterface, FactoryInterface
         $placeholder->getContainer('pageSubtitle')->append($subTitle);
     }
 
-    public function getBusReg(RouteParam $e)
+    /**
+     * @return mixed
+     */
+    public function getBusRegService()
     {
-        $bundle = [
-            'children' => [
-                'licence' => [
-                    'properties' => 'ALL',
-                    'children' => [
-                        'organisation'
-                    ]
-                ],
-                'status' => [
-                    'properties' => 'ALL'
-                ]
-            ]
-        ];
+        return $this->busRegService;
+    }
 
-        $restClient = $this->getServiceLocator()->get('Helper\Rest');
-
-        return $restClient->makeRestCall(
-            'BusReg',
-            'GET',
-            array('id' => $e->getValue(), 'bundle' => json_encode($bundle))
-        );
+    /**
+     * @param mixed $busRegService
+     */
+    public function setBusRegService($busRegService)
+    {
+        $this->busRegService = $busRegService;
     }
 
     /**
@@ -100,6 +92,8 @@ class BusRegId implements ListenerAggregateInterface, FactoryInterface
     {
         $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
         $this->setServiceLocator($serviceLocator);
+
+        $this->setBusRegService($serviceLocator->get('DataServiceManager')->get('Generic\Service\Data\BusReg'));
 
         return $this;
     }

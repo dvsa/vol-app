@@ -20,6 +20,7 @@ use Zend\View\Model\ViewModel;
  * @author S Lizzio <shaun.lizzio@valtech.co.uk>
  */
 class ComplaintController extends OlcsController\CrudAbstract
+    implements OlcsController\Interfaces\CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
 
