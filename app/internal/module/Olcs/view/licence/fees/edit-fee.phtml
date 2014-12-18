@@ -1,6 +1,7 @@
 <?php
 
-echo $this->render('partials/read-only/main',
+echo $this->render(
+    'partials/read-only/main',
     [
         'multiItems' => [
             [
@@ -18,8 +19,9 @@ echo $this->render('partials/read-only/main',
                 ['label' => $this->translate('Processed by:'), 'value' => $processedBy, 'class' => 'full-width'],
             ]
         ]
-    ]);
+    ]
+);
+
 if ($form) {
     echo $this->form($form);
 }
-?>

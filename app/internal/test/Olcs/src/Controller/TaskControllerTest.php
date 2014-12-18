@@ -75,6 +75,11 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
 
     private $testClickedButton = false;
 
+    /**
+     * @var \Zend\ServiceManager\ServiceLocatorInterface
+    */
+    private $sm;
+
     public function setUp()
     {
         $this->setApplicationConfig(
@@ -123,16 +128,16 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnCallback(array($this, 'mockRestCall')));
 
         // stub out the data services that we manipulate for dynamic selects
-        $sm = \OlcsTest\Bootstrap::getServiceManager();
-        $sm->setService(
+        $this->sm = \OlcsTest\Bootstrap::getServiceManager();
+        $this->sm->setService(
             'Olcs\Service\Data\TaskSubCategory',
             m::mock('\StdClass')->shouldReceive('setCategory')->getMock()
         );
-        $sm->setService(
+        $this->sm->setService(
             'Olcs\Service\Data\User',
             m::mock('\StdClass')->shouldReceive('setTeam')->getMock()
         );
-        $this->controller->setServiceLocator($sm);
+        $this->controller->setServiceLocator($this->sm);
 
         parent::setUp();
     }
@@ -510,8 +515,7 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
             );
 
         // stub out the data services that we manipulate for dynamic selects
-        $sm = \OlcsTest\Bootstrap::getServiceManager();
-        $sm->setService(
+        $this->sm->setService(
             'Entity\Application',
             m::mock('\StdClass')
                 ->shouldReceive('getDataForTasks')
@@ -527,7 +531,7 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
                     ->andReturn(987)
                 ->getMock()
         );
-        $sm->setService(
+        $this->sm->setService(
             'Entity\BusReg',
             m::mock('\StdClass')
                 ->shouldReceive('getDataForTasks')
@@ -557,9 +561,9 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
                     ->getMock()
             )
             ->getMock();
-        $sm->setService('DataServiceManager', $dsm);
+        $this->sm->setService('DataServiceManager', $dsm);
 
-        $this->controller->setServiceLocator($sm);
+        $this->controller->setServiceLocator($this->sm);
 
         $this->controller->expects($this->any())
             ->method('redirect')
@@ -1301,9 +1305,8 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
             ->andReturn([]);
 
         // mock lookup licence details for application
-        $sm = \OlcsTest\Bootstrap::getServiceManager();
-        $sut->setServiceLocator($sm);
-        $sm->setService(
+        $sut->setServiceLocator($this->sm);
+        $this->sm->setService(
             'Entity\Application',
             m::mock('\StdClass')
                 ->shouldReceive('getDataForTasks')
@@ -1419,8 +1422,7 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
         // check scripts are loaded
         $sut->shouldReceive('loadScripts')->with(['forms/task']);
 
-        $sm = \OlcsTest\Bootstrap::getServiceManager();
-        $sut->setServiceLocator($sm);
+        $sut->setServiceLocator($this->sm);
 
         $view = $sut->editAction();
         list($header, $content) = $view->getChildren();
@@ -1499,9 +1501,8 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
             )
             ->andReturn([]);
 
-        // mock lookup licence details for application
-        $sm = \OlcsTest\Bootstrap::getServiceManager();
-        $sut->setServiceLocator($sm);
+
+        $sut->setServiceLocator($this->sm);
 
         // stub rest calls for dropdowns
         $sut->shouldReceive('getListDataFromBackend')->andReturn([]);

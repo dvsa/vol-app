@@ -113,7 +113,72 @@ class ComplaintController extends OlcsController\CrudAbstract
             'case' => [],
             'complaintType' => [],
             'status' => [],
-            'complainantContactDetails' => [],
+            'complainantContactDetails' => [
+                'children' => [
+                    'person' => [
+                        'forename',
+                        'familyName'
+                    ]
+                ]
+            ]
         )
     );
+
+    public function processLoad($data)
+    {
+        if (isset($data['complainantContactDetails']['person'])) {
+            $data['complainantForename'] = $data['complainantContactDetails']['person']['forename'];
+            $data['complainantFamilyName'] = $data['complainantContactDetails']['person']['familyName'];
+        }
+
+        return parent::processLoad($data);
+    }
+
+    public function processSave($data)
+    {
+        $personService = $this->getServiceLocator()
+            ->get('DataServiceManager')
+            ->get('Generic\Service\Data\Person');
+
+        if (isset($data['fields']['id']) && !empty($data['fields']['id'])) {
+            //prevent the person id from ever being overwritten
+            if (isset($data['fields']['complainantContactDetails'])) {
+                unset($data['fields']['complainantContactDetails']);
+            }
+
+            //get the current person id
+            $existing = $this->loadCurrent();
+
+            //we may not need to modify the person details at all
+            $person = $existing['complainantContactDetails']['person'];
+
+            if ($data['fields']['complainantForename'] != $person['forename']
+                || $data['fields']['complainantFamilyName'] != $person['familyName']) {
+                $person['forename'] = $data['fields']['complainantForename'];
+                $person['familyName'] = $data['fields']['complainantFamilyName'];
+                $personService->save($person);
+            }
+        } else {
+            //this is an edit so we need to create a person and add contact details
+            $person['forename'] = $data['fields']['complainantForename'];
+            $person['familyName'] = $data['fields']['complainantFamilyName'];
+
+            $personId = $personService->save($person);
+
+            $contactDetailsService = $this->getServiceLocator()
+                ->get('DataServiceManager')
+                ->get('Generic\Service\Data\ContactDetails');
+
+            $contactDetails = [
+                'person' => $personId,
+                'contactType' => 'ct_complainant'
+            ];
+
+            $contactDetailsId = $contactDetailsService->save($contactDetails);
+
+            $data['fields']['complainantContactDetails'] = $contactDetailsId;
+        }
+
+        return parent::processSave($data);
+    }
 }
