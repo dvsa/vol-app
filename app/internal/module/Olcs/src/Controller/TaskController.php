@@ -706,5 +706,4 @@ class TaskController extends AbstractController
         $service = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\Cases');
         return $service->fetchCaseData($id);
     }
-
 }

@@ -16,7 +16,7 @@ use Mockery as m;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class TaskControllerTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
+class CaseTaskControllerTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     use MockDateTrait;
 
@@ -52,9 +52,6 @@ class TaskControllerTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
         // mock case id route param
         $mockParams = $this->pluginManager->get('params', '');
         $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
-
-        // mock licence id lookup
-
 
         // mock date
         $date = '2014-12-18';
@@ -191,5 +188,4 @@ class TaskControllerTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
         $this->assertEquals('thisistheredirect', $response);
     }
-
 }

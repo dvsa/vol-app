@@ -83,7 +83,8 @@ class TaskController extends OlcsController\CrudAbstract
         return $this->renderView($view);
     }
 
-    protected function getLicenceIdForCase() {
+    protected function getLicenceIdForCase()
+    {
         $case = $this->getCase();
         return $case['licence']['id'];
     }
