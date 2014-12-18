@@ -269,7 +269,8 @@ class TaskController extends AbstractController
      *
      * @return array
      */
-    protected function getTaskTypeDetails() {
+    protected function getTaskTypeDetails()
+    {
         $taskId = $this->getFromRoute('task');
         if (empty($taskId)) {
             $taskType    = $this->getFromRoute('type');
@@ -652,9 +653,9 @@ class TaskController extends AbstractController
      */
     protected function getLicence($id)
     {
-        $licence = $this->makeRestCall('Licence', 'GET', array('id' => $id));
-
-        return $licence;
+        return $this->getServiceLocator()
+            ->get('Entity\Licence')
+            ->getOverview($id);
     }
 
     protected function getLicenceIdForApplication($applicationId)

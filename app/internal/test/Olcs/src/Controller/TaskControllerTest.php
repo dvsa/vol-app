@@ -185,10 +185,30 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
         $this->assertEquals('Add task', $header->getVariable('pageTitle'));
     }
 
+    public function editActionProvider() {
+        return [
+            'from dashboard' => [
+                array(
+                    array('type', ''),
+                    array('typeId', 123),
+                    array('task', 456),
+                )
+            ],
+            'from licence' => [
+                array(
+                    array('type', 'licence'),
+                    array('typeId', 123),
+                    array('task', 456),
+                )
+            ],
+        ];
+    }
     /**
      * Test edit action
+     *
+     * @dataProvider editActionProvider
      */
-    public function testEditAction()
+    public function testEditAction($routeParamsValueMap)
     {
         $form = $this->getMock('\stdClass', ['get', 'setValue', 'setValueOptions', 'remove', 'setData']);
 
@@ -203,56 +223,7 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
         $this->controller->expects($this->any())
             ->method('getFromRoute')
             ->will(
-                $this->returnValueMap(
-                    array(
-                        array('type', 'licence'),
-                        array('typeId', 123),
-                        array('task', 456),
-                    )
-                )
-            );
-
-        $toArray = $this->getMock('\stdClass', ['toArray']);
-        $toArray->expects($this->any())
-            ->method('toArray')
-            ->will($this->returnValue([]));
-
-        $this->request->expects($this->any())
-            ->method('getPost')
-            ->will($this->returnValue($toArray));
-
-        $view = $this->controller->editAction();
-
-        list($header, $content) = $view->getChildren();
-
-        $this->assertEquals('Edit task', $header->getVariable('pageTitle'));
-    }
-
-    /**
-     * Test edit action from dashboard
-     */
-    public function testEditFromDashboardAction()
-    {
-        $form = $this->getMock('\stdClass', ['get', 'setValue', 'setValueOptions', 'remove', 'setData']);
-
-        $form->expects($this->any())
-            ->method('get')
-            ->will($this->returnSelf());
-
-        $this->controller->expects($this->once())
-            ->method('getForm')
-            ->will($this->returnValue($form));
-
-        $this->controller->expects($this->any())
-            ->method('getFromRoute')
-            ->will(
-                $this->returnValueMap(
-                    array(
-                        array('type', ''),
-                        array('typeId', 123),
-                        array('task', 456),
-                    )
-                )
+                $this->returnValueMap($routeParamsValueMap)
             );
 
         $toArray = $this->getMock('\stdClass', ['toArray']);
@@ -390,6 +361,7 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
             'Transport Manager task' => ['tm', ['transportManager'=>123], 'transport-manager/processing/tasks'],
             'Bus Registration task'  => ['busreg', ['busRegId'=>123, 'licence'=>987], 'licence/bus-processing/tasks'],
             'Case (licence) task'    => ['case', ['case'=>123], 'case_processing_tasks'],
+            'from dashboard'         => ['', [], 'dashboard'],
         ];
     }
     /**
@@ -467,54 +439,7 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
             ->with($expectedRoute, $routeParams)
             ->will($this->returnValue('mockResponse'));
 
-        $this->controller->expects($this->any())
-            ->method('getLicenceIdForApplication')
-            ->with(123)
-            ->will($this->returnValue(987));
-
-        $this->controller->expects($this->any())
-            ->method('getApplication')
-            ->with(123)
-            ->will(
-                $this->returnValue(
-                    [
-                        'id' => 123,
-                        'licence' => [
-                            'id' => 987,
-                            'licNo' => 'AB1234',
-                        ]
-                    ]
-                )
-            );
-        $this->controller->expects($this->any())
-            ->method('getBusReg')
-            ->with(123)
-            ->will(
-                $this->returnValue(
-                    [
-                        'id' => 123,
-                        'regNo' => 'BR1234',
-                        'licence' => [
-                            'id' => 987,
-                        ]
-                    ]
-                )
-            );
-        $this->controller->expects($this->any())
-            ->method('getCase')
-            ->with(123)
-            ->will(
-                $this->returnValue(
-                    [
-                        'id' => 123,
-                        'licence' => [
-                            'id' => 987,
-                        ]
-                    ]
-                )
-            );
-
-        // stub out the data services that we manipulate for dynamic selects
+        // stub any calls to backend for extra data lookups
         $this->sm->setService(
             'Entity\Application',
             m::mock('\StdClass')
@@ -696,10 +621,34 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
         $this->assertEquals('Re-assign task', $header->getVariable('pageTitle'));
     }
 
+    public function reassignPostProvider() {
+        return [
+            'From dashboard' =>[
+                array(
+                    array('task', 456),
+                ),
+                'dashboard',
+                [],
+            ],
+            'From licence' => [
+                array(
+                    array('type', 'licence'),
+                    array('typeId', 123),
+                    array('task', 456),
+                ),
+                'licence/processing',
+                ['licence' => 123],
+
+            ],
+        ];
+    }
+
     /**
      * Test reassign action post
+     *
+     * @dataProvider reassignPostProvider
      */
-    public function testReassignActionPost()
+    public function testReassignActionPost($routeParamsValueMap, $expectedRoute, $expectedRouteParams)
     {
         $form = $this->getMock(
             '\stdClass',
@@ -735,13 +684,7 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
         $this->controller->expects($this->any())
             ->method('getFromRoute')
             ->will(
-                $this->returnValueMap(
-                    array(
-                        array('type', 'licence'),
-                        array('typeId', 123),
-                        array('task', 456),
-                    )
-                )
+                $this->returnValueMap($routeParamsValueMap)
             );
 
         $post = $this->getMock('\stdClass', ['toArray']);
@@ -766,12 +709,10 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
             ->method('isPost')
             ->will($this->returnValue(true));
 
-        $params = ['licence' => 123];
-
         $mockRoute = $this->getMock('\stdClass', ['toRouteAjax']);
         $mockRoute->expects($this->once())
             ->method('toRouteAjax')
-            ->with('licence/processing', $params)
+            ->with($expectedRoute, $expectedRouteParams)
             ->will($this->returnValue('mockResponse'));
 
         $this->controller->expects($this->any())
@@ -779,161 +720,6 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue($mockRoute));
 
         $this->controller->reassignAction();
-    }
-
-    /**
-     * Test reassign action post from dashboard with redirect back
-     */
-    public function testReassignActionPostFromDashboard()
-    {
-        $form = $this->getMock(
-            '\stdClass',
-            [
-                'get', 'setValue', 'setValueOptions',
-                'remove', 'setData', 'isValid',
-                'getData'
-            ]
-        );
-
-        $form->expects($this->any())
-            ->method('get')
-            ->will($this->returnSelf());
-
-        $form->expects($this->any())
-            ->method('isValid')
-            ->will($this->returnValue(true));
-
-        $formData = [
-            'assignment' => ['assignedToTeam' => 1, 'assignedToUser' => 1],
-            'id' => 100,
-            'version' => 200
-        ];
-
-        $form->expects($this->any())
-            ->method('getData')
-            ->will($this->returnValue($formData));
-
-        $this->controller->expects($this->once())
-            ->method('getForm')
-            ->will($this->returnValue($form));
-
-        $this->controller->expects($this->any())
-            ->method('getFromRoute')
-            ->will(
-                $this->returnValueMap(
-                    array(
-                        array('task', 456),
-                    )
-                )
-            );
-
-        $toArray = $this->getMock('\stdClass', ['toArray']);
-        $toArray->expects($this->any())
-            ->method('toArray')
-            ->will($this->returnValue([]));
-
-        $this->request->expects($this->any())
-            ->method('getPost')
-            ->will($this->returnValue($toArray));
-
-        $this->request->expects($this->any())
-            ->method('isPost')
-            ->will($this->returnValue(true));
-
-        $params = [];
-
-        $mockRoute = $this->getMock('\stdClass', ['toRouteAjax']);
-        $mockRoute->expects($this->once())
-            ->method('toRouteAjax')
-            ->with('dashboard', $params)
-            ->will($this->returnValue('mockResponse'));
-
-        $this->controller->expects($this->any())
-            ->method('redirect')
-            ->will($this->returnValue($mockRoute));
-
-        $this->controller->reassignAction();
-    }
-
-    /**
-     * Test edit action post from dashboard with redirect back
-     */
-    public function testEditActionPostFromDashboard()
-    {
-        $form = $this->getMock(
-            '\stdClass',
-            [
-                'get', 'setValue', 'setValueOptions',
-                'remove', 'setData', 'isValid',
-                'getData'
-            ]
-        );
-
-        $form->expects($this->any())
-            ->method('get')
-            ->will($this->returnSelf());
-
-        $form->expects($this->any())
-            ->method('isValid')
-            ->will($this->returnValue(true));
-
-        $formData = [
-            'details' => [
-                'urgent' => 1
-            ],
-            'assignment' => [],
-            'id' => 100,
-            'version' => 200
-        ];
-
-        $form->expects($this->any())
-            ->method('getData')
-            ->will($this->returnValue($formData));
-
-        $this->controller->expects($this->once())
-            ->method('getForm')
-            ->will($this->returnValue($form));
-
-        $this->controller->expects($this->once())
-            ->method('processEdit')
-            ->will($this->returnValue(['id' => 1234]));
-
-        $this->controller->expects($this->any())
-            ->method('getFromRoute')
-            ->will(
-                $this->returnValueMap(
-                    array(
-                        array('task', 456),
-                    )
-                )
-            );
-
-        $toArray = $this->getMock('\stdClass', ['toArray']);
-        $toArray->expects($this->any())
-            ->method('toArray')
-            ->will($this->returnValue([]));
-
-        $this->request->expects($this->any())
-            ->method('getPost')
-            ->will($this->returnValue($toArray));
-
-        $this->request->expects($this->any())
-            ->method('isPost')
-            ->will($this->returnValue(true));
-
-        $params = [];
-
-        $mockRoute = $this->getMock('\stdClass', ['toRouteAjax']);
-        $mockRoute->expects($this->once())
-            ->method('toRouteAjax')
-            ->with('dashboard', $params)
-            ->will($this->returnValue('mockResponse'));
-
-        $this->controller->expects($this->any())
-            ->method('redirect')
-            ->will($this->returnValue($mockRoute));
-
-        $this->controller->editAction();
     }
 
     /**
@@ -993,8 +779,10 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
 
     /**
      * Test close action post
+     *
+     * @dataProvider closePostProvider
      */
-    public function testCloseActionPost()
+    public function testCloseActionPost($routeParamsValueMap, $expectedRoute, $expectedRouteParams)
     {
         $form = $this->getMock(
             '\stdClass',
@@ -1030,15 +818,7 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller->expects($this->any())
             ->method('getFromRoute')
-            ->will(
-                $this->returnValueMap(
-                    array(
-                        array('type', 'licence'),
-                        array('typeId', 123),
-                        array('task', 456),
-                    )
-                )
-            );
+            ->will($this->returnValueMap($routeParamsValueMap));
 
         $toArray = $this->getMock('\stdClass', ['toArray']);
         $toArray->expects($this->any())
@@ -1053,12 +833,10 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
             ->method('isPost')
             ->will($this->returnValue(true));
 
-        $params = ['licence' => 123];
-
         $mockRoute = $this->getMock('\stdClass', ['toRouteAjax']);
         $mockRoute->expects($this->once())
             ->method('toRouteAjax')
-            ->with('licence/processing', $params)
+            ->with($expectedRoute, $expectedRouteParams)
             ->will($this->returnValue('mockResponse'));
 
         $this->controller->expects($this->any())
@@ -1068,81 +846,26 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
         $this->controller->closeAction();
     }
 
-    /**
-     * Test close action post from dashboard with redirect back
-     */
-    public function testCloseActionPostFromDashboard()
-    {
-        $form = $this->getMock(
-            '\stdClass',
-            [
-                'get', 'setValue', 'setValueOptions',
-                'remove', 'setData', 'isValid',
-                'getData'
-            ]
-        );
-
-        $form->expects($this->any())
-            ->method('get')
-            ->will($this->returnSelf());
-
-        $form->expects($this->any())
-            ->method('isValid')
-            ->will($this->returnValue(true));
-
-        $formData = [
-            'details' => [
-                'urgent' => 1
+    public function closePostProvider() {
+        return [
+            'From dashboard' =>[
+                array(
+                    array('task', 456),
+                ),
+                'dashboard',
+                [],
             ],
-            'assignment' => [],
-            'id' => 100,
-            'version' => 200
+            'From licence' => [
+                array(
+                    array('type', 'licence'),
+                    array('typeId', 123),
+                    array('task', 456),
+                ),
+                'licence/processing',
+                ['licence' => 123],
+
+            ],
         ];
-
-        $form->expects($this->any())
-            ->method('getData')
-            ->will($this->returnValue($formData));
-
-        $this->controller->expects($this->once())
-            ->method('getForm')
-            ->will($this->returnValue($form));
-
-        $this->controller->expects($this->any())
-            ->method('getFromRoute')
-            ->will(
-                $this->returnValueMap(
-                    array(
-                        array('task', 456),
-                    )
-                )
-            );
-
-        $toArray = $this->getMock('\stdClass', ['toArray']);
-        $toArray->expects($this->any())
-            ->method('toArray')
-            ->will($this->returnValue([]));
-
-        $this->request->expects($this->any())
-            ->method('getPost')
-            ->will($this->returnValue($toArray));
-
-        $this->request->expects($this->any())
-            ->method('isPost')
-            ->will($this->returnValue(true));
-
-        $params = [];
-
-        $mockRoute = $this->getMock('\stdClass', ['toRouteAjax']);
-        $mockRoute->expects($this->once())
-            ->method('toRouteAjax')
-            ->with('dashboard', $params)
-            ->will($this->returnValue('mockResponse'));
-
-        $this->controller->expects($this->any())
-            ->method('redirect')
-            ->will($this->returnValue($mockRoute));
-
-        $this->controller->closeAction();
     }
 
     /**
@@ -1238,15 +961,13 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
-     * Test edit action for application
+     * Test edit action for application task
      *
-     * @dataProvider editApplicationProvider
+     * @dataProvider editApplicationTaskProvider
      */
-    public function testEditActionForApplication($routeParams)
+    public function testEditActionForApplicationTask($routeParams)
     {
-        $sut = m::mock('\Olcs\Controller\TaskController')
-            ->makePartial()
-            ->shouldAllowMockingProtectedMethods();
+        $sut = m::mock('\Olcs\Controller\TaskController')->makePartial();
 
         // mock form
         $sut->shouldReceive('getForm')->andReturn($this->getMockForm());
@@ -1302,7 +1023,7 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
                 ['id' => 456],
                 m::any() // bundle
             )
-            ->andReturn([]);
+            ->andReturn(['id' => 456]);
 
         // mock lookup licence details for application
         $sut->setServiceLocator($this->sm);
@@ -1323,12 +1044,6 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
                 ->getMock()
         );
 
-        // stub rest calls for dropdowns
-        $sut->shouldReceive('getListDataFromBackend')->andReturn([]);
-
-        // check scripts are loaded
-        $sut->shouldReceive('loadScripts')->with(['forms/task']);
-
         $view = $sut->editAction();
         list($header, $content) = $view->getChildren();
         $this->assertEquals('Edit task', $header->getVariable('pageTitle'));
@@ -1337,7 +1052,7 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
     /**
      * Tests both with and without additional context
      */
-    public function editApplicationProvider()
+    public function editApplicationTaskProvider()
     {
         return [
             [['type' => 'application', 'typeId' => 123, 'task' => 456]],
@@ -1348,13 +1063,11 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
     /**
      * Test edit action for bus reg task
      *
-     * @dataProvider editBusRegProvider
+     * @dataProvider editBusRegTaskProvider
      */
-    public function testEditActionForBusReg($routeParams)
+    public function testEditActionForBusRegTask($routeParams)
     {
-        $sut = m::mock('\Olcs\Controller\TaskController')
-            ->makePartial()
-            ->shouldAllowMockingProtectedMethods();
+        $sut = m::mock('\Olcs\Controller\TaskController')->makePartial();
 
         $sut->shouldReceive('getForm')->andReturn($this->getMockForm());
 
@@ -1403,26 +1116,24 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
                 ['id' => 456],
                 m::any() // bundle
             )
-            ->andReturn([]);
+            ->andReturn(['id' => 456]);
 
         // mock lookup bus reg details
-        $sut->shouldReceive('getBusReg')
-            ->with(123)
-            ->andReturn(
-                [
-                    'id' => 123,
-                    'regNo' => 'BR1234',
-                    'licence' => ['id' => 987, 'licNo' => 'AB1234'],
-                ]
-            );
-
-        // stub rest calls for dropdowns
-        $sut->shouldReceive('getListDataFromBackend')->andReturn([]);
-
-        // check scripts are loaded
-        $sut->shouldReceive('loadScripts')->with(['forms/task']);
-
         $sut->setServiceLocator($this->sm);
+        $this->sm->setService(
+            'Entity\BusReg',
+            m::mock('\StdClass')
+                ->shouldReceive('getDataForTasks')
+                    ->with('123')
+                    ->andReturn(
+                        [
+                            'id' => 123,
+                            'regNo' => 'BR1234',
+                            'licence' => ['id' => 987, 'licNo' => 'AB1234'],
+                        ]
+                    )
+                ->getMock()
+        );
 
         $view = $sut->editAction();
         list($header, $content) = $view->getChildren();
@@ -1432,7 +1143,7 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
     /**
      * Tests both with and without additional context
      */
-    public function editBusRegProvider()
+    public function editBusRegTaskProvider()
     {
         return [
             [['type' => 'busreg', 'typeId' => 123, 'task' => 456]],
@@ -1441,15 +1152,13 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
     }
 
     /**
-     * Test edit action for transport manager tasks
+     * Test edit action for transport manager task
      *
-     * @dataProvider editTmProvider
+     * @dataProvider editTmTaskProvider
      */
-    public function testEditActionForTransportManager($routeParams)
+    public function testEditActionForTransportManagerTask($routeParams)
     {
-        $sut = m::mock('\Olcs\Controller\TaskController')
-            ->makePartial()
-            ->shouldAllowMockingProtectedMethods();
+        $sut = m::mock('\Olcs\Controller\TaskController')->makePartial();
 
         // mock form
         $sut->shouldReceive('getForm')->andReturn($this->getMockForm());
@@ -1499,16 +1208,9 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
                 ['id' => 456],
                 m::any() // bundle
             )
-            ->andReturn([]);
-
+            ->andReturn(['id' => 456]);
 
         $sut->setServiceLocator($this->sm);
-
-        // stub rest calls for dropdowns
-        $sut->shouldReceive('getListDataFromBackend')->andReturn([]);
-
-        // check scripts are loaded
-        $sut->shouldReceive('loadScripts')->with(['forms/task']);
 
         $view = $sut->editAction();
         list($header, $content) = $view->getChildren();
@@ -1518,10 +1220,106 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
     /**
      * Tests both with and without additional context
      */
-    public function editTmProvider()
+    public function editTmTaskProvider()
     {
         return [
             [['type' => 'tm', 'typeId' => 123, 'task' => 456]],
+            [['task' => 456]]
+        ];
+    }
+
+    /**
+     * Test edit action for case (licence) task
+     *
+     * @dataProvider editCaseTaskProvider
+     */
+    public function testEditActionForCaseTask($routeParams)
+    {
+        $sut = m::mock('\Olcs\Controller\TaskController')->makePartial();
+
+        // mock form
+        $sut->shouldReceive('getForm')->andReturn($this->getMockForm());
+
+        // mock route params
+        $sut->shouldReceive('getFromRoute')
+            ->andReturnUsing(
+                function ($param) use ($routeParams) {
+                    return isset($routeParams[$param]) ? $routeParams[$param] : null;
+                }
+            );
+
+        // mock URL helper
+        $sut->shouldReceive('url')->andReturn(
+            m::mock('\StdClass')
+                ->shouldReceive('fromRoute')
+                    ->once()
+                    ->with('case', ['case' => 123])
+                    ->andReturn('tmUrl123')
+                ->getMock()
+        );
+
+        $sut->shouldReceive('getRequest')->andReturn($this->getMockRequest());
+
+        // mock REST calls for task details
+        $sut->shouldReceive('makeRestCall')
+            ->with(
+                'TaskSearchView',
+                'GET',
+                ['id' => 456],
+                ['properties' => ['linkType', 'linkId', 'linkDisplay', 'licenceId']]
+            )
+            ->andReturn(
+                [
+                    // task details, we need licence stuff too
+                    'id'          => 456,
+                    'linkType'    => 'Case',
+                    'linkDisplay' => 'caselink',
+                    'linkId'      => 123,
+                    'licenceId'   => 987,
+                ]
+            );
+
+        $sut->shouldReceive('makeRestCall')
+            ->with(
+                'Task',
+                'GET',
+                ['id' => 456],
+                m::any() // bundle
+            )
+            ->andReturn(['id' => 456]);
+
+        $sut->setServiceLocator($this->sm);
+
+        $dsm = m::mock('\StdClass')
+            ->shouldReceive('get')
+            ->with('Olcs\Service\Data\Cases')
+            ->andReturn(
+                m::mock('Olcs\Service\Data\Cases')
+                    ->shouldReceive('fetchCaseData')
+                    ->with(123)
+                    ->andReturn(
+                        [
+                            'id' => 123,
+                            'licence' => ['id' => 987, 'licNo' => 'AB1234'],
+                        ]
+                    )
+                    ->getMock()
+            )
+            ->getMock();
+        $this->sm->setService('DataServiceManager', $dsm);
+
+        $view = $sut->editAction();
+        list($header, $content) = $view->getChildren();
+        $this->assertEquals('Edit task', $header->getVariable('pageTitle'));
+    }
+
+    /**
+     * Tests both with and without additional context
+     */
+    public function editCaseTaskProvider()
+    {
+        return [
+            [['type' => 'case', 'typeId' => 123, 'task' => 456]],
             [['task' => 456]]
         ];
     }
