@@ -268,11 +268,10 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
 
     /**
      * Test edit action from dashboard with no task type id
-     * @expectedException \Exception
+     * @expectedException \Common\Exception\BadRequestException
      */
     public function testEditFromDashboardActionNoTaskTypeId()
     {
-
         $this->controller->expects($this->any())
             ->method('getFromRoute')
             ->will(
