@@ -42,6 +42,12 @@ class TransportManagerCaseController extends TransportManagerController
             'limit'   => $this->params()->fromRoute('limit', 10),
         ];
 
+        $params = array_merge(
+            $params,
+            $this->getRequest()->getQuery()->toArray(),
+            array('query' => $this->getRequest()->getQuery())
+        );
+
         $results = $this->getServiceLocator()
                         ->get('DataServiceManager')
                         ->get('Olcs\Service\Data\Cases')->fetchList($params);
@@ -51,5 +57,11 @@ class TransportManagerCaseController extends TransportManagerController
         $view->setTemplate('licence/cases');
 
         return $this->renderView($view);
+    }
+
+    public function setRequest(\Zend\Http\Request $request)
+    {
+        $this->request = $request;
+        return $this;
     }
 }
