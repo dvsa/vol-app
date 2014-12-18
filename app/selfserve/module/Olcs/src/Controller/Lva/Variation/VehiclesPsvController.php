@@ -40,5 +40,5 @@ class VehiclesPsvController extends AbstractGenericVehiclesPsvController
     protected function alterFormForLva(Form $form)
     {
         return parent::alterFormForLva($this->traitAlterFormForLva($form));
-    }    
+    }
 }
