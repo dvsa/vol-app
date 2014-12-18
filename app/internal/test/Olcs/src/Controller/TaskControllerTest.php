@@ -75,11 +75,6 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
 
     private $testClickedButton = false;
 
-    /**
-     * @var \Zend\ServiceManager\ServiceLocatorInterface
-     */
-    private $serviceLocator;
-
     public function setUp()
     {
         $this->setApplicationConfig(
@@ -100,9 +95,6 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
                 'processEdit',
                 'getFromRoute',
                 'getSearchForm',
-                'getLicenceIdForApplication',
-                'getApplication',
-                'getBusReg'
             )
         );
 
@@ -393,6 +385,7 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
             'Application task'       => ['application', ['application'=>123], 'lva-application/processing'],
             'Transport Manager task' => ['tm', ['transportManager'=>123], 'transport-manager/processing/tasks'],
             'Bus Registration task'  => ['busreg', ['busRegId'=>123, 'licence'=>987], 'licence/bus-processing/tasks'],
+            'Case (licence) task'    => ['case', ['case'=>123], 'case_processing_tasks'],
         ];
     }
     /**
@@ -503,6 +496,71 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
                     ]
                 )
             );
+        $this->controller->expects($this->any())
+            ->method('getCase')
+            ->with(123)
+            ->will(
+                $this->returnValue(
+                    [
+                        'id' => 123,
+                        'licence' => [
+                            'id' => 987,
+                        ]
+                    ]
+                )
+            );
+
+        // stub out the data services that we manipulate for dynamic selects
+        $sm = \OlcsTest\Bootstrap::getServiceManager();
+        $sm->setService(
+            'Entity\Application',
+            m::mock('\StdClass')
+                ->shouldReceive('getDataForTasks')
+                    ->with('123')
+                    ->andReturn(
+                        [
+                            'id' => 123,
+                            'licence' => ['id' => 987, 'licNo' => 'AB1234'],
+                        ]
+                    )
+                ->shouldReceive('getLicenceIdForApplication')
+                    ->with('123')
+                    ->andReturn(987)
+                ->getMock()
+        );
+        $sm->setService(
+            'Entity\BusReg',
+            m::mock('\StdClass')
+                ->shouldReceive('getDataForTasks')
+                    ->with('123')
+                    ->andReturn(
+                        [
+                            'id' => 123,
+                            'regNo' => 'BR1234',
+                            'licence' => ['id' => 987, 'licNo' => 'AB1234'],
+                        ]
+                    )
+                ->getMock()
+        );
+        $dsm = m::mock('\StdClass')
+            ->shouldReceive('get')
+            ->with('Olcs\Service\Data\Cases')
+            ->andReturn(
+                m::mock('Olcs\Service\Data\Cases')
+                    ->shouldReceive('fetchCaseData')
+                    ->with(123)
+                    ->andReturn(
+                        [
+                            'id' => 123,
+                            'licence' => ['id' => 987, 'licNo' => 'AB1234'],
+                        ]
+                    )
+                    ->getMock()
+            )
+            ->getMock();
+        $sm->setService('DataServiceManager', $dsm);
+
+        $this->controller->setServiceLocator($sm);
 
         $this->controller->expects($this->any())
             ->method('redirect')
@@ -1346,9 +1404,8 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
             ->andReturn([]);
 
         // mock lookup bus reg details
-        $sut->shouldReceive('makeRestCall')
-            //->once()
-            ->with('BusReg', 'GET', m::any())
+        $sut->shouldReceive('getBusReg')
+            ->with(123)
             ->andReturn(
                 [
                     'id' => 123,
