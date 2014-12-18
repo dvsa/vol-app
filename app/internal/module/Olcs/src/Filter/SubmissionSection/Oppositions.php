@@ -16,22 +16,22 @@ class Oppositions extends AbstractSubmissionSectionFilter
     public function filter($data = array())
     {
         $dataToReturnArray = array();
-        if (isset($data['application']['oppositions']) && is_array($data['application']['oppositions'])) {
+        if (isset($data['oppositions']) && is_array($data['oppositions'])) {
 
             usort(
-                $data['application']['oppositions'],
+                $data['oppositions'],
                 function ($a, $b) {
                     return strnatcmp($b['oppositionType']['description'], $a['oppositionType']['description']);
                 }
             );
             usort(
-                $data['application']['oppositions'],
+                $data['oppositions'],
                 function ($a, $b) {
                     return strtotime($b['raisedDate']) - strtotime($a['raisedDate']);
                 }
             );
 
-            foreach ($data['application']['oppositions'] as $opposition) {
+            foreach ($data['oppositions'] as $opposition) {
                 $thisOpposition = array();
                 $thisOpposition['id'] = $opposition['id'];
                 $thisOpposition['version'] = $opposition['version'];
