@@ -57,6 +57,7 @@ class PaymentSubmissionController extends AbstractController
             'actionDate' => $actionDate,
             'assignedByUser' => 1,
             'assignedToUser' => 1,
+            'assignedToTeam' => 2,
             'isClosed' => 0,
             'application' => $this->getApplicationId(),
             'licence' => $this->getLicenceId()
