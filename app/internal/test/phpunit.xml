@@ -17,6 +17,27 @@
         </whitelist>
     </filter>
     <listeners>
+        <listener class="\OlcsTest\Util\XhProf">
+            <arguments>
+                <array>
+                    <element key="xhprofLibFile">
+                        <string>/workspace/xhprof/xhprof_lib/utils/xhprof_lib.php</string>
+                    </element>
+                    <element key="xhprofRunsFile">
+                        <string>/workspace/xhprof/xhprof_lib/utils/xhprof_runs.php</string>
+                    </element>
+                    <element key="xhprofWeb">
+                        <string>http://192.168.149.2/xhprof/xhprof_html/index.php</string>
+                    </element>
+                    <element key="appNamespace">
+                        <string>Olcs</string>
+                    </element>
+                    <element key="xhprofFlags">
+                        <string>XHPROF_FLAGS_CPU,XHPROF_FLAGS_MEMORY</string>
+                    </element>
+                </array>
+            </arguments>
+        </listener>
         <listener class="JohnKary\PHPUnit\Listener\SpeedTrapListener">
             <arguments>
                 <array>
