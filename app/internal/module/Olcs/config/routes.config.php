@@ -967,7 +967,17 @@ $routes = [
                                 'controller' => 'BusProcessingNoteController',
                             ]
                         ]
-                    ]
+                    ],
+                    'tasks' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/tasks',
+                            'defaults' => [
+                                'controller' => 'BusProcessingTaskController',
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
                 ]
             ],
             'bus-fees' => [
