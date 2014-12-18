@@ -25,6 +25,8 @@ trait VariationControllerTrait
     use ApplicationControllerTrait,
         CommonVariationControllerTrait {
             CommonVariationControllerTrait::preDispatch insteadof ApplicationControllerTrait;
+            CommonVariationControllerTrait::postSave insteadof ApplicationControllerTrait;
+            CommonVariationControllerTrait::goToNextSection insteadof ApplicationControllerTrait;
         }
 
     /**
