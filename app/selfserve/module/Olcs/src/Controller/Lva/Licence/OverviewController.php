@@ -11,6 +11,7 @@ namespace Olcs\Controller\Lva\Licence;
 use Olcs\View\Model\Licence\LicenceOverview;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
 use Common\Controller\Lva\AbstractController;
+use Common\Service\Entity\LicenceEntityService;
 
 /**
  * Licence Overview Controller
@@ -33,6 +34,12 @@ class OverviewController extends AbstractController
         $data = $this->getServiceLocator()->get('Entity\Licence')->getOverview($this->getLicenceId());
         $data['idIndex'] = $this->getIdentifierIndex();
 
-        return new LicenceOverview($data, $this->getAccessibleSections());
+        $variables = ['shouldShowCreateVariation' => true];
+
+        if ($data['licenceType']['id'] === LicenceEntityService::LICENCE_TYPE_SPECIAL_RESTRICTED) {
+            $variables['shouldShowCreateVariation'] = false;
+        }
+
+        return new LicenceOverview($data, $this->getAccessibleSections(), $variables);
     }
 }

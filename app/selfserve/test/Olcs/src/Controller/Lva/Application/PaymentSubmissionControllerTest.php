@@ -77,11 +77,12 @@ class PaymentSubmissionControllerTest extends MockeryTestCase
 
         $task = array(
             'category' => CategoryDataService::CATEGORY_APPLICATION,
-            'subCategory' => CategoryDataService::TASK_SUB_CATEGORY_APPLICATION_GRANT_FEE_DUE,
+            'subCategory' => CategoryDataService::TASK_SUB_CATEGORY_APPLICATION_FORMS_DIGITAL,
             'description' => 'GV79 Application',
             'actionDate' => '2014-01-01',
             'assignedByUser' => 1,
             'assignedToUser' => 1,
+            'assignedToTeam' => 2,
             'isClosed' => 0,
             'application' => 1,
             'licence' => 1
