@@ -163,8 +163,7 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
                 $this->returnValueMap(
                     array(
                         array('type', 'licence'),
-                        array('typeId', null),
-                        array('task', 123),
+                        array('typeId', 7)
                     )
                 )
             );
@@ -178,6 +177,16 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
             ->method('getPost')
             ->will($this->returnValue($toArray));
 
+        $this->sm->setService(
+            'Entity\Licence',
+            m::mock('\StdClass')
+                ->shouldReceive('getOverview')
+                    ->with(7)
+                    ->andReturn(['id' => 7, 'licNo' => 'AB1234'])
+                ->getMock()
+        );
+        $this->controller->setServiceLocator($this->sm);
+
         $view = $this->controller->addAction();
 
         list($header, $content) = $view->getChildren();
@@ -185,7 +194,8 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
         $this->assertEquals('Add task', $header->getVariable('pageTitle'));
     }
 
-    public function editActionProvider() {
+    public function editActionProvider()
+    {
         return [
             'from dashboard' => [
                 array(
@@ -621,7 +631,8 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
         $this->assertEquals('Re-assign task', $header->getVariable('pageTitle'));
     }
 
-    public function reassignPostProvider() {
+    public function reassignPostProvider()
+    {
         return [
             'From dashboard' =>[
                 array(
@@ -846,7 +857,8 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
         $this->controller->closeAction();
     }
 
-    public function closePostProvider() {
+    public function closePostProvider()
+    {
         return [
             'From dashboard' =>[
                 array(
@@ -1380,6 +1392,10 @@ class TaskControllerTest extends AbstractHttpControllerTestCase
                 ]
             ]
         ];
+
+        if ($service == 'TaskSearchView' && $method == 'GET' && $data == ['id' => 456]) {
+            return ['id' => 123, 'licenceId' => 7, 'linkType' => 'Licence', 'linkDisplay' => 'LIC1234', 'linkId' => 7];
+        }
 
         if ($service == 'TaskSearchView' && $method == 'GET' && $data == $this->taskSearchViewExpectedData) {
             return [];
