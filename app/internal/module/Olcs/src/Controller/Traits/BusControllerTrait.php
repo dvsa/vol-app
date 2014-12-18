@@ -35,11 +35,6 @@ trait BusControllerTrait
 
         $view = $this->getView($variables);
 
-        /*$this->pageTitle = $busReg['regNo'];
-        $this->pageSubTitle = $busReg['licence']['organisation']['name'] . ', Variation ' .
-            $busReg['variationNo']
-            . ', ' . $busReg['status']['description'];*/
-
         return $view;
     }
 
