@@ -2,22 +2,17 @@
 
 namespace OlcsTest\Util;
 
+/**
+ * XhProf listener
+ *
+ * @author Rob Caiger <rob@clocal.co.uk>
+ */
 class XhProf implements \PHPUnit_Framework_TestListener
 {
-
-    /**
-     * @var array
-     */
     protected $runs = array();
 
-    /**
-     * @var array
-     */
     protected $options = array();
 
-    /**
-     * @var integer
-     */
     protected $suites = 0;
 
     protected $st;
@@ -47,8 +42,8 @@ class XhProf implements \PHPUnit_Framework_TestListener
             );
         }
 
-        require_once $options['xhprofLibFile'];
-        require_once $options['xhprofRunsFile'];
+        require_once($options['xhprofLibFile']);
+        require_once($options['xhprofRunsFile']);
 
         $this->options = $options;
     }
@@ -122,6 +117,7 @@ class XhProf implements \PHPUnit_Framework_TestListener
     public function startTest(\PHPUnit_Framework_Test $test)
     {
         $this->st = microtime(true);
+
         if (!isset($this->options['xhprofFlags'])) {
             $flags = XHPROF_FLAGS_CPU + XHPROF_FLAGS_MEMORY;
         } else {
@@ -130,9 +126,8 @@ class XhProf implements \PHPUnit_Framework_TestListener
                 $flags += constant($flag);
             }
         }
-        xhprof_enable(
-            $flags
-        );
+
+        xhprof_enable($flags);
     }
 
     /**
@@ -146,21 +141,19 @@ class XhProf implements \PHPUnit_Framework_TestListener
         $this->et = microtime(true);
         $data = xhprof_disable();
 
-        $execTime = $this->et - $this->st;
+        $execTime = (int)($this->et - $this->st) * 100;
 
-        $execTime * 100;
+        if ($execTime > 200) {
 
-        //if ($execTime > 200) {
-
-            $runs = new \XHProfRuns_Default;
+            $runs = new \XHProfRuns_Default();
             $run = $runs->save_run($data, $this->options['appNamespace']);
 
-            $this->runs[(string)$execTime][] = [
+            $this->runs[$execTime][] = [
                 'class' => get_class($test),
                 'test' => $test->getName(),
                 'url' => $this->options['xhprofWeb'] . '?run=' . $run . '&source=' . $this->options['appNamespace']
             ];
-        //}
+        }
     }
 
     /**
