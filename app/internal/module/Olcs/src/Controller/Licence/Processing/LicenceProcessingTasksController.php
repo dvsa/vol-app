@@ -16,8 +16,6 @@ use \Olcs\Controller\Traits\TaskSearchTrait;
  */
 class LicenceProcessingTasksController extends AbstractLicenceProcessingController
 {
-    use TaskSearchTrait;
-
     /**
      * @var string
      */

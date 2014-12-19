@@ -1,23 +1,23 @@
 <?php
-	$action = $this->placeholder('action')->getValue();
-	$form = $this->placeholder('form')->getValue();
+$action = $this->placeholder('action')->getValue();
 
-    if (count($form) > 0):
-        if ($form->getOption('override_form_label')) {
+$form = $this->placeholder('form')->getValue();
 ?>
-	<div class="content__header">
-    	<h3><?php echo $this->translate($form->getOption('label')); ?></h3>
-    </div>
-<?php
-        } else {
-?>
-	<div class="content__header">
-    	<h3><?php echo is_string($action) ? ucfirst($action) : ''; ?> <?php echo lcfirst($this->translate($form->getOption('label'))); ?></h3>
-    </div>
-<?php
-        }
-?>
-<?php echo $this->formErrors($form); ?>
-<?php echo $this->form($form); ?>
+<?php if (count($form) > 0): ?>
+    <?php if ($form->getOption('override_form_label')): ?>
+        <h3><?php echo $this->translate($form->getOption('label')); ?></h3>
+    <?php else: ?>
+        <h3>
+            <?php echo is_string($action) ? ucfirst($action) : ''; ?>
+            <?php if ($form->getOption('action_lcfirst') === true): ?>
+                <?php echo lcfirst($this->translate($form->getOption('label'))); ?>
+            <?php else: ?>
+                <?php echo $this->translate($form->getOption('label')); ?>
+            <?php endif; ?>
+        </h3>
+    <?php endif; ?>
+    <?php echo $this->formErrors($form); ?>
+    <?php echo $this->form($form); ?>
 
 <?php endif; ?>
+

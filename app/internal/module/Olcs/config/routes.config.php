@@ -504,7 +504,7 @@ $routes = [
             ]
         ]
     ],
-    'processing_tasks' => [
+    'case_processing_tasks' => [
         'type' => 'segment',
         'options' => [
             'route' => '/case/:case/processing/tasks[/:action]',
@@ -967,7 +967,17 @@ $routes = [
                                 'controller' => 'BusProcessingNoteController',
                             ]
                         ]
-                    ]
+                    ],
+                    'tasks' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/tasks',
+                            'defaults' => [
+                                'controller' => 'BusProcessingTaskController',
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
                 ]
             ],
             'bus-fees' => [

@@ -159,7 +159,7 @@ class SubmissionSectionCommentControllerTest extends AbstractHttpControllerTestC
         $sut->setServiceLocator($mockServiceManager);
 
         $form->shouldReceive('setOptions')
-            ->with(['label' => $mockSectionRefData[$sectionId], 'alter_label' => false]);
+            ->withAnyArgs();
 
         $form = $sut->alterForm($form);
 
