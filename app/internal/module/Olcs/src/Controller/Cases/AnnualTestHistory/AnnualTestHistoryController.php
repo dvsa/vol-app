@@ -16,6 +16,7 @@ use Olcs\Controller\Traits as ControllerTraits;
  * Case Prohibition Controller
  */
 class AnnualTestHistoryController extends OlcsController\CrudAbstract
+    implements OlcsController\Interfaces\CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
 

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit bootstrap="Bootstrap.php" colors="true">
+    <testsuites>
+        <testsuite name="OLCS Internal Application">
+            <directory>./</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">../module/Olcs/src</directory>
+            <directory suffix=".php">../module/Admin/src</directory>
+            <exclude>
+                <directory>../module/Olcs/src/Form/Forms</directory>
+                <directory>../module/Olcs/src/Table/</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+    <listeners>
+        <listener class="\OlcsTest\Util\XhProf">
+            <arguments>
+                <array>
+                    <element key="xhprofLibFile">
+                        <string>/workspace/xhprof/xhprof_lib/utils/xhprof_lib.php</string>
+                    </element>
+                    <element key="xhprofRunsFile">
+                        <string>/workspace/xhprof/xhprof_lib/utils/xhprof_runs.php</string>
+                    </element>
+                    <element key="xhprofWeb">
+                        <string>http://192.168.149.2/xhprof/xhprof_html/index.php</string>
+                    </element>
+                    <element key="appNamespace">
+                        <string>Olcs</string>
+                    </element>
+                    <element key="xhprofFlags">
+                        <string>XHPROF_FLAGS_CPU,XHPROF_FLAGS_MEMORY</string>
+                    </element>
+                </array>
+            </arguments>
+        </listener>
+        <listener class="JohnKary\PHPUnit\Listener\SpeedTrapListener">
+            <arguments>
+                <array>
+                    <element key="slowThreshold">
+                        <integer>1</integer>
+                    </element>
+                    <element key="reportLength">
+                        <integer>10</integer>
+                    </element>
+                </array>
+            </arguments>
+        </listener>
+    </listeners>
+</phpunit>
