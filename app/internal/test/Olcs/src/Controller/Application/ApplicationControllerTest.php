@@ -98,7 +98,7 @@ class ApplicationControllerTest extends MockeryTestCase
         $sut->setPluginManager($mockPluginManager);
         $sut->setServiceLocator($serviceLocator);
 
-        $this->assertEquals('partials/tables', $sut->caseAction()->getTemplate());
+        $this->assertEquals('partials/table', $sut->caseAction()->getTemplate());
     }
 
     /**

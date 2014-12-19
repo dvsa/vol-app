@@ -130,7 +130,7 @@ class NoteControllerTest extends AbstractHttpControllerTestCase
 
         $this->view->expects($this->once())
             ->method('setTemplate')
-            ->with('table');
+            ->with('partials/table');
 
         $this->controller->expects($this->once())
             ->method('renderView');
@@ -217,7 +217,7 @@ class NoteControllerTest extends AbstractHttpControllerTestCase
 
         $this->view->expects($this->once())
             ->method('setTemplate')
-            ->with('table');
+            ->with('partials/table');
 
         $this->controller->expects($this->once())
             ->method('renderView');
