@@ -1,0 +1,8 @@
+<div class="js-response">
+  <?php /* externally we expect each block of content to define js-title and js-body */ ?>
+  <?php echo $this->content ?>
+
+  <div class="js-script">
+    <?php echo $this->inlineScript() ?>
+  </div>
+</div>
