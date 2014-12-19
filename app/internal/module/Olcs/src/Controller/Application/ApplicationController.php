@@ -88,6 +88,12 @@ class ApplicationController extends AbstractController
         return $this->render($view);
     }
 
+    public function setRequest(\Zend\Http\Request $request)
+    {
+        $this->request = $request;
+        return $this;
+    }
+
     /**
      * Placeholder stub
      *
